@@ -13,7 +13,14 @@ namespace Hedra.Engine.ItemSystem
         MovementSpeed,
         Health,
         EffectType,
+        Defense,
         Seed,
+        Ingredients,
+        CraftingStation,
+        IsFood,
+        IsConsumable,
+        Handler,
+        Output,
         Price
     }
 }

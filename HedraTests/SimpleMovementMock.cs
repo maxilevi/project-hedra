@@ -1,4 +1,5 @@
 using Hedra.Engine.Player;
+using Hedra.EntitySystem;
 
 namespace HedraTests
 {

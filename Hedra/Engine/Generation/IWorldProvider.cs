@@ -12,6 +12,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.WorldBuilding;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.Generation
@@ -26,7 +27,7 @@ namespace Hedra.Engine.Generation
 
         ParticleSystem Particles { get; }
 
-        EnviromentGenerator EnviromentGenerator { get; }
+        EnvironmentGenerator EnvironmentGenerator { get; }
 
         IBiomePool BiomePool { get; }
 
@@ -43,6 +44,8 @@ namespace Hedra.Engine.Generation
         int AverageGenerationTime { get; }
 
         int Seed { get; }
+        
+        Vector3 SpawnPoint { get; }
 
         bool IsGenerated { get; }
 
@@ -124,7 +127,7 @@ namespace Hedra.Engine.Generation
 
         Entity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed);
 
-        Vector3 FindPlaceablePosition(Entity Mob, Vector3 DesiredPosition);
+        Vector3 FindPlaceablePosition(IEntity Mob, Vector3 DesiredPosition);
 
         Vector3 FindSpawningPoint(Vector3 Around);
 

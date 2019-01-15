@@ -1,7 +1,9 @@
 using System.Drawing;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Sound;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
@@ -24,8 +26,8 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         {
             var button = (Button) Sender;
             var index = this.IndexFromButton(button);
-            var decomposedIndexY = index % AbilityTree.Layers;
-            var decomposedIndexX = AbilityTree.AbilityCount / AbilityTree.Layers-1 - (index - decomposedIndexY) / AbilityTree.Layers;
+            var decomposedIndexY = index % AbilityTree.Columns;
+            var decomposedIndexX = AbilityTree.AbilityCount / AbilityTree.Columns-1 - (index - decomposedIndexY) / AbilityTree.Columns;
             var item = this.ItemFromButton(button);
             var locked = decomposedIndexX * 5 > _player.Level;
             var previousUnlocked = this.PreviousUnlocked(index);
@@ -37,11 +39,11 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             else
             {
                 if (locked)
-                    _player.MessageDispatcher.ShowNotification("YOU NEED LEVEL " + decomposedIndexX * 5 + " TO UNLOCK THIS SKILL", Color.DarkRed, 3.0f);
+                    _player.MessageDispatcher.ShowNotification(Translations.Get("need_level_to_unlock", decomposedIndexX * 5), Color.DarkRed, 3.0f);
                 else if(!previousUnlocked)
-                    _player.MessageDispatcher.ShowNotification("YOU NEED TO UNLOCK THE PREVIOUS SKILL", Color.DarkRed, 3.0f);
+                    _player.MessageDispatcher.ShowNotification(Translations.Get("unlock_previous_skill"), Color.DarkRed, 3.0f);
                 else
-                    Sound.SoundManager.PlayUISound(Sound.SoundType.ButtonHover, 1.0f, 0.6f);              
+                    SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);              
             }
             this.UpdateView();
             _itemInfo.Show(item);
@@ -54,12 +56,12 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 
         private bool PreviousUnlocked(int Index)
         {
-            var decomposedIndexY = Index % AbilityTree.Layers;
-            var decomposedIndexX = AbilityTree.AbilityCount / AbilityTree.Layers - 1 - (Index - decomposedIndexY) / AbilityTree.Layers;
+            var decomposedIndexY = Index % AbilityTree.Columns;
+            var decomposedIndexX = AbilityTree.AbilityCount / AbilityTree.Columns - 1 - (Index - decomposedIndexY) / AbilityTree.Columns;
             if (decomposedIndexX == 0) return true;
-            else if (!_interface.Array[Index + AbilityTree.Layers].GetAttribute<bool>("Enabled"))
-                return this.PreviousUnlocked(Index + AbilityTree.Layers);
-            return _interface.Array[Index + AbilityTree.Layers].GetAttribute<int>("Level") > 0;
+            else if (!_interface.Array[Index + AbilityTree.Columns].GetAttribute<bool>("Enabled"))
+                return this.PreviousUnlocked(Index + AbilityTree.Columns);
+            return _interface.Array[Index + AbilityTree.Columns].GetAttribute<int>("Level") > 0;
         }
 
         private int IndexFromButton(Button Sender)

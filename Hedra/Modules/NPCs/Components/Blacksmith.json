@@ -1,9 +1,0 @@
-﻿{
-  "Name": "Blacksmith",
-  "Components":  [
-    {
-      "Type": "Hedra.Engine.WorldBuilding.BlacksmithComponent",
-      "Parameters": []
-    }
-  ] 
-}

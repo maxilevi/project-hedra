@@ -1,9 +1,9 @@
-﻿{
+{
   "Name": "CommonBronzeHammer",
   "DisplayName": "Bronze Hammer",
-  "EquipmentType": "Hammer", 
+  "EquipmentType": "Hammer",
   "Tier": "Common",
-  "Description": "Bronze hammer.",
+  "Description": "Forged of bronze, the head is heavy but near hollow.",
   "Attributes": [
     {
       "Name": "Damage",

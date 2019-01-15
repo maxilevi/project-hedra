@@ -6,7 +6,7 @@ using Hedra.Engine.Events;
 using OpenTK;
 using OpenTK.Graphics;
 
-namespace Hedra.Engine
+namespace Hedra.Engine.Loader
 {
     public class HedraWindow : NativeWindow, IEventProvider, IHedraWindow
     {

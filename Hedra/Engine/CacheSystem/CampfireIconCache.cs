@@ -11,5 +11,7 @@ namespace Hedra.Engine.CacheSystem
         {
             this.AddModel(AssetManager.PLYLoader("Assets/UI/CampfireIcon.ply", Vector3.One * .75f));
         }
+        
+        public override CacheItem Type => CacheItem.CampfireIcon;
     }
 }

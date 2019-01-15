@@ -11,5 +11,7 @@ namespace Hedra.Engine.CacheSystem
             
             this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Mausoleum.ply", 2, Vector3.One));
         }
+        
+        public override CacheItem Type => CacheItem.Mausoleum;
     }
 }

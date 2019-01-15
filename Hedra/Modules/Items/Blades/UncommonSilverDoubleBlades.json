@@ -1,9 +1,9 @@
 {
   "Name": "UncommonSilverDoubleBlades",
   "DisplayName": "Silver Blades",
-  "EquipmentType": "DoubleBlades", 
+  "EquipmentType": "DoubleBlades",
   "Tier": "Uncommon",
-  "Description": "Silver Blades.",
+  "Description": "Light and incredibly sharp, packing the punch you need when you need it",
   "Attributes": [
     {
       "Name": "Damage",

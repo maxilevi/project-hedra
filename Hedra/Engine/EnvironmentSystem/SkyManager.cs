@@ -6,6 +6,8 @@
  */
 using System;
 using System.Collections.Generic;
+using Hedra.BiomeSystem;
+using Hedra.Core;
 using OpenTK;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
@@ -32,7 +34,7 @@ namespace Hedra.Engine.EnvironmentSystem
         public static float StackedDaytimeModifier => Math.Max(0, StackedDaytime / 24000 * 2f);
 
         private static readonly Stack<float> TimeStack;
-        private static BiomeSystem.Region _currentRegion;
+        private static Region _currentRegion;
         private static Func<Vector4> _targetTopColor;
         private static Func<Vector4> _nextTargetTopColor;
         private static Func<Vector4> _targetBotColor;
@@ -80,7 +82,9 @@ namespace Hedra.Engine.EnvironmentSystem
             LoadTime = true;
         }
         
-        public static bool IsNight => DayTime > 16000 || DayTime < 10000;
+        public static bool IsSleepTime => DayTime > 18000 || DayTime < 8000;
+        
+        public static bool IsNight => DayTime > 20000 || DayTime < 6000;
 
         public static bool Snowing { get; set; }
 
@@ -94,7 +98,7 @@ namespace Hedra.Engine.EnvironmentSystem
 
         public static void Update()
         {
-            var underChunk = Gen.World.GetChunkAt(LocalPlayer.Instance.BlockPosition);
+            var underChunk = World.GetChunkAt(LocalPlayer.Instance.BlockPosition);
             if(underChunk == null) return;
             Weather.Update(underChunk);
             _currentRegion = underChunk.Biome;

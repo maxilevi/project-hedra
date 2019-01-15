@@ -14,6 +14,8 @@ using System.Linq;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.PhysicsSystem;
 using System.Reflection;
+using Hedra.Engine.IO;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.CacheSystem
 {
@@ -22,34 +24,33 @@ namespace Hedra.Engine.CacheSystem
     /// </summary>
     public class CacheProvider : ICacheProvider
     {
-        public Dictionary<float, List<float>> CachedExtradata { get; private set; }
-        public Dictionary<Vector4, List<Vector4>> CachedColors { get; private set; }
+        public Dictionary<float, List<CompressedValue<float>>> CachedExtradata { get; private set; }
+        public Dictionary<Vector4, List<CompressedValue<Vector4>>> CachedColors { get; private set; }
         private readonly Dictionary<string, CacheType> _caches = new Dictionary<string, CacheType>();
         private readonly object _colorLock = new object();
         private readonly object _extradataLock = new object();
 
         public void Load()
         {
-            CachedColors = new Dictionary< Vector4, List<Vector4> >();
-            CachedExtradata =  new Dictionary< float, List<float> >();
-            Type[] typeList = Assembly.GetExecutingAssembly().GetLoadableTypes(typeof(CacheManager).Namespace).ToArray();
-            foreach (Type type in typeList)
+            CachedExtradata = new Dictionary<float, List<CompressedValue<float>>>();
+            CachedColors =  new Dictionary<Vector4, List<CompressedValue<Vector4>>>();
+            var foundTypes = new HashSet<CacheItem>();
+            var typeList = Assembly.GetExecutingAssembly().GetLoadableTypes(this.GetType().Namespace).ToArray();
+            foreach (var type in typeList)
             {
                 if(!type.IsSubclassOf(typeof(CacheType)) || Attribute.GetCustomAttribute(type, typeof(CacheIgnore)) != null) continue;
 
-                var item = CacheItem.MaxEnums;
-                for (var i = 0; i < (int) CacheItem.MaxEnums; i++)
-                {
-                    var cache = (CacheItem) i;
-                    if (string.Equals(cache + "Cache", type.Name))
-                    {
-                        item = cache;
-                        break;
-                    }
-                }
-                Log.WriteLine($"Loading {type.Name} into cache as {item.ToString()}...", LogType.System);
-                if(item == CacheItem.MaxEnums) throw new ArgumentException("No valid cache type found for "+type);
-                _caches.Add(item.ToString().ToLowerInvariant(), (CacheType) Activator.CreateInstance(type));
+                var cache = (CacheType) Activator.CreateInstance(type);
+                foundTypes.Add(cache.Type);
+                Log.WriteLine($"Loading {cache.GetType().Name} into cache as {cache.Type.ToString()}...", LogType.System);
+                _caches.Add(cache.Type.ToString().ToLowerInvariant(), cache);
+            }
+
+            for (var i = 0; i < (int)CacheItem.MaxEnums; i++)
+            {
+                var item = (CacheItem)i;
+                if (!foundTypes.Contains(item))
+                    throw new ArgumentException($"No valid cache type found for {item}");        
             }
             Log.WriteLine("Finished building cache.");
         }
@@ -58,6 +59,11 @@ namespace Hedra.Engine.CacheSystem
         {
             return _caches[Type].GrabModel();
 
+        }
+
+        public VertexData GetPart(string Type, VertexData Model)
+        {
+            return _caches[Type].GetPart(Model);
         }
 
         public List<CollisionShape> GetShape(VertexData Model)
@@ -91,40 +97,47 @@ namespace Hedra.Engine.CacheSystem
                 {
                     goto COLOR_EXISTS;
                 }
-                CachedColors.Add(cHash, Data.Colors);
+
+                var cache = new List<CompressedValue<Vector4>>();
+                Data.Colors.Compress(cache);
+                CachedColors.Add(cHash, cache);
 
                 COLOR_EXISTS:
                 Data.ColorCache = cHash;
                 Data.Colors = new List<Vector4>();
             }
-
-            lock (_extradataLock)
+            if (Data.HasExtraData)
             {
-                float eHash = MakeHash(Data.ExtraData);
-                if (CachedExtradata.ContainsKey(eHash))
+                lock (_extradataLock)
                 {
-                    goto EXTRADATA_EXISTS;
-                }
-                CachedExtradata.Add(eHash, Data.ExtraData);
+                    float eHash = MakeHash(Data.ExtraData);
+                    if (CachedExtradata.ContainsKey(eHash))
+                    {
+                        goto EXTRADATA_EXISTS;
+                    }
+                    var cache = new List<CompressedValue<float>>();
+                    Data.ExtraData.Compress(cache);
+                    CachedExtradata.Add(eHash, cache);
 
-                EXTRADATA_EXISTS:
-                Data.ExtraDataCache = eHash;
-                Data.ExtraData = new List<float>();
+                    EXTRADATA_EXISTS:
+                    Data.ExtraDataCache = eHash;
+                    Data.ExtraData = new List<float>();
+                }
             }
         }
 
-        private Vector4 MakeHash(List<Vector4> L)
+        private static Vector4 MakeHash(List<Vector4> L)
         {
             Vector4 hash = Vector4.Zero;
-            for (int i = 0; i < L.Count; i++)
+            for (var i = 0; i < L.Count; i++)
             {
                 hash += L[i];
             }
-            hash /= L.Count;
+            hash /= (L.Count+1);
             return hash;
         }
 
-        private float MakeHash(List<float> L)
+        private static float MakeHash(List<float> L)
         {
             float hash = 0;
             for (int i = 0; i < L.Count; i++)

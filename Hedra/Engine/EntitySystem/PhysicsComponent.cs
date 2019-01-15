@@ -10,81 +10,78 @@ using System;
 using OpenTK;
 using Hedra.Engine.Generation;
 using System.Collections.Generic;
+using System.Linq;
+using Hedra.Core;
+using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Sound;
+using Hedra.EntitySystem;
+using Hedra.Sound;
 
 namespace Hedra.Engine.EntitySystem
 {
     public delegate bool OnHitGroundEvent(IEntity Parent, float Falltime);
+    public delegate void OnMoveEvent();
 
-    public class  PhysicsComponent : EntityComponent, IPhysicsComponent
+    public class PhysicsComponent : EntityComponent, IPhysicsComponent
     {
-        private const float NormalSpeed = 2.25f;
-        private const float AttackingSpeed = 0.75f;
-        private readonly Entity _parent;
+        private const float NormalSpeedModifier = 2.25f;
+        private const float MaxSlopeHeight = 1.0f;
+        private const float MaxSlide = 3.0f;
+        public event OnMoveEvent OnMove;
         public event OnHitGroundEvent OnHitGround;
         public bool UsePhysics { get; set; }
         public float Falltime { get; private set; }
         public bool CanBePushed { get; set; } = true;
-        public Vector3 GravityDirection { get; set; } = new Vector3(0,-1f,0);
+        public Vector3 GravityDirection { get; set; } = new Vector3(0, -1f, 0);
         public float VelocityCap { get; set; } = float.MaxValue;
         public Vector3 Velocity { get; set; } = Vector3.Zero;
         public bool HasFallDamage { get; set; } = true;
         public bool UseTimescale { get; set; }
         public bool InFrontOfWall { get; private set; }
         public bool IsDrifting { get; private set; }
+        public bool IsOverAShape => !_isOverTerrain;
 
-        public PhysicsComponent(Entity Parent) : base(Parent)
-        {
-            _parent = Parent;
-            UsePhysics = true;
-            UseTimescale = true;
-        }
-
-        /// <summary>
-        /// If collides with structures
-        /// </summary>
-        public bool CanCollide { get; set; } = false;
-        /// <summary>
-        /// If it pushes entities when moving
-        /// </summary>
-        public bool PushAround { get; set; } = true;
-        /// <summary>
-        /// If collides with other entities
-        /// </summary>
-        public bool HasCollision { get; set; } = true;
-        
-        private Chunk _underChunk, _underChunkR, _underChunkL, _underChunkF, _underChunkB;
-        private readonly List<ICollidable> _collisions = new List<ICollidable>();
+        private Chunk _underChunk;
+        private Chunk _underChunkR;
+        private Chunk _underChunkL;
+        private Chunk _underChunkF;
+        private Chunk _underChunkB;
         private float _height;
-        private float _speed;
-        private bool _isOverBox, _isInsideHitbox;
+        private float _speedMultiplier;
         private bool _isOverTerrain;
         private float _deltaTime;
-        private bool _wasBlockPx;
-        private bool _wasBlockNx;
-        private bool _wasBlockPy;
-        private bool _wasBlockNy;
-        private bool _wasBlockPz;
-        private bool _wasBlockNz;
+        private Vector3 _lastPosition;
+        private readonly Box _physicsBox;
+        private readonly List<ICollidable> _collisions;
+        
+        public PhysicsComponent(IEntity Parent) : base(Parent)
+        {
+            _physicsBox = new Box();
+            UsePhysics = true;
+            UseTimescale = true;
+            _collisions = new List<ICollidable>();
+        }
 
         public Vector3 TargetPosition
         {
-            get => Parent.BlockPosition * new Vector3(1,Chunk.BlockSize,1);
+            get => Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1);
             set => Parent.BlockPosition = new Vector3(value.X, value.Y / Chunk.BlockSize, value.Z);
         }
 
         public override void Update()
         {
-            if(!UsePhysics)
-                return;
-            
             _deltaTime = this.Timestep;
-
-            if (CanCollide)
+            _speedMultiplier = Mathf.Lerp(_speedMultiplier, NormalSpeedModifier * (Parent.IsAttacking ? Parent.AttackingSpeedModifier : 1), _deltaTime * 2f);
+            if (!UsePhysics) return;
+            if (Parent.IsGrounded && Parent.BlockPosition == _lastPosition 
+                                  && TargetPosition.Y >= Physics.HeightAtPosition(Parent.BlockPosition)) return;
+            if(!GameSettings.Paused) _lastPosition = Parent.BlockPosition;
+            if (CollidesWithStructures && !GameSettings.Paused)
             {
                 _underChunk = World.GetChunkAt(Parent.Position);
                 _underChunkR = World.GetChunkAt(Parent.Position + new Vector3(Chunk.Width, 0, 0));
@@ -92,42 +89,29 @@ namespace Hedra.Engine.EntitySystem
                 _underChunkF = World.GetChunkAt(Parent.Position + new Vector3(0, 0, Chunk.Width));
                 _underChunkB = World.GetChunkAt(Parent.Position - new Vector3(0, 0, Chunk.Width));
 
-                lock (_collisions)
-                {
-                    _collisions.Clear();
-                    _collisions.AddRange(World.GlobalColliders);
-                    try
-                    {
-                        if (_underChunk != null && _underChunk.Initialized)
-                            _collisions.AddRange(_underChunk.CollisionShapes);
+                _collisions.Clear();
+                _collisions.AddRange(World.GlobalColliders);
+                if (_underChunk != null && _underChunk.Initialized)
+                    _collisions.AddRange(_underChunk.CollisionShapes);
+                if (_underChunkL != null && _underChunkL.Initialized)
+                    _collisions.AddRange(_underChunkL.CollisionShapes);
+                if (_underChunkR != null && _underChunkR.Initialized)
+                    _collisions.AddRange(_underChunkR.CollisionShapes);
+                if (_underChunkF != null && _underChunkF.Initialized)
+                    _collisions.AddRange(_underChunkF.CollisionShapes);
+                if (_underChunkB != null && _underChunkB.Initialized)
+                    _collisions.AddRange(_underChunkB.CollisionShapes);
 
-                        var player = LocalPlayer.Instance;
-
-                        if (player?.NearCollisions != null)
-                            _collisions.AddRange(player.NearCollisions);
-
-                        if (_underChunkL != null && _underChunkL.Initialized)
-                            _collisions.AddRange(_underChunkL.CollisionShapes);
-                        if (_underChunkR != null && _underChunkR.Initialized)
-                            _collisions.AddRange(_underChunkR.CollisionShapes);
-                        if (_underChunkF != null && _underChunkF.Initialized)
-                            _collisions.AddRange(_underChunkF.CollisionShapes);
-                        if (_underChunkB != null && _underChunkB.Initialized)
-                            _collisions.AddRange(_underChunkB.CollisionShapes);          
-
-                    }
-                    catch (Exception e)
-                    {
-                        Log.WriteLine("Catched a sync error." + Environment.NewLine + e);
-                    }
-                }
+                var nearCollisions = GameManager.Player.NearCollisions;
+                var currentOffset = World.ToChunkSpace(Parent.Position);
+                _collisions.AddRange(nearCollisions.Where(G => G.Contains(currentOffset)).Cast<ICollidable>().ToArray());
             }
 
-            var modifier = 1;//40f * (1f / (float) Time.Frametime);
+            var modifier = 1;
             Velocity += -Physics.Gravity * GravityDirection * _deltaTime * Chunk.BlockSize;
             Velocity = Mathf.Clamp(Velocity, -VelocityCap, VelocityCap);
 
-            var command = new MoveCommand(Parent, Velocity * _deltaTime);
+            var command = new MoveCommand(Velocity * _deltaTime, true);
             this.ProcessCommand(command);
 
             if (!Parent.IsGrounded)
@@ -139,7 +123,7 @@ namespace Hedra.Engine.EntitySystem
             {
                 if (Falltime > 0)
                 {
-                    if (Falltime > 2.0f && HasFallDamage && (OnHitGround?.Invoke(this.Parent, Falltime) ?? true) )
+                    if (Falltime > 2.0f && HasFallDamage && (OnHitGround?.Invoke(this.Parent, Falltime) ?? true))
                     {
                         if (!Parent.SearchComponent<DamageComponent>()?.Immune ?? true)
                         {
@@ -151,21 +135,20 @@ namespace Hedra.Engine.EntitySystem
                             });
                         }
                     }
-                    else if(Falltime > 1f)
+                    else if (Falltime > 1f)
                     {
-                        SoundManager.PlaySound(SoundType.HitGround, _parent.Position);
+                        SoundPlayer.PlaySound(SoundType.HitGround, Parent.Position);
                     }
+
                     Falltime = 0;
                 }
             }
-            Parent.Model.Position = Mathf.Lerp(Parent.Model.Position, this.TargetPosition, _deltaTime * 8f);
-            _speed = Mathf.Lerp(_speed, Parent.IsAttacking ? AttackingSpeed : NormalSpeed, _deltaTime * 2f);
         }
-        
-        public Vector3 MoveFormula(Vector3 Direction)
+
+        public Vector3 MoveFormula(Vector3 Direction, bool ApplyReductions = true)
         {
-            float movementSpeed = (Parent.IsUnderwater && !Parent.IsGrounded ? 1.25f : 1.0f) * Parent.Speed;
-            return Direction * 5f * 1.75f * movementSpeed * _speed;
+            var movementSpeed = (Parent.IsUnderwater && !Parent.IsGrounded ? 1.25f : 1.0f) * Parent.Speed;
+            return Direction * 5f * 1.75f * movementSpeed * (ApplyReductions ? _speedMultiplier : NormalSpeedModifier);
         }
 
         public void Move(float Scalar = 1)
@@ -178,284 +161,267 @@ namespace Hedra.Engine.EntitySystem
             Velocity = Vector3.Zero;
         }
 
-        public void ExecuteTranslate(MoveCommand Command)
+        public bool ExecuteTranslate(MoveCommand Command)
         {
-            ProcessCommand(Command);
+            return ProcessCommand(Command);
         }
 
-        public void Translate(Vector3 Delta)
+        public bool Translate(Vector3 Delta)
         {
-            this.ExecuteTranslate(new MoveCommand(this.Parent, Delta));
+            return this.ExecuteTranslate(new MoveCommand(Delta));
         }
 
-        public void DeltaTranslate(Vector3 Delta)
+        public bool DeltaTranslate(Vector3 Delta, bool OnlyY = false)
         {
-            this.ExecuteTranslate(new MoveCommand(this.Parent, Delta * Time.DeltaTime));
+            return this.ExecuteTranslate(new MoveCommand(Delta * Time.DeltaTime)
+            {
+                OnlyY = OnlyY
+            });
         }
 
-        public void DeltaTranslate(MoveCommand Command)
+        public bool DeltaTranslate(MoveCommand Command)
         {
             Command.Delta *= Time.DeltaTime;
-            this.ExecuteTranslate(Command);
+            return this.ExecuteTranslate(Command);
         }
 
         private float Timestep => Time.IndependantDeltaTime * (UseTimescale ? Time.TimeScale : 1);
 
-        private void ProcessCommand(MoveCommand Command)
+        private bool ProcessCommand(MoveCommand Command)
         {
-            if(Command.Delta == Vector3.Zero) return;
-            bool onlyY = Command.Delta.Xz == Vector2.Zero;
-            Vector3 delta = Command.Delta;
-            var parentBox = this.Parent.Model.BroadphaseBox;
-            float modifierX = delta.X < 0 ? -1f : 1f;
-            float modifierZ = delta.Z < 0 ? -1f : 1f;
-
-            bool blockPx = false, blockNx = false, blockPy = false, blockNy = false, blockPz = false, blockNz = false;
-      
-            if (!onlyY)
+            if (Command.Delta == Vector3.Zero) return true;
+            if (Command.OnlyY && Math.Abs(Command.Delta.Y) > .25f) Parent.IsGrounded = false;
+            var canMove = HandleVoxelCollision(Command);
+            HandleEntityCollision(Command);
+            var originalDelta = Command.Delta;
+            var normalizedDelta = originalDelta.NormalizedFast();
+            var remainingDelta = originalDelta.Length;
+            var wontCollide = true;
+            while (remainingDelta > 0)
             {
-                var nextBlock =
-                    World.GetBlockAt(new Vector3(1f * modifierX, 0, 1f * modifierZ) + delta +
-                                        this.Parent.BlockPosition);
-                bool IsSolid(Block B) => B.Type != BlockType.Air && B.Type != BlockType.Water;
-                var calcPosition = new Vector3(1f * modifierX, 2.5f, 1f * modifierZ) + delta +
-                                    this.Parent.BlockPosition;
-                var nextBlockY = World.GetBlockAt(calcPosition);
-                var tNormal = Physics.NormalAtPosition(calcPosition);
-                if (!IsDrifting)
-                {
-                    if (IsSolid(nextBlockY) || (Vector3.Dot(tNormal, Vector3.UnitY) < .35f && IsSolid(nextBlock)))
-                    {
-                        if (delta.X > 0)
-                            blockPx = true;
-
-                        if (delta.X < 0)
-                            blockNx = true;
-
-                        if (delta.Z < 0)
-                            blockNz = true;
-
-                        if (delta.Z > 0)
-                            blockPz = true;
-
-                        if (Parent is Humanoid human && human.IsClimbing)
-                        {
-                            delta += Vector3.UnitY * Time.DeltaTime * 60f;
-                        }
-                        InFrontOfWall = true;
-                    }
-                    else
-                    {
-                        InFrontOfWall = false;
-                    }
-                }
+                var commandDelta = Math.Min(.25f, remainingDelta);
+                Command.Delta = normalizedDelta * commandDelta;
+                wontCollide &= HandleStructureCollision(Command);
+                remainingDelta -= commandDelta;
+            }
+            Command.Delta = originalDelta;
+            if (!wontCollide && Command.OnlyY) OnColliderHit();
+            canMove &= wontCollide;
+            HandleTerrainCollision(Command);
+            if (canMove)
+            {
+                var moveDelta = Command.Delta * new Vector3(1, 1f / Chunk.BlockSize, 1);
+                Parent.BlockPosition += moveDelta;
+                if(moveDelta.LengthFast > 0.005f)
+                    OnMove?.Invoke();
+            }
+            else
+            {
+                if (Command.OnlyY && Command.Delta.Y < 0) MakeGrounded();
             }
 
-            var terrainNormal = Physics.NormalAtPosition(Parent.Position);
-            var dot = Vector3.Dot(terrainNormal, Vector3.UnitY);
-            if (IsDrifting)
+            return canMove;
+        }
+
+        private void MakeGrounded()
+        {
+            if(!Parent.IsGrounded) OnColliderHit();
+            Parent.IsGrounded = true;
+            Velocity = Vector3.Zero;
+            _isOverTerrain = false;
+        }
+
+        private bool HandleStructureCollision(MoveCommand Command)
+        {
+            _physicsBox.Min = Vector3.Zero + TargetPosition + 2 * Vector3.UnitY;
+            _physicsBox.Max = Parent.Model.BaseBroadphaseBox.Size + TargetPosition;
+            _physicsBox.Min += Command.Delta;
+            _physicsBox.Max += Command.Delta;
+            var shape = _physicsBox.AsShape();
+            for (var i = _collisions.Count - 1; i > -1; i--)
             {
-                Parent.BlockPosition += terrainNormal.Xz.ToVector3() * Time.DeltaTime * 8;
-                this.ResetFall();
-                this.ResetVelocity();
-                if (!onlyY) return;
-            }
-
-            if (dot < .35 && Parent.IsGrounded) IsDrifting = true;
-            else if(dot > .45 || !Parent.IsGrounded) IsDrifting = false;
-
-
-            if (this.HasCollision && !Command.IsRecursive)
-            {
-                var entities = World.Entities;
-                for (int i = entities.Count - 1; i > -1; i--)
+                if (!Physics.Collides(_collisions[i], shape)) continue;
+                if (!Command.OnlyY)
                 {
-                    if (entities[i] == Parent)
-                        continue;
-
-                    if (entities[i].Physics.HasCollision)
-                    {
-                        if (Physics.Collides(entities[i].Model.BroadphaseBox, this.Parent.Model.BroadphaseBox) 
-                            && Physics.Collides(entities[i].Model.BroadphaseCollider, Parent.Model.BroadphaseCollider))
-                        {
-                            if (!PushAround || !entities[i].Physics.CanBePushed) return;
-                            if (entities[i].Model.BroadphaseBox.Size.LengthSquared >
-                                this.Parent.Model.BroadphaseBox.Size.LengthSquared * 4f)
-                            {
-                                if(Vector3.Dot(delta.NormalizedFast(), (entities[i].Position - this.Parent.Position).NormalizedFast()) > .75f) return;
-                                else continue;
-                            }
-                            var increment = -(Parent.Position.Xz - entities[i].Position.Xz).ToVector3().NormalizedFast();
-                            var command = new MoveCommand(entities[i],
-                                increment * 8f)
-                            {
-                                IsRecursive = true
-                            };
-                            entities[i].Physics.DeltaTranslate(command);
-                        }
-                    }
-                }
-            }
-            var overFloor = false;
-            lock(_collisions)
-            {
-                var deltaOrientation = delta.NormalizedFast();
-
-                for(var i = _collisions.Count-1; i > -1; i--)
-                {
-                    Box box = parentBox.Cache;
-
-                    if (!onlyY)
-                    {
-                        box.Min = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation * 1f;
-                        box.Max = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation * 2f + Vector3.UnitY;
-                    }
-                    else
-                    {
-                        if (delta.Y < 0)
-                        {
-                            box.Min = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation * 1f -
-                                      Vector3.UnitX * .5f - Vector3.UnitZ * .5f;
-                            box.Max = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation * 2f +
-                                      Vector3.UnitX * .5f + Vector3.UnitZ * .5f;
-                        }
-                        else
-                        {
-                            box.Min = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation 
-                                * (Parent.Model.BaseBroadphaseBox.Max.Y-1f) -
-                                      Vector3.UnitX * .5f - Vector3.UnitZ * .5f;
-                            box.Max = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation 
-                                * Parent.Model.BaseBroadphaseBox.Max.Y +
-                                      Vector3.UnitX * .5f + Vector3.UnitZ * .5f;
-                        }
-                    }
-
-                    if (!Physics.Collides(box, _collisions[i])) continue;
-
-                    if (deltaOrientation.X > 0)
-                        blockPx = true;
-
-                    if (deltaOrientation.X < 0)
-                        blockNx = true;
-
-                    if (deltaOrientation.Z < 0)
-                        blockNz = true;
-
-                    if (deltaOrientation.Z > 0)
-                        blockPz = true;
-
-                    if (deltaOrientation.Y > 0)
-                        blockPy = true;
-
-                    if (deltaOrientation.Y < 0)
-                        blockNy = true;
-
-                    if (!onlyY)
-                    {
-                        /*box.Min = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation * 1f;
-                        box.Max = Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1) + deltaOrientation * 2f 
-                            + (parentBox.Max.Y - parentBox.Min.Y) * 0.05f * Vector3.UnitY;
-
-                        if (!Physics.Collides(box, _collisions[i]) && !blockPy)
-                        {
-                            Parent.BlockPosition += Vector3.UnitY * Parent.Model.Height * .05f;
-                            if (deltaOrientation.X > 0)
-                                blockPx = false;
-
-                            if (deltaOrientation.X < 0)
-                                blockNx = false;
-
-                            if (deltaOrientation.Z < 0)
-                                blockNz = false;
-
-                            if (deltaOrientation.Z > 0)
-                                blockPz = false;
-
-                        }*/
-                    }
-
-                    if (Parent is Humanoid human && human.IsTravelling)
-                    {
-                        human.IsTravelling = false;
-                        Parent.KnockForSeconds(3f);
-                        Executer.ExecuteOnMainThread(delegate
-                        {
-                            Parent.Damage(Parent.MaxHealth * .15f, Parent, out float xp);
-                        });
-                    }
-                }
-            }
-            if (onlyY)
-            {
-                float heightAtPosition = Physics.HeightAtPosition((int)Parent.BlockPosition.X, (int)Parent.BlockPosition.Z);
-                if (Parent.BlockPosition.Y * Chunk.BlockSize < heightAtPosition)
-                {
-                    Parent.BlockPosition = new Vector3(Parent.BlockPosition.X, heightAtPosition / Chunk.BlockSize,
-                        Parent.BlockPosition.Z);
-                    Parent.IsGrounded = true;
-                    Velocity = Vector3.Zero;
+                    var collided = true;
+                    collided &= HandleSlopes(Command, _collisions[i], shape);
+                    if(collided) HandleSliding(Command, _collisions[i], shape);
+                    collided &= HandleSlidingCorners(Command, _collisions[i], shape);
+                    if (collided) return false;
                 }
                 else
                 {
-                    Parent.IsGrounded = false;
-                }
-
-                if ((!blockNy && delta.Y < 0 || !blockNy && Parent.IsUnderwater))
-                {
-                    var underUnderBlock = World.GetBlockAt(Parent.BlockPosition - Vector3.UnitY * 2f);
-                    var human = Parent as Humanoid;
-                    if (Parent.IsUnderwater || (human?.IsJumping ?? false))
+                    if (Command.Delta.Y < 0)
                     {
+                        Parent.IsGrounded = true;
+                    }
+                    else
+                    {
+                        Parent.BlockPosition -= .05f * Vector3.UnitY;
                         Parent.IsGrounded = false;
                     }
-                    /*else if (underUnderBlock.Type != BlockType.Air && underUnderBlock.Type != BlockType.Water 
-                        /*&& currentBlock.Type != BlockType.Air && currentBlock.Type != BlockType.Water)
-                    {
-                        float heightAtPositon = Physics.HeightAtBlock(Parent.BlockPosition - Vector3.UnitY);
-                        /*Parent.BlockPosition = new Vector3(Parent.BlockPosition.X,
-                            (heightAtPositon + BaseHeight) / Chunk.BlockSize,
-                            Parent.BlockPosition.Z);
-                        
-                        Parent.IsGrounded = true;
-                        blockNy = true;
-                        Velocity = Vector3.Zero;
-                    }*/
-
+                    return false;
                 }
-                else if(blockNy)
+            }         
+            return true;
+        }
+
+        private bool HandleSlidingCorners(MoveCommand Command, ICollidable Shape, CollisionShape Box)
+        {
+            if (!CollidesWithOffset(Shape, Box, Command.Delta.NormalizedFast() * MaxSlide))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private bool HandleSlopes(MoveCommand Command, ICollidable Shape, CollisionShape Box)
+        {
+            var slopeHeight = .25f;
+            if (!CollidesWithOffset(Shape, Box, Vector3.UnitY * 1f))
+            {
+                /* If the object collided with Y but not Y+1 then it probably is a slope */
+                var accum = .05f;
+                while (CollidesWithOffset(Shape, Box, Vector3.UnitY * accum) && accum < 1f && !CollidesWithOffset(Shape, Box, Vector3.UnitY * (2f + accum)))
                 {
-                    Parent.IsGrounded = true;
-                    Velocity = Vector3.Zero;
+                    accum += 0.05f;
                 }
-            }   
+                Parent.BlockPosition += accum * Vector3.UnitY;
+                MakeGrounded();
+                return false;
+            }
+            return true;
+        }
 
-            Vector3 prevPosition = Parent.BlockPosition;
-            Parent.BlockPosition += delta * new Vector3(1,1/Chunk.BlockSize,1);
+        private void HandleSliding(MoveCommand Command, ICollidable Shape, CollisionShape Box)
+        {
+            var offset = Vector3.Zero;
+            if (!CollidesWithOffset(Shape, Box, offset = (Command.Delta.Xz.PerpendicularLeft.ToVector3() * .5f + Command.Delta * .5f)))
+            {
+                Parent.BlockPosition += offset;
+            }
+            else if (!CollidesWithOffset(Shape, Box, offset = Command.Delta.Xz.PerpendicularLeft.ToVector3()))
+            {
+                Parent.BlockPosition += offset;
+            }
+            else if (!CollidesWithOffset(Shape, Box, offset = (Command.Delta.Xz.PerpendicularRight.ToVector3() * .5f + Command.Delta * .5f)))
+            {
+                Parent.BlockPosition += offset;
+            }
+            else if (!CollidesWithOffset(Shape, Box, offset = Command.Delta.Xz.PerpendicularRight.ToVector3()))
+            {
+                Parent.BlockPosition += offset;
+            }
+        }
 
-            if( (blockNz || _wasBlockNz) && (Parent.BlockPosition.Z - prevPosition.Z) < 0)
-                Parent.BlockPosition = new Vector3(Parent.BlockPosition.X, Parent.BlockPosition.Y, prevPosition.Z);
-            
-            if( (blockPz || _wasBlockPz) && (Parent.BlockPosition.Z - prevPosition.Z) > 0)
-                Parent.BlockPosition = new Vector3(Parent.BlockPosition.X, Parent.BlockPosition.Y, prevPosition.Z);
-            
-            if( (blockNx || _wasBlockNx) && (Parent.BlockPosition.X - prevPosition.X) < 0)
-                Parent.BlockPosition = new Vector3(prevPosition.X, Parent.BlockPosition.Y, Parent.BlockPosition.Z);
-            
-            if( (blockPx || _wasBlockPx) && (Parent.BlockPosition.X - prevPosition.X) > 0)
-                Parent.BlockPosition = new Vector3(prevPosition.X, Parent.BlockPosition.Y, Parent.BlockPosition.Z);
-            
-            if( (blockNy || _wasBlockNy) && (Parent.BlockPosition.Y - prevPosition.Y) < 0)
-                Parent.BlockPosition = new Vector3(Parent.BlockPosition.X, prevPosition.Y, Parent.BlockPosition.Z);
+        private bool CollidesWithOffset(ICollidable Shape, CollisionShape Box, Vector3 Offset)
+        {
+            try
+            {
+                Box.Transform(Offset);
+                return Physics.Collides(Shape, Box);
+            }
+            finally
+            {
+                Box.Transform(-Offset);
+            }
+        }
 
-            if ((blockPy || _wasBlockPy) && (Parent.BlockPosition.Y - prevPosition.Y) > 0)
-                Parent.BlockPosition = new Vector3(Parent.BlockPosition.X, prevPosition.Y, Parent.BlockPosition.Z);
-            
-            _wasBlockNz = blockNz;
-            _wasBlockNx = blockNx;
-            _wasBlockNy = blockNy;
-            _wasBlockPz = blockPz;
-            _wasBlockPx = blockPx;
-            _wasBlockPy = blockPy;
+        private bool HandleVoxelCollision(MoveCommand Command)
+        {
+            var modifierX = Command.Delta.X < 0 ? -1f : 1f;
+            var modifierZ = Command.Delta.Z < 0 ? -1f : 1f;
+            if (Command.OnlyY) return true;
+            var nextBlock =
+                World.GetBlockAt(new Vector3(1f * modifierX, 0, 1f * modifierZ) + Command.Delta +
+                                 this.Parent.BlockPosition);
+            bool IsSolid(Block B) => B.Type != BlockType.Air && B.Type != BlockType.Water;
+            var calcPosition = new Vector3(1f * modifierX, 2.5f, 1f * modifierZ) + Command.Delta +
+                               this.Parent.BlockPosition;
+            var nextBlockY = World.GetBlockAt(calcPosition);
+            var tNormal = Physics.NormalAtPosition(calcPosition);
+            if (!IsDrifting)
+            {
+                InFrontOfWall = IsSolid(nextBlockY) ||
+                                (Vector3.Dot(tNormal, Vector3.UnitY) < .35f && IsSolid(nextBlock));
+                if (InFrontOfWall) return false;
+            }
+            return true;
+        }
+
+        private void HandleTerrainCollision(MoveCommand Command)
+        {
+            var heightAtPosition = Physics.HeightAtPosition((int)Parent.BlockPosition.X, (int)Parent.BlockPosition.Z);
+            if (Parent.BlockPosition.Y * Chunk.BlockSize <= heightAtPosition)
+            {
+                if(!Parent.IsGrounded) 
+                    OnColliderHit();
+                
+                Parent.BlockPosition = new Vector3(Parent.BlockPosition.X, heightAtPosition / Chunk.BlockSize,
+                    Parent.BlockPosition.Z);
+                Parent.IsGrounded = true;
+                Velocity = Vector3.Zero;
+                _isOverTerrain = true;
+            }
+
+            if (Command.Delta.Y < 0 ||  Parent.IsUnderwater)
+            {
+                var human = Parent as Humanoid;
+                if (Parent.IsUnderwater || (human?.IsJumping ?? false))
+                {
+                     Parent.IsGrounded = false;
+                    _isOverTerrain = false;
+                }
+            }
+        }
+
+        private void OnColliderHit()
+        {
+            if (!(Parent is IHumanoid human) || !human.IsTravelling) return;
+            human.IsTravelling = false;
+            Parent.KnockForSeconds(3f);
+            Executer.ExecuteOnMainThread(delegate
+            {
+                Parent.Damage(Parent.MaxHealth * .15f, Parent, out _);
+            });
+        }
+
+        private void HandleEntityCollision(MoveCommand Command)
+        {
+            if (!this.CollidesWithEntities || Command.IsRecursive) return;
+            var entities = World.Entities;
+            var chunkSpace = World.ToChunkSpace(Parent.Position);
+            for (var i = entities.Count - 1; i > -1; i--)
+            {
+                if (entities[i] == Parent)
+                    continue;
+
+                /* Is a entity is farther than 2 chunks away, just skip it.*/
+                if ((World.ToChunkSpace(entities[i].Position) - chunkSpace).LengthSquared > Chunk.Width * Chunk.Width)
+                    continue;
+
+                if (!entities[i].Physics.UsePhysics) continue;
+                if (!entities[i].Physics.CollidesWithEntities) continue;
+                var radii = Parent.Model.Dimensions.Size.LengthFast + entities[i].Model.Dimensions.Size.LengthFast;
+                if (!((entities[i].Position - Parent.Position).LengthSquared < radii * radii)) continue;
+                if (!Physics.Collides(entities[i].Model.BroadphaseBox, this.Parent.Model.BroadphaseBox) ||
+                    !Physics.Collides(entities[i].Model.BroadphaseCollider, Parent.Model.BroadphaseCollider))
+                    continue;
+
+                if (!PushAround || !entities[i].Physics.CanBePushed) return;
+                if (entities[i].Model.BroadphaseBox.Size.LengthSquared >
+                    this.Parent.Model.BroadphaseBox.Size.LengthSquared * 4f)
+                {
+                    if (Vector3.Dot(Command.Delta.NormalizedFast(), (entities[i].Position - this.Parent.Position).NormalizedFast()) > .75f) return;
+                    else continue;
+                }
+                var increment = -(Parent.Position.Xz - entities[i].Position.Xz).ToVector3().NormalizedFast();
+                var command = new MoveCommand(increment * 8f)
+                {
+                    IsRecursive = true
+                };
+                entities[i].Physics.DeltaTranslate(command);
+            }
         }
         
         public void ResetFall()
@@ -463,14 +429,30 @@ namespace Hedra.Engine.EntitySystem
             Falltime = 0.01f;
         }
         
-        public override void Dispose(){
-            lock (_collisions)
-                this._collisions.Clear();    
-            this._underChunk = null;
-            this._underChunkR = null;
-            this._underChunkL = null;
-            this._underChunkF = null;
-            this._underChunkB = null;
+        /// <summary>
+        /// If collides with structures
+        /// </summary>
+        public bool CollidesWithStructures { get; set; } = true;
+        /// <summary>
+        /// If it pushes entities when moving
+        /// </summary>
+        public bool PushAround { get; set; } = true;
+        /// <summary>
+        /// If collides with other entities
+        /// </summary>
+        public bool CollidesWithEntities { get; set; } = true;
+
+
+        public ICollidable[] CollisionObjects => _collisions.ToArray();
+
+        public override void Dispose()
+        {
+            _collisions.Clear();
+            _underChunk = null;
+            _underChunkR = null;
+            _underChunkL = null;
+            _underChunkF = null;
+            _underChunkB = null;
         }
     }
 }

@@ -5,7 +5,7 @@ using OpenTK;
 using OpenTK.Input;
 using OpenTK.Platform;
 
-namespace Hedra.Engine
+namespace Hedra.Engine.Loader
 {
     public interface IHedraWindow
     {

@@ -10,6 +10,7 @@ using OpenTK;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.Core;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
 using Hedra.Engine.Generation;
@@ -17,6 +18,9 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Sound;
+using Hedra.EntitySystem;
+using Hedra.Rendering;
+using Hedra.Sound;
 
 namespace Hedra.Engine.Player
 {
@@ -34,10 +38,15 @@ namespace Hedra.Engine.Player
         public event OnProjectileMoveEvent LandEventHandler;
 
         public Vector3 Propulsion { get; set; }
+        public Vector3 Direction { get; set; }
         public float Lifetime { get; set; } = 10f;
         public ObjectMesh Mesh { get; }
         public bool Collide { get; set; } = true;
+        public bool HandleLifecycle { get; set; } = true;
         public bool Disposed { get; private set; }
+        public bool UsePhysics { get; set; } = true;
+        public float Speed { get; set; } = 1;
+        public IEntity[] IgnoreEntities { get; set; }
 
         private readonly IEntity _parent;
         private readonly List<ICollidable> _collisions;
@@ -67,30 +76,44 @@ namespace Hedra.Engine.Player
             }
 
             Lifetime -= Time.DeltaTime;
-            Propulsion *= (float)Math.Pow(.75f, Time.DeltaTime);
-            _accumulatedVelocity += (Propulsion * 60f - Vector3.UnitY * 20f) * (float) Time.DeltaTime;
-            _accumulatedVelocity *= (float) Math.Pow(.8f, (float)Time.DeltaTime);
-            Mesh.Position += _accumulatedVelocity * 2f * (float)Time.DeltaTime;
-            Mesh.Rotation = Physics.DirectionToEuler(_accumulatedVelocity.NormalizedFast());
-            if (Collide)
+            if (UsePhysics)
             {
-                ProcessCollision();
+                Propulsion *= (float)Math.Pow(.75f, Time.DeltaTime);
+                _accumulatedVelocity += (Propulsion * 60f - Vector3.UnitY * 20f) * Time.DeltaTime;
+                _accumulatedVelocity *= (float)Math.Pow(.8f, Time.DeltaTime);
+                Mesh.Position += _accumulatedVelocity * 2f * Time.DeltaTime;
             }
-                
-            for(var i = 0; i < World.Entities.Count; i++)
+            else
             {
-                if (_parent == World.Entities[i] || !Physics.Collides(_collisionBox.Cache.Translate(Mesh.Position), World.Entities[i].Model.BroadphaseBox)) continue;
+                Mesh.Position += Direction * Speed * Time.DeltaTime;
+            }
+            Mesh.LocalRotation = Physics.DirectionToEuler(_accumulatedVelocity.NormalizedFast());
+            if (HandleLifecycle)
+            {
+                if (Collide)
+                {
+                    ProcessCollision();
+                }
 
-                HitEventHandler?.Invoke(this, World.Entities[i]);
-                _collided = true;
-                this.Dispose();
-                break;
+                var entities = World.Entities;
+                for (var i = 0; i < entities.Count; i++)
+                {
+                    if (_parent == entities[i] 
+                        || !Physics.Collides(_collisionBox.Cache.Translate(Mesh.Position), entities[i].Model.BroadphaseBox)
+                        || IgnoreEntities != null && Array.IndexOf(IgnoreEntities, entities[i]) != -1) continue;
+                    
+                    HitEventHandler?.Invoke(this, World.Entities[i]);
+                    _collided = true;
+                    this.Dispose();
+                    break;
+                }
+
+                if (Lifetime < 0)
+                {
+                    this.Dispose();
+                }
             }
 
-            if (Lifetime < 0)
-            {
-                this.Dispose();
-            }
             MoveEventHandler?.Invoke(this);
         }
 
@@ -131,7 +154,7 @@ namespace Hedra.Engine.Player
 
             if (isColliding)
             {
-                SoundManager.PlaySound(SoundType.HitGround, Mesh.Position);
+                SoundPlayer.PlaySound(SoundType.HitGround, Mesh.Position);
                 World.Particles.Color = new Vector4(1, 1, 1, 1);
                 World.Particles.ParticleLifetime = 0.75f;
                 World.Particles.GravityEffect = .0f;
@@ -151,8 +174,8 @@ namespace Hedra.Engine.Player
 
         public virtual Vector3 Rotation
         {
-            get => Mesh.Rotation;
-            set => Mesh.Rotation = value;
+            get => Mesh.LocalRotation;
+            set => Mesh.LocalRotation = value;
         }
 
         public virtual Vector3 Position

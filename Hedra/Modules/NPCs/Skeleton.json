@@ -1,0 +1,53 @@
+{
+  "Name": "Skeleton",
+  "DisplayName": "Skeleton",
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/SkeletonIdle.dae",
+    "Scale": 1.0
+  },
+  "Class": "Warrior",
+  "Behaviour" : "Hostile",
+  "Immune": false,
+  "XP": 3.5,
+  "AttackPower": 1.0,
+  "AttackSpeed": 1.0,
+  "Components":  [],
+  "Weapons": [
+    {
+      "Tier": "Uncommon",
+      "Type": "Sword"
+    },
+    {
+      "Tier": "Uncommon",
+      "Type": "Axe"
+    },
+    {
+      "Tier": "Uncommon",
+      "Type": "Hammer"
+    },
+    {
+      "Tier": "Uncommon",
+      "Type": "Bow"
+    },
+    {
+      "Tier": "Uncommon",
+      "Type": "Bow"
+    },
+    {
+      "Tier": "Uncommon",
+      "Type": "Bow"
+    },
+    {
+      "Tier": "Uncommon",
+      "Type": "Claw"
+    },
+    {
+      "Tier": "Uncommon",
+      "Type": "DoubleBlades"
+    },
+    {
+      "Tier": "Uncommon",
+      "Type": "Katar"
+    }
+  ]
+}

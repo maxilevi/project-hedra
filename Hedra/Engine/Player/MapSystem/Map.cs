@@ -10,16 +10,19 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using Hedra.Core;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 using OpenTK;
 using OpenTK.Input;
 
@@ -28,7 +31,7 @@ namespace Hedra.Engine.Player.MapSystem
     /// <summary>
     /// Description of Map.
     /// </summary>
-    public class Map : PlayerInterface
+    public class Map : PlayerInterface, IDisposable
     {
         private const int MapViewSize = 8;
         private const int MapSize = 8;
@@ -63,11 +66,11 @@ namespace Hedra.Engine.Player.MapSystem
             this._builder = new MapBuilder();
             this._baseItems = new List<MapBaseItem>();
             this._meshBuilder = new MapMeshBuilder(_player, MapSize, ChunkSize);
-            this._cursor = ObjectMesh.FromVertexData(AssetManager.PLYLoader("Assets/UI/MapCursor.ply", Vector3.One * 20f));
-            this._marker = ObjectMesh.FromVertexData(AssetManager.PLYLoader("Assets/UI/MapMarker.ply", Vector3.One * 5f));
+            this._cursor = ObjectMesh.FromVertexData(AssetManager.PLYLoader("Assets/UI/MapCursor.ply", Vector3.One * 20f), false);
+            this._marker = ObjectMesh.FromVertexData(AssetManager.PLYLoader("Assets/UI/MapMarker.ply", Vector3.One * 5f), false);
             _marker.ApplyFog = false;
 
-            var hint = new GUIText("CLICK TO MARK A WAYPOINT",
+            var hint = new GUIText(Translation.Create("mark_waypoint"), 
                 Vector2.UnitY * .8f, Color.White,
                 FontCache.Get(AssetManager.BoldFamily, 16f, FontStyle.Bold));
             var underline = new GUIText("＿＿＿＿＿＿＿＿",
@@ -85,7 +88,7 @@ namespace Hedra.Engine.Player.MapSystem
                     _player.Model.TargetRotation = Physics.DirectionToEuler(_player.Minimap.MarkedDirection);
                 }
                 else if(Args.Button == MouseButton.Right) _player.Minimap.Unmark();
-                SoundManager.PlayUISound(SoundType.NotificationSound);
+                SoundPlayer.PlayUISound(SoundType.NotificationSound);
             });
         }
 
@@ -98,14 +101,11 @@ namespace Hedra.Engine.Player.MapSystem
             this.UpdateFogAndTime();
 
             var mapPosition = _player.Model.ModelPosition.Xz.ToVector3();
-            lock (_icons)
-            {
-                for (var i = 0; i < _icons.Count; i++)
-                { 
-                    _icons[i].Mesh.Rotation = new Vector3(_icons[i].Mesh.Rotation.X, _icons[i].Mesh.Rotation.Y + (float) Time.DeltaTime * 0f, _icons[i].Mesh.Rotation.Z);
-                    _icons[i].Mesh.Position = new Vector3(mapPosition.X, _targetHeight + 10f, mapPosition.Z);
-                }
-            }
+            for (var i = 0; i < _icons.Count; i++)
+            { 
+                _icons[i].Mesh.LocalRotation = new Vector3(_icons[i].Mesh.LocalRotation.X, _icons[i].Mesh.LocalRotation.Y + (float) Time.DeltaTime * 0f, _icons[i].Mesh.LocalRotation.Z);
+                _icons[i].Mesh.Position = new Vector3(mapPosition.X, _targetHeight + 10f, mapPosition.Z);
+            }          
             for (var i = 0; i < _baseItems.Count; i++)
             {
                 if (_baseItems[i].Mesh != null)
@@ -118,7 +118,7 @@ namespace Hedra.Engine.Player.MapSystem
                 _marker.Enabled = _player.Minimap.HasMarker;
                 _marker.Position = mapPosition + Vector3.UnitY * (_targetHeight + 25f) + _player.Minimap.MarkedDirection * FogDistance;
                 _cursor.Position = mapPosition + Vector3.UnitY * (_targetHeight + 45f);
-                _cursor.Rotation = _player.Model.Rotation;
+                _cursor.LocalRotation = _player.Model.LocalRotation;
                 WorldRenderer.Scale = Mathf.Lerp(Vector3.One,
                     Vector3.One * (ChunkSize / (float)Chunk.Width), 1f) + Vector3.One * 0.002f;
                 WorldRenderer.BakedOffset = -(mapPosition + Vector3.UnitY * _targetHeight);
@@ -167,7 +167,6 @@ namespace Hedra.Engine.Player.MapSystem
 
         private void UpdateIcons()
         {
-            this.ClearIcons();
             for (var x = 0; x < MapViewSize; x++)
             {
                 for (var z = 0; z < MapViewSize; z++)
@@ -202,7 +201,7 @@ namespace Hedra.Engine.Player.MapSystem
                                     baseData.Color = CubeData.CreateCubeColor(Color.DarkSlateGray.ToVector4());
                                     var mapItem = new MapItem(icon + baseData.ToVertexData());
                                     mapItem.Mesh.ApplyNoiseTexture = true;
-                                    mapItem.Mesh.Rotation = new Vector3(0, Utils.Rng.Next(0, 4) * 90f, 0);
+                                    mapItem.Mesh.LocalRotation = new Vector3(0, Utils.Rng.Next(0, 4) * 90f, 0);
                                     mapItem.Mesh.LocalPosition = realPos.ToVector3() + Vector3.UnitY * 12;
                                     mapItem.Mesh.Scale = Vector3.One * 2f;
                                     lock (_icons) _icons.Add(mapItem);
@@ -216,14 +215,11 @@ namespace Hedra.Engine.Player.MapSystem
 
         private void ClearIcons()
         {
-            lock (_icons)
+            for (int i = 0; i < _icons.Count; i++)
             {
-                for (int i = 0; i < _icons.Count; i++)
-                {
-                    _icons[i].Dispose();
-                }
-                _icons.Clear();
+                _icons[i].Dispose();
             }
+            _icons.Clear();       
         }
 
         private void UpdateMap()
@@ -292,7 +288,7 @@ namespace Hedra.Engine.Player.MapSystem
 
         private void GenerateMesh(MapBaseItem BaseItem, Vector2 Coords)
         {
-            TaskManager.Parallel(delegate
+            TaskScheduler.Parallel(delegate
             {
                 var prevMesh = BaseItem.Mesh;
                 var item = _meshBuilder.BuildItem(Coords);
@@ -317,19 +313,21 @@ namespace Hedra.Engine.Player.MapSystem
             return null;
         }
 
-        public override Key OpeningKey => Key.M;
+        public override Key OpeningKey => Controls.Map;
 
         public override bool Show
         {
             get => _show;
-            set{
+            set
+            {
                 if(GameManager.IsLoading || _player.Trade.Show) return;
 
                 if (value)
                 {
                     _stateManager.CaptureState();
                     this.UpdateChunks();
-                    TaskManager.Parallel(this.UpdateIcons);
+                    this.ClearIcons();
+                    TaskScheduler.Parallel(this.UpdateIcons);
                     SkyManager.UpdateDayColors = false;
                     WorldRenderer.EnableCulling = false;                  
                     this._targetSize = 1.0f;
@@ -346,7 +344,8 @@ namespace Hedra.Engine.Player.MapSystem
                     this._player.Toolbar.Listen = false;
                     _panel.Enable();
                     SkyManager.PushTime();                   
-                }else
+                }
+                else
                 {
                     _stateManager.ReleaseState();
                     _panel.Disable();
@@ -354,7 +353,7 @@ namespace Hedra.Engine.Player.MapSystem
                     this._targetSize = 0f;
                     this._targetHeight = 0;
                     this._targetTime = SkyManager.PeekTime();
-                    TaskManager.When(() => _height < Camera.DefaultDelegate().Y, delegate
+                    TaskScheduler.When(() => _height < Camera.DefaultDelegate().Y, delegate
                     {
 
                         this._player.View.PositionDelegate = Camera.DefaultDelegate;
@@ -365,9 +364,14 @@ namespace Hedra.Engine.Player.MapSystem
                     });
                     _player.Loader.UpdateFog(Force: true);
                 }
-                SoundManager.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
+                SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
                 _show = value;
             }
+        }
+
+        public void Dispose()
+        {
+            EventDispatcher.UnregisterMouseDown(this);
         }
     }
 }

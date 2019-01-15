@@ -10,8 +10,10 @@ using Hedra.Engine.Game;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.Rendering
 {
@@ -27,6 +29,7 @@ namespace Hedra.Engine.Rendering
         public bool IsBuilded;
         public bool IsGenerated;
         public bool Enabled { get; set; }
+        public bool PrematureCulling => false;
         public bool BuildedOnce { get; set; }
 
         public Vector3 Position { get; set; }
@@ -126,6 +129,12 @@ namespace Hedra.Engine.Rendering
                 _instanceElements.Add(Data);
             else
                 _lodedInstanceElements.Add(Data);
+        }
+        
+        public void RemoveInstance(InstanceData Data)
+        {
+            _instanceElements.Remove(Data);
+            _lodedInstanceElements.Remove(Data);
         }
 
         public InstanceData[] InstanceElements => _instanceElements.ToArray();

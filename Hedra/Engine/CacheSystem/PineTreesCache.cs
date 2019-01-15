@@ -7,15 +7,17 @@ namespace Hedra.Engine.CacheSystem
     {
         public PineTreesCache()
         {
-            this.AddModel(AssetManager.PLYLoader("Assets/Env/Pine0.ply", Vector3.One));
-            this.AddModel(AssetManager.PLYLoader("Assets/Env/Pine1.ply", Vector3.One));
-            this.AddModel(AssetManager.PLYLoader("Assets/Env/Pine2.ply", Vector3.One));
-            this.AddModel(AssetManager.PLYLoader("Assets/Env/Pine3.ply", Vector3.One));
+            this.AddModel(AssetManager.LoadPLYWithLODs("Assets/Env/Trees/Pine0.ply", Vector3.One));
+            this.AddModel(AssetManager.LoadPLYWithLODs("Assets/Env/Trees/Pine1.ply", Vector3.One));
+            this.AddModel(AssetManager.LoadPLYWithLODs("Assets/Env/Trees/Pine2.ply", Vector3.One));
+            this.AddModel(AssetManager.LoadPLYWithLODs("Assets/Env/Trees/Pine3.ply", Vector3.One));
 
-            this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Pine0.ply", 2, Vector3.One));
-            this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Pine1.ply", 3, Vector3.One));
-            this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Pine2.ply", 2, Vector3.One));
-            this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Pine3.ply", 2, Vector3.One));
+            this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Trees/Pine0.ply", 2, Vector3.One));
+            this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Trees/Pine1.ply", 3, Vector3.One));
+            this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Trees/Pine2.ply", 2, Vector3.One));
+            this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Trees/Pine3.ply", 2, Vector3.One));
         }
+        
+        public override CacheItem Type => CacheItem.PineTrees;
     }
 }

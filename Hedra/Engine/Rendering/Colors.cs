@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
+using Hedra.Core;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering

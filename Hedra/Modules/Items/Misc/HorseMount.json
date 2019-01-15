@@ -1,14 +1,14 @@
-﻿{
+{
   "Name": "HorseMount",
   "DisplayName": "Horse Mount",
   "Tier": "Rare",
-  "EquipmentType": "Pet", 
-  "Description": "Horse mount.",
+  "EquipmentType": "Pet",
+  "Description": "Allows you to ride a horse.",
   "Attributes": [
     {
       "Name": "MobType",
       "Value": "Horse",
-      "Hidden":  true
+      "Hidden": true
     },
     {
       "Name": "MountAIType",

@@ -1,0 +1,21 @@
+{
+  "Name": "UncommonEmeraldStaff",
+  "DisplayName": "Emerald Staff",
+  "EquipmentType": "Staff",
+  "Tier": "Uncommon",
+  "Description": "This like many staves is adorned with a gemstone, the creator of this staff chose Emerald.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 3.75
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.1
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Staff/UncommonEmeraldStaff.ply"
+  }
+}

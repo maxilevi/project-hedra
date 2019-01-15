@@ -4,17 +4,22 @@ using Hedra.Engine.ClassSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.ItemSystem.WeaponSystem;
+using Hedra.Engine.ItemSystem.ArmorSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
+using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Player.BoatSystem;
+using Hedra.Engine.Player.CraftingSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.MapSystem;
+using Hedra.Engine.Player.QuestSystem;
 using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.Rendering.UI;
+using Hedra.EntitySystem;
+using Hedra.WeaponSystem;
 using OpenTK;
 
 namespace HedraTests.Player
@@ -30,8 +35,6 @@ namespace HedraTests.Player
             Movement = new SimpleMovementMock(this);
             Model = new HumanoidModel(this, new HumanoidModelTemplate
             {
-                Colors = new ColorTemplate[0],
-                Name = string.Empty,
                 Path = string.Empty,
                 Scale = 0
             });
@@ -50,21 +53,48 @@ namespace HedraTests.Player
         public float AttackCooldown { get; set; }
         public float RandomFactor { get; set; }
         public float AttackResistance { get; set; }
+        public float ManaRegenFactor { get; set; }
         public int Gold { get; set; }
         public float DamageEquation { get; }
         public bool IsTravelling { get; set; }
+        public bool IsFishing { get; set; }
 
-        public void Roll()
-        {
-            throw new NotImplementedException();
-        }
-        
-        public void Attack(float Damage, Action<Entity> Callback)
+        public void Roll(RollType Type)
         {
             throw new NotImplementedException();
         }
 
-        public void Attack(float Damage)
+        public void SetWeapon(Weapon Item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetHelmet(HelmetPiece Item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetChestplate(ChestPiece Item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetPants(PantsPiece Item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetBoots(BootsPiece Item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AttackSurroundings(float Damage, Action<IEntity> Callback)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AttackSurroundings(float Damage)
         {
             throw new NotImplementedException();
         }
@@ -74,7 +104,22 @@ namespace HedraTests.Player
             throw new NotImplementedException();
         }
 
+        public void AddBonusAttackSpeedWhile(float BonusAttackSpeed, Func<bool> Condition)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddBonusHealthWhile(float BonusHealth, Func<bool> Condition)
+        {
+            throw new NotImplementedException();
+        }
+
         public void ProcessHit(bool HittedSomething)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ResetEquipment()
         {
             throw new NotImplementedException();
         }
@@ -88,6 +133,7 @@ namespace HedraTests.Player
         public float BaseSpeed { get; }
         public bool Destroy { get; set; }
         public float Stamina { get; set; }
+        public float AttackingSpeedModifier { get; }
         public int Level { get; set; } = 1;
         public float AttackPower { get; set; }
         public float MaxStamina { get; set; }
@@ -136,7 +182,7 @@ namespace HedraTests.Player
         public EntitySpawner Spawner { get; }
         public IToolbar Toolbar { get; set; }
         public IVehicle Boat { get; }
-        public QuestLog QuestLog { get; }
+        public QuestInterface QuestInterface { get; }
         public IAbilityTree AbilityTree { get; set; }
         public PetManager Pet { get; }
         public Chat Chat { get; }
@@ -180,7 +226,8 @@ namespace HedraTests.Player
         public string Name { get; set; }
         public float Oxygen { get; set; }
         public Vector3 Position { get; set; }
-        public ICollidable[] NearCollisions { get; }
+        public CollisionGroup[] NearCollisions { get; }
+        public CraftingInventory Crafting { get; }
         public bool Enabled { get; set; }
         public void Respawn()
         {
@@ -203,6 +250,7 @@ namespace HedraTests.Player
         }
 
         public Vector3 Rotation { get; set; }
+        public Vector3 Size { get; }
         public string Type { get; set; }
         public void ShowIcon(CacheItem? IconType)
         {
@@ -259,7 +307,12 @@ namespace HedraTests.Player
             throw new NotImplementedException();
         }
 
-        public void UpdateEnviroment()
+        public T[] GetComponents<T>()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateEnvironment()
         {
             throw new NotImplementedException();
         }

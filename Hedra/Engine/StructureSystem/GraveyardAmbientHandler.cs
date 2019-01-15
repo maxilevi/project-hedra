@@ -1,13 +1,13 @@
 using System;
+using Hedra.Core;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
-using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Sound;
-using Hedra.Engine.StructureSystem;
+using Hedra.Sound;
 using OpenTK;
 
-namespace Hedra.Engine.WorldBuilding
+namespace Hedra.Engine.StructureSystem
 {
     public class GraveyardAmbientHandler : IDisposable
     {
@@ -50,7 +50,7 @@ namespace Hedra.Engine.WorldBuilding
                 SkyManager.Enabled = false;
                 _targetCementeryTime = GraveyardDesign.GraveyardSkyTime;
                 _shouldUpdateTime = true;
-                SoundManager.PlayUISound(SoundType.DarkSound);
+                SoundPlayer.PlayUISound(SoundType.DarkSound);
             }
             else if (!_inCementery && wasInCementery)
             {
@@ -78,7 +78,7 @@ namespace Hedra.Engine.WorldBuilding
             if (_parent.Restored && !_restoreSoundPlayed)
             {
                 _restoreSoundPlayed = true;
-                SoundManager.PlaySound(SoundType.DarkSound, GameManager.Player.Position);
+                SoundPlayer.PlaySound(SoundType.DarkSound, GameManager.Player.Position);
 
             }
 
@@ -134,6 +134,7 @@ namespace Hedra.Engine.WorldBuilding
 
         public void Dispose()
         {
+            _particles.Dispose();
             GameManager.AfterSave -= AfterSave;
             GameManager.BeforeSave -= BeforeSave;
         }

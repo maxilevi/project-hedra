@@ -1,5 +1,6 @@
 using System.IO;
 using System.Net;
+using Hedra.API;
 using Hedra.Engine.Loader;
 using NUnit.Framework;
 

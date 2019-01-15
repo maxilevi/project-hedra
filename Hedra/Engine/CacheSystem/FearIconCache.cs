@@ -9,5 +9,7 @@ namespace Hedra.Engine.CacheSystem
         {
             this.AddModel(AssetManager.PLYLoader("Assets/Env/FearIcon.ply", Vector3.One));
         }
+        
+        public override CacheItem Type => CacheItem.FearIcon;
     }
 }

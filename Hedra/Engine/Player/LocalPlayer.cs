@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Hedra.Core;
 using Hedra.Engine.ClassSystem;
 using OpenTK;
 using Hedra.Engine.Sound;
@@ -21,15 +22,20 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Player.BoatSystem;
+using Hedra.Engine.Player.CraftingSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.MapSystem;
+using Hedra.Engine.Player.QuestSystem;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.Rendering.Geometry;
+using Hedra.Sound;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Player
@@ -44,25 +50,26 @@ namespace Hedra.Engine.Player
         public IPlayerInventory Inventory { get; }
         public EntitySpawner Spawner { get; }
         public IToolbar Toolbar { get; }
-        public QuestLog QuestLog { get; }
+        public QuestInterface QuestInterface { get; }
         public IAbilityTree AbilityTree { get; }
         public PetManager Pet { get; }
         public Chat Chat { get; }
         public Minimap Minimap { get; }
         public Map Map { get; }
         public TradeInventory Trade { get; }
+        public CraftingInventory Crafting { get; }
         public IMessageDispatcher MessageDispatcher { get; set; }
         public override float FacingDirection => -(View.TargetYaw * Mathf.Degree - 90f);
-        public ICollidable[] NearCollisions => StructureAware.NearCollisions;
+        public CollisionGroup[] NearCollisions => StructureAware.NearCollisions;
         private IAmbientEffectHandler AmbientEffects { get; }
         private IStructureAware StructureAware { get; }
         private float _acummulativeHealing;
-        private bool _floating;
         private Vector3 _previousPosition;
         private float _health;
         private bool _wasSleeping;
         private bool _enabled;
         private bool _canInteract;
+        private DamageComponent _damageHandler;
 
         public LocalPlayer()
         {
@@ -75,19 +82,19 @@ namespace Hedra.Engine.Player
             this.Toolbar = new Toolbar(this);
             this.Glider = new HangGlider(this);
             this.AbilityTree = new AbilityTree(this);
-            this.QuestLog = new QuestLog(this);
+            this.QuestInterface = new QuestInterface(this);
             this.Pet = new PetManager(this);
             this.Chat = new Chat(this);
             this.Minimap = new Minimap(this);
             this.Map = new Map(this);
+            this.Crafting = new CraftingInventory(this);
             this.Trade = new TradeInventory(this);
             this.Movement = new PlayerMovement(this);
             this.MessageDispatcher = new VisualMessageDispatcher(this);
             this.StructureAware = new StructureAware(this);
             this.Boat = new Boat(this);
             this.AmbientEffects = new AmbientEffectHandler(this);
-            this.BlockPosition = new Vector3(GameSettings.SpawnPoint);
-            this.Physics.CanCollide = true;
+            this.Physics.CollidesWithStructures = true;
             this.AttackPower = 1.0f;
 
             this.SetupHandlers();
@@ -101,10 +108,18 @@ namespace Hedra.Engine.Player
         {
             EventDispatcher.RegisterKeyDown(this, delegate(object Sender, KeyEventArgs Args)
             {
-                if (Key.R == Args.Key && !GameSettings.Paused && IsDead)
+                if (Controls.Respawn == Args.Key && !GameSettings.Paused && IsDead)
                     Respawn();
+                
+                if (Controls.Handlamp == Args.Key && !GameSettings.Paused && CanInteract)
+                {
+                    HandLamp.Enabled = !HandLamp.Enabled;
+                    SoundPlayer.PlaySound(SoundType.NotificationSound, Position);
+                }
             });
-            this.SearchComponent<DamageComponent>().Delete = false;
+
+            _damageHandler = SearchComponent<DamageComponent>();
+            _damageHandler.Delete = false;
         }
 
         public override bool CanInteract
@@ -113,8 +128,7 @@ namespace Hedra.Engine.Player
             set
             {
                 _canInteract = value;
-                if(DmgComponent != null)
-                    DmgComponent.Immune = !value;
+                _damageHandler.Immune = !value;
             }
         }
 
@@ -180,16 +194,6 @@ namespace Hedra.Engine.Player
                 
                 _previousPosition = Model.Human.BlockPosition;
             }
-            
-            if(this.IsRiding){
-                if(this.Position.Y < -1f)
-                    _floating = true;
-                if(_floating)
-                    this.Physics.TargetPosition += Vector3.UnitY * 15 * Time.DeltaTime;
-                if(this.Position.Y > 1f)
-                    _floating = false;
-                if(Model.MountModel == null || Model.MountModel != null && Model.MountModel.Disposed) IsRiding = false;
-            }
 
             try
             {
@@ -218,41 +222,42 @@ namespace Hedra.Engine.Player
 
             if (!this.IsDead)
             {
-                if(!this.DmgComponent.HasBeenAttacked)
+                if(!_damageHandler.HasBeenAttacked)
                     this.Health += HealthRegen * Time.IndependantDeltaTime;
                 this.Mana += ManaRegen * Time.IndependantDeltaTime;
                 this.Stamina += (float)Time.DeltaTime * 4f;
             }
             this.Rotation = new Vector3(0, this.Rotation.Y, 0);
 
-            var underBlock0 = World.GetBlockAt(Mathf.DivideVector(View.CameraPosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (0 + IsoSurfaceCreator.WaterQuadOffset));
-            var underBlock1 = World.GetBlockAt(Mathf.DivideVector(View.CameraPosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (1 + IsoSurfaceCreator.WaterQuadOffset));
-            var underBlock2 = World.GetBlockAt(Mathf.DivideVector(View.CameraPosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (2 + IsoSurfaceCreator.WaterQuadOffset));
-            var underBlock3 = World.GetBlockAt(Mathf.DivideVector(View.CameraPosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (3 + IsoSurfaceCreator.WaterQuadOffset));
-            int lowestY = World.GetLowestY( (int) View.CameraPosition.X, (int) View.CameraPosition.Z);
+            var underBlock0 = World.GetBlockAt(Mathf.DivideVector(View.CameraEyePosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (0 + IsoSurfaceCreator.WaterQuadOffset));
+            var underBlock1 = World.GetBlockAt(Mathf.DivideVector(View.CameraEyePosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (1 + IsoSurfaceCreator.WaterQuadOffset));
+            var underBlock2 = World.GetBlockAt(Mathf.DivideVector(View.CameraEyePosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (2 + IsoSurfaceCreator.WaterQuadOffset));
+            var underBlock3 = World.GetBlockAt(Mathf.DivideVector(View.CameraEyePosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (3 + IsoSurfaceCreator.WaterQuadOffset));
+            int lowestY = World.GetLowestY( (int) View.CameraEyePosition.X, (int) View.CameraEyePosition.Z);
             
             //Log.WriteLine(UnderBlock0.Type);
-            if(underBlock0.Type != BlockType.Water && ( View.CameraPosition.Y / Chunk.BlockSize >= lowestY + 2 &&  underBlock1.Type != BlockType.Water && underBlock2.Type != BlockType.Water && underBlock3.Type != BlockType.Water)){
+            if(underBlock0.Type != BlockType.Water && ( View.CameraEyePosition.Y / Chunk.BlockSize >= lowestY + 2 &&  underBlock1.Type != BlockType.Water && underBlock2.Type != BlockType.Water && underBlock3.Type != BlockType.Water)){
                 GameSettings.DistortEffect = false;
                 GameSettings.UnderWaterEffect = false;
                 WorldRenderer.ShowWaterBackfaces = false;
             }
-            if( underBlock0.Type == BlockType.Water || (View.CameraPosition.Y / Chunk.BlockSize <= lowestY + 2 && (underBlock1.Type == BlockType.Water || underBlock2.Type == BlockType.Water || underBlock3.Type == BlockType.Water))){
+            if( underBlock0.Type == BlockType.Water || (View.CameraEyePosition.Y / Chunk.BlockSize <= lowestY + 2 && (underBlock1.Type == BlockType.Water || underBlock2.Type == BlockType.Water || underBlock3.Type == BlockType.Water))){
                 GameSettings.UnderWaterEffect = true;
                 GameSettings.DistortEffect = true;
                 WorldRenderer.ShowWaterBackfaces = true;
             }
-            this.View.AddonDistance = IsMoving || IsSwimming || IsTravelling ? 3.0f : 0.0f;
+            this.View.AddedDistance = IsMoving || IsSwimming || IsTravelling ? 3.0f : 0.0f;
 
             AmbientEffects.Update();
             StructureAware.Update();
             Loader.Update();
             Inventory.Update();
+            Crafting.Update();
             AbilityTree.Update();
             Toolbar.Update();
             UI.Update();
             ManageSounds();
-            QuestLog.Update();
+            QuestInterface.Update();
             Pet.Update();
             Chat.Update();
             Map.Update();
@@ -286,16 +291,16 @@ namespace Hedra.Engine.Player
         }
         public override Item MainWeapon => Inventory.MainWeapon;
 
-        public void EatFood(){
+        public void EatFood()
+        {
             if(this.IsDead || this.IsEating || this.IsKnocked || this.IsEating || this.IsAttacking || this.IsClimbing) return;
             this.WasAttacking = false;
             this.IsAttacking = false;
             
-            if(Inventory.Food != null){
-                var foodHealth = Inventory.Food.GetAttribute<float>("Saturation");
+            if(Inventory.Food != null)
+            {
                 var foodAmount = Inventory.Food.GetAttribute<int>(CommonAttributes.Amount);
-                Model.SetFood(Inventory.Food);
-                Model.Eat(foodHealth);
+                Model.EatFood(Inventory.Food);
 
                 if(foodAmount > 1)
                     Inventory.Food.SetAttribute(CommonAttributes.Amount, foodAmount-1);
@@ -310,9 +315,9 @@ namespace Hedra.Engine.Player
             if (_health <= 0f)
             {
                 IsDead = true;
-                CoroutineManager.StartCoroutine(this.DmgComponent.DisposeCoroutine);
+                CoroutineManager.StartCoroutine(_damageHandler.DisposeCoroutine);
                 Executer.ExecuteOnMainThread(delegate {
-                    this.MessageDispatcher.ShowMessageWhile("[R] TO RESPAWN", Color.White,
+                    this.MessageDispatcher.ShowMessageWhile(Translations.Get("to_respawn", Controls.Respawn), Color.White,
                         () => this.Health <= 0 && !GameManager.InStartMenu);
                 });
             }
@@ -339,12 +344,12 @@ namespace Hedra.Engine.Player
                 {
                     if (Model.Enabled)
                     {
-                        var newLabel = new Billboard(2.0f, $"+ {(int) _acummulativeHealing} HP", Color.GreenYellow,
+                        var newLabel = new TextBillboard(2.0f, $"+ {(int) _acummulativeHealing} HP", Color.GreenYellow,
                             FontCache.Get(AssetManager.BoldFamily,
                                 18 + 12 * ((_acummulativeHealing - MaxHealth * .05f) / this.MaxHealth),
                                 FontStyle.Bold), this.Model.HeadPosition);
                         newLabel.Vanish = true;
-                        newLabel.Speed = 4;
+                        newLabel.VanishSpeed = 4;
                     }
                     _acummulativeHealing = 0;
                 }
@@ -401,28 +406,29 @@ namespace Hedra.Engine.Player
             Gold = (int)(Gold - goldDiff);
             if (xpDiff > 0)
             {
-                var xp = new Billboard(6f, $"- {xpDiff} XP", Color.Purple,
-                    FontCache.Get(AssetManager.BoldFamily, 18f, FontStyle.Bold), this.Model.HeadPosition + Vector3.UnitY * 1f)
+                var xp = new TextBillboard(6f, $"- {xpDiff} XP", Color.Purple,
+                    FontCache.Get(AssetManager.BoldFamily, 18f, FontStyle.Bold), () => this.Model.HeadPosition + Vector3.UnitY * 1f)
                 {
                     Vanish = true,
-                    Speed = 2,
-                    FollowFunc = () => this.Model.HeadPosition + Vector3.UnitY * 1f
+                    VanishSpeed = 2
                 };
             }
             if (goldDiff > 0)
             {
-                var gold = new Billboard(6f, $"- {goldDiff} G", Color.Gold,
-                    FontCache.Get(AssetManager.BoldFamily, 18f, FontStyle.Bold), this.Model.HeadPosition + Vector3.UnitY * 3f)
+                var gold = new TextBillboard(6f, $"- {goldDiff} G", Color.Gold,
+                    FontCache.Get(AssetManager.BoldFamily, 18f, FontStyle.Bold), () => this.Model.HeadPosition + Vector3.UnitY * 2f)
                 {
                     Vanish = true,
-                    Speed = 2,
-                    FollowFunc = () => this.Model.HeadPosition + Vector3.UnitY * 2f
+                    VanishSpeed = 2
                 };
             }
         }
 
         public void Reset()
         {
+            IsRiding = false;
+            /* Finish removing the mount */
+            Pet.Pet?.Update();
             Inventory.ClearInventory();
             ComponentManager.Clear();
             Chat.Clear();
@@ -447,17 +453,19 @@ namespace Hedra.Engine.Player
         {
             if(Name == string.Empty)
             {
-                Instance.MessageDispatcher.ShowNotification("Name cannot be empty", Color.Red, 3f);
+                Instance.MessageDispatcher.ShowNotification(Translations.Get("name_empty"), Color.Red, 3f);
                 return false;
             }
             if(DataManager.CharacterCount >= GameSettings.MaxCharacters)
             {
-                Instance.MessageDispatcher.ShowNotification($"You cannot have more than {GameSettings.MaxCharacters} characters", Color.Red, GameSettings.MaxCharacters);
+                Instance.MessageDispatcher.ShowNotification(Translations.Get("max_characters", GameSettings.MaxCharacters), Color.Red, GameSettings.MaxCharacters);
                 return false;
             }
-            if(Name.Length > 12)
+
+            const int maxName = 12;
+            if(Name.Length > maxName)
             {
-                Instance.MessageDispatcher.ShowNotification("Name cannot be that long", Color.Red, 3f);
+                Instance.MessageDispatcher.ShowNotification(Translations.Get("name_long", maxName), Color.Red, 3f);
                 return false;
             }
             var data = new PlayerInformation
@@ -470,16 +478,23 @@ namespace Hedra.Engine.Player
 
             var gold = ItemPool.Grab(ItemType.Gold);
             gold.SetAttribute(CommonAttributes.Amount, 5);
-            data.AddItem(PlayerInventory.GoldHolder, gold );
+            data.AddItem(PlayerInventory.GoldHolder, gold);
 
             var food = ItemPool.Grab(ItemType.Berry);
             food.SetAttribute(CommonAttributes.Amount, 5);
-            data.AddItem( PlayerInventory.FoodHolder, food);
+            data.AddItem(PlayerInventory.FoodHolder, food);
 
             data.AddItem(PlayerInventory.WeaponHolder, ClassType.StartingItem);
 
             DataManager.SavePlayer(data);
             return true;
+        }
+
+        public void Dispose()
+        {
+            UpdateManager.Remove(this);
+            DrawManager.Remove(this);
+            EventDispatcher.UnregisterKeyDown(this);
         }
     }
 }

@@ -7,6 +7,7 @@
 
 using System.Reflection;
 using Hedra.Engine.Management;
+using Hedra.EntitySystem;
 
 namespace Hedra.Engine.EntitySystem
 {

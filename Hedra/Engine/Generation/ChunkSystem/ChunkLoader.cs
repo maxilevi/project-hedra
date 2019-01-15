@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Author: Zaphyk
  * Date: 07/02/2016
  * Time: 07:36 p.m.
@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using Hedra.Core;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
@@ -72,7 +73,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var updateTimer = new Timer(0.05f);
             while (GameManager.Exists)
             {
-                //if(!updateTimer.Tick()) continue;
+                if(!updateTimer.Tick()) continue;
                 for (var i = _chunkWatchers.Count - 1; i > -1; i--)
                 {
                     _chunkWatchers[i].Update();
@@ -141,5 +142,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _targetActivechunks = 0;
             _activeChunks = 0;
         }
+
+        public int WatcherCount => _chunkWatchers.Count;
     }
 }

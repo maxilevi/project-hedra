@@ -5,8 +5,7 @@
   "Speed": 1.25,
   "XP": 2.0,
   "Level": 4,
-  "AIType": "Neutral",
-  "Ridable": false,
+  "AIType": "Goat",
   "Effects": [
     {
       "Name": "Knock",

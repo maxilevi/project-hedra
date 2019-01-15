@@ -1,0 +1,21 @@
+{
+  "Name": "UncommonLongStaff",
+  "DisplayName": "Long Staff",
+  "EquipmentType": "Staff",
+  "Tier": "Uncommon",
+  "Description": "Said to be the longest staff in existance.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 4.5
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 0.85
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Staff/UncommonLongStaff.ply"
+  }
+}

@@ -8,6 +8,7 @@
 //
 using OpenTK;
 using System;
+using Hedra.Core;
 
 namespace Hedra.Engine.Generation{
     

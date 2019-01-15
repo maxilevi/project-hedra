@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using Hedra.Core;
 using OpenTK;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Generation;
@@ -16,6 +17,8 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
+using Hedra.EntitySystem;
+using Hedra.Sound;
 
 namespace Hedra.Engine.EntitySystem
 {
@@ -48,7 +51,7 @@ namespace Hedra.Engine.EntitySystem
                 damage.Immune = false;
                 damage.Damage(Parent.MaxHealth, Parent, out _, false, false);
             }
-            SoundManager.PlaySound(SoundType.NotificationSound, Parent.Position);
+            SoundPlayer.PlaySound(SoundType.NotificationSound, Parent.Position);
             Interactee.MessageDispatcher.ShowNotification(CollectMessage, Colors.DarkRed.ToColor(), 3f, false);
             base.Interact(Interactee);
         }

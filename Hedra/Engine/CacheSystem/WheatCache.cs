@@ -14,9 +14,11 @@ namespace Hedra.Engine.CacheSystem
              */
 
             var model = AssetManager.PLYLoader("Assets/Env/Wheat.ply", Vector3.One);
-            model.Extradata.AddRange(model.GenerateWindValues());
+            model.AddWindValues();
 
             this.AddModel(model);
         }
+        
+        public override CacheItem Type => CacheItem.Wheat;
     }
 }

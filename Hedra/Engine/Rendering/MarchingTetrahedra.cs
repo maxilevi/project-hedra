@@ -7,6 +7,7 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Hedra.Core;
 using Hedra.Engine.Rendering.Geometry;
 using OpenTK;
 
@@ -158,7 +159,7 @@ namespace Hedra.Engine.Rendering
                     Vertices.Add(Triangles[i].P[1]);
                     Vertices.Add(Triangles[i].P[2]);
                     
-                    Vector3 Normal = Mathf.CrossProduct(Triangles[i].P[1] - Triangles[i].P[0], Triangles[i].P[2] - Triangles[i].P[0]).Normalized();
+                    Vector3 Normal = Vector3.Cross(Triangles[i].P[1] - Triangles[i].P[0], Triangles[i].P[2] - Triangles[i].P[0]).Normalized();
                     Normals.Add(Normal);
                     Normals.Add(Normal);
                     Normals.Add(Normal);

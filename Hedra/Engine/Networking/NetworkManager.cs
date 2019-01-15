@@ -21,8 +21,10 @@ using System.IO;
 using System.Collections;
 using System.Linq;
 using Hedra.Engine.Game;
+using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.WorldBuilding;
+using Hedra.EntitySystem;
 
 
 namespace Hedra.Engine.Networking
@@ -133,7 +135,6 @@ namespace Hedra.Engine.Networking
                     
                     //0x2 is KeepAlive
                     //if(Buffer[0] != 0x2 && Buffer[0] != 0x0)
-                    //    Log.WriteLine("Packet of ID "+Buffer[0] + " Received");
                     byte PacketID = Buffer[0];
                     byte[] Data = new byte[ (int) Math.Max(Buffer.Length-1,0) ];
                     Array.Copy(Buffer,1,Data,0, (int) Math.Max(Buffer.Length-1,0));

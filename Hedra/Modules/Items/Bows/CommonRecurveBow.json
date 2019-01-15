@@ -1,10 +1,9 @@
-
 {
   "Name": "CommonRecurveBow",
   "DisplayName": "Recurve Bow",
   "EquipmentType": "Bow",
   "Tier": "Common",
-  "Description": "Recurve bow.",
+  "Description": "Using the common Recurve design, this bow has a low draw weight with effective range.",
   "Attributes": [
     {
       "Name": "Damage",

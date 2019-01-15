@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Hedra.BiomeSystem;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ComplexMath;
@@ -10,6 +11,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
@@ -50,7 +52,7 @@ namespace Hedra.Engine.StructureSystem
         {
             var height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
 
-            return !(Math.Abs(ChunkOffset.X - GameSettings.SpawnPoint.X) > 10000 || Math.Abs(ChunkOffset.Y - GameSettings.SpawnPoint.Y) > 10000) &&
+            return Math.Abs(ChunkOffset.X - World.SpawnPoint.X) < 10000 && Math.Abs(ChunkOffset.Y - World.SpawnPoint.Y) < 10000 &&
                    Rng.Next(0, 40) == 1 && BiomeGenerator.PathFormula(TargetPosition.X, TargetPosition.Y) > 0 && height > BiomePool.SeaLevel && !World.StructureHandler.MerchantSpawned;
         }
     }

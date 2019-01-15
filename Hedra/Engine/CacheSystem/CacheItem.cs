@@ -1,6 +1,6 @@
 
 namespace Hedra.Engine.CacheSystem
-{
+{   
     public enum CacheItem
     {
         AppleTrees,
@@ -16,7 +16,6 @@ namespace Hedra.Engine.CacheSystem
         Grass,
         Wheat,
         Cloud,
-        Farm,
         BerryBush,
         AttentionIcon,
         Berries,
@@ -37,7 +36,10 @@ namespace Hedra.Engine.CacheSystem
         CampfireTent,
         CampfireRoaster,
         CampfireLogs,
-        Mushroom,
+        Reed,
+        Sunflower,
+        Pumpkin,
+        Corn,
         MaxEnums
     }
 }

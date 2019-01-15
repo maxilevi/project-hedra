@@ -10,11 +10,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.Core;
 using Hedra.Engine.Management;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
-namespace Hedra.Engine.Rendering
+namespace Hedra.Engine.Rendering.Particles
 {
     /// <summary>
     ///     Description of TrailRenderer.
@@ -199,6 +200,7 @@ namespace Hedra.Engine.Rendering
             if(_buffersCreated) DisposeBuffers();
             else Executer.ExecuteOnMainThread(DisposeBuffers);
             DrawManager.TrailRenderer.Remove(this);
+            Tip = null;
         }
     }
 

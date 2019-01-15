@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Hedra.BiomeSystem;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
 using OpenTK;

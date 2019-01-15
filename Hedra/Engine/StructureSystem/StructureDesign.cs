@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.BiomeSystem;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.ComplexMath;
+using Hedra.Engine.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -11,6 +13,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
@@ -26,14 +29,14 @@ namespace Hedra.Engine.StructureSystem
         
         protected virtual CollidableStructure Setup(Vector3 TargetPosition, Random Rng, BaseStructure Structure)
         {
-            var collidable = new CollidableStructure(this, TargetPosition, new Plateau(TargetPosition, Radius), Structure);
+            var collidable = new CollidableStructure(this, TargetPosition, new RoundedPlateau(TargetPosition.Xz, Radius), Structure);
             Structure.Position = collidable.Position;
             return collidable;
         }
 
         public bool CanSetup(Vector3 TargetPosition)
         {
-            return World.WorldBuilding.CanAddPlateau(new Plateau(TargetPosition, Radius));
+            return World.WorldBuilding.CanAddPlateau(new RoundedPlateau(TargetPosition.Xz, Radius));
         }
 
         public void CheckFor(Vector2 ChunkOffset, Region Biome, RandomDistribution Distribution)
@@ -44,7 +47,7 @@ namespace Hedra.Engine.StructureSystem
                 {
                     var offset = new Vector2(ChunkOffset.X + x * Chunk.Width,
                         ChunkOffset.Y + z * Chunk.Width);
-                    Distribution.Seed = BiomeGenerator.GenerateSeed(offset);
+                    Distribution.Seed = Unique.GenerateSeed(offset);
                     var targetPosition = BuildTargetPosition(offset, Distribution);
                     var items = World.StructureHandler.StructureItems;
                     
@@ -72,7 +75,7 @@ namespace Hedra.Engine.StructureSystem
         
         public static int BuildRngSeed(Vector2 Offset)
         {
-            return BiomeGenerator.GenerateSeed(Offset);
+            return Unique.GenerateSeed(Offset);
         }
 
         public static Vector3 BuildTargetPosition(Vector2 ChunkOffset, IRandom Rng)
@@ -82,10 +85,10 @@ namespace Hedra.Engine.StructureSystem
                 ChunkOffset.Y + Rng.Next(0, (int)(Chunk.Width / Chunk.BlockSize)) * Chunk.BlockSize);
         }
 
-        public bool ShouldSetup(Vector2 ChunkOffset, Vector3 TargetPosition, CollidableStructure[] Items, Region Biome, IRandom Rng)
+        public virtual bool ShouldSetup(Vector2 ChunkOffset, Vector3 TargetPosition, CollidableStructure[] Items, Region Biome, IRandom Rng)
         {
-            bool shouldBe = this.SetupRequirements(TargetPosition, ChunkOffset, Biome, Rng)
-                            && (TargetPosition.Xz - GameSettings.SpawnPoint).LengthSquared > 256 * 256;
+            var shouldBe = this.SetupRequirements(TargetPosition, ChunkOffset, Biome, Rng)
+                            && (TargetPosition - World.SpawnPoint).Xz.LengthSquared > 256 * 256;
 
             return shouldBe && this.ShouldBuild(TargetPosition, Items, Biome.Structures.Designs);
         }
@@ -93,10 +96,10 @@ namespace Hedra.Engine.StructureSystem
         private bool ShouldBuild(Vector3 NewPosition, CollidableStructure[] Items, StructureDesign[] Designs)
         {
             float wSeed = World.Seed * 0.0001f;
-            var height = (int) (World.StructureHandler.SeedGenerator.GetValue(NewPosition.X * .0085f + wSeed,
-                          NewPosition.Z * .0085f + wSeed) * 100f);
-            var index = new Random(height).Next(0, Designs.Length);
-            bool isStructureRegion = index == Array.IndexOf(Designs, this);
+            var voronoi = (int) (World.StructureHandler.SeedGenerator.GetValue(NewPosition.X * .0075f + wSeed,
+                          NewPosition.Z * .0075f + wSeed) * 100f);
+            var index = new Random(voronoi).Next(0, Designs.Length);
+            var isStructureRegion = index == Array.IndexOf(Designs, this);
             if (isStructureRegion)
             {
                 lock (Items)

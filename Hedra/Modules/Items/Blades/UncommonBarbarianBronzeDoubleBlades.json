@@ -1,9 +1,9 @@
 {
   "Name": "UncommonBarbarianBronzeDoubleBlades",
   "DisplayName": "Barbarian Bronze Blades",
-  "EquipmentType": "DoubleBlades", 
+  "EquipmentType": "DoubleBlades",
   "Tier": "Uncommon",
-  "Description": "Barbarian bronze blades.",
+  "Description": "Bulked up and sharpened blades made of bronze for near optimal jabs.",
   "Attributes": [
     {
       "Name": "Damage",

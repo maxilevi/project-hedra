@@ -31,7 +31,7 @@ namespace Hedra.Engine.Rendering
             Dictionary<string, byte[]> Frames = new Dictionary<string, byte[]>();
             List<string> FrameNames = new List<string>();
             
-            using (MemoryStream Ms = new MemoryStream( AssetManager.ReadBinary(File,AssetManager.DataFile3) ))
+            using (MemoryStream Ms = new MemoryStream( AssetManager.ReadBinary(File,AssetManager.AssetsResource) ))
             {
                 using (BinaryReader Reader = new BinaryReader(Ms))
                 {

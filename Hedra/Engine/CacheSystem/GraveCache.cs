@@ -21,5 +21,7 @@ namespace Hedra.Engine.CacheSystem
             this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Grave4.ply", 1, Vector3.One));
             this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Grave5.ply", 1, Vector3.One));
         }
+        
+        public override CacheItem Type => CacheItem.Grave;
     }
 }

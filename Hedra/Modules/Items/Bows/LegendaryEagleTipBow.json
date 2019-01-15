@@ -1,10 +1,9 @@
-
 {
   "Name": "LegendaryEagleTipBow",
   "DisplayName": "Eagle Tip Bow",
   "EquipmentType": "Bow",
   "Tier": "Legendary",
-  "Description": "Eagle tip bow.",
+  "Description": "It is engraved with the shape of an eagle on the grip.",
   "Attributes": [
     {
       "Name": "Damage",

@@ -9,8 +9,11 @@ using OpenTK;
 using Hedra.Engine.Management;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using Hedra.Core;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.EntitySystem;
 
 namespace Hedra.Engine.Player
 {
@@ -19,12 +22,14 @@ namespace Hedra.Engine.Player
         private readonly List<MoveOrder> _order;
         private float _speed;
         public bool CaptureMovement { get; set; } = true;
-        public float JumpingDistance => Human.IsMoving ? 6f : 3f;
-        public bool IsFloating { get; set; }
         public Vector3 RollDirection { get; set; }
+        public virtual bool IsMovingForward { get; protected set; }
+        public virtual bool IsMovingBackwards { get; protected set; }
+        public float RollFacing { get; set; }
         public bool IsJumping { get; private set; }
         protected readonly IHumanoid Human;
         private Vector3 _jumpPropulsion;
+        private float _lastHeight;
 
         public MovementManager(IHumanoid Human)
         {
@@ -51,7 +56,7 @@ namespace Hedra.Engine.Player
             if(Human.Position.Y + Human.Model.Height + 1 > Physics.WaterHeight(Human.Physics.TargetPosition) && Up) return;
             Human.IsGrounded = false;
             Human.Physics.Velocity = Vector3.Zero;
-            Human.Model.Rotation = new Vector3(0, Human.Model.Rotation.Y, 0);
+            Human.Model.LocalRotation = new Vector3(0, Human.Model.LocalRotation.Y, 0);
             if(Up) Human.Physics.TargetPosition += Vector3.UnitY * 12.5f * (float) Time.DeltaTime;
             else Human.Physics.TargetPosition -= Vector3.UnitY * 12.5f * (float) Time.DeltaTime;
 
@@ -59,8 +64,6 @@ namespace Hedra.Engine.Player
                 Human.Physics.TargetPosition.X,
                 Math.Max(Physics.HeightAtPosition(Human.Physics.TargetPosition)+2, Human.Physics.TargetPosition.Y),
                 Human.Physics.TargetPosition.Z);
-
-            IsFloating = true;
         }
 
         protected void Jump()
@@ -76,7 +79,7 @@ namespace Hedra.Engine.Player
             IsJumping = true;
             Human.Physics.ResetFall();
             Human.Physics.GravityDirection = -Vector3.UnitY;
-            _jumpPropulsion = Vector3.UnitY * 80f;
+            _jumpPropulsion = Vector3.UnitY * 60f;
         }
 
         protected virtual void DoUpdate() { }
@@ -84,7 +87,6 @@ namespace Hedra.Engine.Player
         public void ProcessMovement(float CharacterRotation, Vector3 MoveSpace, bool Orientate = true)
         {
             Human.Physics.DeltaTranslate(MoveSpace);
-
             if (Orientate)
             {
                 if (!Human.WasAttacking && !Human.IsAttacking)
@@ -93,16 +95,25 @@ namespace Hedra.Engine.Player
                         Human.Model.TargetRotation.Z);
                     Human.Orientation = new Vector3(MoveSpace.X, 0, MoveSpace.Z).NormalizedFast();
                 }
-                RollDirection = new Vector3(Human.Model.Rotation.X, CharacterRotation, Human.Model.Rotation.Z);
             }
+
+            Human.IsSitting = false;
+        }
+        
+        public void OrientateTowards(float Facing)
+        {
+            Human.Model.TargetRotation = new Vector3(Human.Model.TargetRotation.X, Facing, Human.Model.TargetRotation.Z);
+            var inRadians = Human.Model.LocalRotation.Y * Mathf.Radian;
+            // There seems to be a bug in how we store the rotations so be switch the sines
+            //if(Human is LocalPlayer player)
+            //    Human.Orientation = player.View.LookingDirection;
+            //else
+                Human.Orientation = new Vector3((float)Math.Sin(inRadians), 0, (float)Math.Cos(inRadians));
         }
         
         public void Orientate()
         {
-            Human.Model.TargetRotation = new Vector3(Human.Model.TargetRotation.X, Human.FacingDirection, Human.Model.TargetRotation.Z);
-            var inRadians = Human.Model.Rotation.Y * Mathf.Radian;
-            // There seems to be a bug in how we store the rotations so be switch the sines
-            Human.Orientation = new Vector3((float) Math.Sin(inRadians), 0, (float) Math.Cos(inRadians));
+            OrientateTowards(Human.FacingDirection);
         }
 
         public void Move(Vector3 Position, float Seconds, bool Orientate = true)
@@ -127,9 +138,12 @@ namespace Hedra.Engine.Player
         private void HandleJumping()
         {
             if (!IsJumping) return;
-            if ((Physics.HeightAtPosition(Human.Position)+2 > Human.Position.Y || Human.IsGrounded) && _jumpPropulsion.LengthFast < 40 || Human.IsUnderwater)
+            if ((Physics.HeightAtPosition(Human.Position) > Human.Position.Y || Human.IsGrounded) 
+                && _jumpPropulsion.LengthFast < 30 || Human.IsUnderwater)
+            {
                 IsJumping = false;
-            Human.Physics.DeltaTranslate(_jumpPropulsion);
+            }
+            if(!Human.Physics.DeltaTranslate(_jumpPropulsion, true)) IsJumping = false;
             _jumpPropulsion *= (float)Math.Pow(.25f, Time.DeltaTime * 3f);
         }
 

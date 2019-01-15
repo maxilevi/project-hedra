@@ -1,16 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Animation;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.EntitySystem
 {
     public abstract class UpdatableModel<T> : BaseUpdatableModel, IDisposable where T : class, ICullableModel
     {
+        protected const float PitchSpeed = 1.11f;
         protected HashSet<IModel> AdditionalModels { get; }
         public override Vector3 TargetRotation { get; set; }
         public override bool IsStatic => false;
@@ -19,7 +23,6 @@ namespace Hedra.Engine.EntitySystem
         private T _model;
         private List<IModel> _iterableModels;
         private Box _baseBroadphaseBox = new Box(Vector3.Zero, Vector3.One);
-        private Vector3 _lastPosition;
         private Timer _movingTimer;
 
         protected UpdatableModel(IEntity Parent)
@@ -28,6 +31,8 @@ namespace Hedra.Engine.EntitySystem
             this._movingTimer = new Timer(.05f);
             this.AdditionalModels = new HashSet<IModel>();
             this.Parent = Parent;
+            if(Parent?.Physics != null)
+                Parent.Physics.OnMove += OnMove;
         }
 
         protected void RegisterModel(IModel Model)
@@ -71,7 +76,8 @@ namespace Hedra.Engine.EntitySystem
         public override Vector3[] Vertices => BroadphaseBox.Vertices.ToArray();
         public override CollisionShape[] Colliders => new []{ BroadphaseBox.ToShape() };
         public override CollisionShape BroadphaseCollider => BroadphaseBox.ToShape();
-        public override Box BroadphaseBox => BaseBroadphaseBox.Cache.Translate(Model.Position);
+        public override CollisionShape HorizontalBroadphaseCollider => BaseBroadphaseBox.ToShape();
+        public override Box BroadphaseBox => BaseBroadphaseBox.Cache.Translate(Parent.Physics.TargetPosition);
         public override Box Dimensions { get; protected set; }
 
         public override Box BaseBroadphaseBox
@@ -122,10 +128,10 @@ namespace Hedra.Engine.EntitySystem
             set => _iterableModels.ForEach(M => M.Position = value);
         }
 
-        public override Vector3 Rotation
+        public override Vector3 LocalRotation
         {
-            get => Model.Rotation;
-            set => _iterableModels.ForEach(M => M.Rotation = value);
+            get => Model.LocalRotation;
+            set => _iterableModels.ForEach(M => M.LocalRotation = value);
         }
 
         public override Vector3 Scale
@@ -145,11 +151,8 @@ namespace Hedra.Engine.EntitySystem
 
             if (Parent != null)
             {
-                var isTranslating = (Parent.BlockPosition.Xz - _lastPosition.Xz).LengthFast > 0.001f;
-                if (isTranslating) _movingTimer.Reset();
                 if (IsMoving && _movingTimer.Tick()) IsMoving = false;
-                else if (isTranslating) IsMoving = true;
-                _lastPosition = Parent.BlockPosition;
+                Position = Parent.Physics.TargetPosition;
             }
         }
 
@@ -168,8 +171,16 @@ namespace Hedra.Engine.EntitySystem
             
         }
 
+        private void OnMove()
+        {
+            _movingTimer.Reset();
+            IsMoving = true;  
+        }
+
         public override void Dispose()
         {
+            if(Parent != null)
+                this.Parent.Physics.OnMove -= OnMove;
             this.Model?.Dispose();
             this.Disposed = true;
         }

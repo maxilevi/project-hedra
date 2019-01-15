@@ -8,6 +8,7 @@
  */
 
 using System;
+using Hedra.Core;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
@@ -104,14 +105,14 @@ namespace Hedra.Engine.Player.MapSystem
                 Renderer.LoadProjection(projMatrix);
 
                 var oldShadows = GameSettings.GlobalShadows;
-                var oldFancy = GameSettings.Fancy;
+                var oldFancy = GameSettings.Quality;
                 GameSettings.GlobalShadows = false;
-                GameSettings.Fancy = false;
+                GameSettings.Quality = false;
                 DrawManager.FrustumObject.CalculateFrustum(projMatrix, DrawManager.FrustumObject.ModelViewMatrix);
                 World.CullTest(DrawManager.FrustumObject);
                 WorldRenderer.Render(World.DrawingChunks, World.ShadowDrawingChunks, WorldRenderType.Static);
                 WorldRenderer.Render(World.DrawingChunks, World.ShadowDrawingChunks, WorldRenderType.Water);
-                GameSettings.Fancy = oldFancy;
+                GameSettings.Quality = oldFancy;
                 GameSettings.GlobalShadows = oldShadows;
 
                 _player.View.Pitch = oldPitch;
@@ -148,12 +149,12 @@ namespace Hedra.Engine.Player.MapSystem
             _mapCursor.Enable();
             _miniMapRing.Enable();
             _miniMapNorth.Enable();
-            _miniMapNorth.BaseTexture.TextureElement.Angle = -_player.Model.Rotation.Y;
+            _miniMapNorth.BaseTexture.TextureElement.Angle = -_player.Model.LocalRotation.Y;
 
             if (HasMarker)
             {
                 Vector3 rot = Physics.DirectionToEuler(MarkedDirection);
-                _miniMapMarker.BaseTexture.TextureElement.Angle = -_player.Model.Rotation.Y + rot.Y;
+                _miniMapMarker.BaseTexture.TextureElement.Angle = -_player.Model.LocalRotation.Y + rot.Y;
                 _miniMapMarker.Enable();
             }
             else
@@ -183,7 +184,7 @@ namespace Hedra.Engine.Player.MapSystem
             Shader["Opacity"] = _miniMap.TextureElement.Opacity;
             Shader["Grayscale"] = _miniMap.TextureElement.Grayscale ? 1 : 0;
             Shader["Tint"] = _miniMap.TextureElement.Tint;
-            Shader["Rotation"] = Matrix3.CreateRotationZ(-_player.Model.Rotation.Y * Mathf.Radian);
+            Shader["Rotation"] = Matrix3.CreateRotationZ(-_player.Model.LocalRotation.Y * Mathf.Radian);
 
             DrawManager.UIRenderer.DrawQuad();
 

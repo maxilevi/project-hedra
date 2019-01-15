@@ -1,0 +1,21 @@
+{
+  "Name": "RareEpitaphStaff",
+  "DisplayName": "Epitaph Staff",
+  "EquipmentType": "Staff",
+  "Tier": "Rare",
+  "Description": "A deeply inscribed staff for transferring souls to the afterlife.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 5.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 0.95
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Staff/RareEgipticStaff.ply"
+  }
+}

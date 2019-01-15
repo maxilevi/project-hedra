@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
+using Hedra.Core;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.StructureSystem.VillageSystem.Templates;
+using Hedra.Engine.WorldBuilding;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
@@ -19,9 +23,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         
         public override bool Place(MarketParameters Parameters, VillageCache Cache)
         {
-            var work = this.CreateGroundwork(Parameters.Position, Parameters.Size);
-            work.Groundwork = null;
-            work.Plateau.NoTrees = true;
+            var work = this.CreateGroundwork(Parameters.Position, Parameters.Size, BlockType.StonePath);
             return this.PushGroundwork(work);
         }
 
@@ -30,15 +32,15 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return Input;
         }
 
-        public override BuildingOutput Build(MarketParameters Parameters, VillageCache Cache, Random Rng, Vector3 Center)
+        public override BuildingOutput Build(MarketParameters Parameters, DesignTemplate Design, VillageCache Cache, Random Rng, Vector3 Center)
         {
-            float marketDist = 4.75f + Rng.NextFloat() * .75f + 1.2f;
-            int marketCount = 16 + Rng.Next(0, 4);
+            float marketDist = 3.5f + Rng.NextFloat() * .75f + 0.2f;
+            int marketCount = 8 + Rng.Next(0, 4);
 
             var marketModels = new List<VertexData>();
             var marketShapes = new List<CollisionShape>();
             var originalPosition = Parameters.Position;
-            var transMatrix = Matrix4.CreateScale(5f) * Matrix4.CreateTranslation(originalPosition);
+            var transMatrix = Matrix4.CreateScale(4f) * Matrix4.CreateTranslation(originalPosition);
             for (var i = 0; i < marketCount; i++)
             {
                 switch (i)
@@ -50,24 +52,24 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                         SpawnHumanoid(HumanType.Merchant, originalPosition + Vector3.UnitZ * 40f);
                         break;
                     case 2:
-                        SpawnVillager(originalPosition - Vector3.UnitX * 40f, false);
+                        SpawnVillager(originalPosition - Vector3.UnitX * 40f);
                         break;
                     case 3:
-                        SpawnVillager(originalPosition + Vector3.UnitX * 40f, false);
+                        SpawnVillager(originalPosition + Vector3.UnitX * 40f);
                         break;
                 }
 
-
+/*
                 if(base.IntersectsWithAnyPath(
                     Vector3.TransformPosition(
                          Vector3.UnitZ * marketDist * Chunk.BlockSize, Matrix4.CreateRotationY(360 / marketCount * i * Mathf.Radian) * transMatrix
                     ).Xz,
                     16
-                )) continue;
+                )) continue;*/
                 
-                VertexData market0 = VillageCache.Market.Market0_Clone.Clone();
+                VertexData market0 = VillageCache.Market.Market0_Clone.ToVertexData().Clone();
                 bool extraShelf = Rng.Next(0, 4) != 0;
-                if (extraShelf) market0 += VillageCache.Market.Market1_Clone.Clone();
+                if (extraShelf) market0 += VillageCache.Market.Market1_Clone.ToVertexData().Clone();
                 market0.Transform(Matrix4.CreateRotationY(90 * Mathf.Radian));
                 market0.Translate(Vector3.UnitZ * marketDist * Chunk.BlockSize);
                 market0.Transform(Matrix4.CreateRotationY(360 / marketCount * i * Mathf.Radian));
@@ -90,7 +92,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 else if (basketCount == 3 || basketCount == 4 || basketCount == 5) basketCount = 4;
 
                 List<CollisionShape> shelfShapes = VillageCache.Market.ShelfShapes_Clones[basketCount].DeepClone();
-                VertexData shelfModel = VillageCache.Market.ShelfModels_Clones[basketCount].Clone();
+                VertexData shelfModel = VillageCache.Market.ShelfModels_Clones[basketCount].ToVertexData().Clone();
 
                 shelfModel.Transform(Matrix4.CreateRotationY(90 * Mathf.Radian));
                 shelfModel.Translate(Vector3.UnitZ * marketDist * Chunk.BlockSize);
@@ -118,7 +120,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                     if (basketCount != -1)
                     {
                         shelfShapes = VillageCache.Market.ShelfShapes_Clones[basketCount].DeepClone();
-                        shelfModel = VillageCache.Market.ShelfModels_Clones[basketCount].Clone();
+                        shelfModel = VillageCache.Market.ShelfModels_Clones[basketCount].ToVertexData().Clone();
 
                         shelfModel.Transform(Matrix4.CreateRotationY(90 * Mathf.Radian));
                         shelfModel.Translate(Vector3.UnitZ * marketDist * Chunk.BlockSize);
@@ -143,13 +145,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return new BuildingOutput
             {
                 Models = marketModels,
-                Shapes = marketShapes
+                Shapes = marketShapes,
+                BuildAsInstance = false
             };
-        }
-
-        public override void Polish(MarketParameters Parameters)
-        {
-
         }
 
         private static Vector4 MarketColor(Random Rng)

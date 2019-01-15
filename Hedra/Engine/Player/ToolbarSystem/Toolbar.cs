@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Created by SharpDevelop.
  * User: maxi
  * Date: 01/07/2016
@@ -12,10 +12,11 @@ using System.Linq;
 using System.Text;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
-using Hedra.Engine.ItemSystem.WeaponSystem;
+using Hedra.Engine.Loader;
 using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.Skills;
+using Hedra.WeaponSystem;
 using OpenTK;
 using OpenTK.Input;
 
@@ -24,7 +25,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
     /// <summary>
     /// Description of SkillsBar.
     /// </summary>
-    public class Toolbar : IToolbar
+    public class Toolbar : IToolbar, IDisposable
     {
         public const int InteractableItems = 4;
         public const int BarItems = 7;
@@ -67,8 +68,14 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
         private void LoadSkills()
         {
-            Type[] skillsTypes = AppDomain.CurrentDomain.GetAssemblies().SelectMany(Assembly => Assembly.GetLoadableTypes())
-                .Where(Type => Type.IsSubclassOf(typeof(BaseSkill))).Where(Type => Type != typeof(WeaponAttack)).Where(Type => !Type.IsAbstract).ToArray();
+            bool Filter(Type T) => T.IsSubclassOf(typeof(BaseSkill)) && T != typeof(WeaponAttack) && !T.IsAbstract;
+            
+            var skillsTypes = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(Assembly => Assembly.GetLoadableTypes())
+                .Where(Filter)
+                //.Concat(ModificationsLoader.GetTypes(Filter))
+                .ToArray();
+            
             _skills = new BaseSkill[skillsTypes.Length];
             for (var i = 0; i < Skills.Length; i++)
             {
@@ -218,6 +225,12 @@ namespace Hedra.Engine.Player.ToolbarSystem
                 _manager.Enabled = _show;
                 this.UpdateView();
             }
+        }
+
+        public void Dispose()
+        {
+            EventDispatcher.UnregisterMouseDown(this);
+            EventDispatcher.UnregisterMouseUp(this);
         }
     }
 }

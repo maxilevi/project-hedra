@@ -1,3 +1,4 @@
+using Hedra.BiomeSystem;
 using Hedra.Engine.TreeSystem;
 
 namespace Hedra.Engine.BiomeSystem.UndeadBiome

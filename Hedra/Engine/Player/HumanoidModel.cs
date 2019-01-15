@@ -9,6 +9,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Hedra.Core;
 using Hedra.Engine.ComplexMath;
 using OpenTK;
 using Hedra.Engine.Rendering;
@@ -17,19 +18,20 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Sound;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.ModuleSystem;
-using Hedra.Engine.ModuleSystem.AnimationEvents;
+using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Animation;
+using Hedra.EntitySystem;
+using Hedra.Rendering;
+using Hedra.Sound;
 
 namespace Hedra.Engine.Player
 {
-    /// <inheritdoc/>
     /// <summary>
     /// Description of PlayerModel.
     /// </summary>
-    public sealed class HumanoidModel : UpdatableModel<AnimatedModel>, IAudible, IDisposeAnimation
+    public sealed class HumanoidModel : AnimatedUpdatableModel, IAudible, IDisposeAnimation
     {
         private const float DefaultScale = 0.75f;
         public IHumanoid Human { get; private set; }
@@ -50,6 +52,7 @@ namespace Hedra.Engine.Player
         private Animation _jumpAnimation;
         private Animation _sailingAnimation;
         private Animation _helloAnimation;
+        private Animation _fishingAnimation;
         public Joint LeftShoulderJoint { get; private set; }
         public Joint RightShoulderJoint { get; private set; }
         public Joint LeftElbowJoint { get; private set; }
@@ -64,18 +67,17 @@ namespace Hedra.Engine.Player
         private Animation _animationPlaying;
         private AreaSound _modelSound;
         private StaticModel _food;
-        public Weapon LeftWeapon { get; private set; }
-        public QuadrupedModel MountModel;
         private AnimatedCollider _collider;
+        public Vector3 RidingOffset { get; set; }
 
         public override CollisionShape BroadphaseCollider => _collider.Broadphase;
+        public override CollisionShape HorizontalBroadphaseCollider => _collider.HorizontalBroadphase;
         public override CollisionShape[] Colliders => _collider.Shapes;
         public override Vector3[] Vertices => _collider.Vertices;
         public override bool IsWalking => _walkAnimation == Model.AnimationPlaying;
-        public bool LockWeapon { get; set; }
         public override Vector4 Tint { get; set; }
         public override Vector4 BaseTint { get; set; }
-        private string _modelPath;
+        protected override string ModelPath { get; set; }
         private ObjectMesh _lampModel;
         private bool _hasLamp;
         private Vector3 _previousPosition;
@@ -92,6 +94,7 @@ namespace Hedra.Engine.Player
         private Vector3 _defaultRightWeaponPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
         private Vector3 _defaultChestPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
         private bool _isDisposeAnimationPlaying;
+        private Timer _foodTimer;
 
 
         public HumanoidModel(IHumanoid Human, HumanoidModelTemplate Template) : base(Human)
@@ -101,25 +104,12 @@ namespace Hedra.Engine.Player
 
         public HumanoidModel(IHumanoid Human, HumanType Type) : base(Human)
         {
-            Load(Human, HumanoidLoader.ModelTemplater[Type]);
+            Load(Human, HumanoidLoader.HumanoidTemplater[Type].Model);
         }
 
         public HumanoidModel(IHumanoid Human) : base(Human)
         {
-            Load(Human, HumanoidLoader.ModelTemplater[Human.Class]);
-        }
-
-        public void Paint(Vector4[] Colors)
-        {
-            if(Colors.Length > AssetManager.ColorCodes.Length)
-                throw new ArgumentOutOfRangeException($"Provided amount of colors cannot be higher than the color codes.");
-
-            var colorMap = new Dictionary<Vector3, Vector3>();
-            for (var i = 0; i < Colors.Length; i++)
-            {
-                colorMap.Add(AssetManager.ColorCodes[i].Xyz, Colors[i].Xyz);
-            }
-            AnimationModelLoader.Paint(Model, _modelPath, colorMap);
+            Load(Human, HumanoidLoader.HumanoidTemplater[Human.Class].Model);
         }
 
         private void Load(IHumanoid Humanoid, HumanoidModelTemplate Template)
@@ -127,8 +117,7 @@ namespace Hedra.Engine.Player
             Human = Humanoid;
             Scale = Vector3.One * Template.Scale;
             Tint = Vector4.One;
-            LeftWeapon = Weapon.Empty;
-            _modelPath = Template.Path;
+            ModelPath = Template.Path;
             
             Model = AnimationModelLoader.LoadEntity(Template.Path);
 
@@ -160,6 +149,7 @@ namespace Hedra.Engine.Player
             _sleepAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSleep.dae");
             _jumpAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorJump.dae");
             _sailingAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSit.dae");
+            _fishingAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSit.dae");
             _helloAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorHello.dae");
             _helloAnimation.Loop = false;
             
@@ -171,18 +161,24 @@ namespace Hedra.Engine.Player
 
             _eatAnimation.OnAnimationStart += delegate
             {
-                SoundManager.PlaySound(SoundType.FoodEat, Position);
+                SoundPlayer.PlaySound(SoundType.FoodEat, Position);
             };
-
-            _eatAnimation.OnAnimationEnd += delegate{ 
-                _food.Enabled = false;            
+            
+            _eatAnimation.OnAnimationUpdate += delegate { _foodTimer.Tick(); };
+            _eatAnimation.OnAnimationEnd += delegate
+            {
+                _food.Enabled = false;
                 Humanoid.IsEating = false;
             };
-
+            
             _collider = new AnimatedCollider(Template.Path, Model);
             BaseBroadphaseBox = AssetManager.LoadHitbox(Template.Path) * Model.Scale;
             Dimensions = AssetManager.LoadDimensions(Template.Path) * Model.Scale;
             _modelSound = new AreaSound(SoundType.HumanRun, Vector3.Zero, 48f);
+            _foodTimer = new Timer(1)
+            {
+                AutoReset = false
+            };
             _food = new StaticModel(VertexData.Empty)
             {
                 Scale = Vector3.One * 1.5f
@@ -194,9 +190,11 @@ namespace Hedra.Engine.Player
             if(_hasLamp == Active) return;
             _hasLamp = Active;
             
-            if(_lampModel == null){
+            if(_lampModel == null)
+            {
                 var lampData = AssetManager.PLYLoader("Assets/Items/Handlamp.ply", new Vector3(1.5f, 1.5f, 1.5f), Vector3.Zero, Vector3.Zero, true);
                 _lampModel = ObjectMesh.FromVertexData(lampData);
+                RegisterModel(_lampModel);
             }
             _lampModel.Enabled = Active;
         }
@@ -222,40 +220,18 @@ namespace Hedra.Engine.Player
             DisposeTime = 0;
         }
 
-        public override void Attack(IEntity Victim)
+        public void EatFood(Item Food)
         {
-            if(!Human.IsKnocked && !Human.IsAttacking && !(Human is LocalPlayer)){
-                LeftWeapon.Attack1(Human);
-            }
-        }
-        
-        public void SetWeapon(Weapon Weapon)
-        {
-            if(Weapon == LeftWeapon)
-                return;
-
-            LeftWeapon.Dispose();
-            UnregisterModel(LeftWeapon);
-
-            LeftWeapon = Weapon;
-            LeftWeapon.Enabled = Enabled;
-            LeftWeapon.Scale = Model.Scale;
-            LeftWeapon.Alpha = Model.Alpha;
-
-            RegisterModel(LeftWeapon);
-
-            (Human as LocalPlayer)?.Toolbar.SetAttackType(LeftWeapon);
-        }
-
-        public void SetFood(Item Food)
-        {
+            _foodTimer.AlertTime = Food.GetAttribute<float>("EatTime");
+            _foodTimer.Reset();
             _food.SetModel(Food.Model);
+            Eat(Food.GetAttribute<float>("Saturation"));
         }
         
-        public void Eat(float FoodHealth)
+        private void Eat(float FoodHealth)
         {
             Human.IsEating = true;
-            TaskManager.While( 
+            TaskScheduler.While( 
                 () => Human.IsEating && !Human.IsDead,
                 () => Human.Health += FoodHealth * Time.IndependantDeltaTime * .3f);
             Model.BlendAnimation(_eatAnimation);
@@ -271,11 +247,10 @@ namespace Hedra.Engine.Player
             if (Human.IsMoving)
             {
                 currentAnimation = _walkAnimation;
-                Human.IsSitting = false;
+                //if(Human.IsSitting) Human.IsSitting = false;
                 if (Human.IsRiding)
                 {
                     currentAnimation = _rideAnimation;
-                    MountModel?.Run();
                 }
                 if (Human.IsUnderwater)
                 {
@@ -288,7 +263,6 @@ namespace Hedra.Engine.Player
                 if (Human.IsRiding)
                 {
                     currentAnimation = _idleRideAnimation;
-                    MountModel?.Idle();
                 }
                 if (Human.IsUnderwater)
                 {
@@ -337,6 +311,10 @@ namespace Hedra.Engine.Player
             {
                 currentAnimation = _knockedAnimation;
             }
+            if (Human.IsFishing)
+            {
+                currentAnimation = _fishingAnimation;
+            }
             if (currentAnimation != null && Model.AnimationPlaying != currentAnimation 
                 && (Model.AnimationPlaying != _animationPlaying || _animationPlaying == null))
             {
@@ -350,6 +328,12 @@ namespace Hedra.Engine.Player
                 }
             }
         }
+
+        public void Play(Animation Animation)
+        {
+            PlayAnimation(Animation);
+            BlendAnimation(Animation);
+        }
         
         public void PlayAnimation(Animation Animation)
         {
@@ -357,7 +341,7 @@ namespace Hedra.Engine.Player
             Model.PlayAnimation(_animationPlaying);
         }
 
-        public void Blend(Animation Animation)
+        public void BlendAnimation(Animation Animation)
         {
             Model.BlendAnimation(Animation);
         }
@@ -385,18 +369,19 @@ namespace Hedra.Engine.Player
                 
             _food.TransformationMatrix = mat4;
             _food.Position = Model.Position;
-            _food.TargetRotation = new Vector3(180, 0, 0);
-            _food.RotationPoint = Vector3.Zero;
-            _food.Rotation = Vector3.Zero;
+            _food.TargetRotation = Vector3.Zero;
+            _food.LocalRotationPoint = Vector3.Zero;
             _food.LocalRotation = Vector3.Zero;
+            _food.Rotation = new Vector3(90, 0, 0);
             _food.LocalPosition = Vector3.Zero;
-            _food.BeforeLocalRotation = Vector3.Zero;
+            _food.BeforeRotation = Vector3.Zero;
             _food.Enabled = true;
         }
         
         private void HandleRollEffects()
         {
-            if(_previousPosition != Human.BlockPosition && Human.IsGrounded){
+            if(_previousPosition != Human.BlockPosition && Human.IsGrounded)
+            {
                 World.Particles.VariateUniformly = true;
                 World.Particles.Color = Vector4.One;//World.GetHighestBlockAt( (int) this.Human.Position.X, (int) this.Human.Position.Z).GetColor(Region.Default);// * new Vector4(.8f, .8f, 1.0f, 1.0f);
                 World.Particles.Position = Human.Position - Vector3.UnitY;
@@ -419,48 +404,33 @@ namespace Hedra.Engine.Player
             base.Update();
             HandleState();
             _walkAnimation.Speed = Human.Speed;
-            _modelSound.Pitch = Human.Speed / 1.11f;
-            
-            var positionAddon = Vector3.Zero;
-            if (MountModel != null)
-            {
-                positionAddon += MountModel.Height * Vector3.UnitY * .5f;
-            }
-
-            Model.Position = Mathf.Lerp(Model.Position, Position + positionAddon, Time.IndependantDeltaTime * 32f);
-            if (MountModel != null)
-            {
-                MountModel.Position = Mathf.Lerp(MountModel.Position, Position, Time.IndependantDeltaTime * 32f);
-            }
+            _modelSound.Pitch = Human.Speed / PitchSpeed;
+            Model.Position = Mathf.Lerp(Model.Position, Position + RidingOffset, Time.IndependantDeltaTime * 24f);
             _rotationQuaternionX = Quaternion.Slerp(_rotationQuaternionX, QuaternionMath.FromEuler(Vector3.UnitX * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
             _rotationQuaternionY = Quaternion.Slerp(_rotationQuaternionY, QuaternionMath.FromEuler(Vector3.UnitY * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
             _rotationQuaternionZ = Quaternion.Slerp(_rotationQuaternionZ, QuaternionMath.FromEuler(Vector3.UnitZ * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
-            Model.Rotation = new Vector3(
+            Model.LocalRotation = new Vector3(
                 QuaternionMath.ToEuler(_rotationQuaternionX).X,
                 QuaternionMath.ToEuler(_rotationQuaternionY).Y,
                 QuaternionMath.ToEuler(_rotationQuaternionZ).Z
                 );
-
-            Rotation = Model.Rotation;
-            if(MountModel != null)
-                MountModel.TargetRotation = TargetRotation;
-
-            if(!LockWeapon) LeftWeapon.Update(Human);
-            
-            if(_hasLamp){
+            LocalRotation = Model.LocalRotation;
+            if(_hasLamp)
+            {
                 _lampModel.Position = LeftWeaponPosition;
-                _lampModel.Rotation = Rotation;
-                _lampModel.RotationPoint = Vector3.Zero;
+                _lampModel.LocalRotation = LocalRotation;
+                _lampModel.LocalRotationPoint = Vector3.Zero;
             }
             Human.HandLamp.Update();
-
             if (!Disposed)
             {
                 _modelSound.Type = Human.IsSleeping 
                     ? SoundType.HumanSleep 
-                    : SoundType.HumanRun;
+                    : Human.Physics.IsOverAShape
+                        ? SoundType.HumanRunWood 
+                        : SoundType.HumanRun;
                 _modelSound.Position = Position;
-                _modelSound.Update(IsWalking && !Human.IsJumping && !Human.IsSwimming || Human.IsSleeping);
+                _modelSound.Update(IsWalking && !Human.IsJumping && !Human.IsSwimming && Human.IsGrounded || Human.IsSleeping);
             }
             Model.Update();
         }
@@ -468,6 +438,19 @@ namespace Hedra.Engine.Player
         public void StopSound()
         {
             _modelSound.Stop();
+        }
+
+        public void RegisterEquipment(IModel Equipment)
+        {
+            Equipment.Enabled = Enabled;
+            Equipment.Scale = Model.Scale;
+            Equipment.Alpha = Model.Alpha;
+            RegisterModel(Equipment);
+        }
+        
+        public void UnregisterEquipment(IModel Equipment)
+        {
+            UnregisterModel(Equipment);
         }
 
         public Vector3 TransformFromJoint(Vector3 Point, Joint Joint)
@@ -496,6 +479,8 @@ namespace Hedra.Engine.Player
         
         public Animation AnimationBlending => Model.AnimationBlending;
 
+        public Matrix4 HeadMatrix => Model.MatrixFromJoint(HeadJoint);
+        
         public Matrix4 ChestMatrix => Model.MatrixFromJoint(ChestJoint);
 
         public Matrix4 LeftWeaponMatrix => Model.MatrixFromJoint(LeftWeaponJoint);
@@ -574,16 +559,16 @@ namespace Hedra.Engine.Player
             set => Model.TransformationMatrix = value;
         }
         
-        public override Vector3 Rotation { get; set; }
+        public override Vector3 LocalRotation { get; set; }
 
         public override void Dispose()
         {
+            _food.Dispose();
             _collider.Dispose();
             Model.Dispose();
             _lampModel?.Dispose();
-            LeftWeapon.Dispose();
             
-            var flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+            const BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
             foreach (var field in GetType().GetFields(flags))
             {
                 if(field.GetType() == typeof(Animation))
@@ -593,7 +578,8 @@ namespace Hedra.Engine.Player
         }
     }
     
-    public enum HumanType{
+    public enum HumanType
+    {
         Warrior,
         Archer,
         Rogue,
@@ -602,7 +588,7 @@ namespace Hedra.Engine.Player
         Blacksmith,
         Mandragora,
         TravellingMerchant,
-        Villager,
+        Gnoll,
         Mage
     }
 }

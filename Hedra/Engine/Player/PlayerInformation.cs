@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System.Collections.Generic;
+using System.Linq;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.Game;
 using OpenTK;
@@ -35,14 +36,15 @@ namespace Hedra.Engine.Player
         public ClassDesign Class { get; set; }
         public float RandomFactor { get; set; }
         private Dictionary<int, Item> _items;
+        private List<string> _learnedRecipes;
 
         public PlayerInformation()
         {
             this.Level = 1;
             this.Daytime = 12000;
             this.Health = 100;
-            this.BlockPosition = GameSettings.SpawnPoint.ToVector3();
             this._items = new Dictionary<int, Item>();
+            this._learnedRecipes = new List<string>();
             this.AbilityTreeArray = new byte[0];
             this.ToolbarArray = new byte[4];
         }
@@ -50,12 +52,23 @@ namespace Hedra.Engine.Player
         public void AddItem(int Index, Item ItemSpecification)
         {
             _items.Add(Index, ItemSpecification);
-
+        }
+        
+        public void AddLearnedRecipe(string RecipeName)
+        {
+            _learnedRecipes.Add(RecipeName);
         }
 
-        public KeyValuePair<int, Item>[] Items {
+        public KeyValuePair<int, Item>[] Items
+        {
             get => _items.ToArray();
             set => _items = value.FromArray();
+        }
+
+        public string[] Recipes
+        {
+            get => _learnedRecipes.ToArray();
+            set => _learnedRecipes = value.ToList();
         }
 
         public bool IsCorrupt => 

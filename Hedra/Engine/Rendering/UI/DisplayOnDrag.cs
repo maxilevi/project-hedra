@@ -6,12 +6,13 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
+
+using Hedra.Core;
 using Hedra.Engine.Events;
 using OpenTK;
 using OpenTK.Input;
 
-namespace Hedra.Engine.Rendering
+namespace Hedra.Engine.Rendering.UI
 {
     /// <summary>
     /// Description of OnDrag.
@@ -41,6 +42,5 @@ namespace Hedra.Engine.Rendering
             if(E.Mouse.IsButtonUp(MouseButton.Left))
                 _inFocus = false;
         }
-        
     }
 }

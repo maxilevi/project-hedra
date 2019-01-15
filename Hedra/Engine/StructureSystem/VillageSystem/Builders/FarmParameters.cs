@@ -6,29 +6,30 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
     public class FarmParameters : IBuildingParameters
     {
-        public DesignTemplate Design { get; set; }
-        public DesignTemplate WindmillDesign { get; set; }
+        public FarmDesignTemplate Design { get; set; }
+        public WindmillDesignTemplate WindmillDesign { get; set; }
+        public PropTemplate PropDesign { get; set; }
         public Vector3 Position { get; set; }
         public Vector3 Rotation { get; set; }
         public Random Rng { get; set; }
         public bool HasWindmill { get; set; }
+        public bool InsidePaths { get; set; }
+        public DesignTemplate[] PropDesigns { get; set; }
 
-        public FarmParameters AlterPosition(Vector3 Offset)
+        DesignTemplate IBuildingParameters.Design
         {
-            return new FarmParameters
-            {
-                Design = Design,
-                WindmillDesign = WindmillDesign,
-                Position = Position + Offset,
-                Rng = Rng,
-                HasWindmill = HasWindmill
-            };
+            get => Design;
+            set => Design = value as FarmDesignTemplate;
         }
 
         public float GetSize(VillageCache Cache)
-        {
-            var diameter = Cache.GrabSize(Design.Path).Xz.LengthFast * 3f;
-            return diameter * .5f;
+        {          
+            var size = 0f;
+            for (var i = 0; i < PropDesigns.Length; i++)
+            {
+                size = Math.Max(size, Cache.GrabSize(PropDesigns[i].Path).Xz.LengthFast * .75f);
+            }
+            return size;       
         }
     }
 }

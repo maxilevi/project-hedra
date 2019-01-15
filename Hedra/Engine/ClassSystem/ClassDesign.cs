@@ -1,10 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Hedra.API;
+using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Player.Skills;
+using OpenTK;
 
 namespace Hedra.Engine.ClassSystem
 {
@@ -12,12 +17,17 @@ namespace Hedra.Engine.ClassSystem
     {
         public static Type[] AvailableClasses { get; }
         public static string[] ClassNames { get; }
+        public static string[] AvailableClassNames { get; }
+        private static readonly Dictionary<string, Type> ClassMap;
 
         static ClassDesign()
         {
-            AvailableClasses = Reflection.GetLoadableTypes(Assembly.GetExecutingAssembly(), typeof(ClassDesign).Namespace)
-                .Where(T => T.IsSubclassOf(typeof(ClassDesign)) ).Where(T => !Attribute.IsDefined(T, typeof(HiddenClassAttribute)) ).ToArray();
-            ClassNames = AvailableClasses.Select(ClassDesign.ToString).ToArray();
+            var classes = Assembly.GetExecutingAssembly().GetLoadableTypes()
+                .Where(T => T.IsSubclassOf(typeof(ClassDesign))).ToArray();
+            ClassMap = classes.ToDictionary( T => FromType(T).ToString(), T => T);
+            AvailableClasses = classes.Where(T => !Attribute.IsDefined(T, typeof(HiddenClassAttribute))).ToArray();
+            ClassNames = ClassMap.Keys.ToArray();
+            AvailableClassNames = AvailableClasses.Select(T => FromType(T).ToString()).ToArray();
         }
 
         public string Name => this.ToString();
@@ -29,6 +39,13 @@ namespace Hedra.Engine.ClassSystem
         public abstract float AttackResistance { get; }
         public abstract float MaxStamina { get; }
         public abstract float BaseDamage { get; }
+        public abstract float AttackingSpeedModifier { get; }
+        public abstract Matrix4 HelmetPlacement { get; }
+        public abstract Matrix4 ChestplatePlacement { get; }
+        public abstract Matrix4 PantsMatrixPlacement { get; }
+        public abstract Matrix4 LeftBootPlacement { get; }
+        public abstract Matrix4 RightBootPlacement { get; }
+        public abstract Class Type { get; }
 
         public abstract float MaxHealthFormula(float RandomFactor);
         public abstract float MaxManaFormula(float RandomFactor);
@@ -45,10 +62,9 @@ namespace Hedra.Engine.ClassSystem
 
         public static ClassDesign FromString(string Class)
         {
-            var fullName = $"{typeof(ClassDesign).Namespace}.{(Class.EndsWith("Design") ? Class : Class + "Design")}";
-            var type = Type.GetType(fullName);
-            if (type == null) throw new ArgumentNullException("Provided Argument CLASS cannot be null.");
-            return ClassDesign.FromType(type);
+            if(!ClassMap.ContainsKey(Class))
+                throw new ArgumentOutOfRangeException($"Provided argument '{Class}' is an invalid class type.");
+            return ClassDesign.FromType(ClassMap[Class]);
         }
 
         public static ClassDesign FromType(Type Type)
@@ -58,12 +74,7 @@ namespace Hedra.Engine.ClassSystem
 
         public static string ToString(ClassDesign ClassDesign)
         {
-            return ClassDesign.ToString(ClassDesign.GetType());
-        }
-
-        public static string ToString(Type ClassDesign)
-        {
-            return ClassDesign.Name.Replace("Design", string.Empty);
+            return ClassDesign.Type.ToString();
         }
 
         public static ClassDesign None { get; } = new NoneDesign();

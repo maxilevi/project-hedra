@@ -1,22 +1,21 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Hedra.Components;
+using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
-using Hedra.Engine.Rendering.Particles;
-using Hedra.Engine.Sound;
+using Hedra.Engine.WorldBuilding;
 using OpenTK;
 using OpenTK.Input;
 
-namespace Hedra.Engine.WorldBuilding
+namespace Hedra.Engine.StructureSystem
 {
     public class BanditCamp : BaseStructure, IUpdatable
     {
@@ -38,7 +37,7 @@ namespace Hedra.Engine.WorldBuilding
             this._campfire = new Campfire(Position);
             EventDispatcher.RegisterKeyDown(this, delegate(object Sender, KeyEventArgs EventArgs)
             {
-                _shouldRescue = EventArgs.Key == Key.E && _canRescue;
+                _shouldRescue = EventArgs.Key == Controls.Interact && _canRescue;
             });
             UpdateManager.Add(this);
         }
@@ -72,9 +71,10 @@ namespace Hedra.Engine.WorldBuilding
             };
             _rescuee = World.WorldBuilding.SpawnHumanoid(randomTypes[Rng.Next(0, randomTypes.Length)],
                 this.Position + Vector3.UnitY * 7f + Vector3.UnitZ * 3.0f);
+            _rescuee.ResetEquipment();
             _rescuee.Physics.UsePhysics = false;
-            _rescuee.Physics.HasCollision = false;
-            _rescuee.Physics.CanCollide = false;
+            _rescuee.Physics.CollidesWithEntities = false;
+            _rescuee.Physics.CollidesWithStructures = false;
             _rescuee.MainWeapon = null;
 
             _rescuee.Name = Rng.Next(0, 10) == 1 ? "Deckard Cain" : NameGenerator.PickMaleName(Rng);
@@ -112,22 +112,24 @@ namespace Hedra.Engine.WorldBuilding
                 return;
             }
 
-            GameManager.Player.MessageDispatcher.ShowMessage("PRESS [E] TO UNTIE", .25f);
+            GameManager.Player.MessageDispatcher.ShowMessage(
+                Translations.Get("press_to_untie", Controls.Interact.ToString().ToUpperInvariant()),
+                .25f
+            );
             _canRescue = true;
 
             if (!_shouldRescue) return;
 
             _rescuee.IsTied = false;
             Rescued = true;
-            TaskManager.Delay(1, delegate
+            TaskScheduler.DelayFrames(1, delegate
             {
-                var talkComponent = new TalkComponent(_rescuee,
-                    "I am grateful to you for saving me. Take this item as a show of gratitude");
+                var talkComponent = new TalkComponent(_rescuee, Translations.Get("saved_old_man"));
                 talkComponent.OnTalk += delegate
                 {
                     var settings = new ItemPoolSettings(ItemTier.Rare, EquipmentType.Axe);
                     _rescuee.Movement.Orientate();
-                    TaskManager.After(1000, () =>
+                    TaskScheduler.After(.25f, () =>
                         World.DropItem(ItemPool.Grab(settings), _rescuee.Position + Vector3.UnitX * 5f)
                     );
                     //TaskManager.After( (int) ((talkComponent.Duration+1) * 1000), () =>
@@ -138,8 +140,8 @@ namespace Hedra.Engine.WorldBuilding
             });
             _rescuee.Model.TransformationMatrix = Matrix4.Identity;
             _rescuee.Physics.UsePhysics = true;
-            _rescuee.Physics.HasCollision = true;
-            _rescuee.Physics.CanCollide = true;
+            _rescuee.Physics.CollidesWithEntities = true;
+            _rescuee.Physics.CollidesWithStructures = true;
             _rescuee.BlockPosition = new Vector3(this.Position.X + 8f, Physics.HeightAtPosition(this.Position) / Chunk.BlockSize, this.Position.Z);
             _rescuee.Rotation = Vector3.Zero;
         }
@@ -153,6 +155,7 @@ namespace Hedra.Engine.WorldBuilding
                     Enemies[i].Dispose();
                 }
             }
+            EventDispatcher.UnregisterKeyDown(this);
             _rescuee?.Dispose();
             this._campfire.Dispose();
             UpdateManager.Remove(this);

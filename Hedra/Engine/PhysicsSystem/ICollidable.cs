@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using OpenTK;
 
 namespace Hedra.Engine.PhysicsSystem
 {
@@ -15,6 +16,12 @@ namespace Hedra.Engine.PhysicsSystem
     /// </summary>
     public interface ICollidable
     {
-        float Height { get; }
+        float BroadphaseRadius { get; }
+        Vector3 BroadphaseCenter { get; }
+        Vector3[] Vertices { get; }
+        CollisionShape AsShape();
+        Box AsBox();
+        CollisionGroup AsGroup();
+
     }
 }

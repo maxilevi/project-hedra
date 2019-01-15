@@ -1,9 +1,9 @@
 {
   "Name": "UncommonSilverSword",
   "DisplayName": "Silver Sword",
-  "EquipmentType": "Sword", 
+  "EquipmentType": "Sword",
   "Tier": "Uncommon",
-  "Description": "Silver sword.",
+  "Description": "A simple sword of silver composition making it light and sharp.",
   "Attributes": [
     {
       "Name": "Damage",

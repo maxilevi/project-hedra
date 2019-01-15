@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ComplexMath;
@@ -8,13 +9,15 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
+using Hedra.Rendering;
 using OpenTK;
-using Region = Hedra.Engine.BiomeSystem.Region;
+using Region = Hedra.BiomeSystem.Region;
 
 namespace Hedra.Engine.StructureSystem
 {
@@ -127,7 +130,7 @@ namespace Hedra.Engine.StructureSystem
             {
                 if (!Cementery.Restored)
                 {
-                    LocalPlayer.Instance.MessageDispatcher.ShowNotification("THERE ARE STILL ENEMIES AROUND.", Color.DarkRed, 2f);
+                    LocalPlayer.Instance.MessageDispatcher.ShowNotification(Translations.Get("enemies_around"), Color.DarkRed, 2f);
                 }
                 return Cementery.Restored;
             };
@@ -146,11 +149,11 @@ namespace Hedra.Engine.StructureSystem
                 if (i == 3) addonPosition = Vector3.UnitZ * 14 * Chunk.BlockSize - Vector3.UnitX * 14 * Chunk.BlockSize;
 
                 Vector3 lightPosition = Position + addonPosition;
-                VertexData lampPost = AssetManager.PLYLoader("Assets/Env/Lamp0.ply", Vector3.One * 3.25f * 1.5f);
+                VertexData lampPost = AssetManager.PLYLoader("Assets/Env/Village/Lamp0.ply", Vector3.One * 3.25f * 1.5f);
                 lampPost.Translate(lightPosition);
                 lampPost.GraduateColor(Vector3.UnitY);
                 lampPost.FillExtraData(WorldRenderer.NoHighlightFlag);
-                List<CollisionShape> shapes = AssetManager.LoadCollisionShapes("Assets/Env/Lamp0.ply", 1, Vector3.One * 3.25f * 1.5f);
+                List<CollisionShape> shapes = AssetManager.LoadCollisionShapes("Assets/Env/Village/Lamp0.ply", 1, Vector3.One * 3.25f * 1.5f);
                 for (int l = 0; l < shapes.Count; l++)
                 {
                     shapes[l].Transform(lightPosition);
@@ -158,9 +161,9 @@ namespace Hedra.Engine.StructureSystem
                 Structure.AddCollisionShape(shapes.ToArray());
                 Structure.AddStaticElement(lampPost);
 
-                var lamp = new LampPost(lightPosition + Vector3.UnitY * 7)
+                var lamp = new WorldLight(lightPosition + Vector3.UnitY * 7)
                 {
-                    Radius = 120f,
+                    Radius = PointLight.DefaultRadius,
                     LightColor = new Vector3(1, .6f, .5f)
                 };
                 Cementery.AddChildren(lamp);

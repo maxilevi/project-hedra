@@ -1,9 +1,9 @@
 {
   "Name": "RareSunderingHalberdHammer",
   "DisplayName": "Sundering Halberd",
-  "EquipmentType": "Hammer", 
+  "EquipmentType": "Hammer",
   "Tier": "Rare",
-  "Description": "Sundering halberd.",
+  "Description": "Simply a wonderful halberd, but with a hammer head.",
   "Attributes": [
     {
       "Name": "Damage",

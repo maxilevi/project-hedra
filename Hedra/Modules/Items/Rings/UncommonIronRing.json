@@ -1,9 +1,9 @@
-﻿{
+{
   "Name": "UncommonIronRing",
   "DisplayName": "Iron Ring",
-  "EquipmentType": "Ring", 
+  "EquipmentType": "Ring",
   "Tier": "Uncommon",
-  "Description": "Iron ring.",
+  "Description": "Heavy and poorly designed. The Engraving is poorly done.",
   "Attributes": [
     {
       "Name": "MovementSpeed",

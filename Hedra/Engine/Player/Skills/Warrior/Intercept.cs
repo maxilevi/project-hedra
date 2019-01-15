@@ -5,6 +5,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.Player.Skills.Warrior
@@ -34,7 +35,7 @@ namespace Hedra.Engine.Player.Skills.Warrior
 
         public Intercept()
         {
-            _timer = new Timer(0);
+            _timer = new Timer(1);
             _dmgTimer = new Timer(.05f);
             _interceptStance = AnimationLoader.LoadAnimation("Assets/Chr/WarriorIntercept.dae");
         }
@@ -46,7 +47,7 @@ namespace Hedra.Engine.Player.Skills.Warrior
             if (!_isMoving) return;
             if (Player.Model.AnimationBlending == null)
             {
-                Player.Model.Blend(_interceptStance);
+                Player.Model.BlendAnimation(_interceptStance);
             }
 
             if (_dmgTimer.Tick())
@@ -104,7 +105,7 @@ namespace Hedra.Engine.Player.Skills.Warrior
         {
             if(_isMoving) return;
             Player.Movement.Orientate();
-            Player.Model.Blend(_interceptStance);
+            Player.Model.BlendAnimation(_interceptStance);
             _isMoving = true;
             _timer.AlertTime = Duration;
             _timer.Reset();

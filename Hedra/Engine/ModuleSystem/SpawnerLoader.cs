@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using Hedra.Engine.IO;
+using Hedra.Engine.ModuleSystem.Templates;
 using Newtonsoft.Json;
 
 namespace Hedra.Engine.ModuleSystem

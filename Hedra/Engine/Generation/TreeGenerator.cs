@@ -7,8 +7,11 @@
 using System;
 using Hedra.Engine.Rendering;
 using System.Collections.Generic;
+using Hedra.BiomeSystem;
+using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
+using Hedra.Engine.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.TreeSystem;
@@ -27,7 +30,7 @@ namespace Hedra.Engine.Generation
         {
             var underChunk = World.GetChunkAt(Position);
             if (underChunk == null) return default(PlacementObject);
-            var rng = new Random(BiomeGenerator.GenerateSeed(Position.Xz));
+            var rng = new Random(Unique.GenerateSeed(Position.Xz));
 
             var height = Physics.HeightAtPosition(Position, Lod);
             var normal = Physics.NormalAtPosition(Position, Lod);
@@ -43,7 +46,7 @@ namespace Hedra.Engine.Generation
                 //This old noise doesnt support negative coordinates
                 //And I will leave it here because the menu looks good with it.
                 spaceBetween = Position.X > 0 && Position.Z > 0 
-                    ? SimplexNoise.Noise.Generate(Position.X * .001f, (Position.Z + 100) * .001f) * 75f
+                    ? Noise.Generate(Position.X * .001f, (Position.Z + 100) * .001f) * 75f
                     : int.MaxValue;
                 noiseValue = Math.Min(Math.Max(0, Math.Abs(spaceBetween / 75f) * valueFactor)+.3f, 1.0f);
             }
@@ -84,7 +87,7 @@ namespace Hedra.Engine.Generation
         {
             var underChunk = World.GetChunkAt(Placement.Position);
             if(underChunk == null) return;
-            var rng = new Random(BiomeGenerator.GenerateSeed(Placement.Position.Xz));
+            var rng = new Random(Unique.GenerateSeed(Placement.Position.Xz));
             var extraScale = new Random(World.Seed + 1111).NextFloat() * 5 + 4;
             var scale = 10 + rng.NextFloat() * 3.5f;
 
@@ -96,12 +99,11 @@ namespace Hedra.Engine.Generation
             var model = originalModel.Clone();
 
             var transMatrix = Matrix4.CreateScale(new Vector3(scale, scale, scale) * 1.5f );
-            transMatrix *=  Matrix4.CreateRotationY( rng.NextFloat() * 360f);
+            transMatrix *=  Matrix4.CreateRotationY( rng.NextFloat() * 360f * Mathf.Radian);
             transMatrix *= Matrix4.CreateTranslation( Placement.Position );
 
-            var windRng = Utils.Rng.NextFloat(); 
-            model.Extradata.AddRange( model.GenerateWindValues(AssetManager.ColorCode1, windRng) );
-            model.AddExtraData(AssetManager.ColorCode2, model.GenerateWindValues(AssetManager.ColorCode2, windRng));
+            model.AddWindValues(AssetManager.ColorCode1);
+            model.AddWindValues(AssetManager.ColorCode2);
 
             Vector4 woodColor = rng.Next(0, 5) != 1
                 ? BiomeRegion.Colors.WoodColors[new Random(World.Seed + 5232).Next(0, BiomeRegion.Colors.WoodColors.Length)] 
@@ -123,17 +125,7 @@ namespace Hedra.Engine.Generation
                     shape.Transform(transMatrix);
                     underChunk.AddCollisionShape(shape);
                 }
-
-                var data = new InstanceData
-                {
-                    ExtraData = model.Extradata,
-                    MeshCache = originalModel,
-                    Colors = model.Colors,
-                    TransMatrix = transMatrix
-                };
-
-                CacheManager.Check(data);
-                underChunk.StaticBuffer.AddInstance(data);
+                underChunk.StaticBuffer.AddInstance(model.ToInstanceData(transMatrix));
             }
         }
 

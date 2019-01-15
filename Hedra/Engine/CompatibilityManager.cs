@@ -117,8 +117,7 @@ namespace Hedra.Engine
                 MultiDrawElementsMethod =
                     delegate(PrimitiveType Type, int[] Counts, DrawElementsType DrawType, IntPtr[] Offsets, int Length)
                     {
-                        Renderer.Provider.MultiDrawElements(PrimitiveType.Triangles, Counts, DrawElementsType.UnsignedInt, Offsets,
-                            Counts.Length);
+                        Renderer.Provider.MultiDrawElements(PrimitiveType.Triangles, Counts, DrawElementsType.UnsignedInt, Offsets, Length);
                     };
             }
         }

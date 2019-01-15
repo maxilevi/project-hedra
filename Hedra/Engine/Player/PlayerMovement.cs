@@ -1,19 +1,24 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Windows.Forms;
+using Hedra.Core;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 using OpenTK;
 using OpenTK.Input;
+using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;
 
 namespace Hedra.Engine.Player
 {
-    public class PlayerMovement : MovementManager
+    public class PlayerMovement : MovementManager, IDisposable
     {
         private readonly LocalPlayer _player;
         private readonly Dictionary<Key, Action> _registeredKeys;
@@ -34,12 +39,18 @@ namespace Hedra.Engine.Player
             this.RegisterListeners();
         }
 
-        public void OnMouseButtonDown(object Sender, MouseButtonEventArgs EventArgs)
+        private void OnMouseButtonDown(object Sender, MouseButtonEventArgs EventArgs)
         {
             if (!this.CaptureMovement || GameSettings.Paused || Human.IsKnocked || Human.IsDead
                 || !Human.CanInteract || Human.IsRiding || Human.IsEating) return;
 
-            if (EventArgs.Button == MouseButton.Middle) _player.Roll();
+            if (EventArgs.Button == MouseButton.Middle)
+            {
+                if(GameManager.Keyboard[Controls.Rightward] || GameManager.Keyboard[Controls.Leftward])
+                    _player.Roll(RollType.Sideways);
+                else
+                    _player.Roll(RollType.Normal);
+            }
         }
 
         protected override void DoUpdate()
@@ -49,29 +60,29 @@ namespace Hedra.Engine.Player
                 return;
 
 
-            if ((GameManager.Keyboard[Key.W] || GameManager.Keyboard[Key.A] || GameManager.Keyboard[Key.S] || GameManager.Keyboard[Key.D]) && !_player.IsCasting)
+            if ((GameManager.Keyboard[Controls.Forward] || GameManager.Keyboard[Controls.Leftward] || GameManager.Keyboard[Controls.Backward] || GameManager.Keyboard[Controls.Rightward]) && !_player.IsCasting)
             {
-                Human.Model.Rotation = new Vector3(0, Human.Model.Rotation.Y, Human.Model.Rotation.Z);
+                Human.Model.LocalRotation = new Vector3(0, Human.Model.LocalRotation.Y, Human.Model.LocalRotation.Z);
 
             }
 
             if (!_player.IsGliding)
             {
                 _characterRotation = Human.FacingDirection;
-                if (GameManager.Keyboard[Key.D]) _characterRotation += -90f;
-                if (GameManager.Keyboard[Key.A])_characterRotation += 90f;
-                if (GameManager.Keyboard[Key.S]) _characterRotation += 180f;
-                if (GameManager.Keyboard[Key.W]) _characterRotation += 0f;
-                if (GameManager.Keyboard[Key.W] && GameManager.Keyboard[Key.D]) _characterRotation += 45f;
-                if (GameManager.Keyboard[Key.W] && GameManager.Keyboard[Key.A]) _characterRotation += -45f;
-                if (GameManager.Keyboard[Key.S] && GameManager.Keyboard[Key.D]) _characterRotation += 135f;
-                if (GameManager.Keyboard[Key.S] && GameManager.Keyboard[Key.A]) _characterRotation += -135f;
+                if (GameManager.Keyboard[Controls.Rightward]) _characterRotation += -90f;
+                if (GameManager.Keyboard[Controls.Leftward]) _characterRotation += 90f;
+                if (GameManager.Keyboard[Controls.Backward]) _characterRotation += 180f;
+                if (GameManager.Keyboard[Controls.Forward]) _characterRotation += 0f;
+                if (GameManager.Keyboard[Controls.Forward] && GameManager.Keyboard[Controls.Rightward]) _characterRotation += 45f;
+                if (GameManager.Keyboard[Controls.Forward] && GameManager.Keyboard[Controls.Leftward]) _characterRotation += -45f;
+                if (GameManager.Keyboard[Controls.Backward] && GameManager.Keyboard[Controls.Rightward]) _characterRotation += 135f;
+                if (GameManager.Keyboard[Controls.Backward] && GameManager.Keyboard[Controls.Leftward]) _characterRotation += -135f;
 
                 var keysPresses = 0f;
-                var wPressed = GameManager.Keyboard[Key.W];
-                var sPressed = GameManager.Keyboard[Key.S];
-                var dPressed = GameManager.Keyboard[Key.D];
-                var aPressed = GameManager.Keyboard[Key.A];
+                var wPressed = GameManager.Keyboard[Controls.Forward];
+                var sPressed = GameManager.Keyboard[Controls.Backward];
+                var dPressed = GameManager.Keyboard[Controls.Rightward];
+                var aPressed = GameManager.Keyboard[Controls.Leftward];
                 if (dPressed && aPressed)
                 {
                     dPressed = false;
@@ -89,36 +100,47 @@ namespace Hedra.Engine.Player
                 keysPresses = 1f / (!wPressed && !sPressed && !aPressed && !dPressed ? 1f : keysPresses);
                 if (keysPresses < 1f) keysPresses *= 1.5f;
 
-                _targetAngles.Z = 5f * (_player.View.StackedYaw - _yaw);
-                _targetAngles = Mathf.Clamp(_targetAngles, -10f, 10f);
-                _angles = Mathf.Lerp(_angles, _targetAngles * (GameManager.Keyboard[Key.W] ? 1.0F : 0.0F), (float)Time.DeltaTime * 8f);
+                _targetAngles.Z = 7.5f * (_player.View.StackedYaw - _yaw);
+                _targetAngles = Mathf.Clamp(_targetAngles, -15f, 15f);
+                _angles = Mathf.Lerp(_angles, _targetAngles * (GameManager.Keyboard[Controls.Forward] ? 1.0F : 0.0F), (float)Time.DeltaTime * 8f);
                 _yaw = Mathf.Lerp(_yaw, _player.View.StackedYaw, (float)Time.DeltaTime * 2f);
-                if (GameManager.Keyboard[Key.W] || GameSettings.ContinousMove)
+                IsMovingForward = GameManager.Keyboard[Controls.Forward];
+                IsMovingBackwards = GameManager.Keyboard[Controls.Backward];
+                if (GameManager.Keyboard[Controls.Forward] || GameSettings.ContinousMove)
                 {
+                    if (GameSettings.ContinousMove)
+                    {
+                        Human.Physics.CollidesWithStructures = false;
+                        Human.Physics.CollidesWithEntities = false;
+                    }
                     _targetYaw = _player.View.TargetYaw;
                     this.ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Forward) * keysPresses);                   
                     this.Orientate();
                 }
                 _player.Model.TransformationMatrix = 
-                    Matrix4.CreateRotationY(-_player.Model.Rotation.Y * Mathf.Radian) *
+                    Matrix4.CreateRotationY(-_player.Model.LocalRotation.Y * Mathf.Radian) *
                     Matrix4.CreateRotationZ(_angles.Z * Mathf.Radian * (_player.IsUnderwater ? 0.0f : 1.0f)) *
-                    Matrix4.CreateRotationY(_player.Model.Rotation.Y * Mathf.Radian);
-                if (GameManager.Keyboard[Key.S])
+                    Matrix4.CreateRotationY(_player.Model.LocalRotation.Y * Mathf.Radian);
+                if (GameManager.Keyboard[Controls.Backward])
                 {
                     this.ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Backward) * keysPresses);
                 }
 
-                if (GameManager.Keyboard[Key.A])
+                if (GameManager.Keyboard[Controls.Leftward])
                 {
                     this.ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Left) * keysPresses);
+                    RollDirection = Human.Physics.MoveFormula(_player.View.Left, false).Xz.ToVector3().NormalizedFast();
+                    RollFacing = _characterRotation;
                 }
 
-                if (GameManager.Keyboard[Key.D])
+                if (GameManager.Keyboard[Controls.Rightward])
                 {
-                    this.ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Right) * keysPresses);
+                    ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Right) * keysPresses);
+                    RollDirection = Human.Physics.MoveFormula(_player.View.Right, false).Xz.ToVector3().NormalizedFast();
+                    RollFacing = _characterRotation;
                 }
                 
-                if(GameManager.Keyboard[Key.ControlLeft] && _player.Physics.InFrontOfWall)
+                if(GameManager.Keyboard[Controls.Climb] && _player.Physics.InFrontOfWall)
                 {
                     if(_player.Stamina > 5)
                     {
@@ -140,12 +162,12 @@ namespace Hedra.Engine.Player
                         _player.IsClimbing = false;
                 }
             }
-
+        
 
             if (!_player.IsUnderwater) return;
             this.ClampSwimming(_player);
-            if (GameManager.Keyboard[Key.Space]) this.MoveInWater(true);
-            if (GameManager.Keyboard[Key.ShiftLeft]) this.MoveInWater(false);
+            if (GameManager.Keyboard[Controls.Jump]) this.MoveInWater(true);
+            if (GameManager.Keyboard[Controls.Descend]) this.MoveInWater(false);
         }
         
         private void RegisterKey(Key Key, Action Action)
@@ -155,12 +177,12 @@ namespace Hedra.Engine.Player
 
         private void RegisterListeners()
         {
-            this.RegisterKey(Key.Q, delegate
+            this.RegisterKey(Controls.Eat, delegate
             {
                 if (_player.CanInteract) _player.EatFood();
             });
 
-            this.RegisterKey(Key.G, delegate
+            this.RegisterKey(Controls.SpecialItem, delegate
             {
                 if (!GameManager.InStartMenu && !GameManager.InMenu && !Human.IsKnocked
                     && Human.CanInteract && _vehicleCooldown < 0)
@@ -168,7 +190,7 @@ namespace Hedra.Engine.Player
                     var vehicleItem = _player.Inventory.Vehicle;
                     if (vehicleItem == null && !GameSettings.Paused)
                     {
-                        _player.MessageDispatcher.ShowNotification("YOU NEED A VEHICLE TO DO THAT", Color.Red, 3f, true);
+                        _player.MessageDispatcher.ShowNotification(Translations.Get("need_vehicle"), Color.Red, 3f, true);
                     }
                     else if (vehicleItem != null)
                     {
@@ -192,24 +214,9 @@ namespace Hedra.Engine.Player
                 }
             });
 
-            this.RegisterKey(Key.R, delegate
-            {
-                if (!GameSettings.Paused && _player.IsDead)
-                    _player.Respawn();
-            });
-
-            this.RegisterKey(Key.Space, delegate
+            this.RegisterKey(Controls.Jump, delegate
             {
                 if (!_player.IsUnderwater) this.Jump();
-            });
-
-            this.RegisterKey(Key.F, delegate
-            {
-                if (!GameSettings.Paused && _player.CanInteract)
-                {
-                    _player.HandLamp.Enabled = !_player.HandLamp.Enabled;
-                    SoundManager.PlaySound(SoundType.NotificationSound, _player.Position, false, 1f, .5f);
-                }
             });
 
             this.RegisterKey(Key.F3, delegate
@@ -235,22 +242,17 @@ namespace Hedra.Engine.Player
             }
 
             if (EventArgs.Key == Key.Escape && !_player.UI.GamePanel.Enabled && !_player.UI.Hide)
-                SoundManager.PlayUISound(SoundType.ButtonClick);
+                SoundPlayer.PlayUISound(SoundType.ButtonClick);
 
             if (EventArgs.Key == Key.Escape && _player.Chat.Focused)
             {
                 _player.Chat.LoseFocus();
             }
 
-            //Kinda specific?
-            if (EventArgs.Key == Key.Escape && _player.UI.OptionsMenu.DonateBtcButton.Enabled)
-            {
-                _player.UI.OptionsMenu.DonateBtcButton.ForceClick();
-            }
             if (EventArgs.Key == Key.F2)
             {
                 if (!Directory.Exists(AssetManager.AppData + "/Screenshots/")) Directory.CreateDirectory(AssetManager.AppData + "/Screenshots/");
-                _player.MessageDispatcher.ShowNotification("Saved screenshot as " + Recorder.SaveScreenshot(AssetManager.AppData + "/Screenshots/"), System.Drawing.Color.White, 3f, false);
+                _player.MessageDispatcher.ShowNotification($"{Translations.Get("saved_screenshot")} {Recorder.SaveScreenshot($"{AssetManager.AppData}/Screenshots/")}", System.Drawing.Color.White, 3f, false);
             }
             if (EventArgs.Key == Key.F4) _player.UI.ShowHelp = !_player.UI.ShowHelp;
 
@@ -333,6 +335,12 @@ namespace Hedra.Engine.Player
                 _player.Health = _player.MaxHealth;
             }
 #endif
+        }
+
+        public void Dispose()
+        {
+            EventDispatcher.UnregisterMouseDown(this);
+            EventDispatcher.UnregisterKeyDown(this);
         }
     }
 }

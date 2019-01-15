@@ -11,7 +11,7 @@ namespace Hedra.Engine.Rendering
         Vector4 BaseTint { get; set; }
         Vector3 Scale { get; set; }
         Vector3 Position { get; set; }
-        Vector3 Rotation { get; set; }
+        Vector3 LocalRotation { get; set; }
         bool Enabled { get; set; }
         bool ApplyFog { get; set; }
         bool Pause { get; set; }
@@ -25,5 +25,6 @@ namespace Hedra.Engine.Rendering
     {
         Vector3 Position { get; set; }
         bool Enabled { get; set; }
+        bool PrematureCulling { set; }
     }
 }

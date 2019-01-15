@@ -1,25 +1,26 @@
 using System;
-using System.Linq;
 using System.Text;
 using Hedra.Engine.ItemSystem.ArmorSystem;
-using Hedra.Engine.ItemSystem.WeaponSystem;
-using Hedra.Engine.Rendering;
+using Hedra.Engine.ItemSystem.Templates;
+using Hedra.Rendering;
+using Hedra.WeaponSystem;
 
 namespace Hedra.Engine.ItemSystem
 {
     public class Item
     {
         private static string GoldItemName = "Gold";
-        private static string[] FoodItemNames = {"Berry"};
         public string Name { get; set; }
         public string DisplayName { get; set; }
         public string Description { get; set; }
         public ItemTier Tier { get; set; }
         public string EquipmentType { get; set; }
-        public ItemModelTemplate ModelTemplate { get; set; }
+        public ItemModelTemplate ModelTemplate { get; private set; }
         private readonly AttributeArray _attributes;
         private Weapon _weaponCache;
+        private ArmorPiece _armorCache;
         private VertexData _model;
+        private bool _armorCacheDirty;
         private bool _weaponCacheDirty;
 
         public Item()
@@ -37,7 +38,6 @@ namespace Hedra.Engine.ItemSystem
                 Description = Template.Description,
                 EquipmentType = Template.EquipmentType,
                 ModelTemplate = Template.Model,
-                Model = ItemModelLoader.Load(Template.Model)
             };
             item.SetAttributes(Template.Attributes);
             return item;
@@ -128,13 +128,14 @@ namespace Hedra.Engine.ItemSystem
         public static Item FromArray(byte[] Array)
         {
             var savedTemplate = ItemTemplate.FromJSON(Encoding.ASCII.GetString(Array));
+            if (!ItemPool.Exists(savedTemplate.Name)) return null;
             var defaultTemplate = ItemFactory.Templater[savedTemplate.Name];
             savedTemplate.Model = defaultTemplate.Model;
             savedTemplate.Description = defaultTemplate.Description;
             savedTemplate.DisplayName = defaultTemplate.DisplayName;
             savedTemplate.Tier = defaultTemplate.Tier;
             var item = FromTemplate(savedTemplate);
-            if (savedTemplate.EquipmentType == null) return item;
+            if (savedTemplate.EquipmentType == null) return UpdateAttributes(item);
             
             var newItem = ItemPool.Grab(savedTemplate.Name);
             if (!item.HasAttribute(CommonAttributes.Seed)) item.SetAttribute(CommonAttributes.Seed, Utils.Rng.Next(int.MinValue, int.MaxValue), true);
@@ -143,27 +144,55 @@ namespace Hedra.Engine.ItemSystem
             return ItemPool.Randomize(newItem, new Random(newItem.GetAttribute<int>(CommonAttributes.Seed)));           
         }
 
+        private static Item UpdateAttributes(Item Item)
+        {
+            if (Item.HasAttribute(CommonAttributes.Amount))
+            {
+                if(!Item.IsFood && !Item.IsGold) 
+                    throw new ArgumentOutOfRangeException($"Type of item {Item.Name} was not expected");
+                var amount = Item.GetAttribute<int>(CommonAttributes.Amount);
+                var newItem = ItemPool.Grab(Item.Name);
+                newItem.SetAttribute(CommonAttributes.Amount, amount);
+                return newItem;
+            }
+            return Item;
+        }
+
         public byte[] ToArray()
         {
             return Encoding.ASCII.GetBytes(ItemTemplate.ToJson(ItemTemplate.FromItem(this)));
         }
 
-        public bool IsGold => Name == Item.GoldItemName;
-        public bool IsFood => FoodItemNames.Contains(Name);
+        public bool IsGold => Name == GoldItemName;
+        public bool IsFood => HasAttribute(CommonAttributes.IsFood) && GetAttribute<bool>(CommonAttributes.IsFood) || Name == "Berry";
         public bool IsWeapon => WeaponFactory.Contains(this);
         public bool IsArmor => ArmorFactory.Contains(this);
         public bool IsRing => EquipmentType == ItemSystem.EquipmentType.Ring.ToString();
         public bool IsEquipment => IsWeapon || IsRing || IsArmor;
+        public bool IsConsumable => HasAttribute(CommonAttributes.IsConsumable) && GetAttribute<bool>(CommonAttributes.IsConsumable);
 
         public VertexData Model
         {
-            get => _model;
+            get
+            {
+                if (_model == null)
+                    Model = ItemModelLoader.Load(ModelTemplate);
+                return _model;
+            }
             set
             {
                 _model = value;
                 _weaponCacheDirty = true;
             }
         }
+        
+        public HelmetPiece Helmet => GetArmor<HelmetPiece>();
+        
+        public ChestPiece Chestplate => GetArmor<ChestPiece>();
+        
+        public PantsPiece Pants => GetArmor<PantsPiece>();
+        
+        public BootsPiece Boots => GetArmor<BootsPiece>();
 
         public Weapon Weapon
         {
@@ -177,6 +206,17 @@ namespace Hedra.Engine.ItemSystem
 
                 return _weaponCache;
             }
+        }
+        
+        private T GetArmor<T>() where T : ArmorPiece
+        {
+            if (_armorCache != null && !_armorCacheDirty && !_armorCache.Disposed) return (T) _armorCache;
+
+            var armor = ArmorFactory.Get(this);
+            _armorCache = armor;
+            _armorCacheDirty = false;
+
+            return (T) _armorCache;
         }
     }
 }

@@ -1,9 +1,9 @@
-﻿{
+{
   "Name": "CommonBronzeKnife",
   "DisplayName": "Bronze Knife",
-  "EquipmentType": "Knife", 
+  "EquipmentType": "Knife",
   "Tier": "Common",
-  "Description": "Bronze knife.",
+  "Description": "A short bladed weapon composed of bronze.",
   "Attributes": [
     {
       "Name": "Damage",

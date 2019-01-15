@@ -1,9 +1,9 @@
-{
+  {
   "Name": "Boat",
   "DisplayName": "Boat",
   "Tier": "Rare",
   "EquipmentType": "Vehicle",
-  "Description": "A boat.",
+  "Description": "A simple wooden boat.",
   "Attributes": [
     {
       "Name": "Price",

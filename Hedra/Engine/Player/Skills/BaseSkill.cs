@@ -108,7 +108,7 @@ namespace Hedra.Engine.Player.Skills
             Shader["Scale"] = Scale * new Vector2(1,-1);
             Shader["Position"] = AdjustedPosition;
             Shader["Bools"] = new Vector2(Level == 0 || Grayscale ? 1 : 0, 1);
-            Shader["Cooldown"] = this.Cooldown / this.MaxCooldown;
+            Shader["Cooldown"] = OverlayBlending;
             
             Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, TextureId);
@@ -133,6 +133,9 @@ namespace Hedra.Engine.Player.Skills
         {
             AdjustedPosition = GUITexture.Adjust(Position);
         }
+
+        protected virtual float OverlayBlending => Cooldown / MaxCooldown;
+        public virtual bool PlaySound => false;
         
         public abstract void Use();
         public virtual void KeyUp(){}
@@ -165,6 +168,7 @@ namespace Hedra.Engine.Player.Skills
         public void Dispose()
         {
             DrawManager.Remove(this);
+            UpdateManager.Remove(this);
             CooldownSecondsText.Dispose();
         }    
     }

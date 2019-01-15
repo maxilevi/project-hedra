@@ -4,41 +4,26 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Hedra.Engine.Generation;
+using Hedra.Engine.IO;
 using Hedra.Engine.Management;
+using Hedra.Engine.ModuleSystem.Templates;
 using Newtonsoft.Json;
 
 namespace Hedra.Engine.ModuleSystem
 {
     public static class HumanoidLoader
     {
-        private static readonly Dictionary<string, HumanoidModelTemplate> ModelTemplates;
         private static readonly Dictionary<string, HumanoidTemplate> HumanoidTemplates;
-        private static readonly Dictionary<string, HumanoidComponentsTemplate> ComponentsTemplates;
-        public static HumanoidModelTemplater ModelTemplater;
         public static HumanoidTemplater HumanoidTemplater;
-        public static HumanoidComponentsTemplater ComponentsTemplater;
 
         static HumanoidLoader()
         {
-            ModelTemplates = new Dictionary<string, HumanoidModelTemplate>();
-            ModelTemplater = new HumanoidModelTemplater(ModelTemplates);
             HumanoidTemplates = new Dictionary<string, HumanoidTemplate>();
             HumanoidTemplater = new HumanoidTemplater(HumanoidTemplates);
-            ComponentsTemplates = new Dictionary<string, HumanoidComponentsTemplate>();
-            ComponentsTemplater = new HumanoidComponentsTemplater(ComponentsTemplates);
         }
 
         public static void LoadModules(string AppPath)
         {
-            ModelTemplates.Clear();
-
-            HumanoidModelTemplate[] modelTemplates = Load<HumanoidModelTemplate>(AppPath + "/Modules/NPCs/Models");
-
-            for (var i = 0; i < modelTemplates.Length; i++)
-            {
-                ModelTemplates.Add(modelTemplates[i].Name.ToLowerInvariant(), modelTemplates[i]);
-            }
-
             HumanoidTemplates.Clear();
 
             HumanoidTemplate[] humanTemplates = Load<HumanoidTemplate>(AppPath + "/Modules/NPCs/");
@@ -46,15 +31,6 @@ namespace Hedra.Engine.ModuleSystem
             for (var i = 0; i < humanTemplates.Length; i++)
             {
                 HumanoidTemplates.Add(humanTemplates[i].Name.ToLowerInvariant(), humanTemplates[i]);
-            }
-
-            ComponentsTemplates.Clear();
-
-            HumanoidComponentsTemplate[] componentsTemplates = Load<HumanoidComponentsTemplate>(AppPath + "/Modules/NPCs/Components");
-
-            for (var i = 0; i < componentsTemplates.Length; i++)
-            {
-                ComponentsTemplates.Add(humanTemplates[i].Name.ToLowerInvariant(), componentsTemplates[i]);
             }
         }
 

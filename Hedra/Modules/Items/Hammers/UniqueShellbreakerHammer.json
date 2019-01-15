@@ -1,9 +1,9 @@
 {
   "Name": "UniqueShellbreakerHammer",
-  "DisplayName": "Shellbreaker Hammer",
-  "EquipmentType": "Hammer", 
+  "DisplayName": "Shellbreaker",
+  "EquipmentType": "Hammer",
   "Tier": "Unique",
-  "Description": "Shellbreaker hammer.",
+  "Description": "Named for it's incredible weight and ability to smash turtle shells.",
   "Attributes": [
     {
       "Name": "Damage",

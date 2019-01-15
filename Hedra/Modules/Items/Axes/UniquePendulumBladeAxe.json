@@ -1,9 +1,9 @@
-﻿{
+{
   "Name": "UniquePendulumBladeAxe",
   "DisplayName": "Pendulum Blade",
-  "EquipmentType": "Axe", 
+  "EquipmentType": "Axe",
   "Tier": "Unique",
-  "Description": "Pendulum blade axe.",
+  "Description": "Swings like a pendulum, weighty and functional.",
   "Attributes": [
     {
       "Name": "Damage",

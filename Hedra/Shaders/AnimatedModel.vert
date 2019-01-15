@@ -41,16 +41,8 @@ uniform mat4 projectionViewMatrix;
 uniform mat4 ShadowMVP;
 uniform float Alpha;
 
-struct PointLight
+void main(void)
 {
-    vec3 Position;
-    vec3 Color;
-    float Radius;
-};
-
-uniform PointLight Lights[12];
-
-void main(void){
 	vec3 linear_color = srgb_to_linear(in_color);
 	pass_height = U_Height;
 	pass_botColor = U_BotColor;
@@ -59,10 +51,11 @@ void main(void){
 	vec4 totalLocalPos = vec4(0.0, 0.0, 0.0, 0.0);
 	vec4 totalNormal = vec4(0.0, 0.0, 0.0, 0.0);
 	mat4 identity = mat4(
-	1.0, 0.0, 0.0, 0.0,
-	0.0, 1.0, 0.0, 0.0,
-	0.0, 0.0, 1.0, 0.0,
-	0.0, 0.0, 0.0, 1.0);
+        1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0,
+        0.0, 0.0, 0.0, 1.0
+	);
 	
 	float sum = 0.0;
 	for(int i=0;i<MAX_WEIGHTS;i++){
@@ -85,18 +78,7 @@ void main(void){
 	vec3 unitToLight = normalize(LightPosition);
 	vec3 unitToCamera = normalize((inverse(_modelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - pass_position.xyz);
 
-	vec3 FLightColor = vec3(0.0, 0.0, 0.0);
-	for(int i = 0; i < 12; i++){
-		float dist = length(Lights[i].Position - pass_position.xyz );
-		vec3 toLightPoint = normalize(Lights[i].Position);
-		float att = 1.0 / (1.0 + .35*dist*dist);
-		att *= Lights[i].Radius;
-		att = min(att, 1.0);
-		
-		FLightColor += Lights[i].Color * att; 
-	}
-	FLightColor = clamp(FLightColor, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
-
+	vec3 FLightColor = calculate_lights(LightColor, totalLocalPos.xyz);
 	vec4 Specular = specular(unitToLight, unitNormal, unitToCamera, LightColor);
 	vec4 Rim = rim(linear_color, LightColor, unitToCamera, unitNormal);
 

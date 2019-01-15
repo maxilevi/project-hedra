@@ -7,13 +7,16 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System.Drawing;
-using Hedra.Engine.AISystem;
+using Hedra.AISystem;
+using Hedra.Core;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using OpenTK;
 using OpenTK.Input;
 using Hedra.Engine.Player;
+using Hedra.EntitySystem;
 
 namespace Hedra.Engine.EntitySystem
 {
@@ -35,8 +38,8 @@ namespace Hedra.Engine.EntitySystem
         {
             EventDispatcher.RegisterKeyDown(this, delegate(object Object, KeyEventArgs EventArgs)
             {
-                _shouldRide = EventArgs.Key == Key.E && _canRide;
-                _shouldUnride = EventArgs.Key == Key.ShiftLeft && _canUnride;
+                _shouldRide = EventArgs.Key == Controls.Interact && _canRide;
+                _shouldUnride = EventArgs.Key == Controls.Descend && _canUnride;
             });
         }
         
@@ -50,7 +53,7 @@ namespace Hedra.Engine.EntitySystem
             {
                 if (Parent.Model is IMountable model && model.IsMountable && !Parent.IsUnderwater && !Parent.IsKnocked)
                 {
-                    player.MessageDispatcher.ShowMessage("[E] TO MOUNT", .5f, Color.White);
+                    player.MessageDispatcher.ShowMessage(Translations.Get("to_mount", Controls.Interact), .5f, Color.White);
                     Parent.Model.Tint = new Vector4(2.0f, 2.0f, 2.0f, 1f);
                     _canRide = true;
                     if (_shouldRide) this.Ride(player);
@@ -88,14 +91,15 @@ namespace Hedra.Engine.EntitySystem
             if(HasRider || Entity.IsRiding) return;
             
             _rider = Entity;
-            _rider.ComponentManager.AddComponentWhile(new SpeedBonusComponent(_rider, -_rider.Speed + Parent.Speed * .5f), () => _rider != null && _rider.IsRiding);
+            _rider.ComponentManager.AddComponentWhile(new SpeedBonusComponent(_rider, -_rider.Speed + 2.25f), () => _rider != null && _rider.IsRiding);
             HasRider = true;
+            var model = (QuadrupedModel) Parent.Model;
             _rider.IsRiding = true;
-            _rider.Model.MountModel = (QuadrupedModel) Parent.Model;
-            _rider.Model.MountModel.AlignWithTerrain = false;
-            _rider.Model.MountModel.HasRider = true;
+            _rider.Model.RidingOffset = model.Height * Vector3.UnitY * .5f;
+            model.AlignWithTerrain = false;
+            model.Rider = _rider;
             Parent.Physics.UsePhysics = false;
-            Parent.Physics.HasCollision = false;
+            Parent.Physics.CollidesWithEntities = false;
             Parent.SearchComponent<DamageComponent>().Immune = true;
 
             _ai = Parent.SearchComponent<BasicAIComponent>();
@@ -107,21 +111,24 @@ namespace Hedra.Engine.EntitySystem
         private void Quit()
         {
             Parent.Position = _rider.Position;
-            _rider.Model.MountModel.AlignWithTerrain = true;
-            _rider.Model.MountModel.HasRider = false;
-            _rider.Model.MountModel = null;
+            var model = (QuadrupedModel) Parent.Model;
+            model.AlignWithTerrain = true;
+            model.Rider = null;
+            _rider.IsRiding = false;
+            _rider.Model.RidingOffset = Vector3.Zero;
             HasRider = false;
             _ai.Enabled = true;
             _healthBar.Hide = false;
 
 
             Parent.Physics.UsePhysics = true;
-            Parent.Physics.HasCollision = true;
+            Parent.Physics.CollidesWithEntities = true;
             Parent.SearchComponent<DamageComponent>().Immune = false;
         }
 
         public override void Dispose()
         {
+            EventDispatcher.UnregisterKeyDown(this);
             if (!HasRider) return;
             this.Quit();
         }

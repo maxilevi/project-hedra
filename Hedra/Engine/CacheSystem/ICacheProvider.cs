@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.CacheSystem
@@ -11,6 +12,8 @@ namespace Hedra.Engine.CacheSystem
         
         VertexData GetModel(string Type);
 
+        VertexData GetPart(string Type, VertexData Model);
+
         List<CollisionShape> GetShape(VertexData Model);
 
         List<CollisionShape> GetShape(string Type, VertexData Data);
@@ -19,8 +22,8 @@ namespace Hedra.Engine.CacheSystem
 
         void Check(InstanceData Data);
         
-        Dictionary<float, List<float>> CachedExtradata { get; }
+        Dictionary<float, List<CompressedValue<float>>> CachedExtradata { get; }
         
-        Dictionary<Vector4, List<Vector4>> CachedColors { get; }
+        Dictionary<Vector4, List<CompressedValue<Vector4>>> CachedColors { get; }
     }
 }

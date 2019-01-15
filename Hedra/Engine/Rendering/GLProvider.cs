@@ -1,5 +1,7 @@
 using System;
 using System.Diagnostics;
+using Hedra.Core;
+using Hedra.Engine.IO;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
@@ -641,7 +643,7 @@ namespace Hedra.Engine.Rendering
         private void EnsureNoErrors()
         {
 #if DEBUG
-            if(System.Threading.Thread.CurrentThread.ManagedThreadId != Hedra.MainThreadId)
+            if(System.Threading.Thread.CurrentThread.ManagedThreadId != Loader.Hedra.MainThreadId)
                 throw new ArgumentException($"Invalid GL calls outside of the main thread.");
             var error = GL.GetError();
             if (error != ErrorCode.NoError)

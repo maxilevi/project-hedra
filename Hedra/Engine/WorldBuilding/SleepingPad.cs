@@ -1,4 +1,5 @@
 using System;
+using System.Windows.Forms;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
@@ -6,8 +7,11 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Events;
 using Hedra.Engine.Player;
 using Hedra.Engine.Scenes;
+using Hedra.EntitySystem;
+using Hedra.Engine.Localization;
 using OpenTK;
 using OpenTK.Input;
+using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;
 
 namespace Hedra.Engine.WorldBuilding
 {
@@ -15,22 +19,22 @@ namespace Hedra.Engine.WorldBuilding
     {
         public bool IsOccupied => Sleeper != null;
         public IHumanoid Sleeper { get; private set; }
-        public int BedRadius { get; set; } = 16;
+        public int BedRadius { get; set; } = 12;
         public Vector3 TargetRotation { get; set; }
 
         public SleepingPad(Vector3 Position) : base(Position)
         {
             var player = LocalPlayer.Instance;
-            EventDispatcher.RegisterKeyDown(this, delegate(object sender, KeyEventArgs Args)
+            EventDispatcher.RegisterKeyDown(this, delegate(object Sender, KeyEventArgs Args)
             {
-                if (Args.Key == Key.E && !IsOccupied)
+                if (Args.Key == Controls.Interact && !IsOccupied)
                 {
                     if (player.IsAttacking || player.IsCasting || player.IsDead || !player.CanInteract ||
-                        player.IsEating || (player.Position - this.Position).LengthSquared > BedRadius * BedRadius || !SkyManager.IsNight) return;
+                        player.IsEating || (player.Position - this.Position).LengthSquared > BedRadius * BedRadius || !SkyManager.IsSleepTime) return;
 
                     this.SetSleeper(player);
                 }
-                if (Args.Key == Key.ShiftLeft && IsOccupied && Sleeper == player)
+                if (Args.Key == Controls.Descend && IsOccupied && Sleeper == player)
                 {
                     this.SetSleeper(null);
                 }
@@ -42,12 +46,10 @@ namespace Hedra.Engine.WorldBuilding
         public void Update()
         {
             var player = LocalPlayer.Instance;
-            player.MessageDispatcher.ShowMessageWhile("[E] TO SLEEP",
-                () => (player.Position - this.Position).LengthSquared < BedRadius * BedRadius && player.CanInteract && !IsOccupied && SkyManager.IsNight);
+            player.MessageDispatcher.ShowMessageWhile(Translations.Get("to_sleep", Controls.Interact),
+                () => (player.Position - this.Position).LengthSquared < BedRadius * BedRadius && player.CanInteract && !IsOccupied && SkyManager.IsSleepTime);
 
-            if(IsOccupied && !SkyManager.IsNight)
-                this.SetSleeper(null);
-            if(IsOccupied && Sleeper.IsDead)
+            if(IsOccupied && (!SkyManager.IsSleepTime || Sleeper.IsDead))
                 this.SetSleeper(null);
         }
 
@@ -91,6 +93,7 @@ namespace Hedra.Engine.WorldBuilding
         public override void Dispose()
         {
             EventDispatcher.UnregisterKeyDown(this);
+            UpdateManager.Remove(this);
         }
     }
 }

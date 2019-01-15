@@ -11,6 +11,7 @@ using System.Globalization;
 using OpenTK;
 using System.Xml;
 using System.Collections.Generic;
+using Hedra.Core;
 
 namespace Hedra.Engine.Rendering.Animation.ColladaParser
 {

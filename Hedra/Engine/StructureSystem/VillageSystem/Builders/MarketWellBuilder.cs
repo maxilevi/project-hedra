@@ -1,5 +1,8 @@
 using System;
 using Hedra.Engine.Generation;
+using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Player;
+using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using Hedra.Engine.WorldBuilding;
 using OpenTK;
 
@@ -15,16 +18,16 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         {
             return this.PlaceGroundwork(Parameters.Position, Parameters.WellSize);
         }
-        
-        public override BuildingOutput Build(MarketParameters Parameters, VillageCache Cache, Random Rng, Vector3 Center)
+
+        public override void Polish(MarketParameters Parameters, VillageRoot Root, Random Rng)
         {
-            var output = base.Build(Parameters, Cache, Rng, Center);
-            output.Structures.Add(new LampPost(Vector3.UnitY * 8f + Parameters.Position)
+            base.Polish(Parameters, Root, Rng);
+            var offset = (Physics.HeightAtPosition(Parameters.Position) + 4) * Vector3.UnitY;
+            Structure.WorldObject.AddChildren(new WorldLight(Parameters.Position + offset)
             {
-                Radius = 386,
-                LightColor = new Vector3(.25f, .25f, .25f)
+                Radius = MarketParameters.MarketSize,
+                LightColor = HandLamp.LightColor
             });
-            return output;
         }
     }
 }

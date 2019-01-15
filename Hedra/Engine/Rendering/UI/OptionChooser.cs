@@ -7,6 +7,7 @@
 using System;
 using System.Drawing;
 using System.Linq;
+using Hedra.Engine.Localization;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering.UI
@@ -16,40 +17,47 @@ namespace Hedra.Engine.Rendering.UI
         // \u25C0 Left
         // \u25B6 Right        
         
-        public GUIText Text;
-        public Button LeftArrow;
-        public Button RightArrow;
-        public GUIText CurrentValue;
-        public Func<int> GetValue;
-        public Action<int> SetValue;
-        public Font Font;
-        public Color Color;
-        public string[] Options;
-        public int Index;
+        public GUIText Text { get; private set; }
+        public Button LeftArrow{ get; private set; }
+        public Button RightArrow { get; private set; }
+        public GUIText CurrentValue { get; private set; }
+        public int Index { get; set; }
+        public Font Font { get; private set; }
+        public Color Color { get; private set; }
+        public Translation[] Options { get; private set; }
         
-        private void Initialize(Vector2 Position, Vector2 Scale, string Text, Color C, Font F, string[] Options, bool Centered){
+        private void Initialize(Vector2 Position, Vector2 Scale, Translation Translation, Color C, Font F, Translation[] Options, bool Centered)
+        {
             this.Font = F;
             this.Color = C;
             this.Options = Options;
-            var longestValue = Options.FirstOrDefault(S => S.Length == Options.Max(Str => Str.Length));
+            var max = Options.Max(T => T.Get().Length);
+            var longestValue = Options.FirstOrDefault(T => T.Get().Length == max);
 
 
-            GUIText prevCurrentValue = new GUIText(longestValue, Position, Color.Transparent, F);
-            Button prevRightArrow = new Button(Position, Scale, "\u25B6", 0, Color.Transparent, F);
-            Button prevLeftArrow = new Button(Position, Scale, "\u25C0", 0, Color.Transparent, F);
+            var prevCurrentValue = new GUIText(longestValue, Position, Color.Transparent, F);
+            var prevRightArrow = new Button(Position, Scale, "\u25B6", Color.Transparent, F);
+            var prevLeftArrow = new Button(Position, Scale, "\u25C0", Color.Transparent, F);
             
-            if(!Centered){
-                this.Text = new GUIText(Text, new Vector2(Position.X - prevCurrentValue.Scale.X - prevRightArrow.Scale.X, Position.Y), C, F);
-            
-                this.LeftArrow = new Button(this.Text.Position + new Vector2(prevLeftArrow.Scale.X + this.Text.Scale.X,0), Scale, "\u25C0", 0, C, F);
+            if(!Centered)
+            {
+                this.Text = new GUIText(Translation, new Vector2(Position.X - prevCurrentValue.Scale.X - prevRightArrow.Scale.X, Position.Y), C, F);
+                Vector2 Place() => this.Text.Position + new Vector2(prevLeftArrow.Scale.X + this.Text.Scale.X, 0);
+                Translation.LanguageChanged += delegate
+                {
+                    this.LeftArrow.Position = Place();
+                };
+                this.LeftArrow = new Button(Place(), Scale, "\u25C0", C, F);
                 this.CurrentValue = new GUIText(longestValue, LeftArrow.Position + new Vector2(LeftArrow.Scale.X + prevCurrentValue.Scale.X, 0), C, F);
-                this.RightArrow = new Button(CurrentValue.Position + new Vector2(CurrentValue.Scale.X + prevRightArrow.Scale.X, 0), Scale, "\u25B6", 0, C, F);
-            }else{
-                this.Text = new GUIText(Text, Position + new Vector2(0,prevCurrentValue.Scale.Y * 1.5f), C, F);
+                this.RightArrow = new Button(CurrentValue.Position + new Vector2(CurrentValue.Scale.X + prevRightArrow.Scale.X, 0), Scale, "\u25B6", C, F);
+            }
+            else
+            {
+                this.Text = new GUIText(Translation, Position + new Vector2(0,prevCurrentValue.Scale.Y * 1.5f), C, F);
             
                 this.CurrentValue = new GUIText(longestValue, Position, C, F);
-                this.LeftArrow = new Button(Position - new Vector2(prevLeftArrow.Scale.X + CurrentValue.Scale.X,0), Scale, "\u25C0", 0, C, F);
-                this.RightArrow = new Button(CurrentValue.Position + new Vector2(CurrentValue.Scale.X + prevRightArrow.Scale.X, 0), Scale, "\u25B6", 0, C, F);
+                this.LeftArrow = new Button(Position - new Vector2(prevLeftArrow.Scale.X + CurrentValue.Scale.X,0), Scale, "\u25C0", C, F);
+                this.RightArrow = new Button(CurrentValue.Position + new Vector2(CurrentValue.Scale.X + prevRightArrow.Scale.X, 0), Scale, "\u25B6", C, F);
             }
             LeftArrow.Click += this.OnArrowClick;
             RightArrow.Click +=  this.OnRightArrowClick;
@@ -59,17 +67,24 @@ namespace Hedra.Engine.Rendering.UI
             prevCurrentValue.Dispose();
         }
         
-        public OptionChooser(Vector2 Position, Vector2 Scale, string Text, Color C, Font F, string[] Options, bool Centered = false) : base()
+        public OptionChooser(Vector2 Position, Vector2 Scale, Translation Text, Color C, Font F, Translation[] Options, bool Centered = false) : base()
         {
             Initialize(Position, Scale, Text, C, F, Options, Centered);
         }
         
-        public void OnArrowClick(object Sender, EventArgs E){
+        public OptionChooser(Vector2 Position, Vector2 Scale, string Text, Color C, Font F, string[] Options, bool Centered = false) : base()
+        {
+            Initialize(Position, Scale, Translation.Default(Text), C, F, Options.Select(Translation.Default).ToArray(), Centered);
+        }
+        
+        public void OnArrowClick(object Sender, EventArgs E)
+        {
             Index--;
             this.Update();
         }
         
-        public void OnRightArrowClick(object Sender, EventArgs E){
+        public void OnRightArrowClick(object Sender, EventArgs E)
+        {
             Index++;
             this.Update();
         }
@@ -81,7 +96,7 @@ namespace Hedra.Engine.Rendering.UI
             if(Index == -1)
                 Index = Options.Length-1;
 
-            this.CurrentValue.Text = Options[Index];
+            this.CurrentValue.SetTranslation(Options[Index]);
         }
         
         public void Enable(){
@@ -102,8 +117,8 @@ namespace Hedra.Engine.Rendering.UI
         public bool Clickable{
             get => _mClickable;
             set{
-                this.LeftArrow.Clickable = value;
-                this.RightArrow.Clickable = value;
+                this.LeftArrow.CanClick = value;
+                this.RightArrow.CanClick = value;
                 this._mClickable = value;
             }
         }

@@ -1,9 +1,8 @@
 using System;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows.Forms;
+using Hedra.BiomeSystem;
+using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Geometry;
 using OpenTK;
 
@@ -68,6 +67,14 @@ namespace Hedra.Engine.Generation.ChunkSystem
                         float delta = clampNoise / levelSize - (float) Math.Floor(clampNoise / levelSize);
 
                         blockColor = Mathf.Lerp(A, B, delta);
+                    } else if (y0.Type == BlockType.StonePath)
+                    {
+                        var shade = (Utils.Rng.NextFloat() * 2 - 1f) * .2f;
+                        blockColor += new Vector4(shade, shade, shade, 0); 
+                    } else if (y0.Type == BlockType.FarmDirt)
+                    {
+                        if((x+1) % 2 == 0)
+                            blockColor -= new Vector4(.1f, .1f, .1f, 0);
                     }
                     color += new Vector4(blockColor.X, blockColor.Y, blockColor.Z, blockColor.W);
                     colorCount++;
@@ -148,7 +155,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     }
                     for (int k = Math.Min(Y + 8, Chunk.Height - 1); k > -1; k--)
                     {
-                        var block = neighbourChunk?.GetBlockAt(x, k, z) ?? new Block();
+                        var block = neighbourChunk[x][k]?[z] ?? new Block();
                         if (block.Type == BlockType.Seafloor)
                         {
                             Cell.Density[i] = 0;
@@ -203,6 +210,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         }
         
         //Use ref to avoid copying the structs since this function has a very high call rate.
+        [MethodImpl(256)]
         private unsafe Chunk GetNeighbourChunk(int* X, int* Z)
         {
             if (*X >= 0 && *X < _boundsX && *Z >= 0 && *Z < _boundsZ) return _parent;
@@ -216,6 +224,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return GetNeighbourBlock(&X, &Y, &Z);
         }
 
+        [MethodImpl(256)]
         private unsafe Block GetNeighbourBlock(int* X, int* Y, int* Z)
         {
             var chunk = GetNeighbourChunk(X, Z);
@@ -224,6 +233,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         }
         
         // Source: https://codereview.stackexchange.com/a/58309
+        [MethodImpl(256)]
         private static unsafe int Modulo(int* Index)
         {
             return (*Index % Bounds + Bounds) % Bounds;

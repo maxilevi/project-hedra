@@ -12,6 +12,8 @@ using System.IO;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using Hedra.Engine.IO;
+using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
 using OpenTK.Graphics.OpenGL4;
 
@@ -66,7 +68,8 @@ namespace Hedra.Engine.Management
             }
         }
         
-        public static void RegisterPlayer(){
+        public static void RegisterPlayer()
+        {
             try{
                 WebRequest Request = WebRequest.Create(Server+"request?type=analytics&gversion="+Program.GameWindow.GameVersion);
                 Request.GetResponse().Close();
@@ -77,14 +80,15 @@ namespace Hedra.Engine.Management
             }
         }
         
-        private static IEnumerator Run(){
+        private static IEnumerator Run()
+        {
             if(Online){
                 PlayTime += 0.25f;
-                TaskManager.Asynchronous( () => AnalyticsManager.SendData() );
+                TaskScheduler.Asynchronous( () => AnalyticsManager.SendData() );
             }
             while(Online){
                 if(PassedTime > 60){
-                    TaskManager.Asynchronous( () => AnalyticsManager.SendData() );
+                    TaskScheduler.Asynchronous( () => AnalyticsManager.SendData() );
                     PassedTime = 0;
                 }
                 PassedTime += Time.IndependantDeltaTime;
@@ -92,7 +96,8 @@ namespace Hedra.Engine.Management
             }
         }
         
-        public static void SendData(){
+        public static void SendData()
+        {
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             try{
                 string specs = OSManager.Specs;
@@ -106,7 +111,8 @@ namespace Hedra.Engine.Management
             }
         }
         
-        public static void SendCrashReport(string Ex, CrashState State){
+        public static void SendCrashReport(string Ex, int State)
+        {
             try{
                 if(!Online) return;
                 #if !DEBUG
@@ -123,11 +129,6 @@ namespace Hedra.Engine.Management
                 Log.WriteLine("Whoops! Error when sending log.");
             }
         }
-    }
-    
-    public enum CrashState{
-        CRASH,
-        RUN
     }
     
 }

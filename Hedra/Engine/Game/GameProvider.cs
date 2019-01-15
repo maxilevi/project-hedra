@@ -1,10 +1,13 @@
 using System;
 using System.Collections;
 using System.Drawing;
+using Hedra.Core;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Input;
+using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
@@ -114,6 +117,7 @@ namespace Hedra.Engine.Game
             SkyManager.DayTime = Information.Daytime;
             SkyManager.LoadTime = true;
             Player.Inventory.SetItems(Information.Items);
+            Player.Crafting.SetRecipes(Information.Recipes);
             SetRestrictions(Information);
             GameSettings.DarkEffect = false;
             CoroutineManager.StartCoroutine(SpawnCoroutine);
@@ -122,6 +126,11 @@ namespace Hedra.Engine.Game
 
         private void SetRestrictions(PlayerInformation Information)
         {
+            var modRestrictions = RestrictionsFactory.Instance.Build(Information.Class.GetType());
+            for (var i = 0; i < modRestrictions.Length; i++)
+            {
+                Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, modRestrictions[i]);
+            }
             Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, Information.Class.StartingItem.EquipmentType);
             Player.Inventory.AddRestriction(PlayerInventory.BootsHolder, EquipmentType.Boots);
             Player.Inventory.AddRestriction(PlayerInventory.PantsHolder, EquipmentType.Pants);
@@ -134,29 +143,20 @@ namespace Hedra.Engine.Game
 
         public void NewRun(PlayerInformation Information)
         {
-            Player.IsRiding = false;
-            Player.Pet.Pet?.Update();//Finish removing the mount
-
             Information.WorldSeed = World.RandomSeed;
-            GameManager.Player.IsTravelling = false;
             GameManager.MakeCurrent(Information);
-            GameManager.Player.Position = World.FindSpawningPoint(GameSettings.SpawnPoint.ToVector3());
-
             SkyManager.SetTime(12000);
-
-            Player.Model = new HumanoidModel(Player);
-            
-            if(Player.Inventory.MainWeapon != null){
-                //Force to discard cache
+            Player.Model = new HumanoidModel(Player);         
+            if(Player.Inventory.MainWeapon != null)
+            {
                 Player.Inventory.MainWeapon.FlushCache();
-                Player.Model.SetWeapon(Player.Inventory.MainWeapon.Weapon);
-                
+                Player.SetWeapon(Player.Inventory.MainWeapon.Weapon);               
             }
+            SpawnCampfireDesign.AlignPlayer(Player);
             Player.UI.HideMenu();
             Player.UI.Hide = false;
-            Player.Enabled = true;                
+            Player.Enabled = true;
             _isNewRun = true;
-            Player.MessageDispatcher.ShowMessageWhile("[F4] HELP", () => !LocalPlayer.Instance.UI.ShowHelp);
         }
         
         private IEnumerator SpawnCoroutine()
@@ -173,14 +173,10 @@ namespace Hedra.Engine.Game
             while (_loadingScreen.IsLoading)
             {
                 Player.Physics.ResetFall();
-                Player.Physics.TargetPosition = new Vector3(
-                    Player.Physics.TargetPosition.X,
-                    Physics.HeightAtPosition(Player.Physics.TargetPosition),
-                    Player.Physics.TargetPosition.Z
-                );
+                Player.Physics.UsePhysics = false;
                 yield return null;
             }
-
+            Player.Physics.UsePhysics = true;
             Player.SearchComponent<DamageComponent>().Immune = false;
             Player.UI.GamePanel.Enable();
             Player.Chat.Show = true;
@@ -188,10 +184,10 @@ namespace Hedra.Engine.Game
             GameManager.SpawningEffect = true;
             Player.Model.ApplyFog = true;
             Player.CanInteract = true;
-            Player.QuestLog.Show = true;
+            Player.QuestInterface.Show = true;
             GameManager.Player.PlaySpawningAnimation = true;
-            GameManager.Player.MessageDispatcher.ShowTitleMessage(World.WorldBuilding.GenerateName(), 1.5f);
-            
+            if (!GameManager.Player.MessageDispatcher.HasTitleMessages)
+                GameManager.Player.MessageDispatcher.ShowTitleMessage(World.WorldBuilding.GenerateName(), 1.5f);           
         }
 
         public void Unload()
@@ -216,11 +212,11 @@ namespace Hedra.Engine.Game
                 if (!value || SpawningEffect || GameSettings.Paused) return;
                 _spawningEffect = true;
                 GameSettings.BloomModifier = 8.0f;
-                TaskManager.While( () => Math.Abs(GameSettings.BloomModifier - 1.0f) > .005f, delegate
+                TaskScheduler.While( () => Math.Abs(GameSettings.BloomModifier - 1.0f) > .005f, delegate
                 {
                     GameSettings.BloomModifier = Mathf.Lerp(GameSettings.BloomModifier, 1.0f, Time.IndependantDeltaTime);
                 });
-                TaskManager.When( () => Math.Abs(GameSettings.BloomModifier - 1.0f) < .005f, delegate
+                TaskScheduler.When( () => Math.Abs(GameSettings.BloomModifier - 1.0f) < .005f, delegate
                 {
                     GameSettings.BloomModifier = 1.0f;
                     _spawningEffect = false;

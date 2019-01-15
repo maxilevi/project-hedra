@@ -1,10 +1,9 @@
-
 {
   "Name": "RareCelestialClaw",
   "DisplayName": "Celestial Claw",
   "EquipmentType": "Claw",
   "Tier": "Rare",
-  "Description": "Commonly used by knights.",
+  "Description": "Made of Celestial Matter, light and heavy at the same time.",
   "Attributes": [
     {
       "Name": "Damage",
@@ -12,7 +11,7 @@
     },
     {
       "Name": "AttackSpeed",
-      "Value": 1.10
+      "Value": 1.1
     }
   ],
   "Model": {

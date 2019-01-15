@@ -1,9 +1,9 @@
-﻿{
+{
   "Name": "CommonBronzeDoubleBlades",
   "DisplayName": "Bronze Blades",
-  "EquipmentType": "DoubleBlades", 
+  "EquipmentType": "DoubleBlades",
   "Tier": "Common",
-  "Description": "Bronze double blades.",
+  "Description": "Forged of bronze, dull but pointy. A good point for training.",
   "Attributes": [
     {
       "Name": "Damage",

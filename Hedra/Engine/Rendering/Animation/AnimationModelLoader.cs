@@ -76,7 +76,7 @@ namespace Hedra.Engine.Rendering.Animation
                 else
                 {
                     string fileContents = Encoding.ASCII.GetString(AssetManager.ReadPath(ModelFile));
-                    entityData = ColladaLoader.LoadColladaModel(fileContents, GeneralSettings.MaxWeights);
+                    entityData = ColladaLoader.LoadColladaModel(fileContents);
                     ModelCache.Add(ModelFile, entityData);
                 }
             }

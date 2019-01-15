@@ -11,5 +11,7 @@ namespace Hedra.Engine.CacheSystem
             
             this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/MerchantCart.ply", 14, Vector3.One));
         }
+        
+        public override CacheItem Type => CacheItem.MerchantCart;
     }
 }

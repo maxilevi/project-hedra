@@ -7,6 +7,7 @@ namespace Hedra.Engine.Rendering.Shaders
     {
         public int Location { get; }
         public object Value { get; set; }
+        public bool Loaded { get; set; }
         public MappingType Type { get; private set; }
 
         public UniformMapping(int Location, object Value)

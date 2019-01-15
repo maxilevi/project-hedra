@@ -1,0 +1,279 @@
+﻿{
+  "Name" : "Woodland",
+  "Decorations": {
+    "Lamps": [
+      {
+        "Path": "Assets/Env/Lamp0.ply",
+        "Scale": 4.0,
+        "LightOffset": {
+          "X": 0.0,
+          "Y": 5.0,
+          "Z": 0.0
+        }
+      }
+    ],
+    "Benches": [
+      {
+        "Path": "Assets/Env/Bench0.ply",
+        "Scale": 3.0,
+        "SitOffset": {
+          "X": 0.0,
+          "Y": 1.0,
+          "Z": 0.0
+        }
+      },
+      {
+        "Path": "Assets/Env/Bench1.ply",
+        "Scale": 3.0,
+        "SitOffset": {
+          "X": 0.0,
+          "Y": 1.0,
+          "Z": 0.0
+        }
+      }
+    ]
+  },
+  "Well" : {
+    "Designs":[
+      {
+        "Path" : "Assets/Env/Village/Well0.ply",
+        "Scale" : 3.0
+      }
+    ]
+  },
+  "Farm" : {
+    "Designs" : [],
+    "PropDesigns" :
+    [
+      {
+        "Scale": 8.0,
+        "Path": "Assets/Env/Village/Farm0_Prop0.ply",
+        "Chance": 10,
+        "HasLivestock": true
+      },
+      {
+        "Scale": 8.0,
+        "Path": "Assets/Env/Village/Farm0_Prop1.ply",
+        "Chance": 90,
+        "HasWindmill": true,
+        "WindmillChance": 15
+      }
+    ]
+  },
+  "Stable" : {
+    "Designs" : [
+      {
+        "Path" : "Assets/Env/Village/Stable0.ply",
+        "Scale" : 4.0
+      }
+    ]
+  },
+  "Blacksmith" : {
+    "Designs" : [
+      {
+        "Path" : "Assets/Env/Village/Blacksmith0.ply",
+        "LodPath": "Assets/Env/Village/Blacksmith0-Lod.ply",
+        "Scale" : 2.0,
+        "Doors" : [
+          {
+           "Path":  "Assets/Env/Village/Blacksmith0_Door0.ply",
+            "Position" : {
+              "X": 9.23307,
+              "Y": 5.91168,
+              "Z": -7.05042
+            }
+          }
+        ],
+        "Blacksmith" : {
+          "X": -11.20,
+          "Y": 0.5,
+          "Z": -12.0
+        },
+        "LampPosition" : {
+          "X": -16.0,
+          "Y": 0.0,
+          "Z": -16.0
+        }
+      },
+      {
+        "Path" : "Assets/Env/Village/Carpenter0.ply",
+        "LodPath": "Assets/Env/Village/Carpenter0-Lod.ply",
+        "Scale" : 2.0,
+        "Doors" : [
+          {
+            "Path":  "Assets/Env/Village/Carpenter0_Door0.ply",
+            "Position" : {
+              "X": -9.12806,
+              "Y": 5.93834,
+              "Z": -7.02207
+            },
+            "InvertedPivot": true,
+            "InvertedRotation": false
+          }
+        ],
+        "Blacksmith" : {
+          "X": -11.20,
+          "Y": 0.5,
+          "Z": -12.0
+        },
+        "LampPosition" : {
+          "X": -16.0,
+          "Y": 0.0,
+          "Z": -16.0
+        }
+      }
+    ]
+  },
+  "Windmill" : {
+    "Designs" : [
+      {
+        "Path" : "Assets/Env/Village/Windmill0.ply",
+        "BladesPath": "Assets/Env/Village/Windmill0_Blades.ply",
+        "BladesPosition" : {
+          "X" :  0.0,
+          "Y" :  4.54216,
+          "Z" : -0.50052
+        },
+        "Scale" : 8.0,
+        "Chance": 80
+      },
+      {
+        "Path" : "Assets/Env/Village/Windmill1.ply",
+        "Scale" : 4.0,
+        "Chance": 20
+      }
+    ]
+  },
+  "House" : {
+    "Designs" : [
+      {
+        "Path" : "Assets/Env/Village/House0.ply",
+        "LodPath": "Assets/Env/Village/House0-Lod.ply",
+        "Scale" : 3.0,
+        "Beds" : [
+          {
+            "Position" : {
+              "X" : -3.20435,
+              "Y" : 1.09831,
+              "Z" : -1.16152
+            }
+          }
+        ],
+        "Doors" : [
+          {
+            "Path":  "Assets/Env/Village/House0_Door0.ply",
+            "Position" : {
+              "X": 4.56401,
+              "Y": 2.87233,
+              "Z": -6.06534
+            }
+          },
+          {
+            "Path":  "Assets/Env/Village/House0_Door1.ply",
+            "Position" : {
+              "X": -1.1613,
+              "Y": 2.20772,
+              "Z": 3.7195
+            }
+          }
+        ]
+      },
+      {
+        "Path" : "Assets/Env/Village/House1.ply",
+        "LodPath": "Assets/Env/Village/House1-Lod.ply",
+        "Scale" : 3.5,
+        "Beds" : [
+          {
+            "Position" : {
+              "X" : -1.43419,
+              "Y" : 5.51153,
+              "Z" : -6.28642
+            }
+          }
+        ],
+        "Doors" : [
+          {
+            "Path":  "Assets/Env/Village/House1_Door0.ply",
+            "Position" : {
+              "X": 4.25405,
+              "Y": 2.12194,
+              "Z": -7.93568
+            }
+          },
+          {
+            "Path":  "Assets/Env/Village/House1_Door1.ply",
+            "Position" : {
+              "X": 4.28769,
+              "Y": 1.67716,
+              "Z": 0.52434
+            }
+          },
+          {
+            "Path":  "Assets/Env/Village/House1_Door2.ply",
+            "Position" : {
+              "X": 4.14934,
+              "Y": 6.33101,
+              "Z": 0.39632
+            }
+          },
+          {
+            "Path":  "Assets/Env/Village/House1_Door3.ply",
+            "Position" : {
+              "X": 4.14934,
+              "Y": 6.33101,
+              "Z": -4.18791
+            }
+          }
+        ]
+      },
+      {
+        "Path" : "Assets/Env/Village/House2.ply",
+        "LodPath": "Assets/Env/Village/House2-Lod.ply",
+        "Scale" : 3.5,
+        "Beds" : [
+          {
+            "Position" : {
+              "X" : -9.9806,
+              "Y" : 1.15,
+              "Z" : 3.32437
+            }
+          },
+          {
+            "Position" : {
+              "X" : 9.10594,
+              "Y" : 1.15,
+              "Z" : 3.32436
+            }
+          }
+        ],
+        "Doors" : [
+          {
+            "Path":  "Assets/Env/Village/House2_Door0.ply",
+            "Position" : {
+              "X": 2.22709,
+              "Y": 2.28284,
+              "Z": -9.61886
+            }
+          },
+          {
+            "Path":  "Assets/Env/Village/House2_Door1.ply",
+            "Position" : {
+              "X": -4.88185,
+              "Y": 1.82325,
+              "Z": 2.94575
+            }
+          },
+          {
+            "Path":  "Assets/Env/Village/House2_Door2.ply",
+            "Position" : {
+              "X": 4.24883,
+              "Y": 1.84454,
+              "Z": 6.68699
+            },
+            "InvertedPivot": true
+          }
+        ]
+      }
+    ]
+  }
+}

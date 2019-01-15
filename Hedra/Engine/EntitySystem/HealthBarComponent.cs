@@ -1,11 +1,13 @@
 using System;
 using System.Drawing;
 using System.Globalization;
+using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Scenes;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.EntitySystem
@@ -42,7 +44,7 @@ namespace Hedra.Engine.EntitySystem
 
         public HealthBarComponent(IEntity Parent, string Name) : base(Parent)
         {
-            _healthBar = new Bar(Vector2.Zero, Mathf.ScaleGUI(new Vector2(1024, 578), _originalScale), Name,
+            _healthBar = new Bar(Vector2.Zero, Mathf.ScaleGui(new Vector2(1024, 578), _originalScale), Name,
                 () => Parent.Health, () => Parent.MaxHealth,
                 HealthBarPanel);
 
@@ -56,7 +58,7 @@ namespace Hedra.Engine.EntitySystem
 
         public HealthBarComponent(IEntity Parent) : base(Parent)
         {
-            _healthBar = new Bar(Vector2.Zero, Mathf.ScaleGUI(new Vector2(1024, 578), _originalScale), Name,
+            _healthBar = new Bar(Vector2.Zero, Mathf.ScaleGui(new Vector2(1024, 578), _originalScale), Name,
                 () => Parent.Health, () => Parent.MaxHealth,
                 HealthBarPanel);
 
@@ -81,8 +83,8 @@ namespace Hedra.Engine.EntitySystem
             _healthBar.Text.UIText.UIText.Scale = _originalTextScale * _barSize * _textEnabled;
 
             var product = 
-                Mathf.DotProduct(GameManager.Player.View.CrossDirection, (Parent.Position - GameManager.Player.Position).NormalizedFast());
-            if (_barSize <= 0.5f || product <= 0.5f)
+                Vector3.Dot(GameManager.Player.View.CrossDirection, (Parent.Position - GameManager.Player.Position).NormalizedFast());
+            if (_barSize <= 0.5f || product <= 0.0f)
             {
                 _healthBar.Disable();
                 _targetBarSize = 0;
@@ -106,12 +108,12 @@ namespace Hedra.Engine.EntitySystem
         {
             if(Parent.Model == null) return;
 
-            Vector4 eyeSpace = Vector4.Transform(new Vector4(Parent.Position + Parent.Model.Height * 1.5f * Vector3.UnitY, 1),
+            var eyeSpace = Vector4.Transform(new Vector4(Parent.Position + Parent.Model.Height * 1.75f * Vector3.UnitY, 1),
                     DrawManager.FrustumObject.ModelViewMatrix);
-            Vector4 homogeneusSpace = Vector4.Transform(eyeSpace, DrawManager.FrustumObject.ProjectionMatrix);
-            Vector3 ndc = homogeneusSpace.Xyz / homogeneusSpace.W;
-            _healthBar.Position = Mathf.Clamp(ndc.Xy, -.98f, .98f);
-            _healthBar.Scale = _originalScale * _barSize;
+            var homogeneusSpace = Vector4.Transform(eyeSpace, DrawManager.FrustumObject.ProjectionMatrix);
+            var ndc = homogeneusSpace.Xyz / homogeneusSpace.W;
+            _healthBar.Position = Mathf.Clamp(ndc.Xy, -.98f, .98f) + _originalScale * _barSize * Vector2.UnitY;
+            _healthBar.Scale = _originalScale * _barSize * Math.Min(1, Parent.Model.Height / 7f);
 
             if (!_textUpdated)
             {

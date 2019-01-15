@@ -1,10 +1,9 @@
-
 {
   "Name": "DivineCarmesiClaw",
   "DisplayName": "Carmesi Claw",
   "EquipmentType": "Claw",
   "Tier": "Divine",
-  "Description": "An intense thirst for blood...",
+  "Description": "When you picked up the claw you felt an unquenching thirst for blood. Will you submit.",
   "Attributes": [
     {
       "Name": "Damage",

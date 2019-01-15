@@ -9,7 +9,9 @@ using System.Diagnostics;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using System.Drawing;
+using Hedra.Core;
 using Hedra.Engine.Game;
+using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Rendering.UI
@@ -75,7 +77,7 @@ namespace Hedra.Engine.Rendering.UI
                 Graphics2D.Textures.Remove(DisposeId);
                 Renderer.DeleteTexture(DisposeId);
             }
-            if(System.Threading.Thread.CurrentThread.ManagedThreadId != Hedra.MainThreadId)
+            if(System.Threading.Thread.CurrentThread.ManagedThreadId != Loader.Hedra.MainThreadId)
                 Executer.ExecuteOnMainThread(DisposeProcess);
             else
                 DisposeProcess();

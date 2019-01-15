@@ -1,9 +1,9 @@
 {
   "Name": "CommonIronKnife",
   "DisplayName": "Iron Knife",
-  "EquipmentType": "Knife", 
+  "EquipmentType": "Knife",
   "Tier": "Common",
-  "Description": "Iron knife.",
+  "Description": "A sharp, relatively light knife, due to it's iron compisition.",
   "Attributes": [
     {
       "Name": "Damage",

@@ -10,6 +10,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Hedra.Core;
 using Hedra.Engine.Generation;
 using OpenTK;
 using Hedra.Engine.Rendering;
@@ -21,6 +22,8 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Player;
 using Hedra.Engine.Sound;
+using Hedra.Rendering;
+using Hedra.Sound;
 
 namespace Hedra.Engine.Scenes
 {
@@ -56,11 +59,6 @@ namespace Hedra.Engine.Scenes
             }
             
             PlatformPosition = CreatorPosition.Xz.ToVector3() + Vector3.UnitX * 4 + Vector3.UnitY * (Physics.HeightAtPosition(PlatformPosition +  Vector3.UnitX * 4));
-            
-            //VertexData CenterModel = AssetManager.PlyLoader("Assets/Intro/CreationPlatform.ply", Vector3.One);
-            //CenterModel.Transform( PlatformPosition );
-            //UnderChunk.AddStaticElement(CenterModel);
-            //World.AddChunkToQueue(UnderChunk, true);
         }
         
         private static IEnumerator MakeFire(){
@@ -86,8 +84,8 @@ namespace Hedra.Engine.Scenes
         
         private static PointLight _light;
         private static SoundItem _sound;
-        private static IEnumerator MenuUpdate(){
-
+        private static IEnumerator MenuUpdate()
+        {
             while (World.Seed == World.MenuSeed)
             {
                 if (_light == null)
@@ -95,7 +93,7 @@ namespace Hedra.Engine.Scenes
                     _light = ShaderManager.GetAvailableLight();
                     if (_light != null)
                     {
-                        _light.Color = new Vector3(1f, 0.35f, 0.35f);
+                        _light.Color = new Vector3(1f, 0.4f, 0.4f);
                         _light.Position = FirePosition;
                     }
                 }
@@ -103,18 +101,18 @@ namespace Hedra.Engine.Scenes
 
                 if (_sound == null)
                 {
-                    _sound = SoundManager.GetAvailableSource();
+                    _sound = SoundPlayer.GetAvailableSource();
                     yield return null;
                     yield return null;
                     yield return null;
                     yield return null;
-                    float gain = Math.Max(0, 1 - (FirePosition - SoundManager.ListenerPosition).LengthFast / 32f);
-                    _sound?.Source.Play(SoundManager.GetBuffer(SoundType.Fireplace), FirePosition, 1f, gain, true);
+                    float gain = Math.Max(0, 1 - (FirePosition - SoundPlayer.ListenerPosition).LengthFast / 32f);
+                    _sound?.Source.Play(SoundPlayer.GetBuffer(SoundType.Fireplace), FirePosition, 1f, gain, true);
                 }
 
                 if (_sound != null)
                 {
-                    float gain = System.Math.Max(0, 1 - (FirePosition - SoundManager.ListenerPosition).LengthFast / 32f);
+                    float gain = System.Math.Max(0, 1 - (FirePosition - SoundPlayer.ListenerPosition).LengthFast / 32f);
                     _sound.Source.Volume = gain;
 
                 }

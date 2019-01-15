@@ -1,9 +1,9 @@
 {
   "Name": "UniqueRingingHammer",
   "DisplayName": "Ringing Hammer",
-  "EquipmentType": "Hammer", 
+  "EquipmentType": "Hammer",
   "Tier": "Unique",
-  "Description": "Ringing hammer.",
+  "Description": "It leaves a terrible ringing noise in your ear.",
   "Attributes": [
     {
       "Name": "Damage",

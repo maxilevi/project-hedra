@@ -9,8 +9,12 @@
 
 using System;
 using System.Linq;
+using Hedra.Components;
+using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Input;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI;
 using OpenTK;
@@ -138,7 +142,7 @@ namespace Hedra.Engine.Player.Inventory
                 _player.Movement.CaptureMovement = false;
                 _player.View.CaptureMovement = false;
                 _player.View.PositionDelegate = () => (_player.Position + _trader.Position) / 2;
-                UpdateManager.CursorShown = true;
+                Cursor.Show = true;
             }
             else
             {
@@ -181,7 +185,7 @@ namespace Hedra.Engine.Player.Inventory
             if(merchant != null) this.Trade(merchant);
         }
 
-        public override Key OpeningKey => Key.E;
+        public override Key OpeningKey => Controls.Interact;
 
         public override bool Show
         {

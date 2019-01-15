@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.CacheSystem
@@ -9,9 +10,9 @@ namespace Hedra.Engine.CacheSystem
     {
         public static ICacheProvider Provider { get; set; } = new CacheProvider();
 
-        public static Dictionary<float, List<float>> CachedExtradata => Provider.CachedExtradata;
+        public static Dictionary<float, List<CompressedValue<float>>> CachedExtradata => Provider.CachedExtradata;
         
-        public static Dictionary<Vector4, List<Vector4>> CachedColors => Provider.CachedColors;
+        public static Dictionary<Vector4, List<CompressedValue<Vector4>>> CachedColors => Provider.CachedColors;
         
         public static void Load()
         {
@@ -20,12 +21,12 @@ namespace Hedra.Engine.CacheSystem
 
         public static VertexData GetModel(CacheItem Item)
         {
-            return GetModel(Item.ToString());
+            return Provider.GetModel(Item.ToString().ToLowerInvariant());
         }
-
-        public static VertexData GetModel(string Type)
+        
+        public static VertexData GetPart(CacheItem Item, VertexData Model)
         {
-            return Provider.GetModel(Type.ToLowerInvariant());
+            return Provider.GetPart(Item.ToString().ToLowerInvariant(), Model);
         }
 
         public static List<CollisionShape> GetShape(VertexData Model)

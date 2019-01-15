@@ -1,7 +1,9 @@
+using Hedra;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ModuleSystem;
+using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.Player;
 using Hedra.Engine.WorldBuilding;
 using OpenTK;
@@ -10,17 +12,27 @@ namespace HedraTests.Structure
 {
     public class StructureDesignWorldBuildingMock : IWorldBuilding
     {
-        public bool CanAddPlateau(Plateau Mount)
+        public bool CanAddPlateau(RoundedPlateau Mount)
         {
             return false;
         }
 
-        public bool CanAddPlateau(Plateau Mount, Plateau[] Candidates)
+        public BasePlateau[] GetPlateausFor(Vector2 Position)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IGroundwork[] GetGroundworksFor(Vector2 Position)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool CanAddPlateau(RoundedPlateau Mount, RoundedPlateau[] Candidates)
         {
             return false;
         }
 
-        public Plateau[] Plateaus => null;
+        public BasePlateau[] Plateaux => null;
         
         public IGroundwork[] Groundworks => null;
         
@@ -54,17 +66,7 @@ namespace HedraTests.Structure
             return SpawnHumanoid(null, Position);
         }
 
-        public Humanoid SpawnVillager(Vector3 Position, bool Move)
-        {
-            return SpawnBandit(Position, 0, Move);
-        }
-
         public Humanoid SpawnVillager(Vector3 Position, bool Move, string Name)
-        {
-            return SpawnHumanoid(null, Position);
-        }
-
-        public Humanoid SpawnEnt(Vector3 Position)
         {
             return SpawnHumanoid(null, Position);
         }
@@ -85,6 +87,16 @@ namespace HedraTests.Structure
 
         public void DisposeStructure(CollidableStructure Structure)
         {
+        }
+
+        public float ApplyMultiple(Vector2 Position, float MaxHeight)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public float ApplyMultiple(Vector2 Position, float MaxHeight, params BasePlateau[] Against)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

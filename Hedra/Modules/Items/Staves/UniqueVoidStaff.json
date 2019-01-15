@@ -1,0 +1,21 @@
+{
+  "Name": "UniqueVoidStaff",
+  "DisplayName": "Void Staff",
+  "EquipmentType": "Staff",
+  "Tier": "Unique",
+  "Description": "A simply unbelievable feat, 2 floating chunks of wood around a similarly floating black sphere.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 6.5
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.05
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Staff/UniqueVoidStaff.ply"
+  }
+}

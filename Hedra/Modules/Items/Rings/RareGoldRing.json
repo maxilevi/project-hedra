@@ -1,9 +1,9 @@
-﻿{
+{
   "Name": "RareGoldRing",
   "DisplayName": "Gold Ring",
-  "EquipmentType": "Ring", 
+  "EquipmentType": "Ring",
   "Tier": "Rare",
-  "Description": "Gold ring.",
+  "Description": "The ring is forged of gold in a rather complex process, the engraving is truly beautiful.",
   "Attributes": [
     {
       "Name": "MovementSpeed",

@@ -1,9 +1,9 @@
 {
   "Name": "UniquePaladinHammer",
   "DisplayName": "Paladin Hammer",
-  "EquipmentType": "Hammer", 
+  "EquipmentType": "Hammer",
   "Tier": "Unique",
-  "Description": "Paladin hammer.",
+  "Description": "The Favorable weapon of a Paladin, easy to swing and heavy.",
   "Attributes": [
     {
       "Name": "Damage",

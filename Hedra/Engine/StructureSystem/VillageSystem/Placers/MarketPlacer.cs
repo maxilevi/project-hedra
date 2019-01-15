@@ -13,12 +13,17 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
         {
         }
 
-        protected override bool SpecialRequirements(PlacementPoint Point)
+        public override bool SpecialRequirements(PlacementPoint Point)
         {
             if (_currentMarkets >= 1) return false;
-            _currentMarkets++;
-            Point.Position = Vector3.Zero;
             return true;
+        }
+
+        public override MarketParameters FromPoint(PlacementPoint Point)
+        {
+            Point.Position = Vector3.Zero;
+            _currentMarkets++;
+            return base.FromPoint(Point);
         }
     }
 }

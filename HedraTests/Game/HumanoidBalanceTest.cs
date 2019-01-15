@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using Hedra;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.Game;
+using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
+using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.Player;
 using NUnit.Framework;
 
@@ -14,6 +16,7 @@ namespace HedraTests.Game
     [TestFixture]
     public class HumanoidBalanceTest : BaseTest
     {
+        private static bool _loaded;
         private int RandomLevel => Utils.Rng.Next(0, Humanoid.MaxLevel) + 1;
         private readonly HumanoidBalanceSheet _sheet = new HumanoidBalanceSheet();
         private Humanoid _human;
@@ -26,8 +29,6 @@ namespace HedraTests.Game
             _human.RandomFactor = Humanoid.NewRandomFactor();
             _human.Model = new HumanoidModel(_human, new HumanoidModelTemplate
             {
-                Colors = new ColorTemplate[0],
-                Name = string.Empty,
                 Path = string.Empty,
                 Scale = 0
             });
@@ -151,7 +152,13 @@ namespace HedraTests.Game
         /* Called via reflection by NUnit */
         private static IEnumerable<ClassDesign> TestClasses()
         {
-            var classes = ClassDesign.AvailableClasses;
+            var classes = new []
+            {
+                typeof(WarriorDesign),
+                typeof(MageDesign),
+                typeof(ArcherDesign),
+                typeof(RogueDesign)
+            };
             for (var i = 0; i < classes.Length; i++)
             {
                 yield return ClassDesign.FromType(classes[i]);
@@ -161,8 +168,7 @@ namespace HedraTests.Game
         /* Called via reflection by NUnit */
         private static IEnumerable<Item> BadWeapons()
         {
-            AssetManager.Provider = new SimpleAssetProvider();
-            ItemFactory.LoadModules(GameLoader.AppPath);
+            LoadItems();
             for (var i = 0; i < 3; i++)
             {
                 yield return GrabWeapon(new ItemPoolSettings(ItemTier.Common)
@@ -176,8 +182,7 @@ namespace HedraTests.Game
         /* Called via reflection by NUnit */
         private static IEnumerable<Item> NormalWeapons()
         {
-            AssetManager.Provider = new SimpleAssetProvider();
-            ItemFactory.LoadModules(GameLoader.AppPath);
+            LoadItems();
             for (var i = 0; i < 3; i++)
             {
                 yield return GrabWeapon(new ItemPoolSettings(ItemTier.Unique)
@@ -191,8 +196,7 @@ namespace HedraTests.Game
         /* Called via reflection by NUnit */
         private static IEnumerable<Item> GoodWeapons()
         {
-            AssetManager.Provider = new SimpleAssetProvider();
-            ItemFactory.LoadModules(GameLoader.AppPath);
+            LoadItems();
             for (var i = 0; i < 3; i++)
             {
                 yield return GrabWeapon(new ItemPoolSettings(ItemTier.Divine)
@@ -206,19 +210,30 @@ namespace HedraTests.Game
         /* Called via reflection by NUnit */
         private static IEnumerable<Item> RandomWeapons()
         {
-            AssetManager.Provider = new SimpleAssetProvider();
-            ItemFactory.LoadModules(GameLoader.AppPath);
+            LoadItems();
             for (var i = 0; i < 3; i++)
             {
                 yield return ItemPool.Grab(new ItemPoolSettings(ItemTier.Divine));
             }
         }
 
+        private static void LoadItems()
+        {
+            AssetManager.Provider = new SimpleAssetProvider();
+            if (!_loaded)
+            {
+                _loaded = true;
+                HedraContent.Register();
+            }
+            ItemFactory.LoadModules(GameLoader.AppPath);
+        }
+        
         private static Item GrabWeapon(ItemPoolSettings Settings)
         {
             Item item = null;
             while (item == null || !item.IsWeapon)
             {
+                Log.WriteLine("Grabbing item from ItemPool");
                 item = ItemPool.Grab(Settings);
             }
             return item;

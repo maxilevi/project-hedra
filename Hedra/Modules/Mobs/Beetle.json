@@ -2,12 +2,11 @@
 	"Name" : "Beetle", 
 	"MaxHealth": 488.0,
 	"AttackDamage": 10.0,
-	"AttackCooldown": 3.0,
+	"AttackCooldown": 1.0,
 	"Speed": 1.45,
 	"XP": 12.0,
 	"Level": 16,
 	"AIType": "GiantBeetle",
-	"Ridable": false,
 	"Effects": [
 		{
 			"Name": "Poison",

@@ -1,0 +1,21 @@
+{
+  "Name": "UniqueWorldEaterStaff",
+  "DisplayName": "The World Eater",
+  "EquipmentType": "Staff",
+  "Tier": "Unique",
+  "Description": "Made of luxurious wood with golden accents. The head is shaped a worm, though could be confused for a snake.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 6.5
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Staff/UniqueWorldEaterStaff.ply"
+  }
+}

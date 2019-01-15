@@ -9,12 +9,15 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Hedra.API;
+using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
@@ -28,6 +31,8 @@ using Hedra.Engine.Sound;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.Engine.WorldBuilding;
+using Hedra.EntitySystem;
+using Hedra.Sound;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
@@ -40,6 +45,7 @@ namespace Hedra.Engine.Generation
         private readonly RenderingComparer _renderingComparer;
         private readonly SharedWorkerPool _meshWorkerPool;
         private readonly SharedWorkerPool _genWorkerPool;
+        private Vector3 _spawningPoint;
         private int _previousCount;
         private int _previousId;
         private Matrix4 _previousModelView;
@@ -65,7 +71,7 @@ namespace Hedra.Engine.Generation
         public Dictionary<Vector2, Chunk> SearcheableChunks { get; }
         public AreaHighlighter Highlighter { get; private set; }
         public ParticleSystem Particles { get; private set; }
-        public EnviromentGenerator EnviromentGenerator { get; private set; }
+        public EnvironmentGenerator EnvironmentGenerator { get; private set; }
         public IBiomePool BiomePool { get; private set; }
         public MobFactory MobFactory { get; private set; }
         public TreeGenerator TreeGenerator { get; private set; }
@@ -77,7 +83,7 @@ namespace Hedra.Engine.Generation
         public int ChunkQueueCount => _chunkBuilder.Count;
         public int AverageBuildTime => _meshBuilder.AverageWorkTime;     
         public int AverageGenerationTime => _chunkBuilder.AverageWorkTime;
-
+        public Vector3 SpawnPoint => _spawningPoint;
         public Dictionary<Vector2, Chunk> DrawingChunks { get; }
         public Dictionary<Vector2, Chunk> ShadowDrawingChunks { get; }
 
@@ -90,7 +96,7 @@ namespace Hedra.Engine.Generation
             TreeGenerator = new TreeGenerator();
             WorldBuilding = new WorldBuilding.WorldBuilding();
             StructureHandler = new StructureHandler();
-            EnviromentGenerator = new EnviromentGenerator();
+            EnvironmentGenerator = new EnvironmentGenerator();
             MobFactory = new MobFactory();
             Highlighter = new AreaHighlighter();
             Particles = new ParticleSystem
@@ -116,6 +122,7 @@ namespace Hedra.Engine.Generation
             VillageLoader.LoadModules(AssetManager.AppPath);
             HumanoidLoader.LoadModules(AssetManager.AppPath);
             ModulesReload?.Invoke(AssetManager.AppPath);
+            ModificationsLoader.Reload();
         }
 
         public int MenuSeed => 2124321422;
@@ -201,6 +208,7 @@ namespace Hedra.Engine.Generation
             OpenSimplexNoise.Load(NewSeed == MenuSeed ? 23123123 : NewSeed); //Not really the menu seed.
             _meshBuilder.Discard();
             _chunkBuilder.Discard();
+            _spawningPoint = FindSpawningPoint(GeneralSettings.SpawnPoint);
             SkyManager.SetTime(12000);
 
             var items = Items;
@@ -512,7 +520,7 @@ namespace Hedra.Engine.Generation
 
             model.OnPickup += delegate(IPlayer Player)
             {
-                TaskManager.While(() => !model.Disposed, delegate
+                TaskScheduler.While(() => !model.Disposed, delegate
                 {
                     model.Outline = false;
                     model.Position = Mathf.Lerp(model.Position, Player.Position, Time.DeltaTime * 5f);
@@ -520,7 +528,7 @@ namespace Hedra.Engine.Generation
                         if (Player.Inventory.AddItem(model.ItemSpecification))
                         {
                             model.Enabled = false;
-                            SoundManager.PlaySound(SoundType.NotificationSound, model.Position, false, 1f,
+                            SoundPlayer.PlaySound(SoundType.NotificationSound, model.Position, false, 1f,
                                 1.2f);
                             model.Dispose();
                         }
@@ -535,34 +543,35 @@ namespace Hedra.Engine.Generation
             var placeablePosition = this.FindPlaceablePosition(mob, DesiredPosition);
             mob.MobId = ++_previousId;
             mob.MobSeed = MobSeed;
-            mob.Model.TargetRotation = new Vector3(0, new Random(MobSeed).NextFloat() * 360f, 0);
+            mob.Model.TargetRotation = new Vector3(0, (new Random(MobSeed)).NextFloat() * 360f * Mathf.Radian, 0);
             mob.Physics.TargetPosition = placeablePosition;
             mob.Model.Position = placeablePosition;
-
+            MobFactory.Polish(mob);
+            
             this.AddEntity(mob);
-
             return mob;
         }
 
         public Vector3 FindSpawningPoint(Vector3 Around)
         {
             var point = Around;
-
-            bool IsOcean(Vector3 Point)
+            var rng = new Random(World.Seed + 43234);
+            bool IsWater(Vector3 Point)
             {
                 var region = BiomePool.GetRegion(Point);
-                return region.Generation.GetHeight(Point.X, Point.Z, null, out _) < Engine.BiomeSystem.BiomePool.SeaLevel;
+                return region.Generation.GetHeight(Point.X, Point.Z, null, out _) < Engine.BiomeSystem.BiomePool.SeaLevel
+                    || LandscapeGenerator.River(point.Xz) > 0;
             }
-            while (IsOcean(point))
+            while (IsWater(point))
             {
                 point += 
-                    new Vector3( (192f * Utils.Rng.NextFloat() - 96f) * Chunk.BlockSize, 0, (192f * Utils.Rng.NextFloat() - 96f) * Chunk.BlockSize);
+                    new Vector3( (192f * rng.NextFloat() - 96f) * Chunk.BlockSize, 0, (192f * rng.NextFloat() - 96f) * Chunk.BlockSize);
             }
 
             return point;
         }
 
-        public Vector3 FindPlaceablePosition(Entity Mob, Vector3 DesiredPosition)
+        public Vector3 FindPlaceablePosition(IEntity Mob, Vector3 DesiredPosition)
         {
             var position = DesiredPosition;
             var underChunk = this.GetChunkAt(position);

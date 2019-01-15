@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Hedra.Engine.IO;
+using Hedra.Engine.ModuleSystem.Templates;
 using Newtonsoft.Json;
 
 namespace Hedra.Engine.ModuleSystem
@@ -10,13 +12,13 @@ namespace Hedra.Engine.ModuleSystem
         public static IEnemyFactory[] LoadModules(string AppPath)
         {
             var factories = new List<IEnemyFactory>();
-            string[] modules = Directory.GetFiles(AppPath + "/Modules/Mobs");
-            foreach (string module in modules)
+            var modules = Directory.GetFiles($"{AppPath}/Modules/Mobs");
+            foreach (var module in modules)
             {
-                string ext = Path.GetExtension(module);
+                var ext = Path.GetExtension(module);
                 if (ext != ".json") continue;
 
-                CustomFactory factory = FromJSON( File.ReadAllText(module), out bool result);
+                var factory = FromJSON(File.ReadAllText(module), out var result);
                 if(!result) continue;
                 factory.Load();
 
@@ -29,7 +31,7 @@ namespace Hedra.Engine.ModuleSystem
         {
             try
             {
-                CustomFactory factory = JsonConvert.DeserializeObject<CustomFactory>(Data);
+                var factory = JsonConvert.DeserializeObject<CustomFactory>(Data);
                 Success = true;
                 return factory;
             }

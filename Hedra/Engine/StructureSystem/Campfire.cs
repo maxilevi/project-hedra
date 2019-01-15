@@ -8,18 +8,21 @@
  */
 
 using System;
-using  System.Linq;
-using OpenTK;
-using Hedra.Engine.Management;
-using Hedra.Engine.Generation;
-using Hedra.Engine.Rendering.Particles;
-using Hedra.Engine.Player;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
+using Hedra.Engine.Generation;
+using Hedra.Engine.Management;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Sound;
+using Hedra.Engine.WorldBuilding;
+using Hedra.EntitySystem;
+using Hedra.Rendering;
+using Hedra.Sound;
+using OpenTK;
 
-namespace Hedra.Engine.WorldBuilding
+namespace Hedra.Engine.StructureSystem
 {
     /// <summary>
     /// Description of Campfire.
@@ -68,7 +71,8 @@ namespace Hedra.Engine.WorldBuilding
 
                 this._light = ShaderManager.GetAvailableLight();
 
-                if(this._light != null){
+                if(this._light != null)
+                {
                     this._light.Color = new Vector3(1f, 0.4f, 0.4f);
                     this._light.Position = Position;
                     ShaderManager.UpdateLight(this._light);
@@ -77,16 +81,16 @@ namespace Hedra.Engine.WorldBuilding
 
             if (this._sound == null && distToPlayer < 32f*32f*2f)
             {
-                this._sound = SoundManager.GetAvailableSource();
+                this._sound = SoundPlayer.GetAvailableSource();
             }
 
             if (this._sound != null)
             {
 
                 if (!this._sound.Source.IsPlaying)
-                    this._sound.Source.Play(SoundManager.GetBuffer(SoundType.Fireplace), this.Position, 1f, 1f, true);
+                    this._sound.Source.Play(SoundPlayer.GetBuffer(SoundType.Fireplace), this.Position, 1f, 1f, true);
 
-                var gain = Math.Max(0, 1 - (this.Position - SoundManager.ListenerPosition).LengthFast / 32f);
+                var gain = Math.Max(0, 1 - (this.Position - SoundPlayer.ListenerPosition).LengthFast / 32f);
                 this._sound.Source.Volume = gain;
             }
 
@@ -131,6 +135,7 @@ namespace Hedra.Engine.WorldBuilding
         public override void Dispose()
         {
             base.Dispose();
+            UpdateManager.Remove(this);
             if (this._light != null)
             {
                 this._light.Color = Vector3.Zero;

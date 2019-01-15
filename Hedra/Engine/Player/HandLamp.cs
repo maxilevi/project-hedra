@@ -9,6 +9,9 @@
 using OpenTK;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.WorldBuilding;
+using Hedra.EntitySystem;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.Player
 {
@@ -17,38 +20,45 @@ namespace Hedra.Engine.Player
     /// </summary>
     public class HandLamp
     {
-        public Humanoid Human { get; set; }
-        public PointLight Light { get; set; }
-        public float LightModifier { get; set; }
-        public Vector3 LightColor { get; set; } = new Vector3(1,.6f,.5f);
+        public static readonly Vector3 LightColor = new Vector3(1, .6f, .5f);
+        private IHumanoid Humanoid { get; }
+        private readonly WorldLight _lamp;
         private bool _enabled;
 
-        public HandLamp(Humanoid Human){
-            this.Human = Human;
+        public HandLamp(IHumanoid Humanoid)
+        {
+            this.Humanoid = Humanoid;
+            _lamp = new WorldLight(Vector3.Zero)
+            {
+                LightColor = LightColor,
+                DisableAtNight = false,
+                Enabled = false
+            };
+            UpdateManager.Remove(_lamp);
         }
-        
-        public void Update(){
-            if (Light == null || (Light.Position == Human.Position && Light.Color == LightColor * LightModifier)) return;
-            Light.Position = Human.Position;
-            Light.Color = LightColor * LightModifier;
-            Light.Radius = PointLight.DefaultRadius * 4f;
-            ShaderManager.UpdateLight(Light);
+
+        public void Update()
+        {
+            _lamp.Position = Humanoid.Position;
+            _lamp.Update();
         }
-        
-        public bool Enabled{
-            get{ return _enabled;}
-            set{
+
+        public bool Enabled
+        {
+            get => _enabled;
+            set
+            {
                 _enabled = value;
-                if(value && Light == null) Light = ShaderManager.GetAvailableLight();
-                LightModifier =  Enabled ? 1 : 0;
-                Human.Model.SetLamp(Enabled);
+                _lamp.Enabled = _enabled;
+                Humanoid.Model.SetLamp(_enabled);
             }
         }
+
+        public PointLight LightObject => _lamp.LightObject;
         
-        public void Dispose(){
-            this.Enabled = false;
-            if(Light != null)
-                Light.Locked = false;
+        public void Dispose()
+        {
+            _lamp.Dispose();
         }
     }
 }

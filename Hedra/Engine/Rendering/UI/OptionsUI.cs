@@ -17,6 +17,10 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using Hedra.Engine.Game;
+using Hedra.Engine.Localization;
+using Hedra.Engine.Native;
+using Hedra.Sound;
+using OpenTK.Input;
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -25,7 +29,8 @@ namespace Hedra.Engine.Rendering.UI
     /// </summary>
     public class OptionsUI : Panel
     {
-        public Button DonateBtcButton = null;
+        private static readonly Translation OnTranslation;
+        private static readonly Translation OffTranslation;
         private List<UIElement> _graphicsButtons = new List<UIElement>();
         private List<UIElement> _audioButtons = new List<UIElement>();
         private List<UIElement> _inputButtons = new List<UIElement>();
@@ -40,7 +45,13 @@ namespace Hedra.Engine.Rendering.UI
         private readonly Font _normalFont;
         private readonly Font _boldFont;
 
-        public OptionsUI() : base()
+        static OptionsUI()
+        {
+            OnTranslation = Translation.Create("on");
+            OffTranslation = Translation.Create("off");
+        }
+        
+        public OptionsUI()
         {
             var fontSize = 14;
             var dist = .2f;
@@ -64,61 +75,23 @@ namespace Hedra.Engine.Rendering.UI
             var redditClick = new Button(new Vector2(-.6f, -.05f), squareScale, 0);
             var twitterClick = new Button(new Vector2(.6f, -.05f), squareScale, 0);
 
-            DonateBtcButton = new Button(Vector2.Zero, Vector2.One, 0);
-
-            /*copyAddress.Click += delegate {
-                DonateBtcButton.Clickable = false;
-                Clipboard.SetText("18GbXbnGzLDwi5KmZ1VD4JQpibw6Lpyfvp");
-                Player.MessageDispatcher.ShowNotification("Succesfully copied to clipboard", Color.White, 3f, true);
-                TaskManager.RunAfterSeconds(250, delegate{ DonateBtcButton.Clickable = true; } );
-            };*/
-
-
-            DonateBtcButton.Click += delegate {
-                donateBtc.Disable();
-                DonateBtcButton.Disable();
-                twitterClick.Disable();
-                discordClick.Disable();
-                redditClick.Disable();
-                //copyAddress.Disable();
-                Enable();
-            };
-
             twitterClick.Click += delegate
             {
-                DonateBtcButton.Clickable = false;
                 Process.Start("https://twitter.com/Zaphyk");
-                TaskManager.After(250, delegate { DonateBtcButton.Clickable = true; });
             };
 
             redditClick.Click += delegate
             {
-                DonateBtcButton.Clickable = false;
                 Process.Start("https://www.reddit.com/r/projecthedra");
-                TaskManager.After(250, delegate { DonateBtcButton.Clickable = true; });
             };
 
             discordClick.Click += delegate
             {
-                DonateBtcButton.Clickable = false;
                 Process.Start("https://discord.gg/AEC4Uab");
-                TaskManager.After(250, delegate { DonateBtcButton.Clickable = true; });
             };
 
-            
-            Button supportGame = new Button(new Vector2(0f, -bandPosition.Y),  Graphics2D.SizeFromAssets("Assets/UI/SocialButton.png") * .5f, Graphics2D.LoadFromAssets("Assets/UI/SocialButton.png"));
-            supportGame.Click += delegate { 
-                Disable();
-                donateBtc.Enable();
-                DonateBtcButton.Enable();
-                twitterClick.Enable();
-                discordClick.Enable();
-                redditClick.Enable();
-                //copyAddress.Enable();
-            };
-            
             _graphics = new Button(new Vector2(0f, bandPosition.Y),
-                                new Vector2(0.15f,0.075f), "Graphics", 0, Color.White, _normalFont);
+                                new Vector2(0.15f,0.075f), Translation.Create("graphics"), Color.White, _normalFont);
             _graphics.Click += delegate
             {
 
@@ -130,7 +103,7 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             _audio = new Button(new Vector2(-0.2f, bandPosition.Y),
-                                new Vector2(0.15f,0.075f), "Audio", 0, Color.White, _normalFont);
+                                new Vector2(0.15f,0.075f), Translation.Create("audio"), Color.White, _normalFont);
             
             _audio.Click += delegate { 
                 SetGraphicsButtonState(false);
@@ -141,7 +114,7 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             _input = new Button(new Vector2(-0.4f, bandPosition.Y),
-                                new Vector2(0.15f,0.075f), "Input", 0, Color.White, _normalFont);
+                                new Vector2(0.15f,0.075f), Translation.Create("input"), Color.White, _normalFont);
             
             _input.Click += delegate { 
                 SetGraphicsButtonState(false);
@@ -152,7 +125,7 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             _display = new Button(new Vector2(0.2f,bandPosition.Y), new Vector2(0.15f,0.05f),
-                                       "Display", 0, Color.White, _normalFont);
+                Translation.Create("display"), Color.White, _normalFont);
             
             _display.Click += delegate { 
                 SetGraphicsButtonState(false);
@@ -163,7 +136,7 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             _controls = new Button(new Vector2(0.4f,bandPosition.Y), new Vector2(0.15f,0.05f),
-                                       "Controls", 0, Color.White, _normalFont);
+                Translation.Create("controls"), Color.White, _normalFont);
             _controls.Click += delegate { 
                 SetGraphicsButtonState(false);
                 SetAudioButtonState(false);
@@ -173,22 +146,24 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             
-            GameSettings.ChunkLoaderRadius = Math.Max(GameSettings.ChunkLoaderRadius, GameSettings.MinLoadingRadius);
+            GameSettings.ChunkLoaderRadius = Math.Max(GameSettings.ChunkLoaderRadius, GeneralSettings.MinLoadingRadius);
             var viewValuesList = new List<string>();
-            for (int i = GameSettings.MinLoadingRadius; i < GameSettings.MaxLoadingRadius + 1; i++)
+            for (int i = GeneralSettings.MinLoadingRadius; i < GeneralSettings.MaxLoadingRadius + 1; i++)
             {
                 viewValuesList.Add(i.ToString());
             }
 
-
             var viewValues = viewValuesList.ToArray();
-            
-            OptionChooser viewDistance = new OptionChooser(new Vector2(dist, vDist*2f), new Vector2(0.15f, 0.075f), "View Distance: ",
-                                             fontColor, _normalFont,
-                                            viewValues, false);
-            viewDistance.Index = (GameSettings.MaxLoadingRadius - GameSettings.MinLoadingRadius) / 2;
-            viewDistance.CurrentValue.Text = viewValues[(GameSettings.MaxLoadingRadius - GameSettings.MinLoadingRadius) / 2];
-            
+
+            var viewDistance = new OptionChooser(new Vector2(dist, vDist * 2f), new Vector2(0.15f, 0.075f),
+                Translation.Create("view_distance", "{0} : "),
+                fontColor, _normalFont,
+                viewValues.Select(Translation.Default).ToArray(), false)
+            {
+                Index = (GeneralSettings.MaxLoadingRadius - GeneralSettings.MinLoadingRadius) / 2,
+                CurrentValue = {Text = viewValues[(GeneralSettings.MaxLoadingRadius - GeneralSettings.MinLoadingRadius) / 2]}
+            };
+
             for(int i = 0; i < viewValues.Length; i++){
                 if(int.Parse(viewValues[i]) == GameSettings.ChunkLoaderRadius)
 {
@@ -198,21 +173,21 @@ namespace Hedra.Engine.Rendering.UI
             }
             
             viewDistance.LeftArrow.Click += delegate { 
-                GameSettings.ChunkLoaderRadius = viewDistance.Index + GameSettings.MinLoadingRadius;
+                GameSettings.ChunkLoaderRadius = viewDistance.Index + GeneralSettings.MinLoadingRadius;
             };
             
             viewDistance.RightArrow.Click += delegate { 
-                GameSettings.ChunkLoaderRadius = viewDistance.Index + GameSettings.MinLoadingRadius;
+                GameSettings.ChunkLoaderRadius = viewDistance.Index + GeneralSettings.MinLoadingRadius;
             };
 
-            var fpsLimitList = new List<string>();
-            fpsLimitList.AddRange(Enumerable.Range(0, 12+1).Select(I => (I*5+30).ToString()));
-            fpsLimitList.Add("NONE");
+            var fpsLimitList = new List<Translation>();
+            fpsLimitList.AddRange(Enumerable.Range(0, 12+1).Select(I => (I*5+30).ToString()).Select(Translation.Default));
+            fpsLimitList.Add(Translation.Create("none"));
             
             var frameLimiterValues = fpsLimitList.ToArray();
 
 
-            var frameLimiter = new OptionChooser(new Vector2(-dist, 0), new Vector2(0.15f, 0.075f), "FPS Limit: ",
+            var frameLimiter = new OptionChooser(new Vector2(-dist, 0), new Vector2(0.15f, 0.075f), Translation.Create("fps_limit", "{0} :"),
                 fontColor, _normalFont,
                 frameLimiterValues);
 
@@ -220,84 +195,71 @@ namespace Hedra.Engine.Rendering.UI
                 frameLimiter.Index = fpsLimitList.Count - 1;
             else
                 frameLimiter.Index = Enumerable.Range(0, fpsLimitList.Count-1)
-                    .FirstOrDefault(I => GameSettings.FrameLimit == int.Parse(fpsLimitList[I]));
-            frameLimiter.CurrentValue.Text = fpsLimitList[frameLimiter.Index];
+                    .FirstOrDefault(I => GameSettings.FrameLimit == int.Parse(fpsLimitList[I].Get()));
+            frameLimiter.CurrentValue.Text = fpsLimitList[frameLimiter.Index].Get();
 
-            OnButtonClickEventHandler updateLimiter = delegate
+            void UpdateLimiter(object Sender, MouseButtonEventArgs E)
             {
-                if (frameLimiter.CurrentValue.Text == "NONE")
-                    GameSettings.FrameLimit = 0;
-                else
-                    GameSettings.FrameLimit = int.Parse(frameLimiter.CurrentValue.Text);
-            };
+                GameSettings.FrameLimit = 
+                    frameLimiter.Index == fpsLimitList.Count-1 ? 0 : int.Parse(frameLimiter.CurrentValue.Text);
+            }
 
-            frameLimiter.LeftArrow.Click += updateLimiter;
-            frameLimiter.RightArrow.Click += updateLimiter;
+            frameLimiter.LeftArrow.Click += UpdateLimiter;
+            frameLimiter.RightArrow.Click += UpdateLimiter;
 
             var fxaa = new Button(new Vector2(dist, 0f),
-                     new Vector2(0.15f, 0.075f), "FXAA: " + (GameSettings.FXAA ? "ON" : "OFF"), 0, fontColor, _normalFont);
+                     new Vector2(0.15f, 0.075f), BuildOnOff("fxaa", () => GameSettings.FXAA), fontColor, _normalFont);
 
             fxaa.Click += delegate {
-                    GameSettings.FXAA = !GameSettings.FXAA;
-                    fxaa.Text.Text = "FXAA: " + (GameSettings.FXAA ? "ON" : "OFF");
-                };
+                GameSettings.FXAA = !GameSettings.FXAA;
+            };
             
-            Button bloom = new Button(new Vector2(dist, -vDist),
-                     new Vector2(0.15f, 0.075f), "Bloom: " + (GameSettings.Bloom ? "ON" : "OFF"), 0, fontColor, _normalFont);
+            var bloom = new Button(new Vector2(dist, -vDist),
+                     new Vector2(0.15f, 0.075f), BuildOnOff("bloom", () => GameSettings.Bloom), fontColor, _normalFont);
 
 
-            bloom.Click += delegate {
-                    GameSettings.Bloom = !GameSettings.Bloom;
-                    bloom.Text.Text = "Bloom: " + (GameSettings.Bloom ? "ON" : "OFF");
-                };
+            bloom.Click += delegate
+            {
+                GameSettings.Bloom = !GameSettings.Bloom;
+            };
             
-            Button quality = new Button(new Vector2(-dist, vDist*2),
-                                 new Vector2(0.15f,0.075f), "Quality: " + ( GameSettings.Fancy ? "FANCY" : "FAST"), 0, fontColor, _normalFont);
+            var quality = new Button(
+                                new Vector2(-dist, vDist*2),
+                                new Vector2(0.15f,0.075f), 
+                                BuildOnOff("quality", () => GameSettings.Quality, Translation.Create("quality_fancy"), Translation.Create("quality_fast")),
+                                fontColor, _normalFont);
             
-            quality.Click += new OnButtonClickEventHandler(
-                delegate{
-                    if(GameSettings.Fancy)
-                        GameSettings.Fancy = false;
-                    else
-                        GameSettings.Fancy = true;
-                    quality.Text.Text = "Quality: " + ( GameSettings.Fancy ? "FANCY" : "FAST");
-                });
+            quality.Click += delegate
+            {
+                GameSettings.Quality = !GameSettings.Quality;
+            };
 
             
-            Button vSync = new Button(new Vector2(-dist, vDist),
-                                 new Vector2(0.15f,0.075f), "VSync: " + ( GameSettings.VSync ? "ON" : "OFF"), 0, fontColor, _normalFont);
+            var vSync = new Button(new Vector2(-dist, vDist),
+                                 new Vector2(0.15f,0.075f), BuildOnOff("vsync", () => GameSettings.VSync), fontColor, _normalFont);
             
-            vSync.Click += new OnButtonClickEventHandler(
-                delegate{
-                    if(GameSettings.VSync)
-                        GameSettings.VSync = false;
-                    else
-                        GameSettings.VSync = true;
-                    vSync.Text.Text = "VSync: " + ( GameSettings.VSync ? "ON" : "OFF");
-                });
+            vSync.Click += delegate { GameSettings.VSync = !GameSettings.VSync; };
             
-            Button invertMouse = new Button(new Vector2(0, .6f),
-                                 new Vector2(0.15f,0.075f), "Invert Mouse: " + ( GameSettings.InvertMouse ? "ON" : "OFF"), 0, fontColor, _normalFont);
+            var invertMouse = new Button(new Vector2(0, .6f),
+                                 new Vector2(0.15f,0.075f), BuildOnOff("invert_mouse", () => GameSettings.InvertMouse), fontColor, _normalFont);
             
-            invertMouse.Click += new OnButtonClickEventHandler(
-                delegate{
-                    if(GameSettings.InvertMouse)
-                        GameSettings.InvertMouse = false;
-                    else
-                        GameSettings.InvertMouse = true;
-                    invertMouse.Text.Text = "Invert Mouse: " + ( GameSettings.InvertMouse ? "ON" : "OFF");
-                });
+            invertMouse.Click += delegate { GameSettings.InvertMouse = !GameSettings.InvertMouse; };
             
-            string[] shadowsValues =  new string[]{"MEDIUM","LOW","MEDIUM","HIGH"};//Repeat medium so the option chooser has the correct size
-            OptionChooser shadows = new OptionChooser(new Vector2(dist, vDist), new Vector2(0.15f, 0.075f), "Shadow Quality: ",
+            var shadowsValues =  new []
+            {
+                "low","medium","high"
+            }.Select(S => Translation.Create(S)).ToArray();
+            OptionChooser shadows = new OptionChooser(new Vector2(dist, vDist), new Vector2(0.15f, 0.075f), Translation.Create("shadow_quality", "{0}: "),
                                              fontColor, _normalFont,
                                             shadowsValues, false);
-            shadows.Index = 3;
-            shadows.CurrentValue.Text = "MEDIUM";
+            shadows.Index = 1;
+            shadows.CurrentValue.Text = Translations.Get("medium");
             
-            for(int i = 0; i < shadowsValues.Length; i++){
-                if( i == GameSettings.ShadowQuality){
-                    shadows.CurrentValue.Text = (i == 0) ? "OFF" : shadowsValues[i];
+            for(var i = 0; i < shadowsValues.Length; i++)
+            {
+                if( i == GameSettings.ShadowQuality)
+                {
+                    shadows.CurrentValue.Text = i == 0 ? Translations.Get("off") : shadowsValues[i].Get();
                     shadows.Index = i;
                     break;
                 }
@@ -306,147 +268,172 @@ namespace Hedra.Engine.Rendering.UI
             shadows.LeftArrow.Click += delegate {
                 GameSettings.ShadowQuality = shadows.Index;
                 if(shadows.Index == 0)
-                    shadows.CurrentValue.Text = "OFF";
+                    shadows.CurrentValue.Text = Translations.Get("off");
             };
             
             shadows.RightArrow.Click += delegate {
                 GameSettings.ShadowQuality = shadows.Index;
                 if(shadows.Index == 0)
-                    shadows.CurrentValue.Text = "OFF";
+                    shadows.CurrentValue.Text = Translations.Get("off");
             };
-            
             var ssao = new Button(new Vector2(-dist, -vDist * 2),
-                                 new Vector2(0.15f,0.075f), "Ambient Occlusion: " + ( GameSettings.SSAO ? "ON" : "OFF"), 0, fontColor, _normalFont);
+                                 new Vector2(0.15f,0.075f), BuildOnOff("ambient_occlusion", () => GameSettings.SSAO), fontColor, _normalFont);
             
             ssao.Click += delegate
             {
                 GameSettings.SSAO = !GameSettings.SSAO;
-                ssao.Text.Text = "Ambient Occlusion: " + ( GameSettings.SSAO ? "ON" : "OFF");
             };
             
             var fullscreen = new Button(new Vector2(-dist, -vDist),
-                new Vector2(0.15f,0.075f), $"Fullscreen: {(GameSettings.Fullscreen ? "ON" : "OFF")}", 0, fontColor, _normalFont);
+                new Vector2(0.15f,0.075f), BuildOnOff("fullscreen", () => GameSettings.Fullscreen), fontColor, _normalFont);
             
             fullscreen.Click += delegate
             {
                 GameSettings.Fullscreen = !GameSettings.Fullscreen;
-                fullscreen.Text.Text = $"Fullscreen: {(GameSettings.Fullscreen ? "ON" : "OFF")}";
             };
             
             var showChat = new Button(new Vector2(0, .4f),
-                                 new Vector2(0.15f,0.075f), "Show Chat: " + ( GameSettings.ShowChat ? "ON" : "OFF"), 0, fontColor, _normalFont);
+                                 new Vector2(0.15f,0.075f), BuildOnOff("show_chat", () => GameSettings.ShowChat), fontColor, _normalFont);
             
             showChat.Click += delegate
             {
                 GameSettings.ShowChat = !GameSettings.ShowChat;
-                showChat.Text.Text = "Show Chat: " + ( GameSettings.ShowChat ? "ON" : "OFF");
             };
             
-            Button showMinimap = new Button(new Vector2(0, .6f),
-                                 new Vector2(0.15f,0.075f), "Show Minimap: " + ( GameSettings.ShowMinimap ? "ON" : "OFF"), 0, fontColor, _normalFont);
+            var showMinimap = new Button(new Vector2(0, .6f),
+                                 new Vector2(0.15f,0.075f), BuildOnOff("show_minimap", () => GameSettings.ShowMinimap), fontColor, _normalFont);
             
             showMinimap.Click += delegate
             {
                 GameSettings.ShowMinimap = !GameSettings.ShowMinimap;
-                showMinimap.Text.Text = "Show Minimap: " + ( GameSettings.ShowMinimap ? "ON" : "OFF");
             };
 
             Button showConsole = null;
             if (OSManager.CanHideConsole)
             {
                 showConsole = new Button(new Vector2(0, .2f),
-                    new Vector2(0.15f, 0.075f), "Show Console: " + (GameSettings.ShowConsole ? "ON" : "OFF"), 0,
+                    new Vector2(0.15f, 0.075f), BuildOnOff("show_console", () => GameSettings.ShowConsole),
                     fontColor, _normalFont);
 
                 showConsole.Click += delegate
                 {
                     GameSettings.ShowConsole = !GameSettings.ShowConsole;
-                    showConsole.Text.Text = "Show Console: " + (GameSettings.ShowConsole ? "ON" : "OFF");
                 };
             }
 
+            var langs = Translations.Languages;
+            var languageOptions = new Translation[langs.Length];
+            for (var i = 0; i < langs.Length; i++)
+            {
+                languageOptions[i] = Translation.Default(langs[i]);
+            }
+            var language = new OptionChooser(new Vector2(0, -.2f), Vector2.Zero,
+                Translation.Create("language", "{0}: "),
+                fontColor, _normalFont, languageOptions, false)
+            {
+                Index = Array.IndexOf(languageOptions.Select(T => T.Get()).ToArray(), GameSettings.Language)
+            };
+            language.CurrentValue.Text = languageOptions[language.Index].Get();
+            language.LeftArrow.Click += delegate
+            {
+                GameSettings.Language = languageOptions[language.Index].Get();
+            };     
+            language.RightArrow.Click += delegate
+            { 
+                GameSettings.Language = languageOptions[language.Index].Get();
+            };
+
             var smoothLod = new Button(new Vector2(0, .0f),
-                new Vector2(0.15f, 0.075f), "Smooth LOD: " + (GameSettings.SmoothLod ? "ON" : "OFF"), 0,
+                new Vector2(0.15f, 0.075f), BuildOnOff("smooth_lod", () => GameSettings.SmoothLod),
                 fontColor, _normalFont);
 
             smoothLod.Click += delegate
             {
                 GameSettings.SmoothLod = !GameSettings.SmoothLod;
-                smoothLod.Text.Text = "Smooth LOD: " + (GameSettings.SmoothLod ? "ON" : "OFF");
             };
             
-            string[] volumeOptions = new string[]{"0%","5%","10%","15%","20%","25%","30%","35%","40%","45%","50%","55%","60%","65%","70%","75%","80%","85%","90%","95%","100%"};
-            OptionChooser musicVolume = new OptionChooser(new Vector2(0, .6f), new Vector2(0.15f, 0.075f), "Music Volume: ",  fontColor, _normalFont,
-                                                         volumeOptions, false);
+            var volumeOptions = new []
+            {
+                "0%","5%","10%","15%","20%","25%","30%","35%","40%","45%","50%",
+                "55%","60%","65%","70%","75%","80%","85%","90%","95%","100%"
+            }.Select(Translation.Default).ToArray();
+            var musicVolume = new OptionChooser(new Vector2(0, .6f), new Vector2(0.15f, 0.075f), Translation.Create("music_volume", "{0}: "),  fontColor, _normalFont, volumeOptions);
 
-            for(int i = 0; i < volumeOptions.Length; i++){
-                if( (float) (Int32.Parse( volumeOptions[i].Replace("%",string.Empty) ) / 100f) == SoundtrackManager.Volume)
+            for(int i = 0; i < volumeOptions.Length; i++)
+            {
+                if(Math.Abs(int.Parse(volumeOptions[i].Get().Replace("%",string.Empty) ) / 100f - SoundtrackManager.Volume) < 0.005f)
                 {
                     musicVolume.Index = i;
-                    musicVolume.CurrentValue.Text = volumeOptions[i];
-                    //SoundtrackManager.Volume = Int32.Parse( VolumeOptions[Volume.Index].Replace("%",string.Empty) ) / 100f;                
+                    musicVolume.CurrentValue.Text = volumeOptions[i].Get();                
                     break;
                 }
             }
             
             musicVolume.LeftArrow.Click += delegate { 
-                GameSettings.MusicVolume = Int32.Parse( volumeOptions[musicVolume.Index].Replace("%",string.Empty) ) / 100f;
+                GameSettings.MusicVolume = int.Parse( volumeOptions[musicVolume.Index].Get().Replace("%",string.Empty) ) / 100f;
             };
             
             musicVolume.RightArrow.Click += delegate { 
-                GameSettings.MusicVolume = Int32.Parse( volumeOptions[musicVolume.Index].Replace("%",string.Empty) ) / 100f;
+                GameSettings.MusicVolume = int.Parse( volumeOptions[musicVolume.Index].Get().Replace("%",string.Empty) ) / 100f;
             };
             
-            OptionChooser sfxVolume = new OptionChooser(new Vector2(0, .4f), new Vector2(0.15f, 0.075f), "Sound FX Volume: ",  fontColor, _normalFont,
+            var sfxVolume = new OptionChooser(new Vector2(0, .4f), new Vector2(0.15f, 0.075f), Translation.Create("sfx_volume", "{0}: "),  fontColor, _normalFont,
                                                          volumeOptions, false);
 
             for(int i = 0; i < volumeOptions.Length; i++){
-                if( (float) (Int32.Parse( volumeOptions[i].Replace("%",string.Empty) ) / 100f) == Sound.SoundManager.Volume){
+                if( Math.Abs((float) (Int32.Parse( volumeOptions[i].Get().Replace("%",string.Empty) ) / 100f) - SoundPlayer.Volume) < 0.005f)
+                {
                     sfxVolume.Index = i;
-                    sfxVolume.CurrentValue.Text = volumeOptions[i];            
+                    sfxVolume.CurrentValue.Text = volumeOptions[i].Get();            
                     break;
                 }
             }
             
-            sfxVolume.LeftArrow.Click += delegate { 
-                Sound.SoundManager.Volume = Int32.Parse( volumeOptions[sfxVolume.Index].Replace("%",string.Empty) ) / 100f;
+            sfxVolume.LeftArrow.Click += (Sender, Args) =>
+                SoundPlayer.Volume = int.Parse(volumeOptions[sfxVolume.Index].Get().Replace("%", string.Empty)) / 100f;
+            
+            sfxVolume.RightArrow.Click += (Sender, Args) =>
+                SoundPlayer.Volume = int.Parse(volumeOptions[sfxVolume.Index].Get().Replace("%", string.Empty)) / 100f;
+            
+            var sensitivityOptions = new []
+            {
+                "0.1","0.2","0.3","0.4","0.5","0.6","0.7","0.8","0.9","1.0",
+                "1.1","1.2","1.3","1.4","1.5","1.6","1.7","1.8","1.9","2.0",
+                "2.1","2.2","2.3","2.4","2.5"
+            }.Select(Translation.Default).ToArray();
+            var mouseSensitivity = new OptionChooser(
+                new Vector2(0, .4f), Vector2.Zero,
+                Translation.Create("mouse_sensitivity", "{0}: "),
+                fontColor, _normalFont, sensitivityOptions);
+            
+            mouseSensitivity.LeftArrow.Click += delegate
+            {
+                GameSettings.MouseSensibility = 
+                    float.Parse(sensitivityOptions[mouseSensitivity.Index].Get(), NumberStyles.Any, CultureInfo.GetCultureInfo("en-US"));
             };
             
-            sfxVolume.RightArrow.Click += delegate { 
-                Sound.SoundManager.Volume = Int32.Parse( volumeOptions[sfxVolume.Index].Replace("%",string.Empty) ) / 100f;
+            mouseSensitivity.RightArrow.Click += delegate 
+            { 
+                GameSettings.MouseSensibility = 
+                    float.Parse(sensitivityOptions[mouseSensitivity.Index].Get(), NumberStyles.Any, CultureInfo.GetCultureInfo("en-US"));
             };
             
-            //if(!GraphicsOptions.MaxResolution)
-            //    FullScreen.Clickable = false;
-            //Resolution.Clickable = false;
-            
-            string[] sensitivityOptions = new string[]{"0.1","0.2","0.3","0.4","0.5","0.6","0.7","0.8","0.9","1.0","1.1","1.2","1.3","1.4","1.5","1.6","1.7","1.8","1.9","2.0","2.1","2.2","2.3","2.4","2.5"};
-            OptionChooser mouseSensitivity = new OptionChooser(new Vector2(0, .4f), Vector2.Zero, "Mouse Sensitivity: ",
-                                                               fontColor, _normalFont, sensitivityOptions, false);
-            mouseSensitivity.LeftArrow.Click += delegate {
-                GameSettings.MouseSensibility = float.Parse(sensitivityOptions[mouseSensitivity.Index], NumberStyles.Any, CultureInfo.GetCultureInfo("en-US"));
-            };
-            
-            mouseSensitivity.RightArrow.Click += delegate { 
-                GameSettings.MouseSensibility = float.Parse(sensitivityOptions[mouseSensitivity.Index], NumberStyles.Any, CultureInfo.GetCultureInfo("en-US"));
-            };
-            
-            for(int i = 0; i < sensitivityOptions.Length; i++){
-                if(float.Parse(sensitivityOptions[i], NumberStyles.Any, CultureInfo.GetCultureInfo("en-US")) == GameSettings.MouseSensibility){
-                    mouseSensitivity.CurrentValue.Text    = sensitivityOptions[i];
+            for(var i = 0; i < sensitivityOptions.Length; i++)
+            {
+                if(Math.Abs(float.Parse(sensitivityOptions[i].Get(), NumberStyles.Any, CultureInfo.GetCultureInfo("en-US")) - GameSettings.MouseSensibility) < 0.005f)
+                {
+                    mouseSensitivity.CurrentValue.Text = sensitivityOptions[i].Get();
                     mouseSensitivity.Index = i;
                 }
             }
             
-            Button autosave = new Button(new Vector2(0f, .2f),
-                                 new Vector2(0.15f,0.075f), "Autosave: " + ( GameSettings.Autosave ? "ON" : "OFF"), 0, fontColor, _normalFont);
+            var autosave = new Button(new Vector2(0f, .2f),
+                                 new Vector2(0.15f,0.075f), BuildOnOff("autosave", () => GameSettings.Autosave), fontColor, _normalFont);
             
-            autosave.Click += (
-                delegate
-                {
-                    GameSettings.Autosave = !GameSettings.Autosave;
-                    autosave.Text.Text = "Autosave: " + ( GameSettings.Autosave ? "ON" : "OFF");
-                });
+            autosave.Click += delegate
+            {
+                GameSettings.Autosave = !GameSettings.Autosave;
+            };
 
             _graphicsButtons.Add(quality);
             _graphicsButtons.Add(vSync);
@@ -465,6 +452,7 @@ namespace Hedra.Engine.Rendering.UI
             _displayButtons.Add(showChat);
             _displayButtons.Add(showMinimap);
             _displayButtons.Add(smoothLod);
+            _displayButtons.Add(language);
             if(showConsole != null) _displayButtons.Add(showConsole);
             
             AddElement(_controls);
@@ -473,22 +461,26 @@ namespace Hedra.Engine.Rendering.UI
             AddElement(_input);
             AddElement(_graphics);
             AddElement(_display);
-            AddElement(supportGame);
             
             
-            for(int i = 0; i < _graphicsButtons.Count; i++){
+            for(var i = 0; i < _graphicsButtons.Count; i++)
+            {
                 AddElement(_graphicsButtons[i]);
             }
-            for(int i = 0; i < _inputButtons.Count; i++){
+            for(var i = 0; i < _inputButtons.Count; i++)
+            {
                 AddElement(_inputButtons[i]);
             }
-            for(int i = 0; i < _audioButtons.Count; i++){
+            for(var i = 0; i < _audioButtons.Count; i++)
+            {
                 AddElement(_audioButtons[i]);
             }
-            for(int i = 0; i < _displayButtons.Count; i++){
+            for(var i = 0; i < _displayButtons.Count; i++)
+            {
                 AddElement(_displayButtons[i]);
             }
-            for(int i = 0; i < _controlsText.ControlsElements.Count; i++){
+            for(var i = 0; i < _controlsText.ControlsElements.Count; i++)
+            {
                 AddElement(_controlsText.ControlsElements[i]);
             }
             
@@ -499,9 +491,11 @@ namespace Hedra.Engine.Rendering.UI
                 GameManager.Player.UI.Menu.Enable();
             };
             
-            OnPanelStateChange += delegate(object Sender, PanelState E) {
-                if(E == PanelState.Disabled){
-                    GameSettings.Save(AssetManager.AppData+"settings.cfg");
+            OnPanelStateChange += delegate(object Sender, PanelState E)
+            {
+                if(E == PanelState.Disabled)
+                {
+                    GameSettings.Save($"{AssetManager.AppData}/settings.cfg");
                     GameSettings.DarkEffect = false;
                 }
                 if(E == PanelState.Enabled){
@@ -543,7 +537,8 @@ namespace Hedra.Engine.Rendering.UI
                 _graphics.Text.TextFont = _boldFont;
                 this.UpdateFonts();
             }
-            for(int i = 0; i < _graphicsButtons.Count; i++){
+            for(int i = 0; i < _graphicsButtons.Count; i++)
+            {
                 if(Enabled)
                     _graphicsButtons[i].Enable();
                 else
@@ -551,14 +546,16 @@ namespace Hedra.Engine.Rendering.UI
             }
         }
 
-        private void SetInputButtonState(bool Enabled){
+        private void SetInputButtonState(bool Enabled)
+        {
             if (Enabled)
             {
                 this.ResetFonts();
                 _input.Text.TextFont = _boldFont;
                 this.UpdateFonts();
             }
-            for (int i = 0; i < _inputButtons.Count; i++){
+            for (int i = 0; i < _inputButtons.Count; i++)
+            {
                 if(Enabled)
                     _inputButtons[i].Enable();
                 else
@@ -567,14 +564,16 @@ namespace Hedra.Engine.Rendering.UI
             
         }
 
-        private void SetAudioButtonState(bool Enabled){
+        private void SetAudioButtonState(bool Enabled)
+        {
             if (Enabled)
             {
                 this.ResetFonts();
                 _audio.Text.TextFont = _boldFont;
                 this.UpdateFonts();
             }
-            for (int i = 0; i < _audioButtons.Count; i++){
+            for (int i = 0; i < _audioButtons.Count; i++)
+            {
                 if(Enabled)
                     _audioButtons[i].Enable();
                 else
@@ -589,15 +588,27 @@ namespace Hedra.Engine.Rendering.UI
                 _display.Text.TextFont = _boldFont;
                 this.UpdateFonts();
             }
-            for (int i = 0; i < _displayButtons.Count; i++){
+            for (int i = 0; i < _displayButtons.Count; i++)
+            {
                 if(Enabled)
                     _displayButtons[i].Enable();
                 else
                     _displayButtons[i].Disable();
             }
         }
-
-        private void SetControlsButtonState(bool Enabled){
+        
+        private static Translation BuildOnOff(string Key, Func<bool> Getter,
+            Translation OptionalOn = null, Translation OptionalOff = null)
+        {
+            var on = OptionalOn ?? OnTranslation;
+            var off = OptionalOff ?? OffTranslation;
+            var trans = Translation.Create(Key, "{0} : ");
+            trans.Concat(() => Getter() ? on.Get() : off.Get());
+            return trans;
+        }
+        
+        private void SetControlsButtonState(bool Enabled)
+        {
             if (Enabled)
             {
                 this.ResetFonts();

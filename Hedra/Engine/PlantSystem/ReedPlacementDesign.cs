@@ -31,7 +31,7 @@ namespace Hedra.Engine.PlantSystem
                    && diff > .5
                    && OpenSimplexNoise.Evaluate(Position.X * 0.004f, Position.Z * 0.004f) > .2f
                    && Vector3.Dot(Physics.NormalAtPosition(Position), Vector3.UnitY) > .75
-                   && UnderChunk.Landscape.RandomGen.Next(0, 2) == 1;
+                   && UnderChunk.Landscape.RandomGen.Next(0, 5) == 1;
         }
     }
 }

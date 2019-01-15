@@ -1,10 +1,9 @@
-
 {
   "Name": "UncommonIronKatar",
   "DisplayName": "Iron Katar",
   "EquipmentType": "Katar",
   "Tier": "Uncommon",
-  "Description": "It's a bit rusty.",
+  "Description": "The blade is rusted, heavy, and dull. Seems to give tinitus.",
   "Attributes": [
     {
       "Name": "Damage",
@@ -12,7 +11,7 @@
     },
     {
       "Name": "AttackSpeed",
-      "Value": 0.90
+      "Value": 0.9
     }
   ],
   "Model": {

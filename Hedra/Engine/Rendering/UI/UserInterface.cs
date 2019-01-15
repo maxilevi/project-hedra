@@ -14,6 +14,8 @@ using System.Drawing;
 using System.Drawing.Text;
 using System.Reflection;
 using Hedra.Engine.Game;
+using Hedra.Engine.Input;
+using Hedra.Engine.Localization;
 using OpenTK;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
@@ -52,20 +54,17 @@ namespace Hedra.Engine.Rendering.UI
             
             _title = new Texture(Graphics2D.LoadFromAssets("Assets/UI/Menu.png"),
                                    new Vector2(-.4f, .35f), Graphics2D.SizeFromAssets("Assets/UI/Menu.png") * .75f);
-            
-            /*Alpha = new Texture(Graphics2D.LoadFromAssets("Assets/UI/alpha.png"),
-                                 new Vector2(-.25f, .4f), Graphics2D.SizeFromAssets("Assets/UI/alpha.png") * .6f);*/
-            
+
             var blackBand = new Texture(Color.FromArgb(0,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.09f / GameSettings.Height * 578), GradientType.LeftRight);
             
             
             _newRun = new Button(new Vector2(.1f, bandPosition.Y),
-                                new Vector2(0.15f,0.075f), "New World", 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
-            
-            _newRun.Click += new OnButtonClickEventHandler(NewRunOnClick);
+                                new Vector2(0.15f,0.075f), Translation.Create("new_world"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
+
+            _newRun.Click += NewRunOnClick;
             
             _loadButton = new Button(new Vector2(.3f, bandPosition.Y),
-                                         new Vector2(0.15f,0.075f), "Load World", 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
+                                         new Vector2(0.15f,0.075f), Translation.Create("load_world"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
 
             _loadButton.Click += delegate {
                 if(!GameManager.InStartMenu){
@@ -77,27 +76,30 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             Button connectToServer = new Button(new Vector2(.535f, bandPosition.Y),
-                                         new Vector2(0.15f,0.075f), "Multiplayer", 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
+                                         new Vector2(0.15f,0.075f), Translation.Create("multiplayer"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
             
             Button disconnect = new Button(new Vector2(.535f, bandPosition.Y),
-                                         new Vector2(0.15f,0.075f), "Disconnect", 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
+                                         new Vector2(0.15f,0.075f), Translation.Create("disconnect"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
             disconnect.Click += delegate{ Networking.NetworkManager.Disconnect(true); };
             
             connectToServer.Click += delegate{
-                Player.MessageDispatcher.ShowNotification("Multiplayer is down.", Color.DarkRed, 3f, true);
+                Player.MessageDispatcher.ShowNotification("", Color.DarkRed, 3f, true);
             };
             
             Button options = new Button(new Vector2(.75f, bandPosition.Y),
-                                        new Vector2(0.15f,0.075f), "Options", 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
+                                        new Vector2(0.15f,0.075f), Translation.Create("options"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
             
-            options.Click += delegate(object Sender, MouseButtonEventArgs E) { Menu.Disable(); OptionsMenu.Enable();};
+            options.Click += delegate
+            {
+                Menu.Disable(); OptionsMenu.Enable();
+            };
             
             Button quit = new Button(new Vector2(.9f, bandPosition.Y),
-                                     new Vector2(0.15f,0.075f), "Exit", 0, DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
+                                     new Vector2(0.15f,0.075f), Translation.Create("exit"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
             
             quit.Click += delegate { Program.GameWindow.Exit(); };
             
-            if( Program.GameWindow.GameVersion != "Unknown" )
+            if(Program.GameWindow.GameVersion != "Unknown")
             {
                 var versionText = new GUIText(Program.GameWindow.GameVersion, Vector2.Zero, Color.Black, FontCache.Get(AssetManager.NormalFamily, 8));
                 versionText.Position = new Vector2(-1,1) + new Vector2(versionText.Scale.X, -versionText.Scale.Y);
@@ -133,7 +135,9 @@ namespace Hedra.Engine.Rendering.UI
             if(GameManager.InStartMenu){
                 Menu.Disable();
                 ChrChooser.Enable();
-            }else{
+            }
+            else
+            {
                 GameManager.NewRun(_player);
             }
         }
@@ -143,12 +147,18 @@ namespace Hedra.Engine.Rendering.UI
             if (_player == null) return;
 
             this.GamePanel.Update();
-            _loadButton.Text.Text = GameManager.InStartMenu ? "Load World" : "Start Menu";
+            _loadButton.Text.Text = GameManager.InStartMenu 
+                ? Translations.Get("load_world") 
+                : Translations.Get("start_menu");
         }
         
         public void ShowMenu()
         {
-            if(GameManager.IsLoading || GameManager.InMenu) return;
+            if (GameSettings.ContinousMove)
+            {
+                _player.View.LockMouse = false;
+            }
+            if(GameManager.IsLoading || GameManager.InMenu || GameSettings.ContinousMove) return;
 
             Menu.Enable();
             OptionsMenu.Disable();
@@ -166,10 +176,10 @@ namespace Hedra.Engine.Rendering.UI
                 _player.Movement.CaptureMovement = false;
                 _player.View.CaptureMovement = false;
             }
-            UpdateManager.CursorShown = true;
+            Cursor.Show = true;
             LocalPlayer.Instance.Chat.Show = false;
             GameSettings.DarkEffect = false;
-            System.Windows.Forms.Cursor.Position = new Point(GameSettings.Width / 2, GameSettings.Height/2);
+            Cursor.Center();
         }
             
         public void HideMenu()
@@ -186,13 +196,14 @@ namespace Hedra.Engine.Rendering.UI
             ChrChooser.Disable();
             ChrCreator.Disable();
             ConnectPanel.Disable();
-            UpdateManager.CursorShown = false;
+            Cursor.Show = false;
             LocalPlayer.Instance.Chat.Show = true;
             LocalPlayer.Instance.Chat.LoseFocus();
-            System.Windows.Forms.Cursor.Position = new Point(GameSettings.Width / 2, GameSettings.Height/2);
+            Cursor.Center();
         }
         
-        private IEnumerator MenuEnter(){
+        private IEnumerator MenuEnter()
+        {
             while(Menu.Position.X > 0f){
                 Menu.Move(new Vector2(-0.025f,0));
                 yield return null;

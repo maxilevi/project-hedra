@@ -1,8 +1,8 @@
-﻿{
+{
   "Name": "Mushroom",
   "DisplayName": "Mushroom",
   "Tier": "Misc",
-  "Description": "Food.",
+  "Description": "Polarizing but filling.",
   "Attributes": [
     {
       "Name": "Amount",

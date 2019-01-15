@@ -17,39 +17,45 @@ using Hedra.Engine.Rendering.UI;
 using OpenTK;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.Generation
 {
 
     public delegate void OnModelAdded(CachedVertexData Models);
+    public delegate void OnInstanceAdded(InstanceData Instance);
 
     public class CollidableStructure : IDisposable
     {
-        private readonly HashSet<ICollidable> _colliders;
+        private readonly HashSet<CollisionGroup> _colliders;
         private readonly HashSet<CachedVertexData> _models;
+        private readonly HashSet<InstanceData> _instances;
         private readonly HashSet<IGroundwork> _groundworks;
-        private readonly HashSet<Plateau> _plateaus;
+        private readonly HashSet<BasePlateau> _plateaus;
         private readonly object _lock = new object();
         public event OnModelAdded ModelAdded;
+        public event OnInstanceAdded InstanceAdded;
         public Vector3 Position { get; }
-        public Plateau Mountain { get; }
+        public RoundedPlateau Mountain { get; }
         public BaseStructure WorldObject { get; }
         public float Radius { get; private set; }
         public StructureDesign Design { get; }
         public AttributeArray Parameters { get; }
         public bool Built { get; set; }
+        public bool Disposed { get; private set; }
 
-        public CollidableStructure(StructureDesign Design, Vector3 Position, Plateau Mountain, BaseStructure WorldObject)
+        public CollidableStructure(StructureDesign Design, Vector3 Position, RoundedPlateau Mountain, BaseStructure WorldObject)
         {
             this.Position = new Vector3(Position.X, (Mountain?.MaxHeight + 1) * Chunk.BlockSize ?? Position.Y, Position.Z);
             this.Mountain = Mountain;
             this.Design = Design;
             this.WorldObject = WorldObject;
             this.Parameters = new AttributeArray();
-            this._colliders = new HashSet<ICollidable>();
+            this._colliders = new HashSet<CollisionGroup>();
             this._models = new HashSet<CachedVertexData>();
             this._groundworks = new HashSet<IGroundwork>();
-            this._plateaus = new HashSet<Plateau>();
+            this._plateaus = new HashSet<BasePlateau>();
+            this._instances = new HashSet<InstanceData>();
         }
 
         public void Setup()
@@ -57,7 +63,7 @@ namespace Hedra.Engine.Generation
             World.WorldBuilding.SetupStructure(this);
         }
 
-        public ICollidable[] Colliders
+        public CollisionGroup[] Colliders
         {
             get
             {
@@ -75,7 +81,16 @@ namespace Hedra.Engine.Generation
             }
         }
         
-        public Plateau[] Plateaus
+        public InstanceData[] Instances
+        {
+            get
+            {
+                lock(_lock)
+                    return _instances.ToArray();
+            }
+        }
+        
+        public BasePlateau[] Plateaux
         {
             get
             {
@@ -93,14 +108,22 @@ namespace Hedra.Engine.Generation
             }
         }
 
-        public void AddCollisionShape(params ICollidable[] IColliders)
+        public void AddCollisionShape(params CollisionShape[] IColliders)
+        {
+            if (IColliders.Length == 0) return;
+            lock (_lock)
+            {
+                _colliders.Add(new CollisionGroup(IColliders));
+            }
+        }
+        public void AddCollisionGroup(CollisionGroup Group)
         {
             lock (_lock)
             {
-                for(var i = 0; i < IColliders.Length; i++)
-                    _colliders.Add(IColliders[i]);
+                _colliders.Add(Group);
             }
         }
+        
 
         public void AddStaticElement(params VertexData[] Models)
         {
@@ -111,6 +134,19 @@ namespace Hedra.Engine.Generation
                     var model = CachedVertexData.FromVertexData(Models[i]);
                     _models.Add(model);
                     ModelAdded?.Invoke(model);
+                }
+                this.CalculateRadius();
+            }
+        }
+        
+        public void AddInstance(params InstanceData[] Instances)
+        {
+            lock (_lock)
+            {
+                for (var i = 0; i < Instances.Length; i++)
+                {
+                    _instances.Add(Instances[i]);
+                    InstanceAdded?.Invoke(Instances[i]);
                 }
                 this.CalculateRadius();
             }
@@ -127,21 +163,15 @@ namespace Hedra.Engine.Generation
             }
         }
         
-        public void AddPlateau(params Plateau[] Plateaus)
+        public void AddPlateau(params BasePlateau[] RoundedPlateaux)
         {
             lock (_lock)
             {
-                for (var i = 0; i < Plateaus.Length; i++)
+                for (var i = 0; i < RoundedPlateaux.Length; i++)
                 {
-                    _plateaus.Add(Plateaus[i]);
+                    _plateaus.Add(RoundedPlateaux[i]);
                 }
             }
-        }
-
-        public bool CanAddPlateau(Plateau Mount)
-        {
-            lock(_lock)
-                return World.WorldBuilding.CanAddPlateau(Mount, _plateaus.ToArray());
         }
 
         private void CalculateRadius()
@@ -150,6 +180,12 @@ namespace Hedra.Engine.Generation
             foreach (var model in _models)
             {
                 var newRadius = (model.Position - this.Position).LengthFast + model.Bounds.Xz.LengthFast * .5f;
+                if (newRadius > radius)
+                    radius = newRadius;
+            }
+            foreach (var instance in _instances)
+            {
+                var newRadius = (instance.Position - this.Position).LengthFast + instance.Bounds.Xz.LengthFast * .5f;
                 if (newRadius > radius)
                     radius = newRadius;
             }
@@ -165,6 +201,7 @@ namespace Hedra.Engine.Generation
                     model.Dispose();
                 }
             }
+            Disposed = true;
             World.WorldBuilding.DisposeStructure(this);
             WorldObject?.Dispose();
         }

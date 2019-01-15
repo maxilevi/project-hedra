@@ -1,6 +1,7 @@
 namespace Hedra.Engine.StructureSystem.VillageSystem.Templates
 {
-    public class WindmillTemplate : BuildingTemplate<DesignTemplate>
+    public class WindmillTemplate : BuildingTemplate<WindmillDesignTemplate>
     {
+
     }
 }

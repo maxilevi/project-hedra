@@ -1,6 +1,7 @@
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using System;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.Player.MapSystem
@@ -11,7 +12,7 @@ namespace Hedra.Engine.Player.MapSystem
 
         public MapItem(VertexData Data)
         {
-            _mesh = ObjectMesh.FromVertexData(Data);    
+            _mesh = ObjectMesh.FromVertexData(Data, false);
             DrawManager.Remove(_mesh);
         }
 
@@ -42,8 +43,8 @@ namespace Hedra.Engine.Player.MapSystem
 
         public Vector3 Rotation
         {
-            get => _mesh.Rotation;
-            set => _mesh.Rotation = value;
+            get => _mesh.LocalRotation;
+            set => _mesh.LocalRotation = value;
         }
 
         public void Dispose()

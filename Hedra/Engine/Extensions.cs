@@ -16,6 +16,7 @@ using System.Linq;
 using System.Collections;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
+using Hedra.Core;
 using Hedra.Engine.ComplexMath;
 using Newtonsoft.Json.Converters;
 using OpenTK;
@@ -26,8 +27,7 @@ namespace Hedra.Engine
     /// Description of Extensions.
     /// </summary>
     public static class Extensions
-    {
-
+    {      
         public static void Shuffle<T>(this IList<T> List, Random Rng)
         {
             int n = List.Count;
@@ -39,6 +39,11 @@ namespace Hedra.Engine
                 List[k] = List[n];
                 List[n] = value;
             }
+        }
+
+        public static T Random<T>(this IList<T> List, Random Rng)
+        {
+            return List[Rng.Next(0, List.Count)];
         }
 
         public static Vector3 SupportPoint(this Vector3[] Vertices, Vector3 Direction)
@@ -69,7 +74,7 @@ namespace Hedra.Engine
 
         public static Vector2 ScaleUI(this Vector2 Vector, Vector2 Resolution)
         {
-            return Mathf.ScaleGUI(Resolution, Vector);
+            return Mathf.ScaleGui(Resolution, Vector);
         }
         
         public static Vector3 ToEuler(this Quaternion Quaternion)
@@ -124,23 +129,26 @@ namespace Hedra.Engine
             return new Quaternion(x, y, z, w);
         }
         
-        public static Quaternion SlerpExt(Quaternion a, Quaternion b, float blend) {
+        public static Quaternion SlerpExt(Quaternion a, Quaternion b, float blend)
+        {
             Quaternion result = new Quaternion(0, 0, 0, 1);
             float dot = a.W * b.W + a.X * b.X + a.Y * b.Y + a.Z * b.Z;
             float blendI = 1f - blend;
-            if (dot < 0) {
+            if (dot < 0)
+            {
                 result.W = blendI * a.W + blend * -b.W;
                 result.X = blendI * a.X + blend * -b.X;
                 result.Y = blendI * a.Y + blend * -b.Y;
                 result.Z = blendI * a.Z + blend * -b.Z;
-            } else {
+            }
+            else
+            {
                 result.W = blendI * a.W + blend * b.W;
                 result.X = blendI * a.X + blend * b.X;
                 result.Y = blendI * a.Y + blend * b.Y;
                 result.Z = blendI * a.Z + blend * b.Z;
             }
-            result.Normalize();
-            return result;
+            return result.Normalized();
         }
         ///<sumary>
         /// Do NOT touch this function. It's not a real ToMatrix, it's an adhoc version.

@@ -1,9 +1,9 @@
-﻿{
+{
   "Name": "CommonBronzeRing",
   "DisplayName": "Bronze Ring",
-  "EquipmentType": "Ring", 
+  "EquipmentType": "Ring",
   "Tier": "Common",
-  "Description": "Bronze ring.",
+  "Description": "A ring forged in bronze. Acceptable quality.",
   "Attributes": [
     {
       "Name": "MovementSpeed",
@@ -17,7 +17,7 @@
     },
     {
       "Name": "AttackSpeed",
-      "Value": 0.00,
+      "Value": 0.0,
       "Display": "Percentage"
     },
     {

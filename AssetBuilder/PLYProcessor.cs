@@ -34,6 +34,7 @@ namespace AssetBuilder
             const int startDataIndex = 2;
 
             var hasColor = HasColor(fileContents);
+            var hasAlpha = fileContents.IndexOf("property uchar alpha", StringComparison.Ordinal) != -1;
             var vertexCount = int.Parse(numbers[vertexCountIndex]);
             var faceCount = int.Parse(numbers[faceCountIndex]);
             var vertexData = new List<Vector3>(vertexCount);
@@ -41,7 +42,7 @@ namespace AssetBuilder
             var normals = new List<Vector3>();
             var indices = new List<uint>(faceCount * 3);
 
-            var numberOffset = hasColor ? 9 : 6;
+            var numberOffset = hasColor ? 10 : 6;
             int accumulatedOffset = startDataIndex;
             for(; vertexData.Count < vertexCount; accumulatedOffset += numberOffset)
             {
@@ -66,7 +67,7 @@ namespace AssetBuilder
                             float.Parse(numbers[accumulatedOffset + 6]) / 255f,
                             float.Parse(numbers[accumulatedOffset + 7]) / 255f, 
                             float.Parse(numbers[accumulatedOffset + 8]) / 255f,
-                            1.0f
+                            hasAlpha ? float.Parse(numbers[accumulatedOffset + 9]) / 255f : 1.0f
                             )
                     );
                 }

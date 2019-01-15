@@ -1,9 +1,9 @@
 {
   "Name": "CommonIronDoubleBlades",
   "DisplayName": "Iron Blades",
-  "EquipmentType": "DoubleBlades", 
+  "EquipmentType": "DoubleBlades",
   "Tier": "Common",
-  "Description": "Iron blades.",
+  "Description": "Weightier than bronze, with it's weight creating more effective strikes.",
   "Attributes": [
     {
       "Name": "Damage",

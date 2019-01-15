@@ -1,9 +1,9 @@
-﻿{
+{
   "Name": "CommonWoodenBow",
   "DisplayName": "Wooden Bow",
-  "EquipmentType": "Bow", 
+  "EquipmentType": "Bow",
   "Tier": "Common",
-  "Description": "Wooden bow.",
+  "Description": "A rudementary bow made of wood.",
   "Attributes": [
     {
       "Name": "Damage",

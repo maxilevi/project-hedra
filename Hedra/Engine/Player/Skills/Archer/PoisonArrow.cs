@@ -8,9 +8,11 @@
  */
 
 using System;
+using Hedra.Core;
 using Hedra.Engine.EntitySystem;
-using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Rendering;
+using Hedra.EntitySystem;
+using Hedra.WeaponSystem;
 using OpenTK;
 
 namespace Hedra.Engine.Player.Skills.Archer

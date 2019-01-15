@@ -10,10 +10,14 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Hedra.Core;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
+using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.Game
@@ -26,7 +30,6 @@ namespace Hedra.Engine.Game
         public static float SurfaceWidth { get; set; }
         public static float SurfaceHeight { get; set; }
         public static bool TestingMode { get; set; }
-        public static Vector2 SpawnPoint { get; } = new Vector2(5000, 5000);
         public static float BloomModifier { get; set; } = 1f;
         public static bool Wireframe { get; set; }
         public static bool LockFrustum { get; set; }
@@ -39,20 +42,16 @@ namespace Hedra.Engine.Game
         public static float ScreenRatio { get; set; }
         public static float DefaultScreenHeight { get; set; }
         public static bool Paused { get; set; }
-        public static int MaxLoadingRadius { get; set; } = 32;
-        public static int MinLoadingRadius { get; } = 8;
         public static float AmbientOcclusionIntensity = 1;
         public static bool BlurFilter = false;
         public static bool DarkEffect = false;
         public static bool DistortEffect = false;
-        public static bool Fancy = true;
         public const float Fov = 85.0f;
         public static bool GlobalShadows = true;
         public static bool Hardcore = false;
         public static bool Lod = true;
         public static bool MaxResolution = false;
         public static bool UnderWaterEffect = false;
-        public static float UpdateDistance = 420;
         private static bool _fullscreen;
         private static int _shadowQuality = 2;
         private static int _frameLimit;
@@ -68,6 +67,9 @@ namespace Hedra.Engine.Game
         
         public static bool Shadows => ShadowQuality != 0 && GlobalShadows;
         
+        
+        [Setting] public static bool Quality { get; set; } = true;
+        
         [Setting] public static bool SmoothLod { get; set; } = true;
         
         [Setting] public static bool Bloom { get; set; } = true;
@@ -75,8 +77,6 @@ namespace Hedra.Engine.Game
         [Setting] public static bool Autosave { get; set; } = true;
 
         [Setting] public static int ChunkLoaderRadius { get; set; } = 20;
-
-        [Setting] public static bool HideObjectives { get; set; } = false;
 
         [Setting] public static bool InvertMouse { get; set; } = false;
 
@@ -139,8 +139,15 @@ namespace Hedra.Engine.Game
         [Setting]
         public static float SFXVolume
         {
-            get => SoundManager.Volume;
-            set => SoundManager.Volume = value;
+            get => SoundPlayer.Volume;
+            set => SoundPlayer.Volume = value;
+        }
+        
+        [Setting]
+        public static string Language
+        {
+            get => Translations.Language;
+            set => Translations.Language = value;
         }
 
         [Setting]
@@ -202,7 +209,7 @@ namespace Hedra.Engine.Game
                 {
                     if (!Predicate(properties[k])) continue;
                     if (properties[k].Name != parts[0]) continue;
-                    var value = Convert.ChangeType(parts[1], properties[k].PropertyType);
+                    var value = ConvertString(parts[1], properties[k].PropertyType);
                     properties[k].SetValue(null, value, null);
                 }
             }
@@ -213,6 +220,11 @@ namespace Hedra.Engine.Game
             return
                 typeof(GameSettings).GetProperties(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static)
                     .Where(P => P.IsDefined(typeof(SettingAttribute), true)).ToArray();
+        }
+        
+        private static object ConvertString(string Value, Type Type)
+        {
+            return Type.IsEnum ? Enum.Parse(Type, Value) : Convert.ChangeType(Value, Type);
         }
     }
 }

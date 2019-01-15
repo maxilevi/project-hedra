@@ -1,8 +1,8 @@
-﻿{
+{
   "Name": "Gold",
   "DisplayName": "Gold",
   "Tier": "Misc",
-  "Description": "Currency.",
+  "Description": "The primary currency of the universe.",
   "Attributes": [
     {
       "Name": "Amount",
@@ -11,6 +11,6 @@
   ],
   "Model": {
     "Scale": 1.0,
-    "Path": "$DataFile$/Items/Coin.ply"
+    "Path": "$DataFile$/Items/Misc/Coin.ply"
   }
 }

@@ -9,5 +9,7 @@ namespace Hedra.Engine.CacheSystem
         {
             this.AddModel(AssetManager.PLYLoader("Assets/Env/Fern.ply", Vector3.One));
         }
+        
+        public override CacheItem Type => CacheItem.Fern;
     }
 }

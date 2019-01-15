@@ -17,6 +17,7 @@ namespace Hedra.Engine.ItemSystem
         Pet,
         Vehicle,
         Ring,
-        Staff
+        Staff,
+        Recipe
     }
 }

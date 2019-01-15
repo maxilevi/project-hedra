@@ -1,10 +1,17 @@
 using System;
-using System.Drawing;
-using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Linq;
+using Hedra.Core;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
+using Hedra.Engine.Generation;
+using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.Input;
+using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.StructureSystem;
+using Hedra.EntitySystem;
 using OpenTK;
 using OpenTK.Input;
 
@@ -14,6 +21,7 @@ namespace Hedra.Engine.Player
     {
         public static Vector3 DefaultCameraHeight = Vector3.UnitY * 9.0f;
         public static Func<Vector3> DefaultDelegate;
+        private const float DefaultDistance = 10;
         public const float DefaultMaxDistance = 14f;
         public const float DefaultMinDistance = 2.0f;
         public const float DefaultMaxPitch = 1.5f;
@@ -25,31 +33,35 @@ namespace Hedra.Engine.Player
         public float MinDistance { get; set; }
         public float MaxPitch { get; set; }
         public float MinPitch { get; set; }
-        public float AddonDistance { get; set; }
         public float Distance { get; set; }
         public float WheelSpeed { get; set; }
         public bool CaptureMovement { get; set; }
+        public float AddedDistance { get; set; }
         public bool LockMouse { get; set; }
         public Matrix4 ModelViewMatrix { get; private set; }
         public Func<Vector3> PositionDelegate { get; set; }
-        public int XDelta { get; private set; }
-        public int YDelta { get; private set; }
+        private float _xDelta;
+        private float _yDelta;
         public float Pitch { get; set; }
         public float Yaw { get; set; }
         public float StackedYaw { get; private set; }
 
         private Vector3 _cameraHeight;
-        private readonly LocalPlayer _player;
         private float _previousAlpha = -1f;
-        private float _prevDistance;
         private Vector3 _interpolatedPosition;
         private Vector3 _lastDelegateValue;
         private Vector3 _interpolatedZoomOut;
         private Vector3 _targetZoomOut;
+        private Vector2 _lastCollisionPosition;
+        private readonly IHumanoid _player;
+        private readonly List<ICollidable> _collisions;
+        private readonly Box _cameraBox;
 
-        public Camera(LocalPlayer RefPlayer)
+        public Camera(IHumanoid Player)
         {
-            _player = RefPlayer;
+            _player = Player;
+            _cameraBox = new Box(-Vector3.One, Vector3.One);
+            _collisions = new List<ICollidable>();
             Reset();
         }
 
@@ -72,59 +84,45 @@ namespace Hedra.Engine.Player
 
         public void Update()
         {
-            this.Interpolate();
-            this.ClampYaw();
+            Interpolate();
+            ClampYaw();
 
-            var cameraPosition = CameraPosition;
-            if ( !GameSettings.Paused && !GameManager.IsLoading && !_player.IsDead)
+            if ( !GameSettings.Paused && !GameManager.IsLoading && !_player.IsDead && !GameSettings.ContinousMove)
             {
-                XDelta = Cursor.Position.X - GameSettings.Width / 2;
-                YDelta = Cursor.Position.Y - GameSettings.Height / 2;
-                if (LockMouse) Cursor.Position = new Point(GameSettings.Width / 2, GameSettings.Height / 2);
+                _xDelta = Cursor.Position.X - GameSettings.Width / 2f;
+                _yDelta = Cursor.Position.Y - GameSettings.Height / 2f;
+                if (LockMouse) Cursor.Center();
                 
                 if (CaptureMovement)
                 {
-                    this.ManageRotations();
+                    ManageRotations();
                 }
 
-                if (Physics.IsColliding(cameraPosition, new Box(-Vector3.One * 2f + cameraPosition, Vector3.One * 2f + cameraPosition)))
-                {
-                    if (_prevDistance == 0)
-                        _prevDistance = TargetDistance;
-                    TargetDistance += Time.IndependantDeltaTime * -32f;
-                }
-                else
-                {
-                    this.ClampDistance();
-                }
-
-                this.ManageAlpha();
             }
-            while((cameraPosition = CameraPosition).Y - 2 < Physics.HeightAtPosition(cameraPosition) 
-                && !GameManager.IsLoading && TargetDistance > MinDistance)
+            bool ShouldMove()
             {
-                TargetDistance += Time.IndependantDeltaTime * -128;
+                var cameraPosition = CameraEyePosition;
+                return IsColliding(cameraPosition) || cameraPosition.Y - 2 < Physics.HeightAtPosition(cameraPosition);
             }
 
-            this.BuildCameraMatrix();
+            while(ShouldMove() && !GameManager.IsLoading && !GameManager.InStartMenu && TargetDistance > MinDistance)
+            {
+                TargetDistance -= Time.IndependantDeltaTime;
+                Distance -= Time.IndependantDeltaTime;
+            }
+
+            BuildCameraMatrix();
             DrawManager.FrustumObject.CalculateFrustum(DrawManager.FrustumObject.ProjectionMatrix, ModelViewMatrix);
             DrawManager.FrustumObject.SetFrustum(ModelViewMatrix);
         }
 
         private void ManageRotations()
         {
-            TargetYaw += XDelta * GameSettings.MouseSensibility * 0.0025f;
-            StackedYaw += XDelta * GameSettings.MouseSensibility * 0.0025f;
+            TargetYaw += _xDelta * GameSettings.MouseSensibility * 0.0025f;
+            StackedYaw += _xDelta * GameSettings.MouseSensibility * 0.0025f;
 
-            float possiblePitch = (!GameSettings.InvertMouse ? -YDelta : YDelta) * GameSettings.MouseSensibility * 0.0025f;
-            Vector3 camPos =
-                _interpolatedPosition - new Vector3((float)Math.Cos(TargetYaw), TargetPitch + possiblePitch, (float)Math.Sin(TargetYaw)) *
-                new Vector3(TargetDistance, TargetDistance, TargetDistance) + CameraHeight;
-
-            float heightAtCamPos = Physics.HeightAtPosition(camPos);
-            if (camPos.Y > heightAtCamPos + MinDistance) TargetPitch += possiblePitch;
-
-            TargetPitch = Mathf.Clamp(TargetPitch, MinPitch, MaxPitch);
+            var possiblePitch = (!GameSettings.InvertMouse ? -_yDelta : _yDelta) * GameSettings.MouseSensibility * 0.0025f;
+            TargetPitch = Mathf.Clamp(TargetPitch + possiblePitch, MinPitch, MaxPitch);
         }
 
         private void Interpolate()
@@ -138,9 +136,7 @@ namespace Hedra.Engine.Player
             _interpolatedPosition = PositionDelegate() - _interpolatedZoomOut;
             Pitch = Mathf.Lerp(Pitch, TargetPitch, Time.IndependantDeltaTime * 16f);
             Yaw = Mathf.Lerp(Yaw, TargetYaw, Time.IndependantDeltaTime * 16f);
-            var cameraPosition = this.CalculatePosition(0);
-            var addonDistance = cameraPosition.Y > Physics.HeightAtPosition(cameraPosition) + 2 ? AddonDistance : 0;
-            Distance = Mathf.Lerp(Distance, TargetDistance + addonDistance * Time.TimeScale, Time.IndependantDeltaTime * 3f);
+            Distance = Mathf.Lerp(Distance, TargetDistance + AddedDistance * Time.TimeScale, Time.IndependantDeltaTime * 3f);
         }
 
         private void ClampYaw()
@@ -157,82 +153,25 @@ namespace Hedra.Engine.Player
             }
         }
 
-        private void ManageAlpha()
-        {
-            TargetDistance = Mathf.Clamp(TargetDistance, 1.5f, MaxDistance);
-            if (TargetDistance < 4.5f)
-            {
-                if (_previousAlpha <= -0.995) _previousAlpha = _player.Model.Alpha;
-                _player.Model.Alpha = Mathf.Clamp((TargetDistance - 1.5f) / 4.5f, 0, 1) + 0.0025f;
-            }
-            else
-            {
-                if (Math.Abs(_previousAlpha - -1f) < 0.005f) return;
-                _player.Model.Alpha = _previousAlpha;
-                _previousAlpha = -1;
-            }
-        }
 
         public void BuildCameraMatrix()
         {
-            ModelViewMatrix = Matrix4.LookAt(_interpolatedPosition - LookAtPoint * Distance + CameraHeight,
-                _interpolatedPosition + LookAtPoint * Distance + CameraHeight, Vector3.UnitY);
+            ModelViewMatrix = Matrix4.LookAt(CameraEyePosition, CameraLookAtPosition, Vector3.UnitY);
         }
 
         public override void OnMouseWheel(object Sender, MouseWheelEventArgs E)
         {
             if (GameSettings.Paused || !CaptureMovement) return;
 
-            Vector3 pos = _interpolatedPosition - LookAtPoint * (TargetDistance - E.Delta * WheelSpeed) + CameraHeight;
-            float y = Physics.HeightAtPosition(pos);
+            var pos = _interpolatedPosition - LookAtPoint * (TargetDistance - E.Delta * WheelSpeed) + CameraHeight;
+            var y = Physics.HeightAtPosition(pos);
             if (pos.Y <= y + MinDistance) return;
 
             TargetDistance -= E.Delta * WheelSpeed;
             TargetDistance = Mathf.Clamp(TargetDistance, 1.5f, MaxDistance);
-
-            _prevDistance = TargetDistance;
         }
 
-        private void ClampDistance()
-        {
-            if (_prevDistance <= 0.005f || !(TargetDistance < _prevDistance)) return;
-
-            for (var i = 2; i < 5; i++)
-            {
-                var position = this.CalculatePosition(i) + Vector3.UnitY;
-                float y = Physics.HeightAtPosition(position);
-                var box = new Box(-Vector3.One * 2f + this.CalculatePosition(i-1), Vector3.One * 2f + position);
-                if (position.Y <= y + MinDistance || Physics.IsColliding(position, box))
-                    return;
-            }
-            TargetDistance += Time.IndependantDeltaTime * 32f;
-        }
-
-        private float _targetDistance = 10f;
-
-        public float TargetDistance
-        {
-            get => _targetDistance;
-            set
-            {
-                _targetDistance = value;
-                if (TargetDistance < 4.5f)
-                {
-                    var newAlpha = Mathf.Clamp((TargetDistance - 1.5f) / 4.5f, 0, 1);
-                    _player.Model.Alpha = newAlpha + 0.0025f;
-                }
-                else
-                {
-                    _player.Model.Alpha = 1;
-                }
-            }
-        }
-
-        private Vector3 CalculatePosition(float i)
-        {
-            return _interpolatedPosition + CameraHeight -
-                LookAtPoint * (TargetDistance + (_prevDistance - TargetDistance) * (1f / (i + 1)));
-        }
+        public float TargetDistance { get; set; } = DefaultDistance;
 
         private Vector3 LookAtPoint => new Vector3(Forward.X, Pitch, Forward.Z);
 
@@ -250,13 +189,17 @@ namespace Hedra.Engine.Player
         {
             get
             {
-                if (_player.IsSitting || _player.IsSleeping) return _cameraHeight - Vector3.UnitY * 2.0f;
+                //if (_player.IsSitting || _player.IsSleeping) return _cameraHeight - Vector3.UnitY * 2.0f;
                 return _cameraHeight;
             }
             set => _cameraHeight = value;
         }
 
-        public Vector3 CameraPosition => _interpolatedPosition - LookAtPoint * new Vector3(TargetDistance, TargetDistance, TargetDistance) + CameraHeight;
+        public Vector3 CameraEyePosition => _interpolatedPosition - CameraOrientation + CameraHeight;
+
+        private Vector3 CameraLookAtPosition => _interpolatedPosition + CameraOrientation + CameraHeight;
+        
+        private Vector3 CameraOrientation => LookAtPoint * Distance;
 
         public Vector3 CrossDirection
         {
@@ -269,10 +212,62 @@ namespace Hedra.Engine.Player
                 return lookingDir.Xyz.NormalizedFast();
             }
         }
-        public Vector3 CrossPosition => throw new NotImplementedException();
 
-        public Matrix4 ViewMatrix => Matrix4.LookAt(-LookAtPoint * TargetDistance + CameraHeight,
-            LookAtPoint * TargetDistance + CameraHeight,
-            Vector3.UnitY);
+        public Matrix4 ViewMatrix => Matrix4.LookAt(-CameraOrientation, CameraOrientation, Vector3.UnitY);
+
+        private bool IsColliding(Vector3 Position)
+        {
+            UpdateCollisions(Position);
+            try
+            {
+                _cameraBox.Translate(Position);
+                for (var i = 0; i < _collisions.Count; i++)
+                {
+                    if (Physics.Collides(_collisions[i], _cameraBox))
+                        return true;
+                }
+                return false;
+            }
+            finally
+            {
+                _cameraBox.Translate(-Position);
+            }
+        }
+        
+        private void UpdateCollisions(Vector3 Position)
+        {
+            var chunkSpace = World.ToChunkSpace(Position);
+            if (chunkSpace == _lastCollisionPosition) return;
+            _lastCollisionPosition = chunkSpace;
+            var underChunk = World.GetChunkAt(Position);
+            var underChunkR = World.GetChunkAt(Position + new Vector3(Chunk.Width,0, 0));
+            var underChunkL = World.GetChunkAt(Position - new Vector3(Chunk.Width,0, 0));
+            var underChunkF = World.GetChunkAt(Position + new Vector3(0,0,Chunk.Width));
+            var underChunkB = World.GetChunkAt(Position - new Vector3(0,0,Chunk.Width));
+
+            _collisions.Clear();
+            _collisions.AddRange(World.GlobalColliders);
+            
+            try
+            {
+                if(underChunk != null)
+                    _collisions.AddRange(underChunk.CollisionShapes);
+                if(underChunkL != null)
+                    _collisions.AddRange(underChunkL.CollisionShapes);
+                if(underChunkR != null)
+                    _collisions.AddRange(underChunkR.CollisionShapes);
+                if(underChunkF != null)
+                    _collisions.AddRange(underChunkF.CollisionShapes);
+                if(underChunkB != null)
+                    _collisions.AddRange(underChunkB.CollisionShapes);
+            }
+            catch(IndexOutOfRangeException e)
+            {
+                Log.WriteLine(e.ToString());
+            }
+
+            var structures = StructureHandler.GetNearStructures(Position);
+            _collisions.AddRange(structures.SelectMany(S => S.Colliders));
+        }
     }
 }

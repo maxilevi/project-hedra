@@ -30,6 +30,8 @@
 // 
 // </license>
 
+using Hedra.Engine.IO;
+
 namespace Hedra.Engine.Rendering
 {
     using System;

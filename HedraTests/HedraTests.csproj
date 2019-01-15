@@ -66,14 +66,21 @@
     <Compile Include="BaseTest.cs" />
     <Compile Include="CacheSystem\CacheProviderTest.cs" />
     <Compile Include="CodePolicy\BaseCodePolicy.cs" />
+    <Compile Include="CodePolicy\ControlsCodePolicy.cs" />
     <Compile Include="CodePolicy\GLCodePolicy.cs" />
     <Compile Include="CodePolicy\ShaderCodePolicy.cs" />
     <Compile Include="CodePolicy\SolutionTest.cs" />
+    <Compile Include="CodePolicy\DanglingReferencesCodePolicy.cs" />
     <Compile Include="Core\GameSettingsTest.cs" />
+    <Compile Include="Core\HalfBlockTest.cs" />
     <Compile Include="EntitySystem\DamageComponentTest.cs" />
+    <Compile Include="Game\ArmorBalanceSheet.cs" />
+    <Compile Include="Game\ArmorBalanceTest.cs" />
     <Compile Include="Game\BalanceEntry.cs" />
+    <Compile Include="Game\BaseEquipmentTest.cs" />
     <Compile Include="Game\HumanoidBalanceSheet.cs" />
     <Compile Include="Game\HumanoidBalanceTest.cs" />
+    <Compile Include="Game\ItemPriceTest.cs" />
     <Compile Include="Game\WeaponBalanceSheet.cs" />
     <Compile Include="Game\WeaponBalanceTest.cs" />
     <Compile Include="Game\MobBalanceSheet.cs" />
@@ -83,12 +90,16 @@
     <Compile Include="Game\UniqueBalanceEntry.cs" />
     <Compile Include="Generation\ChunkComparerTest.cs" />
     <Compile Include="Generation\RenderingComparerTest.cs" />
+    <Compile Include="Handling\CoroutineTest.cs" />
     <Compile Include="HedraReflectionTest.cs" />
     <Compile Include="ItemSystem\ItemPoolTest.cs" />
     <Compile Include="ItemSystem\ItemTest.cs" />
+    <Compile Include="ItemSystem\TradeManagerMock.cs" />
     <Compile Include="Loaders\ModificationsLoaderTest.cs" />
     <Compile Include="MathExtensions\PhysicsTest.cs" />
     <Compile Include="MathExtensions\RandomTest.cs" />
+    <Compile Include="ModuleSystem\AssetProviderTest.cs" />
+    <Compile Include="PhysicsSystem\CollisionGroupTest.cs" />
     <Compile Include="Player\AbilityTreeTest.cs" />
     <Compile Include="Player\AttributeArrayTest.cs" />
     <Compile Include="Player\CappedSkillMock.cs" />
@@ -155,6 +166,7 @@
     <Compile Include="WorldBuilding\InteractableStructureTest.cs" />
     <Compile Include="WorldBuilding\ObeliskTest.cs" />
     <Compile Include="Generation\WorldTest.cs" />
+    <Compile Include="WorldBuilding\PlateauTest.cs" />
     <Compile Include="WorldSpawnMock.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,12 @@
+{
+  "Name": "ChristmasHat",
+  "DisplayName": "Christmas Hat",
+  "EquipmentType": "Helmet",
+  "Tier": "Common",
+  "Description": "Merry Christmas!",
+  "Attributes": [],
+  "Model": {
+    "Scale": 0.65,
+    "Path": "$DataFile$/Items/Helmets/ChristmasHat.dae"
+  }
+}

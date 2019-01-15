@@ -1,0 +1,21 @@
+{
+  "Name": "RareWildSocketedStaff",
+  "DisplayName": "Wild Socketed Staff",
+  "EquipmentType": "Staff",
+  "Tier": "Rare",
+  "Description": "Untamed, unadorned, the socket of a small gemstone is open.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 6.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Staff/RareWildSocketedStaff.ply"
+  }
+}

@@ -13,11 +13,15 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using OpenTK;
 using System.Collections.Generic;
+using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
+using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -40,20 +44,20 @@ namespace Hedra.Engine.Rendering.UI
             var blackBand = new Texture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LeftRight);
             var blackBand2 = new Texture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), -bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LeftRight);    
             
-            var currentTab = new GUIText("Choose a character", new Vector2(0f, bandPosition.Y), Color.White, FontCache.Get(AssetManager.BoldFamily, 15, FontStyle.Bold));
+            var currentTab = new GUIText(Translation.Create("choose_character"), new Vector2(0f, bandPosition.Y), Color.White, FontCache.Get(AssetManager.BoldFamily, 15, FontStyle.Bold));
 
             var newChr = new Button(new Vector2(0.8f,bandPosition.Y), new Vector2(0.15f,0.05f),
-                                       "New Character", 0, Color.White, FontCache.Get(AssetManager.NormalFamily, 13));
+                Translation.Create("new_character"), Color.White, FontCache.Get(AssetManager.NormalFamily, 13));
             newChr.Click += delegate { this.Disable(); GameManager.Player.UI.ChrCreator.Enable(); };    
             
-            var playBtn = new Button(new Vector2(-.1f, -.8f), Vector2.One, "Load", 0, Color.White, FontCache.Get(AssetManager.NormalFamily, 14));
+            var playBtn = new Button(new Vector2(-.1f, -.8f), Vector2.One, Translation.Create("load"), Color.White, FontCache.Get(AssetManager.NormalFamily, 14));
             
             playBtn.Click += delegate 
             {
                 GameManager.MakeCurrent(DataManager.PlayerFiles[_humans.IndexOf(_selectedHuman)]);
             };
             
-            var deleteButton = new Button(new Vector2(.1f, -.8f), Vector2.One, "Delete", 0, Color.White, FontCache.Get(AssetManager.NormalFamily, 14));
+            var deleteButton = new Button(new Vector2(.1f, -.8f), Vector2.One, Translation.Create("delete"), Color.White, FontCache.Get(AssetManager.NormalFamily, 14));
             
             deleteButton.Click += (O, S) => DeleteSelected();
             
@@ -76,12 +80,16 @@ namespace Hedra.Engine.Rendering.UI
             
             CoroutineManager.StartCoroutine(UpdateWrapper);
             
-            OnPanelStateChange += delegate(object Sender, PanelState E) {
-                if(E == PanelState.Disabled)
-                    Scenes.MenuBackground.Campfire = false;
-                if (E == PanelState.Enabled)
-                {            
-                    ReloadFiles();
+            OnPanelStateChange += delegate(object Sender, PanelState E)
+            {
+                switch (E)
+                {
+                    case PanelState.Disabled:
+                        Scenes.MenuBackground.Campfire = false;
+                        break;
+                    case PanelState.Enabled:
+                        ReloadFiles();
+                        break;
                 }
             };
             
@@ -133,7 +141,7 @@ namespace Hedra.Engine.Rendering.UI
                 human.Physics.UseTimescale = false;
                 human.Removable = false;
                 human.Model.Enabled = false;
-                human.Physics.CanCollide = false;
+                human.Physics.CollidesWithStructures = false;
                 _humans.Add(human);
             }
             
@@ -152,8 +160,8 @@ namespace Hedra.Engine.Rendering.UI
                 _humans[i].Class = _information[i].Class;
                 _humans[i].Model = new HumanoidModel(_humans[i]);
                 _humans[i].BlockPosition = Scenes.MenuBackground.FirePosition + offset;
-                _humans[i].Model.Rotation = Physics.DirectionToEuler(-offset.Normalized().Xz.ToVector3());
-                _humans[i].Model.TargetRotation = _humans[i].Model.Rotation;
+                _humans[i].Model.LocalRotation = Physics.DirectionToEuler(-offset.Normalized().Xz.ToVector3());
+                _humans[i].Model.TargetRotation = _humans[i].Model.LocalRotation;
                 _humans[i].Model.Enabled = true;
                 _humans[i].Name = _information[i].Name;
                 _humans[i].Level = _information[i].Level;
@@ -168,10 +176,32 @@ namespace Hedra.Engine.Rendering.UI
                 foreach (var pair in _information[i].Items)
                 {
                     var item = pair.Value;
-                    if (pair.Key != PlayerInventory.WeaponHolder || item == null) continue;
-                    _humans[i].MainWeapon = item;
-                    _humans[i].Model.SetWeapon(_humans[i].MainWeapon.Weapon);
+                    if (item == null) continue;
+                    AddItemToHuman(_humans[i], pair.Key, item);
                 }
+            }
+        }
+
+        private static void AddItemToHuman(Humanoid Human, int Index, Item Object)
+        {
+            switch (Index)
+            {
+                case PlayerInventory.WeaponHolder:
+                    Human.MainWeapon = Object;
+                    Human.SetWeapon(Human.MainWeapon.Weapon);
+                    break;
+                case PlayerInventory.HelmetHolder:
+                    Human.SetHelmet(Object.Helmet);
+                    break;
+                case PlayerInventory.ChestplateHolder:
+                    Human.SetChestplate(Object.Chestplate);
+                    break;
+                case PlayerInventory.PantsHolder:
+                    Human.SetPants(Object.Pants);
+                    break;
+                case PlayerInventory.BootsHolder:
+                    Human.SetBoots(Object.Boots);
+                    break;
             }
         }
         
@@ -187,14 +217,14 @@ namespace Hedra.Engine.Rendering.UI
                         if (_previousHuman != _humans[k]) continue;
                         Vector3 fPos = Scenes.MenuBackground.FirePosition + this.FireDirection(k, 8);
                         _previousHuman.BlockPosition = new Vector3(fPos.X, _previousHuman.BlockPosition.Y, fPos.Z);
-                        _previousHuman.Model.Rotation = new Vector3(0, Physics.DirectionToEuler(this.FireDirection(k, 8).NormalizedFast().Xz.ToVector3()).Y+180, 0);
+                        _previousHuman.Model.LocalRotation = new Vector3(0, Physics.DirectionToEuler(this.FireDirection(k, 8).NormalizedFast().Xz.ToVector3()).Y+180, 0);
                         _previousHuman.Model.TargetRotation = new Vector3(0, Physics.DirectionToEuler(this.FireDirection(k, 8).NormalizedFast().Xz.ToVector3()).Y+180, 0);
                     }
                 }
                 _previousHuman = _selectedHuman;
                 _selectedHuman = _humans[i];
                 _name.Text = _selectedHuman.Name;
-                _level.Text = $"{Utils.FirstCharToUpper(_selectedHuman.Class.ToString().ToLowerInvariant())} Level {_selectedHuman.Level}";
+                _level.Text = $"{Translations.Get(_selectedHuman.Class.ToString().ToLowerInvariant())} {Translations.Get("level")} {_selectedHuman.Level}";
                 break;
             }
         }
@@ -246,7 +276,7 @@ namespace Hedra.Engine.Rendering.UI
 
                     int k = i;
                     if(_humans[k].MainWeapon != null && _humans[k].MainWeapon.Weapon.InAttackStance)
-                        _humans[k].Model.Blend(_humans[k].MainWeapon.Weapon.AttackStanceAnimation);                             
+                        _humans[k].Model.BlendAnimation(_humans[k].MainWeapon.Weapon.AttackStanceAnimation);                             
                         
                     _humans[i].Model.Enabled = (_humans[i].Model.ModelPosition.Xz - _humans[i].BlockPosition.Xz).LengthFast < 8;
                     _humans[i].Update();                    
@@ -256,8 +286,8 @@ namespace Hedra.Engine.Rendering.UI
             for (int j = 0; j < _humans.Count; j++)
             {
                 Vector3 target = FireDirection(j, 4.8f);
-                _humans[j].Model.Rotation = Physics.DirectionToEuler(target.NormalizedFast().Xz.ToVector3()) + Vector3.UnitY * 180f;
-                _humans[j].Model.TargetRotation = _humans[j].Model.Rotation;
+                _humans[j].Model.LocalRotation = Physics.DirectionToEuler(target.NormalizedFast().Xz.ToVector3()) + Vector3.UnitY * 180f;
+                _humans[j].Model.TargetRotation = _humans[j].Model.LocalRotation;
             }
 
             if (this.Enabled){
@@ -287,7 +317,7 @@ namespace Hedra.Engine.Rendering.UI
                     if (_humans[i].Model.Enabled && Math.Abs(ndc.X - coords.X) < size.X && Math.Abs(1 - ndc.Y - coords.Y) < size.Y)
                     {
                         if( (_humans[i].Model.Tint.Xyz - new Vector3(2, 2, 2)).LengthFast > 0.05f)
-                            SoundManager.PlayUISound(SoundType.ButtonClick);
+                            SoundPlayer.PlayUISound(SoundType.ButtonClick);
                         _humans[i].Model.Tint = new Vector4(2, 2, 2, 1);
                     }
                     else
@@ -332,8 +362,8 @@ namespace Hedra.Engine.Rendering.UI
                         _previousHuman.MainWeapon.Weapon.InAttackStance = false;
                     if ( (_previousHuman.BlockPosition.Xz - Scenes.MenuBackground.FirePosition.Xz - backTarget.Xz).LengthSquared > 1*1){
                         _previousHuman.Physics.Translate(backTarget.NormalizedFast() * 6f * Time.IndependantDeltaTime);
-                        _previousHuman.Model.Rotation = Physics.DirectionToEuler(backTarget.NormalizedFast().Xz.ToVector3());
-                        _previousHuman.Model.TargetRotation = _previousHuman.Model.Rotation;
+                        _previousHuman.Model.LocalRotation = Physics.DirectionToEuler(backTarget.NormalizedFast().Xz.ToVector3());
+                        _previousHuman.Model.TargetRotation = _previousHuman.Model.LocalRotation;
                     }
                     
                 }

@@ -9,18 +9,21 @@ using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.ItemSystem.WeaponSystem;
+using Hedra.Engine.IO;
 using Hedra.Engine.Management;
+using Hedra.Engine.Native;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
+using Hedra.EntitySystem;
+using Hedra.WeaponSystem;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Loader
 {
-    public class DebugInfoProvider
+    public class DebugInfoProvider : IDisposable
     {
         private readonly Panel _debugPanel;
         private readonly GUIText _debugText;
@@ -94,19 +97,19 @@ namespace Hedra.Engine.Loader
                 var underChunk = World.GetChunkByOffset(chunkSpace);
                 var chunkBound = Chunk.Width / Chunk.BlockSize;
                 var defaultVoxelCount = chunkBound * Chunk.Height * chunkBound;
-                var text = $"X = {(int)player.BlockPosition.X} Y = {(int)(player.BlockPosition.Y)} Z={(int)player.BlockPosition.Z}";
+                var text = $"X = {(int)player.BlockPosition.X} Y = {(int)(player.BlockPosition.Y)} Z={(int)player.BlockPosition.Z} Routines={CoroutineManager.Count} Watchers={player.Loader.WatcherCount}";
                 text += 
                     $"\n\nChunks={World.Chunks.Count} ChunkX={underChunk?.OffsetX ?? 0} ChunkZ={underChunk?.OffsetZ ?? 0}";
                 text +=
                     $"\n\navg_vcount={_voxelCount / _chunkCount / 1000}k / {defaultVoxelCount/1000}k voxel_count={_voxelCount/1000}k";
                 text += 
-                    $"\n\nAvgBuildTime={World.AverageBuildTime} MS AvgGenTime={World.AverageGenerationTime} MS Lights={ShaderManager.UsedLights}/{ShaderManager.MaxLights} Pitch={player.View.Pitch.ToString("0.00")}";
+                    $"\n\nAvgBuildTime={World.AverageBuildTime} MS AvgGenTime={World.AverageGenerationTime} MS Lights={ShaderManager.UsedLights}/{ShaderManager.MaxLights} Pitch={player.View.Pitch:0.00}";
                 text += 
                     $"\n\nMQueue = {World.MeshQueueCount} GQueue ={World.ChunkQueueCount} Time={(int)(SkyManager.DayTime/1000)}:{((int) ( ( SkyManager.DayTime/1000f - (int)(SkyManager.DayTime/1000) ) * 60)):00} H={World.Entities.Count(M => M.IsHumanoid)} Items={World.Items.Length} M&H={World.Entities.Count}";
                 text += 
-                    $"\n\nWatchers={World.StructureHandler.Watchers.Length} Structs={World.StructureHandler.Structures.Length}->{World.StructureHandler.Structures.Sum(S => S.Children.Length)} Plateaus={World.WorldBuilding.Plateaus.Length} Groundworks={World.WorldBuilding.Groundworks.Length}";
+                    $"\n\nWatchers={World.StructureHandler.Watchers.Length} Structs={World.StructureHandler.Structures.Length}->{World.StructureHandler.Structures.Sum(S => S.Children.Length)} Plateaus={World.WorldBuilding.Plateaux.Length} Groundworks={World.WorldBuilding.Groundworks.Length}";
                 text += 
-                    $"\n\nTextures ={Graphics2D.Textures.Count} Seed={World.Seed} FPS={Time.Framerate} MS={Time.Frametime}";
+                    $"\n\nTextures ={Graphics2D.Textures.Count} Updates={UpdateManager.UpdateCount} Seed={World.Seed} FPS={Time.Framerate} MS={Time.Frametime}";
                 text +=
                     $"\n\n SkippedBinds={Renderer.TextureHandler.Skipped} SkippedUses={Renderer.ShaderHandler.Skipped} CulledObjects = {DrawManager.CulledObjectsCount}/{DrawManager.CullableObjectsCount}  Cache={CacheManager.CachedColors.Count}|{CacheManager.CachedExtradata.Count} Pitch={player.View.TargetPitch}";
 
@@ -170,7 +173,7 @@ namespace Hedra.Engine.Loader
 
         private void DrawFrustum()
         {
-            var points = DrawManager.FrustumObject.Points;
+            var points = GameManager.Player.Model.BroadphaseBox.Vertices;
             _frustumPoints.Update(points, Vector3.SizeInBytes * points.Length);
             
             _frustumVAO.Bind();
@@ -185,7 +188,7 @@ namespace Hedra.Engine.Loader
         
         public void Draw()
         {
-            if (GameSettings.DebugView && GameSettings.LockFrustum)
+            if (GameSettings.DebugView)
             {
                 DrawFrustum();
             }
@@ -258,11 +261,10 @@ namespace Hedra.Engine.Loader
                         GameManager.Player.Model.BaseBroadphaseBox.Max - GameManager.Player.Model.BaseBroadphaseBox.Min);
                     Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 
-                    if (GameManager.Player.Model.LeftWeapon != null &&
-                        GameManager.Player.Model.LeftWeapon is MeleeWeapon melee)
+                    if (GameManager.Player.LeftWeapon != null &&
+                        GameManager.Player.LeftWeapon is MeleeWeapon melee)
                     {
                         Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-                        BasicGeometry.DrawShapes(melee.Shapes, Colors.White);
                         Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
                     }
                     World.Entities.ToList().ForEach(delegate(IEntity E)
@@ -327,6 +329,11 @@ namespace Hedra.Engine.Loader
                     }*/
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            EventDispatcher.UnregisterKeyDown(this);
         }
     }
 }

@@ -10,7 +10,7 @@ using System;
 using OpenTK;
 using Hedra.Engine.Player;
 using System.Collections.Generic;
-using Hedra.Engine.AISystem;
+using Hedra.AISystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
@@ -95,7 +95,6 @@ namespace Hedra.Engine.Networking
                             
                             if(Packet.Animation[i] == 0x1){
                                 Mob.SearchComponent<DamageComponent>().Immune = true;
-                                //Mob.Model.Attack(Mob, 0f); // Attack itself to do the animation
                                 Mob.SearchComponent<DamageComponent>().Immune = false;
                             }
                         }

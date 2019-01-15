@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Hedra.BiomeSystem;
+using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
@@ -11,13 +13,15 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.PlantSystem
 {
     public class BerryBushDesign : PlantDesign
     {
-        public override VertexData Model => CacheManager.GetModel(CacheItem.BerryBush);
+        public override CacheItem Type => CacheItem.BerryBush;
+        
         public override bool HasCustomPlacement => true;
 
         public override Matrix4 TransMatrix(Vector3 Position, Random Rng)
@@ -30,7 +34,7 @@ namespace Hedra.Engine.PlantSystem
 
             float height = Physics.HeightAtPosition(Position + addon);
             var topBlock = World.GetHighestBlockAt((int)(Position.X + addon.X), (int)(Position.Z + addon.Z));
-            if (topBlock.Noise3D) return Matrix4.Identity;
+            if (Block.Noise3D) return Matrix4.Identity;
 
             for (int x = -3; x < 3; x++)
             {
@@ -42,19 +46,18 @@ namespace Hedra.Engine.PlantSystem
                 }
             }
 
-            Matrix4 rotationMat4 = Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat());
+            Matrix4 rotationMat4 = Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat() * Mathf.Radian);
             Matrix4 transMatrix = Matrix4.CreateScale(1.75f + Rng.NextFloat() * .75f);
             transMatrix *= rotationMat4;
             transMatrix *= Matrix4.CreateTranslation(new Vector3(Position.X, height, Position.Z) + addon);
             return transMatrix;
         }
 
-        public override VertexData Paint(Vector3 Position, VertexData Data, Region Region, Random Rng)
+        public override VertexData Paint(VertexData Data, Region Region, Random Rng)
         {
             Data = Data + CacheManager.GetModel(CacheItem.Berries).Clone();
 
-            var underChunk = World.GetChunkAt(Position);
-            Vector4 newColor = Utils.VariateColor(underChunk.Biome.Colors.GrassColor, 15, Rng);
+            Vector4 newColor = Utils.VariateColor(Region.Colors.GrassColor, 15, Rng);
             Vector4 berriesColor = Utils.VariateColor(Colors.BerryColor(Rng), 15, Rng);
 
             ///maybe this is causing problems
@@ -68,7 +71,6 @@ namespace Hedra.Engine.PlantSystem
         public override void CustomPlacement(VertexData Data, Matrix4 TransMatrix)
         {
             var position = TransMatrix.ExtractTranslation();
-            var underChunk = World.GetChunkAt(position);
             TransMatrix = TransMatrix.ClearTranslation();
             Data.Transform(TransMatrix);
 
@@ -77,15 +79,16 @@ namespace Hedra.Engine.PlantSystem
                 {
                     Physics =
                     {
-                        HasCollision = false,
+                        CollidesWithEntities = false,
                         UsePhysics = false,
-                        CanCollide = false
+                        CollidesWithStructures = false,
+                        TargetPosition = position
                     },
-                    BlockPosition = position
                 };
                 berryBush.Model = new StaticModel(berryBush, Data)
                 {
-                    Position = position
+                    Position = position,
+                    ApplyNoiseTexture = true
                 };
 
                 var damage = new DamageComponent(berryBush)

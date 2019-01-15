@@ -5,18 +5,21 @@
  *
  */
 using System;
+using Hedra.Core;
+using Hedra.Engine.ComplexMath;
+using Hedra.Engine.Game;
 using OpenTK;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.Rendering
 {
     public class ObjectMesh : IRenderable, IDisposable, ICullableModel, IUpdatable
     {
-        public Vector3 TargetRotation { get; set; }
-        public Vector3 TargetPosition { get; set; }
         public float AnimationSpeed { get; set; } = 1f;
         public bool Enabled { get; set; }
+        public bool PrematureCulling { get; set; } = true;
         public Box CullingBox { get; set; }
         public ChunkMesh Mesh { get; }
         private readonly ObjectMeshBuffer _buffer;
@@ -26,31 +29,28 @@ namespace Hedra.Engine.Rendering
            _buffer = new ObjectMeshBuffer();
         }
 
-        public ObjectMesh(Vector3 Position)
+        private ObjectMesh(Vector3 Position)
         {
             this.Enabled = true;
             this._buffer = new ObjectMeshBuffer();
             this.Mesh = new ChunkMesh(Position, _buffer);
             this.Position = Position;
-            this.Rotation = Vector3.Zero;
+            this.LocalRotation = Vector3.Zero;
             Mesh.Enabled = true;
             Enabled = true;    
             DrawManager.Add(this);
             UpdateManager.Add(this);
         }
 
-        
         public void Draw()
         {
-            if(Enabled) Mesh.Draw();
+            if (Enabled)
+                Mesh.Draw();
         }
-        
+
         public void Update()
         {
-            this.AnimationPosition = Mathf.Lerp(this.AnimationPosition, this.TargetPosition,
-                Time.IndependantDeltaTime * 6);
-            this.AnimationRotation = Mathf.Lerp(this.AnimationRotation, this.TargetRotation,
-                Time.IndependantDeltaTime * 6);
+            _buffer.LocalRotation = LocalRotation;//Mathf.Lerp(_buffer.LocalRotation, LocalRotation, Time.IndependantDeltaTime * 8f);
         }
 
         public bool ApplyNoiseTexture
@@ -64,17 +64,20 @@ namespace Hedra.Engine.Rendering
             return _buffer.TransformPoint(Point);
         }
 
-        public Matrix4 TransformationMatrix{
+        public Matrix4 TransformationMatrix
+        {
             get => _buffer.TransformationMatrix;
             set => _buffer.TransformationMatrix = value;
         }
         
-        public Vector4 Tint{
+        public Vector4 Tint
+        {
             get => _buffer.Tint;
             set => _buffer.Tint = value;
         }
         
-        public Vector4 BaseTint{
+        public Vector4 BaseTint
+        {
             get => _buffer.BaseTint;
             set => _buffer.BaseTint = value;
         }
@@ -111,8 +114,8 @@ namespace Hedra.Engine.Rendering
         
         public Vector3 RotationPoint
         {
-            get => _buffer.Point;
-            set => _buffer.Point = value;
+            get => _buffer.RotationPoint;
+            set => _buffer.RotationPoint = value;
         }
 
         public bool Pause
@@ -121,104 +124,28 @@ namespace Hedra.Engine.Rendering
             set => _buffer.Pause = value;
         }
 
-        public Vector3 Rotation{
-            get => _buffer.Rotation;
-            set{
-                float valY = value.Y;
-                
-                if(float.IsInfinity(valY) || float.IsNaN(valY)) valY = 0;
-                
-                float valX = value.X;
-                
-                if(float.IsInfinity(valX) || float.IsNaN(valX)) valX = 0;
-                
-                float valZ = value.Z;
-                
-                if(float.IsInfinity(valZ) || float.IsNaN(valZ)) valZ = 0;
-        
-                _buffer.Rotation = new Vector3(valX, valY, valZ);
-            }
-        }
-        
-        public Vector3 BeforeLocalRotation
-        {
-            get => _buffer.BeforeLocalRotation;
-            set => _buffer.BeforeLocalRotation = value;
-        }
-        
-        public Vector3 LocalRotation{
-            get => _buffer.LocalRotation;
-            set{
-                float valY = value.Y;
-                
-                if(float.IsInfinity(valY) || float.IsNaN(valY)) valY = 0;
-                
-                float valX = value.X;
-                
-                if(float.IsInfinity(valX) || float.IsNaN(valX)) valX = 0;
-                
-                float valZ = value.Z;
-                
-                if(float.IsInfinity(valZ) || float.IsNaN(valZ)) valZ = 0;
+        public Vector3 LocalRotation { get; set; }
 
-                
-                _buffer.LocalRotation = new Vector3(valX, valY, valZ);
+        public Vector3 BeforeRotation
+        {
+            get => _buffer.BeforeRotation;
+            set => _buffer.BeforeRotation = value;
+        }
+        
+        public Vector3 Rotation
+        {
+            get => _buffer.Rotation;
+            set
+            {
+                if(_buffer.Rotation == value) return;
+                _buffer.Rotation = value;
             }
         }
         
-        public Vector3 LocalRotationPoint{
+        public Vector3 LocalRotationPoint
+        {
             get => _buffer.LocalRotationPoint;
             set => _buffer.LocalRotationPoint = value;
-        }
-        
-        public Vector3 AnimationRotation
-        {
-            get => _buffer.AnimationRotation;
-            set
-            {
-                float valY = value.Y;
-                
-                if(valY > 40960 || valY < -40960) valY = 0;
-                
-                float valX = value.X;
-                
-                if(valX > 40960 || valX < -40960) valX = 0;
-                
-                float valZ = value.Z;
-                
-                if(valZ > 40960 || valZ < -40960) valZ = 0;
-
-                
-                _buffer.AnimationRotation = new Vector3(valX, valY, valZ);
-            }
-        }
-        
-        public Vector3 AnimationRotationPoint
-        {
-            get => _buffer.AnimationRotationPoint;
-            set => _buffer.AnimationRotationPoint = value;
-        }
-        
-        public Vector3 AnimationPosition
-        {
-            get => _buffer.AnimationPosition;
-            set
-            {
-                float valY = value.Y;
-                
-                if(valY > 4096 || valY < -4096) valY = 0;
-                
-                float valX = value.X;
-                
-                if(valX > 4096 || valX < -4096) valX = 0;
-                
-                float valZ = value.Z;
-                
-                if(valZ > 4096 || valZ < -4096) valZ = 0;
-
-                
-                _buffer.AnimationPosition = new Vector3(valX, valY, valZ);
-            }
         }
         
         public bool ApplyFog
@@ -240,14 +167,12 @@ namespace Hedra.Engine.Rendering
             set => _buffer.Scale = value;
         }
 
-        public static ObjectMesh FromVertexData(VertexData Data)
+        public static ObjectMesh FromVertexData(VertexData Data, bool CullPrematurely = true)
         {
-            return FromVertexData(Data, Vector3.Zero);
-        }
-        
-        public static ObjectMesh FromVertexData(VertexData Data, Vector3 Position)
-        {
-            var mesh = new ObjectMesh(Position);
+            var mesh = new ObjectMesh(Vector3.Zero)
+            {
+                PrematureCulling = CullPrematurely
+            };
             Executer.ExecuteOnMainThread( delegate
             {                                                  
                 mesh.Mesh.BuildFrom(Data, false);
@@ -264,6 +189,7 @@ namespace Hedra.Engine.Rendering
         public void Dispose()
         {
             DrawManager.Remove(this);
+            UpdateManager.Remove(this);
             _buffer?.Dispose();
         }
     }

@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Animation.ColladaParser;
+using Hedra.Rendering;
 using OpenTK;
 
 
@@ -19,9 +21,9 @@ namespace Hedra.Engine.Management
     /// </summary>
     public static class AssetManager
     {
-        public static string DataFile1 => Provider.ShaderResource;
-        public static string DataFile2 => Provider.SoundResource;
-        public static string DataFile3 => Provider.AssetsResource;
+        public static string ShaderResource => Provider.ShaderResource;
+        public static string SoundResource => Provider.SoundResource;
+        public static string AssetsResource => Provider.AssetsResource;
         
         public static Vector4 ColorCode0 { get; }
         public static Vector4 ColorCode1 { get; }
@@ -62,9 +64,9 @@ namespace Hedra.Engine.Management
             Provider.GrabShaders();
         }
 
-        public static byte[] ReadPath(string Path)
+        public static byte[] ReadPath(string Path, bool Text = true)
         {
-            return Provider.ReadPath(Path);
+            return Provider.ReadPath(Path, Text);
         }
 
         public static byte[] ReadBinary(string Name, string DataFile)
@@ -107,16 +109,20 @@ namespace Hedra.Engine.Management
             return Provider.PLYLoader(File, Scale, Vector3.Zero, Vector3.Zero);
         }
 
+        public static VertexData LoadPLYWithLODs(string Filename, Vector3 Scale)
+        {
+            return Provider.LoadPLYWithLODs(Filename, Scale);
+        }
+        
         public static VertexData PLYLoader(string File, Vector3 Scale, Vector3 Position, Vector3 Rotation,
             bool HasColors = true)
         {
             return Provider.PLYLoader(File, Scale, Position, Rotation, HasColors);
         }
-
-        public static VertexData PLYLoader(byte[] Data, Vector3 Scale, Vector3 Position, Vector3 Rotation,
-            bool HasColors = true)
+        
+        public static ModelData DAELoader(string File)
         {
-            return Provider.PLYLoader(Data, Scale, Position, Rotation, HasColors);
+            return Provider.DAELoader(File);
         }
 
         public static void Dispose()

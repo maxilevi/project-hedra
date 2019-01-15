@@ -1,8 +1,8 @@
-﻿{
+{
   "Name": "Berry",
   "DisplayName": "Berry",
-  "Tier": "Misc", 
-  "Description": "Food.",
+  "Tier": "Misc",
+  "Description": "An edible morsel. Not very nourishing",
   "Attributes": [
     {
       "Name": "Amount",
@@ -10,16 +10,26 @@
     },
     {
       "Name": "Saturation",
-      "Value": 25
+      "Value": 20
     },
     {
       "Name": "Price",
       "Value": 4,
       "Hidden": true
+    },
+    {
+      "Name": "IsFood",
+      "Value": true,
+      "Hidden": true
+    },
+    {
+      "Name": "EatTime",
+      "Value": 3.0,
+      "Hidden": true
     }
   ],
   "Model": {
     "Scale": 1.0,
-    "Path": "$DataFile$/Items/Berry.ply"
+    "Path": "$DataFile$/Items/Misc/Berry.ply"
   }
 }

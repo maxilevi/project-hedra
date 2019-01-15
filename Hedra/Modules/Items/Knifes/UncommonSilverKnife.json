@@ -1,9 +1,9 @@
 {
   "Name": "UncommonSilverKnife",
   "DisplayName": "Silver Knife",
-  "EquipmentType": "Knife", 
+  "EquipmentType": "Knife",
   "Tier": "Uncommon",
-  "Description": "Silver knife.",
+  "Description": "A short blade comprised of silver, it is sharp and light.",
   "Attributes": [
     {
       "Name": "Damage",

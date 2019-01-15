@@ -1,10 +1,9 @@
-
 {
   "Name": "LegendaryPlatedGoreBow",
   "DisplayName": "Plated Gore Bow",
   "EquipmentType": "Bow",
   "Tier": "Legendary",
-  "Description": "Plated gore bow. High chance of causing bleeding.",
+  "Description": "Plated with Gold, the arrow is barbed, causing the enemy to bleed.",
   "Attributes": [
     {
       "Name": "Damage",
@@ -16,7 +15,7 @@
     },
     {
       "Name": "Effect",
-      "Value" : "Bleed"
+      "Value": "Bleed"
     }
   ],
   "Model": {

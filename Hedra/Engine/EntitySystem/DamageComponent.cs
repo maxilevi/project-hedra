@@ -16,10 +16,13 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using System.Drawing;
 using System.Linq;
-using Hedra.Engine.AISystem;
+using Hedra.AISystem;
+using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Player;
 using Hedra.Engine.Sound;
+using Hedra.EntitySystem;
+using Hedra.Sound;
 
 namespace Hedra.Engine.EntitySystem
 {
@@ -34,7 +37,7 @@ namespace Hedra.Engine.EntitySystem
         public float XpToGive { get; set; } = 8;
         public bool Immune { get; set; }
         public bool Delete { get; set; } = true;
-        private readonly List<Billboard> _damageLabels;
+        private readonly List<BaseBillboard> _damageLabels;
         private readonly List<Predicate<IEntity>> _ignoreList;
         private float _tintTimer;
         private Vector4 _targetTint;
@@ -43,7 +46,7 @@ namespace Hedra.Engine.EntitySystem
 
         public DamageComponent(IEntity Parent) : base(Parent)
         {
-            _damageLabels = new List<Billboard>();
+            _damageLabels = new List<BaseBillboard>();
             _ignoreList = new List<Predicate<IEntity>>();
         }
 
@@ -100,12 +103,11 @@ namespace Hedra.Engine.EntitySystem
                 var font = FontCache.Get(AssetManager.BoldFamily, 12 + 6 * dmgDiff, FontStyle.Bold);
                 var dmgString = ((int) Amount).ToString();
                 var missString = Immune ? "IMMUNE" : "MISS";
-                var dmgLabel = new Billboard(1.8f, !Immune && !shouldMiss ? dmgString : missString, color,
-                    font, Parent.Position)
+                var dmgLabel = new TextBillboard(1.8f, !Immune && !shouldMiss ? dmgString : missString, color,
+                    font, () => Parent.Position)
                 {
                     Vanish = true,
-                    Speed = 4,
-                    FollowFunc = () => Parent.Position
+                    VanishSpeed = 4,
                 };
                 _damageLabels.Add(dmgLabel);
             }
@@ -113,17 +115,18 @@ namespace Hedra.Engine.EntitySystem
 
             if (PlaySound)
             {
-                SoundManager.PlaySoundWithVariation(!shouldMiss ? SoundType.HitSound : SoundType.SlashSound, Parent.Position, 1f, 80f);
+                SoundPlayer.PlaySoundWithVariation(!shouldMiss ? SoundType.HitSound : SoundType.SlashSound, Parent.Position, 1f, 80f);
             }
 
             if (shouldMiss || Immune) return;
             _tintTimer = 0.25f;
             Parent.Health = Math.Max(Parent.Health - Amount, 0);
-            if (Damager != null && Damager != Parent && PushBack)
+            if (Damager != null && Damager != Parent && PushBack 
+                && Parent.Size.LengthFast < Damager.Size.LengthFast)
             {
                 var direction = -(Damager.Position - Parent.Position).Normalized();
                 var factor = 0.5f;
-                var averageSize = (Parent.Model.BaseBroadphaseBox.Size.X + Parent.Model.BaseBroadphaseBox.Size.Z) * .5f;
+                var averageSize = (Parent.Size.X + Parent.Size.Z) * .5f;
                 if (Parent is LocalPlayer) factor = 0.0f;
                 Parent.Physics.Translate(direction * factor * averageSize);
             }
@@ -131,18 +134,17 @@ namespace Hedra.Engine.EntitySystem
             if (Parent.Health <= 0 && !Parent.IsDead)
             {
                 Parent.IsDead = true;
-                var dropComponent = Parent.SearchComponent<DropComponent>();
-                dropComponent?.Drop();
-                Parent.Physics.HasCollision = false;
+                DropLoot();
+                Parent.Physics.CollidesWithEntities = false;
                 Exp = XpToGive;
                 if(Damager is LocalPlayer)
                 {
                     var delta = (int)Math.Ceiling(Exp);
-                    var label0 = new Billboard(4.0f, $"+{delta} XP", Color.Violet,
+                    var label0 = new TextBillboard(4.0f, $"+{delta} XP", Color.Violet,
                         FontCache.Get(AssetManager.BoldFamily, 48, FontStyle.Bold),
                         Parent.Position)
                     {
-                        Size = .4f,
+                        Scalar = .4f,
                         Vanish = true
                     };
                 }
@@ -153,6 +155,16 @@ namespace Hedra.Engine.EntitySystem
                 OnDamageEvent.Invoke(new DamageEventArgs(Parent, Damager, Amount, Exp));
         }
 
+        private void DropLoot()
+        {
+            var components = Parent.GetComponents<DropComponent>();
+            for (var i = 0; i < components.Length; i++)
+            {
+                components[i].Drop();
+                Parent.RemoveComponent(components[i]);
+            }
+        }
+        
 
         public IEnumerator DisposeCoroutine()
         {
@@ -160,7 +172,7 @@ namespace Hedra.Engine.EntitySystem
 
             if (Parent.Model is IDisposeAnimation animable)
             {
-                SoundManager.PlaySound(SoundType.GlassBreak, Parent.Position);
+                SoundPlayer.PlaySound(SoundType.GlassBreak, Parent.Position);
                 animable.DisposeAnimation();
 
                 while (currentTime < 4)
@@ -189,7 +201,7 @@ namespace Hedra.Engine.EntitySystem
             _ignoreList.Add(Predicate);
         }
 
-        public Billboard[] Labels => _damageLabels.ToArray();
+        public BaseBillboard[] Labels => _damageLabels.ToArray();
 
         /// <summary>
         /// Returns a bool representing if the Entity has been attacked in the last six seconds.

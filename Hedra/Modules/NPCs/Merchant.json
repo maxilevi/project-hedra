@@ -1,12 +1,23 @@
 ﻿{
   "Name": "Merchant",
   "DisplayName": "Merchant",
-  "ModelType": "Merchant",
   "Class": "Warrior",
   "Behaviour" : "Friendly",  
   "Health": 100,
   "Immune": true,
   "AttackPower": 1.0, 
-  "AttackSpeed": 1.0, 
-  "Weapons": []
+  "AttackSpeed": 1.0,
+  "Components":  [
+    {
+      "Type": "Hedra.Components.MerchantComponent",
+      "Parameters": [
+        false
+      ]
+    }
+  ],
+  "Weapons": [],
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/MerchantIdle.dae",
+    "Scale": 1.0
+  }
 }

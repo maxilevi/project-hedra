@@ -9,14 +9,22 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.AISystem;
+using Hedra.AISystem.Humanoid;
+using Hedra.Components;
+using Hedra.Core;
 using OpenTK;
-using Hedra.Engine.AISystem;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Generation;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Game;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
+using Hedra.Engine.ModuleSystem.Templates;
+using Hedra.EntitySystem;
 
 namespace Hedra.Engine.WorldBuilding
 {
@@ -26,29 +34,14 @@ namespace Hedra.Engine.WorldBuilding
     public class WorldBuilding : IWorldBuilding
     {
         private readonly List<IGroundwork> _groundwork;
-        private readonly List<Plateau> _plateaus;
+        private readonly List<BasePlateau> _plateaus;
         private readonly object _plateauLock = new object();
         private readonly object _groundworkLock = new object();
 
         public WorldBuilding()
         {
             _groundwork = new List<IGroundwork>();
-            _plateaus = new List<Plateau>();
-        }
-
-        public Entity SpawnCarriage(Vector3 Position)
-        {
-            var carriage = World.SpawnMob("QuestCarriage", Position, 1);
-            carriage.Health = carriage.MaxHealth;
-            carriage.Physics.CanCollide = true;
-            carriage.Physics.PushAround = false;
-            carriage.RemoveComponent(carriage.SearchComponent<BasicAIComponent>());
-            carriage.SearchComponent<DamageComponent>().Immune = true;
-            carriage.AddComponent(new CarriageAIComponent(carriage));
-            carriage.RemoveComponent(carriage.SearchComponent<HealthBarComponent>());
-            carriage.Removable = false;
-            World.AddEntity(carriage);
-            return carriage;
+            _plateaus = new List<BasePlateau>();
         }
 
         public Humanoid SpawnHumanoid(HumanType Type, Vector3 DesiredPosition)
@@ -65,6 +58,8 @@ namespace Hedra.Engine.WorldBuilding
         {
             var human = HumanoidFactory.BuildHumanoid(Type, Level, Behaviour);
             human.Physics.TargetPosition = World.FindPlaceablePosition(human, DesiredPosition);
+            human.Rotation = new Vector3(0, Utils.Rng.NextFloat(), 0) * 360f * Mathf.Radian;
+            ApplySeasonHats(human, Type);
             return human;
         }
 
@@ -78,47 +73,18 @@ namespace Hedra.Engine.WorldBuilding
                 Name = Undead ? "Skeleton" : "Bandit"
             };
             var isGnoll = Utils.Rng.Next(0, 4) == 1;
-            var human = this.SpawnHumanoid(isGnoll ? "Gnoll" : classType.ToString(), Level, Position, behaviour);
+            var className = isGnoll
+                ? HumanType.Gnoll.ToString()
+                : Undead
+                    ? HumanType.Skeleton.ToString()
+                    : classType.ToString();
+            var human = this.SpawnHumanoid(className, Level, Position, behaviour);
             if (isGnoll) human.AddonHealth = human.MaxHealth * .5f;
-            if (Undead)
-            {
-                human.Model = new HumanoidModel(human, HumanType.Skeleton);
-                human.Model.SetWeapon(human.MainWeapon.Weapon);
-            }
 
             if(!human.MainWeapon.Weapon.IsMelee)
                 human.AddComponent( new ArcherAIComponent(human, Friendly) );
             else
                 human.AddComponent(new WarriorAIComponent(human, Friendly));
-
-            return human;
-        }
-        
-        public Humanoid SpawnVillager(Vector3 Position, bool Move, string Name)
-        {
-            var behaviour = new HumanoidBehaviourTemplate(HumanoidBehaviourTemplate.Hostile);
-            behaviour.Name = Name;
-            var human = this.SpawnHumanoid(HumanType.Villager, Position);
-
-            human.AddComponent(new VillagerAIComponent(human, Move));
-            return human;
-        }
-
-        public Humanoid SpawnEnt(Vector3 Position)
-        {
-            var behaviour = new HumanoidBehaviourTemplate(HumanoidBehaviourTemplate.Hostile);
-            var human = this.SpawnHumanoid("Ent", 36, Position, behaviour);
-            human.AddComponent(new WarriorAIComponent(human, false));
-            human.MainWeapon = null;
-
-            var region = World.BiomePool.GetRegion(Position);
-            var woodColor = region.Colors.WoodColors[Utils.Rng.Next(0, region.Colors.WoodColors.Length)] * 2.0f;
-            human.Model.Paint(new []
-            {
-                woodColor,
-                region.Colors.LeavesColors[Utils.Rng.Next(0, region.Colors.LeavesColors.Length)],
-                woodColor * .65f
-            });
 
             return human;
         }
@@ -131,12 +97,28 @@ namespace Hedra.Engine.WorldBuilding
         public string GenerateName()
         {
             var rng = new Random(World.Seed);
-            var types = new string[]{"Islands","Lands","Mountains"};
-            return types[rng.Next(0,types.Length)]+" of "+NameGenerator.Generate(World.Seed);
+            var types = new []
+            {
+                "Lands","Mountains", "Territory"
+            };
+            return $"{types[rng.Next(0,types.Length)]} of {NameGenerator.Generate(World.Seed)}";
         }
 
+        private void ApplySeasonHats(Humanoid Human, string Type)
+        {
+            if (!string.Equals(Type, HumanType.Warrior.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
+                !string.Equals(Type, HumanType.Merchant.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
+                !string.Equals(Type, HumanType.TravellingMerchant.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
+                !string.Equals(Type, HumanType.Archer.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
+                !string.Equals(Type, HumanType.Blacksmith.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
+                !string.Equals(Type, HumanType.Rogue.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
+                !string.Equals(Type, HumanType.Mage.ToString(), StringComparison.InvariantCultureIgnoreCase)) return;
+            
+            if(Season.IsChristmas) 
+                Human.SetHelmet(ItemPool.Grab(ItemType.ChristmasHat).Helmet);
+        }
 
-        public bool CanAddPlateau(Plateau Mount, Plateau[] Candidates)
+        private bool CanAddPlateau(RoundedPlateau Mount, RoundedPlateau[] Candidates)
         {
 
             for (var i = 0; i < Candidates.Length; i++)
@@ -150,13 +132,13 @@ namespace Hedra.Engine.WorldBuilding
             return true;
         }
 
-        public bool CanAddPlateau(Plateau Mount)
+        public bool CanAddPlateau(RoundedPlateau Mount)
         {
             lock (_plateauLock)
-                return CanAddPlateau(Mount, _plateaus.ToArray());
+                return CanAddPlateau(Mount, _plateaus.Select(P => P as RoundedPlateau).Where(P => P != null).ToArray());
         }
 
-        private void RemovePlateau(Plateau Mount)
+        private void RemovePlateau(BasePlateau Mount)
         {
             lock (_plateauLock)
             {
@@ -172,44 +154,29 @@ namespace Hedra.Engine.WorldBuilding
             }
         }
 
-        private void AddPlateau(Plateau Mount)
+        private void AddPlateau(BasePlateau Mount)
         {
-            try
+            lock (_plateauLock)
             {
-                lock (_plateauLock)
-                {
-                    _plateaus.Add(Mount);
-                }
-            }
-            finally
-            {
-                this.SortPlateaus();
-            }
+                Mount.MaxHeight = ApplyMultiple(Mount.Position, Mount.MaxHeight);
+                _plateaus.Add(Mount);
+            }         
         }
 
-        private void SortPlateaus()
+        public float ApplyMultiple(Vector2 Position, float MaxHeight, params BasePlateau[] Against)
         {
-            // Plateaus should be clamped to the lowest one
-            /*lock (_plateauLock)
+            var plateaus = Against.OrderByDescending(P => P.MaxHeight).ToList();
+            for (var i = 0; i < plateaus.Count; i++)
             {
-                var doneSet = new HashSet<Plateau>();
-                for (var i = 0; i < _plateaus.Count; i++)
-                {
-                    var intersecting = new List<Plateau>();
-                    for (var j = 0; j < _plateaus.Count; j++)
-                    {
-                        if(_plateaus[j] == _plateaus[i]) continue;
-                        if(!doneSet.Contains(_plateaus[j]) && (_plateaus[j].Position - _plateaus[i].Position).LengthFast < _plateaus[i].Radius + _plateaus[j].Radius)
-                            intersecting.Add(_plateaus[j]);
-                    }
-                    var lowest = intersecting.OrderByDescending(P => P.Radius).ToArray();
-                    for (var j = 0; j < intersecting.Count; j++)
-                    {
-                       // _plateaus[j].MaxHeight = lowest[0].MaxHeight;
-                        doneSet.Add(_plateaus[j]);
-                    }
-                }
-            }*/
+                MaxHeight = plateaus[i].Apply(Position, MaxHeight, out _);
+            }
+            return MaxHeight;
+        }
+        
+        public float ApplyMultiple(Vector2 Position, float MaxHeight)
+        {
+            lock (_plateauLock)
+                return ApplyMultiple(Position, MaxHeight, _plateaus.ToArray());
         }
 
         private void AddGroundwork(IGroundwork Work)
@@ -219,14 +186,68 @@ namespace Hedra.Engine.WorldBuilding
                 _groundwork.Add(Work);
             }
         }
+
+        public BasePlateau[] GetPlateausFor(Vector2 Position)
+        {
+            lock (_plateauLock)
+            {
+                var chunkSpace = World.ToChunkSpace(Position);
+                var list = new List<BasePlateau>();
+                for (var i = 0; i < _plateaus.Count; ++i)
+                {
+                    var squared = _plateaus[i].ToBoundingBox();
+                    if (
+                        squared.Collides(chunkSpace)
+                        || squared.Collides(chunkSpace + new Vector2(Chunk.Width, 0)) 
+                        || squared.Collides(chunkSpace + new Vector2(0, Chunk.Width))
+                        || squared.Collides(chunkSpace + new Vector2(Chunk.Width, Chunk.Width))
+                        || World.ToChunkSpace(squared.BackCorner) == chunkSpace
+                        || World.ToChunkSpace(squared.FrontCorner) == chunkSpace
+                        || World.ToChunkSpace(squared.RightCorner) == chunkSpace
+                        || World.ToChunkSpace(squared.LeftCorner) == chunkSpace
+                    )
+                    {
+                        list.Add(_plateaus[i]);
+                    }
+                }
+                return list.ToArray();
+            }
+        }
+
+        public IGroundwork[] GetGroundworksFor(Vector2 Position)
+        {
+            lock (_groundworkLock)
+            {
+                var chunkSpace = World.ToChunkSpace(Position);
+                var list = new List<IGroundwork>();
+                for (var i = 0; i < _groundwork.Count; ++i)
+                {
+                    var squared = _groundwork[i].ToBoundingBox();
+                    if (
+                        squared.Collides(chunkSpace)
+                        || squared.Collides(chunkSpace + new Vector2(Chunk.Width, 0)) 
+                        || squared.Collides(chunkSpace + new Vector2(0, Chunk.Width))
+                        || squared.Collides(chunkSpace + new Vector2(Chunk.Width, Chunk.Width))
+                        || World.ToChunkSpace(squared.BackCorner) == chunkSpace
+                        || World.ToChunkSpace(squared.FrontCorner) == chunkSpace
+                        || World.ToChunkSpace(squared.RightCorner) == chunkSpace
+                        || World.ToChunkSpace(squared.LeftCorner) == chunkSpace
+                    )
+                    {
+                        list.Add(_groundwork[i]);
+                    }
+                }
+                return list.ToArray();
+            }
+        }
         
-        public Plateau[] Plateaus
+        public BasePlateau[] Plateaux
         {
             get
-            {
+            {    
                 lock (_plateauLock)
                 {
-                    return _plateaus.Select(P => P).ToArray();
+                    return _plateaus.ToArray();
                 }
             }
         }
@@ -240,12 +261,12 @@ namespace Hedra.Engine.WorldBuilding
             }
         }
 
-        private void LoopStructure(CollidableStructure Structure, Action<Plateau> PlateauDo, Action<IGroundwork> GroundworkDo)
+        private static void LoopStructure(CollidableStructure Structure, Action<BasePlateau> PlateauDo, Action<IGroundwork> GroundworkDo)
         {
             if (Structure.Mountain != null)
                 PlateauDo(Structure.Mountain);
             
-            var plateaus = Structure.Plateaus;
+            var plateaus = Structure.Plateaux.OrderByDescending(P => P.MaxHeight).ToArray();
             for (var i = 0; i < plateaus.Length; i++)
                 PlateauDo(plateaus[i]);
             

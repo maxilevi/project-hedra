@@ -8,11 +8,15 @@
  */
 
 using System;
+using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
+using Hedra.EntitySystem;
+using Hedra.Rendering;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.Player.Skills.Rogue
@@ -63,7 +67,7 @@ namespace Hedra.Engine.Player.Skills.Rogue
                 if(Utils.Rng.Next(0, KnockChance) == 0)
                     Hit.KnockForSeconds(3);
             };
-            Sound.SoundManager.PlaySound(Sound.SoundType.BowSound, Human.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
+            SoundPlayer.PlaySound(SoundType.BowSound, Human.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
         }
         
         public override void Use(){
@@ -72,7 +76,7 @@ namespace Hedra.Engine.Player.Skills.Rogue
             Casting = true;
             Player.IsAttacking = true;
             Player.LeftWeapon.InAttackStance = false;
-            Player.Model.Blend(_throwAnimation);
+            Player.Model.BlendAnimation(_throwAnimation);
             Player.Movement.Orientate();
         }
         

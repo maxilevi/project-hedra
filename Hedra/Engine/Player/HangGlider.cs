@@ -1,16 +1,20 @@
 using System;
+using Hedra.Core;
 using Hedra.Engine.Events;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 using OpenTK;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Player
 {
-    public class HangGlider : IVehicle
+    public class HangGlider : IVehicle, IDisposable
     {
-        private readonly LocalPlayer _player;
+        private readonly IPlayer _player;
         private readonly GliderModel _model;
         private Vector3 _accumulatedVelocity;
         private Vector3 _angles;
@@ -24,7 +28,7 @@ namespace Hedra.Engine.Player
         private float _upPush;
         private int _remainingParticles;
 
-        public HangGlider(LocalPlayer Player)
+        public HangGlider(IPlayer Player)
         {
             _player = Player;
             _model = new GliderModel();
@@ -44,10 +48,10 @@ namespace Hedra.Engine.Player
             };
             EventDispatcher.RegisterKeyDown(this, delegate(object Sender, KeyEventArgs EventArgs)
             {
-                if (!this.Enabled || !this._player.CanInteract || EventArgs.Key != Key.Space || _player.Stamina < _player.MaxStamina * .25f) return;
+                if (!this.Enabled || !this._player.CanInteract || EventArgs.Key != Controls.Jump || _player.Stamina < _player.MaxStamina * .25f) return;
                 this.Push(220f);
                 this._player.Stamina -= _player.MaxStamina * .25f;
-                SoundManager.PlaySoundWithVariation(SoundType.Jump, _player.Position);
+                SoundPlayer.PlaySoundWithVariation(SoundType.Jump, _player.Position);
                 _remainingParticles = 20;
             });
         }
@@ -78,15 +82,15 @@ namespace Hedra.Engine.Player
                 _player.View.MinPitch = -1.25f;
 
                 _model.Position = _player.Model.ModelPosition + Vector3.UnitY * 8f;
-                _model.BeforeLocalRotation = Vector3.UnitY * 3.5f;
-                _model.Rotation = new Vector3(_angles.X, _player.Model.Rotation.Y, 0);
+                _model.BeforeRotation = Vector3.UnitY * 3.5f;
+                _model.Rotation = new Vector3(_angles.X, _player.Model.LocalRotation.Y, 0);
                 _model.LocalRotation = Vector3.UnitZ * _angles.Z;
                 _player.Model.TransformationMatrix =
-                    Matrix4.CreateRotationY(-_player.Model.Rotation.Y * Mathf.Radian)
+                    Matrix4.CreateRotationY(-_player.Model.LocalRotation.Y * Mathf.Radian)
                     * Matrix4.CreateTranslation(Vector3.UnitY * -7.5f)
                     * Matrix4.CreateRotationZ(_angles.Z * Mathf.Radian) *
                     Matrix4.CreateRotationX(_angles.X * Mathf.Radian)
-                    * Matrix4.CreateRotationY(_player.Model.Rotation.Y * Mathf.Radian)
+                    * Matrix4.CreateRotationY(_player.Model.LocalRotation.Y * Mathf.Radian)
                     * Matrix4.CreateTranslation(Vector3.UnitY * 10f);
                 _player.Movement.Orientate();
                 _player.Physics.GravityDirection = -Vector3.UnitY * 1f;
@@ -174,5 +178,10 @@ namespace Hedra.Engine.Player
         public bool CanEnable => !_player.IsGrounded;
         
         public bool Enabled { get; private set; }
+
+        public void Dispose()
+        {
+            EventDispatcher.UnregisterKeyDown(this);
+        }
     }
 }

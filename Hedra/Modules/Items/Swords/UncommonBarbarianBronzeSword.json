@@ -1,9 +1,9 @@
 {
   "Name": "UncommonBarbarianBronzeSword",
   "DisplayName": "Bronze Machete",
-  "EquipmentType": "Sword", 
+  "EquipmentType": "Sword",
   "Tier": "Uncommon",
-  "Description": "Bronze machete.",
+  "Description": "A machete meant for cutting foliage of bronze compostion. It is dull and heavier than ideal.",
   "Attributes": [
     {
       "Name": "Damage",

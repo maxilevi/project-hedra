@@ -6,15 +6,14 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
-using OpenTK;
-using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Management;
-using Hedra.Engine.Player;
-using Hedra.Engine.Sound;
+using Hedra.Engine.WorldBuilding;
+using OpenTK;
 
-namespace Hedra.Engine.WorldBuilding
+namespace Hedra.Engine.StructureSystem
 {
     /// <inheritdoc cref="BaseStructure" />
     /// <summary>

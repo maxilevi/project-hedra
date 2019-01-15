@@ -1,9 +1,9 @@
-﻿{
+{
   "Name": "UncommonHandGuillotineAxe",
   "DisplayName": "Hand Guillotine",
-  "EquipmentType": "Axe", 
+  "EquipmentType": "Axe",
   "Tier": "Uncommon",
-  "Description": "Hand guillotine axe.",
+  "Description": "Heavy and strong, like a Guillotine, but handheld.",
   "Attributes": [
     {
       "Name": "Damage",

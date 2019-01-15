@@ -7,6 +7,8 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using Hedra.Engine.Rendering;
+using Hedra.EntitySystem;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.EntitySystem
@@ -31,11 +33,11 @@ namespace Hedra.Engine.EntitySystem
             if (Model != null)
             {
                 model.Position = this.Position;
-                model.Rotation = this.Rotation;
-                model.RotationPoint = this.RotationPoint;
                 model.LocalRotation = this.LocalRotation;
+                model.LocalRotationPoint = this.LocalRotationPoint;
+                model.Rotation = this.Rotation;
                 model.LocalPosition = this.LocalPosition;
-                model.BeforeLocalRotation = this.BeforeLocalRotation;
+                model.BeforeRotation = this.BeforeRotation;
                 model.TransformationMatrix = this.TransformationMatrix;
                 model.Scale = this.Scale;
                 model.Alpha = this.Alpha;

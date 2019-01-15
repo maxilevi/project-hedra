@@ -8,6 +8,7 @@
  */
 using System;
 using System.Collections.Generic;
+using Hedra.Engine.IO;
 
 namespace Hedra.Engine.Management
 {
@@ -58,7 +59,7 @@ namespace Hedra.Engine.Management
 
         private static void ScheduleGC(PoolItem<T> Item)
         {
-            TaskManager.Delay(GCDelay, () => Item.Locked = false);
+            TaskScheduler.DelayFrames(GCDelay, () => Item.Locked = false);
         }
     }
 

@@ -16,7 +16,6 @@ using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Game;
@@ -28,8 +27,10 @@ namespace Hedra.Engine.StructureSystem
     /// </summary>
     public class StructureHandler
     {
+        private static readonly RandomDistribution Distribution;
         private readonly object _lock = new object();
         public Vector3 MerchantPosition { get; set; }
+        public bool SpawnCampfireSpawned { get; set; }
         public bool MerchantSpawned { get; set; }
         public Voronoi SeedGenerator { get; }
         private readonly List<StructureWatcher> _itemWatchers;
@@ -38,6 +39,11 @@ namespace Hedra.Engine.StructureSystem
         private bool _dirtyStructuresItems;
         private bool _dirtyStructures;
 
+        static StructureHandler()
+        {
+            Distribution = new RandomDistribution(true);
+        }
+        
         public StructureHandler()
         {
             _itemWatchers = new List<StructureWatcher>();
@@ -52,7 +58,7 @@ namespace Hedra.Engine.StructureSystem
                 for (var i = _itemWatchers.Count-1; i > -1; --i)
                 {
                     var item = _itemWatchers[i];
-                    if (ShouldRemove(GameManager.Player.Loader.Offset, item.Structure))
+                    if (ShouldRemove(Chunk.Position.Xz, item.Structure))
                     {
                         item.Dispose();
                         _itemWatchers.RemoveAt(i);
@@ -64,7 +70,8 @@ namespace Hedra.Engine.StructureSystem
 
         private bool ShouldRemove(Vector2 Offset, CollidableStructure Structure)
         {
-            return Structure.Design.ShouldRemove(Offset, Structure) && Structure.Built;
+            /* Offset is not used because this causes issues when chunks are deleted at chunk edges */
+            return Structure.Design.ShouldRemove(GameManager.Player.Loader.Offset, Structure) && Structure.Built;
         }
 
         public static void CheckStructures(Vector2 ChunkOffset)
@@ -72,7 +79,6 @@ namespace Hedra.Engine.StructureSystem
             if (!World.IsChunkOffset(ChunkOffset))
                 throw new ArgumentException("Provided parameter does not represent a valid offset");
 
-            var distribution = new RandomDistribution(true);
             var underChunk = World.GetChunkAt(ChunkOffset.ToVector3());
             var region = underChunk != null
                 ? underChunk.Biome
@@ -81,7 +87,7 @@ namespace Hedra.Engine.StructureSystem
             for (var i = 0; i < designs.Length; i++)
             {
                 if (designs[i].MeetsRequirements(ChunkOffset))
-                    designs[i].CheckFor(ChunkOffset, region, distribution);
+                    designs[i].CheckFor(ChunkOffset, region, Distribution);
             }
         }
 
@@ -112,6 +118,7 @@ namespace Hedra.Engine.StructureSystem
         {
             this.MerchantPosition = Vector3.Zero;
             this.MerchantSpawned = false;
+            this.SpawnCampfireSpawned = false;
             lock (_lock)
             {
                 for (var i = _itemWatchers.Count - 1; i > -1; i--)
@@ -155,7 +162,9 @@ namespace Hedra.Engine.StructureSystem
             {
                 if (_dirtyStructures || _structureCache == null)
                 {
-                    _structureCache = _itemWatchers.Select(I => I.Structure.WorldObject).ToArray();
+                    _structureCache = _itemWatchers.SelectMany(
+                        I => I.Structure.WorldObject.Children.Concat(new [] { I.Structure.WorldObject })
+                        ).ToArray();
                     _dirtyStructures = false;
                 }
                 return _structureCache;

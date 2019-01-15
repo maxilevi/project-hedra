@@ -12,7 +12,9 @@ using Hedra.Engine.Scenes;
 using Hedra.Engine.Player;
 using System.IO;
 using System.Linq;
+using Hedra.Core;
 using Hedra.Engine.Game;
+using Hedra.Sound;
 using OpenTK.Audio;
 using OpenTK.Audio.OpenAL;
 using NVorbis;
@@ -55,7 +57,7 @@ namespace Hedra.Engine.Management
 
         public static void Load()
         {
-            Load(new SoundSource(SoundManager.ListenerPosition));
+            Load(new SoundSource(SoundPlayer.ListenerPosition));
         }
 
         public static void Load(SoundSource Source)
@@ -77,7 +79,8 @@ namespace Hedra.Engine.Management
                 "Sounds/Soundtrack/ThroughTheGrasslands.ogg",
                 "Sounds/Soundtrack/BreathOfDay.ogg",
                 "Sounds/Soundtrack/TheVillage.ogg",
-                "Sounds/Soundtrack/AdventurersMinuet.ogg"
+                "Sounds/Soundtrack/AdventurersMinuet.ogg",
+                "Sounds/Soundtrack/Obelisk.ogg"
             };
             _loopableSongsStart = Array.IndexOf(TrackNames, forestTrack);
             ShuffleSongs();
@@ -139,7 +142,7 @@ namespace Hedra.Engine.Management
             _receivedBytes = -1;
             _reader?.Dispose();
 
-            byte[] bytes = AssetManager.ReadBinary(TrackNames[_trackIndex], AssetManager.DataFile2);
+            byte[] bytes = AssetManager.ReadBinary(TrackNames[_trackIndex], AssetManager.SoundResource);
             Stream stream = new MemoryStream(bytes);
             _reader = new VorbisReader(stream, true);
         }
@@ -148,7 +151,7 @@ namespace Hedra.Engine.Management
         {
             if ( !_loaded || GameSettings.Paused && !GameManager.InStartMenu || GameManager.IsLoading || TrackNames.Length == 0 || _trackIndex < 0) return;
             
-            Source.Position = SoundManager.ListenerPosition;
+            Source.Position = SoundPlayer.ListenerPosition;
 
             if (_sleepTime)
             {
@@ -194,11 +197,11 @@ namespace Hedra.Engine.Management
                 //Default buffer
                 if(_usedBuffer == null || (_frontBuffer != null && _usedBuffer.ID == _frontBuffer.ID) ){
                     _backBuffer?.Dispose();
-                    _backBuffer = new SoundBuffer(data, SoundManager.GetSoundFormat(_reader.Channels, 16), _reader.SampleRate);
+                    _backBuffer = new SoundBuffer(data, SoundPlayer.GetSoundFormat(_reader.Channels, 16), _reader.SampleRate);
                     _usedBuffer = _backBuffer;
                 } else if(_usedBuffer.ID == _backBuffer.ID){
                     _frontBuffer?.Dispose();
-                    _frontBuffer = new SoundBuffer(data, SoundManager.GetSoundFormat(_reader.Channels, 16), _reader.SampleRate);
+                    _frontBuffer = new SoundBuffer(data, SoundPlayer.GetSoundFormat(_reader.Channels, 16), _reader.SampleRate);
                     _usedBuffer = _frontBuffer;
                 }
                 _buildBuffers = false;

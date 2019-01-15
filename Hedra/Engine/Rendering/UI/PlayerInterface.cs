@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
@@ -7,7 +8,7 @@ namespace Hedra.Engine.Rendering.UI
 {
     public delegate void OnPlayerInterfaceStateChangeEventHandler(bool Show);
 
-    public abstract class PlayerInterface
+    public abstract class PlayerInterface : IDisposable
     {
         private static readonly List<PlayerInterface> Interfaces;
         private static PlayerInterface _openedInterface;
@@ -15,6 +16,7 @@ namespace Hedra.Engine.Rendering.UI
         public static bool Showing => _openedInterface != null;
         public abstract Key OpeningKey { get; }
         public abstract bool Show { get; set; }
+        protected virtual bool Disabled { get; }
 
         protected PlayerInterface()
         {
@@ -39,10 +41,10 @@ namespace Hedra.Engine.Rendering.UI
             switch (Args.Key)
             {
                 case Key.Escape:
-                    PlayerInterface.OnEscapeDown(Args);
+                    OnEscapeDown(Args);
                     break;
                 default:
-                    PlayerInterface.ManageOpened(Args);
+                    ManageOpened(Args);
                     break;
             }
         }
@@ -52,7 +54,7 @@ namespace Hedra.Engine.Rendering.UI
             for (var i = 0; i < Interfaces.Count; i++)
             {
                 if (Interfaces[i].OpeningKey != Args.Key || GameSettings.Paused || GameManager.Player.IsDead ||
-                    !GameManager.Player.CanInteract || GameManager.IsLoading) continue;
+                    !GameManager.Player.CanInteract || GameManager.IsLoading || Interfaces[i].Disabled) continue;
                 if (_openedInterface == null)
                 {
                     Interfaces[i].Show = true;
@@ -101,6 +103,11 @@ namespace Hedra.Engine.Rendering.UI
                 Interface.Show = false;
                 _openedInterface = null;
             }
+        }
+
+        public void Dispose()
+        {
+            EventDispatcher.UnregisterKeyDown(typeof(EventDispatcher));
         }
     }
 }

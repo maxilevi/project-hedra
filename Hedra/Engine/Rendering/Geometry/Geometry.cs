@@ -1,4 +1,5 @@
 using System;
+using Hedra.Core;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering.Geometry
@@ -101,7 +102,7 @@ namespace Hedra.Engine.Rendering.Geometry
                 b1 = vertexData[cornerB] - vertexData[cornerA];
                 b2 = vertexData[cornerC] - vertexData[cornerA];
 
-                normal = Mathf.CrossProduct(b1, b2).Normalized();
+                normal = Vector3.Cross(b1, b2).Normalized();
 
                 normalData[cornerA] += normal;
                 normalData[cornerB] += normal;

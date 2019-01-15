@@ -8,6 +8,12 @@
 
   "Plains": [
     {
+      "Type": "Cow",
+      "Chance": 15.0,
+      "MinGroup": 1,
+      "MaxGroup": 2
+    },
+    {
       "Type": "Sheep",
       "Chance": 35.0,
       "MinGroup" : 3,
@@ -15,17 +21,17 @@
     },
     {
       "Type": "Horse",
-      "Chance": 25.0,
+      "Chance": 20.0,
       "MinGroup" : 2,
       "MaxGroup": 3
     },
     {
       "Type": "Boar",
-      "Chance": 15.0
+      "Chance": 10.0
     },
     {
       "Type": "Wasp",
-      "Chance": 15.0,
+      "Chance": 10.0,
       "MinGroup": 1,
       "MaxGroup": 2
     },

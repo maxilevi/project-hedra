@@ -1,6 +1,9 @@
+using System;
 using System.Drawing;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.IO;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
@@ -9,7 +12,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Game
 {
-    public class LoadingScreen : IUpdatable
+    public class LoadingScreen : IUpdatable, IDisposable
     {
         private Texture _loadingScreen;
         private GUIText _playerText;
@@ -47,7 +50,7 @@ namespace Hedra.Engine.Game
                     _text += ".";
                     _time = 0;
                     if (_text.Contains("...."))
-                        _text = "LOADING";
+                        _text = Translations.Get("loading");
                 }
                 _playerText.Text = _text;
                 _loadingScreen.TextureElement.Opacity = 1;
@@ -87,9 +90,14 @@ namespace Hedra.Engine.Game
         {
             if(IsLoaded() || (!Program.GameWindow?.SplashScreen?.FinishedLoading ?? true)) return;
             IsLoading = true;
-            _text = "LOADING";
+            _text = Translations.Get("loading");
         }
         
         public bool IsLoading { get; private set; }
+
+        public void Dispose()
+        {
+            UpdateManager.Remove(this);
+        }
     }
 }

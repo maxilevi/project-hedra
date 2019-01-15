@@ -7,7 +7,9 @@
 
 using System;
 using System.Collections.Generic;
+using Hedra.Core;
 using Hedra.Engine.Generation;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering.Geometry
@@ -431,7 +433,6 @@ namespace Hedra.Engine.Rendering.Geometry
                 NewTri.P[0] = VertList[TriTable[CubeIndex, i + 0]];
                 NewTri.P[1] = VertList[TriTable[CubeIndex, i + 1]];
                 NewTri.P[2] = VertList[TriTable[CubeIndex, i + 2]];
-                //Log.WriteLine(NewTri.P[0] + " | " + NewTri.P[1] + " | "+ NewTri.P[2]);
                 TriangleList.Add(NewTri);
             }
             return TriangleList.ToArray();
@@ -490,7 +491,7 @@ namespace Hedra.Engine.Rendering.Geometry
                     Data.Vertices.Add(Triangles[i].P[1]);
                     Data.Vertices.Add(Triangles[i].P[2]);
                     
-                    Vector3 Normal = Mathf.CrossProduct(Triangles[i].P[1] - Triangles[i].P[0], Triangles[i].P[2] - Triangles[i].P[0]).Normalized();
+                    Vector3 Normal = Vector3.Cross(Triangles[i].P[1] - Triangles[i].P[0], Triangles[i].P[2] - Triangles[i].P[0]).Normalized();
                     Data.Normals.Add(Normal);
                     Data.Normals.Add(Normal);
                     Data.Normals.Add(Normal);

@@ -1,0 +1,33 @@
+{
+  "Name" : "Pig",
+  "MaxHealth": 234.0,
+  "AttackDamage": 3.0,
+  "Speed": 1.15,
+  "XP": 4.0,
+  "Level": 6,
+  "AIType": "Pig",
+  "Effects": [],
+  "Drops": [],
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/PigIdle.dae",
+    "Scale": 4.0,
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/BoarIdle.dae",
+        "Speed": 1.0
+      }
+    ],
+    "WalkAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/BoarWalk.dae",
+        "Speed": 1.0
+      }
+    ],
+    "AttackAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/BoarAttack.dae",
+        "Speed": 1.15
+      }
+    ]
+  }
+}

@@ -5,6 +5,7 @@ using Hedra;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.ModuleSystem;
+using Hedra.EntitySystem;
 using HedraTests.Player;
 using NUnit.Framework;
 
@@ -13,6 +14,7 @@ namespace HedraTests.Game
     [TestFixture]
     public class MobBalanceTest : BaseTest
     {
+        private static bool _loaded;
         private readonly MobBalanceSheet _sheet = new MobBalanceSheet();
 
         [TestCaseSource(nameof(Mobs))]
@@ -70,6 +72,11 @@ namespace HedraTests.Game
         {
             BaseTest.MockEngine();
             GameManager.Player = new PlayerMock();
+            if (!_loaded)
+            {
+                HedraContent.Register();
+                _loaded = true;
+            }
             var factories = MobLoader.LoadModules(GameLoader.AppPath);
             for (var i = 0; i < factories.Length; i++)
             {

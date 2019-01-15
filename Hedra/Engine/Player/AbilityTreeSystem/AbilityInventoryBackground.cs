@@ -1,5 +1,6 @@
 using System.Drawing;
 using Hedra.Engine.Player.Inventory;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
@@ -16,7 +17,8 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 
         public override void UpdateView(IHumanoid Human)
         {
-            base.UpdateView(Human);
+            Name.Text = Human.Name;
+            Level.Text = $"LEVEL {Human.Level}";
             TopLeftText.Text = $"{Human.HealthRegen:0.00} HP/s";
             BottomLeftText.Text = $"{Human.AttackSpeed:0.00} AS";
             TopRightText.Text = $"{Human.ManaRegen:0.00} MP/s";

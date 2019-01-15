@@ -1,6 +1,8 @@
 using System;
+using Hedra.Core;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
+using Hedra.Engine.Localization;
 using OpenTK;
 using OpenTK.Input;
 
@@ -24,19 +26,19 @@ namespace Hedra.Engine.Player.BoatSystem
         public void Update()
         {
             const float propulsionFactor = 35.0f;
-            var any = GameManager.Keyboard[Key.W] || GameManager.Keyboard[Key.A] || GameManager.Keyboard[Key.D];
-            if (GameManager.Keyboard[Key.W])
+            var any = GameManager.Keyboard[Controls.Forward] || GameManager.Keyboard[Controls.Leftward] || GameManager.Keyboard[Controls.Rightward];
+            if (GameManager.Keyboard[Controls.Forward])
             {
                 _accumulatedDirection = _player.View.Forward * propulsionFactor;
             }
-            if (GameManager.Keyboard[Key.A])
+            if (GameManager.Keyboard[Controls.Leftward])
             {
-                var dir = GameManager.Keyboard[Key.W] ? (_player.View.Left + _player.View.Forward) * .5f : _player.View.Left;
+                var dir = GameManager.Keyboard[Controls.Forward] ? (_player.View.Left + _player.View.Forward) * .5f : _player.View.Left;
                 _accumulatedDirection = dir * propulsionFactor;
             }
-            if (GameManager.Keyboard[Key.D])
+            if (GameManager.Keyboard[Controls.Rightward])
             {
-                var dir = GameManager.Keyboard[Key.W] ? (_player.View.Right + _player.View.Forward) * .5f : _player.View.Right;
+                var dir = GameManager.Keyboard[Controls.Forward] ? (_player.View.Right + _player.View.Forward) * .5f : _player.View.Right;
                 _accumulatedDirection = dir * propulsionFactor;
             }
             if (_accumulatedDirection.LengthFast > .005f)
@@ -60,20 +62,20 @@ namespace Hedra.Engine.Player.BoatSystem
             _yaw = Mathf.Lerp(_yaw, _player.View.StackedYaw, (float)Time.DeltaTime * 2f);
 
             _player.Model.TransformationMatrix =
-                Matrix4.CreateRotationY(-_player.Model.Rotation.Y * Mathf.Radian)
+                Matrix4.CreateRotationY(-_player.Model.LocalRotation.Y * Mathf.Radian)
                 * Matrix4.CreateRotationZ(_angles.Z * Mathf.Radian)
                 * Matrix4.CreateRotationX(_angles.X * Mathf.Radian)
-                * Matrix4.CreateRotationY(_player.Model.Rotation.Y * Mathf.Radian);
+                * Matrix4.CreateRotationY(_player.Model.LocalRotation.Y * Mathf.Radian);
         }
 
         private void HandleCharacterRotation()
         {
             _characterRotation = _player.FacingDirection;
-            if (GameManager.Keyboard[Key.D]) _characterRotation += -90f;
-            if (GameManager.Keyboard[Key.A]) _characterRotation += 90f;
-            if (GameManager.Keyboard[Key.W]) _characterRotation += 0f;
-            if (GameManager.Keyboard[Key.W] && GameManager.Keyboard[Key.D]) _characterRotation += 45f;
-            if (GameManager.Keyboard[Key.W] && GameManager.Keyboard[Key.A]) _characterRotation += -45f;
+            if (GameManager.Keyboard[Controls.Rightward]) _characterRotation += -90f;
+            if (GameManager.Keyboard[Controls.Leftward]) _characterRotation += 90f;
+            if (GameManager.Keyboard[Controls.Forward]) _characterRotation += 0f;
+            if (GameManager.Keyboard[Controls.Forward] && GameManager.Keyboard[Controls.Rightward]) _characterRotation += 45f;
+            if (GameManager.Keyboard[Controls.Forward] && GameManager.Keyboard[Controls.Leftward]) _characterRotation += -45f;
         }
 
         public bool ShouldDrift { get; private set; }

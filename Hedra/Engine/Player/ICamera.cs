@@ -12,15 +12,13 @@ namespace Hedra.Engine.Player
         float MinDistance { get; set; }
         float MaxPitch { get; set; }
         float MinPitch { get; set; }
-        float AddonDistance { get; set; }
+        float AddedDistance { get; set; }
         float Distance { get; set; }
         float WheelSpeed { get; set; }
         bool CaptureMovement { get; set; }
         bool LockMouse { get; set; }
         Matrix4 ModelViewMatrix { get; }
         Func<Vector3> PositionDelegate { get; set; }
-        int XDelta { get; }
-        int YDelta { get; }
         float Pitch { get; set; }
         float Yaw { get; set; }
         float StackedYaw { get; }
@@ -31,10 +29,8 @@ namespace Hedra.Engine.Player
         Vector3 Right { get; }
         Vector3 Left { get; }
         Vector3 CameraHeight { get; set; }
-        Vector3 CameraPosition { get; }
+        Vector3 CameraEyePosition { get; }
         Vector3 CrossDirection { get; }
-        Vector3 CrossPosition { get; }
-        Matrix4 ViewMatrix { get; }
         void Update();
         void BuildCameraMatrix();
         void Reset();

@@ -10,11 +10,14 @@
 using System;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Sound;
+using Hedra.EntitySystem;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.Player.Skills.Warrior
@@ -77,8 +80,8 @@ namespace Hedra.Engine.Player.Skills.Warrior
         
         public override void Use()
         {
-            SoundManager.PlaySound(SoundType.SlashSound, Player.Position);
-            Player.Model.Blend(_bashAnimation);
+            SoundPlayer.PlaySound(SoundType.SlashSound, Player.Position);
+            Player.Model.BlendAnimation(_bashAnimation);
         }
 
         private float Damage => Math.Min(BaseDamage + DamageChangeRate * Level, DamageCap);

@@ -12,6 +12,7 @@ namespace Hedra.Engine.PhysicsSystem
         private readonly AnimatedColliderData _colliderData;
         private readonly CollisionShape[] _shapes;
         private CollisionShape _defaultBroadphaseShape;
+        private CollisionShape _horizontalBroadphaseShape;
 
         public AnimatedCollider(string Identifier, AnimatedModel Model)
         {
@@ -20,6 +21,25 @@ namespace Hedra.Engine.PhysicsSystem
             this._shapes = new CollisionShape[_colliderData.BonesData.Length];
         }
 
+        public CollisionShape HorizontalBroadphase
+        {
+            get
+            {
+                var transforms = Model.JointTransforms;
+                if (_horizontalBroadphaseShape == null)
+                    _horizontalBroadphaseShape = new CollisionShape(new Vector3[_colliderData.DefaultBroadphase.Length]);
+                for (var i = 0; i < _horizontalBroadphaseShape.Vertices.Length; i++)
+                {
+                    _horizontalBroadphaseShape.Vertices[i] = Vector3.TransformPosition(
+                        _colliderData.DefaultBroadphase[i].Vertex,
+                        transforms[(int)_colliderData.DefaultBroadphase[i].Id.X]
+                    );
+                }
+                _horizontalBroadphaseShape.RecalculateBroadphase(new Vector3(1, 0, 1));
+                return _horizontalBroadphaseShape;
+            }
+        }
+        
         public CollisionShape Broadphase
         {
             get

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Hedra.BiomeSystem;
+using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ComplexMath;
@@ -11,6 +13,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
@@ -27,7 +30,7 @@ namespace Hedra.Engine.StructureSystem
             var fortModel = AssetManager.PLYLoader("Assets/Env/Fort1.ply", Vector3.One * 1.5f, Vector3.Zero, Vector3.Zero);
 
             var transMatrix = Matrix4.Identity;
-            transMatrix *= Matrix4.CreateRotationY(rng.NextFloat() * 360);
+            transMatrix *= Matrix4.CreateRotationY(rng.NextFloat() * 360 * Mathf.Radian);
             transMatrix *= Matrix4.CreateTranslation(position);
             fortModel.Transform(transMatrix);
 

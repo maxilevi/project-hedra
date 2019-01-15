@@ -1,7 +1,9 @@
 using System.Drawing;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 
 namespace Hedra.Engine.Player.Inventory
 {
@@ -69,9 +71,14 @@ namespace Hedra.Engine.Player.Inventory
                 price = Item.GetAttribute<int>(CommonAttributes.Price);
             }
             price *= 1 + ((float) Item.Tier / (float) (ItemTier.Misc - 1)) * .5f;
-            return (int) (price *(_buyerInterface.Array.Contains(Item) ? 0.5f : 1.25f));
+            return (int) (price * GetPriceMultiplier(Item));
         }
 
+        protected virtual float GetPriceMultiplier(Item Item)
+        {
+            return _buyerInterface.Array.Contains(Item) ? 0.5f : 1.25f;
+        }
+        
         public void ProcessTrade(Humanoid Buyer, Humanoid Seller,
     InventoryArrayInterface BuyerInterface, InventoryArrayInterface SellerInterface, Item Item, int Price)
         {
@@ -99,7 +106,7 @@ namespace Hedra.Engine.Player.Inventory
                     if (!BuyerInterface.Array.AddItem(oneItem))
                     {
                         World.DropItem(oneItem, Buyer.Position);
-                        SoundManager.PlaySound(SoundType.NotificationSound, Buyer.Position);
+                        SoundPlayer.PlaySound(SoundType.NotificationSound, Buyer.Position);
                     }
                 }
                 else
@@ -109,14 +116,14 @@ namespace Hedra.Engine.Player.Inventory
                     if (!BuyerInterface.Array.AddItem(Item))
                     {
                         World.DropItem(Item, Buyer.Position);
-                        SoundManager.PlaySound(SoundType.NotificationSound, Buyer.Position);
+                        SoundPlayer.PlaySound(SoundType.NotificationSound, Buyer.Position);
                     }
                 }
-                SoundManager.PlaySound(SoundType.TransactionSound, Buyer.Position);
+                SoundPlayer.PlaySound(SoundType.TransactionSound, Buyer.Position);
             }
             else
             {
-                Buyer.MessageDispatcher.ShowNotification("NOT ENOUGH MONEY", Color.Red, 3f);
+                Buyer.MessageDispatcher.ShowNotification(Translations.Get("not_enough_money"), Color.Red, 3f);
             }
             OnTransactionComplete?.Invoke(Item, Price);
         }

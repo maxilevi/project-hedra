@@ -3,9 +3,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Game
@@ -63,7 +65,7 @@ namespace Hedra.Engine.Game
             try
             {
                 Log.WriteLine("Attemping to load sound engine...");
-                SoundManager.Load();
+                SoundPlayer.Load();
                 SoundtrackManager.Load();
                 Log.WriteLine("Sound engine loaded succesfully");
             }

@@ -8,12 +8,15 @@
  */
 
 using System;
+using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
+using Hedra.EntitySystem;
 using OpenTK;
 using OpenTK.Input;
 
@@ -27,10 +30,11 @@ namespace Hedra.Engine.WorldBuilding
     
     public abstract class InteractableStructure : BaseStructure, IUpdatable
     {
-        public virtual float InteractionAngle => .9f;
+        protected virtual float InteractionAngle => .75f;
+        protected virtual bool SingleUse => true;
         protected virtual bool DisposeAfterUse => true;
         protected virtual bool CanInteract => true;
-        public virtual Key Key => Key.E;
+        public virtual Key Key => Controls.Interact;
         public abstract string Message { get; }
         public abstract int InteractDistance { get; }
         public bool Interacted { get; private set; }
@@ -43,7 +47,7 @@ namespace Hedra.Engine.WorldBuilding
         {
             EventDispatcher.RegisterKeyDown(this, delegate (object Sender, KeyEventArgs EventArgs)
             {
-                if (_canInteract && Key == EventArgs.Key && !Interacted)
+                if (_canInteract && Key == EventArgs.Key && (!Interacted || !SingleUse))
                 {
                     _shouldInteract = true;
                     EventArgs.Cancel();
@@ -54,21 +58,26 @@ namespace Hedra.Engine.WorldBuilding
 
         public virtual void Update()
         {
+            if ((Position - GameManager.Player.Position).LengthSquared < 128 * 128)
+                DoUpdate();
+        }
+
+        protected virtual void DoUpdate()
+        {
             var player = GameManager.Player;
 
             bool IsInLookingAngle() => Vector2.Dot((this.Position - player.Position).Xz.NormalizedFast(),
-                player.View.LookingDirection.Xz.NormalizedFast()) > .9f;                
+                player.View.LookingDirection.Xz.NormalizedFast()) > InteractionAngle;                
             
-            bool IsInRadius() => (this.Position - player.Position).LengthSquared < InteractDistance * InteractDistance;
-
-            if (IsInLookingAngle() && IsInRadius() && !Interacted && CanInteract)
+            if (IsInRadius() && IsInLookingAngle() && (!Interacted || !SingleUse) && CanInteract)
             {
                 player.MessageDispatcher.ShowMessageWhile($"[{Key.ToString()}] {Message}", () => !Disposed && IsInLookingAngle() && IsInRadius());
                 _canInteract = true;
-                if(!_selected) this.OnSelected(player);
-                if (_shouldInteract && !Interacted && !Disposed && CanInteract)
+                if(!_selected) OnSelected(player);
+                if (_shouldInteract && (!Interacted || !SingleUse) && !Disposed && CanInteract)
                 {
-                    this.InvokeInteraction(player);
+                    InvokeInteraction(player);
+                    if (!SingleUse) _shouldInteract = false;
                 }
                 else
                 {
@@ -82,26 +91,30 @@ namespace Hedra.Engine.WorldBuilding
             }
         }
 
-        
-        public void InvokeInteraction(IPlayer Player)
+        private bool IsInRadius()
         {
-            Interacted = true;
-            this.Interact(Player);
-            OnInteractEvent?.Invoke(Player);
-            if(DisposeAfterUse) this.Dispose();
+            return (Position - GameManager.Player.Position).LengthSquared < InteractDistance * InteractDistance;
         }
 
-        protected virtual void OnSelected(IPlayer Interactee)
+        public void InvokeInteraction(IHumanoid Humanoid)
+        {
+            Interacted = true;
+            this.Interact(Humanoid);
+            OnInteractEvent?.Invoke(Humanoid);
+            if(DisposeAfterUse && SingleUse) this.Dispose();
+        }
+
+        protected virtual void OnSelected(IHumanoid Humanoid)
         {
             _selected = true;
         }
 
-        protected virtual void OnDeselected(IPlayer Interactee)
+        protected virtual void OnDeselected(IHumanoid Humanoid)
         {
             _selected = false;
         }
 
-        protected abstract void Interact(IPlayer Interactee);
+        protected abstract void Interact(IHumanoid Humanoid);
 
         public override void Dispose()
         {

@@ -1,23 +1,32 @@
 using System;
 using System.Runtime.InteropServices;
+using Hedra.BiomeSystem;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
 {
     public class VillageDesign : StructureDesign
     {
-        public override int Radius { get; set; } = 1024 + 512;
+        public const int MaxVillageSize = 18;
+        public const int MinVillageSize = 12;
+        public const int PlateauVillageRatio = 64;
+        public const int MaxVillageRadius = MaxVillageSize * PlateauVillageRatio;
+        public const int PathWidth = 16;
+        public const float Spacing = 114;
+        public override int Radius { get; set; } = MaxVillageRadius;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.VillageIcon);
 
         public override void Build(CollidableStructure Structure)
@@ -30,9 +39,10 @@ namespace Hedra.Engine.StructureSystem
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
         {
             var structure = base.Setup(TargetPosition, Rng, new Village(TargetPosition));
-            structure.Mountain.Radius = 200;
             var region = World.BiomePool.GetRegion(TargetPosition);
             var builder = new VillageAssembler(structure, VillageLoader.Designer[region.Structures.VillageType], Rng);
+            structure.Mountain.Radius = builder.Size * PlateauVillageRatio;
+            structure.Mountain.Hardness = 1.5f;
             var design = builder.DesignVillage();
             design.Translate(TargetPosition);
             builder.PlaceGroundwork(design);
@@ -48,14 +58,9 @@ namespace Hedra.Engine.StructureSystem
             return BiomeGenerator.PathFormula(ChunkOffset.X, ChunkOffset.Y) > 0 && Rng.Next(0, 25) == 1 && height > BiomePool.SeaLevel;
         }
 
-        private string CreateName(int Seed)
-        {
-            return NameGenerator.Generate(Seed);
-        }
-
         public override void OnEnter(IPlayer Player)
         {
-            Player.MessageDispatcher.ShowTitleMessage($"WELCOME TO {NameGenerator.Generate(World.Seed)}", 6f);
+            Player.MessageDispatcher.ShowTitleMessage(Translations.Get("welcome_to_village", NameGenerator.Generate(World.Seed + 23123)), 6f);
         }
         
         public override int[] AmbientSongs => new []

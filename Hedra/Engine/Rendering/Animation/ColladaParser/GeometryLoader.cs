@@ -11,6 +11,7 @@ using System.Globalization;
 using OpenTK;
 using System.Xml;
 using System.Collections.Generic;
+using Hedra.Core;
 
 namespace Hedra.Engine.Rendering.Animation.ColladaParser
 {
@@ -66,7 +67,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
                 
                 Weights.Add(new Vector3(s,q,r));
             }
-            return new ModelData(Positions.ToArray(), ColorsList.ToArray(), NormalsList.ToArray(), Indices.ToArray(), JointIds.ToArray(), Weights.ToArray(), 1);
+            return new ModelData(Positions.ToArray(), ColorsList.ToArray(), NormalsList.ToArray(), Indices.ToArray(), JointIds.ToArray(), Weights.ToArray());
         }
     
         private void ReadRawData(XmlNode PolyNode) {

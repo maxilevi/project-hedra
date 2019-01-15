@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using Hedra.Core;
 using Hedra.Engine.Management;
 using OpenTK.Graphics.OpenGL4;
 

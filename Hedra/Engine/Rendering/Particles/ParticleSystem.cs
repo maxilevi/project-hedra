@@ -7,10 +7,13 @@
 using System;
 using Hedra.Engine.Player;
 using System.Collections.Generic;
+using System.Reflection;
+using Hedra.Core;
 using Hedra.Engine.Game;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using Hedra.Engine.Management;
+using Hedra.Rendering.Particles;
 
 namespace Hedra.Engine.Rendering.Particles
 {
@@ -64,7 +67,7 @@ namespace Hedra.Engine.Rendering.Particles
         
         public void Emit()
         {
-            if( (this.Position - LocalPlayer.Instance.Position).LengthSquared > 512*512) return;
+            if( (this.Position - LocalPlayer.Instance.Position).LengthSquared > GeneralSettings.DrawDistanceSquared) return;
             
             if(Particles.Count == MaxParticles || !Enabled || (GameSettings.Paused && Particle3D.UseTimeScale)) return;
             
@@ -118,7 +121,7 @@ namespace Hedra.Engine.Rendering.Particles
         
         public void Update()
         {
-            if(!HasMultipleOutputs && (this.Position - LocalPlayer.Instance.Position).LengthSquared > 512*512) return;
+            if(!HasMultipleOutputs && (this.Position - LocalPlayer.Instance.Position).LengthSquared > GeneralSettings.DrawDistanceSquared) return;
             
             for(int i = 0; i < Particles.Count; i++){
                 if(this.RandomRotation)
@@ -132,7 +135,7 @@ namespace Hedra.Engine.Rendering.Particles
         
         public void Draw()
         {
-            if(!HasMultipleOutputs && (this.Position - LocalPlayer.Instance.Position).LengthSquared > 512*512) return;
+            if(!HasMultipleOutputs && (this.Position - LocalPlayer.Instance.Position).LengthSquared > GeneralSettings.DrawDistanceSquared) return;
             
             if(Particles.Count > 0){
                 Renderer.Enable(EnableCap.Blend);
@@ -234,17 +237,12 @@ namespace Hedra.Engine.Rendering.Particles
             return TransMatrix;
         }
         
-        public void Dispose(){
+        public void Dispose()
+        {
             //ThreadManager.ExecuteOnMainThread(() => Renderer.DeleteBuffers(1, ref BufferID));
             
             DrawManager.ParticleRenderer.Remove(this);
             UpdateManager.Remove(this);
         }
-    }
-    
-    public enum ParticleShape{
-        Square,
-        Sphere,
-        Cone
     }
 }

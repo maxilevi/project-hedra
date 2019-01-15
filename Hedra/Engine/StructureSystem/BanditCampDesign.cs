@@ -2,6 +2,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Hedra.BiomeSystem;
+using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ComplexMath;
@@ -12,6 +14,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
@@ -97,13 +100,15 @@ namespace Hedra.Engine.StructureSystem
             var rng = (Random)Params[1];
             var structure = (CollidableStructure) Params[2];
             Chunk underChunk = null;
+            var currentSeed = World.Seed;
             while (underChunk?.Landscape == null || !underChunk.Landscape.StructuresPlaced)
             {
+                if(World.Seed != currentSeed || structure.Disposed) yield break;
                 underChunk = World.GetChunkAt(parameters.WorldPosition);
                 yield return null;
             }
 
-            TaskManager.Parallel(delegate
+            TaskScheduler.Parallel(delegate
             {
                 parameters.Position = new Vector3(
                     parameters.Position.X,
@@ -149,7 +154,7 @@ namespace Hedra.Engine.StructureSystem
 
             for (var i = 0; i < tents.Length; i++)
             {
-                structure.AddGroundwork(new RoundedGroundwork(tents[i].WorldPosition, 16f));
+                structure.AddGroundwork(new RoundedGroundwork(tents[i].WorldPosition, 16f, BlockType.Dirt));
             }
 
             structure.Parameters.Set("TentParameters", tents);
@@ -180,7 +185,7 @@ namespace Hedra.Engine.StructureSystem
             var randomCampfires = 4;
             for (var i = 0; i < randomCampfires; i++)
             {
-                var rotationMatrix = Matrix4.CreateRotationY(360f * Rng.NextFloat());
+                var rotationMatrix = Matrix4.CreateRotationY(360f * Rng.NextFloat()* Mathf.Radian);
                 var spawnRadius = Radius * .5f;
                 var randomPosition = Vector3.UnitX * (Rng.NextFloat() * spawnRadius * 2f - spawnRadius)
                                      + Vector3.UnitZ * (Rng.NextFloat() * spawnRadius * 2f - spawnRadius);

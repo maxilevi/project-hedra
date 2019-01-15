@@ -1,9 +1,9 @@
-﻿{
+{
   "Name": "CommonBronzeClaw",
   "DisplayName": "Bronze Claw",
-  "EquipmentType": "Claw", 
+  "EquipmentType": "Claw",
   "Tier": "Common",
-  "Description": "Useful for novices.",
+  "Description": "Forged of bronze, middle weighted and excellent for training.",
   "Attributes": [
     {
       "Name": "Damage",

@@ -10,12 +10,14 @@
 using System;
 using System.Collections;
 using System.Linq;
+using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
-using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Particles;
+using Hedra.EntitySystem;
+using Hedra.WeaponSystem;
 using OpenTK;
 
 namespace Hedra.Engine.Player.Skills.Archer

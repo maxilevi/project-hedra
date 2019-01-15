@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using Hedra.Engine.Game;
+using Hedra.Engine.Localization;
 using OpenTK;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
@@ -48,7 +49,7 @@ namespace Hedra.Engine.Rendering.UI
             Player.OnHitLanded += delegate
             {
                 if (_slingShot.Active) return;
-                TaskManager.When(() => _consecutiveHits.Scale.Y > 0, delegate
+                TaskScheduler.When(() => _consecutiveHits.Scale.Y > 0, delegate
                 {
                     _slingShot.Play(_consecutiveHits);
                 });
@@ -91,10 +92,27 @@ namespace Hedra.Engine.Rendering.UI
             
             _compass = new Texture(Graphics2D.LoadFromAssets("Assets/UI/Compass.png"), Vector2.One - new Vector2(0.0366f, 0.065f) * 2f, new Vector2(0.0366f, 0.065f));
             _help = new Texture(Graphics2D.LoadFromAssets("Assets/UI/Help.png"), Vector2.Zero, Vector2.One);
+
+            var skillTreeTranslation = Translation.Create("skill_tree_label");
+            skillTreeTranslation.Concat(() => $" - {Controls.Skilltree}");
+            var skillTreeMsg = new GUIText(skillTreeTranslation, new Vector2(-.85f, -.9f), Color.FromArgb(200, 255, 255, 255), FontCache.Get(AssetManager.BoldFamily, 14));
             
-            var skillTreeMsg = new GUIText("SKILL TREE - X", new Vector2(-.85f, -.9f), Color.FromArgb(200, 255, 255, 255), FontCache.Get(AssetManager.BoldFamily, 14));
-            var mapMsg = new GUIText("MAP - M", new Vector2(.815f, .425f), Color.FromArgb(200, 255, 255, 255), FontCache.Get(AssetManager.BoldFamily, 14));
+            //var questLogTranslation = Translation.Create("quest_log_label");
+            //questLogTranslation.Concat(() => $" - {Controls.QuestLog}");
+            //var questLogMsg = new GUIText(questLogTranslation, new Vector2(.85f, -.9f), Color.FromArgb(200, 255, 255, 255), FontCache.Get(AssetManager.BoldFamily, 14));
             
+            var mapTranslation = Translation.Create("map_label");
+            skillTreeTranslation.Concat(() => $" - {Controls.Map}");
+            var mapMsg = new GUIText(mapTranslation, new Vector2(.815f, .425f), Color.FromArgb(200, 255, 255, 255), FontCache.Get(AssetManager.BoldFamily, 14));
+                
+            Controls.OnControlsChanged += () =>
+            {
+            //    questLogTranslation.UpdateTranslation();
+                mapTranslation.UpdateTranslation();
+                skillTreeTranslation.UpdateTranslation();
+            };
+            
+            //AddElement(questLogMsg);
             AddElement(skillTreeMsg);
             AddElement(mapMsg);
             AddElement(_consecutiveHits);
@@ -125,12 +143,12 @@ namespace Hedra.Engine.Rendering.UI
         public void Update()
         {
             _compass.Disable();
-            _compass.TextureElement.Angle = _player.Model.Rotation.Y;
+            _compass.TextureElement.Angle = _player.Model.LocalRotation.Y;
             
             if (_player.UI.ShowHelp && Enabled)
             {
                 _player.AbilityTree.Show = false;
-                _player.QuestLog.Show = false;
+                _player.QuestInterface.Show = false;
                 _help.Enable();
             }
             else
@@ -152,7 +170,8 @@ namespace Hedra.Engine.Rendering.UI
                 _player.ConsecutiveHits >= 4 && _player.ConsecutiveHits < 8
                     ? 15f : _player.ConsecutiveHits >= 8 ? 17f : 14f,
                 _consecutiveHits.TextFont.Style);
-            _consecutiveHits.Text = _player.ConsecutiveHits > 0 ? $"{_player.ConsecutiveHits} HIT{(_player.ConsecutiveHits == 1 ? string.Empty : "S")}" : string.Empty;
+            var hits = _player.ConsecutiveHits == 1 ? Translations.Get("hit_label") : Translations.Get("hits_label");
+            _consecutiveHits.Text = _player.ConsecutiveHits > 0 ? $"{_player.ConsecutiveHits} {hits}" : string.Empty;
             _slingShot.Update();
         }
 
@@ -162,8 +181,8 @@ namespace Hedra.Engine.Rendering.UI
             _classLogo.BaseTexture.TextureElement.TextureId = Graphics2D.LoadFromAssets(_player.Class.Logo);
             _classLogo.Scale = Graphics2D.SizeFromAssets(_player.Class.Logo);
         }
-        
-        public bool Oxygen
+
+        private bool Oxygen
         {
             set{
                 if(value)
@@ -180,8 +199,8 @@ namespace Hedra.Engine.Rendering.UI
                 }
             }
         }
-        
-        public bool Stamina
+
+        private bool Stamina
         {
             set{
                 if(value)

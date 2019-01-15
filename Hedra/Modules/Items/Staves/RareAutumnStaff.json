@@ -1,0 +1,21 @@
+{
+  "Name": "RareAutumnStaff",
+  "DisplayName": "Autumn Staff",
+  "EquipmentType": "Staff",
+  "Tier": "Rare",
+  "Description": "Originally a ceremonial decoration to celebrate the autumn. It has since been imbued by a prior caster.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 5.5
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.05
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Staff/RareAutumnStaff.ply"
+  }
+}

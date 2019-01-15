@@ -7,14 +7,18 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using Hedra.Core;
+using Hedra.Engine.Game;
 using OpenTK;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
+using Hedra.EntitySystem;
 
 namespace Hedra.Engine.WorldBuilding
 {
@@ -25,10 +29,11 @@ namespace Hedra.Engine.WorldBuilding
     {
         private static readonly CollisionShape DefaultShape;
 
-        public override string Message => "INTERACT WITH THE CHEST";
+        public override string Message => Translations.Get("interact_chest");
         public override int InteractDistance => 16;
         protected override bool DisposeAfterUse => false;
         protected override bool CanInteract => IsClosed && (Condition?.Invoke() ?? true);
+        private string ChestModelPath => Season.IsChristmas ? "Assets/Chr/ChristmasChestIdle.dae" : "Assets/Chr/ChestIdle.dae"; 
 
         public Item ItemSpecification { get; set; }
         public Func<bool> Condition { get; set; }
@@ -45,7 +50,7 @@ namespace Hedra.Engine.WorldBuilding
 
         public Chest(Vector3 Position, Item ItemSpecification) : base(Position)
         {
-            this._model = AnimationModelLoader.LoadEntity("Assets/Chr/ChestIdle.dae");
+            this._model = AnimationModelLoader.LoadEntity(ChestModelPath);
             this._idleAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ChestIdle.dae");
             this._openAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ChestOpen.dae");        
             this._openAnimation.Loop = false;
@@ -68,24 +73,29 @@ namespace Hedra.Engine.WorldBuilding
 
         public override void Update()
         {
+            if (_model != null) _model.Position = Position;
             base.Update();
+        }
+
+        protected override void DoUpdate()
+        {
+            base.DoUpdate();
             if (_model != null)
             {
-                _model.Position = Position;
                 _model.Update();
                 HandleColliders();
             }
         }
 
-        protected override void OnSelected(IPlayer Interactee)
+        protected override void OnSelected(IHumanoid Humanoid)
         {
-            base.OnSelected(Interactee);
+            base.OnSelected(Humanoid);
             _model.Tint = new Vector4(2.5f, 2.5f, 2.5f, 1);
         }
 
-        protected override void OnDeselected(IPlayer Interactee)
+        protected override void OnDeselected(IHumanoid Humanoid)
         {
-            base.OnDeselected(Interactee);
+            base.OnDeselected(Humanoid);
             _model.Tint = new Vector4(1, 1, 1, 1);
         }
 
@@ -109,7 +119,7 @@ namespace Hedra.Engine.WorldBuilding
             }
         }
 
-        protected override void Interact(IPlayer Interactee)
+        protected override void Interact(IHumanoid Humanoid)
         {
             _model.PlayAnimation(_openAnimation);
         }
@@ -124,8 +134,8 @@ namespace Hedra.Engine.WorldBuilding
         
         public Vector3 Rotation
         {
-            get => _model.Rotation;
-            set => _model.Rotation = value;
+            get => _model.LocalRotation;
+            set => _model.LocalRotation = value;
         }
 
         public override void Dispose()

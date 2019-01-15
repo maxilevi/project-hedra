@@ -6,6 +6,7 @@ using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Player.ToolbarSystem
@@ -112,11 +113,11 @@ namespace Hedra.Engine.Player.ToolbarSystem
             var button = (Button) Sender;
             if (_toolbarInferface.Buttons.Contains(button))
             {
-                if (!this.AddTo(button, _bagInterface)) SoundManager.PlayUISound(SoundType.ButtonHover);
+                if (!this.AddTo(button, _bagInterface)) SoundPlayer.PlayUISound(SoundType.ButtonHover);
             }
             else
             {
-                if (!this.AddTo(button, _toolbarInferface)) SoundManager.PlayUISound(SoundType.ButtonHover);
+                if (!this.AddTo(button, _toolbarInferface)) SoundPlayer.PlayUISound(SoundType.ButtonHover);
             }
             this.UpdateView();
         }

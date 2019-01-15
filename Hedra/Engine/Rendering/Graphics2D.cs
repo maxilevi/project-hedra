@@ -16,7 +16,9 @@ using OpenTK.Graphics.OpenGL4;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
+using Hedra.Core;
 using Hedra.Engine.Game;
+using Hedra.Engine.IO;
 
 namespace Hedra.Engine.Rendering
 {
@@ -29,21 +31,21 @@ namespace Hedra.Engine.Rendering
         {
             var id = Provider.LoadTexture(BitmapObject, Min, Mag, Wrap);
             Textures.Add(id);
-            if(Hedra.MainThreadId != Thread.CurrentThread.ManagedThreadId)
+            if(Loader.Hedra.MainThreadId != Thread.CurrentThread.ManagedThreadId)
                 Log.WriteLine($"[Error] Texture being created outside of the GL thread");
             return id;
         }
 
         public static Vector2 ToRelativeSize(this Vector2 Size)
         {
-            return new Vector2(Size.X / GameSettings.Width, Size.Y / GameSettings.Height);
+            return new Vector2(Size.X / (float)GameSettings.Width, Size.Y / (float)GameSettings.Height);
         }
 
         #region NonGL
 
         public static Vector2 TextureSize(Bitmap bmp)
         {
-            return new Vector2(bmp.Width / (float)GameSettings.Width, (float)bmp.Height / (float)GameSettings.Height);
+            return new Vector2(bmp.Width, bmp.Height).ToRelativeSize();
         }
 
         public static Bitmap Clone(Bitmap Original)
@@ -53,22 +55,23 @@ namespace Hedra.Engine.Rendering
         
         public static Vector2 SizeFromAssets(string Path)
         {
-            return TextureSize( new Bitmap( new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.DataFile3))));
+            return TextureSize( new Bitmap( new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.AssetsResource))));
         }
 
         public static uint LoadFromAssets(string Path, TextureMinFilter Min = TextureMinFilter.Linear, TextureMagFilter Mag = TextureMagFilter.Linear, TextureWrapMode Wrap = TextureWrapMode.ClampToBorder)
         {
-            Log.WriteLine($"Loading Texture: {Path}", LogType.System);
-            return LoadTexture(new BitmapObject
+            var id = LoadTexture(new BitmapObject
             {
-                Bitmap = new Bitmap(new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.DataFile3))),
+                Bitmap = new Bitmap(new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.AssetsResource))),
                 Path = Path
             }, Min, Mag, Wrap);
+            Log.WriteLine($"Loading Texture: {Path} Id={id}", LogType.System);
+            return id;
         }
         
         public static Bitmap LoadBitmapFromAssets(string Path)
         {
-            return new Bitmap( new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.DataFile3)));
+            return new Bitmap( new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.AssetsResource)));
         }
         
         public static Vector2 LineSize(string Text, Font F)

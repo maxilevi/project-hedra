@@ -7,6 +7,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using Hedra.BiomeSystem;
 using Hedra.Engine.BiomeSystem.NormalBiome;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Game;
@@ -58,7 +60,7 @@ namespace Hedra.Engine.BiomeSystem
                 SkyDesign = new NormalBiomeSkyDesign(),
                 MobDesign = new NormalBiomeMobDesign(),
                 GenerationDesign = new NormalBiomeGenerationDesign(),
-                EnviromentDesign = new NormalBiomeEnviromentDesign()
+                EnvironmentDesign = new NormalBiomeEnviromentDesign()
             };/*
             BiomeDesigns[1] = new BiomeDesign
             {
@@ -94,7 +96,7 @@ namespace Hedra.Engine.BiomeSystem
                 this._biomeDistribution.Seed = (int) voronoiHeight + 421;
                 int biomeIndex = _biomeDistribution.Next(0, BiomeDesigns.Length);
 
-                if ((Position.Xz - GameSettings.SpawnPoint).LengthFast < 5000) biomeIndex = 0;
+                if ((Position - World.SpawnPoint).Xz.LengthFast < 5000) biomeIndex = 0;
 
                 int index = (regionIndex * 100 / 13 + biomeIndex * 100 / 11) * 100;
 
@@ -107,7 +109,7 @@ namespace Hedra.Engine.BiomeSystem
                 var regionSky = new RegionSky(World.Seed + regionIndex + biomeIndex, BiomeDesigns[biomeIndex].SkyDesign);
                 var regionMob = new RegionMob(World.Seed + regionIndex + biomeIndex, BiomeDesigns[biomeIndex].MobDesign);
                 var regionGeneration = new RegionGeneration(World.Seed + regionIndex + biomeIndex, BiomeDesigns[biomeIndex].GenerationDesign);
-                var regionEnviroment = new RegionEnviroment(World.Seed + regionIndex + biomeIndex, BiomeDesigns[biomeIndex].EnviromentDesign);
+                var regionEnviroment = new RegionEnviroment(World.Seed + regionIndex + biomeIndex, BiomeDesigns[biomeIndex].EnvironmentDesign);
                 var region = new Region
                 {
                     Colors = regionColors,
@@ -116,7 +118,7 @@ namespace Hedra.Engine.BiomeSystem
                     Sky = regionSky,
                     Mob = regionMob,
                     Generation = regionGeneration,
-                    Enviroment = regionEnviroment,
+                    Environment = regionEnviroment,
                 };
 
                 _regionCache.Add(index, region);

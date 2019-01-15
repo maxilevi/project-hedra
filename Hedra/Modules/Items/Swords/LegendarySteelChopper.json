@@ -3,7 +3,7 @@
   "DisplayName": "Steel Chopper",
   "EquipmentType": "Sword",
   "Tier": "Legendary",
-  "Description": "Steel chopper.",
+  "Description": "Steel is a Carbon Iron allow that is quite heavy, strong, and cam be made very sharp.",
   "Attributes": [
     {
       "Name": "Damage",
@@ -11,7 +11,7 @@
     },
     {
       "Name": "AttackSpeed",
-      "Value": 0.90
+      "Value": 0.9
     }
   ],
   "Model": {

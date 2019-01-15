@@ -1,10 +1,9 @@
-
 {
   "Name": "UncommonSpikedGuardBow",
   "DisplayName": "Spiked Guard Bow",
   "EquipmentType": "Bow",
   "Tier": "Uncommon",
-  "Description": "Spiked guard bow.",
+  "Description": "The bow has spikes on it to melee, does not work in practice.",
   "Attributes": [
     {
       "Name": "Damage",

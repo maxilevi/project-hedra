@@ -1,13 +1,16 @@
 using System;
 using System.Linq;
+using Hedra.Core;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 using OpenTK;
 using OpenTK.Input;
 
@@ -15,7 +18,7 @@ namespace Hedra.Engine.Player.Inventory
 {
     public delegate void OnItemMoveEventHandler(InventoryArray PreviousArray, InventoryArray NewArray, int Index, Item Item);
 
-    public class InventoryArrayInterfaceManager
+    public class InventoryArrayInterfaceManager : IDisposable
     {
         public OnItemMoveEventHandler OnItemMove;
         private readonly InventoryInterfaceItemInfo _itemInfoInterface;
@@ -55,7 +58,7 @@ namespace Hedra.Engine.Player.Inventory
             if (_selectedButton != null)
             {
                 _willReset = true;
-                TaskManager.After(10, delegate
+                TaskScheduler.After(.01f, delegate
                 {
                     if(_willReset)
                         this.DropItem(_selectedItem);
@@ -90,7 +93,7 @@ namespace Hedra.Engine.Player.Inventory
                 array[itemIndex] = null;
                 this.SetCancelButton(button);
                 this.UpdateView();
-                SoundManager.PlayUISound(SoundType.ButtonClick);
+                SoundPlayer.PlayUISound(SoundType.ButtonClick);
             }
             else if (_selectedButton != null)
             {
@@ -106,7 +109,7 @@ namespace Hedra.Engine.Player.Inventory
                 this.ResetSelected();
                 this.UpdateView();
                 OnItemMove?.Invoke(newArray, array, itemIndex, item);
-                SoundManager.PlayUISound(SoundType.ButtonClick);
+                SoundPlayer.PlayUISound(SoundType.ButtonClick);
             }
         }
 
@@ -118,13 +121,22 @@ namespace Hedra.Engine.Player.Inventory
             var array = this.ArrayByButton(button);
             var item = array[itemIndex];
             array[itemIndex] = null;
-            if (array.HasRestrictions(itemIndex) && item != null)
+            if (item != null && item.IsConsumable)
+            {
+                var success = Consume(item);
+                if (!success) array[itemIndex] = item;
+            }
+            else if (array.HasRestrictions(itemIndex) && item != null)
+            {
                 this.PlaceItemInFirstEmptyPosition(item);
+            }
             else
+            {
                 this.PlaceInRestrictionsOrFirstEmpty(itemIndex, array, item);
-            
+            }
+
             this.UpdateView();
-            SoundManager.PlayUISound(SoundType.ButtonClick);
+            SoundPlayer.PlayUISound(SoundType.ButtonClick);
         }
 
         private void SetSelectedItem(Button SelectedButton, Item SelectedItem)
@@ -140,8 +152,8 @@ namespace Hedra.Engine.Player.Inventory
         {
             _cancelButton.Position = SelectedButton.Position;
             _cancelButton.Scale = SelectedButton.Scale;
-            _cancelButton.Clickable = false;
-            TaskManager.After(10, () => _cancelButton.Clickable = true);
+            _cancelButton.CanClick = false;
+            TaskScheduler.After(.01f, () => _cancelButton.CanClick = true);
         }
 
         private void PlaceItemInFirstEmptyPosition(Item Item)
@@ -177,12 +189,20 @@ namespace Hedra.Engine.Player.Inventory
             this.ShowCannotYieldEquipment(Item);
             this.PlaceItemInFirstEmptyPosition(Item);
         }
+        
+        
+        private static bool Consume(Item Item)
+        {
+            return ItemHandlerFactory.Instance.Build(
+                Item.GetAttribute<string>(CommonAttributes.Handler)
+            ).Consume(GameManager.Player, Item);
+        }
 
         private void ShowCannotYieldEquipment(Item Item)
         {
             if (Item.IsEquipment)
             {
-                GameManager.Player.MessageDispatcher.ShowNotification("YOU HAVEN'T LEARNED TO\nUSE THAT TYPE OF EQUIPMENT",
+                GameManager.Player.MessageDispatcher.ShowNotification(Translations.Get("cannot_use_equipment"),
                     System.Drawing.Color.Red, 2f, true);
             }
         }
@@ -265,7 +285,7 @@ namespace Hedra.Engine.Player.Inventory
             _selectedMesh = null;
         }
 
-        private void HoverEnter(object Sender, MouseEventArgs EventArgs)
+        protected virtual void HoverEnter(object Sender, MouseEventArgs EventArgs)
         {
             var button = (Button)Sender;
             var itemIndex = this.IndexByButton(button);
@@ -275,7 +295,7 @@ namespace Hedra.Engine.Player.Inventory
             _itemInfoInterface?.Show(item);
         }
 
-        private void HoverExit(object Sender, MouseEventArgs EventArgs)
+        protected virtual void HoverExit(object Sender, MouseEventArgs EventArgs)
         {
             _itemInfoInterface?.Hide();
         }
@@ -310,6 +330,12 @@ namespace Hedra.Engine.Player.Inventory
             {
                 _interfaces[i].UpdateView();
             }
+        }
+
+        public void Dispose()
+        {
+            EventDispatcher.UnregisterMouseMove(this);
+            EventDispatcher.UnregisterMouseDown(this);
         }
     }
 }

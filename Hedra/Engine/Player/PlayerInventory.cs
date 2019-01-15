@@ -9,12 +9,16 @@
 
 using System;
 using System.Collections.Generic;
+using Hedra.Core;
+using Hedra.Engine.Input;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.ItemSystem.WeaponSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
+using Hedra.WeaponSystem;
 using OpenTK;
 using OpenTK.Input;
 
@@ -75,10 +79,27 @@ namespace Hedra.Engine.Player
             };
             _mainItems.OnItemSet += delegate(int Index, Item New)
             {
-                if (Index+InventorySpaces == WeaponHolder)
-                    _player.Model.SetWeapon( New == null ? Weapon.Empty : New.Weapon);
-                if (Index + InventorySpaces == RingHolder)
-                    _player.Ring = New;
+                switch (Index+InventorySpaces)
+                {
+                    case WeaponHolder:
+                        _player.SetWeapon(New == null ? Weapon.Empty : New.Weapon);
+                        break;
+                    case HelmetHolder:
+                        _player.SetHelmet(New?.Helmet);
+                        break;
+                    case ChestplateHolder:
+                        _player.SetChestplate(New?.Chestplate);
+                        break;
+                    case PantsHolder:
+                        _player.SetPants(New?.Pants);
+                        break;
+                    case BootsHolder:
+                        _player.SetBoots(New?.Boots);
+                        break;
+                    case RingHolder:
+                        _player.Ring = New;
+                        break;
+                }
             };
             var itemInfoInterface = new InventoryInterfaceItemInfo(_itemsArrayInterface.Renderer)
             {
@@ -177,7 +198,7 @@ namespace Hedra.Engine.Player
                 _player.View.LockMouse = false;
                 _player.Movement.CaptureMovement = false;
                 _player.View.CaptureMovement = false;
-                UpdateManager.CursorShown = true;
+                Cursor.Show = true;
             }
             else
             {
@@ -189,7 +210,7 @@ namespace Hedra.Engine.Player
         {
             if (_show)
             {
-                _player.View.TargetPitch = Mathf.Lerp(_player.View.TargetPitch, 0f, (float) Time.DeltaTime * 16f);
+                _player.View.TargetPitch = Mathf.Lerp(_player.View.TargetPitch, 0f, Time.DeltaTime * 16f);
                 _player.View.TargetDistance =
                     Mathf.Lerp(_player.View.TargetDistance, 10f, (float) Time.DeltaTime * 16f);
                 _player.View.TargetYaw = Mathf.Lerp(_player.View.TargetYaw, (float) Math.Acos(-_player.Orientation.X),
@@ -222,7 +243,12 @@ namespace Hedra.Engine.Player
 
         public Item Food
         {
-            get { return this.Search(I => I.IsFood); }
+            get
+            {
+                return (this[FoodHolder] != null && this[FoodHolder].IsFood) 
+                    ? this[FoodHolder] 
+                    : this.Search(I => I.IsFood);
+            }
         }
 
         public bool HasAvailableSpace => _items.HasAvailableSpace;
@@ -237,7 +263,7 @@ namespace Hedra.Engine.Player
         public Item Boots => this[BootsHolder];
         public int Length => _items.Length + _mainItems.Length;
 
-        public override Key OpeningKey => Key.I;
+        public override Key OpeningKey => Controls.InventoryOpen;
         public override bool Show
         {
             get => _show;
@@ -252,7 +278,7 @@ namespace Hedra.Engine.Player
                 _interfaceManager.Enabled = _show;
                 this.UpdateInventory();
                 this.SetInventoryState(_show);
-                SoundManager.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
+                SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
             }
         }
     }

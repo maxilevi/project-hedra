@@ -2,19 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Hedra.BiomeSystem;
+using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.PlantSystem
 {
     public class RockDesign :  PlantDesign
     {
-        public override VertexData Model => CacheManager.GetModel(CacheItem.Rock);
+        public override CacheItem Type => CacheItem.Rock;
+        
         public override Matrix4 TransMatrix(Vector3 Position, Random Rng)
         {
             var underChunk = World.GetChunkAt(Position);
@@ -25,7 +29,7 @@ namespace Hedra.Engine.PlantSystem
 
             float height = Physics.HeightAtPosition(Position + addon);
             var topBlock = World.GetHighestBlockAt((int)(Position.X + addon.X), (int)(Position.Z + addon.Z));
-            if (topBlock.Noise3D) return Matrix4.Identity;
+            if (Block.Noise3D) return Matrix4.Identity;
 
             for (int x = -3; x < 3; x++)
             {
@@ -37,19 +41,16 @@ namespace Hedra.Engine.PlantSystem
                 }
             }
 
-            Matrix4 rotationMat4 = Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat());
+            Matrix4 rotationMat4 = Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat() * Mathf.Radian);
             Matrix4 transMatrix = Matrix4.CreateScale(2.75f + Rng.NextFloat() * .75f);
             transMatrix *= rotationMat4;
             transMatrix *= Matrix4.CreateTranslation(new Vector3(Position.X, height, Position.Z) + addon);
             return transMatrix;
         }
 
-        public override VertexData Paint(Vector3 Position, VertexData Data, Region Region, Random Rng)
+        public override VertexData Paint(VertexData Data, Region Region, Random Rng)
         {
-            Data.Extradata.AddRange(Data.GenerateWindValues());
-            for (int i = 0; i < Data.Extradata.Count; i++)
-                Data.Extradata[i] = 0.001f;
-
+            Data.AddWindValues(0f);
             Data.Paint(this.RockColor(Rng));
             Data.GraduateColor(Vector3.UnitY);
 

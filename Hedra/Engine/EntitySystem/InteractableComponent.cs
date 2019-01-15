@@ -1,7 +1,10 @@
 
+using Hedra.Core;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
+using Hedra.EntitySystem;
 using OpenTK;
 using OpenTK.Input;
 
@@ -10,7 +13,7 @@ namespace Hedra.Engine.EntitySystem
     public abstract class InteractableComponent : EntityComponent
     {
         public virtual float InteractionAngle => .9f;
-        public virtual Key Key => Key.E;
+        public virtual Key Key => Controls.Interact;
         public abstract string Message { get; }
         public abstract int InteractDistance { get; }
         protected bool Interacted { get; private set; }

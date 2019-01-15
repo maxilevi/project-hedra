@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.IO;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Effects;
@@ -25,11 +26,10 @@ namespace Hedra.Engine.Management
         private static readonly HashSet<IRenderable> DrawFunctionsSet;
         private static readonly List<IRenderable> DrawFunctions;
         private static bool _initialized;
-        private static Cursor _mouseCursor;
+        private static CursorIcon _mouseCursorIcon;
         
         public static List<IRenderable> ParticleRenderer { get; }
-        public static List<IRenderable
-            > TrailRenderer { get; }
+        public static List<IRenderable> TrailRenderer { get; }
         public static GUIRenderer UIRenderer { get; }
         public static FrustumCulling FrustumObject { get; }
         public static DropShadowRenderer DropShadows { get; }
@@ -73,7 +73,7 @@ namespace Hedra.Engine.Management
         {
             SkyManager.Draw();
             World.CullTest(FrustumObject);
-            World.Draw(WorldRenderType.Static);
+            World.Draw(WorldRenderType.StaticAndInstance);
             DropShadows.Draw();
 
             var drawedObjects = 0;
@@ -151,7 +151,7 @@ namespace Hedra.Engine.Management
 
         public static void Dispose()
         {
-            _mouseCursor?.Dispose();
+            _mouseCursorIcon?.Dispose();
             MainBuffer.Dispose();
             UIRenderer.Dispose();
         }

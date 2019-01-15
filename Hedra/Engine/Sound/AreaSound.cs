@@ -1,5 +1,7 @@
 using System;
+using Hedra.Core;
 using Hedra.Engine.Game;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.Sound
@@ -25,20 +27,20 @@ namespace Hedra.Engine.Sound
         public void Update(bool Condition)
         {
             Condition = Condition && !GameSettings.Paused;
-            if (this._sound == null && (this.Position - SoundManager.ListenerPosition).LengthFast < Radius && Condition)
-                this._sound = SoundManager.GetAvailableSource();
+            if (this._sound == null && (this.Position - SoundPlayer.ListenerPosition).LengthFast < Radius && Condition)
+                this._sound = SoundPlayer.GetAvailableSource();
 
             if (this._sound != null && (!this._sound.Source.IsPlaying || Type != _bufferType) && Condition)
             {
-                this._sound.Source.Play(SoundManager.GetBuffer(Type), this.Position, Pitch, 1, true);
+                this._sound.Source.Play(SoundPlayer.GetBuffer(Type), this.Position, Pitch, 1, true);
                 _bufferType = Type;
             }
 
             if (this._sound != null)
             {
-                _targetGain = Math.Max(0, 1 - (this.Position - SoundManager.ListenerPosition).LengthFast / Radius);
+                _targetGain = Math.Max(0, 1 - (this.Position - SoundPlayer.ListenerPosition).LengthFast / Radius);
                 _targetGain *= Condition ? 1 : 0;
-                _targetGain *= SoundManager.Volume;
+                _targetGain *= SoundPlayer.Volume;
                 _targetGain *= Volume;
 
 
@@ -47,7 +49,7 @@ namespace Hedra.Engine.Sound
                     this._sound.Source.Volume = _targetGain;
 
             }
-            if (this._sound != null && (this.Position - SoundManager.ListenerPosition).LengthFast > Radius)
+            if (this._sound != null && (this.Position - SoundPlayer.ListenerPosition).LengthFast > Radius)
             {
                 this._sound.Source.Stop();
                 this._sound.Locked = false;

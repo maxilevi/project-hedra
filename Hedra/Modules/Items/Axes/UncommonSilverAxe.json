@@ -1,9 +1,9 @@
-﻿{
+{
   "Name": "UncommonSilverAxe",
   "DisplayName": "Silver Axe",
-  "EquipmentType": "Axe", 
+  "EquipmentType": "Axe",
   "Tier": "Uncommon",
-  "Description": "Silver axe.",
+  "Description": "Light and effective, always by the side of a man who needs to get the job down.",
   "Attributes": [
     {
       "Name": "Damage",

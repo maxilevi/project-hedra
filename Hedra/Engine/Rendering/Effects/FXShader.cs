@@ -1,4 +1,4 @@
-namespace Hedra.Engine.Rendering
+namespace Hedra.Engine.Rendering.Effects
 {
     public interface FXShader
     {

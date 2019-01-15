@@ -1,10 +1,9 @@
-
 {
   "Name": "CommonIronClaw",
   "DisplayName": "Iron Claw",
   "EquipmentType": "Claw",
   "Tier": "Common",
-  "Description": "Common but solid nonetheless.",
+  "Description": "Incredibly common, well weighted and sharp.",
   "Attributes": [
     {
       "Name": "Damage",

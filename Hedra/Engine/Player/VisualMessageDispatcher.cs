@@ -4,9 +4,13 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
+using Hedra.Core;
+using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
+using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.Player
@@ -33,7 +37,7 @@ namespace Hedra.Engine.Player
             _mainText = new GUIText(string.Empty, new Vector2(0, .7f), Color.FromArgb(255, 39, 39, 39), FontCache.Get(AssetManager.BoldFamily, 32, FontStyle.Bold));
             _playerText = new GUIText(string.Empty, new Vector2(0, 0), Color.White, FontCache.Get(AssetManager.BoldFamily, 16, FontStyle.Bold));
 
-            _notificationText = new GUIText(string.Empty, new Vector2(0.7f, -0.9f), Color.FromArgb(255, 39, 39, 39), FontCache.Get(AssetManager.NormalFamily, 14));
+            _notificationText = new GUIText(string.Empty, new Vector2(0.7f, -0.8f), Color.FromArgb(255, 39, 39, 39), FontCache.Get(AssetManager.NormalFamily, 14));
             _notificationText.UIText.Opacity = 0f;
 
             Player.UI.GamePanel.AddElement(_mainText);
@@ -61,7 +65,7 @@ namespace Hedra.Engine.Player
                     prevSeed = World.Seed;
                 }
 
-                if (_messageQueue.Count == 0)
+                if (_messageQueue.Count == 0 || GameManager.IsLoading)
                 {
                     yield return null;
                     continue;
@@ -70,7 +74,8 @@ namespace Hedra.Engine.Player
                 var msg = _messageQueue[0];
                 processing = true;
 
-                Action callback = delegate{
+                Action callback = delegate
+                {
                     processing = false;
                     _messageQueue.RemoveAt(0);
                 };
@@ -92,6 +97,8 @@ namespace Hedra.Engine.Player
             }
         }
 
+        public bool HasTitleMessages => _messageQueue.Any(M => M.Type == MessageType.Title);
+        
         public void ShowTitleMessage(string Message, float Seconds)
         {
             this.ShowTitleMessage(Message, Seconds, Color.FromArgb(255, 39, 39, 39));
@@ -119,7 +126,7 @@ namespace Hedra.Engine.Player
 
             if (_player.UI.GamePanel.Enabled)
             {
-                TaskManager.Asynchronous(delegate
+                TaskScheduler.Asynchronous(delegate
                 {
                     _mainText.UIText.Opacity = 0.0001f;
                     float factor = MessageSpeed;
@@ -170,7 +177,7 @@ namespace Hedra.Engine.Player
             
             if (_player.UI.GamePanel.Enabled)
             {
-                TaskManager.Asynchronous(delegate
+                TaskScheduler.Asynchronous(delegate
                 {
                     _playerText.UIText.Opacity = 1;
                     Thread.Sleep( (int) (Item.Time * 1000) );
@@ -219,7 +226,7 @@ namespace Hedra.Engine.Player
 
             if (_player.UI.GamePanel.Enabled)
             {
-                TaskManager.Asynchronous(delegate
+                TaskScheduler.Asynchronous(delegate
                 {
                     _playerText.UIText.Opacity = 1;
                     while (Item.Condition())
@@ -263,9 +270,9 @@ namespace Hedra.Engine.Player
             _notificationText.Text = Item.Content;
             _notificationText.Enable();
             if (Item.PlaySound)
-                Sound.SoundManager.PlaySound(Sound.SoundType.ButtonHover, _player.Position, false, 1f, 1f);
+                SoundPlayer.PlaySound(SoundType.ButtonHover, _player.Position, false, 1f, 1f);
 
-            TaskManager.Asynchronous(delegate
+            TaskScheduler.Asynchronous(delegate
             {
                 _notificationText.UIText.Opacity = 0.0001f;
                 var factor = MessageSpeed * 2f;

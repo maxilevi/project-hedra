@@ -1,13 +1,13 @@
-﻿{
+{
   "Name": "CommonWoodenRing",
   "DisplayName": "Wooden Ring",
-  "EquipmentType": "Ring", 
+  "EquipmentType": "Ring",
   "Tier": "Common",
-  "Description": "Wooden ring.",
+  "Description": "A poorly made ring. The effort of making it is unfathomable.",
   "Attributes": [
     {
       "Name": "MovementSpeed",
-      "Value": 0.10,
+      "Value": 0.1,
       "Display": "Flat"
     },
     {

@@ -13,7 +13,7 @@ namespace HedraTests.Player
         public float MinDistance { get; set; }
         public float MaxPitch { get; set; }
         public float MinPitch { get; set; }
-        public float AddonDistance { get; set; }
+        public float AddedDistance { get; set; }
         public float Distance { get; set; }
         public float WheelSpeed { get; set; }
         public bool CaptureMovement { get; set; }
@@ -32,7 +32,7 @@ namespace HedraTests.Player
         public Vector3 Right { get; }
         public Vector3 Left { get; }
         public Vector3 CameraHeight { get; set; }
-        public Vector3 CameraPosition { get; }
+        public Vector3 CameraEyePosition { get; }
         public Vector3 CrossDirection { get; }
         public Vector3 CrossPosition { get; }
         public Matrix4 ViewMatrix { get; }

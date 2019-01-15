@@ -7,16 +7,13 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
-using System.Collections;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using System.Collections.Generic;
-using Hedra.Engine.Management;
-using Hedra.Engine.Generation;
 using System.Linq;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.Player;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.Rendering
 {
@@ -34,12 +31,13 @@ namespace Hedra.Engine.Rendering
         public GeometryPool<Vector4> Colors { get; }
         public VAO<Vector3, Vector4, Vector3> Data { get; }
         public IComparer<KeyValuePair<Vector2, ChunkRenderCommand>> Comparer { get; set; }
-        public int SizeInBytes { get; }
+        private IntPtr[] _offset;
+        private int[] _counts;
         
         public WorldBuffer(PoolSize Size)
         {
             const int megabyte = 1048576;
-            float realPoolSize = (int) Size / 100f * (.5f + 0.025f * (GameSettings.MaxLoadingRadius - GameSettings.MinLoadingRadius));
+            float realPoolSize = (int) Size / 100f * (.5f + 0.025f * (GeneralSettings.MaxLoadingRadius - GeneralSettings.MinLoadingRadius));
 
             Indices = new GeometryPool<uint>( (int) (megabyte * 9f * realPoolSize), sizeof(uint), VertexAttribPointerType.UnsignedInt, BufferTarget.ElementArrayBuffer, BufferUsageHint.DynamicDraw);
             Vertices = new GeometryPool<Vector3>( (int) (megabyte * 7f * realPoolSize), Vector3.SizeInBytes, VertexAttribPointerType.Float, BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
@@ -47,6 +45,8 @@ namespace Hedra.Engine.Rendering
             Colors = new GeometryPool<Vector4>( (int) (megabyte * 7f * realPoolSize), Vector4.SizeInBytes, VertexAttribPointerType.Float, BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
             Data = new VAO<Vector3, Vector4, Vector3>(Vertices.Buffer, Colors.Buffer, Normals.Buffer);
                          
+            _offset = new IntPtr[GeneralSettings.MaxChunks];
+            _counts = new int[GeneralSettings.MaxChunks];
             _chunkDict = new Dictionary<Vector2, ChunkRenderCommand>();
         }
 
@@ -235,21 +235,18 @@ namespace Hedra.Engine.Rendering
             
             return Entry;                                   
         }
-        
-        public int[] BuildCounts(Dictionary<Vector2, Chunk> ToDraw, out IntPtr[] Offsets)
-        {
-            int[] counts;
-            if (_chunkPairs == null)
-            {
-                Offsets = new IntPtr[0];
-                return new int[0];
-            }    
-            lock(_lock)
-            {
-                counts = new int[_chunkPairs.Count];
-                Offsets = new IntPtr[_chunkPairs.Count];
 
-                var index = 0; 
+        public int BuildCounts(Dictionary<Vector2, Chunk> ToDraw)
+        {
+            return BuildCounts(ToDraw, ref _offset, ref _counts);
+        }
+
+        public int BuildCounts(Dictionary<Vector2, Chunk> ToDraw, ref IntPtr[] OffsetsArray, ref int[] CountsArray)
+        {
+            if (_chunkPairs == null) return 0;
+            var index = 0;
+            lock (_lock)
+            {
                 foreach(var pair in _chunkPairs)
                 {        
                     var count = 0;
@@ -257,15 +254,19 @@ namespace Hedra.Engine.Rendering
                     if(ToDraw.ContainsKey(pair.Key))
                     {    
                         count = pair.Value.DrawCount;
-                        offset = pair.Value.ByteOffset;                    
+                        offset = pair.Value.Entries[0].Offset;                    
                     }                
-                    counts[index] = count;
-                    Offsets[index] = (IntPtr) offset;
+                    CountsArray[index] = count;
+                    OffsetsArray[index] = (IntPtr) offset;
 
                     index++;
                 }
             }
-            return counts;
+            return _chunkPairs.Count;
         }
+
+        public IntPtr[] Offsets => _offset;
+        
+        public int[] Counts => _counts;
     }
 }

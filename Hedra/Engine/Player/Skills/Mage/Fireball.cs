@@ -18,7 +18,7 @@ using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Rendering.Animation;
 
-namespace Hedra.Engine.Player
+namespace Hedra.Engine.Player.Skills.Mage
 {
     /// <summary>
     /// Description of Fireball.

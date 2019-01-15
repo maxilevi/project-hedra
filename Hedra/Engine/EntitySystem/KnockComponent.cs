@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Hedra.Core;
+using Hedra.EntitySystem;
 
 namespace Hedra.Engine.EntitySystem
 {

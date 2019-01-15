@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.Core;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering.Geometry

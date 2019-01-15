@@ -7,7 +7,6 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 {
     public interface IAbilityTree
     {
-        void UpdateView();
         void Update();
         void SetPoints(Type AbilityType, int Count);
         void SetPoints(int Index, int Count);
@@ -16,9 +15,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         void FromInformation(PlayerInformation Information);
         int AvailablePoints { get; }
         InventoryArray TreeItems { get; }
-        Key OpeningKey { get; }
         bool Show { get; set; }
-        bool HasExitAnimation { get; }
         event OnPlayerInterfaceStateChangeEventHandler OnPlayerInterfaceStateChange;
     }
 }

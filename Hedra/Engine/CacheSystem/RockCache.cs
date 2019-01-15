@@ -4,6 +4,7 @@ using Hedra.Engine.Rendering;
 using OpenTK;
 using System.Linq;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.CacheSystem
 {
@@ -27,5 +28,7 @@ namespace Hedra.Engine.CacheSystem
 
             this.AddShapes(list);
         }
+        
+        public override CacheItem Type => CacheItem.Rock;
     }
 }

@@ -6,20 +6,13 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
-using OpenTK;
-using Hedra.Engine.Rendering.UI;
-using Hedra.Engine.Rendering;
-using System.Drawing;
-using System.IO;
-using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Management;
-using Hedra.Engine.Rendering.Particles;
-using System.Collections;
-using Hedra.Engine.Player.Skills;
-using Hedra.Engine.Rendering.Animation;
 
-namespace Hedra.Engine.Player
+using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Animation;
+using Hedra.Engine.Rendering.Particles;
+using OpenTK;
+
+namespace Hedra.Engine.Player.Skills.Mage
 {
     /// <summary>
     /// Description of TripleFireball.
@@ -61,29 +54,7 @@ namespace Hedra.Engine.Player
         }
         
         public override void Update(){ }
-        
-        public IEnumerator ShootCoroutine(){
-            Vector3 Direction = Player.View.CrossDirection;
-            Matrix4 D10 = Matrix4.CreateRotationY(10 * Mathf.Radian);
-            Matrix4 DN10 = Matrix4.CreateRotationY(-10 * Mathf.Radian);
-            yield return null;
-            Matrix4 D5 = Matrix4.CreateRotationY(5 * Mathf.Radian);
-            Matrix4 DN5 = Matrix4.CreateRotationY(-5 * Mathf.Radian);
-            
-            yield return null;
-            
-            this.CreateProjectile(Direction * 4);
-            yield return null;
-            this.CreateProjectile( Vector3.TransformVector(Direction, D10) * 4);//45
-            yield return null;
-            this.CreateProjectile( Vector3.TransformVector(Direction, DN10)* 4);//45 Degrees
-            yield return null;
-            this.CreateProjectile( Vector3.TransformVector(Direction, D5) * 4);
-            yield return null;
-            this.CreateProjectile( Vector3.TransformVector(Direction, DN5)* 4);
-            yield return null;
-        }
-        
+
         public void CreateProjectile(Vector3 Direction)
         {
             /*

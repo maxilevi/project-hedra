@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Hedra.BiomeSystem;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ComplexMath;
@@ -11,6 +12,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
+using Hedra.Rendering;
 using OpenTK;
 using ObeliskType = Hedra.Engine.StructureSystem.ObeliskType;
 
@@ -52,7 +54,7 @@ namespace Hedra.Engine.StructureSystem
             model.Extradata.Clear();
             model.FillExtraData(WorldRenderer.NoHighlightFlag);
 
-            Structure.AddCollisionShape(collisionBox);
+            Structure.AddCollisionShape(collisionBox.ToShape());
             Structure.AddStaticElement(model);
 
             obelisk.AreaWrapper =

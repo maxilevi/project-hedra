@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Hedra.BiomeSystem;
+using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ComplexMath;
@@ -12,6 +14,8 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
+using Hedra.EntitySystem;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
@@ -30,7 +34,7 @@ namespace Hedra.Engine.StructureSystem
             var model = originalModel.ShallowClone();
 
             Matrix4 scaleMatrix = Matrix4.CreateScale(Vector3.One * 100f);
-            Matrix4 transMatrix = Matrix4.CreateRotationY(rng.NextFloat() * 360);
+            Matrix4 transMatrix = Matrix4.CreateRotationY(rng.NextFloat() * 360 * Mathf.Radian);
             transMatrix *= Matrix4.CreateTranslation(position + Vector3.UnitY * 7f);
             model.Transform(scaleMatrix * transMatrix);
 
@@ -38,7 +42,7 @@ namespace Hedra.Engine.StructureSystem
             model.Color(AssetManager.ColorCode1, region.Colors.LeavesColor);
             model.Color(AssetManager.ColorCode2, region.Colors.LeavesColor  * .8f);
 
-            model.Extradata.AddRange(model.GenerateWindValues());
+            model.AddWindValues();
             float treeRng = Utils.Rng.NextFloat();
             for (var i = 0; i < model.Extradata.Count; i++)
             {

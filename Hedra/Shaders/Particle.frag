@@ -1,7 +1,7 @@
 #version 330 core
 !include<"Includes/Sky.shader">
 
-in vec4 Color;
+smooth in vec4 Color;
 in float Visibility;
 layout(location = 0)out vec4 OutColor;
 

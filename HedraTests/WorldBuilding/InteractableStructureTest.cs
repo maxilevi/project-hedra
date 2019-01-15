@@ -1,7 +1,9 @@
+using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.Game;
 using Hedra.Engine.Player;
 using Hedra.Engine.WorldBuilding;
+using Hedra.EntitySystem;
 using HedraTests.Player;
 using NUnit.Framework;
 using OpenTK;
@@ -85,12 +87,12 @@ namespace HedraTests.WorldBuilding
         public void TestSelectingStructure()
         {
             _player.Mana = -10;
-            _structure.Update();
+            _structure.DoUpdate();
             Assert.AreEqual(10, _player.Mana);
             
             _player.Position = new Vector3(0, 0, 0);
             
-            _structure.Update();
+            _structure.DoUpdate();
             Assert.AreEqual(0, _player.Mana);
         }
 
@@ -136,9 +138,9 @@ namespace HedraTests.WorldBuilding
             player.Position = PlayerPosition;
             player.CameraMock.LookingDirection = PlayerLookAt;
             
-            structure.Update();
+            structure.DoUpdate();
             EventProvider.SimulateKeyDown(structure.Key);
-            structure.Update();
+            structure.DoUpdate();
 
             return structure.Interacted;
         }
@@ -148,6 +150,7 @@ namespace HedraTests.WorldBuilding
     {
         private bool _disposeAfterUse;
         private bool _canInteract;
+        protected override float InteractionAngle => .9f;
         public const int StructureInteractionRadius = 25;
         public override string Message => "Here is a mock string";
         public override int InteractDistance => StructureInteractionRadius;
@@ -170,21 +173,26 @@ namespace HedraTests.WorldBuilding
             _canInteract = Value;
         }
 
-        protected override void Interact(IPlayer Interactee)
+        public void DoUpdate()
         {
-            Interactee.Level += 20;
+            base.DoUpdate();
+        }
+
+        protected override void Interact(IHumanoid Humanoid)
+        {
+            Humanoid.Level += 20;
         }
         
-        protected override void OnSelected(IPlayer Interactee)
+        protected override void OnSelected(IHumanoid Humanoid)
         {
-            base.OnSelected(Interactee);
-            Interactee.Mana = 10;
+            base.OnSelected(Humanoid);
+            Humanoid.Mana = 10;
         }
         
-        protected override void OnDeselected(IPlayer Interactee)
+        protected override void OnDeselected(IHumanoid Humanoid)
         {
-            base.OnDeselected(Interactee);
-            Interactee.Mana = 0;
+            base.OnDeselected(Humanoid);
+            Humanoid.Mana = 0;
         }
     }
 }

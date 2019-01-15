@@ -2,12 +2,11 @@
 	"Name" : "Troll", 
 	"MaxHealth": 680.0,
 	"AttackDamage": 13.0,
-	"AttackCooldown": 2.5,
-	"Speed": 1.15,
+	"AttackCooldown": 1.5,
+	"Speed": 1.35,
 	"XP": 18.0,
 	"Level": 25,
-	"AIType": "Hostile",
-	"Ridable": false,
+	"AIType": "Troll",
 	"Effects": [],
 	"Drops": [],
 	"Model": {
@@ -23,15 +22,26 @@
 		"WalkAnimations": [
 			{
 				"Path": "$DataFile$/Assets/Chr/TrollWalk.dae",
-				"Speed": 1.25
+				"Speed": 0.75
 			}
 		],
 		"AttackAnimations": [
 			{
 				"Path": "$DataFile$/Assets/Chr/TrollAttack0.dae",
-				"Speed": 0.75,
-				"OnAnimationMid" : "Quake"
-			}
+				"Speed": 0.5,
+				"OnAnimationProgress" : {
+					"Event": "Quake",
+					"Progress": 0.75
+				}
+			},
+            {
+              "Path": "$DataFile$/Assets/Chr/TrollAttack1.dae",
+              "Speed": 2.0,
+              "OnAnimationProgress" : {
+                "Event": "Slash",
+                "Progress": 0.75
+              }
+            }
 		]
 	} 
 }

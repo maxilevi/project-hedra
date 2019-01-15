@@ -1,10 +1,9 @@
-
 {
   "Name": "RareCrimsonKatar",
   "DisplayName": "Crimson Katar",
   "EquipmentType": "Katar",
   "Tier": "Rare",
-  "Description": "Crimson katar.",
+  "Description": "The blade is Crimson, you do not know what it is painted with.",
   "Attributes": [
     {
       "Name": "Damage",

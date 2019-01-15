@@ -1,7 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
+using Hedra.Sound;
 using NVorbis;
 using OpenTK;
 using OpenTK.Audio;
@@ -11,7 +14,7 @@ namespace Hedra.Engine.Sound
 {
     public class SoundProvider : ISoundProvider
     {
-        private readonly SoundBuffer[] _soundBuffers;
+        private readonly Dictionary<string, SoundFamily> _soundFamilies;
         private readonly SoundItem[] _soundItems;
         private readonly SoundSource[] _soundSources;
         private AudioContext _audioContext;
@@ -22,72 +25,47 @@ namespace Hedra.Engine.Sound
 
         public SoundProvider()
         {
-            _soundBuffers = new SoundBuffer[(int)SoundType.MaxSounds];
+            _soundFamilies = new Dictionary<string, SoundFamily>();
             _soundItems = new SoundItem[8];
             _soundSources = new SoundSource[32];
         }
 
-        public void Load()
+        public void Setup()
         {
             _audioContext = new AudioContext();
             Log.WriteLine("Generating a pool of sound sources...");
-            for (int i = 0; i < _soundSources.Length; i++)
+            for (var i = 0; i < _soundSources.Length; i++)
             {
                 _soundSources[i] = new SoundSource(Vector3.Zero);
             }
             Log.WriteLine("Generating a pool of sound items...");
-            for (int i = 0; i < _soundItems.Length; i++)
+            for (var i = 0; i < _soundItems.Length; i++)
             {
                 _soundItems[i] = new SoundItem(new SoundSource(Vector3.Zero));
             }
-            Log.WriteLine("Loading sounds...");
-            TaskManager.Parallel(delegate
-            {
-                LoadSound(SoundType.ButtonClick, "Sounds/HoverButton.ogg");
-                LoadSound(SoundType.WaterSplash, "Sounds/WaterSplash.ogg");
-                LoadSound(SoundType.ButtonHover, "Sounds/OnOff.ogg");
-                LoadSound(SoundType.SwooshSound, "Sounds/Swoosh.ogg");
-                LoadSound(SoundType.HitSound, "Sounds/Hit.ogg");
-                LoadSound(SoundType.NotificationSound, "Sounds/ItemCollect.ogg");
-                LoadSound(SoundType.ArrowHit, "Sounds/Hit.ogg");
-                LoadSound(SoundType.BowSound, "Sounds/Bow.ogg");
-                LoadSound(SoundType.DarkSound, "Sounds/DarkSound.ogg");
-                LoadSound(SoundType.SlashSound, "Sounds/Slash.ogg");
-                LoadSound(SoundType.Jump, "Sounds/Jump.ogg");
-                LoadSound(SoundType.TransactionSound, "Sounds/Money.ogg");
-                LoadSound(SoundType.FoodEat, "Sounds/Eat.ogg");
-                _soundBuffers[(int) SoundType.FoodEaten] = _soundBuffers[(int) SoundType.NotificationSound];
-                LoadSound(SoundType.HorseRun, "Sounds/Horse.ogg");
-                LoadSound(SoundType.Fireplace, "Sounds/Fireplace.ogg");
-                LoadSound(SoundType.HumanRun, "Sounds/Run.ogg");
-                LoadSound(SoundType.HitGround, "Sounds/HitGround.ogg");
-                LoadSound(SoundType.Dodge, "Sounds/Roll.ogg");
-                LoadSound(SoundType.LongSwoosh, "Sounds/LongSwoosh.ogg");
-                LoadSound(SoundType.GlassBreak, "Sounds/GlassBreak.ogg");
-                LoadSound(SoundType.GlassBreakInverted, "Sounds/GlassBreakInverted.ogg");
-                LoadSound(SoundType.HumanSleep, "Sounds/HumanSleep.ogg");
-                LoadSound(SoundType.TalkSound, "Sounds/ItemCollect.ogg");
-                LoadSound(SoundType.GroundQuake, "Sounds/GroundQuake.ogg");
-                LoadSound(SoundType.SpitSound, "Sounds/Bow.ogg");
-                LoadSound(SoundType.GorillaGrowl, "Sounds/GorillaGrowl.ogg");
-                LoadSound(SoundType.PreparingAttack, "Sounds/PreparingAttack.ogg");
-                LoadSound(SoundType.River, "Sounds/River.ogg");
-                //LoadSound(SoundType.BoatMove, "Sounds/BoatMove.ogg");
-                //LoadSound(SoundType.Swimming, "Sounds/Swimming.ogg");
-                LoadSound(SoundType.Underwater, "Sounds/Underwater.ogg");
-                _loaded = true;
-                Log.WriteLine("Finished loading sounds.");
-            });
         }
 
-        private void LoadSound(SoundType Type, string Name, bool a = false)
+        public void MarkAsReady()
+        {            
+            _loaded = true;
+        }
+
+        public void LoadSound(string Name, params string[] Names)
         {
-            _soundBuffers[(int)Type] = 
-                new SoundBuffer(
-                    LoadOgg(Name, out var channels, out var bits, out var rate),
+            var family = new SoundFamily();
+            for (var i = 0; i < Names.Length; i++)
+            {
+                if(!Names[i].EndsWith(".ogg"))
+                    throw new ArgumentException("Only '.ogg' files are supported.");
+                
+                family.Add(new SoundBuffer(
+                    LoadOgg(Names[i], out var channels, out var bits, out var rate),
                     GetSoundFormat(channels, bits),
                     rate
-                    );
+                ));
+            }
+            _soundFamilies[Name] = family;
+
         }
 
         public void Update(Vector3 Position)
@@ -96,10 +74,10 @@ namespace Hedra.Engine.Sound
             ListenerPosition = Position;
         }
 
-        public void PlaySound(SoundType Sound, Vector3 Location, bool Looping = false, float Pitch = 1, float Gain = 1)
+        public void PlaySound(string Sound, Vector3 Location, bool Looping = false, float Pitch = 1, float Gain = 1)
         {
 
-            if(!_loaded) return;
+            if(!_loaded || Sound == SoundType.None.ToString()) return;
             ListenerPosition = LocalPlayer.Instance.Position;
 
             Gain = Math.Max(Gain * (1-(ListenerPosition - Location).LengthFast / 128f) * Volume, 0);
@@ -111,22 +89,22 @@ namespace Hedra.Engine.Sound
                 Log.WriteLine($"Could not play sound {Sound}");
                 return;
             }
-            source.Play(_soundBuffers[ (int) Sound], Location, Pitch, Gain, Looping);            
+            source.Play(GetBuffer(Sound), Location, Pitch, Gain, Looping);            
         }
 
-        public void PlaySoundWhile(SoundType Sound, Func<bool> Lambda, Func<float> PitchLambda, Func<float> GainLambda)
+        public void PlaySoundWhile(string Sound, Func<bool> Lambda, Func<float> PitchLambda, Func<float> GainLambda)
         {
-            if (!_loaded) return;
+            if (!_loaded || Sound == SoundType.None.ToString()) return;
             var source = GrabSource();
             if(source == null)
             {
                 Log.WriteLine($"Could not play sound {Sound}");
                 return;
             }
-            TaskManager.While(Lambda, delegate
+            TaskScheduler.While(Lambda, delegate
             {
                 if(source.IsPlaying) return;
-                source.Play(_soundBuffers[(int)Sound], ListenerPosition, PitchLambda(), GainLambda(), false);
+                source.Play(GetBuffer(Sound), ListenerPosition, PitchLambda(), GainLambda(), false);
             });
         }
 
@@ -142,9 +120,9 @@ namespace Hedra.Engine.Sound
             return source;
         }
 
-        public SoundBuffer GetBuffer(SoundType Type)
+        public SoundBuffer GetBuffer(string Type)
         {
-            return _soundBuffers[(int)Type];
+            return _soundFamilies[Type.ToString()].Get();
         }
 
         public SoundItem GetAvailableSource()
@@ -179,7 +157,7 @@ namespace Hedra.Engine.Sound
         private short[] LoadOgg(string File, out int Channels, out int Bits, out int Rate, out int BytesPerSecond, out int Count, int Offset, int Length)
         {
             
-            byte[] bytes = AssetManager.ReadBinary(File, AssetManager.DataFile2);
+            byte[] bytes = AssetManager.ReadPath(File, false);
             Stream stream = new MemoryStream(bytes);
             
             using(VorbisReader reader = new VorbisReader(stream, true))
@@ -230,7 +208,7 @@ namespace Hedra.Engine.Sound
         private byte[] LoadWave(string File, out int Channels, out int Bits, out int Rate, out int BytesPerSecond, int Offset, int Length)
         {
             
-            byte[] bytes = AssetManager.ReadBinary(File, AssetManager.DataFile2);
+            byte[] bytes = AssetManager.ReadBinary(File, AssetManager.SoundResource);
             Stream stream = new MemoryStream(bytes);
             
             if (stream == null)

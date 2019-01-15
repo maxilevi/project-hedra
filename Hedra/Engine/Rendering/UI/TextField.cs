@@ -14,6 +14,7 @@ using OpenTK;
 using OpenTK.Input;
 using System.Threading;
 using System.Collections;
+using Hedra.Core;
 using Hedra.Engine.Game;
 
 namespace Hedra.Engine.Rendering.UI
@@ -45,7 +46,8 @@ namespace Hedra.Engine.Rendering.UI
         
         private IEnumerator CaretUpdate()
         {
-            while(Program.GameWindow.Exists){
+            while(Program.GameWindow.Exists)
+            {
                 
                 for(var i = 0; i < 20; i++)
                 {
@@ -209,8 +211,9 @@ namespace Hedra.Engine.Rendering.UI
             _enabled = true;
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
             _textBar?.Dispose();
             _caret?.Dispose();
         }

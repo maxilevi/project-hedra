@@ -1,0 +1,21 @@
+{
+  "Name": "UniqueScryingStaff",
+  "DisplayName": "Scrying Staff",
+  "EquipmentType": "Staff",
+  "Tier": "Unique",
+  "Description": "A truly remarkable staff, with future telling properties.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 7.5
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 0.85
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Staff/UniqueScryingStaff.ply"
+  }
+}

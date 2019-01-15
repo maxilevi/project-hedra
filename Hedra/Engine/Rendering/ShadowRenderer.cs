@@ -8,11 +8,13 @@
  */
 using OpenTK.Graphics.OpenGL4;
 using System;
+using Hedra.Core;
 using Hedra.Engine.Rendering;
 using OpenTK;
 using Hedra.Engine.Management;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
+using Hedra.Engine.IO;
 using Hedra.Engine.Player;
 
 namespace Hedra.Engine.Rendering
@@ -51,7 +53,7 @@ namespace Hedra.Engine.Rendering
 
         public static void Bind()
         {
-            ShadowDistance = 1400f / (float) GameSettings.MaxLoadingRadius * GameSettings.ChunkLoaderRadius;
+            ShadowDistance = 1400f / GeneralSettings.MaxLoadingRadius * GameSettings.ChunkLoaderRadius;
             _prevFbo = Renderer.FBOBound;
             if (ShadowFbo == null) ShadowRenderer.SetQuality(GameSettings.ShadowQuality);
             ShadowFbo.Bind();
@@ -69,7 +71,7 @@ namespace Hedra.Engine.Rendering
 
             Shader.Bind();
             Shader["Time"] = Time.AccumulatedFrameTime;
-            Shader["Fancy"] = GameSettings.Fancy ? 1.0f : 0.0f;
+            Shader["Fancy"] = GameSettings.Quality ? 1.0f : 0.0f;
             Shader["MVP"] = ShadowMvp;
             Renderer.CullFace(CullFaceMode.Front);
             Renderer.Enable(EnableCap.CullFace);

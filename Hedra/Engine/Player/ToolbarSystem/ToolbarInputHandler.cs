@@ -1,12 +1,14 @@
+using System;
 using System.Linq;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Player.ToolbarSystem
 {
-    public class ToolbarInputHandler
+    public class ToolbarInputHandler : IDisposable
     {
         private readonly IPlayer _player;
 
@@ -16,7 +18,8 @@ namespace Hedra.Engine.Player.ToolbarSystem
             EventDispatcher.RegisterKeyUp(this, this.HandleUp);
             EventDispatcher.RegisterKeyDown(this, this.HandleDown);
         }
-        public void HandleUp(object Sender, KeyEventArgs EventArgs)
+
+        private void HandleUp(object Sender, KeyEventArgs EventArgs)
         {
             if (!_player.CanInteract || _player.IsKnocked || _player.Movement.IsJumping || _player.IsDead || _player.IsSwimming ||
                 _player.IsUnderwater || _player.IsTravelling || _player.Inventory.Show || _player.AbilityTree.Show || GameSettings.Paused) return;
@@ -30,7 +33,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
             _player.Toolbar.SkillAt(keyIndex)?.KeyUp();          
         }
 
-        public void HandleDown(object Sender, KeyEventArgs EventArgs)
+        private void HandleDown(object Sender, KeyEventArgs EventArgs)
         {
             if (!_player.CanInteract || _player.Movement.IsJumping || _player.IsKnocked || _player.IsDead || _player.IsSwimming || _player.IsAttacking || _player.IsRiding
                 || _player.IsUnderwater || _player.IsTravelling || _player.Inventory.Show || _player.AbilityTree.Show || _player.Trade.Show || GameSettings.Paused) return;
@@ -42,7 +45,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
                 int keyIndex = int.Parse(keyText.Substring(keyText.Length - 1, 1)) - 1;
                 if (keyIndex < 0 || keyIndex > Toolbar.InteractableItems - 1)
                 {
-                    SoundManager.PlayUISound(SoundType.ButtonHover);
+                    SoundPlayer.PlayUISound(SoundType.ButtonHover);
                     return;
                 }
 
@@ -50,7 +53,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
                 if (ability != null && ability.MeetsRequirements() && this.AbilitiesBeingCasted() == 0)
                 {
-                    SoundManager.PlaySound(SoundType.ButtonClick, _player.Position, false, 1f, 0.5f);
+                    SoundPlayer.PlaySound(SoundType.ButtonClick, _player.Position, false, 1f, 0.5f);
 
                     ability.Cooldown = ability.MaxCooldown;
                     _player.Mana -= ability.ManaCost;
@@ -58,7 +61,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
                 }
                 else
                 {
-                    SoundManager.PlayUISound(SoundType.ButtonHover);
+                    SoundPlayer.PlayUISound(SoundType.ButtonHover);
                 }
             }
         }
@@ -66,6 +69,12 @@ namespace Hedra.Engine.Player.ToolbarSystem
         private int AbilitiesBeingCasted()
         {
             return _player.Toolbar.Skills.Count(T => T.Casting);
+        }
+
+        public void Dispose()
+        {
+            EventDispatcher.UnregisterKeyUp(this);
+            EventDispatcher.UnregisterKeyDown(this);
         }
     }
 }

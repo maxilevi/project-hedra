@@ -1,0 +1,21 @@
+{
+  "Name": "CommonStoneStaff",
+  "DisplayName": "Stone Staff",
+  "EquipmentType": "Staff",
+  "Tier": "Common",
+  "Description": "Easily confusable with a spear, a simple wooden shaft with a rocky point.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 3.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 0.95
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Staff/CommonStoneStaff.ply"
+  }
+}

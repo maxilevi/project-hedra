@@ -7,6 +7,7 @@
 using System.Collections.Generic;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
+using OpenTK.Input;
 
 namespace Hedra.Engine.Management
 {
@@ -18,13 +19,14 @@ namespace Hedra.Engine.Management
         private static readonly HashSet<IUpdatable> UpdateFunctions;
         private static readonly List<IUpdatable> UpdateFunctionsList;
         private static readonly TickSystem Ticker;
-        private static bool _isShown = true;
         private static readonly object Lock = new object();
+        private static readonly List<IUpdatable> ToRemove;
 
         static UpdateManager()
         {
             UpdateFunctions = new HashSet<IUpdatable>();
             UpdateFunctionsList = new List<IUpdatable>();
+            ToRemove = new List<IUpdatable>();
             Ticker = new TickSystem();
         }
 
@@ -41,8 +43,16 @@ namespace Hedra.Engine.Management
                 UpdateFunctionsList.Add(Updatable);
             }
         }
-        
+
         public static void Remove(IUpdatable Updatable)
+        {
+            lock (Lock)
+            {
+                ToRemove.Add(Updatable);
+            }
+        }
+
+        private static void DoRemove(IUpdatable Updatable)
         {
             lock (Lock)
             {
@@ -60,7 +70,8 @@ namespace Hedra.Engine.Management
         {
             lock (Lock)
             {
-                for (var i = UpdateFunctionsList.Count - 1; i > -1; i--)
+                RemovePending();
+                for (var i = 0; i < UpdateFunctionsList.Count; ++i)
                 {
                     if (UpdateFunctionsList[i] == null)
                     {
@@ -76,33 +87,25 @@ namespace Hedra.Engine.Management
                 SkyManager.Update();
             }
         }
-          
-        public static void CenterMouse()
+
+        private static void RemovePending()
         {
-            System.Windows.Forms.Cursor.Position = new System.Drawing.Point(GameSettings.Width / 2, GameSettings.Height / 2);
+            for(var i = 0; i < ToRemove.Count; i++)
+            {
+                DoRemove(ToRemove[i]);
+            }
+            ToRemove.Clear();
         }
 
-        public static CursorState CursorState { get; set; }
-
-        public static bool CursorShown
+        public static int UpdateCount
         {
-            get => _isShown;
-            set
+            get
             {
-                if (value == _isShown)
+                lock (Lock)
                 {
-                    return;
+                    return UpdateFunctionsList.Count;
                 }
-                Program.GameWindow.CursorVisible = value;
-    
-                _isShown = value;
             }
         }
     }
-}
-
-public enum CursorState{
-    NORMAL,
-    CLICK,
-    DRAG
 }

@@ -1,9 +1,9 @@
 {
   "Name": "CommonOrientalWoodenBow",
   "DisplayName": "Oriental Bow",
-  "EquipmentType": "Bow", 
+  "EquipmentType": "Bow",
   "Tier": "Common",
-  "Description": "Oriental wooden bow.",
+  "Description": "Made of Premium Oriental Wood. A fine choice to be put on a wall.",
   "Attributes": [
     {
       "Name": "Damage",

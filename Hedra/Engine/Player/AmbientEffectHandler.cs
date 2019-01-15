@@ -3,6 +3,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Sound;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.Player
@@ -26,7 +27,7 @@ namespace Hedra.Engine.Player
         {
             _areaSound.Update(_nearestWater < MaxRange);
             _areaSound.Type = GameSettings.UnderWaterEffect ? SoundType.Underwater : SoundType.River;
-            if ((_lastPosition - _player.Position).LengthSquared < 0.25f && !_wasAnyNull) return;
+            if ((_lastPosition - _player.Position).LengthSquared < 1f && !_wasAnyNull) return;
             _areaSound.Position = _player.Position;
             _nearestWater = NearestWaterBlock();
             _areaSound.Volume = (1-Math.Min(_nearestWater, MaxRange) / MaxRange)*.1f;

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using Hedra.Engine.AISystem;
+using Hedra.AISystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Player;
@@ -73,6 +73,14 @@ namespace Hedra.Engine.ModuleSystem
             dmg.XpToGive = dmg.XpToGive * mobDifficultyModifier; 
             mob.Health = mob.MaxHealth;
             return mob;
+        }
+
+        public void Polish(Entity Mob)
+        {
+            lock (_lock)
+            {
+                _factories[Mob.Type.ToLowerInvariant()].Polish(Mob);
+            }
         }
 
         private int GetMobDifficulty(Random Rng)

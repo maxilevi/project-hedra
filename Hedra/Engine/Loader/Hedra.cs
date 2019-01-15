@@ -2,32 +2,32 @@
     //#define SHOW_COLLISION
 #endif
 
-using Hedra.Engine.Generation;
-using Hedra.Engine.Management;
-using Hedra.Engine.Player;
-using Hedra.Engine.WorldBuilding;
-using Hedra.Engine.Rendering;
-using Hedra.Engine.Sound;
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL4;
 using System;
 using System.Globalization;
-using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
-using Hedra.Engine;
+using Hedra.API;
+using Hedra.Core;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.Events;
 using Hedra.Engine.Game;
-using Hedra.Engine.Loader;
+using Hedra.Engine.Generation;
+using Hedra.Engine.IO;
+using Hedra.Engine.Localization;
+using Hedra.Engine.Management;
+using Hedra.Engine.Native;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Player;
 using Hedra.Engine.Player.Inventory;
-using Hedra.Engine.Rendering.UI;
-using Forms = System.Windows.Forms;
+using Hedra.Engine.Rendering;
+using Hedra.Engine.Sound;
+using Hedra.Engine.WorldBuilding;
+using Hedra.Sound;
+using OpenTK;
+using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL4;
 
-namespace Hedra
+namespace Hedra.Engine.Loader
 {
     class Hedra : HedraWindow, IHedra
     {
@@ -47,21 +47,25 @@ namespace Hedra
         {
             base.OnLoad(e);
             MainThreadId = Thread.CurrentThread.ManagedThreadId;
-            GameVersion = "α 0.42";
+            GameVersion = "\u03B1 0.44";
             Title = $"{Title} {GameVersion}";
 
             OSManager.Load(Assembly.GetExecutingAssembly().Location);
             AssetManager.Load();
             CompatibilityManager.Load();
+            GameLoader.LoadArchitectureSpecificFiles(GameLoader.AppPath);
+            GameLoader.LoadSoundEngine();
+            HedraContent.Register();
+            ModificationsLoader.Reload();
             NameGenerator.Load();
             CacheManager.Load();
+            Translations.Load();
+            Log.WriteLine("Translations loaded successfully.");
             
-            GameLoader.LoadArchitectureSpecificFiles(GameLoader.AppPath);
             GameLoader.CreateCharacterFolders(GameLoader.AppData, GameLoader.AppPath);
             GameLoader.AllocateMemory();
-            Log.WriteLine("Assets loading was Successful.");
+            Log.WriteLine("Assets loading was successful.");
             
-            GameLoader.LoadSoundEngine();
             GameSettings.LoadNormalSettings(GameSettings.SettingsPath);
             Log.WriteLine($"Setting loaded successfully.");
 
@@ -76,8 +80,8 @@ namespace Hedra
 
             if( shadingOpenGlVersion < 3.1f)
             {
-                Forms.MessageBox.Show("Minimum OpenGL version is 3.1, yours is "+shadingOpenGlVersion, "OpenGL Version not supported",
-                                      Forms.MessageBoxButtons.OK, Forms.MessageBoxIcon.Error);
+                
+                OSManager.Show($"Minimum OpenGL version is 3.1, yours is {shadingOpenGlVersion}", "OpenGL Version not supported");
                 Exit();
             }
             DebugProvider = new DebugInfoProvider();
@@ -98,7 +102,7 @@ namespace Hedra
                 CoroutineManager.Update();
                 UpdateManager.Update();
                 World.Update();
-                SoundManager.Update(LocalPlayer.Instance.Position);
+                SoundPlayer.Update(LocalPlayer.Instance.Position);
                 SoundtrackManager.Update();
                 AutosaveManager.Update();
                 Executer.Update();

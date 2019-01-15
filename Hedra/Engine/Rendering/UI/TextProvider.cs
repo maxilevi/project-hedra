@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using Hedra.Engine.Management;
+using Hedra.Engine.Native;
 
 namespace Hedra.Engine.Rendering.UI
 {

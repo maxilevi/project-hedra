@@ -1,0 +1,45 @@
+{
+  "Name" : "Ent",
+  "MaxHealth": 516.0,
+  "AttackDamage": 11.0,
+  "AttackCooldown": 1.5,
+  "Speed": 1.40,
+  "XP": 12.0,
+  "Level": 17,
+  "AIType": "Hostile",
+  "Effects": [],
+  "Drops": [
+    {
+      "Type": "EnchantedBranch",
+      "Chance": 15
+    }
+  ],
+  "Model": {
+    "Handler": "Ent",
+    "AlignWithTerrain" :  false,
+    "Path": "$DataFile$/Assets/Chr/EntIdle.dae",
+    "Scale": 1.75,
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/EntIdle.dae",
+        "Speed": 1.0
+      }
+    ],
+    "WalkAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/WarriorWalk.dae",
+        "Speed": 1.0
+      }
+    ],
+    "AttackAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/WarriorLeftPunch.dae",
+        "Speed": 1.25
+      },
+      {
+        "Path": "$DataFile$/Assets/Chr/WarriorRightPunch.dae",
+        "Speed": 1.25
+      }
+    ]
+  }
+}

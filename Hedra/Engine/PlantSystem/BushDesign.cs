@@ -1,17 +1,21 @@
 using System;
+using Hedra.BiomeSystem;
+using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.PlantSystem
 {
     public class BushDesign : PlantDesign
     {
-        public override VertexData Model => CacheManager.GetModel(CacheItem.Bushes);
+        public override CacheItem Type => CacheItem.Bushes;
+        
         public override Matrix4 TransMatrix(Vector3 Position, Random Rng)
         {
             var underChunk = World.GetChunkAt(Position);
@@ -22,7 +26,7 @@ namespace Hedra.Engine.PlantSystem
 
             float height = Physics.HeightAtPosition(Position + addon);
             var topBlock = World.GetHighestBlockAt((int)(Position.X + addon.X), (int)(Position.Z + addon.Z));
-            if (topBlock.Noise3D) return Matrix4.Identity;
+            if (Block.Noise3D) return Matrix4.Identity;
 
             for (int x = -3; x < 3; x++)
             {
@@ -34,19 +38,18 @@ namespace Hedra.Engine.PlantSystem
                 }
             }
 
-            Matrix4 rotationMat4 = Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat());
+            Matrix4 rotationMat4 = Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat() * Mathf.Radian);
             Matrix4 transMatrix = Matrix4.CreateScale(1.75f + Rng.NextFloat() * .75f);
             transMatrix *= rotationMat4;
             transMatrix *= Matrix4.CreateTranslation(new Vector3(Position.X, height, Position.Z) + addon);
             return transMatrix;
         }
 
-        public override VertexData Paint(Vector3 Position, VertexData Data, Region Region, Random Rng)
+        public override VertexData Paint(VertexData Data, Region Region, Random Rng)
         {
-            Data.Extradata.AddRange(Data.GenerateWindValues());
+            Data.AddWindValues();
 
-            var underchunk = World.GetChunkAt(Position);
-            Data.Paint(underchunk.Biome.Colors.GrassColor * .8f);
+            Data.Paint(Region.Colors.GrassColor * .8f);
             Data.GraduateColor(Vector3.UnitY);
 
             return Data;

@@ -1,10 +1,9 @@
-
 {
   "Name": "LegendaryDemonicKatar",
   "DisplayName": "Demonic Katar",
   "EquipmentType": "Katar",
   "Tier": "Legendary",
-  "Description": "Demonic katar.",
+  "Description": "It is fiery, the blade demands your soul will you give into it's wishes.",
   "Attributes": [
     {
       "Name": "Damage",

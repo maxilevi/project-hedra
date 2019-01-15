@@ -13,7 +13,9 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Generation;
 using System.Collections.Generic;
 using Hedra.Engine.ClassSystem;
+using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Rendering.UI;
 
 namespace Hedra.Engine.Management
 {
@@ -22,7 +24,7 @@ namespace Hedra.Engine.Management
     /// </summary>
     public static class DataManager
     {
-        private const float SaveVersion = 1.15f;
+        private const float SaveVersion = 1.2f;
         
         public static void SavePlayer(PlayerInformation Player)
         {
@@ -46,7 +48,7 @@ namespace Hedra.Engine.Management
                     bw.Write(SaveVersion);
                     bw.Write(Player.Name);
                     bw.Write(Player.BlockPosition.X);
-                    bw.Write(Player.BlockPosition.Y + 4);
+                    bw.Write(Player.BlockPosition.Y);
                     bw.Write(Player.BlockPosition.Z);
 
                     bw.Write(Player.Rotation.X);
@@ -86,6 +88,15 @@ namespace Hedra.Engine.Management
                             bw.Write(itemBytes);
                         }
                     }
+                    var recipes = Player.Recipes;
+                    if (recipes != null)
+                    {
+                        bw.Write(recipes.Length);
+                        for(var i = 0; i < recipes.Length; ++i)
+                        {
+                            bw.Write(recipes[i]);
+                        } 
+                    }
                 }
             }
         }
@@ -108,7 +119,8 @@ namespace Hedra.Engine.Management
                 Daytime = EnvironmentSystem.SkyManager.DayTime,
                 Class = Player.Class,
                 RandomFactor = Player.RandomFactor,
-                Items = Player.Inventory.ToArray()
+                Items = Player.Inventory.ToArray(),
+                Recipes = Player.Crafting.GetRecipes()
             };
 
             return data;
@@ -167,15 +179,36 @@ namespace Hedra.Engine.Management
                 information.Class = ClassDesign.FromString(br.ReadString());
                 information.RandomFactor = br.ReadSingle();
                 items = new Dictionary<int, Item>();
-                int itemCount = br.ReadInt32();
+                var itemCount = br.ReadInt32();
                 for (var i = 0; i < itemCount; i++)
                 {
                     var index = br.ReadInt32();
                     var item = Item.FromArray(br.ReadBytes(br.ReadInt32()));
-                    items.Add(index, item);
+                    if (item != null)
+                    {
+                        items.Add(index, item);
+                    }
+                    else
+                    {
+                        Log.WriteLine($"Found non-existent item, removing...");
+                    }
                 }
+                information.Items = items.ToArray();
+                if (version >= 1.2f)
+                {
+                    var recipes = new List<string>();
+                    var length = br.ReadInt32();
+                    for(var i = 0; i < length; ++i)
+                    {
+                        var name = br.ReadString();
+                        if(ItemPool.Exists(name))
+                            recipes.Add(name);
+                        else
+                            Log.WriteLine($"Found non-existent recipe ${name}, removing...");
+                    }
+                    information.Recipes = recipes.ToArray();
+                }             
             }
-            information.Items = items.ToArray();
             Str.Close();
             Str.Dispose();
             return information;

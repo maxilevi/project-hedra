@@ -1,9 +1,9 @@
-﻿{
+{
   "Name": "CommonBronzeSword",
   "DisplayName": "Bronze Sword",
-  "EquipmentType": "Sword", 
+  "EquipmentType": "Sword",
   "Tier": "Common",
-  "Description": "Bronze sword.",
+  "Description": "A sword forged of bronze. Mediocre weight and dull.",
   "Attributes": [
     {
       "Name": "Damage",

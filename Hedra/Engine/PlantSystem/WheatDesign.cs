@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Hedra.BiomeSystem;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Generation;
@@ -9,15 +10,16 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.PlantSystem
 {
     public class WheatDesign : WeedDesign
     {
-        public override VertexData Model => CacheManager.GetModel(CacheItem.Wheat);
+        public override CacheItem Type => CacheItem.Wheat;
 
-        protected override void ApplyPaint(Vector3 Position, VertexData Data, Region Region, Random Rng)
+        protected override void ApplyPaint(VertexData Data, Region Region, Random Rng)
         {
             var newColor = new Vector4((Region.Colors.GrassColor * 1.25f).Xyz, 1);
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Hedra;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
@@ -13,6 +14,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.WorldBuilding;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace HedraTests
@@ -23,8 +25,8 @@ namespace HedraTests
         public virtual Dictionary<Vector2, Chunk> SearcheableChunks => null;
         public virtual AreaHighlighter Highlighter => null;
         public virtual ParticleSystem Particles => null;
-        public virtual EnviromentGenerator EnviromentGenerator => null;
-        public virtual IBiomePool BiomePool => null;
+        public virtual EnvironmentGenerator EnvironmentGenerator => null;
+        public virtual IBiomePool BiomePool { get; set; }
         public virtual MobFactory MobFactory => null;
         public virtual TreeGenerator TreeGenerator => null;
         public virtual IWorldBuilding WorldBuilding => null;
@@ -32,6 +34,7 @@ namespace HedraTests
         public int AverageBuildTime => 0;
         public int AverageGenerationTime => 0;
         public virtual int Seed => 0;
+        public Vector3 SpawnPoint { get; }
         public virtual bool IsGenerated => false;
         public virtual int MeshQueueCount => 0;
         public virtual int ChunkQueueCount => 0;
@@ -187,7 +190,7 @@ namespace HedraTests
             return default(Entity);
         }
 
-        public virtual Vector3 FindPlaceablePosition(Entity Mob, Vector3 DesiredPosition)
+        public virtual Vector3 FindPlaceablePosition(IEntity Mob, Vector3 DesiredPosition)
         {
             return default(Vector3);
         }

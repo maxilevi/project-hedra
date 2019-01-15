@@ -1,4 +1,5 @@
 using System;
+using Hedra.BiomeSystem;
 using Hedra.Engine.Rendering;
 using OpenTK;
 
@@ -58,7 +59,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
 
         public override float MinLight(int Seed)
         {
-            return 0.15f;
+            return 0.05f;
         }
 
         public override float MaxLight(int Seed)

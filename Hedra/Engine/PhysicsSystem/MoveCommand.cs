@@ -8,6 +8,7 @@
  */
 using System;
 using Hedra.Engine.EntitySystem;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.PhysicsSystem
@@ -18,14 +19,14 @@ namespace Hedra.Engine.PhysicsSystem
     public struct MoveCommand
     {
         public Vector3 Delta;
-        public IEntity Parent;
+        public bool OnlyY;
         public bool IsRecursive;
         
-        public MoveCommand(IEntity Parent, Vector3 Delta){
+        public MoveCommand(Vector3 Delta, bool OnlyY = false)
+        {
             this.Delta = Delta;
-            this.Parent = Parent;
+            this.OnlyY = OnlyY;
             this.IsRecursive = false;
-
         }
     }
 }

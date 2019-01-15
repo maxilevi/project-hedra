@@ -3,7 +3,7 @@
   "DisplayName": "Silver Falchion",
   "EquipmentType": "Sword",
   "Tier": "Uncommon",
-  "Description": "Steel falchion.",
+  "Description": "A falchion is a slightly curved sword with a convex edge. Steel is a near perfect material for a falchion.",
   "Attributes": [
     {
       "Name": "Damage",

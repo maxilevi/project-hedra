@@ -1,4 +1,5 @@
 using System;
+using Hedra.Sound;
 using OpenTK;
 using OpenTK.Audio.OpenAL;
 
@@ -8,15 +9,14 @@ namespace Hedra.Engine.Sound
     {
         float Volume { get; set; }
         Vector3 ListenerPosition { get; }
-        void Load();
+        void Setup();
         void Update(Vector3 Position);
-        void PlaySound(SoundType Sound, Vector3 Location, bool Looping = false, float Pitch = 1, float Gain = 1);
-        void PlaySoundWhile(SoundType Sound, Func<bool> Lambda, Func<float> Pitch, Func<float> Gain);
-        SoundBuffer GetBuffer(SoundType Type);
+        void PlaySound(string Sound, Vector3 Location, bool Looping = false, float Pitch = 1, float Gain = 1);
+        void PlaySoundWhile(string Sound, Func<bool> Lambda, Func<float> Pitch, Func<float> Gain);
+        SoundBuffer GetBuffer(string Type);
         SoundItem GetAvailableSource();
-        short[] LoadOgg(string File, out int Channels, out int Bits, out int Rate, out int Count);
-        short[] LoadOgg(string File, out int Channels, out int Bits, out int Rate, out int BytesPerSecond, int Offset, int Length);
-        byte[] LoadWave(string File, out int Channels, out int Bits, out int Rate);
         ALFormat GetSoundFormat(int Channels, int Bits);
+        void LoadSound(string Name, params string[] Names);
+        void MarkAsReady();
     }
 }

@@ -1,0 +1,21 @@
+{
+  "Name": "LegendaryBloodstoneStaff",
+  "DisplayName": "Bloodstone Staff",
+  "EquipmentType": "Staff",
+  "Tier": "Legendary",
+  "Description": "It is believed that everything is unique, bloodstone is a near perfect representation.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 9
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 0.9
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Staff/LegendaryBloodstoneStaff.ply"
+  }
+}

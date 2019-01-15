@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
+using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
@@ -69,7 +70,7 @@ namespace Hedra.Engine.Generation
             }
             CoroutineManager.StartCoroutine(FadeHighlight, _highlightedAreas[k], area.Position + Vector3.UnitY * fadeSpeed, Seconds);
 
-            TaskManager.After((int)(Seconds * 1000f), () => CoroutineManager.StartCoroutine(FadeHighlight, new object[] { _highlightedAreas[k], area.Position - Vector3.UnitY * fadeSpeed }));
+            TaskScheduler.After(Seconds, () => CoroutineManager.StartCoroutine(FadeHighlight, new object[] { _highlightedAreas[k], area.Position - Vector3.UnitY * fadeSpeed }));
             return null;
         }
 

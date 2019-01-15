@@ -15,7 +15,7 @@ namespace HedraTests.Core
         public override void Setup()
         {
             base.Setup();
-            Hedra.Program.GameWindow = new SimpleHedraWindowMock();
+            Program.GameWindow = new SimpleHedraWindowMock();
             _dummyConfig = $"{Path.GetTempPath()}/hedra_test_settings.cfg";
             if(File.Exists(_dummyConfig))
                 File.Delete(_dummyConfig);

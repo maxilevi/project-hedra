@@ -1,0 +1,21 @@
+{
+  "Name": "UniqueSanctuaryStaff",
+  "DisplayName": "Sanctuary Staff",
+  "EquipmentType": "Staff",
+  "Tier": "Unique",
+  "Description": "A more defensive staff rather than say, a staff of similar power that would be used by a battle mage.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 7.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Staff/UniqueSanctuaryStaff.ply"
+  }
+}

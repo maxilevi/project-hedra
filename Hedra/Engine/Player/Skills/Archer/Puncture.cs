@@ -9,8 +9,9 @@
 
 using System;
 using Hedra.Engine.EntitySystem;
-using Hedra.Engine.ItemSystem.WeaponSystem;
 using Hedra.Engine.Rendering;
+using Hedra.EntitySystem;
+using Hedra.WeaponSystem;
 
 namespace Hedra.Engine.Player.Skills.Archer
 {

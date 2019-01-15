@@ -1,4 +1,5 @@
 using Hedra.Engine.EntitySystem;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering
@@ -27,16 +28,16 @@ namespace Hedra.Engine.Rendering
             set => Model.TransformationMatrix = value;
         }
 
-        public Vector3 RotationPoint
+        public Vector3 LocalRotationPoint
         {
-            get => Model.RotationPoint;
-            set => Model.RotationPoint = value;
+            get => Model.LocalRotationPoint;
+            set => Model.LocalRotationPoint = value;
         }
 
-        public Vector3 LocalRotation
+        public Vector3 Rotation
         {
-            get => Model.LocalRotation;
-            set => Model.LocalRotation = value;
+            get => Model.Rotation;
+            set => Model.Rotation = value;
         }
         
         public Vector3 LocalPosition
@@ -45,16 +46,22 @@ namespace Hedra.Engine.Rendering
             set => Model.LocalPosition = value;
         }
         
-        public Vector3 BeforeLocalRotation
+        public Vector3 BeforeRotation
         {
-            get => Model.BeforeLocalRotation;
-            set => Model.BeforeLocalRotation = value;
+            get => Model.BeforeRotation;
+            set => Model.BeforeRotation = value;
         }
 
         public Vector3 Position
         {
             get => Model.Position;
             set => Model.Position = value;
+        }
+        
+        public bool ApplyNoiseTexture
+        {
+            get => Model.ApplyNoiseTexture;
+            set => Model.ApplyNoiseTexture = value;
         }
 
         public Vector3 TransformPoint(Vector3 Point)

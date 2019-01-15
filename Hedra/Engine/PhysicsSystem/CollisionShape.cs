@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using OpenTK;
 using Hedra.Engine.Rendering;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.PhysicsSystem
 {
@@ -24,19 +25,18 @@ namespace Hedra.Engine.PhysicsSystem
         public uint[] Indices { get; }
         public float BroadphaseRadius { get; set; }
         public Vector3 BroadphaseCenter { get; set; }
-        public bool UseBroadphase { get; set; } = true;
         public float Height { get; private set; }
         private CollisionShape _cache;
 
-        public CollisionShape(Vector3[] Vertices, uint[] Indices)
+        private CollisionShape(Vector3[] Vertices, uint[] Indices)
         {
-            this.Vertices = Vertices ?? new Vector3[0];
+            this.Vertices = Optimize(Vertices ?? new Vector3[0]);
 #if !DEBUG
             Indices = null;
 #endif
             this.Indices = Indices ?? new uint[0];
             this.RecalculateBroadphase();
-            this.Height = (Support(Vector3.UnitY) - Support(-Vector3.UnitY)).Y;
+            this.Height = (SupportPoint(Vector3.UnitY) - SupportPoint(-Vector3.UnitY)).Y;
         }
 
         public CollisionShape Transform(Matrix4 TransMatrix)
@@ -46,7 +46,7 @@ namespace Hedra.Engine.PhysicsSystem
                 Vertices[i] = Vector3.TransformPosition(Vertices[i], TransMatrix);
             }
             this.RecalculateBroadphase();
-            this.Height = (Support(Vector3.UnitY) - Support(-Vector3.UnitY)).Y;
+            this.Height = (SupportPoint(Vector3.UnitY) - SupportPoint(-Vector3.UnitY)).Y;
             return this;
         }
 
@@ -60,9 +60,8 @@ namespace Hedra.Engine.PhysicsSystem
             return this;
         }
 
-        public Vector3 Support(Vector3 Direction)
-        {
-            
+        public Vector3 SupportPoint(Vector3 Direction)
+        {           
             var highest = float.MinValue;
             var support = Vector3.Zero;
 
@@ -81,16 +80,21 @@ namespace Hedra.Engine.PhysicsSystem
 
         public void RecalculateBroadphase()
         {
+            RecalculateBroadphase(Vector3.One);
+        }
+
+        public void RecalculateBroadphase(Vector3 Mask)
+        {
             float dist = 0;
             var verticesSum = Vector3.Zero;
             for (var i = 0; i < Vertices.Length; i++)
             {
-                verticesSum += Vertices[i];
+                verticesSum += Vertices[i] * Mask;
             }
             this.BroadphaseCenter = verticesSum / Vertices.Length;
             for (var i = 0; i < Vertices.Length; i++)
             {
-                float length = (Vertices[i] - this.BroadphaseCenter).LengthFast;
+                float length = (Vertices[i] * Mask - this.BroadphaseCenter).LengthFast;
 
                 if (length > dist)
                     dist = length;
@@ -98,6 +102,35 @@ namespace Hedra.Engine.PhysicsSystem
             this.BroadphaseRadius = dist;
         }
 
+        private static Vector3[] Optimize(Vector3[] Original)
+        {
+            /* If it's all empty then it probably is a container. */
+            if (Original.All(V => V.Equals(Vector3.Zero))) return Original;
+
+            var set = new HashSet<Vector3>();
+            for (var i = 0; i < Original.Length; i++)
+            {
+                if (!set.Contains(Original[i]))
+                    set.Add(Original[i]);
+            }
+            return set.ToArray();
+        }
+
+        public CollisionShape AsShape()
+        {
+            return this;
+        }
+        
+        public Box AsBox()
+        {
+            return null;
+        }
+        
+        public CollisionGroup AsGroup()
+        {
+            return null;
+        }
+        
         public object Clone()
         {
             return new CollisionShape(Vertices.ToArray(), this.Indices.ToArray());

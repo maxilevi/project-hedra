@@ -11,19 +11,20 @@ using System.Text;
 using System.Drawing;
 using OpenTK;
 using OpenTK.Input;
-using Hedra.Engine.Rendering;
+using Hedra.Engine.Input;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Management;
 using Hedra.Engine.Sound;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
+using Hedra.Sound;
 
 namespace Hedra.Engine.Player
 {
     /// <summary>
     /// Description of Chat.
     /// </summary>
-    public class Chat
+    public class Chat : IDisposable
     {
         public bool Focused { get; set ;}
         private readonly IPlayer _player;
@@ -63,7 +64,7 @@ namespace Hedra.Engine.Player
             if(_commandLine.Text.Length >= 1 && _commandLine.Text[0] == '/')
             {
                 if (CommandManager.ProcessCommand(_commandLine.Text, _player, out string response))
-                    SoundManager.PlaySound(SoundType.NotificationSound, _player.Position);
+                    SoundPlayer.PlaySound(SoundType.NotificationSound, _player.Position);
                 this.AddLine(response);
                 _lastInput = _commandLine.Text;
             }
@@ -132,7 +133,7 @@ namespace Hedra.Engine.Player
             _commandLine.Enable();
             _commandLine.InFocus = true;
             Focused = true;
-            UpdateManager.CursorShown = true;
+            Cursor.Show = true;
             _commandLine.Text = string.Empty;
         }
         
@@ -148,8 +149,8 @@ namespace Hedra.Engine.Player
             _commandLine.Disable();
             _commandLine.InFocus = false;
             Focused = false;
-            UpdateManager.CursorShown = false;
-            UpdateManager.CenterMouse();
+            Cursor.Show = false;
+            Cursor.Center();
         }
         
         public bool Show
@@ -168,6 +169,11 @@ namespace Hedra.Engine.Player
                     _textBox.Disable();
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            EventDispatcher.UnregisterKeyDown(this);
         }
     }
 }

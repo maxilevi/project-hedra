@@ -6,7 +6,6 @@
   "XP": 3.0,
   "Level": 4,
   "AIType": "Hostile",
-  "Ridable": true,
   "Effects": [],
   "Drops": [ ],
   "Model": {

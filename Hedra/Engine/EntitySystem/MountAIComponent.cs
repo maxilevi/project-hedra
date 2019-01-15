@@ -7,11 +7,13 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
-using Hedra.Engine.AISystem;
+using Hedra.AISystem;
+using Hedra.Core;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.EntitySystem

@@ -1,9 +1,9 @@
-﻿{
+{
   "Name": "RareHunterAxe",
   "DisplayName": "Hunter Axe",
-  "EquipmentType": "Axe", 
+  "EquipmentType": "Axe",
   "Tier": "Rare",
-  "Description": "Hunter axe.",
+  "Description": "Commonly used by hunters for it's light weight and versatility.",
   "Attributes": [
     {
       "Name": "Damage",

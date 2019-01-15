@@ -1,10 +1,9 @@
-
 {
   "Name": "RareBronzeKnuckleShieldBow",
   "DisplayName": "Bronze Knuckle Shield Bow",
   "EquipmentType": "Bow",
   "Tier": "Rare",
-  "Description": "Bronze knuckle shield Bow.",
+  "Description": "There is a bronze guard around your fist.",
   "Attributes": [
     {
       "Name": "Damage",

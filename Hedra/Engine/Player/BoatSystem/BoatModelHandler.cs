@@ -1,10 +1,12 @@
 using System;
+using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Particles;
+using Hedra.Rendering.Particles;
 using OpenTK;
 
 namespace Hedra.Engine.Player.BoatSystem
@@ -45,7 +47,7 @@ namespace Hedra.Engine.Player.BoatSystem
                 _player.Model.TransformationMatrix *= Matrix4.CreateFromQuaternion(_terrainOrientation);
             }
             Model.TransformationMatrix = _player.Model.TransformationMatrix;
-            Model.Rotation = _player.Model.Rotation;
+            Model.LocalRotation = _player.Model.LocalRotation;
             Model.Position = _player.Model.ModelPosition;
             Model.Enabled = _stateHandler.Enabled;
             if (_stateHandler.Velocity.LengthFast > 5 && _stateHandler.Enabled && _stateHandler.InWater)

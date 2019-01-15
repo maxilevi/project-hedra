@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.Management;
+using Hedra.Rendering;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
@@ -20,23 +21,20 @@ namespace Hedra.Engine.Rendering
     {
         public const string ModelViewMatrixName = "_modelViewMatrix";
         public const string ModelViewProjectionName = "_modelViewProjectionMatrix";
-        public const int LightDistance = 256;
-        public const int MaxLights = 12;
-        private static readonly List<Shader> Shaders;
-        private static readonly PointLight[] PointLights;
+        public const int LightDistance = 384;
+        public const int MaxLights = 32;
         private static Vector3 _lightPosition;
         private static Vector3 _lightColor;
         private static float _clipPlaneY;
+        private static readonly List<Shader> Shaders;
+        private static readonly List<PointLight> PointLights;
+        public static PointLight[] Lights => PointLights.ToArray();
 
         static ShaderManager()
         {
             Shaders = new List<Shader>();
-            PointLights = new PointLight[MaxLights];
+            PointLights = new List<PointLight>(MaxLights);
             _lightPosition = new Vector3(0, 1000, 0);
-            for (var i = 0; i < PointLights.Length; i++)
-            {
-                PointLights[i] = new PointLight();
-            }
         }
 
         public static void ReloadShaders()
@@ -52,6 +50,7 @@ namespace Hedra.Engine.Rendering
         public static void RegisterShader(Shader Entry)
         {
             Shaders.Add(Entry);
+            Entry.LightCountLocation = Renderer.GetUniformLocation(Entry.ShaderId, "LightCount");
             Entry.LightColorLocation = Renderer.GetUniformLocation(Entry.ShaderId, "LightColor");
             Entry.LightPositionLocation = Renderer.GetUniformLocation(Entry.ShaderId, "LightPosition");
             Entry.PointLightsColorUniform = new int[MaxLights];
@@ -103,33 +102,45 @@ namespace Hedra.Engine.Rendering
 
         public static PointLight GetAvailableLight()
         {
-            for(var i = 0; i < PointLights.Length; i++){
-                if (PointLights[i].Locked) continue;
-                PointLights[i].Radius = PointLight.DefaultRadius;
-                PointLights[i].Color = Vector3.Zero;
-                PointLights[i].Position = Vector3.Zero;
-                PointLights[i].Locked = true;
-                return PointLights[i];
-            }
-            return null;
+            if (UsedLights == MaxLights) return null;
+            var light = new PointLight
+            {
+                Radius = PointLight.DefaultRadius,
+                Color = Vector3.Zero,
+                Position = Vector3.Zero,
+                Locked = true
+            };
+            PointLights.Add(light);
+            return light;
         }
 
         public static void UpdateLight(PointLight Light)
         {
             if (!Light.Locked)
             {
-                Light.Radius = PointLight.DefaultRadius;
-                Light.Color = Vector3.Zero;
+                PointLights.Remove(Light);
+                Do(S => S.LightCountLocation != -1, delegate(Shader Shader)
+                {
+                    for (var i = 0; i < PointLights.Count; i++)
+                    {
+                        Renderer.Uniform3(Shader.PointLightsColorUniform[i], PointLights[i].Color);
+                        Renderer.Uniform3(Shader.PointLightsPositionUniform[i], PointLights[i].Position);
+                        Renderer.Uniform1(Shader.PointLightsRadiusUniform[i], PointLights[i].Radius);
+                        Renderer.Uniform1(Shader.LightCountLocation, PointLights.Count);
+                    }
+                });
             }
-            var lightIndex = Array.IndexOf(PointLights, Light);
-            if(lightIndex == -1) return;
-
-            ShaderManager.Do(S => S.PointLightsColorUniform[lightIndex] != -1, delegate (Shader Shader)
+            else
             {
-                Renderer.Uniform3(Shader.PointLightsColorUniform[lightIndex], Light.Color);
-                Renderer.Uniform3(Shader.PointLightsPositionUniform[lightIndex], Light.Position);
-                Renderer.Uniform1(Shader.PointLightsRadiusUniform[lightIndex], Light.Radius);
-            });
+                var lightIndex = PointLights.IndexOf(Light);
+                Do(S => S.PointLightsColorUniform[lightIndex] != -1, delegate(Shader Shader)
+                {
+                    Renderer.Uniform3(Shader.PointLightsColorUniform[lightIndex], Light.Color);
+                    Renderer.Uniform3(Shader.PointLightsPositionUniform[lightIndex], Light.Position);
+                    Renderer.Uniform1(Shader.PointLightsRadiusUniform[lightIndex], Light.Radius);
+                    Renderer.Uniform1(Shader.LightCountLocation, PointLights.Count);
+                });
+            }
         }
         
         public static Vector3 LightColor
@@ -138,7 +149,7 @@ namespace Hedra.Engine.Rendering
             set
             {
                 _lightColor = value;
-                ShaderManager.Do(S => S.LightColorLocation != -1, delegate (Shader Shader)
+                Do(S => S.LightColorLocation != -1, delegate (Shader Shader)
                 {
                     Shader["LightColor"] = _lightColor;
                 });
@@ -169,17 +180,6 @@ namespace Hedra.Engine.Rendering
             }
         }
 
-        public static int UsedLights
-        {
-            get
-            {
-                var usedLights = 0;
-                for (var i = 0; i < PointLights.Length; i++)
-                {
-                    if (PointLights[i].Locked) usedLights++;
-                }
-                return usedLights;
-            }
-        }
+        public static int UsedLights => PointLights.Count;
     }
 }

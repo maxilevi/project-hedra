@@ -9,15 +9,19 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Templates
         public BlacksmithTemplate Blacksmith { get; set; }
         public FarmTemplate Farm { get; set; }
         public WindmillTemplate Windmill { get; set; }
+        public DecorationsTemplate Decorations { get; set; }
 
-        public DesignTemplate[][] Designs => new DesignTemplate[][]
+        public DesignTemplate[][] CacheableDesigns => new []
         {
             House.Designs,
             Well.Designs,
             Stable.Designs,
             Farm.Designs,
+            Farm.PropDesigns,
             Windmill.Designs,
-            Blacksmith.Designs
+            Blacksmith.Designs,
+            Decorations.Lamps,
+            Decorations.Benches
         };
     }
 }

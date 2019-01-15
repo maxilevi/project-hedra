@@ -7,6 +7,8 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Sound;
+using Hedra.EntitySystem;
+using Hedra.Sound;
 using HedraTests.Player;
 using Moq;
 using NUnit.Framework;
@@ -28,7 +30,6 @@ namespace HedraTests.EntitySystem
         public override void Setup()
         {
             base.Setup();
-            _physics = new PhysicsComponent(null);
             _maxHealth = 100;
             var modelMock = new Mock<BaseUpdatableModel>();
             modelMock.SetupProperty(M => M.Tint);
@@ -48,8 +49,15 @@ namespace HedraTests.EntitySystem
                 lastComponent = Component;
             });
             entityMock.Setup(E => E.SearchComponent<DropComponent>()).Returns( () => (DropComponent) lastComponent);
+            entityMock.Setup(E => E.GetComponents<DropComponent>()).Returns( () => lastComponent != null 
+            ? new []
+            {
+                (DropComponent) lastComponent
+            }
+            : new DropComponent[0]);
             _entity = entityMock.Object;
             _entity.Health = 100;
+            _physics = new PhysicsComponent(_entity);
             GameManager.Player = new PlayerMock();
             _damageComponent = new DamageComponent(_entity);
         }
@@ -88,7 +96,7 @@ namespace HedraTests.EntitySystem
         }
         
         [Test]
-        public void TestEntityIsPushedWhenDamaged()
+        public void TestSmallerEntityIsPushedWhenDamaged()
         {
             var wasCalled = false;
             var physicsMock = new Mock<IPhysicsComponent>();
@@ -96,8 +104,22 @@ namespace HedraTests.EntitySystem
             _physics = physicsMock.Object;
             var entityMock = new Mock<IEntity>();
             entityMock.SetupAllProperties();
-            _damageComponent.Damage(10, entityMock.Object, out var xp, true, true);
+            entityMock.Setup(E => E.Size).Returns(Vector3.One);
+            _damageComponent.Damage(10, entityMock.Object, out _, true, true);
             Assert.True(wasCalled);
+        }
+        
+        [Test]
+        public void TestBiggerEntityIsNotPushedWhenDamaged()
+        {
+            var wasCalled = false;
+            var physicsMock = new Mock<IPhysicsComponent>();
+            physicsMock.Setup(P => P.Translate(It.IsAny<Vector3>())).Callback( () => wasCalled = true);
+            _physics = physicsMock.Object;
+            var entityMock = new Mock<IEntity>();
+            entityMock.SetupAllProperties();
+            _damageComponent.Damage(10, entityMock.Object, out _, true, true);
+            Assert.False(wasCalled);
         }
         
         [Test]
@@ -150,13 +172,13 @@ namespace HedraTests.EntitySystem
             var provider = new Mock<ISoundProvider>();
             provider.Setup(P => P.PlaySound(It.IsIn( new []
             {
-                SoundType.HitSound,
-                SoundType.SlashSound
+                SoundType.HitSound.ToString(),
+                SoundType.SlashSound.ToString()
             }), It.IsAny<Vector3>(), It.IsAny<bool>(), It.IsAny<float>(), It.IsAny<float>())).Callback(delegate
                 {
                     wasCalled = true;
                 });
-            SoundManager.Provider = provider.Object;
+            SoundPlayer.Provider = provider.Object;
             _damageComponent.Damage(10, null, out var xp, true, false);
             Assert.True(wasCalled);
         }

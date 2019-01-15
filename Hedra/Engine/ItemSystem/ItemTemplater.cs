@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.Engine.ItemSystem.Templates;
 
 namespace Hedra.Engine.ItemSystem
 {
@@ -33,6 +34,14 @@ namespace Hedra.Engine.ItemSystem
                 {
                     return _itemTemplates[Key.ToLowerInvariant()];
                 }
+            }
+        }
+
+        public bool Contains(string Key)
+        {
+            lock (_lock)
+            {
+                return _itemTemplates.ContainsKey(Key.ToLowerInvariant());
             }
         }
     }

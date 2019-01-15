@@ -1,0 +1,21 @@
+{
+  "Name": "RareIncenseStaff",
+  "DisplayName": "Incense Staff",
+  "EquipmentType": "Staff",
+  "Tier": "Rare",
+  "Description": "A very thin stave that when burned releases a lovely smell. May act as a ward against spirits.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 5.75
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.1
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Staff/RareIncenseStaff.ply"
+  }
+}

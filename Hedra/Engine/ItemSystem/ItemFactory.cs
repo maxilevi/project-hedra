@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Hedra.Engine.Loader;
+using Hedra.API;
+using Hedra.Engine.IO;
+using Hedra.Engine.ItemSystem.Templates;
 using Newtonsoft.Json;
 
 namespace Hedra.Engine.ItemSystem
@@ -30,7 +32,6 @@ namespace Hedra.Engine.ItemSystem
 
                 foreach (var template in itemTemplates)
                 {
-                    ItemModelLoader.Load(template.Model);
                     ItemTemplates.Add(template.Name.ToLowerInvariant(), template);
                 }
             }
@@ -43,8 +44,7 @@ namespace Hedra.Engine.ItemSystem
             {
                 var ext = Path.GetExtension(module);
                 if (ext != ".json") continue;
-
-                var obj = FromJSON<T>(File.ReadAllText(module), out bool result);
+                var obj = FromJSON<T>(File.ReadAllText(module), out var result);
 
                 if (!result) continue;
 

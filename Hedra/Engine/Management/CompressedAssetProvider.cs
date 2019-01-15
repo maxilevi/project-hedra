@@ -9,17 +9,19 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using Hedra.Engine.Game;
+using Hedra.Engine.IO;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.Management
 {
     public class CompressedAssetProvider : IAssetProvider
     {
-        private readonly PrivateFontCollection _boldFonts;
-        private readonly PrivateFontCollection _normalFonts;
+        private PrivateFontCollection _boldFonts;
+        private PrivateFontCollection _normalFonts;
         private List<ResourceHandler> _registeredHandlers;
         private bool _filesDecompressed;
         private Dictionary<string, VertexData> _hitboxCache;
@@ -36,21 +38,17 @@ namespace Hedra.Engine.Management
         public string SoundResource => "data2.db";
         public string AssetsResource => "data3.db";
         
-        public CompressedAssetProvider()
+        public void Load()
         {
             _boldFonts = new PrivateFontCollection();
             _normalFonts = new PrivateFontCollection();
-        }
-
-        public void Load()
-        {
-            var sansBold = AssetManager.ReadBinary("Assets/ClearSans-Bold.ttf", AssetManager.DataFile3);
+            
+            var sansBold = AssetManager.ReadBinary("Assets/ClearSans-Bold.ttf", AssetManager.AssetsResource);
             _boldFonts.AddMemoryFont(Utils.IntPtrFromByteArray(sansBold), sansBold.Length);
 
-            var sansRegular = AssetManager.ReadBinary("Assets/ClearSans-Regular.ttf", AssetManager.DataFile3);              
+            var sansRegular = AssetManager.ReadBinary("Assets/ClearSans-Regular.ttf", AssetManager.AssetsResource);              
             _normalFonts.AddMemoryFont(Utils.IntPtrFromByteArray(sansRegular), sansRegular.Length);
-            
-            AssetManager.ReloadShaderSources();
+            ReloadShaderSources();
             lock (_hitboxCacheLock)
             {
                 _hitboxCache = new Dictionary<string, VertexData>();
@@ -119,23 +117,27 @@ namespace Hedra.Engine.Management
             _filesDecompressed = true;
         }
 
-        public byte[] ReadPath(string Path)
+        public byte[] ReadPath(string Path, bool Text = true)
         {
             bool external = !Path.Contains("$DataFile$");
-            if (!external || Path.StartsWith("Assets/"))
+            if (!external || Path.StartsWith("Assets/") || Path.StartsWith("Asset\\"))
             {
                 Path = Path.Replace("$DataFile$", string.Empty);
                 if (Path.StartsWith("/"))
                     Path = Path.Substring(1, Path.Length-1);
 
-                return ReadBinary(Path, AssetsResource);
+                return ReadBinary(Path, Text ? AssetsResource : SoundResource);
             }
-            return Encoding.ASCII.GetBytes( File.ReadAllText(Path.Replace("$GameFolder$", AppPath)) );
+
+            var finalPath = Path.Replace("$GameFolder$", GameLoader.AppPath);
+            return Text
+                ? Encoding.ASCII.GetBytes(File.ReadAllText(finalPath))
+                : File.ReadAllBytes(finalPath);
         }
 
         public byte[] ReadBinary(string Name, string DataFile)
         {
-            this.DecompileAssets();
+            DecompileAssets();
             ResourceHandler selectedHandler = null;
             lock (_handlerLock)
             {
@@ -225,8 +227,10 @@ namespace Hedra.Engine.Management
             return Name.Replace("/", slashRegex).Replace(".", "\\.");
         }
         
-        public Icon LoadIcon(string path){
-            using(var ms = new MemoryStream(AssetManager.ReadBinary(path, AssetsResource))){
+        public Icon LoadIcon(string Path)
+        {
+            using(var ms = new MemoryStream(AssetManager.ReadBinary(Path, AssetsResource)))
+            {
                 return new Icon(ms);
             }
         }
@@ -235,8 +239,9 @@ namespace Hedra.Engine.Management
         {
             var shapes = new List<CollisionShape>();
             var name = Path.GetFileNameWithoutExtension(Filename);
-            for(var i = 0; i < Count; i++){
-                var data = AssetManager.PLYLoader("Assets/Env/Colliders/"+name+"_Collider"+i+".ply", Scale, Vector3.Zero, Vector3.Zero, false);
+            for(var i = 0; i < Count; i++)
+            {
+                var data = AssetManager.PLYLoader($"Assets/Env/Colliders/{name}_Collider{i}.ply", Scale, Vector3.Zero, Vector3.Zero, false);
                 var newShape = new CollisionShape(data.Vertices, data.Indices);
                 shapes.Add(newShape);
                 data.Dispose();
@@ -270,7 +275,7 @@ namespace Hedra.Engine.Management
                 if (!_hitboxCache.ContainsKey(ModelFile))
                 {
                     string fileContents = Encoding.ASCII.GetString(AssetManager.ReadPath(ModelFile));
-                    var entityData = ColladaLoader.LoadColladaModel(fileContents, GeneralSettings.MaxWeights);
+                    var entityData = ColladaLoader.LoadColladaModel(fileContents);
                     var vertexData = new VertexData
                     {
                         Vertices = entityData.Mesh.Vertices.ToList(),
@@ -293,9 +298,27 @@ namespace Hedra.Engine.Management
         {
             return Physics.BuildDimensionsBox(this.LoadModelVertexData(ModelFile));
         }
+        
+        public VertexData LoadPLYWithLODs(string Filename, Vector3 Scale)
+        {
+            var model = PLYLoader(Filename, Scale);
+            var name = Path.GetFileNameWithoutExtension(Filename);
+            var dir = Path.GetDirectoryName(Filename);
+            for(var i = 1; i < 4; ++i)
+            {
+                var iterator = (int)Math.Pow(2, i);
+                var path = $"{dir}/{name}_Lod{iterator}.ply";
+                var data = ReadBinary(path, AssetsResource);
+                if (data == null) return model;
+                var vertexInformation = PLYLoader(path, Scale);
+                model.AddLOD(vertexInformation, iterator);
+            }
+            return model;
+        }
 
-        public VertexData PLYLoader(string file, Vector3 Scale){
-            return AssetManager.PLYLoader(file, Scale, Vector3.Zero, Vector3.Zero);
+        private VertexData PLYLoader(string File, Vector3 Scale)
+        {
+            return PLYLoader(File, Scale, Vector3.Zero, Vector3.Zero);
         }
 
         public VertexData PLYLoader(string File, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true)
@@ -305,7 +328,7 @@ namespace Hedra.Engine.Management
             return PLYLoader(data, Scale, Position, Rotation, HasColors);
         }
 
-        public VertexData PLYLoader(byte[] Data, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true)
+        private VertexData PLYLoader(byte[] Data, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true)
         {
             const string header = "PROCESSEDPLY";
             var size = Encoding.ASCII.GetByteCount(header);
@@ -316,7 +339,7 @@ namespace Hedra.Engine.Management
             return PLYParser(Data, Scale, Position, Rotation, HasColors);
         }
 
-        public VertexData PLYUnserialize(byte[] Data, int HeaderSize, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors)
+        private VertexData PLYUnserialize(byte[] Data, int HeaderSize, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors)
         {
             using (var ms = new MemoryStream(Data))
             {
@@ -357,8 +380,8 @@ namespace Hedra.Engine.Management
                 return HandlePLYTransforms(vertices, normals, colors, indices, Scale, Position, Rotation);
             }
         }
-        
-        public VertexData PLYParser(byte[] Data, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors)
+
+        private VertexData PLYParser(byte[] Data, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors)
         {
             string fileContents = Encoding.ASCII.GetString(Data);
 
@@ -369,6 +392,7 @@ namespace Hedra.Engine.Management
             const int vertexCountIndex = 0;
             const int faceCountIndex = 1;
             const int startDataIndex = 2;
+            var hasAlpha = fileContents.IndexOf("property uchar alpha", StringComparison.Ordinal) != -1;
             var vertexCount = int.Parse(numbers[vertexCountIndex]);
             var faceCount = int.Parse(numbers[faceCountIndex]);
 
@@ -378,7 +402,7 @@ namespace Hedra.Engine.Management
             var indices = new List<uint>(faceCount * 3);
             var offset = 0;
 
-            var numberOffset = HasColors ? 9 : 6;
+            var numberOffset = HasColors ? (hasAlpha ? 10 : 9) : 6;
             int accumulatedOffset = startDataIndex;
             for(; vertices.Count < vertexCount; accumulatedOffset += numberOffset)
             {
@@ -403,7 +427,7 @@ namespace Hedra.Engine.Management
                             float.Parse(numbers[accumulatedOffset + 6]) / 255f,
                             float.Parse(numbers[accumulatedOffset + 7]) / 255f, 
                             float.Parse(numbers[accumulatedOffset + 8]) / 255f,
-                            1.0f
+                            hasAlpha ? float.Parse(numbers[accumulatedOffset + 9]) / 255f : 1.0f
                             )
                     );
                 }
@@ -451,6 +475,14 @@ namespace Hedra.Engine.Management
         {
             var fileHeader = Encoding.ASCII.GetString(Data, 1, HeaderSize);
             return fileHeader == Header;
+        }
+        
+        public ModelData DAELoader(string File)
+        {
+            var data = ReadPath(File);
+            if (data == null) throw new ArgumentException($"Failed to find file '{File}' in the Assets folder.");
+            var fileContents = Encoding.ASCII.GetString(data);
+            return ColladaLoader.LoadModel(fileContents);
         }
         
         public void Dispose()

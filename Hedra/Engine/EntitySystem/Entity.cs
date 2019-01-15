@@ -7,7 +7,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
+using Hedra.AISystem.Humanoid;
+using Hedra.Components;
+using Hedra.Core;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem.BossSystem;
 using Hedra.Engine.Game;
@@ -18,8 +20,9 @@ using Hedra.Engine.Player;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
+using Hedra.EntitySystem;
+using Hedra.Sound;
 using OpenTK;
-using OpenTK.Graphics.ES11;
 
 namespace Hedra.Engine.EntitySystem
 {
@@ -28,8 +31,9 @@ namespace Hedra.Engine.EntitySystem
     /// </summary>
     public delegate void OnAttackEventHandler(IEntity Victim, float Amount);
 
-    public class Entity : IRenderable, IDisposable, ISearchable, IEntity
+    public class Entity : IEntity
     {
+        public virtual float AttackingSpeedModifier => 0.75f;
         private DamageComponent _damageManager;
         private int _drowningSoundTimer;
         private float _health = 100f;
@@ -46,7 +50,7 @@ namespace Hedra.Engine.EntitySystem
         public IPhysicsComponent Physics { get; }
 
         private List<IComponent<IEntity>> Components = new List<IComponent<IEntity>>();
-        protected bool Splashed { get; set; }
+        private bool Splashed { get; set; }
 
         public event OnAttackEventHandler AfterAttacking;
         public event OnAttackEventHandler BeforeAttacking;
@@ -54,7 +58,6 @@ namespace Hedra.Engine.EntitySystem
         public float AttackDamage { get; set; } = 1.0f;
         public float AttackCooldown { get; set; }
         public virtual float AttackResistance { get; set; } = 1.0f;
-        public bool Destroy { get; set; } = false;
         public int Level { get; set; } = 1;
         public float MaxOxygen { get; set; } = 30;
         public int MobId { get; set; }
@@ -82,7 +85,7 @@ namespace Hedra.Engine.EntitySystem
         }
 
         public bool InUpdateRange => (BlockPosition.Xz - LocalPlayer.Instance.Model.Position.Xz).LengthSquared <
-                                     GameSettings.UpdateDistance * GameSettings.UpdateDistance;
+                                     GeneralSettings.UpdateDistanceSquared;
 
         public bool IsActive { get; set; }
         public bool IsBoss { get; set; }
@@ -95,7 +98,7 @@ namespace Hedra.Engine.EntitySystem
             {
                 if (this.SearchComponent<WarriorAIComponent>() != null)
                     return this.SearchComponent<WarriorAIComponent>().Friendly;
-                return this.SearchComponent<VillagerAIComponent>() != null;
+                return this.SearchComponent<BaseVillagerAIComponent>() != null;
             }
         }
 
@@ -150,6 +153,8 @@ namespace Hedra.Engine.EntitySystem
                     Type = value.ToString();
             }
         }
+
+        public Vector3 Size => Model.Dimensions.Size;
 
         public BaseUpdatableModel Model { get; set; }
 
@@ -253,29 +258,6 @@ namespace Hedra.Engine.EntitySystem
             AfterAttacking?.Invoke(Invoker, Damage);
         }
 
-        public bool InAttackRange(IEntity Target, float RadiusModifier = 1f)
-        {
-            var collider0 = this.Model.BroadphaseCollider;
-            var collider1 = Target.Model.BroadphaseCollider;
-            var radii = (collider0.BroadphaseRadius + collider1.BroadphaseRadius) * RadiusModifier;
-            if ((collider0.BroadphaseCenter - collider1.BroadphaseCenter).LengthSquared > radii * radii) return false;
-            var vertices0 = collider0.Vertices;
-            var vertices1 = collider1.Vertices;
-            float lowestDistance = float.MaxValue;
-            for (var i = 0; i < vertices0.Length; i++)
-            {
-                for (var k = 0; k < vertices1.Length; k++)
-                {
-                    var dist = (new Vector3(vertices0[i].X, this.Model.Position.Y, vertices0[i].Z) - new Vector3(vertices1[k].X, Target.Model.Position.Y, vertices1[k].Z)).LengthFast;
-                    if (dist < lowestDistance)
-                    {
-                        lowestDistance = dist;
-                    }
-                }
-            }
-            return lowestDistance < 4f * RadiusModifier;
-        }
-
         public void AddBonusSpeedWhile(float BonusSpeed, Func<bool> Condition)
         {
             this.AddComponentWhile(new SpeedBonusComponent(this, BonusSpeed), Condition);
@@ -307,19 +289,33 @@ namespace Hedra.Engine.EntitySystem
         {
             if (Component == null) throw new ArgumentNullException($"{this.GetType()} component cannot be null");
             Components.Remove(Component);
-            Component.Dispose();
             if (Component is ITickable tickable) _tickSystem.Remove(tickable);
+            Component.Dispose();
         }
 
         public T SearchComponent<T>()
         {
             for (var i = 0; i < Components.Count; i++)
+            {
                 if (Components[i] is T variable)
                     return variable;
+            }
+
             return default(T);
         }
+        
+        public T[] GetComponents<T>()
+        {
+            var list = new List<T>();
+            for (var i = 0; i < Components.Count; i++)
+            {
+                if (Components[i] is T variable)
+                    list.Add(variable);
+            }
+            return list.ToArray();
+        }
 
-        public void UpdateEnviroment()
+        public void UpdateEnvironment()
         {
             var underChunk = World.GetChunkAt(Position);
             var waterHeight = PhysicsSystem.Physics.WaterHeight(Position);
@@ -389,7 +385,7 @@ namespace Hedra.Engine.EntitySystem
             World.Particles.ParticleLifetime = 1;
             World.Particles.GravityEffect = .05f;
             World.Particles.PositionErrorMargin = new Vector3(3f, 3f, 3f);
-            SoundManager.PlaySoundWithVariation(SoundType.WaterSplash, Position, 1f, .5f);
+            SoundPlayer.PlaySoundWithVariation(SoundType.WaterSplash, Position, 1f, .5f);
             for (var i = 0; i < 30; i++) World.Particles.Emit();
         }
 
@@ -406,7 +402,7 @@ namespace Hedra.Engine.EntitySystem
             {
                 PlaySpawningAnimation = false;
                 if(Model.Enabled)
-                    SoundManager.PlaySound(SoundType.GlassBreakInverted, BlockPosition, false, 1f, .8f);
+                    SoundPlayer.PlaySound(SoundType.GlassBreakInverted, BlockPosition, false, 1f, .8f);
 
                 if (Model is IDisposeAnimation animable)
                 {
@@ -442,9 +438,10 @@ namespace Hedra.Engine.EntitySystem
 
             World.RemoveEntity(this);
 
-            var copy = Components.ToArray();
-            for (var i = 0; i < Components.Count; i++)
+            for (var i = Components.Count-1; i > -1; --i)
+            {
                 Components[i]?.Dispose();
+            }
 
             (Model as IAudible)?.StopSound();
 
@@ -457,9 +454,11 @@ namespace Hedra.Engine.EntitySystem
             if (IsDead) return;
 
             Physics.Draw();
-            for (var i = 0; i < Components.Count; i++)
-                if (!Components[i].Renderable)
+            for (var i = Components.Count - 1; i > -1; --i)
+            {
+                if (!Components[i].Drawable)
                     Components[i].Draw();
+            }
         }
 
         public virtual void Update()
@@ -470,10 +469,13 @@ namespace Hedra.Engine.EntitySystem
 
             this.SpawnAnimation();
             this.Physics.Update();
-            this.UpdateEnviroment();
+            this.UpdateEnvironment();
             this._tickSystem.Tick();
-            for (var i = 0; i < this.Components.Count; i++)
-                this.Components[i].Update();
+            for (var i = Components.Count-1; i > -1; --i)
+            {
+                Components[i].Update();
+            }
+
             if (IsKnocked)
             {
                 _knockedTime -= Time.DeltaTime;
