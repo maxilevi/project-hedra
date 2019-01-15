@@ -97,8 +97,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void Kill()
         {
-            World.RemoveChunk(_object);
-            this.Dispose();
+            var toDelete = _object;
+            Executer.ExecuteOnMainThread(() => World.RemoveChunk(toDelete));
+            Dispose();
         }
 
         public void Dispose()

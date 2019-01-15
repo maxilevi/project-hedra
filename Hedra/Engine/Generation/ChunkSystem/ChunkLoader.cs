@@ -16,6 +16,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using OpenTK;
+using Hedra.Engine.IO;
 using Timer = Hedra.Engine.Management.Timer;
 
 namespace Hedra.Engine.Generation.ChunkSystem
@@ -92,11 +93,17 @@ namespace Hedra.Engine.Generation.ChunkSystem
             while (GameManager.Exists)
             {
                 if(!_shouldUpdate) Thread.Sleep(1);
-                var watchers = _chunkWatchers.ToArray();
-                for (var i = watchers.Length - 1; i > -1; --i)
+                try
                 {
-                    _chunkWatchers[i].Update();
-                    if (_chunkWatchers[i].Disposed) _chunkWatchers.RemoveAt(i);
+                    var watchers = _chunkWatchers.ToArray();
+                    for (var i = watchers.Length - 1; i > -1; --i)
+                    {
+                        _chunkWatchers[i].Update();
+                        if (_chunkWatchers[i].Disposed) _chunkWatchers.RemoveAt(i);
+                    }
+                } catch (NullReferenceException e)
+                {
+                    Log.WriteLine(e);
                 }
                 _shouldUpdate = false;
             }

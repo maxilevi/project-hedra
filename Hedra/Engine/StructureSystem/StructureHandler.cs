@@ -138,15 +138,12 @@ namespace Hedra.Engine.StructureSystem
         {
             get
             {
-                lock (_lock)
+                if (_dirtyStructuresItems || _itemsCache == null)
                 {
-                    if (_dirtyStructuresItems || _itemsCache == null)
-                    {
-                        _itemsCache = _itemWatchers.Select(I => I.Structure).ToArray();
-                        _dirtyStructuresItems = false;
-                    }
-                    return _itemsCache;
+                    _itemsCache = Watchers.Select(I => I.Structure).ToArray();
+                    _dirtyStructuresItems = false;
                 }
+                return _itemsCache;     
             }
         }
 
@@ -165,7 +162,7 @@ namespace Hedra.Engine.StructureSystem
             {
                 if (_dirtyStructures || _structureCache == null)
                 {
-                    _structureCache = _itemWatchers.SelectMany(
+                    _structureCache = Watchers.SelectMany(
                         I => I.Structure.WorldObject.Children.Concat(new [] { I.Structure.WorldObject })
                         ).ToArray();
                     _dirtyStructures = false;
