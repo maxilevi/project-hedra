@@ -212,6 +212,12 @@ namespace Hedra.Engine.Rendering.Effects
             else
                 DrawQuad(FinalFbo.TextureID[0], GameSettings.Bloom ? AdditiveFbo.TextureID[0] : 0);
 
+            Renderer.ActiveTexture(TextureUnit.Texture0);
+            Renderer.BindTexture(TextureTarget.Texture2D, 0);
+            Renderer.ActiveTexture(TextureUnit.Texture1);
+            Renderer.BindTexture(TextureTarget.Texture2D, 0);
+            Renderer.ActiveTexture(TextureUnit.Texture2);
+            Renderer.BindTexture(TextureTarget.Texture2D, 0);
         }
 
         private static void DrawFXAAQuad(uint Texture, uint AdditiveTexture)

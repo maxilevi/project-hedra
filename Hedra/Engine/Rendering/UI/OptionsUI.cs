@@ -221,7 +221,7 @@ namespace Hedra.Engine.Rendering.UI
             
             var shadowsValues =  new []
             {
-                "low","medium","high"
+                "none","low","medium","high"
             }.Select(S => Translation.Create(S)).ToArray();
             OptionChooser shadows = new OptionChooser(new Vector2(dist, vDist), new Vector2(0.15f, 0.075f), Translation.Create("shadow_quality", "{0}: "),
                                              fontColor, _normalFont,

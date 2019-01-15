@@ -79,6 +79,11 @@ namespace Hedra
             Provider.ReloadModules();
         }
 
+        public static void OccludeTest()
+        {
+            Provider.OccludeTest();
+        }
+        
         public static void CullTest()
         {
             Provider.CullTest();

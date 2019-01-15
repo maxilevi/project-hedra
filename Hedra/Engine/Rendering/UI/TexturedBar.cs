@@ -69,6 +69,8 @@ namespace Hedra.Engine.Rendering.UI
             Renderer.Enable(EnableCap.DepthTest);
             Renderer.Enable(EnableCap.CullFace);
             Shader.Unbind();
+            Renderer.ActiveTexture(TextureUnit.Texture0);
+            Renderer.BindTexture(TextureTarget.Texture2D, 0);
         }
         
         public Vector2 Position

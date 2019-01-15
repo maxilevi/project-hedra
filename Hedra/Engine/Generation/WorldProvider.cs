@@ -49,13 +49,12 @@ namespace Hedra.Engine.Generation
         private readonly SharedWorkerPool _genWorkerPool;
         private Vector3 _spawningVillagePoint;
         private Vector3 _spawningPoint;
-        private int _previousCount;
         private int _previousId;
 
         public WorldProvider()
         {
-            _meshWorkerPool = new SharedWorkerPool(2);
-            _genWorkerPool = new SharedWorkerPool(2);
+            _meshWorkerPool = new SharedWorkerPool(1);
+            _genWorkerPool = new SharedWorkerPool(1);
             _meshBuilder = new MeshBuilder(_meshWorkerPool);
             _chunkBuilder = new ChunkBuilder(_genWorkerPool);
             _entities = new HashSet<IEntity>();
@@ -66,6 +65,7 @@ namespace Hedra.Engine.Generation
             SearcheableChunks = new Dictionary<Vector2, Chunk>(new FastComparer());
             DrawingChunks = new Dictionary<Vector2, Chunk>();
             ShadowDrawingChunks = new Dictionary<Vector2, Chunk>();
+            _unculledChunks = new Dictionary<Vector2, Chunk>();
         }
 
         public event ModulesReloadEvent ModulesReload;
@@ -89,6 +89,7 @@ namespace Hedra.Engine.Generation
         public Vector3 SpawnVillagePoint => _spawningVillagePoint;
         public Dictionary<Vector2, Chunk> DrawingChunks { get; }
         public Dictionary<Vector2, Chunk> ShadowDrawingChunks { get; }
+        private readonly Dictionary<Vector2, Chunk> _unculledChunks;
 
         public void Load()
         {
@@ -143,44 +144,77 @@ namespace Hedra.Engine.Generation
             }
         }
 
+        public void OccludeTest()
+        {
+            if(!GameSettings.OcclusionCulling) return;
+            Occludable.Bind();
+            
+            var chunks = Chunks;
+            for (var i = 0; i < chunks.Count; ++i)
+            {
+                if(_unculledChunks.ContainsKey(chunks[i].Position.Xz))
+                    chunks[i].Mesh?.DrawQuery();
+            }
+
+            Occludable.Unbind();
+        }
+
         public void CullTest()
         {
             DrawingChunks.Clear();
             ShadowDrawingChunks.Clear();
+            _unculledChunks.Clear();
             var toDrawArray = Chunks;
-            for (var i = 0; i < toDrawArray.Count; i++)
+
+            DoCullTest(toDrawArray, DrawingChunks, _unculledChunks);
+
+            if (GameSettings.Shadows)
             {
-                var offset = new Vector2(toDrawArray[i].OffsetX, toDrawArray[i].OffsetZ);
-                var chunk = toDrawArray[i];
+                WorldRenderer.PrepareShadowMatrix();
+                var prevValue = GameSettings.OcclusionCulling;
+                GameSettings.OcclusionCulling = false;
+                DoCullTest(toDrawArray, ShadowDrawingChunks, null);
+                GameSettings.OcclusionCulling = prevValue;
+                WorldRenderer.PrepareCameraMatrix();
+            }
+            _renderingComparer.Position = GameManager.Player.Position;
+        }
+
+        private static void DoCullTest(ReadOnlyCollection<Chunk> ToDrawArray, Dictionary<Vector2, Chunk> Output, Dictionary<Vector2, Chunk> OutputIfFrustumCulled)
+        {
+            for (var i = 0; i < ToDrawArray.Count; i++)
+            {
+                var chunk = ToDrawArray[i];
                 if (chunk == null || chunk.Disposed)
                 {
-                    RemoveChunk(chunk);
+                    World.RemoveChunk(chunk);
                     continue;
                 }
-
+                var offset = chunk.Position.Xz;
+                
                 if (WorldRenderer.EnableCulling)
                 {
                     if(!chunk.Initialized) continue;
                     
                     if (Culling.IsInside(chunk.Mesh))
-                        DrawingChunks.Add(offset, chunk);
+                    {
+                        if(!chunk.Mesh.Occluded || !GameSettings.OcclusionCulling)
+                            Output.Add(offset, chunk);
+                        OutputIfFrustumCulled?.Add(offset, chunk);
+                    }
                 }
                 else
                 {
-                    DrawingChunks.Add(offset, chunk);
+                    Output.Add(offset, chunk);
                 }
-                ShadowDrawingChunks.Add(offset, chunk);
             }
-
-            _renderingComparer.Position = GameManager.Player.Position;
-            _previousCount = GameManager.Player.Loader.ActiveChunks;
         }
 
         public void Draw(WorldRenderType Type)
         {
             if (GameSettings.Wireframe) Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 
-            WorldRenderer.PrepareRendering();
+            WorldRenderer.PrepareCameraMatrix();
             WorldRenderer.Render(DrawingChunks, ShadowDrawingChunks, Type);
 
             if (GameSettings.Wireframe) Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
@@ -289,11 +323,6 @@ namespace Hedra.Engine.Generation
             if (Chunk == null || Chunk.Disposed) return;
             if (!DoMesh) _chunkBuilder.Add(Chunk);
             else _meshBuilder.Add(Chunk);
-        }
-
-        public Chunk GetChunkByOffset(Vector2 vec2)
-        {
-            return GetChunkByOffset((int) vec2.X, (int) vec2.Y);
         }
 
         public void AddEntity(IEntity Entity)

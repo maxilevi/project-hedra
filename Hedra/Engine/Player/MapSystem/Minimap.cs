@@ -122,13 +122,15 @@ namespace Hedra.Engine.Player.MapSystem
                 _player.View.Pitch = -10f;
                 _player.View.BuildCameraMatrix();
 
-                Culling.SetFrustum(_player.View.ModelViewMatrix);
+                Culling.BuildFrustum(_player.View.ModelViewMatrix);
 
-                var projMatrix = Matrix4.CreatePerspectiveFieldOfView(60 * Mathf.Radian, 1, 1, 2048); //Matrix4.CreateOrthographic(1024, 1024, 1f, 2048);
-                Culling.CalculateFrustum(projMatrix, Culling.ModelViewMatrix);
+                var projMatrix = Matrix4.CreateOrthographic(1024, 1024, 1f, 2048);
+                Culling.BuildFrustum(projMatrix, Culling.ModelViewMatrix);
 
                 var oldShadows = GameSettings.GlobalShadows;
                 var oldFancy = GameSettings.Quality;
+                var oldCulling = GameSettings.OcclusionCulling;
+                GameSettings.OcclusionCulling = false;
                 GameSettings.GlobalShadows = false;
                 GameSettings.Quality = false;
                 World.CullTest();
@@ -136,13 +138,14 @@ namespace Hedra.Engine.Player.MapSystem
                 WorldRenderer.Render(World.DrawingChunks, World.ShadowDrawingChunks, WorldRenderType.Water);
                 GameSettings.Quality = oldFancy;
                 GameSettings.GlobalShadows = oldShadows;
+                GameSettings.OcclusionCulling = oldCulling;
 
                 _player.View.Pitch = oldPitch;
                 _player.View.Yaw = oldFacing;
                 _player.View.Distance = oldDistance;
 
                 _player.View.BuildCameraMatrix();
-                Culling.SetFrustum(_player.View.ModelViewMatrix);
+                Culling.BuildFrustum(_player.View.ModelViewMatrix);
 
                 Renderer.Disable(EnableCap.DepthTest);
                 Renderer.Enable(EnableCap.Blend);
@@ -214,6 +217,10 @@ namespace Hedra.Engine.Player.MapSystem
             Renderer.Enable(EnableCap.DepthTest);
             Renderer.Disable(EnableCap.Blend);
             Renderer.Enable(EnableCap.CullFace);
+            Renderer.ActiveTexture(TextureUnit.Texture0);
+            Renderer.BindTexture(TextureTarget.Texture2D, 0);
+            Renderer.ActiveTexture(TextureUnit.Texture1);
+            Renderer.BindTexture(TextureTarget.Texture2D, 0);
             Shader.Unbind();
         }
 

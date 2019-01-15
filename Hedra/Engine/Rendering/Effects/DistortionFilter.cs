@@ -48,6 +48,8 @@ namespace Hedra.Engine.Rendering.Effects
             WaterEffect.Unbind();
             
             Dst.UnBind();
+            Renderer.ActiveTexture(TextureUnit.Texture1);
+            Renderer.BindTexture(TextureTarget.Texture2D, 0);
         }
 
         public override void Dispose()

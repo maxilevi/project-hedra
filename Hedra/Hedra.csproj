@@ -297,6 +297,8 @@
     <Compile Include="Engine\Rendering\DummyGLProvider.cs" />
     <Compile Include="Engine\Rendering\Frustum\BoundingFrustum.cs" />
     <Compile Include="Engine\Rendering\Frustum\Culling.cs" />
+    <Compile Include="Engine\Rendering\Frustum\Occludable.cs" />
+    <Compile Include="Engine\Rendering\Frustum\OcclusionState.cs" />
     <Compile Include="Engine\Rendering\Frustum\Plane.cs" />
     <Compile Include="Engine\Rendering\Frustum\PlaneIntersectionType.cs" />
     <Compile Include="Engine\Rendering\TextFormatting.cs" />
@@ -715,8 +717,6 @@
     <Compile Include="Engine\CacheSystem\CacheProvider.cs" />
     <Compile Include="Engine\Management\CommandManager.cs" />
     <Compile Include="Engine\Management\DataManager.cs" />
-    <Compile Include="Engine\Management\Occludable.cs" />
-    <Compile Include="Engine\Management\OcclusionState.cs" />
     <Compile Include="Engine\Player\Customization\CustomizationOptions.cs" />
     <Compile Include="Engine\Player\Customization\ModelCustomization.cs" />
     <Compile Include="Engine\Player\HangGlider.cs" />
@@ -749,7 +749,6 @@
     <Compile Include="Engine\Management\ICullable.cs" />
     <Compile Include="Engine\Management\IRenderable.cs" />
     <Compile Include="Engine\Management\IUpdatable.cs" />
-    <Compile Include="Engine\Management\OcclusionCulling.cs" />
     <Compile Include="Engine\Rendering\ShaderManager.cs" />
     <Compile Include="Engine\Management\TaskScheduler.cs" />
     <Compile Include="Engine\Management\Executer.cs" />
@@ -1149,10 +1148,6 @@
     </None>
     <None Include="..\project-hedra-assets\Animations\WarriorRightPunch.dae">
       <Link>Assets\Chr\WarriorRightPunch.dae</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Animations\WarriorSmash.dae">
-      <Link>Assets\Chr\WarriorSmash.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Animations\WarriorTalk.dae">
@@ -7343,6 +7338,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Shaders\Includes\Blur.shader">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shaders\OccludePassthrough.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Shaders\Passthrough.frag">

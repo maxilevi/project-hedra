@@ -75,6 +75,7 @@ namespace Hedra.Engine.Player.Skills.Archer
             Player.IsAttacking = false;
             Player.WasAttacking = false;
             Player.Model.PlayAnimation(KickAnimation);
+            KickAnimation.Speed = 1.5f;
         }
         
         public override void Update(){

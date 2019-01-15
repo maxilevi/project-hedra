@@ -42,7 +42,7 @@ namespace Hedra.Engine.EnvironmentSystem
                 "Assets/Sky/stars_right.png",
                 "Assets/Sky/stars_left.png",
                 "Assets/Sky/stars_top.png",
-                "Assets/Sky/stars_bottom.png",
+                null,//"Assets/Sky/stars_bottom.png",
                 "Assets/Sky/stars_front.png",
                 "Assets/Sky/stars_back.png"
             });
@@ -60,7 +60,7 @@ namespace Hedra.Engine.EnvironmentSystem
         public void Draw()
         {
             if(!Enabled) return;
-
+            
             Renderer.Disable(EnableCap.DepthTest);
             Renderer.Disable(EnableCap.Blend);
             _previousShader = Renderer.ShaderBound;
@@ -78,8 +78,7 @@ namespace Hedra.Engine.EnvironmentSystem
             _sunDome.ColorMultiplier = Vector4.One * SkyManager.LastDayFactor * 2f;
             _sunDome.Draw();
 
-            Renderer.UseProgram(_previousShader);
-            Renderer.ShaderBound = _previousShader;
+            SkyGradientShader.Unbind();
             Renderer.Enable(EnableCap.DepthTest);
             Renderer.Enable(EnableCap.CullFace);
         }

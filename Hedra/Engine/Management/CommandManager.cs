@@ -173,6 +173,10 @@ namespace Hedra.Engine.Management
                     World.HighlightArea(Caster.Position, new Vector4(1, 0, 0, 1), 32, 4f);
                     return true;
                 }
+                if(Parts[0] == "fly")
+                {
+                    GameManager.Player.Physics.UsePhysics = !GameManager.Player.Physics.UsePhysics;
+                }
                 if (Parts[0] == "villager")
                 {
                     var vill = World.InRadius<Village>(Caster.Position, VillageDesign.MaxVillageRadius).FirstOrDefault();

@@ -9,4 +9,5 @@ packages
 *.user
 *.hst
 __pycache__
+nsight*
 

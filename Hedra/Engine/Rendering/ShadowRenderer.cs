@@ -54,7 +54,7 @@ namespace Hedra.Engine.Rendering
 
         public static void Bind()
         {
-            ShadowDistance = 1400f / GeneralSettings.MaxLoadingRadius * GameSettings.ChunkLoaderRadius;
+            ShadowDistance = 800f / GeneralSettings.MaxLoadingRadius * GameSettings.ChunkLoaderRadius;
             _prevFbo = Renderer.FBOBound;
             if (ShadowFbo == null) ShadowRenderer.SetQuality(GameSettings.ShadowQuality);
             ShadowFbo.Bind();
@@ -93,10 +93,10 @@ namespace Hedra.Engine.Rendering
             ShadowFbo?.Dispose();
 
             if(Quality == 2 || Quality == 1)
-                 ShadowFbo = new FBO(2048, 2048, false, 0, FramebufferAttachment.DepthAttachment, PixelInternalFormat.DepthComponent16, false, false);
+                 ShadowFbo = new FBO(1024, 1024, false, 0, FramebufferAttachment.DepthAttachment, PixelInternalFormat.DepthComponent16, false, false);
 
             if (Quality == 3)
-                ShadowFbo = new FBO(4096, 4096, false, 0, FramebufferAttachment.DepthAttachment, PixelInternalFormat.DepthComponent16, false, false);
+                ShadowFbo = new FBO(2048, 2048, false, 0, FramebufferAttachment.DepthAttachment, PixelInternalFormat.DepthComponent16, false, false);
         }
 
         public static void Dispose()

@@ -115,7 +115,7 @@ namespace Hedra.Engine.Player
             }
 
             BuildCameraMatrix();
-            Culling.SetFrustum(ModelViewMatrix);
+            Culling.BuildFrustum(ModelViewMatrix);
         }
 
         private void ManageRotations()

@@ -185,7 +185,7 @@ namespace Hedra.Engine.Generation
             }
             foreach (var instance in _instances)
             {
-                var newRadius = (instance.Position - this.Position).LengthFast + instance.Bounds.Xz.LengthFast * .5f;
+                var newRadius = (instance.Position - this.Position).LengthFast + instance.ApproximateBounds.Xz.LengthFast * .5f;
                 if (newRadius > radius)
                     radius = newRadius;
             }

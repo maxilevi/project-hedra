@@ -90,8 +90,7 @@ void main()
 	vec3 FullLight = clamp(FLightColor + LightColor, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
 
 	Color = rim(linear_color.rgb, LightColor, unitToCamera, unitNormal) 
-	+ diffuse(unitToLight, unitNormal, LightColor) * linear_color
-	+ specular(unitToLight, unitNormal, unitToCamera, LightColor);
+	+ diffuse(unitToLight, unitNormal, LightColor) * linear_color;
 	Ambient = 0.25;
 	point_diffuse = diffuse(unitToLight, unitNormal, FLightColor).rgb;
 

@@ -1,10 +1,9 @@
 #version 330 core
 
-!include<"Includes/GammaCorrection.shader">
-!include<"Includes/Conditionals.shader">
-!include<"Includes/Sky.shader">
-
 precision mediump float;
+
+!include<"Includes/GammaCorrection.shader">
+!include<"Includes/Sky.shader">
 
 in vec4 raw_color;
 in vec4 Color;
@@ -14,10 +13,10 @@ in vec4 InNorm;
 in float Visibility;
 in vec4 Coords;
 in vec3 LightDir;
-in float Depth;
-in float CastShadows;
 in float DitherVisibility;
 in vec3 base_vertex_position;
+in float use_shadows;
+in float shadow_quality;
 
 layout(location = 0)out vec4 OutColor; 
 layout(location = 1)out vec4 OutPosition;
@@ -38,9 +37,7 @@ const mat4 ditherMat = mat4(
 );
 
 uniform sampler2D ShadowTex;
-uniform float UseShadows;
 uniform mat4 ShadowMVP;
-uniform float Snow = 0.0;
 uniform bool Dither;
 uniform sampler3D noiseTexture;
 
@@ -56,7 +53,7 @@ void main()
 	{
         if (DitherVisibility - ditherMat[int(gl_FragCoord.x) % 4][int(gl_FragCoord.y) % 4] < 0.0) discard;
 	}
-    float ShadowVisibility = CalculateShadows();
+    float ShadowVisibility = use_shadows > 0.0 ? CalculateShadows() : 1.0;
     float tex = texture(noiseTexture, base_vertex_position).r;
     vec3 completeColor = (Color.xyz * ShadowVisibility + pointlight_color * raw_color.xyz) * (tex + 1.0);
 
@@ -64,7 +61,7 @@ void main()
 	vec4 NewColor = 
 	    mix(sky_color(), vec4(final_color, Color.w), Visibility);
 
-	if(Visibility == 0.0)
+	if(Visibility < 0.005)
 	{
 		OutColor = NewColor;
 		OutPosition = vec4( InPos.xyz, gl_FragCoord.z);
@@ -79,40 +76,40 @@ void main()
 	}
 }
 
+
 float CalculateShadows()
 {
-	float has_shadows = when_gt(UseShadows, 0.0);
 	float bias = max(0.001 * (1.0 - dot(InNorm.xyz, LightDir)), 0.0) + 0.001;
 	vec4 ShadowCoords = Coords * vec4(.5,.5,.5,1.0) + vec4(.5,.5,.5, 0.0);		
 	float shadow = 0.0;
-	float use_disk = or(when_eq(UseShadows,3.0), when_eq(UseShadows, 2.0));
 	vec2 texelSize = 1.0 / textureSize(ShadowTex, 0);
-	
-	for(int x = int(-1.0 * use_disk * has_shadows + 2.0 * not(use_disk) ); x <= 1.0 * use_disk * has_shadows; ++x)
-	{
-		for(float y = -1.0; y <= 1.0; ++y)
-		{
-			for (int i=int(0.0);i<4.0;i++)
-			{
-				vec4 fetch = texture(ShadowTex, ShadowCoords.xy + vec2(x, y) * texelSize + poissonDisk[i] / 1500.0);
-				float pcfDepth = fetch.r; 
-				if ( pcfDepth  <  ShadowCoords.z - bias)
-					shadow += 1.0 * Coords.w * fetch.w;  
-			}					
-		}    
-	}
-	shadow += use_disk * has_shadows * (shadow / (9.0*4.0) - shadow);
+	float samples = 0.0;
+    for(int x = -1; x < 1; ++x)
+    {
+        for(int y = -1; y < 1; ++y)
+        {
+            if(shadow_quality >= 2.0)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    vec4 fetch = texture(ShadowTex, ShadowCoords.xy + vec2(x, y) * texelSize + poissonDisk[i] * .001);
+                    float pcfDepth = fetch.r; 
+                    if (pcfDepth  <  ShadowCoords.z - bias)
+                        shadow += 1.0 * Coords.w * fetch.w;
+                    samples += 1.0;
+                }
+            }
+            else 
+            {
+                vec4 fetch = texture(ShadowTex, ShadowCoords.xy  + vec2(x, y) * texelSize );
+                float pcfDepth = fetch.r; 
+                if ( pcfDepth  <  ShadowCoords.z - bias)
+                    shadow += 1.0 * Coords.w * fetch.a; 
+                samples += 1.0;
+            }
+        }    
+    }
+    shadow /= samples;
 
-	for(int x = int(-1.0 * not(use_disk) * has_shadows + 2.0 * use_disk); x <= 1.0 * not(use_disk) * has_shadows; ++x)
-	{
-		for(float y = -1.0; y <= 1.0; ++y)
-		{
-			vec4 fetch = texture(ShadowTex, ShadowCoords.xy  + vec2(x, y) * texelSize );
-			float pcfDepth = fetch.r; 
-			if ( pcfDepth  <  ShadowCoords.z - bias)
-				shadow += 1.0 * Coords.w * fetch.a; 
-		}    
-	}
-	shadow += not(use_disk) * has_shadows * ( shadow / 9.0 - shadow);
 	return 1.0 - (shadow * .65);
 }

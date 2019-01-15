@@ -63,6 +63,11 @@ namespace HedraTests
             throw new NotImplementedException();
         }
 
+        public void OccludeTest()
+        {
+            throw new NotImplementedException();
+        }
+
         public virtual void Draw(WorldRenderType Type)
         {
         }

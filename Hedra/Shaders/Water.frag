@@ -11,10 +11,8 @@ in float Movement;
 
 layout(location = 0)out vec4 OutColor; 
 layout(location = 1)out vec4 OutPosition;
-layout(location = 2)out vec4 OutNormal; 
+layout(location = 2)out vec4 OutNormal;
 
-uniform vec4 AreaColors[16];
-uniform vec4 AreaPositions[16];
 uniform sampler2D DepthMap;
 uniform bool Dither;
 uniform float Smoothness;
@@ -32,13 +30,6 @@ void main()
 		if( d-floor(d) < 0.5) discard;
 	}
 	vec4 InputColor = Color;
-	for(int i = 0; i < 16; i++)
-	{
-		if(AreaColors[i] != vec4(0.0, 0.0, 0.0, 0.0))
-		InputColor = mix(AreaColors[i], InputColor, clamp(length(AreaPositions[i].xyz - InPos.xyz) / AreaPositions[i].w , 0.0, 1.0) );
-	}
-	InputColor.a = Color.a;
-	
 	vec2 TexCoords = (ClipSpace.xy / ClipSpace.w) / 2.0 + 0.5;
 
 	const float Near = 2.0;

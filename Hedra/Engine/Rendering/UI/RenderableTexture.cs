@@ -27,9 +27,9 @@ namespace Hedra.Engine.Rendering.UI
             DrawManager.UIRenderer.Add(this, Order);
         }
         
-        public void Draw()
+        public void Draw()    
         {
-            if (!BaseTexture.Enabled || BaseTexture.TextureElement.Id == GUIRenderer.TransparentTexture) return;
+            if (!BaseTexture.Enabled || BaseTexture.TextureElement.IdPointer == null && BaseTexture.TextureElement.TextureId == GUIRenderer.TransparentTexture) return;
             DrawManager.UIRenderer.Draw(BaseTexture.TextureElement);
         }
 

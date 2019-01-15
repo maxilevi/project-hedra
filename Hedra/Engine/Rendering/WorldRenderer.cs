@@ -64,9 +64,14 @@ namespace Hedra.Engine.Rendering
             _shadowCounts = new int[StaticBuffer.Counts.Length];
         }
 
-        public static void PrepareRendering()
+        public static void PrepareCameraMatrix()
         {
-            Culling.SetFrustum(GameManager.Player.View.ModelViewMatrix);
+            Culling.BuildFrustum(GameManager.Player.View.ModelViewMatrix);
+        }
+        
+        public static void PrepareShadowMatrix()
+        {
+            Culling.Frustum.Matrix = ShadowRenderer.ShadowMvp;
         }
 
         public static void Render(Dictionary<Vector2, Chunk> ToDraw, Dictionary<Vector2, Chunk> ToDrawShadow, WorldRenderType Type)
@@ -191,15 +196,18 @@ namespace Hedra.Engine.Rendering
             StaticShader.Bind();
 
             StaticShader["PlayerPosition"] = GameManager.Player.Position;
-            StaticShader["Time"] = !GameManager.InStartMenu ? Time.AccumulatedFrameTime : Time.IndependentAccumulatedFrameTime;
-            //StaticShader["Fancy"] = GameSettings.Fancy ? 1.0f : 0.0f;
-            //StaticShader["Snow"] = SkyManager.Snowing ? 1.0f : 0.0f;
             StaticShader["Dither"] = 0;
-            StaticShader["UseShadows"] = (float) GameSettings.ShadowQuality * (GameSettings.Shadows ? 1f : 0f);
             StaticShader["BakedOffset"] = BakedOffset;
+            StaticShader["TimeFancyShadowDistanceUseShadows"] = new Vector4(
+                !GameManager.InStartMenu ? Time.AccumulatedFrameTime : Time.IndependentAccumulatedFrameTime,
+                GameSettings.Quality ? 1.0f : 0.0f,
+                ShadowRenderer.ShadowDistance,
+                GameSettings.ShadowQuality * (GameSettings.Shadows ? 1f : 0f)
+            );
             StaticShader["Scale"] = Scale;
             StaticShader["Offset"] = Offset;
             StaticShader["TransformationMatrix"] = TransformationMatrix;
+            StaticShader["AreaCount"] = World.Highlighter.AreaCount;
             StaticShader["AreaPositions"] = World.Highlighter.AreaPositions;
             StaticShader["AreaColors"] = World.Highlighter.AreaColors;
             
@@ -213,12 +221,16 @@ namespace Hedra.Engine.Rendering
                 Renderer.ActiveTexture(TextureUnit.Texture0);
                 Renderer.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFbo.TextureID[0]);
                 StaticShader["ShadowTex"] = 0;
-                StaticShader["ShadowDistance"] = ShadowRenderer.ShadowDistance;
             }        
         }
         
         private static void StaticUnBind()
         {
+            /* Clear the texture units. */
+            Renderer.ActiveTexture(TextureUnit.Texture0);
+            Renderer.BindTexture(TextureTarget.Texture2D, 0);
+            Renderer.ActiveTexture(TextureUnit.Texture1);
+            Renderer.BindTexture(TextureTarget.Texture3D, 0);
             StaticShader.Unbind();
         }
         
@@ -238,6 +250,7 @@ namespace Hedra.Engine.Rendering
             WaterShader["BakedOffset"] = BakedOffset;
             WaterShader["Scale"] = Scale;
             WaterShader["Offset"] = Offset;
+            WaterShader["AreaCount"] = World.Highlighter.AreaCount;
             WaterShader["AreaPositions"] = World.Highlighter.AreaPositions;
             WaterShader["AreaColors"] = World.Highlighter.AreaColors;        
             WaterShader["WaveMovement"] = WaveMovement;
@@ -248,6 +261,8 @@ namespace Hedra.Engine.Rendering
         
         private static void WaterUnBind()
         {
+            Renderer.ActiveTexture(TextureUnit.Texture0);
+            Renderer.BindTexture(TextureTarget.Texture2D, 0);
             Renderer.Disable(EnableCap.Blend);
             Renderer.Enable(EnableCap.CullFace);
             WaterShader.Unbind();

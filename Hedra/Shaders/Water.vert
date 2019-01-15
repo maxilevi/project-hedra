@@ -79,7 +79,7 @@ void main()
 	
 	float DistanceToCamera = length(vec3(PlayerPosition - v.xyz).xz);
 	Visibility = clamp( (MaxDist - DistanceToCamera) / (MaxDist - MinDist), 0.0, 1.0);
-	
+		
 	//Lighting
 	vec3 unitNormal = Normal;
 	vec3 unitToLight = normalize(LightPosition);
@@ -87,13 +87,12 @@ void main()
 
 	vec3 FullLightColor = clamp(calculate_lights(LightColor, v.xyz) + LightColor, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
 
+	v = TransformationMatrix * v;
 	Ambient = 0.75;
-	Color = ( diffuse(unitToLight, unitNormal, max(FullLightColor, vec3(.55, .55, .55))) * 0.8 + vec4(0.5, 0.5, 0.5, 0.0) * .0) * InColor 
-	+ specular(unitToLight, unitNormal, unitToCamera, FullLightColor);
-
+	Color = ( diffuse(unitToLight, unitNormal, max(FullLightColor, vec3(.55, .55, .55))) * 0.8 + vec4(0.5, 0.5, 0.5, 0.0) * .0) * InColor;
+    Color = apply_highlights(Color, v.xyz);
  	Color.a = Transparency;
  	
-	v = TransformationMatrix * v;
  	gl_Position = _modelViewProjectionMatrix * v;
 
 	InPos = v;
@@ -122,7 +121,8 @@ float GetY(float x, float z){
     return GetOffset(x,z, 0.1, 0.3) + 0.0;
 }
 
-vec3 Cross(vec3 v1, vec3 v2){
+vec3 Cross(vec3 v1, vec3 v2)
+{
 	return vec3(v1.y * v2.z - v1.z * v2.y,
 		     v1.z * v2.x - v1.x * v2.z,
 		     v1.x * v2.y - v1.y * v2.x);

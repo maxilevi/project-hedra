@@ -167,7 +167,7 @@ namespace Hedra.Engine.Player
 
             if (this.IsSleeping != _wasSleeping)
             {
-                SkyManager.DaytimeSpeed = _wasSleeping ? 1.0f : 50.0f;
+                SkyManager.DaytimeSpeed = _wasSleeping ? 1.0f : 40.0f;
                 //GameSettings.DarkEffect = !_wasSleeping;
             }
             _wasSleeping = this.IsSleeping;       

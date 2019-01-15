@@ -17,7 +17,7 @@ using Hedra.Rendering;
 
 namespace Hedra.Engine.Rendering
 {
-    public class ChunkMesh : ICullable, IDisposable
+    public class ChunkMesh : Occludable, ICullable, IDisposable
     {
         private IMeshBuffer _buffer;
         private readonly List<InstanceData> _instanceElements;
@@ -34,6 +34,8 @@ namespace Hedra.Engine.Rendering
         public Vector3 Max { get; private set; }
         public Vector3 Min { get; private set; }
         public Vector3 Position { get; }
+        protected override Vector3 OcclusionMin => Min + Position;
+        protected override Vector3 OcclusionMax => Max + Position;
 
         public ChunkMesh(Vector3 Position, IMeshBuffer Buffer)
         {
@@ -146,8 +148,9 @@ namespace Hedra.Engine.Rendering
 
         public InstanceData[] LodAffectedInstanceElements => _lodedInstanceElements.ToArray();
         
-        public void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
             _buffer?.Dispose();
         }
     }

@@ -44,14 +44,14 @@ namespace Hedra.Engine.Rendering.Frustum
             Renderer.Viewport(0, 0, Width, Height);
         }
 
-        public static void CalculateFrustum(Matrix4 Proj, Matrix4 View)
+        public static void BuildFrustum(Matrix4 Proj, Matrix4 View)
         {
-            SetFrustum(View);
+            BuildFrustum(View);
             ProjectionMatrix = Proj;
             UpdateFrustum();
         }
         
-        public static void SetFrustum(Matrix4 View)
+        public static void BuildFrustum(Matrix4 View)
         {
             var aspect = GameSettings.Width / (float)GameSettings.Height;
             ModelViewMatrix = View;

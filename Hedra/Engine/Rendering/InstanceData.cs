@@ -50,18 +50,16 @@ namespace Hedra.Engine.Rendering
             ApplyRecursively(I => I.Apply(Transformation));
         }
         
-        public Vector3 Bounds
+        public Vector3 ApproximateBounds
         {
             get
             {
                 if (_boundsInitialized) return _bounds;
-                var data = OriginalMesh.Clone();
-                data.Transform(TransMatrix);
-                _bounds.X = data.SupportPoint(Vector3.UnitX).X - data.SupportPoint(-Vector3.UnitX).X;
-                _bounds.Y = data.SupportPoint(Vector3.UnitY).Y - data.SupportPoint(-Vector3.UnitY).Y;
-                _bounds.Z = data.SupportPoint(Vector3.UnitZ).Z - data.SupportPoint(-Vector3.UnitZ).Z;
+                var diagonal = Vector3.TransformPosition(OriginalMesh.SupportPoint(Vector3.One) - OriginalMesh.SupportPoint(-Vector3.One), TransMatrix);
+                _bounds.X = diagonal.X;
+                _bounds.X = diagonal.X;
+                _bounds.X = diagonal.X;
                 _boundsInitialized = true;
-                data.Dispose();
                 return _bounds;
             }
         }

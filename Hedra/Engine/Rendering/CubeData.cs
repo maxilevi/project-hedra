@@ -56,7 +56,8 @@ namespace Hedra.Engine.Rendering
             };
             this.HasNormals = true;
         }
-        public CubeData(){
+        public CubeData()
+        {
             this.Initialize();
         }
         
@@ -106,18 +107,6 @@ namespace Hedra.Engine.Rendering
             return newVerts.ToArray();
         }
 
-        public void RecalculateNormals()
-        {
-            for (var i = 0; i < Indices.Count; i+=3)
-            {
-                Normals[Indices[i]] = Mathf.CalculateNormal(
-                    VerticesArrays[Indices[i+0]],
-                    VerticesArrays[Indices[i+1]],
-                    VerticesArrays[Indices[i+2]]
-                );
-            }
-        }
-        
         public static Vector4[] CreateCubeColor(Vector4 Color){
             return new Vector4[] { 
                 Color, Color, Color, Color,

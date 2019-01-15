@@ -215,6 +215,12 @@ namespace Hedra.Engine.Rendering.UI
             Renderer.Disable(EnableCap.Blend);
             Renderer.Enable(EnableCap.CullFace);
             (CustomProgram ?? Shader).Unbind();
+            Renderer.ActiveTexture(TextureUnit.Texture0);
+            Renderer.BindTexture(TextureTarget.Texture2D, 0);
+            Renderer.ActiveTexture(TextureUnit.Texture1);
+            Renderer.BindTexture(TextureTarget.Texture2D, 0);
+            Renderer.ActiveTexture(TextureUnit.Texture2);
+            Renderer.BindTexture(TextureTarget.Texture2D, 0);
         }
 
         public static void SetTexture(uint Position, uint Id)

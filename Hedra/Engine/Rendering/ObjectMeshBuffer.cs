@@ -199,6 +199,10 @@ namespace Hedra.Engine.Rendering
 
         private static void Unbind()
         {
+            Renderer.ActiveTexture(TextureUnit.Texture0);
+            Renderer.BindTexture(TextureTarget.Texture2D, 0);
+            Renderer.ActiveTexture(TextureUnit.Texture1);
+            Renderer.BindTexture(TextureTarget.Texture3D, 0);
             Shader.Unbind();
             Renderer.Enable(EnableCap.CullFace);
         }

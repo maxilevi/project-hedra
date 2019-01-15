@@ -18,7 +18,7 @@ namespace Hedra.Engine.Generation
 
         public AreaHighlighter()
         {
-            _highlightedAreas = new HighlightedArea[16];
+            _highlightedAreas = new HighlightedArea[8];
             for (var i = 0; i < _highlightedAreas.Length; i++)
                 _highlightedAreas[i] = new HighlightedArea();
         }
@@ -46,6 +46,8 @@ namespace Hedra.Engine.Generation
                 return areaColors.ToArray();
             }
         }
+
+        public int AreaCount => _highlightedAreas.Sum(H => !H.IsEmpty ? 1 : 0);
         
         public HighlightedAreaWrapper HighlightArea(Vector3 Position, Vector4 Color, float Radius, float Seconds)
         {

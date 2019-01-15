@@ -73,6 +73,7 @@ namespace Hedra.Engine.Management
             SkyManager.Draw();
             World.CullTest();
             World.Draw(WorldRenderType.StaticAndInstance);
+            World.OccludeTest();
             DropShadows.Draw();
 
             var drawedObjects = 0;

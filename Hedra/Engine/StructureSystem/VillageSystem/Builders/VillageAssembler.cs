@@ -147,13 +147,17 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 if (waiter.Disposed) yield break;
                 yield return null;
             }
+
             var placer = buildingOutput.Place(position);
             while (placer.MoveNext()) yield return null;
-            structure.AddInstance(buildingOutput.Instances.ToArray());
-            structure.AddStaticElement(buildingOutput.Models.Select(C => C.ToVertexData()).ToArray());
-            structure.AddCollisionShape(buildingOutput.Shapes.ToArray());
-            structure.WorldObject.AddChildren(buildingOutput.Structures.ToArray());
-            callback();
+            TaskScheduler.Parallel(() =>
+            {
+                structure.AddInstance(buildingOutput.Instances.ToArray());
+                structure.AddStaticElement(buildingOutput.Models.Select(C => C.ToVertexData()).ToArray());
+                structure.AddCollisionShape(buildingOutput.Shapes.ToArray());
+                structure.WorldObject.AddChildren(buildingOutput.Structures.ToArray());
+                callback();
+            });
         }
     }
 }

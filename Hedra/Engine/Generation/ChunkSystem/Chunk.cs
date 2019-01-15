@@ -210,6 +210,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Input.StaticData.SupportPoint(Vector3.UnitY).Y,
                 Input.StaticData.SupportPoint(Vector3.UnitZ).Z - OffsetZ
             );
+
             Mesh.SetBounds(
                 new Vector3(staticMin.X, staticMin.Y, staticMin.Z),
                 new Vector3(staticMax.X, Math.Max(staticMax.Y, Input.WaterData.SupportPoint(Vector3.UnitY).Y), staticMax.Z)

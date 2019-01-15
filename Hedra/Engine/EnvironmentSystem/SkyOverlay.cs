@@ -32,8 +32,8 @@ namespace Hedra.Engine.EnvironmentSystem
         private SkyOverlay()
         {
             var geometry = Geometry.Cube();
-            this._vertices = new VBO<Vector3>(geometry.Vertices, geometry.Vertices.Length * Vector3.SizeInBytes, VertexAttribPointerType.Float);
-            this._buffer = new VAO<Vector3>(_vertices);
+            _vertices = new VBO<Vector3>(geometry.Vertices, geometry.Vertices.Length * Vector3.SizeInBytes, VertexAttribPointerType.Float);
+            _buffer = new VAO<Vector3>(_vertices);
         }
 
         public void Draw()

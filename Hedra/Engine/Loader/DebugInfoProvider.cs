@@ -259,8 +259,7 @@ namespace Hedra.Engine.Loader
                         }
                     });
                     Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-                    BasicGeometry.DrawBox(GameManager.Player.Model.BaseBroadphaseBox.Min,
-                        GameManager.Player.Model.BaseBroadphaseBox.Max - GameManager.Player.Model.BaseBroadphaseBox.Min);
+                    //BasicGeometry.DrawBox(GameManager.Player.Model.BaseBroadphaseBox.Min, GameManager.Player.Model.BaseBroadphaseBox.Max - GameManager.Player.Model.BaseBroadphaseBox.Min);
                     Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
 
                     if (GameManager.Player.LeftWeapon != null &&

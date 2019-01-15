@@ -78,6 +78,8 @@ namespace Hedra.Engine.Generation
 
         void CullTest();
 
+        void OccludeTest();
+
         void Draw(WorldRenderType Type);
 
         void Update();

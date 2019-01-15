@@ -38,6 +38,8 @@ namespace Hedra.Engine.Rendering.Effects
 
             Renderer.Enable(EnableCap.DepthTest);
             Renderer.Enable(EnableCap.CullFace);
+            Renderer.ActiveTexture(TextureUnit.Texture0);
+            Renderer.BindTexture(TextureTarget.Texture2D, 0);
         }
     }
 }

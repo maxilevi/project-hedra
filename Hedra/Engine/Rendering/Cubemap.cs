@@ -42,6 +42,7 @@ namespace Hedra.Engine.Rendering
 
         public void Unbind()
         {
+            Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.TextureCubeMap, 0);
         }
     }

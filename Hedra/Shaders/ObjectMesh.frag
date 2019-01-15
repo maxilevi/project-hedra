@@ -29,6 +29,7 @@ uniform sampler3D noiseTexture;
 uniform bool Outline;
 uniform vec4 OutlineColor;
 uniform float Time;
+const float bias = 0.005;
 
 void main()
 {
@@ -46,15 +47,13 @@ void main()
 	float ShadowVisibility = 1.0;
 	if(DitherFogTextureShadows.y && DitherFogTextureShadows.w)
 	{
-		float bias = max(0.001 * (1.0 - dot(InNorm.xyz, LightDir)), 0.0) + 0.001;
-	
 		vec4 ShadowCoords = Coords * vec4(.5,.5,.5,1.0) + vec4(.5,.5,.5, 0.0);
 			
 		float shadow = 0.0;
 		vec2 texelSize = 1.0 / textureSize(ShadowTex, 0);
-		for(int x = -1; x <= 1.0; ++x)
+		for(int x = -1; x <= 1; ++x)
 		{
-		    for(int y = -1; y <= 1.0; ++y)
+		    for(int y = -1; y <= 1; ++y)
 		    {
 				vec4 fetch = texture(ShadowTex, ShadowCoords.xy + vec2(x, y) * texelSize);
 		        float pcfDepth = fetch.r; 
@@ -90,7 +89,7 @@ void main()
 	{
 		vec3 unitToCamera = normalize( (inverse(_modelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - vertex_position.xyz);
 		float outlineDot = max(0.0, 1.0 - dot(base_normal, unitToCamera));
-		FColor = outlineDot * ( cos(Time * 10.0)-.0) * 2.0 * OutlineColor * Alpha;
+		FColor = outlineDot * ( cos(Time * 10.0) ) * 2.0 * OutlineColor * Alpha;
 		OutPosition = vec4(0.0, 0.0, 0.0, 0.0);
 		OutNormal = vec4(0.0, 0.0, 0.0, 0.0);
 	}

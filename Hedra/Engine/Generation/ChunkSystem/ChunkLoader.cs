@@ -38,14 +38,17 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private float _targetMax = 1;
         private float _activeChunks;
         private float _targetActivechunks;
+        private bool _shouldUpdate;
 
         public ChunkLoader(IPlayer Player)
         {
             Enabled = true;
             _player = Player;
+            _mainThread = new Thread(UpdateLoop);
             _chunkWatchers = new List<ChunkWatcher>();
             _candidates = new List<Vector3>();
             _closest = new ClosestComparer();
+            _mainThread.Start();
             RoutineManager.StartRoutine(this.CreateChunksCoroutine);
             RoutineManager.StartRoutine(this.UpdateChunkCoroutine);
             OnChunkReady += World.MarkChunkReady;
@@ -70,16 +73,32 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private IEnumerator UpdateChunkCoroutine()
         {
-            var updateTimer = new Timer(0.15f);
+            var updateTimer = new Timer(0.2f);
             while (GameManager.Exists)
             {
-                if(!updateTimer.Tick()) continue;
-                for (var i = _chunkWatchers.Count - 1; i > -1; i--)
+                if(!updateTimer.Tick()) yield return null;
+                Dispatch();
+                yield return null;
+            }
+        }
+
+        private void Dispatch()
+        {
+            _shouldUpdate = true;
+        }
+
+        private void UpdateLoop()
+        {
+            while (GameManager.Exists)
+            {
+                if(!_shouldUpdate) Thread.Sleep(1);
+                var watchers = _chunkWatchers.ToArray();
+                for (var i = watchers.Length - 1; i > -1; --i)
                 {
                     _chunkWatchers[i].Update();
                     if (_chunkWatchers[i].Disposed) _chunkWatchers.RemoveAt(i);
                 }
-                yield return null;
+                _shouldUpdate = false;
             }
         }
 

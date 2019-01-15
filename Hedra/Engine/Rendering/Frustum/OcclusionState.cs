@@ -6,17 +6,16 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
 
-namespace Hedra.Engine.Management
+namespace Hedra.Engine.Rendering.Frustum
 {
     /// <summary>
     /// Description of OcclusionState.
     /// </summary>
     public enum OcclusionState
     {
-        HIDDEN,
-        VISIBLE,
-        WAITING
+        Hidden,
+        Visible,
+        Waiting
     }
 }

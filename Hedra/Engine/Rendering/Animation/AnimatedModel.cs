@@ -228,7 +228,8 @@ namespace Hedra.Engine.Rendering.Animation
             Data.Unbind();
 
             _shader.Unbind();
-
+            Renderer.ActiveTexture(TextureUnit.Texture0);
+            Renderer.BindTexture(TextureTarget.Texture2D, 0);
             Renderer.Disable(EnableCap.Blend);
         }
 
