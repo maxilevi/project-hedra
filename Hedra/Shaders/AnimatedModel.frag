@@ -1,6 +1,7 @@
 #version 330 core
 !include<"Includes/GammaCorrection.shader">
 !include<"Includes/Sky.shader">
+!include<"Includes/Shadows.shader">
 
 in vec4 pass_color;
 in vec3 pass_normal;
@@ -15,8 +16,7 @@ layout(location = 1)out vec4 out_position;
 layout(location = 2)out vec4 out_normal;
 
 uniform bool UseFog;
-uniform bool UseShadows = true;
-uniform sampler2D ShadowTex;
+uniform bool UseShadows;
 uniform vec4 Tint;
 uniform vec4 BaseTint;
 uniform float Alpha;
@@ -28,28 +28,7 @@ void main(void)
 	{
 		discard;
 	}
-	float ShadowVisibility = 1.0;
-	vec4 ShadowCoords = pass_coords * vec4(.5,.5,.5, 1.0) + vec4(.5,.5,.5, 0.0);
-			
-	if(ShadowCoords.z < 1.0 && UseShadows)
-	{
-		float shadow = 0.0;
-        vec2 texelSize = 1.0 / textureSize(ShadowTex, 0);
-        for(int x = -1; x <= 1; ++x)
-        {
-            for(int y = -1; y <= 1; ++y)
-            {
-                vec4 fetch = texture(ShadowTex, ShadowCoords.xy + vec2(x, y) * texelSize);
-                float pcfDepth = fetch.r; 
-                if ( pcfDepth  <  ShadowCoords.z - bias){
-                    shadow += 1.0;
-                }       
-            }    
-        }
-        shadow /= 9.0;
-        ShadowVisibility = 1.0 - ( (shadow * .45) * pass_coords.w);
-	}
-	
+	float ShadowVisibility = UseShadows ? simple_apply_shadows(pass_coords, bias) : 1.0;	
 	vec4 new_color = pass_color * ShadowVisibility * (BaseTint + Tint) + pass_lightDiffuse * (BaseTint + Tint);
 	new_color = vec4(linear_to_srbg(new_color.xyz), new_color.w);
 

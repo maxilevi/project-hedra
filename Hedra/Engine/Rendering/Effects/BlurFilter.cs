@@ -30,20 +30,20 @@ namespace Hedra.Engine.Rendering.Effects
             
             Dst.Bind();
             HBlurShader.Bind();
-            this.DrawQuad(HBlurShader, Src.TextureID[0], 0);
+            this.DrawQuad(HBlurShader, Src.TextureId[0], 0);
             HBlurShader.Unbind();
             Dst.UnBind();
 
             Src.Bind();
             
             VBlurShader.Bind();
-            this.DrawQuad(VBlurShader, Dst.TextureID[0], 0);
+            this.DrawQuad(VBlurShader, Dst.TextureId[0], 0);
             VBlurShader.Unbind();
             
             Src.UnBind();
             
             Dst.Bind();
-            MainFBO.DrawQuad(Src.TextureID[0]);
+            MainFBO.DrawQuad(Src.TextureId[0]);
             Dst.UnBind();
         }
         

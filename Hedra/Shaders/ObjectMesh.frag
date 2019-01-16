@@ -1,6 +1,7 @@
 #version 330 core
 !include<"Includes/GammaCorrection.shader">
 !include<"Includes/Sky.shader">
+!include<"Includes/Shadows.shader">
 
 in vec4 raw_color;
 in vec4 Color;
@@ -23,7 +24,6 @@ uniform vec4 Tint;
 uniform vec4 BaseTint;
 uniform vec2 res;
 uniform float Alpha;
-uniform sampler2D ShadowTex;
 uniform bvec4 DitherFogTextureShadows;
 uniform sampler3D noiseTexture;
 uniform bool Outline;
@@ -44,27 +44,9 @@ void main()
 		if( d-floor(d) < 0.5) discard;
 	}
 
-	float ShadowVisibility = 1.0;
-	if(DitherFogTextureShadows.y && DitherFogTextureShadows.w)
-	{
-		vec4 ShadowCoords = Coords * vec4(.5,.5,.5,1.0) + vec4(.5,.5,.5, 0.0);
-			
-		float shadow = 0.0;
-		vec2 texelSize = 1.0 / textureSize(ShadowTex, 0);
-		for(int x = -1; x <= 1; ++x)
-		{
-		    for(int y = -1; y <= 1; ++y)
-		    {
-				vec4 fetch = texture(ShadowTex, ShadowCoords.xy + vec2(x, y) * texelSize);
-		        float pcfDepth = fetch.r; 
-		        if ( pcfDepth  <  ShadowCoords.z - bias){
-			    	shadow += 1.0;
-				}       
-		    }    
-		}
-		shadow /= 9.0;
-		ShadowVisibility = 1.0 - shadow * .65;
-	}
+	float ShadowVisibility = DitherFogTextureShadows.w && DitherFogTextureShadows.y 
+	    ? simple_apply_shadows(Coords, bias)
+	    : 1.0;
     float tex = texture(noiseTexture, base_vertex_position).r * int(DitherFogTextureShadows.z);
     vec4 inputColor = vec4(linear_to_srbg((Color.xyz * ShadowVisibility + point_diffuse.xyz * raw_color.xyz) * (Tint.rgb + BaseTint.rgb) * (tex + 1.0)), Color.w);
 

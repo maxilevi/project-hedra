@@ -49,7 +49,7 @@ namespace Hedra.Engine.Player.QuestSystem
             Renderer.Disable(EnableCap.DepthTest);
             Renderer.Enable(EnableCap.Blend);
             Model.PrematureCulling = meshPrematureCulling;
-            return Framebuffer.TextureID[0];
+            return Framebuffer.TextureId[0];
         }
 
         public static void Update()

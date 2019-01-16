@@ -33,7 +33,7 @@ void main()
 {
 	vec3 Vertex = InVertex;
 	vec2 Unpacked = Unpack(InColor.a, prec);
-	float Addon = Fancy * ( cos(Time + Unpacked.y * 8.0) +0.8) * .85 * 0.7 * Unpacked.x * 1.2;
+	float Addon = Fancy * ( cos(Time + Unpacked.y * 8.0) + 0.8) * 0.715 * Unpacked.x;
 
 	float invert_uk = when_lt(Unpacked.y, 0.5);
 	Vertex.x += invert_uk * Addon;

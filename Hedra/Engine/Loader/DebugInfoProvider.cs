@@ -156,7 +156,7 @@ namespace Hedra.Engine.Loader
 
             if (_depthMode)
             {
-                _depthTexture.TextureElement.TextureId = DrawManager.MainBuffer.Ssao.FirstPass.TextureID[0];
+                _depthTexture.TextureElement.TextureId = DrawManager.MainBuffer.Ssao.FirstPass.TextureId[0];
                 _depthTexture.Enable();
             }
             else

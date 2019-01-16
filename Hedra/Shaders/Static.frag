@@ -36,8 +36,7 @@ const mat4 ditherMat = mat4(
    16.0 / 17.0,  8.0 / 17.0, 14.0 / 17.0,  6.0 / 17.0
 );
 
-uniform sampler2D ShadowTex;
-uniform mat4 ShadowMVP;
+uniform sampler2DShadow  ShadowTex;
 uniform bool Dither;
 uniform sampler3D noiseTexture;
 
@@ -84,32 +83,29 @@ float CalculateShadows()
 	float shadow = 0.0;
 	vec2 texelSize = 1.0 / textureSize(ShadowTex, 0);
 	float samples = 0.0;
-    for(int x = -1; x < 1; ++x)
+	int addedMax = shadow_quality > 1.0 ? shadow_quality > 2.0 ? 1 : 1 : 0;
+    for(int x = -1; x < 1 + addedMax; ++x)
     {
-        for(int y = -1; y < 1; ++y)
+        for(int y = -1; y < 1 + addedMax; ++y)
         {
-            if(shadow_quality >= 2.0)
+            vec3 shadowUV = vec3(ShadowCoords.xy + vec2(x, y) * texelSize, ShadowCoords.z - bias);
+            if(shadow_quality > 1.9) //Check if quality is equal or higher than 2.0
             {
                 for (int i = 0; i < 4; i++)
                 {
-                    vec4 fetch = texture(ShadowTex, ShadowCoords.xy + vec2(x, y) * texelSize + poissonDisk[i] * .001);
-                    float pcfDepth = fetch.r; 
-                    if (pcfDepth  <  ShadowCoords.z - bias)
-                        shadow += 1.0 * Coords.w * fetch.w;
+                    
+                    float fetch = 1.0 - texture(ShadowTex, shadowUV + vec3(poissonDisk[i] * texelSize * 2.0, 0.0));
+                    shadow += fetch * Coords.w;
                     samples += 1.0;
                 }
             }
             else 
             {
-                vec4 fetch = texture(ShadowTex, ShadowCoords.xy  + vec2(x, y) * texelSize );
-                float pcfDepth = fetch.r; 
-                if ( pcfDepth  <  ShadowCoords.z - bias)
-                    shadow += 1.0 * Coords.w * fetch.a; 
+                float fetch = 1.0 - texture(ShadowTex, shadowUV);
+                shadow += fetch * Coords.w;
                 samples += 1.0;
             }
         }    
     }
-    shadow /= samples;
-
-	return 1.0 - (shadow * .65);
+	return 1.0 - ((shadow / samples) * .8);
 }

@@ -125,7 +125,8 @@ namespace Hedra.Engine.Player.MapSystem
                 Culling.BuildFrustum(_player.View.ModelViewMatrix);
 
                 var projMatrix = Matrix4.CreateOrthographic(1024, 1024, 1f, 2048);
-                Culling.BuildFrustum(projMatrix, Culling.ModelViewMatrix);
+                var trans = Culling.ModelViewMatrix.ExtractTranslation();
+                Culling.BuildFrustum(projMatrix, Culling.ModelViewMatrix * Matrix4.CreateTranslation(Vector3.UnitY * (Chunk.Height * 2f - _player.Position.Y)));
 
                 var oldShadows = GameSettings.GlobalShadows;
                 var oldFancy = GameSettings.Quality;
@@ -197,7 +198,7 @@ namespace Hedra.Engine.Player.MapSystem
             DrawManager.UIRenderer.SetupQuad();
 
             Renderer.ActiveTexture(TextureUnit.Texture1);
-            Renderer.BindTexture(TextureTarget.Texture2D, _mapFbo.TextureID[0]);
+            Renderer.BindTexture(TextureTarget.Texture2D, _mapFbo.TextureId[0]);
             Shader["Fill"] = 1;
 
             Renderer.ActiveTexture(TextureUnit.Texture0);

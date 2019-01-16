@@ -207,7 +207,7 @@ namespace Hedra.Engine.Rendering.Animation
             if (GameSettings.Shadows)
             {
                 Renderer.ActiveTexture(TextureUnit.Texture0);
-                Renderer.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFbo.TextureID[0]);
+                Renderer.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFbo.TextureId[0]);
                 _shader["ShadowTex"] = 0;
                 if (_shader == DefaultShader || !CompatibilityManager.SupportsGeometryShaders)
                 {

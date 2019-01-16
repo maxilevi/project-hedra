@@ -45,6 +45,7 @@ namespace Hedra.Engine.Rendering
             get => _shadowDistance;
             set
             {
+                if (_shadowDistance == value) return;
                 _shadowDistance = value;
                 DepthProj = Matrix4.CreateOrthographicOffCenter(-_shadowDistance, _shadowDistance,
                     -_shadowDistance, _shadowDistance,
@@ -54,13 +55,13 @@ namespace Hedra.Engine.Rendering
 
         public static void Bind()
         {
-            ShadowDistance = 800f / GeneralSettings.MaxLoadingRadius * GameSettings.ChunkLoaderRadius;
+            ShadowDistance = 1400 / GeneralSettings.MaxLoadingRadius * GameSettings.ChunkLoaderRadius;
             _prevFbo = Renderer.FBOBound;
             if (ShadowFbo == null) ShadowRenderer.SetQuality(GameSettings.ShadowQuality);
             ShadowFbo.Bind();
 
             //ShaderManager.LightPosition = Vector3.TransformNormal(LightPosition.NormalizedFast(), Matrix4.CreateRotationY(SkyManager.SkyModifier * 360 * Mathf.RADIAN));
-            Vector3 Position = GameManager.Player.Position + GameManager.Player.View.LookingDirection;
+            Vector3 Position = GameManager.Player.View.CameraEyePosition.Xz.ToVector3() + Vector3.UnitY * 800;
             Vector3 NormalizedLight =
                 (new Vector3(LightPosition.X, LightPosition.Y, LightPosition.Z))
                 .NormalizedFast(); //ShaderManager.LightPosition
@@ -91,12 +92,28 @@ namespace Hedra.Engine.Rendering
         {
             Log.WriteLine($"Setting shadow quality to {Quality}");
             ShadowFbo?.Dispose();
-
-            if(Quality == 2 || Quality == 1)
-                 ShadowFbo = new FBO(1024, 1024, false, 0, FramebufferAttachment.DepthAttachment, PixelInternalFormat.DepthComponent16, false, false);
-
-            if (Quality == 3)
-                ShadowFbo = new FBO(2048, 2048, false, 0, FramebufferAttachment.DepthAttachment, PixelInternalFormat.DepthComponent16, false, false);
+            var size = Vector2.Zero;
+            switch (Quality)
+            {
+                case 1:
+                    size = new Vector2(1024, 1024);
+                    break;
+                case 2:
+                    size = new Vector2(2048, 2048);
+                    break;                
+                case 3:
+                    size = new Vector2(4096, 4096);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException($"Shadow quality '{Quality}' is not supported.");
+                    
+            }
+            ShadowFbo = new FBO((int)size.X, (int)size.Y, FramebufferAttachment.DepthAttachment,
+                PixelInternalFormat.DepthComponent16, new TextureParameter
+                {
+                    Name = TextureParameterName.TextureCompareMode,
+                    Value = (int) TextureCompareMode.CompareRefToTexture
+                });       
         }
 
         public static void Dispose()

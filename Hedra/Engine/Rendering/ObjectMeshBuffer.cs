@@ -190,7 +190,7 @@ namespace Hedra.Engine.Rendering
             {
                 Shader["ShadowMVP"] = ShadowRenderer.ShadowMvp;
                 Renderer.ActiveTexture(TextureUnit.Texture0);
-                Renderer.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFbo.TextureID[0]);
+                Renderer.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFbo.TextureId[0]);
                 Shader["ShadowTex"] = 0;
                 Shader["ShadowDistance"] = ShadowRenderer.ShadowDistance;
             }
@@ -199,11 +199,11 @@ namespace Hedra.Engine.Rendering
 
         private static void Unbind()
         {
-            /*
+            
             Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, 0);
             Renderer.ActiveTexture(TextureUnit.Texture1);
-            Renderer.BindTexture(TextureTarget.Texture3D, 0);*/
+            Renderer.BindTexture(TextureTarget.Texture3D, 0);
             Shader.Unbind();
             Renderer.Enable(EnableCap.CullFace);
         }

@@ -63,7 +63,7 @@ namespace Hedra.Engine.Rendering.Effects
             {
                 FinalFbo.Bind();
                 DefaultShader.Bind();
-                DrawQuad(Default.TextureID[0]);
+                DrawQuad(Default.TextureId[0]);
                 DefaultShader.Unbind();
                 FinalFbo.UnBind();
                 
@@ -71,7 +71,7 @@ namespace Hedra.Engine.Rendering.Effects
                 {
                     Default.Bind();
                     DefaultShader.Bind();
-                    DrawQuad(FinalFbo.TextureID[0]);
+                    DrawQuad(FinalFbo.TextureId[0]);
                     DefaultShader.Unbind();
                     Default.UnBind();
                     
@@ -98,10 +98,10 @@ namespace Hedra.Engine.Rendering.Effects
                 DrawManager.UIRenderer.SetupQuad();
 
                 Renderer.ActiveTexture(TextureUnit.Texture0);
-                Renderer.BindTexture(TextureTarget.Texture2D, Ssao.FirstPass.TextureID[1]);
+                Renderer.BindTexture(TextureTarget.Texture2D, Ssao.FirstPass.TextureId[1]);
                 
                 Renderer.ActiveTexture(TextureUnit.Texture1);
-                Renderer.BindTexture(TextureTarget.Texture2D, Ssao.FirstPass.TextureID[2]);
+                Renderer.BindTexture(TextureTarget.Texture2D, Ssao.FirstPass.TextureId[2]);
                 
                 Renderer.ActiveTexture(TextureUnit.Texture2);
                 Renderer.BindTexture(TextureTarget.Texture2D, (uint) Ssao.RandomTex);
@@ -122,7 +122,7 @@ namespace Hedra.Engine.Rendering.Effects
 
                 //Firstpass output
                 Renderer.ActiveTexture(TextureUnit.Texture0);
-                Renderer.BindTexture(TextureTarget.Texture2D, Ssao.SecondPass.TextureID[0]);
+                Renderer.BindTexture(TextureTarget.Texture2D, Ssao.SecondPass.TextureId[0]);
 
                 DrawManager.UIRenderer.DrawQuad();
 
@@ -132,10 +132,10 @@ namespace Hedra.Engine.Rendering.Effects
 
                 //Firstpass output
                 Renderer.ActiveTexture(TextureUnit.Texture0);
-                Renderer.BindTexture(TextureTarget.Texture2D, Ssao.ThirdPass.TextureID[0]);
+                Renderer.BindTexture(TextureTarget.Texture2D, Ssao.ThirdPass.TextureId[0]);
                 //Color texture
                 Renderer.ActiveTexture(TextureUnit.Texture1);
-                Renderer.BindTexture(TextureTarget.Texture2D, Ssao.FirstPass.TextureID[0]);
+                Renderer.BindTexture(TextureTarget.Texture2D, Ssao.FirstPass.TextureId[0]);
                 
                 Renderer.Uniform1( Ssao.AOSampler, 0);
                 Renderer.Uniform1( Ssao.ColorSampler, 1);
@@ -190,13 +190,13 @@ namespace Hedra.Engine.Rendering.Effects
             {
                 Default.Bind();
                 DefaultShader.Bind();
-                DrawQuad(FinalFbo.TextureID[0], 0, true);
+                DrawQuad(FinalFbo.TextureId[0], 0, true);
                 DefaultShader.Unbind();
                 Default.UnBind();
                    
                 FinalFbo.Bind();
                 DefaultShader.Bind();
-                DrawQuad(Default.TextureID[0], 0, false);
+                DrawQuad(Default.TextureId[0], 0, false);
                 DefaultShader.Unbind();
                 FinalFbo.UnBind();
                 
@@ -208,9 +208,9 @@ namespace Hedra.Engine.Rendering.Effects
             #endregion
 
             if (GameSettings.FXAA)
-                DrawFXAAQuad(FinalFbo.TextureID[0], GameSettings.Bloom ? AdditiveFbo.TextureID[0] : 0);
+                DrawFXAAQuad(FinalFbo.TextureId[0], GameSettings.Bloom ? AdditiveFbo.TextureId[0] : 0);
             else
-                DrawQuad(FinalFbo.TextureID[0], GameSettings.Bloom ? AdditiveFbo.TextureID[0] : 0);
+                DrawQuad(FinalFbo.TextureId[0], GameSettings.Bloom ? AdditiveFbo.TextureId[0] : 0);
 
             Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, 0);

@@ -168,10 +168,11 @@ namespace Hedra.Engine.Generation
 
             DoCullTest(toDrawArray, DrawingChunks, _unculledChunks);
 
-            if (GameSettings.Shadows)
+            if (GameSettings.Shadows && !GameSettings.LockFrustum)
             {
                 WorldRenderer.PrepareShadowMatrix();
                 var prevValue = GameSettings.OcclusionCulling;
+                /* Disable shadow culling temproary since its working incorrectly */
                 GameSettings.OcclusionCulling = false;
                 DoCullTest(toDrawArray, ShadowDrawingChunks, null);
                 GameSettings.OcclusionCulling = prevValue;

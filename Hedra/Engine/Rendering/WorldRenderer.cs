@@ -219,7 +219,7 @@ namespace Hedra.Engine.Rendering
             {
                 StaticShader["ShadowMVP"] = ShadowRenderer.ShadowMvp;
                 Renderer.ActiveTexture(TextureUnit.Texture0);
-                Renderer.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFbo.TextureID[0]);
+                Renderer.BindTexture(TextureTarget.Texture2D, ShadowRenderer.ShadowFbo.TextureId[0]);
                 StaticShader["ShadowTex"] = 0;
             }        
         }
@@ -244,7 +244,7 @@ namespace Hedra.Engine.Rendering
             WaterShader["PlayerPosition"] = GameManager.Player.Position;
                
                Renderer.ActiveTexture(TextureUnit.Texture0);
-            Renderer.BindTexture(TextureTarget.Texture2D, GameSettings.SSAO && GameSettings.Quality ? DrawManager.MainBuffer.Ssao.FirstPass.TextureID[1] : 0);
+            Renderer.BindTexture(TextureTarget.Texture2D, GameSettings.SSAO && GameSettings.Quality ? DrawManager.MainBuffer.Ssao.FirstPass.TextureId[1] : 0);
 
             WaterShader["TransformationMatrix"] = TransformationMatrix;
             WaterShader["BakedOffset"] = BakedOffset;

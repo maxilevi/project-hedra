@@ -174,8 +174,9 @@ namespace Hedra.Engine.Rendering.UI
         {
             if(Texture.Scale == Vector2.Zero || !Texture.Enabled) return;
 
+            var id = Texture.Id;
             Renderer.ActiveTexture(TextureUnit.Texture0);
-            Renderer.BindTexture(TextureTarget.Texture2D, Texture.Id);
+            Renderer.BindTexture(TextureTarget.Texture2D, id);
             Shader["Texture"] = 0;
 
             Renderer.ActiveTexture(TextureUnit.Texture1);

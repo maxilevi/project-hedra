@@ -126,7 +126,7 @@ namespace Hedra.Engine.Player.Inventory
             Renderer.Disable(EnableCap.DepthTest);
             Renderer.Enable(EnableCap.Blend);
             Mesh.PrematureCulling = meshPrematureCulling;
-            return Framebuffer.TextureID[0];
+            return Framebuffer.TextureId[0];
         }
 
         public static void Update()
