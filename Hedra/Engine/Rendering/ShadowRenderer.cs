@@ -105,7 +105,7 @@ namespace Hedra.Engine.Rendering
                     size = new Vector2(4096, 4096);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException($"Shadow quality '{Quality}' is not supported.");
+                    return;
                     
             }
             ShadowFbo = new FBO((int)size.X, (int)size.Y, FramebufferAttachment.DepthAttachment,

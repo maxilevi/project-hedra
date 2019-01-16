@@ -13,6 +13,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using OpenTK;
 using System.Collections.Generic;
+using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
@@ -108,7 +109,7 @@ namespace Hedra.Engine.Rendering.UI
         
         public void ReloadFiles()
         {
-            var newInformation = DataManager.PlayerFiles;
+            var newInformation = DataManager.PlayerFiles.Take(GameSettings.MaxCharacters).ToArray();
 
             var same = true;
             if (_information != null && _information.Length == newInformation.Length)

@@ -116,17 +116,19 @@ namespace Hedra.Engine.Player.MapSystem
                 var oldDistance = _player.View.Distance;
                 var oldPitch = _player.View.Pitch;
                 var oldFacing = _player.View.Yaw;
+                var oldHeight = _player.View.CameraHeight;
 
                 _player.View.Yaw = -1.55f;
                 _player.View.Distance = 100f;
                 _player.View.Pitch = -10f;
+                _player.View.CameraHeight = Vector3.UnitY * (800 - _player.Position.Y);
                 _player.View.BuildCameraMatrix();
 
                 Culling.BuildFrustum(_player.View.ModelViewMatrix);
 
                 var projMatrix = Matrix4.CreateOrthographic(1024, 1024, 1f, 2048);
                 var trans = Culling.ModelViewMatrix.ExtractTranslation();
-                Culling.BuildFrustum(projMatrix, Culling.ModelViewMatrix * Matrix4.CreateTranslation(Vector3.UnitY * (Chunk.Height * 2f - _player.Position.Y)));
+                Culling.BuildFrustum(projMatrix, Culling.ModelViewMatrix);
 
                 var oldShadows = GameSettings.GlobalShadows;
                 var oldFancy = GameSettings.Quality;
@@ -144,6 +146,7 @@ namespace Hedra.Engine.Player.MapSystem
                 _player.View.Pitch = oldPitch;
                 _player.View.Yaw = oldFacing;
                 _player.View.Distance = oldDistance;
+                _player.View.CameraHeight = oldHeight;
 
                 _player.View.BuildCameraMatrix();
                 Culling.BuildFrustum(_player.View.ModelViewMatrix);

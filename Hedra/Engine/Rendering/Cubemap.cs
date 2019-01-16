@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using Hedra.Engine.IO;
 using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Rendering
@@ -32,6 +33,12 @@ namespace Hedra.Engine.Rendering
             Renderer.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapS, (int) TextureWrapMode.ClampToBorder);
             Renderer.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapT, (int) TextureWrapMode.ClampToBorder);
             Renderer.TexParameter(TextureTarget.TextureCubeMap, TextureParameterName.TextureWrapR, (int) TextureWrapMode.ClampToBorder);
+            
+            var error = Renderer.GetError();
+            if (error != ErrorCode.NoError)
+                Log.WriteLine("GL Error: Cubemap: " + error);
+            
+            Renderer.BindTexture(TextureTarget.TextureCubeMap, 0);
         }
 
         public void Bind()

@@ -172,7 +172,6 @@ namespace Hedra.Engine.Generation
             {
                 WorldRenderer.PrepareShadowMatrix();
                 var prevValue = GameSettings.OcclusionCulling;
-                /* Disable shadow culling temproary since its working incorrectly */
                 GameSettings.OcclusionCulling = false;
                 DoCullTest(toDrawArray, ShadowDrawingChunks, null);
                 GameSettings.OcclusionCulling = prevValue;
@@ -559,13 +558,18 @@ namespace Hedra.Engine.Generation
                     model.Outline = false;
                     model.Position = Mathf.Lerp(model.Position, Player.Position, Time.DeltaTime * 5f);
                     if ((model.Position - Player.Position).LengthSquared < 4 * 4)
+                    {
                         if (Player.Inventory.AddItem(model.ItemSpecification))
                         {
                             model.Enabled = false;
-                            SoundPlayer.PlaySound(SoundType.NotificationSound, model.Position, false, 1f,
-                                1.2f);
-                            model.Dispose();
+                            SoundPlayer.PlaySound(SoundType.NotificationSound, model.Position, false, 1f, 1.2f);
                         }
+                        else
+                        {
+                            World.DropItem(model.ItemSpecification, model.Position);
+                        }
+                        model.Dispose();
+                    }
                 });
             };
             return model;
