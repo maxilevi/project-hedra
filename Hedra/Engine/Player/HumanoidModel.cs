@@ -428,9 +428,9 @@ namespace Hedra.Engine.Player
             if (!Disposed)
             {
                 _modelSound.Type = Human.IsSleeping 
-                    ? SoundType.HumanSleep 
+                    ? SoundType.HumanSleep
                     : Human.Physics.IsOverAShape
-                        ? SoundType.HumanRunWood 
+                        ? SoundType.HumanRunWood
                         : SoundType.HumanRun;
                 _modelSound.Position = Position;
                 _modelSound.Update(IsWalking && !Human.IsJumping && !Human.IsSwimming && Human.IsGrounded || Human.IsSleeping);

@@ -93,7 +93,7 @@ namespace Hedra
                 SoundPlayer.LoadSound(SoundType.HumanSleep, "$DataFile$/Sounds/HumanSleep.ogg");
                 SoundPlayer.LoadSound(SoundType.TalkSound, "$DataFile$/Sounds/ItemCollect.ogg");
                 SoundPlayer.LoadSound(SoundType.GroundQuake, "$DataFile$/Sounds/GroundQuake.ogg");
-                SoundPlayer.LoadSound(SoundType.SpitSound, "$DataFile$/Sounds/Bow.ogg");
+                SoundPlayer.LoadSound(SoundType.BeetleSpitSound, "$DataFile$/Sounds/BeetleSpit.ogg");
                 SoundPlayer.LoadSound(SoundType.GorillaGrowl, "$DataFile$/Sounds/GorillaGrowl.ogg");
                 SoundPlayer.LoadSound(SoundType.PreparingAttack, "$DataFile$/Sounds/PreparingAttack.ogg");
                 SoundPlayer.LoadSound(SoundType.River, "$DataFile$/Sounds/River.ogg");
@@ -101,6 +101,8 @@ namespace Hedra
                 SoundPlayer.LoadSound(SoundType.Sheep, "$DataFile$/Sounds/Sheep.ogg");
                 SoundPlayer.LoadSound(SoundType.Goat, "$DataFile$/Sounds/Goat.ogg");
                 SoundPlayer.LoadSound(SoundType.Door, "$DataFile$/Sounds/Door.ogg");
+                SoundPlayer.LoadSound(SoundType.ItemEquip, "$DataFile$/Sounds/ItemEquip.ogg");
+                SoundPlayer.LoadSound(SoundType.BoatMove, "$DataFile$/Sounds/BoatMove.ogg");
                 SoundPlayer.MarkAsReady();
                 Log.WriteLine("Finished loading sounds.");
             });

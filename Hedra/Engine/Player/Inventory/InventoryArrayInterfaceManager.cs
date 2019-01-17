@@ -136,7 +136,7 @@ namespace Hedra.Engine.Player.Inventory
             }
 
             this.UpdateView();
-            SoundPlayer.PlayUISound(SoundType.ButtonClick);
+            SoundPlayer.PlayUISound(SoundType.ItemEquip);
         }
 
         private void SetSelectedItem(Button SelectedButton, Item SelectedItem)

@@ -1963,12 +1963,20 @@
       <Link>Assets\Items\Misc\GliderIcon.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Sounds\BeetleSpit.ogg">
+      <Link>Sounds\BeetleSpit.ogg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Sounds\Door.ogg">
       <Link>Sounds\Door.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Sounds\Goat.ogg">
       <Link>Sounds\Goat.ogg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Sounds\ItemEquip.ogg">
+      <Link>Sounds\ItemEquip.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Sounds\RunWood.ogg">
@@ -4246,10 +4254,6 @@
     </None>
     <None Include="..\project-hedra-assets\Sounds\Soundtrack\TheVillage.ogg">
       <Link>Sounds\Soundtrack\TheVillage.ogg</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Sounds\Swimming.ogg">
-      <Link>Sounds\Swimming.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Sounds\Swoosh.ogg">

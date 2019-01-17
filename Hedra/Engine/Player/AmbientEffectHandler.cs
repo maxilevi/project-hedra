@@ -1,8 +1,12 @@
 using System;
+using System.Windows.Forms;
+using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Geometry;
 using Hedra.Engine.Sound;
 using Hedra.Sound;
 using OpenTK;
@@ -12,7 +16,7 @@ namespace Hedra.Engine.Player
     public class AmbientEffectHandler : IAmbientEffectHandler, IDisposable
     {
         private const float MaxRange = 32;
-        private readonly AreaSound _areaSound;
+        private readonly AreaSound _riverAreaSound;
         private readonly IPlayer _player;
         private Vector3 _lastPosition;
         private float _nearestWater;
@@ -21,17 +25,48 @@ namespace Hedra.Engine.Player
         public AmbientEffectHandler(IPlayer Player)
         {
             _player = Player;
-            _areaSound = new AreaSound(SoundType.River, Vector3.Zero, 16f);
+            _riverAreaSound = new AreaSound(SoundType.River, Vector3.Zero, 16f);
         }
         
         public void Update()
         {
-            _areaSound.Update(_nearestWater < MaxRange);
-            _areaSound.Type = GameSettings.UnderWaterEffect ? SoundType.Underwater : SoundType.River;
+            HandleRiverSounds();
+            HandleSwimmingEffects();
+        }
+
+        private void HandleSwimmingEffects()
+        {
+            var underBlock0 = World.GetBlockAt(_player.View.CameraEyePosition * new Vector3(1, 1f / Chunk.BlockSize, 1) + Vector3.UnitY * (0 + IsoSurfaceCreator.WaterQuadOffset));
+            var underBlock1 = World.GetBlockAt(_player.View.CameraEyePosition * new Vector3(1, 1f / Chunk.BlockSize, 1) + Vector3.UnitY * (1 + IsoSurfaceCreator.WaterQuadOffset));
+            var underBlock2 = World.GetBlockAt(_player.View.CameraEyePosition * new Vector3(1, 1f / Chunk.BlockSize, 1) + Vector3.UnitY * (2 + IsoSurfaceCreator.WaterQuadOffset));
+            var underBlock3 = World.GetBlockAt(_player.View.CameraEyePosition * new Vector3(1, 1f / Chunk.BlockSize, 1) + Vector3.UnitY * (3 + IsoSurfaceCreator.WaterQuadOffset));
+            var lowestY = World.GetLowestY( (int) _player.View.CameraEyePosition.X, (int) _player.View.CameraEyePosition.Z);
+            
+            if(underBlock0.Type != BlockType.Water 
+               && _player.View.CameraEyePosition.Y / Chunk.BlockSize >= lowestY + 2 &&  underBlock1.Type != BlockType.Water && underBlock2.Type != BlockType.Water && underBlock3.Type != BlockType.Water)
+            {
+                GameSettings.DistortEffect = false;
+                GameSettings.UnderWaterEffect = false;
+                WorldRenderer.ShowWaterBackfaces = false;
+            }
+
+            if(underBlock0.Type == BlockType.Water 
+               || _player.View.CameraEyePosition.Y / Chunk.BlockSize <= lowestY + 2 && (underBlock1.Type == BlockType.Water || underBlock2.Type == BlockType.Water || underBlock3.Type == BlockType.Water))
+            {
+                GameSettings.UnderWaterEffect = true;
+                GameSettings.DistortEffect = true;
+                WorldRenderer.ShowWaterBackfaces = true;
+            }
+        }
+        
+        private void HandleRiverSounds()
+        {
+            _riverAreaSound.Update(_nearestWater < MaxRange);
+            _riverAreaSound.Type = GameSettings.UnderWaterEffect ? SoundType.Underwater : SoundType.River;
             if ((_lastPosition - _player.Position).LengthSquared < 1f && !_wasAnyNull) return;
-            _areaSound.Position = _player.Position;
+            _riverAreaSound.Position = _player.Position;
             _nearestWater = NearestWaterBlock();
-            _areaSound.Volume = (1-Math.Min(_nearestWater, MaxRange) / MaxRange)*.1f;
+            _riverAreaSound.Volume = (1-Math.Min(_nearestWater, MaxRange) / MaxRange)*.1f;
             _lastPosition = _player.Position;
         }
 
@@ -71,7 +106,7 @@ namespace Hedra.Engine.Player
 
         public void Dispose()
         {
-            _areaSound.Dispose();
+            _riverAreaSound.Dispose();
         }
     }
 }

@@ -221,24 +221,6 @@ namespace Hedra.Engine.Player
                 this.Stamina += (float)Time.DeltaTime * 4f;
             }
             this.Rotation = new Vector3(0, this.Rotation.Y, 0);
-
-            var underBlock0 = World.GetBlockAt(Mathf.DivideVector(View.CameraEyePosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (0 + IsoSurfaceCreator.WaterQuadOffset));
-            var underBlock1 = World.GetBlockAt(Mathf.DivideVector(View.CameraEyePosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (1 + IsoSurfaceCreator.WaterQuadOffset));
-            var underBlock2 = World.GetBlockAt(Mathf.DivideVector(View.CameraEyePosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (2 + IsoSurfaceCreator.WaterQuadOffset));
-            var underBlock3 = World.GetBlockAt(Mathf.DivideVector(View.CameraEyePosition, new Vector3(1,Chunk.BlockSize,1)) + Vector3.UnitY * (3 + IsoSurfaceCreator.WaterQuadOffset));
-            int lowestY = World.GetLowestY( (int) View.CameraEyePosition.X, (int) View.CameraEyePosition.Z);
-            
-            //Log.WriteLine(UnderBlock0.Type);
-            if(underBlock0.Type != BlockType.Water && ( View.CameraEyePosition.Y / Chunk.BlockSize >= lowestY + 2 &&  underBlock1.Type != BlockType.Water && underBlock2.Type != BlockType.Water && underBlock3.Type != BlockType.Water)){
-                GameSettings.DistortEffect = false;
-                GameSettings.UnderWaterEffect = false;
-                WorldRenderer.ShowWaterBackfaces = false;
-            }
-            if( underBlock0.Type == BlockType.Water || (View.CameraEyePosition.Y / Chunk.BlockSize <= lowestY + 2 && (underBlock1.Type == BlockType.Water || underBlock2.Type == BlockType.Water || underBlock3.Type == BlockType.Water))){
-                GameSettings.UnderWaterEffect = true;
-                GameSettings.DistortEffect = true;
-                WorldRenderer.ShowWaterBackfaces = true;
-            }
             this.View.AddedDistance = IsMoving || IsSwimming || IsTravelling ? 3.0f : 0.0f;
 
             AmbientEffects.Update();

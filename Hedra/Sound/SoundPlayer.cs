@@ -124,17 +124,17 @@ namespace Hedra.Sound
         HumanSleep,
         TalkSound,
         GroundQuake,
-        SpitSound,
+        BeetleSpitSound,
         GorillaGrowl,
         PreparingAttack,
         River,
         BoatMove,
-        Swimming,
         Underwater,
         Sheep,
         Goat,
         Cow,
         Door,
+        ItemEquip,
         MaxSounds
     }
 }

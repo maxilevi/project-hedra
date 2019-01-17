@@ -22,7 +22,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     var position = Parent.Position + new Vector3(x, 0, z) * Chunk.BlockSize;
                     var chunkSpace = World.ToChunkSpace(position);
                     var chunk = World.GetChunkByOffset(chunkSpace);
-                    if(chunk == null) throw new ArgumentOutOfRangeException($"Sparsity needs to be built when all the neighbours exist.");
+                    if (chunk == null) continue;// throw new ArgumentOutOfRangeException($"Sparsity needs to be built when all the neighbours exist.");
                     var coordX = Mathf.Modulo(x, Parent.BoundsX);
                     var coordZ = Mathf.Modulo(z, Parent.BoundsZ);
                     var l = Lowest(coordX, coordZ, chunk);
