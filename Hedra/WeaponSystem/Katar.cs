@@ -54,7 +54,7 @@ namespace Hedra.WeaponSystem
             MainMesh.LocalRotation = new Vector3(55 + 180, 0, 0);
 
             SecondBlade.BeforeRotation = Vector3.UnitX * 1.0f - Vector3.UnitY * 2f;
-            SecondBlade.LocalRotation = new Vector3(-55 + 180,180,0);
+            SecondBlade.LocalRotation = new Vector3(55 + 180, 180,0);
         }
             
         protected override void OnAttackStance()
