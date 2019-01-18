@@ -49,6 +49,7 @@ invert_mouse = Invert Mouse
 quality = Quality
 quality_fancy = FANCY
 quality_fast = FAST
+occlusion_culling = Occlusion Culling
 music_volume = Music Volume
 sfx_volume = Sound FX Volume
 language = Language

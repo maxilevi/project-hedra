@@ -181,14 +181,21 @@ namespace Hedra.Engine.Rendering.UI
             frameLimiter.LeftArrow.Click += UpdateLimiter;
             frameLimiter.RightArrow.Click += UpdateLimiter;
 
-            var fxaa = new Button(new Vector2(dist, 0f),
+            var occlusionCulling = new Button(new Vector2(dist, 0),
+                new Vector2(0.15f, 0.075f), BuildOnOff("occlusion_culling", () => GameSettings.OcclusionCulling), fontColor, _normalFont);
+
+            occlusionCulling.Click += delegate {
+                GameSettings.OcclusionCulling = !GameSettings.OcclusionCulling;
+            };
+            
+            var fxaa = new Button(new Vector2(dist, -vDist),
                      new Vector2(0.15f, 0.075f), BuildOnOff("fxaa", () => GameSettings.FXAA), fontColor, _normalFont);
 
             fxaa.Click += delegate {
                 GameSettings.FXAA = !GameSettings.FXAA;
             };
             
-            var bloom = new Button(new Vector2(dist, -vDist),
+            var bloom = new Button(new Vector2(dist, -vDist*2),
                      new Vector2(0.15f, 0.075f), BuildOnOff("bloom", () => GameSettings.Bloom), fontColor, _normalFont);
 
 
@@ -418,6 +425,7 @@ namespace Hedra.Engine.Rendering.UI
             _graphicsButtons.Add(frameLimiter);
             _graphicsButtons.Add(bloom);
             _graphicsButtons.Add(fullscreen);
+            _graphicsButtons.Add(occlusionCulling);
             _inputButtons.Add(invertMouse);
             _inputButtons.Add(mouseSensitivity);
             _inputButtons.Add(autosave);

@@ -371,8 +371,9 @@ namespace Hedra.Engine.Management
                     }
                     return true;
                 }
-                if (Parts[0] == "audioareas")
+                if (Parts[0] == "hide")
                 {
+                    LocalPlayer.Instance.Enabled = !LocalPlayer.Instance.Enabled;
                     return true;
                 }
                 if (Parts[0] == "spawn")
