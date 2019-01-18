@@ -433,7 +433,9 @@ namespace Hedra.Engine.Player
             View.TargetDistance = 10f;
             HandLamp.Enabled = false;
             IsTravelling = false;
-            IsKnocked = false;    
+            IsKnocked = false;
+            IsSleeping = false;
+            ShowIcon(null);
             Spawner.Enabled = true;
             HandLamp.Enabled = false;
             DodgeCost = DefaultDodgeCost;
