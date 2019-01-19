@@ -323,9 +323,10 @@ namespace Hedra.Engine.EntitySystem
 
         public void UpdateEnvironment()
         {
+            if (!(this is LocalPlayer)) return;
             var underChunk = World.GetChunkAt(Position);
             var waterHeight = PhysicsSystem.Physics.WaterHeight(Position);
-            if (Position.Y + Model.Height < waterHeight && PhysicsSystem.Physics.WaterLevelAtPosition(Position) > Model.Height)
+            if (Position.Y + Model.Height < waterHeight /* && PhysicsSystem.Physics.WaterLevelAtPosition(Position) > Model.Height*/)
             {
                 if (!Splashed && Math.Abs(waterHeight - Position.Y - Model.Height) > 4)
                 {
@@ -335,7 +336,7 @@ namespace Hedra.Engine.EntitySystem
                 }
                 IsUnderwater = true;
             }
-            else
+            else if(Position.Y + Model.Height > waterHeight + Chunk.BlockSize)
             {
                 IsUnderwater = false;
                 Splashed = false;
