@@ -88,7 +88,7 @@ namespace Hedra.Engine.StructureSystem
             }
 
             Structure.AddStaticElement(model);
-            var pad = new SleepingPad(Position + Structure.Position)
+            var pad = new SleepingPad(Position + Structure.Position + Vector3.UnitY)
             {
                 TargetRotation = CampfireRotation
             };

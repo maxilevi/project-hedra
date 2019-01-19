@@ -60,6 +60,7 @@ namespace Hedra.Engine.WorldBuilding
                 Sleeper.IsSleeping = false;
                 Sleeper.CanInteract = true;
                 Sleeper.ShowIcon(null);
+                Sleeper.Physics.TargetPosition += Vector3.UnitY;
                 var dmgComponent = Sleeper.SearchComponent<DamageComponent>();
                 if (dmgComponent != null)
                 {
