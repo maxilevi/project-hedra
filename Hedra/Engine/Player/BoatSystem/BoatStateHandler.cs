@@ -12,16 +12,24 @@ namespace Hedra.Engine.Player.BoatSystem
         private readonly IPlayer _player;
         private bool _wasEnabled;
         private bool _enabled;
-        
+        private bool _wasInWater;
+        private Quaternion _targetTerrainOrientation;
+        private Quaternion _terrainOrientation;
+
+
         public BoatStateHandler(IPlayer Player)
         {
             _player = Player;
-            _inputHandler = new BoatInputHandler(_player);
+            _inputHandler = new BoatInputHandler(_player, this);
         }
 
         public void Update()
         {
-            if(Enabled && _player.CanInteract) _inputHandler.Update();
+            if (Enabled && _player.CanInteract)
+            {
+                HandleDirection();
+                _inputHandler.Update();
+            }
             HandleTerrain();
             HandleLocation();
         }
@@ -30,11 +38,10 @@ namespace Hedra.Engine.Player.BoatSystem
         {
             if (Enabled)
             {
-                var waterHeight = Physics.WaterHeight(_player.Position)-1.5f;
+                var waterHeight = Physics.WaterHeight(_player.Position);
                 var waterNormal = Physics.WaterNormalAtPosition(_player.Position);
-                var heightFactor = Vector3.Dot(_player.Orientation, waterNormal);
-                var boatY = _player.Physics.TargetPosition.Y + 1 * (1-heightFactor) * 0;
-                OnWaterSurface = Math.Abs(boatY - waterHeight) < 0.05f;
+                var boatY = _player.Physics.TargetPosition.Y;
+                OnWaterSurface = Math.Abs(boatY - waterHeight) < 0.25f;
                 InWater = OnWaterSurface || boatY < waterHeight;
                 if (InWater)
                 {
@@ -43,16 +50,10 @@ namespace Hedra.Engine.Player.BoatSystem
                     /* Boat is under the surface */
                     if (!OnWaterSurface)
                     {
-                        _player.Physics.TargetPosition = 
-                            new Vector3(
-                                _player.Physics.TargetPosition.X, 
-                                Mathf.Lerp(_player.Physics.TargetPosition.Y, waterHeight + 2, Time.DeltaTime * 8f),
-                                _player.Physics.TargetPosition.Z
-                                );
                         OnWaterSurface = true;
-                        //_player.Physics.GravityDirection = Vector3.UnitY;
+                        _player.Physics.GravityDirection = Vector3.UnitY;
                     }
-                    else
+                    else if(_wasInWater)
                     {
                         _player.Physics.ResetVelocity();
                     }
@@ -62,8 +63,19 @@ namespace Hedra.Engine.Player.BoatSystem
                     _player.Physics.GravityDirection = -Vector3.UnitY;
                 }
             }
+            _wasInWater = InWater;
         }
 
+        private void HandleDirection()
+        {
+            var waterNormal = OnWaterSurface || _player.IsUnderwater ? Physics.WaterNormalAtPosition(_player.Model.ModelPosition) : Vector3.UnitY;
+            _targetTerrainOrientation =
+                new Matrix3(Mathf.RotationAlign(Vector3.UnitY, waterNormal)).ExtractRotation();
+            _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation,
+                Time.IndependantDeltaTime * 1f);
+            Transformation = Matrix4.CreateFromQuaternion(_terrainOrientation);
+        }
+        
         private void HandleTerrain()
         {
             if (_player.IsGrounded) Enabled = false;
@@ -99,7 +111,9 @@ namespace Hedra.Engine.Player.BoatSystem
                 if(value && !CanEnable) return;
                 _enabled = value;
             }
-        }
+        }        
+        
+        public Matrix4 Transformation { get; private set; }
 
         public bool OnWaterSurface { get; private set; }
 

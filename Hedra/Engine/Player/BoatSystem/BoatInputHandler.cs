@@ -4,6 +4,7 @@ using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
 using OpenTK;
+using Hedra.Engine.PhysicsSystem;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Player.BoatSystem
@@ -17,10 +18,12 @@ namespace Hedra.Engine.Player.BoatSystem
         private Vector3 _angles;
         private float _yaw;
         private float _characterRotation;
+        private BoatStateHandler _stateHandler;
 
-        public BoatInputHandler(IPlayer Player)
+        public BoatInputHandler(IPlayer Player, BoatStateHandler StateHandler)
         {
             _player = Player;
+            _stateHandler = StateHandler;
         }
         
         public void Update()
@@ -29,7 +32,8 @@ namespace Hedra.Engine.Player.BoatSystem
             var any = GameManager.Keyboard[Controls.Forward] || GameManager.Keyboard[Controls.Leftward] || GameManager.Keyboard[Controls.Rightward];
             if (GameManager.Keyboard[Controls.Forward])
             {
-                _accumulatedDirection = _player.View.Forward * propulsionFactor;
+                var orientation = Vector3.TransformVector(_player.View.Forward, _stateHandler.Transformation);
+                _accumulatedDirection = orientation * propulsionFactor;
             }
             if (GameManager.Keyboard[Controls.Leftward])
             {

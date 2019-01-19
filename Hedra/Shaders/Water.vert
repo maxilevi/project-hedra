@@ -85,13 +85,12 @@ void main()
 	vec3 unitToLight = normalize(LightPosition);
 	vec3 unitToCamera = normalize((inverse(_modelViewMatrix) * vec4(0.0,0.0,0.0,1.0) ).xyz - v.xyz);
 
-	vec3 FullLightColor = clamp(calculate_lights(LightColor, v.xyz) + LightColor, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
-
 	v = TransformationMatrix * v;
-	Ambient = 0.75;
-	Color = ( diffuse(unitToLight, unitNormal, max(FullLightColor, vec3(.55, .55, .55))) * 0.8 + vec4(0.5, 0.5, 0.5, 0.0) * .0) * InColor;
+	Ambient = 0.0;
+	Color = diffuse(unitToLight, unitNormal, max(LightColor, vec3(.4))) * InColor;
     Color = apply_highlights(Color, v.xyz);
  	Color.a = Transparency;
+ 	Color += vec4(diffuse(unitToLight, unitNormal, calculate_lights(LightColor, v.xyz)).xyz * InColor.xyz, 0.0);
  	
  	gl_Position = _modelViewProjectionMatrix * v;
 
@@ -114,7 +113,7 @@ float GetOffset(float x, float z, float val1, float val2){
 	float rX = ((mod(x+z*x*val1, waveLength)/waveLength)+Movement*0.2) * 2.0 * PI;
 	float rZ = ( (mod( val2 * (z*x + x*z), waveLength) / waveLength) +Movement*0.2 * 2.0) * 2.0 * PI;
 	
-	return 1.4 * 0.5 * (sin(rX) + sin(rZ));
+	return .5 * (sin(rX) + sin(rZ));
 }
 
 float GetY(float x, float z){

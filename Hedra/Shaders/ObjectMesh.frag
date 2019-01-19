@@ -16,7 +16,7 @@ in vec3 base_vertex_position;
 in vec3 base_normal;
 in vec3 point_diffuse;
 
-layout(location = 0) out vec4 FColor;
+layout(location = 0)out vec4 FColor;
 layout(location = 1)out vec4 OutPosition;
 layout(location = 2)out vec4 OutNormal;
 
@@ -79,7 +79,7 @@ void main()
 	{
 	    // Ignore the gl_FragCoord.z since it causes issues with the water
 	    mat3 NormalMat = mat3(transpose(inverse(_modelViewMatrix)));
-		OutPosition = vec4((_modelViewMatrix * vec4(InPos, 1.0)).xyz * Alpha, gl_FragCoord.z);
+		OutPosition = vec4((_modelViewMatrix * vec4(InPos, 1.0)).xyz * Alpha, 1.0);
 		OutNormal = vec4(NormalMat * InNorm.xyz, 1.0) * Alpha;
 	}
 }
