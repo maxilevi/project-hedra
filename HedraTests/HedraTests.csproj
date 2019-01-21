@@ -100,6 +100,9 @@
     <Compile Include="MathExtensions\PhysicsTest.cs" />
     <Compile Include="MathExtensions\RandomTest.cs" />
     <Compile Include="ModuleSystem\AssetProviderTest.cs" />
+    <Compile Include="Pathfinding\FinderTest.cs" />
+    <Compile Include="Pathfinding\GridCatalog.cs" />
+    <Compile Include="Pathfinding\PathFinderTests.cs" />
     <Compile Include="PhysicsSystem\BoxTest.cs" />
     <Compile Include="PhysicsSystem\CollisionGroupTest.cs" />
     <Compile Include="Player\AbilityTreeTest.cs" />

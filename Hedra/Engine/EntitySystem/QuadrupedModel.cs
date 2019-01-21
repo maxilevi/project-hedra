@@ -50,7 +50,6 @@ namespace Hedra.Engine.EntitySystem
         public override CollisionShape BroadphaseCollider => Collider.Broadphase;
         public override CollisionShape HorizontalBroadphaseCollider => Collider.HorizontalBroadphase;
         public override CollisionShape[] Colliders => Collider.Shapes;
-        public override Vector3[] Vertices => Collider.Vertices;
         protected override string ModelPath { get; set; }
         private float _attackCooldown;
         private Quaternion _targetTerrainOrientation = Quaternion.Identity;

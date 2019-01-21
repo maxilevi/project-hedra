@@ -280,12 +280,5 @@ namespace Hedra.Engine.PhysicsSystem
                 A.Min.Y  <= B.Max.Y && A.Max.Y >= B.Min.Y &&
                 A.Min.Z  <= B.Max.Z && A.Max.Z  >= B.Min.Z;
         }
-        
-        public static bool AABBvsPoint(Box A, Vector3 P)
-        {
-          return P.X >= A.Min.X && P.X <= A.Max.X &&
-                P.Y >= A.Min.Y && P.Y <= A.Max.Y &&
-                P.Z >= A.Min.Y && P.Z <= A.Max.Z;
-        }
     }        
 }

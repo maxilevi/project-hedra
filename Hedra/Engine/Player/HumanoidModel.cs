@@ -73,7 +73,6 @@ namespace Hedra.Engine.Player
         public override CollisionShape BroadphaseCollider => _collider.Broadphase;
         public override CollisionShape HorizontalBroadphaseCollider => _collider.HorizontalBroadphase;
         public override CollisionShape[] Colliders => _collider.Shapes;
-        public override Vector3[] Vertices => _collider.Vertices;
         public override bool IsWalking => _walkAnimation == Model.AnimationPlaying;
         public override Vector4 Tint { get; set; }
         public override Vector4 BaseTint { get; set; }

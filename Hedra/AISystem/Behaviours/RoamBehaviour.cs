@@ -46,6 +46,7 @@ namespace Hedra.AISystem.Behaviours
                     SoundPlayer.PlaySoundWithVariation(Sound, Parent.Position);
                 }
             }
+            if (Parent.IsStuck) Walk.Cancel();
         }
 
         protected virtual Vector3 SearchPoint => Parent.Position;

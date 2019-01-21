@@ -22,13 +22,12 @@ namespace Hedra.Engine.Rendering.UI
     public delegate void OnPanelStateChangeEventHandler(object Sender, PanelState E);
     public delegate void OnEscapePressedEventHandler(object Sender, EventArgs E);
     
-    public class Panel : EventListener
+    public class Panel : EventListener, UIElement
     {
         private const float MoveSpeed = 2f;
         public bool Animate = false;
         public bool DisableKeys { get; set; }
         public bool Enabled { get; private set; }
-        public Vector2 Position { get; private set; }
         public event OnPanelStateChangeEventHandler OnPanelStateChange;
         public event OnEscapePressedEventHandler OnEscapePressed;
         private bool _firstHover;
@@ -195,6 +194,13 @@ namespace Hedra.Engine.Rendering.UI
             if(_firstHover && _buttons[_prevX][_prevY].Enabled) _buttons[_prevX][_prevY].OnHoverExit(Sender, E);
         }
         
+        public Vector2 Position { get; set; }
+        
+        public Vector2 Scale
+        {
+            get => throw new NotImplementedException();
+            set => throw new NotImplementedException();
+        }
     }
     
     public enum PanelState{

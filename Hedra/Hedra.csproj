@@ -234,6 +234,13 @@
     <Compile Include="Engine\ModuleSystem\Templates\ModelTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\Templates\SpawnerSettings.cs" />
     <Compile Include="Engine\ModuleSystem\Templates\SpawnTemplate.cs" />
+    <Compile Include="Engine\Pathfinding\Finder.cs" />
+    <Compile Include="Engine\Pathfinding\Grid.cs" />
+    <Compile Include="Engine\Pathfinding\MinHeap.cs" />
+    <Compile Include="Engine\Pathfinding\MinHeapNode.cs" />
+    <Compile Include="Engine\Pathfinding\MovementPatterns.cs" />
+    <Compile Include="Engine\Pathfinding\Offset.cs" />
+    <Compile Include="Engine\Pathfinding\PathFinder.cs" />
     <Compile Include="Engine\PhysicsSystem\Collision.cs" />
     <Compile Include="Engine\PlantSystem\CollectibleDesign.cs" />
     <Compile Include="Engine\PlantSystem\CollectiblePlantDesign.cs" />

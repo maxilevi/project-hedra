@@ -94,8 +94,5 @@ namespace Hedra.Engine.PhysicsSystem
         {
             return this;
         }       
-                
-        public Vector3[] Vertices => throw new NotImplementedException();
-
     }
 }

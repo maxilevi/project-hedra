@@ -40,7 +40,7 @@ namespace Hedra.Engine.Rendering.UI
         private readonly Button _display;
         private readonly Button _input;
         private readonly Button _controls;
-        private ControlsUi _controlsText;
+        private ControlsUI _controlsPanel;
         private Vector2 _previousOffset;
         private readonly Font _normalFont;
         private readonly Font _boldFont;
@@ -59,7 +59,7 @@ namespace Hedra.Engine.Rendering.UI
             _normalFont = FontCache.Get(AssetManager.NormalFamily, fontSize-1);
             _boldFont = FontCache.Get(AssetManager.BoldFamily, fontSize+1, FontStyle.Bold);
             Color fontColor = Color.White;
-            _controlsText = new ControlsUi(fontColor);
+            _controlsPanel = new ControlsUI();
             
             var bandPosition = new Vector2(0f, .8f);
             var blackBand = new Texture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LeftRight);
@@ -461,10 +461,7 @@ namespace Hedra.Engine.Rendering.UI
             {
                 AddElement(_displayButtons[i]);
             }
-            for(var i = 0; i < _controlsText.ControlsElements.Count; i++)
-            {
-                AddElement(_controlsText.ControlsElements[i]);
-            }
+            AddElement(_controlsPanel);
             
             Disable();
             
@@ -597,12 +594,10 @@ namespace Hedra.Engine.Rendering.UI
                 _controls.Text.TextFont = _boldFont;
                 this.UpdateFonts();
             }
-            for (int i = 0; i < _controlsText.ControlsElements.Count; i++){
-                if(Enabled)
-                    _controlsText.ControlsElements[i].Enable();
-                else
-                    _controlsText.ControlsElements[i].Disable();
-            }
+            if(Enabled)
+                _controlsPanel.Enable();
+            else
+                _controlsPanel.Disable();
         }
     }
 }

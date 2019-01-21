@@ -69,8 +69,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
             
             output.StaticData.Translate(new Vector3(OffsetX, 0, OffsetZ));
             output.WaterData.Translate(new Vector3(OffsetX, 0, OffsetZ));
-
-            _parent.SetTerrainVertices(output);
             return output;
         }
 

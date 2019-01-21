@@ -15,6 +15,7 @@ namespace Hedra.EntitySystem
         bool InFrontOfWall { get; }
         bool IsDrifting { get; }
         bool IsOverAShape { get; }
+        bool UpdateColliderList { get; set; }
         Vector3 TargetPosition { get; set; }
         Vector3 MoveFormula(Vector3 Direction, bool ApplyReductions = true);
         void Move(float Scalar = 1);
@@ -28,8 +29,8 @@ namespace Hedra.EntitySystem
         void Draw();
         Vector3 GravityDirection { get; set; }  
         float VelocityCap { get; set; }  
-        Vector3 Velocity { get; set; }      
-        bool HasFallDamage { get; set; }
+        Vector3 Velocity { get; set; }
+        bool Raycast(Vector3 Length);
         
         /// <summary>
         /// If collides with structures

@@ -98,8 +98,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     var watchers = _chunkWatchers.ToArray();
                     for (var i = watchers.Length - 1; i > -1; --i)
                     {
-                        _chunkWatchers[i].Update();
-                        if (_chunkWatchers[i].Disposed) _chunkWatchers.RemoveAt(i);
+                        _chunkWatchers[i]?.Update();
+                        if (_chunkWatchers[i]?.Disposed ?? false) _chunkWatchers.RemoveAt(i);
                     }
                 } catch (NullReferenceException e)
                 {

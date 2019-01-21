@@ -14,6 +14,7 @@ using System.Runtime.CompilerServices;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Core;
 using Hedra.Engine.Management;
+using Hedra.Engine.Pathfinding;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Geometry;
@@ -126,7 +127,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             this.UploadMesh(output);
             this.FinishUpload(output, buildingLod);
         }
-
+        
         private void BuildSparsity()
         {
             /* We should build the sparsity data when all the neighbours exist */
@@ -145,20 +146,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private ChunkMeshBuildOutput AddStructuresMeshes(ChunkMeshBuildOutput Input, int LevelOfDetail)
         {
             return _structuresBuilder.AddStructuresMeshes(Input, LevelOfDetail);
-        }
-
-        public void SetTerrainVertices(ChunkMeshBuildOutput Input)
-        {
-            lock (_terrainVerticesLock)
-            {
-                if (BuildedLod == 1 && Lod != 1)
-                {
-                    _terrainVertices = null;
-                }
-
-                if (Lod != 1 || !Input.HasNoise3D) return;
-                //_terrainVertices = Input.StaticData.Vertices.Select( V => V - new Vector3(OffsetX, 0, OffsetZ)).ToArray();
-            }
         }
 
         public void CalculateBounds()
@@ -249,74 +236,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
 
             return new Block();
-        }
-
-        public Vector3 NearestVertex(Vector3 Position)
-        {
-            return Vector3.Zero;
-            /*
-            //if (_terrainVertices == null)
-            {
-                if (_nearestVertexCell.P == null)
-                {
-                    _nearestVertexCell.P = new Vector3[8];
-                    _nearestVertexCell.Type = new BlockType[8];
-                    _nearestVertexCell.Density = new double[8];
-                }
-
-                int width = _blocks.Length;
-                int height = _blocks[0].Length;
-                int depth = _blocks[0][0].Length;
-
-                //Check for air blocks
-                Vector3 blockSpace = World.ToBlockSpace(Position);
-                int x = (int) blockSpace.X, z = (int) blockSpace.Z, y = (int) blockSpace.Y;
-
-                var success = false;
-                _terrainBuilder.Helper.CreateCell(ref _nearestVertexCell, x, y, z, true,
-                    _blocks[x][y][z].Type == BlockType.Water && _blocks[x][y + 1][z].Type == BlockType.Air, Lod, out success);
-
-                _nearestVertexData.Vertices.Clear();
-                _nearestVertexData.Colors.Clear();
-                _nearestVertexData.Normals.Clear();
-                _nearestVertexData.Indices.Clear();
-                MarchingCubes.Process(0f, _nearestVertexCell, Vector4.One, (x + z) % 2 == 0, _nearestVertexData);
-                var dist = float.MaxValue;
-                var point = Vector3.Zero;
-                for (var i = 0; i < _nearestVertexData.Vertices.Count; i++)
-                {
-                    var newDist = (Position - _nearestVertexData.Vertices[i]).LengthSquared;
-                    if (newDist < dist)
-                    {
-                        dist = newDist;
-                        point = _nearestVertexData.Vertices[i];
-                    }
-                }
-                return point;
-            }
-            
-            lock (_terrainVerticesLock)
-            {
-                Vector3 nearest0 = Vector3.Zero,
-                    nearest1 = Vector3.Zero,
-                    nearest2 = Vector3.Zero,
-                    nearest3 = Vector3.Zero;
-                float dist0 = float.MaxValue;
-
-                for (var i = 0; i < _terrainVertices.Length; i++)
-                {
-                    float newDist = (_terrainVertices[i] - Position).LengthSquared;
-                    if (!(newDist < dist0)) continue;
-                    dist0 = newDist;
-
-                    nearest3 = nearest2;
-                    nearest2 = nearest1;
-                    nearest1 = nearest0;
-                    nearest0 = _terrainVertices[i];
-                }
-
-                return nearest0;// + 1 * Vector3.UnitY;
-            }*/
         }
 
         public void AddWaterDensity(Vector3 WaterPosition, Half Density)

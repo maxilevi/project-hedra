@@ -81,7 +81,7 @@ namespace Hedra.Engine.EntitySystem
             if (Parent.IsGrounded && Parent.BlockPosition == _lastPosition 
                                   && TargetPosition.Y >= Physics.HeightAtPosition(Parent.BlockPosition)) return;
             if(!GameSettings.Paused) _lastPosition = Parent.BlockPosition;
-            if (CollidesWithStructures && !GameSettings.Paused)
+            if ((CollidesWithStructures || UpdateColliderList) && !GameSettings.Paused)
             {
                 _underChunk = World.GetChunkAt(Parent.Position);
                 _underChunkR = World.GetChunkAt(Parent.Position + new Vector3(Chunk.Width, 0, 0));
@@ -201,7 +201,7 @@ namespace Hedra.Engine.EntitySystem
             var normalizedDelta = originalDelta.NormalizedFast();
             var remainingDelta = originalDelta.Length;
             var wontCollide = true;
-            while (remainingDelta > 0)
+            while (remainingDelta > 0 && CollidesWithStructures)
             {
                 var commandDelta = Math.Min(.25f, remainingDelta);
                 Command.Delta = normalizedDelta * commandDelta;
@@ -445,10 +445,15 @@ namespace Hedra.Engine.EntitySystem
         /// If collides with other entities
         /// </summary>
         public bool CollidesWithEntities { get; set; } = true;
+        
+        public bool UpdateColliderList { get; set; }
 
-
-        public ICollidable[] CollisionObjects => _collisions.ToArray();
-
+        public bool Raycast(Vector3 Length)
+        {
+            var shape = Parent.Model.BroadphaseBox.Cache.Translate(Length).AsShape();
+            return _collisions.Any(S => Physics.Collides(S, shape));
+        }
+        
         public override void Dispose()
         {
             _collisions.Clear();

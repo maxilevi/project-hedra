@@ -45,18 +45,17 @@ namespace Hedra.AISystem.Behaviours
         {
             if (!_arrived && !Parent.IsKnocked)
             {
-                Parent.Orientation = (Target - Parent.Position).Xz.NormalizedFast().ToVector3();
+                Parent.Orientation = Mathf.Lerp(Parent.Orientation, (Target - Parent.Position).Xz.NormalizedFast().ToVector3(), Time.DeltaTime * 8f);
                 Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
                 Parent.Physics.Move();
 
-                if ((Target - Parent.Position).Xz.LengthSquared < 4 * 4 || _lastPosition.Xz  == Parent.Position.Xz)
+                if ((Target - Parent.Position).Xz.LengthSquared < 1 * 1)
                 {
                     this.Cancel();
                 }
-
-                _lastPosition = Parent.Position;
             }
-            Parent.IsStuck = !Parent.IsMoving && !_arrived && HasTarget;
+            Parent.IsStuck = !Parent.IsMoving && !_arrived && HasTarget || _lastPosition.Xz == Parent.Position.Xz;
+            _lastPosition = Parent.Position;
         }
         
         public bool HasTarget { get; private set; }

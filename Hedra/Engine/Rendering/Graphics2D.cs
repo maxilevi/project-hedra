@@ -81,6 +81,7 @@ namespace Hedra.Engine.Rendering
 
         public static uint LoadFromAssets(string Path, TextureMinFilter Min = TextureMinFilter.Linear, TextureMagFilter Mag = TextureMagFilter.Linear, TextureWrapMode Wrap = TextureWrapMode.ClampToBorder)
         {
+            Log.WriteLine($"Resolving Path: {Path}", LogType.System);
             var id = LoadTexture(new BitmapObject
             {
                 Bitmap = new Bitmap(new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.AssetsResource))),

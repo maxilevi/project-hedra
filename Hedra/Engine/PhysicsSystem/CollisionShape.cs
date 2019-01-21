@@ -151,18 +151,5 @@ namespace Hedra.Engine.PhysicsSystem
         public CollisionShape(VertexData Data) : this(Data.Vertices.ToArray(), Data.Indices.ToArray())
         {       
         }
-
-        public CollisionShape Cache
-        {
-            get
-            {
-                if(_cache == null) _cache = new CollisionShape(Vertices.ToArray(), Indices.ToArray());
-                for (var i = 0; i < _cache.Vertices.Length; i++)
-                {
-                    _cache.Vertices[i] = this.Vertices[i];
-                }
-                return _cache;
-            }
-        }
     }
 }
