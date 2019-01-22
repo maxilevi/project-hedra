@@ -19,7 +19,6 @@ namespace Hedra.AISystem.Behaviours
         private int _currentIndex;
         private readonly Grid _currentGrid;
         private Vector3 _origin;
-        private Vector3 _targetPosition;
         private bool _reached;
         private Action _callback;
 
@@ -68,7 +67,7 @@ namespace Hedra.AISystem.Behaviours
             Finder.UpdateGrid(Parent, _currentGrid);
             
             _origin = Parent.Position;
-            var target = (_targetPosition.Xz - _origin.Xz) * new Vector2(1f / Chunk.BlockSize, 1f / Chunk.BlockSize);
+            var target = (Target.Xz - _origin.Xz) * new Vector2(1f / Chunk.BlockSize, 1f / Chunk.BlockSize);
             var center = new Vector2((int)(_currentGrid.DimX / 2f), (int)(_currentGrid.DimY / 2f));
             var end = center + new Vector2((int)target.X, (int)target.Y);
             var clampedEnd = new Vector2(Math.Max(Math.Min(end.X, _currentGrid.DimX - 1), 0), Math.Max(Math.Min(end.Y, _currentGrid.DimY - 1), 0)); 
@@ -112,7 +111,7 @@ namespace Hedra.AISystem.Behaviours
 
         public void SetTarget(Vector3 Position, Action Callback = null)
         {
-            _targetPosition = Position;
+            Target = Position;
             _callback = Callback;
             _reached = false;
         }
@@ -122,6 +121,8 @@ namespace Hedra.AISystem.Behaviours
             _reached = true;
             _callback?.Invoke();
         }
+
+        public Vector3 Target { get; private set; }
 
         public bool HasTarget => !_reached;
     }

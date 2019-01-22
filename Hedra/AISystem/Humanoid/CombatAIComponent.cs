@@ -10,7 +10,7 @@ using OpenTK;
 
 namespace Hedra.AISystem.Humanoid
 {
-    public abstract class CombatAIComponent : HumanoidAIComponent
+    public abstract class CombatAIComponent : TraverseHumanoidAIComponent
     {
         public bool Friendly { get; set; }
         protected Vector3 TargetPoint;
@@ -81,13 +81,11 @@ namespace Hedra.AISystem.Humanoid
             this.TargetPoint = this.OriginalPosition;
         }
 
-        protected void RollAndMove()
+        protected void RollAndMove2()
         {
             if(Parent != null && Parent.WasAttacking) return;
             if (RollTimer.Tick() && Parent != null && (TargetPoint.Xz - Parent.Position.Xz).LengthSquared > AttackRadius * AttackRadius && CanDodge)
                 Parent.Roll(RollType.Normal);
-
-            this.Move(TargetPoint);
         }
 
         protected void LookTarget()
@@ -95,11 +93,9 @@ namespace Hedra.AISystem.Humanoid
             base.Orientate(TargetPoint);
             if (!Chasing)
             {
-                this.Move(TargetPoint);
-
                 if (Friendly)
                 {
-                    for (int i = World.Entities.Count - 1; i > -1; i--)
+                    for (var i = World.Entities.Count - 1; i > -1; i--)
                     {
                         if (World.Entities[i] != this.Parent &&
                             (World.Entities[i].Position.Xz - Parent.Position.Xz).LengthSquared < 32 * 32)

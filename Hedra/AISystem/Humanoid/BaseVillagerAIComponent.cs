@@ -23,7 +23,7 @@ namespace Hedra.AISystem.Humanoid
     /// <summary>
     /// Description of WarriorAI.
     /// </summary>
-    public abstract class BaseVillagerAIComponent : HumanoidAIComponent
+    public abstract class BaseVillagerAIComponent : TraverseHumanoidAIComponent
     {
         private readonly bool _move;
         private Vector3 _targetPoint;
@@ -53,12 +53,14 @@ namespace Hedra.AISystem.Humanoid
                 if(MovementTimer.Tick())
                 {
                     IsSitting = Utils.Rng.Next(0, 4) == 1 && !IsMoving;
-                    if(!IsSitting)
+                    if (!IsSitting)
+                    {
                         _targetPoint = NewPoint;
+                        MoveTo(_targetPoint);
+                    }
                 }
 
-                if (IsSitting) Sit();
-                else Move(_targetPoint);    
+                if (IsSitting) Sit();    
             }
         }
         

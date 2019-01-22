@@ -127,14 +127,16 @@
     <Compile Include="AISystem\GorillaWarriorAIComponent.cs" />
     <Compile Include="AISystem\HostileAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\ArcherAIComponent.cs" />
+    <Compile Include="AISystem\Humanoid\BaseHumanoidAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\CombatAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\EscapeAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\FarmerAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\FollowAIComponent.cs" />
-    <Compile Include="AISystem\Humanoid\HumanoidAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\MageAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\BaseVillagerAIComponent.cs" />
+    <Compile Include="AISystem\Humanoid\RawMovementHumanoidAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\RoamingVillagerAIComponent.cs" />
+    <Compile Include="AISystem\Humanoid\TraverseHumanoidAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\VillagerAISettings.cs" />
     <Compile Include="AISystem\Humanoid\WarriorAIComponent.cs" />
     <Compile Include="AISystem\IBehaviourComponent.cs" />

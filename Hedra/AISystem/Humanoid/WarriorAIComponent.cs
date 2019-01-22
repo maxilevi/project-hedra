@@ -43,8 +43,8 @@ namespace Hedra.AISystem.Humanoid
         {
             if (this.MovementTimer.Tick() && !Chasing)
             {
-                this.TargetPoint = new Vector3(Utils.Rng.NextFloat() * 24 - 12f, 0, Utils.Rng.NextFloat() * 24 - 12f) +
-                                   Parent.BlockPosition;
+                base.MoveTo(TargetPoint = new Vector3(Utils.Rng.NextFloat() * 24 - 12f, 0, Utils.Rng.NextFloat() * 24 - 12f) +
+                                   Parent.BlockPosition);
             }
             else if (Chasing)
             {
@@ -67,10 +67,8 @@ namespace Hedra.AISystem.Humanoid
                     }
                     this.ForgetTimer.Reset();
                 }
-                else
-                {
-                    base.RollAndMove();
-                }
+
+                base.MoveTo(TargetPoint);
             }
 
             base.LookTarget();

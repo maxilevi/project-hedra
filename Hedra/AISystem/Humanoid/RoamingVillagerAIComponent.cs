@@ -17,10 +17,11 @@ using OpenTK;
 
 namespace Hedra.AISystem.Humanoid
 {
-    public class RoamingVillagerAIComponent : BaseVillagerAIComponent
+    public sealed class RoamingVillagerAIComponent : RawMovementHumanoidAIComponent
     {
         private const int BenchSearchRadius = 24;
         private const int TalkSearchRadius = 8;
+        protected override bool ShouldSleep => true;
         private float MaxSpeed { get; }
         private VillageGraph Graph { get; }
         private Timer LookTimer { get; }
@@ -37,12 +38,14 @@ namespace Hedra.AISystem.Humanoid
         private readonly Timer _sitTimer;
         private readonly Timer _talkTimer;
         private float _targetSpeed;
+        private readonly Timer _movementTimer;
         
-        public RoamingVillagerAIComponent(IHumanoid Parent, VillageGraph Graph) : base(Parent, false)
+        public RoamingVillagerAIComponent(IHumanoid Parent, VillageGraph Graph) : base(Parent)
         {
             this.Graph = Graph;
             _reachedTarget = true;
-            MovementTimer.MakeReady();
+            _movementTimer = new Timer(WaitTime);
+            _movementTimer.MakeReady();
             MaxSpeed = Utils.Rng.NextFloat() * .25f + .8f;
             _timeoutTimer = new Timer(48 + Utils.Rng.NextFloat() * 40);
             _interactionTimer = new Timer(8 + Utils.Rng.NextFloat() * 14f);
@@ -70,7 +73,7 @@ namespace Hedra.AISystem.Humanoid
             {
                 if (_reachedTarget && !_isInteracting)
                 {
-                    if (MovementTimer.Tick())
+                    if (_movementTimer.Tick())
                         FindLocation();
                     else if (LookTimer.Tick())
                         LookAtRandom();
@@ -236,7 +239,7 @@ namespace Hedra.AISystem.Humanoid
         {
             base.OnMovementStuck();
             _reachedTarget = true;
-            MovementTimer.MakeReady();
+            _movementTimer.MakeReady();
         }
 
         private void MoveTo(Vector2 Position, Action Callback, float ErrorMargin = DefaultErrorMargin)
@@ -254,8 +257,8 @@ namespace Hedra.AISystem.Humanoid
 
         private bool ShouldTalk => true;//Utils.Rng.Next(0, 2) == 1;
         
-        protected override float WaitTime => 4;//6 + Utils.Rng.NextFloat() * 10;
+        protected float WaitTime => 4;//6 + Utils.Rng.NextFloat() * 10;
 
-        protected override Vector3 NewPoint => Graph.GetNearestVertex(RandomPointInsideVillage).ToVector3();
+        protected Vector3 NewPoint => Graph.GetNearestVertex(RandomPointInsideVillage).ToVector3();
     }
 }

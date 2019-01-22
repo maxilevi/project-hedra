@@ -49,8 +49,6 @@ namespace Hedra.AISystem.Behaviours
                     Parent.Orientation = orientation;// Mathf.Lerp(Parent.Orientation, orientation, Time.DeltaTime * 8f);
                     Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
                 }
-                //if(Parent.Type == "Ent")
-                //    Console.WriteLine($"prev = '{prev}', new = '{Parent.Model.TargetRotation}', dir = '{Parent.Orientation}', pos = '{Target}'");
                 Parent.Physics.Move();
                 if ((Target - Parent.Position).Xz.LengthSquared < 1 * 1)
                 {

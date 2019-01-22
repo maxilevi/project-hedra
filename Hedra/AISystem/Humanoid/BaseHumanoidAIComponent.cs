@@ -14,12 +14,12 @@ using OpenTK;
 
 namespace Hedra.AISystem.Humanoid
 {
-    public abstract class HumanoidAIComponent : Component<IHumanoid>, IBehaviourComponent
+    public abstract class BaseHumanoidAIComponent : Component<IHumanoid>, IBehaviourComponent
     {
         protected const float DefaultErrorMargin = 3;
         private SleepingPad _bed;
         private bool _isDrowning;
-        protected bool IsMoving { get; private set; }
+        protected bool IsMoving { get; set; }
         protected bool IsSleeping { get; private set; }
         protected abstract bool ShouldSleep { get; }
         protected virtual bool ShouldWakeup { get; }
@@ -28,7 +28,7 @@ namespace Hedra.AISystem.Humanoid
 
         protected bool CanUpdate => !IsSleeping && !_isDrowning && !Parent.IsKnocked;
 
-        protected HumanoidAIComponent(IHumanoid Entity) : base(Entity)
+        protected BaseHumanoidAIComponent(IHumanoid Entity) : base(Entity)
         {
             var dmgComponent = Parent.SearchComponent<DamageComponent>();
             if (dmgComponent != null)
@@ -126,38 +126,6 @@ namespace Hedra.AISystem.Humanoid
             IsSleeping = false;
             _bed.SetSleeper(null);
             _bed = null;
-        }
-
-        /// <summary>
-        /// Move to target position. Needs to be called every frame.
-        /// </summary>
-        /// <param name="TargetPoint">Target point to move</param>
-        protected virtual void Move(Vector3 TargetPoint, float ErrorMargin = DefaultErrorMargin)
-        {
-            if ((TargetPoint.Xz - Parent.Position.Xz).LengthSquared > ErrorMargin * ErrorMargin)
-            {
-                Parent.Orientation = (TargetPoint.Xz - Parent.Position.Xz).ToVector3().NormalizedFast();
-                Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
-                Parent.Physics.Move();
-                Parent.IsSitting = false;
-                IsMoving = true;
-            }
-            else
-            {
-                if(IsMoving)
-                    OnTargetPointReached();
-                IsMoving = false;
-            }
-            if (Parent.IsUnderwater)
-            {
-                if (Math.Abs(TargetPoint.Y - Parent.Position.Y) > 1)
-                    Parent.Movement.MoveInWater(TargetPoint.Y > Parent.Position.Y);
-            }
-            Parent.IsStuck = !Parent.IsMoving && IsMoving;
-            if(Parent.IsStuck)
-            {
-                OnMovementStuck();
-            }
         }
 
         protected virtual void OnMovementStuck()
