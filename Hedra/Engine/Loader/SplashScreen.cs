@@ -1,5 +1,6 @@
 using System;
 using Hedra.Core;
+using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
@@ -56,8 +57,8 @@ namespace Hedra.Engine.Loader
 
         public void Draw()
         {
+            Renderer.Viewport(0, 0, GameSettings.Width, GameSettings.Height);
             DrawManager.UIRenderer.Draw(_studioBackground);
-            //DrawManager.UIRenderer.Draw(_studioLogo);
         }
 
         public bool FinishedLoading => _finishedLoading;
