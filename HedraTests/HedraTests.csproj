@@ -66,6 +66,7 @@
     <Compile Include="BaseTest.cs" />
     <Compile Include="CacheSystem\CacheProviderTest.cs" />
     <Compile Include="CodePolicy\BaseCodePolicy.cs" />
+    <Compile Include="CodePolicy\BehaviourCodePolicy.cs" />
     <Compile Include="CodePolicy\ControlsCodePolicy.cs" />
     <Compile Include="CodePolicy\GLCodePolicy.cs" />
     <Compile Include="CodePolicy\ShaderCodePolicy.cs" />

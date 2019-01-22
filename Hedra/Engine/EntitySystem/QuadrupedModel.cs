@@ -177,20 +177,15 @@ namespace Hedra.Engine.EntitySystem
             _attackCooldown = Parent.AttackCooldown;
         }
 
-        public void Attack(Animation Animation)
-        {
-            this.Attack(null, Animation, null);
-
-        }
 
         public void Attack(Animation Animation, float RangeModifier)
         {
             this.Attack(null, Animation, null, RangeModifier);
         }
 
-        public override void Attack(IEntity Victim)
+        public override bool CanAttack(IEntity Victim, float RangeModifier)
         {
-            this.Attack(Victim, SelectAttackAnimation(), null);
+            return CanAttack();
         }
 
         public override void Attack(IEntity Victim, float RangeModifier)

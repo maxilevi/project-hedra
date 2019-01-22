@@ -10,11 +10,11 @@ namespace Hedra.AISystem.Behaviours
     {
         private readonly Timer _chargeTimer;
         private IEntity _target { get; set; }
-        protected WalkBehaviour Walk { get; }
+        protected TraverseBehaviour Traverse { get; }
         
         public ChargeBehaviour(IEntity Parent) : base(Parent)
         {
-            Walk = new WalkBehaviour(Parent);
+            Traverse = new TraverseBehaviour(Parent);
             _chargeTimer = new Timer(6 + Utils.Rng.Next(0, 4));
         }
 
@@ -34,7 +34,7 @@ namespace Hedra.AISystem.Behaviours
             if (IsCharging)
             {
                 var toTarget = (_target.Position - Parent.Position);
-                Walk.SetTarget(_target.Position + toTarget);
+                Traverse.SetTarget(_target.Position + toTarget);
                 Parent.AddBonusSpeedWhile(Parent.Speed * 3, () => IsCharging);
             }
         }
@@ -42,7 +42,7 @@ namespace Hedra.AISystem.Behaviours
         private void UpdateCharge()
         {
             _chargeTimer.Reset();
-            if (!Walk.HasTarget || _target == null)
+            if (!Traverse.HasTarget || _target == null)
             {
                 SetCharging(false);
             }
@@ -56,7 +56,7 @@ namespace Hedra.AISystem.Behaviours
                     _target.Damage(Parent.AttackDamage * Time.DeltaTime, Parent, out _, false);
                 }
             }
-            Walk.Update();
+            Traverse.Update();
         }
 
         private bool IsInChargeRadius()

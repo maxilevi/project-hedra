@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 
 namespace HedraTests.CodePolicy
@@ -19,6 +21,28 @@ namespace HedraTests.CodePolicy
             for (var i = 0; i <= Index - 1; i++)
                 if (Contents[i] == '\n') res++;
             return res;
+        }
+        
+        protected Dictionary<string, string[]> GetAllFilesThatMatch(string RegexString)
+        {
+            var calls = new Dictionary<string, string[]>();
+            var files = Directory.GetFiles($"{SolutionDirectory}/Hedra/", "*.cs", SearchOption.AllDirectories);
+            for (var i = 0; i < files.Length; i++)
+            {
+                var matches = Regex.Matches(File.ReadAllText(files[i]), RegexString);
+                if (matches.Count > 0)
+                {
+                    var matchList = new List<string>();
+                    for (var k = 0; k < matches.Count; k++)
+                    {
+                        var str = matches[k].Value;
+                        matchList.Add(str.Substring(3, str.Length-4));
+                    }
+                    calls.Add(files[i], matchList.ToArray());
+                }
+            }
+            
+            return calls;
         }
     }
 }

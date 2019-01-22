@@ -9,13 +9,13 @@ namespace Hedra.AISystem.Behaviours
 {
     public class FleeBehaviour : Behaviour
     {
-        protected WalkBehaviour Walk { get; set; }
+        protected TraverseBehaviour Traverse { get; set; }
         public Func<Vector3> Target { get; protected set; }
         public float Radius { get; protected set; }
 
         public FleeBehaviour(IEntity Parent) : base(Parent)
         {
-            Walk = new WalkBehaviour(Parent);
+            Traverse = new TraverseBehaviour(Parent);
         }
 
         public void SetTarget(IEntity Target, float Radius)
@@ -33,15 +33,15 @@ namespace Hedra.AISystem.Behaviours
         public override void Update()
         {
             if (Target != null)
-            {
+            {             
                 var oppositeDirection = (Parent.Position - Target()).Xz.ToVector3().NormalizedFast();
-                Walk.SetTarget(Parent.Position + oppositeDirection * 4f);
+                Traverse.SetTarget(Parent.Position + oppositeDirection * 16f);
                 if ((Parent.Position - Target()).LengthSquared > Radius * Radius)
                 {
                     this.Target = null;
                 }
-                Walk.Update();
             }
+            Traverse.Update();
         }
 
         public bool Enabled => Target != null;

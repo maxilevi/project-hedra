@@ -1,7 +1,7 @@
 ﻿{
   "Name" : "Spider", 
   "MaxHealth": 178.0,
-  "AttackDamage": 2.5,
+  "AttackDamage": 3.0,
   "Speed": 1.4,
   "XP": 2.0,
   "Level": 3,

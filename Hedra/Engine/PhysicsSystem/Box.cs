@@ -125,6 +125,26 @@ namespace Hedra.Engine.PhysicsSystem
                 return _cache;
             }
         }
+        
+        /* Use for debugging */
+        public Vector3[] Vertices
+        {
+            get
+            {
+                if(_verticesCache == null) _verticesCache = new Vector3[8];
+
+                _verticesCache[0] = new Vector3(Min.X, Min.Y, Min.Z);
+                _verticesCache[1] = new Vector3(Max.X, Min.Y, Min.Z);
+                _verticesCache[2] = new Vector3(Min.X, Min.Y, Max.Z);
+                _verticesCache[3] = new Vector3(Max.X, Min.Y, Max.Z);
+
+                _verticesCache[4] = new Vector3(Min.X, Max.Y, Min.Z);
+                _verticesCache[5] = new Vector3(Max.X, Max.Y, Min.Z);
+                _verticesCache[6] = new Vector3(Min.X, Max.Y, Max.Z);
+                _verticesCache[7] = new Vector3(Max.X, Max.Y, Max.Z);
+                return _verticesCache;
+            }
+        }
 
         public Vector3 Size => Max - Min;
 

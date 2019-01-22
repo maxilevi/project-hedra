@@ -8,17 +8,17 @@ namespace Hedra.AISystem.Behaviours
     {
         public Vector3 GuardPosition { get; set; }
         protected float Radius { get; } = 64;
-        protected WalkBehaviour Walk { get; }
+        protected TraverseBehaviour Traverse { get; }
         
         public GuardHostileBehaviour(IEntity Parent) : base(Parent)
         {
-            Walk = new WalkBehaviour(Parent);
+            Traverse = new TraverseBehaviour(Parent);
         }
 
         public override void Update()
         {
-            if(Walk.HasTarget)
-                Walk.Update();
+            if(Traverse.HasTarget)
+                Traverse.Update();
             else
                 base.Update();
         }
@@ -27,7 +27,7 @@ namespace Hedra.AISystem.Behaviours
         {
             var target = base.GetTarget();
             if ((GuardPosition - Parent.Position).Xz.LengthSquared > Radius * Radius)
-                Walk.SetTarget(GuardPosition);
+                Traverse.SetTarget(GuardPosition);
             else
                 return target;
             return null;

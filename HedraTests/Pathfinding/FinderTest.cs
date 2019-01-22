@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Drawing;
 using Hedra.Engine.Pathfinding;
 using NUnit.Framework;
 using OpenTK;
@@ -8,6 +9,26 @@ namespace HedraTests.Pathfinding
     [TestFixture]
     public class FinderTest
     {
+        [Test]
+        public void TestPathIsComputedAsExpected()
+        {
+            var grid = new Grid(5, 4);
+            grid.BlockCell(new Vector2(2, 0));
+            grid.BlockCell(new Vector2(2, 1));
+            grid.BlockCell(new Vector2(2, 2));
+            var path = grid.GetPath(Vector2.Zero, new Vector2(4, 0));
+            Assert.AreEqual(new []
+            {
+                new Vector2(0, 0),
+                new Vector2(1, 1),
+                new Vector2(1, 2),
+                new Vector2(2, 3),
+                new Vector2(3, 2),
+                new Vector2(4, 1),
+                new Vector2(4, 0),
+            }, path);
+        }
+        
         [Test]
         public void TestIsConnectedWith()
         {

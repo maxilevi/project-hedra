@@ -8,10 +8,9 @@ namespace Hedra.AISystem
     {
         public PugAIComponent(IEntity Parent) : base(Parent)
         {
-            AlertTime = 6 + Utils.Rng.NextFloat() * 12f;
         }
-        
-        protected override float AlertTime { get; }
+
+        protected override float AlertTime => 6 + Utils.Rng.NextFloat() * 12f;
         protected override SoundType Sound => SoundType.None;
         protected override float Radius => 120;
     }

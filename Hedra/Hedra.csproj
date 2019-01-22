@@ -104,6 +104,7 @@
     <Compile Include="AISystem\Behaviours\ChargeBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\FleeBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\FollowBehaviour.cs" />
+    <Compile Include="AISystem\Behaviours\TraverseBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\GiantBeetleAttackBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\GorillaWarriorAttackBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\GuardHostileBehaviour.cs" />

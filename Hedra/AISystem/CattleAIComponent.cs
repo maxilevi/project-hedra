@@ -1,5 +1,8 @@
+using System;
 using Hedra.AISystem.Behaviours;
+using Hedra.Core;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Game;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
 using Hedra.Sound;
@@ -13,6 +16,7 @@ namespace Hedra.AISystem
 
         protected CattleAIComponent(IEntity Parent) : base(Parent)
         {
+            if(AlertTime == 0) throw new ArgumentOutOfRangeException($"AlertTime cannot be '{AlertTime}'");
             Roam = new RoamBehaviour(Parent)
             {
                 AlertTime = AlertTime,

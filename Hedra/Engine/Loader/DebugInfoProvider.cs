@@ -175,7 +175,8 @@ namespace Hedra.Engine.Loader
 
         private void DrawFrustum()
         {
-            var points = Culling.Frustum.Corners;
+            var points = World.Entities.FirstOrDefault(E => E.Type == "Ent")?.Model.BroadphaseBox.Vertices;
+            if (points == null) return;
             _frustumPoints.Update(points, Vector3.SizeInBytes * points.Length);
             
             _frustumVAO.Bind();

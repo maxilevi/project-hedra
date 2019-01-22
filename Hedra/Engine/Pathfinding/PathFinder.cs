@@ -17,6 +17,8 @@ namespace Hedra.Engine.Pathfinding
             {
                 return new List<Vector2> {Start};
             }
+
+            var lastOption = default(Offset);
             var head = new MinHeapNode(Start, ManhattanDistance(Start, End));
             var open = new MinHeap();            
             open.Push(head);
@@ -34,7 +36,7 @@ namespace Hedra.Engine.Pathfinding
                     return ReconstructPath(Grid, Start, End, cameFrom);
                 }
 
-                Step(Grid, open, cameFrom, costSoFar, MovementPattern, current, End);
+                Step(Grid, open, cameFrom, costSoFar, MovementPattern, current, End, ref lastOption);
             }
 
             return null;
@@ -47,15 +49,16 @@ namespace Hedra.Engine.Pathfinding
             float[] CostSoFar,
             Offset[] MovementPattern,
             Vector2 Current,
-            Vector2 End)
+            Vector2 End,
+            ref Offset LastDirection)
         {
             // Get the cost associated with getting to the current position
             var initialCost = CostSoFar[Grid.GetIndexUnchecked(Current.X, Current.Y)];
 
             // Get all directions we can move to according to the movement pattern and the dimensions of the grid
-            foreach (var option in GetMovementOptions(Current, Grid.DimX, Grid.DimY, MovementPattern))
+            foreach (var direction in GetMovementOptions(Current, Grid.DimX, Grid.DimY, MovementPattern))
             {
-                var position = Current + option;
+                var position = Current + direction;
                 var cellCost = Grid.GetCellCostUnchecked(position);
 
                 // Ignore this option if the cell is blocked
@@ -65,7 +68,7 @@ namespace Hedra.Engine.Pathfinding
                 var index = Grid.GetIndexUnchecked(position.X, position.Y);
 
                 // Compute how much it would cost to get to the new position via this path
-                var newCost = initialCost + cellCost * option.Cost;
+                var newCost = initialCost + cellCost * direction.Cost;
 
                 // Compare it with the best cost we have so far, 0 means we don't have any path that gets here yet
                 var oldCost = CostSoFar[index];
@@ -80,6 +83,7 @@ namespace Hedra.Engine.Pathfinding
                 // to get from here to the end, and store the node in the open list
                 var expectedCost = newCost + ManhattanDistance(position, End);
                 Open.Push(new MinHeapNode(position, expectedCost));
+                LastDirection = direction;
             }
         }
 

@@ -13,7 +13,7 @@ namespace Hedra.AISystem.Behaviours
     public class RoamBehaviour : Behaviour
     {
         protected IdleBehaviour Idle { get; }
-        protected WalkBehaviour Walk { get; }
+        protected TraverseBehaviour Traverse { get; }
         private Behaviour _currentBehaviour;
         private readonly Timer _moveTicker;
         private readonly Timer _soundTicker;
@@ -21,7 +21,7 @@ namespace Hedra.AISystem.Behaviours
         public RoamBehaviour(IEntity Parent) : base(Parent)
         {
             this.Idle = new IdleBehaviour(Parent);
-            this.Walk = new WalkBehaviour(Parent);
+            this.Traverse = new TraverseBehaviour(Parent);
             this._moveTicker = new Timer(8f + Utils.Rng.NextFloat() * 4);
             this._soundTicker = new Timer(5f + Utils.Rng.NextFloat() * 5);
             this._currentBehaviour = Idle;
@@ -37,8 +37,8 @@ namespace Hedra.AISystem.Behaviours
                     var targetPosition = World.FindPlaceablePosition(Parent, SearchPoint + new Vector3(Utils.Rng.NextFloat() * Diameter - Radius, 0,
                                              Utils.Rng.NextFloat() * Diameter - Radius));
                     if (Physics.IsWaterBlock(targetPosition)) return;
-                    Walk.SetTarget(targetPosition, () => _currentBehaviour = Idle);
-                    _currentBehaviour = Walk;
+                    Traverse.SetTarget(targetPosition, () => _currentBehaviour = Idle);
+                    _currentBehaviour = Traverse;
                 }
 
                 if (this._soundTicker.Tick())
@@ -46,7 +46,7 @@ namespace Hedra.AISystem.Behaviours
                     SoundPlayer.PlaySoundWithVariation(Sound, Parent.Position);
                 }
             }
-            if (Parent.IsStuck) Walk.Cancel();
+            //if (Parent.IsStuck) Traverse.Cancel();
         }
 
         protected virtual Vector3 SearchPoint => Parent.Position;

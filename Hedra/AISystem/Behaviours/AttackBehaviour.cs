@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
@@ -17,12 +18,12 @@ namespace Hedra.AISystem.Behaviours
             FollowTimer = new Timer(16);
         }
 
-        public virtual void SetTarget(IEntity Target)
+        public virtual void SetTarget(IEntity NewTarget)
         {
-            if(Target.IsDead) return;
+            if(NewTarget.IsDead) return;
 
-            this.Target = Target;
-            Follow.Target = this.Target;
+            Target = NewTarget;
+            Follow.Target = NewTarget;
             FollowTimer.Reset();
         }
 
@@ -33,11 +34,11 @@ namespace Hedra.AISystem.Behaviours
                 this.Target = null;
                 Follow.Target = this.Target;
             }
-            if (!Parent.Model.IsAttacking && Target != null && !InAttackRange(Target))
+            if (!Parent.Model.IsAttacking && Target != null && !InAttackRange(Target, 1.15f))
             {
                 Follow.Update();
             }
-            if (Target != null && InAttackRange(Target))
+            if (Target != null && InAttackRange(Target, 1.15f))
             {
                 FollowTimer.Reset();
                 this.Attack(2.0f);
@@ -47,12 +48,16 @@ namespace Hedra.AISystem.Behaviours
         protected virtual void Attack(float RangeModifier)
         {
             Parent.RotateTowards(Target);
-            Parent.Model.Attack(Target, RangeModifier);
+            if (Parent.Model.CanAttack(Target, RangeModifier))
+            {
+                Parent.Model.Attack(Target, RangeModifier);
+                if (!Target.IsMoving && !Target.IsKnocked && Utils.Rng.Next(0, 6) == 1) Target.KnockForSeconds(1.5f);
+            }
         }
         
-        protected bool InAttackRange(IEntity Entity)
+        protected bool InAttackRange(IEntity Entity, float RangeModifier = 1f)
         {
-            return Parent.InAttackRange(Entity);
+            return Parent.InAttackRange(Entity, RangeModifier);
         }
 
         public bool Enabled => this.Target != null;

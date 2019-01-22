@@ -1,6 +1,7 @@
 using System;
 using Hedra.Core;
 using Hedra.Engine;
+using Hedra.Engine.ComplexMath;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.EntitySystem;
@@ -14,7 +15,7 @@ namespace Hedra.AISystem.Behaviours
         private bool _arrived;
         private Action _callback;
         private Vector3 _lastPosition;
-
+        
         public WalkBehaviour(IEntity Parent) : base(Parent)
         {
         }
@@ -28,12 +29,7 @@ namespace Hedra.AISystem.Behaviours
             this.HasTarget = false;
         }
 
-        public void SetTarget(Vector3 Point)
-        {
-            this.SetTarget(Point, null);
-        }
-
-        public void SetTarget(Vector3 Point, Action Callback)
+        public void SetTarget(Vector3 Point, Action Callback = null)
         {
             this._arrived = false;
             this._callback = Callback;
@@ -45,16 +41,23 @@ namespace Hedra.AISystem.Behaviours
         {
             if (!_arrived && !Parent.IsKnocked)
             {
-                Parent.Orientation = Mathf.Lerp(Parent.Orientation, (Target - Parent.Position).Xz.NormalizedFast().ToVector3(), Time.DeltaTime * 8f);
-                Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
+                var orientation = (Target - Parent.Position).Xz.NormalizedFast().ToVector3();
+                var prev = Parent.Model.TargetRotation;
+                /* If the target reaches the point then (Target - Parent.Position) will be equal to Vector3.Zero and thus the normal will be Vector3.Zero too. */
+                if (orientation != Vector3.Zero)
+                {
+                    Parent.Orientation = orientation;// Mathf.Lerp(Parent.Orientation, orientation, Time.DeltaTime * 8f);
+                    Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
+                }
+                //if(Parent.Type == "Ent")
+                //    Console.WriteLine($"prev = '{prev}', new = '{Parent.Model.TargetRotation}', dir = '{Parent.Orientation}', pos = '{Target}'");
                 Parent.Physics.Move();
-
                 if ((Target - Parent.Position).Xz.LengthSquared < 1 * 1)
                 {
                     this.Cancel();
                 }
             }
-            Parent.IsStuck = !Parent.IsMoving && !_arrived && HasTarget || _lastPosition.Xz == Parent.Position.Xz;
+            Parent.IsStuck = !Parent.IsMoving && !_arrived && HasTarget || _lastPosition.Xz == Parent.Position.Xz && HasTarget;
             _lastPosition = Parent.Position;
         }
         

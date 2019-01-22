@@ -156,14 +156,14 @@ namespace Hedra.Engine.EntitySystem
             }
         }
 
-        public override void Attack(IEntity Victim)
-        {
-            this.Attack(Victim, 1);
-        }
-
         public override void Attack(IEntity Victim, float RangeModifier)
         {
 
+        }
+
+        public override bool CanAttack(IEntity Victim, float RangeModifier)
+        {
+            throw new NotImplementedException();
         }
 
         private void OnMove()

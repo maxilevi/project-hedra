@@ -31,7 +31,7 @@ namespace Hedra.Engine.EntitySystem
         public abstract Vector3 Scale { get; set; }
         public abstract Vector3 TargetRotation { get; set; }
         public abstract void Update();
-        public abstract void Attack(IEntity Victim);
+        public abstract bool CanAttack(IEntity Victim, float RangeModifier);
         public abstract void Attack(IEntity Victim, float RangeModifier);
         public abstract void Dispose();
     }

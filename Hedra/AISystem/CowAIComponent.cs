@@ -8,10 +8,9 @@ namespace Hedra.AISystem
     {
         public CowAIComponent(IEntity Parent) : base(Parent)
         {
-            AlertTime = 8 + Utils.Rng.NextFloat() * 12f;
         }
 
-        protected override float AlertTime { get; }
+        protected override float AlertTime => 8 + Utils.Rng.NextFloat() * 12f;
         protected override SoundType Sound => SoundType.None;
     }
 }

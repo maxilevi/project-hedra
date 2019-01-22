@@ -8,10 +8,9 @@ namespace Hedra.AISystem
     {
         public PigAIComponent(IEntity Parent) : base(Parent)
         {
-            AlertTime = 12 + Utils.Rng.NextFloat() * 12f;
         }
         
-        protected override float AlertTime { get; }
+        protected override float AlertTime => 12 + Utils.Rng.NextFloat() * 12f;
         protected override SoundType Sound => SoundType.None;
     }
 }

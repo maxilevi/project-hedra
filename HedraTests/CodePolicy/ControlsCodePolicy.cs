@@ -50,7 +50,7 @@ namespace HedraTests.CodePolicy
         [Test]
         public void TestThereAreNoKeysOutsideOfControls()
         {
-            var filesAndCalls = GetAllKeyUsages();
+            var filesAndCalls = GetAllFilesThatMatch(_regex);
             var fails = new List<string>();
             foreach (var pair in filesAndCalls)
             {
@@ -60,29 +60,6 @@ namespace HedraTests.CodePolicy
                     fails.Add($"OpenTK.Input.Key usages in '{name}.cs' should be in {_controlsClassName}.cs");
             }
             if(fails.Count > 0) Assert.Fail(string.Join(Environment.NewLine, fails.ToArray()));
-        }
- 
-
-        private Dictionary<string, string[]> GetAllKeyUsages()
-        {
-            var calls = new Dictionary<string, string[]>();
-            var files = Directory.GetFiles($"{SolutionDirectory}/Hedra/", "*.cs", SearchOption.AllDirectories);
-            for (var i = 0; i < files.Length; i++)
-            {
-                var matches = Regex.Matches(File.ReadAllText(files[i]), _regex);
-                if (matches.Count > 0)
-                {
-                    var matchList = new List<string>();
-                    for (var k = 0; k < matches.Count; k++)
-                    {
-                        var str = matches[k].Value;
-                        matchList.Add(str.Substring(3, str.Length-4));
-                    }
-                    calls.Add(files[i], matchList.ToArray());
-                }
-            }
-            
-            return calls;
         }
     }
 }

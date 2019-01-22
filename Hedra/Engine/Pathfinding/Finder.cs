@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Hedra.Core;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.EntitySystem;
@@ -21,6 +23,11 @@ namespace Hedra.Engine.Pathfinding
                         Graph.BlockCell(position);
                 }
             }
+        }
+
+        public static Vector2[] GetPath(Grid Graph, Vector2 Start, Vector2 End)
+        {
+            return Graph.GetPath(Start, End, MovementPatterns.Full);
         }
 
         public static Vector2 NearestUnblockedCell(Grid Graph, Vector2 Current)
