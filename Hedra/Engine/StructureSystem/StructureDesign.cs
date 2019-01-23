@@ -31,7 +31,8 @@ namespace Hedra.Engine.StructureSystem
         protected CollidableStructure Setup(Vector3 TargetPosition, Random Rng, BaseStructure Structure)
         {
             var plateau = new RoundedPlateau(TargetPosition.Xz, Radius);
-            var collidable = new CollidableStructure(this, new Vector3(TargetPosition.X, World.WorldBuilding.ApplyMultiple(plateau.Position, plateau.MaxHeight), TargetPosition.Z), plateau, Structure);
+            plateau.MaxHeight = World.WorldBuilding.ApplyMultiple(plateau.Position, plateau.MaxHeight);
+            var collidable = new CollidableStructure(this, new Vector3(TargetPosition.X, plateau.MaxHeight, TargetPosition.Z), plateau, Structure);
             Structure.Position = collidable.Position;
             return collidable;
         }
