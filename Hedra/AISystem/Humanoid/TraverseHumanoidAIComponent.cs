@@ -11,13 +11,14 @@ namespace Hedra.AISystem.Humanoid
         
         protected TraverseHumanoidAIComponent(IHumanoid Entity) : base(Entity)
         {
-            _traverse = new TraverseBehaviour(Entity);
+            _traverse = new TraverseBehaviour(Entity, UseCollision);
         }
 
         public override void Update()
         {
             base.Update();
             UpdateMovement();
+            _traverse.Update();
         }
 
         /// <summary>
@@ -31,6 +32,11 @@ namespace Hedra.AISystem.Humanoid
                 OnTargetPointReached();
                 IsMoving = false;
             });
+        }
+
+        protected void CancelMovement()
+        {
+            _traverse.Cancel();
         }
 
         private void UpdateMovement()
@@ -48,5 +54,7 @@ namespace Hedra.AISystem.Humanoid
                 OnMovementStuck();
             }
         }
+        
+        protected virtual bool UseCollision => false;
     }
 }

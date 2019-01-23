@@ -22,11 +22,14 @@ namespace Hedra.AISystem.Behaviours
         private bool _reached;
         private Action _callback;
 
-        public TraverseBehaviour(IEntity Parent) : base(Parent)
+        public TraverseBehaviour(IEntity Parent, bool UseCollision = false) : base(Parent)
         {
             Walk = new WalkBehaviour(Parent);
-            Parent.Physics.CollidesWithStructures = false;
-            Parent.Physics.UpdateColliderList = true;
+            if (!UseCollision)
+            {
+                Parent.Physics.CollidesWithStructures = false;
+                Parent.Physics.UpdateColliderList = true;
+            }
             _reached = true;
             _currentGrid = new Grid(32, 32);
             _rebuildPathTimer = new Timer(.5f)

@@ -59,28 +59,37 @@ namespace Hedra.AISystem.Humanoid
                 {
                     if (_secondAttackCooldown <= 0)
                     {
+                        base.Orientate(TargetPoint);
                         _secondAttackCooldown = 4.5f;
                         _leftWeapon.Attack2(Parent);
                     }
                     else if (_firstAttackCooldown <= 0)
                     {
+                        base.Orientate(TargetPoint);
                         _firstAttackCooldown = 1.5f;
                         _leftWeapon.Attack1(Parent);
-                    }                   
+                    }
+                    base.CancelMovement();
                 }
-                base.MoveTo(TargetPoint);
+                else
+                {
+                    base.MoveTo(TargetPoint);
+                }
             }
             base.LookTarget();
         }
 
         private void OnMiss(Projectile Arrow)
         {
-            AttackRadius -= Chunk.BlockSize;
+            AttackRadius -= Chunk.BlockSize * 2;
+            AttackRadius = System.Math.Max(AttackRadius, Chunk.BlockSize * 2);
         }
         
         private void OnHit(Projectile Arrow)
         {
             AttackRadius = DefaultAttackRadius;
         }
+
+        protected override bool UseCollision => true;
     }
 }

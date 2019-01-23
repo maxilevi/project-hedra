@@ -163,10 +163,11 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             for (var i = _chunkWatchers.Count - 1; i > -1; i--)
             {
-                _chunkWatchers[i].Kill();
+                _chunkWatchers[i]?.Kill();
             }
             _targetActivechunks = 0;
             _activeChunks = 0;
+            _chunkWatchers.Clear();
         }
 
         public int WatcherCount => _chunkWatchers.Count;

@@ -78,7 +78,7 @@ namespace Hedra.AISystem.Humanoid
 
             ChasingTarget = null;
             Chasing = false;
-            this.TargetPoint = this.OriginalPosition;
+            base.MoveTo(this.TargetPoint = this.OriginalPosition);
         }
 
         protected void RollAndMove2()
@@ -90,7 +90,7 @@ namespace Hedra.AISystem.Humanoid
 
         protected void LookTarget()
         {
-            base.Orientate(TargetPoint);
+            //base.Orientate(TargetPoint);
             if (!Chasing)
             {
                 if (Friendly)

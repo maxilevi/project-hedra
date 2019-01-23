@@ -58,17 +58,21 @@ namespace Hedra.AISystem.Humanoid
 
                 this.TargetPoint = ChasingTarget.Position;
                 this._attackTimer -= Time.IndependantDeltaTime;
-                if (Parent.InAttackRange(ChasingTarget) && !Parent.IsKnocked)
+                if (Parent.InAttackRange(ChasingTarget, 1.5f) && !Parent.IsKnocked)
                 {
+                    base.Orientate(TargetPoint);
                     if (_attackTimer < 0)
                     {
+                        
                         Parent.LeftWeapon.Attack1(Parent);
                         _attackTimer = 1.25f;
                     }
                     this.ForgetTimer.Reset();
                 }
-
-                base.MoveTo(TargetPoint);
+                else
+                {
+                    base.MoveTo(TargetPoint);
+                }
             }
 
             base.LookTarget();

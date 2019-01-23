@@ -50,7 +50,7 @@ namespace Hedra.AISystem.Behaviours
                     Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
                 }
                 Parent.Physics.Move();
-                if ((Target - Parent.Position).Xz.LengthSquared < 1 * 1)
+                if ((Target - Parent.Position).Xz.LengthSquared < 2 * 2)
                 {
                     this.Cancel();
                 }
