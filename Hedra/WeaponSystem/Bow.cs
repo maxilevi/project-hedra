@@ -30,12 +30,12 @@ namespace Hedra.WeaponSystem
         public override uint SecondaryAttackIcon => WeaponIcons.BowSecondaryAttack;
         
         protected override string AttackStanceName => "Assets/Chr/ArcherShootStance.dae";
-        protected override float PrimarySpeed => .7f;
+        protected override float PrimarySpeed => .6f;
         protected override string[] PrimaryAnimationsNames => new []
         {
             "Assets/Chr/ArcherShoot.dae"
         };
-        protected override float SecondarySpeed => 1f;
+        protected override float SecondarySpeed => 1.5f;
         protected override string[] SecondaryAnimationsNames => new []
         {
             "Assets/Chr/ArcherTripleShoot.dae"

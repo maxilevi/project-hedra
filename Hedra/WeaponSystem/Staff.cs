@@ -15,7 +15,7 @@ namespace Hedra.WeaponSystem
         public override uint SecondaryAttackIcon => WeaponIcons.StaffSecondaryAttack;
         
         protected override string AttackStanceName => "Assets/Chr/MageStaff-Stance.dae";
-        protected override float PrimarySpeed => 0.9f;
+        protected override float PrimarySpeed => 1.1f;
         protected override string[] PrimaryAnimationsNames => new []
         {
             "Assets/Chr/MageStaff-PrimaryAttack.dae"
