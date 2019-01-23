@@ -1,3 +1,4 @@
+using Hedra.Engine.ClassSystem;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.Player;
@@ -97,7 +98,7 @@ namespace HedraTests.Player
         private float RecursiveXp(int Target)
         {
             if (Target == 0) return 0;
-            return _human.Class.XPFormula(Target) + RecursiveXp(Target - 1);
+            return ClassDesign.XPFormula(Target) + RecursiveXp(Target - 1);
         }
     }
 }

@@ -32,7 +32,7 @@ namespace Hedra.Engine.Player.Skills.Rogue
             base.MaxCooldown = 8.5f;
             
             _roundSlashAnimation = AnimationLoader.LoadAnimation("Assets/Chr/RogueBladeRoundAttack.dae");
-            _roundSlashAnimation.Speed = 2f;
+            _roundSlashAnimation.Speed = 1.5f;
             _roundSlashAnimation.Loop = false;
             _roundSlashAnimation.OnAnimationStart += delegate
             { 

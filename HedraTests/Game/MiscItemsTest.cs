@@ -12,7 +12,7 @@ namespace HedraTests.Game
         public void TestMiscItemsHavePriceAttribute()
         {
             AssetManager.Provider = new SimpleAssetProvider();
-            ItemFactory.LoadModules(GameLoader.AppPath);
+            ItemLoader.LoadModules(GameLoader.AppPath);
             var items = ItemPool.Matching(T => T.Tier == ItemTier.Misc);
             for (var i = 0; i < items.Length; i++)
             {

@@ -205,8 +205,13 @@
     <Compile Include="Engine\CacheSystem\SunflowerCache.cs" />
     <Compile Include="Engine\CacheSystem\TimberCache.cs" />
     <Compile Include="Engine\CacheSystem\WellCache.cs" />
+    <Compile Include="Engine\ClassSystem\AbilityTreeLoader.cs" />
+    <Compile Include="Engine\ClassSystem\ClassLoader.cs" />
     <Compile Include="Engine\ClassSystem\RestrictionsFactory.cs" />
+    <Compile Include="Engine\ClassSystem\Templates\AbilityTreeTemplate.cs" />
+    <Compile Include="Engine\ClassSystem\Templates\ClassTemplate.cs" />
     <Compile Include="Engine\Core\ISearchable.cs" />
+    <Compile Include="Engine\Core\ModuleLoader.cs" />
     <Compile Include="Engine\Core\Singleton.cs" />
     <Compile Include="Engine\Core\TypeFactory.cs" />
     <Compile Include="Engine\Core\Unique.cs" />
@@ -234,6 +239,7 @@
     <Compile Include="Engine\ModuleSystem\Templates\HumanoidModelTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\Templates\HumanoidTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\Templates\HumanoidWeaponTemplate.cs" />
+    <Compile Include="Engine\ModuleSystem\Templates\INamedTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\Templates\ModelTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\Templates\SpawnerSettings.cs" />
     <Compile Include="Engine\ModuleSystem\Templates\SpawnTemplate.cs" />
@@ -648,7 +654,7 @@
     <Compile Include="Engine\ItemSystem\CommonItems.cs" />
     <Compile Include="Engine\ItemSystem\EffectDescriber.cs" />
     <Compile Include="Engine\ItemSystem\Item.cs" />
-    <Compile Include="Engine\ItemSystem\ItemFactory.cs" />
+    <Compile Include="Engine\ItemSystem\ItemLoader.cs" />
     <Compile Include="Engine\ItemSystem\ItemModelLoader.cs" />
     <Compile Include="Engine\ItemSystem\ItemPoolSettings.cs" />
     <Compile Include="Engine\ItemSystem\ItemTemplater.cs" />
@@ -7253,6 +7259,18 @@
     <Content Include="Mods\README.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Classes\Archer.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Classes\Mage.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Classes\Rogue.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Classes\Warrior.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Chestplates\CommonLeatherChestplate.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -7343,6 +7361,10 @@
     <Content Include="Modules\NPCs\Skeleton.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\SkillTrees\ArcherTree.json" />
+    <Content Include="Modules\SkillTrees\MageTree.json" />
+    <Content Include="Modules\SkillTrees\RogueTree.json" />
+    <Content Include="Modules\SkillTrees\WarriorTree.json" />
     <Content Include="Modules\Villages\Woodland.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

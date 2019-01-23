@@ -153,7 +153,7 @@ namespace Hedra.Engine.Management
                         Caster.XP += float.Parse(Parts[1]);
                         return true;
                     case "list" when Parts[1] == "items":
-                        Result = string.Join(Environment.NewLine, ItemFactory.Templater.Templates.Select(T => T.Name));
+                        Result = string.Join(Environment.NewLine, ItemLoader.Templater.Templates.Select(T => T.Name));
                         return true;
                 }
 

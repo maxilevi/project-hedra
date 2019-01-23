@@ -225,7 +225,7 @@ namespace HedraTests.Game
                 _loaded = true;
                 HedraContent.Register();
             }
-            ItemFactory.LoadModules(GameLoader.AppPath);
+            ItemLoader.LoadModules(GameLoader.AppPath);
         }
         
         private static Item GrabWeapon(ItemPoolSettings Settings)

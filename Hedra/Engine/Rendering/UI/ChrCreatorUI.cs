@@ -77,7 +77,7 @@ namespace Hedra.Engine.Rendering.UI
                 var position = _human.Physics.TargetPosition = Scenes.MenuBackground.PlatformPosition;
 
                 _human.Model.Dispose();
-                _human.Model = new HumanoidModel(_human, _classType.Human)
+                _human.Model = new HumanoidModel(_human, _classType.ModelTemplate)
                 {
                     Position = position,
                     LocalRotation = rotation,

@@ -14,8 +14,6 @@ namespace Hedra.Engine.Player.Skills
     public class TreeItem
     {
         public Type AbilityType { get; set; }
-        public bool Locked { get; set; }
-        public int Level { get; set; }
         public uint Image { get; set; }
         public bool Enabled { get; set; }
     }

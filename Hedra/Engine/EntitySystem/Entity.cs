@@ -487,6 +487,7 @@ namespace Hedra.Engine.EntitySystem
             this.Physics.Update();
             this.UpdateEnvironment();
             this._tickSystem.Tick();
+            var beforeComponents = Components.ToArray();
             for (var i = Components.Count-1; i > -1; --i)
             {
                 Components[i].Update();

@@ -6,6 +6,7 @@ using Hedra.API;
 using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
+using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Player.Skills;
@@ -31,15 +32,15 @@ namespace Hedra.Engine.ClassSystem
         }
 
         public string Name => this.ToString();
-        public abstract string Logo { get; }
-        public abstract HumanType Human { get; }
-        public abstract float BaseSpeed { get; }
-        public abstract AbilityTreeBlueprint AbilityTreeDesign { get; }
-        public abstract Item StartingItem { get; }
-        public abstract float AttackResistance { get; }
-        public abstract float MaxStamina { get; }
-        public abstract float BaseDamage { get; }
-        public abstract float AttackingSpeedModifier { get; }
+        public virtual HumanoidModelTemplate ModelTemplate => ClassLoader.Instance[Type].Model;
+        public virtual string Logo => ClassLoader.Instance[Type].Logo;
+        public virtual float BaseSpeed => ClassLoader.Instance[Type].BaseSpeed;
+        public virtual AbilityTreeBlueprint AbilityTreeDesign => AbilityTreeLoader.Instance[ClassLoader.Instance[Type].AbilityTreeDesign];
+        public virtual Item StartingItem => ItemPool.Grab(ClassLoader.Instance[Type].StartingItem);
+        public virtual float AttackResistance => ClassLoader.Instance[Type].AttackResistance;
+        public virtual float MaxStamina => ClassLoader.Instance[Type].MaxStamina;
+        public virtual float BaseDamage => ClassLoader.Instance[Type].BaseDamage;
+        public virtual float AttackingSpeedModifier => ClassLoader.Instance[Type].AttackingSpeedModifier;
         public abstract Matrix4 HelmetPlacement { get; }
         public abstract Matrix4 ChestplatePlacement { get; }
         public abstract Matrix4 PantsMatrixPlacement { get; }
@@ -47,10 +48,17 @@ namespace Hedra.Engine.ClassSystem
         public abstract Matrix4 RightBootPlacement { get; }
         public abstract Class Type { get; }
 
-        public abstract float MaxHealthFormula(float RandomFactor);
-        public abstract float MaxManaFormula(float RandomFactor);
+        public virtual float MaxHealthFormula(float RandomFactor)
+        {
+            return ClassLoader.Instance[Type].BaseHealthPerLevel + RandomFactor;
+        }
+
+        public virtual float MaxManaFormula(float RandomFactor)
+        {
+            return ClassLoader.Instance[Type].BaseManaPerLevel + RandomFactor;
+        }
        
-        public float XPFormula(int TargetLevel)
+        public static float XPFormula(int TargetLevel)
         {
             return TargetLevel * 10f + 38;
         }

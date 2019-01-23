@@ -1,9 +1,10 @@
 using System.Linq;
 using Hedra.Engine.ModuleSystem;
+using Hedra.Engine.ModuleSystem.Templates;
 
 namespace Hedra.Engine.ItemSystem.Templates
 {    
-    public class ItemTemplate : SerializableTemplate<ItemTemplate>
+    public class ItemTemplate : SerializableTemplate<ItemTemplate>, INamedTemplate
     {
         public string Name { get; set; }
         public string DisplayName { get; set; }

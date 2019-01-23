@@ -111,7 +111,7 @@ namespace Hedra.Engine.Player
             }
         }
 
-        public float MaxXP => MaxLevel == Level ? 0 : Class.XPFormula(this.Level);
+        public float MaxXP => MaxLevel == Level ? 0 : ClassDesign.XPFormula(this.Level);
                     
         public float MaxMana
         {

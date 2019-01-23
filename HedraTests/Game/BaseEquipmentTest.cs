@@ -43,8 +43,8 @@ namespace HedraTests.Game
         {
             var obj = new T();
             AssetManager.Provider = new SimpleAssetProvider();
-            ItemFactory.LoadModules(GameLoader.AppPath);
-            var templates = ItemFactory.Templater.Templates;
+            ItemLoader.LoadModules(GameLoader.AppPath);
+            var templates = ItemLoader.Templater.Templates;
             for (var i = 0; i < templates.Length; i++)
             {
                 var newItem = Item.FromTemplate(templates[i]);

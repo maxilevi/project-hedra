@@ -1,0 +1,17 @@
+{
+  "Name": "Archer",
+  "AbilityTreeDesign": "ArcherTree",
+  "Logo": "$DataFile$/Assets/UI/ArcherLogo.png",
+  "BaseSpeed": 1.4,
+  "StartingItem": "CommonWoodenBow",
+  "AttackResistance": 0.975,
+  "MaxStamina": 115,
+  "BaseDamage": 2.75,
+  "AttackingSpeedModifier": 0.25,
+  "BaseHealthPerLevel": 8.0,
+  "BaseManaPerLevel": 9.0,
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/ArcherIdle.dae",
+    "Scale": 1.0
+  }
+}

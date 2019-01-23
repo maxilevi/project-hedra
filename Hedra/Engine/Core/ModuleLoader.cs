@@ -3,38 +3,43 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Hedra.API;
+using Hedra.Engine.ClassSystem.Templates;
 using Hedra.Engine.IO;
-using Hedra.Engine.ItemSystem.Templates;
+using Hedra.Engine.ModuleSystem.Templates;
 using Newtonsoft.Json;
 
-namespace Hedra.Engine.ItemSystem
+namespace Hedra.Engine.Core
 {
-    public static class ItemFactory
+    public interface IModuleLoader
     {
-        private static readonly Dictionary<string, ItemTemplate> ItemTemplates;
-        private static readonly object Lock = new object();
-        public static ItemTemplater Templater { get; }
-
-        static ItemFactory()
+        void DoLoadModules(string AppPath);
+    }
+    
+    public abstract class ModuleLoader<T, U> : Singleton<T>, IModuleLoader where T : class, IModuleLoader, new() where U : INamedTemplate
+    {
+        protected readonly object Lock = new object();
+        protected readonly Dictionary<string, U> Templates = new Dictionary<string, U>();
+        protected abstract string FolderPrefix { get; }
+        
+        public void DoLoadModules(string AppPath)
         {
-            ItemTemplates = new Dictionary<string, ItemTemplate>();
-            Templater = new ItemTemplater(ItemTemplates, Lock);
+            lock (Lock)
+            {
+                Templates.Clear();
+                var modules = Directory.GetFiles($"{AppPath}/Modules/{FolderPrefix}/", "*",
+                    SearchOption.AllDirectories);
+                var mods = ModificationsLoader.Get($"/{FolderPrefix}/");
+                var templates = Load<U>(modules.Concat(mods).ToArray());
+                foreach (var template in templates)
+                {
+                    Templates.Add(template.Name.ToLowerInvariant(), template);
+                }
+            }
         }
 
         public static void LoadModules(string AppPath)
         {
-            lock (Lock)
-            {
-                ItemTemplates.Clear();
-                var modules = Directory.GetFiles($"{AppPath}/Modules/Items/", "*", SearchOption.AllDirectories);
-                var mods = ModificationsLoader.Get("/Items/");
-                var itemTemplates = Load<ItemTemplate>(modules.Concat(mods).ToArray());
-
-                foreach (var template in itemTemplates)
-                {
-                    ItemTemplates.Add(template.Name.ToLowerInvariant(), template);
-                }
-            }
+            Instance.DoLoadModules(AppPath);
         }
 
         private static T[] Load<T>(string[] Modules)

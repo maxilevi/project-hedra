@@ -9,7 +9,7 @@ namespace HedraTests.ItemSystem
     {
         public ItemTest()
         {
-            ItemFactory.LoadModules(GameLoader.AppPath);
+            ItemLoader.LoadModules(GameLoader.AppPath);
         }
        
         [Test]

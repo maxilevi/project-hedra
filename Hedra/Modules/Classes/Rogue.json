@@ -1,0 +1,17 @@
+{
+  "Name": "Rogue",
+  "AbilityTreeDesign": "RogueTree",
+  "Logo": "$DataFile$/Assets/UI/RogueLogo.png",
+  "BaseSpeed": 1.45,
+  "StartingItem": "CommonBronzeDoubleBlades",
+  "AttackResistance": 1.025,
+  "MaxStamina": 125.0,
+  "BaseDamage": 3.5,
+  "AttackingSpeedModifier": 0.4,
+  "BaseHealthPerLevel": 8.5,
+  "BaseManaPerLevel": 8.5,
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/RogueIdle.dae",
+    "Scale": 1.0
+  }
+}

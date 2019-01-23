@@ -13,6 +13,7 @@ using Hedra.API;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
+using Hedra.Engine.ClassSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
@@ -122,7 +123,8 @@ namespace Hedra.Engine.Generation
 
             var factories = MobLoader.LoadModules(AssetManager.AppPath);
             MobFactory?.AddFactory(factories);
-            ItemFactory.LoadModules(AssetManager.AppPath);
+            ClassLoader.LoadModules(AssetManager.AppPath);
+            ItemLoader.LoadModules(AssetManager.AppPath);
             VillageLoader.LoadModules(AssetManager.AppPath);
             HumanoidLoader.LoadModules(AssetManager.AppPath);
             ModulesReload?.Invoke(AssetManager.AppPath);

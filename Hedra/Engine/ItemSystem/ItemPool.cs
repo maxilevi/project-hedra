@@ -61,7 +61,7 @@ namespace Hedra.Engine.ItemSystem
         public static Item Grab(ItemPoolSettings Settings)
         {
             var rng = new Random(Settings.Seed);
-            var templates = ItemFactory.Templater.Templates;
+            var templates = ItemLoader.Templater.Templates;
             var selectedTier = Settings.SameTier ? Settings.Tier : SelectTier(Settings.Tier, rng);
             
             var newTemplates = templates.Where(Template =>
@@ -160,17 +160,17 @@ namespace Hedra.Engine.ItemSystem
 
         public static Item[] Matching(Predicate<ItemTemplate> Searcher)
         {
-            return ItemFactory.Templater.Templates.Where(I => Searcher(I)).Select(I => ItemPool.Grab(I.Name)).ToArray();
+            return ItemLoader.Templater.Templates.Where(I => Searcher(I)).Select(I => ItemPool.Grab(I.Name)).ToArray();
         }
         
         public static Item Grab(string Name)
         {
-            return Item.FromTemplate(ItemFactory.Templater[Name]);
+            return Item.FromTemplate(ItemLoader.Templater[Name]);
         }
         
         public static Item Grab(string Name, int Seed)
         {
-            var item = Item.FromTemplate(ItemFactory.Templater[Name]);
+            var item = Item.FromTemplate(ItemLoader.Templater[Name]);
             item.SetAttribute(CommonAttributes.Seed, Seed, true);
             return ItemPool.Randomize(item, new Random(Seed));
         }
@@ -192,7 +192,7 @@ namespace Hedra.Engine.ItemSystem
 
         public static bool Exists(string Name)
         {
-            return ItemFactory.Templater.Contains(Name);
+            return ItemLoader.Templater.Contains(Name);
         }
     }
 

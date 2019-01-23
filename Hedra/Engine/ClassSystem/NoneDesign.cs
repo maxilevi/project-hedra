@@ -12,7 +12,6 @@ namespace Hedra.Engine.ClassSystem
     public class NoneDesign : ClassDesign
     {
         public override string Logo => throw new ArgumentException();
-        public override HumanType Human => throw new ArgumentException();
         /* Do not delete. Used in tests */
         public override float BaseSpeed => 1.25f;
         public override AbilityTreeBlueprint AbilityTreeDesign => throw new ArgumentException();
