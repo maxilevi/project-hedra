@@ -171,6 +171,7 @@ namespace Hedra.AISystem.Humanoid
                 NearestBench.InvokeInteraction(Parent);
                 TaskScheduler.After(Utils.Rng.NextFloat() * 8 + 12, delegate
                 {
+                    if (Parent.Disposed) return;
                     _sitTimer.Reset();
                     _isInteracting = false;
                     Parent.IsSitting = false;

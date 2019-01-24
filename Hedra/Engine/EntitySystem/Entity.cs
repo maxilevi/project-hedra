@@ -450,7 +450,7 @@ namespace Hedra.Engine.EntitySystem
 
         public virtual void Dispose()
         {
-            if (Model.Disposed) return;
+            if (Disposed) return;
 
             World.RemoveEntity(this);
             var components = Components.ToArray(); 
@@ -504,5 +504,7 @@ namespace Hedra.Engine.EntitySystem
                 if (_knockedTime < 0) IsKnocked = false;
             }
         }
+
+        public bool Disposed => Model.Disposed;
     }
 }

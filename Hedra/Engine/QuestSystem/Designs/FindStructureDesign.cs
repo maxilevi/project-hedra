@@ -14,6 +14,10 @@ namespace Hedra.Engine.QuestSystem.Designs
     {
         public override QuestTier Tier => QuestTier.Easy;
 
+        public override bool HasLocation => true;
+
+        public override Vector3 GetLocation(QuestObject Quest) => Quest.Parameters.Get<Vector3>("StructurePosition");
+
         public override string GetShortDescription(QuestObject Quest) 
             => Translations.Get("quest_find_structure_short", StructureTypeName);
 

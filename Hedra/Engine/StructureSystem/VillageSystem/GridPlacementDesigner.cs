@@ -13,8 +13,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 {
     public class GridPlacementDesigner : PlacementDesigner
     {
-        private const float NoPathZone = .55f;
-        private const float SparseZone = .60f;
+        public const float NoPathZone = .55f;
+        public const float SparseZone = .60f;
         private int VillageSize { get; }
         private MarketParameters _marketPoint;
         

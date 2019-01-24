@@ -2,6 +2,7 @@ using Hedra.Core;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
+using Hedra.Engine.Game;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
@@ -48,6 +49,7 @@ namespace Hedra.Engine.Player.QuestSystem
             Renderer.BindShader(Renderer.ShaderBound);
             Renderer.Disable(EnableCap.DepthTest);
             Renderer.Enable(EnableCap.Blend);
+            Renderer.Viewport(0, 0, GameSettings.Width, GameSettings.Height);
             Model.PrematureCulling = meshPrematureCulling;
             return Framebuffer.TextureId[0];
         }

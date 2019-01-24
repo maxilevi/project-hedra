@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Events;
@@ -22,6 +23,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
+using Hedra.Rendering;
 using Hedra.Sound;
 using OpenTK;
 using OpenTK.Input;
@@ -44,6 +46,7 @@ namespace Hedra.Engine.Player.MapSystem
         private readonly MapMeshBuilder _meshBuilder;
         private readonly List<MapBaseItem> _baseItems;
         private readonly ObjectMesh _cursor;
+        private readonly List<ObjectMesh> _markers;
         private readonly ObjectMesh _marker;
         private readonly ObjectMesh _questMarker;
         private readonly Panel _panel;
@@ -68,9 +71,16 @@ namespace Hedra.Engine.Player.MapSystem
             this._baseItems = new List<MapBaseItem>();
             this._meshBuilder = new MapMeshBuilder(_player, MapSize, ChunkSize);
             this._cursor = ObjectMesh.FromVertexData(AssetManager.PLYLoader("Assets/UI/MapCursor.ply", Vector3.One * 20f), false);
-            this._marker = ObjectMesh.FromVertexData(AssetManager.PLYLoader("Assets/UI/MapMarker.ply", Vector3.One * 5f), false);
-            this._questMarker = ObjectMesh.FromVertexData(AssetManager.PLYLoader("Assets/UI/MapMarker.ply", Vector3.One * 5f), false);
-            _marker.ApplyFog = false;
+            _markers = new[]
+            {
+                _marker = ObjectMesh.FromVertexData(AssetManager.PLYLoader("Assets/UI/MapMarker.ply", Vector3.One * 5f), false),
+                _questMarker = ObjectMesh.FromVertexData(AssetManager.PLYLoader("Assets/Env/ExclamationMark.ply", Vector3.One * 5f) + CreateBaseVertexData(3f), false)
+            }.ToList();
+            _markers.ForEach(M =>
+            {
+                M.ApplyNoiseTexture = true;
+                M.ApplyFog = false;
+            });
 
             var hint = new GUIText(Translation.Create("mark_waypoint"), 
                 Vector2.UnitY * .8f, Color.White,
@@ -89,7 +99,7 @@ namespace Hedra.Engine.Player.MapSystem
                     _player.Orientation = _player.Minimap.MarkedDirection;
                     _player.Model.TargetRotation = Physics.DirectionToEuler(_player.Minimap.MarkedDirection);
                 }
-                else if(Args.Button == MouseButton.Right) _player.Minimap.Unmark();
+                else if(Args.Button == MouseButton.Right) _player.Minimap.UnMark();
                 SoundPlayer.PlayUISound(SoundType.NotificationSound);
             });
         }
@@ -115,12 +125,27 @@ namespace Hedra.Engine.Player.MapSystem
                     _baseItems[i].Mesh.Position = new Vector3(mapPosition.X, _targetHeight - ChunkSize * 2f + 25f, mapPosition.Z);
                 }
             }
+            _markers.ForEach(M => M.Enabled = _show);
             if (_show)
             {
-                _marker.Enabled = _player.Minimap.HasMarker;
-                _marker.Position = mapPosition + Vector3.UnitY * (_targetHeight + 25f) + _player.Minimap.MarkedDirection * FogDistance;
-                //_questMarker.Enabled = _player.Minimap.HasMarker;
-                //_questMarker.Position = mapPosition + Vector3.UnitY * (_targetHeight + 25f) + _player.Minimap.MarkedDirection * FogDistance;
+                _markers.ForEach(M => M.Position = mapPosition + Vector3.UnitY * (_targetHeight + 25f));
+
+                /* ReSharper disable once AssignmentInConditionalExpression */
+                if (_marker.Enabled &= _player.Minimap.HasMarker)
+                {
+                    _marker.Position += _player.Minimap.MarkedDirection * FogDistance;
+                }
+                
+                /* ReSharper disable once AssignmentInConditionalExpression */
+                if (_questMarker.Enabled &= _player.Minimap.HasQuestMarker)
+                {
+                    _questMarker.Position += 
+                        Mathf.Min(
+                            Mathf.Max(Vector2.One, (_player.Minimap.MarkedQuestPosition - mapPosition).Xz).NormalizedFast() * FogDistance,
+                            ToMapCoordinates(_player.Minimap.MarkedQuestPosition.Xz)
+                        ).ToVector3();
+                }
+
                 _cursor.Position = mapPosition + Vector3.UnitY * (_targetHeight + 45f);
                 _cursor.LocalRotation = _player.Model.LocalRotation;
                 WorldRenderer.Scale = Mathf.Lerp(Vector3.One,
@@ -197,13 +222,7 @@ namespace Hedra.Engine.Player.MapSystem
                                                   + new Vector2((i - MapSize / 2) * ChunkSize,
                                                       (j - MapSize / 2) * ChunkSize);
                                     var icon = sample.Icon.Clone();
-                                    var baseData = new CubeData();
-                                    var scale = 3f;
-                                    baseData.AddFace(Face.ALL);
-                                    baseData.Scale(new Vector3(scale, 1f, scale));
-                                    baseData.TransformVerts(-Vector3.UnitY * 1f - new Vector3(scale, 0, scale) * .5f);
-                                    baseData.Color = CubeData.CreateCubeColor(Color.DarkSlateGray.ToVector4());
-                                    var mapItem = new MapItem(icon + baseData.ToVertexData());
+                                    var mapItem = new MapItem(icon + CreateBaseVertexData());
                                     mapItem.Mesh.ApplyNoiseTexture = true;
                                     mapItem.Mesh.LocalRotation = new Vector3(0, Utils.Rng.Next(0, 4) * 90f, 0);
                                     mapItem.Mesh.LocalPosition = realPos.ToVector3() + Vector3.UnitY * 12;
@@ -217,9 +236,26 @@ namespace Hedra.Engine.Player.MapSystem
             }
         }
 
+        private static Vector2 ToMapCoordinates(Vector2 WorldCoordinates)
+        {
+            var result = (WorldCoordinates - World.ToChunkSpace(GameManager.Player.Position));
+            return result / MapSize / Chunk.Width * ChunkSize * MapSize;
+        }
+
+        private static VertexData CreateBaseVertexData(float Scalar = 1f)
+        {
+            var scale = 3f * Scalar;
+            var baseData = new CubeData();
+            baseData.AddFace(Face.ALL);
+            baseData.Scale(new Vector3(scale, 1f * Scalar, scale));
+            baseData.TransformVerts(-Vector3.UnitY * 1f - new Vector3(scale, 0, scale) * .5f);
+            baseData.Color = CubeData.CreateCubeColor(Color.DarkSlateGray.ToVector4());
+            return baseData.ToVertexData();
+        }
+
         private void ClearIcons()
         {
-            for (int i = 0; i < _icons.Count; i++)
+            for (var i = 0; i < _icons.Count; i++)
             {
                 _icons[i].Dispose();
             }

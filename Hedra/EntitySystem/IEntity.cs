@@ -74,6 +74,8 @@ namespace Hedra.EntitySystem
         bool IsAttacking { get; }
         
         bool IsStuck { get; set; }
+
+        bool Disposed { get; }
         
         float MaxHealth { get; }
         

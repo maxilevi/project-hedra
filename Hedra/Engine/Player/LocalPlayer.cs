@@ -426,6 +426,7 @@ namespace Hedra.Engine.Player
             ComponentManager.Clear();
             CraftingInterface.Reset();
             QuestInterface.Reset();
+            Minimap.Reset();
             Chat.Clear();
             Model.Alpha = 0f;
             View.TargetPitch = 0f;

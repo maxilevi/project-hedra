@@ -64,12 +64,12 @@ namespace Hedra.Engine.Rendering.UI
         public void Dispose()
         {
             if(_disposed) return;
-            MaskId = this.DisposeId(MaskId);
-            TextureId = this.DisposeId(TextureId);
+            MaskId = DisposeId(MaskId);
+            TextureId = DisposeId(TextureId);
             _disposed = true;
         }
 
-        private uint DisposeId(uint DisposeId)
+        private static uint DisposeId(uint DisposeId)
         {
             if (Array.IndexOf(GUIRenderer.InmortalTextures, DisposeId) != -1 || DisposeId == 0) return DisposeId;
 

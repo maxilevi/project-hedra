@@ -46,7 +46,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             };
             Parameters.Rotation = Vector3.UnitY * Rng.Next(0, 4) * 90;
             SpawnPlants(Parameters, Rng, output);
-            if (Parameters.PropDesign != null)
+            if (Parameters.PropDesign != null && (!Parameters.PropDesign.OnlyOnOutskirts || !Parameters.InsidePaths))
             {
                 var prop = base.Build(Parameters, Parameters.PropDesign, Cache, Rng, Center);
                 if (Parameters.PropDesign.HasWindmill)

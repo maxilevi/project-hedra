@@ -39,9 +39,12 @@ namespace Hedra.Engine.Player.MapSystem
         private readonly RenderableTexture _miniMapRing;
         private readonly RenderableTexture _miniMapNorth;
         private readonly RenderableTexture _miniMapMarker;
+        private readonly RenderableTexture _miniMapQuestMarker;
         private readonly FBO _mapFbo;
         private bool _show;
         public bool HasMarker { get; private set; }
+        public bool HasQuestMarker { get; private set; }
+        public Vector3 MarkedQuestPosition { get; private set; }
         public Vector3 MarkedDirection { get; private set; }
         private Vector3 _lastPosition;
         private int _previousActiveChunks;
@@ -68,10 +71,13 @@ namespace Hedra.Engine.Player.MapSystem
                 DrawOrder.After
             );
             _miniMapMarker = new RenderableTexture(
+                new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMapMarker.png"), new Vector2(.8f, .75f), Graphics2D.SizeFromAssets("Assets/UI/MiniMapMarker.png").As1920x1080() * mapScale),
+                DrawOrder.After
+            );
+            _miniMapQuestMarker = new RenderableTexture(
                 new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMapQuest.png"), new Vector2(.8f, .75f), Graphics2D.SizeFromAssets("Assets/UI/MiniMapQuest.png").As1920x1080() * mapScale),
                 DrawOrder.After
             );
-            
             var mapTranslation = Translation.Create("map_label");
             mapTranslation.Concat(() => $" - {Controls.Map}");
             var mapMsg = new GUIText(mapTranslation, _miniMapRing.Position - _miniMapRing.Scale.Y * Vector2.UnitY * 1.5f, Color.FromArgb(200, 255, 255, 255), FontCache.Get(AssetManager.BoldFamily, 14));
@@ -83,6 +89,7 @@ namespace Hedra.Engine.Player.MapSystem
             _panel.AddElement(_miniMapRing);
             _panel.AddElement(_miniMapNorth);
             _panel.AddElement(_miniMapMarker);
+            _panel.AddElement(_miniMapQuestMarker);
             _panel.Disable();
         }
 
@@ -96,10 +103,27 @@ namespace Hedra.Engine.Player.MapSystem
             MarkedDirection = Direction;
             HasMarker = true;
         }
+        
+        public void MarkQuest(Vector3 Position)
+        {
+            MarkedQuestPosition = Position;
+            HasQuestMarker = true;
+        }
 
-        public void Unmark()
+        public void UnMark()
         {
             HasMarker = false;
+        }
+        
+        public void UnMarkQuest()
+        {
+            HasQuestMarker = false;
+        }
+
+        public void Reset()
+        {
+            UnMarkQuest();
+            UnMark();
         }
 
         private void DrawMap()
@@ -181,16 +205,10 @@ namespace Hedra.Engine.Player.MapSystem
             _miniMapNorth.Enable();
             _miniMapNorth.BaseTexture.TextureElement.Angle = -_player.Model.LocalRotation.Y;
 
-            if (HasMarker)
-            {
-                Vector3 rot = Physics.DirectionToEuler(MarkedDirection);
-                _miniMapMarker.BaseTexture.TextureElement.Angle = -_player.Model.LocalRotation.Y + rot.Y;
-                _miniMapMarker.Enable();
-            }
-            else
-            {
-                _miniMapMarker.Disable();
-            }
+            UpdateRingObject(_miniMapMarker, MarkedDirection, HasMarker);
+            UpdateRingObject(_miniMapQuestMarker, (MarkedQuestPosition - _player.Position).Xz.NormalizedFast().ToVector3(), HasQuestMarker);
+            if((MarkedQuestPosition - _player.Position).LengthSquared < Chunk.Width * .5f * Chunk.Width * .5f)
+                _miniMapQuestMarker.Disable();
 
             this.DrawMap();
 
@@ -228,6 +246,19 @@ namespace Hedra.Engine.Player.MapSystem
             Shader.Unbind();
         }
 
+        private void UpdateRingObject(RenderableTexture Texture, Vector3 Direction, bool Condition)
+        {
+            if (Condition)
+            {
+                Texture.BaseTexture.TextureElement.Angle = -_player.Model.LocalRotation.Y + Physics.DirectionToEuler(Direction).Y;
+                Texture.Enable();
+            }
+            else
+            {
+                Texture.Disable();
+            }
+        }
+        
         public bool Show
         {
             get => _show;

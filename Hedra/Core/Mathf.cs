@@ -177,35 +177,15 @@ namespace Hedra.Core
             return Math.Max(Math.Min(Val, Max), Min);
         }
 
-        public static Vector3 Clamp(Vector3 Value, Vector3 Min, Vector3 Max)
-        {
-            return new Vector3(Clamp(Value.X, Min.X, Max.X), Clamp(Value.Y, Min.Y, Max.Y), Clamp(Value.Z, Min.Z, Max.Z));
-        }
-
         public static Vector3 Clamp(Vector3 Value, float Min, float Max){
             return new Vector3(Clamp(Value.X,Min,Max), Clamp(Value.Y,Min,Max), Clamp(Value.Z,Min,Max));
-        }
-        
-        public static Vector4 Clamp(Vector4 V, float Min, float Max)
-        {
-            return new Vector4(Clamp(V.X,Min,Max), Clamp(V.Y,Min,Max), Clamp(V.Z,Min,Max), Clamp(V.W,Min,Max));
         }
         
         public static Vector2 Clamp(Vector2 V, float Min, float Max)
         {
             return new Vector2(Clamp(V.X,Min,Max), Clamp(V.Y,Min,Max));
         }
-        
-        public static Color ColorFromInt32(uint Data)
-        {
-            return Color.FromArgb( (byte) (Data >> 24), (byte) (Data >> 16), (byte) (Data >> 8), (byte) (Data >> 0) );
-        }
-        
-        public static uint Int32FromColor(Color Color)
-        {
-            return (uint)( (Color.A << 24) | (Color.R << 16) | (Color.G << 8) | (Color.B << 0) );
-        }
-        
+
         public static float NextFloat(this IRandom Random)
         {
             return (float) Random.NextDouble();
@@ -216,27 +196,14 @@ namespace Hedra.Core
             return (float) Random.NextDouble();
         }
 
-        public static int LevenshteinDistance(string Str1, string Str2)
+        public static Vector2 Min(Vector2 A, Vector2 B)
         {
-            if (string.IsNullOrEmpty(Str1) || string.IsNullOrEmpty(Str2)) return 0;
+            return A.LengthFast > B.LengthFast ? B : A;
+        }
 
-            int lengthA = Str1.Length;
-            int lengthB = Str2.Length;
-            var distances = new int[lengthA + 1, lengthB + 1];
-            for (var i = 0; i <= lengthA; distances[i, 0] = i++) {}
-            for (var j = 0; j <= lengthB; distances[0, j] = j++) {}
-
-            for (var i = 1; i <= lengthA; i++)
-            for (var j = 1; j <= lengthB; j++)
-            {
-                int cost = Str2[j - 1] == Str1[i - 1] ? 0 : 1;
-                distances[i, j] = Math.Min
-                (
-                    Math.Min(distances[i - 1, j] + 1, distances[i, j - 1] + 1),
-                    distances[i - 1, j - 1] + cost
-                );
-            }
-            return distances[lengthA, lengthB];
+        public static Vector2 Max(Vector2 A, Vector2 B)
+        {
+            return A.LengthFast > B.LengthFast ? A : B;
         }
 
         public static Color Lerp(this Color Origin, Color Target, float T)

@@ -11,6 +11,7 @@ namespace Hedra.Engine.QuestSystem
         public event OnQuestChanged QuestAccepted;
         public event OnQuestChanged QuestCompleted;
         public event OnQuestChanged QuestAbandoned;
+        public event OnQuestChanged QuestLoaded;
         private readonly IPlayer _player;
         private readonly List<QuestObject> _activeQuests;
 
@@ -24,8 +25,8 @@ namespace Hedra.Engine.QuestSystem
         public void Start(QuestObject Quest)
         {
             Quest.Start(_player);
-            QuestAccepted?.Invoke(Quest);
             _activeQuests.Add(Quest);
+            QuestAccepted?.Invoke(Quest);
             CheckForCompleteness();
         }
 
@@ -35,6 +36,7 @@ namespace Hedra.Engine.QuestSystem
             _activeQuests.AddRange(Quests.Select(QuestObject.FromTemplate).ToList());
             _activeQuests.RemoveAll(Q => Q == null);
             _activeQuests.ForEach(Q => Q.Start(_player));
+            _activeQuests.ForEach(Q => QuestLoaded?.Invoke(Q));
         }
 
         public void Trigger()

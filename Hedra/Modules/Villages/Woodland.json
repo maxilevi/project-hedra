@@ -49,6 +49,7 @@
         "Scale": 8.0,
         "Path": "Assets/Env/Village/Farm0_Prop0.ply",
         "Chance": 10,
+        "OnlyOnOutskirts": true,
         "HasLivestock": true
       },
       {

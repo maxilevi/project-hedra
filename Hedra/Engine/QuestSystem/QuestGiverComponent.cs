@@ -44,7 +44,7 @@ namespace Hedra.Engine.QuestSystem
         private void OnQuestAbandoned(QuestObject Object)
         {
             if (Object == _quest)
-                _canGiveQuest = true;
+                Parent.RemoveComponent(this);
         }
 
         private void AddQuest(IEntity Interactee)

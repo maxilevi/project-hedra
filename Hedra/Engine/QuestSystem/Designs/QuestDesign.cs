@@ -17,6 +17,10 @@ namespace Hedra.Engine.QuestSystem.Designs
 
         protected virtual bool HasNext => true;
 
+        public virtual bool HasLocation => false;
+        
+        public virtual Vector3 GetLocation(QuestObject Quest) => throw new NotImplementedException();
+
         /// <summary>
         /// Builds a quest reward for this design.
         /// </summary>
@@ -168,6 +172,13 @@ namespace Hedra.Engine.QuestSystem.Designs
             Cleanup(Quest);
             if(HasNext)
                 Quest.Owner.Questing.Start(GetNext(Quest));
+        }
+
+        /// <summary>
+        /// Called when the quest is started. This could either happen when a quest is loaded or a new quest accepted.
+        /// </summary>
+        public virtual void OnAdded(QuestObject Quest)
+        {
         }
 
         /// <summary>

@@ -9,14 +9,18 @@ using Hedra.Engine.Player.QuestSystem.Views;
 using Hedra.Engine.QuestSystem.Designs;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
+using OpenTK;
 
 namespace Hedra.Engine.QuestSystem
 {
     public class QuestObject
     {
         private readonly QuestDesign _design;
+        public event OnQuestChanged QuestChanged;
         public QuestView View { get; }
         public QuestDesign BaseDesign { get; }
+        public bool HasLocation => _design.HasLocation;
+        public Vector3 Location => _design.GetLocation(this);
         public QuestReward Reward => _design.GetReward(this);
         public bool IsEndQuest => _design.IsEndQuest(this);
         public string ShortDescription => _design.GetShortDescription(this);
@@ -41,6 +45,17 @@ namespace Hedra.Engine.QuestSystem
         public void Start(IPlayer Player)
         {
             Owner = Player;
+            Owner.Questing.QuestCompleted += Q =>
+            {
+                if(Q == this)
+                    QuestChanged?.Invoke(this);
+            };
+            Owner.Questing.QuestAbandoned += Q =>
+            {
+                if(Q == this)
+                    QuestChanged?.Invoke(this);
+            };
+            _design.OnAdded(this);
         }
 
         public void SetSteps(int NewSteps)

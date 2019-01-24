@@ -9,10 +9,9 @@ namespace Hedra.AISystem
     {
         public SheepFarmAIComponent(IEntity Parent, Vector3 FarmPosition, float Width) : base(Parent, FarmPosition, Width)
         {
-            AlertTime = 8 + Utils.Rng.NextFloat() * 12f;
         }
 
-        protected override float AlertTime { get; }
+        protected override float AlertTime => 8 + Utils.Rng.NextFloat() * 12f;
         protected override SoundType Sound => SoundType.Sheep;
     }
 }

@@ -24,10 +24,12 @@ namespace Hedra.Engine.Player.QuestSystem
         private readonly Vector2 _descriptionPosition;
         private readonly Button _abandonButton;
         private readonly Texture _renderBackground;
+        private readonly IPlayer _player;
         
         public QuestingJournal(IPlayer Player) 
             : base(Player, null, 0, 0, Vector2.One)
         {
+            _player = Player;
             _journalBackground = 
                 new Texture(InventoryInterfaceItemInfo.DefaultId, Position, InventoryInterfaceItemInfo.DefaultSize * .55f);
             _journalBackground.SendBack();
@@ -67,6 +69,10 @@ namespace Hedra.Engine.Player.QuestSystem
                 UpdateView();
                 SoundPlayer.PlayUISound(SoundType.NotificationSound);
             };
+            _player.Questing.QuestAccepted += _ => UpdateMarkedQuest();
+            _player.Questing.QuestAbandoned += _ => UpdateMarkedQuest();
+            _player.Questing.QuestCompleted += _ => UpdateMarkedQuest();
+            _player.Questing.QuestLoaded += _ => UpdateMarkedQuest();
             Panel.AddElement(_renderBackground);
             Panel.AddElement(_abandonButton);
             Panel.AddElement(_renderTexture);
@@ -106,6 +112,23 @@ namespace Hedra.Engine.Player.QuestSystem
                 _renderTexture.Disable();
                 _abandonButton.Disable();
                 _renderBackground.Disable();
+            }
+
+            UpdateMarkedQuest();
+        }
+
+        private void UpdateMarkedQuest()
+        {
+            if (Quests.Length > 0)
+            {
+                if (CurrentQuest.HasLocation)
+                    _player.Minimap.MarkQuest(CurrentQuest.Location);
+                else
+                    _player.Minimap.UnMarkQuest();
+            }
+            else
+            {
+                _player.Minimap.UnMarkQuest();
             }
         }
 

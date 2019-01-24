@@ -168,6 +168,7 @@ namespace HedraTests.Player
         public bool IsStatic { get; }
         public bool IsUnderwater { get; set; }
         public bool IsKnocked { get; }
+        public bool Disposed { get; }
         public float MaxHealth { get; set; }
         public float ManaRegen { get; }
         public float HealthRegen { get; }
