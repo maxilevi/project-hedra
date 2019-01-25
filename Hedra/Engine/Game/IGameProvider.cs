@@ -20,6 +20,7 @@ namespace Hedra.Engine.Game
         void MakeCurrent(PlayerInformation Information);
         void LoadMenu();
         void Load();
+        void LoadCharacter(PlayerInformation Information);
         void NewRun(PlayerInformation Information);
         void Unload();
         void Reload();

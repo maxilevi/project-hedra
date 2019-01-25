@@ -56,7 +56,7 @@ namespace Hedra.Engine.Rendering.UI
             
             playBtn.Click += delegate 
             {
-                GameManager.MakeCurrent(DataManager.PlayerFiles[_humans.IndexOf(_selectedHuman)]);
+                GameManager.LoadCharacter(DataManager.PlayerFiles[_humans.IndexOf(_selectedHuman)]);
             };
             
             var deleteButton = new Button(new Vector2(.1f, -.8f), Vector2.One, Translation.Create("delete"), Color.White, FontCache.Get(AssetManager.NormalFamily, 14));

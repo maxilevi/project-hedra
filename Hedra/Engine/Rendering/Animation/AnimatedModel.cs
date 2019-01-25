@@ -43,8 +43,8 @@ namespace Hedra.Engine.Rendering.Animation
         public Vector4 BaseTint { get; set; }
         public Vector3 Scale { get; set; }
         public Box CullingBox { get; set; }
-        public Vector3 Max => CullingBox.Max;
-        public Vector3 Min => CullingBox.Min;
+        public Vector3 Max => CullingBox?.Max ?? Vector3.Zero;
+        public Vector3 Min => CullingBox?.Min ?? Vector3.Zero;
         public Vector3[] JointIdsArray => _baseModelData.JointIds;
         public Vector3[] VerticesArray => _baseModelData.Vertices;
         private readonly List<ModelData> _addedModels;

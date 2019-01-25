@@ -88,6 +88,14 @@ namespace Hedra.Engine.Game
                 yield return null;
             }
         }
+
+        public void LoadCharacter(PlayerInformation Information)
+        {
+            if(Information.WorldSeed == 0)
+                NewRun(Information);
+            else
+                MakeCurrent(Information);
+        }
         
         public void MakeCurrent(PlayerInformation Information)
         {
@@ -112,8 +120,7 @@ namespace Hedra.Engine.Game
             Player.View.CameraHeight = Camera.DefaultCameraHeight;
             if(Player.IsDead)
                 Player.Respawn();
-            if(Information.WorldSeed != 0)
-                World.Recreate(Information.WorldSeed);
+            World.Recreate(Information.WorldSeed);
             if(Player.IsDead)
                 Player.Respawn();
             SkyManager.DayTime = Information.Daytime;

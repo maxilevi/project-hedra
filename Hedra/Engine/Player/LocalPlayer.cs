@@ -469,7 +469,7 @@ namespace Hedra.Engine.Player
             {
                 Name = Name,
                 RandomFactor = NewRandomFactor(),
-                WorldSeed = World.RandomSeed,
+                WorldSeed = 0,
                 Class = ClassType
             };
 

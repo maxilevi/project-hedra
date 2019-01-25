@@ -11,7 +11,7 @@
   "BaseHealthPerLevel": 9.5,
   "BaseManaPerLevel": 7,
   "Model": {
-    "Path": "$DataFile$/Assets/Chr/RogueIdle.dae",
+    "Path": "$DataFile$/Assets/Chr/WarriorIdle.dae",
     "Scale": 1.0
   }
 }

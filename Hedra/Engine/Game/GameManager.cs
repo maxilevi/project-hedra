@@ -36,6 +36,11 @@ namespace Hedra.Engine.Game
             Provider.MakeCurrent(Information);
         }
 
+        public static void LoadCharacter(PlayerInformation Information)
+        {
+            Provider.LoadCharacter(Information);
+        }
+
         public static void NewRun(IPlayer User)
         {
             Provider.NewRun(DataManager.DataFromPlayer(User));

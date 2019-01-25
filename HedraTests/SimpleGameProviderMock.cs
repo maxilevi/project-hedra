@@ -43,6 +43,11 @@ namespace HedraTests
             throw new System.NotImplementedException();
         }
 
+        public void LoadCharacter(PlayerInformation Information)
+        {
+            throw new NotImplementedException();
+        }
+
         public void NewRun(PlayerInformation Information)
         {
             throw new System.NotImplementedException();
