@@ -231,7 +231,7 @@ namespace Hedra.Engine.Player
         public void AttackSurroundings(float Damage, Action<IEntity> Callback)
         {
             var meleeWeapon = LeftWeapon as MeleeWeapon;
-            var rangeModifier =  meleeWeapon?.MainWeaponSize.Y / 3f + .85f ?? 1.0f;
+            var rangeModifier =  meleeWeapon?.MainWeaponSize.Y / 2.5f + 1f ?? 1.0f;
             var wideModifier = Math.Max( (meleeWeapon?.MainWeaponSize.Xz.LengthFast ?? 1.0f) - .75f, 1.0f);
             var nearEntities = World.InRadius<IEntity>(this.Position, 16f * rangeModifier);
             var possibleTargets = nearEntities.Where(E => !E.IsStatic && E != this).ToArray();

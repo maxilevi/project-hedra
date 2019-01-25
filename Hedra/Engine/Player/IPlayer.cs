@@ -33,6 +33,7 @@ namespace Hedra.Engine.Player
         CollisionGroup[] NearCollisions { get; }
         CraftingInventory Crafting { get; }
         QuestInventory Questing { get; }
+        IStructureAware StructureAware { get; }
         bool InterfaceOpened { get; }
         bool Enabled { get; set; }
         void Respawn();

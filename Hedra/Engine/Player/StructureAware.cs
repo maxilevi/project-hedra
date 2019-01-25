@@ -9,8 +9,11 @@ using OpenTK;
 
 namespace Hedra.Engine.Player
 {
+    public delegate void OnStructureEnter(CollidableStructure Structure);
+    
     public class StructureAware : IStructureAware
     {
+        public event OnStructureEnter StructureEnter;
         private bool _wasPlayingCustom;
         private readonly IPlayer _player;
         private CollidableStructure[] _currentNearStructures;
@@ -55,7 +58,10 @@ namespace Hedra.Engine.Player
                         SoundtrackManager.PlayTrack(song, true);
                         _wasPlayingCustom = true;
                         if (_enterTimer.Ready)
-                           structure.Design.OnEnter(_player);
+                        {
+                            structure.Design.OnEnter(_player);
+                            StructureEnter?.Invoke(structure);
+                        }
                     }
                     none = false;
                 }

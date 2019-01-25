@@ -11,6 +11,8 @@ namespace Hedra.Engine.QuestSystem.Designs
 {
     public class SpawnQuestDesign : FindStructureDesign
     {   
+        protected override bool HasNext => false;
+        
         public override string Name => Quests.SpawnQuest.ToString();
         
         protected override QuestDesign[] GetAuxiliaries(QuestObject Quest) => null;

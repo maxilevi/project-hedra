@@ -61,6 +61,7 @@ namespace Hedra.Engine.Player
         public EntitySpawner Spawner { get; }
         public IToolbar Toolbar { get; }
         public IAbilityTree AbilityTree { get; }
+        public IStructureAware StructureAware { get; }
         public PetManager Pet { get; }
         public Chat Chat { get; }
         public Minimap Minimap { get; }
@@ -69,7 +70,6 @@ namespace Hedra.Engine.Player
         public override float FacingDirection => -(View.TargetYaw * Mathf.Degree - 90f);
         public CollisionGroup[] NearCollisions => StructureAware.NearCollisions;
         private IAmbientEffectHandler AmbientEffects { get; }
-        private IStructureAware StructureAware { get; }
         private float _acummulativeHealing;
         private Vector3 _previousPosition;
         private float _health;
@@ -85,6 +85,7 @@ namespace Hedra.Engine.Player
             this.Loader = new ChunkLoader(this);
             this.Spawner = new EntitySpawner(this);
             this.Model = new HumanoidModel(this);
+            this.StructureAware = new StructureAware(this);
             this.Inventory = new PlayerInventory(this);
             this.InventoryInterface = new PlayerInventoryInterface(this);
             this.Crafting = new CraftingInventory(this.Inventory);
@@ -101,7 +102,6 @@ namespace Hedra.Engine.Player
             this.Trade = new TradeInventory(this);
             this.Movement = new PlayerMovement(this);
             this.MessageDispatcher = new VisualMessageDispatcher(this);
-            this.StructureAware = new StructureAware(this);
             this.Boat = new Boat(this);
             this.AmbientEffects = new AmbientEffectHandler(this);
             this.Physics.CollidesWithStructures = true;

@@ -235,6 +235,7 @@ namespace HedraTests.Player
         public CollisionGroup[] NearCollisions { get; }
         public CraftingInventory Crafting { get; }
         public QuestInventory Questing { get; }
+        public IStructureAware StructureAware { get; }
         public bool InterfaceOpened { get; }
         public bool Enabled { get; set; }
         public void Respawn()

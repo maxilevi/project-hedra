@@ -49,7 +49,7 @@ namespace Hedra.Engine.QuestSystem
 
         private void AddQuest(IEntity Interactee)
         {
-            if(!(Interactee is IPlayer player) || (Parent.Position - player.Position).LengthSquared > 16 * 16) return;
+            if(!(Interactee is IPlayer player) || (Parent.Position - player.Position).LengthSquared > 32 * 32) return;
             _canGiveQuest = false;
             player.Questing.Start(_quest);
             player.Questing.QuestAbandoned += OnQuestAbandoned;

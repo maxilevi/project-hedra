@@ -64,7 +64,7 @@ namespace Hedra.AISystem.Humanoid
         {
             if (!base.CanUpdate) return;
 
-            if (Parent.IsNear(GameManager.Player, 16) && !_isInteracting || Parent.SearchComponent<TalkComponent>().Talking)
+            if (Parent.IsNear(GameManager.Player, 16) && !_isInteracting || (Parent.SearchComponent<TalkComponent>()?.Talking ?? false))
             {
                 Parent.RotateTowards(GameManager.Player);
                 _targetSpeed = 0;
