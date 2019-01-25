@@ -50,7 +50,7 @@ namespace Hedra.Engine.Game
         {
             Provider.Unload();
         }
-
+    
         public static void Reload()
         {
             Provider.Reload();

@@ -31,7 +31,7 @@ namespace Hedra.Engine.QuestSystem
             return true;
         }
 
-        public static void SetupQuest(QuestObject Quest, IHumanoid Giver)
+        public static void SetupQuest(QuestObject Quest, IHumanoid Giver, bool IsNew = true)
         {
             World.StructureHandler.AddStructure(
                 new CollidableStructure(
@@ -44,7 +44,14 @@ namespace Hedra.Engine.QuestSystem
                     Built = true
                 }
             );
-            Giver.AddComponent(new QuestGiverComponent(Giver, Quest));
+            if(IsNew)
+                Giver.AddComponent(new QuestGiverComponent(Giver, Quest));
+        }
+
+        public static void DisposeIfNecessary(IHumanoid Giver)
+        {
+            if(!_registeredNpcs.Contains(Giver))
+                Giver.Dispose();
         }
 
         public static void UnregisterNPC(IHumanoid Giver)

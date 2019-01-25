@@ -121,6 +121,7 @@ namespace Hedra.Engine.QuestSystem
                 }
 
                 quest.FirstTime = false;
+                QuestPersistence.SetupQuest(quest, quest.Giver, false);
                 return quest;
             }
             catch (Exception e)

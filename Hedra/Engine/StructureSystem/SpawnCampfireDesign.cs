@@ -24,7 +24,7 @@ namespace Hedra.Engine.StructureSystem
         {
             var rng = BuildRng(Structure);
             BuildBaseCampfire(Structure, Vector3.Zero, rng, out var transformationMatrix);
-            ((Campfire) Structure.WorldObject).Bandit = CreateVillager(Structure, rng);
+            ((SpawnCampfire) Structure.WorldObject).Villager = CreateVillager(Structure, rng);
             SpawnMat(
                 Vector3.UnitX * -16f,
                 Vector3.Zero,
