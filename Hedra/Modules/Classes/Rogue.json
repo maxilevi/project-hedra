@@ -1,6 +1,8 @@
 {
   "Name": "Rogue",
-  "AbilityTreeDesign": "RogueTree",
+  "MainAbilityTree": "Rogue",
+  "FirstSpecializationTree": "Assassin",
+  "SecondSpecializationTree": "Ninja",
   "Logo": "$DataFile$/Assets/UI/RogueLogo.png",
   "BaseSpeed": 1.45,
   "StartingItem": "CommonBronzeDoubleBlades",

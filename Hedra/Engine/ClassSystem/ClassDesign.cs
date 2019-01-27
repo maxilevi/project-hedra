@@ -9,7 +9,6 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.AbilityTreeSystem;
-using Hedra.Engine.Player.Skills;
 using OpenTK;
 
 namespace Hedra.Engine.ClassSystem
@@ -34,8 +33,10 @@ namespace Hedra.Engine.ClassSystem
         public string Name => this.ToString();
         public virtual HumanoidModelTemplate ModelTemplate => ClassLoader.Instance[Type].Model;
         public virtual string Logo => ClassLoader.Instance[Type].Logo;
-        public virtual float BaseSpeed => ClassLoader.Instance[Type].BaseSpeed;
-        public virtual AbilityTreeBlueprint AbilityTreeDesign => AbilityTreeLoader.Instance[ClassLoader.Instance[Type].AbilityTreeDesign];
+        public virtual float BaseSpeed => ClassLoader.Instance[Type].BaseSpeed;    
+        public virtual AbilityTreeBlueprint MainTree => AbilityTreeLoader.Instance[ClassLoader.Instance[Type].MainAbilityTree];
+        public virtual AbilityTreeBlueprint FirstSpecializationTree => AbilityTreeLoader.Instance[ClassLoader.Instance[Type].FirstSpecializationTree];
+        public virtual AbilityTreeBlueprint SecondSpecializationTree => AbilityTreeLoader.Instance[ClassLoader.Instance[Type].SecondSpecializationTree];        
         public virtual Item StartingItem => ItemPool.Grab(ClassLoader.Instance[Type].StartingItem);
         public virtual float AttackResistance => ClassLoader.Instance[Type].AttackResistance;
         public virtual float MaxStamina => ClassLoader.Instance[Type].MaxStamina;

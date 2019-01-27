@@ -1,3 +1,11 @@
 {
-  
+  "Name": "Rogue",
+  "M21": "Shuriken",
+  "M24": "TripleShuriken",
+  "M12": "LearnKatar",
+  "M13": "LearnClaw",
+  "M32": "Fade",
+  "M33": "Venom",
+  "M31": "BurstOfSpeed",
+  "M23": "RoundSlash"
 }

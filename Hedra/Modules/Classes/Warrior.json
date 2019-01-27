@@ -1,6 +1,8 @@
 {
   "Name": "Warrior",
-  "AbilityTreeDesign": "WarriorTree",
+  "MainAbilityTree": "Warrior",
+  "FirstSpecializationTree": "Berserker",
+  "SecondSpecializationTree": "Paladin",
   "Logo": "$DataFile$/Assets/UI/WarriorLogo.png",
   "BaseSpeed": 1.325,
   "StartingItem": "CommonBronzeSword",

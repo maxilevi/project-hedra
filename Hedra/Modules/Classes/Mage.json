@@ -1,6 +1,8 @@
 {
   "Name": "Mage",
-  "AbilityTreeDesign": "MageTree",
+  "MainAbilityTree": "Mage",
+  "FirstSpecializationTree": "Druid",
+  "SecondSpecializationTree": "Necromancer",
   "Logo": "$DataFile$/Assets/UI/MageLogo.png",
   "BaseSpeed": 1.4,
   "StartingItem": "CommonBronzeStaff",

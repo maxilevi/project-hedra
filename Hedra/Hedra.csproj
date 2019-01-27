@@ -161,6 +161,7 @@
     <Compile Include="API\ModelHandlerRegistry.cs" />
     <Compile Include="API\ModificationsLoader.cs" />
     <Compile Include="API\Registry.cs" />
+    <Compile Include="API\SkillRegistry.cs" />
     <Compile Include="API\TypeRegistry.cs" />
     <Compile Include="API\ClassRestrictionRegistry.cs" />
     <Compile Include="API\WeaponRegistry.cs" />
@@ -282,10 +283,13 @@
     <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\AuxiliaryDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\DummyDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\EndDesign.cs" />
+    <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\NoneDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\ReadNoteDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\SpeakDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\BaseItemQuestDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\CollectDesign.cs" />
+    <Compile Include="Engine\QuestSystem\Designs\CompleteStructureDesign.cs" />
+    <Compile Include="Engine\QuestSystem\Designs\FindOverworldStructureDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\CraftDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\ItemCollect.cs" />
     <Compile Include="Engine\QuestSystem\Designs\QuestDesign.cs" />
@@ -325,6 +329,44 @@
     <Compile Include="Engine\Rendering\TextureBillboard.cs" />
     <Compile Include="Engine\Rendering\TextureParameter.cs" />
     <Compile Include="Engine\Rendering\UI\Plaque.cs" />
+    <Compile Include="Engine\SkillSystem\Archer\Agility.cs" />
+    <Compile Include="Engine\SkillSystem\Archer\FlameArrow.cs" />
+    <Compile Include="Engine\SkillSystem\Archer\IceArrow.cs" />
+    <Compile Include="Engine\SkillSystem\Archer\Kick.cs" />
+    <Compile Include="Engine\SkillSystem\Archer\LearnKnife.cs" />
+    <Compile Include="Engine\SkillSystem\Archer\PoisonArrow.cs" />
+    <Compile Include="Engine\SkillSystem\Archer\Puncture.cs" />
+    <Compile Include="Engine\SkillSystem\BaseSkill.cs" />
+    <Compile Include="Engine\SkillSystem\CappedSkill.cs" />
+    <Compile Include="Engine\SkillSystem\LearningSkill.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\Conflagaration.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\Fireball.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\FireRelease.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\FlameRush.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\FlameStyle.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\Meditation.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\Meteor.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\TripleFireball.cs" />
+    <Compile Include="Engine\SkillSystem\PassiveSkill.cs" />
+    <Compile Include="Engine\SkillSystem\Rogue\BurstOfSpeed.cs" />
+    <Compile Include="Engine\SkillSystem\Rogue\Fade.cs" />
+    <Compile Include="Engine\SkillSystem\Rogue\LearnClaw.cs" />
+    <Compile Include="Engine\SkillSystem\Rogue\LearnKatar.cs" />
+    <Compile Include="Engine\SkillSystem\Rogue\RoundSlash.cs" />
+    <Compile Include="Engine\SkillSystem\Rogue\Shuriken.cs" />
+    <Compile Include="Engine\SkillSystem\Rogue\TripleShuriken.cs" />
+    <Compile Include="Engine\SkillSystem\Rogue\Venom.cs" />
+    <Compile Include="Engine\SkillSystem\SkillFactory.cs" />
+    <Compile Include="Engine\SkillSystem\SpecialAttackPassiveSkill.cs" />
+    <Compile Include="Engine\SkillSystem\SpecialAttackSkill.cs" />
+    <Compile Include="Engine\SkillSystem\SwitchSkill.cs" />
+    <Compile Include="Engine\SkillSystem\TreeItem.cs" />
+    <Compile Include="Engine\SkillSystem\Warrior\Bash.cs" />
+    <Compile Include="Engine\SkillSystem\Warrior\Intercept.cs" />
+    <Compile Include="Engine\SkillSystem\Warrior\LearnAxe.cs" />
+    <Compile Include="Engine\SkillSystem\Warrior\LearnHammer.cs" />
+    <Compile Include="Engine\SkillSystem\Warrior\Resistance.cs" />
+    <Compile Include="Engine\SkillSystem\Warrior\Whirlwind.cs" />
     <Compile Include="Engine\StructureSystem\CachedVertexDataChunkWatcher.cs" />
     <Compile Include="Engine\StructureSystem\ChunkWatcher.cs" />
     <Compile Include="Engine\StructureSystem\InstanceDataChunkWatcher.cs" />
@@ -538,45 +580,9 @@
     <Compile Include="Engine\Player\IPlayerInventory.cs" />
     <Compile Include="Engine\Player\IVehicle.cs" />
     <Compile Include="Engine\Player\RollType.cs" />
-    <Compile Include="Engine\Player\Skills\Archer\Agility.cs" />
-    <Compile Include="Engine\Player\Skills\Archer\FlameArrow.cs" />
-    <Compile Include="Engine\Player\Skills\Archer\IceArrow.cs" />
-    <Compile Include="Engine\Player\Skills\Archer\Kick.cs" />
-    <Compile Include="Engine\Player\Skills\Archer\LearnKnife.cs" />
-    <Compile Include="Engine\Player\Skills\Archer\Puncture.cs" />
-    <Compile Include="Engine\Player\Skills\Archer\PoisonArrow.cs" />
-    <Compile Include="Engine\Player\Skills\CappedSkill.cs" />
-    <Compile Include="Engine\Player\Skills\Mage\Conflagaration.cs" />
-    <Compile Include="Engine\Player\Skills\Mage\Fireball.cs" />
-    <Compile Include="Engine\Player\Skills\Mage\FireRelease.cs" />
-    <Compile Include="Engine\Player\Skills\Mage\FlameRush.cs" />
-    <Compile Include="Engine\Player\Skills\Mage\FlameStyle.cs" />
-    <Compile Include="Engine\Player\Skills\Mage\Meditation.cs" />
-    <Compile Include="Engine\Player\Skills\Mage\Meteor.cs" />
-    <Compile Include="Engine\Player\Skills\Mage\TripleFireball.cs" />
-    <Compile Include="Engine\Player\Skills\Rogue\BurstOfSpeed.cs" />
-    <Compile Include="Engine\Player\Skills\Rogue\Fade.cs" />
-    <Compile Include="Engine\Player\Skills\Rogue\LearnClaw.cs" />
-    <Compile Include="Engine\Player\Skills\Rogue\LearnKatar.cs" />
-    <Compile Include="Engine\Player\Skills\Rogue\RoundSlash.cs" />
-    <Compile Include="Engine\Player\Skills\Rogue\Shuriken.cs" />
-    <Compile Include="Engine\Player\Skills\Rogue\TripleShuriken.cs" />
-    <Compile Include="Engine\Player\Skills\Rogue\Venom.cs">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Engine\Player\Skills\SpecialAttackPassiveSkill.cs" />
-    <Compile Include="Engine\Player\Skills\SwitchSkill.cs" />
-    <Compile Include="Engine\Player\Skills\Warrior\Bash.cs" />
-    <Compile Include="Engine\Player\Skills\Warrior\Intercept.cs" />
-    <Compile Include="Engine\Player\Skills\Warrior\LearnAxe.cs" />
-    <Compile Include="Engine\Player\Skills\Warrior\LearnHammer.cs" />
-    <Compile Include="Engine\Player\Skills\Warrior\Resistance.cs" />
-    <Compile Include="Engine\Player\Skills\Warrior\Whirlwind.cs" />
     <Compile Include="Engine\Player\StructureAware.cs" />
     <Compile Include="Engine\Player\ICamera.cs" />
     <Compile Include="Engine\Player\IStructureAware.cs" />
-    <Compile Include="Engine\Player\Skills\PassiveSkill.cs" />
-    <Compile Include="Engine\Player\Skills\SpecialAttackSkill.cs" />
     <Compile Include="Engine\Player\ToolbarSystem\IToolbar.cs" />
     <Compile Include="Engine\Rendering\AnimatedUpdatableModel.cs" />
     <Compile Include="Engine\Rendering\Animation\AnimationLoader.cs" />
@@ -740,7 +746,6 @@
     <Compile Include="Engine\Player\MapSystem\MapBaseItem.cs" />
     <Compile Include="Engine\Player\MapSystem\MapMeshBuilder.cs" />
     <Compile Include="Engine\Player\PlayerMovement.cs" />
-    <Compile Include="Engine\Player\Skills\LearningSkill.cs" />
     <Compile Include="Engine\WorldBuilding\IGroundwork.cs" />
     <Compile Include="Engine\WorldBuilding\Tombstone.cs" />
     <Compile Include="Engine\Rendering\CapHandler.cs" />
@@ -833,14 +838,8 @@
     <Compile Include="Engine\Player\ParticleProjectile.cs" />
     <Compile Include="Engine\Player\Projectile.cs" />
     <Compile Include="Engine\Player\ToolbarSystem\Toolbar.cs" />
-    <Compile Include="Engine\Player\AbilityTreeSystem\ArcherAbilityTreeBlueprint.cs" />
-    <Compile Include="Engine\Player\AbilityTreeSystem\RogueAbilityTreeBlueprint.cs" />
-    <Compile Include="Engine\Player\AbilityTreeSystem\MageAbilityTreeBlueprint.cs" />
-    <Compile Include="Engine\Player\Skills\BaseSkill.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\AbilityTree.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\AbilityTreeBlueprint.cs" />
-    <Compile Include="Engine\Player\Skills\TreeItem.cs" />
-    <Compile Include="Engine\Player\AbilityTreeSystem\WarriorAbilityTreeBlueprint.cs" />
     <Compile Include="Engine\Management\StateManager.cs" />
     <Compile Include="Engine\Player\Inventory\TradeInventory.cs" />
     <Compile Include="Engine\Player\VisualMessageDispatcher.cs" />
@@ -4055,55 +4054,72 @@
       <Link>Assets\Env\Colliders\Well0_Collider5.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\BladesAttack1.png">
+    <None Include="..\project-hedra-assets\UI\Skills\BladesAttack1.png">
+      <Link>Assets\Skills\BladesAttack1.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\BladesAttack2.png">
+    <None Include="..\project-hedra-assets\UI\Skills\BladesAttack2.png">
+      <Link>Assets\Skills\BladesAttack2.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\ClawAttack1.png">
+    <None Include="..\project-hedra-assets\UI\Skills\ClawAttack1.png">
+      <Link>Assets\Skills\ClawAttack1.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\ClawAttack2.png">
+    <None Include="..\project-hedra-assets\UI\Skills\ClawAttack2.png">
+      <Link>Assets\Skills\ClawAttack2.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\HolderSkill.png">
+    <None Include="..\project-hedra-assets\UI\Skills\HolderSkill.png">
+      <Link>Assets\Skills\HolderSkill.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\KatarAttack1.png">
+    <None Include="..\project-hedra-assets\UI\Skills\KatarAttack1.png">
+      <Link>Assets\Skills\KatarAttack1.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\KatarAttack2.png">
+    <None Include="..\project-hedra-assets\UI\Skills\KatarAttack2.png">
+      <Link>Assets\Skills\KatarAttack2.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\Lunge.png">
+    <None Include="..\project-hedra-assets\UI\Skills\Lunge.png">
+      <Link>Assets\Skills\Lunge.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\LungeKnife.png">
+    <None Include="..\project-hedra-assets\UI\Skills\LungeKnife.png">
+      <Link>Assets\Skills\LungeKnife.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\Shoot.png">
+    <None Include="..\project-hedra-assets\UI\Skills\Shoot.png">
+      <Link>Assets\Skills\Shoot.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\Slash.png">
+    <None Include="..\project-hedra-assets\UI\Skills\Slash.png">
+      <Link>Assets\Skills\Slash.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\SlashKnife.png">
+    <None Include="..\project-hedra-assets\UI\Skills\SlashKnife.png">
+      <Link>Assets\Skills\SlashKnife.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\SmashAxeIcon.png">
+    <None Include="..\project-hedra-assets\UI\Skills\SmashAxeIcon.png">
+      <Link>Assets\Skills\SmashAxeIcon.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\SmashHammerIcon.png">
+    <None Include="..\project-hedra-assets\UI\Skills\SmashHammerIcon.png">
+      <Link>Assets\Skills\SmashHammerIcon.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\SwingAxeIcon.png">
+    <None Include="..\project-hedra-assets\UI\Skills\SwingAxeIcon.png">
+      <Link>Assets\Skills\SwingAxeIcon.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\SwingHammerIcon.png">
+    <None Include="..\project-hedra-assets\UI\Skills\SwingHammerIcon.png">
+      <Link>Assets\Skills\SwingHammerIcon.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\TripleShot.png">
+    <None Include="..\project-hedra-assets\UI\Skills\TripleShot.png">
+      <Link>Assets\Skills\TripleShot.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Assets\UI\Pointer.png">
@@ -6371,103 +6387,136 @@
     <None Include="Assets\new-logo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\Agility.png">
+    <None Include="..\project-hedra-assets\UI\Skills\Agility.png">
+      <Link>Assets\Skills\Agility.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\AttackLeap.png">
+    <None Include="..\project-hedra-assets\UI\Skills\AttackLeap.png">
+      <Link>Assets\Skills\AttackLeap.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\Axe.png">
+    <None Include="..\project-hedra-assets\UI\Skills\Axe.png">
+      <Link>Assets\Skills\Axe.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\Bash.png">
+    <None Include="..\project-hedra-assets\UI\Skills\Bash.png">
+      <Link>Assets\Skills\Bash.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\Berserk.png">
+    <None Include="..\project-hedra-assets\UI\Skills\Berserk.png">
+      <Link>Assets\Skills\Berserk.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\BurstOfSpeed.png">
+    <None Include="..\project-hedra-assets\UI\Skills\BurstOfSpeed.png">
+      <Link>Assets\Skills\BurstOfSpeed.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\Claw.png">
+    <None Include="..\project-hedra-assets\UI\Skills\Claw.png">
+      <Link>Assets\Skills\Claw.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\Conflagaration.png">
+    <None Include="..\project-hedra-assets\UI\Skills\Conflagaration.png">
+      <Link>Assets\Skills\Conflagaration.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\DoubleSwords.png">
+    <None Include="..\project-hedra-assets\UI\Skills\DoubleSwords.png">
+      <Link>Assets\Skills\DoubleSwords.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\Fade.png">
+    <None Include="..\project-hedra-assets\UI\Skills\Fade.png">
+      <Link>Assets\Skills\Fade.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\Fireball.png">
+    <None Include="..\project-hedra-assets\UI\Skills\Fireball.png">
+      <Link>Assets\Skills\Fireball.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\FireRelease.png">
+    <None Include="..\project-hedra-assets\UI\Skills\FireRelease.png">
+      <Link>Assets\Skills\FireRelease.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\FlameArrow.png">
+    <None Include="..\project-hedra-assets\UI\Skills\FlameArrow.png">
+      <Link>Assets\Skills\FlameArrow.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\FlameDisk.png">
+    <None Include="..\project-hedra-assets\UI\Skills\FlameDisk.png">
+      <Link>Assets\Skills\FlameDisk.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\FlameJump.png">
+    <None Include="..\project-hedra-assets\UI\Skills\FlameJump.png">
+      <Link>Assets\Skills\FlameJump.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\FlameStyle.png">
+    <None Include="..\project-hedra-assets\UI\Skills\FlameStyle.png">
+      <Link>Assets\Skills\FlameStyle.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\Hammer.png">
+    <None Include="..\project-hedra-assets\UI\Skills\Hammer.png">
+      <Link>Assets\Skills\Hammer.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\Health.png">
+    <None Include="..\project-hedra-assets\UI\Skills\Health.png">
+      <Link>Assets\Skills\Health.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\IceArrow.png">
+    <None Include="..\project-hedra-assets\UI\Skills\IceArrow.png">
+      <Link>Assets\Skills\IceArrow.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\Katar.png">
+    <None Include="..\project-hedra-assets\UI\Skills\Katar.png">
+      <Link>Assets\Skills\Katar.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\Kick.png">
+    <None Include="..\project-hedra-assets\UI\Skills\Kick.png">
+      <Link>Assets\Skills\Kick.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\LearnKnife.png">
+    <None Include="..\project-hedra-assets\UI\Skills\LearnKnife.png">
+      <Link>Assets\Skills\LearnKnife.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\Meteor.png">
+    <None Include="..\project-hedra-assets\UI\Skills\Meteor.png">
+      <Link>Assets\Skills\Meteor.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\PierceArrows.png">
+    <None Include="..\project-hedra-assets\UI\Skills\PierceArrows.png">
+      <Link>Assets\Skills\PierceArrows.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\PoisonArrow.png">
+    <None Include="..\project-hedra-assets\UI\Skills\PoisonArrow.png">
+      <Link>Assets\Skills\PoisonArrow.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\RoundSlash.png">
+    <None Include="..\project-hedra-assets\UI\Skills\RoundSlash.png">
+      <Link>Assets\Skills\RoundSlash.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\Shuriken.png">
+    <None Include="..\project-hedra-assets\UI\Skills\Shuriken.png">
+      <Link>Assets\Skills\Shuriken.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\SkySmash.png">
+    <None Include="..\project-hedra-assets\UI\Skills\SkySmash.png">
+      <Link>Assets\Skills\SkySmash.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\Spin.png">
+    <None Include="..\project-hedra-assets\UI\Skills\Spin.png">
+      <Link>Assets\Skills\Spin.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\Throw.png">
+    <None Include="..\project-hedra-assets\UI\Skills\Throw.png">
+      <Link>Assets\Skills\Throw.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\TripleFireball.png">
+    <None Include="..\project-hedra-assets\UI\Skills\TripleFireball.png">
+      <Link>Assets\Skills\TripleFireball.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\TripleShuriken.png">
+    <None Include="..\project-hedra-assets\UI\Skills\TripleShuriken.png">
+      <Link>Assets\Skills\TripleShuriken.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Skills\Venom.png">
+    <None Include="..\project-hedra-assets\UI\Skills\Venom.png">
+      <Link>Assets\Skills\Venom.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Assets\Sans.ttf">
@@ -7155,19 +7204,36 @@
       <Link>Assets\UI\XpBarBackground.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Skills\Intercept.png">
+    <Content Include="..\project-hedra-assets\UI\Skills\Berserker.png">
+      <Link>Assets\Skills\Berserker.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Skills\IronSkin.png">
+    <Content Include="..\project-hedra-assets\UI\Skills\Intercept.png">
+      <Link>Assets\Skills\Intercept.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Skills\Meditation.png">
+    <Content Include="..\project-hedra-assets\UI\Skills\IronSkin.png">
+      <Link>Assets\Skills\IronSkin.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Skills\StaffAttack1.png">
+    <Content Include="..\project-hedra-assets\UI\Skills\Meditation.png">
+      <Link>Assets\Skills\Meditation.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Assets\Skills\StaffAttack2.png">
+    <Content Include="..\project-hedra-assets\UI\Skills\Paladin.png">
+      <Link>Assets\Skills\Paladin.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\StaffAttack1.png">
+      <Link>Assets\Skills\StaffAttack1.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\StaffAttack2.png">
+      <Link>Assets\Skills\StaffAttack2.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Warrior.png">
+      <Link>Assets\Skills\Warrior.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Sky\empty.png">
@@ -7365,10 +7431,42 @@
     <Content Include="Modules\NPCs\Skeleton.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\SkillTrees\ArcherTree.json" />
-    <Content Include="Modules\SkillTrees\MageTree.json" />
-    <Content Include="Modules\SkillTrees\RogueTree.json" />
-    <Content Include="Modules\SkillTrees\WarriorTree.json" />
+    <Content Include="Modules\SkillTrees\ArcherTree.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\SkillTrees\AssassinTree.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\SkillTrees\BerserkerTree.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\SkillTrees\DruidTree.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\SkillTrees\HunterTree.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\SkillTrees\MageTree.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\SkillTrees\NecromancerTree.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\SkillTrees\NinjaTree.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\SkillTrees\PaladinTree.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\SkillTrees\RogueTree.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\SkillTrees\ScoutTree.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\SkillTrees\WarriorTree.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Villages\Woodland.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

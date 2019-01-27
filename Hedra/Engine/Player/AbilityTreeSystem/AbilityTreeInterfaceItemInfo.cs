@@ -2,8 +2,8 @@ using System;
 using System.Drawing;
 using Hedra.Core;
 using Hedra.Engine.Player.Inventory;
-using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Engine.SkillSystem;
 using OpenTK;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem

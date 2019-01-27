@@ -1,5 +1,4 @@
-using Hedra.Engine.Player.Skills;
-using Hedra.Engine.Player.Skills.Warrior;
+using Hedra.Engine.SkillSystem.Warrior;
 using NUnit.Framework;
 
 namespace HedraTests.Player.Skills.Warrior

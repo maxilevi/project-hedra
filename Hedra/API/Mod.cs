@@ -11,6 +11,7 @@ namespace Hedra.API
         private readonly ModelHandlerRegistry _modelHandlerRegistry;
         private readonly ItemHandlerRegistry _itemHandlerRegistry;
         private readonly EffectRegistry _effectRegistry;
+        private readonly SkillRegistry _skillRegistry;
         
         public abstract string Name { get; }
         
@@ -23,6 +24,7 @@ namespace Hedra.API
             _modelHandlerRegistry = new ModelHandlerRegistry();
             _itemHandlerRegistry = new ItemHandlerRegistry();
             _effectRegistry = new EffectRegistry();
+            _skillRegistry = new SkillRegistry();
         }
         
         protected abstract void RegisterContent();
@@ -36,6 +38,11 @@ namespace Hedra.API
         protected void AddClassRestriction(Class Class, string EquipmentType)
         {
             _classRegistry.Add(Class, EquipmentType);
+        }
+
+        protected void AddSkill(string Name, Type ClassType)
+        {
+            _skillRegistry.Add(Name, ClassType);
         }
         
         protected void AddAIType(string Name, Type ClassType)

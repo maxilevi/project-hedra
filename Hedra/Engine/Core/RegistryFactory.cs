@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Hedra.Engine.Core
 {
@@ -31,5 +32,7 @@ namespace Hedra.Engine.Core
         }
 
         protected T3 this[T2 Key] => _table[Key];
+
+        protected T3[] GetAll() => _table.Values.ToArray();
     }
 }

@@ -1,0 +1,42 @@
+{
+  "Name": "WoodenPlankRecipe",
+  "DisplayName": "Wooden bowl recipe",
+  "EquipmentType": "Recipe",
+  "Tier": "Common",
+  "Description": "...",
+  "Attributes": [
+    {
+      "Name": "CraftingStation",
+      "Value": "None"
+    },
+    {
+      "Name": "Ingredients",
+      "Value": [
+        {
+          "Name": "Timber",
+          "Amount": 2
+        }
+      ],
+      "Display": "Bullets"
+    },
+    {
+      "Name": "Output",
+      "Value": "WoodenBowl",
+      "Hidden": true
+    },
+    {
+      "Name": "IsConsumable",
+      "Value": true,
+      "Hidden": true
+    },
+    {
+      "Name": "Handler",
+      "Value": "Recipe",
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 2.0,
+    "Path": "$DataFile$/Items/Misc/Recipe.ply"
+  }
+}

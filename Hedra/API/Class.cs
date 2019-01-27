@@ -6,6 +6,14 @@ namespace Hedra.API
         Mage,
         Archer,
         Rogue,
+        Druid,
+        Assassin,
+        Hunter,
+        Scout,
+        Ninja,
+        Necromancer,
+        Paladin,
+        Berserker,    
         None
     }
 }

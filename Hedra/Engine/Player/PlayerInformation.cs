@@ -32,7 +32,9 @@ namespace Hedra.Engine.Player
         public Vector3 BlockPosition { get; set; }
         public Vector3 Rotation { get; set; }
         public Vector3 TargetPosition { get; set; }
-        public byte[] AbilityTreeArray { get; set; }
+        public byte[] MainTreeArray { get; set; }
+        public byte[] FirstSpecializationTreeArray { get; set; }
+        public byte[] SecondSpecializationTreeArray { get; set; }
         public byte[] ToolbarArray { get; set; }
         public ClassDesign Class { get; set; }
         public float RandomFactor { get; set; }
@@ -48,7 +50,9 @@ namespace Hedra.Engine.Player
             this._items = new Dictionary<int, Item>();
             this._learnedRecipes = new List<string>();
             this._quests = new List<QuestTemplate>();
-            this.AbilityTreeArray = new byte[0];
+            this.MainTreeArray = new byte[0];
+            this.FirstSpecializationTreeArray = new byte[0];
+            this.SecondSpecializationTreeArray = new byte[0];
             this.ToolbarArray = new byte[4];
         }
 

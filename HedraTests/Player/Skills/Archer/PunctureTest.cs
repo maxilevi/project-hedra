@@ -1,6 +1,6 @@
 using Hedra.Engine.Generation;
-using Hedra.Engine.Player.Skills.Archer;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.SkillSystem.Archer;
 using Hedra.Rendering;
 using Hedra.WeaponSystem;
 using NUnit.Framework;

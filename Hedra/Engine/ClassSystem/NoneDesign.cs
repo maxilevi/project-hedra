@@ -3,7 +3,6 @@ using Hedra.API;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.AbilityTreeSystem;
-using Hedra.Engine.Player.Skills;
 using OpenTK;
 
 namespace Hedra.Engine.ClassSystem
@@ -14,7 +13,9 @@ namespace Hedra.Engine.ClassSystem
         public override string Logo => throw new ArgumentException();
         /* Do not delete. Used in tests */
         public override float BaseSpeed => 1.25f;
-        public override AbilityTreeBlueprint AbilityTreeDesign => throw new ArgumentException();
+        public override AbilityTreeBlueprint MainTree => throw new ArgumentException();
+        public override AbilityTreeBlueprint FirstSpecializationTree => throw new ArgumentException();
+        public override AbilityTreeBlueprint SecondSpecializationTree => throw new ArgumentException();
         public override Item StartingItem => throw new ArgumentException();
         public override float AttackResistance => throw new ArgumentException();
         public override float MaxStamina => throw new ArgumentException();

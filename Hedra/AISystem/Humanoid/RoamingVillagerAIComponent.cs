@@ -143,6 +143,7 @@ namespace Hedra.AISystem.Humanoid
         {
             MoveTo(NearestVillager.Position.Xz, delegate
             {
+                if (Parent.Disposed) return;
                 var time = Utils.Rng.NextFloat() * 8 + 8;
                 TalkWith(NearestVillager, time);
                 NearestVillager.SearchComponent<RoamingVillagerAIComponent>().TalkWith(Parent, time);

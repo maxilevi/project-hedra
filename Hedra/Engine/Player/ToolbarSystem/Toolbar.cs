@@ -15,7 +15,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.Loader;
 using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Player.Inventory;
-using Hedra.Engine.Player.Skills;
+using Hedra.Engine.SkillSystem;
 using Hedra.WeaponSystem;
 using OpenTK;
 using OpenTK.Input;
@@ -68,18 +68,11 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
         private void LoadSkills()
         {
-            bool Filter(Type T) => T.IsSubclassOf(typeof(BaseSkill)) && T != typeof(WeaponAttack) && !T.IsAbstract;
-            
-            var skillsTypes = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(Assembly => Assembly.GetLoadableTypes())
-                .Where(Filter)
-                //.Concat(ModificationsLoader.GetTypes(Filter))
-                .ToArray();
-            
-            _skills = new BaseSkill[skillsTypes.Length];
-            for (var i = 0; i < Skills.Length; i++)
+            var types = SkillFactory.Instance.GetAll();
+            _skills = new BaseSkill[types.Length];
+            for (var i = 0; i < _skills.Length; i++)
             {
-                _skills[i] = (BaseSkill) Activator.CreateInstance(skillsTypes[i]);
+                _skills[i] = (BaseSkill) Activator.CreateInstance(types[i]);
                 _skills[i].Initialize(Vector2.Zero, InventoryArrayInterface.DefaultSize, _player.UI.GamePanel, _player);
                 _skills[i].Active = false;
             }

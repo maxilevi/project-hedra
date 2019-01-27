@@ -9,7 +9,6 @@ using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
-using Hedra.Engine.Player.Skills.Rogue;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Sound;

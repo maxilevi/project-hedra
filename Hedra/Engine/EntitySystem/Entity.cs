@@ -472,7 +472,7 @@ namespace Hedra.Engine.EntitySystem
             Physics.Draw();
             for (var i = Components.Count - 1; i > -1; --i)
             {
-                if (!Components[i].Drawable)
+                if (!Components[i]?.Drawable ?? false)
                     Components[i].Draw();
             }
         }
@@ -490,13 +490,12 @@ namespace Hedra.Engine.EntitySystem
             var beforeComponents = Components.ToArray();
             for (var i = Components.Count-1; i > -1; --i)
             {
-                Components[i].Update();
+                Components[i]?.Update();
             }
 
             if (IsKnocked)
             {
                 _knockedTime -= Time.DeltaTime;
-                //Model.LocalRotation = new Vector3(0, 0, 90);
                 if (Model is HumanoidModel model)
                 {
                     model.Human.IsRiding = false;

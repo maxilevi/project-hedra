@@ -123,6 +123,7 @@ namespace Hedra.Engine.Generation
 
             var factories = MobLoader.LoadModules(AssetManager.AppPath);
             MobFactory?.AddFactory(factories);
+            AbilityTreeLoader.LoadModules(AssetManager.AppPath);
             ClassLoader.LoadModules(AssetManager.AppPath);
             ItemLoader.LoadModules(AssetManager.AppPath);
             VillageLoader.LoadModules(AssetManager.AppPath);

@@ -1,5 +1,4 @@
-using Hedra.Engine.Player.Skills;
-using Hedra.Engine.Player.Skills.Archer;
+using Hedra.Engine.SkillSystem.Archer;
 using NUnit.Framework;
 
 namespace HedraTests.Player.Skills.Archer

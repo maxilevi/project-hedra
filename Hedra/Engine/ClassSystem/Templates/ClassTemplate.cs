@@ -8,7 +8,9 @@ namespace Hedra.Engine.ClassSystem.Templates
         public HumanoidModelTemplate Model { get; set; }
         public string Logo { get; set; }
         public float BaseSpeed { get; set; }
-        public string AbilityTreeDesign { get; set; }
+        public string MainAbilityTree { get; set; }
+        public string FirstSpecializationTree { get; set; }
+        public string SecondSpecializationTree { get; set; }
         public string StartingItem { get; set; }
         public float AttackResistance { get; set;}
         public float MaxStamina { get; set; }

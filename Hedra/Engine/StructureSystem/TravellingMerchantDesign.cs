@@ -53,7 +53,8 @@ namespace Hedra.Engine.StructureSystem
             var height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
 
             return Math.Abs(ChunkOffset.X - World.SpawnPoint.X) < 10000 && Math.Abs(ChunkOffset.Y - World.SpawnPoint.Y) < 10000 &&
-                   Rng.Next(0, 20) == 1 && BiomeGenerator.PathFormula(TargetPosition.X, TargetPosition.Y) > 0 && height > BiomePool.SeaLevel && !World.StructureHandler.MerchantSpawned;
+                   Rng.Next(0, 20) == 1 && BiomeGenerator.PathFormula(TargetPosition.X, TargetPosition.Y) > 0 && height > BiomePool.SeaLevel && !World.StructureHandler.MerchantSpawned
+                   && Math.Abs(LandscapeGenerator.River(TargetPosition.Xz)) < 0.005f;
         }
     }
 }

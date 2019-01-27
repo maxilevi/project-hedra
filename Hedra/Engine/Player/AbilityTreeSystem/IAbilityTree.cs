@@ -11,7 +11,10 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         void SetPoints(Type AbilityType, int Count);
         void SetPoints(int Index, int Count);
         void Reset();
-        byte[] ToArray();
+        byte[] MainTreeSave { get; }
+        byte[] FirstTreeSave { get; }
+        byte[] SecondTreeSave { get; }
+        void ShowBlueprint(AbilityTreeBlueprint Blueprint, byte[] AbilityTreeArray);
         void FromInformation(PlayerInformation Information);
         int AvailablePoints { get; }
         InventoryArray TreeItems { get; }

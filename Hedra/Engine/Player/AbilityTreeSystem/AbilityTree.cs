@@ -28,7 +28,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
     /// </summary>
     public class AbilityTree : PlayerInterface, IAbilityTree
     {
-        public const int Rows = 5;
+        public const int Rows = 4;
         public const int Columns = 3;
         public const int AbilityCount = Columns * Rows;
         private const char SaveMarker = '!';
@@ -36,29 +36,24 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         private const string HeaderMarker = "<>";
         private readonly Vector2 _targetResolution;
         private readonly IPlayer _player;
-        private readonly InventoryArray _abilities;
+        private readonly InventoryArray _mainTree;
+        private readonly InventoryArray _firstTree;
+        private readonly InventoryArray _secondTree;
         private readonly AbilityTreeInterface _interface;
         private readonly AbilityTreeInterfaceManager _manager;
         private readonly InventoryStateManager _stateManager;
         private readonly AbilityInventoryBackground _background;
-        private AbilityTreeBlueprint _blueprint;
+        private InventoryArray _abilities;
         private bool _show;
 
         public AbilityTree(IPlayer Player)
         {
             _player = Player;
             _targetResolution = new Vector2(1366, 705);
-            _abilities = new InventoryArray(AbilityCount);
-            for (var i = 0; i < _abilities.Length; i++)
-            {
-                _abilities[i] = new Item
-                {
-                    Model = new VertexData()
-                };
-                _abilities[i].SetAttribute("Level", 0);
-                
-            }
-            _interface = new AbilityTreeInterface(_player, _abilities, 0, _abilities.Length, Columns, new Vector2(1.5f, 1.5f))
+            _firstTree = BuildArray();
+            _secondTree = BuildArray();
+            _abilities = _mainTree = BuildArray();
+            _interface = new AbilityTreeInterface(_player, _abilities, 0, _abilities.Length, Columns)
             {
                 Position = Mathf.ScaleGui(_targetResolution, Vector2.UnitX * -.65f + Vector2.UnitY * -.25f),
                 IndividualScale = Vector2.One * 1.1f
@@ -75,6 +70,21 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             {
                 base.Invoke(State);
             };
+        }
+
+        private static InventoryArray BuildArray()
+        {
+            var array = new InventoryArray(AbilityCount);
+            for (var i = 0; i < array.Length; i++)
+            {
+                array[i] = new Item
+                {
+                    Model = new VertexData()
+                };
+                array[i].SetAttribute("Level", 0);             
+            }
+
+            return array;
         }
 
         private void UpdateView()
@@ -136,56 +146,75 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         {
             for (var i = 0; i < AbilityCount; i++)
             {
-                this.SetPoints(i,0);
+                this.SetPoints(i, 0);
             }
         }
 
-        public byte[] ToArray()
+        public byte[] MainTreeSave => BuildSaveData(_mainTree);
+        
+        public byte[] FirstTreeSave => BuildSaveData(_firstTree);
+        
+        public byte[] SecondTreeSave => BuildSaveData(_secondTree);
+        
+        private static byte[] BuildSaveData(InventoryArray Abilities)
         {
             var saveData = HeaderMarker;
-            for (var i = 0; i < _abilities.Length; i++)
+            for (var i = 0; i < Abilities.Length; i++)
             {
-                var skill = _abilities[i];
-                saveData += skill == null 
+                var skill = Abilities[i];
+                saveData += skill == null
                     ? string.Empty + AbilityTree.SaveMarker 
                     : (skill.GetAttribute<Type>("AbilityType")?.Name ?? string.Empty) + AbilityTree.NumberMarker + skill.GetAttribute<int>("Level") + AbilityTree.SaveMarker;
             }
             return Encoding.ASCII.GetBytes(saveData);
         }
 
-        public void FromInformation(PlayerInformation Information)
+        public void ShowBlueprint(AbilityTreeBlueprint Blueprint, byte[] AbilityTreeArray)
         {
-            this._blueprint = Information.Class.AbilityTreeDesign;
-            this.SetBlueprint(_blueprint);
-            if (Information.AbilityTreeArray.Length > 0)
+            this.SetBlueprint(Blueprint);
+            if (AbilityTreeArray != null)
             {
-                var saveData = Encoding.ASCII.GetString(Information.AbilityTreeArray);
-                if (!saveData.StartsWith(HeaderMarker)) return;
-
-                var splits = saveData.Substring(HeaderMarker.Length, saveData.Length - HeaderMarker.Length)
-                    .Split(AbilityTree.SaveMarker);
-                for (var i = 0; i < splits.Length; i++)
+                if (AbilityTreeArray.Length > 0)
                 {
-                    var subSplits = splits[i].Split(AbilityTree.NumberMarker);
-                    var firstSplit = subSplits[0];
-                    if (firstSplit == string.Empty) continue;
-                    var secondSplit = subSplits[1];
-                    for (var k = 0; k < _abilities.Length; k++)
+                    var saveData = Encoding.ASCII.GetString(AbilityTreeArray);
+                    if (!saveData.StartsWith(HeaderMarker)) return;
+
+                    var splits = saveData.Substring(HeaderMarker.Length, saveData.Length - HeaderMarker.Length)
+                        .Split(AbilityTree.SaveMarker);
+                    for (var i = 0; i < splits.Length; i++)
                     {
-                        if (firstSplit == _abilities[k].GetAttribute<Type>("AbilityType")?.Name)
+                        var subSplits = splits[i].Split(AbilityTree.NumberMarker);
+                        var firstSplit = subSplits[0];
+                        if (firstSplit == string.Empty) continue;
+                        var secondSplit = subSplits[1];
+                        for (var k = 0; k < _abilities.Length; k++)
                         {
-                            this.SetPoints(k, int.Parse(secondSplit));
+                            if (firstSplit == _abilities[k].GetAttribute<Type>("AbilityType")?.Name)
+                            {
+                                this.SetPoints(k, int.Parse(secondSplit));
+                            }
                         }
                     }
                 }
+                else
+                {
+                    this.Reset();
+                }
             }
-            else
-            {
-                this.Reset();
-            }
+
             this.UpdateView();
         }
 
+        public void FromInformation(PlayerInformation Information)
+        {
+            _abilities = _firstTree;
+            ShowBlueprint(Information.Class.FirstSpecializationTree, Information.FirstSpecializationTreeArray);
+            _abilities = _secondTree;
+            ShowBlueprint(Information.Class.SecondSpecializationTree, Information.SecondSpecializationTreeArray);
+            _abilities = _mainTree;
+            ShowBlueprint(Information.Class.MainTree, Information.MainTreeArray);
+        }
+        
         private void SetBlueprint(AbilityTreeBlueprint Blueprint)
         {
             for (var i = 0; i < Blueprint.Items.Length; i++)
@@ -229,9 +258,8 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 _background.Enabled = _show;
                 _manager.Enabled = _show;
                 if(_show)
-                    this.SetBlueprint(_blueprint);
-                this.UpdateView();
-                this.SetInventoryState(_show);
+                    ShowBlueprint(_player.Class.MainTree, null);
+                SetInventoryState(_show);
                 SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
             }
         }

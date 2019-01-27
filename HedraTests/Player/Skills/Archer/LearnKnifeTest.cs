@@ -1,7 +1,6 @@
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player;
-using Hedra.Engine.Player.Skills;
-using Hedra.Engine.Player.Skills.Archer;
+using Hedra.Engine.SkillSystem.Archer;
 
 namespace HedraTests.Player.Skills.Archer
 {

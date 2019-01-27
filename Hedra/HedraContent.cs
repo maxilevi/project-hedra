@@ -4,6 +4,10 @@ using Hedra.API;
 using Hedra.Components.Effects;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
+using Hedra.Engine.SkillSystem.Archer;
+using Hedra.Engine.SkillSystem.Mage;
+using Hedra.Engine.SkillSystem.Rogue;
+using Hedra.Engine.SkillSystem.Warrior;
 using Hedra.Engine.Sound;
 using Hedra.ItemHandlers;
 using Hedra.ModelHandlers;
@@ -20,6 +24,7 @@ namespace Hedra
         protected override void RegisterContent()
         {
             RegisterSounds();
+            RegisterSkills();
 
             AddWeaponType("Sword", typeof(Sword));
             AddWeaponType("Axe", typeof(Axe));
@@ -63,7 +68,43 @@ namespace Hedra
             AddEffectType("Knock", typeof(KnockComponent));
         }
 
-        private void RegisterSounds()
+        private void RegisterSkills()
+        {
+            AddSkill("Agility", typeof(Agility));
+            AddSkill("FlameArrow", typeof(FlameArrow));
+            AddSkill("Kick", typeof(Kick));
+            AddSkill("IceArrow", typeof(IceArrow));
+            AddSkill("LearnKnife", typeof(LearnKnife));
+            AddSkill("PoisonArrow", typeof(PoisonArrow));
+            AddSkill("Puncture", typeof(Puncture));
+            
+            AddSkill("Conflagaration", typeof(Conflagaration));
+            AddSkill("Fireball", typeof(Fireball));
+            AddSkill("FireRelease", typeof(FireRelease));
+            AddSkill("FlameRush", typeof(FlowingMagma));
+            AddSkill("FlameStyle", typeof(FlameStyle));
+            AddSkill("Meditation", typeof(Meditation));
+            AddSkill("Meteor", typeof(Meteor));
+            AddSkill("TripleFireball", typeof(TripleFireball));
+            
+            AddSkill("BurstOfSpeed", typeof(BurstOfSpeed));
+            AddSkill("Fade", typeof(Fade));
+            AddSkill("LearnClaw", typeof(LearnClaw));
+            AddSkill("LearnKatar", typeof(LearnKatar));
+            AddSkill("RoundSlash", typeof(RoundSlash));
+            AddSkill("Shuriken", typeof(Shuriken));
+            AddSkill("TripleShuriken", typeof(TripleShuriken));
+            AddSkill("Venom", typeof(Venom));
+            
+            AddSkill("Bash", typeof(Bash));
+            AddSkill("Intercept", typeof(Intercept));
+            AddSkill("LearnAxe", typeof(LearnAxe));
+            AddSkill("LearnHammer", typeof(LearnHammer));
+            AddSkill("Resistance", typeof(Resistance));
+            AddSkill("Whirlwind", typeof(Whirlwind));
+        }
+
+        private static void RegisterSounds()
         {
             Log.WriteLine("Loading sounds...");
             TaskScheduler.Parallel(delegate

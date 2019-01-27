@@ -26,7 +26,7 @@ namespace Hedra.Engine.Management
     /// </summary>
     public static class DataManager
     {
-        private const float SaveVersion = 1.25f;
+        private const float SaveVersion = 1.3f;
         
         public static void SavePlayer(PlayerInformation Player)
         {
@@ -66,8 +66,14 @@ namespace Hedra.Engine.Management
 
                     bw.Write(Player.WorldSeed);
 
-                    bw.Write(Player.AbilityTreeArray.Length);
-                    bw.Write(Player.AbilityTreeArray);
+                    bw.Write(Player.MainTreeArray.Length);
+                    bw.Write(Player.MainTreeArray);
+                    
+                    bw.Write(Player.FirstSpecializationTreeArray.Length);
+                    bw.Write(Player.FirstSpecializationTreeArray);
+                    
+                    bw.Write(Player.SecondSpecializationTreeArray.Length);
+                    bw.Write(Player.SecondSpecializationTreeArray);
 
                     bw.Write(Player.ToolbarArray.Length);
                     bw.Write(Player.ToolbarArray);
@@ -126,7 +132,9 @@ namespace Hedra.Engine.Management
                 Name = Player.Name,
                 Rotation = Player.Rotation,
                 BlockPosition = Player.BlockPosition,
-                AbilityTreeArray = Player.AbilityTree.ToArray(),
+                MainTreeArray = Player.AbilityTree.MainTreeSave,
+                FirstSpecializationTreeArray = Player.AbilityTree.FirstTreeSave,
+                SecondSpecializationTreeArray = Player.AbilityTree.SecondTreeSave,
                 ToolbarArray = Player.Toolbar.ToArray(),
                 TargetPosition = Player.Physics.TargetPosition,
                 Daytime = EnvironmentSystem.SkyManager.DayTime,
@@ -186,7 +194,12 @@ namespace Hedra.Engine.Management
                 information.Level = br.ReadInt32();
                 information.Mana = br.ReadSingle();
                 information.WorldSeed = br.ReadInt32();
-                information.AbilityTreeArray = br.ReadBytes(br.ReadInt32());
+                information.MainTreeArray = br.ReadBytes(br.ReadInt32());
+                if (version >= 1.3f)
+                {
+                    information.FirstSpecializationTreeArray = br.ReadBytes(br.ReadInt32());
+                    information.SecondSpecializationTreeArray = br.ReadBytes(br.ReadInt32());
+                }
                 information.ToolbarArray = br.ReadBytes(br.ReadInt32());
                 information.TargetPosition = br.ReadVector3();
                 information.Daytime = br.ReadSingle();

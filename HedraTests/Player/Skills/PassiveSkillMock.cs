@@ -1,5 +1,5 @@
 using System;
-using Hedra.Engine.Player.Skills;
+using Hedra.Engine.SkillSystem;
 
 namespace HedraTests.Player.Skills
 {

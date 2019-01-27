@@ -1,6 +1,6 @@
 using System;
-using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.SkillSystem;
 using Hedra.Rendering;
 using Hedra.WeaponSystem;
 using Moq;

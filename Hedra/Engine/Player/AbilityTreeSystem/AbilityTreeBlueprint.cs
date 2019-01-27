@@ -7,25 +7,36 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
-using Hedra.Engine.Player.Skills;
+using System.Linq;
+using Hedra.Engine.ClassSystem.Templates;
+using Hedra.Engine.Game;
+using Hedra.Engine.SkillSystem;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {
     /// <summary>
     /// Description of TreeBlueprint.
     /// </summary>
-    public abstract class AbilityTreeBlueprint
+    public class AbilityTreeBlueprint
     {
+        public string Name { get; set; }
+        public uint Icon { get; set; }
         public readonly TreeItem[][] Items = new TreeItem[AbilityTree.Columns][];
 
-        protected AbilityTreeBlueprint()
+        public AbilityTreeBlueprint(AbilityTreeTemplate AbilityTreeTemplate)
         {
+            Name = AbilityTreeTemplate.Name.ToLowerInvariant();
             for(var i = 0; i < Items.Length; i++)
             {
                 Items[i] = new TreeItem[AbilityTree.Rows];
                 for(var j = 0; j < Items[i].Length; j++)
                 {
-                    Items[i][j] = new TreeItem();
+                    var skill = AbilityTreeTemplate.Get(i, j);
+                    Items[i][j] = skill != null ? new TreeItem
+                    {
+                        AbilityType = SkillFactory.Instance.Get(skill),
+                        Image = GameManager.Player.Toolbar.Skills.First(S => S.GetType() == SkillFactory.Instance.Get(skill)).TextureId,
+                    } : new TreeItem();
                 }
             }
         }

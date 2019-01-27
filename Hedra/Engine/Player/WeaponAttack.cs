@@ -8,9 +8,9 @@
  */
 
 using System;
-using Hedra.Engine.Player.Skills;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Engine.SkillSystem;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
 using OpenTK;
