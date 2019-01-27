@@ -2,7 +2,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.WorldBuilding;
 using OpenTK;
 
-namespace Hedra.Engine.StructureSystem
+namespace Hedra.Engine.StructureSystem.VillageSystem
 {
     public class Loom : CraftingStation
     {

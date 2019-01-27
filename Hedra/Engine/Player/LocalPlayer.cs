@@ -483,6 +483,11 @@ namespace Hedra.Engine.Player
 
             data.AddItem(PlayerInventory.WeaponHolder, ClassType.StartingItem);
             data.AddRecipe(ItemPool.Grab(ItemType.HealthPotionRecipe).Name);
+            var recipes = ClassType.StartingRecipes;
+            for (var i = 0; i < recipes.Length; ++i)
+            {
+                data.AddRecipe(recipes[i].Name);
+            }
 
             DataManager.SavePlayer(data);
             return true;

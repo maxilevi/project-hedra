@@ -26,6 +26,7 @@ namespace Hedra.Engine.ItemSystem
         Boat,
         Mushroom,
         Timber,
+        Pebble,
         MaxEnums
     }
 }

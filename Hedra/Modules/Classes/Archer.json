@@ -6,6 +6,9 @@
   "Logo": "$DataFile$/Assets/UI/ArcherLogo.png",
   "BaseSpeed": 1.4,
   "StartingItem": "CommonWoodenBow",
+  "StartingRecipes": [
+    "StoneArrowRecipe"
+  ],
   "AttackResistance": 0.975,
   "MaxStamina": 115,
   "BaseDamage": 2.75,

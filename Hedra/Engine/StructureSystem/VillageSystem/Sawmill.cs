@@ -1,4 +1,8 @@
-namespace Hedra.Engine.StructureSystem
+using Hedra.Engine.Localization;
+using Hedra.Engine.WorldBuilding;
+using OpenTK;
+
+namespace Hedra.Engine.StructureSystem.VillageSystem
 {
     public class Sawmill : CraftingStation
     {

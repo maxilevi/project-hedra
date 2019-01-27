@@ -19,6 +19,8 @@ namespace Hedra.Engine.StructureSystem
                 LightColor = HandLamp.LightColor
             };
         }
+        
+        public override CraftingSystem.CraftingStation StationType => CraftingSystem.CraftingStation.Well;
 
         protected override string CraftingMessage => Translations.Get("use_well");
 

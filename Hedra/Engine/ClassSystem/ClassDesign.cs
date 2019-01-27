@@ -38,6 +38,7 @@ namespace Hedra.Engine.ClassSystem
         public virtual AbilityTreeBlueprint FirstSpecializationTree => AbilityTreeLoader.Instance[ClassLoader.Instance[Type].FirstSpecializationTree];
         public virtual AbilityTreeBlueprint SecondSpecializationTree => AbilityTreeLoader.Instance[ClassLoader.Instance[Type].SecondSpecializationTree];        
         public virtual Item StartingItem => ItemPool.Grab(ClassLoader.Instance[Type].StartingItem);
+        public virtual Item[] StartingRecipes => ClassLoader.Instance[Type].StartingRecipes.Select(S => ItemPool.Grab(S)).ToArray();
         public virtual float AttackResistance => ClassLoader.Instance[Type].AttackResistance;
         public virtual float MaxStamina => ClassLoader.Instance[Type].MaxStamina;
         public virtual float BaseDamage => ClassLoader.Instance[Type].BaseDamage;

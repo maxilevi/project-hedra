@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Hedra.Engine.CraftingSystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
@@ -71,7 +72,7 @@ namespace HedraTests.Game
 
                 if (Item.IsRecipe)
                 {
-                    return CalculatePrice(ItemPool.Grab(Item.GetAttribute<string>(CommonAttributes.Output))) / 2;
+                    return CalculatePrice(CraftingInventory.GetOutputFromRecipe(Item)) / 2;
                 }
                 price *= (int) (Item.Tier+1);
             }

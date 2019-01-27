@@ -12,6 +12,7 @@ namespace Hedra.Engine.ClassSystem.Templates
         public string FirstSpecializationTree { get; set; }
         public string SecondSpecializationTree { get; set; }
         public string StartingItem { get; set; }
+        public string[] StartingRecipes { get; set; } = new string[0];
         public float AttackResistance { get; set;}
         public float MaxStamina { get; set; }
         public float BaseDamage { get; set; }

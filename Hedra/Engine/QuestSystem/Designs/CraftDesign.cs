@@ -109,7 +109,7 @@ namespace Hedra.Engine.QuestSystem.Designs
             Parameters.Set("Recipe", recipe);
             Parameters.Set("Station", recipe.GetAttribute<CraftingStation>(CommonAttributes.CraftingStation));
             Parameters.Set("StartingItems", item.StartingItems);
-            var output = ItemPool.Grab(recipe.GetAttribute<string>(CommonAttributes.Output));
+            var output = CraftingInventory.GetOutputFromRecipe(recipe);
             return new []
             {
                 new ItemCollect

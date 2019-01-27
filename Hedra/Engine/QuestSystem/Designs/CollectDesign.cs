@@ -84,7 +84,7 @@ namespace Hedra.Engine.QuestSystem.Designs
             var possibleItems = ItemPool.Matching(T => T.Tier == ItemTier.Misc && T.Name != ItemType.Gold.ToString());
             var recipes = ItemPool.Matching(T => T.EquipmentType == EquipmentType.Recipe.ToString());
             possibleItems = possibleItems.Where(
-                I => recipes.All(R => R.GetAttribute<string>(CommonAttributes.Output) != I.Name)
+                I => recipes.All(R => CraftingInventory.GetOutputFromRecipe(R).Name != I.Name)
             ).ToArray();
             return possibleItems.Select(I => new ItemCollect
             {

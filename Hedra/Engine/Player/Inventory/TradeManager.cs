@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Linq;
+using Hedra.Engine.CraftingSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
@@ -62,7 +63,7 @@ namespace Hedra.Engine.Player.Inventory
                 }
 
                 if (Item.IsRecipe)
-                    return ItemPrice(ItemPool.Grab(Item.GetAttribute<string>(CommonAttributes.Output))) / 2;
+                    return ItemPrice(CraftingInventory.GetOutputFromRecipe(Item)) / 2;
                 
                 price *= (int) (Item.Tier+1);
             }

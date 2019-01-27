@@ -49,7 +49,7 @@ namespace Hedra.Engine.Core
             {
                 var ext = Path.GetExtension(module);
                 if (ext != ".json") continue;
-                var obj = FromJSON<T>(File.ReadAllText(module), out var result);
+                var obj = FromJSON<T>(module, File.ReadAllText(module), out var result);
 
                 if (!result) continue;
 
@@ -58,7 +58,7 @@ namespace Hedra.Engine.Core
             return list.ToArray();
         }
 
-        private static T FromJSON<T>(string Data, out bool Success)
+        private static T FromJSON<T>(string Path, string Data, out bool Success)
         {
             try
             {
@@ -69,7 +69,7 @@ namespace Hedra.Engine.Core
             catch (Exception e)
             {
                 Success = false;
-                Log.WriteLine(e.ToString());
+                Log.WriteLine($"Exception while reading file '{Path}':{Environment.NewLine}{e}");
             }
             return default(T);
         }

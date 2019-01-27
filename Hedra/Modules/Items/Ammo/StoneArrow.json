@@ -1,3 +1,18 @@
 {
-  
+  "Name": "StoneArrow",
+  "DisplayName": "StoneArrow",
+  "Tier": "Common",
+  "EquipmentType": "Ammo",
+  "Description": "A simple stone arrow.",
+  "Attributes": [
+    {
+      "Name": "Price",
+      "Value": 2,
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Ammo/StoneArrow.ply"
+  }
 }

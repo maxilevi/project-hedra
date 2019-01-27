@@ -202,6 +202,7 @@
     <Compile Include="Core\Mathf.cs" />
     <Compile Include="Engine\CacheSystem\CornCache.cs" />
     <Compile Include="Engine\CacheSystem\MushroomCache.cs" />
+    <Compile Include="Engine\CacheSystem\PebbleCache.cs" />
     <Compile Include="Engine\CacheSystem\PumpkinCache.cs" />
     <Compile Include="Engine\CacheSystem\SunflowerCache.cs" />
     <Compile Include="Engine\CacheSystem\TimberCache.cs" />
@@ -258,6 +259,7 @@
     <Compile Include="Engine\PlantSystem\FarmPlantDesign.cs" />
     <Compile Include="Engine\PlantSystem\MushroomDesign.cs" />
     <Compile Include="Engine\PlantSystem\MushroomPlacementDesign.cs" />
+    <Compile Include="Engine\PlantSystem\PebbleDesign.cs" />
     <Compile Include="Engine\PlantSystem\PumpkinDesign.cs" />
     <Compile Include="Engine\PlantSystem\SunflowerDesign.cs" />
     <Compile Include="Engine\PlantSystem\TimberDesign.cs" />
@@ -379,6 +381,8 @@
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\IBuilder.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\CollectiblePlant.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\IProbabilityTemplate.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\Loom.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\Sawmill.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\BedTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\BuildingDesignTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\DecorationsTemplate.cs" />
@@ -7112,6 +7116,22 @@
     <Folder Include="Modules\Items\Pants\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\project-hedra-assets\Environment\Misc\Pebble0.ply">
+      <Link>Assets\Env\Plants\Pebble0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Misc\Pebble0_Lod2.ply">
+      <Link>Assets\Env\Plants\Pebble0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Misc\Pebble0_Lod4.ply">
+      <Link>Assets\Env\Plants\Pebble0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Misc\Pebble0_Lod8.ply">
+      <Link>Assets\Env\Plants\Pebble0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Misc\Boat.ply">
       <Link>Assets\Items\Misc\Boat.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -7341,6 +7361,9 @@
     <Content Include="Modules\Classes\Warrior.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Ammo\StoneArrow.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Chestplates\CommonLeatherChestplate.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -7380,6 +7403,9 @@
     <Content Include="Modules\Items\Misc\Boat.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Misc\Cloth.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Misc\EnchantedBranch.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -7389,10 +7415,26 @@
     <Content Include="Modules\Items\Misc\Rake.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Misc\Pebble.json" />
+    <Content Include="Modules\Items\Misc\String.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Misc\Timber.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Misc\WoodenBowl.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Misc\WoodenPlank.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Misc\Wool.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Recipes\StoneArrowRecipe.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Recipes\ClothRecipe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Recipes\CookedMeatRecipe.json">
@@ -7405,6 +7447,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Recipes\MushroomStewRecipe.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Recipes\StringRecipe.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Recipes\WoodenPlankRecipe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Recipes\PumpkinPieRecipe.json">

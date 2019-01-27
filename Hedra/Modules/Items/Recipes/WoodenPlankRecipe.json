@@ -1,27 +1,30 @@
 {
   "Name": "WoodenPlankRecipe",
-  "DisplayName": "Wooden bowl recipe",
+  "DisplayName": "Wooden plank recipe",
   "EquipmentType": "Recipe",
   "Tier": "Common",
   "Description": "...",
   "Attributes": [
     {
       "Name": "CraftingStation",
-      "Value": "None"
+      "Value": "Sawmill"
     },
     {
       "Name": "Ingredients",
       "Value": [
         {
           "Name": "Timber",
-          "Amount": 2
+          "Amount": 1
         }
       ],
       "Display": "Bullets"
     },
     {
       "Name": "Output",
-      "Value": "WoodenBowl",
+      "Value": {
+        "Name": "WoodenPlank",
+        "Amount": 2
+      },
       "Hidden": true
     },
     {

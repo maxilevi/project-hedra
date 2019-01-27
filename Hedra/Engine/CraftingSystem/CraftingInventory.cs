@@ -52,18 +52,10 @@ namespace Hedra.Engine.CraftingSystem
         {
             var structs = World.InRadius<WorldBuilding.CraftingStation>(Position, CraftingStationRadius);
             var currentStation = CraftingStation.None;
-            var nearWater = structs.Any(
-                S => S is Well
-            );
-            var nearFire = structs.Any(
-                S => S is Campfire
-            );
-            var nearAnvil = structs.Any(
-                S => S is Anvil
-            );
-            if (nearWater) currentStation |= CraftingStation.Well;
-            if (nearFire) currentStation |= CraftingStation.Campfire;
-            if (nearAnvil) currentStation |= CraftingStation.Anvil;
+            for (var i = 0; i < structs.Length; ++i)
+            {
+                currentStation |= structs[i].StationType;
+            }
             return currentStation;
         }
 
@@ -75,12 +67,23 @@ namespace Hedra.Engine.CraftingSystem
             ingredients.ToList().ForEach(
                 I => _inventory.RemoveItem(_inventory.Search(T => T.Name == I.Name), I.Amount)
             );
-            var output = ItemPool.Grab(Recipe.GetAttribute<string>(CommonAttributes.Output), Unique.RandomSeed);
+            var output = GetOutputFromRecipe(Recipe);
             if (!_inventory.AddItem(output))
             {
                 World.DropItem(output, Position);
             }
             Craft?.Invoke(ingredients, Recipe, output);
+        }
+
+        public static Item GetOutputFromRecipe(Item Recipe)
+        {
+            var output = Recipe.GetAttribute<object>("Output");
+            if (output is string s) return ItemPool.Grab(s, Unique.RandomSeed);
+            
+            var asJArray = Recipe.GetAttribute<JArray>("Output");
+            var item = ItemPool.Grab((string)asJArray["Name"]);
+            item.SetAttribute(CommonAttributes.Amount, asJArray["Amount"]);
+            return item;
         }
         
         public bool LearnRecipe(string RecipeName)
@@ -124,7 +127,7 @@ namespace Hedra.Engine.CraftingSystem
         private void UpdateRecipes()
         {
             _recipes = _recipeNames.Select(R => ItemPool.Grab(R)).ToArray(); 
-            _recipeOutputs = _recipes.Select(I => ItemPool.Grab(I.GetAttribute<string>(CommonAttributes.Output))).ToArray();
+            _recipeOutputs = _recipes.Select(GetOutputFromRecipe).ToArray();
         }
         
         public string[] RecipeNames => _recipeNames.ToArray();

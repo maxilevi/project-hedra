@@ -14,6 +14,8 @@ namespace Hedra.Engine.WorldBuilding
         private const float Angle = .75f;
         
         protected abstract string CraftingMessage { get; }
+        
+        public abstract CraftingSystem.CraftingStation StationType { get; }
 
         protected CraftingStation(Vector3 Position) : base(Position)
         {
