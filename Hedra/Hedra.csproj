@@ -331,6 +331,7 @@
     <Compile Include="Engine\Rendering\TextureBillboard.cs" />
     <Compile Include="Engine\Rendering\TextureParameter.cs" />
     <Compile Include="Engine\Rendering\UI\Plaque.cs" />
+    <Compile Include="Engine\SkillSystem\SingleAnimationSkill.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Agility.cs" />
     <Compile Include="Engine\SkillSystem\Archer\FlameArrow.cs" />
     <Compile Include="Engine\SkillSystem\Archer\IceArrow.cs" />

@@ -23,31 +23,25 @@ namespace Hedra.Engine.SkillSystem.Rogue
     /// <summary>
     /// Description of WeaponThrow.
     /// </summary>
-    public class Shuriken : BaseSkill
+    public class Shuriken : SingleAnimationSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Shuriken.png");
-        private readonly Animation _throwAnimation;
         private static readonly VertexData ShurikenData = AssetManager.PLYLoader("Assets/Items/Shuriken.ply", new Vector3(1, 2, 1));
+        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Shuriken.png");
+        protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/RogueShurikenThrow.dae");
+        protected override float AnimationSpeed => 1;
 
         public Shuriken()
         {
             base.ManaCost = 35f;
             base.MaxCooldown = 8.5f;
-            
-            _throwAnimation = AnimationLoader.LoadAnimation("Assets/Chr/RogueShurikenThrow.dae");
-            _throwAnimation.Loop = false;
-            _throwAnimation.Speed = .5f;
-            _throwAnimation.OnAnimationMid += delegate{
-                Shuriken.ShootShuriken(Player, Player.View.CrossDirection.NormalizedFast(), 20f * base.Level, 8);
-            };
-            _throwAnimation.OnAnimationEnd += delegate{
-                Player.IsCasting = false;
-                Casting = false;
-                Player.IsAttacking = false;
-            };
         }
 
-        public static void ShootShuriken(IHumanoid Human, Vector3 Direction, float Damage, int KnockChance = -1){
+        protected override void OnAnimationMid()
+        {
+            ShootShuriken(Player, Player.View.CrossDirection.NormalizedFast(), 20f * base.Level, 8);
+        }
+
+        protected static void ShootShuriken(IHumanoid Human, Vector3 Direction, float Damage, int KnockChance = -1){
             VertexData weaponData = ShurikenData.Clone();
             weaponData.Scale(Vector3.One * 1.75f);
 
@@ -60,7 +54,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
                 Lifetime = 5f
             };
             weaponProj.HitEventHandler += delegate(Projectile Sender, IEntity Hit) {
-                Hit.Damage(Damage, Human, out float exp, true);
+                Hit.Damage(Damage, Human, out var exp);
                 Human.XP += exp;
                 if (KnockChance == -1) return;
                 if(Utils.Rng.Next(0, KnockChance) == 0)
@@ -69,30 +63,16 @@ namespace Hedra.Engine.SkillSystem.Rogue
             SoundPlayer.PlaySound(SoundType.BowSound, Human.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
         }
         
-        public override void Use(){
-            base.MaxCooldown = 8.5f - Math.Min(5f, base.Level * .5f);
-            Player.IsCasting = true;
-            Casting = true;
-            Player.IsAttacking = true;
-            Player.LeftWeapon.InAttackStance = false;
-            Player.Model.BlendAnimation(_throwAnimation);
-            Player.Movement.Orientate();
-        }
-        
-        public override void Update(){
-            if(Player.IsCasting && Casting){
-                
-                World.Particles.Color = new Vector4(1,1,1,1);
-                World.Particles.ParticleLifetime = 1f;
-                World.Particles.GravityEffect = .0f;
-                World.Particles.Direction = Vector3.Zero;
-                World.Particles.Scale = new Vector3(.25f,.25f,.25f);
-                World.Particles.Position = Player.Model.LeftWeaponPosition;
-                World.Particles.PositionErrorMargin = Vector3.One * 0.75f;
-                
-                for(int i = 0; i < 1; i++)
-                    World.Particles.Emit();
-            }
+        protected override void OnExecution()
+        {
+            World.Particles.Color = Vector4.One;
+            World.Particles.ParticleLifetime = 1f;
+            World.Particles.GravityEffect = .0f;
+            World.Particles.Direction = Vector3.Zero;
+            World.Particles.Scale = Vector3.One * .25f;
+            World.Particles.Position = Player.Model.LeftWeaponPosition;
+            World.Particles.PositionErrorMargin = Vector3.One * 0.75f;
+            World.Particles.Emit();            
         }
         
         public override string Description => "Throw a shuriken at your foes.";
