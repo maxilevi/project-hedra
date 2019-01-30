@@ -23,7 +23,7 @@ namespace Hedra.Engine.SkillSystem.Archer
     /// </summary>
     public class PoisonArrow : SpecialAttackSkill<Bow>
     {
-        private const float BaseDamage = 80f;
+        private const float BaseDamage = 18f;
         private const float BaseCooldown = 14f;
         private const float CooldownCap = 6f;
         private const float BaseManaCost = 30f;

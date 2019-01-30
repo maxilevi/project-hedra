@@ -24,6 +24,7 @@ using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Networking;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Sound;
@@ -346,6 +347,11 @@ namespace Hedra.Engine.Management
                 if (Parts[0] == "bleed")
                 {
                     Caster.AddComponent(new BleedingComponent(Caster, null, 5f, 30f));
+                }
+                if (Parts[0] == "host")
+                {
+                    Connection.Instance.Build();
+                    Connection.Instance.Host();
                 }
                 if (Parts[0] == "slow")
                 {

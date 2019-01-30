@@ -21,10 +21,11 @@ namespace Hedra.Engine.SkillSystem
     /// <summary>
     /// Description of WeaponThrow.
     /// </summary>
-    public abstract class SingleAnimationSkill : BaseSkill
+    public abstract class SingleAnimationSkill : CappedSkill
     {
         protected abstract Animation SkillAnimation { get; }
         protected virtual float AnimationSpeed { get; }
+        protected virtual bool EquipWeapons => true;
         private float _frameCounter;
         private bool _shouldEnd;
         private bool _executedStart;
@@ -59,20 +60,29 @@ namespace Hedra.Engine.SkillSystem
         public override void Use()
         {
             Casting = true;
-            Player.IsAttacking = true;
+            if (EquipWeapons)
+            {
+                Player.IsAttacking = true;
+            }
+            else
+            {
+                Player.IsAttacking = false;
+                Player.WasAttacking = false;
+                Player.LeftWeapon.InAttackStance = false;
+            }
             Player.Movement.Orientate();
             _shouldEnd = false;
             _executedStart = false;
             _executedMid = false;
             _executedEnd = false;
-            Player.Model.Play(SkillAnimation);
+            Player.Model.BlendAnimation(SkillAnimation);
         }
 
         private void Disable()
         {
             Casting = false;
-            Player.IsAttacking = false;
             Player.Model.Reset();
+            OnDisable();
         }
         
         public override void Update()
@@ -90,8 +100,13 @@ namespace Hedra.Engine.SkillSystem
             OnExecution();
         }
 
-        private bool ShouldEnd => Player.IsDead || Player.IsKnocked || _shouldEnd;
+        private bool ShouldEnd => Player.IsDead || Player.IsKnocked || _shouldEnd || Player.Model.AnimationBlending != SkillAnimation;
 
+        protected virtual void OnDisable()
+        {
+            
+        }
+        
         protected virtual void OnAnimationMid()
         {
             

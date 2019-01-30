@@ -51,7 +51,7 @@ namespace Hedra.AISystem.Behaviours
             if (Parent.Model.CanAttack(Target, RangeModifier))
             {
                 Parent.Model.Attack(Target, RangeModifier);
-                if (!Target.IsMoving && !Target.IsKnocked && Utils.Rng.Next(0, 6) == 1) Target.KnockForSeconds(1.5f);
+                //if (!Target.IsMoving && !Target.IsKnocked && Utils.Rng.Next(0, 6) == 1) Target.KnockForSeconds(1.5f);
             }
         }
         

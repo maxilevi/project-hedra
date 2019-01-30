@@ -84,6 +84,7 @@ namespace Hedra.API
             _modelHandlerRegistry.Unregister();
             _itemHandlerRegistry.Unregister();
             _effectRegistry.Unregister();
+            _skillRegistry.Unregister();
         }
     }
 }

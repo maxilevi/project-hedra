@@ -148,6 +148,11 @@ namespace Hedra.Engine.EntitySystem
                 }
             }
         }
+        
+        public void ResetSpeed()
+        {
+            _speedMultiplier = NormalSpeedModifier;
+        }
 
         public Vector3 MoveFormula(Vector3 Direction, bool ApplyReductions = true)
         {
@@ -390,42 +395,57 @@ namespace Hedra.Engine.EntitySystem
             });
         }
 
+        public bool EntityRaycast(IEntity[] Entities, Vector3 Addition)
+        {
+            var success = false;
+            EntityRaycast(Entities, Addition, E => { return success = true; });
+            return success;
+        }
+
+        private void EntityRaycast(IEntity[] Entities, Vector3 Addition, Func<IEntity, bool> OnCollision)
+        {
+            var chunkSpace = World.ToChunkSpace(Parent.Position);
+            for (var i = Entities.Length - 1; i > -1; i--)
+            {
+                if (Entities[i] == Parent)
+                    continue;
+                /* Is a entity is farther than 2 chunks away, just skip it.*/
+                if ((World.ToChunkSpace(Entities[i].Position) - chunkSpace).LengthSquared > Chunk.Width * Chunk.Width)
+                    continue;
+
+                if (!Entities[i].Physics.UsePhysics) continue;
+                if (!Entities[i].Physics.CollidesWithEntities) continue;
+                var radii = Parent.Model.Dimensions.Size.LengthFast + Entities[i].Model.Dimensions.Size.LengthFast;
+                if (!((Entities[i].Position - Parent.Position).LengthSquared < radii * radii)) continue;
+                if (!Physics.Collides(Entities[i].Model.BroadphaseBox, this.Parent.Model.BroadphaseBox) ||
+                    !Physics.Collides(Entities[i].Model.BroadphaseCollider, Parent.Model.BroadphaseCollider))
+                    continue;
+
+                if (OnCollision.Invoke(Entities[i]))
+                    return;
+            }
+        }
+        
         private void HandleEntityCollision(MoveCommand Command)
         {
             if (!this.CollidesWithEntities || Command.IsRecursive) return;
-            var entities = World.Entities;
-            var chunkSpace = World.ToChunkSpace(Parent.Position);
-            for (var i = entities.Count - 1; i > -1; i--)
+            EntityRaycast(World.Entities.ToArray(), Vector3.Zero, E =>
             {
-                if (entities[i] == Parent)
-                    continue;
-
-                /* Is a entity is farther than 2 chunks away, just skip it.*/
-                if ((World.ToChunkSpace(entities[i].Position) - chunkSpace).LengthSquared > Chunk.Width * Chunk.Width)
-                    continue;
-
-                if (!entities[i].Physics.UsePhysics) continue;
-                if (!entities[i].Physics.CollidesWithEntities) continue;
-                var radii = Parent.Model.Dimensions.Size.LengthFast + entities[i].Model.Dimensions.Size.LengthFast;
-                if (!((entities[i].Position - Parent.Position).LengthSquared < radii * radii)) continue;
-                if (!Physics.Collides(entities[i].Model.BroadphaseBox, this.Parent.Model.BroadphaseBox) ||
-                    !Physics.Collides(entities[i].Model.BroadphaseCollider, Parent.Model.BroadphaseCollider))
-                    continue;
-
-                if (!PushAround || !entities[i].Physics.CanBePushed) return;
-                if (entities[i].Model.BroadphaseBox.Size.LengthSquared >
+                if (!PushAround || !E.Physics.CanBePushed) return false;
+                if (E.Model.BroadphaseBox.Size.LengthSquared >
                     this.Parent.Model.BroadphaseBox.Size.LengthSquared * 4f)
                 {
-                    if (Vector3.Dot(Command.Delta.NormalizedFast(), (entities[i].Position - this.Parent.Position).NormalizedFast()) > .75f) return;
-                    else continue;
+                    if (Vector3.Dot(Command.Delta.NormalizedFast(), (E.Position - this.Parent.Position).NormalizedFast()) > .75f) return false;
+                    else return false;
                 }
-                var increment = -(Parent.Position.Xz - entities[i].Position.Xz).ToVector3().NormalizedFast();
+                var increment = -(Parent.Position.Xz - E.Position.Xz).ToVector3().NormalizedFast();
                 var command = new MoveCommand(increment * 8f)
                 {
                     IsRecursive = true
                 };
-                entities[i].Physics.DeltaTranslate(command);
-            }
+                E.Physics.DeltaTranslate(command);
+                return false;
+            });
         }
         
         public void ResetFall()

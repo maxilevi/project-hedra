@@ -274,7 +274,7 @@ namespace Hedra.Engine.PhysicsSystem
             return false;
         }
 
-        private static bool AABBvsAABB(Box A, Box B)
+        public static bool AABBvsAABB(Box A, Box B)
         {
             return A.Min.X  <= B.Max.X && A.Max.X >= B.Min.X &&
                 A.Min.Y  <= B.Max.Y && A.Max.Y >= B.Min.Y &&

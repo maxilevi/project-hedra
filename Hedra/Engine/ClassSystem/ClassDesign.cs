@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Hedra.API;
+using Hedra.Engine.ClassSystem.Templates;
 using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.AbilityTreeSystem;
+using Newtonsoft.Json.Linq;
 using OpenTK;
 
 namespace Hedra.Engine.ClassSystem
@@ -36,8 +38,8 @@ namespace Hedra.Engine.ClassSystem
         public virtual float BaseSpeed => ClassLoader.Instance[Type].BaseSpeed;    
         public virtual AbilityTreeBlueprint MainTree => AbilityTreeLoader.Instance[ClassLoader.Instance[Type].MainAbilityTree];
         public virtual AbilityTreeBlueprint FirstSpecializationTree => AbilityTreeLoader.Instance[ClassLoader.Instance[Type].FirstSpecializationTree];
-        public virtual AbilityTreeBlueprint SecondSpecializationTree => AbilityTreeLoader.Instance[ClassLoader.Instance[Type].SecondSpecializationTree];        
-        public virtual Item StartingItem => ItemPool.Grab(ClassLoader.Instance[Type].StartingItem);
+        public virtual AbilityTreeBlueprint SecondSpecializationTree => AbilityTreeLoader.Instance[ClassLoader.Instance[Type].SecondSpecializationTree];
+        public virtual KeyValuePair<int, Item>[] StartingItems => ClassLoader.Instance[Type].StartingItems.Select(ParseStartingItems).ToArray();
         public virtual Item[] StartingRecipes => ClassLoader.Instance[Type].StartingRecipes.Select(S => ItemPool.Grab(S)).ToArray();
         public virtual float AttackResistance => ClassLoader.Instance[Type].AttackResistance;
         public virtual float MaxStamina => ClassLoader.Instance[Type].MaxStamina;
@@ -50,6 +52,15 @@ namespace Hedra.Engine.ClassSystem
         public abstract Matrix4 RightBootPlacement { get; }
         public abstract Class Type { get; }
 
+        private static KeyValuePair<int, Item> ParseStartingItems(StartingItemTemplate Template)
+        {
+            var item = ItemPool.Grab(Template.Name);
+            var amount = Template.Amount;
+            if(amount > 1)
+                item.SetAttribute(CommonAttributes.Amount, amount);
+            return new KeyValuePair<int, Item>(Template.Index, item);
+        }
+        
         public virtual float MaxHealthFormula(float RandomFactor)
         {
             return ClassLoader.Instance[Type].BaseHealthPerLevel + RandomFactor;

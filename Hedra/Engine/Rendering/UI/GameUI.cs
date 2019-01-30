@@ -41,6 +41,7 @@ namespace Hedra.Engine.Rendering.UI
         private readonly SlingShotAnimation _slingShot;
         private readonly IPlayer _player;
         private string _currentClass;
+        private bool _shouldPlay;
 
         public GameUI(IPlayer Player)
         {
@@ -51,10 +52,7 @@ namespace Hedra.Engine.Rendering.UI
             Player.OnHitLanded += delegate
             {
                 if (_slingShot.Active) return;
-                TaskScheduler.When(() => _consecutiveHits.Scale.Y > 0, delegate
-                {
-                    _slingShot.Play(_consecutiveHits);
-                });
+                _shouldPlay = true;
             };
             const float scale = .75f;
             _healthBackground = new Texture(
@@ -199,6 +197,11 @@ namespace Hedra.Engine.Rendering.UI
                 _consecutiveHits.TextFont.Style);
             var hits = _player.ConsecutiveHits == 1 ? Translations.Get("hit_label") : Translations.Get("hits_label");
             _consecutiveHits.Text = _player.ConsecutiveHits > 0 ? $"{_player.ConsecutiveHits} {hits}" : string.Empty;
+            if (_shouldPlay)
+            {
+                _slingShot.Play(_consecutiveHits);
+                _shouldPlay = false;
+            }
             _slingShot.Update();
         }
 

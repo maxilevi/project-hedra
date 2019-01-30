@@ -32,12 +32,12 @@ namespace Hedra.Engine.Loader
                 Opacity = 0
             };
             
-#if !DEBUG
-            TaskScheduler.After(4, () => _splashOpacity = 0);
-#endif
-#if DEBUG
+//#if !DEBUG
+            //TaskScheduler.After(4, () => _splashOpacity = 0);
+//#endif
+//#if DEBUG
             this._finishedLoading = true;
-#endif
+//#endif
 
         }
 

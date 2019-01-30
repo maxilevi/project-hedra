@@ -63,7 +63,7 @@ namespace Hedra.Engine.Player.Inventory
                 }
 
                 if (Item.IsRecipe)
-                    return ItemPrice(CraftingInventory.GetOutputFromRecipe(Item)) / 2;
+                    return ItemPrice(CraftingInventory.GetOutputFromRecipe(Item));
                 
                 price *= (int) (Item.Tier+1);
             }

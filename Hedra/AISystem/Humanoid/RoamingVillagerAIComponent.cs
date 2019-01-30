@@ -155,7 +155,7 @@ namespace Hedra.AISystem.Humanoid
         private void TalkWith(IHumanoid Humanoid, float Time)
         {
             Parent.RotateTowards(Humanoid);
-            Parent.SearchComponent<TalkComponent>().Simulate(Humanoid, Time, delegate
+            Parent.SearchComponent<TalkComponent>()?.Simulate(Humanoid, Time, delegate
             {
                 _talkTimer.Reset();
                 _isInteracting = false;

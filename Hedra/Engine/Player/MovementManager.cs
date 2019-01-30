@@ -25,6 +25,7 @@ namespace Hedra.Engine.Player
         public Vector3 RollDirection { get; set; }
         public virtual bool IsMovingForward { get; protected set; }
         public virtual bool IsMovingBackwards { get; protected set; }
+        public Vector3 LastOrientation { get; private set; }
         public float RollFacing { get; set; }
         public bool IsJumping { get; private set; }
         protected readonly IHumanoid Human;
@@ -89,11 +90,12 @@ namespace Hedra.Engine.Player
             Human.Physics.DeltaTranslate(MoveSpace);
             if (Orientate)
             {
+                LastOrientation = new Vector3(MoveSpace.X, 0, MoveSpace.Z).NormalizedFast();
                 if (!Human.WasAttacking && !Human.IsAttacking)
                 {
                     Human.Model.TargetRotation = new Vector3(Human.Model.TargetRotation.X, CharacterRotation,
                         Human.Model.TargetRotation.Z);
-                    Human.Orientation = new Vector3(MoveSpace.X, 0, MoveSpace.Z).NormalizedFast();
+                    Human.Orientation = LastOrientation;
                 }
             }
 

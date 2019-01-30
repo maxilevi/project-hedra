@@ -75,7 +75,6 @@ namespace Hedra.Engine.Player
                     _lastInput = _commandLine.Text;
                     var outText = _player.Name+": "+WordFilter.Filter(_commandLine.Text);
                     this.AddLine(outText);
-                    Networking.NetworkManager.SendChatMessage(outText);
                 }
             }
             _commandLine.Text = string.Empty;

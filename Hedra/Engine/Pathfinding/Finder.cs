@@ -13,16 +13,30 @@ namespace Hedra.Engine.Pathfinding
     {
         public static void UpdateGrid(IEntity Parent, Grid Graph)
         {
+            var gridBounds = new Box(
+                ToWorldCoordinates(new Vector2(0, 0), Graph.DimX, Graph.DimY),
+                ToWorldCoordinates(new Vector2(Graph.DimX, Graph.DimY), Graph.DimX, Graph.DimY)
+            );
+            var entities = World.Entities.Where(E => Physics.AABBvsAABB(E.Model.BroadphaseBox, gridBounds)).ToArray();
             for (var x = 0; x < Graph.DimX; ++x)
             {
                 for (var y = 0; y < Graph.DimY; ++y)
                 {
                     var position = new Vector2(x, y);
                     Graph.UnblockCell(position);
-                    if(Parent.Physics.Raycast((position - new Vector2((int) (Graph.DimX / 2f), (int)(Graph.DimY / 2f))).ToVector3() * Chunk.BlockSize))
+                    var realPosition = ToWorldCoordinates(position, Graph.DimX, Graph.DimY);
+                    if(Parent.Physics.Raycast(realPosition))
+                        Graph.BlockCell(position);
+                    else if(Parent.Physics.EntityRaycast(entities, realPosition))
                         Graph.BlockCell(position);
                 }
             }
+        }
+
+        private static Vector3 ToWorldCoordinates(Vector2 Position, int DimX, int DimY)
+        {
+            return (Position - new Vector2((int) (DimX / 2f), (int) (DimY / 2f))).ToVector3() *
+                   Chunk.BlockSize;
         }
 
         public static Vector2[] GetPath(Grid Graph, Vector2 Start, Vector2 End)

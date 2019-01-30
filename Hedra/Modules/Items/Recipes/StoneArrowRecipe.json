@@ -13,11 +13,11 @@
       "Name": "Ingredients",
       "Value": [
         {
-          "Name": "Rock",
+          "Name": "Pebble",
           "Amount": 1
         },
         {
-          "Name": "Timber",
+          "Name": "Stick",
           "Amount": 1
         }
       ],

@@ -34,14 +34,14 @@ namespace Hedra.WeaponSystem
 
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
-            if(Type != AttackEventType.End) return;
+            if(Type != AttackEventType.Mid) return;
             Owner.AttackSurroundings(Owner.DamageEquation * 1.75f, delegate(IEntity Mob)
             {
 
-                if (Utils.Rng.Next(0, 3) == 1 && Options.Charge > .75f)
+                if (Utils.Rng.Next(0, 2) == 1 && Options.Charge > .5f)
                     Mob.KnockForSeconds(1.0f + Utils.Rng.NextFloat() * 2f);
 
-                if (Utils.Rng.Next(0, 3) == 1 && Options.Charge > .5f)
+                if (Utils.Rng.Next(0, 3) == 1 && Options.Charge > .25f)
                     Mob.AddComponent(new BleedingComponent(Mob, this.Owner, 4f,
                         Owner.DamageEquation * 2f));
             });

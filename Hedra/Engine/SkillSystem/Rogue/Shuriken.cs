@@ -9,6 +9,7 @@
 
 using System;
 using Hedra.Core;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
@@ -28,32 +29,45 @@ namespace Hedra.Engine.SkillSystem.Rogue
         private static readonly VertexData ShurikenData = AssetManager.PLYLoader("Assets/Items/Shuriken.ply", new Vector3(1, 2, 1));
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Shuriken.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/RogueShurikenThrow.dae");
-        protected override float AnimationSpeed => 1;
-
-        public Shuriken()
-        {
-            base.ManaCost = 35f;
-            base.MaxCooldown = 8.5f;
-        }
+        protected override bool EquipWeapons => false;
+        protected override float AnimationSpeed => 1.25f;
+        protected override int MaxLevel => 15;
+        public override float ManaCost => 35;
+        public override float MaxCooldown => Math.Max(4, 8 - base.Level * .5f);
 
         protected override void OnAnimationMid()
         {
-            ShootShuriken(Player, Player.View.CrossDirection.NormalizedFast(), 20f * base.Level, 8);
+            ShootShuriken();
         }
 
-        protected static void ShootShuriken(IHumanoid Human, Vector3 Direction, float Damage, int KnockChance = -1){
-            VertexData weaponData = ShurikenData.Clone();
-            weaponData.Scale(Vector3.One * 1.75f);
+        protected void ShootShuriken()
+        {
+            ShootShuriken(Player.View.LookingDirection);
+        }
 
-            var startingLocation = Human.Model.LeftWeaponPosition + Human.Orientation * .5f +
-                                   Vector3.UnitY * 2f;
+        protected void ShootShuriken(Vector3 Direction)
+        {
+            ShootShuriken(Player, Direction, 18 + Level * 2, Level > 5 ? 8 : -1);
+        }
+        
+        private static void ShootShuriken(IHumanoid Human, Vector3 Direction, float Damage, int KnockChance = -1)
+        {
+            var weaponData = ShurikenData.Clone().RotateZ(90);
+            weaponData.Scale(Vector3.One * 1f);
+
+            var startingLocation = Human.Model.LeftWeaponPosition;
 
             var weaponProj = new Projectile(Human, startingLocation, weaponData)
             {
-                Propulsion = Direction * 2f,
+                Propulsion = Direction * 2.25f,
                 Lifetime = 5f
             };
-            weaponProj.HitEventHandler += delegate(Projectile Sender, IEntity Hit) {
+            weaponProj.MoveEventHandler += delegate
+            {
+                weaponProj.Mesh.LocalRotation += Time.DeltaTime * Vector3.UnitY * 25f;
+            };
+            weaponProj.HitEventHandler += delegate(Projectile Sender, IEntity Hit)
+            {
                 Hit.Damage(Damage, Human, out var exp);
                 Human.XP += exp;
                 if (KnockChance == -1) return;
@@ -72,10 +86,10 @@ namespace Hedra.Engine.SkillSystem.Rogue
             World.Particles.Scale = Vector3.One * .25f;
             World.Particles.Position = Player.Model.LeftWeaponPosition;
             World.Particles.PositionErrorMargin = Vector3.One * 0.75f;
-            World.Particles.Emit();            
+            //World.Particles.Emit();            
         }
         
-        public override string Description => "Throw a shuriken at your foes.";
-        public override string DisplayName => "Shuriken";
+        public override string Description => Translations.Get("shuriken_desc");
+        public override string DisplayName => Translations.Get("shuriken_skill");
     }
 }

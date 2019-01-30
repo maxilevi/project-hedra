@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using Hedra.Engine.ModuleSystem.Templates;
+using Newtonsoft.Json.Linq;
 
 namespace Hedra.Engine.ClassSystem.Templates
 {
@@ -11,7 +13,7 @@ namespace Hedra.Engine.ClassSystem.Templates
         public string MainAbilityTree { get; set; }
         public string FirstSpecializationTree { get; set; }
         public string SecondSpecializationTree { get; set; }
-        public string StartingItem { get; set; }
+        public StartingItemTemplate[] StartingItems { get; set; }
         public string[] StartingRecipes { get; set; } = new string[0];
         public float AttackResistance { get; set;}
         public float MaxStamina { get; set; }

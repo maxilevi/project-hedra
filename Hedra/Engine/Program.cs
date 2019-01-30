@@ -1,9 +1,10 @@
 using System;
-using System.Collections.Generic;
+using Hedra.Engine.Steamworks;
 using Hedra.Engine.Game;
 using Hedra.Engine.IO;
 using Hedra.Engine.Loader;
 using Hedra.Engine.Native;
+using Hedra.Engine.Networking;
 using Hedra.Engine.Rendering;
 using OpenTK;
 using OpenTK.Graphics;
@@ -19,11 +20,36 @@ namespace Hedra.Engine
 
         private static void Main(string[] Args)
         {
-            if (Args.Length > 0 && Args[0] == "--dummy-mode") EnableDummyMode();
+            var dummyMode = Args.Length == 1 && Args[0] == "--dummy-mode";
+            var serverMode = Args.Length == 1 && Args[0] == "--server-mode";
+
+            if (serverMode)
+            {
+                RunDedicatedServer();
+            }
+            else
+            {
+                RunNormalAndDummyMode(dummyMode);
+            }
+            
+            Environment.Exit(0);
+        }
+
+        private static void RunDedicatedServer()
+        {
+            
+        }
+        
+        private static void RunNormalAndDummyMode(bool DummyMode)
+        {
+            if(DummyMode) EnableDummyMode();
             #if DEBUG
             IsDebug = true;
             #endif
 
+            GameLoader.LoadArchitectureSpecificFiles(GameLoader.AppPath);
+            Steam.Instance.Load();
+            
             var device = DisplayDevice.Default;
             Log.WriteLine(device.Bounds.ToString());
             GameSettings.DeviceWidth = device.Width;
@@ -74,9 +100,10 @@ namespace Hedra.Engine
                 Log.WriteLine("Project Hedra loaded successfully. Exiting...");
                 Environment.Exit(0);
             }
-            Environment.Exit(0);
+            
+            Steam.Instance.Dispose();
         }
-
+        
         private static void EnableDummyMode()
         {
             IsDummy = true;

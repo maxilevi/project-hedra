@@ -23,6 +23,7 @@ namespace Hedra.Engine.Player
         void AddRestriction(int Index, EquipmentType Type);
         void AddRestriction(int Index, string Type);
         Item Food { get; }
+        Item Ammo { get; }
         bool HasAvailableSpace { get; }
         Item MainWeapon { get; }
         Item Vehicle { get; }

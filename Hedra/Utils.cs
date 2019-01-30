@@ -13,7 +13,6 @@ using System.Text;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using Hedra.Engine.Networking;
 using OpenTK;
 
 namespace Hedra
@@ -236,35 +235,6 @@ namespace Hedra
                 return fwrIndex+1;
             else
                 return bkwIndex+1;
-        }
-        
-        
-        public static IPEndPoint CreateIPEndPoint(string endPoint)
-        {
-            string[] ep = endPoint.Split(':');
-            if (ep.Length < 2) throw new FormatException("Invalid endpoint format");
-            IPAddress ip;
-            if (ep.Length > 2)
-            {
-                if (!IPAddress.TryParse(string.Join(":", ep, 0, ep.Length - 1), out ip))
-                {
-                    throw new FormatException("Invalid ip-adress");
-                }
-            }
-            else
-            {
-                if (!IPAddress.TryParse(ep[0], out ip))
-                {
-                    throw new FormatException("Invalid ip-adress");
-                }
-            }
-            int port;
-            if (!int.TryParse(ep[ep.Length - 1], NumberStyles.None, NumberFormatInfo.CurrentInfo, out port))
-            {
-                port = NetworkManager.DefaultPort;
-            }
-            return new IPEndPoint(ip, port);
-        }
-        
+        } 
     }
 }

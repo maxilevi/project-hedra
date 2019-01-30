@@ -16,6 +16,7 @@ using Hedra.Engine.IO;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Native;
+using Hedra.Engine.Networking;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.Inventory;
@@ -47,13 +48,12 @@ namespace Hedra.Engine.Loader
         {
             base.OnLoad(e);
             MainThreadId = Thread.CurrentThread.ManagedThreadId;
-            GameVersion = "\u03B1 0.45";
+            GameVersion = "\u03B1 0.46";
             Title = $"{Title} {GameVersion}";
 
             OSManager.Load(Assembly.GetExecutingAssembly().Location);
             AssetManager.Load();
             CompatibilityManager.Load();
-            GameLoader.LoadArchitectureSpecificFiles(GameLoader.AppPath);
             GameLoader.LoadSoundEngine();
             HedraContent.Register();
             ModificationsLoader.Reload();
@@ -125,6 +125,7 @@ namespace Hedra.Engine.Loader
                 _lastValue = newNumber;
             }
             DebugProvider.Update();
+            Connection.Instance.Update();
             AnalyticsManager.PlayTime += (float) Delta;
         }
 

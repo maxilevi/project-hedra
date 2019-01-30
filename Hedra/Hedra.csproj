@@ -75,6 +75,9 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <Reference Include="Facepunch.Steamworks">
+      <HintPath>..\references\Facepunch.Steamworks.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\references\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
@@ -212,6 +215,7 @@
     <Compile Include="Engine\ClassSystem\RestrictionsFactory.cs" />
     <Compile Include="Engine\ClassSystem\Templates\AbilityTreeTemplate.cs" />
     <Compile Include="Engine\ClassSystem\Templates\ClassTemplate.cs" />
+    <Compile Include="Engine\ClassSystem\Templates\StartingItemTemplate.cs" />
     <Compile Include="Engine\Core\ISearchable.cs" />
     <Compile Include="Engine\Core\ModuleLoader.cs" />
     <Compile Include="Engine\Core\Singleton.cs" />
@@ -245,6 +249,8 @@
     <Compile Include="Engine\ModuleSystem\Templates\ModelTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\Templates\SpawnerSettings.cs" />
     <Compile Include="Engine\ModuleSystem\Templates\SpawnTemplate.cs" />
+    <Compile Include="Engine\Networking\Connection.cs" />
+    <Compile Include="Engine\Networking\Handler.cs" />
     <Compile Include="Engine\Pathfinding\Finder.cs" />
     <Compile Include="Engine\Pathfinding\Grid.cs" />
     <Compile Include="Engine\Pathfinding\MinHeap.cs" />
@@ -360,6 +366,7 @@
     <Compile Include="Engine\SkillSystem\Rogue\TripleShuriken.cs" />
     <Compile Include="Engine\SkillSystem\Rogue\Venom.cs" />
     <Compile Include="Engine\SkillSystem\SkillFactory.cs" />
+    <Compile Include="Engine\SkillSystem\SkillUtils.cs" />
     <Compile Include="Engine\SkillSystem\SpecialAttackPassiveSkill.cs" />
     <Compile Include="Engine\SkillSystem\SpecialAttackSkill.cs" />
     <Compile Include="Engine\SkillSystem\SwitchSkill.cs" />
@@ -370,6 +377,7 @@
     <Compile Include="Engine\SkillSystem\Warrior\LearnHammer.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Resistance.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Whirlwind.cs" />
+    <Compile Include="Engine\Steamworks\Steam.cs" />
     <Compile Include="Engine\StructureSystem\CachedVertexDataChunkWatcher.cs" />
     <Compile Include="Engine\StructureSystem\ChunkWatcher.cs" />
     <Compile Include="Engine\StructureSystem\InstanceDataChunkWatcher.cs" />
@@ -781,18 +789,6 @@
     <Compile Include="Engine\Management\Executer.cs" />
     <Compile Include="Engine\Management\UpdateManager.cs" />
     <Compile Include="Engine\Management\ZipManager.cs" />
-    <Compile Include="Engine\Networking\Packet0x10.cs" />
-    <Compile Include="Engine\Networking\Packet0x12.cs" />
-    <Compile Include="Engine\Networking\Packet0x13.cs" />
-    <Compile Include="Engine\Networking\Packet0x14.cs" />
-    <Compile Include="Engine\Networking\Packet0x15.cs" />
-    <Compile Include="Engine\Networking\Packet0x4.cs" />
-    <Compile Include="Engine\Networking\NetworkManager.cs" />
-    <Compile Include="Engine\Networking\Packet0x6.cs" />
-    <Compile Include="Engine\Networking\Packet0x8.cs" />
-    <Compile Include="Engine\Networking\PacketBuilder.cs" />
-    <Compile Include="Engine\Networking\Packet0x2.cs" />
-    <Compile Include="Engine\Networking\PeerData.cs" />
     <Compile Include="Engine\PhysicsSystem\Physics.cs" />
     <Compile Include="Engine\PhysicsSystem\Box.cs" />
     <Compile Include="Engine\PhysicsSystem\CollisionShape.cs" />
@@ -1713,6 +1709,10 @@
     </None>
     <None Include="..\project-hedra-assets\Environment\TallTrees\TallTree2_Lod8.ply">
       <Link>Assets\Env\Trees\TallTree2_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Models\Blend\Ammo\StoneArrow.ply">
+      <Link>Assets\Items\Ammo\StoneArrow.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Blend\Bows\CommonRecurveBow.ply">
@@ -4710,10 +4710,6 @@
       <Link>Assets\Chr\WolfIdle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\Arrow.ply">
-      <Link>Assets\Items\Arrow.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Models\Berries.ply">
       <Link>Assets\Env\Berries.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -4724,10 +4720,6 @@
     </None>
     <None Include="..\project-hedra-assets\Models\Blacksmith1.ply">
       <Link>Assets\Env\Blacksmith1.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\BoarTusk.ply">
-      <Link>Assets\Items\BoarTusk.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Bush1.ply">
@@ -6051,10 +6043,6 @@
       <Link>Assets\Env\GiantTree0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\GoatHorn.ply">
-      <Link>Assets\Items\GoatHorn.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Models\Grass.ply">
       <Link>Assets\Env\Grass.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -6239,10 +6227,6 @@
       <Link>Assets\Items\Hammers\RareSunderingHammer.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\RatTail.ply">
-      <Link>Assets\Items\RatTail.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Models\Roaster.ply">
       <Link>Assets\Env\Roaster.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -6259,16 +6243,8 @@
       <Link>Assets\Env\SleepingIcon.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\SpiderEyes.ply">
-      <Link>Assets\Items\SpiderEyes.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Models\Stable0.ply">
       <Link>Assets\Env\Village\Stable0.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\TurtleShell.ply">
-      <Link>Assets\Items\TurtleShell.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\UncommonBarbarianBronzeSword.ply">
@@ -7117,6 +7093,10 @@
     <Folder Include="Modules\Items\Pants\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\project-hedra-assets\Animations\ArcherChargeStance.dae">
+      <Link>Assets\Chr\ArcherChargeStance.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Environment\Misc\Pebble0.ply">
       <Link>Assets\Env\Plants\Pebble0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -7135,6 +7115,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Misc\Boat.ply">
       <Link>Assets\Items\Misc\Boat.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Misc\WoodenPlank.ply">
+      <Link>Assets\Items\Misc\WoodenPlank.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\AbilityTreeBackground.png">
@@ -7416,7 +7400,12 @@
     <Content Include="Modules\Items\Misc\Rake.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\Items\Misc\Pebble.json" />
+    <Content Include="Modules\Items\Misc\Pebble.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Misc\Stick.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Misc\String.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -7552,10 +7541,16 @@
     <Content Include="x64\openal32.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="x64\steam_api64.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="x64\wrap_oal.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="x86\openal32.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x86\steam_api.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="x86\wrap_oal.dll">

@@ -93,7 +93,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
             switch (EventArgs.Button)
             {
                 case MouseButton.Left:
-                    if (!_w1.MeetsRequirements()) return;
+                    if (!_w1.MeetsRequirements() || _w2.IsCharging) return;
                     _w1.Cooldown = _w1.MaxCooldown;
                     _w1.Use();
                     break;

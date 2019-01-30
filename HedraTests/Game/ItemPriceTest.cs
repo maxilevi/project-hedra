@@ -72,7 +72,7 @@ namespace HedraTests.Game
 
                 if (Item.IsRecipe)
                 {
-                    return CalculatePrice(CraftingInventory.GetOutputFromRecipe(Item)) / 2;
+                    return CalculatePrice(CraftingInventory.GetOutputFromRecipe(Item));
                 }
                 price *= (int) (Item.Tier+1);
             }

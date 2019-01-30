@@ -19,6 +19,7 @@ namespace Hedra.Engine.ItemSystem
         Vehicle,
         Ring,
         Staff,
-        Recipe,        
+        Recipe,
+        Ammo
     }
 }

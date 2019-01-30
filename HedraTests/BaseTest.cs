@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using Hedra;
 using Hedra.Engine;
+using Hedra.Engine.ClassSystem;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
@@ -44,6 +45,7 @@ namespace HedraTests
             ColladaLoader.Provider = new SimpleColladaProvider();
             GameManager.Provider = new SimpleGameProviderMock();
             GUIText.Provider = new SimpleTextProviderMock();
+            ClassLoader.LoadModules(GameLoader.AppPath);
             if(!_translationsLoaded) Translations.Load();
             _translationsLoaded = true;
         }

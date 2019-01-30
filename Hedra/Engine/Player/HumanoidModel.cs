@@ -109,7 +109,7 @@ namespace Hedra.Engine.Player
 
         public HumanoidModel(IHumanoid Human) : base(Human)
         {
-            Load(Human, HumanoidLoader.HumanoidTemplater[Human.Class].Model);
+            Load(Human, Human.Class.ModelTemplate);
         }
 
         private void Load(IHumanoid Humanoid, HumanoidModelTemplate Template)
@@ -386,7 +386,7 @@ namespace Hedra.Engine.Player
         
         private void HandleRollEffects()
         {
-            if(_previousPosition != Human.BlockPosition && Human.IsGrounded)
+            if((_previousPosition - Human.BlockPosition).LengthFast > 1 && Human.IsGrounded)
             {
                 World.Particles.VariateUniformly = true;
                 World.Particles.Color = Vector4.One;//World.GetHighestBlockAt( (int) this.Human.Position.X, (int) this.Human.Position.Z).GetColor(Region.Default);// * new Vector4(.8f, .8f, 1.0f, 1.0f);

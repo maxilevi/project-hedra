@@ -54,37 +54,42 @@ namespace Hedra.Engine.Player
         public override bool MeetsRequirements()
         {
             if(DisableWeapon) return false;            
-             return base.MeetsRequirements() && !Player.IsAttacking && !Player.IsEating && Player.CanInteract;
+             return base.MeetsRequirements() && !Player.IsAttacking && !Player.IsEating && Player.CanInteract 
+                    && (Player.LeftWeapon.CanDoAttack1 && _type == AttackType.Primary || Player.LeftWeapon.CanDoAttack2 && _type == AttackType.Secondary);
         }
         
         public override void KeyUp()
         {
-            if (_type == AttackType.Primary)
+            if (!ShouldCharge)
             {
                 _continousAttack = false;
             }
-            if (_type == AttackType.Secondary && _isCharging)
+            else if (_isCharging)
             {
                 var charge = _chargeTime / (BaseChargeTime + ExtraChargeTime);
-                Player.LeftWeapon.Attack2(Player, new AttackOptions
+                var options = new AttackOptions
                 {
                     Charge = charge,
                     DamageModifier = AttackOptions.Default.DamageModifier * charge + .15f
-                });
+                };
+                if(_type == AttackType.Primary)
+                    Player.LeftWeapon.Attack1(Player, options);
+                else
+                    Player.LeftWeapon.Attack2(Player, options);
                 IsCharging = false;
             }
         }
         
         public override void Use()
         {
-            if (_type == AttackType.Primary)
-            {
-                _continousAttack = true;
-            }
-            if (_type == AttackType.Secondary)
+            if (ShouldCharge)
             {
                 IsCharging = true;
                 SoundPlayer.PlaySoundWhile(SoundType.PreparingAttack, () => IsCharging, () => 1, () => Charge);
+            }
+            else
+            {
+                _continousAttack = true;
             }
         }
         
@@ -106,6 +111,7 @@ namespace Hedra.Engine.Player
                 _shiverAnimation.Update();
                 Player.LeftWeapon.ChargingIntensity = Charge;
             }
+            Player.LeftWeapon.IsCharging = IsCharging;
             Tint = IsCharging ? new Vector3(1,0,0) * Charge + Vector3.One * .65f : NormalTint;
         }
 
@@ -123,6 +129,7 @@ namespace Hedra.Engine.Player
             }
         }
 
+        private bool ShouldCharge => AttackType.Secondary == _type || Player.LeftWeapon.IsChargeable;
         public override uint TextureId => _textureId;
         protected override bool HasCooldown => false;
         public override string Description => string.Empty;

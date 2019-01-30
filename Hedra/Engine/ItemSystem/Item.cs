@@ -97,6 +97,11 @@ namespace Hedra.Engine.ItemSystem
             return _attributes.Get<T>(Attribute);
         }
 
+        public object RawAttribute(string Attribute)
+        {
+            return _attributes.Raw(Attribute);
+        }
+
         public void DeleteAttribute(string Attribute)
         {
             _attributes.Delete(Attribute);
@@ -135,7 +140,7 @@ namespace Hedra.Engine.ItemSystem
             savedTemplate.DisplayName = defaultTemplate.DisplayName;
             savedTemplate.Tier = defaultTemplate.Tier;
             var item = FromTemplate(savedTemplate);
-            if (savedTemplate.EquipmentType == null) return UpdateAttributes(item);
+            if (item.HasAttribute(CommonAttributes.Amount)) return UpdateAttributes(item);
             
             var newItem = ItemPool.Grab(savedTemplate.Name);
             if (!item.HasAttribute(CommonAttributes.Seed)) item.SetAttribute(CommonAttributes.Seed, Utils.Rng.Next(int.MinValue, int.MaxValue), true);
@@ -146,14 +151,10 @@ namespace Hedra.Engine.ItemSystem
 
         private static Item UpdateAttributes(Item Item)
         {
-            if (Item.HasAttribute(CommonAttributes.Amount))
-            {
-                var amount = Item.GetAttribute<int>(CommonAttributes.Amount);
-                var newItem = ItemPool.Grab(Item.Name);
-                newItem.SetAttribute(CommonAttributes.Amount, amount);
-                return newItem;
-            }
-            return Item;
+            var amount = Item.GetAttribute<int>(CommonAttributes.Amount);
+            var newItem = ItemPool.Grab(Item.Name);
+            newItem.SetAttribute(CommonAttributes.Amount, amount);
+            return newItem;
         }
 
         public byte[] ToArray()
@@ -163,6 +164,7 @@ namespace Hedra.Engine.ItemSystem
 
         public bool IsGold => Name == GoldItemName;
         public bool IsFood => HasAttribute(CommonAttributes.IsFood) && GetAttribute<bool>(CommonAttributes.IsFood) || Name == "Berry";
+        public bool IsAmmo => string.Equals(EquipmentType, ItemSystem.EquipmentType.Ammo.ToString(), StringComparison.InvariantCultureIgnoreCase);
         public bool IsWeapon => WeaponFactory.Contains(this);
         public bool IsArmor => ArmorFactory.Contains(this);
         public bool IsRing => EquipmentType == ItemSystem.EquipmentType.Ring.ToString();

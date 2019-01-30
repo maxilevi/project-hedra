@@ -52,19 +52,7 @@ namespace Hedra.Engine.Rendering.UI
             
             var join = new Button(new Vector2(0,-.65f), new Vector2(.15f,.05f), "Join", Color.White, FontCache.Get(AssetManager.NormalFamily, fontSize));
             join.Click += delegate {
-                
-                if(!NetworkManager.Join(_ipField.Text)){
-                    LocalPlayer.Instance.MessageDispatcher.ShowNotification("refused",Color.FromArgb(255,229,10,10), 2.5f);
-                    return;
-                }
-                //Game.MakeCurrent(Game.CurrentInformation);
-                if(NetworkManager.WorldSeed != -1)
-                    World.Recreate(NetworkManager.WorldSeed);
-                if(NetworkManager.WorldTime != -1)
-                    EnvironmentSystem.SkyManager.SetTime(NetworkManager.WorldTime);
-                GameManager.Player.Spawner.Enabled = false;
-                GameManager.Player.UI.HideMenu();
-                
+
             };
             
             Button host = new Button(new Vector2(0,-.65f), new Vector2(.15f,.05f), "Host", Color.White, FontCache.Get(AssetManager.NormalFamily, fontSize));

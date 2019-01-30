@@ -39,6 +39,8 @@ namespace Hedra.Components
             flask.SetAttribute(CommonAttributes.Amount, int.MaxValue);
             var bowl = ItemPool.Grab(ItemType.WoodenBowl);
             bowl.SetAttribute(CommonAttributes.Amount, int.MaxValue);
+            var stoneArrow = ItemPool.Grab(ItemType.StoneArrow);
+            stoneArrow.SetAttribute(CommonAttributes.Amount, int.MaxValue);
             var recipes = new[]
             {
                 ItemPool.Grab(ItemType.PumpkinPieRecipe),
@@ -51,12 +53,12 @@ namespace Hedra.Components
                 {TradeInventory.MerchantSpaces - 1, berry},
                 {TradeInventory.MerchantSpaces - 2, flask},
                 {TradeInventory.MerchantSpaces - 3, bowl},
-                {TradeInventory.MerchantSpaces - 4, null /*recipes[rng.Next(0, recipes.Length)]*/},
+                //{TradeInventory.MerchantSpaces - 4, rng.NextBool() ? stoneArrow : null},
+                {TradeInventory.MerchantSpaces - 5, null /*recipes[rng.Next(0, recipes.Length)]*/},
             };
             if (_isTravellingMerchant)
             {
                 newItems.Add(0, ItemPool.Grab("HorseMount"));
-                newItems.Add(1, ItemPool.Grab(ItemType.Glider));
                 newItems.Add(2, ItemPool.Grab(ItemType.Boat));
             }
             return newItems;

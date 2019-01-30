@@ -15,7 +15,7 @@
   ],
   "Model": {
     "Path": "$DataFile$/Assets/Chr/SheepIdle0.dae",
-    "Scale": 1.25,
+    "Scale": 1.0,
     "IdleAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/SheepIdle0.dae",
@@ -35,7 +35,7 @@
     "AttackAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/SheepAttack.dae",
-        "Speed": 2.0
+        "Speed": 5.0
       }
     ]
   } 

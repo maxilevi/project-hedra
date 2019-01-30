@@ -83,7 +83,7 @@ namespace Hedra.Engine.Rendering.UI
                     LocalRotation = rotation,
                     TargetRotation = rotation
                 };
-                _human.SetWeapon(_classType.StartingItem.Weapon);
+                _human.SetWeapon(_classType.StartingItems.First(P => P.Value.IsWeapon).Value.Weapon);
             }
 
             SetWeapon(null, null);

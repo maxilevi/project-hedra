@@ -27,6 +27,8 @@ namespace Hedra.Engine.ItemSystem
         Mushroom,
         Timber,
         Pebble,
+        HealthPotion,
+        StoneArrow,
         MaxEnums
     }
 }

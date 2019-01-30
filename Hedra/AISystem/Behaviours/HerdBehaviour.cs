@@ -31,7 +31,7 @@ namespace Hedra.AISystem.Behaviours
                         var herd = baseAIComponent.SearchBehaviour<HerdBehaviour>();
                         if (herd != null)
                         {
-                            if (nearEntities.Count < 4)
+                            /*if (nearEntities.Count < 4)
                             {
                                 //Check if it is an arrow
                                 if ((Args.Damager.Position - Parent.Position).LengthSquared > CallRadius * CallRadius)
@@ -44,9 +44,9 @@ namespace Hedra.AISystem.Behaviours
                                 }
                             }
                             else
-                            {
+                            {*/
                                 herd.SetAttack(Args.Damager);
-                            }
+                            //}
                         }
                     });
                 };

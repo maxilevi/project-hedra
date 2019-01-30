@@ -5,7 +5,13 @@
   "SecondSpecializationTree": "Necromancer",
   "Logo": "$DataFile$/Assets/UI/MageLogo.png",
   "BaseSpeed": 1.4,
-  "StartingItem": "CommonBronzeStaff",
+  "StartingItems": [
+    {
+      "Name": "CommonBronzeStaff",
+      "Index": 27,
+      "Amount": 1
+    }
+  ],
   "AttackResistance": 0.95,
   "MaxStamina": 100,
   "BaseDamage": 2.75,

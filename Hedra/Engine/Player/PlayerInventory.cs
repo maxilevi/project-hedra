@@ -196,6 +196,8 @@ namespace Hedra.Engine.Player
                     : this.Search(I => I.IsFood);
             }
         }
+        
+        public Item Ammo => Search(I => I.IsAmmo);
 
         public bool HasAvailableSpace => _items.HasAvailableSpace;
         public Item this[int Index] => (Index >= InventorySpaces ? _mainItems : _items)[ToCorrectItemSpace(Index)];

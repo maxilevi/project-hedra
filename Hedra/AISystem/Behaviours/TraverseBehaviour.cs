@@ -32,7 +32,7 @@ namespace Hedra.AISystem.Behaviours
             }
             _reached = true;
             _currentGrid = new Grid(32, 32);
-            _rebuildPathTimer = new Timer(.5f)
+            _rebuildPathTimer = new Timer(.2f)
             {
                 AutoReset = false
             };

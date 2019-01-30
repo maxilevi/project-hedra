@@ -5,11 +5,17 @@
   "SecondSpecializationTree": "Ninja",
   "Logo": "$DataFile$/Assets/UI/RogueLogo.png",
   "BaseSpeed": 1.45,
-  "StartingItem": "CommonBronzeDoubleBlades",
+  "StartingItems": [
+    {
+      "Name": "CommonBronzeDoubleBlades",
+      "Index": 27,
+      "Amount": 1
+    }
+  ],
   "AttackResistance": 1.025,
   "MaxStamina": 125.0,
   "BaseDamage": 3.5,
-  "AttackingSpeedModifier": 0.4,
+  "AttackingSpeedModifier": 0.6,
   "BaseHealthPerLevel": 8.5,
   "BaseManaPerLevel": 8.5,
   "Model": {

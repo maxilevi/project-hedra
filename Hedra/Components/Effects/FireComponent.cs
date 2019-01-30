@@ -8,7 +8,6 @@
  */
 
 using Hedra.Core;
-using Hedra.Engine.EntitySystem;
 using Hedra.EntitySystem;
 
 namespace Hedra.Components.Effects

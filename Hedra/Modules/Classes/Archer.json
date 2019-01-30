@@ -5,14 +5,20 @@
   "SecondSpecializationTree": "Hunter",
   "Logo": "$DataFile$/Assets/UI/ArcherLogo.png",
   "BaseSpeed": 1.4,
-  "StartingItem": "CommonWoodenBow",
+  "StartingItems": [
+    {
+      "Name": "CommonWoodenBow",
+      "Index": 27,
+      "Amount": 1
+    }
+  ],
   "StartingRecipes": [
     "StoneArrowRecipe"
   ],
   "AttackResistance": 0.975,
   "MaxStamina": 115,
   "BaseDamage": 2.75,
-  "AttackingSpeedModifier": 0.25,
+  "AttackingSpeedModifier": 0.15,
   "BaseHealthPerLevel": 8.0,
   "BaseManaPerLevel": 9.0,
   "Model": {

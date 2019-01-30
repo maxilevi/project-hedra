@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.Core;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Rendering;
 using OpenTK;
@@ -248,6 +249,21 @@ namespace Hedra.Rendering
             Extradata = newExtradata;
             Normals = newNormals;
             return this;
+        }
+
+        public VertexData RotateX(float EulerAngle)
+        {
+            return Transform(Matrix4.CreateRotationX(EulerAngle * Mathf.Radian));
+        }
+        
+        public VertexData RotateY(float EulerAngle)
+        {
+            return Transform(Matrix4.CreateRotationY(EulerAngle * Mathf.Radian));
+        }
+        
+        public VertexData RotateZ(float EulerAngle)
+        {
+            return Transform(Matrix4.CreateRotationZ(EulerAngle * Mathf.Radian));
         }
         
         public VertexData Scale(Vector3 Scalar)

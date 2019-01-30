@@ -9,6 +9,7 @@
 
 using System;
 using Hedra.Core;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Sound;
@@ -19,99 +20,67 @@ namespace Hedra.Engine.SkillSystem.Archer
     /// <summary>
     /// Description of Bash.
     /// </summary>
-    public class Kick : BaseSkill
+    public class Kick : SingleAnimationSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Kick.png");
-        private float Damage = 35f;
-        private bool EmitParticles = false;
-        private Animation KickAnimation;
-        
-        public Kick() : base() {
-            base.ManaCost = 15f;
-            base.MaxCooldown = 3f;
-            
-            this.KickAnimation = AnimationLoader.LoadAnimation("Assets/Chr/ArcherKick.dae");//ArcherKick
-            this.KickAnimation.Loop = false;
-            
-            this.KickAnimation.OnAnimationEnd += delegate { 
-                Player.IsCasting = false;
-                Casting = false;
-                Player.WasAttacking = false;
-                Player.IsAttacking = false;
-                this.EmitParticles = false;
-            };
-            
-            this.KickAnimation.OnAnimationMid += delegate {
-            
-                for(int i = 0; i< World.Entities.Count; i++){
-                    if(World.Entities[i] == Player)
-                        continue;
-                    
-                    Vector3 ToEntity = (World.Entities[i].Position - Player.Position).NormalizedFast();
-                    float Dot = Vector3.Dot(ToEntity, Player.Orientation);
-                    if(Dot >= .25f && (World.Entities[i].Position - Player.Position).LengthSquared < 16f*16f){
-                        float Exp;
-                        World.Entities[i].Damage(this.Damage * Dot * .5f, Player, out Exp, true);
-                        Player.XP += Exp;
-                    }
-                }
-                this.EmitParticles = true;
-                SoundPlayer.PlaySound(SoundType.SwooshSound, Player.Position, false, 0.8f, 1f);
-            };
-        }
-        
+        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Kick.png");    
+        protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/ArcherKick.dae");
+        private const float BaseDamage = 15;
+        private float Damage => BaseDamage + (BaseDamage * Level * .5f);
+        public override float MaxCooldown => Math.Max(8, 12 - Level * .5f);
+        public override float ManaCost => 40;
+        protected override float AnimationSpeed => 1.5f;
+        protected override int MaxLevel => 20;
+        private bool _emitParticles;
+
         public override bool MeetsRequirements()
         {
             return base.MeetsRequirements() && !Player.IsAttacking && !Player.IsCasting;
         }
-        
-        public override void Use(){
-            base.MaxCooldown = Math.Max(4f - base.Level * .25f, 1.5f);
-            Damage = 35f * base.Level * .6f + 5f;
-            Player.IsCasting = true;
-            Casting = true;
-            Player.IsAttacking = false;
-            Player.WasAttacking = false;
-            Player.Model.PlayAnimation(KickAnimation);
-            KickAnimation.Speed = 1.5f;
-        }
-        
-        public override void Update(){
-            if(Player.IsCasting && Casting){
-                Player.Movement.Orientate();
-                
-                if(EmitParticles){
-                    this.PushEntitiesAway();
-                    World.Particles.Color = new Vector4(1,1,1,1);
-                    World.Particles.ParticleLifetime = 1f;
-                    World.Particles.GravityEffect = .0f;
-                    World.Particles.Direction = Vector3.Zero;
-                    World.Particles.Scale = new Vector3(.5f,.5f,.5f);
-                    World.Particles.Position = 
-                        Player.Model.TransformFromJoint(Player.Model.JointDefaultPosition(Player.Model.RightFootJoint)
-                                                                                                 + Vector3.UnitZ * 3f, Player.Model.RightFootJoint);
-                    World.Particles.PositionErrorMargin = Vector3.One * 0.75f;
-                    
-                    for(int i = 0; i < 2; i++)
-                        World.Particles.Emit();
-                }
-            }
-        }
-        
-        public void PushEntitiesAway()
+
+        protected override void OnAnimationMid()
         {
-            for(int i = 0; i< World.Entities.Count; i++){
-                if( (Player.Position - World.Entities[i].Position).LengthSquared < 48*48){
-                    if(Player == World.Entities[i])
-                        continue;
+            SkillUtils.DamageNearby(Player, Damage, 16, .25f);
+            _emitParticles = true;
+            SoundPlayer.PlaySound(SoundType.SwooshSound, Player.Position, false, 0.8f, 1f);
+        }
+
+        protected override void OnAnimationEnd()
+        {
+            _emitParticles = false;
+        }
+
+        protected override void OnExecution()
+        {
+            Player.Movement.Orientate();
+            PushEntitiesAway();
+            
+            if(_emitParticles) return;
+            World.Particles.Color = new Vector4(1,1,1,1);
+            World.Particles.ParticleLifetime = 1f;
+            World.Particles.GravityEffect = .0f;
+            World.Particles.Direction = Vector3.Zero;
+            World.Particles.Scale = new Vector3(.5f,.5f,.5f);
+            World.Particles.Position = 
+                Player.Model.TransformFromJoint(Player.Model.JointDefaultPosition(Player.Model.RightFootJoint)
+                                                + Vector3.UnitZ * 3f, Player.Model.RightFootJoint);
+            World.Particles.PositionErrorMargin = Vector3.One * 0.75f;
                     
-                    Vector3 Direction = -(Player.Position - World.Entities[i].Position).Normalized();
-                    World.Entities[i].BlockPosition += Direction * (float) Engine.Time.DeltaTime * 96f;
-                }
+            for(var i = 0; i < 2; i++)
+                World.Particles.Emit();
+        }
+
+        private void PushEntitiesAway()
+        {
+            for(var i = 0; i< World.Entities.Count; i++)
+            {
+                if (Player == World.Entities[i]) continue;
+                if (!((Player.Position - World.Entities[i].Position).LengthSquared < 32 * 32)) continue;                  
+                var direction = -(Player.Position - World.Entities[i].Position).NormalizedFast();
+                World.Entities[i].Physics.DeltaTranslate(direction * 64f);
             }
         }
         
-        public override string Description => "A powerful knocking kick.";
-        public override string DisplayName => "Kick";
+        public override string Description => Translations.Get("kick_desc");
+        public override string DisplayName => Translations.Get("kick_skill");
     }
 }

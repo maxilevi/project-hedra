@@ -25,14 +25,15 @@ namespace Hedra.EntitySystem
         bool DeltaTranslate(Vector3 Delta, bool OnlyY = false);
         bool DeltaTranslate(MoveCommand Command);
         void ResetFall();
+        void ResetSpeed();
         void Dispose();
         void Draw();
         Vector3 GravityDirection { get; set; }  
         float VelocityCap { get; set; }  
         Vector3 Velocity { get; set; }
         bool Raycast(Vector3 Length);
-        
-        /// <summary>
+        bool EntityRaycast(IEntity[] Entities, Vector3 Length);
+        /// <summary>   
         /// If collides with structures
         /// </summary>
         bool CollidesWithStructures { get; set; }

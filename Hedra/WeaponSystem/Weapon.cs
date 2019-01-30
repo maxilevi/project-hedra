@@ -33,7 +33,11 @@ namespace Hedra.WeaponSystem
         public ObjectMesh MainMesh { get; }
         public ObjectMesh[] Meshes { get; private set; }
         public VertexData MeshData { get; }
-        public Animation AttackStanceAnimation { get; set; }
+        public virtual bool IsChargeable => false;
+        public bool IsCharging { protected get; set; }
+        public Animation AttackStanceAnimation { get; private set; }
+        public Animation ChargeStanceAnimation { get; private set; }
+        protected virtual string ChargeStanceName { get; }
         protected virtual Vector3 SheathedPosition => new Vector3(-.6f, 0.5f, -0.8f);
         protected virtual Vector3 SheathedRotation => new Vector3(-5, 90, -135);
         protected virtual bool ContinousAttack => false;
@@ -98,6 +102,7 @@ namespace Hedra.WeaponSystem
         private void CreateAnimations()
         {
             AttackStanceAnimation = AnimationLoader.LoadAnimation(AttackStanceName);
+            ChargeStanceAnimation = AnimationLoader.LoadAnimation(ChargeStanceName ?? AttackStanceName);
             _primaryAnimations = new Animation[PrimaryAnimationsNames.Length];
             for (var i = 0; i < _primaryAnimations.Length; i++)
             {
@@ -198,6 +203,10 @@ namespace Hedra.WeaponSystem
         {
             Attack1(Human, new AttackOptions());
         }
+
+        public virtual bool CanDoAttack1 => true;
+        
+        public virtual bool CanDoAttack2 => true;
 
         public virtual void Attack1(IHumanoid Human, AttackOptions Options)
         {
@@ -365,14 +374,29 @@ namespace Hedra.WeaponSystem
                 }
             }
         }
+                  
+        protected virtual void OnAttackStance()
+        {
+            if(IsCharging)
+                OnChargeStance();
+            else
+                OnPostAttackStance();               
+        }
+
+        protected virtual void OnChargeStance()
+        {
+            
+        }
+
+        protected virtual void OnPostAttackStance()
+        {
+            
+        }
 
         protected virtual void OnSheathed()
         {
         }
 
-        protected virtual void OnAttackStance()
-        {
-        }
         
         protected virtual void OnPrimaryAttack()
         {
@@ -443,7 +467,7 @@ namespace Hedra.WeaponSystem
                 if (Owner == null)
                     return false;
 
-                return Owner.Model.AnimationBlending == AttackStanceAnimation;
+                return Owner.Model.AnimationBlending == AttackStanceAnimation || Owner.Model.AnimationBlending == ChargeStanceAnimation;
             }
             set
             {
@@ -658,7 +682,7 @@ namespace Hedra.WeaponSystem
                     yield break;
                 }
 
-                Owner.Model.DefaultBlending = AttackStanceAnimation;
+                Owner.Model.DefaultBlending = IsCharging ? ChargeStanceAnimation : AttackStanceAnimation;
                 _passedTimeInAttackStance += Time.DeltaTime;
                 yield return null;
             }

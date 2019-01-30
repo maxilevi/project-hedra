@@ -3,11 +3,11 @@
   "DisplayName": "Wooden Bow",
   "EquipmentType": "Bow",
   "Tier": "Common",
-  "Description": "A rudementary bow made of wood.",
+  "Description": "A rudimentary bow made of wood.",
   "Attributes": [
     {
       "Name": "Damage",
-      "Value": 1.5
+      "Value": 2.5
     },
     {
       "Name": "AttackSpeed",

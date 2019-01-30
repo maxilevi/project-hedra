@@ -19,6 +19,7 @@ using Hedra.Engine.Input;
 using Hedra.Engine.Localization;
 using OpenTK;
 using Hedra.Engine.Management;
+using Hedra.Engine.Networking;
 using Hedra.Engine.Player;
 
 namespace Hedra.Engine.Rendering.UI
@@ -80,7 +81,6 @@ namespace Hedra.Engine.Rendering.UI
             
             Button disconnect = new Button(new Vector2(.535f, bandPosition.Y),
                                          new Vector2(0.15f,0.075f), Translation.Create("disconnect"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
-            disconnect.Click += delegate{ Networking.NetworkManager.Disconnect(true); };
             
             connectToServer.Click += delegate{
                 Player.MessageDispatcher.ShowNotification("", Color.DarkRed, 3f, true);
@@ -118,7 +118,7 @@ namespace Hedra.Engine.Rendering.UI
             
             Menu.OnPanelStateChange += delegate(object Sender, PanelState E) { 
                 if(E == PanelState.Enabled){
-                    if(Networking.NetworkManager.IsConnected){
+                    if(Connection.Instance.IsAlive){
                         _newRun.Disable();
                         _loadButton.Disable();
                         connectToServer.Disable();
@@ -167,7 +167,7 @@ namespace Hedra.Engine.Rendering.UI
             GamePanel.Disable();
             ChrCreator.Disable();
             ConnectPanel.Disable();
-            if(!Networking.NetworkManager.IsConnected)
+            if(!Connection.Instance.IsAlive)
             {
                 GameSettings.Paused = true;
             }else{

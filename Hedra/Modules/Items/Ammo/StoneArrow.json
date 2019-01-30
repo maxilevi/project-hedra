@@ -1,6 +1,6 @@
 {
   "Name": "StoneArrow",
-  "DisplayName": "StoneArrow",
+  "DisplayName": "Stone arrow",
   "Tier": "Common",
   "EquipmentType": "Ammo",
   "Description": "A simple stone arrow.",
@@ -9,6 +9,10 @@
       "Name": "Price",
       "Value": 2,
       "Hidden": true
+    },
+    {
+      "Name": "Amount",
+      "Value": 1
     }
   ],
   "Model": {

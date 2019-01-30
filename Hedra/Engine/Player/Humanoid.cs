@@ -56,6 +56,7 @@ namespace Hedra.Engine.Player
             get => Equipment.Ring;
             set => Equipment.Ring = value;
         }
+
         public IPlayerInventory Inventory { get; }
         public IMessageDispatcher MessageDispatcher { get; set; }
         public int ConsecutiveHits { get; private set; }
@@ -200,18 +201,12 @@ namespace Hedra.Engine.Player
             SearchComponent<DamageComponent>().Immune = true;
             WasAttacking = false;
             IsAttacking = false;
+            Physics.ResetSpeed();
             this.ComponentManager.AddComponentWhile(new SpeedBonusComponent(this, -this.Speed + this.Speed * 1.1f),
                 () => IsRolling);
-            
-            if (Type == RollType.Normal)
-            {
-                Movement.Move(Orientation * 2f, 1f, false);
-            }
-            else
-            {
-                Movement.OrientateTowards(Movement.RollFacing);
-                Movement.Move(Movement.RollDirection * 4f, .5f, false);
-            }
+
+            Movement.OrientateTowards(Movement.RollFacing);
+            Movement.Move(Movement.LastOrientation * 2.5f, .5f, false);
 
             SoundPlayer.PlaySoundWithVariation(SoundType.Dodge, this.Position);
             TaskScheduler.When( () => !IsRolling, () =>
@@ -233,7 +228,7 @@ namespace Hedra.Engine.Player
             var meleeWeapon = LeftWeapon as MeleeWeapon;
             var rangeModifier =  meleeWeapon?.MainWeaponSize.Y / 2.5f + 1f ?? 1.0f;
             var wideModifier = Math.Max( (meleeWeapon?.MainWeaponSize.Xz.LengthFast ?? 1.0f) - .75f, 1.0f);
-            var nearEntities = World.InRadius<IEntity>(this.Position, 16f * rangeModifier);
+            var nearEntities = World.InRadius<IEntity>(this.Position, 32f * rangeModifier);
             var possibleTargets = nearEntities.Where(E => !E.IsStatic && E != this).ToArray();
             var atLeastOneHit = false;
 
@@ -241,7 +236,7 @@ namespace Hedra.Engine.Player
             {
                 var norm = (target.Position - this.Position).Xz.NormalizedFast().ToVector3();
                 var dot = Vector3.Dot(norm, this.Orientation);
-                if(dot > 0.70f / wideModifier && this.InAttackRange(target, rangeModifier))
+                if(dot > 0.60f / wideModifier && this.InAttackRange(target, rangeModifier))
                 {
                     var damageToDeal = Damage * dot;
                     target.Damage(damageToDeal, this, out float exp);

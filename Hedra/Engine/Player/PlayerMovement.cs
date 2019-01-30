@@ -124,6 +124,7 @@ namespace Hedra.Engine.Player
                 if (GameManager.Keyboard[Controls.Backward])
                 {
                     this.ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Backward) * keysPresses);
+                    RollFacing = _characterRotation;
                 }
 
                 if (GameManager.Keyboard[Controls.Leftward])

@@ -17,7 +17,6 @@ namespace Hedra.Engine.Player
 
         public void RemoveItem(Item Old, int Amount = 1)
         {
-            throw new NotImplementedException();
         }
 
         public event OnInventoryUpdated InventoryUpdated;
@@ -73,7 +72,8 @@ namespace Hedra.Engine.Player
         }
 
         public Item Food => throw new NotImplementedException();
-        
+        public Item Ammo => ItemPool.Grab(ItemType.StoneArrow);
+
         public bool HasAvailableSpace => throw new NotImplementedException();
         
         public Item MainWeapon => throw new NotImplementedException();

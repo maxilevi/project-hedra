@@ -101,7 +101,12 @@ namespace Hedra.Engine.EntitySystem
                 if (dmgDiff > 1.85f) color = Color.Gold;
                 if (dmgDiff > 2.25f) color = Color.Red;
                 if (isImmune || shouldMiss) color = Color.White;
-                var font = FontCache.Get(AssetManager.BoldFamily, 12 + 6 * dmgDiff, FontStyle.Bold);
+                var maxSize = float.MaxValue;
+                if (Parent is LocalPlayer)
+                {
+                    color = Color.Red;
+                }
+                var font = FontCache.Get(AssetManager.BoldFamily, Math.Min(12 + 6 * dmgDiff, maxSize), FontStyle.Bold);
                 var dmgString = ((int) Amount).ToString();
                 var missString = isImmune ? "IMMUNE" : "MISS";
                 var dmgLabel = new TextBillboard(1.8f, !isImmune && !shouldMiss ? dmgString : missString, color,

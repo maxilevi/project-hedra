@@ -20,17 +20,17 @@ namespace Hedra.Engine.ItemSystem
             return _attributes.ContainsKey(Attribute);
         }
 
-        public void Set(string Attribute, object Value)
-        {
-            this.Set(Attribute, Value, false, null);
-        }
-
-        public void Set(string Attribute, object Value, bool Hidden, string Display)
+        public void Set(string Attribute, object Value, bool Hidden = false, string Display = null)
         {
             if (!_attributes.ContainsKey(Attribute))
                 _attributes.Add(Attribute, new AttributeObject(Value, Hidden, Display));
             else
                 _attributes[Attribute] = new AttributeObject(Value, Hidden, Display ?? _attributes[Attribute].Display);
+        }
+
+        public object Raw(string Attribute)
+        {
+            return _attributes[Attribute].Value;
         }
 
         public T Get<T>(string Attribute)

@@ -7,10 +7,12 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
+using System;
 using System.Collections;
 using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
@@ -25,12 +27,13 @@ namespace Hedra.WeaponSystem
     public delegate void OnArrowEvent(Projectile Arrow);
         
     public class Bow : RangedWeapon
-    {           
+    {
         public override uint PrimaryAttackIcon => WeaponIcons.BowPrimaryAttack;     
         public override uint SecondaryAttackIcon => WeaponIcons.BowSecondaryAttack;
         
         protected override string AttackStanceName => "Assets/Chr/ArcherShootStance.dae";
-        protected override float PrimarySpeed => .6f;
+        protected override string ChargeStanceName => "Assets/Chr/ArcherChargeStance.dae";
+        protected override float PrimarySpeed => .85f;
         protected override string[] PrimaryAnimationsNames => new []
         {
             "Assets/Chr/ArcherShoot.dae"
@@ -43,20 +46,13 @@ namespace Hedra.WeaponSystem
         
         protected override Vector3 SheathedPosition => new Vector3(1.5f,-0.0f,0.0f);
         protected override Vector3 SheathedRotation => new Vector3(-5,90,-125 );
-        protected virtual float ArrowDamageModifier => 1.0f;
         
-        private static readonly VertexData ArrowVertexData;
-        private static readonly VertexData ArrowDataVertexData;
         private static readonly VertexData QuiverVertexData;
         
         static Bow()
         {
-            ArrowVertexData = AssetManager.PLYLoader("Assets/Items/Arrow.ply", Vector3.One * 4f * 1.5f,
-                Vector3.UnitX * .35f, Vector3.Zero);
             QuiverVertexData = AssetManager.PLYLoader("Assets/Items/Quiver.ply",
                 Vector3.One * new Vector3(2.2f, 2.8f, 2.2f) * 1.5f);
-            ArrowDataVertexData = AssetManager.PLYLoader("Assets/Items/Arrow.ply", Vector3.One * 5f, Vector3.Zero,
-                new Vector3(-90, 0, 90) * Mathf.Radian);
         }
         
         public OnArrowEvent BowModifiers;
@@ -64,30 +60,32 @@ namespace Hedra.WeaponSystem
         public OnArrowEvent Miss;
         public float ArrowDownForce { get; set; }
         private readonly ObjectMesh _quiver;
-        private readonly ObjectMesh _arrow;
+        private ObjectMesh _arrow;
+        private string _lastAmmoName;
 
         public Bow(VertexData Contents) : base(Contents)
         {
-            _arrow = ObjectMesh.FromVertexData(ArrowVertexData);
             _quiver = ObjectMesh.FromVertexData(QuiverVertexData);
             _quiver.LocalPosition = this.SheathedPosition + new Vector3(.3f, -0.75f, -0.2f);
             _quiver.RotationPoint = new Vector3(0, 0, _quiver.LocalPosition.Z);
-            _quiver.LocalRotation = new Vector3(SheathedRotation.X, SheathedRotation.Y, SheathedRotation.Z+90);          
+            _quiver.LocalRotation = new Vector3(SheathedRotation.X, SheathedRotation.Y, SheathedRotation.Z+90);
+            //_arrow = ObjectMesh.FromVertexData(VertexData.Empty);
+            _arrow = ObjectMesh.FromVertexData(RescaleArrow((ItemPool.Grab(ItemType.StoneArrow))?.Model)?.RotateZ(180) ?? VertexData.Empty);
         }
         
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
-            if(Type != AttackEventType.Mid) return;
+            if(AttackEventType.Mid != Type) return;
             var player = Owner as IPlayer;
-            var direction = player?.View.CrossDirection ?? Owner.Orientation;
-            Shoot(direction, Options, player?.Pet?.Pet);
-            TaskScheduler.After(
-                .15f,
+            var direction = player?.View.LookingDirection ?? Owner.Orientation;
+            var left = direction.Xz.PerpendicularLeft.ToVector3() + Vector3.UnitY * direction.Y;
+            var right = direction.Xz.PerpendicularRight.ToVector3() + Vector3.UnitY * direction.Y;
+            Shoot(right * .15f + direction * .85f, Options, player?.Pet?.Pet);
+            TaskScheduler.After(.15f,
                 () => Shoot(direction, Options, player?.Pet?.Pet)
             );
-            TaskScheduler.After(
-                .3f,
-                () => Shoot(direction, Options, player?.Pet?.Pet)
+            TaskScheduler.After(.25f,
+                () => Shoot(left * .15f + direction * .85f, Options, player?.Pet?.Pet)
             );
         }
 
@@ -101,21 +99,40 @@ namespace Hedra.WeaponSystem
             MainMesh.BeforeRotation = this.SheathedPosition * this.Scale;
         }
 
-        protected override void OnAttackStance()
+        protected override void OnPostAttackStance()
         {
             var mat4 = Owner.Model.LeftWeaponMatrix.ClearTranslation() 
                            * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);                  
-            this.MainMesh.TransformationMatrix = mat4;
-            this.MainMesh.Position = Owner.Model.Position;
-            this.MainMesh.LocalRotation = new Vector3(90,25,180);
-            this.MainMesh.BeforeRotation = Vector3.Zero;   
+            MainMesh.TransformationMatrix = mat4;
+            MainMesh.Position = Owner.Model.Position;
+            MainMesh.LocalRotation = new Vector3(90,25,180);
+            MainMesh.BeforeRotation = Vector3.Zero;   
+        }
+        
+        protected override void OnChargeStance()
+        {
+            OnPostAttackStance();
+            this.MainMesh.LocalRotation = new Vector3(45, 90, 135);
         }
 
+        protected override void OnSecondaryAttack()
+        {
+            OnPostAttackStance();
+            this.MainMesh.LocalRotation = new Vector3(45, 90, 135);
+        }
+        
         public override void Update(IHumanoid Human)
         {
             base.Update(Human);
             SetQuiverPosition();
             SetArrowPosition();
+            //var newAmmo = ItemPool.Grab()//Human?.Inventory.Ammo;
+            //if (_lastAmmoName != newAmmo?.Name)
+            //{
+            //    _arrow?.Dispose();
+            //    _arrow = ObjectMesh.FromVertexData(RescaleArrow(newAmmo?.Model)?.RotateZ(180) ?? VertexData.Empty);
+            //    _lastAmmoName = newAmmo?.Name;
+           // }
         }
 
         private void SetQuiverPosition()
@@ -146,8 +163,13 @@ namespace Hedra.WeaponSystem
 
         protected override void Shoot(Vector3 Direction, AttackOptions Options, params IEntity[] ToIgnore)
         {
-
-            var arrowProj = new Projectile(Owner, Owner.Model.LeftWeaponPosition + Owner.Model.Human.Orientation * 2 - Vector3.UnitY, ArrowDataVertexData)
+            //var currentAmmo = Owner.Inventory.Ammo;
+            //if (currentAmmo == null) return;
+            var currentAmmo = ItemPool.Grab(ItemType.StoneArrow);
+            var arrowProj = new Projectile(Owner,
+                Owner.Model.LeftWeaponPosition,
+                RescaleArrow(currentAmmo.Model).RotateX(90)
+            )
             {
                 Lifetime = 5f,
                 Propulsion = Direction * 2f - Vector3.UnitY * ArrowDownForce,
@@ -155,7 +177,7 @@ namespace Hedra.WeaponSystem
             };
             arrowProj.HitEventHandler += delegate(Projectile Sender, IEntity Hit)
             {
-                Hit.Damage(Owner.DamageEquation * ArrowDamageModifier * Options.DamageModifier, Owner, out var exp, true, false);
+                Hit.Damage(Owner.DamageEquation * Options.DamageModifier, Owner, out var exp, true, false);
                 Owner.XP += exp;
             };
             arrowProj.LandEventHandler += S =>
@@ -168,9 +190,20 @@ namespace Hedra.WeaponSystem
                 Hit?.Invoke(arrowProj);
                 Owner.ProcessHit(true);
             };
-            arrowProj = this.AddModifiers(arrowProj);
+            arrowProj = AddModifiers(arrowProj);
             SoundPlayer.PlaySound(SoundType.BowSound, Owner.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
         }
+
+        private VertexData RescaleArrow(VertexData Model)
+        {
+            if (Model == null) return null;
+            var size = (Model.SupportPoint(Vector3.One) - Model.SupportPoint(-Vector3.One)).LengthFast;
+            return Model.Clone().Scale(Vector3.One * 3.5f * .75f / size);
+        }
+
+        public override bool CanDoAttack1 => true;//Owner?.Inventory.Ammo != null;
+        
+        public override bool CanDoAttack2 => true;//Owner?.Inventory.Ammo != null;
 
         public override void Dispose()
         {

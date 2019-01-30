@@ -392,6 +392,7 @@ namespace Hedra.Engine.Player
             this.Model.Position = newPosition;
             this.Physics.TargetPosition = newPosition;
             this.IsKnocked = false;
+            IsRolling = false;
 
             var xpDiff = (int)(XP * .15f);
             var goldDiff = (int)(Gold * .1f);
@@ -433,6 +434,7 @@ namespace Hedra.Engine.Player
             View.TargetYaw = 0f;
             View.TargetDistance = 10f;
             HandLamp.Enabled = false;
+            IsRolling = false;
             IsTravelling = false;
             IsKnocked = false;
             IsSleeping = false;
@@ -477,12 +479,17 @@ namespace Hedra.Engine.Player
             gold.SetAttribute(CommonAttributes.Amount, 5);
             data.AddItem(PlayerInventory.GoldHolder, gold);
 
-            var food = ItemPool.Grab(ItemType.Berry);
+            var food = ItemPool.Grab(ItemType.HealthPotion);
             food.SetAttribute(CommonAttributes.Amount, 5);
             data.AddItem(PlayerInventory.FoodHolder, food);
 
-            data.AddItem(PlayerInventory.WeaponHolder, ClassType.StartingItem);
             data.AddRecipe(ItemPool.Grab(ItemType.HealthPotionRecipe).Name);
+            var items = ClassType.StartingItems;
+            for (var i = 0; i < items.Length; ++i)
+            {
+                data.AddItem(items[i].Key, items[i].Value);
+            }
+            
             var recipes = ClassType.StartingRecipes;
             for (var i = 0; i < recipes.Length; ++i)
             {

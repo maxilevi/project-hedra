@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Hedra.API;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player;
@@ -16,7 +17,8 @@ namespace Hedra.Engine.ClassSystem
         public override AbilityTreeBlueprint MainTree => throw new ArgumentException();
         public override AbilityTreeBlueprint FirstSpecializationTree => throw new ArgumentException();
         public override AbilityTreeBlueprint SecondSpecializationTree => throw new ArgumentException();
-        public override Item StartingItem => throw new ArgumentException();
+        public override KeyValuePair<int, Item>[] StartingItems => throw new ArgumentException();
+        public override Item[] StartingRecipes => throw new ArgumentException();
         public override float AttackResistance => throw new ArgumentException();
         public override float MaxStamina => throw new ArgumentException();
         /* Do not delete. Used in tests */
