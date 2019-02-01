@@ -22,6 +22,14 @@ namespace HedraTests.Game
             AssertComplies(Item);
         }
 
+        public void TestItemPriceWhenInfinite(Item Item)
+        {
+            var berry = ItemPool.Grab(ItemType.Berry);
+            var price = _trader.ItemPrice(berry);
+            berry.SetAttribute(CommonAttributes.Amount, int.MaxValue);
+            Assert.Equals(price, _trader.ItemPrice(berry));
+        }
+
         private void AssertComplies(Item Item)
         {
             var expectedPrice = CalculatePrice(Item);
