@@ -33,8 +33,13 @@ namespace Hedra.Engine.StructureSystem
             BuildBaseCampfire(Structure, rotation, rng, out var transformationMatrix);
 
             ((Campfire) Structure.WorldObject).Bandit =
-                    World.WorldBuilding.SpawnBandit(new Vector3(Structure.Position.X, 125, Structure.Position.Z), Level);
+                    World.WorldBuilding.SpawnBandit(
+                        new Vector3(Structure.Position.X, 125, Structure.Position.Z) 
+                        + Vector3.TransformPosition(Vector3.UnitZ * -12f, Matrix4.CreateRotationY(rotation.Y * Mathf.Radian)),
+                        Level
+                    );
 
+            ((Campfire) Structure.WorldObject).Bandit.IsSitting = true;
             if (rng.Next(0, 5) != 1)
             {
                 SpawnMat(
