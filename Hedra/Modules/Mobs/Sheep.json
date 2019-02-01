@@ -11,6 +11,10 @@
     {
       "Type": "RawMeat",
       "Chance": 5
+    },
+    {
+      "Type": "Wool",
+      "Chance": 10
     }
   ],
   "Model": {

@@ -9,7 +9,8 @@ namespace Hedra.Engine.CraftingSystem
         Anvil = 1,
         Campfire = 2,
         Well = 4,
-        Sawmill = 8,
+        Workbench = 8,
         Loom = 16,
+        Water = 32,
     }
 }

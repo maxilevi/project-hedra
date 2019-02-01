@@ -1,3 +1,4 @@
+using System;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using OpenTK;
@@ -19,7 +20,7 @@ namespace Hedra.Engine.PlantSystem
         /// <summary>
         /// Plant design to use for this placement design.
         /// </summary>
-        public abstract PlantDesign GetDesign(Vector3 Position, Chunk UnderChunk);
+        public abstract PlantDesign GetDesign(Vector3 Position, Chunk UnderChunk, Random Rng);
 
         /// <summary>
         /// Function that deterministically says if a placement should be done.

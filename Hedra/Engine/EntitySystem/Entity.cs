@@ -488,9 +488,9 @@ namespace Hedra.Engine.EntitySystem
             this.UpdateEnvironment();
             this._tickSystem.Tick();
             var beforeComponents = Components.ToArray();
-            for (var i = Components.Count-1; i > -1; --i)
+            for (var i = beforeComponents.Length-1; i > -1; --i)
             {
-                Components[i]?.Update();
+                beforeComponents[i]?.Update();
             }
 
             if (IsKnocked)

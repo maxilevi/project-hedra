@@ -8,7 +8,7 @@ namespace Hedra.Engine.SkillSystem
 {
     public class SkillUtils
     {
-        public static void DamageNearby(IHumanoid Caster, float Damage, float Radius, float Angle = 0)
+        public static void DamageNearby(IHumanoid Caster, float Damage, float Radius, float Angle = 0, bool PlaySound = true)
         {
             for(var i = 0; i< World.Entities.Count; i++)
             {
@@ -18,7 +18,7 @@ namespace Hedra.Engine.SkillSystem
                 var dot = Vector3.Dot(toEntity, Caster.Orientation);
                 if(dot >= Angle && (World.Entities[i].Position - Caster.Position).LengthSquared < Radius * Radius)
                 {
-                    World.Entities[i].Damage(Damage * dot, Caster, out var exp);
+                    World.Entities[i].Damage(Damage * dot, Caster, out var exp, PlaySound);
                     Caster.XP += exp;
                 }
             }

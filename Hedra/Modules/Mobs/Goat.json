@@ -14,9 +14,12 @@
       "Duration": 2.0
     }
   ],
-  
-  "Drops": [],
-  
+  "Drops": [
+    {
+      "Type": "Wool",
+      "Chance": 10
+    }
+  ],
   "Model": {
     "Path": "$DataFile$/Assets/Chr/GoatIdle.dae",
     "Scale": 2.25,

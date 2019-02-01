@@ -29,6 +29,7 @@ namespace Hedra.Engine.ItemSystem
         Pebble,
         HealthPotion,
         StoneArrow,
+        WoodenStick,
         MaxEnums
     }
 }

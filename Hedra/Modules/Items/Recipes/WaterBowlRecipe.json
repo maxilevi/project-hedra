@@ -1,0 +1,45 @@
+{
+  "Name": "WaterBowlRecipe",
+  "DisplayName": "Water bowl recipe",
+  "EquipmentType": "Recipe",
+  "Tier": "Common",
+  "Description": "...",
+  "Attributes": [
+    {
+      "Name": "CraftingStation",
+      "Value": "Water"
+    },
+    {
+      "Name": "Ingredients",
+      "Value": [
+        {
+          "Name": "WoodenBowl",
+          "Amount": 1
+        }
+      ],
+      "Display": "Bullets"
+    },
+    {
+      "Name": "Output",
+      "Value": {
+        "Name": "WaterBowl",
+        "Amount": 1
+      },
+      "Hidden": true
+    },
+    {
+      "Name": "IsConsumable",
+      "Value": true,
+      "Hidden": true
+    },
+    {
+      "Name": "Handler",
+      "Value": "Recipe",
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 2.0,
+    "Path": "$DataFile$/Items/Misc/Recipe.ply"
+  }
+}

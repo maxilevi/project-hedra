@@ -1,0 +1,21 @@
+{
+  "Name": "WoodenStick",
+  "DisplayName": "Wooden stick",
+  "Tier": "Misc",
+  "Description": "...",
+  "Attributes": [
+    {
+      "Name": "Amount",
+      "Value": 1
+    },
+    {
+      "Name": "Price",
+      "Value": 2.0,
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Misc/WoodenStick.ply"
+  }
+}

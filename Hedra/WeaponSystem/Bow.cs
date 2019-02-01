@@ -190,7 +190,8 @@ namespace Hedra.WeaponSystem
                 Hit?.Invoke(arrowProj);
                 Owner.ProcessHit(true);
             };
-            arrowProj = AddModifiers(arrowProj);
+            if(Options.Charge > .35f)
+                arrowProj = AddModifiers(arrowProj);
             SoundPlayer.PlaySound(SoundType.BowSound, Owner.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
         }
 

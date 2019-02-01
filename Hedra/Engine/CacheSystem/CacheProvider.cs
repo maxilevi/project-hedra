@@ -18,6 +18,7 @@ using System.Reflection;
 using Hedra.Engine.IO;
 using Hedra.Rendering;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace Hedra.Engine.CacheSystem
 {
@@ -26,18 +27,19 @@ namespace Hedra.Engine.CacheSystem
     /// </summary>
     public class CacheProvider : ICacheProvider
     {
-        public Dictionary<object, List<CompressedValue<float>>> CachedExtradata { get; private set; }
-        public Dictionary<object, List<CompressedValue<Vector4>>> CachedColors { get; private set; }
+        public Dictionary<string, List<CompressedValue<float>>> CachedExtradata { get; private set; }
+        public Dictionary<string, List<CompressedValue<Vector4>>> CachedColors { get; private set; }
         private readonly Dictionary<string, CacheType> _caches = new Dictionary<string, CacheType>();
         private readonly object _colorLock = new object();
         private readonly object _extradataLock = new object();
-        private SHA256Managed _hasher;
+        private MD5 _hasher;
+        private object _asd;
 
         public void Load()
         {
-            CachedExtradata = new Dictionary<object, List<CompressedValue<float>>>();
-            CachedColors =  new Dictionary<object, List<CompressedValue<Vector4>>>();
-            _hasher = new SHA256Managed();
+            CachedExtradata = new Dictionary<string, List<CompressedValue<float>>>(StringComparer.OrdinalIgnoreCase);
+            CachedColors =  new Dictionary<string, List<CompressedValue<Vector4>>>(StringComparer.OrdinalIgnoreCase);
+            _hasher = MD5.Create();
             var foundTypes = new HashSet<CacheItem>();
             var typeList = Assembly.GetExecutingAssembly().GetLoadableTypes(this.GetType().Namespace).ToArray();
             foreach (var type in typeList)
@@ -130,31 +132,33 @@ namespace Hedra.Engine.CacheSystem
             }
         }
 
-        private object MakeHash(List<Vector4> List)
+        public string MakeHash(List<Vector4> Colors)
         {
-            Vector4 hash = Vector4.Zero;
-            for (int i = 0; i < List.Count; i++)
+            var floatArray = Colors.SelectMany(C => new []
             {
-                hash += List[i];
-            }
-            hash /= List.Count;
-            return hash;
+                C.X, C.Y, C.Z, C.W
+            }).ToArray();
+            var byteArray = new byte[floatArray.Length * sizeof(float)];
+            Buffer.BlockCopy(floatArray, 0, byteArray, 0, byteArray.Length);
+            return MakeHash(byteArray);
         }
 
-        private object MakeHash(List<float> List)
+        public string MakeHash(List<float> Extradata)
         {
-            float hash = 0;
-            for (int i = 0; i < List.Count; i++)
-            {
-                hash += List[i];
-            }
-            hash /= List.Count;
-            return hash - 10;
+            var byteArray = new byte[Extradata.Count * sizeof(float)];
+            Buffer.BlockCopy(Extradata.ToArray(), 0, byteArray, 0, byteArray.Length);
+            return MakeHash(byteArray);
         }
 
-        private object MakeHash(string Key)
+        private string MakeHash(byte[] Bytes)
         {
-            return _hasher.ComputeHash(System.Text.Encoding.UTF8.GetBytes(Key));
+            var hash = _hasher.ComputeHash(Bytes);
+            var sb = new StringBuilder();
+            for (var i = 0; i < hash.Length; i++)
+            {
+                sb.Append(hash[i].ToString("x2"));
+            }
+            return sb.ToString();
         }
     }
 }

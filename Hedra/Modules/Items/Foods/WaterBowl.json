@@ -1,0 +1,21 @@
+{
+  "Name": "WaterBowl",
+  "DisplayName": "Water bowl",
+  "Tier": "Misc",
+  "Description": "A water bowl.",
+  "Attributes": [
+    {
+      "Name": "Amount",
+      "Value": 1
+    },
+    {
+      "Name": "Price",
+      "Value": 5,
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Foods/WaterBowl.ply"
+  }
+}

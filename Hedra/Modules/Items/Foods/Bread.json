@@ -1,0 +1,40 @@
+{
+  "Name": "Bread",
+  "DisplayName": "Bread",
+  "Tier": "Misc",
+  "Description": "...",
+  "Attributes": [
+    {
+      "Name": "Amount",
+      "Value": 1
+    },
+    {
+      "Name": "Saturation",
+      "Value": 120
+    },
+    {
+      "Name": "Price",
+      "Value": 28,
+      "Hidden": true
+    },
+    {
+      "Name": "IsFood",
+      "Value": true,
+      "Hidden": true
+    },
+    {
+      "Name": "EatTime",
+      "Value": 6.0,
+      "Hidden": true
+    },
+    {
+      "Name": "EatSitting",
+      "Value": true,
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Foods/Bread.ply"
+  }
+}

@@ -19,9 +19,9 @@ namespace Hedra.Engine.PlantSystem
             _bushDesign = new BushDesign();
         }
 
-        public override PlantDesign GetDesign(Vector3 Position, Chunk UnderChunk)
+        public override PlantDesign GetDesign(Vector3 Position, Chunk UnderChunk, Random Rng)
         {
-            return UnderChunk.Landscape.RandomGen.Next(0, 4) != 1 ? _bushDesign : _fernDesign;
+            return Rng.Next(0, 4) != 1 ? _bushDesign : _fernDesign;
         }
 
         public override bool ShouldPlace(Vector3 Position, Chunk UnderChunk)

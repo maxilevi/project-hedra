@@ -24,7 +24,7 @@ namespace Hedra.Engine.Player.Inventory
         private readonly InventoryInterfaceItemInfo _itemInfoInterface;
         private readonly InventoryArrayInterface[] _interfaces;
         private readonly Button _cancelButton;
-        private float _selectedMeshHeight;
+        private Vector3 _selectedMeshSize;
         private ObjectMesh _selectedMesh;
         private Button _selectedButton;
         private Item _selectedItem;
@@ -144,8 +144,8 @@ namespace Hedra.Engine.Player.Inventory
             _selectedButton = SelectedButton;
             _selectedItem = SelectedItem;
             var renderer = this.RendererByButton(_selectedButton);
-            _selectedMesh = InventoryItemRenderer.BuildModel(_selectedItem.Model, out _selectedMeshHeight);
-            _selectedButton.Texture.IdPointer = () => renderer.Draw(_selectedMesh, SelectedItem, true, _selectedMeshHeight * InventoryItemRenderer.ZOffsetFactor);
+            _selectedMesh = InventoryItemRenderer.BuildModel(_selectedItem.Model, out _selectedMeshSize);
+            _selectedButton.Texture.IdPointer = () => InventoryItemRenderer.Draw(_selectedMesh, SelectedItem, true, _selectedMeshSize);
         }
 
         private void SetCancelButton(Button SelectedButton)

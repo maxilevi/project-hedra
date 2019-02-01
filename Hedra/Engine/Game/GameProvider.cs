@@ -118,6 +118,8 @@ namespace Hedra.Engine.Game
             Player.AbilityTree.FromInformation(Information);
             Player.Toolbar.FromInformation(Information);
             Player.View.CameraHeight = Camera.DefaultCameraHeight;
+            if(Information.MarkedDirection != Vector3.Zero)
+                Player.Minimap.Mark(Information.MarkedDirection);
             if(Player.IsDead)
                 Player.Respawn();
             World.Recreate(Information.WorldSeed);

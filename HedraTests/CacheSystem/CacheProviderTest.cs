@@ -23,6 +23,32 @@ namespace HedraTests.CacheSystem
             Provider = new CacheProvider();
             Provider.Load();
         }
+
+        [Test]
+        public void TestExtraDataCacheHashing()
+        {
+            var list = new List<float>();
+            for(var i = 0; i < 100000; ++i)
+                list.Add(Utils.Rng.NextFloat());
+            var hash1 = Provider.MakeHash(list);
+            var hash2 = Provider.MakeHash(list);
+            Assert.AreEqual(hash1, hash2);         
+        }
+        
+        [Test]
+        public void TestColorsCacheHashing()
+        {
+            var list = new List<Vector4>(new []
+            {
+                new Vector4(.323f, 12.3312f, 23.32f, 21.33333f),
+                new Vector4(.4423f, 122.3367812f, 23124.12321332f, 21.213f), 
+                new Vector4(.64323f, 12132.38312f, 23.31232f, 21.213f),
+                new Vector4(.33f, 18762.33812f, 23.332f, 21.21443f)
+            });
+            var hash1 = Provider.MakeHash(list);
+            var hash2 = Provider.MakeHash(list);
+            Assert.AreEqual(hash1, hash2);         
+        }
         
         [Test]
         public void TestUsesCache()

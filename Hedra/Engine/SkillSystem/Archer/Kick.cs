@@ -28,9 +28,10 @@ namespace Hedra.Engine.SkillSystem.Archer
         private float Damage => BaseDamage + (BaseDamage * Level * .5f);
         public override float MaxCooldown => Math.Max(8, 12 - Level * .5f);
         public override float ManaCost => 40;
-        protected override float AnimationSpeed => 1.5f;
+        protected override float AnimationSpeed => 1.3f;
         protected override int MaxLevel => 20;
         private bool _emitParticles;
+        private bool _shouldPush;
 
         public override bool MeetsRequirements()
         {
@@ -39,20 +40,27 @@ namespace Hedra.Engine.SkillSystem.Archer
 
         protected override void OnAnimationMid()
         {
-            SkillUtils.DamageNearby(Player, Damage, 16, .25f);
-            _emitParticles = true;
+            _shouldPush = true;
             SoundPlayer.PlaySound(SoundType.SwooshSound, Player.Position, false, 0.8f, 1f);
         }
 
+        protected override void OnAnimationStart()
+        {
+            _emitParticles = true;
+        }
+        
         protected override void OnAnimationEnd()
         {
             _emitParticles = false;
+            _shouldPush = false;
         }
 
         protected override void OnExecution()
         {
             Player.Movement.Orientate();
-            PushEntitiesAway();
+            if(_shouldPush)
+                PushEntitiesAway();
+            SkillUtils.DamageNearby(Player, Damage * Time.DeltaTime, 24, .25f, false);
             
             if(_emitParticles) return;
             World.Particles.Color = new Vector4(1,1,1,1);
@@ -74,7 +82,7 @@ namespace Hedra.Engine.SkillSystem.Archer
             for(var i = 0; i< World.Entities.Count; i++)
             {
                 if (Player == World.Entities[i]) continue;
-                if (!((Player.Position - World.Entities[i].Position).LengthSquared < 32 * 32)) continue;                  
+                if (!((Player.Position - World.Entities[i].Position).LengthSquared < 24 * 24)) continue;                  
                 var direction = -(Player.Position - World.Entities[i].Position).NormalizedFast();
                 World.Entities[i].Physics.DeltaTranslate(direction * 64f);
             }

@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using Hedra.Core;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
@@ -11,13 +13,13 @@ namespace Hedra.Engine.SkillSystem.Warrior
     public class Intercept : CappedSkill
     {
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Intercept.png");
-        public override string Description => "Charge and knock down you enemies.";
-        public override string DisplayName => "Intercept";
-        private const float BaseDamage = 80f;
+        public override string Description => Translations.Get("intercept_desc");
+        public override string DisplayName => Translations.Get("intercept_skill");
+        private const float BaseDamage = 30f;
         private const float BaseCooldown = 24f;
         private const float CooldownCap = 12f;
         private const float DurationCap = 0.5f;
-        private const float BaseDuration = 0.75f;
+        private const float BaseDuration = 0.70f;
         private const float BaseManaCost = 60f;
         
         private float Damage => BaseDamage * (base.Level * 0.15f) + BaseDamage;
@@ -84,8 +86,7 @@ namespace Hedra.Engine.SkillSystem.Warrior
                 World.Particles.GravityEffect = .1f;
                 World.Particles.PositionErrorMargin = new Vector3(Player.Model.Dimensions.Size.X, 2, Player.Model.Dimensions.Size.Z) * .5f;
             }
-            for (var i = 0; i < 1; i++)
-                World.Particles.Emit();
+            World.Particles.Emit();
         }
 
         private void End()
@@ -108,7 +109,7 @@ namespace Hedra.Engine.SkillSystem.Warrior
             _timer.AlertTime = Duration;
             _timer.Reset();
             Player.Movement.CaptureMovement = false;
-            Player.Movement.Move(Player.Physics.MoveFormula(Player.Orientation) * 1.5f, Duration, false);
+            Player.Movement.Move(Player.Physics.MoveFormula(Player.View.LookingDirection.Xz.ToVector3().NormalizedFast()) * 1.5f, Duration, false);
         }
     }
 }

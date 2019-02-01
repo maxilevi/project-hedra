@@ -19,7 +19,7 @@ namespace Hedra.Engine.PlantSystem
             _cloudDesign = new CloudDesign();
         }
 
-        public override PlantDesign GetDesign(Vector3 Position, Chunk UnderChunk)
+        public override PlantDesign GetDesign(Vector3 Position, Chunk UnderChunk, Random Rng)
         {
             return _cloudDesign;
         }

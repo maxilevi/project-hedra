@@ -43,6 +43,7 @@ namespace Hedra.Engine.CacheSystem
         Mushroom,
         Timber,
         Pebble,
+        Stick,
         MaxEnums
     }
 }

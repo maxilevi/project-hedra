@@ -89,7 +89,7 @@ namespace Hedra.Engine.EntitySystem
             var shouldMiss = Parent is LocalPlayer && Utils.Rng.Next(1, 18) == 1;
             _attackedTimer = 6;
             _hasBeenAttacked = true;
-            var isImmune = Immune | Parent.IsStuck;
+            var isImmune = Immune | (Parent.IsStuck && !Parent.Model.Pause);
 
             if (!Parent.IsStatic && PlaySound && (GameManager.Player.Position - Parent.Position).LengthSquared < 80*80 && Amount >= 1f)
             {

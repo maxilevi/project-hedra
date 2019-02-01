@@ -1,4 +1,5 @@
 
+using System;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using OpenTK;
@@ -18,9 +19,9 @@ namespace Hedra.Engine.PlantSystem
 
         public override bool CanBeHidden => true;
 
-        public override PlantDesign GetDesign(Vector3 Position, Chunk UnderChunk)
+        public override PlantDesign GetDesign(Vector3 Position, Chunk UnderChunk, Random Rng)
         {
-            return UnderChunk.Landscape.RandomGen.Next(0, 7) != 1 ? _grassDesign : _wheatDesign;
+            return Rng.Next(0, 7) != 1 ? _grassDesign : _wheatDesign;
         }
 
         public override bool ShouldPlace(Vector3 Position, Chunk UnderChunk)

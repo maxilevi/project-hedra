@@ -530,7 +530,7 @@ namespace Hedra.Engine.BiomeSystem
                 if(designs[i].CanBeHidden && HideEnvironment) continue;
                 if (designs[i].ShouldPlace(Position, this.Chunk))
                 {
-                    var design = designs[i].GetDesign(Position, this.Chunk);
+                    var design = designs[i].GetDesign(Position, Chunk, Chunk.Landscape.RandomGen);
                     World.EnvironmentGenerator.GeneratePlant(Position, Biome, design);
                 }
             }

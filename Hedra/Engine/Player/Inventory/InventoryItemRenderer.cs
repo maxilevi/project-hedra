@@ -22,7 +22,7 @@ namespace Hedra.Engine.Player.Inventory
         private readonly int _length;
         private readonly int _offset;
         private readonly ObjectMesh[] _models;
-        private readonly float[] _modelsHeights;
+        private readonly Vector3[] _modelsSize;
         private static float _itemRotation;
 
         static InventoryItemRenderer()
@@ -36,7 +36,7 @@ namespace Hedra.Engine.Player.Inventory
             this._length = Length;
             this._offset = Offset;
             this._models = new ObjectMesh[_length];
-            this._modelsHeights = new float[_length];
+            this._modelsSize = new Vector3[_length];
         }
 
         public void UpdateView()
@@ -50,16 +50,20 @@ namespace Hedra.Engine.Player.Inventory
                 }
                 if (_array[i+ _offset] != null)
                 {
-                    _models[i] = BuildModel(_array[i + _offset].Model, out _modelsHeights[i]);
+                    _models[i] = BuildModel(_array[i + _offset].Model, out _modelsSize[i]);
                     itemCount++;
                 }
             }
         }
 
-        public static ObjectMesh BuildModel(VertexData Model, out float ModelHeight)
+        public static ObjectMesh BuildModel(VertexData Model, out Vector3 ModelSizes)
         {
             var model = CenterModel(Model.Clone());
-            ModelHeight = model.SupportPoint(Vector3.UnitY).Y - model.SupportPoint(-Vector3.UnitY).Y;
+            ModelSizes = new Vector3(
+                model.SupportPoint(Vector3.UnitX).X - model.SupportPoint(-Vector3.UnitX).X,
+                model.SupportPoint(Vector3.UnitY).Y - model.SupportPoint(-Vector3.UnitY).Y,
+                model.SupportPoint(Vector3.UnitZ).Z - model.SupportPoint(-Vector3.UnitZ).Z
+            );           
             var mesh = ObjectMesh.FromVertexData(model);
             //mesh.BaseTint = EffectDescriber.EffectColorFromItem(Item);
             mesh.ApplyFog = false;
@@ -69,16 +73,22 @@ namespace Hedra.Engine.Player.Inventory
 
         public uint Draw(int Id)
         {
-            return Draw(_models[Id], _array[Id + _offset], true, _modelsHeights[Id] * ZOffsetFactor);
+            return Draw(_models[Id], _array[Id + _offset], true, _modelsSize[Id]);
         }
 
-        public uint Draw(ObjectMesh Mesh, Item Item, bool TiltIfWeapon = true, float ZOffset = 3.0f)
+        public static uint Draw(ObjectMesh Mesh, bool IsWeapon, bool TiltIfWeapon, Vector3 Size)
+        {
+            var zoffset = Size.Y > (Size.X + Size.Z) * .25f ? Size.Y * ZOffsetFactor : (Size.X + Size.Z);
+            return Draw(Mesh, IsWeapon, TiltIfWeapon, Size.Y * ZOffsetFactor + (Size.X + Size.Z) * .5f);
+        }
+
+        public static uint Draw(ObjectMesh Mesh, Item Item, bool TiltIfWeapon, Vector3 Size)
         {
             if(Item == null) return GUIRenderer.TransparentTexture;
-            return Draw(Mesh, Item.IsWeapon, TiltIfWeapon, ZOffset);
+            return Draw(Mesh, Item.IsWeapon, TiltIfWeapon, Size);
         }
 
-        public static uint Draw(ObjectMesh Mesh, bool IsWeapon, bool TiltIfWeapon = true, float ZOffset = 3.0f)
+        private static uint Draw(ObjectMesh Mesh, bool IsWeapon, bool TiltIfWeapon = true, float ZOffset = 3.0f)
         {
             ZOffset = Math.Max(ZOffset, 3.0f);
             if (Mesh == null) return GUIRenderer.TransparentTexture;

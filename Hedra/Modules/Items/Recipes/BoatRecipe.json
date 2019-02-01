@@ -1,0 +1,49 @@
+{
+  "Name": "BoatRecipe",
+  "DisplayName": "Boat recipe",
+  "EquipmentType": "Recipe",
+  "Tier": "Rare",
+  "Description": "...",
+  "Attributes": [
+    {
+      "Name": "CraftingStation",
+      "Value": "Workbench"
+    },
+    {
+      "Name": "Ingredients",
+      "Value": [
+        {
+          "Name": "WoodenPlank",
+          "Amount": 16
+        },
+        {
+          "Name": "Cloth",
+          "Amount": 8
+        }
+      ],
+      "Display": "Bullets"
+    },
+    {
+      "Name": "Output",
+      "Value": {
+        "Name": "Boat",
+        "Amount": 1
+      },
+      "Hidden": true
+    },
+    {
+      "Name": "IsConsumable",
+      "Value": true,
+      "Hidden": true
+    },
+    {
+      "Name": "Handler",
+      "Value": "Recipe",
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 2.0,
+    "Path": "$DataFile$/Items/Misc/Recipe.ply"
+  }
+}

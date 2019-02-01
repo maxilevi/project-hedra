@@ -51,16 +51,32 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             }
             var lampOffset = Vector3.TransformPosition(Parameters.Design.LampPosition * Parameters.Design.Scale, transformation);
             DecorationsPlacer.PlaceLamp(Parameters.Position + lampOffset, Structure, Root, _width, Rng);
-            if (Parameters.Design.HasAnvil)
-            {
-                var anvilPosition = Parameters.Position + Vector3.TransformPosition(
-                                        Parameters.Design.AnvilPosition * Parameters.Design.Scale,
-                                        transformation);
-                DecorationsPlacer.PlaceWhenWorldReady(anvilPosition,
-                    P => Structure.WorldObject.AddChildren(new Anvil(P)),
-                    () => Structure.Disposed
-                );
-            }
+            PlaceAnvilIfNecessary(Parameters, transformation);
+            PlaceWorkbenchIfNecessary(Parameters, transformation);
+        }
+
+        private void PlaceAnvilIfNecessary(BlacksmithParameters Parameters, Matrix4 Transformation)
+        {
+            if (!Parameters.Design.HasAnvil) return;
+            var position = Parameters.Position + Vector3.TransformPosition(
+                                    Parameters.Design.AnvilPosition * Parameters.Design.Scale,
+                                    Transformation);
+            DecorationsPlacer.PlaceWhenWorldReady(position,
+                P => Structure.WorldObject.AddChildren(new Anvil(P)),
+                () => Structure.Disposed
+            );
+        }
+
+        private void PlaceWorkbenchIfNecessary(BlacksmithParameters Parameters, Matrix4 Transformation)
+        {
+            if (!Parameters.Design.HasWorkbench) return;
+            var position = Parameters.Position + Vector3.TransformPosition(
+                                    Parameters.Design.WorkbenchPosition * Parameters.Design.Scale,
+                                    Transformation);
+            DecorationsPlacer.PlaceWhenWorldReady(position,
+                P => Structure.WorldObject.AddChildren(new Workbench(P)),
+                () => Structure.Disposed
+            );
         }
     }
 }

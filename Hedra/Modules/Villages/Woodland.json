@@ -127,6 +127,12 @@
           "X": -16.0,
           "Y": 0.0,
           "Z": -16.0
+        },
+        "HasWorkbench": true,
+        "WorkbenchPosition": {
+          "X": 2.4,
+          "Y": 0.5,
+          "Z": 2.8
         }
       }
     ]

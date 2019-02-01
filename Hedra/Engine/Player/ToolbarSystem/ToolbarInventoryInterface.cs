@@ -18,7 +18,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
         private ObjectMesh _foodMesh;
         private Item _foodItem;
         private Item _builtFoodItem;
-        private float _foodHeight;
+        private Vector3 _foodSize;
 
         public ToolbarInventoryInterface(IPlayer Player, InventoryArray Array, int Offset, int Length, int SlotsPerLine, Vector2 Spacing, string[] CustomIcons = null) : base(Array, Offset, Length, SlotsPerLine, Spacing, CustomIcons)
         {
@@ -42,7 +42,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
                 _panel.AddElement(_textBackgrounds[i]);
             }
             this.Buttons[this.Buttons.Length - 1].Texture.IdPointer = () => _foodItem != null
-                ? Renderer.Draw(_foodMesh, _foodItem, true, _foodHeight * InventoryItemRenderer.ZOffsetFactor)
+                ? InventoryItemRenderer.Draw(_foodMesh, _foodItem, true, _foodSize)
                 : GUIRenderer.TransparentTexture;
         }
 
@@ -73,7 +73,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
             _foodItem = _player.Inventory.Food;
             if (_foodItem != _builtFoodItem && _foodItem != null)
             {
-                _foodMesh = InventoryItemRenderer.BuildModel(_foodItem.Model, out _foodHeight);
+                _foodMesh = InventoryItemRenderer.BuildModel(_foodItem.Model, out _foodSize);
                 _builtFoodItem = _foodItem;
             }
             this.ButtonsText[this.ButtonsText.Length - 1].Text =

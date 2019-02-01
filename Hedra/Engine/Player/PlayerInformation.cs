@@ -32,6 +32,7 @@ namespace Hedra.Engine.Player
         public Vector3 BlockPosition { get; set; }
         public Vector3 Rotation { get; set; }
         public Vector3 TargetPosition { get; set; }
+        public Vector3 MarkedDirection { get; set; }
         public byte[] MainTreeArray { get; set; }
         public byte[] FirstSpecializationTreeArray { get; set; }
         public byte[] SecondSpecializationTreeArray { get; set; }

@@ -15,7 +15,7 @@
     }
   ],
   "Model": {
-    "Scale": 1.0,
+    "Scale": 0.75,
     "Path": "$DataFile$/Items/Misc/Cloth.ply"
   }
 }

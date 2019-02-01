@@ -1,0 +1,46 @@
+{
+  "Name": "BreadRecipe",
+  "DisplayName": "Bread recipe",
+  "EquipmentType": "Recipe",
+  "Tier": "Common",
+  "Description": "...",
+  "Attributes": [
+    {
+      "Name": "CraftingStation",
+      "Value": "Campfire"
+    },
+    {
+      "Name": "Ingredients",
+      "Value": [
+        {
+          "Name": "Flour",
+          "Amount": 1
+        },
+        {
+          "Name": "WaterBowl",
+          "Amount": 1
+        }
+      ],
+      "Display": "Bullets"
+    },
+    {
+      "Name": "Output",
+      "Value": "Bread",
+      "Hidden": true
+    },
+    {
+      "Name": "IsConsumable",
+      "Value": true,
+      "Hidden": true
+    },
+    {
+      "Name": "Handler",
+      "Value": "Recipe",
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 2.0,
+    "Path": "$DataFile$/Items/Misc/Recipe.ply"
+  }
+}

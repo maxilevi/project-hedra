@@ -34,6 +34,7 @@ namespace Hedra.Engine.SkillSystem
 
         protected SingleAnimationSkill() 
         {
+            if(SkillAnimation != SkillAnimation) throw new ArgumentOutOfRangeException($"SkillAnimation needs to be a singleton.");
             SkillAnimation.Loop = false;
             SkillAnimation.Speed = AnimationSpeed;
             SkillAnimation.OnAnimationStart += Sender =>

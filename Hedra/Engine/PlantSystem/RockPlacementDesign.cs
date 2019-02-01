@@ -1,3 +1,4 @@
+using System;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using OpenTK;
@@ -13,7 +14,7 @@ namespace Hedra.Engine.PlantSystem
             _rockDesign = new RockDesign();
         }
 
-        public override PlantDesign GetDesign(Vector3 Position, Chunk UnderChunk)
+        public override PlantDesign GetDesign(Vector3 Position, Chunk UnderChunk, Random Rng)
         {
             return _rockDesign;
         }

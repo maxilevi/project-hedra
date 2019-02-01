@@ -29,8 +29,8 @@ namespace Hedra.Engine.Rendering
         public List<Vector4> Colors { get; set; }
         public List<float> ExtraData { get; set; }
         public Matrix4 TransMatrix { get; set; }
-        public object ColorCache { get; set; }
-        public object ExtraDataCache { get; set; }
+        public string ColorCache { get; set; }
+        public string ExtraDataCache { get; set; }
         public bool HasExtraData => ExtraData.Count != 0 || ExtraDataCache != null;
         public bool VariateColor { get; set; } = true;
         public bool GraduateColor { get; set; }

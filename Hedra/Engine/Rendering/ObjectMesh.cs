@@ -8,6 +8,7 @@ using System;
 using Hedra.Core;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Game;
+using Hedra.Engine.Generation.ChunkSystem;
 using OpenTK;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
@@ -18,13 +19,15 @@ namespace Hedra.Engine.Rendering
     public class ObjectMesh : IRenderable, IDisposable, ICullableModel, IUpdatable
     {
         public float AnimationSpeed { get; set; } = 1f;
-        public bool Enabled { get; set; }
         public bool PrematureCulling { get; set; } = true;
         public Box CullingBox { get; set; }
         public Vector3 Max => CullingBox?.Max ?? Vector3.Zero;
         public Vector3 Min => CullingBox?.Min ?? Vector3.Zero;
         public ChunkMesh Mesh { get; }
         private readonly ObjectMeshBuffer _buffer;
+        private bool _enabled;
+        private Chunk _underChunk;
+        private Timer _underChunkTimer;
 
         public ObjectMesh()
         {
@@ -39,7 +42,8 @@ namespace Hedra.Engine.Rendering
             this.Position = Position;
             this.LocalRotation = Vector3.Zero;
             Mesh.Enabled = true;
-            Enabled = true;    
+            Enabled = true;
+            _underChunkTimer = new Timer(4 + Utils.Rng.NextFloat() * 2);
             DrawManager.Add(this);
             UpdateManager.Add(this);
         }
@@ -52,6 +56,8 @@ namespace Hedra.Engine.Rendering
 
         public void Update()
         {
+            if (_underChunkTimer.Tick())
+                _underChunk = World.GetChunkAt(Position);
             _buffer.LocalRotation = LocalRotation;//Mathf.Lerp(_buffer.LocalRotation, LocalRotation, Time.IndependantDeltaTime * 8f);
         }
 
@@ -126,6 +132,12 @@ namespace Hedra.Engine.Rendering
             set => _buffer.Pause = value;
         }
 
+        public bool Enabled
+        {
+            get => _enabled && !(_underChunk?.Mesh?.Occluded ?? false);
+            set => _enabled = value;
+        }
+        
         public Vector3 LocalRotation { get; set; }
 
         public Vector3 BeforeRotation

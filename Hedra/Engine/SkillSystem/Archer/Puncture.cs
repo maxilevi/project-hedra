@@ -36,7 +36,7 @@ namespace Hedra.Engine.SkillSystem.Archer
             {
                 if(Utils.Rng.Next(0, (int) (10 - Level / 5)) == 0)
                 {
-                    Hit.AddComponent( new BleedingComponent(Hit, Player, 2 + Level / 10.0f, 20 + 10 * Level) );
+                    Hit.AddComponent( new BleedingComponent(Hit, Player, 2 + Level / 10.0f, Player.DamageEquation * (.75f + Level / 10f)) );
                 }
             };
             Weapon.BowModifiers -= Lambda;

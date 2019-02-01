@@ -26,7 +26,7 @@ namespace Hedra.Engine.Management
     /// </summary>
     public static class DataManager
     {
-        private const float SaveVersion = 1.3f;
+        private const float SaveVersion = 1.35f;
         
         public static void SavePlayer(PlayerInformation Player)
         {
@@ -79,6 +79,7 @@ namespace Hedra.Engine.Management
                     bw.Write(Player.ToolbarArray);
 
                     bw.Write(Player.TargetPosition);
+                    bw.Write(Player.MarkedDirection);
 
                     bw.Write(Player.Daytime);
                     bw.Write(Player.Class.Name);
@@ -142,7 +143,8 @@ namespace Hedra.Engine.Management
                 RandomFactor = Player.RandomFactor,
                 Items = Player.Inventory.ToArray(),
                 Recipes = Player.Crafting.RecipeNames,
-                Quests = Player.Questing.GetTemplates()
+                Quests = Player.Questing.GetTemplates(),
+                MarkedDirection = Player.Minimap.MarkedDirection
             };
 
             return data;
@@ -202,6 +204,7 @@ namespace Hedra.Engine.Management
                 }
                 information.ToolbarArray = br.ReadBytes(br.ReadInt32());
                 information.TargetPosition = br.ReadVector3();
+                if (version >= 1.35f) information.MarkedDirection = br.ReadVector3();
                 information.Daytime = br.ReadSingle();
                 information.Class = ClassDesign.FromString(br.ReadString());
                 information.RandomFactor = br.ReadSingle();

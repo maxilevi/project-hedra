@@ -32,11 +32,11 @@ namespace Hedra.Engine.Steamworks
 
         public void CallIf(Action<Client> Do)
         {
-            if(_useSteam)
+            if(IsAvailable)
                 Do(_client);
         }
 
-        public bool IsAvailable => _useSteam;
+        public bool IsAvailable => _useSteam && _client.IsValid;
         
         public Client GetClient()
         {

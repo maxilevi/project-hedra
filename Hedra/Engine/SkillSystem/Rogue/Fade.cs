@@ -9,8 +9,10 @@
 
 using System;
 using System.Collections;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Animation;
 using Hedra.Sound;
 using OpenTK;
 
@@ -19,52 +21,73 @@ namespace Hedra.Engine.SkillSystem.Rogue
     /// <summary>
     /// Description of WeaponThrow.
     /// </summary>
-    public class Fade : BaseSkill
+    public class Fade : SingleAnimationSkill
     {
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Fade.png");
+        protected override int MaxLevel => 20;
+        private float FadeTime => Math.Min(16, 6 + Level * .5f);
+        public override float MaxCooldown => 28 - Level + FadeTime;
+        public override float ManaCost => 110f;
+        private bool _isFaded;
+        private float _timeRemaining;
 
-        public Fade() : base() 
+        protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/RogueFade.dae");
+        protected override float AnimationSpeed => 5f;
+        
+        public override void Update()
         {
-            base.ManaCost = 80f;
-            base.MaxCooldown = 16f;
-        }
-        
-        public override void Use(){
-            base.MaxCooldown = 20f;
-            RoutineManager.StartRoutine(FadeTime);
-        }
-        
-        private IEnumerator FadeTime(){
-            float PassedTime = 8f + Math.Min(base.Level * .75f, 10f), PTime = 0;
-            SoundPlayer.PlayUISound(SoundType.DarkSound, 1f, .25f);
-            while(PTime < PassedTime){
-                
-                Player.Model.Alpha = .4f;
-                Player.Model.BaseTint = -new Vector4(.8f,.8f,.8f,0);
-                Player.IsInvisible = true;
-                
-                if(Player.IsAttacking || Player.IsCasting){
-                    Player.Model.Alpha = 1;
-                    Player.Model.BaseTint = Vector4.Zero;
-                    Player.IsInvisible = false;
-                    yield break;
-                }
-                
-                PTime += Engine.Time.DeltaTime;
-                yield return null;
+            base.Update();
+            if(!_isFaded) return;
+
+            if (_timeRemaining > 0)
+            {
+                _timeRemaining -= Time.DeltaTime;
+                ShowParticles();
             }
-            
+            else
+            {
+                UnFade();
+            }
+        }
+
+        private void UnFade()
+        {
             Player.Model.Alpha = 1;
             Player.Model.BaseTint = Vector4.Zero;
             Player.IsInvisible = false;
+            _isFaded = false;
         }
 
-        public override void Update()
+        protected override void OnAnimationEnd()
         {
-            
+            _isFaded = true;
+            _timeRemaining = FadeTime;
+            Player.Model.Alpha = .5f;
+            Player.Model.BaseTint = -new Vector4(.85f, .85f, .85f, 0);
+            Player.IsInvisible = true;
+            SoundPlayer.PlayUISound(SoundType.DarkSound, 1f, .25f);
         }
-        
-        public override string Description => "Temporarily hide from your enemies.";
-        public override string DisplayName => "Fade";
+
+        private void ShowParticles()
+        {
+            World.Particles.Color = new Vector4(.2f, .2f, .2f, .8f);
+            World.Particles.VariateUniformly = true;
+            World.Particles.Position =
+                Player.Position + Vector3.UnitY * Player.Model.Height * .3f;
+            World.Particles.Scale = Vector3.One * .25f;
+            World.Particles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
+            World.Particles.Direction = -Player.Orientation * .05f;
+            World.Particles.ParticleLifetime = 1.0f;
+            World.Particles.GravityEffect = 0.0f;
+            World.Particles.PositionErrorMargin = new Vector3(1.25f, Player.Model.Height * .3f, 1.25f);
+            World.Particles.Emit();
+        }
+
+        protected override void OnExecution()
+        {
+        }
+
+        public override string Description => Translations.Get("fade_desc");
+        public override string DisplayName => Translations.Get("fade_skill");
     }
 }

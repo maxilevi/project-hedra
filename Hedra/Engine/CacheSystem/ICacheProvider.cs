@@ -22,8 +22,8 @@ namespace Hedra.Engine.CacheSystem
 
         void Check(InstanceData Data);
         
-        Dictionary<object, List<CompressedValue<float>>> CachedExtradata { get; }
+        Dictionary<string, List<CompressedValue<float>>> CachedExtradata { get; }
         
-        Dictionary<object, List<CompressedValue<Vector4>>> CachedColors { get; }
+        Dictionary<string, List<CompressedValue<Vector4>>> CachedColors { get; }
     }
 }

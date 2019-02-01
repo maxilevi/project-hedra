@@ -130,6 +130,20 @@ namespace Hedra.Engine.PhysicsSystem
             return WaterHeight(Position) - HeightAtPosition(Position);
         }
 
+        public static float NearestWaterBlock(Vector3 Position)
+        {
+            var chunk = World.GetChunkAt(Position);
+            var nearest = float.MaxValue;
+            if (chunk == null || !chunk.HasWater) return nearest;
+            var positions = chunk.GetWaterPositions();
+            for (var i = 0; i < positions.Length; i++)
+            {
+                var realPosition = positions[i].ToVector3() * Chunk.BlockSize + chunk.Position;
+                var dist = (realPosition - Position).LengthSquared;
+                if (dist < nearest) nearest = dist;
+            }
+            return nearest;
+        }
         public static int WaterBlock(Chunk UnderChunk, Vector3 Position)
         {
             int nearestWaterBlockY = 0;

@@ -1,8 +1,8 @@
 {
-  "Name": "Stick",
-  "DisplayName": "Stick",
+  "Name": "Flour",
+  "DisplayName": "Flour",
   "Tier": "Misc",
-  "Description": "...",
+  "Description": "A bag of flour.",
   "Attributes": [
     {
       "Name": "Amount",
@@ -10,12 +10,12 @@
     },
     {
       "Name": "Price",
-      "Value": 2.0,
+      "Value": 4,
       "Hidden": true
     }
   ],
   "Model": {
     "Scale": 1.0,
-    "Path": "$DataFile$/Items/Misc/Stick.ply"
+    "Path": "$DataFile$/Items/Foods/Flour.ply"
   }
 }

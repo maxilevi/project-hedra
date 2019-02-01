@@ -8,11 +8,14 @@ using OpenTK;
 
 namespace Hedra.Engine.PlantSystem
 {
-    public class BerryBushPlacementDesign : CollectibleDesign
+    public class BerryBushPlacementDesign : CollectiblePlacementDesign
     {
         protected override PlantDesign Design { get; } = new BerryBushDesign();
         
-        protected override BlockType Type => BlockType.Grass;
+        protected override BlockType[] Types { get; } =
+        {
+            BlockType.Grass,
+        };
 
         protected override bool ShouldPlace(Random Rng) => Rng.Next(0, 3000) == 1;
     }

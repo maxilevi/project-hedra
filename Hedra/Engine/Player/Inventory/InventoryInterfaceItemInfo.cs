@@ -35,7 +35,7 @@ namespace Hedra.Engine.Player.Inventory
         private readonly Vector2 _nonWeaponItemAttributesPosition;
         private readonly Vector2 _nonWeaponItemTexturePosition;
         private ObjectMesh _currentItemMesh;
-        private float _currentItemMeshHeight;
+        private Vector3 _currentItemMeshSize;
         private bool _enabled;
 
         public InventoryInterfaceItemInfo(InventoryItemRenderer Renderer)
@@ -160,7 +160,7 @@ namespace Hedra.Engine.Player.Inventory
         protected virtual void UpdateItemMesh()
         {
             _currentItemMesh?.Dispose();
-            _currentItemMesh = InventoryItemRenderer.BuildModel(CurrentItem.Model, out _currentItemMeshHeight);
+            _currentItemMesh = InventoryItemRenderer.BuildModel(CurrentItem.Model, out _currentItemMeshSize);
         }
 
         protected virtual void AddAttributes()
@@ -183,8 +183,7 @@ namespace Hedra.Engine.Player.Inventory
 
         protected virtual void AddTexture()
         {
-            ItemTexture.TextureElement.IdPointer = () => _renderer.Draw(_currentItemMesh, CurrentItem,
-                false, _currentItemMeshHeight * InventoryItemRenderer.ZOffsetFactor);
+            ItemTexture.TextureElement.IdPointer = () => InventoryItemRenderer.Draw(_currentItemMesh, CurrentItem, false, _currentItemMeshSize);
         }
         
         public virtual void Show(Item Item)

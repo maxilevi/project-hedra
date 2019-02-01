@@ -112,6 +112,7 @@ namespace Hedra.Engine.Player.MapSystem
 
         public void UnMark()
         {
+            MarkedDirection = Vector3.Zero;
             HasMarker = false;
         }
         

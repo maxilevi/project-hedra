@@ -5,22 +5,22 @@ using OpenTK;
 
 namespace Hedra.Engine.PlantSystem
 {
-    public abstract class CollectibleDesign : PlacementDesign
+    public abstract class CollectiblePlacementDesign : PlacementDesign
     {
         protected abstract PlantDesign Design { get; }
         
-        protected abstract BlockType Type { get; }
+        protected abstract BlockType[] Types { get; }
         
         protected abstract bool ShouldPlace(Random Rng);
 
-        public override PlantDesign GetDesign(Vector3 Position, Chunk UnderChunk)
+        public override PlantDesign GetDesign(Vector3 Position, Chunk UnderChunk, Random Rng)
         {
             return Design;
         }
 
         public override bool ShouldPlace(Vector3 Position, Chunk UnderChunk)
         {
-            return World.GetHighestBlockAt(Position.X, Position.Z).Type == Type &&
+            return Array.IndexOf(Types, World.GetHighestBlockAt(Position.X, Position.Z).Type) != -1 &&
                    ShouldPlace(UnderChunk.Landscape.RandomGen) && World.MenuSeed != World.Seed;
         }
     }

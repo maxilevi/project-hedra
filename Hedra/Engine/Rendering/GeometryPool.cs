@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using Hedra.Engine.IO;
 using Hedra.Core;
 using Hedra.Engine.Management;
 using OpenTK.Graphics.OpenGL4;
@@ -47,7 +48,9 @@ namespace Hedra.Engine.Rendering
             
             Renderer.BindBuffer(Buffer.BufferTarget, Buffer.ID);
             Renderer.BufferData(Buffer.BufferTarget, (IntPtr) TotalMemory, IntPtr.Zero, Buffer.Hint);
-            
+            var error = Renderer.GetError();
+            if (error != ErrorCode.NoError)
+                Log.WriteLine($"GLError when creating GeometryPool<{typeof(T)}> {error}");
         }
 
         public void Bind()

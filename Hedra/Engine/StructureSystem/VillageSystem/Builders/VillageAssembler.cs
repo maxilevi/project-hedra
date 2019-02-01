@@ -79,7 +79,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             }
 
             var plateaus = _structure.Plateaux.Concat(new[] {_structure.Mountain}).ToArray();
-            plateaus = plateaus.Select(P => P.Clone()).Cast<BasePlateau>().OrderByDescending(P => P.MaxHeight).ToArray();
+            plateaus = plateaus.Select(P => P.Clone()).OrderByDescending(P => P.MaxHeight).ToArray();
             for (var i = 0; i < plateaus.Length; ++i)
             {
                 plateaus[i].MaxHeight = 
@@ -99,7 +99,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                    Position.Xz,
                    World.BiomePool.GetRegion(Position).Generation.GetHeight(Position.X, Position.Z, null, out _),
                    Plateaus
-            ) < BiomePool.SeaLevel;
+            ) < BiomePool.SeaLevel-1;
         }
 
         public void Build(PlacementDesign Design, CollidableStructure Structure)

@@ -18,7 +18,7 @@ namespace Hedra.Engine.PlantSystem
         
         public override bool CanBeHidden => true;
               
-        public override PlantDesign GetDesign(Vector3 Position, Chunk UnderChunk)
+        public override PlantDesign GetDesign(Vector3 Position, Chunk UnderChunk, Random Rng)
         {
             return _reedDesign;
         }
