@@ -28,7 +28,7 @@ namespace HedraTests.CacheSystem
         public void TestExtraDataCacheHashing()
         {
             var list = new List<float>();
-            for(var i = 0; i < 100000; ++i)
+            for(var i = 0; i < 1000; ++i)
                 list.Add(Utils.Rng.NextFloat());
             var hash1 = Provider.MakeHash(list);
             var hash2 = Provider.MakeHash(list);

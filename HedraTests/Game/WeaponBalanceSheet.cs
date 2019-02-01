@@ -5,13 +5,13 @@ namespace HedraTests.Game
         public UniqueBalanceEntry BowDamage { get; } = new UniqueBalanceEntry
         {
             Min = 1.5f,
-            Max = 2,
+            Max = 2.5f,
         };
         
         public UniqueBalanceEntry KnifeDamage { get; } = new UniqueBalanceEntry
         {
-            Min = 1.5f,
-            Max = 2,
+            Min = 4f,
+            Max = 5,
         };
         
         public UniqueBalanceEntry SwordDamage { get; } = new UniqueBalanceEntry
