@@ -119,6 +119,7 @@ requires_water = Requires water
 well = well
 anvil = anvil
 campfire = campfire
+workbench = workbench
 use_anvil = USE ANVIL
 use_campfire = USE CAMPFIRE
 use_well = USE WELL

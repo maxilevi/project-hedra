@@ -24,6 +24,9 @@ namespace Hedra.Engine.Player.QuestSystem
             var currentDayColor = ShaderManager.LightColor;
             ShaderManager.SetLightColorInTheSameThread(Vector3.One);
 
+            var previousShadows = GameSettings.GlobalShadows;
+            GameSettings.GlobalShadows = false;
+            
             const float aspect = 1.33f;
             var projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(40 * Mathf.Radian, aspect, 1, 1024f);
             Renderer.LoadProjection(projectionMatrix);
@@ -43,6 +46,7 @@ namespace Hedra.Engine.Player.QuestSystem
             Model.DrawModel(lookAt * projectionMatrix, lookAt);
 
             ShaderManager.SetLightColorInTheSameThread(currentDayColor);
+            GameSettings.GlobalShadows = previousShadows;
             Renderer.PopFBO();
             Renderer.PopShader();
             Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, Renderer.FBOBound);

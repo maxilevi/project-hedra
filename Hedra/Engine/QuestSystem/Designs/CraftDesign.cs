@@ -100,15 +100,15 @@ namespace Hedra.Engine.QuestSystem.Designs
             }
         }
 
-        protected override ItemCollect[] GetItems(QuestObject Previous, QuestParameters Parameters, Random Rng)
+        protected override ItemCollect[] GetItems(QuestObject Quest)
         {
-            if(Previous == null)
+            if(Quest.Previous == null)
                 throw new ArgumentException("Craft designs are not suitable to be first tier quests.");
-            var item = Previous.Parameters.Get<ItemCollect[]>("Items").First();
+            var item = Quest.Previous.Parameters.Get<ItemCollect[]>("Items").First();
             var recipe = ItemPool.Grab(item.Recipe);
-            Parameters.Set("Recipe", recipe);
-            Parameters.Set("Station", recipe.GetAttribute<CraftingStation>(CommonAttributes.CraftingStation));
-            Parameters.Set("StartingItems", item.StartingItems);
+            Quest.Parameters.Set("Recipe", recipe);
+            Quest.Parameters.Set("Station", recipe.GetAttribute<CraftingStation>(CommonAttributes.CraftingStation));
+            Quest.Parameters.Set("StartingItems", item.StartingItems);
             var output = CraftingInventory.GetOutputFromRecipe(recipe);
             return new []
             {
@@ -119,10 +119,8 @@ namespace Hedra.Engine.QuestSystem.Designs
                 }
             };
         }
-// Charge and fire
-        // Right click kick ability
 
-        protected override ItemCollect[] Templates(Random Rng) => throw new NotImplementedException();
+        protected override ItemCollect[] Templates(QuestObject Quest, Random Rng) => throw new NotImplementedException();
 
         private bool HasCraftingStation(QuestObject Quest) => Quest.Parameters.Get<CraftingStation>("Station") != CraftingStation.None ;
         

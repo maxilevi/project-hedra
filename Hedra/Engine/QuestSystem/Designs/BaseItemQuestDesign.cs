@@ -5,6 +5,7 @@ using Hedra.Core;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player.QuestSystem.Views;
 using Hedra.Rendering;
+using Newtonsoft.Json.Linq;
 using OpenTK;
 
 namespace Hedra.Engine.QuestSystem.Designs
@@ -13,14 +14,32 @@ namespace Hedra.Engine.QuestSystem.Designs
     {
         public override QuestTier Tier => QuestTier.Easy;
 
-        protected abstract ItemCollect[] Templates(Random Rng);
+        protected abstract ItemCollect[] Templates(QuestObject Quest, Random Rng);
         
         protected override QuestParameters BuildParameters(QuestObject Previous, QuestContext Context, QuestParameters Parameters, Random Rng)
-        {
-            Parameters.Set("Items", GetItems(Previous, Parameters, Rng));
+        { 
             return Parameters;
         }
-        
+
+        public override void GenerateContent(QuestObject Quest)
+        {
+            Quest.Parameters.Set("Items", GetItems(Quest));
+        }
+
+        public override Dictionary<string, object> GetContent(QuestObject Quest)
+        {
+            return Quest.IsFirst ? new Dictionary<string, object>
+            {
+                {"Items", Quest.Parameters.Get<ItemCollect[]>("Items")}
+            } : null;
+        }
+
+        public override void LoadContent(QuestObject Quest, Dictionary<string, object> Content)
+        {
+            var jArray = (JArray) Content["Items"];
+            Quest.Parameters.Set("Items", jArray.ToObject<ItemCollect[]>());
+        }
+
         public override bool IsQuestCompleted(QuestObject Object)
         {
             return Object.Parameters.Get<ItemCollect[]>("Items").All(
@@ -28,12 +47,12 @@ namespace Hedra.Engine.QuestSystem.Designs
             );
         }
         
-        protected override void Consume(QuestObject Object)
+        protected override void Consume(QuestObject Quest)
         {
-            if (Object.IsEndQuest)
+            if (Quest.IsEndQuest)
             {
-                Object.Parameters.Get<ItemCollect[]>("Items").ToList().ForEach(
-                    I => I.Consume(Object.Owner)
+                Quest.Parameters.Get<ItemCollect[]>("Items").ToList().ForEach(
+                    I => I.Consume(Quest.Owner)
                 );
             }
         }
@@ -51,9 +70,9 @@ namespace Hedra.Engine.QuestSystem.Designs
             return new ModelView(Quest, model);
         }
         
-        private ItemCollect[] TemplatesFromContext(QuestContext Context, Random Rng)
+        private ItemCollect[] TemplatesFromContext(QuestObject Quest, Random Rng)
         {
-            return Templates(Rng);
+            return Templates(Quest, Rng);
         }
 
         private static float GetRewardMultiplier(QuestObject Quest, Random Rng)
@@ -87,13 +106,14 @@ namespace Hedra.Engine.QuestSystem.Designs
             return items[Rng.Next(0, items.Length)];
         }
 
-        protected virtual ItemCollect[] GetItems(QuestObject Previous, QuestParameters Parameters, Random Rng)
+        protected virtual ItemCollect[] GetItems(QuestObject Quest)
         {
-            var templates = TemplatesFromContext(Parameters.Get<QuestContext>("Context"), Rng);
+            var rng = new Random(Quest.Seed);
+            var templates = TemplatesFromContext(Quest, rng);
             var items = new List<ItemCollect>();
             for (var i = 0; i < 1; ++i)
             {
-                var template = templates[Rng.Next(0, templates.Length)];
+                var template = templates[rng.Next(0, templates.Length)];
                 if(items.Contains(template)) continue;
                 items.Add(template);
             }

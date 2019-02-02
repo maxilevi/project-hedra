@@ -12,7 +12,7 @@ namespace Hedra.Engine.QuestSystem
     {
         private readonly QuestObject _quest;
         private readonly TalkComponent _talk;
-        private readonly QuestThoughtsComponent _thoughts;
+        private QuestThoughtsComponent _thoughts;
         private bool _canGiveQuest = true;
         
         public QuestGiverComponent(IHumanoid Parent, QuestObject Quest) : base(Parent)
@@ -21,13 +21,15 @@ namespace Hedra.Engine.QuestSystem
                 throw new ArgumentException("There can only be 1 talk component");
             _quest = Quest;
             Parent.ShowIcon(CacheItem.AttentionIcon);
-            Parent.AddComponent(_thoughts = _quest.BuildThoughts(Parent));
             Parent.AddComponent(_talk = new TalkComponent(Parent));
+            _talk.OnTalkingEnded += AddQuest;
             _talk.OnTalkingStarted += T =>
             {
+                if(!(T is IPlayer player)) return;
+                _quest.GenerateContent(player);
+                Parent.AddComponent(_thoughts = _quest.BuildThoughts(Parent));
                 Quest.SetupDialog();
             };
-            _talk.OnTalkingEnded += AddQuest;
         }
 
         public override void Update()
@@ -62,9 +64,9 @@ namespace Hedra.Engine.QuestSystem
             {
                 _quest.Owner.Questing.QuestAbandoned -= OnQuestAbandoned;
                 _quest.Owner.Questing.QuestCompleted -= OnQuestCompleted;
+                Parent.RemoveComponent(_thoughts);
             }
             Parent.RemoveComponent(_talk);
-            Parent.RemoveComponent(_thoughts);
             Parent.ShowIcon(null);
             base.Dispose();
         }

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Facepunch.Steamworks;
 using Hedra.Engine.Core;
 using Hedra.Engine.IO;
@@ -17,7 +18,7 @@ namespace Hedra.Engine.Steamworks
             {
                 _client = new Client(1009960);
             }
-            catch(DllNotFoundException e)
+            catch(Exception e) when (e is DllNotFoundException || e is FileNotFoundException)
             {
                 Log.WriteLine($"Failed to load Steam library: {e}");
                 _useSteam = false;
@@ -27,7 +28,6 @@ namespace Hedra.Engine.Steamworks
         public void Load()
         {
             SetupIfExists();
-            Console.WriteLine(_client.Username);
         }
 
         public void CallIf(Action<Client> Do)

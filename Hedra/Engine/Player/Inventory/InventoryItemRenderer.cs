@@ -102,6 +102,9 @@ namespace Hedra.Engine.Player.Inventory
             var meshPrematureCulling = Mesh.PrematureCulling;
             Mesh.PrematureCulling = false;
 
+            var previousShadows = GameSettings.GlobalShadows;
+            GameSettings.GlobalShadows = false;
+
             var currentDayColor = ShaderManager.LightColor;
             ShaderManager.SetLightColorInTheSameThread(Vector3.One);
 
@@ -128,6 +131,7 @@ namespace Hedra.Engine.Player.Inventory
             Renderer.BindFramebuffer(FramebufferTarget.ReadFramebuffer, 0);
             */
             ShaderManager.SetLightColorInTheSameThread(currentDayColor);
+            GameSettings.GlobalShadows = previousShadows;
             Renderer.PopFBO();
             Renderer.PopShader();
             Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, Renderer.FBOBound);

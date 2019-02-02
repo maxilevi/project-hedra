@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text;
 using Hedra.Engine.ModuleSystem;
 using OpenTK;
@@ -9,6 +10,7 @@ namespace Hedra.Engine.QuestSystem
         public string Name { get; set; }
         public int Seed { get; set; }
         public int Steps { get; set; }
+        public Dictionary<string, object> Content { get; set; }
         public QuestContextType Context { get; set; }
         public GiverTemplate Giver { get; set; }
           

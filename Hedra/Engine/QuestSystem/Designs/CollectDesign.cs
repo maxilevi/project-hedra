@@ -79,12 +79,13 @@ namespace Hedra.Engine.QuestSystem.Designs
             return Rng.Next((int)Math.Round(18f / MiscItem.GetAttribute<int>(CommonAttributes.Price)), (int)Math.Round(42f / MiscItem.GetAttribute<int>(CommonAttributes.Price)));
         }
         
-        protected override ItemCollect[] Templates(Random Rng)
+        protected override ItemCollect[] Templates(QuestObject Object, Random Rng)
         {
             var possibleItems = ItemPool.Matching(T => T.Tier == ItemTier.Misc && T.Name != ItemType.Gold.ToString());
             var recipes = ItemPool.Matching(T => T.EquipmentType == EquipmentType.Recipe.ToString());
+            var ownerRecipes = Object.Owner.Crafting.RecipeOutputs.Select(S => S.Name);
             possibleItems = possibleItems.Where(
-                I => recipes.All(R => CraftingInventory.GetOutputFromRecipe(R).Name != I.Name)
+                I => recipes.All(R => CraftingInventory.GetOutputFromRecipe(R).Name != I.Name || ownerRecipes.Contains(I.Name))
             ).ToArray();
             return possibleItems.Select(I => new ItemCollect
             {

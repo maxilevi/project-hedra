@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
@@ -17,8 +18,9 @@ namespace Hedra.Engine.QuestSystem
     {
         private readonly QuestDesign _design;
         public event OnQuestChanged QuestChanged;
-        public QuestView View { get; }
+        public QuestView View { get; private set; }
         public QuestDesign BaseDesign { get; }
+        public bool IsFirst => Previous == null;
         public bool HasLocation => _design.HasLocation;
         public Vector3 Location => _design.GetLocation(this);
         public QuestReward Reward => _design.GetReward(this);
@@ -30,6 +32,7 @@ namespace Hedra.Engine.QuestSystem
         public IHumanoid Giver { get; }
         public IPlayer Owner { get; private set; }
         public QuestParameters Parameters { get; }
+        public QuestObject Previous { get; set; }
         public bool FirstTime { get; private set; } = true;
 
         public QuestObject(QuestDesign Design, QuestParameters Parameters, IHumanoid Giver, QuestDesign BaseDesign, int Steps)
@@ -39,7 +42,6 @@ namespace Hedra.Engine.QuestSystem
             this.Steps = Steps;
             this.Giver = Giver;
             this.Parameters = Parameters;
-            this.View = _design.BuildView(this);
         }
 
         public void Start(IPlayer Player)
@@ -55,7 +57,38 @@ namespace Hedra.Engine.QuestSystem
                 if(Q == this)
                     QuestChanged?.Invoke(this);
             };
-            _design.OnAdded(this);
+            GenerateContent(Owner);
+            View = _design.BuildView(this);
+        }
+
+        public void GenerateContent(IPlayer PosibleOwner)
+        {
+            var previousOwner = Owner;
+            try
+            {
+                Owner = PosibleOwner;
+                _design.GenerateContent(this);
+            }
+            finally
+            {
+                Owner = previousOwner;
+            }
+        }
+
+        private void LoadContent(Dictionary<string, object> Content)
+        {
+            _design.LoadContent(this, Content);
+        }
+
+        private QuestObject GetBaseObject()
+        {
+            if (Previous == null) return this;
+            return Previous.GetBaseObject();
+        }
+        
+        private Dictionary<string, object> GetContent()
+        {
+            return _design.GetContent(this);
         }
 
         public void SetSteps(int NewSteps)
@@ -101,7 +134,8 @@ namespace Hedra.Engine.QuestSystem
                 Seed = Parameters.Get<int>("Seed"),
                 Context = Parameters.Get<QuestContext>("Context").ContextType,
                 Steps = Steps,
-                Giver = GiverTemplate.FromHumanoid(Giver)
+                Giver = GiverTemplate.FromHumanoid(Giver),
+                Content = GetBaseObject().GetContent()
             };
         }
 
@@ -114,6 +148,7 @@ namespace Hedra.Engine.QuestSystem
                     Template.Seed,
                     QuestPersistence.BuildQuestVillager(Template.Giver)
                 );
+                quest.LoadContent(Template.Content);
                 for (var i = 0; i < Template.Steps; ++i)
                 {
                     quest._design.Cleanup(quest);
