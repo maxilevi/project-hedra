@@ -3,7 +3,7 @@
   "DisplayName": "Equalizer",
   "EquipmentType": "Axe",
   "Tier": "Divine",
-  "Description": "Perfectly Balanced as all things should.",
+  "Description": "Perfectly balanced, as all things should be.",
   "Attributes": [
     {
       "Name": "Damage",

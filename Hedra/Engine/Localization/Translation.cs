@@ -7,6 +7,7 @@ namespace Hedra.Engine.Localization
     public class Translation : IDisposable
     {
         public event OnLanguageChanged LanguageChanged;
+        public bool UpperCase { get; set; }
         private string _key;
         private bool _isDefault;
         private string _defaultText;
@@ -22,7 +23,7 @@ namespace Hedra.Engine.Localization
         
         public string Get()
         {
-            return _provider(_parameters);
+            return UpperCase ? _provider(_parameters).ToUpperInvariant() : _provider(_parameters);
         }
 
         public void Concat(Func<string> Provider)

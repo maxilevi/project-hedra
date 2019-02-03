@@ -1,4 +1,8 @@
+using System;
 using System.Collections.Generic;
+using System.IO;
+using Hedra.Engine.Game;
+using Newtonsoft.Json;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Localization
@@ -9,7 +13,7 @@ namespace Hedra.Engine.Localization
     {
         public const Key Respect = Key.F;
         public static event OnControlsChangedEvent OnControlsChanged;
-        private static readonly Dictionary<string, Key> Mappings = new Dictionary<string, Key>
+        private static readonly Dictionary<string, Key> DefaultMappings = new Dictionary<string, Key>
         {
             {"inventory_open_key", Key.I},
             {"interact_key", Key.E},
@@ -29,6 +33,8 @@ namespace Hedra.Engine.Localization
             {"crafting_key", Key.C},
             {"quest_log_key", Key.T},
         };
+
+        private static readonly Dictionary<string, Key> Mappings = DefaultMappings;
         
         public static Key InventoryOpen => Mappings["inventory_open_key"];
         public static Key Interact => Mappings["interact_key"];
@@ -51,8 +57,24 @@ namespace Hedra.Engine.Localization
         public static void UpdateMapping(string Key, Key New)
         {
             Mappings[Key] = New;
+            Save();
+            OnControlsChanged?.Invoke();
         }
 
-        public static KeyValuePair<string, Key>[] ChangeableKeys => Mappings.ToArray();
+        public static Dictionary<string, Key> ChangeableKeys => Mappings;
+
+        static Controls()
+        {
+            Mappings = File.Exists(SavePath) 
+                ? JsonConvert.DeserializeObject<Dictionary<string, Key>>(File.ReadAllText(SavePath))
+                : new Dictionary<string, Key>(DefaultMappings);
+        }
+
+        private static void Save()
+        {
+            File.WriteAllText(SavePath, JsonConvert.SerializeObject(Mappings, Formatting.Indented));
+        }
+
+        private static string SavePath => $"{GameLoader.AppData}/controls.cfg";
     }
 }

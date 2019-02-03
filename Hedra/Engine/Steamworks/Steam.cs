@@ -24,6 +24,11 @@ namespace Hedra.Engine.Steamworks
                 _useSteam = false;
             }
         }
+
+        public static void Update()
+        {
+            Instance._client?.Update();
+        }
         
         public void Load()
         {
@@ -36,13 +41,13 @@ namespace Hedra.Engine.Steamworks
                 Do(_client);
         }
 
-        public bool IsAvailable => _useSteam && _client.IsValid;
+        public static Friends Friends => Instance._client.Friends;
         
-        public Client GetClient()
-        {
-            if(!IsAvailable) throw new ArgumentOutOfRangeException($"Cannot use networking features without steam.");
-            return _client;
-        }
+        public static Facepunch.Steamworks.Networking Networking => Instance._client.Networking;
+        
+        public static Lobby Lobby => Instance._client.Lobby;
+        
+        public bool IsAvailable => _useSteam && _client.IsValid;
         
         public void Dispose()
         {

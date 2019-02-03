@@ -73,6 +73,7 @@
     <Compile Include="CodePolicy\ShaderCodePolicy.cs" />
     <Compile Include="CodePolicy\SolutionTest.cs" />
     <Compile Include="CodePolicy\DanglingReferencesCodePolicy.cs" />
+    <Compile Include="CodePolicy\UnusedTranslationKeysCodePolicy.cs" />
     <Compile Include="Core\GameSettingsTest.cs" />
     <Compile Include="Core\HalfBlockTest.cs" />
     <Compile Include="EntitySystem\DamageComponentTest.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="ItemSystem\ItemTest.cs" />
     <Compile Include="ItemSystem\TradeManagerMock.cs" />
     <Compile Include="Loaders\ModificationsLoaderTest.cs" />
+    <Compile Include="Localization\IniParserTest.cs" />
     <Compile Include="MathExtensions\PhysicsTest.cs" />
     <Compile Include="MathExtensions\RandomTest.cs" />
     <Compile Include="ModuleSystem\AssetProviderTest.cs" />

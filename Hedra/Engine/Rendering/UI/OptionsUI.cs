@@ -490,6 +490,11 @@ namespace Hedra.Engine.Rendering.UI
             };
         }
 
+        public void Update()
+        {
+            _controlsPanel.Update();
+        }
+        
         private void ResetFonts()
         {
             _graphics.Text.TextFont = _normalFont;

@@ -19,6 +19,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
+using Hedra.Engine.Networking;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Frustum;
 using Hedra.Sound;
@@ -30,6 +31,7 @@ namespace Hedra.Engine.Rendering.UI
     /// </summary>
     public class ChrChooserUI : Panel
     {
+        public bool ShouldHost { get; set; }
         private PlayerInformation[] _information;
         private readonly List<Humanoid> _humans;
         private Humanoid _selectedHuman, _previousHuman;
@@ -55,6 +57,8 @@ namespace Hedra.Engine.Rendering.UI
             playBtn.Click += delegate 
             {
                 GameManager.LoadCharacter(DataManager.PlayerFiles[_humans.IndexOf(_selectedHuman)]);
+                if(ShouldHost)
+                    Connection.Instance.Host();
             };
             
             var deleteButton = new Button(new Vector2(.1f, -.8f), Vector2.One, Translation.Create("delete"), Color.White, FontCache.Get(AssetManager.NormalFamily, 14));

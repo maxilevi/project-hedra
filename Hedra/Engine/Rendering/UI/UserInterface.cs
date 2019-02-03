@@ -38,6 +38,7 @@ namespace Hedra.Engine.Rendering.UI
         private Button _newRun;
         private Button _loadButton;
         public static Font Regular;
+        public bool InMenu => Menu.Enabled || OptionsMenu.Enabled || ConnectPanel.Enabled;
         public static Color DefaultFontColor = Color.White;
         
         public UserInterface (IPlayer Player)
@@ -62,28 +63,71 @@ namespace Hedra.Engine.Rendering.UI
             _newRun = new Button(new Vector2(.1f, bandPosition.Y),
                                 new Vector2(0.15f,0.075f), Translation.Create("new_world"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
 
-            _newRun.Click += NewRunOnClick;
+            _newRun.Click += delegate
+            {
+                ChrChooser.ShouldHost = false;
+                if(GameManager.InStartMenu)
+                {
+                    Menu.Disable();
+                    ChrChooser.Enable();
+                }
+                else
+                {
+                    GameManager.NewRun(_player);
+                }
+            };
             
             _loadButton = new Button(new Vector2(.3f, bandPosition.Y),
                                          new Vector2(0.15f,0.075f), Translation.Create("load_world"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
-
-            _loadButton.Click += delegate {
-                if(!GameManager.InStartMenu){
+            _loadButton.Click += delegate
+            {
+                if(!GameManager.InStartMenu)
+                {
                     AutosaveManager.Save();
                     GameManager.LoadMenu();
                 }
+                ChrChooser.ShouldHost = false;
                 Menu.Disable();
                 ChrChooser.Enable();
             };
             
-            Button connectToServer = new Button(new Vector2(.535f, bandPosition.Y),
-                                         new Vector2(0.15f,0.075f), Translation.Create("multiplayer"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
+            var inviteFriends = new Button(new Vector2(.3f, bandPosition.Y), Vector2.Zero,
+                Translation.Create("invite_friends"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
             
-            Button disconnect = new Button(new Vector2(.535f, bandPosition.Y),
+            var hostWorld = new Button(new Vector2(.535f, bandPosition.Y),
+                                         new Vector2(0.15f,0.075f), Translation.Create("host_world"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
+            
+            var disconnect = new Button(new Vector2(.535f, bandPosition.Y),
                                          new Vector2(0.15f,0.075f), Translation.Create("disconnect"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
             
-            connectToServer.Click += delegate{
-                Player.MessageDispatcher.ShowNotification("", Color.DarkRed, 3f, true);
+            inviteFriends.Click += delegate
+            {
+                Connection.Instance.InviteFriends();
+            };
+            
+            hostWorld.Click += delegate
+            {
+                if (GameManager.InStartMenu)
+                {
+                    Menu.Disable();
+                    ChrChooser.Enable();
+                    ChrChooser.ShouldHost = true;
+                }
+                else
+                {
+                    Connection.Instance.Host();
+                    UpdateButtons();
+                    disconnect.CanClick = false;
+                    TaskScheduler.After(.05f, () => disconnect.CanClick = true);
+                }
+            };
+            
+            disconnect.Click += delegate
+            {
+                Connection.Instance.Disconnect();
+                UpdateButtons();
+                hostWorld.CanClick = false;
+                TaskScheduler.After(.05f, () => hostWorld.CanClick = true);
             };
             
             Button options = new Button(new Vector2(.75f, bandPosition.Y),
@@ -107,38 +151,38 @@ namespace Hedra.Engine.Rendering.UI
             }
             
             Menu.AddElement(blackBand);
-            Menu.AddElement(connectToServer);
+            Menu.AddElement(hostWorld);
             Menu.AddElement(_title);
             Menu.AddElement(quit);
             Menu.AddElement(_newRun);
             Menu.AddElement(_loadButton);
             Menu.AddElement(options);
             Menu.AddElement(disconnect);
-            //Menu.AddElement(Alpha);
+            Menu.AddElement(inviteFriends);
             
-            Menu.OnPanelStateChange += delegate(object Sender, PanelState E) { 
-                if(E == PanelState.Enabled){
-                    if(Connection.Instance.IsAlive){
-                        _newRun.Disable();
-                        _loadButton.Disable();
-                        connectToServer.Disable();
-                        disconnect.Enable();
-                    }else{
-                        disconnect.Disable();
-                    }
+            Menu.OnPanelStateChange += delegate(object Sender, PanelState E)
+            {
+                if (E != PanelState.Enabled) return;
+                if (Connection.Instance.IsAlive)
+                {
+
+                    _newRun.Disable();
+                    _loadButton.Disable();
+                    hostWorld.Disable();
+                    disconnect.Enable();
+                    inviteFriends.Enable();
+                }
+                else
+                {
+                    inviteFriends.Disable();
+                    disconnect.Disable();
                 }
             };
-        }
-        
-        public void NewRunOnClick(object Sender, EventArgs E)
-        {
-            if(GameManager.InStartMenu){
-                Menu.Disable();
-                ChrChooser.Enable();
-            }
-            else
+
+            void UpdateButtons()
             {
-                GameManager.NewRun(_player);
+                Menu.Disable();
+                Menu.Enable();
             }
         }
         
@@ -146,7 +190,8 @@ namespace Hedra.Engine.Rendering.UI
         {
             if (_player == null) return;
 
-            this.GamePanel.Update();
+            OptionsMenu.Update();
+            GamePanel.Update();
             _loadButton.Text.Text = GameManager.InStartMenu 
                 ? Translations.Get("load_world") 
                 : Translations.Get("start_menu");
@@ -170,20 +215,25 @@ namespace Hedra.Engine.Rendering.UI
             if(!Connection.Instance.IsAlive)
             {
                 GameSettings.Paused = true;
-            }else{
+            }
+            else
+            {
                 _player.View.LockMouse = false;
-                _player.Movement.CaptureMovement = false;
                 _player.View.CaptureMovement = false;
+                _player.CanInteract = false;
             }
             Cursor.Show = true;
             LocalPlayer.Instance.Chat.Show = false;
             GameSettings.DarkEffect = false;
             Cursor.Center();
         }
-            
+
         public void HideMenu()
         {
             GameSettings.Paused = false;
+            _player.View.LockMouse = true;
+            _player.View.CaptureMovement = true;
+            _player.CanInteract = true;
             Menu.Disable();
             OptionsMenu.Disable();
             GamePanel.Enable();

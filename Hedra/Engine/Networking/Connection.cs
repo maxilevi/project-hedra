@@ -9,46 +9,47 @@ namespace Hedra.Engine.Networking
 {
     public class Connection : Singleton<Connection>
     {
-        private Client _client;
-        private List<ulong> _peers;
-        private bool _isHosting;
-        
-        public void Build()
-        {
-            _peers = new List<ulong>();
-            if (Steam.Instance.IsAvailable)
-                _client = Steam.Instance.GetClient();
-            else
-                return;
-        }
+        private GameHost _host;
+        private GameClient _client;
+        public bool IsAlive => Steam.Instance.IsAvailable && (_host.IsActive || _client.IsActive);
 
         public void Host()
         {
-            if (_isHosting) throw new ArgumentOutOfRangeException();
-            _client.Lobby.OnLobbyCreated += delegate(bool B)
-            {
-                _client.Lobby.Name = "Project Hedra Lobby";
-                _client.Lobby.Joinable = true;
-                _isHosting = B;
-            };
-            _client.Lobby.OnLobbyMemberDataUpdated += delegate(ulong U)
-            {
-                _peers.Add(U);
-            };
-            _client.Lobby.Create(Lobby.Type.FriendsOnly, 8);
+            if (!Steam.Instance.IsAvailable) return;
+            _host.Host();
         }
-
+        
         public void Disconnect()
         {
-            _client.Lobby.Leave();
+            if (!Steam.Instance.IsAvailable) return;
+            if (_host.IsActive)
+                _host.Disconnect(); 
+            else
+                _client.Disconnect();  
+        }
+        
+        public static void Load()
+        {
+            Instance.Build();
         }
 
-        public bool IsAlive => _client != null;
-        
-        public void Update()
+        private void Build()
         {
-            if(_client != null)
-                _client.Update();   
+            if (!Steam.Instance.IsAvailable) return;
+            _host = new GameHost();
+            _client = new GameClient();
+            Steam.Instance.CallIf(C =>
+            {
+                C.Networking.OnIncomingConnection += _host.OnIncomingConnection;
+                C.Networking.OnIncomingConnection += _client.OnIncomingConnection;
+                C.Networking.OnP2PData += _host.OnP2PData;
+                C.Networking.OnP2PData += _client.OnP2PData;
+            });
+        }
+
+        public void InviteFriends()
+        {
+            Steam.Instance.CallIf(C => C.Overlay.OpenUserPage("friends", C.OwnerSteamId));
         }
     }
 }

@@ -234,7 +234,7 @@ namespace Hedra.Engine.Game
 
         public bool InStartMenu => World.Seed == World.MenuSeed;
 
-        public bool InMenu => Player != null && Player.UI.Menu.Enabled && !Player.UI.Hide && World.Seed != World.MenuSeed;        
+        public bool InMenu => Player != null && Player.UI.InMenu && !Player.UI.Hide && World.Seed != World.MenuSeed;        
         
         public bool SpawningEffect
         {

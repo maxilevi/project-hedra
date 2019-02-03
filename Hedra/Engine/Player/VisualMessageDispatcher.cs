@@ -290,13 +290,13 @@ namespace Hedra.Engine.Player
             _notificationText.Text = Item.Content;
             _notificationText.Enable();
             if (Item.PlaySound)
-                SoundPlayer.PlaySound(SoundType.ButtonHover, _player.Position, false, 1f, 1f);
+                SoundPlayer.PlayUISound(SoundType.ButtonHover);
             FadeAndShow(Item, Callback);
         }
         
         private void FadeAndShow(MessageItem Item, Action Callback)
         {
-            if (_player.UI.GamePanel.Enabled)
+            if (_player.UI.GamePanel.Enabled || _player.UI.InMenu)
             {
                 RoutineManager.StartRoutine(
                     FadeOverTimeCoroutine,
@@ -317,19 +317,19 @@ namespace Hedra.Engine.Player
             var element = (ITransparent) Params[0];
             var seconds = (float) Params[1];
             var callback = (Action) Params[2];
-            while (element.Opacity < 1 && _player.UI.GamePanel.Enabled)
+            while (element.Opacity < 1 && (_player.UI.GamePanel.Enabled || _player.UI.InMenu))
             {
-                element.Opacity += Time.DeltaTime * FadeSpeed;
+                element.Opacity += Time.IndependantDeltaTime * FadeSpeed;
                 yield return null;
             }
-            while (time < seconds && _player.UI.GamePanel.Enabled)
+            while (time < seconds && (_player.UI.GamePanel.Enabled || _player.UI.InMenu))
             {
-                time += Time.DeltaTime;
+                time += Time.IndependantDeltaTime;
                 yield return null;
             }
-            while (element.Opacity > 0 && _player.UI.GamePanel.Enabled)
+            while (element.Opacity > 0 && (_player.UI.GamePanel.Enabled || _player.UI.InMenu))
             {
-                element.Opacity -= Time.DeltaTime * FadeSpeed;
+                element.Opacity -= Time.IndependantDeltaTime * FadeSpeed;
                 yield return null;
             }
 

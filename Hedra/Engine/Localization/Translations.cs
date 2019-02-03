@@ -26,7 +26,7 @@ namespace Hedra.Engine.Localization
             {
                 _translations.Add(
                     Path.GetFileNameWithoutExtension(files[i]),
-                    Parse(File.ReadAllText(files[i]))
+                    IniParser.Parse(File.ReadAllText(files[i]))
                 );
             }
         }
@@ -97,20 +97,6 @@ namespace Hedra.Engine.Localization
             return Value.Replace(@"\n", Environment.NewLine);
         }
         
-        private static Dictionary<string, string> Parse(string Contents)
-        {
-            var dict = new Dictionary<string, string>();
-            var lines = Contents.Split(Environment.NewLine.ToCharArray()).Where(S => !string.IsNullOrEmpty(S)).ToArray();
-            for (var i = 0; i < lines.Length; i++)
-            {
-                var parts = lines[i].Split('=');
-                var key = parts[0].Trim();
-                var val = parts[1].Trim();
-                dict.Add(key, val);
-            }
-            return dict;
-        }
-
         public static string[] Languages => _translations.Keys.ToArray();
         
         private static string _language = GameLanguage.English.ToString();

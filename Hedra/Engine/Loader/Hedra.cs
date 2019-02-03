@@ -22,6 +22,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
+using Hedra.Engine.Steamworks;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Sound;
 using OpenTK;
@@ -60,6 +61,7 @@ namespace Hedra.Engine.Loader
             NameGenerator.Load();
             CacheManager.Load();
             Translations.Load();
+            Connection.Load();
             Log.WriteLine("Translations loaded successfully.");
             
             GameLoader.CreateCharacterFolders(GameLoader.AppData, GameLoader.AppPath);
@@ -125,7 +127,7 @@ namespace Hedra.Engine.Loader
                 _lastValue = newNumber;
             }
             DebugProvider.Update();
-            Connection.Instance.Update();
+            Steam.Update();
             AnalyticsManager.PlayTime += (float) Delta;
         }
 

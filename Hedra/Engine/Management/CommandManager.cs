@@ -350,7 +350,6 @@ namespace Hedra.Engine.Management
                 }
                 if (Parts[0] == "host")
                 {
-                    Connection.Instance.Build();
                     Connection.Instance.Host();
                 }
                 if (Parts[0] == "slow")

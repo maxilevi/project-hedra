@@ -173,7 +173,7 @@ namespace Hedra.Engine.Rendering.Effects
             
             #region Dark
             if(GameSettings.DarkEffect){
-                UnderWater.Multiplier = new Vector4(.5f,.5f,.5f,1);
+                UnderWater.Multiplier = new Vector4(.4f, .4f, .4f, 1);
                 UnderWater.Pass(Default, FinalFbo);
             }
             #endregion

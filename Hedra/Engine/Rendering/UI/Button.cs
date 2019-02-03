@@ -35,7 +35,6 @@ namespace Hedra.Engine.Rendering.UI
         private Color _previousFontColor;
         private Vector2 _previousScale;
         private GUIText _privateText;
-        private Vector2 _scale;
         private Translation _liveTranslation;
 
         public bool CanClick { get; set; } = true;
@@ -96,15 +95,6 @@ namespace Hedra.Engine.Rendering.UI
                 _liveTranslation = Translation ?? Translation.Default(Text);
                 this.Text = new GUIText(_liveTranslation, Position, FontColor, F);
             }
-
-            if (!string.IsNullOrEmpty(Text))
-            {
-                this.Scale = this.Text.Scale;
-            }
-            else
-            {
-                this.Scale = Texture?.Scale ?? Scale;
-            }
             this.Position = new Vector2(Position.X, Position.Y);
 
             this.HoverEnter += this.OnHoverEnter;
@@ -130,7 +120,7 @@ namespace Hedra.Engine.Rendering.UI
                     if (this.CanClick)
                     {
                         SoundPlayer.PlayUISound(SoundType.ButtonClick, 1, .5f);
-                        this.Click.Invoke(Sender, E);
+                        this.Click.Invoke(this, E);
                         UpdateTranslation();
                     }
                 }
@@ -228,14 +218,13 @@ namespace Hedra.Engine.Rendering.UI
 
         public Vector2 Scale
         {
-            get => this._scale;
+            get => Text?.Scale ?? Texture.Scale;
             set
             {
-                this._scale = value;
-                if (this.Text != null)
-                    this.Text.Scale = value;
-                if (this.Texture != null)
-                    this.Texture.Scale = value;
+                if (Text != null)
+                    Text.Scale = value;
+                if (Texture != null)
+                    Texture.Scale = value;
             }
         }
 

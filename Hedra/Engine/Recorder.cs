@@ -66,40 +66,36 @@ namespace Hedra.Engine
         
         public static string SaveScreenshot(string Path)
         {
-            if (!Steam.Instance.IsAvailable)
-            {
-                int w = (int) GameSettings.SurfaceWidth;
-                int h = (int) GameSettings.SurfaceHeight;
-                int[] pixels = new int[w * h];
-                Renderer.ReadPixels(0, 0, w, h, PixelFormat.Rgba, PixelType.Byte, pixels);
-
-                // we need to process the pixels a bit to deal with the format difference between OpenGL and .NET
-                for (int i = 0; i < pixels.Length; i++)
-                {
-                    int p = pixels[i];
-                    int r = p & 0xff;
-                    int g = (p >> 8) & 0xff;
-                    int b = (p >> 16) & 0xff;
-                    pixels[i] = (r << 16 | g << 8 | b) << 1;
-                }
-
-                using (Bitmap Bmp = new Bitmap(w, h))
-                {
-                    var data = Bmp.LockBits(new Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.WriteOnly,
-                        System.Drawing.Imaging.PixelFormat.Format32bppRgb);
-                    Marshal.Copy(pixels, 0, data.Scan0, pixels.Length);
-                    Bmp.UnlockBits(data);
-
-
-                    Bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
-
-                    Bmp.Save(Path + DateTime.Now.ToString("dd-MM-yyyy_hh-mm-ss") + ".png",
-                        System.Drawing.Imaging.ImageFormat.Png);
-                    return DateTime.Now.ToString("dd-MM-yyyy_hh-mm-ss") + ".png";
-                }
-            }
             Steam.Instance.CallIf(S => S.Screenshots.Trigger());
-            return "STEAM";         
+            var w = (int) GameSettings.SurfaceWidth;
+            var h = (int) GameSettings.SurfaceHeight;
+            var pixels = new int[w * h];
+            Renderer.ReadPixels(0, 0, w, h, PixelFormat.Rgba, PixelType.Byte, pixels);
+
+            // we need to process the pixels a bit to deal with the format difference between OpenGL and .NET
+            for (int i = 0; i < pixels.Length; i++)
+            {
+                int p = pixels[i];
+                int r = p & 0xff;
+                int g = (p >> 8) & 0xff;
+                int b = (p >> 16) & 0xff;
+                pixels[i] = (r << 16 | g << 8 | b) << 1;
+            }
+
+            using (var Bmp = new Bitmap(w, h))
+            {
+                var data = Bmp.LockBits(new Rectangle(0, 0, w, h), System.Drawing.Imaging.ImageLockMode.WriteOnly,
+                    System.Drawing.Imaging.PixelFormat.Format32bppRgb);
+                Marshal.Copy(pixels, 0, data.Scan0, pixels.Length);
+                Bmp.UnlockBits(data);
+
+
+                Bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
+
+                Bmp.Save(Path + DateTime.Now.ToString("dd-MM-yyyy_hh-mm-ss") + ".png",
+                    System.Drawing.Imaging.ImageFormat.Png);
+                return DateTime.Now.ToString("dd-MM-yyyy_hh-mm-ss") + ".png";
+            }    
         }
     }
 }

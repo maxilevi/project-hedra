@@ -88,7 +88,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
         private void MouseDown(object Sender, MouseButtonEventArgs EventArgs)
         {
             if(!Listen || !_player.CanInteract || _player.IsKnocked || _player.IsDead || _player.IsSwimming ||
-                _player.IsTravelling || _player.InterfaceOpened || GameSettings.Paused) return;
+                _player.IsTravelling || _player.InterfaceOpened || GameManager.InMenu) return;
 
             switch (EventArgs.Button)
             {
