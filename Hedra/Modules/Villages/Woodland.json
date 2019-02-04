@@ -1,5 +1,110 @@
 ﻿{
   "Name" : "Woodland",
+  "Inn": {
+    "Designs": [
+      {
+        "Path" : "Assets/Env/Village/Inn0.ply",
+        "LodPath" : "Assets/Env/Village/Inn0-Lod.ply",
+        "Scale" : 6.0,
+        "Beds" : [
+          {
+            "Position" : {
+              "X" : -7.65914,
+              "Y" : 3.65196,
+              "Z" : -5.22788
+            }
+          },
+          {
+            "Position" : {
+              "X" : -7.65914,
+              "Y" : 3.65193,
+              "Z" : -2.17315
+            }
+          },
+          {
+            "Position" : {
+              "X" : -7.65914,
+              "Y" : 3.65193,
+              "Z" : 0.80154
+            }
+          },
+          {
+            "Position" : {
+              "X" : -7.60957,
+              "Y" : 3.53998,
+              "Z" : 4.35956
+            }
+          }
+        ],
+        "Doors" : [
+          {
+            "Path":  "Assets/Env/Village/Inn0_Door0.ply",
+            "Position" : {
+              "X": -0.12124,
+              "Y": 4.02188,
+              "Z": -3.56171
+            }
+          },
+          {
+            "Path":  "Assets/Env/Village/Inn0_Door1.ply",
+            "Position" : {
+              "X": -3.70512,
+              "Y": 4.03037,
+              "Z": 0.82203
+            }
+          },
+          {
+            "Path":  "Assets/Env/Village/Inn0_Door2.ply",
+            "Position" : {
+              "X": -3.70512,
+              "Y": 4.03037,
+              "Z": -2.1498
+            }
+          },
+          {
+            "Path":  "Assets/Env/Village/Inn0_Door3.ply",
+            "Position" : {
+              "X": -3.70512,
+              "Y": 4.03037,
+              "Z": -5.21198
+            }
+          },
+          {
+            "Path":  "Assets/Env/Village/Inn0_Door4.ply",
+            "Position" : {
+              "X": -3.70512,
+              "Y": 4.03037,
+              "Z": 4.45432
+            }
+          },
+          {
+            "Path":  "Assets/Env/Village/Inn0_Door5.ply",
+            "Position" : {
+              "X": -7.21156,
+              "Y": 1.27594,
+              "Z": 3.35052
+            }
+          },
+          {
+            "Path":  "Assets/Env/Village/Inn0_Door6.ply",
+            "Position" : {
+              "X": 9.08116,
+              "Y": 2.05551,
+              "Z": 3.06938
+            }
+          },
+          {
+            "Path":  "Assets/Env/Village/Inn0_Door7.ply",
+            "Position" : {
+              "X": -7.21105,
+              "Y": 1.27415,
+              "Z": -7.21491
+            }
+          }
+        ]
+      }
+    ]
+  },
   "Decorations": {
     "Lamps": [
       {

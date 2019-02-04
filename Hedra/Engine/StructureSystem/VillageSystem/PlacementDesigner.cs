@@ -22,17 +22,19 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         protected HousePlacer HousePlacer { get; }
         protected Placer<BuildingParameters> StablePlacer { get; }
         protected MarketPlacer MarketPlacer { get; }
-
+        protected GenericPlacer InnPlacer { get; }
+        
         protected PlacementDesigner(VillageRoot Root, VillageConfiguration Config, Random Rng)
         {
             this.Root = Root;
             this.Rng = Rng;
             this.Config = Config;
-            this.FarmPlacer = new FarmPlacer(Root.Template.Farm, Root.Template.Farm.Designs, Root.Template.Windmill.Designs, Rng);
-            this.BlacksmithPlacer = new BlacksmithPlacer(Root.Template.Blacksmith.Designs, Rng);
-            this.HousePlacer = new HousePlacer(Root.Template.House.Designs, Root.Template.Well.Designs, Rng);
-            this.StablePlacer = new Placer<BuildingParameters>(Root.Template.Stable.Designs, Rng);
-            this.MarketPlacer = new MarketPlacer(Root.Template.Well.Designs, Rng);
+            FarmPlacer = new FarmPlacer(Root.Template.Farm, Root.Template.Farm.Designs, Root.Template.Windmill.Designs, Rng);
+            BlacksmithPlacer = new BlacksmithPlacer(Root.Template.Blacksmith.Designs, Rng);
+            HousePlacer = new HousePlacer(Root.Template.House.Designs, Root.Template.Well.Designs, Rng);
+            StablePlacer = new Placer<BuildingParameters>(Root.Template.Stable.Designs, Rng);
+            MarketPlacer = new MarketPlacer(Root.Template.Well.Designs, Rng);
+            InnPlacer = new GenericPlacer(Root.Template.Inn.Designs, Rng, 1);
         }
 
         public abstract PlacementDesign CreateDesign();

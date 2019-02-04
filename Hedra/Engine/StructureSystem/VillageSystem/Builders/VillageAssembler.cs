@@ -17,12 +17,12 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
     {
         private readonly VillageRoot _root;
         private readonly HouseBuilder _houseBuilder;
-        private readonly NeighbourhoodWellBuilder _neighbourHoodWellBuilder;
         private readonly FarmBuilder _farmBuilder;
         private readonly BlacksmithBuilder _blacksmithBuilder;
         private readonly StableBuilder _stableBuilder;
         private readonly MarketWellBuilder _marketWellBuilder;
         private readonly MarketBuilder _marketBuilder;
+        private readonly GenericBuilder _genericBuilder;
         private readonly IPlacementDesigner _designer;
         private readonly Random _rng;
         private readonly CollidableStructure _structure;
@@ -35,8 +35,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             _blacksmithBuilder = new BlacksmithBuilder(_structure);
             _stableBuilder = new StableBuilder(_structure);
             _marketWellBuilder = new MarketWellBuilder(_structure);
-            _neighbourHoodWellBuilder = new NeighbourhoodWellBuilder(_structure);
             _marketBuilder = new MarketBuilder(_structure);
+            _genericBuilder = new GenericBuilder(_structure);
             _root = Root;
             _rng = Rng;
             Size = VillageDesign.MaxVillageSize;//Rng.Next(VillageDesign.MinVillageSize, VillageDesign.MaxVillageSize);
@@ -60,6 +60,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             Design.Blacksmith = LoopStructures(Design.Blacksmith, _blacksmithBuilder);
             Design.Farms = LoopStructures(Design.Farms, _farmBuilder);
             Design.Stables = LoopStructures(Design.Stables, _stableBuilder);
+            Design.Generics = LoopStructures(Design.Generics, _genericBuilder);
             _designer.FinishPlacements(_structure, Design);
         }
 
@@ -109,6 +110,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             LoopAndBuild(Design, Structure, Design.Blacksmith, _blacksmithBuilder);
             LoopAndBuild(Design, Structure, Design.Farms, _farmBuilder);
             LoopAndBuild(Design, Structure, Design.Stables, _stableBuilder);
+            LoopAndBuild(Design, Structure, Design.Generics, _genericBuilder);
         }
 
         private void LoopAndBuild<T>(PlacementDesign Design, CollidableStructure Structure, IList<T> Parameters, params Builder<T>[] Builders) where T : IBuildingParameters

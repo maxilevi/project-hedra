@@ -95,6 +95,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             {
                 if (rng < .15f && BlacksmithPlacer.SpecialRequirements(Point))
                     AddBlacksmith(Point, Design, rotation);
+                else if (rng < .25f && InnPlacer.SpecialRequirements(Point))
+                    AddInn(Point, Design, rotation);
                 else if (rng < .90f && HousePlacer.SpecialRequirements(Point))
                     AddHouse(Point, Design, rotation, distFromCenter);
                 else if (rng < .95f && FarmPlacer.SpecialRequirements(Point))
@@ -129,6 +131,13 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             var parameter = BlacksmithPlacer.Place(Point);
             parameter.Rotation = Rotation;
             Design.Blacksmith.Add(parameter);
+        }
+        
+        private void AddInn(PlacementPoint Point, PlacementDesign Design, Vector3 Rotation)
+        {
+            var parameter = InnPlacer.Place(Point);
+            parameter.Rotation = Rotation;
+            Design.Generics.Add(parameter);
         }
 
         private void AddFarm(PlacementPoint Point, PlacementDesign Design, Vector3 Rotation, float Distance)

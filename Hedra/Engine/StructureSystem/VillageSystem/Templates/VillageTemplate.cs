@@ -1,3 +1,5 @@
+using Hedra.Engine.StructureSystem.VillageSystem.Builders;
+
 namespace Hedra.Engine.StructureSystem.VillageSystem.Templates
 {
     public class VillageTemplate
@@ -10,6 +12,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Templates
         public FarmTemplate Farm { get; set; }
         public WindmillTemplate Windmill { get; set; }
         public DecorationsTemplate Decorations { get; set; }
+        public GenericTemplate Inn { get; set; }
 
         public DesignTemplate[][] CacheableDesigns => new []
         {
@@ -21,7 +24,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Templates
             Windmill.Designs,
             Blacksmith.Designs,
             Decorations.Lamps,
-            Decorations.Benches
+            Decorations.Benches,
+            Inn.Designs
         };
     }
 }

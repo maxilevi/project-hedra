@@ -6,22 +6,21 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
-    public class HouseParameters : ILivableBuildingParameters
+    public class GenericParameters : ILivableBuildingParameters
     {
-        public HouseDesignTemplate Design { get; set; }
+        public GenericDesignTemplate Design { get; set; }
         public Vector3 Position { get; set; }
         public Vector3 Rotation { get; set; }
         public Random Rng { get; set; }
-        public DesignTemplate WellTemplate { get; set; }
         public BlockType Type { get; set; } = BlockType.Grass;
         public GroundworkType GroundworkType { get; set; }
 
         BuildingDesignTemplate ILivableBuildingParameters.Design => Design;
-
+        
         DesignTemplate IBuildingParameters.Design
         {
             get => Design;
-            set => Design = value as HouseDesignTemplate;
+            set => Design = value as GenericDesignTemplate;
         }
 
         public float GetSize(VillageCache Cache)

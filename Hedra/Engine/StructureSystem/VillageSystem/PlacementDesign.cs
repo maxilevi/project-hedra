@@ -14,9 +14,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         public List<BlacksmithParameters> Blacksmith { get; set; } = new List<BlacksmithParameters>();
         public List<BuildingParameters> Stables { get; set; } = new List<BuildingParameters>();
         public List<MarketParameters> Markets { get; set; } = new List<MarketParameters>();
+        public List<GenericParameters> Generics { get; set; } = new List<GenericParameters>();
 
         public IBuildingParameters[] Parameters => Farms.Concat<IBuildingParameters>(Houses)
-            .Concat(Blacksmith).Concat(Stables).Concat(Markets).ToArray();
+            .Concat(Blacksmith).Concat(Stables).Concat(Markets).Concat(Generics).ToArray();
 
         public void Translate(Vector3 Translation)
         {
