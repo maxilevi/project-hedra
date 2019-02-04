@@ -91,7 +91,7 @@ namespace Hedra.Engine.WorldBuilding
             {
                 Name = Undead ? "Skeleton" : "Bandit"
             };
-            var isGnoll = Utils.Rng.Next(0, 4) == 1;
+            var isGnoll = Utils.Rng.Next(0, 4) == 1 && !Undead;
             var className = isGnoll
                 ? HumanType.Gnoll.ToString()
                 : Undead
