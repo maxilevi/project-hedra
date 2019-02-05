@@ -1,5 +1,4 @@
 using System;
-using Hedra.Engine.Steamworks;
 using Hedra.Engine.Game;
 using Hedra.Engine.IO;
 using Hedra.Engine.Loader;
@@ -48,7 +47,6 @@ namespace Hedra.Engine
             #endif
 
             GameLoader.LoadArchitectureSpecificFiles(GameLoader.AppPath);
-            Steam.Instance.Load();
             
             var device = DisplayDevice.Default;
             Log.WriteLine(device.Bounds.ToString());
@@ -101,7 +99,6 @@ namespace Hedra.Engine
                 Environment.Exit(0);
             }
             
-            Steam.Instance.Dispose();
         }
         
         private static void EnableDummyMode()

@@ -48,7 +48,7 @@ namespace Hedra.Engine.Loader
         {
             base.OnLoad(e);
             MainThreadId = Thread.CurrentThread.ManagedThreadId;
-            GameVersion = "\u03B1 0.46";
+            GameVersion = "\u03B1 DEMO";
             Title = $"{Title} {GameVersion}";
 
             OSManager.Load(Assembly.GetExecutingAssembly().Location);

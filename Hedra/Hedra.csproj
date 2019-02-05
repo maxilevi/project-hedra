@@ -377,7 +377,6 @@
     <Compile Include="Engine\SkillSystem\Warrior\LearnHammer.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Resistance.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Whirlwind.cs" />
-    <Compile Include="Engine\Steamworks\Steam.cs" />
     <Compile Include="Engine\StructureSystem\CachedVertexDataChunkWatcher.cs" />
     <Compile Include="Engine\StructureSystem\ChunkWatcher.cs" />
     <Compile Include="Engine\StructureSystem\InstanceDataChunkWatcher.cs" />
