@@ -5,34 +5,65 @@
       {
         "Path" : "Assets/Env/Village/Inn0.ply",
         "LodPath" : "Assets/Env/Village/Inn0-Lod.ply",
-        "Scale" : 6.0,
+        "Scale" : 5.5,
+        "HasLamp": false,
+        "Lights": [
+          {
+            "Position" : {
+              "X" : 5.77004,
+              "Y" : 2.78229,
+              "Z" : -3.75976
+            }
+          },
+          {
+            "Position" : {
+              "X" : 0.03511,
+              "Y" : 2.29215,
+              "Z" : -6.80598
+            }
+          },
+          {
+            "Position" : {
+              "X" : -7.14456,
+              "Y" : 2.80861,
+              "Z" : -5.2528
+            }
+          },
+          {
+            "Position" : {
+              "X" : -7.13228,
+              "Y" : 2.75808,
+              "Z" : 5.92288
+            }
+          }
+        ],
         "Beds" : [
           {
             "Position" : {
-              "X" : -7.65914,
-              "Y" : 3.65196,
-              "Z" : -5.22788
+              "X" : -3.77374,
+              "Y" : 3.60593,
+              "Z" : 2.2475
             }
           },
           {
             "Position" : {
-              "X" : -7.65914,
-              "Y" : 3.65193,
-              "Z" : -2.17315
+              "X" : -3.87494,
+              "Y" : 3.49751,
+              "Z" : 5.81958
             }
           },
           {
             "Position" : {
-              "X" : -7.65914,
-              "Y" : 3.65193,
-              "Z" : 0.80154
+              "X" : -3.80649,
+              "Y" : 3.60593,
+              "Z" : -0.7336
             }
           },
           {
             "Position" : {
-              "X" : -7.60957,
-              "Y" : 3.53998,
-              "Z" : 4.35956
+              "X" : -3.78551,
+              "Y" : 3.60593,
+              "Z" : -3.81299
             }
           }
         ],
@@ -40,66 +71,65 @@
           {
             "Path":  "Assets/Env/Village/Inn0_Door0.ply",
             "Position" : {
-              "X": -0.12124,
-              "Y": 4.02188,
-              "Z": -3.56171
-            }
+              "X": 3.66673,
+              "Y": 3.99527,
+              "Z": -2.09315
+            },
+            "InvertedPivot": true
           },
           {
             "Path":  "Assets/Env/Village/Inn0_Door1.ply",
             "Position" : {
-              "X": -3.70512,
-              "Y": 4.03037,
-              "Z": 0.82203
-            }
+              "X": 0.06437,
+              "Y": 4,
+              "Z": 2.27097
+            },
+            "InvertedPivot": true
           },
           {
             "Path":  "Assets/Env/Village/Inn0_Door2.ply",
             "Position" : {
-              "X": -3.70512,
-              "Y": 4.03037,
-              "Z": -2.1498
-            }
+              "X": 0.06437,
+              "Y": 4,
+              "Z": -0.7
+            },
+            "InvertedPivot": true
           },
           {
             "Path":  "Assets/Env/Village/Inn0_Door3.ply",
             "Position" : {
-              "X": -3.70512,
-              "Y": 4.03037,
-              "Z": -5.21198
-            }
+              "X": 0.06437,
+              "Y": 4,
+              "Z": -3.8
+            },
+            "InvertedPivot": true
           },
           {
             "Path":  "Assets/Env/Village/Inn0_Door4.ply",
             "Position" : {
-              "X": -3.70512,
-              "Y": 4.03037,
-              "Z": 4.45432
-            }
+              "X": 0.06437,
+              "Y": 4,
+              "Z": 5.88899
+            },
+            "InvertedPivot": true
           },
           {
             "Path":  "Assets/Env/Village/Inn0_Door5.ply",
             "Position" : {
-              "X": -7.21156,
-              "Y": 1.27594,
-              "Z": 3.35052
-            }
+              "X": -3.43062,
+              "Y": 1.22791,
+              "Z": 4.89633
+            },
+            "InvertedPivot": true
           },
           {
             "Path":  "Assets/Env/Village/Inn0_Door6.ply",
             "Position" : {
-              "X": 9.08116,
-              "Y": 2.05551,
-              "Z": 3.06938
-            }
-          },
-          {
-            "Path":  "Assets/Env/Village/Inn0_Door7.ply",
-            "Position" : {
-              "X": -7.21105,
-              "Y": 1.27415,
-              "Z": -7.21491
-            }
+              "X": -3.4377,
+              "Y": 1.21763,
+              "Z": -5.74635
+            },
+            "InvertedPivot": true
           }
         ]
       }

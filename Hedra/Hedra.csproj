@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -405,6 +405,7 @@
     <Compile Include="Engine\StructureSystem\VillageSystem\Placers\GenericPlacer.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\GenericDesignTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\GenericTemplate.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\LightTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Workbench.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\BedTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\BuildingDesignTemplate.cs" />
@@ -4576,352 +4577,32 @@
       <Link>Assets\Env\Colliders\Inn0_Collider22.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider220.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider220.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider221.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider221.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider222.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider222.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider223.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider223.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider224.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider224.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider225.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider225.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider226.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider226.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider227.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider227.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider228.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider228.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider229.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider229.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider23.ply">
       <Link>Assets\Env\Colliders\Inn0_Collider23.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider230.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider230.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider231.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider231.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider232.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider232.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider233.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider233.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider234.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider234.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider235.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider235.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider236.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider236.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider237.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider237.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider238.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider238.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider239.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider239.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider24.ply">
       <Link>Assets\Env\Colliders\Inn0_Collider24.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider240.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider240.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider241.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider241.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider242.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider242.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider243.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider243.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider244.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider244.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider245.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider245.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider246.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider246.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider247.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider247.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider248.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider248.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider249.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider249.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider25.ply">
       <Link>Assets\Env\Colliders\Inn0_Collider25.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider250.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider250.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider251.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider251.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider252.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider252.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider253.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider253.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider254.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider254.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider255.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider255.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider256.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider256.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider257.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider257.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider258.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider258.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider259.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider259.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider26.ply">
       <Link>Assets\Env\Colliders\Inn0_Collider26.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider260.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider260.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider261.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider261.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider262.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider262.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider263.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider263.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider264.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider264.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider265.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider265.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider266.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider266.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider267.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider267.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider268.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider268.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider269.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider269.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider27.ply">
       <Link>Assets\Env\Colliders\Inn0_Collider27.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider270.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider270.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider271.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider271.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider272.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider272.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider273.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider273.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider274.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider274.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider275.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider275.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider276.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider276.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider277.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider277.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider278.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider278.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider279.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider279.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider28.ply">
       <Link>Assets\Env\Colliders\Inn0_Collider28.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider280.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider280.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider281.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider281.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider282.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider282.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider283.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider283.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider284.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider284.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider285.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider285.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider286.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider286.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider287.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider287.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider288.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider288.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider289.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider289.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider29.ply">
       <Link>Assets\Env\Colliders\Inn0_Collider29.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider290.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider290.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider291.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider291.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider292.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider292.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider293.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider293.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider294.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider294.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider295.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider295.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider296.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider296.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider297.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider297.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider298.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider298.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider299.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider299.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider3.ply">
@@ -4932,128 +4613,12 @@
       <Link>Assets\Env\Colliders\Inn0_Collider30.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider300.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider300.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider301.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider301.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider302.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider302.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider303.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider303.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider304.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider304.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider305.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider305.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider306.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider306.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider307.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider307.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider308.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider308.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider309.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider309.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider31.ply">
       <Link>Assets\Env\Colliders\Inn0_Collider31.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider310.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider310.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider311.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider311.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider312.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider312.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider313.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider313.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider314.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider314.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider315.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider315.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider316.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider316.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider317.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider317.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider318.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider318.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider319.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider319.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider32.ply">
       <Link>Assets\Env\Colliders\Inn0_Collider32.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider320.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider320.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider321.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider321.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider322.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider322.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider323.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider323.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider324.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider324.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider325.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider325.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider326.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider326.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider327.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider327.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider328.ply">
-      <Link>Assets\Env\Colliders\Inn0_Collider328.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Collider33.ply">
@@ -5374,10 +4939,6 @@
     </None>
     <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Door6.ply">
       <Link>Assets\Env\Village\Inn0_Door6.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Villages\Inn\Inn0_Door7.ply">
-      <Link>Assets\Env\Village\Inn0_Door7.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Villages\OutdoorObjects\Bench0.ply">

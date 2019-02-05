@@ -45,10 +45,13 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
         public override void Polish(T Parameters, VillageRoot Root, Random Rng)
         {
-            var width = VillageDesign.Spacing * .5f;
-            var offset = Vector3.TransformPosition(- width * .5f * Vector3.UnitZ - width * .5f * Vector3.UnitX,
-                Matrix4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian));
-            DecorationsPlacer.PlaceLamp(Parameters.Position + offset, Structure, Root, _width, Rng);
+            if (Parameters.Design.HasLamp)
+            {
+                var width = VillageDesign.Spacing * .5f;
+                var offset = Vector3.TransformPosition(-width * .5f * Vector3.UnitZ - width * .5f * Vector3.UnitX,
+                    Matrix4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian));
+                DecorationsPlacer.PlaceLamp(Parameters.Position + offset, Structure, Root, _width, Rng);
+            }
         }
 
         public override BuildingOutput Build(T Parameters, DesignTemplate Design, VillageCache Cache, Random Rng, Vector3 Center)
@@ -57,6 +60,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             var transformation = BuildTransformation(Parameters).ClearTranslation();
             AddDoors(Parameters, Cache, Parameters.Design.Doors, transformation, output);
             AddBeds(Parameters, Parameters.Design.Beds, transformation, output);
+            AddLights(Parameters, Parameters.Design.Lights, transformation, output);
             return output;
         }
     }

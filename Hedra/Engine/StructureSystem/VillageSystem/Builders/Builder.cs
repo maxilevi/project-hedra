@@ -9,6 +9,7 @@ using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem.Templates;
 using Hedra.Engine.Management;
@@ -81,6 +82,19 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 Output.Structures.Add(
                     new SleepingPad(Vector3.TransformPosition(template.Position * Parameters.Design.Scale, Transformation) + Parameters.Position)
                 );
+            }
+        }
+        
+        protected void AddLights(T Parameters, LightTemplate[] Lights, Matrix4 Transformation, BuildingOutput Output)
+        {
+            for (var i = 0; i < Lights.Length; ++i)
+            {
+                var template = Lights[i];
+                Output.Structures.Add(new WorldLight(Parameters.Position + Vector3.TransformPosition(template.Position * Parameters.Design.Scale, Transformation))
+                {
+                    Radius = template.Radius,
+                    LightColor = HandLamp.LightColor
+                });
             }
         }
 
