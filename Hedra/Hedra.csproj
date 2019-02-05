@@ -75,9 +75,6 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Reference Include="Facepunch.Steamworks">
-      <HintPath>..\references\Facepunch.Steamworks.dll</HintPath>
-    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\references\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
@@ -377,6 +374,7 @@
     <Compile Include="Engine\SkillSystem\Warrior\LearnHammer.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Resistance.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Whirlwind.cs" />
+    <Compile Include="Engine\Rendering\UI\SteamWidget.cs" />
     <Compile Include="Engine\StructureSystem\CachedVertexDataChunkWatcher.cs" />
     <Compile Include="Engine\StructureSystem\ChunkWatcher.cs" />
     <Compile Include="Engine\StructureSystem\InstanceDataChunkWatcher.cs" />
@@ -7330,6 +7328,15 @@
     <None Include="Modules\Mobs\Gorilla.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <Content Include="Assets\UI\SteamButtonOpenApp.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\UI\SteamButtonOpenLink.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\UI\SteamTexture.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Mods\README.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -7540,16 +7547,10 @@
     <Content Include="x64\openal32.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="x64\steam_api64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="x64\wrap_oal.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="x86\openal32.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="x86\steam_api.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="x86\wrap_oal.dll">

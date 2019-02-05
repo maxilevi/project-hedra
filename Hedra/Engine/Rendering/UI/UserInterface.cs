@@ -37,6 +37,7 @@ namespace Hedra.Engine.Rendering.UI
         private Texture _title;
         private Button _newRun;
         private Button _loadButton;
+        private Panel _steamNews;
         public static Font Regular;
         public static Color DefaultFontColor = Color.White;
         
@@ -50,11 +51,12 @@ namespace Hedra.Engine.Rendering.UI
             ChrChooser = new ChrChooserUI(Player);
             ConnectPanel = new NetworkUI();
             ChrCreator = new ChrCreatorUI(Player);
+            _steamNews = new SteamWidget();
 
             var bandPosition = new Vector2(0, -.8f);
             const int fontSize = 16;
             _title = new Texture(Graphics2D.LoadFromAssets("Assets/UI/MenuLogo.png"),
-                                   new Vector2(-.405f, .35f), Graphics2D.SizeFromAssets("Assets/UI/MenuLogo.png").As1920x1080() * .75f);
+                                   new Vector2(-.415f, .385f), Graphics2D.SizeFromAssets("Assets/UI/MenuLogo.png").As1920x1080() * .715f);
 
             var blackBand = new Texture(Color.FromArgb(0,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.09f / GameSettings.Height * 578), GradientType.LeftRight);
             
@@ -77,13 +79,15 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             Button connectToServer = new Button(new Vector2(.535f, bandPosition.Y),
-                                         new Vector2(0.15f,0.075f), Translation.Create("multiplayer"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
-            
+                                         new Vector2(0.15f,0.075f), Translation.Default("ADD IT TO YOUR WISHLIST"), Color.Gold, FontCache.Get(AssetManager.BoldFamily, fontSize, FontStyle.Bold));
+            connectToServer.HoverEnter += (A,B) => connectToServer.Scale *= 1.1f;
+            connectToServer.HoverExit += (A,B) => connectToServer.Scale *= 1.0f / 1.1f;
             Button disconnect = new Button(new Vector2(.535f, bandPosition.Y),
                                          new Vector2(0.15f,0.075f), Translation.Create("disconnect"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
             
-            connectToServer.Click += delegate{
-                Player.MessageDispatcher.ShowNotification("", Color.DarkRed, 3f, true);
+            connectToServer.Click += delegate
+            {
+                SteamWidget.OpenStore();
             };
             
             Button options = new Button(new Vector2(.75f, bandPosition.Y),
@@ -118,6 +122,7 @@ namespace Hedra.Engine.Rendering.UI
             
             Menu.OnPanelStateChange += delegate(object Sender, PanelState E) { 
                 if(E == PanelState.Enabled){
+_steamNews.Enable();
                     if(Connection.Instance.IsAlive){
                         _newRun.Disable();
                         _loadButton.Disable();
@@ -126,6 +131,10 @@ namespace Hedra.Engine.Rendering.UI
                     }else{
                         disconnect.Disable();
                     }
+                }
+                else
+                {
+                    _steamNews.Disable();
                 }
             };
         }
