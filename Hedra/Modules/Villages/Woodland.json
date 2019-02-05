@@ -75,7 +75,8 @@
               "Y": 3.99527,
               "Z": -2.09315
             },
-            "InvertedPivot": true
+            "InvertedPivot": true,
+            "InvertedRotation": false
           },
           {
             "Path":  "Assets/Env/Village/Inn0_Door1.ply",
@@ -84,7 +85,8 @@
               "Y": 4,
               "Z": 2.27097
             },
-            "InvertedPivot": true
+            "InvertedPivot": true,
+            "InvertedRotation": false
           },
           {
             "Path":  "Assets/Env/Village/Inn0_Door2.ply",
@@ -93,7 +95,8 @@
               "Y": 4,
               "Z": -0.7
             },
-            "InvertedPivot": true
+            "InvertedPivot": true,
+            "InvertedRotation": false
           },
           {
             "Path":  "Assets/Env/Village/Inn0_Door3.ply",
@@ -102,7 +105,8 @@
               "Y": 4,
               "Z": -3.8
             },
-            "InvertedPivot": true
+            "InvertedPivot": true,
+            "InvertedRotation": false
           },
           {
             "Path":  "Assets/Env/Village/Inn0_Door4.ply",
@@ -111,7 +115,8 @@
               "Y": 4,
               "Z": 5.88899
             },
-            "InvertedPivot": true
+            "InvertedPivot": true,
+            "InvertedRotation": false
           },
           {
             "Path":  "Assets/Env/Village/Inn0_Door5.ply",
@@ -129,7 +134,8 @@
               "Y": 1.21763,
               "Z": -5.74635
             },
-            "InvertedPivot": true
+            "InvertedPivot": true,
+            "InvertedRotation": false
           }
         ]
       }
@@ -268,6 +274,27 @@
           "X": 2.4,
           "Y": 0.5,
           "Z": 2.8
+        }
+      },
+      {
+        "Path" : "Assets/Env/Village/Brewery0.ply",
+        "LodPath": "Assets/Env/Village/Brewery0-Lod.ply",
+        "Scale" : 2.0,
+        "Doors" : [
+          {
+            "Path":  "Assets/Env/Village/Brewery0_Door0.ply",
+            "Position" : {
+              "X": 9.76358,
+              "Y": 5.57899,
+              "Z": -7.31104
+            }
+          }
+        ],
+        "HasBlacksmith": false,
+        "LampPosition" : {
+          "X": -16.0,
+          "Y": 0.0,
+          "Z": -16.0
         }
       }
     ]

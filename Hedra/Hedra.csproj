@@ -8223,6 +8223,14 @@
       <Link>Assets\Skills\Warrior.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0-Lod.ply">
+      <Link>Assets\Env\Village\Brewery0-Lod.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0.ply">
+      <Link>Assets\Env\Village\Brewery0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider0.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -8661,6 +8669,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider99.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider99.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Door0.ply">
+      <Link>Assets\Env\Village\Brewery0_Door0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Sky\empty.png">

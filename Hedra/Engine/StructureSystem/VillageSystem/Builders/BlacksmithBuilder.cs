@@ -34,7 +34,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         public override void Polish(BlacksmithParameters Parameters, VillageRoot Root, Random Rng)
         {
             var transformation = BuildTransformation(Parameters).ClearTranslation();
-            if (Rng.Next(0, 3) == 1)
+            if (Rng.Next(0, 3) == 1 && Parameters.Design.HasBlacksmith)
             {
                 var blacksmithOffset = Vector3.TransformPosition(Parameters.Design.Blacksmith * Parameters.Design.Scale, transformation);
                 var newPosition = Parameters.Position + blacksmithOffset;
