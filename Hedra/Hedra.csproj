@@ -8225,333 +8225,443 @@
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider0.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider1.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider10.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider10.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider100.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider100.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider101.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider101.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider102.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider102.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider103.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider103.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider104.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider104.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider105.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider105.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider106.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider106.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider107.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider107.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider108.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider108.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider109.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider109.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider11.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider11.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider12.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider12.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider13.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider13.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider14.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider14.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider15.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider15.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider16.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider16.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider17.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider17.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider18.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider18.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider19.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider19.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider2.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider20.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider20.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider21.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider21.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider22.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider22.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider23.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider23.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider24.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider24.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider25.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider25.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider26.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider26.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider27.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider27.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider28.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider28.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider29.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider29.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider3.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider3.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider30.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider30.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider31.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider31.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider32.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider32.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider33.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider33.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider34.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider34.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider35.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider35.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider36.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider36.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider37.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider37.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider38.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider38.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider39.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider39.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider4.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider40.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider40.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider41.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider41.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider42.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider42.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider43.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider43.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider44.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider44.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider45.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider45.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider46.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider46.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider47.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider47.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider48.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider48.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider49.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider49.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider5.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider5.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider50.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider50.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider51.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider51.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider52.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider52.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider53.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider53.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider54.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider54.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider55.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider55.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider56.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider56.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider57.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider57.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider58.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider58.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider59.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider59.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider6.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider6.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider60.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider60.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider61.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider61.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider62.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider62.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider63.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider63.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider64.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider64.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider65.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider65.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider66.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider66.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider67.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider67.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider68.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider68.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider69.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider69.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider7.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider7.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider70.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider70.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider71.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider71.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider72.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider72.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider73.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider73.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider74.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider74.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider75.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider75.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider76.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider76.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider77.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider77.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider78.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider78.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider79.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider79.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider8.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider80.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider80.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider81.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider81.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider82.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider82.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider83.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider83.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider84.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider84.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider85.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider85.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider86.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider86.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider87.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider87.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider88.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider88.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider89.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider89.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider9.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider9.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider90.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider90.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider91.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider91.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider92.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider92.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider93.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider93.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider94.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider94.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider95.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider95.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider96.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider96.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider97.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider97.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider98.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider98.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Brewery\Brewery0_Collider99.ply">
       <Link>Assets\Env\Colliders\Brewery0_Collider99.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Sky\empty.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
