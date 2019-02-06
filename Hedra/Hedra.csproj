@@ -8677,1851 +8677,2467 @@
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0-Lod.ply">
       <Link>Assets\Env\Village\LightArmorer0-Lod.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0.ply">
       <Link>Assets\Env\Village\LightArmorer0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider0.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider1.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider10.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider10.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider100.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider100.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider101.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider101.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider102.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider102.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider103.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider103.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider104.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider104.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider105.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider105.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider106.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider106.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider107.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider107.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider108.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider108.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider109.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider109.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider11.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider11.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider110.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider110.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider111.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider111.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider112.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider112.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider113.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider113.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider114.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider114.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider115.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider115.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider116.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider116.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider117.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider117.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider118.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider118.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider119.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider119.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider12.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider12.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider120.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider120.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider121.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider121.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider122.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider122.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider123.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider123.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider124.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider124.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider125.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider125.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider126.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider126.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider127.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider127.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider128.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider128.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider129.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider129.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider13.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider13.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider130.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider130.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider131.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider131.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider132.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider132.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider133.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider133.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider134.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider134.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider135.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider135.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider136.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider136.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider137.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider137.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider138.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider138.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider139.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider139.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider14.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider14.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider140.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider140.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider141.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider141.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider142.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider142.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider143.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider143.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider144.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider144.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider145.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider145.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider146.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider146.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider147.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider147.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider148.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider148.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider149.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider149.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider15.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider15.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider150.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider150.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider151.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider151.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider16.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider16.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider17.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider17.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider18.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider18.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider19.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider19.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider2.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider20.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider20.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider21.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider21.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider22.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider22.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider23.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider23.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider24.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider24.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider25.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider25.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider26.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider26.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider27.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider27.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider28.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider28.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider29.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider29.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider3.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider3.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider30.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider30.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider31.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider31.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider32.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider32.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider33.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider33.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider34.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider34.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider35.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider35.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider36.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider36.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider37.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider37.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider38.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider38.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider39.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider39.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider4.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider40.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider40.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider41.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider41.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider42.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider42.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider43.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider43.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider44.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider44.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider45.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider45.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider46.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider46.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider47.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider47.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider48.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider48.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider49.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider49.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider5.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider5.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider50.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider50.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider51.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider51.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider52.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider52.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider53.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider53.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider54.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider54.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider55.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider55.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider56.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider56.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider57.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider57.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider58.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider58.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider59.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider59.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider6.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider6.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider60.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider60.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider61.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider61.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider62.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider62.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider63.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider63.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider64.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider64.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider65.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider65.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider66.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider66.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider67.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider67.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider68.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider68.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider69.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider69.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider7.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider7.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider70.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider70.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider71.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider71.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider72.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider72.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider73.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider73.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider74.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider74.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider75.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider75.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider76.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider76.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider77.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider77.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider78.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider78.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider79.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider79.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider8.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider80.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider80.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider81.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider81.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider82.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider82.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider83.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider83.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider84.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider84.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider85.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider85.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider86.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider86.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider87.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider87.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider88.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider88.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider89.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider89.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider9.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider9.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider90.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider90.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider91.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider91.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider92.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider92.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider93.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider93.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider94.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider94.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider95.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider95.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider96.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider96.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider97.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider97.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider98.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider98.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Collider99.ply">
       <Link>Assets\Env\Colliders\LightArmorer0_Collider99.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Door0.ply">
       <Link>Assets\Env\Village\LightArmorer0_Door0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Door1.ply">
       <Link>Assets\Env\Village\LightArmorer0_Door1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\LightArmorer\LightArmorer0_Door2.ply">
       <Link>Assets\Env\Village\LightArmorer0_Door2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0-Lod.ply">
       <Link>Assets\Env\Village\Masonry0-Lod.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0.ply">
       <Link>Assets\Env\Village\Masonry0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider0.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider1.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider10.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider10.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider100.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider100.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider101.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider101.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider102.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider102.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider103.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider103.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider104.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider104.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider105.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider105.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider106.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider106.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider107.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider107.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider108.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider108.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider109.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider109.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider11.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider11.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider110.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider110.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider111.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider111.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider112.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider112.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider113.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider113.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider114.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider114.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider115.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider115.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider116.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider116.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider117.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider117.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider118.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider118.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider119.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider119.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider12.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider12.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider120.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider120.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider121.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider121.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider122.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider122.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider123.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider123.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider124.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider124.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider125.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider125.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider13.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider13.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider14.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider14.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider15.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider15.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider16.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider16.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider17.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider17.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider18.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider18.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider19.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider19.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider2.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider20.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider20.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider21.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider21.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider22.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider22.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider23.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider23.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider24.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider24.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider25.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider25.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider26.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider26.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider27.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider27.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider28.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider28.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider29.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider29.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider3.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider3.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider30.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider30.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider31.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider31.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider32.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider32.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider33.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider33.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider34.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider34.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider35.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider35.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider36.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider36.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider37.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider37.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider38.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider38.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider39.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider39.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider4.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider40.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider40.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider41.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider41.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider42.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider42.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider43.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider43.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider44.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider44.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider45.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider45.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider46.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider46.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider47.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider47.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider48.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider48.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider49.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider49.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider5.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider5.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider50.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider50.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider51.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider51.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider52.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider52.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider53.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider53.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider54.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider54.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider55.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider55.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider56.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider56.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider57.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider57.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider58.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider58.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider59.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider59.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider6.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider6.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider60.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider60.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider61.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider61.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider62.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider62.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider63.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider63.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider64.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider64.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider65.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider65.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider66.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider66.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider67.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider67.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider68.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider68.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider69.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider69.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider7.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider7.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider70.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider70.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider71.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider71.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider72.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider72.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider73.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider73.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider74.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider74.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider75.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider75.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider76.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider76.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider77.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider77.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider78.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider78.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider79.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider79.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider8.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider80.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider80.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider81.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider81.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider82.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider82.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider83.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider83.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider84.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider84.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider85.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider85.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider86.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider86.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider87.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider87.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider88.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider88.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider89.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider89.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider9.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider9.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider90.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider90.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider91.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider91.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider92.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider92.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider93.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider93.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider94.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider94.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider95.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider95.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider96.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider96.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider97.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider97.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider98.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider98.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider99.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider99.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Door0.ply">
       <Link>Assets\Env\Village\Masonry0_Door0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0-Lod.ply">
       <Link>Assets\Env\Village\Mayor0-Lod.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0.ply">
       <Link>Assets\Env\Village\Mayor0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider0.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider1.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider10.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider10.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider100.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider100.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider101.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider101.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider102.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider102.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider103.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider103.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider104.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider104.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider105.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider105.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider106.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider106.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider107.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider107.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider108.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider108.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider109.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider109.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider11.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider11.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider110.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider110.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider111.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider111.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider112.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider112.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider113.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider113.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider114.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider114.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider115.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider115.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider116.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider116.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider117.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider117.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider118.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider118.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider119.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider119.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider12.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider12.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider120.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider120.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider121.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider121.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider122.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider122.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider123.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider123.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider124.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider124.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider125.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider125.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider126.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider126.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider127.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider127.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider128.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider128.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider129.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider129.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider13.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider13.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider130.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider130.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider131.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider131.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider132.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider132.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider133.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider133.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider134.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider134.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider135.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider135.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider136.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider136.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider137.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider137.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider138.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider138.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider139.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider139.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider14.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider14.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider140.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider140.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider141.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider141.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider142.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider142.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider143.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider143.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider144.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider144.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider145.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider145.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider146.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider146.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider147.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider147.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider15.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider15.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider16.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider16.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider17.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider17.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider18.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider18.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider19.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider19.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider2.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider20.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider20.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider21.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider21.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider22.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider22.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider23.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider23.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider24.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider24.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider25.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider25.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider26.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider26.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider27.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider27.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider28.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider28.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider29.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider29.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider3.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider3.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider30.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider30.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider31.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider31.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider32.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider32.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider33.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider33.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider34.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider34.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider35.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider35.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider36.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider36.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider37.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider37.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider38.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider38.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider39.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider39.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider4.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider40.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider40.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider41.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider41.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider42.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider42.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider43.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider43.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider44.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider44.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider45.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider45.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider46.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider46.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider47.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider47.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider48.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider48.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider49.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider49.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider5.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider5.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider50.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider50.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider51.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider51.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider52.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider52.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider53.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider53.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider54.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider54.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider55.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider55.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider56.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider56.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider57.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider57.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider58.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider58.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider59.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider59.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider6.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider6.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider60.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider60.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider61.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider61.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider62.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider62.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider63.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider63.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider64.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider64.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider65.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider65.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider66.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider66.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider67.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider67.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider68.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider68.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider69.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider69.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider7.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider7.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider70.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider70.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider71.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider71.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider72.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider72.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider73.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider73.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider74.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider74.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider75.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider75.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider76.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider76.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider77.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider77.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider78.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider78.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider79.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider79.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider8.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider80.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider80.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider81.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider81.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider82.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider82.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider83.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider83.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider84.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider84.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider85.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider85.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider86.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider86.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider87.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider87.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider88.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider88.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider89.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider89.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider9.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider9.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider90.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider90.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider91.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider91.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider92.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider92.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider93.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider93.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider94.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider94.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider95.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider95.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider96.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider96.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider97.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider97.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider98.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider98.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Collider99.ply">
       <Link>Assets\Env\Colliders\Mayor0_Collider99.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Door0.ply">
       <Link>Assets\Env\Village\Mayor0_Door0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Door1.ply">
       <Link>Assets\Env\Village\Mayor0_Door1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Mayor\Mayor0_Door2.ply">
       <Link>Assets\Env\Village\Mayor0_Door2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0-Lod.ply">
       <Link>Assets\Env\Village\Tradesman0-Lod.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0.ply">
       <Link>Assets\Env\Village\Tradesman0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider0.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider1.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider10.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider10.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider100.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider100.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider101.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider101.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider102.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider102.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider103.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider103.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider104.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider104.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider105.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider105.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider106.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider106.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider107.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider107.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider108.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider108.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider109.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider109.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider11.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider11.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider110.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider110.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider111.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider111.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider112.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider112.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider113.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider113.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider114.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider114.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider115.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider115.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider116.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider116.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider117.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider117.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider118.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider118.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider119.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider119.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider12.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider12.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider120.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider120.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider121.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider121.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider122.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider122.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider123.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider123.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider124.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider124.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider125.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider125.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider126.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider126.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider127.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider127.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider128.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider128.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider129.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider129.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider13.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider13.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider130.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider130.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider131.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider131.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider132.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider132.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider133.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider133.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider134.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider134.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider135.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider135.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider136.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider136.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider137.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider137.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider138.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider138.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider139.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider139.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider14.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider14.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider140.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider140.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider141.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider141.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider142.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider142.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider143.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider143.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider144.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider144.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider145.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider145.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider146.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider146.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider147.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider147.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider148.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider148.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider149.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider149.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider15.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider15.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider150.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider150.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider151.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider151.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider152.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider152.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider153.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider153.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider154.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider154.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider155.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider155.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider156.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider156.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider157.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider157.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider158.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider158.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider159.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider159.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider16.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider16.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider160.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider160.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider161.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider161.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider162.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider162.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider163.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider163.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider164.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider164.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider165.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider165.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider166.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider166.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider167.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider167.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider168.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider168.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider169.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider169.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider17.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider17.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider170.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider170.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider171.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider171.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider18.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider18.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider19.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider19.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider2.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider20.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider20.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider21.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider21.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider22.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider22.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider23.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider23.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider24.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider24.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider25.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider25.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider26.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider26.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider27.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider27.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider28.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider28.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider29.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider29.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider3.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider3.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider30.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider30.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider31.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider31.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider32.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider32.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider33.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider33.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider34.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider34.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider35.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider35.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider36.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider36.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider37.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider37.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider38.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider38.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider39.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider39.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider4.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider40.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider40.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider41.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider41.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider42.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider42.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider43.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider43.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider44.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider44.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider45.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider45.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider46.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider46.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider47.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider47.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider48.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider48.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider49.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider49.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider5.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider5.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider50.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider50.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider51.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider51.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider52.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider52.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider53.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider53.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider54.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider54.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider55.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider55.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider56.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider56.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider57.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider57.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider58.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider58.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider59.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider59.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider6.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider6.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider60.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider60.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider61.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider61.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider62.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider62.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider63.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider63.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider64.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider64.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider65.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider65.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider66.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider66.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider67.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider67.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider68.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider68.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider69.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider69.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider7.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider7.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider70.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider70.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider71.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider71.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider72.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider72.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider73.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider73.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider74.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider74.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider75.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider75.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider76.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider76.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider77.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider77.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider78.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider78.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider79.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider79.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider8.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider80.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider80.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider81.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider81.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider82.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider82.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider83.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider83.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider84.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider84.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider85.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider85.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider86.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider86.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider87.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider87.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider88.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider88.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider89.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider89.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider9.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider9.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider90.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider90.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider91.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider91.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider92.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider92.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider93.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider93.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider94.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider94.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider95.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider95.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider96.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider96.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider97.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider97.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider98.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider98.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider99.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider99.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Door0.ply">
       <Link>Assets\Env\Village\Tradesman0_Door0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Door1.ply">
       <Link>Assets\Env\Village\Tradesman0_Door1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Door2.ply">
       <Link>Assets\Env\Village\Tradesman0_Door2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\Sky\empty.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
