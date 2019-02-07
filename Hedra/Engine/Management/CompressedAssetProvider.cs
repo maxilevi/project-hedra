@@ -167,7 +167,7 @@ namespace Hedra.Engine.Management
             {
                 lock (_handlerLock)
                 {
-                    return this.ReadBinaryFromStream(selectedHandler.Stream, Name);
+                    return ReadBinaryFromStream(selectedHandler.Stream, Name);
                 }
             }
             finally
@@ -180,20 +180,23 @@ namespace Hedra.Engine.Management
             }
         }
 
-        private byte[] ReadBinaryFromStream(Stream Stream, string Name)
+        private static byte[] ReadBinaryFromStream(Stream Stream, string Name)
         {
             if (!Stream.CanRead) return null;
-            var reader = new BinaryReader(Stream); // .Dispose closes the stream, something we dont want.
-            while (reader.BaseStream.Position < reader.BaseStream.Length)
+            var reader = new BinaryReader(Stream);
+            var length = reader.BaseStream.Length;
+            while (reader.BaseStream.Position < length)
             {
-                string header = reader.ReadString();
-                int chunkSize = reader.ReadInt32();
-
+                var header = reader.ReadString();
+                if (header.Equals("<end_header>"))
+                    return null;
+                
+                var dataPosition = reader.ReadInt64();
                 if (Path.GetFileName(header).Equals(Path.GetFileName(Name)))
                 {
-                    return reader.ReadBytes(chunkSize);
+                    reader.BaseStream.Seek(dataPosition, SeekOrigin.Begin);
+                    return reader.ReadBytes(reader.ReadInt32());
                 }
-                reader.BaseStream.Seek(reader.BaseStream.Position + chunkSize, SeekOrigin.Begin);
             }
             return null;
         }
@@ -245,6 +248,7 @@ namespace Hedra.Engine.Management
             for(var i = 0; i < Count; i++)
             {
                 var data = AssetManager.PLYLoader($"Assets/Env/Colliders/{name}_Collider{i}.ply", Scale, Vector3.Zero, Vector3.Zero, false);
+                AssertCorrectShapeFormat(data);
                 var newShape = new CollisionShape(data.Vertices, data.Indices);
                 shapes.Add(newShape);
                 data.Dispose();
@@ -263,7 +267,8 @@ namespace Hedra.Engine.Management
                 var path = $"Assets/Env/Colliders/{name}_Collider{iterator}.ply";
                 var data = ReadBinary(path, AssetsResource);
                 if(data == null) return shapes;
-                var vertexInformation = AssetManager.PLYLoader(path, Scale, Vector3.Zero, Vector3.Zero, false);
+                var vertexInformation = PLYLoader(data, Scale, Vector3.Zero, Vector3.Zero, false);
+                AssertCorrectShapeFormat(vertexInformation);
                 var newShape = new CollisionShape(vertexInformation.Vertices, vertexInformation.Indices);
                 shapes.Add(newShape);
                 vertexInformation.Dispose();
@@ -271,6 +276,13 @@ namespace Hedra.Engine.Management
             }
         }
 
+        private static void AssertCorrectShapeFormat(VertexData VertexInformation)
+        {
+            const int limit = 256;
+            if(VertexInformation.Vertices.Count > limit)
+                throw new ArgumentOutOfRangeException($"CollisionShape has {VertexInformation.Vertices.Count} vertices but limit is '{limit}'");
+        }
+        
         private VertexData LoadModelVertexData(string ModelFile)
         {
             lock (_hitboxCacheLock)
@@ -313,7 +325,7 @@ namespace Hedra.Engine.Management
                 var path = $"{dir}/{name}_Lod{iterator}.ply";
                 var data = ReadBinary(path, AssetsResource);
                 if (data == null) return model;
-                var vertexInformation = PLYLoader(path, Scale);
+                var vertexInformation = PLYLoader(data, Scale, Vector3.Zero, Vector3.Zero);
                 model.AddLOD(vertexInformation, iterator);
             }
             return model;

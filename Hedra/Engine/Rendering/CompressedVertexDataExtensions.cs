@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -27,19 +28,21 @@ namespace Hedra.Engine.Rendering
                 }
                 else
                 {
+                    if(count > ushort.MaxValue) throw new ArgumentOutOfRangeException($"Compressed amount exceeds 2^16 ({count})");
                     Compressed.Add(new CompressedValue<T>
                     {
                         Type = type,
-                        Count = (ushort)count
+                        Count = (ushort) count
                     });
                     type = Uncompressed[i];
                     count = 1;
                 }
             }
+            if(count > ushort.MaxValue) throw new ArgumentOutOfRangeException($"Compressed amount exceeds 2^16 ({count})");
             Compressed.Add(new CompressedValue<T>
             {
                 Type = type,
-                Count = (ushort)count
+                Count = (ushort) count
             });
         }
 
@@ -48,7 +51,7 @@ namespace Hedra.Engine.Rendering
             var list = new List<T>();
             for (var i = 0; i < Values.Count; i++)
             {
-                list.AddRange(Enumerable.Repeat(Values[i].Type, Values[i].Count));   
+                list.AddRange(Enumerable.Repeat(Values[i].Type, (int) Values[i].Count));   
             }
             return list;
         }

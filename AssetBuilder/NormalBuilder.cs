@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -36,6 +37,8 @@ namespace AssetBuilder
 
         private void BinaryBuild(Dictionary<string, object> Input, string Output)
         {
+            var map = new Dictionary<string, long>();
+            byte[] contents;
             using (var ms = new MemoryStream())
             {
                 using (var bw = new BinaryWriter(ms))
@@ -43,12 +46,44 @@ namespace AssetBuilder
                     foreach (var pair in Input)
                     {
                         var data = (byte[]) pair.Value;
-                        bw.Write(pair.Key);
+                        map.Add(pair.Key, bw.BaseStream.Position);
                         bw.Write(data.Length);
                         bw.Write(data);
                     }
                 }
-                File.WriteAllBytes(Output, this.ZipBytes(ms.ToArray()));
+                contents = ms.ToArray();
+            }
+
+            byte[] index;
+            using (var ms = new MemoryStream())
+            {
+                using (var bw = new BinaryWriter(ms))
+                {
+                    BuildIndex(bw, map, 0);
+                }
+                index = ms.ToArray();
+            }
+
+            using (var ms = new MemoryStream())
+            {
+                using (var bw = new BinaryWriter(ms, Encoding.ASCII))
+                {
+
+                    var separatorLength = Encoding.ASCII.GetByteCount("<end_header>") + 1;
+                    BuildIndex(bw, map, index.Length + separatorLength);
+                    bw.Write("<end_header>");
+                    bw.Write(contents);
+                }
+                File.WriteAllBytes(Output, ZipBytes(ms.ToArray()));
+            }
+        }
+
+        private static void BuildIndex(BinaryWriter Bw, Dictionary<string, long> Input, int Offset)
+        {
+            foreach (var pair in Input)
+            {
+                Bw.Write(pair.Key);
+                Bw.Write((long)(pair.Value + Offset));
             }
         }
     }

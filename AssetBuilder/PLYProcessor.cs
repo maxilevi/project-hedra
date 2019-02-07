@@ -23,6 +23,9 @@ namespace AssetBuilder
         
         public static byte[] Process(string Filename)
         {
+            #if DEBUG
+            Console.WriteLine($"Parsing File {Filename}");
+            #endif
             string fileContents = File.ReadAllText(Filename);
 
             int endHeader = fileContents.IndexOf("element vertex", StringComparison.Ordinal);
@@ -42,7 +45,7 @@ namespace AssetBuilder
             var normals = new List<Vector3>();
             var indices = new List<uint>(faceCount * 3);
 
-            var numberOffset = hasColor ? 10 : 6;
+            var numberOffset = hasColor ? 9 + (hasAlpha ? 1 : 0) : 6;
             int accumulatedOffset = startDataIndex;
             for(; vertexData.Count < vertexCount; accumulatedOffset += numberOffset)
             {
@@ -78,6 +81,7 @@ namespace AssetBuilder
                 indices.Add(uint.Parse(numbers[accumulatedOffset + 2]));
                 indices.Add(uint.Parse(numbers[accumulatedOffset + 3]));
             }
+
             return new ProcessionResult
             {
                 Header = Header,
