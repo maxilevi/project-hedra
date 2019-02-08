@@ -22,7 +22,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
             return _placements < _maxPlacements;
         }
 
-        public override GenericParameters FromPoint(PlacementPoint Point)
+        protected override GenericParameters FromPoint(PlacementPoint Point)
         {
             _placements++;
             return new GenericParameters

@@ -5,7 +5,7 @@ using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
 {
-    public class Placer<T> where T : IBuildingParameters, new()
+    public class Placer<T> : IPlacer<T> where T : IBuildingParameters, new()
     {
         protected Random Rng { get; }
         protected DesignTemplate[] Designs { get; }
@@ -25,7 +25,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
             throw new ArgumentOutOfRangeException("Could not place object");
         }
 
-        public virtual T FromPoint(PlacementPoint Point)
+        protected virtual T FromPoint(PlacementPoint Point)
         {
             return new T
             {

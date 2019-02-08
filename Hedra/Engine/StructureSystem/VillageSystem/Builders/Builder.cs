@@ -25,7 +25,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
     public abstract class Builder<T> where T : IBuildingParameters
     {
         protected virtual bool LookAtCenter => true;
-        protected virtual bool GraduateColor => true;
+        protected virtual bool GraduateColor => false;
         protected CollidableStructure Structure { get; }
         private Village VillageObject { get; }
         
@@ -61,6 +61,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         
         public virtual BuildingOutput Build(T Parameters, DesignTemplate Design, VillageCache Cache, Random Rng, Vector3 Center)
         {
+            
             var transformationMatrix = BuildTransformation(Parameters);
             var shapes = Cache.GrabShapes(Design.Path);
             shapes.ForEach(shape => shape.Transform(transformationMatrix));
@@ -80,7 +81,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             {
                 var template = Beds[i];
                 Output.Structures.Add(
-                    new SleepingPad(Vector3.TransformPosition(template.Position * Parameters.Design.Scale, Transformation) + Parameters.Position)
+                    new SleepingPad(
+                        Vector3.TransformPosition((template.Position + Parameters.Design.Offset) * Parameters.Design.Scale, Transformation) + Parameters.Position
+                    )
                 );
             }
         }
@@ -90,7 +93,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             for (var i = 0; i < Lights.Length; ++i)
             {
                 var template = Lights[i];
-                Output.Structures.Add(new WorldLight(Parameters.Position + Vector3.TransformPosition(template.Position * Parameters.Design.Scale, Transformation))
+                Output.Structures.Add(new WorldLight(Parameters.Position + Vector3.TransformPosition((template.Position + Parameters.Design.Offset) * Parameters.Design.Scale, Transformation))
                 {
                     Radius = template.Radius,
                     LightColor = HandLamp.LightColor
@@ -107,7 +110,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 var rotationPoint = Vector3.TransformPosition(Door.GetRotationPointFromMesh(vertexData, doorTemplate.InvertedPivot), Transformation);
                 vertexData.AverageCenter();
                 vertexData.Transform(Transformation);
-                var offset = Vector3.TransformPosition(doorTemplate.Position * Parameters.Design.Scale, Transformation);
+                var offset = Vector3.TransformPosition((doorTemplate.Position + Parameters.Design.Offset) * Parameters.Design.Scale, Transformation);
                 Output.Structures.Add(
                     new Door(
                         vertexData,

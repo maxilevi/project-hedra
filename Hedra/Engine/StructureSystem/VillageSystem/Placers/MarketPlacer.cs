@@ -19,7 +19,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
             return true;
         }
 
-        public override MarketParameters FromPoint(PlacementPoint Point)
+        protected override MarketParameters FromPoint(PlacementPoint Point)
         {
             Point.Position = Vector3.Zero;
             _currentMarkets++;

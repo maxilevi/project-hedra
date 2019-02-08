@@ -23,6 +23,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         protected Placer<BuildingParameters> StablePlacer { get; }
         protected MarketPlacer MarketPlacer { get; }
         protected GenericPlacer InnPlacer { get; }
+        protected GenericPlacer MayorPlacer { get; }
+        protected GenericPlacer MasonryPlacer { get; }
+        protected GenericPlacer ClothierPlacer { get; }
+        protected GenericPlacer ShopPlacer { get; }
         
         protected PlacementDesigner(VillageRoot Root, VillageConfiguration Config, Random Rng)
         {
@@ -30,11 +34,15 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             this.Rng = Rng;
             this.Config = Config;
             FarmPlacer = new FarmPlacer(Root.Template.Farm, Root.Template.Farm.Designs, Root.Template.Windmill.Designs, Rng);
-            BlacksmithPlacer = new BlacksmithPlacer(Root.Template.Blacksmith.Designs, Rng);
+            BlacksmithPlacer = new BlacksmithPlacer(Root.Template.Blacksmith.Designs, Rng, 1);
             HousePlacer = new HousePlacer(Root.Template.House.Designs, Root.Template.Well.Designs, Rng);
             StablePlacer = new Placer<BuildingParameters>(Root.Template.Stable.Designs, Rng);
             MarketPlacer = new MarketPlacer(Root.Template.Well.Designs, Rng);
-            InnPlacer = new GenericPlacer(Root.Template.Inn.Designs, Rng, 1);
+            InnPlacer = new GenericPlacer(Root.Template.Inn.Designs, Rng, 1);//Rng.Next(1, 4));
+            MayorPlacer = new GenericPlacer(Root.Template.Mayor.Designs, Rng, 1);    
+            MasonryPlacer = new GenericPlacer(Root.Template.Masonry.Designs, Rng, 1);//Rng.Next(0, 3));
+            ClothierPlacer = new GenericPlacer(Root.Template.Clothier.Designs, Rng, 1);//Rng.Next(0, 3));
+            ShopPlacer = new GenericPlacer(Root.Template.Shop.Designs, Rng, 1);//Rng.Next(0, 3));
         }
 
         public abstract PlacementDesign CreateDesign();

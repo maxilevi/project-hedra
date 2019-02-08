@@ -18,7 +18,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
             _windmillDesigns = Windmills;
         }
 
-        public override FarmParameters FromPoint(PlacementPoint Point)
+        protected override FarmParameters FromPoint(PlacementPoint Point)
         {
             return new FarmParameters
             {

@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
@@ -60,23 +62,35 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         
         public static VillageCache FromTemplate(VillageTemplate Template)
         {
+            var sw = new Stopwatch();
+            sw.Start();
             var cache = new VillageCache();
             var designs = Template.CacheableDesigns;
             for (var i = 0; i < designs.Length; i++)
             {
                 for (var j = 0; j < designs[i].Length; j++)
                 {
-                    cache._colliderCache.Add(designs[i][j].Path, AssetManager.LoadCollisionShapes(designs[i][j].Path, Vector3.One * designs[i][j].Scale));
-                    cache._modelCache.Add(designs[i][j].Path, AssetManager.PLYLoader(designs[i][j].Path, Vector3.One * designs[i][j].Scale).AsCompressed());
+                    var offset = designs[i][j].Offset * designs[i][j].Scale;
+                    var offsetMatrix = Matrix4.CreateTranslation(offset);
+                    cache._colliderCache.Add(
+                        designs[i][j].Path,
+                        AssetManager.LoadCollisionShapes(designs[i][j].Path, Vector3.One * designs[i][j].Scale).Select(S => S.Transform(offsetMatrix)).ToList()
+                    );
+                    cache._modelCache.Add(
+                        designs[i][j].Path,
+                        AssetManager.PLYLoader(designs[i][j].Path, Vector3.One * designs[i][j].Scale, offset, Vector3.Zero).AsCompressed()
+                    );
                     cache._sizeCache.Add(designs[i][j].Path, CalculateBounds(cache._modelCache[designs[i][j].Path].ToVertexData()));
                     if(designs[i][j].LodPath != null)
                         cache._modelCache.Add(designs[i][j].LodPath, AssetManager.PLYLoader(designs[i][j].LodPath, Vector3.One * designs[i][j].Scale).AsCompressed());
                 }
             }
+            sw.Stop();
+            Log.WriteLine($"Loading village '{Template.Name}' took '{sw.ElapsedMilliseconds}' MS");
             return cache;
         }
 
-        private static VertexData LoadCollisionShapesAsVertexData(string Filename, Vector3 Scale)
+        private static VertexData LoadCollisionShapesAsVertexData(string Filename, Vector3 Scale, Vector3 Position, Vector3 Rotation)
         {
             var model = new VertexData();
             string name = Path.GetFileNameWithoutExtension(Filename);
@@ -85,12 +99,13 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             {
                 var path = $"Assets/Env/Colliders/{name}_Collider{iterator}.ply";
                 var data = AssetManager.ReadBinary(path, AssetManager.AssetsResource);
-                if(data == null) return model;
-                var vertexInformation = AssetManager.PLYLoader(path, Scale);
-                vertexInformation.Colors = Enumerable.Repeat(Vector4.One, vertexInformation.Vertices.Count).ToList();
+                if (data == null) break;
+                var vertexInformation = AssetManager.PLYLoader(path, Scale, Position, Rotation);
                 model += vertexInformation;
                 iterator++;
             }
+            model.Colors = Enumerable.Repeat(Vector4.One, model.Vertices.Count).ToList();
+            return model;
         }
         
         private static Vector3 CalculateBounds(VertexData Model)

@@ -1,11 +1,287 @@
 ﻿{
   "Name" : "Woodland",
+  "Masonry": {
+    "Designs": [
+      {
+        "Path": "Assets/Env/Village/Masonry0.ply",
+        "LodPath": "Assets/Env/Village/Masonry0-Lod.ply",
+        "Scale": 6.0,
+        "HasLamp": false,
+        "Doors": [
+          {
+            "Path": "Assets/Env/Village/Masonry0_Door0.ply",
+            "Position": {
+              "X": -2.03932,
+              "Y": 1.04306,
+              "Z": -3.57377
+            },
+            "InvertedPivot": true,
+            "InvertedRotation": false
+          }
+        ],
+        "Lights": [
+          {
+            "Position" : {
+              "X": 0.47741,
+              "Y": 2.71446,
+              "Z": -7.18543
+            }
+          },
+          {
+            "Position" : {
+              "X": -2.5472,
+              "Y": 2.17319,
+              "Z": 2.78007
+            }
+          },
+          {
+            "Position" : {
+              "X": -4.82232,
+              "Y": 2.75207,
+              "Z": -7.19455
+            },
+            "Indoors": true
+          }
+        ]
+      }
+    ]
+  },
+  "Clothier": {
+    "Designs": [
+      {
+        "Path": "Assets/Env/Village/LightArmorer0.ply",
+        "LodPath": "Assets/Env/Village/LightArmorer0-Lod.ply",
+        "Scale": 6.0,
+        "Offset": {
+          "X": 0.0,
+          "Y": 0.025,
+          "Z": 0.0
+        },
+        "HasLamp": false,
+        "Doors": [
+          {
+            "Path": "Assets/Env/Village/LightArmorer0_Door0.ply",
+            "Position": {
+              "X": -0.01084,
+              "Y": 0.98236,
+              "Z": -6.79719
+            },
+            "InvertedPivot": true,
+            "InvertedRotation": false
+          },
+          {
+            "Path": "Assets/Env/Village/LightArmorer0_Door1.ply",
+            "Position": {
+              "X": 1.14685,
+              "Y": 0.96388,
+              "Z": 10.38114
+            }
+          },
+          {
+            "Path": "Assets/Env/Village/LightArmorer0_Door2.ply",
+            "Position": {
+              "X": -4.68451,
+              "Y": 0.96612,
+              "Z": 0.86512
+            },
+            "InvertedPivot": true
+          }
+        ],
+        "Lights": [
+          {
+            "Position" : {
+              "X": -6.68871,
+              "Y": 1.9811,
+              "Z": -1.02759
+            }
+          },
+          {
+            "Position" : {
+              "X": 2.10971,
+              "Y": 1.92365,
+              "Z": -8.8048
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "Shop": {
+    "Designs": [
+      {
+        "Path": "Assets/Env/Village/Tradesman0.ply",
+        "LodPath": "Assets/Env/Village/Tradesman0-Lod.ply",
+        "Scale": 5.5,
+        "Offset": {
+          "X": 0.0,
+          "Y": 0.025,
+          "Z": 0.0
+        },
+        "HasLamp": false,
+        "Doors": [
+          {
+            "Path": "Assets/Env/Village/Tradesman0_Door0.ply",
+            "Position": {
+              "X": 6.779234,
+              "Y": 0.98149,
+              "Z": -6.53313
+            },
+            "InvertedPivot": true,
+            "InvertedRotation": false
+          },
+          {
+            "Path": "Assets/Env/Village/Tradesman0_Door1.ply",
+            "Position": {
+              "X": 2.014,
+              "Y": 0.99825,
+              "Z": 1.27929
+            },
+            "InvertedPivot": true
+          },
+          {
+            "Path": "Assets/Env/Village/Tradesman0_Door2.ply",
+            "Position": {
+              "X": -2.13435,
+              "Y": 0.98774,
+              "Z": 2.17247
+            }
+          }
+        ],
+        "Lights": [
+          {
+            "Position" : {
+              "X": 6.67718,
+              "Y": 1.9811,
+              "Z": 2.27222
+            },
+            "Indoors": true
+          },
+          {
+            "Position" : {
+              "X": 6.71613,
+              "Y": 2.25976,
+              "Z": 3.74146
+            },
+            "Indoors": true
+          },
+          {
+            "Position" : {
+              "X": 3.45986,
+              "Y": 2.25841,
+              "Z": 3.44813
+            },
+            "Indoors": true
+          }
+        ]
+      }
+    ]
+  },
+  "Mayor": {
+    "Designs": [
+      {
+        "Path": "Assets/Env/Village/Mayor0.ply",
+        "LodPath": "Assets/Env/Village/Mayor0-Lod.ply",
+        "Scale": 5.5,
+        "Offset": {
+          "X": 0.0,
+          "Y": 0.075,
+          "Z": 0.0
+        },
+        "HasLamp": false,
+        "Chimneys": [
+          {
+            "Position": {
+              "X": -3.38601,
+              "Y": 0.07568,
+              "Z": -4.5657
+            }
+          }
+        ],
+        "Lights": [
+          {
+            "Position" : {
+              "X": -0.12193,
+              "Y": 2.38438,
+              "Z": -4.35951
+            },
+            "Indoors": true
+          },
+          {
+            "Position" : {
+              "X": -0.13016,
+              "Y": 2.39479,
+              "Z": -1.32935
+            },
+            "Indoors": true
+          },
+          {
+            "Position" : {
+              "X": -0.2289,
+              "Y": 2.1047,
+              "Z": 3.03554
+            },
+            "Indoors": true
+          },
+          {
+            "Position" : {
+              "X": 2.59324,
+              "Y": 5.39092,
+              "Z": 4.33418
+            },
+            "Indoors": true
+          },
+          {
+            "Position" : {
+              "X": 2.59786,
+              "Y": 5.37868,
+              "Z": 2.56658
+            },
+            "Indoors": true
+          }
+        ],
+        "Doors": [
+          {
+            "Path": "Assets/Env/Village/Mayor0_Door0.ply",
+            "Position": {
+              "X": 0.00788,
+              "Y": 0.98912,
+              "Z": -6.77345
+            },
+            "InvertedPivot": true,
+            "InvertedRotation": false
+          },
+          {
+            "Path": "Assets/Env/Village/Mayor0_Door1.ply",
+            "Position": {
+              "X": -4.69139,
+              "Y": 0.98789,
+              "Z": 0.90401
+            },
+            "InvertedPivot": true
+          },
+          {
+            "Path": "Assets/Env/Village/Mayor0_Door2.ply",
+            "Position": {
+              "X": 4.3083,
+              "Y": 4.20298,
+              "Z": 3.49531
+            }
+          }
+        ]
+      }
+    ]
+  },
   "Inn": {
     "Designs": [
       {
         "Path" : "Assets/Env/Village/Inn0.ply",
         "LodPath" : "Assets/Env/Village/Inn0-Lod.ply",
         "Scale" : 5.5,
+        "Offset": {
+          "X": 0.0,
+          "Y": -0.05,
+          "Z": 0.0
+        },
         "HasLamp": false,
         "Lights": [
           {

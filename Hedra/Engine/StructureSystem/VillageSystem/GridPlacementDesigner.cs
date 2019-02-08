@@ -5,7 +5,9 @@ using Hedra.Core;
 using Hedra.Engine.Generation;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine;
+using Hedra.Engine.Core;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
+using Hedra.Engine.StructureSystem.VillageSystem.Placers;
 using Hedra.Engine.WorldBuilding;
 using OpenTK;
 
@@ -16,7 +18,6 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         public const float NoPathZone = .55f;
         public const float SparseZone = .60f;
         private int VillageSize { get; }
-        private MarketParameters _marketPoint;
         
         public GridPlacementDesigner(VillageRoot Root, VillageConfiguration Config, Random Rng) : base(Root, Config, Rng)
         {
@@ -25,14 +26,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         
         public override PlacementDesign CreateDesign()
         {
-            var design = new PlacementDesign
-            {
-                Markets = new List<MarketParameters>
-                {
-                    MarketPlacer.Place(new PlacementPoint())
-                }
-            };
-            _marketPoint = design.Markets[0];
+            var design = new PlacementDesign();
+            var specialPoints = AddSpecialPoints(design);
             var points = new List<PlacementPoint>();
             for (var x = 1; x < VillageSize; ++x)
             {
@@ -40,13 +35,12 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                 {
                     if( (new Vector2(x,z) - new Vector2(VillageSize, VillageSize) * .5f).LengthSquared > VillageSize * .5f * .5f * VillageSize)
                         continue;
-                    var size = _marketPoint.Size * 1.5f;
                     var offset = CalculateOffset();
                     var spacingX = 0f;
                     if (x % 2 == 0) spacingX += VillageDesign.Spacing * .5f;
                     var position = new Vector2(VillageDesign.Spacing * x, VillageDesign.Spacing * z + spacingX) - offset;
 
-                    if ((position - _marketPoint.Position.Xz).LengthSquared > size * size)
+                    if (DoesNotIntersectWithSpecialBuildings(specialPoints, position))
                     {
                         points.Add(new PlacementPoint
                         {
@@ -58,11 +52,25 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                 }
             }
 
+            var marketPoint = specialPoints[0];
+            points = points.OrderBy(P => (P.Position.Xz - marketPoint.Position.Xz).LengthFast).ToList();
             for (var i = 0; i < points.Count; i++)
             {
                 var successful = SelectPlacer(points[i], design);
             }
             return design;
+        }
+
+        private bool DoesNotIntersectWithSpecialBuildings(IBuildingParameters[] SpecialPoints, Vector2 Position)
+        {
+            return SpecialPoints.All(S => (Position - S.Position.Xz).LengthSquared > Math.Pow(S.GetSize(Root.Cache) * 1.5f, 2));
+        }
+
+        private IBuildingParameters[] AddSpecialPoints(PlacementDesign Design)
+        {
+            // Add special buildings like inns and mayors
+            Design.Markets.Add(MarketPlacer.Place(new PlacementPoint()));
+            return Design.Parameters;
         }
         
         private bool SelectPlacer(PlacementPoint Point, PlacementDesign Design)
@@ -81,11 +89,23 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                 var mod = (1.0f + Math.Max(0, distFromCenter - SparseZone) * 2f) * VillageDesign.Spacing * (Point.Position.NormalizedFast());
                 Point.Position = (new Vector2(VillageDesign.Spacing * x, VillageDesign.Spacing * z + spacingX) - offset + mod.Xz).ToVector3();
             }
-            
-            if (distFromCenter < .2f)
+
+            var genericPlacers = new []
             {
-                if (rng < .5f && BlacksmithPlacer.SpecialRequirements(Point))
-                    AddBlacksmith(Point, Design, rotation);
+                new Pair<IPlacer<IBuildingParameters>, Action<IBuildingParameters>>(ShopPlacer, P => Design.Generics.Add((GenericParameters)P)),
+                new Pair<IPlacer<IBuildingParameters>, Action<IBuildingParameters>>(ClothierPlacer, P => Design.Generics.Add((GenericParameters)P)),
+                new Pair<IPlacer<IBuildingParameters>, Action<IBuildingParameters>>(MasonryPlacer, P => Design.Generics.Add((GenericParameters)P)),
+                new Pair<IPlacer<IBuildingParameters>, Action<IBuildingParameters>>(InnPlacer, P => Design.Generics.Add((GenericParameters)P)),
+                new Pair<IPlacer<IBuildingParameters>, Action<IBuildingParameters>>(BlacksmithPlacer, P => Design.Blacksmith.Add((BlacksmithParameters)P))
+            };
+            genericPlacers.Shuffle(Rng);
+            
+            if (distFromCenter < .35f)
+            {
+                if (rng < .35f && MayorPlacer.SpecialRequirements(Point))
+                    AddMayor(Point, Design, rotation);
+                else if (rng < .35f)
+                    TryAddAny(genericPlacers, Point, rotation);
                 else if (rng < .95f && HousePlacer.SpecialRequirements(Point))
                     AddHouse(Point, Design, rotation, distFromCenter);
                 else
@@ -93,10 +113,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             }
             else if (distFromCenter < NoPathZone)
             {
-                if (rng < .15f && BlacksmithPlacer.SpecialRequirements(Point))
-                    AddBlacksmith(Point, Design, rotation);
-                else if (rng < .25f && InnPlacer.SpecialRequirements(Point))
-                    AddInn(Point, Design, rotation);
+                if (rng < .075f)
+                    TryAddAny(genericPlacers, Point, rotation);
                 else if (rng < .90f && HousePlacer.SpecialRequirements(Point))
                     AddHouse(Point, Design, rotation, distFromCenter);
                 else if (rng < .95f && FarmPlacer.SpecialRequirements(Point))
@@ -106,7 +124,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             }
             else if (distFromCenter < NoPathZone + .15f)
             {
-                if (rng < .30f && HousePlacer.SpecialRequirements(Point))
+                if (rng < .1f && InnPlacer.SpecialRequirements(Point))
+                    TryAddAny(genericPlacers, Point, rotation);
+                else if (rng < .30f && HousePlacer.SpecialRequirements(Point))
                     AddHouse(Point, Design, rotation, distFromCenter);
                 else if (rng < .50f && FarmPlacer.SpecialRequirements(Point))
                     AddFarm(Point, Design, rotation, distFromCenter);
@@ -115,7 +135,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             }
             else if (distFromCenter < 1f)
             {
-                if (rng < .05f && HousePlacer.SpecialRequirements(Point))
+                if (rng < .05f && InnPlacer.SpecialRequirements(Point))
+                    TryAddAny(genericPlacers, Point, rotation);
+                else if (rng < .1f && HousePlacer.SpecialRequirements(Point))
                     AddHouse(Point, Design, rotation, distFromCenter);
                 else if (rng < 0.45f && FarmPlacer.SpecialRequirements(Point))
                     AddFarm(Point, Design, rotation, distFromCenter);
@@ -126,20 +148,27 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             return true;
         }
 
-        private void AddBlacksmith(PlacementPoint Point, PlacementDesign Design, Vector3 Rotation)
+        private void TryAddAny(Pair<IPlacer<IBuildingParameters>, Action<IBuildingParameters>>[] Pairs, PlacementPoint Point, Vector3 Rotation)
         {
-            var parameter = BlacksmithPlacer.Place(Point);
-            parameter.Rotation = Rotation;
-            Design.Blacksmith.Add(parameter);
+            for (var i = 0; i < Pairs.Length; ++i)
+            {
+                if (Pairs[i].One.SpecialRequirements(Point))
+                {
+                    var parameters = Pairs[i].One.Place(Point);
+                    parameters.Rotation = Rotation;
+                    Pairs[i].Two(parameters);
+                    break;
+                }
+            }
         }
-        
-        private void AddInn(PlacementPoint Point, PlacementDesign Design, Vector3 Rotation)
+
+        private void AddMayor(PlacementPoint Point, PlacementDesign Design, Vector3 Rotation)
         {
-            var parameter = InnPlacer.Place(Point);
+            var parameter = MayorPlacer.Place(Point);
             parameter.Rotation = Rotation;
             Design.Generics.Add(parameter);
         }
-
+        
         private void AddFarm(PlacementPoint Point, PlacementDesign Design, Vector3 Rotation, float Distance)
         {
             var parameter = FarmPlacer.Place(Point);
@@ -225,6 +254,15 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                 BonusHeight = .0f,
             });
             PlaceDecorations(Structure, Design);
+        }        
+
+
+        protected Vector2 GetRealSize(IBuildingParameters Parameters)
+        {
+            if (Parameters.Design != null)
+                return Root.Cache.GrabSize(Parameters.Design.Path).Xz;
+            else
+                return VillageDesign.Spacing * Vector2.One;
         }
 
         private void PlaceDecorations(CollidableStructure Structure, PlacementDesign Design)

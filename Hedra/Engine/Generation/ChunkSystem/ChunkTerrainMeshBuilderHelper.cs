@@ -38,7 +38,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             Vector3 position = Cell.P[0] / _blockSize;
             Vector4 color = Vector4.Zero;
-            float colorCount = 0;
+            var colorCount = 0;
             int x = (int) position.X, y = (int) position.Y, z = (int) position.Z;
 
             float noise =
@@ -84,7 +84,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var voronoi = (int) (World.StructureHandler.SeedGenerator.GetValue((Cell.P[0].X + _offsetX) * .0075f + wSeed, (Cell.P[0].Z + _offsetZ) * .0075f + wSeed) * 100f);
             var rng = new Random(new Random(voronoi).Next(0, 12));
             return new Vector4(rng.NextFloat(), rng.NextFloat(), rng.NextFloat(), 1.0f);*/
-            return new Vector4(color.Xyz / colorCount, 1.0f);
+            return new Vector4(colorCount == 0 ? regionColor.DirtColor.Xyz : color.Xyz / colorCount, 1.0f);
         }
 
         public void CreateCell(ref GridCell Cell, ref int X, ref int Y, ref int Z, ref bool WaterCell, ref int Lod, out bool Success)

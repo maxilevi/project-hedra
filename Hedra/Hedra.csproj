@@ -220,6 +220,7 @@
     <Compile Include="Engine\ClassSystem\Templates\StartingItemTemplate.cs" />
     <Compile Include="Engine\Core\ISearchable.cs" />
     <Compile Include="Engine\Core\ModuleLoader.cs" />
+    <Compile Include="Engine\Core\Pair.cs" />
     <Compile Include="Engine\Core\Singleton.cs" />
     <Compile Include="Engine\Core\TypeFactory.cs" />
     <Compile Include="Engine\Core\Unique.cs" />
@@ -403,6 +404,8 @@
     <Compile Include="Engine\StructureSystem\VillageSystem\IProbabilityTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Loom.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Placers\GenericPlacer.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\Placers\IPlacer.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\ChimneyTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\GenericDesignTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\GenericTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\LightTemplate.cs" />
@@ -9431,10 +9434,6 @@
       <Link>Assets\Env\Colliders\Masonry0_Collider124.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider125.ply">
-      <Link>Assets\Env\Colliders\Masonry0_Collider125.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="..\project-hedra-assets\Villages\Masonry\Masonry0_Collider13.ply">
       <Link>Assets\Env\Colliders\Masonry0_Collider13.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -10761,10 +10760,6 @@
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider170.ply">
       <Link>Assets\Env\Colliders\Tradesman0_Collider170.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider171.ply">
-      <Link>Assets\Env\Colliders\Tradesman0_Collider171.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Villages\Tradesman\Tradesman0_Collider18.ply">

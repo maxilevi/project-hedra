@@ -14,8 +14,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
             this.WellDesigns = WellDesigns;
             _houseDesigns = Designs;
         }
-        
-        public override HouseParameters FromPoint(PlacementPoint Point)
+
+        protected override HouseParameters FromPoint(PlacementPoint Point)
         {
             return new HouseParameters
             {
