@@ -271,8 +271,10 @@ namespace Hedra.Engine.Rendering.Effects
             Renderer.Enable(EnableCap.DepthTest);
             DefaultShader.Unbind();
         }
-        
-        public void Clear(){}
+
+        public void Clear()
+        {
+        }
         
         public void CaptureData()
         {
@@ -283,7 +285,8 @@ namespace Hedra.Engine.Rendering.Effects
             
             
         }
-        public void UnCaptureData(){
+        public void UnCaptureData()
+        {
             if(!GameSettings.SSAO)
                 Default.UnBind();
             else

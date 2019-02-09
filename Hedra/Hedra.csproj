@@ -400,6 +400,7 @@
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\GenericParameters.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\IBuilder.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\GenericBuilder.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\Chimney.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\CollectiblePlant.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\IProbabilityTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Loom.cs" />

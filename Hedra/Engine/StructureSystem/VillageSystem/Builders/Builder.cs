@@ -8,6 +8,7 @@ using Hedra.AISystem.Humanoid;
 using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
+using Hedra.Engine.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Generation;
@@ -75,30 +76,36 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             };
         }
         
+        private static Vector3 TransformPosition(T Parameters, Vector3 Position, Matrix4 Transformation)
+        {
+            return Vector3.TransformPosition((Position + Parameters.Design.Offset) * Parameters.Design.Scale, Transformation) + Parameters.Position;
+        }
+        
+        private static void AddStructure<U>(T Parameters, U[] Templates, Matrix4 Transformation, BuildingOutput Output, Func<Vector3, U, BaseStructure> Get) where U : IPositionable
+        {
+            for (var i = 0; i < Templates.Length; ++i)
+            {
+                Output.Structures.Add(Get(TransformPosition(Parameters, Templates[i].Position, Transformation), Templates[i]));
+            }
+        }
+        
         protected void AddBeds(T Parameters, BedTemplate[] Beds, Matrix4 Transformation, BuildingOutput Output)
         {
-            for (var i = 0; i < Beds.Length; ++i)
-            {
-                var template = Beds[i];
-                Output.Structures.Add(
-                    new SleepingPad(
-                        Vector3.TransformPosition((template.Position + Parameters.Design.Offset) * Parameters.Design.Scale, Transformation) + Parameters.Position
-                    )
-                );
-            }
+            AddStructure(Parameters, Beds, Transformation, Output, (P, T) => new SleepingPad(P));
+        }
+
+        protected void AddChimneys(T Parameters, ChimneyTemplate[] Chimneys, Matrix4 Transformation, BuildingOutput Output)
+        {
+            AddStructure(Parameters, Chimneys, Transformation, Output, (P, T) => new Chimney(P));
         }
         
         protected void AddLights(T Parameters, LightTemplate[] Lights, Matrix4 Transformation, BuildingOutput Output)
         {
-            for (var i = 0; i < Lights.Length; ++i)
+            AddStructure(Parameters, Lights, Transformation, Output, (P, T) => new WorldLight(P)
             {
-                var template = Lights[i];
-                Output.Structures.Add(new WorldLight(Parameters.Position + Vector3.TransformPosition((template.Position + Parameters.Design.Offset) * Parameters.Design.Scale, Transformation))
-                {
-                    Radius = template.Radius,
-                    LightColor = HandLamp.LightColor
-                });
-            }
+                Radius = T.Radius,
+                LightColor = HandLamp.LightColor
+            });
         }
 
         protected void AddDoors(T Parameters, VillageCache Cache, DoorTemplate[] Doors, Matrix4 Transformation, BuildingOutput Output)

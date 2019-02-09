@@ -17,6 +17,8 @@ namespace Hedra.Engine.WorldBuilding
         
         public abstract CraftingSystem.CraftingStation StationType { get; }
 
+        protected virtual bool CanCraft => true;
+
         protected CraftingStation(Vector3 Position) : base(Position)
         {
             UpdateManager.Add(this);
@@ -24,6 +26,7 @@ namespace Hedra.Engine.WorldBuilding
 
         public virtual void Update()
         {
+            if(!CanCraft) return;
             var player = GameManager.Player;
             bool IsInLookingAngle() => Vector2.Dot((Position - player.Position).Xz.NormalizedFast(),
                                            player.View.LookingDirection.Xz.NormalizedFast()) > Angle;

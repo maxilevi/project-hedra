@@ -21,6 +21,9 @@ namespace Hedra.AISystem.Behaviours
         private Vector3 _origin;
         private bool _reached;
         private Action _callback;
+        private float _lastTimeBetweenTargets;
+        private float _currentTimeBetweenTargets;
+        private bool _useRebuildTimer;
 
         public TraverseBehaviour(IEntity Parent, bool UseCollision = false) : base(Parent)
         {
@@ -44,8 +47,7 @@ namespace Hedra.AISystem.Behaviours
             {
                 if (!Walk.HasTarget || Parent.IsStuck)
                 {
-                    if (_rebuildPathTimer.Ready || _currentPath == null)
-                        UpdatePath();
+                    RebuildIfNecessary();
                     if (_currentIndex < _currentPath.Length)
                         Walk.SetTarget(
                             (_currentPath[_currentIndex] - new Vector2((int)(_currentGrid.DimX / 2f), (int)(_currentGrid.DimY / 2f))).ToVector3() * Chunk.BlockSize + _origin,
@@ -63,6 +65,20 @@ namespace Hedra.AISystem.Behaviours
             }
             _rebuildPathTimer.Tick();
             Walk.Update();
+            UpdateStrategy();
+        }
+
+        private void UpdateStrategy()
+        {
+            _currentTimeBetweenTargets += Time.DeltaTime;
+            _useRebuildTimer = Math.Max(_currentTimeBetweenTargets, _lastTimeBetweenTargets) < _rebuildPathTimer.AlertTime;
+        }
+        
+        private void RebuildIfNecessary(bool NewTarget = false)
+        {
+            var needsRebuild = _useRebuildTimer ? _rebuildPathTimer.Ready : NewTarget;
+            if (needsRebuild || _currentPath == null)
+                UpdatePath();
         }
 
         private void UpdatePath()
@@ -117,6 +133,9 @@ namespace Hedra.AISystem.Behaviours
             Target = Position;
             _callback = Callback;
             _reached = false;
+            _lastTimeBetweenTargets = _currentTimeBetweenTargets;
+            _currentTimeBetweenTargets = 0;
+            RebuildIfNecessary(true);
         }
 
         public void Cancel()
