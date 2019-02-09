@@ -6,6 +6,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Pathfinding;
 using Hedra.EntitySystem;
 using System.Drawing;
+using Hedra.Components.Effects;
 using Hedra.Engine.Game;
 using OpenTK;
 
@@ -24,6 +25,9 @@ namespace Hedra.AISystem.Behaviours
         private float _lastTimeBetweenTargets;
         private float _currentTimeBetweenTargets;
         private bool _useRebuildTimer;
+        private float _speedBonus;
+        private float _lastBonus;
+        private SpeedBonusComponent _lastComponent;
 
         public TraverseBehaviour(IEntity Parent, bool UseCollision = false) : base(Parent)
         {
@@ -66,6 +70,17 @@ namespace Hedra.AISystem.Behaviours
             _rebuildPathTimer.Tick();
             Walk.Update();
             UpdateStrategy();
+            UpdateSpeedBonus();
+        }
+
+        private void UpdateSpeedBonus()
+        {
+            if (Math.Abs(_lastBonus - _speedBonus) > 0.005f)
+            {
+                _lastComponent?.Dispose();
+                if(_lastComponent != null) Parent.RemoveComponent(_lastComponent);
+                Parent.AddComponent(_lastComponent = new SpeedBonusComponent(Parent, -Parent.Speed + (_lastBonus = _speedBonus) * Parent.Speed));
+            }
         }
 
         private void UpdateStrategy()
@@ -101,6 +116,10 @@ namespace Hedra.AISystem.Behaviours
                 _currentPath = new []{ unblockedCenter };
             _currentIndex = 0;
             _rebuildPathTimer.Reset();
+
+            _speedBonus = _currentGrid.BlockedCellCount < _currentGrid.TotalCellCount * .25f 
+                ? 1.15f
+                : 1f;
 
             if (Parent.Type != "Ent") return;
             

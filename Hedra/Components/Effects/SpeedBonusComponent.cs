@@ -17,8 +17,7 @@ namespace Hedra.Components.Effects
 
         public override void Update()
         {
-            var human = Parent as Humanoid;
-            if(human != null && !human.IsMoving || human != null && human.IsRiding) return;
+            if(Parent is Humanoid human && human.IsRiding || !Parent.IsMoving) return;
             if (_speedBonus > 0)
             {
                 World.Particles.Color = Vector4.One;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using OpenTK;
 
@@ -63,8 +64,14 @@ namespace Hedra.Engine.Pathfinding
                     $"Argument {nameof(Cost)} with value {Cost} is invalid. The cost of traversing a cell cannot be less than one");
             }
 
-            this._weights[GetIndex(Position.X, Position.Y)] = Cost;
+            _weights[GetIndex(Position.X, Position.Y)] = Cost;
         }
+        
+        public int BlockedCellCount => _weights.Count(float.IsPositiveInfinity);
+        
+        public int TotalCellCount => DimX * DimY;
+
+        public int UnblockedCellCount => TotalCellCount - BlockedCellCount;
 
         /// <summary>
         /// Makes the cell intraversable
@@ -86,7 +93,7 @@ namespace Hedra.Engine.Pathfinding
         /// <returns>The cost</returns>
         public float GetCellCost(Vector2 Position)
         {
-            return this._weights[GetIndex(Position.X, Position.Y)];
+            return _weights[GetIndex(Position.X, Position.Y)];
         }
 
         /// <summary>
