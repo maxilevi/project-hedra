@@ -1,7 +1,6 @@
 #version 330 core
 
 !include<"Includes/GammaCorrection.shader">
-!include<"Includes/Lighting.shader">
 
 precision lowp float;
 
@@ -9,11 +8,10 @@ layout(location = 0)in vec3 InVertex;
 layout(location = 1)in vec4 InColor;
 layout(location = 2)in vec3 InNormal;
 
+out float Config;
 out vec4 raw_color;
-out vec4 Color;
 out vec4 InPos;
 out vec4 InNorm;
-out vec3 pointlight_color;
 out float Visibility;
 out float pass_height;
 out vec4 pass_botColor;
@@ -42,6 +40,7 @@ uniform vec3 BakedOffset;
 uniform mat4 TransformationMatrix;
 uniform float MinDitherDistance;
 uniform float MaxDitherDistance;
+uniform vec3 LightPosition = vec3(-500.0, 800.0, 0.0);
 const float ShadowTransition = 10.0;
 const float NoShadowsFlag = -1.0;
 const float NoHighlightFlag = -2.0;
@@ -79,7 +78,7 @@ vec2 Unpack(float inp, int prec)
 void main()
 {
     vec4 linear_color = srgb_to_linear(InColor); 
-	float Config = InColor.a;
+	Config = InColor.a;
 	vec3 unitToLight = normalize(LightPosition);
 	vec4 Vertex = vec4((InVertex + BakedOffset) * Scale + Offset, 1.0);
 	base_vertex_position = Vertex.xyz;
@@ -115,25 +114,5 @@ void main()
 	
 	InPos = Vertex;
 	InNorm = vec4(InNormal, 1.0);
-    if(Config - NoHighlightFlag > FlagEpsilon)
-    {
-        linear_color = apply_highlights(linear_color, Vertex.xyz);
-    }
-		
-	//Lighting
-	vec3 unitNormal = normalize(InNorm.xyz);
-	vec3 unitToCamera = normalize((inverse(_modelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - Vertex.xyz);
-
-	vec3 FLightColor = calculate_lights(LightColor, Vertex.xyz);
-	vec4 InputColor = vec4(linear_color.xyz, 1.0);
-
-	Ambient += Config - NoShadowsFlag < FlagEpsilon ? 0.25 : 0.0;
-	vec4 Rim = rim(InputColor.rgb, LightColor, unitToCamera, unitNormal);
-	vec4 Diffuse = diffuse(unitToLight, unitNormal, LightColor);
-	vec4 realColor = Rim + Diffuse * InputColor;
-    Color = vec4(realColor.xyz, realColor.a);	
-
-	pointlight_color = diffuse(unitToLight, unitNormal, FLightColor).rgb;		
-	raw_color = linear_color;
-	
+    raw_color = linear_color;
 }

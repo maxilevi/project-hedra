@@ -62,6 +62,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             AddBeds(Parameters, Parameters.Design.Beds, transformation, output);
             AddLights(Parameters, Parameters.Design.Lights, transformation, output);
             AddChimneys(Parameters, Parameters.Design.Chimneys, transformation, output);
+            AddGenericStructure(Parameters, Parameters.Design.Structures, transformation, output);
             return output;
         }
     }

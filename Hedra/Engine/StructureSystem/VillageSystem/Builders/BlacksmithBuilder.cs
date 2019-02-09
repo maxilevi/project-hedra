@@ -28,6 +28,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             var output = base.Build(Parameters, Design, Cache, Rng, Center);
             var transformation = BuildTransformation(Parameters).ClearTranslation();
             AddDoors(Parameters, Cache, Parameters.Design.Doors, transformation, output);
+            AddChimneys(Parameters, Parameters.Design.Chimneys, transformation, output);
             return output;
         }
 

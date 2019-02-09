@@ -14,7 +14,6 @@ in vec3 LightDir;
 in vec3 vertex_position;
 in vec3 base_vertex_position;
 in vec3 base_normal;
-in vec3 point_diffuse;
 
 layout(location = 0)out vec4 FColor;
 layout(location = 1)out vec4 OutPosition;
@@ -48,7 +47,7 @@ void main()
 	    ? simple_apply_shadows(Coords, bias)
 	    : 1.0;
     float tex = texture(noiseTexture, base_vertex_position).r * int(DitherFogTextureShadows.z);
-    vec4 inputColor = vec4(linear_to_srbg((Color.xyz * ShadowVisibility + point_diffuse.xyz * raw_color.xyz) * (Tint.rgb + BaseTint.rgb) * (tex + 1.0)), Color.w);
+    vec4 inputColor = vec4(linear_to_srbg(Color.xyz * ShadowVisibility * (Tint.rgb + BaseTint.rgb) * (tex + 1.0)), Color.w);
 
     if(Outline)
     {

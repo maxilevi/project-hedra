@@ -8,8 +8,6 @@ in vec3 pass_normal;
 in float pass_visibility;
 in vec3 pass_position;
 in vec4 pass_coords;
-in vec3 pass_lightDir;
-in vec4 pass_lightDiffuse;
 
 layout(location = 0)out vec4 out_colour;
 layout(location = 1)out vec4 out_position;
@@ -29,7 +27,7 @@ void main(void)
 		discard;
 	}
 	float ShadowVisibility = UseShadows ? simple_apply_shadows(pass_coords, bias) : 1.0;	
-	vec4 new_color = pass_color * ShadowVisibility * (BaseTint + Tint) + pass_lightDiffuse * (BaseTint + Tint);
+	vec4 new_color = pass_color * (BaseTint + Tint) * ShadowVisibility;
 	new_color = vec4(linear_to_srbg(new_color.xyz), new_color.w);
 
 	if(UseFog)

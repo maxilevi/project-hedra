@@ -29,7 +29,6 @@ out vec4 pass_topColor;
 out vec3 pass_position;
 out vec4 pass_coords;
 out vec3 pass_lightDir;
-out vec4 pass_lightDiffuse;
 
 const float ShadowTransition = 20.0;
 
@@ -84,10 +83,9 @@ void main(void)
 	//Diffuse Lighting
 	vec3 FullLightColor = clamp(LightColor + FLightColor, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
 	vec4 Diffuse = diffuse(unitToLight, unitNormal, LightColor * 1.15);
-	vec4 final_color = Rim + Diffuse * vec4(linear_color,1.0);
-	vec3 lightDiffuse = diffuse(unitToLight, unitNormal, FLightColor).rgb;
+	vec4 lightDiffuse = diffuse(unitToLight, unitNormal, FLightColor);
+	vec4 final_color = Rim + (Diffuse + lightDiffuse) * vec4(linear_color,1.0);
 
-	pass_lightDiffuse = vec4(lightDiffuse, 0.0) * vec4(linear_color, 0.0);
 	pass_color = vec4(final_color.xyz, Alpha);
 	
 	//Shadows Stuff

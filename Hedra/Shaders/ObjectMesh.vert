@@ -33,7 +33,6 @@ out vec4 Coords;
 out vec3 LightDir;
 out vec3 vertex_position;
 out vec3 base_normal;
-out vec3 point_diffuse;
 out vec3 base_vertex_position;
 
 layout(std140) uniform FogSettings {
@@ -90,9 +89,8 @@ void main()
 	vec3 FullLight = clamp(FLightColor + LightColor, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
 
 	Color = rim(linear_color.rgb, LightColor, unitToCamera, unitNormal) 
-	+ diffuse(unitToLight, unitNormal, LightColor) * linear_color;
+	+ (diffuse(unitToLight, unitNormal, LightColor) + diffuse(unitToLight, unitNormal, FLightColor)) * linear_color;
 	Ambient = 0.25;
-	point_diffuse = diffuse(unitToLight, unitNormal, FLightColor).rgb;
 
 	InPos = Vertex.xyz;
 	vertex_position = Vertex.xyz;

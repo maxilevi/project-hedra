@@ -117,7 +117,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             
             if (distFromCenter < .2f)
             {
-                if (rng < .5f && BlacksmithPlacer.SpecialRequirements(Point))
+                if (rng < .15f && BlacksmithPlacer.SpecialRequirements(Point))
                     AddBlacksmith(Point, Design, rotation);
                 else if (rng < .95f && HousePlacer.SpecialRequirements(Point))
                     AddHouse(Point, Design, rotation, distFromCenter);
@@ -126,7 +126,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             }
             else if (distFromCenter < NoPathZone)
             {
-                if (rng < .15f && BlacksmithPlacer.SpecialRequirements(Point))
+                if (rng < .1f && BlacksmithPlacer.SpecialRequirements(Point))
                     AddBlacksmith(Point, Design, rotation);
                 else if (rng < .90f && HousePlacer.SpecialRequirements(Point))
                     AddHouse(Point, Design, rotation, distFromCenter);

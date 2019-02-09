@@ -17,7 +17,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
 
         public override bool SpecialRequirements(PlacementPoint Point)
         {
-            if (_currentBlacksmiths >= _maxPlacements) return false;
+           // if (_currentBlacksmiths >= _maxPlacements) return false;
             return true;
         }
 

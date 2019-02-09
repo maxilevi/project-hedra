@@ -406,10 +406,12 @@
     <Compile Include="Engine\StructureSystem\VillageSystem\Loom.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Placers\GenericPlacer.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Placers\IPlacer.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\QuestBoard.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\ChimneyTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\GenericDesignTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\GenericTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\LightTemplate.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\StructureTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Workbench.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\BedTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\BuildingDesignTemplate.cs" />

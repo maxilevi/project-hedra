@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using Hedra.Engine.Core;
+using Hedra.Engine.WorldBuilding;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Templates
@@ -8,6 +11,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Templates
         public BedTemplate[] Beds { get; set; } = new BedTemplate[0];
         public LightTemplate[] Lights { get; set; } = new LightTemplate[0];
         public ChimneyTemplate[] Chimneys { get; set; } = new ChimneyTemplate[0];
+        public StructureTemplate[] Structures { get; set; } = new StructureTemplate[0];
         public Vector3 LampPosition { get; set; }
         public bool HasLamp { get; set; } = true;
     }

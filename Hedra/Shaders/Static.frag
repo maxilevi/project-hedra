@@ -4,10 +4,10 @@ precision mediump float;
 
 !include<"Includes/GammaCorrection.shader">
 !include<"Includes/Sky.shader">
+!include<"Includes/Lighting.shader">
 
+in float Config;
 in vec4 raw_color;
-in vec4 Color;
-in vec3 pointlight_color;
 in vec4 InPos;
 in vec4 InNorm;
 in float Visibility;
@@ -39,8 +39,12 @@ const mat4 ditherMat = mat4(
 uniform sampler2DShadow  ShadowTex;
 uniform bool Dither;
 uniform sampler3D noiseTexture;
+const float NoShadowsFlag = -1.0;
+const float NoHighlightFlag = -2.0;
+const float FlagEpsilon = 0.1;
 
 float CalculateShadows();
+vec3 CalculateColor(float ShadowVisibility, float Tex);
 
 void main()
 {
@@ -54,11 +58,11 @@ void main()
 	}
     float ShadowVisibility = use_shadows > 0.0 ? CalculateShadows() : 1.0;
     float tex = texture(noiseTexture, base_vertex_position).r;
-    vec3 completeColor = (Color.xyz * ShadowVisibility + pointlight_color * raw_color.xyz) * (tex + 1.0);
+    vec3 completeColor = CalculateColor(ShadowVisibility, tex);
 
 	vec3 final_color = linear_to_srbg(completeColor);
 	vec4 NewColor = 
-	    mix(sky_color(), vec4(final_color, Color.w), Visibility);
+	    mix(sky_color(), vec4(final_color, raw_color.w), Visibility);
 
 	if(Visibility < 0.005)
 	{
@@ -75,6 +79,28 @@ void main()
 	}
 }
 
+vec3 CalculateColor(float ShadowVisibility, float Tex) {
+		
+	//Lighting
+	vec3 unitToLight = normalize(LightPosition);
+	vec3 unitNormal = normalize(InNorm.xyz);
+	vec3 unitToCamera = normalize((inverse(_modelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - InPos.xyz);
+
+	vec3 FLightColor = calculate_lights(LightColor, InPos.xyz);
+	vec4 InputColor = vec4(raw_color.xyz, 1.0);
+    if(Config - NoHighlightFlag > FlagEpsilon)
+    {
+        InputColor = apply_highlights(InputColor, InPos.xyz);
+    }
+
+	Ambient += Config - NoShadowsFlag < FlagEpsilon ? 0.25 : 0.0;
+	vec4 Rim = rim(InputColor.rgb, LightColor, unitToCamera, unitNormal);
+	vec4 Diffuse = diffuse(unitToLight, unitNormal, LightColor);
+	vec4 realColor = Rim + Diffuse * InputColor;
+
+	vec3 point_light_color = diffuse(unitToLight, unitNormal, FLightColor).rgb;		
+	return (realColor.xyz + point_light_color * raw_color.xyz) * (Tex + 1.0) * ShadowVisibility;
+}
 
 float CalculateShadows()
 {

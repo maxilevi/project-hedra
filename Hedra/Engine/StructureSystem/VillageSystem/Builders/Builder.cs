@@ -99,6 +99,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             AddStructure(Parameters, Chimneys, Transformation, Output, (P, T) => new Chimney(P));
         }
         
+        protected void AddGenericStructure(T Parameters, StructureTemplate[] Templates, Matrix4 Transformation, BuildingOutput Output)
+        {
+            AddStructure(Parameters, Templates, Transformation, Output, (P, T) => StructureTemplate.FromType(T.Type, P));
+        }
+        
         protected void AddLights(T Parameters, LightTemplate[] Lights, Matrix4 Transformation, BuildingOutput Output)
         {
             AddStructure(Parameters, Lights, Transformation, Output, (P, T) => new WorldLight(P)
