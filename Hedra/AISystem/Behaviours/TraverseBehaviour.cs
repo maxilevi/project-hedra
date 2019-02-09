@@ -25,8 +25,8 @@ namespace Hedra.AISystem.Behaviours
         private float _lastTimeBetweenTargets;
         private float _currentTimeBetweenTargets;
         private bool _useRebuildTimer;
-        private float _speedBonus;
-        private float _lastBonus;
+        private float _speedBonus = 1;
+        private float _lastBonus = 1;
         private SpeedBonusComponent _lastComponent;
 
         public TraverseBehaviour(IEntity Parent, bool UseCollision = false) : base(Parent)
@@ -38,7 +38,8 @@ namespace Hedra.AISystem.Behaviours
                 Parent.Physics.UpdateColliderList = true;
             }
             _reached = true;
-            _currentGrid = new Grid(32, 32);
+            var size = 16 + (int)(Parent.Size.LengthFast / 4);
+            _currentGrid = new Grid(size, size);
             _rebuildPathTimer = new Timer(.2f)
             {
                 AutoReset = false
@@ -77,9 +78,10 @@ namespace Hedra.AISystem.Behaviours
         {
             if (Math.Abs(_lastBonus - _speedBonus) > 0.005f)
             {
-                _lastComponent?.Dispose();
                 if(_lastComponent != null) Parent.RemoveComponent(_lastComponent);
-                Parent.AddComponent(_lastComponent = new SpeedBonusComponent(Parent, -Parent.Speed + (_lastBonus = _speedBonus) * Parent.Speed));
+                _lastComponent = null;
+                if ((_lastBonus = _speedBonus) * Parent.Speed == Parent.Speed) return;
+                Parent.AddComponent(_lastComponent = new SpeedBonusComponent(Parent, -Parent.Speed + _speedBonus * Parent.Speed));
             }
         }
 
@@ -117,7 +119,7 @@ namespace Hedra.AISystem.Behaviours
             _currentIndex = 0;
             _rebuildPathTimer.Reset();
 
-            _speedBonus = _currentGrid.BlockedCellCount < _currentGrid.TotalCellCount * .25f 
+            _speedBonus = _currentGrid.BlockedCellCount < _currentGrid.TotalCellCount * .25f && HasTarget && (Target - Parent.Position).Xz.LengthSquared > 24*24
                 ? 1.15f
                 : 1f;
 
