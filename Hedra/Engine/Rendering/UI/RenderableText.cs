@@ -40,7 +40,8 @@ namespace Hedra.Engine.Rendering.UI
         public string Text
         {
             get => UIText.Text;
-            set{
+            set
+            {
                 UIText.Text = value;
                 DrawManager.UIRenderer.Remove(this.UIText.UIText);
             }
@@ -58,15 +59,24 @@ namespace Hedra.Engine.Rendering.UI
             set => UIText.Position = value;
         }
         
-        public Color Color{
+        public Color Color
+        {
             get => UIText.TextColor;
-            set => UIText.TextColor = value;
+            set
+            {
+                UIText.TextColor = value;
+                DrawManager.UIRenderer.Remove(UIText.UIText);
+            }
         }
 
         public Font TextFont
         {
             get => UIText.TextFont;
-            set => UIText.TextFont = value;
+            set
+            {
+                UIText.TextFont = value;
+                DrawManager.UIRenderer.Remove(UIText.UIText);
+            }
         }
 
         public void Enable()

@@ -35,11 +35,11 @@ namespace Hedra.Engine.Rendering.UI
         private Func<float> _value;
         public Vector4 BackgroundColor = new Vector4(0.1529f, 0.1529f, 0.1529f, 1);
         public bool CurvedBorders;
-        private DrawOrder Order;
+        private DrawOrder _order;
         public bool ShowBar = true;
-        private Vector2 TargetResolution = new Vector2(1024, 578);
+        private readonly Vector2 _targetResolution = new Vector2(1024, 578);
         public RenderableText Text;
-        private Vector4 UniformColor;
+        private readonly Vector4 _uniformColor;
         public Vector2 AdjustedPosition { get; set; }
 
         public bool UpdateTextRatio = true;
@@ -53,10 +53,17 @@ namespace Hedra.Engine.Rendering.UI
         public Bar(Vector2 Position, Vector2 Scale, Func<float> Value, Func<float> Max, Vector4 Color, Panel InPanel,
             DrawOrder Order = DrawOrder.Before, bool CurvedBorders = true)
         {
-            UniformColor = Color;
+            _uniformColor = Color;
             this.Initialize(Position, Scale, Value, Max, InPanel, null, Order, CurvedBorders);
         }
 
+        public Bar(Vector2 Position, Vector2 Scale, string Text, Func<float> Value, Func<float> Max, Vector4 Color, Panel InPanel,
+            DrawOrder Order = DrawOrder.Before)
+        {
+            _uniformColor = Color;
+            this.Initialize(Position, Scale, Value, Max, InPanel, Text, Order);
+        }
+        
         public Bar(Vector2 Position, Vector2 Scale, string Text, Func<float> Value, Func<float> Max, Panel InPanel,
             DrawOrder Order = DrawOrder.Before)
         {
@@ -86,8 +93,8 @@ namespace Hedra.Engine.Rendering.UI
             Renderer.BindTexture(TextureTarget.Texture2D, CurvedBorders ? _barBlueprint : _rectangleBlueprint);
 
             Shader["Scale"] =
-                Mathf.DivideVector(TargetResolution * Scale, new Vector2(GameSettings.Width, GameSettings.Height)) +
-                Mathf.DivideVector(TargetResolution * new Vector2(0.015f, 0.015f),
+                Mathf.DivideVector(_targetResolution * Scale, new Vector2(GameSettings.Width, GameSettings.Height)) +
+                Mathf.DivideVector(_targetResolution * new Vector2(0.015f, 0.015f),
                     new Vector2(GameSettings.Width, GameSettings.Height));
             Shader["Position"] = AdjustedPosition;
             Shader["Color"] = BackgroundColor;
@@ -96,12 +103,12 @@ namespace Hedra.Engine.Rendering.UI
             DrawManager.UIRenderer.DrawQuad();
 
             Shader["Scale"] = ShowBar
-                    ? Mathf.DivideVector(TargetResolution * Scale, new Vector2(GameSettings.Width, GameSettings.Height)) *
+                    ? Mathf.DivideVector(_targetResolution * Scale, new Vector2(GameSettings.Width, GameSettings.Height)) *
                       new Vector2(_barSize, 1)
                     : new Vector2(0, 0);
             Shader["Position"] = AdjustedPosition;
-            Shader["Color"] =  UniformColor != Vector4.Zero 
-                ? UniformColor : _barSize > 0.6f 
+            Shader["Color"] =  _uniformColor != Vector4.Zero 
+                ? _uniformColor : _barSize > 0.6f 
                 ? Colors.FullHealthGreen : _barSize < 2.5f 
                 ? Colors.LowHealthRed : throw new ArgumentOutOfRangeException("Health is out of range");
 
@@ -152,7 +159,7 @@ namespace Hedra.Engine.Rendering.UI
         {
             this.Position = Position;
             this.Scale = Scale;
-            this.Order = Order;
+            this._order = Order;
             this.CurvedBorders = CurvedBorders;
             _value = Value;
             _max = Max;
@@ -174,7 +181,7 @@ namespace Hedra.Engine.Rendering.UI
                     FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold));
                 UpdateTextRatio = false;
             }
-            DrawManager.UIRenderer.Add(this, this.Order);
+            DrawManager.UIRenderer.Add(this, this._order);
             _inPanel.AddElement(Text);
             
             if (_barBlueprint == 0)

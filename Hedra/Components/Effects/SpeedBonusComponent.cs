@@ -8,16 +8,18 @@ namespace Hedra.Components.Effects
     public class SpeedBonusComponent : EntityComponent
     {
         private readonly float _speedBonus;
+        private readonly bool _showParticles;
 
-        public SpeedBonusComponent(IEntity Parent, float Speed) : base(Parent)
+        public SpeedBonusComponent(IEntity Parent, float Speed, bool ShowParticles = true) : base(Parent)
         {
             _speedBonus = Speed;
+            _showParticles = ShowParticles;
              Parent.Speed += _speedBonus;
         }
 
         public override void Update()
         {
-            if(Parent is Humanoid human && human.IsRiding || !Parent.IsMoving) return;
+            if(Parent is Humanoid human && human.IsRiding || !Parent.IsMoving || !_showParticles) return;
             if (_speedBonus > 0)
             {
                 World.Particles.Color = Vector4.One;
@@ -51,7 +53,7 @@ namespace Hedra.Components.Effects
         {
             if(Disposed) return;
             
-            this.Parent.Speed -= _speedBonus;
+            Parent.Speed -= _speedBonus;
         }
     }
 }

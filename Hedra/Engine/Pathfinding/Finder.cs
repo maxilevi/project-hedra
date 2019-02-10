@@ -27,7 +27,7 @@ namespace Hedra.Engine.Pathfinding
                     var realPosition = ToWorldCoordinates(position, Graph.DimX, Graph.DimY);
                     if(Parent.Physics.Raycast(realPosition))
                         Graph.BlockCell(position);
-                    else if(Parent.Physics.EntityRaycast(entities, realPosition))
+                    else if(Parent.Physics.EntityRaycast(entities, realPosition, 2.5f))
                         Graph.BlockCell(position);
                 }
             }

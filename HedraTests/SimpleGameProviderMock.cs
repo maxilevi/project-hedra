@@ -3,6 +3,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.Input;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
+using OpenTK;
 
 namespace HedraTests
 {
@@ -59,6 +60,11 @@ namespace HedraTests
         }
 
         public void Reload()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool NearAnyPlayer(Vector3 Position, float Radius)
         {
             throw new NotImplementedException();
         }

@@ -2,6 +2,7 @@ using System;
 using Hedra.Engine.Input;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
+using OpenTK;
 
 namespace Hedra.Engine.Game
 {
@@ -24,5 +25,6 @@ namespace Hedra.Engine.Game
         void NewRun(PlayerInformation Information);
         void Unload();
         void Reload();
+        bool NearAnyPlayer(Vector3 Position, float Radius);
     }
 }

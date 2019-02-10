@@ -29,6 +29,7 @@ using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Sound;
 using Hedra.Engine.StructureSystem;
+using Hedra.Engine.WorldBuilding;
 
 namespace Hedra.Engine.Management
 {
@@ -397,7 +398,11 @@ namespace Hedra.Engine.Management
                         World.WorldBuilding.SpawnHumanoid(HumanType.TravellingMerchant, Caster.Position + Caster.Orientation * 32);
                         return true;
                     }
-
+                    if(Parts[1] == "explorers")
+                    {
+                        TravellingExplorers.Build(Caster.Position + Caster.Orientation * 32, Utils.Rng);
+                        return true;
+                    }
                     if (World.MobFactory.ContainsFactory(Parts[1]))
                     {
                         var amount = Parts.Length > 2 ? int.Parse(Parts[2]) : 1;

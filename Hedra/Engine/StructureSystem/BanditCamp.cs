@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine.EntitySystem;
@@ -82,7 +83,7 @@ namespace Hedra.Engine.StructureSystem
             var trade = _rescuee.SearchComponent<TradeComponent>();
             if(trade != null) _rescuee.RemoveComponent(trade);
             _rescuee.RemoveComponent(_rescuee.SearchComponent<HealthBarComponent>());
-            _rescuee.AddComponent(new HealthBarComponent(_rescuee, _rescuee.Name));
+            _rescuee.AddComponent(new HealthBarComponent(_rescuee, _rescuee.Name, HealthBarType.Friendly));
             _rescuee.SearchComponent<DamageComponent>().Immune = true;
             _rescuee.IsTied = true;
         }

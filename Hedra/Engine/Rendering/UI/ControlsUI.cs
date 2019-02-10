@@ -35,7 +35,10 @@ namespace Hedra.Engine.Rendering.UI
         
         public ControlsUI()
         {
-            _timer = new Timer(.5f);
+            _timer = new Timer(.5f)
+            {
+                UseTimeScale = false
+            };
             _controlMapKeys = Controls.ChangeableKeys.OrderBy(P => Translations.Get(P.Key)).Select(P => P.Key).ToArray();
             _labels = new GUIText[_controlMapKeys.Length];
             _keys = new GUIText[_controlMapKeys.Length];

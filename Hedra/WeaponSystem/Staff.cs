@@ -1,4 +1,5 @@
-﻿using Hedra.Engine;
+﻿using System.Linq;
+using Hedra.Engine;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
@@ -41,14 +42,14 @@ namespace Hedra.WeaponSystem
                 Owner.Position + Vector3.UnitY * 4f,
                 Direction,
                 Owner.DamageEquation * Options.DamageModifier,
-                ToIgnore
+                ToIgnore.Concat(Options.IgnoreEntities).ToArray()
             );
         }
 
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             if(Type != AttackEventType.End) return;
-            Firewave.Create(Owner, Owner.DamageEquation * 3 * Options.Charge, Options.Charge);
+            Firewave.Create(Owner, Owner.DamageEquation * 3 * Options.Charge, Options.Charge, Options.IgnoreEntities);
         }
         
         protected override void OnSheathed()

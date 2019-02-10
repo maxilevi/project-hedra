@@ -35,7 +35,10 @@ namespace Hedra.Engine.Rendering.UI
         
         public ChrCreatorUI(IPlayer Player) 
         {
-            _clickTimer = new Timer(.25f);
+            _clickTimer = new Timer(.25f)
+            {
+                UseTimeScale = false
+            };
             Font defaultFont = FontCache.Get(AssetManager.NormalFamily, 12);
             Color defaultColor = Color.White;//Color.FromArgb(255,39,39,39);
             

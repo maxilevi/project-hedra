@@ -8,10 +8,12 @@
  */
 
 using System;
+using System.Drawing;
 using Hedra.AISystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using OpenTK;
 
@@ -88,7 +90,7 @@ namespace Hedra.Engine.Player
 
                 Pet.Level = 1;
                 Pet.RemoveComponent(Pet.SearchComponent<HealthBarComponent>());
-                Pet.AddComponent(new HealthBarComponent(Pet, "Mount"));
+                Pet.AddComponent(new HealthBarComponent(Pet, Translations.Get(Pet.Name.ToLowerInvariant()), HealthBarType.Immune));
                 Pet.RemoveComponent(Pet.SearchComponent<BasicAIComponent>());
                 Pet.AddComponent(new MountAIComponent(Pet, _player));
                 Pet.Removable = false;

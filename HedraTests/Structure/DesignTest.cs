@@ -76,7 +76,7 @@ namespace HedraTests.Structure
             worldMock.Setup(W => W.SpawnMob(It.IsAny<string>(), It.IsAny<Vector3>(), It.IsAny<int>())).Returns(delegate
             {
                 var ent = new Entity();
-                ent.AddComponent(new HealthBarComponent(ent, "test"));
+                ent.AddComponent(new HealthBarComponent(ent, "test", HealthBarType.Hostile));
                 ent.AddComponent(new DamageComponent(ent));
                 ent.AddComponent(guardAiComponentMock.Object);
                 if(!_interceptedEntities.Contains(ent)) _interceptedEntities.Add(ent);

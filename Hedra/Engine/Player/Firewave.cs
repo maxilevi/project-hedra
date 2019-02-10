@@ -17,6 +17,7 @@ namespace Hedra.Engine.Player
     public class Firewave : ParticleProjectile
     {
         private const int DistanceSquared = 32 * 32;
+        private IEntity[] _ignore;
         private IHumanoid _owner;
         private float _damage;
         private bool _shouldStop;
@@ -26,7 +27,7 @@ namespace Hedra.Engine.Player
         {
         }
 
-        public void Explode()
+        private void Explode()
         {
             CreateExplosion();
         }
@@ -52,7 +53,7 @@ namespace Hedra.Engine.Player
             var entities = World.Entities;
             for (var i = 0; i < entities.Count; i++)
             {
-                if (entities[i] == _owner) continue;
+                if (entities[i] == _owner || Array.IndexOf(_ignore, entities[i]) != -1) continue;
                 if ((entities[i].Position - _owner.Position).LengthSquared < DistanceSquared)
                 {
                     World.Entities[i].Damage(_damage, _owner, out var exp);
@@ -60,15 +61,15 @@ namespace Hedra.Engine.Player
                 }
             }
         }
-        
-        public void PushEntitiesAway()
+
+        private void PushEntitiesAway()
         {
             var entities = World.Entities;
             for(var i = 0; i< entities.Count; i++)
             {
                 if((_owner.Position - entities[i].Position).LengthSquared < DistanceSquared * _charge)
                 {
-                    if(_owner == entities[i]) continue;
+                    if(_owner == entities[i] || Array.IndexOf(_ignore, entities[i]) != -1) continue;
                     
                     var direction = -(_owner.Position - entities[i].Position).NormalizedFast();
                     entities[i].Physics.DeltaTranslate(direction * 128 * _charge);
@@ -100,7 +101,7 @@ namespace Hedra.Engine.Player
         {
         }
 
-        public static void Create(IHumanoid Owner, float Damage, float Charge = 1)
+        public static void Create(IHumanoid Owner, float Damage, float Charge = 1, params IEntity[] Ignore)
         {
             var release = new Firewave(Owner, Owner.Position)
             {
@@ -112,7 +113,8 @@ namespace Hedra.Engine.Player
                 Speed = 0,
                 _owner = Owner,
                 _damage = Damage,
-                _charge = Charge
+                _charge = Charge,
+                _ignore = Ignore
             };
             release.Explode();
         }

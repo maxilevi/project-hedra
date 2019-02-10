@@ -53,7 +53,7 @@ namespace Hedra.EntitySystem
         
         bool IsDead { get; set; }
         
-        bool IsFriendly { get; }
+        bool IsFriendly { get; set; }
         
         bool IsGrounded { get; set; }
         
@@ -101,7 +101,7 @@ namespace Hedra.EntitySystem
 
         void Damage(float Amount, IEntity Damager, out float Exp, bool PlaySound = true, bool PushBack = true);
 
-        void AddBonusSpeedWhile(float BonusSpeed, Func<bool> Condition);
+        void AddBonusSpeedWhile(float BonusSpeed, Func<bool> Condition, bool ShowParticles = true);
 
         void AddBonusSpeedForSeconds(float BonusSpeed, float Seconds);
 

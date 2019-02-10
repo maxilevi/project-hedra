@@ -33,7 +33,8 @@ namespace Hedra.Engine.Rendering.UI
             Shader = Shader.Build("Shaders/Bar.vert", "Shaders/Bar.frag");
         }
 
-        public TexturedBar(uint TextureId, Vector2 Position, Vector2 Scale, Func<float> Value, Func<float> Max, Panel InPanel){
+        public TexturedBar(uint TextureId, Vector2 Position, Vector2 Scale, Func<float> Value, Func<float> Max)
+        {
             this.Scale = Scale;
             this._value = Value;
             this._max = Max;
@@ -63,7 +64,7 @@ namespace Hedra.Engine.Rendering.UI
             Shader["Color"] = -Vector4.One;
 
             DrawManager.UIRenderer.SetupQuad();
-            DrawManager.UIRenderer.DrawQuad();    
+            DrawManager.UIRenderer.DrawQuad();
             
             Renderer.Disable(EnableCap.Blend);
             Renderer.Enable(EnableCap.DepthTest);

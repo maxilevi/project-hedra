@@ -52,11 +52,11 @@ namespace HedraTests.Structure
             return SpawnHumanoid(Type, DesiredPosition, null);
         }
 
-        public Humanoid SpawnHumanoid(string Type, Vector3 DesiredPosition, HumanoidBehaviourTemplate Behaviour)
+        public Humanoid SpawnHumanoid(string Type, Vector3 DesiredPosition, HumanoidConfiguration Configuration)
         {
             var human = new Humanoid();
             human.Position = DesiredPosition;
-            human.AddComponent(new HealthBarComponent(human, string.Empty));
+            human.AddComponent(new HealthBarComponent(human, string.Empty, HealthBarType.Friendly));
             human.AddComponent(new DamageComponent(human));
             World.AddEntity(human);
             return human;

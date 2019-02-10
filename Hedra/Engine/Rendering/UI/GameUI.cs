@@ -67,15 +67,15 @@ namespace Hedra.Engine.Rendering.UI
 
             _healthBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/HealthBar.png"), Vector2.Zero, Graphics2D.SizeFromAssets("Assets/UI/HealthBar.png").As1920x1080()  * scale,
                 () => Player.Health,
-                () => Player.MaxHealth, this);
+                () => Player.MaxHealth);
 
             _manaBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/ManaBar.png"), Vector2.Zero, Graphics2D.SizeFromAssets("Assets/UI/ManaBar.png").As1920x1080()  * scale,
                 () => Player.Mana,
-                () => Player.MaxMana, this);
+                () => Player.MaxMana);
 
             _xpBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/XpBar.png"), Vector2.Zero, Graphics2D.SizeFromAssets("Assets/UI/XpBar.png").As1920x1080() * scale,
                 () => Player.XP,
-                () => Player.MaxXP, this);
+                () => Player.MaxXP);
 
             var oxygenAndStaminaBackgroundId = Graphics2D.LoadFromAssets("Assets/UI/StaminaAndOxygenBarBackground.png");
             var oxygenAndStaminaBackgroundSize = Graphics2D.SizeFromAssets("Assets/UI/StaminaAndOxygenBarBackground.png").As1920x1080() * scale;
@@ -87,7 +87,7 @@ namespace Hedra.Engine.Rendering.UI
             
             _oxygenBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/OxygenBar.png"), Vector2.Zero, Graphics2D.SizeFromAssets("Assets/UI/StaminaBar.png").As1920x1080() * scale,
                 () => Player.Oxygen,
-                () => Player.MaxOxygen, this);
+                () => Player.MaxOxygen);
 
             _staminaBackground = new RenderableTexture(
                 new Texture(oxygenAndStaminaBackgroundId, Vector2.Zero, oxygenAndStaminaBackgroundSize),
@@ -95,7 +95,7 @@ namespace Hedra.Engine.Rendering.UI
             );
             
             _staminaBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/StaminaBar.png"), Vector2.Zero, Graphics2D.SizeFromAssets("Assets/UI/StaminaBar.png").As1920x1080() * scale,
-                () => Player.Stamina, () => Player.MaxStamina, this);
+                () => Player.Stamina, () => Player.MaxStamina);
       
             _classLogo = new RenderableTexture(new Texture(0, new Vector2(-.85f, .75f), Vector2.One), DrawOrder.After);
             _oxygenIcon = new RenderableTexture(

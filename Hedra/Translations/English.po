@@ -102,6 +102,9 @@ villager_thought_2 = You seem like an adventurer. Why don't you try doing a ques
 villager_thought_3 = Am I the only one who hears the sound of glass breaking?
 villager_thought_4 = I haven't seen you before, are you an explorer?
 villager_thought_5 = I need to craft some stone arrows before I go hunting
+explorer_thought_0 = Hi
+explorer_thought_1 = Hi
+explorer_thought_2 = Hi
 saved_old_man = I am thankful to you for saving me. Take this item as a show of gratitude
 right_click_use = RIGHT-CLICK TO USE
 recipe_already_learned = YOU ALREADY LEARNED THAT RECIPE
@@ -200,4 +203,7 @@ crafting_key = Craft
 quest_log_key = Quest Log
 reset_to_default = RESET TO DEFAULT
 key_already_used = KEY '{0}' IS ALREADY BOUND TO AN ACTION
+# Mobs
+horse = Horse
+# -- Mobs
 

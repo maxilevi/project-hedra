@@ -3,6 +3,7 @@ using Hedra.Engine.Steamworks;
 using Hedra.Engine.Game;
 using Hedra.Engine.IO;
 using Hedra.Engine.Loader;
+using Hedra.Engine.Management;
 using Hedra.Engine.Native;
 using Hedra.Engine.Networking;
 using Hedra.Engine.Rendering;
@@ -68,7 +69,8 @@ namespace Hedra.Engine
             };
             if (OSManager.RunningPlatform == Platform.Windows)
             {
-                //GameWindow.Icon = AssetManager.LoadIcon("Assets/Icon.ico");
+                Log.WriteLine("Loading Icon...");
+                GameWindow.Icon = AssetManager.LoadIcon("Assets/Icon.ico");
             }
 
             GameSettings.SurfaceWidth = GameWindow.Width;

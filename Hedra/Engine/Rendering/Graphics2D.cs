@@ -121,6 +121,33 @@ namespace Hedra.Engine.Rendering
                 Path = $"UI:Color:{TextureColor}"
             }, TextureMinFilter.Linear, TextureMagFilter.Linear, TextureWrapMode.Repeat);
         }
+        
+        public static Bitmap ReplaceColor(Bitmap Bmp, Color Original, Color Replacement)
+        {
+            var data = Bmp.LockBits(new Rectangle(0,0,Bmp.Width,Bmp.Height), ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            unsafe
+            {
+                var dataPtr = (byte*)data.Scan0;
+                var stride = data.Stride;
+                if(dataPtr == null) throw new ArgumentNullException("dataPrt cannot be null");
+                for (var y = 0; y < Bmp.Height; y++)
+                {
+                    for (var x = 0; x < Bmp.Width; x++)
+                    {
+                        if(
+                            dataPtr[x * 4 + y * stride] != Original.B ||
+                            dataPtr[x * 4 + y * stride + 1] != Original.G ||
+                            dataPtr[x * 4 + y * stride + 2] != Original.R
+                        ) continue;
+                        dataPtr[x * 4 + y * stride] = Replacement.B;
+                        dataPtr[x * 4 + y * stride + 1] = Replacement.G;
+                        dataPtr[x * 4 + y * stride + 2] = Replacement.R; 
+                    }
+                }
+            }
+            Bmp.UnlockBits(data);
+            return Bmp;
+        }
 
         public static Bitmap CreateGradient(Color Color1, Color Color2, GradientType Type, Bitmap Bmp){
             BitmapData Data = Bmp.LockBits(new Rectangle(0,0,Bmp.Width,Bmp.Height), ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);

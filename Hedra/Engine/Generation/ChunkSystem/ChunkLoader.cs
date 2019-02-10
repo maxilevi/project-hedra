@@ -74,7 +74,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private IEnumerator UpdateChunkCoroutine()
         {
-            var updateTimer = new Timer(0.2f);
+            var updateTimer = new Timer(0.2f)
+            {
+                UseTimeScale = false
+            };
             while (GameManager.Exists)
             {
                 if(!updateTimer.Tick()) yield return null;
@@ -111,7 +114,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private IEnumerator CreateChunksCoroutine()
         {
-            var creationTimer = new Timer(0.1f);
+            var creationTimer = new Timer(0.1f)
+            {
+                UseTimeScale = false
+            };
             while (GameManager.Exists)
             {
                 Offset = World.ToChunkSpace(_player.BlockPosition);

@@ -71,7 +71,7 @@ namespace Hedra.AISystem.Behaviours
             _rebuildPathTimer.Tick();
             Walk.Update();
             UpdateStrategy();
-            UpdateSpeedBonus();
+            //UpdateSpeedBonus();
         }
 
         private void UpdateSpeedBonus()
@@ -80,7 +80,7 @@ namespace Hedra.AISystem.Behaviours
             {
                 if(_lastComponent != null) Parent.RemoveComponent(_lastComponent);
                 _lastComponent = null;
-                if ((_lastBonus = _speedBonus) * Parent.Speed == Parent.Speed) return;
+                if (Math.Abs((_lastBonus = _speedBonus) * Parent.Speed - Parent.Speed) < 0.005f) return;
                 Parent.AddComponent(_lastComponent = new SpeedBonusComponent(Parent, -Parent.Speed + _speedBonus * Parent.Speed));
             }
         }

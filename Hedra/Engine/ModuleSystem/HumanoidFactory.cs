@@ -16,23 +16,23 @@ namespace Hedra.Engine.ModuleSystem
 {
     public static class HumanoidFactory
     {
-        private static Dictionary<string, HumanoidBehaviourTemplate> _behaviours;
+        private static Dictionary<string, HumanoidConfiguration> _behaviours;
 
         static HumanoidFactory()
         {
-            _behaviours = new Dictionary<string, HumanoidBehaviourTemplate>
+            _behaviours = new Dictionary<string, HumanoidConfiguration>
             {
-                {"Hostile", new HumanoidBehaviourTemplate(HumanoidBehaviourTemplate.Hostile)},
-                {"Neutral", new HumanoidBehaviourTemplate(HumanoidBehaviourTemplate.Neutral)},
-                {"Friendly", new HumanoidBehaviourTemplate(HumanoidBehaviourTemplate.Friendly)}
+                {"Hostile", new HumanoidConfiguration(HealthBarType.Hostile)},
+                {"Neutral", new HumanoidConfiguration(HealthBarType.Neutral)},
+                {"Friendly", new HumanoidConfiguration(HealthBarType.Friendly)}
             };
         }
 
 
-        public static Humanoid BuildHumanoid(string HumanoidType, int Level, HumanoidBehaviourTemplate Behaviour)
+        public static Humanoid BuildHumanoid(string HumanoidType, int Level, HumanoidConfiguration Configuration)
         {
             var template = HumanoidLoader.HumanoidTemplater[HumanoidType];
-            var behaviour = Behaviour ?? _behaviours[template.Behaviour];
+            var behaviour = Configuration ?? _behaviours[template.Behaviour];
 
             var difficulty = GetDifficulty(Utils.Rng);
             var difficultyModifier = GetDifficultyModifier(difficulty);
@@ -78,10 +78,7 @@ namespace Hedra.Engine.ModuleSystem
                 human.AddComponent(drop);
             }
 
-            human.AddComponent(new HealthBarComponent(human, behaviour.Name ?? template.DisplayName ?? template.Name)
-            {
-                FontColor = behaviour.Color.ToColor()
-            });
+            human.AddComponent(new HealthBarComponent(human, template.DisplayName ?? template.Name, behaviour.Type));
             human.SearchComponent<DamageComponent>().Immune = template.Immune;
             human.SearchComponent<DamageComponent>().XpToGive = 6f;
             human.Removable = false;

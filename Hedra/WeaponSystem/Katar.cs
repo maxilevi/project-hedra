@@ -35,7 +35,7 @@ namespace Hedra.WeaponSystem
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             if(Type != AttackEventType.Mid) return;
-            Owner.AttackSurroundings(Owner.DamageEquation * 1.75f, delegate(IEntity Mob)
+            Owner.AttackSurroundings(Owner.DamageEquation * 1.75f, Options.IgnoreEntities, delegate(IEntity Mob)
             {
 
                 if (Utils.Rng.Next(0, 2) == 1 && Options.Charge > .5f)

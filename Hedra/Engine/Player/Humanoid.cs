@@ -217,13 +217,23 @@ namespace Hedra.Engine.Player
 
         #endregion
 
+        public void AttackSurroundings(float Damage, IEntity[] Ignore)
+        {
+            this.AttackSurroundings(Damage, Ignore, null);
+        }
+        
+        public void AttackSurroundings(float Damage, Action<IEntity> Callback)
+        {
+            this.AttackSurroundings(Damage, null, null);
+        }
+        
         public void AttackSurroundings(float Damage)
         {
-            this.AttackSurroundings(Damage, null);
+            this.AttackSurroundings(Damage, null, null);
         }
 
 
-        public void AttackSurroundings(float Damage, Action<IEntity> Callback)
+        public void AttackSurroundings(float Damage, IEntity[] IgnoreList, Action<IEntity> Callback)
         {
             var meleeWeapon = LeftWeapon as MeleeWeapon;
             var rangeModifier =  meleeWeapon?.MainWeaponSize.Y / 2.5f + 1f ?? 1.0f;
@@ -234,6 +244,7 @@ namespace Hedra.Engine.Player
 
             foreach (var target in possibleTargets)
             {
+                if (IgnoreList != null && Array.IndexOf(IgnoreList, target) != -1) continue;
                 var norm = (target.Position - this.Position).Xz.NormalizedFast().ToVector3();
                 var dot = Vector3.Dot(norm, this.Orientation);
                 if(dot > 0.60f / wideModifier && this.InAttackRange(target, rangeModifier))

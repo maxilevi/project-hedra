@@ -25,69 +25,54 @@ namespace Hedra.AISystem.Humanoid
         private const int DefaultAttackRadius = 96;
         private float _secondAttackCooldown;
         private float _firstAttackCooldown;
-        private Bow _leftWeapon;
-        public override float SearchRadius { get; set; } = 128;
-        public override float AttackRadius { get; set; } = DefaultAttackRadius;
-        public override float ForgetRadius { get; set; } = 192;
+        private float _attackRadius = DefaultAttackRadius;
+        private readonly Bow _leftWeapon;
+        protected override float SearchRadius => 128;
+        protected override float AttackRadius => _attackRadius;
+        protected override float ForgetRadius => 192;
 
-        public ArcherAIComponent(IHumanoid Parent, bool Friendly) : base(Parent, Friendly)
+        public ArcherAIComponent(IHumanoid Parent, bool IsFriendly) : base(Parent, IsFriendly)
         {
             _leftWeapon = (Bow) Parent.LeftWeapon;
             _leftWeapon.Miss += OnMiss;
             _leftWeapon.Hit += OnHit;
         }
-        
-        public override void DoUpdate()
-        {        
-            _secondAttackCooldown -= Time.IndependantDeltaTime;
-            _firstAttackCooldown -= Time.IndependantDeltaTime;
 
-            if( this.MovementTimer.Tick() && !Chasing)
-                base.MoveTo(TargetPoint = new Vector3(Utils.Rng.NextFloat() * 24-12f, 0, Utils.Rng.NextFloat() * 24-12f) + Parent.BlockPosition);
-            
-            else if(Chasing)
+        protected override void DoUpdate()
+        {        
+            _secondAttackCooldown -= Time.DeltaTime;
+            _firstAttackCooldown -= Time.DeltaTime;
+        }
+
+        protected override void OnAttack()
+        {    
+            if (_secondAttackCooldown <= 0)
             {
-                
-                if((TargetPoint.Xz - Parent.Position.Xz).LengthSquared > ForgetRadius * ForgetRadius || ChasingTarget.IsDead || ChasingTarget.IsInvisible)
+                _secondAttackCooldown = 4.5f;
+                _leftWeapon.Attack2(Parent, new AttackOptions
                 {
-                    base.Reset();
-                    return;
-                }
-                
-                TargetPoint = ChasingTarget.Position;
-                if( (TargetPoint - Parent.Position).LengthSquared < AttackRadius * AttackRadius && !Parent.IsKnocked)
-                {
-                    if (_secondAttackCooldown <= 0)
-                    {
-                        base.Orientate(TargetPoint);
-                        _secondAttackCooldown = 4.5f;
-                        _leftWeapon.Attack2(Parent);
-                    }
-                    else if (_firstAttackCooldown <= 0)
-                    {
-                        base.Orientate(TargetPoint);
-                        _firstAttackCooldown = 1.5f;
-                        _leftWeapon.Attack1(Parent);
-                    }
-                    base.CancelMovement();
-                }
-                else
-                {
-                    base.MoveTo(TargetPoint);
-                }
+                    IgnoreEntities = IgnoreEntities
+                });
             }
-            base.LookTarget();
+            else if (_firstAttackCooldown <= 0)
+            {
+                _firstAttackCooldown = 1.5f;
+                _leftWeapon.Attack1(Parent, new AttackOptions
+                {
+                    IgnoreEntities = IgnoreEntities
+                });
+            }
         }
 
         private void OnMiss(Projectile Arrow)
         {
-            AttackRadius -= Chunk.BlockSize * 2;
-            AttackRadius = System.Math.Max(AttackRadius, Chunk.BlockSize * 2);
+            _attackRadius -= Chunk.BlockSize * 2;
+            _attackRadius = System.Math.Max(AttackRadius, Chunk.BlockSize * 2);
         }
         
         private void OnHit(Projectile Arrow)
         {
-            AttackRadius = DefaultAttackRadius;
+            _attackRadius = DefaultAttackRadius;
         }
 
         protected override bool UseCollision => true;

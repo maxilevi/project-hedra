@@ -4,6 +4,7 @@ using System.Drawing;
 using Hedra.AISystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 
 namespace Hedra.Engine.ModuleSystem
@@ -65,9 +66,13 @@ namespace Hedra.Engine.ModuleSystem
             var mobDifficulty = GetMobDifficulty(new Random(Seed));
             var mobDifficultyModifier = GetMobDifficultyModifier(mobDifficulty);
 
-            var barComponent = new HealthBarComponent(mob, mob.Type.AddSpacesToSentence(true));
+            var barComponent = new HealthBarComponent(
+                mob,
+                Translations.Has(mob.Type) ? Translations.Get(mob.Type) : mob.Type.AddSpacesToSentence(true),
+                HealthBarType.Hostile,
+                mobDifficulty == 1 ? Color.White : mobDifficulty == 3 ? Color.Red : Color.Gold
+            );
             mob.AddComponent(barComponent);
-            barComponent.FontColor = mobDifficulty == 1 ? Color.White : mobDifficulty == 3 ? Color.Red : Color.Gold;
             
             mob.MaxHealth = mob.MaxHealth * mobDifficultyModifier;
             dmg.XpToGive = dmg.XpToGive * mobDifficultyModifier; 

@@ -43,7 +43,10 @@ namespace Hedra.Engine.Rendering
             this.LocalRotation = Vector3.Zero;
             Mesh.Enabled = true;
             Enabled = true;
-            _underChunkTimer = new Timer(4 + Utils.Rng.NextFloat() * 2);
+            _underChunkTimer = new Timer(4 + Utils.Rng.NextFloat() * 2)
+            {
+                UseTimeScale = false
+            };
             DrawManager.Add(this);
             UpdateManager.Add(this);
         }

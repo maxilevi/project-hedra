@@ -29,7 +29,10 @@ namespace Hedra.Engine.EntitySystem
         protected UpdatableModel(IEntity Parent)
         {
             this._iterableModels = new List<IModel>();
-            this._movingTimer = new Timer(.05f);
+            this._movingTimer = new Timer(.05f)
+            {
+                UseTimeScale = false
+            };
             this.AdditionalModels = new HashSet<IModel>();
             this.Parent = Parent;
             if(Parent?.Physics != null)

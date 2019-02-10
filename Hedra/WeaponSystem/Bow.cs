@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections;
+using System.Linq;
 using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
@@ -173,7 +174,7 @@ namespace Hedra.WeaponSystem
             {
                 Lifetime = 5f,
                 Propulsion = Direction * 2f - Vector3.UnitY * ArrowDownForce,
-                IgnoreEntities = ToIgnore
+                IgnoreEntities = ToIgnore.Concat(Options.IgnoreEntities).ToArray()
             };
             arrowProj.HitEventHandler += delegate(Projectile Sender, IEntity Hit)
             {

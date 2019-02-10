@@ -131,10 +131,13 @@
     <Compile Include="AISystem\HostileAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\ArcherAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\BaseHumanoidAIComponent.cs" />
+    <Compile Include="AISystem\Humanoid\BanditAIBehaviour.cs" />
     <Compile Include="AISystem\Humanoid\CombatAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\EscapeAIComponent.cs" />
+    <Compile Include="AISystem\Humanoid\ExplorerAIBehaviour.cs" />
     <Compile Include="AISystem\Humanoid\FarmerAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\FollowAIComponent.cs" />
+    <Compile Include="AISystem\Humanoid\CombatAIBehaviour.cs" />
     <Compile Include="AISystem\Humanoid\MageAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\BaseVillagerAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\RawMovementHumanoidAIComponent.cs" />
@@ -192,6 +195,7 @@
     <Compile Include="Components\Effects\SpeedBonusComponent.cs" />
     <Compile Include="Components\Effects\SpeedComponent.cs" />
     <Compile Include="Components\Effects\ToxicComponent.cs" />
+    <Compile Include="Components\ExplorerThoughtsComponent.cs" />
     <Compile Include="Components\FarmerThoughtsComponent.cs" />
     <Compile Include="Components\HeadIconComponent.cs" />
     <Compile Include="Components\MercenaryComponent.cs" />
@@ -227,6 +231,7 @@
     <Compile Include="Engine\CraftingSystem\CraftingInventory.cs" />
     <Compile Include="Engine\CraftingSystem\CraftingStation.cs" />
     <Compile Include="Engine\CraftingSystem\Templates\IngredientsTemplate.cs" />
+    <Compile Include="Engine\EntitySystem\DisposeComponent.cs" />
     <Compile Include="Engine\Game\Season.cs" />
     <Compile Include="Engine\Generation\FastComparer.cs" />
     <Compile Include="Engine\ItemSystem\FoodSystem\FoodHandler.cs" />
@@ -244,7 +249,7 @@
     <Compile Include="Engine\ModuleSystem\Templates\CustomFactory.cs" />
     <Compile Include="Engine\ModuleSystem\Templates\DropTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\Templates\EffectTemplate.cs" />
-    <Compile Include="Engine\ModuleSystem\Templates\HumanoidBehaviourTemplate.cs" />
+    <Compile Include="Engine\ModuleSystem\Templates\HumanoidConfiguration.cs" />
     <Compile Include="Engine\ModuleSystem\Templates\HumanoidComponentsItemTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\Templates\HumanoidModelTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\Templates\HumanoidTemplate.cs" />
@@ -431,6 +436,7 @@
     <Compile Include="Engine\WorldBuilding\IBoundingBox.cs" />
     <Compile Include="Engine\WorldBuilding\SquaredGroundwork.cs" />
     <Compile Include="Engine\WorldBuilding\SquaredPlateau.cs" />
+    <Compile Include="Engine\WorldBuilding\TravellingExplorers.cs" />
     <Compile Include="EntitySystem\EntityExtensions.cs" />
     <Compile Include="HedraContent.cs" />
     <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeColors.cs" />
@@ -7301,9 +7307,6 @@
     <None Include="Assets\Knife.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\new-logo.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\UI\Skills\Agility.png">
       <Link>Assets\Skills\Agility.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -7439,13 +7442,7 @@
     <None Include="Assets\Sans.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\UI\alpha.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Assets\UI\Compass.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\UI\DonateBTC.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Assets\UI\Help.png">
@@ -8115,6 +8112,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\UI\ArcherLogo.png">
       <Link>Assets\UI\ArcherLogo.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\EntityHealthBar.png">
+      <Link>Assets\UI\EntityHealthBar.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\HealthBar.png">

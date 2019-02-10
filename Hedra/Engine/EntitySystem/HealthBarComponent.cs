@@ -5,6 +5,7 @@ using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
+using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Scenes;
@@ -19,9 +20,18 @@ namespace Hedra.Engine.EntitySystem
     /// </summary>
     public class HealthBarComponent : EntityComponent, IRenderable, IDisposable
     {
-        private static readonly Panel HealthBarPanel = new Panel();
-        private readonly Bar _healthBar;
-        private readonly Vector2 _originalScale = new Vector2(0.075f, 0.025f) * .8f;
+        private static readonly Color Friendly = Color.YellowGreen;
+        private static readonly Color Hostile = Color.Red;
+        private static readonly Color Immune = Color.CornflowerBlue;
+        private static readonly Color Neutral = Color.White;
+
+        private static uint _friendlyTexture;
+        private static uint _hostileTexture;
+        private static uint _immuneTexture;
+        
+        private readonly TexturedBar _healthBar;
+        private readonly RenderableText _text;
+        private readonly Vector2 _originalScale = new Vector2(0.06f, 0.025f) * .65f;
         private Vector2 _originalTextScale;
         private float _barSize;
         private string _name;
@@ -29,33 +39,62 @@ namespace Hedra.Engine.EntitySystem
         private float _targetBarSize = 1;
         private float _textEnabled;
         private bool _textUpdated;
-        public Color FontColor = Color.White;
 
-        public bool Hide { get; set; }
-
-        public string Name
+        static HealthBarComponent()
         {
-            get => _name;
-            set
+            Executer.ExecuteOnMainThread(() =>
             {
-                _name = value;
-                if (_healthBar?.Text != null)
-                {
-                    (_healthBar?.Text).Text = _name;
-                    _originalTextScale = (_healthBar?.Text).Scale;
-                }
-            }
+                var blueprint = Graphics2D.LoadBitmapFromAssets("Assets/UI/EntityHealthBar.png");
+                _friendlyTexture = Graphics2D.LoadTexture(new BitmapObject
+                    {
+                        Bitmap = Graphics2D.ReplaceColor(
+                            Graphics2D.ReplaceColor((Bitmap) blueprint.Clone(), Color.FromArgb(255, 0, 0, 0), Friendly),
+                            Color.FromArgb(255, 255, 255, 255), new Vector4(Friendly.ToVector4().Xyz * .75f, 1).ToColor()
+                        ),
+                        Path = $"UI:Color:HealthBarComponent:Friendly"
+                    }
+                );
+                _hostileTexture = Graphics2D.LoadTexture(new BitmapObject
+                    {
+                        Bitmap = Graphics2D.ReplaceColor(
+                            Graphics2D.ReplaceColor((Bitmap) blueprint.Clone(), Color.FromArgb(255, 0, 0, 0), Hostile),
+                            Color.FromArgb(255, 255, 255, 255), new Vector4(Hostile.ToVector4().Xyz * .75f, 1).ToColor()
+                        ),
+                        Path = $"UI:Color:HealthBarComponent:Hostile"
+                    }
+                );
+                _immuneTexture = Graphics2D.LoadTexture(new BitmapObject
+                    {
+                        Bitmap = Graphics2D.ReplaceColor(
+                            Graphics2D.ReplaceColor((Bitmap) blueprint.Clone(), Color.FromArgb(255, 0, 0, 0), Immune),
+                            Color.FromArgb(255, 255, 255, 255), new Vector4(Immune.ToVector4().Xyz * .75f, 1).ToColor()
+                        ),
+                        Path = $"UI:Color:HealthBarComponent:Immune"
+                    }
+                );
+            });
         }
-
-        public HealthBarComponent(IEntity Parent, string Name) : base(Parent)
+        
+        public HealthBarComponent(IEntity Parent, string Name, HealthBarType Type) : this(Parent, Name, Type, Neutral)
+        {    
+        }
+        
+        public HealthBarComponent(IEntity Parent, string Name, HealthBarType Type, Color FontColor) : base(Parent)
         {
-            _healthBar = new Bar(Vector2.Zero, Mathf.ScaleGui(new Vector2(1024, 578), _originalScale), string.Empty,
-                () => Parent.Health, () => Parent.MaxHealth,
-                HealthBarPanel);
-
-            _healthBar.UpdateTextRatio = false;
+            var color = ColorFromType(Type);
+            _healthBar = new TexturedBar(
+                0,
+                Vector2.Zero,
+                Mathf.ScaleGui(new Vector2(1024, 578), _originalScale),
+                () => Parent.Health,
+                () => Parent.MaxHealth
+            );
+            Executer.ExecuteOnMainThread(
+                () => _healthBar.TextureId = TextureFromType(Type)
+            );
+            _text = new RenderableText(string.Empty, Vector2.Zero, FontColor, FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold));
             this.Name = Name;
-
+            DrawManager.UIRenderer.Remove(_text);
             DrawManager.UIRenderer.Remove(_healthBar);
             DrawManager.UIRenderer.Add(this, DrawOrder.After);
         }
@@ -70,20 +109,22 @@ namespace Hedra.Engine.EntitySystem
 
             _targetBarSize = _show ? 1 : 0;
 
-            _barSize = Mathf.Lerp(_barSize, _targetBarSize, (float)Time.DeltaTime * 16f);
-            _healthBar.Text.UIText.UIText.Scale = _originalTextScale * _barSize * _textEnabled;
+            _barSize = Mathf.Lerp(_barSize, _targetBarSize, Time.DeltaTime * 16f);
+            _text.Scale = _originalTextScale * _barSize * _textEnabled;
 
             var product = 
                 Vector3.Dot(GameManager.Player.View.CrossDirection, (Parent.Position - GameManager.Player.Position).NormalizedFast());
             if (_barSize <= 0.5f || product <= 0.0f)
             {
                 _healthBar.Disable();
+                _text.Disable();
                 _targetBarSize = 0;
                 _textEnabled = 0; 
             }
             else
             {
                 _healthBar.Enable();
+                _text.Enable();
                 _targetBarSize = 1;
                 _textEnabled = 1;
             }
@@ -101,19 +142,56 @@ namespace Hedra.Engine.EntitySystem
 
             var eyeSpace = Vector4.Transform(new Vector4(Parent.Position + Parent.Model.Height * 1.5f * Vector3.UnitY, 1),
                     Culling.ModelViewMatrix);
-            var homogeneusSpace = Vector4.Transform(eyeSpace, Culling.ProjectionMatrix);
-            var ndc = homogeneusSpace.Xyz / homogeneusSpace.W;
-            _healthBar.Position = Mathf.Clamp(ndc.Xy, -.98f, .98f) + _originalScale * _barSize * Vector2.UnitY;
+            var homogeneousSpace = Vector4.Transform(eyeSpace, Culling.ProjectionMatrix);
+            var ndc = homogeneousSpace.Xyz / homogeneousSpace.W;
+            _healthBar.Position = Mathf.Clamp(ndc.Xy, -.98f, .98f) + (1 - _barSize) * _originalScale.X * Vector2.UnitX;
             _healthBar.Scale = _originalScale * _barSize * Math.Min(1, Parent.Model.Height / 7f);
-
-            if (!_textUpdated)
-            {
-                _healthBar.Text.UIText.TextColor = FontColor;
-                _textUpdated = true;
-            }
-            _healthBar.CurvedBorders = true;
-            _healthBar.Text.Position = _healthBar.Position + Vector2.UnitY * _originalScale * 4;
+            _text.Position = _healthBar.Position + Vector2.UnitY * _originalScale * 3f - (1 - _barSize) * _originalScale.X * Vector2.UnitX;
             _healthBar.Draw();
+            _text.Draw();
         }
+
+        private static Color ColorFromType(HealthBarType Type)
+        {
+            return Type == HealthBarType.Friendly
+                ? Friendly
+                : Type == HealthBarType.Hostile
+                    ? Hostile
+                    : Type == HealthBarType.Immune
+                        ? Immune
+                        : Neutral;
+        }
+        
+        private static uint TextureFromType(HealthBarType Type)
+        {
+            return Type == HealthBarType.Friendly
+                ? _friendlyTexture
+                : Type == HealthBarType.Hostile
+                    ? _hostileTexture
+                    : Type == HealthBarType.Immune
+                        ? _immuneTexture
+                        : throw new ArgumentOutOfRangeException($"Texture for type '{Type}' doesn't exists.");
+        }
+        
+        public bool Hide { get; set; }
+        
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                _text.Text = _name;
+                _originalTextScale = _text.Scale;
+            }
+        }
+    }
+    
+    public enum HealthBarType
+    {
+        Hostile,
+        Immune,
+        Friendly,
+        Neutral
     }
 }

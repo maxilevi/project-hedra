@@ -12,6 +12,7 @@ namespace Hedra.Engine.Localization
             var lines = Contents.Split(Environment.NewLine.ToCharArray()).Where(S => !string.IsNullOrEmpty(S)).ToArray();
             for (var i = 0; i < lines.Length; i++)
             {
+                if(lines[i].Trim().StartsWith("#")) continue;
                 var parts = lines[i].Split('=');
                 var key = parts[0].Trim();
                 var val = parts[1].Trim();

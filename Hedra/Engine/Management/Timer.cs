@@ -19,6 +19,7 @@ namespace Hedra.Engine.Management
         private float _timerCount;
         public bool AutoReset { get; set; } = true;
         public float AlertTime { get; set; }
+        public bool UseTimeScale { get; set; } = true;
         
         public Timer(float AlertTime)
         {
@@ -33,7 +34,7 @@ namespace Hedra.Engine.Management
         
         public bool Tick()
         {
-            _timerCount += Time.IndependantDeltaTime;
+            _timerCount += UseTimeScale ? Time.DeltaTime : Time.IndependantDeltaTime;
 
             if (!Ready) return false;
             if (AutoReset)_timerCount = 0;

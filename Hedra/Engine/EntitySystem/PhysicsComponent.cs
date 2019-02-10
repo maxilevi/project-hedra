@@ -395,29 +395,29 @@ namespace Hedra.Engine.EntitySystem
             });
         }
 
-        public bool EntityRaycast(IEntity[] Entities, Vector3 Addition)
+        public bool EntityRaycast(IEntity[] Entities, Vector3 Addition, float Modifier = 1)
         {
             var success = false;
-            EntityRaycast(Entities, Addition, E => { return success = true; });
+            EntityRaycast(Entities, Addition, E => { return success = true; }, Modifier);
             return success;
         }
 
-        private void EntityRaycast(IEntity[] Entities, Vector3 Addition, Func<IEntity, bool> OnCollision)
+        private void EntityRaycast(IEntity[] Entities, Vector3 Addition, Func<IEntity, bool> OnCollision, float Modifier = 1)
         {
-            var chunkSpace = World.ToChunkSpace(Parent.Position);
+            var chunkSpace = World.ToChunkSpace(Parent.Position + Addition);
             for (var i = Entities.Length - 1; i > -1; i--)
             {
                 if (Entities[i] == Parent)
                     continue;
-                /* Is a entity is farther than 2 chunks away, just skip it.*/
+                /* Is a entity is farther than 2 chunks away, just skip it. */
                 if ((World.ToChunkSpace(Entities[i].Position) - chunkSpace).LengthSquared > Chunk.Width * Chunk.Width)
                     continue;
 
                 if (!Entities[i].Physics.UsePhysics) continue;
                 if (!Entities[i].Physics.CollidesWithEntities) continue;
-                var radii = Parent.Model.Dimensions.Size.LengthFast + Entities[i].Model.Dimensions.Size.LengthFast;
-                if (!((Entities[i].Position - Parent.Position).LengthSquared < radii * radii)) continue;
-                if (!Physics.Collides(Entities[i].Model.BroadphaseBox, this.Parent.Model.BroadphaseBox) ||
+                var radii = (Parent.Model.Dimensions.Size.LengthFast + Entities[i].Model.Dimensions.Size.LengthFast) * Modifier;
+                if (!((Entities[i].Position - Parent.Position + Addition).LengthSquared < radii * radii)) continue;
+                if (!Physics.Collides(Entities[i].Model.BroadphaseBox, Parent.Model.BroadphaseBox) ||
                     !Physics.Collides(Entities[i].Model.BroadphaseCollider, Parent.Model.BroadphaseCollider))
                     continue;
 

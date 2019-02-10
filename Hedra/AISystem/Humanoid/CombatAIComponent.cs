@@ -1,3 +1,4 @@
+using System.Linq;
 using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
@@ -12,26 +13,35 @@ namespace Hedra.AISystem.Humanoid
 {
     public abstract class CombatAIComponent : TraverseHumanoidAIComponent
     {
-        public bool Friendly { get; set; }
-        protected Vector3 TargetPoint;
-        protected bool Chasing;
-        protected IEntity ChasingTarget;
-        protected Vector3 OriginalPosition;
-        protected Timer MovementTimer;
-        protected Timer RollTimer;
-        public bool CanDodge { get; set; } = true;
-        public abstract float SearchRadius { get; set; }
-        public abstract float AttackRadius { get; set; }
-        public abstract float ForgetRadius { get; set; }
-        protected override bool ShouldSleep => !Chasing;
+        public const float StareRadius = 16;
+        private Vector3 _targetPoint;
+        private bool _hasTargetPoint;
+        private bool _staring;
+        private IEntity _chasingTarget;
+        private CombatAIBehaviour _behaviour;
+        private readonly Vector3 _originalPosition;
+        private readonly Timer _movementTimer;
+        private readonly Timer _rollTimer;
+        private readonly Timer _forgetTimer;
+        protected abstract float SearchRadius { get; }
+        protected abstract float AttackRadius { get; }
+        protected abstract float ForgetRadius { get; }
+        public IEntity[] IgnoreEntities { get; set; } = new IEntity[0];
+        public bool IsFriendly { get; }
+        protected override bool ShouldSleep => !IsChasing;
+        private bool IsChasing => _chasingTarget != null;
+        public bool IsExploring => !IsChasing && _hasTargetPoint;
 
-        protected CombatAIComponent(IHumanoid Entity, bool Friendly) : base(Entity)
+        protected CombatAIComponent(IHumanoid Entity, bool IsFriendly) : base(Entity)
         {
-            this.Friendly = Friendly;
-            this.TargetPoint = new Vector3(Utils.Rng.NextFloat() * 24 - 12f, 0, Utils.Rng.NextFloat() * 24 - 12f) + Parent.BlockPosition;
-            this.MovementTimer = new Timer(Utils.Rng.NextFloat() * 4 + 6.0f);
-            this.RollTimer = new Timer(Utils.Rng.NextFloat() * 3 + 4.0f);
-            this.OriginalPosition = Parent.BlockPosition;
+            this.IsFriendly = IsFriendly;
+            _movementTimer = new Timer(1);
+            _rollTimer = new Timer(Utils.Rng.NextFloat() * 3 + 4.0f);
+            _forgetTimer = new Timer(Utils.Rng.NextFloat() * 6 + 8.0f);
+            Behaviour = new BanditAIBehaviour(Entity);
+            _targetPoint = Behaviour.FindPoint();
+            _originalPosition = Parent.BlockPosition;
+            _movementTimer.MakeReady();
         }
 
         protected override bool ShouldWakeup
@@ -59,72 +69,157 @@ namespace Hedra.AISystem.Humanoid
         {
             base.OnDamageEvent(Args);
             if (!(Args.Damager is LocalPlayer)) return;
-            this.SetTarget(Args.Damager);
+            SetTarget(Args.Damager);
         }
 
         public override void Update()
         {
             base.Update();
-            if (!base.CanUpdate) return;
-            this.DoUpdate();
+            if (!CanUpdate) return;
+            if (ShouldReset()) return;
+            DoUpdate();
+            if (IsChasing) OnChasing();
+            else if(!_staring) OnExploring();
+            if (IsExploring) HandleStaring();
+            else _staring = false;
+            FindTarget();
         }
 
-        public abstract void DoUpdate();
-
-        protected void Reset()
+        private void HandleStaring()
         {
-            if (ChasingTarget.IsDead)
-                Parent.Health += ChasingTarget.MaxHealth * .33f;
+            var nearHumanoids = World.InRadius<IPlayer>(Parent.Position, StareRadius);
+            if (nearHumanoids.Length > 0)
+            {
+                Stare(nearHumanoids.First());
+            }
+        }
 
-            ChasingTarget = null;
-            Chasing = false;
-            base.MoveTo(this.TargetPoint = this.OriginalPosition);
+        private void Stare(IEntity Entity)
+        {
+            Parent.RotateTowards(Entity);
+            if (_hasTargetPoint)
+            {
+                CancelMovement();
+                _hasTargetPoint = false;
+                Behaviour.OnStare(Entity);
+            }
+            _staring = true;
+        }
+
+        public void WalkTo(Vector3 Position)
+        {
+            CancelMovement();
+            SetTargetPoint(Position);
+            MoveTo(_targetPoint);
+        }
+
+        private bool ShouldReset()
+        {
+            var targetLost = IsChasing && (_chasingTarget.IsDead || _chasingTarget.IsInvisible || (_targetPoint.Xz - Parent.Position.Xz).LengthSquared > ForgetRadius * ForgetRadius);
+            var shouldWeReset = IsChasing && _forgetTimer.Tick() || targetLost;
+            if (shouldWeReset)
+            {
+                Reset();
+                return true;
+            }
+            return false;
+        }
+        
+        protected virtual void DoUpdate()
+        {
+            
+        }
+
+        private void OnChasing()
+        {
+            SetTargetPoint(_chasingTarget.Position);
+            if (InAttackRadius(_chasingTarget) && !Parent.IsKnocked)
+            {
+                Orientate(_targetPoint);
+                OnAttack();
+                _forgetTimer.Reset();
+                CancelMovement();
+            }
+            else
+            {
+                MoveTo(_targetPoint);
+            }
+        }
+        
+        private void OnExploring()
+        {
+            if (!_hasTargetPoint && _movementTimer.Tick())
+            {
+                /* When exploring without a target set the speed to 1 */
+                Parent.AddBonusSpeedWhile(-Parent.Speed + .65f, () => IsExploring, false);
+                SetTargetPoint(Behaviour.FindPoint());
+                MoveTo(_targetPoint);
+            }
+        }
+
+        protected override void OnTargetPointReached()
+        {
+            _hasTargetPoint = false;
+        }
+
+        protected override void OnMovementStuck()
+        {
+            _hasTargetPoint = false;
+        }
+
+        protected abstract void OnAttack();
+
+        protected virtual bool InAttackRadius(IEntity Target)
+        {
+            return (Target.Position - Parent.Position).LengthSquared < AttackRadius * AttackRadius;
+        }
+
+        private void Reset()
+        {
+            if (IsChasing && _chasingTarget.IsDead)
+                Parent.Health += _chasingTarget.MaxHealth * .33f;
+
+            _chasingTarget = null;
+            SetTargetPoint(_originalPosition);
+            MoveTo(_targetPoint);
         }
 
         protected void RollAndMove2()
         {
             if(Parent != null && Parent.WasAttacking) return;
-            if (RollTimer.Tick() && Parent != null && (TargetPoint.Xz - Parent.Position.Xz).LengthSquared > AttackRadius * AttackRadius && CanDodge)
+            if (_rollTimer.Tick() && Parent != null && (_targetPoint.Xz - Parent.Position.Xz).LengthSquared > AttackRadius * AttackRadius)
                 Parent.Roll(RollType.Normal);
         }
 
-        protected void LookTarget()
+        private void FindTarget()
         {
-            //base.Orientate(TargetPoint);
-            if (!Chasing)
-            {
-                if (Friendly)
-                {
-                    for (var i = World.Entities.Count - 1; i > -1; i--)
-                    {
-                        if (World.Entities[i] != this.Parent &&
-                            (World.Entities[i].Position.Xz - Parent.Position.Xz).LengthSquared < 32 * 32)
-                        {
-
-                            if (World.Entities[i].IsStatic || World.Entities[i] is LocalPlayer
-                                || World.Entities[i].IsImmune || World.Entities[i].IsFriendly ||
-                                World.Entities[i].IsInvisible) continue;
-
-                            this.SetTarget(World.Entities[i]);
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    var player = GameManager.Player;
-                    if ((player.Position.Xz - Parent.Position.Xz).LengthSquared < SearchRadius * SearchRadius)
-                    {
-                        this.SetTarget(player);
-                    }
-                }
-            }
+            if (IsChasing) return;
+            SetTarget(IsFriendly 
+                ? Behaviour.FindMobTarget(32) 
+                : Behaviour.FindPlayerTarget(SearchRadius)
+            );
         }
 
-        protected virtual void SetTarget(IEntity Target)
+        private void SetTarget(IEntity Target)
         {
-            this.Chasing = true;
-            this.ChasingTarget = Target;
+            _chasingTarget = Target;
+            _forgetTimer.Reset();
+        }
+
+        private void SetTargetPoint(Vector3 Position)
+        {
+            _hasTargetPoint = true;
+            _targetPoint = Position;
+        }
+
+        public CombatAIBehaviour Behaviour
+        {
+            get => _behaviour;
+            set
+            {
+                _behaviour = value;
+                _movementTimer.AlertTime = _behaviour.WaitTime;
+            }
         }
     }
 }

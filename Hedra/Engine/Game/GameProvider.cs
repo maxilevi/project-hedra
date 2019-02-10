@@ -27,9 +27,8 @@ namespace Hedra.Engine.Game
         public bool Exists => Program.GameWindow.Exists;
         public bool IsExiting => Program.GameWindow.IsExiting;    
         public KeyboardManager Keyboard { get; private set; }
-        public IPlayer Player { get; set; }
         public bool IsLoading => _loadingScreen?.IsLoading ?? false;
-
+        private IPlayer[] _players;
         private LoadingScreen _loadingScreen;
         private bool _isNewRun;
         private bool _spawningEffect;
@@ -42,12 +41,15 @@ namespace Hedra.Engine.Game
             World.Load();
             
             Log.WriteLine("Loading the player...");
-            Player = new LocalPlayer
+            _players = new IPlayer[]
             {
-                Enabled = false,
-                Model =
+                new LocalPlayer
                 {
-                    Enabled = false
+                    Enabled = false,
+                    Model =
+                    {
+                        Enabled = false
+                    }
                 }
             };
             
@@ -87,6 +89,11 @@ namespace Hedra.Engine.Game
                 Player.Model.Alpha = 0f;
                 yield return null;
             }
+        }
+
+        public bool NearAnyPlayer(Vector3 Position, float Radius)
+        {
+            return _players.Any(P => (P.Position - Position).LengthSquared < Radius * Radius);
         }
 
         public void LoadCharacter(PlayerInformation Information)
@@ -254,6 +261,12 @@ namespace Hedra.Engine.Game
                     _spawningEffect = false;
                 });
             }
+        }
+
+        public IPlayer Player
+        {
+            get => _players.First();
+            set => _players[0] = value;
         }
     }
 }

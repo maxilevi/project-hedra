@@ -32,7 +32,7 @@ namespace Hedra.EntitySystem
         float VelocityCap { get; set; }  
         Vector3 Velocity { get; set; }
         bool Raycast(Vector3 Length);
-        bool EntityRaycast(IEntity[] Entities, Vector3 Length);
+        bool EntityRaycast(IEntity[] Entities, Vector3 Length, float Modifier = 1);
         /// <summary>   
         /// If collides with structures
         /// </summary>

@@ -96,17 +96,7 @@ namespace Hedra.Engine.EntitySystem
         public bool IsBoss { get; set; }
         public bool IsDead { get; set; }
         public bool IsFlying { get; set; }
-
-        public bool IsFriendly
-        {
-            get
-            {
-                if (this.SearchComponent<WarriorAIComponent>() != null)
-                    return this.SearchComponent<WarriorAIComponent>().Friendly;
-                return this.SearchComponent<BaseVillagerAIComponent>() != null;
-            }
-        }
-
+        public virtual bool IsFriendly { get; set; }
         public bool IsGrounded { get; set; }
 
         public bool IsHumanoid
@@ -263,9 +253,9 @@ namespace Hedra.Engine.EntitySystem
             AfterAttacking?.Invoke(Invoker, Damage);
         }
 
-        public void AddBonusSpeedWhile(float BonusSpeed, Func<bool> Condition)
+        public void AddBonusSpeedWhile(float BonusSpeed, Func<bool> Condition, bool ShowParticles = true)
         {
-            this.AddComponentWhile(new SpeedBonusComponent(this, BonusSpeed), Condition);
+            this.AddComponentWhile(new SpeedBonusComponent(this, BonusSpeed, ShowParticles), Condition);
         }
 
         public void AddBonusSpeedForSeconds(float BonusSpeed, float Seconds)

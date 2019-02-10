@@ -48,9 +48,14 @@ namespace Hedra.Engine.WorldBuilding
             return SpawnHumanoid(Type, 1, DesiredPosition, null);
         }
 
-        private Humanoid SpawnHumanoid(string Type, int Level, Vector3 DesiredPosition, HumanoidBehaviourTemplate Behaviour)
+        private Humanoid SpawnHumanoid(HumanType Type, Vector3 DesiredPosition, HumanoidConfiguration Configuration)
         {
-            var human = HumanoidFactory.BuildHumanoid(Type, Level, Behaviour);
+            return SpawnHumanoid(Type.ToString(), 1, DesiredPosition, Configuration);
+        }
+        
+        private Humanoid SpawnHumanoid(string Type, int Level, Vector3 DesiredPosition, HumanoidConfiguration Configuration)
+        {
+            var human = HumanoidFactory.BuildHumanoid(Type, Level, Configuration);
             human.Physics.TargetPosition = World.FindPlaceablePosition(human, DesiredPosition);
             human.Rotation = new Vector3(0, Utils.Rng.NextFloat(), 0) * 360f * Mathf.Radian;
             ApplySeasonHats(human, Type);
@@ -72,13 +77,12 @@ namespace Hedra.Engine.WorldBuilding
                 HumanType.Mage,
                 HumanType.Archer
             };
-            var villager = World.WorldBuilding.SpawnHumanoid(types[rng.Next(0, types.Length)], DesiredPosition);
+            var villager = SpawnHumanoid(types[rng.Next(0, types.Length)], DesiredPosition, new HumanoidConfiguration(HealthBarType.Immune));
             villager.Seed = Seed;
             villager.SetWeapon(null);
-            villager.SearchComponent<HealthBarComponent>().FontColor = HumanoidBehaviourTemplate.Friendly.ToColor();
             villager.Name = NameGenerator.PickMaleName(rng);
+            villager.IsFriendly = true;
             villager.SearchComponent<DamageComponent>().Immune = true;
-            villager.SearchComponent<HealthBarComponent>().Name = villager.Name;
             return villager;
         }
 
@@ -87,24 +91,23 @@ namespace Hedra.Engine.WorldBuilding
             int classN = Utils.Rng.Next(0, ClassDesign.AvailableClasses.Length);
             var classType = ClassDesign.FromType(ClassDesign.AvailableClasses[classN]);
 
-            var behaviour = new HumanoidBehaviourTemplate(HumanoidBehaviourTemplate.Hostile)
-            {
-                Name = Undead ? "Skeleton" : "Bandit"
-            };
-            var isGnoll = Utils.Rng.Next(0, 4) == 1 && !Undead;
-            var className = isGnoll
+            var behaviour = new HumanoidConfiguration(Friendly ? HealthBarType.Friendly : HealthBarType.Hostile);
+            var isWerewolf = Utils.Rng.Next(0, 4) == 1 && !Undead;
+            var className = isWerewolf
                 ? HumanType.Gnoll.ToString()
                 : Undead
                     ? HumanType.Skeleton.ToString()
                     : classType.ToString();
             var human = this.SpawnHumanoid(className, Level, Position, behaviour);
-            if (isGnoll) human.AddonHealth = human.MaxHealth * .5f;
-
+            if (isWerewolf) human.AddonHealth = human.MaxHealth * .5f;
+            human.Health = human.MaxHealth;
+            
             if(!human.MainWeapon.Weapon.IsMelee)
                 human.AddComponent( new ArcherAIComponent(human, Friendly) );
             else
                 human.AddComponent(new WarriorAIComponent(human, Friendly));
-
+            human.Name = Undead ? "Skeleton" : "Bandit";
+            human.IsFriendly = Friendly;
             return human;
         }
         

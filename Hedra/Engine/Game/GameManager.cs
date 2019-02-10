@@ -9,6 +9,7 @@ using System;
 using Hedra.Engine.Input;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
+using OpenTK;
 
 namespace Hedra.Engine.Game
 {
@@ -26,6 +27,11 @@ namespace Hedra.Engine.Game
             Provider.AfterSave += (S, E) => AfterSave?.Invoke(S, E);
         }
 
+        public static bool NearAnyPlayer(Vector3 Position, float Radius)
+        {
+            return Provider.NearAnyPlayer(Position, Radius);
+        }
+        
         public static void LoadMenu()
         {
             Provider.LoadMenu();

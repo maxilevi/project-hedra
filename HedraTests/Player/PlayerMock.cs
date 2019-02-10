@@ -59,6 +59,16 @@ namespace HedraTests.Player
         public float ManaRegenFactor { get; set; }
         public int Gold { get; set; }
         public float DamageEquation { get; }
+        public void AttackSurroundings(float Damage, IEntity[] ToIgnore, Action<IEntity> Callback)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AttackSurroundings(float Damage, IEntity[] ToIgnore)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool IsTravelling { get; set; }
         public bool IsFishing { get; set; }
 
@@ -160,7 +170,7 @@ namespace HedraTests.Player
         public bool IsDead { get; set; }
         public bool IsFlying { get; set; }
         public bool IsSailing { get; set; }
-        public bool IsFriendly { get; }
+        public bool IsFriendly { get; set; }
         public bool IsGrounded { get; set; }
         public bool IsHumanoid { get; }
         public bool IsImmune { get; }
@@ -281,6 +291,11 @@ namespace HedraTests.Player
             throw new NotImplementedException();
         }
 
+        public void AddBonusSpeedWhile(float BonusSpeed, Func<bool> Condition, bool ShowParticles = true)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool InAttackRange(IEntity Target, float RadiusModifier = 1)
         {
             throw new NotImplementedException();
@@ -322,11 +337,6 @@ namespace HedraTests.Player
         }
 
         public T[] GetComponents<T>()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateEnvironment()
         {
             throw new NotImplementedException();
         }
