@@ -26,5 +26,7 @@ namespace Hedra.AISystem
                 Hostile.Update();
             }
         }
+        
+        public override AIType Type => AIType.Hostile;
     }
 }

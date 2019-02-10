@@ -43,10 +43,10 @@ namespace Hedra.Engine.Rendering.UI
         {         
         }
 
-        private static BitmapObject BuildBitmap(string Text, Color Color, Font Font, out Vector2 Measurements)
+        private static BitmapObject BuildBitmap(string Text, Color Color, Font Font, TextOptions Options, out Vector2 Measurements)
         {
             const float crispModifier = 1.5f;
-            var textBitmap = Provider.BuildText(Text, FontCache.Get(Font.FontFamily, Font.Size * crispModifier, Font.Style), Color);
+            var textBitmap = Provider.BuildText(Text, FontCache.Get(Font.FontFamily, Font.Size * crispModifier, Font.Style), Color, Options);
             Measurements = 
                 new Vector2((float) (textBitmap.Width * (1.0 / crispModifier)), (float) (textBitmap.Height * (1.0 / crispModifier)));
             var obj = new BitmapObject
@@ -59,12 +59,12 @@ namespace Hedra.Engine.Rendering.UI
 
         public static uint BuildText(string Text, Color Color, Font Font, out Vector2 Measurements)
         {
-            return Graphics2D.LoadTexture(BuildBitmap(Text, Color, Font, out Measurements));
+            return Graphics2D.LoadTexture(BuildBitmap(Text, Color, Font, new TextOptions(), out Measurements));
         }
         
         public void UpdateText()
         {
-            var obj = BuildBitmap(Text, TextColor, TextFont, out var measurements);
+            var obj = BuildBitmap(Text, TextColor, TextFont, BuildTextOptions(), out var measurements);
             var previousState = UIText?.Enabled ?? false;
             DrawManager.UIRenderer.Remove(UIText);
             UIText?.Dispose();
@@ -82,6 +82,16 @@ namespace Hedra.Engine.Rendering.UI
                 Executer.ExecuteOnMainThread(() => UIText.TextureId = Graphics2D.LoadTexture(obj));
             else
                 UIText.TextureId = Graphics2D.LoadTexture(obj);        
+        }
+
+        private TextOptions BuildTextOptions()
+        {
+            return new TextOptions
+            {
+                HasStroke = Stroke,
+                StrokeColor = StrokeColor,
+                StrokeWidth = StrokeWidth
+            };
         }
 
         public void SetTranslation(Translation Translation)
@@ -148,6 +158,12 @@ namespace Hedra.Engine.Rendering.UI
             get => UIText.Opacity;
             set => UIText.Opacity = value;
         }
+        
+        public bool Stroke { get; set; }
+        
+        public float StrokeWidth { get; set; }
+        
+        public Color StrokeColor { get; set; }
 
         public void Enable()
         {

@@ -38,7 +38,7 @@ namespace Hedra.Engine.Rendering.UI
             this.Text = string.Empty;
             _textBar.UpdateTextRatio = false;
             ShowCaret = false;
-            _caret = new RenderableText("|", Position + Vector2.UnitY * .00275f, _textBar.Text.UIText.TextColor, _textBar.Text.UIText.TextFont);
+            _caret = new RenderableText("|", Position + Vector2.UnitY * .00275f, _textBar.Text.Color, _textBar.Text.TextFont);
             DrawManager.UIRenderer.Add(_caret, DrawOrder.After);
             InPanel.AddElement(_caret);
             RoutineManager.StartRoutine(this.CaretUpdate);
@@ -97,7 +97,7 @@ namespace Hedra.Engine.Rendering.UI
         {
             if (!InFocus || !this._enabled) return;
             
-            var textSize = (Graphics2D.LineSize(Text, _textBar.Text.UIText.TextFont).X + TextBuffer) / GameSettings.Width;
+            var textSize = (Graphics2D.LineSize(Text, _textBar.Text.TextFont).X + TextBuffer) / GameSettings.Width;
             if (textSize > _textBar.Scale.X)
             {
                 return;

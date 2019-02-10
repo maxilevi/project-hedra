@@ -94,6 +94,7 @@ namespace Hedra.Engine.Player
                 Pet.RemoveComponent(Pet.SearchComponent<BasicAIComponent>());
                 Pet.AddComponent(new MountAIComponent(Pet, _player));
                 Pet.Removable = false;
+                Pet.IsFriendly = true;
                 ((QuadrupedModel) Pet.Model).IsMountable = true;
             }
         }

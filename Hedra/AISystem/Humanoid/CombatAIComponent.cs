@@ -29,7 +29,7 @@ namespace Hedra.AISystem.Humanoid
         public IEntity[] IgnoreEntities { get; set; } = new IEntity[0];
         public bool IsFriendly { get; }
         protected override bool ShouldSleep => !IsChasing;
-        private bool IsChasing => _chasingTarget != null;
+        public bool IsChasing => _chasingTarget != null;
         public bool IsExploring => !IsChasing && _hasTargetPoint;
 
         protected CombatAIComponent(IHumanoid Entity, bool IsFriendly) : base(Entity)
@@ -144,6 +144,7 @@ namespace Hedra.AISystem.Humanoid
             {
                 MoveTo(_targetPoint);
             }
+            Behaviour.SetTarget(_chasingTarget);
         }
         
         private void OnExploring()
@@ -165,6 +166,7 @@ namespace Hedra.AISystem.Humanoid
         protected override void OnMovementStuck()
         {
             _hasTargetPoint = false;
+            Behaviour.OnStuck();
         }
 
         protected abstract void OnAttack();
@@ -173,7 +175,7 @@ namespace Hedra.AISystem.Humanoid
         {
             return (Target.Position - Parent.Position).LengthSquared < AttackRadius * AttackRadius;
         }
-
+        
         private void Reset()
         {
             if (IsChasing && _chasingTarget.IsDead)
@@ -200,7 +202,7 @@ namespace Hedra.AISystem.Humanoid
             );
         }
 
-        private void SetTarget(IEntity Target)
+        public void SetTarget(IEntity Target)
         {
             _chasingTarget = Target;
             _forgetTimer.Reset();

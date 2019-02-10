@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Hedra.Engine.Management;
 using Hedra.Engine.Native;
+using OpenTK;
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -49,9 +50,14 @@ namespace Hedra.Engine.Rendering.UI
             };
         }
         
+        public Bitmap BuildText(string Text, Font TextFont, Color TextColor, TextOptions Options)
+        {
+            return DoBuildText(BuildParams(Text, TextFont, TextColor, Options));
+        }
+        
         public Bitmap BuildText(string Text, Font TextFont, Color TextColor)
         {
-            return DoBuildText(BuildParams(Text, TextFont, TextColor));
+            return BuildText(Text, TextFont, TextColor, new TextOptions());
         }
 
         private static string[] GetSplits(string Text)
@@ -129,8 +135,13 @@ namespace Hedra.Engine.Rendering.UI
         {
             return string.Join(string.Empty, GetSplits(Text).Select(StringMatch));
         }
-        
+
         public static TextParams BuildParams(string Text, Font TextFont, Color TextColor)
+        {
+            return BuildParams(Text, TextFont, TextColor, new TextOptions());
+        }
+        
+        public static TextParams BuildParams(string Text, Font TextFont, Color TextColor, TextOptions Options)
         {
             var splits = GetSplits(Text);          
             var texts = splits.Select(StringMatch).ToArray();
@@ -139,7 +150,8 @@ namespace Hedra.Engine.Rendering.UI
                 texts,
                 texts.Select(S => fullText.IndexOf(S, StringComparison.Ordinal)).ToArray(),
                 splits.Select(S => FontMatch(S, TextFont)).ToArray(),
-                splits.Select(S => ColorMatch(S, TextColor)).ToArray()
+                splits.Select(S => ColorMatch(S, TextColor)).ToArray(),
+                splits.Select(S => Options).ToArray()
             );
         }
 
@@ -236,25 +248,12 @@ namespace Hedra.Engine.Rendering.UI
                         continue;
                     }
                         
-                    // Draw shadows
-                    using (var gp = new GraphicsPath())
-                    {
-                        using (var shadowBrush = new SolidBrush(Color.FromArgb(80, 0, 0, 0)))
-                        {
-                            gp.AddString(
-                                Params.Texts[i],
-                                Params.TextFonts[i].FontFamily,
-                                (int) Params.TextFonts[i].Style,
-                                Params.TextFonts[i].Size,
-                                Point.Empty, StringFormat.GenericTypographic
-                            );
-                            var shadowOffset = new Matrix();
-                            shadowOffset.Translate(1.5f + offset.X, 1.5f + offset.Y);
-                            gp.Transform(shadowOffset);
-
-                            graphics.FillPath(shadowBrush, gp);
-                        }
-                    }
+                    /* Draw shadows & strokes */
+                    if (Params.TextOptions[i].HasStroke)
+                        AddStroke(graphics, Params.Texts[i], Params.TextFonts[i], offset);
+                    else
+                        AddShadows(graphics, Params.Texts[i], Params.TextFonts[i], offset);
+                    
                     using (var brush = new SolidBrush(Params.TextColors[i]))
                     {
                         using (var gp = new GraphicsPath())
@@ -284,7 +283,7 @@ namespace Hedra.Engine.Rendering.UI
                             ).First();
                             bounds = region.GetBounds(graphics);
                             offset = new PointF(
-                                bounds.Width * .75f+ offset.X,
+                                bounds.Width * .75f + offset.X,
                                 offset.Y
                             );
                         }
@@ -294,6 +293,41 @@ namespace Hedra.Engine.Rendering.UI
             return textBitmap;
         }
 
+        private static void AddStroke(Graphics Graphics, string Text, Font TextFont, PointF Offset)
+        {
+            AddBackground(Graphics, Text, TextFont, Color.FromArgb(200, 0, 0, 0), new Vector2(Offset.X, Offset.Y + 0.75f));
+            AddBackground(Graphics, Text, TextFont, Color.FromArgb(200, 0, 0, 0), new Vector2(Offset.X + 0.75f, Offset.Y));
+            AddBackground(Graphics, Text, TextFont, Color.FromArgb(200, 0, 0, 0), new Vector2(Offset.X, Offset.Y - 0.75f));
+            AddBackground(Graphics, Text, TextFont, Color.FromArgb(200, 0, 0, 0), new Vector2(Offset.X - 0.75f, Offset.Y));
+        }
+
+        private static void AddShadows(Graphics Graphics, string Text, Font TextFont, PointF Offset)
+        {
+            AddBackground(Graphics, Text, TextFont, Color.FromArgb(80, 0, 0, 0), new Vector2(Offset.X + 1.5f, Offset.Y + 1.5f));
+        }
+
+        private static void AddBackground(Graphics Graphics, string Text, Font TextFont, Color TextColor, Vector2 Offset)
+        {
+            using (var gp = new GraphicsPath())
+            {
+                using (var shadowBrush = new SolidBrush(TextColor))
+                {
+                    gp.AddString(
+                        Text,
+                        TextFont.FontFamily,
+                        (int) TextFont.Style,
+                        TextFont.Size,
+                        Point.Empty, StringFormat.GenericTypographic
+                    );
+                    var shadowOffset = new Matrix();
+                    shadowOffset.Translate(Offset.X, Offset.Y);
+                    gp.Transform(shadowOffset);
+
+                    Graphics.FillPath(shadowBrush, gp);
+                }
+            }
+        }
+        
         private static SizeF CalculateNeededSize(TextParams Params)
         {
             var max = SizeF.Empty;
@@ -352,13 +386,15 @@ namespace Hedra.Engine.Rendering.UI
         public int[] Offsets { get; }
         public Font[] TextFonts { get; }
         public Color[] TextColors { get; }
+        public TextOptions[] TextOptions { get; }
 
-        public TextParams(string[] Texts, int[] Offsets, Font[] TextFonts, Color[] TextColors)
+        public TextParams(string[] Texts, int[] Offsets, Font[] TextFonts, Color[] TextColors, TextOptions[] TextOptions)
         {
             this.TextFonts = TextFonts;
             this.Offsets = Offsets;
             this.Texts = Texts;
             this.TextColors = TextColors;
+            this.TextOptions = TextOptions;
         }
     }
 }

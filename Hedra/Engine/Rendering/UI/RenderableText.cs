@@ -79,6 +79,24 @@ namespace Hedra.Engine.Rendering.UI
             }
         }
 
+        public bool Stroke
+        {
+            get => UIText.Stroke;
+            set => UIText.Stroke = value;
+        }
+
+        public float StrokeWidth
+        {
+            get => UIText.StrokeWidth;
+            set => UIText.StrokeWidth = value;
+        }
+
+        public Color StrokeColor
+        {
+            get => UIText.StrokeColor;
+            set => UIText.StrokeColor = value;
+        }
+
         public void Enable()
         {
             UIText.Enable();

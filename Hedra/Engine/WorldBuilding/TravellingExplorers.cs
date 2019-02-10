@@ -29,7 +29,7 @@ namespace Hedra.Engine.WorldBuilding
             }
 
             explorers.ForEach(E => E.SearchComponent<CombatAIComponent>().Behaviour = 
-                new ExplorerAIBehaviour(E, explorers.ToArray(), Rng.Next(int.MinValue, int.MaxValue)));
+                new ExplorerAIBehaviour(E, explorers.ToArray(), Rng));
         }
     }
 }

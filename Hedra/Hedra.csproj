@@ -101,6 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AISystem\AIFactory.cs" />
+    <Compile Include="AISystem\AIType.cs" />
     <Compile Include="AISystem\BasicAIComponent.cs" />
     <Compile Include="AISystem\Behaviours\AttackBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\Behaviour.cs" />
@@ -350,6 +351,7 @@
     <Compile Include="Engine\Rendering\TextureBillboard.cs" />
     <Compile Include="Engine\Rendering\TextureParameter.cs" />
     <Compile Include="Engine\Rendering\UI\Plaque.cs" />
+    <Compile Include="Engine\Rendering\UI\TextOptions.cs" />
     <Compile Include="Engine\SkillSystem\SingleAnimationSkill.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Agility.cs" />
     <Compile Include="Engine\SkillSystem\Archer\FlameArrow.cs" />

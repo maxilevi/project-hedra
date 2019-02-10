@@ -34,5 +34,7 @@ namespace Hedra.AISystem
                 }
             }
         }
+        
+        public override AIType Type => AIType.Hostile;
     }
 }

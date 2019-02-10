@@ -57,5 +57,7 @@ namespace Hedra.Engine.EntitySystem
                 Parent.Physics.Move();
             }
         }
+        
+        public override AIType Type => AIType.Friendly;
     }
 }

@@ -33,5 +33,7 @@ namespace Hedra.AISystem
             get => Hostile.GuardPosition;
             set => Hostile.GuardPosition = value;
         }
+        
+        public override AIType Type => AIType.Hostile;
     }
 }

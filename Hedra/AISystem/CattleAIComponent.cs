@@ -29,7 +29,8 @@ namespace Hedra.AISystem
         protected abstract float AlertTime { get; }
         protected abstract SoundType Sound { get; }
         protected virtual float Radius => 80;
-        
+        public override AIType Type => AIType.Neutral;
+
         public override void Update()
         {
             if (!Herd.Enabled)

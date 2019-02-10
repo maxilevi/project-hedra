@@ -19,5 +19,7 @@ namespace Hedra.AISystem
         {
             Roam.Update();
         }
+        
+        public override AIType Type => AIType.Friendly;
     }
 }

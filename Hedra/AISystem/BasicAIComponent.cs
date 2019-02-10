@@ -11,6 +11,7 @@ namespace Hedra.AISystem
     public abstract class BasicAIComponent : EntityComponent, IBehaviourComponent
     {
         public bool Enabled { get; set; }
+        public abstract AIType Type { get; }
         private Behaviour[] _behaviours;
 
         protected BasicAIComponent(IEntity Parent) : base(Parent)

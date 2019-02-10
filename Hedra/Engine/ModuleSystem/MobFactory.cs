@@ -69,7 +69,7 @@ namespace Hedra.Engine.ModuleSystem
             var barComponent = new HealthBarComponent(
                 mob,
                 Translations.Has(mob.Type) ? Translations.Get(mob.Type) : mob.Type.AddSpacesToSentence(true),
-                HealthBarType.Hostile,
+                BarTypeFromAIType(ai.Type),
                 mobDifficulty == 1 ? Color.White : mobDifficulty == 3 ? Color.Red : Color.Gold
             );
             mob.AddComponent(barComponent);
@@ -88,7 +88,16 @@ namespace Hedra.Engine.ModuleSystem
             }
         }
 
-        private int GetMobDifficulty(Random Rng)
+        private static HealthBarType BarTypeFromAIType(AIType AI)
+        {
+            return AI == AIType.Friendly
+                ? HealthBarType.Immune
+                : AI == AIType.Hostile
+                    ? HealthBarType.Hostile
+                    : HealthBarType.Friendly;
+        }
+        
+        private static int GetMobDifficulty(Random Rng)
         {
             var levelN = Rng.Next(0, 10);
             var mobDifficulty = 1;

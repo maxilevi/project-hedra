@@ -24,5 +24,15 @@ namespace Hedra.AISystem.Humanoid
         {
             
         }
+        
+        public virtual void OnStuck()
+        {
+            
+        }
+        
+        public virtual void SetTarget(IEntity Entity)
+        {
+            
+        }
     }
 }

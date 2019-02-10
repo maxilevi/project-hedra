@@ -19,6 +19,7 @@ using Hedra.Engine.IO;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.WorldBuilding;
 
 namespace Hedra.Engine.EntitySystem
 {
@@ -75,24 +76,39 @@ namespace Hedra.Engine.EntitySystem
                 return;
 
             if (this.Conflicts(desiredPosition)) return;
-            
-            var newPosition = new Vector3(desiredPosition.X, Physics.HeightAtPosition(desiredPosition), desiredPosition.Z);                    
-            var template = this.SelectMobTemplate(newPosition);
-            if (template == null) return;
 
-            var count = Utils.Rng.Next(template.MinGroup, template.MaxGroup + 1);
-
-            for (var i = 0; i < count; i++)
+            if (ShouldSpawnMob(desiredPosition))
             {
-                var offset = new Vector3(Utils.Rng.NextFloat() * 8f - 4f, 0, Utils.Rng.NextFloat() * 8f - 4f) * Chunk.BlockSize;
-                var newNearPosition = new Vector3(newPosition.X + offset.X,
-                    Physics.HeightAtPosition(newPosition + offset),
-                    newPosition.Z + offset.Z);
-                World.SpawnMob(template.Type, newNearPosition, Utils.Rng);
+                var newPosition = new Vector3(desiredPosition.X, Physics.HeightAtPosition(desiredPosition),
+                    desiredPosition.Z);
+                var template = this.SelectMobTemplate(newPosition);
+                if (template == null) return;
+
+                var count = Utils.Rng.Next(template.MinGroup, template.MaxGroup + 1);
+
+                for (var i = 0; i < count; i++)
+                {
+                    var offset = new Vector3(Utils.Rng.NextFloat() * 8f - 4f, 0, Utils.Rng.NextFloat() * 8f - 4f) *
+                                 Chunk.BlockSize;
+                    var newNearPosition = new Vector3(newPosition.X + offset.X,
+                        Physics.HeightAtPosition(newPosition + offset),
+                        newPosition.Z + offset.Z);
+                    World.SpawnMob(template.Type, newNearPosition, Utils.Rng);
+                }
+            }
+            else
+            {
+                TravellingExplorers.Build(desiredPosition, Utils.Rng);
             }
         }
-        
-        public virtual SpawnTemplate SelectMobTemplate(Vector3 NewPosition)
+
+        private static bool ShouldSpawnMob(Vector3 NewPosition)
+        {
+            var region = World.BiomePool.GetRegion(NewPosition);
+            return Utils.Rng.Next(0, region.Mob.SpawnerSettings.ExplorerRatio) != 1;
+        }
+
+        protected virtual SpawnTemplate SelectMobTemplate(Vector3 NewPosition)
         {
             var region = World.BiomePool.GetRegion(NewPosition);
             var mountain = NewPosition.Y > 60 * Chunk.BlockSize;

@@ -53,7 +53,7 @@ namespace Hedra.Engine.Rendering.UI
         public Bar(Vector2 Position, Vector2 Scale, Func<float> Value, Func<float> Max, Vector4 Color, Panel InPanel,
             DrawOrder Order = DrawOrder.Before, bool CurvedBorders = true)
         {
-            _uniformColor = Color;
+            if(Color != default(Vector4)) _uniformColor = Color;
             this.Initialize(Position, Scale, Value, Max, InPanel, null, Order, CurvedBorders);
         }
 
@@ -94,8 +94,7 @@ namespace Hedra.Engine.Rendering.UI
 
             Shader["Scale"] =
                 Mathf.DivideVector(_targetResolution * Scale, new Vector2(GameSettings.Width, GameSettings.Height)) +
-                Mathf.DivideVector(_targetResolution * new Vector2(0.015f, 0.015f),
-                    new Vector2(GameSettings.Width, GameSettings.Height));
+                Mathf.DivideVector(_targetResolution * new Vector2(0.015f, 0.015f), new Vector2(GameSettings.Width, GameSettings.Height));
             Shader["Position"] = AdjustedPosition;
             Shader["Color"] = BackgroundColor;
 
@@ -182,7 +181,7 @@ namespace Hedra.Engine.Rendering.UI
                 UpdateTextRatio = false;
             }
             DrawManager.UIRenderer.Add(this, this._order);
-            _inPanel.AddElement(Text);
+            _inPanel?.AddElement(Text);
             
             if (_barBlueprint == 0)
             {

@@ -76,7 +76,7 @@ namespace Hedra.Engine.Player
 
             if (_accumulatedVelocity == Vector3.Zero)
             {
-                _accumulatedVelocity = Propulsion + Vector3.UnitY * 10f;
+                _accumulatedVelocity = Propulsion + Vector3.UnitY * 7f;
             }
 
             Lifetime -= Time.DeltaTime;

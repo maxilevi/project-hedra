@@ -11,6 +11,7 @@ using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Scenes;
 using Hedra.EntitySystem;
 using OpenTK;
+using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.EntitySystem
 {
@@ -20,8 +21,9 @@ namespace Hedra.Engine.EntitySystem
     /// </summary>
     public class HealthBarComponent : EntityComponent, IRenderable, IDisposable
     {
-        private static readonly Color Friendly = Color.YellowGreen;
-        private static readonly Color Hostile = Color.Red;
+        private const int ShowDistance = 48;
+        private static readonly Color Friendly = Colors.FullHealthGreen.ToColor();
+        private static readonly Color Hostile = Colors.LowHealthRed.ToColor();
         private static readonly Color Immune = Color.CornflowerBlue;
         private static readonly Color Neutral = Color.White;
 
@@ -31,14 +33,13 @@ namespace Hedra.Engine.EntitySystem
         
         private readonly TexturedBar _healthBar;
         private readonly RenderableText _text;
-        private readonly Vector2 _originalScale = new Vector2(0.06f, 0.025f) * .65f;
+        private readonly Vector2 _originalScale = new Vector2(0.075f, 0.025f) * .75f;
         private Vector2 _originalTextScale;
         private float _barSize;
         private string _name;
         private bool _show;
         private float _targetBarSize = 1;
         private float _textEnabled;
-        private bool _textUpdated;
 
         static HealthBarComponent()
         {
@@ -48,42 +49,41 @@ namespace Hedra.Engine.EntitySystem
                 _friendlyTexture = Graphics2D.LoadTexture(new BitmapObject
                     {
                         Bitmap = Graphics2D.ReplaceColor(
-                            Graphics2D.ReplaceColor((Bitmap) blueprint.Clone(), Color.FromArgb(255, 0, 0, 0), Friendly),
+                            Graphics2D.ReplaceColor((Bitmap) blueprint.Clone(), Color.FromArgb(255, 0, 0, 0), Color.FromArgb(255, 14, 14, 14)),
                             Color.FromArgb(255, 255, 255, 255), new Vector4(Friendly.ToVector4().Xyz * .75f, 1).ToColor()
                         ),
                         Path = $"UI:Color:HealthBarComponent:Friendly"
-                    }
+                    }, TextureMinFilter.Nearest, TextureMagFilter.Nearest, TextureWrapMode.ClampToEdge
                 );
                 _hostileTexture = Graphics2D.LoadTexture(new BitmapObject
                     {
                         Bitmap = Graphics2D.ReplaceColor(
-                            Graphics2D.ReplaceColor((Bitmap) blueprint.Clone(), Color.FromArgb(255, 0, 0, 0), Hostile),
+                            Graphics2D.ReplaceColor((Bitmap) blueprint.Clone(), Color.FromArgb(255, 0, 0, 0), Color.FromArgb(255, 14, 14, 14)),
                             Color.FromArgb(255, 255, 255, 255), new Vector4(Hostile.ToVector4().Xyz * .75f, 1).ToColor()
                         ),
                         Path = $"UI:Color:HealthBarComponent:Hostile"
-                    }
+                    }, TextureMinFilter.Nearest, TextureMagFilter.Nearest, TextureWrapMode.ClampToEdge
                 );
                 _immuneTexture = Graphics2D.LoadTexture(new BitmapObject
                     {
                         Bitmap = Graphics2D.ReplaceColor(
-                            Graphics2D.ReplaceColor((Bitmap) blueprint.Clone(), Color.FromArgb(255, 0, 0, 0), Immune),
+                            Graphics2D.ReplaceColor((Bitmap) blueprint.Clone(), Color.FromArgb(255, 0, 0, 0), Color.FromArgb(255, 14, 14, 14)),
                             Color.FromArgb(255, 255, 255, 255), new Vector4(Immune.ToVector4().Xyz * .75f, 1).ToColor()
                         ),
                         Path = $"UI:Color:HealthBarComponent:Immune"
-                    }
+                    }, TextureMinFilter.Nearest, TextureMagFilter.Nearest, TextureWrapMode.ClampToEdge
                 );
             });
         }
         
-        public HealthBarComponent(IEntity Parent, string Name, HealthBarType Type) : this(Parent, Name, Type, Neutral)
+        public HealthBarComponent(IEntity Parent, string Name, HealthBarType Type) : this(Parent, Name, Type, ColorFromType(Type))
         {    
         }
         
         public HealthBarComponent(IEntity Parent, string Name, HealthBarType Type, Color FontColor) : base(Parent)
         {
-            var color = ColorFromType(Type);
             _healthBar = new TexturedBar(
-                0,
+                TextureFromType(Type),
                 Vector2.Zero,
                 Mathf.ScaleGui(new Vector2(1024, 578), _originalScale),
                 () => Parent.Health,
@@ -92,7 +92,10 @@ namespace Hedra.Engine.EntitySystem
             Executer.ExecuteOnMainThread(
                 () => _healthBar.TextureId = TextureFromType(Type)
             );
-            _text = new RenderableText(string.Empty, Vector2.Zero, FontColor, FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold));
+            _text = new RenderableText(string.Empty, Vector2.Zero, Type == HealthBarType.Hostile ? FontColor : Color.White, FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold));
+            _text.Stroke = true;
+            /*_text.StrokeWidth = true;
+            _text.StrokeColor = true;*/
             this.Name = Name;
             DrawManager.UIRenderer.Remove(_text);
             DrawManager.UIRenderer.Remove(_healthBar);
@@ -101,7 +104,7 @@ namespace Hedra.Engine.EntitySystem
 
         public override void Update()
         {
-            _show = (Parent.Model.Position.Xz - GameManager.Player.Position.Xz).LengthSquared < 45 * 45 
+            _show = (Parent.Model.Position.Xz - GameManager.Player.Position.Xz).LengthSquared < ShowDistance * ShowDistance 
                 && !Hide
                 && !Parent.IsDead
                 && !GameSettings.Paused
@@ -136,21 +139,32 @@ namespace Hedra.Engine.EntitySystem
             _healthBar.Dispose();
         }
 
+        private float GetRatio()
+        {
+            return Parent.Health / Parent.MaxHealth;
+        }
+
         public override void Draw()
         {
             if(Parent.Model == null) return;
 
-            var eyeSpace = Vector4.Transform(new Vector4(Parent.Position + Parent.Model.Height * 1.5f * Vector3.UnitY, 1),
-                    Culling.ModelViewMatrix);
+            var eyeSpace = Vector4.Transform(
+                new Vector4(Parent.Position + Parent.Model.Height * (1.5f) * Vector3.UnitY, 1), Culling.ModelViewMatrix
+            );
             var homogeneousSpace = Vector4.Transform(eyeSpace, Culling.ProjectionMatrix);
             var ndc = homogeneousSpace.Xyz / homogeneousSpace.W;
-            _healthBar.Position = Mathf.Clamp(ndc.Xy, -.98f, .98f) + (1 - _barSize) * _originalScale.X * Vector2.UnitX;
+            _healthBar.Position = Mathf.Clamp(ndc.Xy, -.98f, .98f) + (1 - GetRatio()) * _originalScale.X * Vector2.UnitX;
             _healthBar.Scale = _originalScale * _barSize * Math.Min(1, Parent.Model.Height / 7f);
-            _text.Position = _healthBar.Position + Vector2.UnitY * _originalScale * 3f - (1 - _barSize) * _originalScale.X * Vector2.UnitX;
+            _text.Position = _healthBar.Position + Vector2.UnitY * _originalScale * 3f - (1 - GetRatio()) * _originalScale.X * Vector2.UnitX;
             _healthBar.Draw();
             _text.Draw();
         }
 
+        private float DistanceFactor()
+        {
+            return Math.Min(1, (Parent.Model.Position.Xz - GameManager.Player.Position.Xz).LengthFast / ShowDistance);
+        }
+        
         private static Color ColorFromType(HealthBarType Type)
         {
             return Type == HealthBarType.Friendly

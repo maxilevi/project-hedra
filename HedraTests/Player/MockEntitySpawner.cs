@@ -14,7 +14,7 @@ namespace HedraTests.Player
         {
         }
 
-        public override SpawnTemplate SelectMobTemplate(Vector3 NewPosition)
+        protected override SpawnTemplate SelectMobTemplate(Vector3 NewPosition)
         {
             return TargetTemplate;
         }

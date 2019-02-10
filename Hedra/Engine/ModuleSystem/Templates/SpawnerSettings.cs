@@ -6,5 +6,6 @@ namespace Hedra.Engine.ModuleSystem.Templates
         public SpawnTemplate[] Plains { get; set; }
         public SpawnTemplate[] Mountain { get; set; }
         public SpawnTemplate[] Forest { get; set; }
+        public int ExplorerRatio { get; set; }
     }
 }

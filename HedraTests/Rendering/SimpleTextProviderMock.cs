@@ -9,5 +9,10 @@ namespace HedraTests.Rendering
         {
             return new Bitmap(1, 1);
         }
+
+        public Bitmap BuildText(string Text, Font TextFont, Color TextColor, TextOptions Options)
+        {
+            return new Bitmap(1, 1);
+        }
     }
 }
