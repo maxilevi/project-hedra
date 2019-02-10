@@ -13,7 +13,7 @@ namespace Hedra.Engine.WorldBuilding
     {
         public static void Build(Vector3 Position, Random Rng)
         {
-            var friendly = true;//Rng.Next(0, 3) != 1;
+            var friendly = Rng.NextBool();
             var count = Rng.Next(1, 4);
             var explorers = new List<IHumanoid>();
             for (var i = 0; i < count; ++i)

@@ -24,12 +24,12 @@ namespace Hedra.Engine.EntitySystem
         private const int ShowDistance = 48;
         private static readonly Color Friendly = Colors.FullHealthGreen.ToColor();
         private static readonly Color Hostile = Colors.LowHealthRed.ToColor();
-        private static readonly Color Immune = Color.CornflowerBlue;
+        private static readonly Color Immune = Friendly;
         private static readonly Color Neutral = Color.White;
 
-        private static uint _friendlyTexture;
+        private static uint neutralTexture;
         private static uint _hostileTexture;
-        private static uint _immuneTexture;
+        private static uint _friendlyTexture;
         
         private readonly TexturedBar _healthBar;
         private readonly RenderableText _text;
@@ -46,7 +46,7 @@ namespace Hedra.Engine.EntitySystem
             Executer.ExecuteOnMainThread(() =>
             {
                 var blueprint = Graphics2D.LoadBitmapFromAssets("Assets/UI/EntityHealthBar.png");
-                _friendlyTexture = Graphics2D.LoadTexture(new BitmapObject
+                neutralTexture = Graphics2D.LoadTexture(new BitmapObject
                     {
                         Bitmap = Graphics2D.ReplaceColor(
                             Graphics2D.ReplaceColor((Bitmap) blueprint.Clone(), Color.FromArgb(255, 0, 0, 0), Color.FromArgb(255, 14, 14, 14)),
@@ -64,7 +64,7 @@ namespace Hedra.Engine.EntitySystem
                         Path = $"UI:Color:HealthBarComponent:Hostile"
                     }, TextureMinFilter.Nearest, TextureMagFilter.Nearest, TextureWrapMode.ClampToEdge
                 );
-                _immuneTexture = Graphics2D.LoadTexture(new BitmapObject
+                _friendlyTexture = Graphics2D.LoadTexture(new BitmapObject
                     {
                         Bitmap = Graphics2D.ReplaceColor(
                             Graphics2D.ReplaceColor((Bitmap) blueprint.Clone(), Color.FromArgb(255, 0, 0, 0), Color.FromArgb(255, 14, 14, 14)),
@@ -92,7 +92,11 @@ namespace Hedra.Engine.EntitySystem
             Executer.ExecuteOnMainThread(
                 () => _healthBar.TextureId = TextureFromType(Type)
             );
-            _text = new RenderableText(string.Empty, Vector2.Zero, Type == HealthBarType.Hostile ? FontColor : Color.White, FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold));
+            _text = new RenderableText(
+                string.Empty,
+                Vector2.Zero, Type == HealthBarType.Hostile ? FontColor : Type == HealthBarType.Neutral ? Color.White : Friendly,
+                FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold)
+            );
             _text.Stroke = true;
             /*_text.StrokeWidth = true;
             _text.StrokeColor = true;*/
@@ -167,23 +171,23 @@ namespace Hedra.Engine.EntitySystem
         
         private static Color ColorFromType(HealthBarType Type)
         {
-            return Type == HealthBarType.Friendly
+            return Type == HealthBarType.Neutral
                 ? Friendly
                 : Type == HealthBarType.Hostile
                     ? Hostile
-                    : Type == HealthBarType.Immune
+                    : Type == HealthBarType.Friendly
                         ? Immune
                         : Neutral;
         }
         
         private static uint TextureFromType(HealthBarType Type)
         {
-            return Type == HealthBarType.Friendly
-                ? _friendlyTexture
+            return Type == HealthBarType.Neutral
+                ? neutralTexture
                 : Type == HealthBarType.Hostile
                     ? _hostileTexture
-                    : Type == HealthBarType.Immune
-                        ? _immuneTexture
+                    : Type == HealthBarType.Friendly
+                        ? _friendlyTexture
                         : throw new ArgumentOutOfRangeException($"Texture for type '{Type}' doesn't exists.");
         }
         
@@ -204,7 +208,6 @@ namespace Hedra.Engine.EntitySystem
     public enum HealthBarType
     {
         Hostile,
-        Immune,
         Friendly,
         Neutral
     }

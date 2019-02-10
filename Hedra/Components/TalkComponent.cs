@@ -50,6 +50,7 @@ namespace Hedra.Components
         private TextBillboard _board;
         private Translation _thought;
         private IHumanoid _talker;
+        private bool _wasAvailableToTalk;
 
         static TalkComponent()
         {
@@ -81,7 +82,7 @@ namespace Hedra.Components
         private bool IsAvailableToTalk()
         {
             return Parent.IsNear(GameManager.Player, TalkRadius) && !Talking && GameManager.Player.CanInteract
-                && !PlayerInterface.Showing && !Parent.Model.IsMoving && CanTalk;
+                && !PlayerInterface.Showing && !Parent.Model.IsMoving && CanTalk && -Vector3.Dot(GameManager.Player.View.LookingDirection, Parent.Orientation) > .9f;
         }
 
         public void AddDialogLine(Translation Dialog)
@@ -91,9 +92,11 @@ namespace Hedra.Components
         
         public override void Update()
         {
-            if (IsAvailableToTalk())
+            var availableToTalk = IsAvailableToTalk();
+            if (availableToTalk)
             {
                 GameManager.Player.MessageDispatcher.ShowMessageWhile(Translations.Get("to_talk", Controls.Interact), Color.White, IsAvailableToTalk);
+                Parent.Model.Tint = Vector4.One * 3f;
 
                 if (_shouldTalk)
                 {
@@ -104,6 +107,11 @@ namespace Hedra.Components
             {
                 Parent.RotateTowards(_talker);
             }
+            if(_wasAvailableToTalk && !availableToTalk)
+            {
+                Parent.Model.Tint = Vector4.One;
+            }
+            _wasAvailableToTalk = availableToTalk;
         }
 
         private Translation SelectMainThought()

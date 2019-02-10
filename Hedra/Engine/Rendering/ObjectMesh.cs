@@ -28,6 +28,7 @@ namespace Hedra.Engine.Rendering
         private bool _enabled;
         private Chunk _underChunk;
         private Timer _underChunkTimer;
+        private Vector3 _lastPosition;
 
         public ObjectMesh()
         {
@@ -59,8 +60,11 @@ namespace Hedra.Engine.Rendering
 
         public void Update()
         {
-            if (_underChunkTimer.Tick())
+            if (_lastPosition != Position || _underChunkTimer.Tick())
+            {
+                _lastPosition = Position;
                 _underChunk = World.GetChunkAt(Position);
+            }
             _buffer.LocalRotation = LocalRotation;//Mathf.Lerp(_buffer.LocalRotation, LocalRotation, Time.IndependantDeltaTime * 8f);
         }
 

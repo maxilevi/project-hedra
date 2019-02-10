@@ -295,10 +295,10 @@ namespace Hedra.Engine.Rendering.UI
 
         private static void AddStroke(Graphics Graphics, string Text, Font TextFont, PointF Offset)
         {
-            AddBackground(Graphics, Text, TextFont, Color.FromArgb(200, 0, 0, 0), new Vector2(Offset.X, Offset.Y + 0.75f));
-            AddBackground(Graphics, Text, TextFont, Color.FromArgb(200, 0, 0, 0), new Vector2(Offset.X + 0.75f, Offset.Y));
-            AddBackground(Graphics, Text, TextFont, Color.FromArgb(200, 0, 0, 0), new Vector2(Offset.X, Offset.Y - 0.75f));
-            AddBackground(Graphics, Text, TextFont, Color.FromArgb(200, 0, 0, 0), new Vector2(Offset.X - 0.75f, Offset.Y));
+            AddBackground(Graphics, Text, TextFont, Color.FromArgb(80, 0, 0, 0), new Vector2(Offset.X, Offset.Y + 1.75f));
+            AddBackground(Graphics, Text, TextFont, Color.FromArgb(80, 0, 0, 0), new Vector2(Offset.X + 1.75f, Offset.Y));
+            AddBackground(Graphics, Text, TextFont, Color.FromArgb(80, 0, 0, 0), new Vector2(Offset.X, Offset.Y - 1.75f));
+            AddBackground(Graphics, Text, TextFont, Color.FromArgb(80, 0, 0, 0), new Vector2(Offset.X - 1.75f, Offset.Y));
         }
 
         private static void AddShadows(Graphics Graphics, string Text, Font TextFont, PointF Offset)

@@ -90,7 +90,7 @@ namespace Hedra.Engine.Player
 
                 Pet.Level = 1;
                 Pet.RemoveComponent(Pet.SearchComponent<HealthBarComponent>());
-                Pet.AddComponent(new HealthBarComponent(Pet, Translations.Get(Pet.Name.ToLowerInvariant()), HealthBarType.Immune));
+                Pet.AddComponent(new HealthBarComponent(Pet, Translations.Get(Pet.Name.ToLowerInvariant()), HealthBarType.Friendly));
                 Pet.RemoveComponent(Pet.SearchComponent<BasicAIComponent>());
                 Pet.AddComponent(new MountAIComponent(Pet, _player));
                 Pet.Removable = false;

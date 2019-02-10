@@ -13,7 +13,7 @@ namespace Hedra.Engine.Rendering
     public static class Colors
     {
         public static Vector4 LowHealthRed = new Vector4(0.878f, 0.196f, 0.235f, 1);
-        public static Vector4 FullHealthGreen = Color.LawnGreen.ToVector4();//new Vector4(0.4f, 0.6627451f, 0.4f, 1);
+        public static Vector4 FullHealthGreen = new Vector4(0.4f, 0.6627451f, 0.4f, 1);
         public static Vector4 LightBlue = new Vector4(0.200f, 0.514f, 0.714f, 1f);
         public static Vector4 Violet = new Vector4(0.941f, 0.008f, 0.608f, 1f);
         public static Vector4 PoisonGreen = new Vector4(0.282f, 0.725f, 0.373f, 1f);

@@ -91,10 +91,10 @@ namespace Hedra.Engine.ModuleSystem
         private static HealthBarType BarTypeFromAIType(AIType AI)
         {
             return AI == AIType.Friendly
-                ? HealthBarType.Immune
+                ? HealthBarType.Friendly
                 : AI == AIType.Hostile
                     ? HealthBarType.Hostile
-                    : HealthBarType.Friendly;
+                    : HealthBarType.Neutral;
         }
         
         private static int GetMobDifficulty(Random Rng)
