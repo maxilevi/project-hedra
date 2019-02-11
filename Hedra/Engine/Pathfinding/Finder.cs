@@ -25,7 +25,7 @@ namespace Hedra.Engine.Pathfinding
                     var position = new Vector2(x, y);
                     Graph.UnblockCell(position);
                     var realPosition = ToWorldCoordinates(position, Graph.DimX, Graph.DimY);
-                    if(Parent.Physics.Raycast(realPosition))
+                    if(Parent.Physics.CollidesWithOffset(realPosition))
                         Graph.BlockCell(position);
                     else if(Parent.Physics.EntityRaycast(entities, realPosition, 2.5f))
                         Graph.BlockCell(position);

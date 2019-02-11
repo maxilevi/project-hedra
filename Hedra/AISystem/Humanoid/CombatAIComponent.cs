@@ -68,7 +68,6 @@ namespace Hedra.AISystem.Humanoid
         protected override void OnDamageEvent(DamageEventArgs Args)
         {
             base.OnDamageEvent(Args);
-            if (!(Args.Damager is LocalPlayer)) return;
             SetTarget(Args.Damager);
         }
 

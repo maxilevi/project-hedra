@@ -31,7 +31,8 @@ namespace Hedra.EntitySystem
         Vector3 GravityDirection { get; set; }  
         float VelocityCap { get; set; }  
         Vector3 Velocity { get; set; }
-        bool Raycast(Vector3 Length);
+        bool CollidesWithOffset(Vector3 Offset);
+        bool Raycast(Vector3 End);
         bool EntityRaycast(IEntity[] Entities, Vector3 Length, float Modifier = 1);
         /// <summary>   
         /// If collides with structures

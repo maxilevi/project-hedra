@@ -5,6 +5,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Events;
+using Hedra.Engine.Game;
 using Hedra.Engine.Player;
 using Hedra.Engine.Scenes;
 using Hedra.EntitySystem;
@@ -15,42 +16,38 @@ using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;
 
 namespace Hedra.Engine.WorldBuilding
 {
-    public class SleepingPad : BaseStructure, IUpdatable, ITickable
+    public class SleepingPad : InteractableStructure, IUpdatable, ITickable
     {
         public bool IsOccupied => Sleeper != null;
         public IHumanoid Sleeper { get; private set; }
-        public int BedRadius { get; set; } = 12;
         public Vector3 TargetRotation { get; set; }
+        
+        protected override bool DisposeAfterUse => false;
+
+        protected override bool CanInteract => SkyManager.IsSleepTime && !IsOccupied;
 
         public SleepingPad(Vector3 Position) : base(Position)
         {
-            var player = LocalPlayer.Instance;
-            EventDispatcher.RegisterKeyDown(this, delegate(object Sender, KeyEventArgs Args)
-            {
-                if (Args.Key == Controls.Interact && !IsOccupied)
-                {
-                    if (player.IsAttacking || player.IsCasting || player.IsDead || !player.CanInteract ||
-                        player.IsEating || (player.Position - this.Position).LengthSquared > BedRadius * BedRadius || !SkyManager.IsSleepTime) return;
-
-                    this.SetSleeper(player);
-                }
-                if (Args.Key == Controls.Descend && IsOccupied && Sleeper == player)
-                {
-                    this.SetSleeper(null);
-                }
-            });
-            
-            UpdateManager.Add(this);      
         }
 
-        public void Update()
-        {
-            var player = LocalPlayer.Instance;
-            player.MessageDispatcher.ShowMessageWhile(Translations.Get("to_sleep", Controls.Interact),
-                () => (player.Position - this.Position).LengthSquared < BedRadius * BedRadius && player.CanInteract && !IsOccupied && SkyManager.IsSleepTime);
+        public override string Message => Translations.Get("to_sleep", Controls.Interact);
 
+        public override int InteractDistance => 12;
+
+        public override void Update()
+        {
+            base.Update();
             if(IsOccupied && (!SkyManager.IsSleepTime || Sleeper.IsDead))
-                this.SetSleeper(null);
+                SetSleeper(null);
+        }
+
+        protected override void OnKeyDown(object Sender, KeyEventArgs Args)
+        {
+            base.OnKeyDown(Sender, Args);
+            if (Args.Key == Controls.Descend && IsOccupied && Sleeper == GameManager.Player)
+            {
+                SetSleeper(null);
+            }
         }
 
         public void SetSleeper(IHumanoid Human)
@@ -85,16 +82,15 @@ namespace Hedra.Engine.WorldBuilding
             Sleeper = Human;
         }
 
-        public void OnDamageWakeUp (DamageEventArgs Args)
+        private void OnDamageWakeUp(DamageEventArgs Args)
         {
             if (Sleeper == Args.Victim)
                 this.SetSleeper(null);
         }
 
-        public override void Dispose()
+        protected override void Interact(IHumanoid Humanoid)
         {
-            EventDispatcher.UnregisterKeyDown(this);
-            UpdateManager.Remove(this);
+            SetSleeper(Humanoid);
         }
     }
 }

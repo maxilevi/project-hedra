@@ -18,6 +18,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
     public class Door : InteractableStructure
     {
         protected override bool SingleUse => false;
+        protected override bool AllowThroughCollider => true;
         public override string Message => Translations.Get(!_opened ? "open_door" : "close_door");
         public override int InteractDistance => 12;
         private bool _isMoving;

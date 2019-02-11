@@ -34,6 +34,7 @@ namespace Hedra.Engine.WorldBuilding
         protected virtual bool SingleUse => true;
         protected virtual bool DisposeAfterUse => true;
         protected virtual bool CanInteract => true;
+        protected virtual bool AllowThroughCollider => true;
         public virtual Key Key => Controls.Interact;
         public abstract string Message { get; }
         public abstract int InteractDistance { get; }
@@ -45,17 +46,19 @@ namespace Hedra.Engine.WorldBuilding
 
         protected InteractableStructure(Vector3 Position) : base(Position)
         {
-            EventDispatcher.RegisterKeyDown(this, delegate (object Sender, KeyEventArgs EventArgs)
-            {
-                if (_canInteract && Key == EventArgs.Key && (!Interacted || !SingleUse) && GameManager.Player.CanInteract)
-                {
-                    _shouldInteract = true;
-                    EventArgs.Cancel();
-                }
-            }, EventPriority.Normal);
+            EventDispatcher.RegisterKeyDown(this, OnKeyDown, EventPriority.Normal);
             UpdateManager.Add(this);
         }
 
+        protected virtual void OnKeyDown(object Sender, KeyEventArgs EventArgs)
+        {
+            if (_canInteract && Key == EventArgs.Key && (!Interacted || !SingleUse) && GameManager.Player.CanInteract)
+            {
+                _shouldInteract = true;
+                EventArgs.Cancel();
+            }
+        }
+        
         public virtual void Update()
         {
             if ((Position - GameManager.Player.Position).LengthSquared < 128 * 128)
@@ -67,11 +70,11 @@ namespace Hedra.Engine.WorldBuilding
             var player = GameManager.Player;
 
             bool IsInLookingAngle() => Vector2.Dot((this.Position - player.Position).Xz.NormalizedFast(),
-                player.View.LookingDirection.Xz.NormalizedFast()) > InteractionAngle;                
+                player.View.LookingDirection.Xz.NormalizedFast()) > InteractionAngle && (AllowThroughCollider || !player.Physics.Raycast(Position));                
             
             if (IsInRadius() && IsInLookingAngle() && (!Interacted || !SingleUse) && CanInteract && player.CanInteract)
             {
-                player.MessageDispatcher.ShowMessageWhile($"[{Key.ToString()}] {Message}", () => !Disposed && IsInLookingAngle() && IsInRadius() && player.CanInteract);
+                player.MessageDispatcher.ShowMessageWhile($"[{Key.ToString()}] {Message}", () => !Disposed && IsInRadius() && IsInLookingAngle() && player.CanInteract);
                 _canInteract = true;
                 if(!_selected) OnSelected(player);
                 if (_shouldInteract && (!Interacted || !SingleUse) && !Disposed && CanInteract && player.CanInteract)
@@ -115,7 +118,7 @@ namespace Hedra.Engine.WorldBuilding
         }
 
         protected abstract void Interact(IHumanoid Humanoid);
-
+        
         public override void Dispose()
         {
             base.Dispose();

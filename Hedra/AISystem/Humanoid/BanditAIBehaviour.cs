@@ -23,7 +23,7 @@ namespace Hedra.AISystem.Humanoid
         public override IEntity FindPlayerTarget(float SearchRadius)
         {
             var player = GameManager.Player;
-            return (player.Position.Xz - Parent.Position.Xz).LengthSquared < SearchRadius * SearchRadius 
+            return !player.IsDead && (player.Position.Xz - Parent.Position.Xz).LengthSquared < SearchRadius * SearchRadius 
                 ? player 
                 : null;
         }

@@ -468,9 +468,19 @@ namespace Hedra.Engine.EntitySystem
         
         public bool UpdateColliderList { get; set; }
 
-        public bool Raycast(Vector3 Length)
+        public bool Raycast(Vector3 End)
         {
-            var shape = Parent.Model.BroadphaseBox.Cache.Translate(Length).AsShape();
+            var shape = new CollisionShape(new []
+            {
+                TargetPosition,
+                End
+            });
+            return _collisions.Any(S => Physics.Collides(S, shape));
+        }
+        
+        public bool CollidesWithOffset(Vector3 Offset)
+        {
+            var shape = Parent.Model.BroadphaseBox.Cache.Translate(Offset).AsShape();
             return _collisions.Any(S => Physics.Collides(S, shape));
         }
         
