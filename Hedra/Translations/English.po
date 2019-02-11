@@ -203,7 +203,28 @@ crafting_key = Craft
 quest_log_key = Quest Log
 reset_to_default = RESET TO DEFAULT
 key_already_used = KEY '{0}' IS ALREADY BOUND TO AN ACTION
-# Mobs
+# Mob Translations
 horse = Horse
-# -- Mobs
+fox = Fox
+bear = Bear
+bee = Bee
+boar = Boar
+beetle = Beetle
+cow = Cow
+deer = Deer
+ent = Ent
+goat = Goat
+gorilla = Gorilla
+ooze = Ooze
+pug = Pug
+rat = Rat
+roach = Roach
+sheep = Sheep
+snake = Snake
+spider = Spider
+troll = Troll
+turtle = Turtle
+wasp = Wasp
+wolf = Wolf
+# -- End mobs translations
 

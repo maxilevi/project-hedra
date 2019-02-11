@@ -4,6 +4,7 @@ using System.Drawing;
 using Hedra.AISystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
+using Hedra.Engine.IO;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 
@@ -65,10 +66,13 @@ namespace Hedra.Engine.ModuleSystem
             
             var mobDifficulty = GetMobDifficulty(new Random(Seed));
             var mobDifficultyModifier = GetMobDifficultyModifier(mobDifficulty);
-
+            var mobName = Translations.Has(mob.Type.ToLowerInvariant()) ? Translations.Get(mob.Type.ToLowerInvariant()) : mob.Type.AddSpacesToSentence(true);
+            if(!Translations.Has(mob.Type.ToLowerInvariant()))
+                Log.WriteLine($"Failed to find translation for mob '{mob.Type}', using name as default.");
+            
             var barComponent = new HealthBarComponent(
                 mob,
-                Translations.Has(mob.Type) ? Translations.Get(mob.Type) : mob.Type.AddSpacesToSentence(true),
+                mobName,
                 BarTypeFromAIType(ai.Type),
                 mobDifficulty == 1 ? Color.White : mobDifficulty == 3 ? Color.Red : Color.Gold
             );
