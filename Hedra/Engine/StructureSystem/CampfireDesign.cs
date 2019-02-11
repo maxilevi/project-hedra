@@ -104,6 +104,7 @@ namespace Hedra.Engine.StructureSystem
         {
             var structure = base.Setup(TargetPosition, Rng, new Campfire(TargetPosition));
             structure.Mountain.Radius = 48;
+            structure.AddGroundwork(new RoundedGroundwork(TargetPosition, 24, BlockType.Dirt));
             return structure;
         }
 

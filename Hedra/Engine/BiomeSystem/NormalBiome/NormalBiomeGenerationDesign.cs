@@ -57,8 +57,8 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             Blocktype = BlockType.Air;
 
             AddBaseHeight(X, Z, ref height, ref Blocktype, out var baseHeight);
-            AddMountainHeight(X, Z, ref height, ref Blocktype);
-            AddMountHeight(X, Z, ref height, ref Blocktype, HeightCache);
+            //AddMountainHeight(X, Z, ref height, ref Blocktype);
+            //AddMountHeight(X, Z, ref height, ref Blocktype, HeightCache);
             AddBigMountainsHeight(X, Z,ref height, ref Blocktype, HeightCache);
             AddLakes(X, Z, ref height);
             AddStones(X, Z, ref height, ref Blocktype, HeightCache);
@@ -70,7 +70,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
         {
             var lakeNoise = Math.Max(0, OpenSimplexNoise.Evaluate(X * 0.001, Z * 0.001));
             var frequency = Math.Max(0, OpenSimplexNoise.Evaluate(X * 0.0005, Z * 0.0005));
-            Height += frequency * -lakeNoise * 48.0;
+            Height += frequency * -lakeNoise * 96.0;
         }
 
         private static void AddStones(float X, float Z, ref double Height, ref BlockType Type, Dictionary<Vector2, float[]> HeightCache)
@@ -90,10 +90,15 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
         {
             if (World.Seed == World.MenuSeed) return;
 
-            var rawMountainHeight = Math.Max(0, OpenSimplexNoise.Evaluate(X * 0.00075, Z * 0.00075) - .15);
-            var moutainHeight = rawMountainHeight * 200.0;
+            var rawMountainHeight = Math.Max(0f, OpenSimplexNoise.Evaluate(X * 0.001, Z * 0.001)    );
+            var moutainHeight = rawMountainHeight * 64.0;
             if (moutainHeight > 0)
             {
+                var smallerMountains = OpenSimplexNoise.Evaluate(X * 0.01, Z * 0.01) * 12f;
+                Height += smallerMountains * Math.Min(1f, rawMountainHeight);
+
+                //var evenSmallerMountains = OpenSimplexNoise.Evaluate(X * 0.01, Z * 0.01) * 4f;
+                //Height += smallerMountains * Math.Min(1f, rawMountainHeight);
                 /*
                 var stones = Math.Min(Math.Max(0, OpenSimplexNoise.Evaluate(X * 0.0025, Z * 0.0025) - .5) * 2048.0, 16.0)
                 * Math.Min(moutainHeight, 1);
@@ -110,23 +115,23 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
 
         private static void AddMountHeight(float X, float Z, ref double Height, ref BlockType Type, Dictionary<Vector2, float[]> HeightCache)
         {
-            /*var mountHeight = Mathf.Clamp((OpenSimplexNoise.Evaluate(X * 0.004, Z * 0.004) - .6f) * 2048, 0.0, 32.0);
+            var mountHeight = Math.Min(Math.Max((OpenSimplexNoise.Evaluate(X * 0.004, Z * 0.004) - .6f) * 2048, 0.0), 32.0);
 
             if (mountHeight > 0)
             {
                 Type = BlockType.Stone;
                 var mod = (World.MenuSeed == World.Seed) ? 0 : .4f;//Mathf.Clamp(OpenSimplexNoise.Evaluate(x * 0.005f, z * 0.005f) * .5f - .1f, 0.0, 2.0);
                 mountHeight *= mod;
-                var Mult = 1;//Mathf.Clamp(OpenSimplexNoise.Evaluate(x * 0.005, z * 0.005) * 4.0, 0, 1);
+                var Mult = Math.Min(Math.Max(OpenSimplexNoise.Evaluate(X * 0.0005, Z * 0.0005) * 4.0, 0.0), 1.0);
                 mountHeight *= Mult;
 
-                if (mountHeight > 0)
-                    HeightCache?.Add(new Vector2(X, Z), new[] { (float)mountHeight, (float)Height, (float)(Mult * mod) });
+                //if (mountHeight > 0)
+                //    HeightCache?.Add(new Vector2(X, Z), new[] { (float)mountHeight, (float)Height, (float)(Mult * mod) });
                 Height += mountHeight;
             }
 
             if (mountHeight <= 1.0)
-                Type = BlockType.Grass;*/
+                Type = BlockType.Grass;
         }
         
         private static void AddMountainHeight(float X, float Z, ref double Height, ref BlockType Type)

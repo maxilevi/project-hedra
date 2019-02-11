@@ -106,7 +106,8 @@ namespace Hedra.Engine.WorldBuilding
                 human.AddComponent( new ArcherAIComponent(human, Friendly) );
             else
                 human.AddComponent(new WarriorAIComponent(human, Friendly));
-            human.SearchComponent<DamageComponent>().Ignore(E => E is IPlayer);
+            if(Friendly)
+                human.SearchComponent<DamageComponent>().Ignore(E => E is IPlayer);
             human.Name = (!Friendly) ? Undead ? "Skeleton" : "Bandit" : NameGenerator.PickMaleName(Utils.Rng);
             human.IsFriendly = Friendly;
             return human;
