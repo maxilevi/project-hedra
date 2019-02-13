@@ -47,8 +47,9 @@ namespace Hedra.Engine.Rendering.UI
         
         public void Draw()
         {
-            if(!_enabled)
+            if(!_enabled || Scale == Vector2.Zero)
                 return;
+            
             _barSize = Mathf.Clamp( Mathf.Lerp(_barSize, _value() / _max(), (float) Time.DeltaTime * 8f), 0, 1);
 
             Shader.Bind();

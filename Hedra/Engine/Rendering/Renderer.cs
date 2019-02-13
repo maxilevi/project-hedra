@@ -394,6 +394,11 @@ namespace Hedra.Engine.Rendering
         {
             return Provider.GetInteger(PName);
         }
+        
+        public static void GetInteger(GetPName PName, out int Value)
+        {
+            Provider.GetInteger(PName, out Value);
+        }
 
         public static void GetQueryObject(int QueryObject, GetQueryObjectParam Parameter, out int Value)
         {

@@ -33,21 +33,18 @@ namespace Hedra.Engine.Rendering
         public static Shader WaterShader { get; private set; }
         public static Shader StaticShader { get; private set; }
         public static float WaveMovement { get; private set; }
-        public static WorldBuffer StaticBuffer { get; private set; }
-        public static WorldBuffer InstanceBuffer { get; private set; }
-        public static WorldBuffer WaterBuffer { get; private set; }
+        public static BufferBalancer StaticBuffer { get; private set; }
+        public static BufferBalancer InstanceBuffer { get; private set; }
+        public static BufferBalancer WaterBuffer { get; private set; }
         public static bool ShowWaterBackfaces {get; set;}
         public static Texture3D NoiseTexture { get; private set; }
         private static IntPtr[] _shadowOffsets;
         private static int[] _shadowCounts;
 
-        public static void AllocateMemory()
+        public static void Initialize()
         {
             WaterShader = Shader.Build("Shaders/Water.vert", "Shaders/Water.frag");
             StaticShader = Shader.Build("Shaders/Static.vert", "Shaders/Static.frag");
-            StaticBuffer = new WorldBuffer(PoolSize.SuperBig);
-            InstanceBuffer = new WorldBuffer(PoolSize.Normal);
-            WaterBuffer = new WorldBuffer(PoolSize.Tiny);
 
             var noiseValues = new float[16, 16, 16];
             for (var x = 0; x < noiseValues.GetLength(0); x++)
@@ -61,8 +58,24 @@ namespace Hedra.Engine.Rendering
                 }
             }
             NoiseTexture = new Texture3D(noiseValues);
-            _shadowOffsets = new IntPtr[StaticBuffer.Offsets.Length];
-            _shadowCounts = new int[StaticBuffer.Counts.Length];
+        }
+
+        public static void Allocate()
+        {
+            StaticBuffer = new BufferBalancer(
+                new WorldBuffer(PoolSize.Small),
+                new WorldBuffer(PoolSize.Small),
+                new WorldBuffer(PoolSize.Small),
+                new WorldBuffer(PoolSize.Small)
+            );
+            InstanceBuffer = new BufferBalancer(
+                new WorldBuffer(PoolSize.VerySmall)
+            );
+            WaterBuffer = new BufferBalancer(
+                new WorldBuffer(PoolSize.Tiny)
+            );
+            _shadowOffsets = new IntPtr[GeneralSettings.MaxChunks];
+            _shadowCounts = new int[GeneralSettings.MaxChunks];
         }
 
         public static void PrepareCameraMatrix()
@@ -93,65 +106,47 @@ namespace Hedra.Engine.Rendering
 
         private static void InstanceDraw(Dictionary<Vector2, Chunk> ToDraw)
         {
-            var count = InstanceBuffer.BuildCounts(ToDraw);
-
-            InstanceBuffer.Bind();
-            InstanceBuffer.BindIndices();
             StaticShader["Dither"] = GameSettings.SmoothLod ? 1 : 0;
             StaticShader["MaxDitherDistance"] = GeneralSettings.MaxLodDitherDistance;
             StaticShader["MinDitherDistance"] = GeneralSettings.MinLodDitherDistance;
             
-            Renderer.MultiDrawElements(PrimitiveType.Triangles, InstanceBuffer.Counts, DrawElementsType.UnsignedInt, InstanceBuffer.Offsets, count);
+            InstanceBuffer.Draw(ToDraw);
         }
         
         private static void TerrainDraw(Dictionary<Vector2, Chunk> ToDraw, Dictionary<Vector2, Chunk> ShadowDraw)
-        {
-            var shadowCount = StaticBuffer.BuildCounts(ShadowDraw, ref _shadowOffsets, ref _shadowCounts);
-                
-            StaticBuffer.Bind(false);
+        { 
             Renderer.EnableVertexAttribArray(0);
             Renderer.EnableVertexAttribArray(1);
-
-            StaticBuffer.BindIndices();
 
             if (GameSettings.Shadows)
             {
                 ShadowRenderer.Bind();
-                Renderer.MultiDrawElements(PrimitiveType.Triangles, _shadowCounts, DrawElementsType.UnsignedInt, _shadowOffsets, shadowCount);
+                StaticBuffer.DrawShadows(ShadowDraw, ref _shadowOffsets, ref _shadowCounts);
                 ShadowRenderer.UnBind();
             }
-            var count = StaticBuffer.BuildCounts(ToDraw);
-
             StaticBind();
             Renderer.EnableVertexAttribArray(2);
-            Renderer.MultiDrawElements(PrimitiveType.Triangles, StaticBuffer.Counts, DrawElementsType.UnsignedInt, StaticBuffer.Offsets, count);            
-
-            StaticBuffer.Unbind();
+            StaticBuffer.Draw(ToDraw);
         }
 
         private static void WaterDraw(Dictionary<Vector2, Chunk> ToDraw)
         {
-            var count = WaterBuffer.BuildCounts(ToDraw);
-
             WaveMovement += Time.IndependantDeltaTime * Mathf.Radian * 32;
             if (WaveMovement >= 5f)
                 WaveMovement = 0;
 
             WaterBind();
-            WaterBuffer.Bind();
                 
             Renderer.EnableVertexAttribArray(0);
             Renderer.EnableVertexAttribArray(1);
             Renderer.EnableVertexAttribArray(2);
-                
-            Renderer.BindBuffer(WaterBuffer.Indices.Buffer.BufferTarget, WaterBuffer.Indices.Buffer.ID);
-            Renderer.MultiDrawElements(PrimitiveType.Triangles, WaterBuffer.Counts, DrawElementsType.UnsignedInt, WaterBuffer.Offsets, count);
+
+            WaterBuffer.Draw(ToDraw);
                 
             Renderer.DisableVertexAttribArray(0);
             Renderer.DisableVertexAttribArray(1);
             Renderer.DisableVertexAttribArray(2);    
                 
-            WaterBuffer.Unbind();
             WaterUnBind();
         }
 
@@ -181,12 +176,14 @@ namespace Hedra.Engine.Rendering
         {
             StaticBuffer.Discard();
             WaterBuffer.Discard();
+            InstanceBuffer.Discard();
         }
 
         public static void ForceDiscard()
         {
             StaticBuffer.ForceDiscard();
             WaterBuffer.ForceDiscard();
+            InstanceBuffer.ForceDiscard();
         }
         
         #region Binds

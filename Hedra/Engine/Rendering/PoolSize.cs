@@ -9,6 +9,7 @@ namespace Hedra.Engine.Rendering
     {
         VeryTiny = 10,
         Tiny = 25,
+        VerySmall = 37,
         Small = 50,
         Normal = 75,
         Big = 100,

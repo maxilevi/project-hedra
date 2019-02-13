@@ -9,7 +9,13 @@ using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Engine.Rendering.Geometry;
 using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using OpenTK.Graphics.OpenGL;
+using DrawElementsType = OpenTK.Graphics.OpenGL4.DrawElementsType;
+using GetPName = OpenTK.Graphics.OpenGL4.GetPName;
+using GL = OpenTK.Graphics.OpenGL4.GL;
+using PrimitiveType = OpenTK.Graphics.OpenGL4.PrimitiveType;
+using StringName = OpenTK.Graphics.OpenGL4.StringName;
+using VertexAttribPointerType = OpenTK.Graphics.OpenGL4.VertexAttribPointerType;
 
 namespace Hedra.Engine
 {
@@ -131,8 +137,30 @@ namespace Hedra.Engine
                 new Vector3(1,0,0)
             };
             Buffer = new VBO<Vector3>(verts, verts.Length * Vector3.SizeInBytes, VertexAttribPointerType.Float);
-            Indices = new VBO<uint>(new uint[] {0,1,2}, sizeof(uint) * verts.Length, VertexAttribPointerType.UnsignedInt);
+            Indices = new VBO<uint>(new uint[] {0, 1, 2}, sizeof(uint) * verts.Length, VertexAttribPointerType.UnsignedInt);
             return new VAO<Vector3>(Buffer);
+        }
+        
+        public static int QueryAvailableVideoMemory()
+        {
+            var previousSeverity = Renderer.Severity;
+            try
+            {
+                Renderer.Severity = ErrorSeverity.Ignore;
+                Renderer.GetInteger((GetPName) AtiMeminfo.VboFreeMemoryAti, out var mem);
+                Log.WriteLine($"Detected '{mem}KB' as ATI memory");
+                Renderer.GetError();
+
+                if (mem != 0) return mem / 1024;
+                Log.WriteLine($"Detected '{mem}KB' as NVIDIA memory");
+                Renderer.GetInteger((GetPName) NvxGpuMemoryInfo.GpuMemoryInfoCurrentAvailableVidmemNvx, out mem);
+                Renderer.GetError();
+                return mem / 1024;
+            }
+            finally
+            {
+                Renderer.Severity = previousSeverity;
+            }
         }
     }
 }

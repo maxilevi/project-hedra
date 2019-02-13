@@ -64,6 +64,7 @@ namespace Hedra.Engine.Rendering
         void GetActiveUniformBlock(uint V0, uint V1, ActiveUniformBlockParameter Parameter, out int V3);
         ErrorCode GetError();
         int GetInteger(GetPName PName);
+        void GetInteger(GetPName PName, out int Value);
         void GetQueryObject(uint Program, GetQueryObjectParam Parameter, out int Value);
         void GetShader(uint Program, ShaderParameter Parameter, out int Value);
         string GetShaderInfoLog(int Id);

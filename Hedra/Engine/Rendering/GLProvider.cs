@@ -407,6 +407,12 @@ namespace Hedra.Engine.Rendering
                 EnsureNoErrors();
             }
         }
+        
+        public void GetInteger(GetPName PName, out int Value)
+        {
+            GL.GetInteger(PName, out Value);
+            EnsureNoErrors();
+        }
 
         public void GetQueryObject(uint Program, GetQueryObjectParam Parameter, out int Value)
         {
@@ -646,7 +652,7 @@ namespace Hedra.Engine.Rendering
             if(System.Threading.Thread.CurrentThread.ManagedThreadId != Loader.Hedra.MainThreadId)
                 throw new ArgumentException($"Invalid GL calls outside of the main thread.");
             var error = GL.GetError();
-            if (error != ErrorCode.NoError)
+            if (error != ErrorCode.NoError && ErrorSeverity.Ignore != Severity)
             {
                 var errorMsg = $"Unexpected OpenGL error: {error}";
                 Log.WriteResult(false, errorMsg);

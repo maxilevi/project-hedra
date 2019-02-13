@@ -88,7 +88,8 @@ namespace Hedra.Engine.Rendering
             }
         }
 
-        public bool Remove(Vector2 Offset){
+        public bool Remove(Vector2 Offset)
+        {
             
             lock(_lock)
             {
@@ -112,6 +113,12 @@ namespace Hedra.Engine.Rendering
                 return Remove(Offset);
             }
             return Add(Offset, Data);      
+        }
+        
+        public bool Has(Vector2 Offset)
+        {
+            lock (_lock)
+                return _chunkDict.ContainsKey(Offset);
         }
 
         private bool Add(Vector2 Offset, VertexData Data)
@@ -180,8 +187,8 @@ namespace Hedra.Engine.Rendering
             }
             return false;
         }
-        
-          public MemoryEntry ReplaceIndices(uint[] Data, int SizeInBytes, MemoryEntry Entry, MemoryEntry[] Entries)
+
+        private MemoryEntry ReplaceIndices(uint[] Data, int SizeInBytes, MemoryEntry Entry, MemoryEntry[] Entries)
           {            
             if(Entry.Length != SizeInBytes)
             {
@@ -267,5 +274,9 @@ namespace Hedra.Engine.Rendering
         public IntPtr[] Offsets => _offset;
         
         public int[] Counts => _counts;
+        
+        public int AvailableMemory => Indices.AvailableMemory + Vertices.AvailableMemory + Colors.AvailableMemory + Normals.AvailableMemory;
+        
+        public int TotalMemory => Indices.TotalMemory + Vertices.TotalMemory + Colors.TotalMemory + Normals.TotalMemory;
     }
 }

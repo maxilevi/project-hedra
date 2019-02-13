@@ -246,6 +246,11 @@ namespace Hedra.Engine.Rendering
             return 1;
         }
 
+        public void GetInteger(GetPName PName, out int Value)
+        {
+            Value = 1;
+        }
+
         public virtual void GetQueryObject(uint Program, GetQueryObjectParam Parameter, out int Value)
         {
             Value = 1;
