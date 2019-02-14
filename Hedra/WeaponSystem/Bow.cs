@@ -200,7 +200,7 @@ namespace Hedra.WeaponSystem
         {
             if (Model == null) return null;
             var size = (Model.SupportPoint(Vector3.One) - Model.SupportPoint(-Vector3.One)).LengthFast;
-            return Model.Clone().Scale(Vector3.One * 3.5f * .75f / size);
+            return Model.Clone().Scale(Vector3.One * 3f * .75f / size);
         }
 
         public override bool CanDoAttack1 => true;//Owner?.Inventory.Ammo != null;

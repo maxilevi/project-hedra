@@ -50,14 +50,44 @@ namespace Hedra.Engine.PhysicsSystem
         
         public static Vector3 DirectionToEuler(Vector3 Direction)
         {
-            var mv = Mathf.RotationAlign(Direction.Z < 0 ? -Vector3.UnitZ : Vector3.UnitZ, Direction);
-            var modifier = new Vector3(0, Direction.Z < 0 ? 180 : 0, 0);
-            var multiplier = new Vector3(Direction.Z < 0 ? -1f : 1, 1, 1);
-            mv.ExtractRotation().ToAxisAngle(out Vector3 axis, out float angle);
-            if(float.IsNaN(angle)) return Vector3.Zero;
-            return axis * angle * Mathf.Degree * multiplier + modifier;
+            var newForward = Direction.Xz.ToVector3().NormalizedFast();
+            var defaultRot = Vector3.UnitX * CalculateNewX(Direction) + Vector3.UnitZ * GetRotation(Vector3.UnitZ, new Vector3(0, Direction.Y, 1).NormalizedFast(), Vector3.UnitY).Z;
+            var xRot = GetRotation(Vector3.UnitZ, newForward, Vector3.UnitY);
+            var axisAngle = ((Matrix4.CreateRotationZ(defaultRot.Z * Mathf.Radian) * Matrix4.CreateRotationX(defaultRot.X * Mathf.Radian)) * Matrix4.CreateRotationY(xRot.Y * Mathf.Radian)).ExtractRotation().ToAxisAngle();
+            return axisAngle.Xyz * axisAngle.W * Mathf.Degree;
         }
-            
+
+        private static Vector3 GetRotation(Vector3 source, Vector3 dest, Vector3 up)
+        {
+            float dot = Vector3.Dot(source, dest);
+
+            if (Math.Abs(dot - (-1.0f)) < 0.01f)
+            {
+                // vector a and b point exactly in the opposite direction, 
+                // so it is a 180 degrees turn around the up-axis
+                return up * 180;
+            }
+            if (Math.Abs(dot - (1.0f)) < 0.01f)
+            {
+                // vector a and b point exactly in the same direction
+                // so we return the identity quaternion
+                return Vector3.Zero;
+            }
+
+            float rotAngle = (float)Math.Acos(dot);
+            Vector3 rotAxis = Vector3.Cross(source, dest);
+            rotAxis = Vector3.Normalize(rotAxis);
+            return rotAxis * rotAngle * Mathf.Degree;
+        }
+        
+        private static float CalculateNewX(Vector3 Direction)
+        {
+            var output = 0f;
+            if (Direction.Y > 0) output = Mathf.Lerp(0, -90, Direction.Y);
+            else output = Mathf.Lerp(0, 90, -Direction.Y);
+            return output;
+        }
+        
         public static float HeightAtPosition(float X, float Z, int Lod = -1)
         {
              return HeightAtPosition(new Vector3(X,0,Z), Lod);

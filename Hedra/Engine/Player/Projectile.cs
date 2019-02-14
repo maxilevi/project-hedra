@@ -19,6 +19,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
+using Hedra.Engine.ComplexMath;
 using Hedra.Rendering;
 using Hedra.Sound;
 
@@ -67,6 +68,7 @@ namespace Hedra.Engine.Player
             Mesh = ObjectMesh.FromVertexData(MeshData);
             Propulsion = Propulsion;
             Mesh.Position = Origin;
+            //Mesh.LocalRotation = Physics.DirectionToEuler(Parent.Orientation);
             UpdateManager.Add(this);
         }
         
@@ -91,7 +93,8 @@ namespace Hedra.Engine.Player
             {
                 Mesh.Position += Direction * Speed * Time.DeltaTime;
             }
-            Mesh.LocalRotation = Physics.DirectionToEuler(_accumulatedVelocity.NormalizedFast());
+            var dir = Physics.DirectionToEuler(_accumulatedVelocity.NormalizedFast());
+            Mesh.LocalRotation = dir;
             if (HandleLifecycle)
             {
                 if (Collide)
