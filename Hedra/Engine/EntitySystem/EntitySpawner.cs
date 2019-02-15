@@ -116,7 +116,7 @@ namespace Hedra.Engine.EntitySystem
             var template = default(MiniBossTemplate);
             for (var i = 0; i < templates.Length; ++i)
             {
-                if (templates[i].Chance < rng)
+                if (templates[i].Chance / 100f < rng)
                 {
                     template = templates[i];
                     break;
