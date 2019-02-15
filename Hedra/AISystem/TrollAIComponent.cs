@@ -1,9 +1,10 @@
 using Hedra.AISystem.Behaviours;
 using Hedra.EntitySystem;
+using OpenTK;
 
 namespace Hedra.AISystem
 {
-    public class TrollAIComponent : BasicAIComponent
+    public class TrollAIComponent : BasicAIComponent, IGuardAIComponent
     {
         protected RetaliateBehaviour Retaliate { get; }
         protected HostileBehaviour Hostile { get; }
@@ -28,5 +29,6 @@ namespace Hedra.AISystem
         }
         
         public override AIType Type => AIType.Hostile;
+        public Vector3 GuardPosition { get; set; }
     }
 }

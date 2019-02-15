@@ -73,7 +73,7 @@ namespace Hedra.AISystem.Behaviours
                 Parent.RotateTowards(Victim);
                 spitAnimation.OnAnimationMid -= AttackHandler;
                 var direction = (Victim.Position - Parent.Position).NormalizedFast();
-                var spit = new ParticleProjectile(Parent, Parent.Position + Parent.Orientation * 2f + Vector3.UnitY * 2.0f)
+                var spit = new ParticleProjectile(Parent, Parent.Position + Parent.Orientation * 2f + Vector3.UnitY * 2f)
                 {
                     Propulsion = direction * 2f,
                     Color = Color.LawnGreen.ToVector4() * .5f,

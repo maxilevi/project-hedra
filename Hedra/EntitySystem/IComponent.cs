@@ -1,6 +1,8 @@
+using System;
+
 namespace Hedra.EntitySystem
 {
-    public interface IComponent<out T> where T : IEntity
+    public interface IComponent<out T> where T : IEntity, IDisposable
     {
         bool Drawable { get; }
 

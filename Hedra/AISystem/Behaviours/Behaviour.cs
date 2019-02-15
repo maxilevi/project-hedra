@@ -1,10 +1,12 @@
+using System;
+using System.Linq;
 using System.Reflection;
 using Hedra.Engine.EntitySystem;
 using Hedra.EntitySystem;
 
 namespace Hedra.AISystem.Behaviours
 {
-    public abstract class Behaviour
+    public abstract class Behaviour : IDisposable
     {
         protected IEntity Parent { get; }
 
@@ -15,8 +17,8 @@ namespace Hedra.AISystem.Behaviours
 
         public void AlterBehaviour<T>(T NewBehaviour) where T : Behaviour
         {
-            const BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-            foreach (FieldInfo field in this.GetType().GetFields(flags))
+            var types = GetFields(GetType());
+            foreach (var field in types)
             {
                 if (field.FieldType.IsSubclassOf(typeof(T)) || typeof(T) == field.FieldType)
                 {
@@ -28,7 +30,20 @@ namespace Hedra.AISystem.Behaviours
                 }
             }
         }
+        
+        private static FieldInfo[] GetFields(Type Derived)
+        {
+            const BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
+            var fields = Derived.GetFields(flags).ToArray();
+            if (Derived.BaseType != typeof(Behaviour) && Derived.BaseType != null)
+            {
+                return GetFields(Derived.BaseType).Concat(fields).ToArray();
+            }
+            return fields;
+        }
 
-        public virtual void Update() { }
+        public virtual void Update() {}
+
+        public virtual void Dispose() {}
     }
 }

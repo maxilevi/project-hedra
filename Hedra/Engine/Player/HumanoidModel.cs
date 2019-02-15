@@ -411,9 +411,9 @@ namespace Hedra.Engine.Player
             _walkAnimation.Speed = Human.Speed;
             _modelSound.Pitch = Human.Speed / PitchSpeed;
             Model.Position = Mathf.Lerp(Model.Position, Position + RidingOffset, Time.IndependantDeltaTime * 24f);
-            _rotationQuaternionX = Quaternion.Slerp(_rotationQuaternionX, QuaternionMath.FromEuler(Vector3.UnitX * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
-            _rotationQuaternionY = Quaternion.Slerp(_rotationQuaternionY, QuaternionMath.FromEuler(Vector3.UnitY * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
-            _rotationQuaternionZ = Quaternion.Slerp(_rotationQuaternionZ, QuaternionMath.FromEuler(Vector3.UnitZ * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 6f);
+            _rotationQuaternionX = Quaternion.Slerp(_rotationQuaternionX, QuaternionMath.FromEuler(Vector3.UnitX * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 8f);
+            _rotationQuaternionY = Quaternion.Slerp(_rotationQuaternionY, QuaternionMath.FromEuler(Vector3.UnitY * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 8f);
+            _rotationQuaternionZ = Quaternion.Slerp(_rotationQuaternionZ, QuaternionMath.FromEuler(Vector3.UnitZ * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 8f);
             Model.LocalRotation = new Vector3(
                 QuaternionMath.ToEuler(_rotationQuaternionX).X,
                 QuaternionMath.ToEuler(_rotationQuaternionY).Y,

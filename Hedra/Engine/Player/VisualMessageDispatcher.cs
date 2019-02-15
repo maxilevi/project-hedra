@@ -38,6 +38,7 @@ namespace Hedra.Engine.Player
             _messageQueue = new List<MessageItem>();
 
             _mainText = new GUIText(string.Empty, new Vector2(0, .7f), Color.White, FontCache.Get(AssetManager.BoldFamily, 32, FontStyle.Bold));
+            _mainText.Stroke = true;
             _playerText = new GUIText(string.Empty, new Vector2(0, 0), Color.White, FontCache.Get(AssetManager.BoldFamily, 13, FontStyle.Bold));
 
             _notificationText = new GUIText(string.Empty, new Vector2(0.7f, -0.8f), Color.FromArgb(255, 39, 39, 39),
@@ -144,10 +145,10 @@ namespace Hedra.Engine.Player
         
         public void ShowTitleMessage(string Message, float Seconds)
         {
-            this.ShowTitleMessage(Message, Seconds, Color.FromArgb(255, 39, 39, 39));
+            this.ShowTitleMessage(Message, Seconds, Color.White);
         }
 
-        public void ShowTitleMessage(string Message, float Seconds, Color TextColor)
+        private void ShowTitleMessage(string Message, float Seconds, Color TextColor)
         {
             if (_messageQueue.Any(Item => Item.Content == Message.ToUpperInvariant())) return;
             var item = new MessageItem

@@ -28,6 +28,12 @@ namespace HedraTests.CodePolicy
         }
         
         [Test]
+        public void TestNoTraverseStorage()
+        {
+            AssertBothInSameFile(@"TraverseStorage\.Instance\.CreateIfNecessary", @"TraverseStorage\.Instance\.RemoveIfNecessary", "TraverseStorage");
+        }
+        
+        [Test]
         public void TestNoKeyDown()
         {
             AssertBothInSameFile(@"EventDispatcher\.RegisterKeyDown", @"EventDispatcher\.UnregisterKeyDown", "RegisterKeyDown");

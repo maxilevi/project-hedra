@@ -28,6 +28,11 @@ namespace Hedra.AISystem.Behaviours
             Attack.Update();
         }
 
+        public override void Dispose()
+        {
+            Attack.Dispose();
+        }
+
         public bool Enabled => Attack.Enabled;
     }
 }

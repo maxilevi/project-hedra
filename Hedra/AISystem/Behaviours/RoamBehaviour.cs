@@ -49,6 +49,12 @@ namespace Hedra.AISystem.Behaviours
             //if (Parent.IsStuck) Traverse.Cancel();
         }
 
+        public override void Dispose()
+        {
+            Idle.Dispose();
+            Traverse.Dispose();
+        }
+
         protected virtual Vector3 SearchPoint => Parent.Position;
         
         private float Diameter => Radius * 2f;

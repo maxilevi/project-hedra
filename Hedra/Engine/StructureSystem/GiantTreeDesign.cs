@@ -59,13 +59,14 @@ namespace Hedra.Engine.StructureSystem
             var underWater = region.Generation.GetHeight(position.X, position.Z, null, out _) < BiomePool.SeaLevel;
             Executer.ExecuteOnMainThread(delegate
             {
+                if (Structure.Disposed) return;
                 var chestOffset = Vector3.UnitZ * 10f + Vector3.UnitX * -80f;
                 var chestPosition = Vector3.TransformPosition(chestOffset, transMatrix);
                 IEntity treeBoss = null;
                 if (!underWater)
                 {
                     treeBoss = BossGenerator.Generate(
-                        new [] { MobType.Beetle, MobType.Gorilla },
+                        new [] { MobType.Beetle, MobType.Gorilla, MobType.Troll },
                         Vector3.TransformPosition(chestOffset - Vector3.UnitZ * 50, transMatrix),
                         rng);
                     ((GiantTree)Structure.WorldObject).Boss = treeBoss;

@@ -57,8 +57,7 @@ namespace Hedra.Engine.Management
         {
             var identifiers = Environment.OSVersion + Renderer.GetString(StringName.Vendor)
                               + Renderer.GetString(StringName.Renderer) 
-                              + Renderer.GetString(StringName.Version) 
-                              + OSManager.CPUArchitecture 
+                              + Renderer.GetString(StringName.Version)  
                               + Environment.OSVersion 
                               + Environment.UserName;
                 

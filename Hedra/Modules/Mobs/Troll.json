@@ -27,7 +27,7 @@
 		],
 		"AttackAnimations": [
 			{
-				"Path": "$DataFile$/Assets/Chr/TrollAttack0.dae",
+		        "Path": "$DataFile$/Assets/Chr/TrollAttack0.dae",
 				"Speed": 0.5,
 				"OnAnimationProgress" : {
 					"Event": "Quake",
@@ -36,10 +36,10 @@
 			},
             {
               "Path": "$DataFile$/Assets/Chr/TrollAttack1.dae",
-              "Speed": 2.0,
+              "Speed": 1.5,
               "OnAnimationProgress" : {
                 "Event": "Slash",
-                "Progress": 0.75
+                "Progress": 0.5
               }
             }
 		]

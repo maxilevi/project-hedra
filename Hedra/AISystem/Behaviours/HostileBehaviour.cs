@@ -40,5 +40,10 @@ namespace Hedra.AISystem.Behaviours
         }
 
         public bool Enabled => Attack.Enabled;
+
+        public override void Dispose()
+        {
+            Attack.Dispose();
+        }
     }
 }

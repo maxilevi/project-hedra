@@ -12,6 +12,7 @@ using OpenTK;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.PhysicsSystem;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
 
@@ -37,9 +38,13 @@ namespace Hedra.Engine.Player
             if(Disposed) return;
             base.Update();
 
-            this.UpdateLighting();
-
-            this.DoParticles();
+            UpdateLighting();
+            DoParticles();
+        }
+        
+        protected override Box GetCollisionBox(VertexData MeshData)
+        {
+            return new Box(Vector3.Zero, Size * 1.5f);
         }
 
         protected virtual void DoParticles()
@@ -48,7 +53,7 @@ namespace Hedra.Engine.Player
             Particles.Color = Color;
             Particles.ParticleLifetime = 1f;
             Particles.GravityEffect = 0f;
-            Particles.PositionErrorMargin = new Vector3(1f, 1f, 1f);
+            Particles.PositionErrorMargin = Size;
             Particles.Scale = Vector3.One * .25f;
             Particles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
             Particles.Emit();
@@ -57,12 +62,14 @@ namespace Hedra.Engine.Player
             Particles.Color = Color;
             Particles.ParticleLifetime = .05f;
             Particles.GravityEffect = 0f;
-            Particles.PositionErrorMargin = new Vector3(1f, 1f, 1f);
+            Particles.PositionErrorMargin = Size;
             Particles.Scale = Vector3.One * 1.25f;
             Particles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
             Particles.VariateUniformly = true;
             for (var i = 0; i < 35; i++) Particles.Emit();
         }
+
+        private static Vector3 Size => Vector3.One;
 
         private void UpdateLighting()
         {

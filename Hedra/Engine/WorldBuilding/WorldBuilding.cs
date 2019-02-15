@@ -19,6 +19,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.ModuleSystem.Templates;
 
@@ -123,9 +124,9 @@ namespace Hedra.Engine.WorldBuilding
             var rng = new Random(World.Seed);
             var types = new []
             {
-                "Lands","Mountains", "Territory"
+                "mountains_of", "lands_of", "territory_of"
             };
-            return $"{types[rng.Next(0,types.Length)]} of {NameGenerator.Generate(World.Seed)}";
+            return Translations.Get(types[rng.Next(0, types.Length)], NameGenerator.Generate(World.Seed));
         }
 
         private void ApplySeasonHats(Humanoid Human, string Type)

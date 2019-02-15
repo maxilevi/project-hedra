@@ -13,8 +13,11 @@ using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
+using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
+using Hedra.EntitySystem;
 using OpenTK;
+using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.EntitySystem.BossSystem
 {
@@ -22,110 +25,128 @@ namespace Hedra.Engine.EntitySystem.BossSystem
     /// <summary>
     ///     Description of BossHealthBarComponent.
     /// </summary>
-    public class BossHealthBarComponent : EntityComponent, IDisposable
+    public class BossHealthBarComponent : BaseHealthBarComponent
     {
-        private Vector2 _barDefaultScale;
-        private Bar _healthBar;
-        private bool _initialized;
-        private Vector2 _nameDefaultScale;
-        private GUIText _nameGui;
-        private float _targetSize;
-        public bool Enabled = true;
-        public string Name;
+        private static uint _bossBarTexture;
+        public static uint _backgroundTextureId;
+        private static Vector2 _bossBarTextureSize;
+        private static Vector2 _backgroundTextureSize;
 
-        public BossHealthBarComponent(Entity Parent, string Name) : base(Parent)
+        private readonly Panel _panel;
+        private readonly TexturedBar _healthBar;
+        private readonly Texture _backgroundTexture;
+        private readonly GUIText _percentageText;
+        private readonly Vector2 _barDefaultPosition;
+        private readonly Vector2[] _originalScales;
+        private readonly GUIText _nameText;
+        private float _targetSize;
+        private bool _initialized;
+        public bool Enabled { get; set; }
+        public string Name { get; }
+
+        static BossHealthBarComponent()
+        {
+            Executer.ExecuteOnMainThread(() =>
+            {
+                _bossBarTexture = BuildTexture(
+                    Graphics2D.LoadBitmapFromAssets("Assets/UI/BossHealthBar.png"),
+                    Hostile,
+                    "BossHostile"
+                );
+                _backgroundTextureId = Graphics2D.LoadFromAssets("Assets/UI/BossHealthBarBackground.png");
+            });
+            _bossBarTextureSize = Graphics2D.SizeFromAssets("Assets/UI/BossHealthBar.png").As1920x1080() * .65f;
+            _backgroundTextureSize = Graphics2D.SizeFromAssets("Assets/UI/BossHealthBarBackground.png").As1920x1080() * .65f;
+        }
+        
+        public BossHealthBarComponent(IEntity Parent, string Name) : base(Parent)
         {
             this.Name = Name;
-        }
-
-
-        private void Initialize()
-        {
-            if (_initialized)
-                return;
-            _initialized = true;
-
-            var player = GameManager.Player;
-
-            if (player == null || _healthBar != null)
-                return;
-
-            _healthBar = new Bar(new Vector2(0f, .7f), new Vector2(0.35f, 0.03f), () => Parent.Health,
+            _panel = new Panel();
+             _backgroundTexture = new Texture(
+                0,
+                _barDefaultPosition = new Vector2(0f, .75f),
+                _backgroundTextureSize
+            );
+            _healthBar = new TexturedBar(
+                0,
+                _backgroundTexture.Position,
+                _bossBarTextureSize,
+                () => Parent.Health,
                 () => Parent.MaxHealth,
-                player.UI.GamePanel);
+                DrawOrder.Before
+            );
+            _percentageText = new GUIText(string.Empty, _healthBar.Position, Color.White, FontCache.Get(AssetManager.BoldFamily, 10, FontStyle.Bold));
+            _nameText = new GUIText(Name.ToUpperInvariant(), new Vector2(0f, .815f), Color.White, FontCache.Get(AssetManager.BoldFamily, 12, FontStyle.Bold));
 
-            _nameGui = new GUIText(Name, new Vector2(0f, .85f), Color.White,
-                FontCache.Get(AssetManager.NormalFamily, 14));
+            _panel.AddElement(_backgroundTexture);
+            _panel.AddElement(_nameText);
+            _panel.AddElement(_healthBar);
+            _panel.AddElement(_percentageText);
 
-
-            DrawManager.UIRenderer.Remove(_healthBar.Text);
-            DrawManager.UIRenderer.Add(_healthBar.Text, DrawOrder.After);
-            _barDefaultScale = _healthBar.Scale;
-            _nameDefaultScale = _nameGui.Scale;
-
-            player.UI.GamePanel.AddElement(_nameGui);
-            player.UI.GamePanel.AddElement(_healthBar);
+            var elements = _panel.Elements;
+            _originalScales = new Vector2[elements.Count];
+            for (var i = 0; i < elements.Count; ++i)
+            {
+                _originalScales[i] = elements[i].Scale;
+            }
+            
+            GameManager.Player.UI.GamePanel.AddElement(_panel);
+            Executer.ExecuteOnMainThread(
+                () =>
+                {
+                    _healthBar.TextureId = _bossBarTexture;
+                    _backgroundTexture.TextureElement.TextureId = _backgroundTextureId;
+                }
+            );
         }
 
         public override void Update()
         {
-            this.Initialize();
-            if (!Enabled) return;
-
-            var player = GameManager.Player;
-
-            if (player == null) return;
-
-            if (_healthBar == null) return;
-
-            if (_nameGui != null)
+            _targetSize = CanShow ? 1 : 0;
+            var elements = _panel.Elements;
+            for (var i = 0; i < elements.Count; ++i)
             {
-                _nameGui.Scale = Mathf.Lerp(_nameGui.Scale, _nameDefaultScale * _targetSize,
-                    (float) Time.DeltaTime * 8f);
-                if(_targetSize > 0)
-                    _nameGui.Enable();
+                if (_percentageText == elements[i])
+                {
+                    if (_targetSize < 1)
+                        _percentageText.Disable();
+                    else
+                        _percentageText.Enable();
+                }
                 else
-                    _nameGui.Disable();
+                {
+                    elements[i].Scale = Mathf.Lerp(elements[i].Scale, _originalScales[i] * _targetSize,
+                        Time.IndependantDeltaTime * 8f);
+                    DisableIfSmall(elements[i]);
+                }
+                if(!GameManager.Player.UI.GamePanel.Enabled)
+                    elements[i].Disable();
             }
-
-
-            _healthBar.Scale =
-                Mathf.Lerp(_healthBar.Scale, _barDefaultScale * _targetSize, (float) Time.DeltaTime * 8f);
-            //_healthBar.Text.Text = Parent.Health + "/" + Parent.MaxHealth;
-
-            if (_healthBar.Scale.LengthSquared < new Vector2(0.002f, 0.002f).LengthSquared)
-                _healthBar.Scale = Vector2.Zero;
-
-            if (player.UI.GamePanel.Enabled)
-                _healthBar.Enable();
-            else
-                _healthBar.Disable();
-
-            if (_healthBar.Scale == Vector2.Zero)
-                _healthBar.Disable();
-
-            if (player.UI.GamePanel.Enabled && (Parent.Position - player.Position).LengthSquared < 14400)
-            {
-                _targetSize = 1;
-                _healthBar.Text.Enable();
-            }
-            else
-            {
-                _targetSize = 0;
-                _healthBar.Text.Disable();
-            }
+            //_healthBar.Position = _barDefaultPosition + (1 - GetRatio()) * _healthBar.Scale.X * Vector2.UnitX;
+            _percentageText.Text = $"{(int)Parent.Health}/{(int)Parent.MaxHealth}";
         }
 
-        public override void Draw() { }
+        private static void DisableIfSmall(UIElement Element)
+        {
+            if (Element.Scale.LengthSquared < 0.001 * 0.001)
+                Element.Disable();
+            else
+                Element.Enable();
+        }
+        
+        private bool CanShow => GameManager.Player.UI.GamePanel.Enabled && (Parent.Position - GameManager.Player.Position).LengthSquared < 14400;
+        
+        public override void Draw()
+        {
+        }
 
         public override void Dispose()
         {
-            this.Initialize();
-            var player = GameManager.Player;
-            player.UI.GamePanel.RemoveElement(_healthBar);
-            player.UI.GamePanel.RemoveElement(_nameGui);
-            _healthBar.Dispose();
-            _nameGui.Dispose();
+            GameManager.Player.UI.GamePanel.RemoveElement(_panel);
+            var elements = _panel.Elements;
+            for (var i = 0; i < elements.Count; ++i)
+                elements[i].Dispose();
         }
     }
 }

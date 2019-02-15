@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
+using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
 using Hedra.Sound;
@@ -23,23 +24,27 @@ namespace Hedra.Engine.Game
         
         public static void AllocateMemory()
         {
-            /*Log.WriteLine("Querying available vram ...");
-            int availableVBOMemory = GraphicsWrapper.QueryAvailableMemory();
-            if(availableVBOMemory == 0) Log.WriteLine("Failed to detect available VRAM");
-            Log.WriteLine("Available GPU memory is of "+availableVBOMemory+" MB");*/
-            Log.WriteLine("Allocating world VRAM");
-            //GraphicsOptions.MaxLoadingRadius = Math.Max( 0 * (int) (GraphicsOptions.MaxLoadingRadius / 768f), GraphicsOptions.MinLoadingRadius);
-            WorldRenderer.AllocateMemory();
+            Log.WriteLine("Initializing world renderer...");
+            WorldRenderer.Initialize();
+            
+            Log.WriteLine($"Detected video card type is '{OSManager.GraphicsCard}'");
+            /*Log.WriteLine("Querying available VRAM ...");
 
-            int staticMem = WorldRenderer.StaticBuffer.Indices.TotalMemory / 1024 / 1024;
-            staticMem += WorldRenderer.StaticBuffer.Normals.TotalMemory / 1024 / 1024;
-            staticMem += WorldRenderer.StaticBuffer.Colors.TotalMemory / 1024 / 1024;
-            staticMem += WorldRenderer.StaticBuffer.Vertices.TotalMemory / 1024 / 1024;
+            /* If the card is integrated then clamp to 20 *
+            GeneralSettings.MaxLoadingRadius = OSManager.GraphicsCard == GraphicsCardType.Intel
+                ? 20
+                : GeneralSettings.MaxLoadingRadius;
+            Log.WriteLine($"Setting max world radius to '{GeneralSettings.MaxLoadingRadius}'");*/
+            Log.WriteLine("Allocating world memory...");
+            WorldRenderer.Allocate();
+            
+            int staticMem = WorldRenderer.StaticBuffer.TotalMemory / 1024 / 1024;
             Log.WriteLine("Allocated " + staticMem + " MB of VRAM for static rendering.");
-            int waterMem = WorldRenderer.WaterBuffer.Indices.TotalMemory / 1024 / 1024;
-            waterMem += WorldRenderer.WaterBuffer.Normals.TotalMemory / 1024 / 1024;
-            waterMem += WorldRenderer.WaterBuffer.Colors.TotalMemory / 1024 / 1024;
-            waterMem += WorldRenderer.WaterBuffer.Vertices.TotalMemory / 1024 / 1024;
+            
+            int instanceMem = WorldRenderer.InstanceBuffer.TotalMemory / 1024 / 1024;
+            Log.WriteLine("Allocated " + instanceMem + " MB of VRAM for instance rendering.");
+            
+            int waterMem = WorldRenderer.WaterBuffer.TotalMemory / 1024 / 1024;
             Log.WriteLine("Allocated " + waterMem + " MB of VRAM for water rendering.");
 
             DrawManager.Load();

@@ -64,12 +64,17 @@ namespace Hedra.Engine.Player
             _parent = Parent;
             _chunkCollisions = new List<ICollidable>();
             _structureCollisions = new List<ICollidable>();
-            _collisionBox = Physics.BuildBroadphaseBox(MeshData);
+            _collisionBox = GetCollisionBox(MeshData);
             Mesh = ObjectMesh.FromVertexData(MeshData);
             Propulsion = Propulsion;
             Mesh.Position = Origin;
             //Mesh.LocalRotation = Physics.DirectionToEuler(Parent.Orientation);
             UpdateManager.Add(this);
+        }
+
+        protected virtual Box GetCollisionBox(VertexData MeshData)
+        {
+            return Physics.BuildBroadphaseBox(MeshData);
         }
         
         public virtual void Update()

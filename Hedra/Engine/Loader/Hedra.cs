@@ -31,8 +31,11 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Loader
 {
+    public delegate void OnFrameChanged();
+    
     class Hedra : HedraWindow, IHedra
     {
+        public event OnFrameChanged FrameChanged;
         public DebugInfoProvider DebugProvider { get; private set; }
         public SplashScreen SplashScreen { get; private set; }
         public static int MainThreadId { get; private set; }
@@ -129,6 +132,7 @@ namespace Hedra.Engine.Loader
             DebugProvider.Update();
             Steam.Update();
             AnalyticsManager.PlayTime += (float) Delta;
+            FrameChanged?.Invoke();
         }
 
         protected override void OnRenderFrame(double Delta)

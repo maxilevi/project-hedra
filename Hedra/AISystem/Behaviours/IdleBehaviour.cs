@@ -16,5 +16,10 @@ namespace Hedra.AISystem.Behaviours
         {
             Stare.Update();
         }
+
+        public override void Dispose()
+        {
+            Stare.Dispose();
+        }
     }
 }

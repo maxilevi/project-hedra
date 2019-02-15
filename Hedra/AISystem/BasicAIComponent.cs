@@ -5,10 +5,11 @@ using System.Reflection;
 using Hedra.AISystem.Behaviours;
 using Hedra.Engine.EntitySystem;
 using Hedra.EntitySystem;
+using OpenTK;
 
 namespace Hedra.AISystem
 {
-    public abstract class BasicAIComponent : EntityComponent, IBehaviourComponent
+    public abstract class BasicAIComponent : EntityComponent, IBehaviourComponent, ITraverseAIComponent
     {
         public bool Enabled { get; set; }
         public abstract AIType Type { get; }
@@ -36,37 +37,43 @@ namespace Hedra.AISystem
             }
         }
 
+        public Vector2 GridSize
+        {
+            get => SearchBehaviour<TraverseBehaviour>().GridSize;
+            set => SearchBehaviour<TraverseBehaviour>().ResizeGrid(value);
+        }
+
         public T SearchBehaviour<T>() where T : Behaviour
         {
-            this.BuildMappings();
+            if(_behaviours == null)
+                _behaviours = BuildMappings(GetType(), this);
             for (var i = 0; i < _behaviours.Length; i++)
                 if (_behaviours[i] is T variable)
                     return variable;
             return default(T);
         }
 
-        private void BuildMappings()
+        private Behaviour[] BuildMappings(Type SearchType, object Instance)
         {
-            if(_behaviours != null) return;
-
             var behaviours = new List<Behaviour>();
-            var type = this.GetType();
-            var fields = GetFields(type);
+            var fields = GetFields(SearchType);
             for(var i = 0; i < fields.Length; i++)
             {
                 if (fields[i].FieldType.IsSubclassOf(typeof(Behaviour)))
                 {
-                    behaviours.Add(fields[i].GetValue(this) as Behaviour);
+                    var instance = fields[i].GetValue(Instance);
+                    behaviours.Add(instance as Behaviour);
+                    behaviours.AddRange(BuildMappings(fields[i].FieldType, instance));
                 }
             }
-            _behaviours = behaviours.ToArray();
+            return behaviours.ToArray();
         }
 
         private static FieldInfo[] GetFields(Type Derived)
         {
             const BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
             var fields = Derived.GetFields(flags).ToArray();
-            if (Derived.BaseType != typeof(BasicAIComponent))
+            if (Derived.BaseType != typeof(BasicAIComponent) && Derived.BaseType != null)
             {
                 return GetFields(Derived.BaseType).Concat(fields).ToArray();
             }

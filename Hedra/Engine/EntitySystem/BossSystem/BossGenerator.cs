@@ -12,6 +12,7 @@ using Hedra.AISystem;
 using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
@@ -27,13 +28,10 @@ namespace Hedra.Engine.EntitySystem.BossSystem
         public static Entity Generate(MobType[] PossibleTypes, Vector3 Position, Random Rng)
         {
             var type = PossibleTypes[Rng.Next(0, PossibleTypes.Length)];
-            if (type == MobType.Troll)
-            {
-                type = MobType.Gorilla;
-            }
             var boss = World.SpawnMob(type, Vector3.Zero, Rng);
             boss.Position = Position;
             boss.SearchComponent<IGuardAIComponent>().GuardPosition = Position;
+            boss.SearchComponent<ITraverseAIComponent>().GridSize = new Vector2(32, 32);
             var dmgComponent = boss.SearchComponent<DamageComponent>();
             dmgComponent.Immune = true;
             var healthBarComponent = new BossHealthBarComponent(boss, NameGenerator.Generate(World.Seed + Rng.Next(0, 999999)));
@@ -43,7 +41,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
             {
                 if (!(Args.Victim.Health <= 0)) return;
 
-                GameManager.Player.MessageDispatcher.ShowMessage("YOU EARNED "+(int)dmgComponent.XpToGive + " XP!", 3f, Colors.Violet.ToColor());
+                GameManager.Player.MessageDispatcher.ShowMessage(Translations.Get("boss_get_xp", (int) dmgComponent.XpToGive), 3f, Colors.Violet.ToColor());
                 healthBarComponent.Enabled = false;
             };
             boss.AddComponent(new SpawnComponent(boss, Position, () => dmgComponent.Immune = false));
@@ -55,8 +53,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
             boss.AddComponent(dmgComponent);
             boss.AddComponent(healthBarComponent);
             
-            return boss;
-            
+            return boss;           
         }
     }
 }

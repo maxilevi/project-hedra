@@ -147,7 +147,7 @@ namespace Hedra.Engine.EntitySystem
 
         public bool CanAttack()
         {
-            if (Array.IndexOf(AttackAnimations, Model.AnimationPlaying) != -1 || Parent.IsKnocked)
+            if (Array.IndexOf(AttackAnimations, Model.AnimationPlaying) != -1 || Parent.IsKnocked || Parent.IsStuck)
                 return false;
             return _attackCooldown < 0;
         }

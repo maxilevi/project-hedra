@@ -42,5 +42,12 @@ namespace Hedra.AISystem
                 Herd.Update();
             }
         }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            Roam.Dispose();
+            Herd.Dispose();
+        }
     }
 }

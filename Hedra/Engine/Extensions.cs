@@ -98,7 +98,8 @@ namespace Hedra.Engine
             throw new ArgumentException($"Cannot create a deep clone of Unclonable object");
         }
         
-        public static Quaternion FromMatrixExt(Matrix4 matrix) {
+        public static Quaternion FromMatrixExt(Matrix4 matrix)
+        {
             float w, x, y, z;
             float diagonal = matrix.M11 + matrix.M22 + matrix.M33;
             if (diagonal > 0) {

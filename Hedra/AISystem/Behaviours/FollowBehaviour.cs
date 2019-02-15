@@ -22,5 +22,10 @@ namespace Hedra.AISystem.Behaviours
         }
         
         public bool Enabled => Target != null && !Target.IsDead && !Target.IsInvisible;
+
+        public override void Dispose()
+        {
+            Traverse.Dispose();
+        }
     }
 }

@@ -48,9 +48,9 @@ namespace Hedra.Engine.Loader
             _depthTexture = new Texture(0, Vector2.Zero, Vector2.One);
             _depthTexture.TextureElement.Flipped = true;
             _debugText = new GUIText(string.Empty, new Vector2(.65f,-.5f), Color.Black, FontCache.Get(AssetManager.NormalFamily,12));
-            _staticPool = new Texture(0, new Vector2(0f, 0.95f), new Vector2(1024f / GameSettings.Width, 16f / GameSettings.Height));
-            _waterPool = new Texture(0, new Vector2(0f, 0.90f), new Vector2(1024f / GameSettings.Width, 16f / GameSettings.Height));
-            _instancePool = new Texture(0, new Vector2(0f, 0.85f), new Vector2(1024f / GameSettings.Width, 16f / GameSettings.Height));
+            _staticPool = new Texture(0, new Vector2(0f, 0.90f), new Vector2(1024f / GameSettings.Width, 48f / GameSettings.Height));
+            _waterPool = new Texture(0, new Vector2(0f, 0.80f), new Vector2(1024f / GameSettings.Width, 16f / GameSettings.Height));
+            _instancePool = new Texture(0, new Vector2(0f, 0.75f), new Vector2(1024f / GameSettings.Width, 16f / GameSettings.Height));
             _debugPanel.AddElement(_staticPool);
             _debugPanel.AddElement(_waterPool);
             _debugPanel.AddElement(_instancePool);
@@ -130,17 +130,17 @@ namespace Hedra.Engine.Loader
                     Renderer.DeleteTexture(_instancePool.TextureElement.TextureId);
                     _staticPool.TextureElement.TextureId = Graphics2D.LoadTexture(new BitmapObject
                     {
-                        Bitmap = WorldRenderer.StaticBuffer.Indices.Draw(),
+                        Bitmap = WorldRenderer.StaticBuffer.Visualize(),
                         Path = "Debug:GeometryPool"
                     });
                     _waterPool.TextureElement.TextureId = Graphics2D.LoadTexture(new BitmapObject
                     {
-                        Bitmap = WorldRenderer.WaterBuffer.Vertices.Draw(),
+                        Bitmap = WorldRenderer.WaterBuffer.Visualize(),
                         Path = "Debug:WaterGeometryPool"
                     });
                     _instancePool.TextureElement.TextureId = Graphics2D.LoadTexture(new BitmapObject
                     {
-                        Bitmap = WorldRenderer.InstanceBuffer.Indices.Draw(),
+                        Bitmap = WorldRenderer.InstanceBuffer.Visualize(),
                         Path = "Debug:InstanceGeometryPool"
                     });
                     var borderWidth = (chunkBound-1) * Chunk.Height * 8;

@@ -91,5 +91,6 @@ namespace HedraTests
         public DebugInfoProvider DebugProvider { get; }
         public SplashScreen SplashScreen { get; }
         public string GameVersion { get; }
+        public event OnFrameChanged FrameChanged;
     }
 }

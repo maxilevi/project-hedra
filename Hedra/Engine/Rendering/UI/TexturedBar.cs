@@ -33,14 +33,14 @@ namespace Hedra.Engine.Rendering.UI
             Shader = Shader.Build("Shaders/Bar.vert", "Shaders/Bar.frag");
         }
 
-        public TexturedBar(uint TextureId, Vector2 Position, Vector2 Scale, Func<float> Value, Func<float> Max)
+        public TexturedBar(uint TextureId, Vector2 Position, Vector2 Scale, Func<float> Value, Func<float> Max, DrawOrder Order = DrawOrder.After)
         {
             this.Scale = Scale;
             this._value = Value;
             this._max = Max;
             this.TextureId = TextureId;
 
-            DrawManager.UIRenderer.Add(this, DrawOrder.After);
+            DrawManager.UIRenderer.Add(this, Order);
 
             this.Position = Position;
         }

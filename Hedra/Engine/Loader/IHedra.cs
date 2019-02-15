@@ -9,5 +9,6 @@ namespace Hedra.Engine.Loader
         DebugInfoProvider DebugProvider { get; }
         SplashScreen SplashScreen { get; }
         string GameVersion { get; }
+        event OnFrameChanged FrameChanged;
     }
 }

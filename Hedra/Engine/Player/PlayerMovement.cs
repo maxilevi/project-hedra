@@ -281,13 +281,6 @@ namespace Hedra.Engine.Player
                 World.StructureHandler.Discard();
                 _player.Chat.AddLine("Chunks discarded.");
             }
-            if (EventArgs.Key == Key.F12)
-            {
-                WorldRenderer.StaticBuffer.Vertices.DrawAndSave();
-                WorldRenderer.StaticBuffer.Indices.DrawAndSave();
-                WorldRenderer.WaterBuffer.Colors.DrawAndSave();
-            }
-
 #if DEBUG
             if (EventArgs.Key == Key.F10)
             {

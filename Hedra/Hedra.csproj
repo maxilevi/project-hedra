@@ -108,6 +108,7 @@
     <Compile Include="AISystem\Behaviours\ChargeBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\FleeBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\FollowBehaviour.cs" />
+    <Compile Include="AISystem\Behaviours\GridStorage.cs" />
     <Compile Include="AISystem\Behaviours\TraverseBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\GiantBeetleAttackBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\GorillaWarriorAttackBehaviour.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="AISystem\Behaviours\RoamAroundBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\RoamBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\StareBehaviour.cs" />
+    <Compile Include="AISystem\Behaviours\TraverseStorage.cs" />
     <Compile Include="AISystem\Behaviours\TrollAttackBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\WalkBehaviour.cs" />
     <Compile Include="AISystem\CattleAIComponent.cs" />
@@ -148,6 +150,7 @@
     <Compile Include="AISystem\Humanoid\WarriorAIComponent.cs" />
     <Compile Include="AISystem\IBehaviourComponent.cs" />
     <Compile Include="AISystem\IGuardAIComponent.cs" />
+    <Compile Include="AISystem\ITraverseAIComponent.cs" />
     <Compile Include="AISystem\NeutralAIComponent.cs" />
     <Compile Include="AISystem\PigAIComponent.cs" />
     <Compile Include="AISystem\PigFarmAIComponent.cs" />
@@ -232,6 +235,7 @@
     <Compile Include="Engine\CraftingSystem\CraftingInventory.cs" />
     <Compile Include="Engine\CraftingSystem\CraftingStation.cs" />
     <Compile Include="Engine\CraftingSystem\Templates\IngredientsTemplate.cs" />
+    <Compile Include="Engine\EntitySystem\BaseHealthBarComponent.cs" />
     <Compile Include="Engine\EntitySystem\DisposeComponent.cs" />
     <Compile Include="Engine\Game\Season.cs" />
     <Compile Include="Engine\Generation\FastComparer.cs" />
@@ -259,6 +263,7 @@
     <Compile Include="Engine\ModuleSystem\Templates\ModelTemplate.cs" />
     <Compile Include="Engine\ModuleSystem\Templates\SpawnerSettings.cs" />
     <Compile Include="Engine\ModuleSystem\Templates\SpawnTemplate.cs" />
+    <Compile Include="Engine\Native\GraphicsCardType.cs" />
     <Compile Include="Engine\Networking\Connection.cs" />
     <Compile Include="Engine\Networking\GameClient.cs" />
     <Compile Include="Engine\Networking\Handler.cs" />
@@ -336,6 +341,7 @@
     <Compile Include="Engine\QuestSystem\QuestTemplate.cs" />
     <Compile Include="Engine\QuestSystem\QuestThoughtsComponent.cs" />
     <Compile Include="Engine\QuestSystem\QuestTier.cs" />
+    <Compile Include="Engine\Rendering\BufferBalancer.cs" />
     <Compile Include="Engine\Rendering\DummyGLProvider.cs" />
     <Compile Include="Engine\Rendering\Frustum\BoundingFrustum.cs" />
     <Compile Include="Engine\Rendering\Frustum\Culling.cs" />
@@ -6983,10 +6989,6 @@
       <Link>Assets\Env\Fort1.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Models\GiantTree0.ply">
-      <Link>Assets\Env\GiantTree0.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Models\Grass.ply">
       <Link>Assets\Env\Grass.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -8105,12 +8107,840 @@
       <Link>Assets\Items\Misc\Wool.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0.ply">
+      <Link>Assets\Env\Structures\GiantTree0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider0.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider1.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider10.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider10.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider100.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider100.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider101.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider101.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider102.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider102.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider103.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider103.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider104.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider104.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider105.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider105.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider106.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider106.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider107.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider107.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider108.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider108.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider109.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider109.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider11.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider11.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider110.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider110.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider111.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider111.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider112.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider112.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider113.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider113.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider114.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider114.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider115.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider115.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider116.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider116.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider117.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider117.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider118.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider118.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider119.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider119.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider12.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider12.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider120.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider120.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider121.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider121.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider122.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider122.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider123.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider123.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider124.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider124.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider125.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider125.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider126.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider126.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider127.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider127.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider128.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider128.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider129.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider129.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider13.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider13.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider130.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider130.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider131.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider131.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider132.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider132.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider133.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider133.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider134.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider134.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider135.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider135.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider136.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider136.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider137.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider137.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider138.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider138.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider139.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider139.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider14.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider14.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider140.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider140.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider141.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider141.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider142.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider142.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider143.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider143.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider144.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider144.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider145.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider145.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider146.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider146.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider147.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider147.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider148.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider148.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider149.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider149.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider15.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider15.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider150.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider150.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider151.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider151.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider152.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider152.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider153.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider153.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider154.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider154.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider155.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider155.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider156.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider156.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider157.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider157.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider158.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider158.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider159.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider159.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider16.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider16.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider160.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider160.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider161.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider161.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider162.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider162.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider163.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider163.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider164.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider164.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider165.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider165.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider166.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider166.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider167.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider167.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider168.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider168.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider169.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider169.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider17.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider17.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider170.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider170.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider171.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider171.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider172.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider172.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider173.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider173.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider174.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider174.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider175.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider175.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider176.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider176.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider177.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider177.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider178.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider178.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider179.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider179.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider18.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider18.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider180.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider180.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider181.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider181.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider182.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider182.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider183.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider183.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider184.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider184.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider185.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider185.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider186.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider186.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider187.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider187.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider188.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider188.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider189.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider189.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider19.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider19.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider190.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider190.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider191.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider191.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider192.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider192.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider193.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider193.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider194.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider194.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider195.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider195.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider196.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider196.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider197.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider197.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider198.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider198.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider199.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider199.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider2.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider20.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider20.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider200.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider200.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider201.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider201.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider202.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider202.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider203.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider203.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider21.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider21.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider22.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider22.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider23.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider23.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider24.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider24.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider25.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider25.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider26.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider26.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider27.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider27.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider28.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider28.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider29.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider29.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider3.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider3.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider30.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider30.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider31.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider31.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider32.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider32.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider33.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider33.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider34.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider34.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider35.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider35.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider36.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider36.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider37.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider37.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider38.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider38.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider39.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider39.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider4.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider40.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider40.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider41.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider41.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider42.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider42.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider43.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider43.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider44.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider44.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider45.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider45.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider46.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider46.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider47.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider47.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider48.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider48.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider49.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider49.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider5.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider5.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider50.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider50.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider51.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider51.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider52.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider52.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider53.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider53.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider54.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider54.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider55.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider55.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider56.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider56.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider57.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider57.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider58.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider58.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider59.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider59.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider6.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider6.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider60.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider60.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider61.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider61.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider62.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider62.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider63.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider63.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider64.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider64.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider65.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider65.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider66.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider66.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider67.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider67.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider68.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider68.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider69.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider69.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider7.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider7.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider70.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider70.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider71.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider71.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider72.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider72.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider73.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider73.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider74.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider74.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider75.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider75.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider76.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider76.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider77.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider77.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider78.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider78.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider79.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider79.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider8.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider80.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider80.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider81.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider81.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider82.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider82.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider83.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider83.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider84.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider84.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider85.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider85.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider86.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider86.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider87.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider87.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider88.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider88.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider89.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider89.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider9.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider9.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider90.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider90.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider91.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider91.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider92.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider92.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider93.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider93.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider94.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider94.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider95.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider95.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider96.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider96.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider97.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider97.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider98.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider98.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider99.ply">
+      <Link>Assets\Env\Colliders\GiantTree0_Collider99.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\UI\AbilityTreeBackground.png">
       <Link>Assets\UI\AbilityTreeBackground.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\ArcherLogo.png">
       <Link>Assets\UI\ArcherLogo.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\BossHealthBar.png">
+      <Link>Assets\UI\BossHealthBar.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\BossHealthBarBackground.png">
+      <Link>Assets\UI\BossHealthBarBackground.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\EntityHealthBar.png">
