@@ -1,5 +1,15 @@
 ﻿{
-  "ExplorerRatio": 50,
+  "MiniBosses": [
+    {
+      "Type": "Ent",
+      "Chance": 30.0
+    },
+    {
+      "Type": "Explorers",
+      "Chance": 70.0,
+      "IsCustom": true
+    }
+  ],
   "Shore": [
     {
       "Type": "Turtle",

@@ -9,7 +9,7 @@ float luma(vec3 color);
 
 void main(){
 	vec4 val = texture(Sampler, TexCoords);
-	float bright = luma(val.rgb) - 0.65 / Modifier;
+	float bright = luma(val.rgb) - 0.55 / Modifier;
 	
 	Color = val * bright;
 	

@@ -8,6 +8,8 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
 using OpenTK;
@@ -98,14 +100,55 @@ namespace Hedra.Engine.EntitySystem
             }
             else
             {
-                TravellingExplorers.Build(desiredPosition, Utils.Rng);
+                SelectAndSpawnMiniBoss(desiredPosition, Utils.Rng);
             }
         }
 
+        private static void SelectAndSpawnMiniBoss(Vector3 DesiredPosition, Random Rng)
+        {
+            var region = World.BiomePool.GetRegion(DesiredPosition);
+            var templates = region.Mob.SpawnerSettings.MiniBosses.OrderBy(T => T.Chance).ToArray();
+            var rng = Rng.NextFloat();
+            var sum = Math.Abs(templates.Sum(T => T.Chance) - 100f);
+            if(sum > 0.01f)
+                throw new ArgumentOutOfRangeException($"MiniBoss templates need to add to 100.0 but only add up to {sum}");
+            
+            var template = default(MiniBossTemplate);
+            for (var i = 0; i < templates.Length; ++i)
+            {
+                if (templates[i].Chance < rng)
+                {
+                    template = templates[i];
+                    break;
+                }
+            }
+            if(template == default(MiniBossTemplate))
+                throw new ArgumentOutOfRangeException("Failed to select a mini boss template");
+            SpawnMiniBoss(template, DesiredPosition, Utils.Rng);
+        }
+        
+        private static void SpawnMiniBoss(MiniBossTemplate Template, Vector3 Position, Random Rng)
+        {
+            var dict = new Dictionary<string, Action>
+            {
+                {"Explorers", () => TravellingExplorers.Build(Position, Utils.Rng)}
+            };
+            if (Template.IsCustom)
+            {
+                if (!dict.ContainsKey(Template.Type))
+                    throw new ArgumentOutOfRangeException($"Custom template type '{Template.Type}' does not exist.");
+                dict[Template.Type]();
+            }
+            else
+            {
+                World.SpawnMob(Template.Type, Position, Rng);
+            }
+        }
+        
         private static bool ShouldSpawnMob(Vector3 NewPosition)
         {
             var region = World.BiomePool.GetRegion(NewPosition);
-            return Utils.Rng.Next(0, region.Mob.SpawnerSettings.ExplorerRatio) != 1;
+            return Utils.Rng.Next(0, 50) != 1 || region.Mob.SpawnerSettings.MiniBosses.Length == 0;
         }
 
         protected virtual SpawnTemplate SelectMobTemplate(Vector3 NewPosition)

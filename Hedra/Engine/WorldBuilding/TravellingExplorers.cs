@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Hedra.AISystem.Humanoid;
 using Hedra.Components;
+using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.EntitySystem;
 using OpenTK;
@@ -24,7 +26,7 @@ namespace Hedra.Engine.WorldBuilding
                     explorer.AddComponent(new ExplorerThoughtsComponent(explorer));
                     explorer.AddComponent(new TalkComponent(explorer));
                 }
-
+                explorer.AddComponent(new DisposeComponent(explorer, Chunk.Width * GeneralSettings.MaxLoadingRadius + Chunk.Width));
                 explorers.Add(explorer);
             }
 

@@ -49,15 +49,6 @@ namespace Hedra
             return builder.ToString();
         }
 
-        public static string FirstCharToUpper(string input)
-        {
-            return input.First().ToString().ToUpper() + String.Join(string.Empty, input.Skip(1));
-        }
-        
-        public static string GetProjectPath(string p){
-            return p;
-        }
-
         public static Random Rng { get; set; } = new Random();
 
         public static System.Drawing.Color VariateColor(System.Drawing.Color c, int Range){
