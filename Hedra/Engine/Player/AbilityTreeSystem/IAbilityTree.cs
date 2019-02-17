@@ -21,6 +21,8 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         bool Show { get; set; }
         int SpecializationTreeIndex { get; }
         AbilityTreeBlueprint Specialization { get; }
+        void LearnSpecialization(AbilityTreeBlueprint Blueprint);
+        bool IsTreeEnabled(AbilityTreeBlueprint Blueprint);
         bool HasSpecialization { get; }
         bool HasFirstSpecialization { get; }
         bool HasSecondSpecialization { get; }

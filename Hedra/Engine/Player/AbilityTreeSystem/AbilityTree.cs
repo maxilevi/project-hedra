@@ -153,6 +153,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             {
                 this.SetPoints(i, 0);
             }
+            SpecializationTreeIndex = 0;
         }
 
         public byte[] MainTreeSave => BuildSaveData(_mainTree);
@@ -173,7 +174,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             }
             return Encoding.ASCII.GetBytes(saveData);
         }
-
+        
         public void ShowBlueprint(AbilityTreeBlueprint Blueprint, byte[] AbilityTreeArray)
         {
             this.SetBlueprint(Blueprint);
@@ -237,7 +238,28 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 }
             }
         }
+        
+        public void LearnSpecialization(AbilityTreeBlueprint Blueprint)
+        {
+            if (_player.Class.FirstSpecializationTree.Identifier == Blueprint.Identifier)
+                SpecializationTreeIndex = 1;
+            else if(_player.Class.SecondSpecializationTree.Identifier == Blueprint.Identifier)
+                SpecializationTreeIndex = 2;
+            
+            SoundPlayer.PlayUISound(SoundType.NotificationSound);
+            UpdateView();
+        }
 
+        public bool IsTreeEnabled(AbilityTreeBlueprint Blueprint)
+        {
+            if (_player.Class.FirstSpecializationTree.Identifier == Blueprint.Identifier)
+                return HasFirstSpecialization;
+            if (_player.Class.SecondSpecializationTree.Identifier == Blueprint.Identifier)
+                return HasSecondSpecialization;
+            /* Is the default tree, always true */
+            return true;
+        }
+        
         public bool HasSpecialization => SpecializationTreeIndex != 0;
 
         public bool HasFirstSpecialization => SpecializationTreeIndex == 1;

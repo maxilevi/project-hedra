@@ -98,7 +98,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                     if(level > 0 && _panel.Enabled)
                         _skillPointsBackgroundTextures[i].Enable();
                     
-                    SetGrayscale(i);
+                    SetGrayscaleIfNecessary(i);
                     if (!Array[i + Offset].HasAttribute("ButtonScale") ||
                         !Array[i + Offset].HasAttribute("TextureScale")) continue;
                     Buttons[i].Scale = this.Array[i + Offset].GetAttribute<Vector2>("ButtonScale");
@@ -108,6 +108,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 
             _titleText.Text = Translations.Get("skill_tree_title", _blueprint.DisplayName);
             _titleText.Position = _backgroundTexture.Position + _backgroundTexture.Scale.Y * Vector2.UnitY - _titleText.Scale.Y * Vector2.UnitY;
+            _titleText.Grayscale = !IsTreeEnabled;
             UpdateRelationships();
             _specializationPanel.UpdateView();
         }
@@ -160,14 +161,15 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         }
         
         
-        private bool SetGrayscale(int Index)
+        private void SetGrayscaleIfNecessary(int Index)
         {
             var decomposedIndexY = Index % AbilityTree.Columns;
             var decomposedIndexX = AbilityTree.AbilityCount / AbilityTree.Columns - 1 - (Index - decomposedIndexY) / AbilityTree.Columns;
-            this.Buttons[Index].Texture.Grayscale = decomposedIndexX * 5 > _player.Level || !this.PreviousUnlocked(Index);
-            return this.Buttons[Index].Texture.Grayscale;
+            this.Buttons[Index].Texture.Grayscale = (decomposedIndexX * 5 > _player.Level || !this.PreviousUnlocked(Index)) && IsTreeEnabled;
         }
 
+        private bool IsTreeEnabled => _player.AbilityTree.IsTreeEnabled(_blueprint);
+        
         private bool PreviousUnlocked(int Index)
         {
             var decomposedIndexY = Index % AbilityTree.Columns;

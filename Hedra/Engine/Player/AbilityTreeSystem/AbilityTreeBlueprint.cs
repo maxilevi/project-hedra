@@ -25,6 +25,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         public string DisplayName => Translations.Get(_nameTranslationKey);
         public string Description => Translations.Get(_descriptionTranslationKey);
         public uint Icon { get; set; }
+        public string Identifier => _nameTranslationKey;
         public readonly TreeItem[][] Items = new TreeItem[AbilityTree.Columns][];
 
         public AbilityTreeBlueprint(AbilityTreeTemplate AbilityTreeTemplate)

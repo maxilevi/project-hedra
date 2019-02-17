@@ -158,6 +158,12 @@ namespace Hedra.Engine.Rendering.UI
             get => UIText.Opacity;
             set => UIText.Opacity = value;
         }
+
+        public bool Grayscale
+        {
+            get => UIText.Grayscale;
+            set => UIText.Grayscale = value;
+        }
         
         public bool Stroke { get; set; }
         

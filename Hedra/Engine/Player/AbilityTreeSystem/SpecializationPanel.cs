@@ -79,7 +79,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             };
             _classSpecialization1.Click += (S, A) => Show(Player.Class.SecondSpecializationTree);
 
-            _specializationInfo = new SpecializationInfo();
+            _specializationInfo = new SpecializationInfo(_player);
             _defaultClassMarker = new Texture(PagedInventoryArrayInterface.SelectedId, _defaultClass.Position, _defaultClass.Scale * 1.1f);
             _classSpecialization0Marker = new Texture(PagedInventoryArrayInterface.SelectedId, _classSpecialization0.Position, _classSpecialization0.Scale * 1.1f);
             _classSpecialization1Marker = new Texture(PagedInventoryArrayInterface.SelectedId, _classSpecialization1.Position, _classSpecialization1.Scale * 1.1f);

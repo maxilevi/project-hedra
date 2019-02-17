@@ -236,8 +236,8 @@ territory_of = Territory of {0}
 skill_tree_title = $(BOLD)(CAPS)(GOLD){{0}}\nSKILL TREE
 learn_specialization = LEARN SPECIALIZATION
 # -- Class Descriptions --
-berserker_class_description = ..
-paladin_class_description = ..
+berserker_class_description = A crazed warrior who fights for honor and bloodlust                           
+paladin_class_description = A skilled warrior trained in the great arts of defense
 druid_class_description = ..
 necromancer_class_description = A magician who mastered the arts of life and death but chose to pursue the latter
 hunter_class_description = ..
