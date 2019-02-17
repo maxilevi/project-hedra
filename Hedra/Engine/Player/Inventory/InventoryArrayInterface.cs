@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Linq;
 using Hedra.Engine.Events;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
@@ -21,7 +22,7 @@ namespace Hedra.Engine.Player.Inventory
         private readonly Texture[] _inventoryTextures;
         private readonly RenderableButton[] _inventoryButtons;
         private readonly RenderableText[] _inventoryButtonsText;
-        private readonly Panel _elementsPanel;
+        protected readonly Panel _panel;
         private readonly int _length;
         private readonly int _offset;
         private Vector2 _position = Vector2.Zero;
@@ -39,7 +40,7 @@ namespace Hedra.Engine.Player.Inventory
             this._inventoryTextures = new Texture[_length];
             this._inventoryButtons = new RenderableButton[_length];
             this._inventoryButtonsText = new RenderableText[_length];
-            this._elementsPanel = new Panel();
+            this._panel = new Panel{DisableKeys = true};
             var size = DefaultSize;
             var offset = new Vector2(size.X, size.Y);
             var slotsPerLine = Math.Max(SlotsPerLine, 1);
@@ -63,9 +64,9 @@ namespace Hedra.Engine.Player.Inventory
                 _inventoryButtons[i] = new RenderableButton(position, size * scale * .8f, GUIRenderer.TransparentTexture);
                 _inventoryButtons[i].Texture.IdPointer = () => _renderer.Draw(k);
                 _inventoryButtons[i].PlaySound = false;
-                _elementsPanel.AddElement(_inventoryTextures[i]);
-                _elementsPanel.AddElement(_inventoryButtonsText[i]);
-                _elementsPanel.AddElement(_inventoryButtons[i]);
+                _panel.AddElement(_inventoryTextures[i]);
+                _panel.AddElement(_inventoryButtonsText[i]);
+                _panel.AddElement(_inventoryButtons[i]);
 
                 DrawManager.UIRenderer.Add(_inventoryButtons[i], DrawOrder.After);
                 DrawManager.UIRenderer.Add(_inventoryButtonsText[i], DrawOrder.After);
@@ -96,38 +97,27 @@ namespace Hedra.Engine.Player.Inventory
 
         public virtual bool Enabled
         {
-            get { return _enabled; }
+            get => _enabled;
             set
             {
                 _enabled = value;
-                if(_enabled) _elementsPanel.Enable();
-                else _elementsPanel.Disable();
+                if (this.Enabled) _panel.Enable();
+                else _panel.Disable();
             }
         }
-
         public virtual Vector2 Scale
         {
-            get { return _scale; }
+            get => _scale;
             set
             {
-                for (var i = 0; i < _inventoryTextures.Length; i++)
+                var elements = _panel.Elements.ToArray();
+                for (var i = 0; i < elements.Length; i++)
                 {
-                    _inventoryTextures[i].Scale = new Vector2(_inventoryTextures[i].Scale.X / _individualScale.X,
-                                                      _inventoryTextures[i].Scale.Y / _individualScale.Y) * value;
-                    _inventoryButtons[i].Scale = new Vector2(_inventoryButtons[i].Scale.X / _individualScale.X,
-                                                     _inventoryButtons[i].Scale.Y / _individualScale.Y) * value;
-
-                    var relativePosition = _inventoryTextures[i].Position - Position;
-                    _inventoryTextures[i].Position = new Vector2(relativePosition.X / _scale.X,
-                        relativePosition.Y / _scale.Y) * value + Position;
-
-                    relativePosition = _inventoryButtons[i].Position - Position;
-                    _inventoryButtons[i].Position = new Vector2(relativePosition.X / _scale.X,
-                                                        relativePosition.Y / _scale.Y) * value + Position;
-
-                    relativePosition = _inventoryButtonsText[i].Position - Position;
-                    _inventoryButtonsText[i].Position = new Vector2(relativePosition.X / _scale.X,
-                                                        relativePosition.Y / _scale.Y) * value + Position;
+                    elements[i].Scale = 
+                        new Vector2(elements[i].Scale.X / _individualScale.X, elements[i].Scale.Y / _individualScale.Y) * value;
+                    var relativePosition = elements[i].Position - Position;
+                    elements[i].Position = 
+                        new Vector2(relativePosition.X / _scale.X, relativePosition.Y / _scale.Y) * value + Position;
                 }
                 _scale = value;
             }
@@ -135,15 +125,14 @@ namespace Hedra.Engine.Player.Inventory
 
         public virtual Vector2 IndividualScale
         {
-            get { return _individualScale; }
+            get => _individualScale;
             set
             {
-                for (var i = 0; i < _inventoryTextures.Length; i++)
+                var elements = _panel.Elements.ToArray();
+                for (var i = 0; i < elements.Length; i++)
                 {
-                    _inventoryTextures[i].Scale = new Vector2(_inventoryTextures[i].Scale.X / _individualScale.X,
-                        _inventoryTextures[i].Scale.Y / _individualScale.Y) * value;
-                    _inventoryButtons[i].Scale = new Vector2(_inventoryButtons[i].Scale.X / _individualScale.X,
-                                                     _inventoryButtons[i].Scale.Y / _individualScale.Y) * value;
+                    elements[i].Scale = new Vector2(elements[i].Scale.X / _individualScale.X,
+                                            elements[i].Scale.Y / _individualScale.Y) * value;
                 }
                 _individualScale = value;
             }
@@ -151,14 +140,13 @@ namespace Hedra.Engine.Player.Inventory
 
         public virtual Vector2 Position
         {
-            get { return _position; }
+            get => _position;
             set
             {
-                for (var i = 0; i < _inventoryTextures.Length; i++)
+                var elements = _panel.Elements.ToArray();
+                for (var i = 0; i < elements.Length; i++)
                 {
-                    _inventoryTextures[i].Position = _inventoryTextures[i].Position - _position + value;
-                    _inventoryButtons[i].Position = _inventoryButtons[i].Position - _position + value;
-                    _inventoryButtonsText[i].Position = _inventoryButtonsText[i].Position - _position + value;
+                    elements[i].Position = elements[i].Position - _position + value;
                 }
                 _position = value;
             }

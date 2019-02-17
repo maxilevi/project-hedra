@@ -114,13 +114,16 @@ namespace Hedra.Engine.EntitySystem
                 throw new ArgumentOutOfRangeException($"MiniBoss templates need to add to 100.0 but only add up to {sum}");
             
             var template = default(MiniBossTemplate);
+            var accum = 0f;
             for (var i = 0; i < templates.Length; ++i)
             {
-                if (templates[i].Chance / 100f < rng)
+                var chance = templates[i].Chance / 100f;
+                if (rng < chance + accum)
                 {
                     template = templates[i];
                     break;
                 }
+                accum += chance;
             }
             if(template == default(MiniBossTemplate))
                 throw new ArgumentOutOfRangeException("Failed to select a mini boss template");

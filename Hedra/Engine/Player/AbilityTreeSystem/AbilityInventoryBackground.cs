@@ -1,4 +1,5 @@
 using System.Drawing;
+using System.Globalization;
 using Hedra.Engine.Player.Inventory;
 using Hedra.EntitySystem;
 using OpenTK;
@@ -19,10 +20,10 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         {
             Name.Text = Human.Name;
             Level.Text = $"LEVEL {Human.Level}";
-            TopLeftText.Text = $"{Human.HealthRegen:0.00} HP/s";
-            BottomLeftText.Text = $"{Human.AttackSpeed:0.00} AS";
-            TopRightText.Text = $"{Human.ManaRegen:0.00} MP/s";
-            BottomRightText.Text = $"{Human.Speed:0.00} S";
+            TopLeftText.Text = $"{Human.HealthRegen.ToString("0.00", CultureInfo.InvariantCulture)} HP/s";
+            BottomLeftText.Text = $"{Human.AttackSpeed.ToString("0.00", CultureInfo.InvariantCulture)} AS";
+            TopRightText.Text = $"{Human.ManaRegen.ToString("0.00", CultureInfo.InvariantCulture)} MP/s";
+            BottomRightText.Text = $"{Human.Speed.ToString("0.00", CultureInfo.InvariantCulture)} S";
         }
     }
 }

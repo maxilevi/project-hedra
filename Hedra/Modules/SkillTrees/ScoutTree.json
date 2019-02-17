@@ -1,3 +1,5 @@
 {
-  "Name": "Scout"
+  "Name": "Scout",
+  "Description": "scout_class_description",
+  "Icon": "$DataFile$/Assets/Skills/Scout.png"
 }

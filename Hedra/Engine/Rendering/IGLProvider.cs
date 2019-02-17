@@ -74,6 +74,7 @@ namespace Hedra.Engine.Rendering
         void LinkProgram(uint Program);
         void MultiDrawElements(PrimitiveType Primitive, int[] Counts, DrawElementsType Type, IntPtr[] Offsets, int Count);
         void PointSize(float Size);
+        void LineWidth(float Width);
         void PolygonMode(MaterialFace Face, PolygonMode Mode);
         void ReadBuffer(ReadBufferMode Mode);
         void ReadPixels(int V0, int V1, int V2, int V3, PixelFormat Format, PixelType Type, int[] Pixels);

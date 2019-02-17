@@ -5,6 +5,7 @@ namespace Hedra.Engine.ClassSystem.Templates
     public class AbilityTreeTemplate : INamedTemplate
     {
         public string Name { get; set; }
+        public string Description { get; set; }
         public string Icon { get; set; } = "$DataFile$/Assets/Skills/HolderSkill.png";
         public string M11 { get; set; }
         public string M12 { get; set; }

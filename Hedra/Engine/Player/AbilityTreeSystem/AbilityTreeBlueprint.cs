@@ -10,6 +10,7 @@
 using System.Linq;
 using Hedra.Engine.ClassSystem.Templates;
 using Hedra.Engine.Game;
+using Hedra.Engine.Localization;
 using Hedra.Engine.SkillSystem;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
@@ -19,13 +20,17 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
     /// </summary>
     public class AbilityTreeBlueprint
     {
-        public string Name { get; set; }
+        private readonly string _nameTranslationKey;
+        private readonly string _descriptionTranslationKey;
+        public string DisplayName => Translations.Get(_nameTranslationKey);
+        public string Description => Translations.Get(_descriptionTranslationKey);
         public uint Icon { get; set; }
         public readonly TreeItem[][] Items = new TreeItem[AbilityTree.Columns][];
 
         public AbilityTreeBlueprint(AbilityTreeTemplate AbilityTreeTemplate)
         {
-            Name = AbilityTreeTemplate.Name.ToLowerInvariant();
+            _nameTranslationKey = AbilityTreeTemplate.Name.ToLowerInvariant();
+            _descriptionTranslationKey = AbilityTreeTemplate.Description?.ToLowerInvariant();
             for(var i = 0; i < Items.Length; i++)
             {
                 Items[i] = new TreeItem[AbilityTree.Rows];

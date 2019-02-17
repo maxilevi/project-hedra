@@ -250,7 +250,7 @@ namespace Hedra.Engine.Rendering.UI
                         
                     /* Draw shadows & strokes */
                     if (Params.TextOptions[i].HasStroke)
-                        AddStroke(graphics, Params.Texts[i], Params.TextFonts[i], offset);
+                        AddStroke(graphics, Params.Texts[i], Params.TextFonts[i], offset, Params.TextOptions[i]);
                     else
                         AddShadows(graphics, Params.Texts[i], Params.TextFonts[i], offset);
                     
@@ -293,12 +293,12 @@ namespace Hedra.Engine.Rendering.UI
             return textBitmap;
         }
 
-        private static void AddStroke(Graphics Graphics, string Text, Font TextFont, PointF Offset)
+        private static void AddStroke(Graphics Graphics, string Text, Font TextFont, PointF Offset, TextOptions Options)
         {
-            AddBackground(Graphics, Text, TextFont, Color.FromArgb(80, 0, 0, 0), new Vector2(Offset.X, Offset.Y + 1.75f));
-            AddBackground(Graphics, Text, TextFont, Color.FromArgb(80, 0, 0, 0), new Vector2(Offset.X + 1.75f, Offset.Y));
-            AddBackground(Graphics, Text, TextFont, Color.FromArgb(80, 0, 0, 0), new Vector2(Offset.X, Offset.Y - 1.75f));
-            AddBackground(Graphics, Text, TextFont, Color.FromArgb(80, 0, 0, 0), new Vector2(Offset.X - 1.75f, Offset.Y));
+            AddBackground(Graphics, Text, TextFont, Color.FromArgb(80, Options.StrokeColor.R, Options.StrokeColor.G, Options.StrokeColor.B), new Vector2(Offset.X, Offset.Y + 1.75f));
+            AddBackground(Graphics, Text, TextFont, Color.FromArgb(80, Options.StrokeColor.R, Options.StrokeColor.G, Options.StrokeColor.B), new Vector2(Offset.X + 1.75f, Offset.Y));
+            AddBackground(Graphics, Text, TextFont, Color.FromArgb(80, Options.StrokeColor.R, Options.StrokeColor.G, Options.StrokeColor.B), new Vector2(Offset.X, Offset.Y - 1.75f));
+            AddBackground(Graphics, Text, TextFont, Color.FromArgb(80, Options.StrokeColor.R, Options.StrokeColor.G, Options.StrokeColor.B), new Vector2(Offset.X - 1.75f, Offset.Y));
         }
 
         private static void AddShadows(Graphics Graphics, string Text, Font TextFont, PointF Offset)

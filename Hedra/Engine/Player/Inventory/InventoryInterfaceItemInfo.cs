@@ -41,7 +41,7 @@ namespace Hedra.Engine.Player.Inventory
         public InventoryInterfaceItemInfo(InventoryItemRenderer Renderer)
         {
             this._renderer = Renderer;
-            this.Panel = new Panel();
+            this.Panel = new Panel {DisableKeys = true};
             var resFactor = 1366f / GameSettings.Width;
             this.BackgroundTexture = new Texture(DefaultId, Vector2.Zero, DefaultSize * .525f * resFactor);
             this.ItemTexture = new Texture(0, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, BackgroundTexture.Scale * new Vector2(.45f, .0f) + Vector2.UnitX * .025f),

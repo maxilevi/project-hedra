@@ -36,6 +36,7 @@ namespace Hedra.Engine.Player
         public byte[] MainTreeArray { get; set; }
         public byte[] FirstSpecializationTreeArray { get; set; }
         public byte[] SecondSpecializationTreeArray { get; set; }
+        public int SpecializationTreeIndex { get; set; }
         public byte[] ToolbarArray { get; set; }
         public ClassDesign Class { get; set; }
         public float RandomFactor { get; set; }

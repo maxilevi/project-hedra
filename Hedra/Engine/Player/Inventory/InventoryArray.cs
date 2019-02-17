@@ -154,6 +154,7 @@ namespace Hedra.Engine.Player.Inventory
             return list.ToArray();
         }
 
+        public Item[] Items => _items;
         public int Length => _items.Length;
         public bool HasAvailableSpace => _items.Any(Item => Item == null);
 

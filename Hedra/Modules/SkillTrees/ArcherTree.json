@@ -1,5 +1,6 @@
 {
   "Name": "Archer",
+  "Icon": "$DataFile$/Assets/Skills/Archer.png",
   "M11": "Kick",
   "M13": "LearnKnife", 
   "M22": "Agility",

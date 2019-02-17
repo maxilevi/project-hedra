@@ -19,6 +19,11 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         int AvailablePoints { get; }
         InventoryArray TreeItems { get; }
         bool Show { get; set; }
+        int SpecializationTreeIndex { get; }
+        AbilityTreeBlueprint Specialization { get; }
+        bool HasSpecialization { get; }
+        bool HasFirstSpecialization { get; }
+        bool HasSecondSpecialization { get; }
         event OnPlayerInterfaceStateChangeEventHandler OnPlayerInterfaceStateChange;
     }
 }

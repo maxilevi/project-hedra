@@ -9,11 +9,13 @@ using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using OpenTK;
+using OpenTK.Platform.MacOS;
 
 namespace Hedra.Engine.Player.PagedInterface
 {
     public abstract class PagedInventoryArrayInterface : InventoryArrayInterface
     {
+        public static uint SelectedId { get; } = Graphics2D.LoadFromAssets("Assets/UI/SelectedInventorySlot.png");
         protected Texture[] SelectedTextures { get; }
         protected Panel Panel { get; }
         protected IPlayer Player { get; }
@@ -41,7 +43,7 @@ namespace Hedra.Engine.Player.PagedInterface
             {
                 SelectedTextures[i] =
                     new Texture(
-                        Graphics2D.LoadFromAssets("Assets/UI/SelectedInventorySlot.png"),
+                        SelectedId,
                         Textures[i].Position,
                         Textures[i].Scale
                     );

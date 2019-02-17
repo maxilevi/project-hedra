@@ -439,6 +439,11 @@ namespace Hedra.Engine.Rendering
         {
             Provider.PointSize(Size);
         }
+        
+        public static void LineWidth(float Width)
+        {
+            Provider.LineWidth(Width);
+        }
 
         public static void PolygonMode(MaterialFace Face, PolygonMode Mode)
         {

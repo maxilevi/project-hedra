@@ -1,4 +1,5 @@
 {
   "Name": "Berserker",
+  "Description": "berserker_class_description",
   "Icon": "$DataFile$/Assets/Skills/Berserker.png"
 }

@@ -294,6 +294,10 @@ namespace Hedra.Engine.Rendering
         {
         }
 
+        public void LineWidth(float Width)
+        {
+        }
+
         public virtual void PolygonMode(MaterialFace Face, PolygonMode Mode)
         {
         }

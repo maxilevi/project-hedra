@@ -37,13 +37,13 @@ namespace Hedra.Engine.Rendering.UI
         private bool _disposed;
         private StackTrace _stack;
 
-        public GUITexture(uint Id, Vector2 Scale, Vector2 Pos)
+        public GUITexture(uint Id, Vector2 Scale, Vector2 Position)
         {
-            this.TextureId = Id;
-            this.Position = Pos;
             this.Scale = Scale;
-            this.Opacity = 1;
-            this.Tint = Vector4.One;
+            this.Position = Position;
+            TextureId = Id;
+            Opacity = 1;
+            Tint = Vector4.One;
             _stack = new StackTrace();
         }
 

@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Hedra.Core;
@@ -31,6 +32,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         public const int Rows = 4;
         public const int Columns = 3;
         public const int AbilityCount = Columns * Rows;
+        public int SpecializationTreeIndex { get; set; }
         private const char SaveMarker = '!';
         private const char NumberMarker = '|';
         private const string HeaderMarker = "<>";
@@ -55,12 +57,15 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             _abilities = _mainTree = BuildArray();
             _interface = new AbilityTreeInterface(_player, _abilities, 0, _abilities.Length, Columns)
             {
-                Position = Mathf.ScaleGui(_targetResolution, Vector2.UnitX * -.65f + Vector2.UnitY * -.25f),
-                IndividualScale = Vector2.One * 1.1f
+                Position = Mathf.ScaleGui(_targetResolution, Vector2.UnitX * -.65f + Vector2.UnitY * -.1f),
+                SpecializationInfo =
+                {
+                    Position = Mathf.ScaleGui(_targetResolution, Vector2.UnitX * .6f + Vector2.UnitY * .25f)
+                }
             };
             var itemInfo = new AbilityTreeInterfaceItemInfo(_interface.Renderer)
             {
-                Position = Mathf.ScaleGui(_targetResolution, Vector2.UnitX * .6f + Vector2.UnitY * .1f)
+                Position = _interface.SpecializationInfo.Position
             };
             _manager = new AbilityTreeInterfaceManager(_player, itemInfo, _interface);
             _stateManager = new InventoryStateManager(_player);
@@ -214,6 +219,30 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             _abilities = _mainTree;
             ShowBlueprint(Information.Class.MainTree, Information.MainTreeArray);
         }
+
+        public AbilityTreeBlueprint Specialization
+        {
+            get
+            {
+                switch (SpecializationTreeIndex)
+                {
+                    case 0:
+                        return null;
+                    case 1:
+                        return _player.Class.FirstSpecializationTree;
+                    case 2:
+                        return _player.Class.SecondSpecializationTree;
+                    default:
+                        throw new ArgumentOutOfRangeException("Invalid tree index");
+                }
+            }
+        }
+
+        public bool HasSpecialization => SpecializationTreeIndex != 0;
+
+        public bool HasFirstSpecialization => SpecializationTreeIndex == 1;
+        
+        public bool HasSecondSpecialization => SpecializationTreeIndex == 2;
         
         private void SetBlueprint(AbilityTreeBlueprint Blueprint)
         {
@@ -240,6 +269,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                     button.Texture.MaskId = _interface.Textures[index].TextureElement.Id;
                 }
             }
+            _interface.SetBlueprint(Blueprint);
         }
 
         public int AvailablePoints => _manager.AvailablePoints;

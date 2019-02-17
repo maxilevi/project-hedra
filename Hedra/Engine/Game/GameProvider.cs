@@ -93,7 +93,7 @@ namespace Hedra.Engine.Game
 
         public bool NearAnyPlayer(Vector3 Position, float Radius)
         {
-            return _players.Any(P => (P.Position - Position).LengthSquared < Radius * Radius);
+            return _players.Any(P => (P.Position - Position).Xz.LengthSquared < Radius * Radius);
         }
 
         public void LoadCharacter(PlayerInformation Information)

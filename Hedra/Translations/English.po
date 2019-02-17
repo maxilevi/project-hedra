@@ -159,6 +159,7 @@ quest_find_structure_dialog_0 = There is a nearby $(BOLD)(ORANGE)(CAPS){{0}}. Yo
 quest_spawn_dialog_0 = This is my last stop, you will have to continue your journey alone.
 quest_spawn_find_structure = There is a nearby $(BOLD)(ORANGE)(CAPS){{0}}. You should go find it.
 quest_village = VILLAGE
+# -- Class Names --
 mage = Mage
 warrior = Warrior
 archer = Archer
@@ -171,7 +172,7 @@ hunter = Hunter
 scout = Scout
 ninja = Ninja
 assassin = Assassin
-skill_tree_title = SKILL TREE
+# -- End Class Names --
 kick_skill = Kick
 kick_desc = A powerful knocking kick
 shuriken_skill = Shuriken
@@ -232,4 +233,16 @@ boss_get_xp = YOU EARNED {0} XP!
 mountains_of = Mountains of {0}
 lands_of = Lands of {0}
 territory_of = Territory of {0}
+skill_tree_title = $(BOLD)(CAPS)(GOLD){{0}}\nSKILL TREE
+learn_specialization = LEARN SPECIALIZATION
+# -- Class Descriptions --
+berserker_class_description = ..
+paladin_class_description = ..
+druid_class_description = ..
+necromancer_class_description = A magician who mastered the arts of life and death but chose to pursue the latter
+hunter_class_description = ..
+scout_class_description = ..
+ninja_class_description = ..
+assassin_class_description = ..
+# -- End Class Names --
 

@@ -239,6 +239,8 @@
     <Compile Include="Engine\EntitySystem\DisposeComponent.cs" />
     <Compile Include="Engine\Game\Season.cs" />
     <Compile Include="Engine\Generation\FastComparer.cs" />
+    <Compile Include="Engine\Input\ArrowSelector.cs" />
+    <Compile Include="Engine\Input\ArrowSelectorState.cs" />
     <Compile Include="Engine\ItemSystem\FoodSystem\FoodHandler.cs" />
     <Compile Include="Engine\ItemSystem\ItemHandlerFactory.cs" />
     <Compile Include="Engine\ItemSystem\Templates\AttributeTemplate.cs" />
@@ -289,6 +291,9 @@
     <Compile Include="Engine\PlantSystem\SunflowerDesign.cs" />
     <Compile Include="Engine\PlantSystem\TimberDesign.cs" />
     <Compile Include="Engine\PlantSystem\TimberAndSticksPlacementDesign.cs" />
+    <Compile Include="Engine\Player\AbilityTreeSystem\SpecializationInfo.cs" />
+    <Compile Include="Engine\Player\AbilityTreeSystem\SpecializationPanel.cs" />
+    <Compile Include="Engine\Player\AbilityTreeSystem\TreeLinesUI.cs" />
     <Compile Include="Engine\Player\CraftingSystem\CraftingBackground.cs" />
     <Compile Include="Engine\Player\CraftingSystem\CraftingInterface.cs" />
     <Compile Include="Engine\Player\CraftingSystem\CraftingInventoryArrayInterface.cs" />
@@ -9001,6 +9006,22 @@
     </Content>
     <Content Include="..\project-hedra-assets\UI\RogueLogo.png">
       <Link>Assets\UI\RogueLogo.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\SkillLabel.png">
+      <Link>Assets\UI\SkillLabel.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Archer.png">
+      <Link>Assets\Skills\Archer.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Hunter.png">
+      <Link>Assets\Skills\Hunter.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Scout.png">
+      <Link>Assets\Skills\Scout.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\StaminaAndOxygenBarBackground.png">

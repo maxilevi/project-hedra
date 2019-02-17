@@ -8,6 +8,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using OpenTK;
 using Hedra.Engine.Management;
 using Hedra.Engine.Events;
@@ -25,6 +26,7 @@ namespace Hedra.Engine.Rendering.UI
     public class Panel : EventListener, UIElement
     {
         private const float MoveSpeed = 2f;
+        private Vector2 _position;
         public bool Animate = false;
         public bool DisableKeys { get; set; }
         public bool Enabled { get; private set; }
@@ -194,7 +196,19 @@ namespace Hedra.Engine.Rendering.UI
             if(_firstHover && _buttons[_prevX][_prevY].Enabled) _buttons[_prevX][_prevY].OnHoverExit(Sender, E);
         }
         
-        public Vector2 Position { get; set; }
+        public virtual Vector2 Position
+        {
+            get => _position;
+            set
+            {
+                var elements = Elements.ToArray();
+                for (var i = 0; i < elements.Length; i++)
+                {
+                    elements[i].Position = elements[i].Position - _position + value;
+                }
+                _position = value;
+            }
+        }
         
         public Vector2 Scale
         {

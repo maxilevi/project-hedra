@@ -492,6 +492,12 @@ namespace Hedra.Engine.Rendering
             GL.PointSize(Size);
             EnsureNoErrors();
         }
+        
+        public void LineWidth(float Width)
+        {
+            GL.LineWidth(Width);
+            EnsureNoErrors();
+        }
 
         public void PolygonMode(MaterialFace Face, PolygonMode Mode)
         {
