@@ -165,7 +165,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         {
             var decomposedIndexY = Index % AbilityTree.Columns;
             var decomposedIndexX = AbilityTree.AbilityCount / AbilityTree.Columns - 1 - (Index - decomposedIndexY) / AbilityTree.Columns;
-            this.Buttons[Index].Texture.Grayscale = (decomposedIndexX * 5 > _player.Level || !this.PreviousUnlocked(Index)) && IsTreeEnabled;
+            this.Buttons[Index].Texture.Grayscale = (decomposedIndexX * 5 > _player.Level || !this.PreviousUnlocked(Index)) || !IsTreeEnabled;
         }
 
         private bool IsTreeEnabled => _player.AbilityTree.IsTreeEnabled(_blueprint);

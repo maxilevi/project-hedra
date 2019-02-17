@@ -238,11 +238,12 @@ learn_specialization = LEARN SPECIALIZATION
 # -- Class Descriptions --
 berserker_class_description = A crazed warrior who fights for honor and bloodlust                           
 paladin_class_description = A skilled warrior trained in the great arts of defense
-druid_class_description = ..
+druid_class_description = Raised by forests, the druid knows how to use the power of plants and animals as his own
 necromancer_class_description = A magician who mastered the arts of life and death but chose to pursue the latter
 hunter_class_description = ..
 scout_class_description = ..
 ninja_class_description = ..
 assassin_class_description = ..
 # -- End Class Names --
+need_specialize_to_unlock = YOU NEED TO SPECIALIZE INTO A \n{0} TO UNLOCK THIS SKILL
 

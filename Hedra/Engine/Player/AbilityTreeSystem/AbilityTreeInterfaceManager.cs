@@ -4,6 +4,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Sound;
+using OpenTK;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
@@ -12,9 +13,9 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
     {
         private readonly Texture[] _lines;
         private readonly IPlayer _player;
-        private readonly InventoryArrayInterface _interface;
+        private readonly AbilityTreeInterface _interface;
         private readonly InventoryInterfaceItemInfo _itemInfo;
-        public AbilityTreeInterfaceManager(IPlayer Player, InventoryInterfaceItemInfo ItemInfoInterface, InventoryArrayInterface Interface)
+        public AbilityTreeInterfaceManager(IPlayer Player, InventoryInterfaceItemInfo ItemInfoInterface, AbilityTreeInterface Interface)
             : base(ItemInfoInterface, Interface)
         {
             _player = Player;
@@ -29,29 +30,50 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             var decomposedIndexY = index % AbilityTree.Columns;
             var decomposedIndexX = AbilityTree.AbilityCount / AbilityTree.Columns-1 - (index - decomposedIndexY) / AbilityTree.Columns;
             var item = this.ItemFromButton(button);
-            var locked = decomposedIndexX * 5 > _player.Level;
+            var locked = decomposedIndexX * 5 > _player.Level || !_player.AbilityTree.IsCurrentTreeEnabled;
             var previousUnlocked = this.PreviousUnlocked(index);
 
             if (this.AvailablePoints > 0 && !locked && previousUnlocked)
             {
-                _player.AbilityTree.SetPoints(index, item.GetAttribute<int>("Level")+1);
+                _player.AbilityTree.SetPoints(index, item.GetAttribute<int>("Level") + 1);
             }
             else
             {
                 if (locked)
-                    _player.MessageDispatcher.ShowNotification(Translations.Get("need_level_to_unlock", decomposedIndexX * 5), Color.DarkRed, 3.0f);
-                else if(!previousUnlocked)
+                {
+                    if(!_player.AbilityTree.IsCurrentTreeEnabled)
+                        _player.MessageDispatcher.ShowNotification(Translations.Get("need_specialize_to_unlock", _player.AbilityTree.Specialization.DisplayName), Color.DarkRed, 3.0f);
+                    else
+                        _player.MessageDispatcher.ShowNotification(Translations.Get("need_level_to_unlock", decomposedIndexX * 5), Color.DarkRed, 3.0f);
+                }
+                else if (!previousUnlocked)
+                {
                     _player.MessageDispatcher.ShowNotification(Translations.Get("unlock_previous_skill"), Color.DarkRed, 3.0f);
+                }
                 else
-                    SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);              
+                {
+                    SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
+                }
             }
-            this.UpdateView();
-            _itemInfo.Show(item);
+            UpdateView();
         }
 
         protected override void Use(object Sender, MouseButtonEventArgs EventArgs)
         {
 
+        }
+
+        protected override void HoverEnter(object Sender, MouseEventArgs EventArgs)
+        {
+            base.HoverEnter(Sender, EventArgs);
+            _interface.SpecializationInfo.ShowSpecialization(null);
+        }
+
+        protected override void HoverExit(object Sender, MouseEventArgs EventArgs)
+        {
+            base.HoverExit(Sender, EventArgs);
+            var blueprint = _player.AbilityTree.Specialization;
+            _interface.SpecializationInfo.ShowSpecialization(blueprint.IsSpecialization ? blueprint : null);
         }
 
         private bool PreviousUnlocked(int Index)

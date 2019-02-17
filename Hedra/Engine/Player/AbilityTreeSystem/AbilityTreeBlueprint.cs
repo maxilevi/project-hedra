@@ -24,6 +24,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         private readonly string _descriptionTranslationKey;
         public string DisplayName => Translations.Get(_nameTranslationKey);
         public string Description => Translations.Get(_descriptionTranslationKey);
+        public bool IsSpecialization => _descriptionTranslationKey != null;
         public uint Icon { get; set; }
         public string Identifier => _nameTranslationKey;
         public readonly TreeItem[][] Items = new TreeItem[AbilityTree.Columns][];

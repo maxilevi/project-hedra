@@ -128,7 +128,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (Model.Colors.Count != Model.Vertices.Count)
             {
                 _parent.RemoveInstance(Element);
-                Log.WriteLine($"Removed instance data because of mismatch. ({Model.Colors.Count}|{Model.Vertices.Count})");
+                Log.WriteLine($"Removed instance data '{Model.Name}' because of mismatch. ({Model.Colors.Count}|{Model.Vertices.Count})");
                 return;
                 //throw new ArgumentOutOfRangeException($"Color '{Model.Colors.Count}' and vertices '{Model.Vertices.Count}' mismatch. This is probably a cache collision");
             }

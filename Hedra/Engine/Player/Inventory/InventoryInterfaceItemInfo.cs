@@ -213,10 +213,11 @@ namespace Hedra.Engine.Player.Inventory
             get => BackgroundTexture.Position;
             set
             {
+                var position = BackgroundTexture.Position;
                 var elements = Panel.Elements.ToArray();
                 for (var i = 0; i < elements.Length; ++i)
                 {
-                    elements[i].Position = elements[i].Position - Position + value;
+                    elements[i].Position = elements[i].Position - position + value;
                 }
             }
         }

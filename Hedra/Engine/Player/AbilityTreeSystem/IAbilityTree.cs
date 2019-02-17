@@ -26,6 +26,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         bool HasSpecialization { get; }
         bool HasFirstSpecialization { get; }
         bool HasSecondSpecialization { get; }
+        bool IsCurrentTreeEnabled { get; }
         event OnPlayerInterfaceStateChangeEventHandler OnPlayerInterfaceStateChange;
     }
 }

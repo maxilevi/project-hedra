@@ -45,6 +45,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         private readonly AbilityTreeInterfaceManager _manager;
         private readonly InventoryStateManager _stateManager;
         private readonly AbilityInventoryBackground _background;
+        private AbilityTreeBlueprint _blueprint;
         private InventoryArray _abilities;
         private bool _show;
 
@@ -60,7 +61,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 Position = Mathf.ScaleGui(_targetResolution, Vector2.UnitX * -.65f + Vector2.UnitY * -.1f),
                 SpecializationInfo =
                 {
-                    Position = Mathf.ScaleGui(_targetResolution, Vector2.UnitX * .6f + Vector2.UnitY * .25f)
+                    Position = Mathf.ScaleGui(_targetResolution, Vector2.UnitX * .6f + Vector2.UnitY * .35f)
                 }
             };
             var itemInfo = new AbilityTreeInterfaceItemInfo(_interface.Renderer)
@@ -221,23 +222,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             ShowBlueprint(Information.Class.MainTree, Information.MainTreeArray);
         }
 
-        public AbilityTreeBlueprint Specialization
-        {
-            get
-            {
-                switch (SpecializationTreeIndex)
-                {
-                    case 0:
-                        return null;
-                    case 1:
-                        return _player.Class.FirstSpecializationTree;
-                    case 2:
-                        return _player.Class.SecondSpecializationTree;
-                    default:
-                        throw new ArgumentOutOfRangeException("Invalid tree index");
-                }
-            }
-        }
+        public AbilityTreeBlueprint Specialization => _blueprint;
         
         public void LearnSpecialization(AbilityTreeBlueprint Blueprint)
         {
@@ -259,6 +244,8 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             /* Is the default tree, always true */
             return true;
         }
+
+        public bool IsCurrentTreeEnabled => IsTreeEnabled(_blueprint);
         
         public bool HasSpecialization => SpecializationTreeIndex != 0;
 
@@ -291,7 +278,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                     button.Texture.MaskId = _interface.Textures[index].TextureElement.Id;
                 }
             }
-            _interface.SetBlueprint(Blueprint);
+            _interface.SetBlueprint(_blueprint = Blueprint);
         }
 
         public int AvailablePoints => _manager.AvailablePoints;
