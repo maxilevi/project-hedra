@@ -10,7 +10,7 @@
   "Drops": [],
   "Model": {
     "Path": "$DataFile$/Assets/Chr/PigIdle.dae",
-    "Scale": 4.0,
+    "Scale": 2.5,
     "IdleAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/BoarIdle.dae",

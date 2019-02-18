@@ -146,7 +146,7 @@ namespace Hedra.Engine.Player
         
         public void ShowTitleMessage(string Message, float Seconds)
         {
-            this.ShowTitleMessage(Message, Seconds, Color.Black);
+            this.ShowTitleMessage(Message, Seconds, Color.FromArgb(255, 40, 40, 40));
         }
 
         private void ShowTitleMessage(string Message, float Seconds, Color TextColor)

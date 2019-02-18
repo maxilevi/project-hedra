@@ -240,10 +240,10 @@ berserker_class_description = A crazed warrior who fights for honor and bloodlus
 paladin_class_description = A skilled warrior trained in the great arts of defense
 druid_class_description = Raised by forests, the druid knows how to use the power of plants and animals as his own
 necromancer_class_description = A magician who mastered the arts of life and death but chose to pursue the latter
-hunter_class_description = ..
-scout_class_description = ..
-ninja_class_description = ..
-assassin_class_description = ..
+hunter_class_description = A skilled ranger specialized in accurate and powerful but long-ranged attacks
+scout_class_description = Swift, quick and versatile. The scout can launch fast attacks and quickly adapt to new environments
+ninja_class_description = Skilled in the art of deception, ninjas are nimble and fast
+assassin_class_description = Master of the shadows, specializes in stealth combat and surprise attacks
 # -- End Class Names --
 need_specialize_to_unlock = YOU NEED TO SPECIALIZE INTO A \n{0} TO UNLOCK THIS SKILL
 

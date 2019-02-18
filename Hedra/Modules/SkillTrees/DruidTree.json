@@ -1,4 +1,5 @@
 {
   "Name": "Druid",
+  "Icon": "$DataFile$/Assets/Skills/Druid.png",
   "Description": "druid_class_description"
 }

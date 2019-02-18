@@ -1,5 +1,6 @@
 {
   "Name": "Rogue",
+  "Icon": "$DataFile$/Assets/Skills/Rogue.png",
   "M21": "Shuriken",
   "M24": "TripleShuriken",
   "M12": "LearnKatar",

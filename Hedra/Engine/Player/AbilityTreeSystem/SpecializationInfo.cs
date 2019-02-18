@@ -30,7 +30,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 Translation.Create("learn_specialization"),
                 _learnSpecializationButton.Position,
                 Color.White,
-                FontCache.Get(AssetManager.BoldFamily, 14, FontStyle.Bold)
+                FontCache.Get(AssetManager.BoldFamily, 15, FontStyle.Bold)
             );
             _learnSpecializationButton.Texture.Grayscale = true;
             _learnSpecializationButton.Texture.Tint = new Vector4(Color.Orange.ToVector4().Xyz * 5f, 1);
@@ -59,7 +59,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         protected override void UpdateView()
         {
             ItemText.Text = _blueprint.DisplayName;
-            ItemDescription.Text = _blueprint.Description;
+            ItemDescription.Text = Utils.FitString(_blueprint.Description, 38);
             ItemDescription.Color = Color.White;
             ItemTexture.TextureElement.TextureId = _blueprint.Icon;
             HintTexture.Disable();

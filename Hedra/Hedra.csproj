@@ -8027,6 +8027,14 @@
     <Folder Include="Assets\Items\Boots\" />
     <Folder Include="Assets\Items\Gems\" />
     <Folder Include="Assets\Items\Pants\" />
+    <Folder Include="Engine\SkillSystem\Archer\Hunter" />
+    <Folder Include="Engine\SkillSystem\Archer\Scout" />
+    <Folder Include="Engine\SkillSystem\Mage\Druid" />
+    <Folder Include="Engine\SkillSystem\Mage\Necromancer" />
+    <Folder Include="Engine\SkillSystem\Rogue\Assassin" />
+    <Folder Include="Engine\SkillSystem\Rogue\Ninja" />
+    <Folder Include="Engine\SkillSystem\Warrior\Berserker" />
+    <Folder Include="Engine\SkillSystem\Warrior\Paladin" />
     <Folder Include="Modules\Items\Boots\" />
     <Folder Include="Modules\Items\Gems\" />
     <Folder Include="Modules\Items\Pants\" />
@@ -9016,8 +9024,32 @@
       <Link>Assets\Skills\Archer.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Assassin.png">
+      <Link>Assets\Skills\Assassin.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Druid.png">
+      <Link>Assets\Skills\Druid.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Hunter.png">
       <Link>Assets\Skills\Hunter.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Mage.png">
+      <Link>Assets\Skills\Mage.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Necromancer.png">
+      <Link>Assets\Skills\Necromancer.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Ninja.png">
+      <Link>Assets\Skills\Ninja.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Rogue.png">
+      <Link>Assets\Skills\Rogue.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Scout.png">
