@@ -39,7 +39,7 @@ namespace Hedra.Engine.SkillSystem
         public abstract string Description { get; }
         public abstract string DisplayName { get; }
         public bool Casting { get; set; }
-        public virtual uint TextureId { get; }
+        public abstract uint TextureId { get; }
         public Vector2 AdjustedPosition { get; set; }
         protected virtual bool Grayscale { get; set; }
         public bool Initialized { get; private set;}

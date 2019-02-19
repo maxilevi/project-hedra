@@ -30,6 +30,7 @@ namespace Hedra.Engine.ItemSystem
         HealthPotion,
         StoneArrow,
         WoodenStick,
+        SteelArrow,
         MaxEnums
     }
 }

@@ -312,6 +312,7 @@
     <Compile Include="Engine\Player\QuestSystem\Views\ModelView.cs" />
     <Compile Include="Engine\Player\QuestSystem\Views\EntityView.cs" />
     <Compile Include="Engine\Player\QuestSystem\Views\QuestView.cs" />
+    <Compile Include="Engine\Player\ToolbarSystem\PassiveEffectsInventoryInterface.cs" />
     <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\AuxiliaryDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\DummyDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\EndDesign.cs" />
@@ -363,6 +364,13 @@
     <Compile Include="Engine\Rendering\TextureParameter.cs" />
     <Compile Include="Engine\Rendering\UI\Plaque.cs" />
     <Compile Include="Engine\Rendering\UI\TextOptions.cs" />
+    <Compile Include="Engine\SkillSystem\Archer\Hunter\Concealment.cs" />
+    <Compile Include="Engine\SkillSystem\Archer\Hunter\Focus.cs" />
+    <Compile Include="Engine\SkillSystem\Archer\Hunter\Raven.cs" />
+    <Compile Include="Engine\SkillSystem\Archer\Hunter\Scavenge.cs" />
+    <Compile Include="Engine\SkillSystem\Archer\Hunter\SpikeTrap.cs" />
+    <Compile Include="Engine\SkillSystem\Archer\Hunter\SteadyAim.cs" />
+    <Compile Include="Engine\SkillSystem\Archer\Hunter\SteelArrows.cs" />
     <Compile Include="Engine\SkillSystem\SingleAnimationSkill.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Agility.cs" />
     <Compile Include="Engine\SkillSystem\Archer\FlameArrow.cs" />
@@ -8027,7 +8035,6 @@
     <Folder Include="Assets\Items\Boots\" />
     <Folder Include="Assets\Items\Gems\" />
     <Folder Include="Assets\Items\Pants\" />
-    <Folder Include="Engine\SkillSystem\Archer\Hunter" />
     <Folder Include="Engine\SkillSystem\Archer\Scout" />
     <Folder Include="Engine\SkillSystem\Mage\Druid" />
     <Folder Include="Engine\SkillSystem\Mage\Necromancer" />
@@ -8078,6 +8085,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\Environment\Misc\WoodenStick0_Lod8.ply">
       <Link>Assets\Env\Plants\WoodenStick0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Ammo\SteelArrow.ply">
+      <Link>Assets\Items\Ammo\SteelArrow.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Foods\Bread.ply">
@@ -9028,8 +9039,16 @@
       <Link>Assets\Skills\Assassin.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Concealment.png">
+      <Link>Assets\Skills\Concealment.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Druid.png">
       <Link>Assets\Skills\Druid.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Focus.png">
+      <Link>Assets\Skills\Focus.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Hunter.png">
@@ -9048,12 +9067,32 @@
       <Link>Assets\Skills\Ninja.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Raven.png">
+      <Link>Assets\Skills\Raven.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Rogue.png">
       <Link>Assets\Skills\Rogue.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Scavenge.png">
+      <Link>Assets\Skills\Scavenge.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Scout.png">
       <Link>Assets\Skills\Scout.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\SpikeTrap.png">
+      <Link>Assets\Skills\SpikeTrap.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\SteadyAim.png">
+      <Link>Assets\Skills\SteadyAim.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\SteelArrows.png">
+      <Link>Assets\Skills\SteelArrows.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\StaminaAndOxygenBarBackground.png">
@@ -12123,6 +12162,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Classes\Warrior.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Ammo\SteelArrow.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Ammo\StoneArrow.json">

@@ -56,6 +56,7 @@ namespace Hedra.WeaponSystem
                 Vector3.One * new Vector3(2.2f, 2.8f, 2.2f) * 1.5f);
         }
         
+        public Item Ammo { get; set; }
         public OnArrowEvent BowModifiers;
         public OnArrowEvent Hit;
         public OnArrowEvent Miss;
@@ -70,8 +71,8 @@ namespace Hedra.WeaponSystem
             _quiver.LocalPosition = this.SheathedPosition + new Vector3(.3f, -0.75f, -0.2f);
             _quiver.RotationPoint = new Vector3(0, 0, _quiver.LocalPosition.Z);
             _quiver.LocalRotation = new Vector3(SheathedRotation.X, SheathedRotation.Y, SheathedRotation.Z+90);
-            //_arrow = ObjectMesh.FromVertexData(VertexData.Empty);
-            _arrow = ObjectMesh.FromVertexData(RescaleArrow((ItemPool.Grab(ItemType.StoneArrow))?.Model)?.RotateZ(180) ?? VertexData.Empty);
+            _arrow = ObjectMesh.FromVertexData(VertexData.Empty);
+            Ammo = ItemPool.Grab(ItemType.StoneArrow);
         }
         
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
@@ -127,13 +128,13 @@ namespace Hedra.WeaponSystem
             base.Update(Human);
             SetQuiverPosition();
             SetArrowPosition();
-            //var newAmmo = ItemPool.Grab()//Human?.Inventory.Ammo;
-            //if (_lastAmmoName != newAmmo?.Name)
-            //{
-            //    _arrow?.Dispose();
-            //    _arrow = ObjectMesh.FromVertexData(RescaleArrow(newAmmo?.Model)?.RotateZ(180) ?? VertexData.Empty);
-            //    _lastAmmoName = newAmmo?.Name;
-           // }
+            var newAmmo = Ammo;
+            if (_lastAmmoName != newAmmo?.Name)
+            {
+                _arrow?.Dispose();
+                _arrow = ObjectMesh.FromVertexData(RescaleArrow(newAmmo?.Model)?.RotateZ(180) ?? VertexData.Empty);
+                _lastAmmoName = newAmmo?.Name;
+            }
         }
 
         private void SetQuiverPosition()

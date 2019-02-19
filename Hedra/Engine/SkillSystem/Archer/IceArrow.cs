@@ -10,6 +10,7 @@
 using System;
 using Hedra.Components.Effects;
 using Hedra.Core;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
@@ -28,8 +29,8 @@ namespace Hedra.Engine.SkillSystem.Archer
         private const float CooldownCap = 8f;
         private const float BaseManaCost = 40f;
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/IceArrow.png");
-        public override string Description => "Shoot a freezing arrow.";
-        public override string DisplayName => "Ice Arrow";
+        public override string Description => Translations.Get("ice_arrow_desc");
+        public override string DisplayName => Translations.Get("ice_arrow");
         private float Damage => BaseDamage * (base.Level * 0.40f) + BaseDamage;
         public override float MaxCooldown => Math.Max(BaseCooldown - 0.80f * base.Level, CooldownCap);
         public override float ManaCost => BaseManaCost;

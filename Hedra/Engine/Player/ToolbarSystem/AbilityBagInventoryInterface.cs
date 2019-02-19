@@ -10,12 +10,10 @@ namespace Hedra.Engine.Player.ToolbarSystem
     public class AbilityBagInventoryInterface : InventoryArrayInterface
     {
         private readonly Panel _panel;
-        private readonly IPlayer _player;
 
         public AbilityBagInventoryInterface(IPlayer Player, InventoryArray Array, int Offset, int Length, int SlotsPerLine, Vector2 Spacing, string[] CustomIcons = null) : base(Array, Offset, Length, SlotsPerLine, Spacing, CustomIcons)
         {
             _panel = new Panel();
-            _player = Player;
             for (var i = 0; i < this.Buttons.Length; i++)
             {
                 this.Buttons[i].Texture.IdPointer = null;
@@ -38,7 +36,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
         public override bool Enabled
         {
-            get { return base.Enabled; }
+            get => base.Enabled;
             set
             {
                 base.Enabled = value;

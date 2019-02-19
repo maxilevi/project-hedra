@@ -5,6 +5,7 @@ using Hedra.Components.Effects;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.SkillSystem.Archer;
+using Hedra.Engine.SkillSystem.Archer.Hunter;
 using Hedra.Engine.SkillSystem.Mage;
 using Hedra.Engine.SkillSystem.Rogue;
 using Hedra.Engine.SkillSystem.Warrior;
@@ -74,9 +75,17 @@ namespace Hedra
             AddSkill("FlameArrow", typeof(FlameArrow));
             AddSkill("Kick", typeof(Kick));
             AddSkill("IceArrow", typeof(IceArrow));
-            AddSkill("LearnKnife", typeof(LearnKnife));
             AddSkill("PoisonArrow", typeof(PoisonArrow));
             AddSkill("Puncture", typeof(Puncture));
+            
+            AddSkill("LearnKnife", typeof(LearnKnife));
+            AddSkill("Concealment", typeof(Concealment));
+            AddSkill("Focus", typeof(Focus));
+            AddSkill("Raven", typeof(Raven));
+            AddSkill("Scavenge", typeof(Scavenge));
+            AddSkill("SpikeTrap", typeof(SpikeTrap));
+            AddSkill("SteadyAim", typeof(SteadyAim));
+            AddSkill("SteelArrows", typeof(SteelArrows));
             
             AddSkill("Conflagaration", typeof(Conflagaration));
             AddSkill("Fireball", typeof(Fireball));

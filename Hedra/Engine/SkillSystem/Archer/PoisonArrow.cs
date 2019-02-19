@@ -10,6 +10,7 @@
 using System;
 using Hedra.Components.Effects;
 using Hedra.Core;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
@@ -28,8 +29,8 @@ namespace Hedra.Engine.SkillSystem.Archer
         private const float CooldownCap = 6f;
         private const float BaseManaCost = 70f;
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/PoisonArrow.png");
-        public override string Description => "Shoot a poisonous arrow.";
-        public override string DisplayName => "Poison Arrow";
+        public override string Description => Translations.Get("poison_arrow_desc");
+        public override string DisplayName => Translations.Get("poison_arrow");
         private float Damage => BaseDamage * (base.Level * 0.35f) + BaseDamage;
         public override float MaxCooldown => Math.Max(BaseCooldown - 0.80f * base.Level, CooldownCap);
         public override float ManaCost => BaseManaCost;

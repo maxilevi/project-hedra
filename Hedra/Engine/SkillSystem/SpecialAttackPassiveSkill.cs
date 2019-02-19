@@ -12,6 +12,7 @@ namespace Hedra.Engine.SkillSystem
         {
             base.Initialize(Position, Scale, InPanel, Player);
             Player.BeforeAttacking += BeforeAttacking;
+            Player.AfterAttacking += AfterAttacking;
         }
 
         private void BeforeAttacking(IEntity Parent, float Damage)
@@ -20,10 +21,18 @@ namespace Hedra.Engine.SkillSystem
                 BeforeUse(weapon);
         }
         
+        private void AfterAttacking(IEntity Parent, float Damage)
+        {
+            if(Level > 0 && Player.HasWeapon && Player.LeftWeapon is T weapon)
+                AfterUse(weapon);
+        }
+        
         protected override void OnChange()
         {
         }
         
         protected abstract void BeforeUse(T Weapon);
+        
+        protected virtual void AfterUse(T Weapon){}
     }
 }

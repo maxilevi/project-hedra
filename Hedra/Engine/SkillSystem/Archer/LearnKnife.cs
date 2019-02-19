@@ -8,6 +8,7 @@
  */
 
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 
@@ -25,8 +26,8 @@ namespace Hedra.Engine.SkillSystem.Archer
             Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentType.Knife);
         }
 
-        public override string Description => "Learn to use the knife.";
-        public override string DisplayName => "Learn Knife";
+        public override string Description => Translations.Get("learn_knife_desc");
+        public override string DisplayName => Translations.Get("learn_knife");
 
     }
 }

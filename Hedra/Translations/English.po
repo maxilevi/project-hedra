@@ -89,8 +89,6 @@ not_enough_money = NOT ENOUGH MONEY
 unlock_previous_skill = YOU NEED TO UNLOCK THE PREVIOUS SKILL
 need_level_to_unlock = YOU NEED LEVEL {0} TO UNLOCK THIS SKILL
 cannot_use_equipment = YOU HAVEN'T LEARNED TO\nUSE THAT TYPE OF EQUIPMENT
-whirlwind = Whirlwind
-whirlwind_desc = A fierce spinning attack.
 farmer_thought_0 = Are you an adventurer? I envy you. Farming gets tiring.
 farmer_thought_1 = The life of a farmer may be a dull one, but it's what keeps the village going!
 farmer_thought_2 = Farming is exhausting.
@@ -159,6 +157,7 @@ quest_find_structure_dialog_0 = There is a nearby $(BOLD)(ORANGE)(CAPS){{0}}. Yo
 quest_spawn_dialog_0 = This is my last stop, you will have to continue your journey alone.
 quest_spawn_find_structure = There is a nearby $(BOLD)(ORANGE)(CAPS){{0}}. You should go find it.
 quest_village = VILLAGE
+
 # -- Class Names --
 mage = Mage
 warrior = Warrior
@@ -173,6 +172,8 @@ scout = Scout
 ninja = Ninja
 assassin = Assassin
 # -- End Class Names --
+
+# -- Skill Names --
 kick_skill = Kick
 kick_desc = A powerful knocking kick
 shuriken_skill = Shuriken
@@ -185,6 +186,24 @@ fade_desc = Temporarily hide from your enemies
 fade_skill = Fade
 intercept_skill = Intercept
 intercept_desc = Charge and knock down you enemies
+puncture_skill_desc = Arrows have a high chance to cause bleeding
+puncture_skill = Puncture
+whirlwind = Whirlwind
+whirlwind_desc = A fierce spinning attack
+steel_arrows_desc = 
+steel_arrows = Steel Arrows
+agility_skill = Agility
+agility_skill_desc = Dodging costs {0} less stamina
+flame_arrow_desc = Shoot a flaming arrow
+flame_arrow = Flame Arrow
+ice_arrow_desc = Shoot a freezing arrow
+ice_arrow = Ice Arrow
+learn_knife_desc = Learn to use the knife
+learn_knife = Learn Knife
+poison_arrow_desc = Shoot a poisonous arrow
+poison_arrow = Poison Arrow
+# -- End Skill Names --
+
 inventory_open_key = Inventory
 interact_key = Interact
 forward_key = Move Forward

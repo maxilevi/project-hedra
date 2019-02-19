@@ -1,0 +1,22 @@
+{
+  "Name": "SteelArrow",
+  "DisplayName": "Steel arrow",
+  "Tier": "Common",
+  "EquipmentType": "Ammo",
+  "Description": "A reinforced steel arrow.",
+  "Attributes": [
+    {
+      "Name": "Price",
+      "Value": 5,
+      "Hidden": true
+    },
+    {
+      "Name": "Amount",
+      "Value": 1
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Ammo/SteelArrow.ply"
+  }
+}

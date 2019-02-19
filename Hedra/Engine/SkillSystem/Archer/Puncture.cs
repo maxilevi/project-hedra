@@ -8,6 +8,7 @@
  */
 
 using Hedra.Components.Effects;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
@@ -47,7 +48,7 @@ namespace Hedra.Engine.SkillSystem.Archer
 
         }
 
-        public override string Description => "Arrows have a high chance to cause bleeding.";
-        public override string DisplayName => "Puncture";
+        public override string Description => Translations.Get("puncture_skill_desc");
+        public override string DisplayName => Translations.Get("puncture_skill");
     }
 }

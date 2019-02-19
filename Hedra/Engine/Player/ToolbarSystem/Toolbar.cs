@@ -29,13 +29,16 @@ namespace Hedra.Engine.Player.ToolbarSystem
     {
         public const int InteractableItems = 4;
         public const int BarItems = 7;
+        private const int MaxPassiveItems = 8;
         private const char Marker = '!';
         private const string HeaderMarker = "<>";
         private readonly IPlayer _player;
         private readonly InventoryArray _barItems;
         private readonly InventoryArray _bagItems;
+        private readonly InventoryArray _passiveItems;
         private readonly ToolbarInventoryInterface _toolbarItemsInterface;
         private readonly AbilityBagInventoryInterface _bagItemsInterface;
+        private readonly PassiveEffectsInventoryInterface _passiveEffectsInventoryInterface;
         private readonly ToolbarInterfaceManager _manager;
         private readonly ToolbarInputHandler _inputHandler;
         private BaseSkill[] _skills;
@@ -48,6 +51,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
             _player = Player;
             _barItems = new InventoryArray(BarItems);
             _bagItems = new InventoryArray(AbilityTree.AbilityCount-1);
+            _passiveItems = new InventoryArray(MaxPassiveItems);
             _toolbarItemsInterface = new ToolbarInventoryInterface(_player, _barItems, 0, _barItems.Length, BarItems, Vector2.One)
             {
                 Position = Vector2.UnitY * -.825f,
@@ -58,7 +62,12 @@ namespace Hedra.Engine.Player.ToolbarSystem
                 Position = Vector2.UnitY * -.6f,
                 IndividualScale = Vector2.One * 0.85f
             };
-            _manager = new ToolbarInterfaceManager(_player, _toolbarItemsInterface, _bagItemsInterface)
+            _passiveEffectsInventoryInterface = new PassiveEffectsInventoryInterface(_bagItems, 0, _bagItems.Length, AbilityTree.AbilityCount / 2, Vector2.One)
+            {
+                Position = Vector2.UnitY * .8f,
+                IndividualScale = Vector2.One * 0.25f
+            };
+            _manager = new ToolbarInterfaceManager(_player, _toolbarItemsInterface, _bagItemsInterface, _passiveEffectsInventoryInterface)
             {
                 HasCancelButton = false
             };
@@ -195,7 +204,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
             set
             {
                 _bagItemsInterface.Enabled = value;
-                var filtered = _manager.GetFilteredSkills();
+                var filtered = _manager.GetActiveFilteredSkills();
                 var inToolbar = new[] {this.SkillAt(0), this.SkillAt(1), this.SkillAt(2), this.SkillAt(3)};
                 for (var i = 0; i < _skills.Length; i++)
                 {

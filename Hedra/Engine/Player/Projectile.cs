@@ -38,6 +38,7 @@ namespace Hedra.Engine.Player
         public event OnProjectileMoveEvent MoveEventHandler;
         public event OnProjectileMoveEvent LandEventHandler;
 
+        public bool DisposeOnHit { get; set; } = true;
         public Vector3 Propulsion { get; set; }
         public Vector3 Direction { get; set; }
         public float Lifetime { get; set; } = 10f;
@@ -49,6 +50,7 @@ namespace Hedra.Engine.Player
         public float Speed { get; set; } = 1;
         public IEntity[] IgnoreEntities { get; set; }
 
+        private readonly HashSet<IEntity> _collidedList;
         private readonly IEntity _parent;
         private readonly List<ICollidable> _chunkCollisions;
         private readonly List<ICollidable> _structureCollisions;
@@ -56,7 +58,6 @@ namespace Hedra.Engine.Player
         private Vector2 _lastChunkCollisionPosition;
         private Vector2 _lastStructureCollisionPosition;
         private Vector3 _accumulatedVelocity;
-        private bool _collided;
 
 
         public Projectile(IEntity Parent, Vector3 Origin, VertexData MeshData)
@@ -114,13 +115,14 @@ namespace Hedra.Engine.Player
                     for (var i = 0; i < entities.Count; i++)
                     {
                         if (_parent == entities[i]
-                            || !Physics.Collides(_collisionBox,
-                                entities[i].Model.BroadphaseBox)
+                            || _collidedList.Contains(World.Entities[i])
+                            || !Physics.Collides(_collisionBox, entities[i].Model.BroadphaseBox)
                             || IgnoreEntities != null && Array.IndexOf(IgnoreEntities, entities[i]) != -1) continue;
 
                         HitEventHandler?.Invoke(this, World.Entities[i]);
-                        _collided = true;
-                        this.Dispose();
+                        _collidedList.Add(World.Entities[i]);
+                        if(DisposeOnHit)
+                            Dispose();
                         break;
                     }
                 }

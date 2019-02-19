@@ -8,6 +8,7 @@
  */
 
 using System;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 
@@ -34,7 +35,7 @@ namespace Hedra.Engine.SkillSystem.Archer
 
         protected override int MaxLevel => 10;
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Agility.png");
-        public override string Description => $"Dodging costs {-StaminaFormula(true)} less stamina.";
-        public override string DisplayName => "Agility";
+        public override string Description => Translations.Get("agility_skill_desc", -StaminaFormula(true));
+        public override string DisplayName => Translations.Get("agility_skill");
     }
 }

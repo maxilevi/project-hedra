@@ -12,6 +12,7 @@ using System.Collections;
 using System.Linq;
 using Hedra.Components.Effects;
 using Hedra.Core;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
@@ -36,8 +37,8 @@ namespace Hedra.Engine.SkillSystem.Archer
         private const float BaseEffectRange = 24;
         private const float BaseManaCost = 40f;
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/FlameArrow.png");
-        public override string Description => "Shoot a flaming arrow.";
-        public override string DisplayName => "Flame Arrow";
+        public override string Description => Translations.Get("flame_arrow_desc");
+        public override string DisplayName => Translations.Get("flame_arrow");
         private float Damage => BaseDamage * (base.Level * 0.40f) + BaseDamage;
         public override float MaxCooldown => Math.Max(BaseCooldown - 0.80f * base.Level, CooldownCap);
         private float EffectDuration => Math.Min(BaseEffectDuration + 0.15f * base.Level, DurationCap);
