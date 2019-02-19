@@ -71,6 +71,16 @@ namespace Hedra.Engine.Player
             throw new NotImplementedException();
         }
 
+        public void RemoveRestriction(int Index, EquipmentType Type)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveRestriction(int Index, string Type)
+        {
+            throw new NotImplementedException();
+        }
+
         public Item Food => throw new NotImplementedException();
         public Item Ammo => ItemPool.Grab(ItemType.StoneArrow);
 

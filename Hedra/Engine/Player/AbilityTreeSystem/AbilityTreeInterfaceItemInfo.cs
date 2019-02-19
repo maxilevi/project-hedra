@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using Hedra.Core;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.SkillSystem;
@@ -20,9 +21,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         protected override void UpdateView()
         {
             var realSkill = CurrentItem.GetAttribute<BaseSkill>("Skill");
-            ItemDescription.Text = $"{Utils.FitString(realSkill.Description, 25)}" +
-                              (realSkill.ManaCost != 0 ? $"Mana cost : {realSkill.ManaCost}{Environment.NewLine}" : string.Empty) +
-                              (realSkill.MaxCooldown != 0 ? $"Cooldown : {realSkill.MaxCooldown}" : string.Empty);
+            ItemDescription.Text = BuildItemDescription(realSkill);
             ItemDescription.Color = Color.White;
             ItemText.Text = Utils.FitString(realSkill.DisplayName, 15);
 
@@ -30,6 +29,17 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 ? CurrentItem.GetAttribute<uint>("ImageId") 
                 : GUIRenderer.TransparentTexture;
             SetPosition();
+        }
+
+        private static string BuildItemDescription(BaseSkill RealSkill)
+        {
+            var manaCost = RealSkill.ManaCost > 0
+                ? $"{Translations.Get("skill_mana_cost", RealSkill.ManaCost)}{Environment.NewLine}"
+                : string.Empty;
+            var cooldown = RealSkill.MaxCooldown > 0 
+                ? Translations.Get("skill_cooldown", RealSkill.MaxCooldown) 
+                : string.Empty;
+            return $"{Utils.FitString(RealSkill.Description, 25)}{Environment.NewLine}{manaCost}{cooldown}";
         }
 
         protected virtual void SetPosition()

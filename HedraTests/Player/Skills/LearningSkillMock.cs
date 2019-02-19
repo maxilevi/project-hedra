@@ -1,4 +1,5 @@
 using System;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.SkillSystem;
 
 namespace HedraTests.Player.Skills
@@ -11,8 +12,11 @@ namespace HedraTests.Player.Skills
         public override uint TextureId { get; }
         
         public Action OnLearnCallback { get; set; }
-        
-        protected override void Learn()
+
+        protected override int RestrictionIndex { get; }
+        protected override EquipmentType Equipment { get; }
+
+        protected override void Add()
         {
             OnLearnCallback?.Invoke();
         }

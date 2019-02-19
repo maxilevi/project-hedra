@@ -8,6 +8,7 @@
  */
 
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 
@@ -19,13 +20,13 @@ namespace Hedra.Engine.SkillSystem.Warrior
     public class LearnAxe : LearningSkill
     {
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Axe.png");
-
-        protected override void Learn()
-        {
-            Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentType.Axe);
-        }
         
-        public override string Description => "Learn to use the axe.";
-        public override string DisplayName => "Learn Axe";
+        protected override EquipmentType Equipment => EquipmentType.Axe;
+        
+        protected override int RestrictionIndex => PlayerInventory.WeaponHolder;
+        
+        public override string Description => Translations.Get("learn_axe_desc");
+        
+        public override string DisplayName => Translations.Get("learn_axe");
     }
 }

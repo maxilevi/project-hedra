@@ -58,6 +58,7 @@ namespace Hedra.Engine.EntitySystem
         public event OnComponentAdded ComponentAdded;
         public event OnAttackEventHandler AfterAttacking;
         public event OnAttackEventHandler BeforeAttacking;
+        public EntityAttributes Attributes { get; }
         public EntityComponentManager ComponentManager { get; }
         public float AttackDamage { get; set; } = 1.0f;
         public float AttackCooldown { get; set; }
@@ -95,7 +96,6 @@ namespace Hedra.Engine.EntitySystem
         public bool IsActive { get; set; }
         public bool IsBoss { get; set; }
         public bool IsDead { get; set; }
-        public bool IsFlying { get; set; }
         public virtual bool IsFriendly { get; set; }
         public bool IsGrounded { get; set; }
 
@@ -166,17 +166,7 @@ namespace Hedra.Engine.EntitySystem
 
                 return bossHealthBar?.Name ?? "null";
             }
-            set
-            {
-                _name = value;
-
-                /*var bar = this.SearchComponent<HealthBarComponent>();
-                 var bossBar = this.SearchComponent<BossHealthBarComponent>();
-                 if (bar != null)
-                     bar.Name = value;
-                 if (bossBar != null)
-                     bossBar.Name = value;*/
-            }
+            set => _name = value;
         }
 
         public float Oxygen
@@ -202,6 +192,7 @@ namespace Hedra.Engine.EntitySystem
         public Entity()
         {
             _tickSystem = new TickSystem();
+            Attributes = new EntityAttributes();
             ComponentManager = new EntityComponentManager(this);
             Physics = new PhysicsComponent(this);
             _splashTimer = new Timer(1f) { AutoReset = false };
@@ -255,12 +246,12 @@ namespace Hedra.Engine.EntitySystem
 
         public void AddBonusSpeedWhile(float BonusSpeed, Func<bool> Condition, bool ShowParticles = true)
         {
-            this.AddComponentWhile(new SpeedBonusComponent(this, BonusSpeed, ShowParticles), Condition);
+            AddComponentWhile(new SpeedBonusComponent(this, BonusSpeed, ShowParticles), Condition);
         }
 
         public void AddBonusSpeedForSeconds(float BonusSpeed, float Seconds)
         {
-            this.AddComponentForSeconds(new SpeedBonusComponent(this, BonusSpeed), Seconds);
+            AddComponentForSeconds(new SpeedBonusComponent(this, BonusSpeed), Seconds);
         }
 
         public void AddComponentWhile(IComponent<IEntity> Component, Func<bool> Condition)
@@ -311,7 +302,7 @@ namespace Hedra.Engine.EntitySystem
             return list.ToArray();
         }
 
-        public void UpdateEnvironment()
+        private void UpdateEnvironment()
         {
             if (!(this is LocalPlayer)) return;
             var underChunk = World.GetChunkAt(Position);
@@ -370,8 +361,8 @@ namespace Hedra.Engine.EntitySystem
                 _drowningSoundTimer = 0;
             _drowningSoundTimer++;
         }
-        
-        public void SplashEffect(Chunk UnderChunk)
+
+        private void SplashEffect(Chunk UnderChunk)
         {
             World.Particles.VariateUniformly = true;
             World.Particles.Color = new Vector4((UnderChunk?.Biome.Colors.WaterColor ?? Colors.DeepSkyBlue).Xyz, .5f);

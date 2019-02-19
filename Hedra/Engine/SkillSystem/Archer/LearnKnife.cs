@@ -21,12 +21,12 @@ namespace Hedra.Engine.SkillSystem.Archer
     {
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/LearnKnife.png");
         
-        protected override void Learn()
-        {
-            Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentType.Knife);
-        }
-
+        protected override int RestrictionIndex => PlayerInventory.WeaponHolder;
+        
+        protected override EquipmentType Equipment => EquipmentType.Knife;
+        
         public override string Description => Translations.Get("learn_knife_desc");
+        
         public override string DisplayName => Translations.Get("learn_knife");
 
     }

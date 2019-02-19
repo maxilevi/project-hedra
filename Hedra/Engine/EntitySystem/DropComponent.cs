@@ -21,10 +21,37 @@ namespace Hedra.Engine.EntitySystem
     /// </summary>
     public class DropComponent : EntityComponent, ITickable
     {
+        public bool Dropped { get; private set; }
         public bool RandomDrop { get; set; } = true;
         public Item ItemDrop { get; set; }
-        public DropComponent(IEntity Parent) : base(Parent){}
         private float _dropChance;
+        
+        public DropComponent(IEntity Parent) : base(Parent)
+        {
+            Parent.SearchComponent<DamageComponent>().OnDamageEvent += A =>
+            {
+                if(!A.Victim.IsDead) return;
+                var originalChance = Utils.Rng.NextFloat() * 100f;
+                Drop(originalChance * A.Damager.Attributes.DropChanceModifier);
+            };
+        }
+
+        private void Drop(float Chance)
+        {
+            if (!Parent.IsDead || Dropped) return;
+            if (Chance < DropChance)
+            {
+                var item = RandomDrop ? ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon)) : ItemDrop;
+                if (item != null)
+                {
+                    World.DropItem(item,
+                        Parent.Position + Vector3.UnitY * 2f +
+                        new Vector3(Utils.Rng.NextFloat() * 8f - 4f, 0, Utils.Rng.NextFloat() * 8f - 4f));
+                }
+            }
+            Dropped = true;
+        }
+        
         public float DropChance
         {
             private get => _dropChance;
@@ -35,23 +62,7 @@ namespace Hedra.Engine.EntitySystem
                     throw new ArgumentException("Drop chance cannot be less than 0 or more than 100.");
             }
         }
-        public bool Dropped { get; private set; }
         
         public override void Update(){}
-        
-        public void Drop()
-        {
-            if (!this.Parent.IsDead || Dropped) return;
-            Dropped = true;
-            if (!(Utils.Rng.NextFloat() * 100f < DropChance)) return;
-
-            var item = RandomDrop ? ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon)) : ItemDrop;
-            if (item != null)
-            {
-                World.DropItem(item,
-                    Parent.Position + Vector3.UnitY * 2f +
-                    new Vector3(Utils.Rng.NextFloat() * 8f - 4f, 0, Utils.Rng.NextFloat() * 8f - 4f));
-            }
-        }
     }
 }

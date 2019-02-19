@@ -3,10 +3,10 @@
   "Description": "hunter_class_description",
   "Icon": "$DataFile$/Assets/Skills/Hunter.png",
   "M23": "SteelArrows",
-  "M32": "LearnKnife",
-  "M34": "Concealment",
+  "M12": "LearnKnife",
+  "M14": "Concealment",
   "M22": "Focus",
-  "M11": "SpikeTrap",
-  "M12": "Scavenge",
-  "M31": "Raven"
+  "M31": "SpikeTrap",
+  "M32": "Scavenge",
+  "M11": "Raven"
 }

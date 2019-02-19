@@ -19,17 +19,15 @@ namespace Hedra.Engine.SkillSystem
             {
                 if(Level > MaxLevel)
                     Player.AbilityTree.SetPoints(GetType(), MaxLevel);
-                if(_currentLevel != 0 && Level == 0)
-                    Remove();
-                else
-                    OnChange();
+                Remove();
+                Add();
                 _currentLevel = Level;
             }
         }
 
         protected abstract void Remove();
 
-        protected abstract void OnChange();
+        protected abstract void Add();
         
         public override void Use()
         {

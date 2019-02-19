@@ -125,6 +125,14 @@ namespace Hedra.Engine.Player.Inventory
             _restrictions[Index] = newRestrictions.ToArray();
         }
 
+        public void RemoveRestriction(int Index, string Restriction)
+        {
+            var restrictionArray = _restrictions[Index];
+            if(restrictionArray == null || Array.IndexOf(restrictionArray, Restriction) == -1)
+                throw new ArgumentOutOfRangeException($"Cannot remove a restriction '{Restriction}' from an inexistant array.");
+            SetRestrictions(Index, restrictionArray.Where(R => R != Restriction).ToArray());
+        }
+
         public void SetRestrictions(int Index, params string[] Restrictions)
         {
             _restrictions[Index] = Restrictions;

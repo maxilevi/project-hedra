@@ -23,7 +23,7 @@ namespace Hedra.Engine.SkillSystem.Archer
             return -1f * Level;
         }
 
-        protected override void OnChange()
+        protected override void Add()
         {
             Player.DodgeCost = Humanoid.DefaultDodgeCost + StaminaFormula();
         }

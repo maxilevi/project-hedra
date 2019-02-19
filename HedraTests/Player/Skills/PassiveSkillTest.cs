@@ -34,7 +34,7 @@ namespace HedraTests.Player.Skills
             var timesCalled = 0;
             Skill.Level = 1;
             Skill.SetMaxLevel(1);
-            Skill.OnChangeCallback = () => timesCalled++;
+            Skill.OnAddCallback = () => timesCalled++;
             Skill.Update();
             Skill.Update();
             Skill.Update();
@@ -45,7 +45,7 @@ namespace HedraTests.Player.Skills
         public void TestOnChangeIsNotCalledIfDoesntHaveSkill()
         {
             var timesCalled = 0;
-            Skill.OnChangeCallback = () => timesCalled++;
+            Skill.OnAddCallback = () => timesCalled++;
             Skill.Update();
             Skill.Update();
             Skill.Update();

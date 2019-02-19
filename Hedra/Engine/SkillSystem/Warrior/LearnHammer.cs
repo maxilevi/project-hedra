@@ -8,6 +8,7 @@
  */
 
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 
@@ -20,12 +21,12 @@ namespace Hedra.Engine.SkillSystem.Warrior
     {
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Hammer.png");
         
-        protected override void Learn()
-        {
-            Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentType.Hammer);
-        }
+        protected override EquipmentType Equipment => EquipmentType.Hammer;
         
-        public override string Description => "Learn to use the hammer.";
-        public override string DisplayName => "Learn Hammer";
+        protected override int RestrictionIndex => PlayerInventory.WeaponHolder;
+        
+        public override string Description => Translations.Get("learn_hammer_desc");
+        
+        public override string DisplayName => Translations.Get("learn_hammer");
     }
 }

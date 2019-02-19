@@ -1,3 +1,5 @@
+using System.Globalization;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.SkillSystem.Mage
@@ -11,14 +13,11 @@ namespace Hedra.Engine.SkillSystem.Mage
         protected override void Remove()
         {
             Player.ManaRegenFactor -= _accumulatedChange;
-            _accumulatedChange = 0;
         }
 
-        protected override void OnChange()
+        protected override void Add()
         {
-            Player.ManaRegenFactor -= _accumulatedChange;
-            _accumulatedChange = ManaRegenFormula();
-            Player.ManaRegenFactor += _accumulatedChange; 
+            Player.ManaRegenFactor += _accumulatedChange = ManaRegenFormula(); 
         }
 
         private float ManaRegenFormula()
@@ -26,8 +25,8 @@ namespace Hedra.Engine.SkillSystem.Mage
             return ChangePerLevel * Level;
         }
         
-        public override string Description => $"Grants +{(ManaRegenFormula()):0.0} MP regen.";
+        public override string Description => Translations.Get("meditation_desc", ManaRegenFormula().ToString("0.0", CultureInfo.InvariantCulture));
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Meditation.png");
-        public override string DisplayName => "Meditation";
+        public override string DisplayName => Translations.Get("meditation_skill");
     }
 }

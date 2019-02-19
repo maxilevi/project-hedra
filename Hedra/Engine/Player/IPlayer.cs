@@ -14,7 +14,7 @@ using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.Player
-{
+{   
     public interface IPlayer : ISearchable, IHumanoid
     {
         IMessageDispatcher MessageDispatcher { get; }

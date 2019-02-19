@@ -8,6 +8,8 @@
  */
 
 using System;
+using System.Globalization;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.SkillSystem.Warrior
@@ -24,9 +26,8 @@ namespace Hedra.Engine.SkillSystem.Warrior
             return Clamp ? 12 * Math.Max(Level, 1) : 12 * Level;
         }
         
-        protected override void OnChange()
+        protected override void Add()
         {
-            Player.AddonHealth -= _addonHealth;
             _addonHealth = HealthFormula() * Level;
             Player.AddonHealth += _addonHealth;
             if(Player.Health > Player.MaxHealth) Player.Health = Player.MaxHealth;
@@ -34,7 +35,7 @@ namespace Hedra.Engine.SkillSystem.Warrior
 
         protected override void Remove()
         {
-            /* Health will be resetted when changing the character */
+            Player.AddonHealth -= _addonHealth;
         }
 
         public override void Load()
@@ -49,8 +50,8 @@ namespace Hedra.Engine.SkillSystem.Warrior
 
         protected override int MaxLevel => 10;
         
-        public override string Description => $"Grants +{HealthFormula(true):0.0} HP.";
-        public override string DisplayName => "Resistance";
+        public override string Description => Translations.Get("resistance_desc", HealthFormula(true).ToString("0.0", CultureInfo.InvariantCulture));
+        public override string DisplayName => Translations.Get("resistance_skill");
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Health.png");
     }
 }

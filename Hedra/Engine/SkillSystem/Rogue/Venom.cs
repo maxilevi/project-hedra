@@ -9,6 +9,7 @@
 
 using System;
 using Hedra.Components.Effects;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.SkillSystem.Rogue
@@ -20,7 +21,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
     {
         private PoisonousComponent _component;
 
-        protected override void OnChange()
+        protected override void Add()
         {
             if (Player.SearchComponent<PoisonousComponent>() == null)
             {
@@ -39,8 +40,11 @@ namespace Hedra.Engine.SkillSystem.Rogue
         }
 
         protected override int MaxLevel => 100;
+        
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Venom.png");
-        public override string Description => "Your attacks have a chance to apply poison.";
-        public override string DisplayName => "Venom";
+        
+        public override string Description => Translations.Get("venom_desc");
+        
+        public override string DisplayName => Translations.Get("venom_skill");
     }
 }

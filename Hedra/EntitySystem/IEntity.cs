@@ -19,6 +19,8 @@ namespace Hedra.EntitySystem
         
         EntityComponentManager ComponentManager { get; }
         
+        EntityAttributes Attributes { get; }
+        
         float AttackDamage { get; set; }
         
         float AttackCooldown { get; set; }

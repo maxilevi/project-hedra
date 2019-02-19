@@ -20,17 +20,25 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
         
         protected override void BeforeUse(Bow Weapon)
         {
+            void HandlerLambda(Projectile A) => Modifier(Weapon, A, HandlerLambda);
+            Weapon.BowModifiers += HandlerLambda;
+        }
+
+        private static void Modifier(Bow Weapon, Projectile ArrowProj, OnArrowEvent Lambda)
+        {
+            ArrowProj.DisposeOnHit = false;
+            Weapon.BowModifiers -= Lambda;
+        }
+
+        protected override void Add(Bow Weapon)
+        {
             _previousAmmo = Weapon.Ammo;
             Weapon.Ammo = SteelArrow;
         }
-
-        protected override void AfterUse(Bow Weapon)
+        
+        protected override void Remove(Bow Weapon)
         {
             Weapon.Ammo = _previousAmmo;
-        }
-        
-        protected override void Remove()
-        {
         }
 
         public override string Description => Translations.Get("steel_arrows_desc");

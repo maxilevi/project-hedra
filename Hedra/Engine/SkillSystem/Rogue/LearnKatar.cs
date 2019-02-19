@@ -8,6 +8,7 @@
  */
 
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 
@@ -20,12 +21,12 @@ namespace Hedra.Engine.SkillSystem.Rogue
     {
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Katar.png");
 
-        protected override void Learn()
-        {
-            Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentType.Katar);
-        }
+        protected override int RestrictionIndex => PlayerInventory.WeaponHolder;
         
-        public override string Description => "Learn to use the katar.";
-        public override string DisplayName => "Learn Katar";
+        protected override EquipmentType Equipment => EquipmentType.Katar;
+        
+        public override string Description => Translations.Get("learn_katar_desc");
+        
+        public override string DisplayName => Translations.Get("learn_katar");
     }
 }

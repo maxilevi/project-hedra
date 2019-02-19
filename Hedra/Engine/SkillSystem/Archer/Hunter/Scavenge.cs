@@ -1,22 +1,31 @@
+using System;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.SkillSystem.Archer.Hunter
 {
     public class Scavenge : PassiveSkill
     {
-        public override string Description { get; }
-        public override string DisplayName { get; }
-        protected override int MaxLevel { get; }
+        protected override int MaxLevel => 15;
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Scavenge.png");
+        private float _previousValue;
         
         protected override void Remove()
         {
-            throw new System.NotImplementedException();
+            Player.Attributes.DropChanceModifier -= _previousValue;
         }
 
-        protected override void OnChange()
+        protected override void Add()
         {
-            throw new System.NotImplementedException();
+            Player.Attributes.DropChanceModifier += _previousValue = Formula(Level);
         }
+
+        private float Formula(int Factor)
+        {
+            return Factor * .1f;
+        }
+        
+        public override string Description => Translations.Get("scavenge_desc", (int)(Formula(Level + 1) * 100));
+        public override string DisplayName => Translations.Get("scavenge_skill");
     }
 }

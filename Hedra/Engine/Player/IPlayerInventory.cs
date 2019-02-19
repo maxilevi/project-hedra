@@ -22,6 +22,8 @@ namespace Hedra.Engine.Player
         KeyValuePair<int, Item>[] ToArray();
         void AddRestriction(int Index, EquipmentType Type);
         void AddRestriction(int Index, string Type);
+        void RemoveRestriction(int Index, EquipmentType Type);
+        void RemoveRestriction(int Index, string Type);
         Item Food { get; }
         Item Ammo { get; }
         bool HasAvailableSpace { get; }

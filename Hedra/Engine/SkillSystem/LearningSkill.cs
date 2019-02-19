@@ -1,20 +1,22 @@
+using Hedra.Engine.ItemSystem;
+
 namespace Hedra.Engine.SkillSystem
 {
     public abstract class LearningSkill : PassiveSkill
     {
-        public override bool Passive => true;
-        protected override int MaxLevel => 1;
+        public sealed override bool Passive => true;
+        protected sealed override int MaxLevel => 1;
+        protected abstract int RestrictionIndex { get; }
+        protected abstract EquipmentType Equipment { get; }
 
-        protected override void OnChange()
+        protected override void Add()
         {
-            Learn();
+            Player.Inventory.AddRestriction(RestrictionIndex, Equipment);
         }
 
         protected override void Remove()
         {
-            
+            Player.Inventory.RemoveRestriction(RestrictionIndex, Equipment);
         }
-
-        protected abstract void Learn();
     }
 }
