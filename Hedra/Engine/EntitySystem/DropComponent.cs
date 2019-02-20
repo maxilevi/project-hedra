@@ -31,17 +31,18 @@ namespace Hedra.Engine.EntitySystem
             Parent.SearchComponent<DamageComponent>().OnDamageEvent += A =>
             {
                 if(!A.Victim.IsDead) return;
-                var originalChance = Utils.Rng.NextFloat() * 100f;
-                Drop(originalChance * A.Damager.Attributes.DropChanceModifier);
+                Drop(A.Damager);
             };
         }
 
-        private void Drop(float Chance)
+        private void Drop(IEntity Killer)
         {
             if (!Parent.IsDead || Dropped) return;
-            if (Chance < DropChance)
+            var chance = Utils.Rng.NextFloat() * 100f;
+            var item = RandomDrop ? ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon)) : ItemDrop;
+            chance = chance / (item != null && item.IsFood ? Killer.Attributes.FoodDropChanceModifier : 1);
+            if (chance < DropChance)
             {
-                var item = RandomDrop ? ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon)) : ItemDrop;
                 if (item != null)
                 {
                     World.DropItem(item,

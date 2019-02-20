@@ -12,12 +12,12 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
         
         protected override void Remove()
         {
-            Player.Attributes.DropChanceModifier -= _previousValue;
+            Player.Attributes.FoodDropChanceModifier -= _previousValue;
         }
 
         protected override void Add()
         {
-            Player.Attributes.DropChanceModifier += _previousValue = Formula(Level);
+            Player.Attributes.FoodDropChanceModifier += _previousValue = Formula(Level);
         }
 
         private float Formula(int Factor)
