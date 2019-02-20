@@ -163,7 +163,7 @@ namespace Hedra.WeaponSystem
             return ArrowProj;
         }
 
-        protected override void Shoot(Vector3 Direction, AttackOptions Options, params IEntity[] ToIgnore)
+        public override void Shoot(Vector3 Direction, AttackOptions Options, params IEntity[] ToIgnore)
         {
             //var currentAmmo = Owner.Inventory.Ammo;
             //if (currentAmmo == null) return;

@@ -51,7 +51,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                     MaskId = Textures[Buttons.Length - 1].TextureElement.TextureId
                 }
             };
-            _classSpecialization0.Click += (S, A) => Show(Player.Class.FirstSpecializationTree);
+            _classSpecialization0.Click += (S, A) => Show(Player.Class.FirstSpecializationTree, _player.AbilityTree.FirstTree);
             _defaultClass = new Button(
                 Buttons[Buttons.Length - 2].Position.X * Vector2.UnitX +
                 _specializationBackground.Position.Y * Vector2.UnitY,
@@ -64,7 +64,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                     MaskId = Textures[Buttons.Length - 2].TextureElement.TextureId
                 }
             };
-            _defaultClass.Click += (S, A) => Show(Player.Class.MainTree, false);
+            _defaultClass.Click += (S, A) => Show(Player.Class.MainTree, _player.AbilityTree.MainTree, false);
             _classSpecialization1 = new Button(
                 Buttons[Buttons.Length - 3].Position.X * Vector2.UnitX +
                 _specializationBackground.Position.Y * Vector2.UnitY,
@@ -77,7 +77,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                     MaskId = Textures[Buttons.Length - 3].TextureElement.TextureId
                 }
             };
-            _classSpecialization1.Click += (S, A) => Show(Player.Class.SecondSpecializationTree);
+            _classSpecialization1.Click += (S, A) => Show(Player.Class.SecondSpecializationTree, _player.AbilityTree.SecondTree);
 
             _specializationInfo = new SpecializationInfo(_player);
             _defaultClassMarker = new Texture(PagedInventoryArrayInterface.SelectedId, _defaultClass.Position, _defaultClass.Scale * 1.1f);
@@ -167,9 +167,9 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             ArrowSelector.ProcessKeyUp(Args, _selectorState);
         }
 
-        private void Show(AbilityTreeBlueprint Blueprint, bool ShowSpecializationInfo = true)
+        private void Show(AbilityTreeBlueprint Blueprint, InventoryArray Array,  bool ShowSpecializationInfo = true)
         {
-            _player.AbilityTree.ShowBlueprint(Blueprint, null);
+            _player.AbilityTree.ShowBlueprint(Blueprint, Array, null);
             _specializationInfo.ShowSpecialization(ShowSpecializationInfo ? Blueprint : null);
         }
         
@@ -185,7 +185,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 
         public void Dispose()
         {
-            EventDispatcher.UnregisterKeyPress(this);
+            EventDispatcher.UnregisterKeyUp(this);
             EventDispatcher.UnregisterKeyDown(this);
         }
     }

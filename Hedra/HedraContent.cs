@@ -77,6 +77,7 @@ namespace Hedra
             AddSkill("IceArrow", typeof(IceArrow));
             AddSkill("PoisonArrow", typeof(PoisonArrow));
             AddSkill("Puncture", typeof(Puncture));
+            AddSkill("ArrowRain", typeof(ArrowRain));
             
             AddSkill("LearnKnife", typeof(LearnKnife));
             AddSkill("Concealment", typeof(Concealment));

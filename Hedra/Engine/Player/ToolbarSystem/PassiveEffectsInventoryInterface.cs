@@ -1,3 +1,4 @@
+using System.Linq;
 using Hedra.Engine.Player.Inventory;
 using OpenTK;
 
@@ -15,11 +16,18 @@ namespace Hedra.Engine.Player.ToolbarSystem
             {
                 ButtonsText[i].Dispose();
             }
+
+            for (var i = 0; i < Textures.Length; ++i)
+            {
+                Textures[i].TextureElement.Opacity = .75f;
+                Textures[i].TextureElement.MaskId = InventoryArrayInterface.DefaultId;
+            }
         }
 
         public override void UpdateView()
         {
-            
+            var sum = Textures.Sum(T => T.Scale.X);
+            Position = Position.Y * Vector2.UnitY - Vector2.UnitX * sum * .25f;
         }
     }
 }

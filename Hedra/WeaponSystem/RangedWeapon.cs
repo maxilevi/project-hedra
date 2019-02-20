@@ -25,6 +25,6 @@ namespace Hedra.WeaponSystem
             Shoot(direction, Options, player?.Pet?.Pet);
         }
         
-        protected abstract void Shoot(Vector3 Direction, AttackOptions Options, params IEntity[] ToIgnore);
+        public abstract void Shoot(Vector3 Direction, AttackOptions Options, params IEntity[] ToIgnore);
     }
 }

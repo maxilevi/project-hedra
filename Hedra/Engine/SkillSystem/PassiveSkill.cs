@@ -22,6 +22,7 @@ namespace Hedra.Engine.SkillSystem
                 Remove();
                 Add();
                 _currentLevel = Level;
+                _set = true;
             }
         }
 

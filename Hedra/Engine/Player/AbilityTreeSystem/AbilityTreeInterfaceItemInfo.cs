@@ -26,7 +26,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             ItemText.Text = Utils.FitString(realSkill.DisplayName, 15);
 
             ItemTexture.TextureElement.TextureId = CurrentItem.HasAttribute("ImageId") 
-                ? CurrentItem.GetAttribute<uint>("ImageId") 
+                ? CurrentItem.GetAttribute<uint>("ImageId")
                 : GUIRenderer.TransparentTexture;
             SetPosition();
         }
@@ -36,10 +36,10 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             var manaCost = RealSkill.ManaCost > 0
                 ? $"{Translations.Get("skill_mana_cost", RealSkill.ManaCost)}{Environment.NewLine}"
                 : string.Empty;
-            var cooldown = RealSkill.MaxCooldown > 0 
-                ? Translations.Get("skill_cooldown", RealSkill.MaxCooldown) 
+            var cooldown = RealSkill.MaxCooldown > 0
+                ? Translations.Get("skill_cooldown", RealSkill.MaxCooldown)
                 : string.Empty;
-            return $"{Utils.FitString(RealSkill.Description, 25)}{Environment.NewLine}{manaCost}{cooldown}";
+            return $"{TextProvider.Wrap(RealSkill.Description, 25)}{Environment.NewLine}{manaCost}{cooldown}";
         }
 
         protected virtual void SetPosition()

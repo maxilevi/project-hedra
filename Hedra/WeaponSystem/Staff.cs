@@ -35,7 +35,7 @@ namespace Hedra.WeaponSystem
         {  
         }
 
-        protected override void Shoot(Vector3 Direction, AttackOptions Options, params IEntity[] ToIgnore)
+        public override void Shoot(Vector3 Direction, AttackOptions Options, params IEntity[] ToIgnore)
         {
             Fireball.Create(
                 Owner,

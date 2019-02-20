@@ -24,7 +24,7 @@ namespace Hedra.Engine.SkillSystem
     public abstract class SingleAnimationSkill : CappedSkill
     {
         protected abstract Animation SkillAnimation { get; }
-        protected virtual float AnimationSpeed { get; }
+        protected virtual float AnimationSpeed { get; } = 1;
         protected virtual bool EquipWeapons => true;
         private float _frameCounter;
         private bool _shouldEnd;

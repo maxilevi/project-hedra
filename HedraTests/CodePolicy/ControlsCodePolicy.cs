@@ -37,7 +37,11 @@ namespace HedraTests.CodePolicy
             @"Getter",
             /* Excluded key types*/
             @"Escape",
-            @"Enter"
+            @"Enter",
+            @"Up",
+            @"Down",
+            @"Left",
+            @"Right"
         };
 
         [SetUp]

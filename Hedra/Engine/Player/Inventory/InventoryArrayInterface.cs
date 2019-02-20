@@ -17,7 +17,7 @@ namespace Hedra.Engine.Player.Inventory
         public const float UISizeMultiplier = 1.15f;
         public static uint DefaultId { get; } = Graphics2D.LoadFromAssets(DefaultIcon);
         public static Vector2 DefaultSize { get; } = Graphics2D.SizeFromAssets(DefaultIcon).As1920x1080() * UISizeMultiplier;
-        private readonly InventoryArray _array;
+        private InventoryArray _array;
         private readonly InventoryItemRenderer _renderer;
         private readonly Texture[] _inventoryTextures;
         private readonly RenderableButton[] _inventoryButtons;
@@ -86,6 +86,13 @@ namespace Hedra.Engine.Player.Inventory
                 }
             }
             _renderer.UpdateView();
+        }
+
+        public void SetArray(InventoryArray New)
+        {
+            if(Array.Length != New.Length)
+                throw new ArgumentOutOfRangeException($"New InventoryArray ({New.Length}) needs to be of the same size as the original.");
+            _array = New;
         }
 
         public int Offset => _offset;

@@ -73,6 +73,7 @@ namespace HedraTests.Structure
                 if(!_interceptedEntities.Contains(Entity)) _interceptedEntities.Add(Entity);
             });
             var guardAiComponentMock = new Mock<IGuardAIComponent>();
+            guardAiComponentMock.As<ITraverseAIComponent>();
             worldMock.Setup(W => W.SpawnMob(It.IsAny<string>(), It.IsAny<Vector3>(), It.IsAny<int>())).Returns(delegate
             {
                 var ent = new Entity();

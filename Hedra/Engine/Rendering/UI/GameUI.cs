@@ -25,7 +25,6 @@ namespace Hedra.Engine.Rendering.UI
     {
         public readonly Texture Cross;
         private readonly Texture _compass;
-        private readonly Texture _help;
         private readonly RenderableTexture _classLogo;
         private readonly RenderableTexture _oxygenBackground;
         private readonly RenderableTexture _staminaBackground;
@@ -110,7 +109,6 @@ namespace Hedra.Engine.Rendering.UI
             Cross = new Texture("Assets/UI/Pointer.png", new Vector2(0, 0f), Vector2.One * .1f);
             
             _compass = new Texture(Graphics2D.LoadFromAssets("Assets/UI/Compass.png"), Vector2.One - new Vector2(0.0366f, 0.065f) * 2f, new Vector2(0.0366f, 0.065f));
-            _help = new Texture(Graphics2D.LoadFromAssets("Assets/UI/Help.png"), Vector2.Zero, Vector2.One);
 
             var skillTreeTranslation = Translation.Create("skill_tree_label");
             skillTreeTranslation.Concat(() => $" - {Controls.Skilltree}");
@@ -144,7 +142,6 @@ namespace Hedra.Engine.Rendering.UI
             AddElement(_oxygenBackground);
             AddElement(_healthBar);
             AddElement(_manaBar);
-            AddElement(_help);
             
             OnPanelStateChange += delegate(object Sender, PanelState E)
             { 
@@ -171,16 +168,6 @@ namespace Hedra.Engine.Rendering.UI
             _oxygenBar.Position = _oxygenBackground.Position + Vector2.UnitX * (_oxygenBackground.Scale.X - _oxygenBar.Scale.X) * .5f;
             _staminaIcon.Position = _staminaBackground.Position;
             _oxygenIcon.Position = _oxygenBackground.Position;
-            
-            if (_player.UI.ShowHelp && Enabled)
-            {
-                _player.AbilityTree.Show = false;
-                _help.Enable();
-            }
-            else
-            {
-                _help.Disable();
-            }
             
             if(_currentClass != _player.Class.Logo)
                 this.UpdateLogo();

@@ -11,6 +11,7 @@ namespace HedraTests.CodePolicy
         private readonly string[] _exceptions = new[]
         {
             nameof(TraverseBehaviour),
+            nameof(ChargeBehaviour),
         };
 
         [Test]

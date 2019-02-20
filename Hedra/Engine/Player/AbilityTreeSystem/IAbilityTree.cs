@@ -1,4 +1,5 @@
 using System;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
 using OpenTK.Input;
@@ -14,10 +15,13 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         byte[] MainTreeSave { get; }
         byte[] FirstTreeSave { get; }
         byte[] SecondTreeSave { get; }
-        void ShowBlueprint(AbilityTreeBlueprint Blueprint, byte[] AbilityTreeArray);
+        void ShowBlueprint(AbilityTreeBlueprint Blueprint, InventoryArray Array, byte[] AbilityTreeArray);
         void FromInformation(PlayerInformation Information);
         int AvailablePoints { get; }
-        InventoryArray TreeItems { get; }
+        Item[] TreeItems { get; }
+        InventoryArray MainTree { get; }
+        InventoryArray FirstTree { get; }
+        InventoryArray SecondTree { get; }
         bool Show { get; set; }
         int SpecializationTreeIndex { get; }
         AbilityTreeBlueprint Specialization { get; }

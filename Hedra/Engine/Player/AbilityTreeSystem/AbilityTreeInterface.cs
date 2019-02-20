@@ -52,6 +52,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 Buttons[i].Texture.IdPointer = null;
                 ButtonsText[i].Color = Color.White;
                 ButtonsText[i].TextFont = FontCache.Get(AssetManager.BoldFamily, 10f, FontStyle.Bold);
+                ButtonsText[i].Disable();
                 var skillPointSize = LabelSize * (float)(2.0 / 3.0);
                 ButtonsText[i].Position = Textures[i].Position - (Textures[i].Scale.Y + skillPointSize.Y) * Vector2.UnitY;
                 _skillPointsBackgroundTextures[i] = 
@@ -73,23 +74,21 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 
         public override void UpdateView()
         {
+            if(!Enabled) return;
             _availablePointsText.Text = $"{Translations.Get("available_points")}: {_player.AbilityTree.AvailablePoints}";
             for (var i = 0; i < this.Buttons.Length; i++)
             {
-                _skillPointsBackgroundTextures[i].Disable();
+                _skillPointsBackgroundTextures[i + Offset].Disable();
+                ButtonsText[i + Offset].Disable();
+                Buttons[i + Offset].Disable();
+                Textures[i + Offset].Disable();
                 if (!Array[i + Offset].HasAttribute("Enabled")) continue;
+                if (Array[i + Offset].GetAttribute<bool>("Enabled"))
+                {
+                    ButtonsText[i + Offset].Enable();
+                    Buttons[i + Offset].Enable();
+                    Textures[i + Offset].Enable();
 
-                if (!Array[i + Offset].GetAttribute<bool>("Enabled"))
-                {
-                    if (Buttons[i].Scale == Vector2.Zero || this.Textures[i].Scale == Vector2.Zero) continue;
-                    Array[i + Offset].SetAttribute("ButtonScale", this.Buttons[i].Scale);
-                    Array[i + Offset].SetAttribute("TextureScale", this.Textures[i].Scale);
-                    Buttons[i].Scale = Vector2.Zero;
-                    Textures[i].Scale = Vector2.Zero;
-                    ButtonsText[i].Text = string.Empty;
-                }
-                else
-                {
                     var level = this.Array[i + Offset].HasAttribute("Level")
                         ? this.Array[i + Offset].GetAttribute<int>("Level")
                         : 0;
@@ -99,10 +98,6 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                         _skillPointsBackgroundTextures[i].Enable();
                     
                     SetGrayscaleIfNecessary(i);
-                    if (!Array[i + Offset].HasAttribute("ButtonScale") ||
-                        !Array[i + Offset].HasAttribute("TextureScale")) continue;
-                    Buttons[i].Scale = this.Array[i + Offset].GetAttribute<Vector2>("ButtonScale");
-                    Textures[i].Scale = this.Array[i + Offset].GetAttribute<Vector2>("TextureScale");
                 }
             }
 

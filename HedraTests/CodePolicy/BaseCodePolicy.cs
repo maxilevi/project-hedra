@@ -44,5 +44,10 @@ namespace HedraTests.CodePolicy
             
             return calls;
         }
+
+        protected string[] GetAllModules()
+        {
+            return Directory.GetFiles($"{SolutionDirectory}/Hedra/Modules/", "*.json", SearchOption.AllDirectories);
+        }
     }
 }

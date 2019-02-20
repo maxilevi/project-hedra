@@ -38,7 +38,7 @@ namespace HedraTests.Player.Skills
             Skill.Update();
             Skill.Update();
             Skill.Update();
-            Assert.AreEqual(3, timesCalled);
+            Assert.AreEqual(1, timesCalled);
         }
         
         [Test]
@@ -62,7 +62,7 @@ namespace HedraTests.Player.Skills
             Skill.Update();
             Skill.Level = 0;
             Skill.Update();
-            Assert.AreEqual(1, timesCalled);
+            Assert.AreEqual(2, timesCalled);
         }
     }
 }

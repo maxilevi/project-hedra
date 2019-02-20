@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Hedra.Engine.ClassSystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
+using Hedra.Engine.Management;
+using Hedra.Engine.ModuleSystem;
 using NUnit.Framework;
 
 namespace HedraTests.CodePolicy
@@ -16,26 +19,19 @@ namespace HedraTests.CodePolicy
         {
             @"_\d",
             @"_key",
-            "warrior",
-            "archer",
-            "rogue",
-            "berserker",
-            "paladin",
-            "druid",
-            "necromancer",
-            "hunter",
-            "scout",
-            "ninja",
-            "assassin",
-            "requires_.+"
+            "requires_.+",
         };
         
         [Test]
         public void TestThereAreNoUnusedKeys()
         {
+            var mobNames = MobLoader.LoadModules(GameLoader.AppPath).Select(K => K.Name.ToLowerInvariant()).ToArray();
+            var classNames = ClassDesign.ClassNames.Select(S => S.ToLowerInvariant()).ToArray();
             var englishKeys = IniParser.Parse(File.ReadAllText($"{GameLoader.AppPath}/Translations/English.po"))
                 .Select(P => P.Key)
                 .Where(K => _exceptions.ToList().All(E => !Regex.IsMatch(K, E)))
+                .Where(K => Array.IndexOf(classNames, K) == -1)
+                .Where(K => Array.IndexOf(mobNames, K) == -1)
                 .ToArray();
             var set = new HashSet<string>(englishKeys);
             var sourceFiles = GetAllFilesThatMatch(@"\bTranslation[|s]*\b")
@@ -47,6 +43,18 @@ namespace HedraTests.CodePolicy
                 {
                     var source = File.ReadAllText(sourceFiles[k]);
                     if (source.Contains(englishKeys[i]))
+                        set.Remove(englishKeys[i]);                    
+                }
+                englishKeys = set.ToArray();
+            }
+
+            var modules = GetAllModules();
+            for (var k = 0; k < modules.Length; ++k)
+            {
+                for (var i = 0; i < englishKeys.Length; ++i)
+                {
+                    var source = File.ReadAllText(modules[k]);
+                    if (Regex.IsMatch(source, $"\"{englishKeys[i]}\""))
                         set.Remove(englishKeys[i]);                    
                 }
                 englishKeys = set.ToArray();

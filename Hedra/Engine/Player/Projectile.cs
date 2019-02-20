@@ -63,6 +63,7 @@ namespace Hedra.Engine.Player
         public Projectile(IEntity Parent, Vector3 Origin, VertexData MeshData)
         {
             _parent = Parent;
+            _collidedList = new HashSet<IEntity>();
             _chunkCollisions = new List<ICollidable>();
             _structureCollisions = new List<ICollidable>();
             _collisionBox = GetCollisionBox(MeshData);

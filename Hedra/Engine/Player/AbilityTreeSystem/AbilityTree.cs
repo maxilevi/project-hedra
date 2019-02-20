@@ -176,9 +176,9 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             return Encoding.ASCII.GetBytes(saveData);
         }
         
-        public void ShowBlueprint(AbilityTreeBlueprint Blueprint, byte[] AbilityTreeArray)
+        public void ShowBlueprint(AbilityTreeBlueprint Blueprint, InventoryArray Array, byte[] AbilityTreeArray)
         {
-            this.SetBlueprint(Blueprint);
+            this.SetBlueprint(Blueprint, Array);
             if (AbilityTreeArray != null)
             {
                 if (AbilityTreeArray.Length > 0)
@@ -214,12 +214,10 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 
         public void FromInformation(PlayerInformation Information)
         {
-            _abilities = _firstTree;
-            ShowBlueprint(Information.Class.FirstSpecializationTree, Information.FirstSpecializationTreeArray);
-            _abilities = _secondTree;
-            ShowBlueprint(Information.Class.SecondSpecializationTree, Information.SecondSpecializationTreeArray);
-            _abilities = _mainTree;
-            ShowBlueprint(Information.Class.MainTree, Information.MainTreeArray);
+            ShowBlueprint(Information.Class.FirstSpecializationTree, _firstTree, Information.FirstSpecializationTreeArray);
+            ShowBlueprint(Information.Class.SecondSpecializationTree, _secondTree, Information.SecondSpecializationTreeArray);
+            ShowBlueprint(Information.Class.MainTree, _mainTree, Information.MainTreeArray);
+            SpecializationTreeIndex = Information.SpecializationTreeIndex;
         }
 
         public AbilityTreeBlueprint Specialization => _blueprint;
@@ -253,8 +251,9 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         
         public bool HasSecondSpecialization => SpecializationTreeIndex == 2;
         
-        private void SetBlueprint(AbilityTreeBlueprint Blueprint)
+        private void SetBlueprint(AbilityTreeBlueprint Blueprint, InventoryArray Array)
         {
+            _abilities = Array;
             for (var i = 0; i < Blueprint.Items.Length; i++)
             {
                 for (var j = 0; j < Blueprint.Items[i].Length; j++)
@@ -278,11 +277,16 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                     button.Texture.MaskId = _interface.Textures[index].TextureElement.Id;
                 }
             }
+
+            _interface.SetArray(Array);
             _interface.SetBlueprint(_blueprint = Blueprint);
         }
 
         public int AvailablePoints => _manager.AvailablePoints;
-        public InventoryArray TreeItems => _abilities;
+        public Item[] TreeItems => MainTree.Items.Concat(FirstTree.Items).Concat(SecondTree.Items).ToArray();
+        public InventoryArray MainTree => _mainTree;
+        public InventoryArray FirstTree => _firstTree;
+        public InventoryArray SecondTree => _secondTree;
 
         public override Key OpeningKey => Controls.Skilltree;
         public override bool Show
@@ -297,7 +301,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 _background.Enabled = _show;
                 _manager.Enabled = _show;
                 if(_show)
-                    ShowBlueprint(_player.Class.MainTree, null);
+                    ShowBlueprint(_player.Class.MainTree, _mainTree, null);
                 SetInventoryState(_show);
                 SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
             }

@@ -2,6 +2,7 @@
   "Name": "Archer",
   "Icon": "$DataFile$/Assets/Skills/Archer.png",
   "M11": "Kick",
+  "M12": "ArrowRain",
   "M22": "Agility",
   "M23": "Puncture",
   "M31": "PoisonArrow",

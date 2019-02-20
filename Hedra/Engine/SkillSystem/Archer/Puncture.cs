@@ -35,17 +35,12 @@ namespace Hedra.Engine.SkillSystem.Archer
         {
             ArrowProj.HitEventHandler += delegate(Projectile Sender, IEntity Hit)
             {
-                if(Utils.Rng.Next(0, (int) (10 - Level / 5)) == 0)
+                if(Utils.Rng.Next(0, 10) == 0 && Hit.SearchComponent<BleedingComponent>() == null)
                 {
                     Hit.AddComponent( new BleedingComponent(Hit, Player, 2 + Level / 10.0f, Player.DamageEquation * (.75f + Level / 10f)) );
                 }
             };
             Weapon.BowModifiers -= Lambda;
-        }
-
-        protected override void Remove()
-        {
-
         }
 
         public override string Description => Translations.Get("puncture_skill_desc");

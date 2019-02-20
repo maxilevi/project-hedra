@@ -20,5 +20,9 @@ namespace HedraTests.Player.Skills
         {
             OnLearnCallback?.Invoke();
         }
+
+        protected override void Remove()
+        {
+        }
     }
 }

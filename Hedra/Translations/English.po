@@ -228,6 +228,8 @@ venom_desc = Your attacks have a chance to apply poison
 venom_skill = Venom
 resistance_desc = Grants $(GREEN)(BOLD){+{0}} HP
 resistance_skill = Resistance
+arrow_rain_desc = Shoot a rain of arrows at your foes
+arrow_rain = Arrow Rain
 # -- End Skill Names --
 
 skill_mana_cost = $(BOLD)(BLUE){Mana Cost: {0}}

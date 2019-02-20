@@ -7,6 +7,7 @@ using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.SkillSystem;
 using Hedra.Engine.Sound;
 using Hedra.Sound;
+using OpenTK;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Player.ToolbarSystem
@@ -21,7 +22,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
         public ToolbarInterfaceManager(IPlayer Player,
             ToolbarInventoryInterface ToolbarInferface, AbilityBagInventoryInterface BagInterface, PassiveEffectsInventoryInterface PassiveInterface)
-            : base(null, ToolbarInferface, BagInterface)
+            : base(null, ToolbarInferface, BagInterface, PassiveInterface)
         {
             _toolbarInferface = ToolbarInferface;
             _bagInterface = BagInterface;
@@ -48,8 +49,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
                     B => _bagInterface.Array[Array.IndexOf(_bagInterface.Buttons, B)]
                              .GetAttribute<Type>("AbilityType") == null);
                 var index = Array.IndexOf(_bagInterface.Buttons, firstButton);
-                var texture = _toolbarInferface.Textures[index];
-                filteredSkills[i].Scale = texture.Scale;
+                filteredSkills[i].Scale = _toolbarInferface.Textures[0].Scale;
                 filteredSkills[i].Position = firstButton.Position;
 
                 this._bagInterface.Array[index].SetAttribute("ImageId", filteredSkills[i].TextureId);
@@ -85,9 +85,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
                         B => _toolbarInferface.Array[Array.IndexOf(_toolbarInferface.Buttons, B)]
                                  .GetAttribute<Type>("AbilityType") == type
                     );
-                    var index = Array.IndexOf(_toolbarInferface.Buttons, button);
-                    var texture = _toolbarInferface.Textures[index];
-                    filteredSkills[i].Scale = texture.Scale;
+                    filteredSkills[i].Scale = ToolbarScale;
                     filteredSkills[i].Position = button.Position;
                 }
                 else
@@ -95,8 +93,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
                     var index = Array.IndexOf(_bagInterface.Buttons, this._bagInterface.Buttons.First(
                         B => _bagInterface.Array[Array.IndexOf(_bagInterface.Buttons, B)].GetAttribute<Type>("AbilityType") == null));
                     var firstButton = _bagInterface.Buttons[index];
-                    var texture = _toolbarInferface.Textures[index];
-                    filteredSkills[i].Scale = texture.Scale;
+                    filteredSkills[i].Scale = ToolbarScale;
                     filteredSkills[i].Position = firstButton.Position;
 
                     this._bagInterface.Array[index].SetAttribute("ImageId", filteredSkills[i].TextureId);
@@ -108,11 +105,13 @@ namespace Hedra.Engine.Player.ToolbarSystem
             base.UpdateView();
         }
 
+        private Vector2 ToolbarScale => _toolbarInferface.Textures[0].Scale;
+
         private void UpdatePassiveView()
         {
             for (var i = 0; i < _passiveInterface.Textures.Length; ++i)
             {
-                _passiveInterface.Textures[i].TextureElement.TextureId = 0;
+                _passiveInterface.Textures[i].TextureElement.TextureId = GUIRenderer.TransparentTexture;
             }
             var skills = GetPassiveAndEnabledFilteredSkills().Take(_passiveInterface.Array.Length).ToArray();
             for (var i = 0; i < skills.Length; ++i)
@@ -173,9 +172,10 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
         private BaseSkill[] GetFilteredSkills()
         {
+            var items = _player.AbilityTree.TreeItems;
             return _player.Toolbar.Skills?.Where(delegate (BaseSkill S)
             {
-                var item = _player.AbilityTree.TreeItems.Search(I => I != null && I.HasAttribute("AbilityType") &&
+                var item = items.FirstOrDefault(I => I != null && I.HasAttribute("AbilityType") &&
                                                                      I.GetAttribute<Type>("AbilityType") == S.GetType());
                 return item != null && item.GetAttribute<bool>("Enabled");
             }).ToArray() ?? new BaseSkill[0];
@@ -188,7 +188,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
         private BaseSkill[] GetPassiveAndEnabledFilteredSkills()
         {
-            return GetFilteredSkills().Where(S => !S.Passive && S.Level > 0).ToArray();
+            return GetFilteredSkills().Where(S => S.Passive && S.Level > 0).ToArray();
         }
     }
 }

@@ -46,8 +46,11 @@ namespace HedraTests
             GameManager.Provider = new SimpleGameProviderMock();
             GUIText.Provider = new SimpleTextProviderMock();
             ClassLoader.LoadModules(GameLoader.AppPath);
+            Program.GameWindow = new SimpleHedraWindowMock();
             if(!_translationsLoaded) Translations.Load();
             _translationsLoaded = true;
+            GameSettings.Width = 1920;
+            GameSettings.Height = 1080;
         }
 
         [TearDown]

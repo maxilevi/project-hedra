@@ -1,3 +1,4 @@
+using System.Linq;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering;
@@ -11,7 +12,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
     {
         private readonly Panel _panel;
 
-        public AbilityBagInventoryInterface(IPlayer Player, InventoryArray Array, int Offset, int Length, int SlotsPerLine, Vector2 Spacing, string[] CustomIcons = null) : base(Array, Offset, Length, SlotsPerLine, Spacing, CustomIcons)
+        public AbilityBagInventoryInterface(InventoryArray Array, int Offset, int Length, int SlotsPerLine, Vector2 Spacing, string[] CustomIcons = null) : base(Array, Offset, Length, SlotsPerLine, Spacing, CustomIcons)
         {
             _panel = new Panel();
             for (var i = 0; i < this.Buttons.Length; i++)
@@ -31,7 +32,8 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
         public sealed override void UpdateView()
         {
-
+            var sum = Buttons.Sum(B => B.Texture.Scale.X);
+            Position = Position.Y * Vector2.UnitY - Vector2.UnitX * sum * .25f;
         }
 
         public override bool Enabled

@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Drawing;
+using Hedra.Engine.Events;
 using Hedra.Engine.Loader;
 using OpenTK;
 using OpenTK.Input;
@@ -8,7 +9,7 @@ using OpenTK.Platform;
 
 namespace HedraTests
 {
-    public class SimpleHedraWindowMock : IHedra
+    public class SimpleHedraWindowMock : IHedra, IEventProvider
     {
         public double TargetFramerate { get; set; }
         public bool IsExiting => true;

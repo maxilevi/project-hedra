@@ -9,16 +9,16 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
         
         protected override void Remove()
         {
-            throw new System.NotImplementedException();
+
         }
 
         protected override void Add()
         {
-            throw new System.NotImplementedException();
+
         }
 
         public override string Description => Translations.Get("focus_desc");
         public override string DisplayName => Translations.Get("focus_skill");
-        protected override int MaxLevel { get; }
+        protected override int MaxLevel => 15;
     }
 }

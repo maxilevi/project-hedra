@@ -27,26 +27,24 @@ namespace Hedra.Engine.Rendering.UI
     public class UserInterface
     {
         private readonly IPlayer _player;
-        public bool ShowHelp = false;
-        public Panel Menu;
-        public OptionsUI OptionsMenu;
-        public GameUI GamePanel;
-        public ChrChooserUI ChrChooser;
-        public ChrCreatorUI ChrCreator;
-        public NetworkUI ConnectPanel;
-        private Texture _title;
-        private Button _newRun;
-        private Button _loadButton;
-        public static Font Regular;
-        public bool InMenu => Menu.Enabled || OptionsMenu.Enabled || ConnectPanel.Enabled;
-        public static Color DefaultFontColor = Color.White;
+        public Panel Menu { get; }
+        private readonly OptionsUI _optionsMenu;
+        public GameUI GamePanel { get; }
+        public ChrChooserUI ChrChooser { get; }
+        public ChrCreatorUI ChrCreator { get; }
+        private readonly NetworkUI ConnectPanel;
+        private readonly Texture _title;
+        private readonly Button _newRun;
+        private readonly Button _loadButton;
+        public bool InMenu => Menu.Enabled || _optionsMenu.Enabled || ConnectPanel.Enabled;
+        private static readonly Color DefaultFontColor = Color.White;
         
         public UserInterface (IPlayer Player)
         {
             this._player = Player;
             
             Menu = new Panel();
-            OptionsMenu = new OptionsUI();
+            _optionsMenu = new OptionsUI();
             GamePanel = new GameUI(Player);
             ChrChooser = new ChrChooserUI(Player);
             ConnectPanel = new NetworkUI();
@@ -135,7 +133,7 @@ namespace Hedra.Engine.Rendering.UI
             
             options.Click += delegate
             {
-                Menu.Disable(); OptionsMenu.Enable();
+                Menu.Disable(); _optionsMenu.Enable();
             };
             
             Button quit = new Button(new Vector2(.9f, bandPosition.Y),
@@ -190,7 +188,7 @@ namespace Hedra.Engine.Rendering.UI
         {
             if (_player == null) return;
 
-            OptionsMenu.Update();
+            _optionsMenu.Update();
             GamePanel.Update();
             _loadButton.Text.Text = GameManager.InStartMenu 
                 ? Translations.Get("load_world") 
@@ -206,7 +204,7 @@ namespace Hedra.Engine.Rendering.UI
             if(GameManager.IsLoading || GameManager.InMenu || GameSettings.ContinousMove) return;
 
             Menu.Enable();
-            OptionsMenu.Disable();
+            _optionsMenu.Disable();
             ChrChooser.Disable();
             _player.HideInterfaces();
             GamePanel.Disable();
@@ -235,7 +233,7 @@ namespace Hedra.Engine.Rendering.UI
             _player.View.CaptureMovement = true;
             _player.CanInteract = true;
             Menu.Disable();
-            OptionsMenu.Disable();
+            _optionsMenu.Disable();
             GamePanel.Enable();
             ChrChooser.Disable();
             ChrCreator.Disable();

@@ -50,22 +50,22 @@ namespace Hedra.Engine.Player.ToolbarSystem
         {
             _player = Player;
             _barItems = new InventoryArray(BarItems);
-            _bagItems = new InventoryArray(AbilityTree.AbilityCount-1);
+            _bagItems = new InventoryArray((AbilityTree.AbilityCount-1) * 3);
             _passiveItems = new InventoryArray(MaxPassiveItems);
             _toolbarItemsInterface = new ToolbarInventoryInterface(_player, _barItems, 0, _barItems.Length, BarItems, Vector2.One)
             {
                 Position = Vector2.UnitY * -.825f,
                 IndividualScale = Vector2.One * 1.0f
             };
-            _bagItemsInterface = new AbilityBagInventoryInterface(_player, _bagItems, 0, _bagItems.Length, AbilityTree.AbilityCount / 2, Vector2.One)
+            _bagItemsInterface = new AbilityBagInventoryInterface(_bagItems, 0, _bagItems.Length, _bagItems.Length / 2, Vector2.One)
             {
                 Position = Vector2.UnitY * -.6f,
                 IndividualScale = Vector2.One * 0.85f
             };
-            _passiveEffectsInventoryInterface = new PassiveEffectsInventoryInterface(_bagItems, 0, _bagItems.Length, AbilityTree.AbilityCount / 2, Vector2.One)
+            _passiveEffectsInventoryInterface = new PassiveEffectsInventoryInterface(_bagItems, 0, _bagItems.Length, MaxPassiveItems, Vector2.One * .65f)
             {
-                Position = Vector2.UnitY * .8f,
-                IndividualScale = Vector2.One * 0.25f
+                Position = Vector2.UnitY * -.55f,
+                IndividualScale = Vector2.One * 0.65f
             };
             _manager = new ToolbarInterfaceManager(_player, _toolbarItemsInterface, _bagItemsInterface, _passiveEffectsInventoryInterface)
             {

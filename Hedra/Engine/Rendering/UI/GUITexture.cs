@@ -106,7 +106,7 @@ namespace Hedra.Engine.Rendering.UI
         {
             if (!_disposed)
             {
-                if(GameManager.IsExiting || Program.IsDummy) return;
+                if(GameManager.IsExiting || Program.IsDummy || GameSettings.TestingMode) return;
                 Log.WriteLine($"Texture {Id} failed to dispose correctly.");
                 Executer.ExecuteOnMainThread(this.Dispose);
             }

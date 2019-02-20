@@ -40,6 +40,7 @@ namespace HedraTests.Player
                 Path = string.Empty,
                 Scale = 0
             });
+            UI = new UserInterface(this);
         }
 
         public void SplashEffect(Chunk UnderChunk)
