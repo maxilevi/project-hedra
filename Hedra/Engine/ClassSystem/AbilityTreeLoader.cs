@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Hedra.API;
 using Hedra.Engine.ClassSystem.Templates;
 using Hedra.Engine.Core;
@@ -27,6 +28,8 @@ namespace Hedra.Engine.ClassSystem
             }
         }
 
+        public string[] Names => Templates.Keys.ToArray();
+        
         protected override string FolderPrefix => "SkillTrees";
     }
 }

@@ -25,12 +25,13 @@ namespace HedraTests.CodePolicy
         [Test]
         public void TestThereAreNoUnusedKeys()
         {
+            AbilityTreeLoader.LoadModules(GameLoader.AppPath);
             var mobNames = MobLoader.LoadModules(GameLoader.AppPath).Select(K => K.Name.ToLowerInvariant()).ToArray();
-            var classNames = ClassDesign.ClassNames.Select(S => S.ToLowerInvariant()).ToArray();
+            var skillTreesNames = AbilityTreeLoader.Instance.Names.Select(S => S.ToLowerInvariant()).ToArray();
             var englishKeys = IniParser.Parse(File.ReadAllText($"{GameLoader.AppPath}/Translations/English.po"))
                 .Select(P => P.Key)
                 .Where(K => _exceptions.ToList().All(E => !Regex.IsMatch(K, E)))
-                .Where(K => Array.IndexOf(classNames, K) == -1)
+                .Where(K => Array.IndexOf(skillTreesNames, K) == -1)
                 .Where(K => Array.IndexOf(mobNames, K) == -1)
                 .ToArray();
             var set = new HashSet<string>(englishKeys);

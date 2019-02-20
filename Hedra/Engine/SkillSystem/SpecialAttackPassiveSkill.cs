@@ -10,30 +10,30 @@ namespace Hedra.Engine.SkillSystem
     {
         private T _lastWeapon;
         
-        private void BeforeAttacking(IEntity Parent, float Damage)
+        private void BeforeAttack(AttackOptions Options)
         {
             if(Level > 0 && Player.HasWeapon && Player.LeftWeapon is T weapon)
-                BeforeUse(weapon);
+                BeforeUse(weapon, Options);
         }
         
-        private void AfterAttacking(IEntity Parent, float Damage)
+        private void AfterAttack(AttackOptions Options)
         {
             if(Level > 0 && Player.HasWeapon && Player.LeftWeapon is T weapon)
-                AfterUse(weapon);
+                AfterUse(weapon, Options);
         }
 
         protected override void Remove()
         {
-            Player.BeforeAttacking -= BeforeAttacking;
-            Player.AfterAttacking -= AfterAttacking;
+            Player.BeforeAttack -= BeforeAttack;
+            Player.AfterAttack -= AfterAttack;
             Player.Inventory.InventoryUpdated -= InventoryUpdated;
             InventoryUpdated();
         }
 
         protected override void Add()
         {
-            Player.BeforeAttacking += BeforeAttacking;
-            Player.AfterAttacking += AfterAttacking;
+            Player.BeforeAttack += BeforeAttack;
+            Player.AfterAttack += AfterAttack;
             Player.Inventory.InventoryUpdated += InventoryUpdated;
             InventoryUpdated();
         }
@@ -61,8 +61,8 @@ namespace Hedra.Engine.SkillSystem
             }
         }
         
-        protected abstract void BeforeUse(T Weapon);
-        
-        protected virtual void AfterUse(T Weapon){}
+        protected abstract void BeforeUse(T Weapon, AttackOptions Options);
+
+        protected abstract void AfterUse(T Weapon, AttackOptions Options);
     }
 }

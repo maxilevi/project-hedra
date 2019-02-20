@@ -48,6 +48,7 @@ namespace HedraTests.EntitySystem
             {
                 lastComponent = Component;
             });
+            entityMock.Setup(E => E.SearchComponent<DamageComponent>()).Returns(() => _damageComponent);
             entityMock.Setup(E => E.SearchComponent<DropComponent>()).Returns( () => (DropComponent) lastComponent);
             entityMock.Setup(E => E.GetComponents<DropComponent>()).Returns( () => lastComponent != null 
             ? new []

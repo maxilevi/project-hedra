@@ -25,13 +25,18 @@ namespace Hedra.Engine.SkillSystem.Archer
         
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/PierceArrows.png");
 
-        protected override void BeforeUse(Bow Weapon)
+        protected override void BeforeUse(Bow Weapon, AttackOptions Options)
         {
-            void HandlerLambda(Projectile A) => PierceModifier(Weapon, A, HandlerLambda);
-            Weapon.BowModifiers += HandlerLambda;
+            if (Options.Charge < .35f) return;
+            Weapon.BowModifiers += PierceModifier;
         }
 
-        private void PierceModifier(Bow Weapon, Projectile ArrowProj, OnArrowEvent Lambda)
+        protected override void AfterUse(Bow Weapon, AttackOptions Options)
+        {
+            Weapon.BowModifiers -= PierceModifier;
+        }
+        
+        private void PierceModifier(Projectile ArrowProj)
         {
             ArrowProj.HitEventHandler += delegate(Projectile Sender, IEntity Hit)
             {
@@ -40,7 +45,6 @@ namespace Hedra.Engine.SkillSystem.Archer
                     Hit.AddComponent( new BleedingComponent(Hit, Player, 2 + Level / 10.0f, Player.DamageEquation * (.75f + Level / 10f)) );
                 }
             };
-            Weapon.BowModifiers -= Lambda;
         }
 
         public override string Description => Translations.Get("puncture_skill_desc");

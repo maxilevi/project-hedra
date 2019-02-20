@@ -23,14 +23,17 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
 using Hedra.Sound;
+using Hedra.WeaponSystem;
 using OpenTK;
 
 namespace Hedra.Engine.EntitySystem
 {
-    /// <summary>
+    /// <summary>S
     ///     Description of Class1.
     /// </summary>
-    public delegate void OnAttackEventHandler(IEntity Victim, float Amount);
+    public delegate void OnDamagingEventHandler(IEntity Victim, float Amount);
+
+    public delegate void OnAttackEventHandler(AttackOptions Options);
 
     public delegate void OnComponentAdded(IComponent<IEntity> Component);
     
@@ -56,8 +59,8 @@ namespace Hedra.Engine.EntitySystem
         private bool Splashed { get; set; }
 
         public event OnComponentAdded ComponentAdded;
-        public event OnAttackEventHandler AfterAttacking;
-        public event OnAttackEventHandler BeforeAttacking;
+        public event OnDamagingEventHandler AfterDamaging;
+        public event OnDamagingEventHandler BeforeDamaging;
         public EntityAttributes Attributes { get; }
         public EntityComponentManager ComponentManager { get; }
         public float AttackDamage { get; set; } = 1.0f;
@@ -229,19 +232,19 @@ namespace Hedra.Engine.EntitySystem
             if (_damageManager == null)
                 return;
 
-            Damager?.InvokeBeforeAttack(this, Amount);
+            Damager?.InvokeBeforeDamaging(this, Amount);
             _damageManager.Damage(Amount, Damager, out Exp, PlaySound, PushBack);
-            Damager?.InvokeAfterAttack(this, Amount);
+            Damager?.InvokeAfterDamaging(this, Amount);
         }
 
-        public void InvokeBeforeAttack(IEntity Invoker, float Damage)
+        public void InvokeBeforeDamaging(IEntity Invoker, float Damage)
         {
-            BeforeAttacking?.Invoke(Invoker, Damage);
+            BeforeDamaging?.Invoke(Invoker, Damage);
         }
         
-        public void InvokeAfterAttack(IEntity Invoker, float Damage)
+        public void InvokeAfterDamaging(IEntity Invoker, float Damage)
         {
-            AfterAttacking?.Invoke(Invoker, Damage);
+            AfterDamaging?.Invoke(Invoker, Damage);
         }
 
         public void AddBonusSpeedWhile(float BonusSpeed, Func<bool> Condition, bool ShowParticles = true)

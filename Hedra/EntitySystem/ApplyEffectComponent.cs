@@ -11,7 +11,7 @@ namespace Hedra.EntitySystem
 
         protected ApplyEffectComponent(IEntity Entity, int Chance, float Damage, float Duration) : base(Entity)
         {
-            Parent.AfterAttacking += Apply;
+            Parent.AfterDamaging += Apply;
         }
 
         public override void Update()
@@ -29,7 +29,7 @@ namespace Hedra.EntitySystem
         public override void Dispose()
         {
             base.Dispose();
-            Parent.AfterAttacking -= Apply;
+            Parent.AfterDamaging -= Apply;
         }
     }
 }

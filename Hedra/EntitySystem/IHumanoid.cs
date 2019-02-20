@@ -10,7 +10,9 @@ using OpenTK;
 namespace Hedra.EntitySystem
 {
     public interface IHumanoid : IEntity
-    {
+    {      
+        event OnAttackEventHandler BeforeAttack;
+        event OnAttackEventHandler AfterAttack;
         event OnHitLandedEventHandler OnHitLanded;
         IMessageDispatcher MessageDispatcher { get; set; }
         IPlayerInventory Inventory { get; }
@@ -80,5 +82,7 @@ namespace Hedra.EntitySystem
         void SetChestplate(ChestPiece Item);
         void SetPants(PantsPiece Item);
         void SetBoots(BootsPiece Item);
+        void InvokeBeforeAttackEvent(AttackOptions Options);
+        void InvokeAfterAttackEvent(AttackOptions Options);
     }
 }

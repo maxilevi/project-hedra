@@ -18,16 +18,21 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
         private Item SteelArrow { get; } = ItemPool.Grab(ItemType.SteelArrow);
         private Item _previousAmmo;
         
-        protected override void BeforeUse(Bow Weapon)
+        protected override void BeforeUse(Bow Weapon, AttackOptions Options)
         {
-            void HandlerLambda(Projectile A) => Modifier(Weapon, A, HandlerLambda);
-            Weapon.BowModifiers += HandlerLambda;
+            Weapon.BowModifiers += Modifier;
         }
 
-        private static void Modifier(Bow Weapon, Projectile ArrowProj, OnArrowEvent Lambda)
+        protected override void AfterUse(Bow Weapon, AttackOptions Options)
+        {
+            Weapon.BowModifiers -= Modifier;
+        }
+        
+        private static void Modifier(Projectile ArrowProj)
         {
             ArrowProj.DisposeOnHit = false;
-            Weapon.BowModifiers -= Lambda;
+            ArrowProj.Mesh.Outline = true;
+            ArrowProj.Mesh.OutlineColor = Colors.Red;
         }
 
         protected override void Add(Bow Weapon)

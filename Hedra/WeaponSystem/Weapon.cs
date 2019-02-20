@@ -110,11 +110,19 @@ namespace Hedra.WeaponSystem
                 _primaryAnimations[i].Speed = PrimarySpeed;
                 _primaryAnimations[i].Loop = false;
                 _primaryAnimations[i].OnAnimationStart += 
-                    Sender => OnPrimaryAttackEvent(AttackEventType.Start, _currentAttackOption);
+                    Sender =>
+                    {
+                        Owner.InvokeBeforeAttackEvent(_currentAttackOption);
+                        OnPrimaryAttackEvent(AttackEventType.Start, _currentAttackOption);
+                    };
                 _primaryAnimations[i].OnAnimationMid += 
                     Sender => OnPrimaryAttackEvent(AttackEventType.Mid, _currentAttackOption);
                 _primaryAnimations[i].OnAnimationEnd += 
-                    Sender => OnPrimaryAttackEvent(AttackEventType.End, _currentAttackOption);
+                    Sender =>
+                    {
+                        Owner.InvokeAfterAttackEvent(_currentAttackOption);
+                        OnPrimaryAttackEvent(AttackEventType.End, _currentAttackOption);
+                    };
             }
             
             _secondaryAnimations = new Animation[SecondaryAnimationsNames.Length];
@@ -124,11 +132,19 @@ namespace Hedra.WeaponSystem
                 _secondaryAnimations[i].Speed = SecondarySpeed;
                 _secondaryAnimations[i].Loop = false;
                 _secondaryAnimations[i].OnAnimationStart += 
-                    Sender => OnSecondaryAttackEvent(AttackEventType.Start, _currentAttackOption);
+                    Sender =>
+                    {
+                        Owner.InvokeBeforeAttackEvent(_currentAttackOption);
+                        OnSecondaryAttackEvent(AttackEventType.Start, _currentAttackOption);
+                    };
                 _secondaryAnimations[i].OnAnimationMid += 
                     Sender => OnSecondaryAttackEvent(AttackEventType.Mid, _currentAttackOption);
                 _secondaryAnimations[i].OnAnimationEnd += 
-                    Sender => OnSecondaryAttackEvent(AttackEventType.End, _currentAttackOption);
+                    Sender =>
+                    {
+                        Owner.InvokeAfterAttackEvent(_currentAttackOption);
+                        OnSecondaryAttackEvent(AttackEventType.End, _currentAttackOption);
+                    };
             }
             RegisterAnimationSpeeds();
         }

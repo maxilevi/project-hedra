@@ -13,9 +13,9 @@ namespace Hedra.EntitySystem
 
         event OnComponentAdded ComponentAdded;
         
-        event OnAttackEventHandler AfterAttacking;
+        event OnDamagingEventHandler AfterDamaging;
         
-        event OnAttackEventHandler BeforeAttacking;
+        event OnDamagingEventHandler BeforeDamaging;
         
         EntityComponentManager ComponentManager { get; }
         
@@ -129,8 +129,8 @@ namespace Hedra.EntitySystem
 
         void Update();
 
-        void InvokeBeforeAttack(IEntity Invoker, float Damage);
+        void InvokeBeforeDamaging(IEntity Invoker, float Damage);
 
-        void InvokeAfterAttack(IEntity Invoker, float Damage);
+        void InvokeAfterDamaging(IEntity Invoker, float Damage);
     }
 }

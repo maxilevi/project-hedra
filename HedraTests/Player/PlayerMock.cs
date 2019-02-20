@@ -50,8 +50,10 @@ namespace HedraTests.Player
 
         public IPhysicsComponent Physics { get; }
         public event OnComponentAdded ComponentAdded;
-        public event OnAttackEventHandler AfterAttacking;
-        public event OnAttackEventHandler BeforeAttacking;
+        public event OnDamagingEventHandler AfterDamaging;
+        public event OnDamagingEventHandler BeforeDamaging;
+        public event OnAttackEventHandler BeforeAttack;
+        public event OnAttackEventHandler AfterAttack;
         public EntityComponentManager ComponentManager { get; }
         public EntityAttributes Attributes { get; }
         public float AttackDamage { get; set; }
@@ -104,6 +106,16 @@ namespace HedraTests.Player
             throw new NotImplementedException();
         }
 
+        public void InvokeBeforeAttackEvent(AttackOptions Options)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void InvokeAfterAttackEvent(AttackOptions Options)
+        {
+            throw new NotImplementedException();
+        }
+
         public void AttackSurroundings(float Damage, Action<IEntity> Callback)
         {
             throw new NotImplementedException();
@@ -125,6 +137,11 @@ namespace HedraTests.Player
         }
 
         public void AddBonusHealthWhile(float BonusHealth, Func<bool> Condition)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ProcessHit(bool HittedSomething, bool InvokeBeforeAttackEvent = true)
         {
             throw new NotImplementedException();
         }
@@ -368,12 +385,12 @@ namespace HedraTests.Player
             throw new NotImplementedException();
         }
 
-        public void InvokeBeforeAttack(IEntity Invoker, float Damage)
+        public void InvokeBeforeDamaging(IEntity Invoker, float Damage)
         {
             throw new NotImplementedException();
         }
 
-        public void InvokeAfterAttack(IEntity Invoker, float Damage)
+        public void InvokeAfterDamaging(IEntity Invoker, float Damage)
         {
             throw new NotImplementedException();
         }

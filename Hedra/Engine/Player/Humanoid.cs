@@ -41,6 +41,8 @@ namespace Hedra.Engine.Player
         public const int MaxConsecutiveHits = 45;
         public const float DefaultDodgeCost = 25;
         
+        public event OnAttackEventHandler AfterAttack;
+        public event OnAttackEventHandler BeforeAttack;
         public event OnHitLandedEventHandler OnHitLanded;
         
         private FishingHandler Fisher { get; }
@@ -365,6 +367,16 @@ namespace Hedra.Engine.Player
                     throw new ArgumentOutOfRangeException(nameof(NewType), NewType, null);
             }
             ComponentManager.AddComponentWhile(effect, Condition);
+        }
+
+        public void InvokeBeforeAttackEvent(AttackOptions Options)
+        {
+            BeforeAttack?.Invoke(Options);   
+        }
+
+        public void InvokeAfterAttackEvent(AttackOptions Options)
+        {
+            AfterAttack?.Invoke(Options);
         }
 
         public bool HasWeapon => MainWeapon != null;
