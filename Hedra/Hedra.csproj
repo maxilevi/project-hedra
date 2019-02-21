@@ -313,7 +313,7 @@
     <Compile Include="Engine\Player\QuestSystem\Views\ModelView.cs" />
     <Compile Include="Engine\Player\QuestSystem\Views\EntityView.cs" />
     <Compile Include="Engine\Player\QuestSystem\Views\QuestView.cs" />
-    <Compile Include="Engine\Player\ToolbarSystem\PassiveEffectsInventoryInterface.cs" />
+    <Compile Include="Engine\Player\ToolbarSystem\PassiveEffectsInterface.cs" />
     <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\AuxiliaryDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\DummyDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\EndDesign.cs" />

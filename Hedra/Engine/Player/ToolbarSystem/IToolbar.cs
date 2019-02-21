@@ -12,6 +12,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
         BaseSkill[] Skills { get; }
         bool DisableAttack { get; set; }
         bool BagEnabled { get; set; }
+        bool PassiveEffectsEnabled { get; set; }
         bool Listen { get; set; }
         bool Show { get; set; }
         byte[] ToArray();

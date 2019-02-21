@@ -10,6 +10,7 @@
 using System;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Loader;
@@ -19,6 +20,7 @@ using Hedra.Engine.SkillSystem;
 using Hedra.WeaponSystem;
 using OpenTK;
 using OpenTK.Input;
+using TaskScheduler = Hedra.Engine.Management.TaskScheduler;
 
 namespace Hedra.Engine.Player.ToolbarSystem
 {
@@ -29,16 +31,14 @@ namespace Hedra.Engine.Player.ToolbarSystem
     {
         public const int InteractableItems = 4;
         public const int BarItems = 7;
-        private const int MaxPassiveItems = 8;
         private const char Marker = '!';
         private const string HeaderMarker = "<>";
         private readonly IPlayer _player;
         private readonly InventoryArray _barItems;
         private readonly InventoryArray _bagItems;
-        private readonly InventoryArray _passiveItems;
         private readonly ToolbarInventoryInterface _toolbarItemsInterface;
         private readonly AbilityBagInventoryInterface _bagItemsInterface;
-        private readonly PassiveEffectsInventoryInterface _passiveEffectsInventoryInterface;
+        private readonly PassiveEffectsInterface _passiveEffectsInterface;
         private readonly ToolbarInterfaceManager _manager;
         private readonly ToolbarInputHandler _inputHandler;
         private BaseSkill[] _skills;
@@ -51,7 +51,6 @@ namespace Hedra.Engine.Player.ToolbarSystem
             _player = Player;
             _barItems = new InventoryArray(BarItems);
             _bagItems = new InventoryArray((AbilityTree.AbilityCount-1) * 3);
-            _passiveItems = new InventoryArray(MaxPassiveItems);
             _toolbarItemsInterface = new ToolbarInventoryInterface(_player, _barItems, 0, _barItems.Length, BarItems, Vector2.One)
             {
                 Position = Vector2.UnitY * -.825f,
@@ -62,16 +61,19 @@ namespace Hedra.Engine.Player.ToolbarSystem
                 Position = Vector2.UnitY * -.6f,
                 IndividualScale = Vector2.One * 0.85f
             };
-            _passiveEffectsInventoryInterface = new PassiveEffectsInventoryInterface(_bagItems, 0, _bagItems.Length, MaxPassiveItems, Vector2.One * .65f)
+            _passiveEffectsInterface = new PassiveEffectsInterface
             {
-                Position = Vector2.UnitY * -.55f,
-                IndividualScale = Vector2.One * 0.65f
+                Position = Vector2.UnitY * -.775f
             };
-            _manager = new ToolbarInterfaceManager(_player, _toolbarItemsInterface, _bagItemsInterface, _passiveEffectsInventoryInterface)
+            _manager = new ToolbarInterfaceManager(_player, _toolbarItemsInterface, _bagItemsInterface, _passiveEffectsInterface)
             {
                 HasCancelButton = false
             };
             _inputHandler = new ToolbarInputHandler(_player);
+            TaskScheduler.When(
+                () => _player.AbilityTree != null,
+                () => _player.AbilityTree.SkillUpdated += S => UpdateView()
+            );
             this.LoadSkills();
         }
 
@@ -213,6 +215,18 @@ namespace Hedra.Engine.Player.ToolbarSystem
                         if (filtered.Contains(_skills[i])) _skills[i].Active = value;
                     }
                 }
+            }
+        }
+
+        public bool PassiveEffectsEnabled
+        {
+            get => _passiveEffectsInterface.Enabled;
+            set
+            {
+                if(value)
+                    _passiveEffectsInterface.Enable();
+                else
+                    _passiveEffectsInterface.Disable();
             }
         }
 

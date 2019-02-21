@@ -302,7 +302,7 @@ namespace Hedra.Engine.Player.Inventory
 
         public bool HasCancelButton { get; set; } = true;
 
-        public bool Enabled
+        public virtual bool Enabled
         {
             get => _enabled;
             set

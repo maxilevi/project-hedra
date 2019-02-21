@@ -16,13 +16,13 @@ namespace Hedra.Engine.Player.ToolbarSystem
     {
         private readonly ToolbarInventoryInterface _toolbarInferface;
         private readonly AbilityBagInventoryInterface _bagInterface;
-        private readonly PassiveEffectsInventoryInterface _passiveInterface;
+        private readonly PassiveEffectsInterface _passiveInterface;
         private readonly IPlayer _player;
         private bool _hasInitialized;
 
         public ToolbarInterfaceManager(IPlayer Player,
-            ToolbarInventoryInterface ToolbarInferface, AbilityBagInventoryInterface BagInterface, PassiveEffectsInventoryInterface PassiveInterface)
-            : base(null, ToolbarInferface, BagInterface, PassiveInterface)
+            ToolbarInventoryInterface ToolbarInferface, AbilityBagInventoryInterface BagInterface, PassiveEffectsInterface PassiveInterface)
+            : base(null, ToolbarInferface, BagInterface)
         {
             _toolbarInferface = ToolbarInferface;
             _bagInterface = BagInterface;
@@ -100,25 +100,11 @@ namespace Hedra.Engine.Player.ToolbarSystem
                     this._bagInterface.Array[index].SetAttribute("AbilityType", filteredSkills[i].GetType());
                 }
             }
-
-            UpdatePassiveView();
+            _passiveInterface.UpdateView(GetPassiveAndEnabledFilteredSkills());
             base.UpdateView();
         }
 
         private Vector2 ToolbarScale => _toolbarInferface.Textures[0].Scale;
-
-        private void UpdatePassiveView()
-        {
-            for (var i = 0; i < _passiveInterface.Textures.Length; ++i)
-            {
-                _passiveInterface.Textures[i].TextureElement.TextureId = GUIRenderer.TransparentTexture;
-            }
-            var skills = GetPassiveAndEnabledFilteredSkills().Take(_passiveInterface.Array.Length).ToArray();
-            for (var i = 0; i < skills.Length; ++i)
-            {
-                _passiveInterface.Textures[i].TextureElement.TextureId = skills[i].TextureId;
-            }
-        }
 
         protected override void Interact(object Sender, MouseButtonEventArgs EventArgs) {}
 
@@ -189,6 +175,19 @@ namespace Hedra.Engine.Player.ToolbarSystem
         private BaseSkill[] GetPassiveAndEnabledFilteredSkills()
         {
             return GetFilteredSkills().Where(S => S.Passive && S.Level > 0).ToArray();
+        }
+
+        public override bool Enabled
+        {
+            get => base.Enabled;
+            set
+            {
+                base.Enabled = value;
+                if(Enabled)
+                    _passiveInterface.Enable();
+                else
+                    _passiveInterface.Disable();
+            }
         }
     }
 }

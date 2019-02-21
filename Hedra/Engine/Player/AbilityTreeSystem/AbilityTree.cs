@@ -16,6 +16,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Engine.SkillSystem;
 using Hedra.Rendering;
 using Hedra.Sound;
 using OpenTK;
@@ -24,14 +25,14 @@ using Cursor = Hedra.Engine.Input.Cursor;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {
-    /// <summary>
-    /// Description of SkillSystem.
-    /// </summary>
+    public delegate void OnSkillUpdated(BaseSkill Skill);
+    
     public class AbilityTree : PlayerInterface, IAbilityTree
     {
         public const int Rows = 4;
         public const int Columns = 3;
         public const int AbilityCount = Columns * Rows;
+        public event OnSkillUpdated SkillUpdated;
         public int SpecializationTreeIndex { get; set; }
         private const char SaveMarker = '!';
         private const char NumberMarker = '|';
@@ -143,6 +144,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 if (_player.Toolbar.Skills[k].GetType() == _abilities[Index].GetAttribute<Type>("AbilityType"))
                 {
                     _player.Toolbar.Skills[k].Level = Count;
+                    SkillUpdated?.Invoke(_player.Toolbar.Skills[k]);
                 }
             }
             this.UpdateView();
@@ -297,6 +299,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 if (_show == value || _stateManager.GetState() != _show) return;
                 _show = value;
                 _player.Toolbar.BagEnabled = _show;
+                _player.Toolbar.PassiveEffectsEnabled = !_show;
                 _interface.Enabled = _show;              
                 _background.Enabled = _show;
                 _manager.Enabled = _show;

@@ -42,6 +42,8 @@ namespace Hedra.Engine.Rendering.UI
         private string _currentClass;
         private bool _shouldPlay;
 
+        public Vector2 LogoPosition => _classLogo.Position;
+        
         public GameUI(IPlayer Player)
         {
             _player = Player;

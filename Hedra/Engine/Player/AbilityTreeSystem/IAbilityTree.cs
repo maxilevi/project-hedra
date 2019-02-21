@@ -8,6 +8,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 {
     public interface IAbilityTree
     {
+        event OnSkillUpdated SkillUpdated;
         void Update();
         void SetPoints(Type AbilityType, int Count);
         void SetPoints(int Index, int Count);
