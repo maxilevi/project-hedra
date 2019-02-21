@@ -112,7 +112,7 @@ namespace Hedra.Engine.Player
                 Player.LeftWeapon.ChargingIntensity = Charge;
             }
             Player.LeftWeapon.IsCharging = IsCharging;
-            Tint = IsCharging ? new Vector3(1,0,0) * Charge + Vector3.One * .65f : NormalTint;
+            Tint = IsCharging ? new Vector3(1,0,0) * Charge + Vector3.One * .65f : Vector3.One;
         }
 
         public bool IsCharging

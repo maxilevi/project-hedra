@@ -61,7 +61,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
                 Position = Vector2.UnitY * -.6f,
                 IndividualScale = Vector2.One * 0.85f
             };
-            _passiveEffectsInterface = new PassiveEffectsInterface
+            _passiveEffectsInterface = new PassiveEffectsInterface(_player)
             {
                 Position = Vector2.UnitY * -.775f
             };
@@ -85,6 +85,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
             {
                 _skills[i] = (BaseSkill) Activator.CreateInstance(types[i]);
                 _skills[i].Initialize(Vector2.Zero, InventoryArrayInterface.DefaultSize, _player.UI.GamePanel, _player);
+                _skills[i].StateUpdated += SkillStateUpdated;
                 _skills[i].Active = false;
             }
             _w1 = new WeaponAttack();
@@ -94,6 +95,11 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
             EventDispatcher.RegisterMouseDown(this, this.MouseDown);
             EventDispatcher.RegisterMouseUp(this, this.MouseUp);
+        }
+
+        private void SkillStateUpdated()
+        {
+            UpdateView();
         }
 
         private void MouseDown(object Sender, MouseButtonEventArgs EventArgs)
@@ -138,6 +144,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
         public void Update()
         {
             _toolbarItemsInterface.Update();
+            _passiveEffectsInterface.Update();
         }
 
         public void UpdateView()

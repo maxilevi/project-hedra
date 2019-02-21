@@ -13,7 +13,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
 {
     public class SteelArrows : SpecialAttackPassiveSkill<Bow>
     {
-        protected override int MaxLevel => 25;
+        protected override int MaxLevel => 15;
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/SteelArrows.png");
         private Item SteelArrow { get; } = ItemPool.Grab(ItemType.SteelArrow);
         private Item _previousAmmo;
@@ -28,11 +28,14 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
             Weapon.BowModifiers -= Modifier;
         }
         
-        private static void Modifier(Projectile ArrowProj)
+        private void Modifier(Projectile ArrowProj)
         {
-            ArrowProj.DisposeOnHit = false;
-            ArrowProj.Mesh.Outline = true;
-            ArrowProj.Mesh.OutlineColor = Colors.Red;
+            if (Utils.Rng.Next(1, Math.Min(2, MaxLevel - Level + 1)) == 1)
+            {
+                ArrowProj.DisposeOnHit = false;
+                ArrowProj.Mesh.Outline = true;
+                ArrowProj.Mesh.OutlineColor = Colors.Red;
+            }
         }
 
         protected override void Add(Bow Weapon)

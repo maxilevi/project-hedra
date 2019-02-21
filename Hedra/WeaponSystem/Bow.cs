@@ -182,15 +182,18 @@ namespace Hedra.WeaponSystem
                 Hit.Damage(Owner.DamageEquation * Options.DamageModifier, Owner, out var exp, true, false);
                 Owner.XP += exp;
             };
+            /* This is because some arrows can penetrate through enemies */
+            var gotHit = false;
             arrowProj.LandEventHandler += S =>
             {
                 Miss?.Invoke(arrowProj);
-                Owner.ProcessHit(false);
+                if(!gotHit)
+                    Owner.ProcessHit(false);
             };
             arrowProj.HitEventHandler += (S,V) =>
             {
                 Hit?.Invoke(arrowProj);
-                Owner.ProcessHit(true);
+                Owner.ProcessHit(gotHit = true);
             };
             arrowProj = AddModifiers(arrowProj);
             SoundPlayer.PlaySound(SoundType.BowSound, Owner.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);

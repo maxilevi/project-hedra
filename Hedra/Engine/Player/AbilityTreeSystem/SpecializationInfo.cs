@@ -35,7 +35,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             _learnSpecializationButton.Texture.Grayscale = true;
             _learnSpecializationButton.Texture.Tint = new Vector4(Color.Orange.ToVector4().Xyz * 5f, 1);
             ItemTexture.Scale *= 1.15f;
-            BackgroundTexture.Scale *= 1.15f;
+            BackgroundTexture.Scale *= 1.1f;
             Panel.AddElement(_learnSpecializationButton);
             Panel.AddElement(_learnSpecializationText);
 

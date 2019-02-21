@@ -48,6 +48,6 @@ namespace Hedra.Engine.Management
         }
 
         public bool Ready => _timerCount >= AlertTime;
-
+        public float Progress => _timerCount / AlertTime;
     }
 }

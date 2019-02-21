@@ -20,17 +20,19 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.SkillSystem
 {
+    public delegate void OnStateUpdated();
+    
     /// <summary>
     /// Description of Skill.
     /// </summary>
     public abstract class BaseSkill : UIElement, IRenderable, IUpdatable, ISimpleTexture, IAdjustable
     {
-        public static Shader Shader { get; }
-        public static Vector3 GrayTint { get; }
-        public static Vector3 NormalTint { get; }
+        private static readonly Shader Shader = Shader.Build("Shaders/Skills.vert", "Shaders/Skills.frag");
+        private static readonly Vector3 NormalTint = Vector3.One;
+        public event OnStateUpdated StateUpdated;
+        public bool IsAffecting => IsAffectingModifier > 0;
         public virtual float MaxCooldown { get; protected set; }
-        protected virtual bool HasCooldown => true;
-        public Vector3 Tint { get; set; }
+        public virtual float IsAffectingModifier => 1;
         public virtual float ManaCost { get; protected set; }
         public float Cooldown { get; set; }
         public int Level { get; set; }
@@ -40,25 +42,20 @@ namespace Hedra.Engine.SkillSystem
         public abstract string DisplayName { get; }
         public bool Casting { get; set; }
         public abstract uint TextureId { get; }
-        public Vector2 AdjustedPosition { get; set; }
-        protected virtual bool Grayscale { get; set; }
-        public bool Initialized { get; private set;}
-        protected bool Enabled { get; set; } = true;
-        protected RenderableText CooldownSecondsText;
+        protected Vector3 Tint { get; set; }
         protected IPlayer Player => GameManager.Player;
+        protected virtual bool HasCooldown => true;
+        protected virtual bool Grayscale { get; set; }
+        private bool _initialized;
+        private bool Enabled { get; set; } = true;
+        private Vector2 _adjustedPosition;
+        private RenderableText _cooldownSecondsText;
         private Panel _panel;
         private Vector2 _position;
 
-        static BaseSkill()
-        {
-            Shader = Shader.Build("Shaders/Skills.vert", "Shaders/Skills.frag");
-            GrayTint = new Vector3(0.299f, 0.587f, 0.114f);
-            NormalTint = Vector3.One;
-        }
-
         protected BaseSkill()
         {
-            // Invoked via reflection
+            /* Invoked via reflection */
         }
 
         public virtual void Initialize(Vector2 Position, Vector2 Scale, Panel InPanel, IPlayer Player)
@@ -71,7 +68,7 @@ namespace Hedra.Engine.SkillSystem
             
             DrawManager.UIRenderer.Add(this, DrawOrder.After);
             UpdateManager.Add(this);
-            this.Initialized = true;
+            this._initialized = true;
         }
         
         public virtual bool MeetsRequirements()
@@ -87,18 +84,18 @@ namespace Hedra.Engine.SkillSystem
             if(!Enabled || !Active)
                 return;
             
-            if(!Initialized) throw new ArgumentException("This skill hasn't been initialized yet.");
+            if(!_initialized) throw new ArgumentException("This skill hasn't been initialized yet.");
 
             Cooldown -= Time.DeltaTime;
-            if (CooldownSecondsText == null)
+            if (_cooldownSecondsText == null)
             {
-                CooldownSecondsText = new RenderableText(string.Empty, Position, Color.White,
+                _cooldownSecondsText = new RenderableText(string.Empty, Position, Color.White,
                     FontCache.Get(AssetManager.BoldFamily, 12, FontStyle.Bold));
-                if(_panel.Enabled) CooldownSecondsText.Enable();
-                _panel.AddElement(CooldownSecondsText);
+                if(_panel.Enabled) _cooldownSecondsText.Enable();
+                _panel.AddElement(_cooldownSecondsText);
             }
-            if (CooldownSecondsText.Position != Position) CooldownSecondsText.Position = Position;
-            CooldownSecondsText.Text = Cooldown > 0 && HasCooldown ? ((int)Cooldown + 1).ToString() : string.Empty;
+            if (_cooldownSecondsText.Position != Position) _cooldownSecondsText.Position = Position;
+            _cooldownSecondsText.Text = Cooldown > 0 && HasCooldown ? ((int)Cooldown + 1).ToString() : string.Empty;
             Renderer.Enable(EnableCap.Blend);
             Renderer.Disable(EnableCap.DepthTest);
             Renderer.Disable(EnableCap.CullFace);
@@ -106,7 +103,7 @@ namespace Hedra.Engine.SkillSystem
             Shader.Bind();
             Shader["Tint"] = Player.Mana - this.ManaCost < 0 && Tint == NormalTint ? new Vector3(.9f,.6f,.6f) : Tint;
             Shader["Scale"] = Scale * new Vector2(1,-1);
-            Shader["Position"] = AdjustedPosition;
+            Shader["Position"] = _adjustedPosition;
             Shader["Bools"] = new Vector2(Level == 0 || Grayscale ? 1 : 0, 1);
             Shader["Cooldown"] = OverlayBlending;
             
@@ -131,14 +128,19 @@ namespace Hedra.Engine.SkillSystem
             Renderer.ActiveTexture(TextureUnit.Texture1);
             Renderer.BindTexture(TextureTarget.Texture2D, 0);
             
-            CooldownSecondsText.Draw();
+            _cooldownSecondsText.Draw();
         }
 
         public void Adjust()
         {
-            AdjustedPosition = GUITexture.Adjust(Position);
+            _adjustedPosition = GUITexture.Adjust(Position);
         }
 
+        protected void InvokeStateUpdated()
+        {
+            StateUpdated?.Invoke();
+        }
+        
         protected virtual float OverlayBlending => Cooldown / MaxCooldown;
         public virtual bool PlaySound => false;
         
@@ -149,6 +151,7 @@ namespace Hedra.Engine.SkillSystem
         public abstract void Update();
 
         public Vector2 Scale { get; set; }
+        public virtual string[] Attributes => new string[0];
 
         public Vector2 Position
         {
@@ -174,7 +177,7 @@ namespace Hedra.Engine.SkillSystem
         {
             DrawManager.Remove(this);
             UpdateManager.Remove(this);
-            CooldownSecondsText.Dispose();
+            _cooldownSecondsText.Dispose();
         }    
     }
 }

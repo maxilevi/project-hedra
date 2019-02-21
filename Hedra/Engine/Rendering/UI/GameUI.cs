@@ -47,7 +47,7 @@ namespace Hedra.Engine.Rendering.UI
         public GameUI(IPlayer Player)
         {
             _player = Player;
-            _consecutiveHits = new GUIText(string.Empty, new Vector2(0f, -0.75f), Color.Transparent, FontCache.Get(AssetManager.BoldFamily, 1f, FontStyle.Bold));
+            _consecutiveHits = new GUIText(string.Empty, new Vector2(0f, -0.7f), Color.Transparent, FontCache.Get(AssetManager.BoldFamily, 1f, FontStyle.Bold));
             _slingShot = new SlingShotAnimation();
             _slingShot.Play(_consecutiveHits);
             Player.OnHitLanded += delegate

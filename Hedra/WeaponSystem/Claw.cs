@@ -35,7 +35,7 @@ namespace Hedra.WeaponSystem
         protected override void OnPrimaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             if(AttackEventType.Mid != Type) return;
-            Owner.AttackSurroundings(Owner.DamageEquation);
+            Owner.AttackSurroundings(Owner.DamageEquation * Options.DamageModifier);
         }
         
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)

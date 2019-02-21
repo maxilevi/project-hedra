@@ -10,10 +10,13 @@ namespace Hedra.Engine.Player.ToolbarSystem
     {
         private const int MaxEffects = 8;
         private readonly Texture[] _textures;
+        private readonly IPlayer _player;
         private Vector2 _previousOffset;
+        private BaseSkill[] _skills;
         
-        public PassiveEffectsInterface()
+        public PassiveEffectsInterface(IPlayer Player)
         {
+            _player = Player;
             _textures = new Texture[MaxEffects];
             var size = InventoryArrayInterface.DefaultSize * .25f;
             var padding = Vector2.UnitX * size.X * .35f;
@@ -25,7 +28,6 @@ namespace Hedra.Engine.Player.ToolbarSystem
                     TextureElement =
                     {
                         MaskId = InventoryArrayInterface.DefaultId,
-                        Opacity = .85f
                     }
                 };
                 offset += Vector2.UnitX * _textures[i].Scale.X * 2 + padding;
@@ -33,13 +35,25 @@ namespace Hedra.Engine.Player.ToolbarSystem
             }
         }
 
+        public void Update()
+        {
+            if(_skills == null) return;
+            if (_skills.Any(S => !S.IsAffecting)) _player.Toolbar.UpdateView();
+            for (var i = 0; i < _skills.Length; ++i)
+            {
+                _textures[i].TextureElement.Opacity = .85f * _skills[i].IsAffectingModifier;
+                _textures[i].TextureElement.Grayscale = _skills[i].IsAffectingModifier < 1;
+            }
+        }
+
         public void UpdateView(BaseSkill[] Skills)
         {
+            _skills = Skills;
             for (var i = 0; i < _textures.Length; ++i)
             {
                 _textures[i].TextureElement.TextureId = GUIRenderer.TransparentTexture;
             }
-            var skills = Skills.Take(_textures.Length).ToArray();
+            var skills = _skills.Take(_textures.Length).ToArray();
             for (var i = 0; i < skills.Length; ++i)
             {
                 _textures[i].TextureElement.TextureId = skills[i].TextureId;

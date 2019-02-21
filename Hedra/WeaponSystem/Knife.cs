@@ -62,7 +62,7 @@ namespace Hedra.WeaponSystem
         protected override void OnPrimaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             if(AttackEventType.Mid != Type) return;
-            Owner.AttackSurroundings(Owner.DamageEquation, Options.IgnoreEntities, delegate(IEntity Mob)
+            Owner.AttackSurroundings(Owner.DamageEquation * Options.DamageModifier, Options.IgnoreEntities, delegate(IEntity Mob)
             {
                 if (Utils.Rng.Next(0, 5) == 1)
                     Mob.AddComponent(new BleedingComponent(Mob, this.Owner, 3f,
