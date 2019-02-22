@@ -19,6 +19,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.WorldBuilding;
 using OpenTK;
 using OpenTK.Input;
 
@@ -26,7 +27,7 @@ namespace Hedra.Engine.ItemSystem
 {
     public delegate void OnItemCollect(IPlayer Player);
 
-    public class WorldItem : UpdatableModel<ObjectMesh>, IUpdatable
+    public class WorldItem : WorldObject
     {
         private static ushort _itemCounter;
         public bool PickedUp { get; private set; }
@@ -71,6 +72,7 @@ namespace Hedra.Engine.ItemSystem
         
         public override void Update()
         {
+            base.Update();
             this.Model.Alpha = this.Alpha;
             if(this.PickedUp) return;
 

@@ -457,6 +457,9 @@
     <Compile Include="Engine\WorldBuilding\CraftingStation.cs" />
     <Compile Include="Engine\WorldBuilding\GroundworkType.cs" />
     <Compile Include="Engine\WorldBuilding\IBoundingBox.cs" />
+    <Compile Include="Engine\WorldBuilding\IWorldObject.cs" />
+    <Compile Include="Engine\WorldBuilding\WorldObject.cs" />
+    <Compile Include="Engine\WorldBuilding\BearTrap.cs" />
     <Compile Include="Engine\WorldBuilding\SquaredGroundwork.cs" />
     <Compile Include="Engine\WorldBuilding\SquaredPlateau.cs" />
     <Compile Include="Engine\WorldBuilding\TravellingExplorers.cs" />
@@ -8057,6 +8060,10 @@
       <Link>Assets\Chr\ArcherChargeStance.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Animations\ArcherLayTrap.dae">
+      <Link>Assets\Chr\ArcherLayTrap.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Animations\RogueFade.dae">
       <Link>Assets\Chr\RogueFade.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -8135,6 +8142,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Misc\Wool.ply">
       <Link>Assets\Items\Misc\Wool.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Objects\BearTrap.ply">
+      <Link>Assets\Env\BearTrap.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0.ply">

@@ -47,6 +47,7 @@ namespace Hedra.Engine.Player
                 }
                 Owner.XP += exp;
             };
+            World.AddWorldObject(fireball);
         }
     }
 }

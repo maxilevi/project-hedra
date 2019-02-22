@@ -85,6 +85,7 @@ namespace Hedra.AISystem.Behaviours
                     Hit.Damage(Parent.AttackDamage, this.Parent, out float exp);
                     Parent.AddBonusSpeedForSeconds(1.5f, 3);
                 };
+                World.AddWorldObject(spit);
                 SoundPlayer.PlaySoundWithVariation(SoundType.BeetleSpitSound, Parent.Position);
             }
             Model.Attack(null, spitAnimation, AttackHandler, RangeModifier);

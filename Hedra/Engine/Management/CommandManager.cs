@@ -88,6 +88,7 @@ namespace Hedra.Engine.Management
                             Color = Color.LawnGreen.ToVector4() * .85f,
                             UseLight = false
                         };
+                        World.AddWorldObject(proj);
                         return true;
                     }
                     case "hurt":

@@ -128,6 +128,9 @@ namespace Hedra.Engine.SkillSystem
             
         }
 
-        protected abstract void OnExecution();
+        protected virtual void OnExecution()
+        {
+            
+        }
     }
 }

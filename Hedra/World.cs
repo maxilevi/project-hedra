@@ -49,7 +49,7 @@ namespace Hedra
         public static bool IsGenerated => Provider.IsGenerated;
         public static int MeshQueueCount => Provider.MeshQueueCount;
         public static int ChunkQueueCount => Provider.ChunkQueueCount;
-        public static WorldItem[] Items => Provider.Items;
+        public static IWorldObject[] WorldObjects => Provider.WorldObjects;
         public static ReadOnlyCollection<Chunk> Chunks => Provider.Chunks;
         public static ReadOnlyCollection<IEntity> Entities => Provider.Entities;
         public static ReadOnlyCollection<ICollidable> GlobalColliders => Provider.GlobalColliders;
@@ -136,7 +136,7 @@ namespace Hedra
 
         public static void RemoveItem(WorldItem Item)
         {
-            Provider.RemoveItem(Item);
+            Provider.RemoveObject(Item);
         }
 
         public static void AddChunk(Chunk Chunk)
@@ -284,20 +284,14 @@ namespace Hedra
             return WorldBuilding.SpawnChest(Position, Specification);
         }
 
-        public static IHumanoid SpawnHumanoid(Vector3 Position, HumanType Type)
-        {
-            return null;
-            ;//return WorldBuilding.sp
-        }
-
         public static Vector3 FindSpawningPoint(Vector3 Around)
         {
             return Provider.FindSpawningPoint(Around);
         }
 
-        public static void AddStructure(CollidableStructure Structure)
+        public static void AddWorldObject(IWorldObject WorldObject)
         {
-            Provider.SetupStructure(Structure);
+            Provider.AddWorldObject(WorldObject);
         }
 
         public static Region GetRegion(Vector3 Position)

@@ -20,6 +20,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
 using Hedra.Engine.ComplexMath;
+using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
 using Hedra.Sound;
 
@@ -32,8 +33,9 @@ namespace Hedra.Engine.Player
     public delegate void OnProjectileLandEvent(Projectile Sender);
     public delegate void OnProjectileMoveEvent(Projectile Sender);
     
-    public class Projectile : IDisposable, IUpdatable
+    public class Projectile : IDisposable, IUpdatable, IWorldObject
     {
+        public event OnDisposedEvent OnDispose;
         public event OnProjectileHitEvent HitEventHandler;
         public event OnProjectileMoveEvent MoveEventHandler;
         public event OnProjectileMoveEvent LandEventHandler;
@@ -209,6 +211,7 @@ namespace Hedra.Engine.Player
             UpdateManager.Remove(this);
             Mesh.Dispose();
             Disposed = true;
+            OnDispose?.Invoke();
         }
     }
 }

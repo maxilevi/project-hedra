@@ -41,7 +41,7 @@ namespace HedraTests
         public virtual int MeshQueueCount => 0;
         public virtual int ChunkQueueCount => 0;
         public virtual ReadOnlyCollection<Chunk> Chunks => null;
-        public virtual WorldItem[] Items => null;
+        public virtual IWorldObject[] WorldObjects => null;
         public virtual ReadOnlyCollection<IEntity> Entities => null;
         public virtual BaseStructure[] Structures => null;
         public virtual ReadOnlyCollection<ICollidable> GlobalColliders => null;
@@ -101,8 +101,9 @@ namespace HedraTests
         {
         }
 
-        public virtual void RemoveItem(WorldItem Item)
+        public void RemoveObject(IWorldObject WorldObject)
         {
+            
         }
 
         public virtual void AddChunk(Chunk Chunk)
@@ -171,6 +172,10 @@ namespace HedraTests
         public void SetupStructure(CollidableStructure Structure)
         {
             throw new NotImplementedException();
+        }
+
+        public void AddWorldObject(IWorldObject WorldObject)
+        {
         }
 
         public virtual int GetLowestY(int X, int Z)

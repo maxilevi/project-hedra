@@ -56,7 +56,7 @@ namespace Hedra.Engine.Generation
 
         int ChunkQueueCount { get; }
 
-        WorldItem[] Items { get; }
+        IWorldObject[] WorldObjects { get; }
         
         ReadOnlyCollection<Chunk> Chunks { get; }
 
@@ -96,7 +96,7 @@ namespace Hedra.Engine.Generation
 
         void RemoveEntity(IEntity Entity);
 
-        void RemoveItem(WorldItem Item);
+        void RemoveObject(IWorldObject WorldObject);
 
         void AddChunk(Chunk Chunk);
 
@@ -139,5 +139,7 @@ namespace Hedra.Engine.Generation
         float GetHighest(int X, int Z);
 
         void SetupStructure(CollidableStructure Structure);
+
+        void AddWorldObject(IWorldObject WorldObject);
     }
 }

@@ -107,7 +107,7 @@ namespace Hedra.Engine.Loader
                 text += 
                     $"{lineBreak}AvgBuildTime={World.AverageBuildTime} MS AvgGenTime={World.AverageGenerationTime} MS Lights={ShaderManager.UsedLights}/{ShaderManager.MaxLights} Pitch={player.View.Pitch:0.00}";
                 text += 
-                    $"{lineBreak}MQueue = {World.MeshQueueCount} GQueue ={World.ChunkQueueCount} Time={(int)(SkyManager.DayTime/1000)}:{((int) ( ( SkyManager.DayTime/1000f - (int)(SkyManager.DayTime/1000) ) * 60)):00} H={World.Entities.Count(M => M.IsHumanoid)} Items={World.Items.Length} M&H={World.Entities.Count}";
+                    $"{lineBreak}MQueue = {World.MeshQueueCount} GQueue ={World.ChunkQueueCount} Time={(int)(SkyManager.DayTime/1000)}:{((int) ( ( SkyManager.DayTime/1000f - (int)(SkyManager.DayTime/1000) ) * 60)):00} H={World.Entities.Count(M => M.IsHumanoid)} Items={World.WorldObjects.Length} M&H={World.Entities.Count}";
                 text += 
                     $"{lineBreak}Watchers={World.StructureHandler.Watchers.Length} Structs={World.StructureHandler.Structures.Length}->{World.StructureHandler.Structures.Sum(S => S.Children.Length)} Plateaus={World.WorldBuilding.Plateaux.Length} Groundworks={World.WorldBuilding.Groundworks.Length}";
                 text += 
