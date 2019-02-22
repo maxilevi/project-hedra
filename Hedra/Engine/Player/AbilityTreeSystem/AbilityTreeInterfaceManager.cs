@@ -55,6 +55,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                     SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
                 }
             }
+            _itemInfo?.Show(item);
             UpdateView();
         }
 

@@ -135,6 +135,7 @@ namespace Hedra.Sound
         Cow,
         Door,
         ItemEquip,
+        BearTrap,
         MaxSounds
     }
 }

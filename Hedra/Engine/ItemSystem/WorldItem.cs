@@ -66,8 +66,6 @@ namespace Hedra.Engine.ItemSystem
                 Opacity = .5f
             };
             DrawManager.DropShadows.Add(shadow);
-            
-            UpdateManager.Add(this);
         }
         
         public override void Update()
@@ -128,7 +126,6 @@ namespace Hedra.Engine.ItemSystem
         public new void Dispose()
         {
             EventDispatcher.UnregisterKeyDown(this);
-            UpdateManager.Remove(this);
             World.RemoveItem(this);
             base.Dispose();
         }

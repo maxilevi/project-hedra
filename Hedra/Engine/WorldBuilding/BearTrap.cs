@@ -1,4 +1,5 @@
 using System;
+using Hedra.Sound;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
@@ -28,7 +29,7 @@ namespace Hedra.Engine.WorldBuilding
             _damage = Damage;
             _stun = Stun;
             _timer = new Timer(Duration);
-            this.Position = Parent.Position;
+            this.Position = Position;
         }
 
         public override void Update()
@@ -64,6 +65,7 @@ namespace Hedra.Engine.WorldBuilding
         private void Activate(IEntity Target)
         {
             if(_stun) Target.KnockForSeconds(5);
+            SoundPlayer.PlaySound(SoundType.BearTrap, Target.Position);
             Target.Damage(_damage, Parent, out var exp);
             if (Parent is IHumanoid human) human.XP += exp;
             Dispose();

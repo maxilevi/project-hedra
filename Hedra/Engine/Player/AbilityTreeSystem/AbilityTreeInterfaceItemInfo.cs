@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Globalization;
 using System.Text;
 using Hedra.Core;
 using Hedra.Engine.Localization;
@@ -41,10 +42,10 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         private static string BuildAttributes(BaseSkill RealSkill)
         {
             var manaCost = RealSkill.ManaCost > 0
-                ? $"• {Translations.Get("skill_mana_cost", RealSkill.ManaCost)}{Environment.NewLine}"
+                ? $"• {Translations.Get("skill_mana_cost", RealSkill.ManaCost.ToString("0.0", CultureInfo.InvariantCulture))}{Environment.NewLine}"
                 : string.Empty;
             var cooldown = RealSkill.MaxCooldown > 0
-                ? $"• {Translations.Get("skill_cooldown", RealSkill.MaxCooldown)}{Environment.NewLine}"
+                ? $"• {Translations.Get("skill_cooldown", RealSkill.MaxCooldown.ToString("0.0", CultureInfo.InvariantCulture))}{Environment.NewLine}"
                 : string.Empty;
             var attributes = new StringBuilder();
             var skillAttributes = RealSkill.Attributes;

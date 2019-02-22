@@ -1,4 +1,5 @@
 using System;
+using Hedra.Engine.Management;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Rendering;
@@ -13,6 +14,7 @@ namespace Hedra.Engine.WorldBuilding
         
         protected WorldObject(IEntity Parent) : base(Parent)
         {
+            UpdateManager.Add(this);
         }
 
         public override void Update()
@@ -33,6 +35,7 @@ namespace Hedra.Engine.WorldBuilding
         public override void Dispose()
         {
             base.Dispose();
+            UpdateManager.Remove(this);
             OnDispose?.Invoke();
         }
     }

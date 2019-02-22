@@ -154,6 +154,7 @@ namespace Hedra
                 SoundPlayer.LoadSound(SoundType.Door, "$DataFile$/Sounds/Door.ogg");
                 SoundPlayer.LoadSound(SoundType.ItemEquip, "$DataFile$/Sounds/ItemEquip.ogg");
                 SoundPlayer.LoadSound(SoundType.BoatMove, "$DataFile$/Sounds/BoatMove.ogg");
+                SoundPlayer.LoadSound(SoundType.BearTrap, "$DataFile$/Sounds/BearTrap.ogg");
                 SoundPlayer.MarkAsReady();
                 Log.WriteLine("Finished loading sounds.");
             });
