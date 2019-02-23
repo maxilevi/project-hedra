@@ -15,12 +15,14 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         private readonly IPlayer _player;
         private readonly AbilityTreeInterface _interface;
         private readonly InventoryInterfaceItemInfo _itemInfo;
-        public AbilityTreeInterfaceManager(IPlayer Player, InventoryInterfaceItemInfo ItemInfoInterface, AbilityTreeInterface Interface)
+        private readonly InventoryArray[] _trees;
+        public AbilityTreeInterfaceManager(IPlayer Player, InventoryInterfaceItemInfo ItemInfoInterface, AbilityTreeInterface Interface, params InventoryArray[] Trees)
             : base(ItemInfoInterface, Interface)
         {
             _player = Player;
             _interface = Interface;
             _itemInfo = ItemInfoInterface;
+            _trees = Trees;
         }
 
         protected override void Interact(object Sender, MouseButtonEventArgs EventArgs)
@@ -113,8 +115,16 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             get
             {
                 var used = 0;
-                for (var i = 0; i < _interface.Array.Length; i++)
-                    used += _interface.Array[i].HasAttribute("Level") ? _interface.Array[i].GetAttribute<int>("Level") : 0;
+                for (var k = 0; k < _trees.Length; ++k)
+                {
+                    for (var i = 0; i < _trees[k].Length; i++)
+                    {
+                        used += _trees[k][i].HasAttribute("Level")
+                            ? _trees[k][i].GetAttribute<int>("Level")
+                            : 0;
+                    }
+                }
+
                 return used;
             }
         }

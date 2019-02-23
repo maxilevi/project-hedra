@@ -9,7 +9,9 @@ namespace Hedra.Engine.Rendering
         public const string White = "(WHITE)";
         public const string Green = "(GREEN)";
         public const string Orange = "(ORANGE)";
+        public const string Black = "(BLACK)";
         public const string Gold = "(GOLD)";
+        public const string Yellow = "(YELLOW)";
         public const string Bold = "(BOLD)";
         public const string Normal = "(NORMAL)";
         public const string Smaller = "(SMALLER)";

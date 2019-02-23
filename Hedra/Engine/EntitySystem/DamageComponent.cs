@@ -79,12 +79,11 @@ namespace Hedra.Engine.EntitySystem
 
         public void Damage(float Amount, IEntity Damager, out float Exp, bool PlaySound, bool PushBack)
         {
+            Exp = 0;
+            
             Amount *= Parent.AttackResistance;
-            if (Parent.IsDead || _ignoreList.Any(I => I.Invoke(Damager)))
-            {
-                Exp = 0;
-                return;
-            }
+            if (Parent.IsDead || _ignoreList.Any(I => I.Invoke(Damager))) return;
+            
 
             var shouldMiss = Parent is LocalPlayer && Utils.Rng.Next(1, 18) == 1;
             _attackedTimer = 6;

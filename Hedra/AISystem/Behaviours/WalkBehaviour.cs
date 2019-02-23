@@ -11,7 +11,9 @@ namespace Hedra.AISystem.Behaviours
 {
     public class WalkBehaviour : Behaviour
     {
+        public const float DefaultErrorMargin = 2;
         public Vector3 Target { get; private set; }
+        public float ErrorMargin { get; set; } = DefaultErrorMargin;
         private bool _arrived;
         private Action _callback;
         private Vector3 _lastPosition;
@@ -49,7 +51,7 @@ namespace Hedra.AISystem.Behaviours
                     Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
                 }
                 Parent.Physics.Move();
-                if ((Target - Parent.Position).Xz.LengthSquared < 2 * 2)
+                if ((Target - Parent.Position).Xz.LengthSquared < ErrorMargin * ErrorMargin)
                 {
                     this.Cancel();
                 }

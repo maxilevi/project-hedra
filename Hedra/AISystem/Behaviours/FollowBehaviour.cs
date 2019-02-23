@@ -21,8 +21,14 @@ namespace Hedra.AISystem.Behaviours
             Traverse.Update();
         }
         
-        public bool Enabled => Target != null && !Target.IsDead && !Target.IsInvisible;
+        public bool Enabled => Target != null && !Target.IsDead && !Target.IsInvisible && !Target.Disposed;
 
+        public float ErrorMargin
+        {
+            get => Traverse.ErrorMargin;
+            set => Traverse.ErrorMargin = value;
+        }
+        
         public override void Dispose()
         {
             Traverse.Dispose();

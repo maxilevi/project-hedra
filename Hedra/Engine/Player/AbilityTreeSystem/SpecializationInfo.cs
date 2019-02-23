@@ -8,6 +8,7 @@ using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Sound;
 using OpenTK;
+using OpenTK.Input;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {
@@ -33,17 +34,12 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 FontCache.Get(AssetManager.BoldFamily, 15, FontStyle.Bold)
             );
             _learnSpecializationButton.Texture.Grayscale = true;
-            _learnSpecializationButton.Texture.Tint = new Vector4(Color.Orange.ToVector4().Xyz * 5f, 1);
             ItemTexture.Scale *= 1.15f;
             BackgroundTexture.Scale *= 1.1f;
             Panel.AddElement(_learnSpecializationButton);
             Panel.AddElement(_learnSpecializationText);
 
-            _learnSpecializationButton.Click += (O, A) =>
-            {
-                _player.AbilityTree.LearnSpecialization(_blueprint);
-                UpdateView();
-            };
+            _learnSpecializationButton.Click += OnClick;
             _learnSpecializationButton.HoverEnter += (O,A) =>
             {
                 _learnSpecializationButton.Scale *= 1.05f;
@@ -56,6 +52,21 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             };
         }
 
+        private void OnClick(object Sender, MouseButtonEventArgs Args)
+        {
+            if (_player.Level >= AbilityTree.SpecializationLevelRequirement)
+            {
+                _player.AbilityTree.LearnSpecialization(_blueprint);
+                UpdateView();
+            }
+            else
+            {
+                _player.MessageDispatcher.ShowNotification(
+                    Translations.Get("specialization_level_requirement", AbilityTree.SpecializationLevelRequirement),
+                    Color.Red, 3f);
+            }
+        }
+        
         protected override void UpdateView()
         {
             ItemText.Text = _blueprint.DisplayName;
@@ -66,6 +77,12 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             HintText.Disable();
             SetPosition();
             ItemTexture.Position += ItemTexture.Scale.Y * Vector2.UnitY * .5f;
+            _learnSpecializationButton.Texture.Tint = _player.Level < 5 
+                ? new Vector4(Color.Orange.ToVector4().Xyz * 2f, 1)
+                : new Vector4(Color.Orange.ToVector4().Xyz * 5f, 1);
+            _learnSpecializationText.TextColor = _player.Level < 5
+                ? Color.Gray
+                : Color.White;
             if (_player.AbilityTree.HasSpecialization)
             {
                 _learnSpecializationButton.Disable();

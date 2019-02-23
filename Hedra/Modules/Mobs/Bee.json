@@ -19,7 +19,7 @@
   
   "Model": {
     "Path": "$DataFile$/Assets/Chr/BeeIdle.dae",
-    "Scale": 1.5,
+    "Scale": 1.0,
     "IdleAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/BeeIdle.dae",
@@ -35,7 +35,7 @@
     "AttackAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/BeeAttack.dae",
-        "Speed": 1.75
+        "Speed": 2.25
       }
     ]
   }

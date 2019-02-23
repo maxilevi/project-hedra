@@ -32,7 +32,9 @@ namespace Hedra.Engine.Rendering.UI
                 {TextFormatting.Green, Color.LawnGreen},
                 {TextFormatting.Orange, Color.OrangeRed},
                 {TextFormatting.Gold, Color.Gold},
-                {TextFormatting.Gray, Color.LightGray}
+                {TextFormatting.Gray, Color.LightGray},
+                {TextFormatting.Black, Color.Black},
+                {TextFormatting.Yellow, Color.Yellow}
             };
             FontMap = new Dictionary<string, Font>
             {

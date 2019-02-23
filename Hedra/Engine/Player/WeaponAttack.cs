@@ -8,6 +8,7 @@
  */
 
 using System;
+using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.SkillSystem;
@@ -27,7 +28,8 @@ namespace Hedra.Engine.Player
         private static readonly uint Default = Graphics2D.LoadFromAssets("Assets/Skills/HolderSkill.png");
 
         public bool DisableWeapon { get; set; }
-        private ShiverAnimation _shiverAnimation;
+        private readonly ShiverAnimation _shiverAnimation;
+        private readonly Timer _updateGrayscale; 
         private bool _continousAttack;
         public float Charge { get; private set; }
         private float _chargeTime;
@@ -38,6 +40,7 @@ namespace Hedra.Engine.Player
         public WeaponAttack()
         {
             _shiverAnimation = new ShiverAnimation();
+            _updateGrayscale = new Timer(.1f);
             base.ManaCost = 0f;
             base.Level = 1;
             this.MaxCooldown = .5f;
@@ -113,6 +116,10 @@ namespace Hedra.Engine.Player
             }
             Player.LeftWeapon.IsCharging = IsCharging;
             Tint = IsCharging ? new Vector3(1,0,0) * Charge + Vector3.One * .65f : Vector3.One;
+            if (_updateGrayscale.Tick())
+            {
+                //Grayscale = !MeetsRequirements();
+            }
         }
 
         public bool IsCharging

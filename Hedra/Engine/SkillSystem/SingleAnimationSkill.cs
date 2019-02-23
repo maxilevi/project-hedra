@@ -72,6 +72,11 @@ namespace Hedra.Engine.SkillSystem
                 Player.WasAttacking = false;
                 Player.LeftWeapon.InAttackStance = false;
             }
+
+            if (!CanMoveWhileCasting)
+            {
+                Player.Movement.CaptureMovement = false;
+            }
             Player.Movement.Orientate();
             _shouldEnd = false;
             _executedStart = false;
@@ -84,6 +89,7 @@ namespace Hedra.Engine.SkillSystem
         private void Disable()
         {
             Casting = false;
+            Player.Movement.CaptureMovement = true;
             Player.Model.Reset();
             OnDisable();
         }

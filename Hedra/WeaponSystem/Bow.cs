@@ -207,9 +207,24 @@ namespace Hedra.WeaponSystem
             return Model.Clone().Scale(Vector3.One * 3f * .75f / size);
         }
 
-        public override bool CanDoAttack1 => true;//Owner?.Inventory.Ammo != null;
+        private bool AreThereNearbyMobs()
+        {
+            var entities = World.Entities;
+            for(var i = 0; i< entities.Count; i++)
+            {
+                if(entities[i] == Owner) continue;
+                    
+                var toEntity = (entities[i].Position - Owner.Position).NormalizedFast();
+                var dot = Vector3.Dot(toEntity, Owner.Orientation);
+                if (dot >= .75f && (entities[i].Position - Owner.Position).LengthSquared < 7 * 7) return true;
+            }
+
+            return false;
+        }
+
+        //public override bool CanDoAttack1 => !AreThereNearbyMobs();//Owner?.Inventory.Ammo != null;
         
-        public override bool CanDoAttack2 => true;//Owner?.Inventory.Ammo != null;
+        //public override bool CanDoAttack2 => !AreThereNearbyMobs();//Owner?.Inventory.Ammo != null;
 
         public override void Dispose()
         {

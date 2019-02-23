@@ -4,7 +4,7 @@ namespace Hedra.Engine.SkillSystem
 {
     public abstract class SpecialAttackSkill<T> : BaseSkill where T : Weapon
     {
-        protected override bool Grayscale => !Player.HasWeapon || !(Player.LeftWeapon is T);
+        protected override bool Grayscale => !Player.HasWeapon || !(Player.LeftWeapon is T weapon) || !weapon.CanDoAttack1;
         
         public override void Use()
         {

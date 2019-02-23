@@ -12,6 +12,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
     {
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/SpikeTrap.png");
         protected override int MaxLevel => 15;
+        protected override bool CanMoveWhileCasting => false;
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/ArcherLayTrap.dae");
 
         protected override void OnAnimationEnd()

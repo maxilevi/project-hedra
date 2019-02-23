@@ -365,14 +365,20 @@
     <Compile Include="Engine\Rendering\TextureParameter.cs" />
     <Compile Include="Engine\Rendering\UI\Plaque.cs" />
     <Compile Include="Engine\Rendering\UI\TextOptions.cs" />
-    <Compile Include="Engine\SkillSystem\Archer\ArrowRain.cs" />
+    <Compile Include="Engine\SkillSystem\Archer\Jab.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Hunter\Concealment.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Hunter\Focus.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Hunter\Raven.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Hunter\Scavenge.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Hunter\SpikeTrap.cs" />
-    <Compile Include="Engine\SkillSystem\Archer\Hunter\SteadyAim.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Hunter\SteelArrows.cs" />
+    <Compile Include="Engine\SkillSystem\Archer\Scout\HotPursuit.cs" />
+    <Compile Include="Engine\SkillSystem\Archer\Scout\Nimbleness.cs" />
+    <Compile Include="Engine\SkillSystem\Archer\Scout\Retreat.cs" />
+    <Compile Include="Engine\SkillSystem\Archer\Scout\Rush.cs" />
+    <Compile Include="Engine\SkillSystem\Archer\Scout\SteadyAim.cs" />
+    <Compile Include="Engine\SkillSystem\Archer\Scout\Swiftness.cs" />
+    <Compile Include="Engine\SkillSystem\ChargeablePassiveSkill.cs" />
     <Compile Include="Engine\SkillSystem\SingleAnimationSkill.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Agility.cs" />
     <Compile Include="Engine\SkillSystem\Archer\FlameArrow.cs" />
@@ -464,6 +470,7 @@
     <Compile Include="Engine\WorldBuilding\SquaredPlateau.cs" />
     <Compile Include="Engine\WorldBuilding\TravellingExplorers.cs" />
     <Compile Include="EntitySystem\EntityExtensions.cs" />
+    <Compile Include="EntitySystem\SelfDestructComponent.cs" />
     <Compile Include="HedraContent.cs" />
     <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeColors.cs" />
     <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeEnviromentDesign.cs" />
@@ -8040,7 +8047,6 @@
     <Folder Include="Assets\Items\Boots\" />
     <Folder Include="Assets\Items\Gems\" />
     <Folder Include="Assets\Items\Pants\" />
-    <Folder Include="Engine\SkillSystem\Archer\Scout" />
     <Folder Include="Engine\SkillSystem\Mage\Druid" />
     <Folder Include="Engine\SkillSystem\Mage\Necromancer" />
     <Folder Include="Engine\SkillSystem\Rogue\Assassin" />
@@ -8060,8 +8066,20 @@
       <Link>Assets\Chr\ArcherChargeStance.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Animations\ArcherConcealment.dae">
+      <Link>Assets\Chr\ArcherConcealment.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Animations\ArcherJab.dae">
+      <Link>Assets\Chr\ArcherJab.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Animations\ArcherLayTrap.dae">
       <Link>Assets\Chr\ArcherLayTrap.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Animations\ArcherWhistle.dae">
+      <Link>Assets\Chr\ArcherWhistle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Animations\RogueFade.dae">
@@ -9078,6 +9096,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Hunter.png">
       <Link>Assets\Skills\Hunter.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Jab.png">
+      <Link>Assets\Skills\Jab.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Mage.png">

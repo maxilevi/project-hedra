@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using Hedra.Core;
@@ -31,7 +32,8 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
     {
         public const int Rows = 4;
         public const int Columns = 3;
-        public const int AbilityCount = Columns * Rows;
+        public const int AbilityCount = Columns * Rows;       
+        public const int SpecializationLevelRequirement = 5;
         public event OnSkillUpdated SkillUpdated;
         public int SpecializationTreeIndex { get; set; }
         private const char SaveMarker = '!';
@@ -69,7 +71,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             {
                 Position = _interface.SpecializationInfo.Position
             };
-            _manager = new AbilityTreeInterfaceManager(_player, itemInfo, _interface);
+            _manager = new AbilityTreeInterfaceManager(_player, itemInfo, _interface, _mainTree, _firstTree, _secondTree);
             _stateManager = new InventoryStateManager(_player);
             _background = new AbilityInventoryBackground(Vector2.UnitY * .65f);
 
@@ -228,9 +230,9 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         {
             if (_player.Class.FirstSpecializationTree.Identifier == Blueprint.Identifier)
                 SpecializationTreeIndex = 1;
-            else if(_player.Class.SecondSpecializationTree.Identifier == Blueprint.Identifier)
+            else if (_player.Class.SecondSpecializationTree.Identifier == Blueprint.Identifier)
                 SpecializationTreeIndex = 2;
-            
+
             SoundPlayer.PlayUISound(SoundType.NotificationSound);
             UpdateView();
         }

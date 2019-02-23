@@ -9,79 +9,40 @@ using Hedra.WeaponSystem;
 
 namespace Hedra.Engine.SkillSystem.Archer.Hunter
 {
-    public class Focus : PassiveSkill
+    public class Focus : ChargeablePassiveSkill
     {
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Focus.png");
-        private FocusComponent _component;
-        
-        protected override void Remove()
+
+        protected override ChargeableComponent CreateComponent()
         {
-            _component.StateUpdated -= StateUpdated;
-            Player.RemoveComponent(_component);
+            return new FocusComponent(Player, ChargeTime, DamageBonus);
         }
 
-        protected override void Add()
-        {
-            Player.AddComponent(_component = new FocusComponent(Player, ChargeTime, DamageBonus));
-            _component.StateUpdated += StateUpdated;
-        }
-
-        private void StateUpdated()
-        {
-            InvokeStateUpdated();
-        }
-        
-        public override float IsAffectingModifier => _component?.IsAffectingModifier ?? 0;
         public override string Description => Translations.Get("focus_desc");
         public override string DisplayName => Translations.Get("focus_skill");
         protected override int MaxLevel => 15;
         private float ChargeTime => 10.5f - Level / 2f;
         private float DamageBonus => Math.Min(Level / 3f, 10 / 3f);
         
-        private class FocusComponent : Component<IHumanoid>
+        private class FocusComponent : ChargeableComponent
         {
-            public event OnStateUpdated StateUpdated;
-            private readonly Timer _enemyTimer;
-            private readonly Timer _betweenCharges;
             private readonly float _damageBonus;
-            private bool _shouldCharge;
             
-            public FocusComponent(IHumanoid Entity, float ChargeTime, float DamageBonus) : base(Entity)
+            public FocusComponent(IHumanoid Entity, float ChargeTime, float DamageBonus) : base(Entity, ChargeTime)
             {
-                _enemyTimer = new Timer(.1f);
                 _damageBonus = DamageBonus;
-                _betweenCharges = new Timer(ChargeTime)
-                {
-                    AutoReset = false
-                };
-                Parent.BeforeAttack += BeforeAttack;
             }
 
-            public override void Update()
+            protected override bool ShouldCharge()
             {
-                if (_enemyTimer.Tick())
-                {
-                    var previous = _shouldCharge;
-                    _shouldCharge = !AreThereNearbyEnemies();
-                    if (previous != _shouldCharge)
-                    {
-                        _betweenCharges.Tick();
-                        StateUpdated?.Invoke();
-                    }
-                }
-                if (_shouldCharge)
-                {
-                    _betweenCharges.Tick();
-                }
+                return !AreThereNearbyEnemies();
             }
 
-            private void BeforeAttack(AttackOptions Options)
+            protected override void Apply(AttackOptions Options)
             {
-                if(IsAffectingModifier < 1) return;
                 Options.DamageModifier *= (1 + _damageBonus);
-                _betweenCharges.Reset();
             }
-            
+
             private bool AreThereNearbyEnemies()
             {
                 var entities = World.Entities;
@@ -93,14 +54,6 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
                 }
                 return false;
             }
-
-            public override void Dispose()
-            {
-                base.Dispose();
-                Parent.BeforeAttack -= BeforeAttack;
-            }
-
-            public float IsAffectingModifier => _betweenCharges.Progress;
         }
 
         public override string[] Attributes => new[]

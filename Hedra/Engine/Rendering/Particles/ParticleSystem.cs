@@ -97,7 +97,7 @@ namespace Hedra.Engine.Rendering.Particles
             
             if(Shape == ParticleShape.Cone)
             {
-                Particles.Add(new Particle3D(Position, ParticleCreator.UnitWithinCone(Direction, ConeAngle)* 25, Mathf.RandomVector3(Utils.Rng) * 360,
+                Particles.Add(new Particle3D(Position, ParticleCreator.UnitWithinCone(Direction, ConeAngle) * 25, Mathf.RandomVector3(Utils.Rng) * 360,
                              NewColor,
                              Scale + ParticleScale, GravityEffect, ParticleLifetime));
             }

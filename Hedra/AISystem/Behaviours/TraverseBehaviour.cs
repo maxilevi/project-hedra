@@ -15,6 +15,7 @@ namespace Hedra.AISystem.Behaviours
 {
     public class TraverseBehaviour : Behaviour
     {
+        
         protected WalkBehaviour Walk { get; }
         private Vector2[] _currentPath;
         private int _currentIndex;
@@ -159,6 +160,7 @@ namespace Hedra.AISystem.Behaviours
 
         public void SetTarget(Vector3 Position, Action Callback = null)
         {
+            if ((Parent.Position - Position).LengthSquared < ErrorMargin * ErrorMargin) return;
             Target = Position;
             _callback = Callback;
             _reached = false;
@@ -180,6 +182,12 @@ namespace Hedra.AISystem.Behaviours
         public void ResizeGrid(Vector2 Size)
         {
             TraverseStorage.Instance.ResizeGrid(Parent, Size);
+        }
+
+        public float ErrorMargin
+        {
+            get => Walk.ErrorMargin;
+            set => Walk.ErrorMargin = value;
         }
         
         public bool HasInvalidPath => _currentPath == null;

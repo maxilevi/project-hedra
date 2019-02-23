@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Globalization;
 using Hedra.Core;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
@@ -90,5 +91,9 @@ namespace Hedra.Engine.SkillSystem.Archer
         
         public override string Description => Translations.Get("kick_desc");
         public override string DisplayName => Translations.Get("kick_skill");
+        public override string[] Attributes => new[]
+        {
+            Translations.Get("kick_damage_change", Damage.ToString("0.0", CultureInfo.InvariantCulture))
+        };
     }
 }

@@ -30,7 +30,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
         
         private void Modifier(Projectile ArrowProj)
         {
-            if (Utils.Rng.Next(1, Math.Min(2, MaxLevel - Level + 1)) == 1)
+            if (Utils.Rng.NextFloat() < Chance)
             {
                 ArrowProj.DisposeOnHit = false;
                 ArrowProj.Mesh.Outline = true;
@@ -51,5 +51,11 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
 
         public override string Description => Translations.Get("steel_arrows_desc");
         public override string DisplayName => Translations.Get("steel_arrows");
+        private float Chance => Math.Max(.1f, Level / (float) MaxLevel);
+
+        public override string[] Attributes => new[]
+        {
+            Translations.Get("steel_arrows_percentage_change", (int) (100 * Chance))
+        };
     }
 }

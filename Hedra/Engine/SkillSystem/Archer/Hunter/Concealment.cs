@@ -7,7 +7,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
     public class Concealment : SingleAnimationSkill
     {
         protected override int MaxLevel { get; }
-        protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/WarriorIdle.dae");
+        protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/ArcherConcealment.dae");
         
         protected override void OnExecution()
         {

@@ -12,7 +12,6 @@ namespace Hedra.Engine.WorldBuilding
     public sealed class BearTrap : WorldObject
     {
         private static readonly VertexData TrapModel;
-        private static readonly float ModelHeight;
         private readonly Timer _timer;
         private bool _stun;
         private float _damage;
@@ -20,7 +19,6 @@ namespace Hedra.Engine.WorldBuilding
         static BearTrap()
         {
             TrapModel = AssetManager.PLYLoader("Assets/Env/BearTrap.ply", Vector3.One);
-            ModelHeight = Math.Abs(TrapModel.SupportPoint(-Vector3.UnitY).Y - TrapModel.SupportPoint(Vector3.UnitY).Y);
         }
         
         public BearTrap(IEntity Parent, Vector3 Position, float Duration, float Damage, bool Stun) : base(Parent)
@@ -38,7 +36,7 @@ namespace Hedra.Engine.WorldBuilding
             var heightAtPosition = Physics.HeightAtPosition(Position.X, Position.Z);
             Position = new Vector3(
                 Position.X,
-                heightAtPosition + ModelHeight,
+                heightAtPosition,
                 Position.Z
             );
             HandleCollision();

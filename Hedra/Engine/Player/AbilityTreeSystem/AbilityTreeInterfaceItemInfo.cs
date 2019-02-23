@@ -24,14 +24,23 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         protected override void UpdateView()
         {
             var realSkill = CurrentItem.GetAttribute<BaseSkill>("Skill");
-            ItemDescription.Text = BuildItemDescription(realSkill);
-            ItemDescription.Color = Color.White;
-            ItemText.Text = Utils.FitString(realSkill.DisplayName, 18);
+            var originalLevel = realSkill.Level;
+            try
+            {
+                realSkill.Level = Math.Max(1, originalLevel);
+                ItemDescription.Text = BuildItemDescription(realSkill);
+                ItemDescription.Color = Color.White;
+                ItemText.Text = Utils.FitString(realSkill.DisplayName, 18);
 
-            ItemTexture.TextureElement.TextureId = CurrentItem.HasAttribute("ImageId") 
-                ? CurrentItem.GetAttribute<uint>("ImageId")
-                : GUIRenderer.TransparentTexture;
-            SetPosition();
+                ItemTexture.TextureElement.TextureId = CurrentItem.HasAttribute("ImageId")
+                    ? CurrentItem.GetAttribute<uint>("ImageId")
+                    : GUIRenderer.TransparentTexture;
+                SetPosition();
+            }
+            finally
+            {
+                realSkill.Level = originalLevel;
+            }
         }
 
         private static string BuildItemDescription(BaseSkill RealSkill)
