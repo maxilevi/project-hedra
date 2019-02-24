@@ -32,7 +32,7 @@ namespace Hedra.Engine.SkillSystem
         public event OnStateUpdated StateUpdated;
         public bool IsAffecting => IsAffectingModifier > 0;
         public virtual float MaxCooldown { get; protected set; }
-        public virtual float IsAffectingModifier => 1;
+        public virtual float IsAffectingModifier => Passive ? 1 : 0;
         public virtual float ManaCost { get; protected set; }
         public float Cooldown { get; set; }
         public int Level { get; set; }
@@ -45,7 +45,7 @@ namespace Hedra.Engine.SkillSystem
         protected Vector3 Tint { get; set; }
         protected IPlayer Player => GameManager.Player;
         protected virtual bool HasCooldown => true;
-        protected virtual bool Grayscale { get; set; }
+        protected virtual bool ShouldDisable { get; set; }
         private bool _initialized;
         private bool Enabled { get; set; } = true;
         private Vector2 _adjustedPosition;
@@ -71,12 +71,12 @@ namespace Hedra.Engine.SkillSystem
             this._initialized = true;
         }
         
-        public virtual bool MeetsRequirements()
+        public bool MeetsRequirements()
         {
             if (Cooldown > 0 || Player.Mana - ManaCost <= 0 ||
                 this.Level <= 0 || !Active || Player.IsEating) return false;
 
-            return Player.IsRiding || !Player.IsRiding;
+            return Player.IsRiding || !Player.IsRiding && !ShouldDisable;
         }
         
         public virtual void Draw()
@@ -104,7 +104,7 @@ namespace Hedra.Engine.SkillSystem
             Shader["Tint"] = Player.Mana - this.ManaCost < 0 && Tint == NormalTint ? new Vector3(.9f,.6f,.6f) : Tint;
             Shader["Scale"] = Scale * new Vector2(1,-1);
             Shader["Position"] = _adjustedPosition;
-            Shader["Bools"] = new Vector2(Level == 0 || Grayscale ? 1 : 0, 1);
+            Shader["Bools"] = new Vector2(Level == 0 || ShouldDisable ? 1 : 0, 1);
             Shader["Cooldown"] = OverlayBlending;
             
             Renderer.ActiveTexture(TextureUnit.Texture0);

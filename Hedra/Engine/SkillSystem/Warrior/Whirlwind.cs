@@ -24,7 +24,7 @@ namespace Hedra.Engine.SkillSystem.Warrior
     public class Whirlwind : CappedSkill
     {
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Spin.png");
-        protected override bool Grayscale => !Player.HasWeapon;
+        protected override bool ShouldDisable => Player.Toolbar.DisableAttack || !Player.HasWeapon;
         protected override int MaxLevel => 24;
         public override string Description => Translations.Get("whirlwind_desc");        
         public override string DisplayName => Translations.Get("whirlwind");
@@ -121,11 +121,6 @@ namespace Hedra.Engine.SkillSystem.Warrior
             if (World.Particles.Color == Block.GetColor(BlockType.Grass, underChunk.Biome.Colors))
                 World.Particles.Color = underChunk.Biome.Colors.GrassColor;
             World.Particles.Emit();
-        }
-        
-        public override bool MeetsRequirements()
-        {
-            return base.MeetsRequirements() && !Player.Toolbar.DisableAttack && Player.HasWeapon;
         }
     }
 }

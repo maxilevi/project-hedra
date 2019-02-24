@@ -1,5 +1,11 @@
 {
   "Name": "Scout",
   "Description": "scout_class_description",
-  "Icon": "$DataFile$/Assets/Skills/Scout.png"
+  "Icon": "$DataFile$/Assets/Skills/Scout.png",
+  "M21": "Nimbleness",
+  "M12": "HotPursuit",
+  "M31": "SteadyAim",
+  "M13": "Rush",
+  "M24": "Swiftness",
+  "M32": "Retreat"
 }

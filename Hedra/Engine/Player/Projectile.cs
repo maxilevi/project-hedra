@@ -46,10 +46,11 @@ namespace Hedra.Engine.Player
         public float Lifetime { get; set; } = 10f;
         public ObjectMesh Mesh { get; }
         public bool Collide { get; set; } = true;
-        public bool HandleLifecycle { get; set; } = true;
+        protected bool HandleLifecycle { get; set; } = true;
         public bool Disposed { get; private set; }
         public bool UsePhysics { get; set; } = true;
         public float Speed { get; set; } = 1;
+        public float Falloff { get; set; } = 1f;
         public IEntity[] IgnoreEntities { get; set; }
 
         private readonly HashSet<IEntity> _collidedList;
@@ -87,23 +88,26 @@ namespace Hedra.Engine.Player
 
             if (_accumulatedVelocity == Vector3.Zero)
             {
+                Direction = Propulsion.NormalizedFast();
                 _accumulatedVelocity = Propulsion + Vector3.UnitY * 7f;
             }
 
             Lifetime -= Time.DeltaTime;
+            Vector3 rotation;
             if (UsePhysics)
             {
                 Propulsion *= (float)Math.Pow(.75f, Time.DeltaTime);
-                _accumulatedVelocity += (Propulsion * 60f - Vector3.UnitY * 20f) * Time.DeltaTime;
+                _accumulatedVelocity += (Propulsion * 60f - Vector3.UnitY * 20f * Falloff) * Time.DeltaTime;
                 _accumulatedVelocity *= (float)Math.Pow(.8f, Time.DeltaTime);
                 Mesh.Position += _accumulatedVelocity * 2f * Time.DeltaTime;
+                rotation = Physics.DirectionToEuler(_accumulatedVelocity.NormalizedFast());
             }
             else
             {
-                Mesh.Position += Direction * Speed * Time.DeltaTime;
+                Mesh.Position += Direction * 100f * Speed * Time.DeltaTime;
+                rotation = Physics.DirectionToEuler(Direction);
             }
-            var dir = Physics.DirectionToEuler(_accumulatedVelocity.NormalizedFast());
-            Mesh.LocalRotation = dir;
+            Mesh.LocalRotation = rotation;
             if (HandleLifecycle)
             {
                 if (Collide)

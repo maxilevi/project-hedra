@@ -58,16 +58,11 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
                 World.Particles.Emit();
             }
         }
-        
-        public override bool MeetsRequirements()
-        {
-            return base.MeetsRequirements() && !IsActive;
-        }
 
         private float Duration => 16 + Level * 2;
         private float DamageMultiplier => (Level / 7f);
         protected override int MaxLevel => 15;
-        protected override bool Grayscale => base.Grayscale || IsActive;
+        protected override bool ShouldDisable => IsActive;
         public override string Description => Translations.Get("raven_desc");
         public override string DisplayName => Translations.Get("raven_skill");
         public override float ManaCost => 45;

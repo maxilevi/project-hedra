@@ -31,17 +31,17 @@ namespace Hedra.Engine.SkillSystem.Archer
         public override float ManaCost => 40;
         protected override float AnimationSpeed => 1.3f;
         protected override int MaxLevel => 20;
+        protected override bool ShouldDisable => Player.IsAttacking || Player.IsCasting;
         private bool _emitParticles;
         private bool _shouldPush;
-
-        public override bool MeetsRequirements()
-        {
-            return base.MeetsRequirements() && !Player.IsAttacking && !Player.IsCasting;
-        }
 
         protected override void OnAnimationMid()
         {
             _shouldPush = true;
+            SkillUtils.DoNearby(Player, 24, .25f, (E, D) =>
+            {
+                if(Utils.Rng.Next(0, 4) == 1 && !E.IsKnocked) E.KnockForSeconds(3f);
+            });
             SoundPlayer.PlaySound(SoundType.SwooshSound, Player.Position, false, 0.8f, 1f);
         }
 
@@ -49,7 +49,7 @@ namespace Hedra.Engine.SkillSystem.Archer
         {
             _emitParticles = true;
         }
-        
+
         protected override void OnAnimationEnd()
         {
             _emitParticles = false;

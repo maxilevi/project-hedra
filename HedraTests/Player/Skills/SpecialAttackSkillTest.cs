@@ -55,7 +55,7 @@ namespace HedraTests.Player.Skills
         
         public class SpecialAttackSkillMock : SpecialAttackSkill<Bow>
         {
-            public bool HasGrayscale => Grayscale;
+            public bool HasGrayscale => ShouldDisable;
             public override string Description => string.Empty;
             public override string DisplayName => string.Empty;
             public override uint TextureId => 0;

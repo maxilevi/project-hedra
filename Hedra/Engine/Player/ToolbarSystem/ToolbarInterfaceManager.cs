@@ -174,7 +174,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
         private BaseSkill[] GetPassiveAndEnabledFilteredSkills()
         {
-            return GetFilteredSkills().Where(S => S.Passive && S.Level > 0 && S.IsAffecting).ToArray();
+            return GetFilteredSkills().Where(S =>S.Level > 0 && S.IsAffecting).ToArray();
         }
 
         public override bool Enabled

@@ -26,6 +26,7 @@ namespace Hedra.Engine.SkillSystem.Warrior
         public override float MaxCooldown => Math.Max(BaseCooldown - 0.80f * base.Level, CooldownCap);
         private float Duration => Math.Max(BaseDuration - 0.01f * base.Level, DurationCap);
         public override float ManaCost => BaseManaCost;
+        protected override bool ShouldDisable => _isMoving;
         protected override int MaxLevel => 25;
         
         private bool _isMoving;
@@ -93,11 +94,6 @@ namespace Hedra.Engine.SkillSystem.Warrior
         {
             Player.Movement.CaptureMovement = true;
             Player.Model.Reset();
-        }
-
-        public override bool MeetsRequirements()
-        {
-            return base.MeetsRequirements() && !_isMoving;
         }
 
         public override void Use()

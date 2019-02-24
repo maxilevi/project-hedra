@@ -57,9 +57,9 @@ namespace Hedra.WeaponSystem
         }
         
         public Item Ammo { get; set; }
-        public OnArrowEvent BowModifiers;
-        public OnArrowEvent Hit;
-        public OnArrowEvent Miss;
+        public event OnArrowEvent BowModifiers;
+        public event OnArrowEvent Hit;
+        public event OnArrowEvent Miss;
         public float ArrowDownForce { get; set; }
         private readonly ObjectMesh _quiver;
         private ObjectMesh _arrow;
@@ -175,7 +175,8 @@ namespace Hedra.WeaponSystem
             {
                 Lifetime = 5f,
                 Propulsion = Direction * 2f - Vector3.UnitY * ArrowDownForce,
-                IgnoreEntities = ToIgnore.Concat(Options.IgnoreEntities).ToArray()
+                IgnoreEntities = ToIgnore.Concat(Options.IgnoreEntities).ToArray(),
+                Falloff = Options.ProjectileFalloff
             };
             arrowProj.HitEventHandler += delegate(Projectile Sender, IEntity Hit)
             {
@@ -222,9 +223,9 @@ namespace Hedra.WeaponSystem
             return false;
         }
 
-        //public override bool CanDoAttack1 => !AreThereNearbyMobs();//Owner?.Inventory.Ammo != null;
+        //public override bool CanDoAttack1 => base.CanDoAttack1 && !AreThereNearbyMobs();//Owner?.Inventory.Ammo != null;
         
-        //public override bool CanDoAttack2 => !AreThereNearbyMobs();//Owner?.Inventory.Ammo != null;
+        //public override bool CanDoAttack2 => base.CanDoAttack2 && !AreThereNearbyMobs();//Owner?.Inventory.Ammo != null;
 
         public override void Dispose()
         {

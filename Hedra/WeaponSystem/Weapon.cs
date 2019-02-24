@@ -57,6 +57,10 @@ namespace Hedra.WeaponSystem
         public bool Charging { get; set; }
         public float ChargingIntensity { get; set; }
         protected virtual bool ShouldPlaySound { get; set; } = true;
+        public float PrimaryAttackAnimationSpeed { get; set; } = 1.0f;
+        public float SecondaryAttackAnimationSpeed { get; set; } = 1.0f;     
+        public virtual bool PrimaryAttackEnabled { get; set; } = true;       
+        public virtual bool SecondaryAttackEnabled { get; set; } = true;
 
         private Animation[] _secondaryAnimations;
         private Animation[] _primaryAnimations;
@@ -220,10 +224,6 @@ namespace Hedra.WeaponSystem
             Attack1(Human, new AttackOptions());
         }
 
-        public virtual bool CanDoAttack1 => true;
-        
-        public virtual bool CanDoAttack2 => true;
-
         public virtual void Attack1(IHumanoid Human, AttackOptions Options)
         {
             if (!MeetsRequirements()) return;
@@ -240,7 +240,7 @@ namespace Hedra.WeaponSystem
         {
             BaseAttack(Human, Options);
             var animation = _primaryAnimations[ParsePrimaryIndex(PrimaryAnimationsIndex)];
-            animation.Speed = _animationSpeeds[Array.IndexOf(_animations, animation)] * Owner.AttackSpeed;
+            animation.Speed = _animationSpeeds[Array.IndexOf(_animations, animation)] * Owner.AttackSpeed * PrimaryAttackAnimationSpeed;
             Human.Model.BlendAnimation(animation);
         }
 
@@ -265,7 +265,7 @@ namespace Hedra.WeaponSystem
         {
             BaseAttack(Human, Options);
             var animation = _secondaryAnimations[ParseSecondaryIndex(SecondaryAnimationsIndex)];
-            animation.Speed = _animationSpeeds[Array.IndexOf(_animations, animation)] * Owner.AttackSpeed;
+            animation.Speed = _animationSpeeds[Array.IndexOf(_animations, animation)] * Owner.AttackSpeed * SecondaryAttackAnimationSpeed;
             Human.Model.BlendAnimation(animation);
         }
 

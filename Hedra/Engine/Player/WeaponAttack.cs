@@ -29,7 +29,6 @@ namespace Hedra.Engine.Player
 
         public bool DisableWeapon { get; set; }
         private readonly ShiverAnimation _shiverAnimation;
-        private readonly Timer _updateGrayscale; 
         private bool _continousAttack;
         public float Charge { get; private set; }
         private float _chargeTime;
@@ -40,7 +39,6 @@ namespace Hedra.Engine.Player
         public WeaponAttack()
         {
             _shiverAnimation = new ShiverAnimation();
-            _updateGrayscale = new Timer(.1f);
             base.ManaCost = 0f;
             base.Level = 1;
             this.MaxCooldown = .5f;
@@ -52,13 +50,6 @@ namespace Hedra.Engine.Player
             _textureId = Type == AttackType.Primary
                 ? Weapon?.PrimaryAttackIcon ?? WeaponIcons.DefaultAttack
                 : Weapon?.SecondaryAttackIcon ?? WeaponIcons.DefaultAttack;
-        }
-        
-        public override bool MeetsRequirements()
-        {
-            if(DisableWeapon) return false;            
-             return base.MeetsRequirements() && !Player.IsAttacking && !Player.IsEating && Player.CanInteract 
-                    && (Player.LeftWeapon.CanDoAttack1 && _type == AttackType.Primary || Player.LeftWeapon.CanDoAttack2 && _type == AttackType.Secondary);
         }
         
         public override void KeyUp()
@@ -116,10 +107,6 @@ namespace Hedra.Engine.Player
             }
             Player.LeftWeapon.IsCharging = IsCharging;
             Tint = IsCharging ? new Vector3(1,0,0) * Charge + Vector3.One * .65f : Vector3.One;
-            if (_updateGrayscale.Tick())
-            {
-                //Grayscale = !MeetsRequirements();
-            }
         }
 
         public bool IsCharging
@@ -136,6 +123,14 @@ namespace Hedra.Engine.Player
             }
         }
 
+        private bool CanUse()
+        {
+            return !DisableWeapon && (!Player.IsAttacking && !Player.IsEating && Player.CanInteract
+                    && (Player.LeftWeapon.PrimaryAttackEnabled && _type == AttackType.Primary ||
+                        Player.LeftWeapon.SecondaryAttackEnabled && _type == AttackType.Secondary));
+        }
+        
+        protected override bool ShouldDisable => !CanUse();
         private bool ShouldCharge => AttackType.Secondary == _type || Player.LeftWeapon.IsChargeable;
         public override uint TextureId => _textureId;
         protected override bool HasCooldown => false;

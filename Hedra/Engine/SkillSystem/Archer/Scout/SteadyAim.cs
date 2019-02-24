@@ -1,3 +1,4 @@
+using System;
 using System.Globalization;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
@@ -12,14 +13,14 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
 
         protected override ChargeableComponent CreateComponent()
         {
-            return new SteadyAimComponent(Player, ChargeTime, RangeBonus);
+            return new SteadyAimComponent(Player, ChargeTime, PrecisionBonus);
         }    
                 
         public override string Description => Translations.Get("steady_aim_desc");
         public override string DisplayName => Translations.Get("steady_aim");
         protected override int MaxLevel => 15;
-        private float ChargeTime => 5;//10.5f - Level / 2f;
-        private float RangeBonus => 1;
+        private float ChargeTime => 8.0f - Level / 4f;
+        private float PrecisionBonus => Math.Max(0, 1 - Level / 8);
         
         private class SteadyAimComponent : ChargeableComponent
         {
@@ -37,14 +38,14 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
 
             protected override void Apply(AttackOptions Options)
             {
-                
+                Options.ProjectileFalloff = _precisionBonus;
             }
         }
 
         public override string[] Attributes => new[]
         {
             Translations.Get("steady_wait_change", ChargeTime.ToString("0.0", CultureInfo.InvariantCulture)),
-            Translations.Get("steady_precision_change", (int)(RangeBonus * 100)),
+            Translations.Get("steady_precision_change", (int)((1 - PrecisionBonus) * 100)),
         };
     }
 }

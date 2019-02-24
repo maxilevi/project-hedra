@@ -206,6 +206,7 @@ poison_arrow_desc = Shoot a poisonous arrow
 poison_arrow = Poison Arrow
 concealment_skill = Concealment
 concealment_desc = Mimetize with your environment before dealing your fatal shot
+concealment_damage_change = Increases damage output by $(RED)(BOLD){+{0}%}
 focus_skill = Focus
 focus_desc = Increase your damage on your next attack when no enemies are nearby
 focus_wait_change = Takes $(BOLD)(BLUE){{0}s} to charge
