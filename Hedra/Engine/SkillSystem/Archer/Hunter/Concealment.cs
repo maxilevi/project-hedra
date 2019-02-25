@@ -33,6 +33,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
             _bow.BowModifiers += AddModifiers;
             Player.SearchComponent<DamageComponent>().OnDamageEvent += OnDamaged;
             Cooldown = 0;
+            InvokeStateUpdated();
         }
 
         public override void Update()

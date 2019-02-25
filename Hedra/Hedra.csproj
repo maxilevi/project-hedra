@@ -9098,6 +9098,10 @@
       <Link>Assets\Skills\Focus.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\HotPursuit.png">
+      <Link>Assets\Skills\HotPursuit.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Hunter.png">
       <Link>Assets\Skills\Hunter.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -9114,6 +9118,10 @@
       <Link>Assets\Skills\Necromancer.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Nimbleness.png">
+      <Link>Assets\Skills\Nimbleness.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Ninja.png">
       <Link>Assets\Skills\Ninja.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -9122,8 +9130,16 @@
       <Link>Assets\Skills\Raven.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Retreat.png">
+      <Link>Assets\Skills\Retreat.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Rogue.png">
       <Link>Assets\Skills\Rogue.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Rush.png">
+      <Link>Assets\Skills\Rush.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Scavenge.png">
@@ -9133,6 +9149,9 @@
     <Content Include="..\project-hedra-assets\UI\Skills\Scout.png">
       <Link>Assets\Skills\Scout.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\SkillIcons.psd">
+      <Link>Assets\Skills\SkillIcons.psd</Link>
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\SpikeTrap.png">
       <Link>Assets\Skills\SpikeTrap.png</Link>
@@ -9144,6 +9163,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\SteelArrows.png">
       <Link>Assets\Skills\SteelArrows.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Swiftness.png">
+      <Link>Assets\Skills\Swiftness.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\StaminaAndOxygenBarBackground.png">

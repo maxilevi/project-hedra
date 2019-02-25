@@ -175,8 +175,7 @@ namespace Hedra.WeaponSystem
             {
                 Lifetime = 5f,
                 Propulsion = Direction * 2f - Vector3.UnitY * ArrowDownForce,
-                IgnoreEntities = ToIgnore.Concat(Options.IgnoreEntities).ToArray(),
-                Falloff = Options.ProjectileFalloff
+                IgnoreEntities = ToIgnore.Concat(Options.IgnoreEntities).ToArray()
             };
             arrowProj.HitEventHandler += delegate(Projectile Sender, IEntity Hit)
             {

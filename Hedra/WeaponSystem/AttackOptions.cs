@@ -9,7 +9,6 @@ namespace Hedra.WeaponSystem
         public float RunMovespeed { get; set; } = 0;
         public float Charge { get; set; } = 1f;
         public float DamageModifier { get; set; } = 1f;
-        public float ProjectileFalloff { get; set; } = 1f;
 
         public static AttackOptions Default { get; } = new AttackOptions();
     }
