@@ -7,22 +7,26 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
     {
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Nimbleness.png");
         protected override int MaxLevel => 15;
+        private float _previousValue;
+        
         protected override void Remove()
         {
-            throw new System.NotImplementedException();
+            Player.Attributes.TumbleDistanceModifier -= _previousValue;
+            _previousValue = 0;
         }
 
         protected override void Add()
         {
-            throw new System.NotImplementedException();
+            Player.Attributes.TumbleDistanceModifier += _previousValue = DistanceChange;
         }
-
-        private float DistanceChange => .1f;
+        
+        /* This will give us a range of 106% -> 200% */
+        private float DistanceChange => 1 + Level / (float) MaxLevel;
         public override string Description => Translations.Get("nimbleness_desc");
         public override string DisplayName => Translations.Get("nimbleness_skill");
         public override string[] Attributes => new[]
         {
-            Translations.Get("nimbleness_distance_change", (int) (DistanceChange * 100))
+            Translations.Get("nimbleness_distance_change", (int) ((DistanceChange - 1) * 100))
         };
     }
 }

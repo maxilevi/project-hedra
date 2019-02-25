@@ -190,7 +190,8 @@ namespace Hedra.Engine.Player
             var player = this as LocalPlayer;
             if( IsUnderwater || IsTravelling || IsRolling || IsCasting || IsRiding || IsJumping) return;
             
-            if(player != null){
+            if(player != null)
+            {
                 if (Stamina < DodgeCost)
                 {
                     GameManager.Player.MessageDispatcher.ShowNotification(Translations.Get("too_tired"), Color.DarkRed, 3f, true);
@@ -208,7 +209,7 @@ namespace Hedra.Engine.Player
                 () => IsRolling);
 
             Movement.OrientateTowards(Movement.RollFacing);
-            Movement.Move(Movement.LastOrientation * 2.5f, .5f, false);
+            Movement.Move(Movement.LastOrientation * 2.5f * Attributes.TumbleDistanceModifier, .5f, false);
 
             SoundPlayer.PlaySoundWithVariation(SoundType.Dodge, this.Position);
             TaskScheduler.When( () => !IsRolling, () =>

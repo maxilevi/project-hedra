@@ -28,10 +28,10 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             try
             {
                 realSkill.Level = Math.Max(1, originalLevel);
-                ItemDescription.Text = BuildItemDescription(realSkill);
+                ItemDescription.Text = TextProvider.Wrap(realSkill.Description, 25);
                 ItemDescription.Color = Color.White;
                 ItemText.Text = Utils.FitString(realSkill.DisplayName, 18);
-
+                ItemAttributes.Text = BuildAttributes(realSkill);
                 ItemTexture.TextureElement.TextureId = CurrentItem.HasAttribute("ImageId")
                     ? CurrentItem.GetAttribute<uint>("ImageId")
                     : GUIRenderer.TransparentTexture;
@@ -41,11 +41,6 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             {
                 realSkill.Level = originalLevel;
             }
-        }
-
-        private static string BuildItemDescription(BaseSkill RealSkill)
-        {
-            return $"{TextProvider.Wrap(RealSkill.Description, 25)}{Environment.NewLine}{Environment.NewLine}{BuildAttributes(RealSkill)}";
         }
 
         private static string BuildAttributes(BaseSkill RealSkill)
@@ -67,8 +62,9 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         
         protected virtual void SetPosition()
         {
-            ItemDescription.Position = this.Position - Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .15f);
+            ItemDescription.Position = this.Position - Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .05f);
             ItemTexture.Position = this.Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .15f);
+            ItemAttributes.Position = ItemDescription.Position - (ItemDescription.Scale.Y + ItemAttributes.Scale.Y) * Vector2.UnitY - Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .05f);
             SetTitlePosition();
         }
     }

@@ -54,8 +54,9 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
 
         private void EnableCombat()
         {
-            if(!_inCombat) InvokeStateUpdated();
+            var previousValue = _inCombat;
             _inCombat = true;
+            if (!previousValue) InvokeStateUpdated();
             _combatTimer.Reset();
             RemoveComponentIfNecessary();
             Player.AddComponent(_component = new SpeedBonusComponent(Player, Player.Speed * SpeedChange));
