@@ -1,5 +1,9 @@
+using Hedra.Components.Effects;
+using Hedra.Engine.Management;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
+using Hedra.EntitySystem;
 
 namespace Hedra.Engine.SkillSystem.Archer.Scout
 {
@@ -7,17 +11,64 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
     {
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/HotPursuit.png");
         protected override int MaxLevel => 15;
-        protected override void Remove()
-        {
-            throw new System.NotImplementedException();
-        }
+        private readonly Timer _combatTimer;
+        private bool _inCombat;
+        private SpeedBonusComponent _component;
 
+        public HotPursuit()
+        {
+            _combatTimer = new Timer(5f);
+        }
+        
         protected override void Add()
         {
-            throw new System.NotImplementedException();
+            Player.SearchComponent<DamageComponent>().OnDamageEvent += OnDamageEvent;
+        }
+        
+        protected override void Remove()
+        {
+            Player.SearchComponent<DamageComponent>().OnDamageEvent -= OnDamageEvent;
+            DisableCombat();
         }
 
-        private float SpeedChange => .1f;
+        public override void Update()
+        {
+            base.Update();
+            if(!_inCombat) return;
+            if (Player.IsDead)
+                DisableCombat();
+            if (_combatTimer.Tick())
+                DisableCombat();
+        }
+
+        private void OnDamageEvent(DamageEventArgs Args)
+        {
+            EnableCombat();
+        }
+
+        private void DisableCombat()
+        {
+            _inCombat = false;
+            RemoveComponentIfNecessary();
+        }
+
+        private void EnableCombat()
+        {
+            if(!_inCombat) InvokeStateUpdated();
+            _inCombat = true;
+            _combatTimer.Reset();
+            RemoveComponentIfNecessary();
+            Player.AddComponent(_component = new SpeedBonusComponent(Player, Player.Speed * SpeedChange));
+        }
+
+        private void RemoveComponentIfNecessary()
+        {
+            if (_component != null) Player.RemoveComponent(_component);
+            _component = null;
+        }
+
+        private float SpeedChange => (float) Level / MaxLevel / 4f;
+        public override float IsAffectingModifier => _inCombat ? 1 : 0;
         public override string Description => Translations.Get("hot_pursuit_desc");
         public override string DisplayName => Translations.Get("hot_pursuit_skill");
         public override string[] Attributes => new[]
