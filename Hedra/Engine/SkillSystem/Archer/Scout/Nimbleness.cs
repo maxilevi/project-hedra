@@ -21,12 +21,12 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
         }
         
         /* This will give us a range of 106% -> 200% */
-        private float DistanceChange => 1 + Level / (float) MaxLevel;
+        private float DistanceChange => Level / 10f;
         public override string Description => Translations.Get("nimbleness_desc");
         public override string DisplayName => Translations.Get("nimbleness_skill");
         public override string[] Attributes => new[]
         {
-            Translations.Get("nimbleness_distance_change", (int) ((DistanceChange - 1) * 100))
+            Translations.Get("nimbleness_distance_change", (int) (DistanceChange * 100))
         };
     }
 }

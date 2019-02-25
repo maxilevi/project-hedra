@@ -21,8 +21,8 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
             Player.Attributes.FoodDropChanceModifier += _previousValue = Chance;
         }
 
-        private float Chance => Level * .1f + 1;
-        public override string Description => Translations.Get("scavenge_desc", (int) ((Chance-1) * 100));
+        private float Chance => Level * .1f;
+        public override string Description => Translations.Get("scavenge_desc", (int) (Chance * 100));
         public override string DisplayName => Translations.Get("scavenge_skill");
     }
 }
