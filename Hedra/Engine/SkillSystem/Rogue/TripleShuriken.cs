@@ -28,7 +28,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
         protected override float AnimationSpeed => 1.75f;
         private int _times;
 
-        protected override void OnUse()
+        protected override void OnEnable()
         {
             _times = 0;
         }

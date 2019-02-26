@@ -67,6 +67,7 @@ namespace Hedra.Engine.Player
         public Minimap Minimap { get; }
         public Map Map { get; }
         public TradeInventory Trade { get; }
+        public override Vector3 LookingDirection => View.LookingDirection;
         public override float FacingDirection => -(View.TargetYaw * Mathf.Degree - 90f);
         public CollisionGroup[] NearCollisions => StructureAware.NearCollisions;
         private IAmbientEffectHandler AmbientEffects { get; }

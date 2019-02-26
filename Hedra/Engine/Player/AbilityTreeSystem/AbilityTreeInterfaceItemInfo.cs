@@ -28,7 +28,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             try
             {
                 realSkill.Level = Math.Max(1, originalLevel);
-                ItemDescription.Text = TextProvider.Wrap(realSkill.Description, 25);
+                ItemDescription.Text = TextProvider.Wrap(realSkill.Description, 30);
                 ItemDescription.Color = Color.White;
                 ItemText.Text = Utils.FitString(realSkill.DisplayName, 18);
                 ItemAttributes.Text = BuildAttributes(realSkill);

@@ -177,12 +177,12 @@ namespace Hedra.Engine.EntitySystem
 
         public bool Translate(Vector3 Delta)
         {
-            return this.ExecuteTranslate(new MoveCommand(Delta));
+            return ExecuteTranslate(new MoveCommand(Delta));
         }
 
         public bool DeltaTranslate(Vector3 Delta, bool OnlyY = false)
         {
-            return this.ExecuteTranslate(new MoveCommand(Delta * Time.DeltaTime)
+            return ExecuteTranslate(new MoveCommand(Delta * Time.DeltaTime)
             {
                 OnlyY = OnlyY
             });

@@ -75,12 +75,17 @@ namespace Hedra.Engine.Player
                 Math.Abs(Human.Physics.TargetPosition.Y - Human.Position.Y) > 2.0f || !this.CaptureMovement)
                 return;
 
+            ForceJump();
+        }
+
+        public void ForceJump(float Propulsion = 60)
+        {
             Human.IsSitting = false;
             Human.IsGrounded = false;
             IsJumping = true;
             Human.Physics.ResetFall();
             Human.Physics.GravityDirection = -Vector3.UnitY;
-            _jumpPropulsion = Vector3.UnitY * 60f;
+            _jumpPropulsion = Vector3.UnitY * Propulsion;
         }
 
         protected virtual void DoUpdate() { }
@@ -144,10 +149,16 @@ namespace Hedra.Engine.Player
             if ((Physics.HeightAtPosition(Human.Position) > Human.Position.Y || Human.IsGrounded) 
                 && _jumpPropulsion.LengthFast < 30 || Human.IsUnderwater)
             {
-                IsJumping = false;
+                CancelJump();
             }
-            if(!Human.Physics.DeltaTranslate(_jumpPropulsion, true)) IsJumping = false;
+
+            if (!Human.Physics.DeltaTranslate(_jumpPropulsion, true)) CancelJump();
             _jumpPropulsion *= (float)Math.Pow(.25f, Time.DeltaTime * 3f);
+        }
+
+        public void CancelJump()
+        {
+            IsJumping = false;
         }
 
         private void ManageMoveOrders()

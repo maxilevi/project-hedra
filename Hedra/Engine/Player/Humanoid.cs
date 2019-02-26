@@ -85,6 +85,7 @@ namespace Hedra.Engine.Player
         public virtual bool CanInteract { get; set; } = true;
         public virtual float FacingDirection => throw new NotImplementedException();
         public new HumanoidModel Model { get => base.Model as HumanoidModel; set => base.Model = value; }
+        public virtual Vector3 LookingDirection => Orientation;
         public MovementManager Movement { get; protected set; }
         public HandLamp HandLamp { get; }
         public virtual int Gold { get; set; }

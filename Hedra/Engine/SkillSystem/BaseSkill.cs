@@ -140,7 +140,8 @@ namespace Hedra.Engine.SkillSystem
         {
             StateUpdated?.Invoke();
         }
-        
+
+        public virtual bool CanBeCastedWhileAttacking => false;
         protected virtual float OverlayBlending => Cooldown / MaxCooldown;
         public virtual bool PlaySound => false;
         

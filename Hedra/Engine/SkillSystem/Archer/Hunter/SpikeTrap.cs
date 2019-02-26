@@ -20,7 +20,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
             Place();
         }
 
-        protected override void OnUse()
+        protected override void OnEnable()
         {
             Player.SearchComponent<DamageComponent>().OnDamageEvent += OnCasterDamaged;
         }

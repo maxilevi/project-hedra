@@ -27,6 +27,7 @@ namespace Hedra.Engine.SkillSystem
         protected virtual float AnimationSpeed { get; } = 1;
         protected virtual bool EquipWeapons => true;
         protected virtual bool CanMoveWhileCasting => true;
+        protected virtual bool ShouldCancel => Player.Model.AnimationBlending != SkillAnimation;
         private float _frameCounter;
         private bool _shouldEnd;
         private bool _executedStart;
@@ -59,7 +60,7 @@ namespace Hedra.Engine.SkillSystem
             };
         }
         
-        public sealed override void Use()
+        public override void Use()
         {
             Casting = true;
             if (EquipWeapons)
@@ -83,7 +84,7 @@ namespace Hedra.Engine.SkillSystem
             _executedMid = false;
             _executedEnd = false;
             Player.Model.BlendAnimation(SkillAnimation);
-            OnUse();
+            OnEnable();
         }
 
         private void Disable()
@@ -96,6 +97,7 @@ namespace Hedra.Engine.SkillSystem
         
         public override void Update()
         {
+            base.Update();
             if (!Casting) return;
             if (ShouldEnd) Disable();
 
@@ -109,7 +111,7 @@ namespace Hedra.Engine.SkillSystem
             OnExecution();
         }
 
-        private bool ShouldEnd => Player.IsDead || Player.IsKnocked || _shouldEnd || Player.Model.AnimationBlending != SkillAnimation;
+        private bool ShouldEnd => Player.IsDead || Player.IsKnocked || _shouldEnd || ShouldCancel;
 
         protected void Cancel()
         {
@@ -121,7 +123,7 @@ namespace Hedra.Engine.SkillSystem
             
         }
         
-        protected virtual void OnUse()
+        protected virtual void OnEnable()
         {
             
         }

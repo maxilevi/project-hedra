@@ -35,7 +35,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
         private void HandleDown(object Sender, KeyEventArgs EventArgs)
         {
-            if (!_player.CanInteract || _player.Movement.IsJumping || _player.IsKnocked || _player.IsDead || _player.IsSwimming || _player.IsAttacking || _player.IsRiding
+            if (!_player.CanInteract || _player.Movement.IsJumping || _player.IsKnocked || _player.IsDead || _player.IsSwimming || _player.IsRiding
                 || _player.IsUnderwater || _player.IsTravelling || _player.InterfaceOpened || GameManager.InMenu) return;
 
 
@@ -51,7 +51,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
                 var ability = _player.Toolbar.SkillAt(keyIndex);
 
-                if (ability != null && ability.MeetsRequirements() && this.AbilitiesBeingCasted() == 0)
+                if (ability != null && ability.MeetsRequirements() && this.AbilitiesBeingCasted() == 0 && (!_player.IsAttacking || ability.CanBeCastedWhileAttacking))
                 {
                     SoundPlayer.PlaySound(SoundType.ButtonClick, _player.Position, false, 1f, 0.5f);
 
