@@ -39,9 +39,7 @@ namespace Hedra.Engine.Player
         public WeaponAttack()
         {
             _shiverAnimation = new ShiverAnimation();
-            base.ManaCost = 0f;
-            base.Level = 1;
-            this.MaxCooldown = .5f;
+            Level = 1;
         }
         
         public void SetType(Weapon Weapon, AttackType Type)

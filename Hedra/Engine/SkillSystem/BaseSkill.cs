@@ -31,9 +31,9 @@ namespace Hedra.Engine.SkillSystem
         private static readonly Vector3 NormalTint = Vector3.One;
         public event OnStateUpdated StateUpdated;
         public bool IsAffecting => IsAffectingModifier > 0;
-        public virtual float MaxCooldown { get; protected set; }
+        public virtual float MaxCooldown { get; }
         public virtual float IsAffectingModifier => Passive ? 1 : 0;
-        public virtual float ManaCost { get; protected set; }
+        public virtual float ManaCost { get; }
         public float Cooldown { get; set; }
         public int Level { get; set; }
         public bool Active { get; set; } = true;

@@ -95,14 +95,7 @@ namespace Hedra
             AddSkill("Rush", typeof(Rush));
             AddSkill("Swiftness", typeof(Swiftness));
             
-            AddSkill("Conflagaration", typeof(Conflagaration));
-            AddSkill("Fireball", typeof(Fireball));
             AddSkill("FireRelease", typeof(FireRelease));
-            AddSkill("FlameRush", typeof(FlowingMagma));
-            AddSkill("FlameStyle", typeof(FlameStyle));
-            AddSkill("Meditation", typeof(Meditation));
-            AddSkill("Meteor", typeof(Meteor));
-            AddSkill("TripleFireball", typeof(TripleFireball));
             
             AddSkill("BurstOfSpeed", typeof(BurstOfSpeed));
             AddSkill("Fade", typeof(Fade));

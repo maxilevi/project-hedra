@@ -47,8 +47,6 @@ namespace Hedra.Engine.SkillSystem.Warrior
         
         public Bash()
         {
-            base.ManaCost = 15f;
-            base.MaxCooldown = 3f;
             this._bashAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorHeadbutt.dae");
             this._bashAnimation.OnAnimationMid += Sender => OnDamage();
         }

@@ -365,6 +365,7 @@
     <Compile Include="Engine\Rendering\TextureParameter.cs" />
     <Compile Include="Engine\Rendering\UI\Plaque.cs" />
     <Compile Include="Engine\Rendering\UI\TextOptions.cs" />
+    <Compile Include="Engine\SkillSystem\ActivateSkill.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Jab.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Hunter\Concealment.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Hunter\Focus.cs" />
@@ -390,14 +391,8 @@
     <Compile Include="Engine\SkillSystem\BaseSkill.cs" />
     <Compile Include="Engine\SkillSystem\CappedSkill.cs" />
     <Compile Include="Engine\SkillSystem\LearningSkill.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Conflagaration.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Fireball.cs" />
     <Compile Include="Engine\SkillSystem\Mage\FireRelease.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\FlameRush.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\FlameStyle.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Meditation.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Meteor.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\TripleFireball.cs" />
     <Compile Include="Engine\SkillSystem\PassiveSkill.cs" />
     <Compile Include="Engine\SkillSystem\Rogue\BurstOfSpeed.cs" />
     <Compile Include="Engine\SkillSystem\Rogue\Fade.cs" />

@@ -37,7 +37,8 @@ namespace Hedra.Components.Effects
         {
             if(Disposed) return;
             Parent.AttackSpeed = Parent.BaseAttackSpeed  - _attackSpeedBonus;
-            Parent.Model.Outline = false;
+            if(_showParticles)
+                Parent.Model.Outline = false;
         }
     }
 }

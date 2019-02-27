@@ -9,48 +9,22 @@ using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Archer.Scout
 {
-    public class Swiftness : CappedSkill
+    public class Swiftness : ActivateSkill
     {
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Swiftness.png");
-        private readonly Timer _timer;
-        private bool _active;
         private SpeedBonusComponent _currentSpeedBonus;
         private AttackSpeedBonusComponent _currentAttackSpeedBonus;
 
-        public Swiftness()
+        protected override void DoEnable()
         {
-            _timer = new Timer(1);
-        }
-        
-        public override void Use()
-        {
-            Enable();
-        }
-        
-        public override void Update()
-        {
-            base.Update();
-            if (_timer.Tick() && _active)
-            {
-                Disable();
-            }
-        }
-        
-        private void Enable()
-        {
-            _timer.Reset();
-            _timer.AlertTime = Duration;
-            _active = true;
             Player.AddComponent(_currentSpeedBonus = new SpeedBonusComponent(Player, Player.Speed * SpeedChange));
             Player.AddComponent(_currentAttackSpeedBonus = new AttackSpeedBonusComponent(Player, Player.AttackSpeed * AttackSpeedChange));
-            InvokeStateUpdated();
             Player.Model.Outline = true;
             Player.Model.OutlineColor = Color.FromArgb(128, 102, 204, 255).ToVector4() * 2;
         }
         
-        private void Disable()
+        protected override void DoDisable()
         {
-            _active = false;
             Player.RemoveComponent(_currentSpeedBonus);
             Player.RemoveComponent(_currentAttackSpeedBonus);
             _currentSpeedBonus = null;
@@ -58,10 +32,9 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
             Player.Model.Outline = false;
         }
 
-        public override float IsAffectingModifier => _active ? 1 : 0;
         private float SpeedChange => .35f + Level * 0.025f;
         private float AttackSpeedChange => .25f + Level * .065f;
-        private float Duration => 8 + Level;
+        protected override float Duration => 8 + Level;
         protected override int MaxLevel => 15;
         public override float MaxCooldown => Duration + 54;
         public override float ManaCost => 60;

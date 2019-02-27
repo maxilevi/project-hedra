@@ -259,8 +259,9 @@ nimbleness_distance_change = Increases dodging distance by $(GREEN)(BOLD){+{0}%}
 retreat_desc = Jump back to escape from enemies
 retreat_skill = Retreat
 retreat_distance_change = Jump $(BOLD)(YELLOW){{0} meters} backward
-rush_desc = Grants infinite stamina for $(BOLD)(YELLOW){{0}s}
+rush_desc = Grants infinite stamina temporarily
 rush_skill = Rush
+ruse_time_change = Lasts for $(BOLD)(YELLOW){{0}s}
 # -- End Skill Names --
 
 skill_mana_cost = Mana Cost: $(BOLD)(BLUE){{0}}
