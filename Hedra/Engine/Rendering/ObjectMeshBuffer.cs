@@ -97,9 +97,6 @@ namespace Hedra.Engine.Rendering
 
             Renderer.Disable(EnableCap.Blend);
             Data.Unbind();
-            
-            Renderer.Disable(EnableCap.Blend);
-
             Unbind();
             
             if(Alpha < 1)

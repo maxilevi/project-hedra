@@ -54,6 +54,8 @@ namespace Hedra.Engine.ItemSystem.ArmorSystem
         public bool Pause { get; set; }
         public float Alpha { get; set; }
         public float AnimationSpeed { get; set; }
+        public Vector4 OutlineColor { get; set; }
+        public bool Outline { get; set; }
 
         public void Dispose()
         {

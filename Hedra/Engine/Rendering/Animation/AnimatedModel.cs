@@ -43,6 +43,8 @@ namespace Hedra.Engine.Rendering.Animation
         public Vector4 BaseTint { get; set; }
         public Vector3 Scale { get; set; }
         public Box CullingBox { get; set; }
+        public bool Outline { get; set; }
+        public Vector4 OutlineColor { get; set; }
         public Vector3 Max => CullingBox?.Max ?? Vector3.Zero;
         public Vector3 Min => CullingBox?.Min ?? Vector3.Zero;
         public Vector3[] JointIdsArray => _baseModelData.JointIds;
@@ -225,8 +227,20 @@ namespace Hedra.Engine.Rendering.Animation
             Renderer.BindBuffer(BufferTarget.ElementArrayBuffer, _indices.ID);
             Renderer.DrawElements(PrimitiveType.Triangles, _indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
 
+            if (Outline)
+            {
+                Renderer.Enable(EnableCap.Blend);
+                Renderer.Disable(EnableCap.DepthTest);
+                _shader["Outline"] = Outline ? 1 : 0;
+                _shader["OutlineColor"] = OutlineColor;
+                _shader["Time"] = Time.IndependantDeltaTime;
+                Renderer.BindBuffer(BufferTarget.ElementArrayBuffer, _indices.ID);
+                Renderer.DrawElements(PrimitiveType.Triangles, _indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
+                Renderer.Enable(EnableCap.DepthTest);
+            }
+            _shader["Outline"] = 0;
+            
             Data.Unbind();
-
             _shader.Unbind();
             Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, 0);

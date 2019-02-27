@@ -99,7 +99,7 @@ namespace Hedra.Engine.Player
                 Propulsion *= (float)Math.Pow(.75f, Time.DeltaTime);
                 _accumulatedVelocity += (Propulsion * 60f - Vector3.UnitY * 20f * Falloff) * Time.DeltaTime;
                 _accumulatedVelocity *= (float)Math.Pow(.8f, Time.DeltaTime);
-                Mesh.Position += _accumulatedVelocity * 2f * Time.DeltaTime;
+                Mesh.Position += _accumulatedVelocity * 2.25f * Time.DeltaTime;
                 rotation = Physics.DirectionToEuler(_accumulatedVelocity.NormalizedFast());
             }
             else

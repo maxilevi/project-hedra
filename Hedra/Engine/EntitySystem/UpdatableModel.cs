@@ -124,6 +124,18 @@ namespace Hedra.Engine.EntitySystem
             get => Model.Tint;
             set => _iterableModels.ForEach(M => M.Tint = value);
         }
+        
+        public override bool Outline
+        {
+            get => Model.Outline;
+            set => _iterableModels.ForEach(M => M.Outline = value);
+        }
+        
+        public override Vector4 OutlineColor
+        {
+            get => Model.OutlineColor;
+            set => _iterableModels.ForEach(M => M.OutlineColor = value);
+        }
 
         public override Vector3 Position
         {

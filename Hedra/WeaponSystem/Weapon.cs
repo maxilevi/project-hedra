@@ -74,6 +74,8 @@ namespace Hedra.WeaponSystem
         private bool _applyFog;
         private bool _pause;
         private float _passedTimeInAttackStance;
+        private bool _outline;
+        private Vector4 _outlineColor;
         private bool _effectApplied;
         private AttackOptions _currentAttackOption;
         
@@ -577,6 +579,38 @@ namespace Hedra.WeaponSystem
             }
         }
 
+        public bool Outline
+        {
+            get => _outline;
+            set
+            {
+                if (_outline == value) return;
+
+                GatherMembers();
+                _outline = value;
+                for (var i = 0; i < Meshes.Length; i++)
+                {
+                    Meshes[i].Outline = _outline;
+                }
+            }
+        }
+        
+        public Vector4 OutlineColor
+        {
+            get => _outlineColor;
+            set
+            {
+                if (_outlineColor == value) return;
+
+                GatherMembers();
+                _outlineColor = value;
+                for (var i = 0; i < Meshes.Length; i++)
+                {
+                    Meshes[i].OutlineColor = _outlineColor;
+                }
+            }
+        }
+        
         public float AnimationSpeed
         {
             get => _animationSpeed;

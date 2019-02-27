@@ -17,7 +17,8 @@ namespace Hedra.Engine.Rendering
         bool Pause { get; set; }
         float Alpha { get; set; }
         float AnimationSpeed { get; set; }
-
+        Vector4 OutlineColor { get; set; }
+        bool Outline { get; set; }
         void Dispose();
     }
 

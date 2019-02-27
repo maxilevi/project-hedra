@@ -146,7 +146,7 @@ namespace Hedra.Engine.Player
         private void HandleJumping()
         {
             if (!IsJumping) return;
-            if ((Physics.HeightAtPosition(Human.Position) > Human.Position.Y || Human.IsGrounded) 
+            if ((Physics.HeightAtPosition(Human.Position) + .5f > Human.Position.Y || Human.IsGrounded) 
                 && _jumpPropulsion.LengthFast < 30 || Human.IsUnderwater)
             {
                 CancelJump();

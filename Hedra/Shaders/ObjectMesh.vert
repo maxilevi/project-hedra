@@ -17,7 +17,6 @@ uniform vec3 Position;
 uniform float Time;
 uniform vec3 Scale;
 uniform float ShadowDistance;
-uniform bool Outline;
 uniform bvec4 DitherFogTextureShadows;
 const float ShadowTransition = 20.0;
 

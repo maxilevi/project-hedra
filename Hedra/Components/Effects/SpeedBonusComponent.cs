@@ -51,8 +51,7 @@ namespace Hedra.Components.Effects
 
         public override void Dispose()
         {
-            if(Disposed) return;
-            
+            if(Disposed) return;     
             Parent.Speed -= _speedBonus;
         }
     }
