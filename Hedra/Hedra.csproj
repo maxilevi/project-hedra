@@ -8091,6 +8091,10 @@
       <Link>Assets\Chr\RogueFade.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Animations\RogueKnifeThrow.dae">
+      <Link>Assets\Chr\RogueKnifeThrow.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Environment\Misc\Pebble0.ply">
       <Link>Assets\Env\Plants\Pebble0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -8121,6 +8125,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\Environment\Misc\WoodenStick0_Lod8.ply">
       <Link>Assets\Env\Plants\WoodenStick0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Ammo\Kunai.ply">
+      <Link>Assets\Items\Ammo\Kunai.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Ammo\SteelArrow.ply">

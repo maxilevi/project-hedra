@@ -34,7 +34,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
         protected override float AnimationSpeed => 1.25f;
         protected override int MaxLevel => 15;
         public override float ManaCost => 35;
-        public override float MaxCooldown => Math.Max(4, 8 - base.Level * .5f);
+        public override float MaxCooldown => Math.Max(8, 12 - base.Level * .5f);
 
         protected override void OnAnimationMid()
         {
@@ -91,7 +91,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
             //World.Particles.Emit();            
         }
 
-        private float Damage => 18 + Level * 2;
+        private float Damage => 18 + Level * 1.5f;
         private int StunChance => Level > 5 ? 8 : -1;
         public override string Description => Translations.Get("shuriken_desc");
         public override string DisplayName => Translations.Get("shuriken_skill");
