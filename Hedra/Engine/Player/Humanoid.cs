@@ -393,7 +393,7 @@ namespace Hedra.Engine.Player
 
         public float UnRandomizedDamageEquation => BaseDamageEquation * (1f + ConsecutiveHitsModifier);
         
-        public float BaseDamageEquation => (Class.BaseDamage + this.Level * 0.08f * this.AttackPower) + this.WeaponModifier(MainWeapon);
+        public float BaseDamageEquation => (Class.BaseDamage + Level * 0.08f) * AttackPower + this.WeaponModifier(MainWeapon);
 
         public float WeaponModifier(Item Weapon)
         {

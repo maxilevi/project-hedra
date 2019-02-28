@@ -1,5 +1,12 @@
 {
   "Name": "Ninja",
   "Icon": "$DataFile$/Assets/Skills/Ninja.png",
-  "Description": "ninja_class_description"
+  "Description": "ninja_class_description",
+  "M21": "FanOfKnives",
+  "M22": "TripleShuriken",
+  "M12": "TigerStrike",
+  "M13": "SnakeSpirit",
+  "M14": "FinishingBlow",
+  "M32": "MartialArtsTraining",
+  "M33": "MartialArtsMaster"
 }

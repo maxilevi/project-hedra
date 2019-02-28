@@ -27,7 +27,8 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
             if(!(Player.LeftWeapon is Bow bow)) return;
             _isActive = true;
             _bow = bow;
-            Player.Model.BaseTint = -new Vector4(.85f, .85f, .85f, 0);
+            Player.Model.Outline = true;
+            Player.Model.OutlineColor = new Vector4(.2f, .2f, .2f, 1);
             Player.LeftWeapon.SecondaryAttackEnabled = false;
             Player.BeforeAttack += BeforeAttack;
             _bow.BowModifiers += AddModifiers;
@@ -57,6 +58,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
             Player.BeforeAttack -= BeforeAttack;
             Player.SearchComponent<DamageComponent>().OnDamageEvent -= OnDamaged;
             _bow.BowModifiers -= AddModifiers;
+            Player.Model.Outline = false;
             Cooldown = MaxCooldown;
         }
 

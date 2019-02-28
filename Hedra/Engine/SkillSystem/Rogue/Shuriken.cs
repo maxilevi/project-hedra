@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Globalization;
 using Hedra.Core;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
@@ -47,7 +48,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
 
         protected void ShootShuriken(Vector3 Direction)
         {
-            ShootShuriken(Player, Direction, 18 + Level * 2, Level > 5 ? 8 : -1);
+            ShootShuriken(Player, Direction, Damage, StunChance);
         }
         
         private static void ShootShuriken(IHumanoid Human, Vector3 Direction, float Damage, int KnockChance = -1)
@@ -89,8 +90,15 @@ namespace Hedra.Engine.SkillSystem.Rogue
             World.Particles.PositionErrorMargin = Vector3.One * 0.75f;
             //World.Particles.Emit();            
         }
-        
+
+        private float Damage => 18 + Level * 2;
+        private int StunChance => Level > 5 ? 8 : -1;
         public override string Description => Translations.Get("shuriken_desc");
         public override string DisplayName => Translations.Get("shuriken_skill");
+        public override string[] Attributes => new[]
+        {
+            Translations.Get("shuriken_damage_change", Damage.ToString("0.0", CultureInfo.InvariantCulture)),
+            Translations.Get("shuriken_stun_change", StunChance < 0 ? 0 : (int)(1.0f / (float)StunChance * 100))
+        };
     }
 }

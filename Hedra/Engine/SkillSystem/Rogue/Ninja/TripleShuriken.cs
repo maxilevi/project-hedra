@@ -7,17 +7,11 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
-using System;
-using System.Collections;
-using Hedra.Core;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.Animation;
-using Hedra.Rendering;
-using OpenTK;
 
-namespace Hedra.Engine.SkillSystem.Rogue
+namespace Hedra.Engine.SkillSystem.Rogue.Ninja
 {
     /// <summary>
     /// Description of WeaponThrow.
@@ -39,20 +33,6 @@ namespace Hedra.Engine.SkillSystem.Rogue
             if(_times < 2)
                 Use();
             _times = ++currentTimes;
-        }
-
-        private void Shoot()
-        {
-            var dir = Player.View.LookingDirection;
-            ShootShuriken(dir);
-            TaskScheduler.After(.1f, () =>
-            {
-            //    ShootShuriken(dir);
-            });         
-            TaskScheduler.After(.2f, () =>
-            {
-            //    ShootShuriken( dir);
-            });
         }
 
         public override string Description => Translations.Get("triple_shuriken_desc");    

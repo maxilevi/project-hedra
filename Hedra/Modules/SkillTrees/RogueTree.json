@@ -2,11 +2,9 @@
   "Name": "Rogue",
   "Icon": "$DataFile$/Assets/Skills/Rogue.png",
   "M21": "Shuriken",
-  "M24": "TripleShuriken",
-  "M12": "LearnKatar",
-  "M13": "LearnClaw",
-  "M32": "Fade",
+  "M11": "LearnKatar",
+  "M12": "LearnClaw",
   "M33": "Venom",
-  "M31": "BurstOfSpeed",
+  "M32": "BurstOfSpeed",
   "M23": "RoundSlash"
 }

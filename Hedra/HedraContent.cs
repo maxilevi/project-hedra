@@ -9,6 +9,7 @@ using Hedra.Engine.SkillSystem.Archer.Hunter;
 using Hedra.Engine.SkillSystem.Archer.Scout;
 using Hedra.Engine.SkillSystem.Mage;
 using Hedra.Engine.SkillSystem.Rogue;
+using Hedra.Engine.SkillSystem.Rogue.Ninja;
 using Hedra.Engine.SkillSystem.Warrior;
 using Hedra.Engine.Sound;
 using Hedra.ItemHandlers;
@@ -98,13 +99,21 @@ namespace Hedra
             AddSkill("FireRelease", typeof(FireRelease));
             
             AddSkill("BurstOfSpeed", typeof(BurstOfSpeed));
-            AddSkill("Fade", typeof(Fade));
             AddSkill("LearnClaw", typeof(LearnClaw));
             AddSkill("LearnKatar", typeof(LearnKatar));
             AddSkill("RoundSlash", typeof(RoundSlash));
             AddSkill("Shuriken", typeof(Shuriken));
-            AddSkill("TripleShuriken", typeof(TripleShuriken));
             AddSkill("Venom", typeof(Venom));
+            
+            AddSkill("FanOfKnives", typeof(FanOfKnives));
+            AddSkill("SnakeSpirit", typeof(SnakeSpirit));
+            AddSkill("MartialArtsTraining", typeof(MartialArtsTraining));
+            AddSkill("MartialArtsMaster", typeof(MartialArtsMaster));
+            AddSkill("TigerStrike", typeof(TigerStrike));
+            AddSkill("TripleShuriken", typeof(TripleShuriken));
+            AddSkill("FinishingBlow", typeof(FinishingBlow));
+            
+            AddSkill("Fade", typeof(Fade));
             
             AddSkill("Bash", typeof(Bash));
             AddSkill("Intercept", typeof(Intercept));

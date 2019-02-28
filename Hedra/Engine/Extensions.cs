@@ -27,7 +27,12 @@ namespace Hedra.Engine
     /// Description of Extensions.
     /// </summary>
     public static class Extensions
-    {      
+    {
+        public static void Add(this string[] Array, bool If)
+        {
+            
+        }
+        
         public static void Shuffle<T>(this IList<T> List, Random Rng)
         {
             int n = List.Count;

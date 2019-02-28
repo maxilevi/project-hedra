@@ -59,14 +59,14 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
             }
         }
 
-        private float Duration => 16 + Level * 2;
+        private float Duration => 18 + Level * 2;
         private float DamageMultiplier => (Level / 7f);
         protected override int MaxLevel => 15;
         protected override bool ShouldDisable => IsActive;
         public override string Description => Translations.Get("raven_desc");
         public override string DisplayName => Translations.Get("raven_skill");
         public override float ManaCost => 45;
-        public override float MaxCooldown => 18 + Duration;
+        public override float MaxCooldown => 22 + Duration;
         public override string[] Attributes => new[]
         {
             Translations.Get("raven_time_change", Duration.ToString("0.0", CultureInfo.InvariantCulture)),

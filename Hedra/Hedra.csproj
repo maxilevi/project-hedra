@@ -184,6 +184,8 @@
     <Compile Include="BiomeSystem\BiomeStructureDesign.cs" />
     <Compile Include="BiomeSystem\BiomeTreeDesign.cs" />
     <Compile Include="Components\BlacksmithComponent.cs" />
+    <Compile Include="Components\Effects\AttackPowerBonusComponent.cs" />
+    <Compile Include="Components\Effects\AttackResistanceBonusComponent.cs" />
     <Compile Include="Components\Effects\AttackSpeedBonusComponent.cs" />
     <Compile Include="Components\Effects\BleedComponent.cs" />
     <Compile Include="Components\Effects\BleedingComponent.cs" />
@@ -380,6 +382,14 @@
     <Compile Include="Engine\SkillSystem\Archer\Scout\SteadyAim.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Scout\Swiftness.cs" />
     <Compile Include="Engine\SkillSystem\ChargeablePassiveSkill.cs" />
+    <Compile Include="Engine\SkillSystem\Rogue\Assassin\Fade.cs" />
+    <Compile Include="Engine\SkillSystem\Rogue\Ninja\FanOfKnives.cs" />
+    <Compile Include="Engine\SkillSystem\Rogue\Ninja\FinishingBlow.cs" />
+    <Compile Include="Engine\SkillSystem\Rogue\Ninja\MartialArtsMaster.cs" />
+    <Compile Include="Engine\SkillSystem\Rogue\Ninja\SnakeSpirit.cs" />
+    <Compile Include="Engine\SkillSystem\Rogue\Ninja\MartialArtsTraining.cs" />
+    <Compile Include="Engine\SkillSystem\Rogue\Ninja\TigerStrike.cs" />
+    <Compile Include="Engine\SkillSystem\Rogue\Ninja\TripleShuriken.cs" />
     <Compile Include="Engine\SkillSystem\SingleAnimationSkill.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Agility.cs" />
     <Compile Include="Engine\SkillSystem\Archer\FlameArrow.cs" />
@@ -395,12 +405,10 @@
     <Compile Include="Engine\SkillSystem\Mage\Meditation.cs" />
     <Compile Include="Engine\SkillSystem\PassiveSkill.cs" />
     <Compile Include="Engine\SkillSystem\Rogue\BurstOfSpeed.cs" />
-    <Compile Include="Engine\SkillSystem\Rogue\Fade.cs" />
     <Compile Include="Engine\SkillSystem\Rogue\LearnClaw.cs" />
     <Compile Include="Engine\SkillSystem\Rogue\LearnKatar.cs" />
     <Compile Include="Engine\SkillSystem\Rogue\RoundSlash.cs" />
     <Compile Include="Engine\SkillSystem\Rogue\Shuriken.cs" />
-    <Compile Include="Engine\SkillSystem\Rogue\TripleShuriken.cs" />
     <Compile Include="Engine\SkillSystem\Rogue\Venom.cs" />
     <Compile Include="Engine\SkillSystem\SkillFactory.cs" />
     <Compile Include="Engine\SkillSystem\SkillUtils.cs" />
@@ -8044,8 +8052,6 @@
     <Folder Include="Assets\Items\Pants\" />
     <Folder Include="Engine\SkillSystem\Mage\Druid" />
     <Folder Include="Engine\SkillSystem\Mage\Necromancer" />
-    <Folder Include="Engine\SkillSystem\Rogue\Assassin" />
-    <Folder Include="Engine\SkillSystem\Rogue\Ninja" />
     <Folder Include="Engine\SkillSystem\Warrior\Berserker" />
     <Folder Include="Engine\SkillSystem\Warrior\Paladin" />
     <Folder Include="Modules\Items\Boots\" />
@@ -9089,6 +9095,14 @@
       <Link>Assets\Skills\Druid.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\FanOfKnives.png">
+      <Link>Assets\Skills\FanOfKnives.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\FinishingBlow.png">
+      <Link>Assets\Skills\FinishingBlow.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Focus.png">
       <Link>Assets\Skills\Focus.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -9107,6 +9121,14 @@
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Mage.png">
       <Link>Assets\Skills\Mage.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\MartialArtsMaster.png">
+      <Link>Assets\Skills\MartialArtsMaster.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\MartialArtsTraining.png">
+      <Link>Assets\Skills\MartialArtsTraining.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Necromancer.png">
@@ -9145,8 +9167,9 @@
       <Link>Assets\Skills\Scout.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\project-hedra-assets\UI\Skills\SkillIcons.psd">
-      <Link>Assets\Skills\SkillIcons.psd</Link>
+    <Content Include="..\project-hedra-assets\UI\Skills\SnakeSpirit.png">
+      <Link>Assets\Skills\SnakeSpirit.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\SpikeTrap.png">
       <Link>Assets\Skills\SpikeTrap.png</Link>
@@ -9162,6 +9185,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Swiftness.png">
       <Link>Assets\Skills\Swiftness.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\TigerStrike.png">
+      <Link>Assets\Skills\TigerStrike.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\StaminaAndOxygenBarBackground.png">

@@ -55,7 +55,7 @@ namespace Hedra.EntitySystem
         float AddonHealth { get; set; }
         float DodgeCost { get; set; }    
         float RandomFactor { get; set; }
-        float AttackResistance { get; }
+        float AttackResistance { get; set; }
         int Gold { get; set; }
         float DamageEquation { get; }
         Vector3 LookingDirection { get; }

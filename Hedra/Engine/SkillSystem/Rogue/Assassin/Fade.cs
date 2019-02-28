@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections;
+using System.Globalization;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
@@ -25,9 +26,9 @@ namespace Hedra.Engine.SkillSystem.Rogue
     {
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Fade.png");
         protected override int MaxLevel => 20;
-        private float FadeTime => Math.Min(16, 6 + Level * .5f);
-        public override float MaxCooldown => 28 - Level + FadeTime;
-        public override float ManaCost => 110f;
+        private float FadeTime => 14 + Level / (float) MaxLevel * 15f;
+        public override float MaxCooldown => 28 + FadeTime;
+        public override float ManaCost => 110f - Level / (float) MaxLevel * 30f;
         private bool _isFaded;
         private float _timeRemaining;
 
@@ -52,8 +53,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
 
         private void UnFade()
         {
-            Player.Model.Alpha = 1;
-            Player.Model.BaseTint = Vector4.Zero;
+            Player.Model.Outline = false;
             Player.IsInvisible = false;
             _isFaded = false;
         }
@@ -62,8 +62,8 @@ namespace Hedra.Engine.SkillSystem.Rogue
         {
             _isFaded = true;
             _timeRemaining = FadeTime;
-            Player.Model.Alpha = .5f;
-            Player.Model.BaseTint = -new Vector4(.85f, .85f, .85f, 0);
+            Player.Model.Outline = true;
+            Player.Model.OutlineColor = new Vector4(.2f, .2f, .2f, 1);
             Player.IsInvisible = true;
             SoundPlayer.PlayUISound(SoundType.DarkSound, 1f, .25f);
         }
@@ -83,11 +83,12 @@ namespace Hedra.Engine.SkillSystem.Rogue
             World.Particles.Emit();
         }
 
-        protected override void OnExecution()
-        {
-        }
-
         public override string Description => Translations.Get("fade_desc");
         public override string DisplayName => Translations.Get("fade_skill");
+
+        public override string[] Attributes => new[]
+        {
+            Translations.Get("fade_time_change", FadeTime.ToString("0.0", CultureInfo.InvariantCulture))
+        };
     }
 }

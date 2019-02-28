@@ -33,10 +33,12 @@ namespace Hedra.Engine.EntitySystem
 
     public class DamageComponent : EntityComponent
     {
+        public const float DefaultMissChance = 0.05f;
         public event OnDamageEventHandler OnDamageEvent;
         public float XpToGive { get; set; } = 8;
         public bool Immune { get; set; }
         public bool Delete { get; set; } = true;
+        public float MissChance { get; set; } = DefaultMissChance;
         private readonly List<BaseBillboard> _damageLabels;
         private readonly List<Predicate<IEntity>> _ignoreList;
         private float _tintTimer;
@@ -85,7 +87,7 @@ namespace Hedra.Engine.EntitySystem
             if (Parent.IsDead || _ignoreList.Any(I => I.Invoke(Damager))) return;
             
 
-            var shouldMiss = Parent is LocalPlayer && Utils.Rng.Next(1, 18) == 1;
+            var shouldMiss = Parent is LocalPlayer && Utils.Rng.NextFloat() < MissChance;
             _attackedTimer = 6;
             _hasBeenAttacked = true;
             var isImmune = Immune | (Parent.IsStuck && !Parent.Model.Pause);
