@@ -8,8 +8,8 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
     {
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/FinishingBlow.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/RogueBladeRoundAttack.dae");
-        
-        protected override int MaxLevel { get; }
+
+        protected override int MaxLevel => 15;
         public override string Description => Translations.Get("finishing_blow_desc");
         public override string DisplayName => Translations.Get("finishing_blow_skill");
     }

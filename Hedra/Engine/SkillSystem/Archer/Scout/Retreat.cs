@@ -32,7 +32,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
         public override void Use()
         {
             Player.Movement.Orientate();
-            Player.Movement.ForceJump(50);
+            Player.Movement.ForceJump(40);
             Player.Movement.CaptureMovement = false;
             _orientation = -Player.LookingDirection.Xz.ToVector3().NormalizedFast();
             _accumulated = Vector3.Zero;
