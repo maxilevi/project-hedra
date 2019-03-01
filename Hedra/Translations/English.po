@@ -289,6 +289,22 @@ martial_arts_master_desc = The training you received allows you to launch faster
 martial_arts_master_skill = Martial Arts Master
 martial_arts_training_resistance_change = Increases your attack resistance by $(GREEN)(BOLD){+{0}%}
 martial_arts_training_attack_speed_change = Increases your attack speed by $(GREEN)(BOLD){+{0}%}
+shadow_warrior_desc =
+shadow_warrior_skill = Shadow Warrior
+treason_desc = 
+treason_skill = Treason
+quiet_steps_desc =
+quiet_steps_skill = Quiet Steps
+clean_cut_desc = 
+clean_cut_skill = Clean Cut
+stealth_desc =
+stealth_skill = Stealth
+cutthroat_desc =
+cutthroat_skill = Cutthroat
+night_stalker_desc =
+night_stalker_skill = Night Stalker
+marked_for_death_desc =
+marked_for_death_skill = Marked For Death
 # -- End Skill Names --
 
 skill_mana_cost = Mana Cost: $(BOLD)(BLUE){{0}}

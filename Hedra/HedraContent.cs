@@ -9,6 +9,7 @@ using Hedra.Engine.SkillSystem.Archer.Hunter;
 using Hedra.Engine.SkillSystem.Archer.Scout;
 using Hedra.Engine.SkillSystem.Mage;
 using Hedra.Engine.SkillSystem.Rogue;
+using Hedra.Engine.SkillSystem.Rogue.Assassin;
 using Hedra.Engine.SkillSystem.Rogue.Ninja;
 using Hedra.Engine.SkillSystem.Warrior;
 using Hedra.Engine.Sound;
@@ -104,6 +105,7 @@ namespace Hedra
             AddSkill("RoundSlash", typeof(RoundSlash));
             AddSkill("Shuriken", typeof(Shuriken));
             AddSkill("Venom", typeof(Venom));
+            AddSkill("ShadowWarrior", typeof(ShadowWarrior));
             
             AddSkill("FanOfKnives", typeof(FanOfKnives));
             AddSkill("SnakeSpirit", typeof(SnakeSpirit));
@@ -114,6 +116,13 @@ namespace Hedra
             AddSkill("FinishingBlow", typeof(FinishingBlow));
             
             AddSkill("Fade", typeof(Fade));
+            AddSkill("Treason", typeof(Treason));
+            AddSkill("Stealth", typeof(Stealth));
+            AddSkill("CleanCut", typeof(CleanCut));
+            AddSkill("MarkedForDeath", typeof(MarkedForDeath));
+            AddSkill("Cutthroat", typeof(Cutthroat));
+            AddSkill("NightStalker", typeof(NightStalker));
+            AddSkill("QuietSteps", typeof(QuietSteps));
             
             AddSkill("Bash", typeof(Bash));
             AddSkill("Intercept", typeof(Intercept));

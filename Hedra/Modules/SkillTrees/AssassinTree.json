@@ -1,5 +1,13 @@
 {
   "Name": "Assassin",
   "Icon": "$DataFile$/Assets/Skills/Assassin.png",
-  "Description": "assassin_class_description"
+  "Description": "assassin_class_description",
+  "M11": "Stealth",
+  "M12": "Treason",
+  "M13": "NightStalker",
+  "M32": "Fade",
+  "M34": "Cutthroat",
+  "M21": "SoftSteps",
+  "M22": "CleanCut",
+  "M23": "MarkedForDeath"
 }

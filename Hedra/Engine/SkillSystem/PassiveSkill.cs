@@ -26,9 +26,9 @@ namespace Hedra.Engine.SkillSystem
             }
         }
 
-        protected abstract void Remove();
-
         protected abstract void Add();
+        
+        protected abstract void Remove();
         
         public override void Use()
         {

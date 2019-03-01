@@ -7,17 +7,14 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
-using System;
-using System.Collections;
 using System.Globalization;
 using Hedra.Engine.Localization;
-using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Sound;
 using OpenTK;
 
-namespace Hedra.Engine.SkillSystem.Rogue
+namespace Hedra.Engine.SkillSystem.Rogue.Assassin
 {
     /// <summary>
     /// Description of WeaponThrow.
