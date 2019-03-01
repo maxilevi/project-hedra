@@ -126,19 +126,19 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                     var isLocked = item.GetAttribute<int>("Level") == 0;
                     if (enabled)
                     {
-                        var skillOffset = !isLocked ? _skillPointsBackgroundTextures[i].Scale.Y * Vector2.UnitY * 2.5f : -_skillPointsBackgroundTextures[i].Scale.Y * .2f * Vector2.UnitY;
+                        var skillOffset = !isLocked ? _skillPointsBackgroundTextures[i].Scale.Y * 2 * Vector2.UnitY : Vector2.Zero;
                         var color = new Vector4(isLocked ? Vector3.One * .25f : Vector3.One, button.Texture.Opacity);
                         if (isFirst)
                         {
-                            vertexList.Add(button.Position - button.Scale.Y * Vector2.UnitY * 2f - skillOffset);
+                            vertexList.Add(button.Texture.AdjustedPosition - button.Scale.Y * Vector2.UnitY - skillOffset);
                             colorList.Add(color);
                         }
                         else
                         {
-                            vertexList.Add(button.Position);
+                            vertexList.Add(button.Texture.AdjustedPosition + button.Scale.Y * Vector2.UnitY);
                             colorList.Add(color);
 
-                            vertexList.Add(button.Position - button.Scale.Y * Vector2.UnitY * 2 - skillOffset);
+                            vertexList.Add(button.Texture.AdjustedPosition - button.Scale.Y * Vector2.UnitY - skillOffset);
                             colorList.Add(color);
                         }
                         isFirst = false;
