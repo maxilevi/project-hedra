@@ -2,13 +2,13 @@ using Hedra.Engine.Management;
 
 namespace Hedra.Engine.SkillSystem
 {
-    public abstract class ActivateSkill : CappedSkill
+    public abstract class ActivateDurationSkill : CappedSkill
     {
         public override float IsAffectingModifier => _active ? 1 : 0;
         private readonly Timer _timer;
         private bool _active;
 
-        protected ActivateSkill()
+        protected ActivateDurationSkill()
         {
             _timer = new Timer(1);
         }

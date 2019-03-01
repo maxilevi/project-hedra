@@ -36,6 +36,7 @@ namespace Hedra.AISystem.Humanoid
             _leftWeapon = (Bow) Parent.LeftWeapon;
             _leftWeapon.Miss += OnMiss;
             _leftWeapon.Hit += OnHit;
+            _leftWeapon.BowModifiers += BowModifiers;
         }
 
         protected override void DoUpdate()
@@ -73,6 +74,11 @@ namespace Hedra.AISystem.Humanoid
         private void OnHit(Projectile Arrow)
         {
             _attackRadius = DefaultAttackRadius;
+        }
+
+        private void BowModifiers(Projectile Arrow)
+        {
+            Arrow.Position -= Vector3.UnitY;
         }
 
         protected override bool UseCollision => true;

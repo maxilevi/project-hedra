@@ -59,6 +59,7 @@ namespace HedraTests.Player.Skills
             public override string Description => string.Empty;
             public override string DisplayName => string.Empty;
             public override uint TextureId => 0;
+            protected override int MaxLevel => 10;
             public Action<Bow> Callback { get; set; }
         
             protected override void BeforeUse(Bow Weapon)

@@ -211,12 +211,12 @@ namespace Hedra.WeaponSystem
             Mesh.BeforeRotation = Vector3.UnitY * -0.7f;
         }
 
-        public virtual int ParsePrimaryIndex(int Index)
+        protected virtual int ParsePrimaryIndex(int Index)
         {
             return Index;
         }
 
-        public virtual int ParseSecondaryIndex(int Index)
+        protected virtual int ParseSecondaryIndex(int Index)
         {
             return Index;
         }
@@ -241,8 +241,8 @@ namespace Hedra.WeaponSystem
         protected void BasePrimaryAttack(IHumanoid Human, AttackOptions Options)
         {
             BaseAttack(Human, Options);
-            var animation = _primaryAnimations[ParsePrimaryIndex(PrimaryAnimationsIndex)];
-            animation.Speed = _animationSpeeds[Array.IndexOf(_animations, animation)] * Owner.AttackSpeed * PrimaryAttackAnimationSpeed;
+            var animation = NextPrimaryAnimation;
+            animation.Speed = NextPrimaryAnimationSpeed;
             Human.Model.BlendAnimation(animation);
         }
 
@@ -266,12 +266,12 @@ namespace Hedra.WeaponSystem
         protected void BaseSecondaryAttack(IHumanoid Human, AttackOptions Options)
         {
             BaseAttack(Human, Options);
-            var animation = _secondaryAnimations[ParseSecondaryIndex(SecondaryAnimationsIndex)];
-            animation.Speed = _animationSpeeds[Array.IndexOf(_animations, animation)] * Owner.AttackSpeed * SecondaryAttackAnimationSpeed;
+            var animation = NextSecondaryAnimation;
+            animation.Speed = NextSecondaryAnimationSpeed;
             Human.Model.BlendAnimation(animation);
         }
 
-        protected bool MeetsRequirements()
+        public bool MeetsRequirements()
         {
             return Owner != null &&
                    !(Owner.IsAttacking || Owner.IsKnocked || SecondaryAttack || PrimaryAttack);
@@ -392,7 +392,19 @@ namespace Hedra.WeaponSystem
                 }
             }
         }
-                  
+        
+        public float PrimaryAttackDuration => NextPrimaryAnimation.Length / NextPrimaryAnimationSpeed;
+
+        public float SecondaryAttackDuration => NextSecondaryAnimation.Length / NextSecondaryAnimationSpeed;
+        
+        private float NextPrimaryAnimationSpeed => _animationSpeeds[Array.IndexOf(_animations, NextPrimaryAnimation)] * Owner.AttackSpeed * PrimaryAttackAnimationSpeed;
+
+        private float NextSecondaryAnimationSpeed => _animationSpeeds[Array.IndexOf(_animations, NextSecondaryAnimation)] * Owner.AttackSpeed * SecondaryAttackAnimationSpeed;
+
+        private Animation NextPrimaryAnimation => _primaryAnimations[ParsePrimaryIndex(PrimaryAnimationsIndex)];
+        
+        private Animation NextSecondaryAnimation => _secondaryAnimations[ParseSecondaryIndex(SecondaryAnimationsIndex)];
+
         protected virtual void OnAttackStance()
         {
             if(IsCharging)

@@ -81,7 +81,7 @@ namespace Hedra.WeaponSystem
             base.Update(Human);
         }
 
-        public override int ParsePrimaryIndex(int AnimationIndex)
+        protected override int ParsePrimaryIndex(int AnimationIndex)
         {
             return AnimationIndex == 5 ? 2 : AnimationIndex & 1;
         }

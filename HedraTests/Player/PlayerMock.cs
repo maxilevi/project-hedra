@@ -63,6 +63,7 @@ namespace HedraTests.Player
         public float ManaRegenFactor { get; set; }
         public int Gold { get; set; }
         public float DamageEquation { get; }
+        public float UnRandomizedDamageEquation { get; }
         public Vector3 LookingDirection { get; }
 
         public void AttackSurroundings(float Damage, IEntity[] ToIgnore, Action<IEntity> Callback)

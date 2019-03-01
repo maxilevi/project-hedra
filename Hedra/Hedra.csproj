@@ -367,7 +367,7 @@
     <Compile Include="Engine\Rendering\TextureParameter.cs" />
     <Compile Include="Engine\Rendering\UI\Plaque.cs" />
     <Compile Include="Engine\Rendering\UI\TextOptions.cs" />
-    <Compile Include="Engine\SkillSystem\ActivateSkill.cs" />
+    <Compile Include="Engine\SkillSystem\ActivateDurationSkill.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Jab.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Hunter\Concealment.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Hunter\Focus.cs" />

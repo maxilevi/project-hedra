@@ -28,7 +28,7 @@ namespace Hedra.Engine.SkillSystem.Archer
     /// </summary>
     public class FlameArrow : SpecialAttackSkill<Bow>
     {
-        private const float BaseDamage = 80f;
+        private const float BaseDamage = 60f;
         private const float BaseCooldown = 24f;
         private const float CooldownCap = 12f;
         private const float RangeCap = 12f;
@@ -39,11 +39,12 @@ namespace Hedra.Engine.SkillSystem.Archer
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/FlameArrow.png");
         public override string Description => Translations.Get("flame_arrow_desc");
         public override string DisplayName => Translations.Get("flame_arrow");
-        private float Damage => BaseDamage * (base.Level * 0.40f) + BaseDamage;
+        private float Damage => BaseDamage * (base.Level * 0.75f) + BaseDamage;
         public override float MaxCooldown => Math.Max(BaseCooldown - 0.80f * base.Level, CooldownCap);
         private float EffectDuration => Math.Min(BaseEffectDuration + 0.15f * base.Level, DurationCap);
         private float EffectRange => Math.Min(BaseEffectRange + 0.15f * base.Level, RangeCap);
         public override float ManaCost => BaseManaCost;
+        protected override int MaxLevel => 99;
 
         protected override void BeforeUse(Bow Weapon)
         {

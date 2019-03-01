@@ -58,6 +58,7 @@ namespace Hedra.EntitySystem
         float AttackResistance { get; set; }
         int Gold { get; set; }
         float DamageEquation { get; }
+        float UnRandomizedDamageEquation { get; }
         Vector3 LookingDirection { get; }
         void AttackSurroundings(float Damage, IEntity[] ToIgnore, Action<IEntity> Callback);
         void AttackSurroundings(float Damage, IEntity[] ToIgnore);

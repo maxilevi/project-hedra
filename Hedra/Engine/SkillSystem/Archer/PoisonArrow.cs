@@ -26,7 +26,7 @@ namespace Hedra.Engine.SkillSystem.Archer
     {
         private const float BaseDamage = 11f;
         private const float BaseCooldown = 16f;
-        private const float CooldownCap = 6f;
+        private const float CooldownCap = 10f;
         private const float BaseManaCost = 70f;
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/PoisonArrow.png");
         public override string Description => Translations.Get("poison_arrow_desc");
@@ -34,6 +34,7 @@ namespace Hedra.Engine.SkillSystem.Archer
         private float Damage => BaseDamage * (base.Level * 0.35f) + BaseDamage;
         public override float MaxCooldown => Math.Max(BaseCooldown - 0.80f * base.Level, CooldownCap);
         public override float ManaCost => BaseManaCost;
+        protected override int MaxLevel => 99;
 
         protected override void BeforeUse(Bow Weapon)
         {

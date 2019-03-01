@@ -24,9 +24,9 @@ namespace Hedra.Engine.SkillSystem.Archer
     /// </summary>
     public class IceArrow : SpecialAttackSkill<Bow>
     {
-        private const float BaseDamage = 60f;
+        private const float BaseDamage = 40f;
         private const float BaseCooldown = 18f;
-        private const float CooldownCap = 8f;
+        private const float CooldownCap = 12f;
         private const float BaseManaCost = 40f;
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/IceArrow.png");
         public override string Description => Translations.Get("ice_arrow_desc");
@@ -34,6 +34,7 @@ namespace Hedra.Engine.SkillSystem.Archer
         private float Damage => BaseDamage * (base.Level * 0.40f) + BaseDamage;
         public override float MaxCooldown => Math.Max(BaseCooldown - 0.80f * base.Level, CooldownCap);
         public override float ManaCost => BaseManaCost;
+        protected override int MaxLevel => 99;
 
         protected override void BeforeUse(Bow Weapon)
         {

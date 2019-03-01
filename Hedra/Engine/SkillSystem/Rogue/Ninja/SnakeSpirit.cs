@@ -5,7 +5,7 @@ using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.SkillSystem.Rogue.Ninja
 {
-    public class SnakeSpirit : ActivateSkill
+    public class SnakeSpirit : ActivateDurationSkill
     {
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/SnakeSpirit.png");
         
