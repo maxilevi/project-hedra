@@ -52,6 +52,7 @@ namespace HedraTests.Player
         public event OnComponentAdded ComponentAdded;
         public event OnDamagingEventHandler AfterDamaging;
         public event OnDamagingEventHandler BeforeDamaging;
+        public event OnDamageModifierEventHandler DamageModifiers;
         public event OnAttackEventHandler BeforeAttack;
         public event OnAttackEventHandler AfterAttack;
         public EntityComponentManager ComponentManager { get; }
@@ -394,6 +395,11 @@ namespace HedraTests.Player
         }
 
         public void InvokeAfterDamaging(IEntity Invoker, float Damage)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void InvokeDamageModifier(IEntity Invoker, ref float Damage)
         {
             throw new NotImplementedException();
         }

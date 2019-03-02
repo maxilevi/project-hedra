@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
+using System;
 using System.Linq;
 using Hedra.Engine.ClassSystem.Templates;
 using Hedra.Engine.Game;
@@ -46,6 +47,11 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                     } : new TreeItem();
                 }
             }
+        }
+
+        public bool Has(Type Skill)
+        {
+            return Items.Any(I => I.Any(T => T.AbilityType == Skill));
         }
     }
 }

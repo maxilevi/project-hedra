@@ -20,9 +20,8 @@ namespace Hedra.Engine.Player
         IMessageDispatcher MessageDispatcher { get; }
         ICamera View { get; }
         ChunkLoader Loader { get; }
-        UserInterface UI { get; set; }
+        UserInterface UI { get; }
         IPlayerInventory Inventory { get; }
-        EntitySpawner Spawner { get; }
         IToolbar Toolbar { get; }
         IAbilityTree AbilityTree { get; }
         PetManager Pet { get; }

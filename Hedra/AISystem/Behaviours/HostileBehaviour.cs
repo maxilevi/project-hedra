@@ -18,7 +18,7 @@ namespace Hedra.AISystem.Behaviours
 
         protected virtual IEntity GetTarget()
         {
-            return World.InRadius<IPlayer>(Parent.Position, Radius).FirstOrDefault();
+            return World.InRadius<IPlayer>(Parent.Position, Radius).FirstOrDefault(P => (Parent.Position - P.Position).LengthFast < Radius * P.Attributes.MobAggroModifier);
         }
 
         protected virtual void HandleTarget()

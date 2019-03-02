@@ -34,7 +34,8 @@ namespace Hedra.Engine.Rendering.UI
                 {TextFormatting.Gold, Color.Gold},
                 {TextFormatting.Gray, Color.LightGray},
                 {TextFormatting.Black, Color.Black},
-                {TextFormatting.Yellow, Color.Yellow}
+                {TextFormatting.Yellow, Color.Yellow},
+                {TextFormatting.Cyan, Color.Cyan}
             };
             FontMap = new Dictionary<string, Font>
             {

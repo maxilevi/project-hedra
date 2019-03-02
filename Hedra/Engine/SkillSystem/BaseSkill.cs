@@ -34,7 +34,6 @@ namespace Hedra.Engine.SkillSystem
         public virtual float MaxCooldown { get; }
         public virtual float IsAffectingModifier => Passive ? 1 : 0;
         public virtual float ManaCost { get; }
-        public float Cooldown { get; set; }
         public int Level { get; set; }
         public bool Active { get; set; } = true;
         public virtual bool Passive { get; set; }
@@ -42,6 +41,7 @@ namespace Hedra.Engine.SkillSystem
         public abstract string DisplayName { get; }
         public bool Casting { get; set; }
         public abstract uint TextureId { get; }
+        protected float Cooldown { get; set; }
         protected Vector3 Tint { get; set; }
         protected IPlayer Player => GameManager.Player;
         protected virtual bool HasCooldown => true;
@@ -139,6 +139,11 @@ namespace Hedra.Engine.SkillSystem
         protected void InvokeStateUpdated()
         {
             StateUpdated?.Invoke();
+        }
+
+        public void ResetCooldown()
+        {
+            Cooldown = MaxCooldown / Player.Attributes.CooldownReductionModifier;
         }
 
         public virtual bool CanBeCastedWhileAttacking => false;

@@ -35,6 +35,8 @@ namespace Hedra.Engine.EntitySystem
 
     public delegate void OnAttackEventHandler(AttackOptions Options);
 
+    public delegate void OnDamageModifierEventHandler(IEntity Victim, ref float Damage);
+
     public delegate void OnComponentAdded(IComponent<IEntity> Component);
     
     public class Entity : IEntity
@@ -61,6 +63,7 @@ namespace Hedra.Engine.EntitySystem
         public event OnComponentAdded ComponentAdded;
         public event OnDamagingEventHandler AfterDamaging;
         public event OnDamagingEventHandler BeforeDamaging;
+        public event OnDamageModifierEventHandler DamageModifiers;
         public EntityAttributes Attributes { get; }
         public EntityComponentManager ComponentManager { get; }
         public float AttackDamage { get; set; } = 1.0f;
@@ -233,6 +236,7 @@ namespace Hedra.Engine.EntitySystem
                 return;
 
             Damager?.InvokeBeforeDamaging(this, Amount);
+            Damager?.InvokeDamageModifier(this, ref Amount);
             _damageManager.Damage(Amount, Damager, out Exp, PlaySound, PushBack);
             Damager?.InvokeAfterDamaging(this, Amount);
         }
@@ -245,6 +249,11 @@ namespace Hedra.Engine.EntitySystem
         public void InvokeAfterDamaging(IEntity Invoker, float Damage)
         {
             AfterDamaging?.Invoke(Invoker, Damage);
+        }
+
+        public void InvokeDamageModifier(IEntity Invoker, ref float Damage)
+        {
+            DamageModifiers?.Invoke(Invoker, ref Damage);
         }
 
         public void AddBonusSpeedWhile(float BonusSpeed, Func<bool> Condition, bool ShowParticles = true)

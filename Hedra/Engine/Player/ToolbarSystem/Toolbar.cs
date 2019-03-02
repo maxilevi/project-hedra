@@ -111,12 +111,12 @@ namespace Hedra.Engine.Player.ToolbarSystem
             {
                 case MouseButton.Left:
                     if (!_w1.MeetsRequirements() || _w2.IsCharging) return;
-                    _w1.Cooldown = _w1.MaxCooldown;
+                    _w1.ResetCooldown();
                     _w1.Use();
                     break;
                 case MouseButton.Right:
                     if (!_w2.MeetsRequirements()) return;
-                    _w2.Cooldown = _w2.MaxCooldown;
+                    _w2.ResetCooldown();
                     _w2.Use();
                     break;
             }

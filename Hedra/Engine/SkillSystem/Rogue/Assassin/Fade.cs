@@ -24,8 +24,8 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Fade.png");
         protected override int MaxLevel => 20;
         private float FadeTime => 14 + Level / (float) MaxLevel * 15f;
-        public override float MaxCooldown => 28 + FadeTime;
-        public override float ManaCost => 110f - Level / (float) MaxLevel * 30f;
+        public override float MaxCooldown => 28 - 8 * (Level / (float)MaxLevel) + FadeTime;
+        public override float ManaCost => 110f - 30f * (Level / (float) MaxLevel);
         private bool _isFaded;
         private float _timeRemaining;
 
@@ -63,6 +63,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
             Player.Model.OutlineColor = new Vector4(.2f, .2f, .2f, 1);
             Player.IsInvisible = true;
             SoundPlayer.PlayUISound(SoundType.DarkSound, 1f, .25f);
+            InvokeStateUpdated();
         }
 
         private void ShowParticles()
@@ -82,7 +83,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
 
         public override string Description => Translations.Get("fade_desc");
         public override string DisplayName => Translations.Get("fade_skill");
-
+        public override float IsAffectingModifier => _isFaded ? 1 : 0;
         public override string[] Attributes => new[]
         {
             Translations.Get("fade_time_change", FadeTime.ToString("0.0", CultureInfo.InvariantCulture))

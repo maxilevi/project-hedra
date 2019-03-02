@@ -6,45 +6,51 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-
-using System;
+using System.Globalization;
 using Hedra.Components.Effects;
+using Hedra.Core;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
+using Hedra.EntitySystem;
+using Hedra.WeaponSystem;
 
 namespace Hedra.Engine.SkillSystem.Rogue
 {
     /// <summary>
     /// Description of Resistance.
     /// </summary>
-    public class Venom : PassiveSkill
+    public class Venom : SpecialAttackPassiveSkill<RogueWeapon>
     {
-        private PoisonousComponent _component;
-
-        protected override void Add()
+        protected override void BeforeUse(RogueWeapon Weapon, AttackOptions Options)
         {
-            if (Player.SearchComponent<PoisonousComponent>() == null)
+            Player.AfterDamaging += AfterDamaging;
+        }
+
+        protected override void AfterUse(RogueWeapon Weapon, AttackOptions Options)
+        {
+            Player.AfterDamaging -= AfterDamaging;
+        }
+        
+        private void AfterDamaging(IEntity Victim, float Amount)
+        {
+            if (Utils.Rng.NextFloat() < Chance && Victim.SearchComponent<PoisonComponent>() == null)
             {
-                _component = new PoisonousComponent(Player, 1, 1, 1);
-                Player.AddComponent(_component);
+                Victim.AddComponent(new PoisonComponent(Victim, Player, 5, Damage));
             }
-            var poison = Player.SearchComponent<PoisonousComponent>();
-            poison.Chance = (int) (100 * (Math.Min(.4f, base.Level * .05f) + .2f));
-            poison.Damage = Level * 7.5f + 20f;
-            poison.Duration = 8f - Math.Min(4f, Level * .5f);        
         }
-
-        protected override void Remove()
-        {
-            Player.RemoveComponent(_component);
-        }
-
-        protected override int MaxLevel => 100;
         
+        protected override int MaxLevel => 15;
+        private float Chance => .1f + .1f * (Level / (float)MaxLevel);
+        private float Duration => 3f + 3f * (Level / (float)MaxLevel);
+        private float Damage => 15f + 30f * (Level / (float) MaxLevel);
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Venom.png");
-        
         public override string Description => Translations.Get("venom_desc");
-        
         public override string DisplayName => Translations.Get("venom_skill");
+        public override string[] Attributes => new[]
+        {
+            Translations.Get("venom_chance_change", (int)(Chance * 100)),
+            Translations.Get("venom_damage_change", Damage.ToString("0.0", CultureInfo.InvariantCulture)),
+            Translations.Get("venom_duration_change", Duration.ToString("0.0", CultureInfo.InvariantCulture))
+        };
     }
 }

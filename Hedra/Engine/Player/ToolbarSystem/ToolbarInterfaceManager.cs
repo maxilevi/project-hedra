@@ -73,7 +73,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
             var allSkills = _player.Toolbar.Skills ?? new BaseSkill[0];
             allSkills.ToList().ForEach( S => S.Active = false);
 
-            var filteredSkills = this.GetActiveFilteredSkills();
+            var filteredSkills = GetActiveFilteredSkills();
             for (var i = 0; i < filteredSkills.Length; i++)
             {
                 filteredSkills[i].Active = this.Enabled && _player.AbilityTree.Show;
@@ -159,12 +159,19 @@ namespace Hedra.Engine.Player.ToolbarSystem
         private BaseSkill[] GetFilteredSkills()
         {
             var items = _player.AbilityTree.TreeItems;
-            return _player.Toolbar.Skills?.Where(delegate (BaseSkill S)
+            return _player.Toolbar.Skills?.Where(S =>
             {
-                var item = items.FirstOrDefault(I => I != null && I.HasAttribute("AbilityType") &&
-                                                                     I.GetAttribute<Type>("AbilityType") == S.GetType());
+                if(!CanLearnSkill(S)) return false;
+                var item = items.FirstOrDefault(I => I != null && I.HasAttribute("AbilityType") && I.GetAttribute<Type>("AbilityType") == S.GetType());
                 return item != null && item.GetAttribute<bool>("Enabled");
             }).ToArray() ?? new BaseSkill[0];
+        }
+
+        private bool CanLearnSkill(BaseSkill S)
+        {
+            return _player.AbilityTree != null
+                   && (!_player.Class.MainTree?.Has(S.GetType()) ?? false)
+                   && (!_player.AbilityTree.Specialization?.Has(S.GetType()) ?? false);
         }
         
         public BaseSkill[] GetActiveFilteredSkills()

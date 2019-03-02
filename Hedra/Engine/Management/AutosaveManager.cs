@@ -16,15 +16,18 @@ namespace Hedra.Engine.Management
     /// </summary>
     public static class AutosaveManager
     {
-        public static int TimePerSave = 30;
-        private static float PassedTime;
-        public static void Update(){
+        private const int SecondsTimePerSave = 30;
+        private static float _passedTime;
+        
+        public static void Update()
+        {
             if(!GameSettings.Autosave || GameManager.InStartMenu) return;
             
-            PassedTime += Time.IndependantDeltaTime;
-            if(PassedTime >= TimePerSave){
-                AutosaveManager.Save();
-                PassedTime = 0;
+            _passedTime += Time.IndependantDeltaTime;
+            if(_passedTime >= SecondsTimePerSave)
+            {
+                Save();
+                _passedTime = 0;
             }
         }
         

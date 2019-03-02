@@ -382,6 +382,7 @@
     <Compile Include="Engine\SkillSystem\Archer\Scout\SteadyAim.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Scout\Swiftness.cs" />
     <Compile Include="Engine\SkillSystem\ChargeablePassiveSkill.cs" />
+    <Compile Include="Engine\SkillSystem\ConditionedPassiveSkill.cs" />
     <Compile Include="Engine\SkillSystem\Rogue\Assassin\Cutthroat.cs" />
     <Compile Include="Engine\SkillSystem\Rogue\Assassin\Fade.cs" />
     <Compile Include="Engine\SkillSystem\Rogue\Assassin\MarkedForDeath.cs" />

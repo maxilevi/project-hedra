@@ -28,7 +28,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             try
             {
                 realSkill.Level = Math.Max(1, originalLevel);
-                ItemDescription.Text = TextProvider.Wrap(realSkill.Description, 30);
+                ItemDescription.Text = TextProvider.Wrap(realSkill.Description, 35);
                 ItemDescription.Color = Color.White;
                 ItemText.Text = Utils.FitString(realSkill.DisplayName, 18);
                 ItemAttributes.Text = TextProvider.Wrap(BuildAttributes(realSkill), 30);
@@ -51,19 +51,22 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             var cooldown = RealSkill.MaxCooldown > 0
                 ? $"• {Translations.Get("skill_cooldown", RealSkill.MaxCooldown.ToString("0.0", CultureInfo.InvariantCulture))}{Environment.NewLine}"
                 : string.Empty;
+            var passive = RealSkill.Passive
+                ? $"{Translations.Get("passive_skill")}{Environment.NewLine}"
+                : string.Empty;
             var attributes = new StringBuilder();
             var skillAttributes = RealSkill.Attributes;
             for (var i = 0; i < skillAttributes.Length; ++i)
             {
                 attributes.AppendLine($"• {skillAttributes[i]}");
             }
-            return $"{manaCost}{cooldown}{attributes}";
+            return $"{passive}{manaCost}{cooldown}{attributes}";
         }
         
         protected virtual void SetPosition()
         {
             ItemDescription.Position = this.Position - Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .0f);
-            ItemTexture.Position = this.Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .175f);
+            ItemTexture.Position = this.Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .2f);
             ItemAttributes.Position = ItemDescription.Position - (ItemDescription.Scale.Y + ItemAttributes.Scale.Y) * Vector2.UnitY - Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .075f);
             SetTitlePosition();
         }

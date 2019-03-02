@@ -16,6 +16,8 @@ namespace Hedra.EntitySystem
         event OnDamagingEventHandler AfterDamaging;
         
         event OnDamagingEventHandler BeforeDamaging;
+
+        event OnDamageModifierEventHandler DamageModifiers;
         
         EntityComponentManager ComponentManager { get; }
         
@@ -132,5 +134,7 @@ namespace Hedra.EntitySystem
         void InvokeBeforeDamaging(IEntity Invoker, float Damage);
 
         void InvokeAfterDamaging(IEntity Invoker, float Damage);
+
+        void InvokeDamageModifier(IEntity Invoker, ref float Damage);
     }
 }
