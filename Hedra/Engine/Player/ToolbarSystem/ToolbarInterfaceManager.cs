@@ -169,9 +169,11 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
         private bool CanLearnSkill(BaseSkill S)
         {
-            return _player.AbilityTree != null
-                   && (!_player.Class.MainTree?.Has(S.GetType()) ?? false)
-                   && (!_player.AbilityTree.Specialization?.Has(S.GetType()) ?? false);
+            if (_player.AbilityTree == null) return true;
+            var correctBlueprint = _player.AbilityTree.HasSpecialization
+                ? (_player.AbilityTree.HasFirstSpecialization ? _player.Class.FirstSpecializationTree : _player.Class.SecondSpecializationTree)
+                : null;
+            return (_player.Class.MainTree?.Has(S.GetType()) ?? false) || (correctBlueprint?.Has(S.GetType()) ?? false);
         }
         
         public BaseSkill[] GetActiveFilteredSkills()

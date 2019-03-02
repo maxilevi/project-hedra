@@ -11,6 +11,7 @@ using System.Globalization;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
+using Hedra.EntitySystem;
 using Hedra.Sound;
 using OpenTK;
 
@@ -37,33 +38,45 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
             base.Update();
             if(!_isFaded) return;
 
-            if (_timeRemaining > 0)
+            if (_timeRemaining < 0 || Level == 0)
+            {
+                End();
+            }
+            else
             {
                 _timeRemaining -= Time.DeltaTime;
                 ShowParticles();
             }
-            else
-            {
-                UnFade();
-            }
         }
 
-        private void UnFade()
+        private void End()
         {
             Player.Model.Outline = false;
             Player.IsInvisible = false;
             _isFaded = false;
+            Player.AfterDamaging -= AfterDamaging;
         }
-
-        protected override void OnAnimationEnd()
+        
+        private void Start()
         {
             _isFaded = true;
             _timeRemaining = FadeTime;
             Player.Model.Outline = true;
-            Player.Model.OutlineColor = new Vector4(.2f, .2f, .2f, 1);
+            Player.Model.OutlineColor = new Vector4(.15f, .15f, .15f, 1);
             Player.IsInvisible = true;
             SoundPlayer.PlayUISound(SoundType.DarkSound, 1f, .25f);
             InvokeStateUpdated();
+            Player.AfterDamaging += AfterDamaging;
+        }
+
+        private void AfterDamaging(IEntity Victim, float Damage)
+        {
+            End();
+        }
+        
+        protected override void OnAnimationEnd()
+        {
+            Start();
         }
 
         private void ShowParticles()

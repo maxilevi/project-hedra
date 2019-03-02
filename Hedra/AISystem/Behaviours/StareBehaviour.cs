@@ -1,6 +1,4 @@
-using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Generation;
-using Hedra.Engine.PhysicsSystem;
+using System.Linq;
 using Hedra.EntitySystem;
 
 namespace Hedra.AISystem.Behaviours
@@ -13,10 +11,10 @@ namespace Hedra.AISystem.Behaviours
 
         public override void Update()
         {
-            var nearHumanoids = World.InRadius<IHumanoid>(Parent.Position, 16f);
-            if (nearHumanoids.Length > 0)
+            var nearHumanoid = World.InRadius<IHumanoid>(Parent.Position, 16f).FirstOrDefault(H => !H.IsInvisible);
+            if (nearHumanoid != null)
             {
-                Parent.RotateTowards(nearHumanoids[0]);
+                Parent.RotateTowards(nearHumanoid);
             }
         }
     }

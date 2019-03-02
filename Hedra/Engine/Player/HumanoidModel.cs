@@ -186,7 +186,7 @@ namespace Hedra.Engine.Player
             
             if(_lampModel == null)
             {
-                var lampData = AssetManager.PLYLoader("Assets/Items/Handlamp.ply", new Vector3(1.5f, 1.5f, 1.5f), Vector3.Zero, Vector3.Zero, true);
+                var lampData = AssetManager.PLYLoader("Assets/Items/Handlamp.ply", new Vector3(1.5f, 1.5f, 1.5f), Vector3.Zero, Vector3.Zero);
                 _lampModel = ObjectMesh.FromVertexData(lampData);
                 RegisterModel(_lampModel);
             }

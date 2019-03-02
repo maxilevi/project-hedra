@@ -10,12 +10,12 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
     {
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Treason.png");
         
-        protected override void Add()
+        protected override void DoAdd()
         {
             Player.DamageModifiers += DamageModifier;
         }
 
-        protected override void Remove()
+        protected override void DoRemove()
         {
             Player.DamageModifiers -= DamageModifier;
         }
@@ -41,11 +41,11 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
 
         private bool CanBackStab(IEntity Victim)
         {
-            return Player.InAttackRange(Victim) && Vector3.Dot(Victim.Orientation, Player.Orientation) > -.9f;
+            return Player.InAttackRange(Victim, 2f) && Vector3.Dot(Victim.Orientation, Player.Orientation) > -.85f && Vector3.Dot((Victim.Position - Player.Position).Normalized(), Player.Orientation) > .85f;
         }
         
         protected override int MaxLevel => 15;
-        private float DamageBonus => .5f + 1.5f * (Level / (float) MaxLevel);
+        private float DamageBonus => 1.5f + 2.5f * (Level / (float) MaxLevel);
         public override string Description => Translations.Get("treason_desc");
         public override string DisplayName => Translations.Get("treason_skill");
         public override string[] Attributes => new []

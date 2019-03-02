@@ -65,8 +65,8 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         
         protected virtual void SetPosition()
         {
-            ItemDescription.Position = this.Position - Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .0f);
-            ItemTexture.Position = this.Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .2f);
+            ItemDescription.Position = Position - Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .0f);
+            ItemTexture.Position = Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .2f);
             ItemAttributes.Position = ItemDescription.Position - (ItemDescription.Scale.Y + ItemAttributes.Scale.Y) * Vector2.UnitY - Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .075f);
             SetTitlePosition();
         }
