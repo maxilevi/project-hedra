@@ -71,7 +71,7 @@ namespace Hedra.Engine.SkillSystem
             this._initialized = true;
         }
         
-        public bool MeetsRequirements()
+        public virtual bool MeetsRequirements()
         {
             if (Cooldown > 0 || Player.Mana - ManaCost <= 0 ||
                 this.Level <= 0 || !Active || Player.IsEating) return false;

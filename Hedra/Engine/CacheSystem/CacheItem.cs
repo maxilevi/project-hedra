@@ -44,6 +44,7 @@ namespace Hedra.Engine.CacheSystem
         Timber,
         Pebble,
         Stick,
+        DeathIcon,
         MaxEnums
     }
 }

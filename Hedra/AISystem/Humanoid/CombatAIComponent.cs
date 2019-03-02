@@ -86,10 +86,10 @@ namespace Hedra.AISystem.Humanoid
 
         private void HandleStaring()
         {
-            var nearHumanoids = World.InRadius<IPlayer>(Parent.Position, StareRadius);
-            if (nearHumanoids.Length > 0)
+            var nearHumanoid = World.InRadius<IPlayer>(Parent.Position, StareRadius).FirstOrDefault(H => !H.IsInvisible);
+            if (nearHumanoid != null)
             {
-                Stare(nearHumanoids.First());
+                Stare(nearHumanoid);
             }
         }
 

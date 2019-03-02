@@ -36,7 +36,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
         public override void Update()
         {
             base.Update();
-            if(!_isFaded) return;
+            if (!_isFaded) return;
 
             if (_timeRemaining < 0 || Level == 0)
             {

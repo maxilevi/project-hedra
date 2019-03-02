@@ -307,13 +307,15 @@ clean_cut_damage_change = The bleeding effect deals $(BOLD)(RED){{0}} damage
 stealth_desc = Provides bonus movement speed while on stealth 
 stealth_skill = Stealth
 stealth_speed_change = Increases speed by $(BOLD)(GREEN){{0}%} when invisible
-cutthroat_desc = Deliver a lethal blow to humanoids. Only works when casted from behind.
+cutthroat_desc = Deliver a lethal blow to humanoids. Only works when casted from behind. If the target is killed, the cooldown is reset.
 cutthroat_skill = Cutthroat
+cutthroat_damage_change = Deals $(BOLD)(RED){{0}%} of the target's max health
 night_stalker_desc = Grants cooldown reduction at night
 night_stalker_skill = Night Stalker
 night_stalker_cooldown_change = Reduces cooldowns by $(BOLD)(GREEN){{0}%}
 marked_for_death_desc = Next attack marks the victim, giving you a permanent damage bonus until its death
 marked_for_death_skill = Marked For Death
+marked_for_death_resistance_change = Reduces victim's attack resistance by $(BOLD)(GREEN){{0}%}
 passive_skill = $(BOLD)(CYAN){PASSIVE}
 # -- End Skill Names --
 

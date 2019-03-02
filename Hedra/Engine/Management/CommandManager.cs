@@ -203,6 +203,13 @@ namespace Hedra.Engine.Management
                     return true;
                 }
 
+                if (Parts[0] == "cooldowns")
+                {
+                    for (var i = 0; i < GameManager.Player.Toolbar.Skills.Length; i++)
+                    {
+                        //GameManager.Player.Toolbar.Skills[i].Cooldown
+                    }
+                }
                 if (Parts[0] == "speed"){
                     Caster.Speed += float.Parse(Parts[1]);
                     return true;

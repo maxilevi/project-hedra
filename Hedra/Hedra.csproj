@@ -214,6 +214,7 @@
     <Compile Include="Components\VillagerThoughtsComponent.cs" />
     <Compile Include="Core\Mathf.cs" />
     <Compile Include="Engine\CacheSystem\CornCache.cs" />
+    <Compile Include="Engine\CacheSystem\DeathIconCache.cs" />
     <Compile Include="Engine\CacheSystem\MultipleCollectiblePlacementDesign.cs" />
     <Compile Include="Engine\CacheSystem\MushroomCache.cs" />
     <Compile Include="Engine\CacheSystem\PebbleCache.cs" />
@@ -8096,6 +8097,10 @@
       <Link>Assets\Chr\ArcherWhistle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Animations\RogueCutthroat.dae">
+      <Link>Assets\Chr\RogueCutthroat.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Animations\RogueFade.dae">
       <Link>Assets\Chr\RogueFade.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -8190,6 +8195,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\Objects\BearTrap.ply">
       <Link>Assets\Env\BearTrap.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Objects\DeathIcon.ply">
+      <Link>Assets\Env\DeathIcon.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Sounds\BearTrap.ogg">

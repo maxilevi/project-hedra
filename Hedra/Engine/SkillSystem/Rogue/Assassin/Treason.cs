@@ -22,7 +22,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
 
         private void DamageModifier(IEntity Victim, ref float Damage)
         {
-            if (CanBackStab(Victim))
+            if (SkillUtils.IsBehind(Player, Victim))
             {
                 Damage *= 1 + DamageBonus;
             }
@@ -30,18 +30,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
 
         protected override bool CheckIfCanDo()
         {
-            var entities = World.Entities;
-            for (var i = 0; i < entities.Count; ++i)
-            {
-                if (entities[i] != Player && CanBackStab(entities[i]))
-                    return true;
-            }
-            return false;
-        }
-
-        private bool CanBackStab(IEntity Victim)
-        {
-            return Player.InAttackRange(Victim, 2f) && Vector3.Dot(Victim.Orientation, Player.Orientation) > -.85f && Vector3.Dot((Victim.Position - Player.Position).Normalized(), Player.Orientation) > .85f;
+            return SkillUtils.IsBehindAny(Player);
         }
         
         protected override int MaxLevel => 15;

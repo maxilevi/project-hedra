@@ -83,7 +83,7 @@ namespace Hedra.Engine.EntitySystem
         {
             Exp = 0;
             
-            Amount *= Parent.AttackResistance;
+            Amount *= (1.0f / Parent.AttackResistance);
             if (Parent.IsDead || _ignoreList.Any(I => I.Invoke(Damager))) return;
             
 

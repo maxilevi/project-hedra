@@ -23,7 +23,7 @@ namespace Hedra.Engine.SkillSystem
             var entities = World.Entities;
             for(var i = 0; i< entities.Count; i++)
             {
-                if(entities[i] == LocalPlayer.Instance) continue;
+                if(entities[i] == Caster) continue;
                     
                 var toEntity = (entities[i].Position - Caster.Position).NormalizedFast();
                 var dot = Vector3.Dot(toEntity, Caster.Orientation);
@@ -32,6 +32,34 @@ namespace Hedra.Engine.SkillSystem
                     Lambda(entities[i], dot);
                 }
             }
+        }
+
+        public static bool IsBehindAny(IHumanoid Caster)
+        {
+            return IsBehindAny(Caster, out _);
+        }
+        
+        public static bool IsBehindAny(IHumanoid Caster, out IEntity Entity)
+        {
+            var entities = World.Entities;
+            for (var i = 0; i < entities.Count; ++i)
+            {
+                if (entities[i] != Caster && IsBehind(Caster, entities[i]))
+                {
+                    Entity = entities[i];
+                    return true;
+                }
+            }
+
+            Entity = null;
+            return false;
+        }
+        
+        
+        public static bool IsBehind(IHumanoid Caster, IEntity Victim)
+        {
+            return Caster.InAttackRange(Victim, 2f) && Vector3.Dot(Victim.Orientation, Caster.Orientation) > -.75f 
+                                                    && Vector3.Dot((Victim.Position - Caster.Position).Normalized(), Caster.Orientation) > .75f;
         }
     }
 }
