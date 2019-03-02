@@ -12,7 +12,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
         private const float AttackPowerModifier = 1.25f;
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/FinishingBlow.png");
 
-        public override void Use()
+        protected override void DoUse()
         {
             var weapon = (RogueWeapon) Player.LeftWeapon;
             var options = AttackOptions.Default;

@@ -71,8 +71,8 @@ namespace Hedra.Engine.SkillSystem.Warrior
             });
             Player.Movement.Orientate();
         }
-        
-        public override void Use()
+
+        protected override void DoUse()
         {
             SoundPlayer.PlaySound(SoundType.SlashSound, Player.Position);
             Player.Model.BlendAnimation(_bashAnimation);

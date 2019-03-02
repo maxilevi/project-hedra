@@ -24,7 +24,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
         {
             return SkyManager.IsNight;
         }
-        
+
         private float CooldownReduction => .15f + .30f * (Level / (float) MaxLevel);
         public override string Description => Translations.Get("night_stalker_desc");
         public override string DisplayName => Translations.Get("night_stalker_skill");

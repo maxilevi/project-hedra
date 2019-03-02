@@ -31,8 +31,8 @@ namespace Hedra.Engine.SkillSystem.Rogue
         public override float ManaCost => BaseManaCost + Level * 5f;
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/BurstOfSpeed.png");
         protected override int MaxLevel => 15;
-        
-        public override void Use()
+
+        protected override void DoUse()
         {
             Player.AddBonusSpeedForSeconds(Speed, EffectDuration);
         }

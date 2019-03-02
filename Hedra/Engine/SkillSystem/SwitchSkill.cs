@@ -26,7 +26,7 @@ namespace Hedra.Engine.SkillSystem
             };
         }
 
-        public override void Use()
+        protected override void DoUse()
         {
             Casting = true;
             SoundPlayer.PlaySoundWhile(SoundType, () => Casting, () => 1, () => 1);

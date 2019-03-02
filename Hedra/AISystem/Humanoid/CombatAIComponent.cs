@@ -17,6 +17,7 @@ namespace Hedra.AISystem.Humanoid
         private Vector3 _targetPoint;
         private bool _hasTargetPoint;
         private bool _staring;
+        private bool _isFriendly;
         private IEntity _chasingTarget;
         private CombatAIBehaviour _behaviour;
         private readonly Vector3 _originalPosition;
@@ -27,14 +28,13 @@ namespace Hedra.AISystem.Humanoid
         protected abstract float AttackRadius { get; }
         protected abstract float ForgetRadius { get; }
         public IEntity[] IgnoreEntities { get; set; } = new IEntity[0];
-        public bool IsFriendly { get; }
         protected override bool ShouldSleep => !IsChasing;
         public bool IsChasing => _chasingTarget != null;
         public bool IsExploring => !IsChasing && _hasTargetPoint;
 
         protected CombatAIComponent(IHumanoid Entity, bool IsFriendly) : base(Entity)
         {
-            this.IsFriendly = IsFriendly;
+            _isFriendly = IsFriendly;
             _movementTimer = new Timer(1);
             _rollTimer = new Timer(Utils.Rng.NextFloat() * 3 + 4.0f);
             _forgetTimer = new Timer(Utils.Rng.NextFloat() * 6 + 8.0f);
@@ -195,7 +195,7 @@ namespace Hedra.AISystem.Humanoid
         private void FindTarget()
         {
             if (IsChasing) return;
-            SetTarget(IsFriendly 
+            SetTarget(_isFriendly 
                 ? Behaviour.FindMobTarget(32) 
                 : Behaviour.FindPlayerTarget(SearchRadius)
             );

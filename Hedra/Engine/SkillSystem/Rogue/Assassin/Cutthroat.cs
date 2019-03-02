@@ -24,7 +24,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
                 entity.Damage(entity.MaxHealth * DamagePercentage, Player, out var xp);
                 Player.XP += xp;
                 if (entity.IsDead)
-                    Cooldown = 0;
+                    Player.Toolbar.ResetCooldowns();
             }
         }
 
@@ -46,7 +46,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
         protected override bool ShouldDisable => !_canDo;
         protected override int MaxLevel => 15;
         public override float MaxCooldown => 55 - 10f * (Level / (float)MaxLevel);
-        private float DamagePercentage => .25f + .25f * (Level / (float) MaxLevel);
+        private float DamagePercentage => .1f + .15f * (Level / (float) MaxLevel);
         public override string Description => Translations.Get("cutthroat_desc");
         public override string DisplayName => Translations.Get("cutthroat_skill");
         public override string[] Attributes => new[]

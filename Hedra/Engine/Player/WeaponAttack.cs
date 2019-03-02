@@ -71,8 +71,8 @@ namespace Hedra.Engine.Player
                 IsCharging = false;
             }
         }
-        
-        public override void Use()
+
+        protected override void DoUse()
         {
             if (ShouldCharge)
             {

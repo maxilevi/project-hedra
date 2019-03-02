@@ -50,8 +50,8 @@ namespace Hedra.Engine.SkillSystem.Warrior
             };
             _whirlwindAnimation.Loop = false;
         }
-        
-        public override void Use()
+
+        protected override void DoUse()
         {
             _passedTime = 0;
             _trail.Emit = true;

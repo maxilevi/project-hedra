@@ -39,7 +39,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
         {
             if(_skills == null) return;
             if (_skills.Any(S => !S.IsAffecting)) _player.Toolbar.UpdateView();
-            for (var i = 0; i < _skills.Length; ++i)
+            for (var i = _skills.Length-1; i > -1; --i)
             {
                 _textures[i].TextureElement.Opacity = .85f * _skills[i].IsAffectingModifier;
                 _textures[i].TextureElement.Grayscale = _skills[i].IsAffectingModifier < 1;

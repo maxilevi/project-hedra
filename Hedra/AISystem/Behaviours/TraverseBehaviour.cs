@@ -67,21 +67,19 @@ namespace Hedra.AISystem.Behaviours
                 Walk.Cancel();
             }
             Walk.Update();
-            if (Walk.HasTarget)
+            if (_canReach)
             {
-                if (_canReach)
-                {
-                    TraverseStorage.Instance.Update(Parent);
-                }
-                else
-                {
-                    if ((_lastCanNotReachPosition - Target).Xz.LengthSquared > 2 * 2)
-                    {
-                        _canReach = true;
-                    }
-                    Parent.IsStuck = true;
-                }
+                TraverseStorage.Instance.Update(Parent);
             }
+            else
+            {
+                if ((_lastCanNotReachPosition - Target).Xz.LengthSquared > 2 * 2)
+                {
+                    _canReach = true;
+                }
+                if(Walk.HasTarget)
+                    Parent.IsStuck = true;
+            }    
             /* UpdateSpeedBonus(); */
         }
 

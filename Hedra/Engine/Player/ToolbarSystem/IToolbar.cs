@@ -17,5 +17,6 @@ namespace Hedra.Engine.Player.ToolbarSystem
         bool Show { get; set; }
         byte[] ToArray();
         void FromInformation(PlayerInformation Information);
+        void ResetCooldowns();
     }
 }

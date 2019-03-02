@@ -34,11 +34,16 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
             _raven = World.SpawnMob(MobType.Bee, Player.Position + Player.Orientation * 12, Utils.Rng);
             _raven.RemoveComponent(_raven.SearchComponent<BasicAIComponent>());
             _raven.RemoveComponent(_raven.SearchComponent<HealthBarComponent>());
-            _raven.AddComponent(new RavenAIComponent(_raven, Player));
+            _raven.AddComponent(new MinionAIComponent(_raven, Player));
             _raven.AddComponent(new SelfDestructComponent(_raven, Duration));
             _raven.AddComponent(new HealthBarComponent(_raven, Translations.Get("raven_name"), HealthBarType.Friendly));
             _raven.SearchComponent<DamageComponent>().Ignore(E => E == Player);
             _raven.AttackDamage *= 1.0f + DamageMultiplier;
+            _raven.SearchComponent<DamageComponent>().OnDamageEvent += Args =>
+            {
+                if(_raven.IsDead)
+                    SpawnEffect(_raven.Physics.TargetPosition);
+            }; 
 
             SpawnEffect(_raven.Physics.TargetPosition);
         }
@@ -72,68 +77,5 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
             Translations.Get("raven_time_change", Duration.ToString("0.0", CultureInfo.InvariantCulture)),
             Translations.Get("raven_damage_change", (int) (DamageMultiplier * 100))
         };
-
-        private sealed class RavenAIComponent : BasicAIComponent
-        {
-            private readonly FollowBehaviour _follow;
-            private readonly AttackBehaviour _attack;
-            private readonly IEntity _owner;
-            private bool _disposed;
-
-            public RavenAIComponent(IEntity Parent, IEntity Owner) : base(Parent)
-            {
-                _owner = Owner;
-                _owner.SearchComponent<DamageComponent>().OnDamageEvent += OnDamage;
-                _owner.AfterDamaging += OnDamaging;
-                _attack = new AttackBehaviour(Parent);
-                _follow = new FollowBehaviour(Parent)
-                {
-                    Target = _owner,
-                    ErrorMargin = 16
-                };
-            }
-
-            public override void Update()
-            {
-                if (_attack.Enabled)
-                {
-                    _attack.Update();
-                }
-                else
-                {
-                    _follow.Update();
-                }
-
-                if (_owner.IsDead) Kill();
-            }
-
-            private void OnDamage(DamageEventArgs Args)
-            {
-                if(Args.Damager != _owner && Args.Damager != null)
-                    _attack.SetTarget(Args.Damager);
-            }
-
-            private void OnDamaging(IEntity Target, float Damage)
-            {
-                _attack.SetTarget(Target);
-            }
-
-            private void Kill()
-            {
-                if(_disposed) return;
-                _disposed = true;
-                Executer.ExecuteOnMainThread(Dispose);
-            }
-            
-            public override void Dispose()
-            {
-                base.Dispose();
-                _owner.SearchComponent<DamageComponent>().OnDamageEvent -= OnDamage;
-                _owner.AfterDamaging -= OnDamaging;
-                Raven.SpawnEffect(Parent.Physics.TargetPosition);
-            }
-
-            public override AIType Type => throw new NotImplementedException();
-        }
     }
 }

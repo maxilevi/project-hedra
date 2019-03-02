@@ -12,8 +12,8 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/MarkedForDeath.png");
         private Weapon _activeWeapon;
         private bool _isActive;
-        
-        public override void Use()
+
+        protected override void DoUse()
         {
             Player.BeforeDamaging += BeforeDamaging;
             Player.AfterDamaging += AfterDamaging;
@@ -49,7 +49,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
             _isActive = false;
             _activeWeapon.Outline = false;
             _activeWeapon = null;
-            ResetCooldown();
+            SetOnCooldown();
         }
 
         private void AfterAttack(AttackOptions Options)
@@ -71,6 +71,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
             }
         }
 
+        protected override bool HasCooldown => !ShouldDisable;
         public override float IsAffectingModifier => _isActive ? 1 : 0;
         protected override bool ShouldDisable => _isActive;
         private float AttackResistanceBonus => .2f + .3f * (Level / (float) MaxLevel);

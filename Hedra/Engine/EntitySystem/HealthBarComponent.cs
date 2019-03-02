@@ -24,6 +24,7 @@ namespace Hedra.Engine.EntitySystem
         private static uint _neutralTexture;
         private static uint _hostileTexture;
         private static uint _friendlyTexture;
+        private static uint _blackTexture;
         
         private const int ShowDistance = 48;       
         private readonly TexturedBar _healthBar;
@@ -56,6 +57,11 @@ namespace Hedra.Engine.EntitySystem
                     Friendly,
                     "Friendly"
                 );
+                _blackTexture = BuildTexture(
+                    (Bitmap)blueprint.Clone(),
+                    Color.FromArgb(35, 35, 35),
+                    "Black"
+                );
                 blueprint.Dispose();
             });
         }
@@ -78,7 +84,7 @@ namespace Hedra.Engine.EntitySystem
             );
             _text = new RenderableText(
                 string.Empty,
-                Vector2.Zero, Type == HealthBarType.Hostile ? FontColor : Type == HealthBarType.Neutral ? Color.White : Friendly,
+                Vector2.Zero, Type == HealthBarType.Hostile || Type == HealthBarType.Black ? FontColor : Type == HealthBarType.Neutral ? Color.White : Friendly,
                 FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold)
             );
             _text.Stroke = true;
@@ -167,6 +173,7 @@ namespace Hedra.Engine.EntitySystem
         
         private static uint TextureFromType(HealthBarType Type)
         {
+            if (Type == HealthBarType.Black) return _blackTexture;
             return Type == HealthBarType.Neutral
                 ? _neutralTexture
                 : Type == HealthBarType.Hostile
@@ -194,6 +201,7 @@ namespace Hedra.Engine.EntitySystem
     {
         Hostile,
         Friendly,
-        Neutral
+        Neutral,
+        Black
     }
 }

@@ -17,7 +17,7 @@ namespace HedraTests.Player
         public override string DisplayName => throw new System.NotImplementedException();
         public override uint TextureId => 0;
 
-        public override void Use()
+        protected override void DoUse()
         {
             throw new System.NotImplementedException();
         }

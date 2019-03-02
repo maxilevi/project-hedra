@@ -55,7 +55,6 @@ namespace Hedra.Engine.Player.ToolbarSystem
                 {
                     SoundPlayer.PlaySound(SoundType.ButtonClick, _player.Position, false, 1f, 0.5f);
 
-                    ability.ResetCooldown();
                     _player.Mana -= ability.ManaCost;
                     ability.Use();
                 }

@@ -111,12 +111,10 @@ namespace Hedra.Engine.Player.ToolbarSystem
             {
                 case MouseButton.Left:
                     if (!_w1.MeetsRequirements() || _w2.IsCharging) return;
-                    _w1.ResetCooldown();
                     _w1.Use();
                     break;
                 case MouseButton.Right:
                     if (!_w2.MeetsRequirements()) return;
-                    _w2.ResetCooldown();
                     _w2.Use();
                     break;
             }
@@ -194,6 +192,14 @@ namespace Hedra.Engine.Player.ToolbarSystem
                         _manager.Move(_bagItemsInterface.Array[itemIndex], type, _toolbarItemsInterface, k);
                     }
                 }
+            }
+        }
+
+        public void ResetCooldowns()
+        {
+            for (var i = 0; i < _skills.Length; ++i)
+            {
+                _skills[i].ResetCooldown();
             }
         }
 

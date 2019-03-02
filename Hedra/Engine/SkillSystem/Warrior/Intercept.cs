@@ -96,7 +96,7 @@ namespace Hedra.Engine.SkillSystem.Warrior
             Player.Model.Reset();
         }
 
-        public override void Use()
+        protected override void DoUse()
         {
             if(_isMoving) return;
             Player.Movement.Orientate();

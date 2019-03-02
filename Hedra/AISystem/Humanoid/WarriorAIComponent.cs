@@ -39,10 +39,20 @@ namespace Hedra.AISystem.Humanoid
         protected override void OnAttack()
         {
             if (!(_attackTimer < 0)) return;
-            Parent.LeftWeapon.Attack1(Parent, new AttackOptions
+            if (Utils.Rng.Next(0, 7) == 1)
             {
-                IgnoreEntities = IgnoreEntities
-            });
+                Parent.LeftWeapon.Attack2(Parent, new AttackOptions
+                {
+                    IgnoreEntities = IgnoreEntities
+                });
+            }
+            else
+            {
+                Parent.LeftWeapon.Attack1(Parent, new AttackOptions
+                {
+                    IgnoreEntities = IgnoreEntities
+                });
+            }
             _attackTimer = 1.25f;
         }
 

@@ -31,7 +31,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
         {
             var currentTimes = _times;
             if(_times < 2)
-                Use();
+                DoUse();
             _times = ++currentTimes;
         }
 

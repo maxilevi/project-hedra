@@ -21,8 +21,8 @@ namespace Hedra.Engine.SkillSystem
                 Disable();
             }
         }
-        
-        public override void Use()
+
+        protected override void DoUse()
         {
             Enable();
         }

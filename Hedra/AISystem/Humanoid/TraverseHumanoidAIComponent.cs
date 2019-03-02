@@ -55,6 +55,12 @@ namespace Hedra.AISystem.Humanoid
             }
         }
         
+        public float ErrorMargin
+        {
+            get => _traverse.ErrorMargin;
+            set => _traverse.ErrorMargin = value;
+        }
+        
         protected virtual bool UseCollision => false;
     }
 }

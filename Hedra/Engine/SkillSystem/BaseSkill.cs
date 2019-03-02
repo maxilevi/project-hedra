@@ -140,8 +140,13 @@ namespace Hedra.Engine.SkillSystem
         {
             StateUpdated?.Invoke();
         }
-
+        
         public void ResetCooldown()
+        {
+            Cooldown = 0;
+        }
+
+        protected void SetOnCooldown()
         {
             Cooldown = MaxCooldown / Player.Attributes.CooldownReductionModifier;
         }
@@ -149,8 +154,14 @@ namespace Hedra.Engine.SkillSystem
         public virtual bool CanBeCastedWhileAttacking => false;
         protected virtual float OverlayBlending => Cooldown / MaxCooldown;
         public virtual bool PlaySound => false;
-        
-        public abstract void Use();
+
+        public void Use()
+        {
+            SetOnCooldown();
+            DoUse();
+        }
+
+        protected abstract void DoUse();
         public virtual void KeyUp(){}
         public virtual void Unload(){}
         public virtual void Load(){}

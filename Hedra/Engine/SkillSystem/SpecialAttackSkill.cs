@@ -5,8 +5,8 @@ namespace Hedra.Engine.SkillSystem
     public abstract class SpecialAttackSkill<T> : CappedSkill where T : Weapon
     {
         protected override bool ShouldDisable => !Player.HasWeapon || !(Player.LeftWeapon is T weapon) || !weapon.PrimaryAttackEnabled;
-        
-        public override void Use()
+
+        protected override void DoUse()
         {
             var weapon = (T) Player.LeftWeapon;
             BeforeUse(weapon);

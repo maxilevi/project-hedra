@@ -29,8 +29,8 @@ namespace Hedra.Engine.SkillSystem
         protected abstract void Add();
         
         protected abstract void Remove();
-        
-        public override void Use()
+
+        protected override void DoUse()
         {
             throw new ArgumentException($"Passive skills cannot be used.");
         }

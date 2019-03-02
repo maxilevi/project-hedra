@@ -29,7 +29,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
             AddParticles();
         }
 
-        public override void Use()
+        protected override void DoUse()
         {
             Player.Movement.Orientate();
             Player.Movement.ForceJump(40);
@@ -37,7 +37,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
             _orientation = -Player.LookingDirection.Xz.ToVector3().NormalizedFast();
             _accumulated = Vector3.Zero;
             _multiplier = DefaultMultiplier;
-            base.Use();
+            base.DoUse();
         }
 
         protected override void OnDisable()

@@ -59,8 +59,8 @@ namespace Hedra.Engine.SkillSystem
                 _shouldEnd = true;
             };
         }
-        
-        public override void Use()
+
+        protected override void DoUse()
         {
             Casting = true;
             if (EquipWeapons)
