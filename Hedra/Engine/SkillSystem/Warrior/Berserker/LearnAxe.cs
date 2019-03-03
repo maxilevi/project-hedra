@@ -12,21 +12,21 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 
-namespace Hedra.Engine.SkillSystem.Warrior
+namespace Hedra.Engine.SkillSystem.Warrior.Berserker
 {
     /// <summary>
     /// Description of Resistance.
     /// </summary>
-    public class LearnHammer : LearningSkill
+    public class LearnAxe : LearningSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Hammer.png");
+        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Axe.png");
         
-        protected override EquipmentType Equipment => EquipmentType.Hammer;
+        protected override EquipmentType Equipment => EquipmentType.Axe;
         
         protected override int RestrictionIndex => PlayerInventory.WeaponHolder;
         
-        public override string Description => Translations.Get("learn_hammer_desc");
+        public override string Description => Translations.Get("learn_axe_desc");
         
-        public override string DisplayName => Translations.Get("learn_hammer");
+        public override string DisplayName => Translations.Get("learn_axe");
     }
 }

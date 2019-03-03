@@ -51,7 +51,8 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
         public override string DisplayName => Translations.Get("cutthroat_skill");
         public override string[] Attributes => new[]
         {
-            Translations.Get("cutthroat_damage_change", (int)(DamagePercentage * 100))
+            Translations.Get("cutthroat_damage_change", (int)(DamagePercentage * 100)),
+            Translations.Get("cutthroat_bonus")
         };
     }
 }

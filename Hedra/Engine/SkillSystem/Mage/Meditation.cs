@@ -10,16 +10,18 @@ namespace Hedra.Engine.SkillSystem.Mage
         private const float ChangePerLevel = 0.5f;
         private float _accumulatedChange;
         
-        protected override void Remove()
-        {
-            Player.ManaRegenFactor -= _accumulatedChange;
-        }
-
         protected override void Add()
         {
             Player.ManaRegenFactor += _accumulatedChange = ManaRegenFormula(); 
         }
 
+        protected override void Remove()
+        {
+            Player.ManaRegenFactor -= _accumulatedChange;
+            _accumulatedChange = 0;
+        }
+
+        
         private float ManaRegenFormula()
         {
             return ChangePerLevel * Level;

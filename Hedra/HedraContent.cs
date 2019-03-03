@@ -12,6 +12,8 @@ using Hedra.Engine.SkillSystem.Rogue;
 using Hedra.Engine.SkillSystem.Rogue.Assassin;
 using Hedra.Engine.SkillSystem.Rogue.Ninja;
 using Hedra.Engine.SkillSystem.Warrior;
+using Hedra.Engine.SkillSystem.Warrior.Berserker;
+using Hedra.Engine.SkillSystem.Warrior.Paladin;
 using Hedra.Engine.Sound;
 using Hedra.ItemHandlers;
 using Hedra.ModelHandlers;
@@ -126,10 +128,26 @@ namespace Hedra
             
             AddSkill("Bash", typeof(Bash));
             AddSkill("Intercept", typeof(Intercept));
-            AddSkill("LearnAxe", typeof(LearnAxe));
-            AddSkill("LearnHammer", typeof(LearnHammer));
             AddSkill("Resistance", typeof(Resistance));
             AddSkill("Whirlwind", typeof(Whirlwind));
+            AddSkill("NoEscape", typeof(NoEscape));
+            AddSkill("Stun", typeof(Stun));
+            
+            AddSkill("Faith", typeof(Faith));
+            AddSkill("FireEnchant", typeof(FireEnchant));
+            AddSkill("HolyAttack", typeof(LearnAxe));
+            AddSkill("LearnHammer", typeof(LearnHammer));
+            AddSkill("ManaImbue", typeof(Resistance));
+            AddSkill("Prayer", typeof(Prayer));
+            AddSkill("Smite", typeof(Smite));
+            
+            AddSkill("Berserk", typeof(Berserk));
+            AddSkill("Frenzy", typeof(Frenzy));
+            AddSkill("GroundStomp", typeof(GroundStomp));
+            AddSkill("IronSkin", typeof(IronSkin));
+            AddSkill("LearnAxe", typeof(LearnAxe));
+            AddSkill("Sacrifice", typeof(Sacrifice));
+            AddSkill("WeaponThrow", typeof(BattleCry));           
         }
 
         private static void RegisterSounds()
