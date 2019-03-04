@@ -241,6 +241,7 @@ namespace HedraTests.Player
         public bool IsRiding { get; set; }
         public bool IsClimbing { get; set; }
         public bool WasAttacking { get; set; }
+        public bool IsUndead { get; }
         public float AttackSpeed { get; set; }
         public float BaseAttackSpeed { get; }
         public bool CanInteract { get; set; }

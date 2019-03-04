@@ -84,6 +84,7 @@ namespace Hedra.Engine.EntitySystem
             Exp = 0;
             
             Amount *= (1.0f / Parent.AttackResistance);
+            Amount *= Parent.IsUndead ? Damager?.Attributes.UndeadDamageModifier ?? 1 : 1; 
             if (Parent.IsDead || _ignoreList.Any(I => I.Invoke(Damager))) return;
             
 

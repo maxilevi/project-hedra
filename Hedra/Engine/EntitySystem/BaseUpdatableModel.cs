@@ -36,5 +36,6 @@ namespace Hedra.Engine.EntitySystem
         public abstract bool CanAttack(IEntity Victim, float RangeModifier);
         public abstract void Attack(IEntity Victim, float RangeModifier);
         public abstract void Dispose();
+        public bool IsUndead { get; protected set; }
     }
 }

@@ -132,12 +132,13 @@ namespace Hedra
             AddSkill("Whirlwind", typeof(Whirlwind));
             AddSkill("NoEscape", typeof(NoEscape));
             AddSkill("Stun", typeof(Stun));
+            AddSkill("Leap", typeof(Leap));
             
             AddSkill("Faith", typeof(Faith));
             AddSkill("FireEnchant", typeof(FireEnchant));
-            AddSkill("HolyAttack", typeof(LearnAxe));
+            AddSkill("HolyAttack", typeof(HolyAttack));
             AddSkill("LearnHammer", typeof(LearnHammer));
-            AddSkill("ManaImbue", typeof(Resistance));
+            AddSkill("Salvation", typeof(Salvation));
             AddSkill("Prayer", typeof(Prayer));
             AddSkill("Smite", typeof(Smite));
             
@@ -147,7 +148,7 @@ namespace Hedra
             AddSkill("IronSkin", typeof(IronSkin));
             AddSkill("LearnAxe", typeof(LearnAxe));
             AddSkill("Sacrifice", typeof(Sacrifice));
-            AddSkill("WeaponThrow", typeof(BattleCry));           
+            AddSkill("BattleCry", typeof(BattleCry));           
         }
 
         private static void RegisterSounds()

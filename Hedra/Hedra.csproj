@@ -382,6 +382,7 @@
     <Compile Include="Engine\SkillSystem\Archer\Scout\Rush.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Scout\SteadyAim.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Scout\Swiftness.cs" />
+    <Compile Include="Engine\SkillSystem\WeaponBonusSkill.cs" />
     <Compile Include="Engine\SkillSystem\ChargeablePassiveSkill.cs" />
     <Compile Include="Engine\SkillSystem\ConditionedPassiveSkill.cs" />
     <Compile Include="Engine\SkillSystem\MinionAIComponent.cs" />
@@ -436,12 +437,13 @@
     <Compile Include="Engine\SkillSystem\Warrior\Berserker\Sacrifice.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Berserker\BattleCry.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Intercept.cs" />
+    <Compile Include="Engine\SkillSystem\Warrior\Leap.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\NoEscape.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Paladin\Faith.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Paladin\FireEnchant.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Paladin\HolyAttack.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Paladin\LearnHammer.cs" />
-    <Compile Include="Engine\SkillSystem\Warrior\Paladin\ManaImbue.cs" />
+    <Compile Include="Engine\SkillSystem\Warrior\Paladin\Salvation.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Paladin\Prayer.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Paladin\Smite.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Resistance.cs" />
@@ -9130,6 +9132,10 @@
       <Link>Assets\Skills\Assassin.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\BattleCry.png">
+      <Link>Assets\Skills\BattleCry.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\CleanCut.png">
       <Link>Assets\Skills\CleanCut.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -9146,6 +9152,10 @@
       <Link>Assets\Skills\Druid.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Faith.png">
+      <Link>Assets\Skills\Faith.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\FanOfKnives.png">
       <Link>Assets\Skills\FanOfKnives.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -9154,8 +9164,24 @@
       <Link>Assets\Skills\FinishingBlow.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\FireEnchant.png">
+      <Link>Assets\Skills\FireEnchant.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Focus.png">
       <Link>Assets\Skills\Focus.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Frenzy.png">
+      <Link>Assets\Skills\Frenzy.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\GroundStomp.png">
+      <Link>Assets\Skills\GroundStomp.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\HolyAttack.png">
+      <Link>Assets\Skills\HolyAttack.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\HotPursuit.png">
@@ -9168,6 +9194,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Jab.png">
       <Link>Assets\Skills\Jab.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Leap.png">
+      <Link>Assets\Skills\Leap.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Mage.png">
@@ -9202,6 +9232,14 @@
       <Link>Assets\Skills\Ninja.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\NoEscape.png">
+      <Link>Assets\Skills\NoEscape.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Prayer.png">
+      <Link>Assets\Skills\Prayer.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\QuietSteps.png">
       <Link>Assets\Skills\QuietSteps.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -9222,6 +9260,14 @@
       <Link>Assets\Skills\Rush.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Sacrifice.png">
+      <Link>Assets\Skills\Sacrifice.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Salvation.png">
+      <Link>Assets\Skills\Salvation.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Scavenge.png">
       <Link>Assets\Skills\Scavenge.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -9232,6 +9278,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\ShadowWarrior.png">
       <Link>Assets\Skills\ShadowWarrior.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Smite.png">
+      <Link>Assets\Skills\Smite.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\SnakeSpirit.png">
@@ -9252,6 +9302,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\SteelArrows.png">
       <Link>Assets\Skills\SteelArrows.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Stun.png">
+      <Link>Assets\Skills\Stun.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Swiftness.png">

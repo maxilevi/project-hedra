@@ -67,6 +67,7 @@ namespace Hedra.Engine.EntitySystem
         {
             var rng = new Random(Parent.Seed);
 
+            IsUndead = Template.IsUndead;
             ModelPath = Template.Path;
             Model = AnimationModelLoader.LoadEntity(Template.Path);
             WalkAnimations = new Animation[Template.WalkAnimations.Length];

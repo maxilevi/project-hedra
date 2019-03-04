@@ -6,5 +6,6 @@ namespace Hedra.Engine.EntitySystem
         public float TumbleDistanceModifier { get; set; } = 1;
         public float MobAggroModifier { get; set; } = 1;
         public float CooldownReductionModifier { get; set; } = 1;
+        public float UndeadDamageModifier { get; set; } = 1;
     }
 }

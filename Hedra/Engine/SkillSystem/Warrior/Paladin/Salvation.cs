@@ -4,13 +4,13 @@ using Hedra.Engine.Rendering.Animation;
 
 namespace Hedra.Engine.SkillSystem.Warrior.Paladin
 {
-    public class Prayer : SingleAnimationSkill
+    public class Salvation : SingleAnimationSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Prayer.png");
+        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Salvation.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/WarriorIdle.dae");
-        
+
         protected override int MaxLevel { get; }
-        public override string Description => Translations.Get("prayer_desc");
-        public override string DisplayName => Translations.Get("prayer_skill");
+        public override string Description => Translations.Get("salvation_desc");
+        public override string DisplayName => Translations.Get("salvation_skill");
     }
 }

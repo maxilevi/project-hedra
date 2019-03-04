@@ -117,6 +117,7 @@ namespace Hedra.Engine.Player
             Human = Humanoid;
             Scale = Vector3.One * Template.Scale;
             Tint = Vector4.One;
+            IsUndead = Template.IsUndead;
             ModelPath = Template.Path;
             
             Model = AnimationModelLoader.LoadEntity(Template.Path);

@@ -1,5 +1,12 @@
 {
   "Name": "Berserker",
   "Description": "berserker_class_description",
-  "Icon": "$DataFile$/Assets/Skills/Berserker.png"
+  "Icon": "$DataFile$/Assets/Skills/Berserker.png",
+  "M21": "GroundStomp",
+  "M22": "Sacrifice",
+  "M32": "BattleCry",
+  "M13": "IronSkin",
+  "M11": "LearnAxe",
+  "M24": "Berserk",
+  "M33": "Frenzy"
 }
