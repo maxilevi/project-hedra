@@ -45,5 +45,7 @@ namespace Hedra.Engine.SkillSystem
         protected abstract void DoEnable();
         protected abstract void DoDisable();        
         protected abstract float Duration { get; }
+        protected abstract float CooldownDuration { get; }
+        public sealed override float MaxCooldown => Duration + CooldownDuration;
     }
 }

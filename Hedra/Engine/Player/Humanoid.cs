@@ -58,6 +58,15 @@ namespace Hedra.Engine.Player
             get => Equipment.Ring;
             set => Equipment.Ring = value;
         }
+        public ClassDesign Class
+        {
+            get => _class;
+            set
+            {
+                _class = value;
+                AttackResistance = _class.AttackResistance;
+            }
+        }
 
         public IPlayerInventory Inventory { get; }
         public IMessageDispatcher MessageDispatcher { get; set; }
@@ -80,7 +89,6 @@ namespace Hedra.Engine.Player
         public float AddonHealth { get; set; }
         public float DodgeCost { get; set; }    
         public float RandomFactor { get; set; }
-        public ClassDesign Class { get; set; }
         
         public virtual bool CanInteract { get; set; } = true;
         public virtual float FacingDirection => throw new NotImplementedException();
@@ -91,6 +99,7 @@ namespace Hedra.Engine.Player
         public virtual int Gold { get; set; }
         private float _mana;
         private float _xp;
+        private ClassDesign _class;
         private float _stamina = 100f;
         private bool _isGliding;
         private float _speedAddon;
@@ -384,9 +393,9 @@ namespace Hedra.Engine.Player
         public bool HasWeapon => MainWeapon != null;
         
         public float MaxStamina => Class.MaxStamina;
-        
-        public override float AttackResistance => (1 - 0.003f * base.Level) / Class.AttackResistance;
-        
+
+        public override float AttackResistance { get; set; }
+
         public float ConsecutiveHitsModifier => Mathf.Clamp(ConsecutiveHits / 90f, 0f, .5f);
 
         public float DamageEquation => UnRandomizedDamageEquation * ( .75f + Utils.Rng.NextFloat() * .5f);

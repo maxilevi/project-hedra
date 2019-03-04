@@ -16,8 +16,8 @@ namespace Hedra.Components.Effects
 
         public override void Dispose()
         {
+            if (Disposed) return;
             base.Dispose();
-            if(Disposed) return;
             Parent.AttackResistance -= _previousValue;
         }
     }

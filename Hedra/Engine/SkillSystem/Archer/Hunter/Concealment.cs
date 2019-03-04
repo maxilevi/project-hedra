@@ -8,58 +8,38 @@ using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Archer.Hunter
 {
-    public class Concealment : SingleAnimationSkill
+    public class Concealment : SingleAnimationSkillWithStance
     {
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/ArcherConcealment.dae");
-        private Animation StanceAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/ArcherConcealmentStance.dae");
-        protected override bool CanMoveWhileCasting => false;
-        protected override bool ShouldDisable => Player.Toolbar.DisableAttack || !(Player.LeftWeapon is Bow) || _isActive;
-        private bool _isActive;
+        protected override Animation StanceAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/ArcherConcealmentStance.dae");
+        protected override bool ShouldDisable => Player.Toolbar.DisableAttack || !(Player.LeftWeapon is Bow) || base.ShouldDisable;
         private Bow _bow;
-        
+
         protected override void OnAnimationEnd()
         {
+            if(!(Player.LeftWeapon is Bow bow)) return;
+            _bow = bow;
             Start();
         }
-
-        private void Start()
+        
+        protected override void DoStart()
         {
-            if(!(Player.LeftWeapon is Bow bow)) return;
-            _isActive = true;
-            _bow = bow;
             Player.Model.Outline = true;
             Player.Model.OutlineColor = new Vector4(.2f, .2f, .2f, 1);
             Player.LeftWeapon.SecondaryAttackEnabled = false;
             Player.BeforeAttack += BeforeAttack;
             _bow.BowModifiers += AddModifiers;
             Player.SearchComponent<DamageComponent>().OnDamageEvent += OnDamaged;
-            Cooldown = 0;
-            InvokeStateUpdated();
         }
 
-        public override void Update()
+        protected override void DoEnd()
         {
-            base.Update();
-            if (_isActive)
-            {
-                Player.Model.PlayAnimation(StanceAnimation);
-                Player.LeftWeapon.InAttackStance = true;
-                if (Player.IsMoving || !(Player.LeftWeapon is Bow))
-                    End();
-            }
-        }
-
-        private void End()
-        {
-            _isActive = false;
             Player.Model.BaseTint = Vector4.Zero;
             Player.LeftWeapon.SecondaryAttackEnabled = true;
-            Player.Model.Reset();
             Player.BeforeAttack -= BeforeAttack;
             Player.SearchComponent<DamageComponent>().OnDamageEvent -= OnDamaged;
             _bow.BowModifiers -= AddModifiers;
             Player.Model.Outline = false;
-            Cooldown = MaxCooldown;
         }
 
         private void OnDamaged(DamageEventArgs Args)
@@ -84,8 +64,8 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
             Options.DamageModifier *= 1 + DamageChange;
         }
 
+        protected override bool ShouldQuitStance => Player.IsMoving || !(Player.LeftWeapon is Bow);
         public override float MaxCooldown => 18;
-        public override float IsAffectingModifier => _isActive ? 1 : 0;
         protected override int MaxLevel => 15;
         private float DamageChange => 1 + Level / 5f;
         public override string Description => Translations.Get("concealment_desc");

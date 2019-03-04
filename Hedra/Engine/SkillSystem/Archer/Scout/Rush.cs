@@ -29,7 +29,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
         protected override float Duration => 5f + (Level / 15f) * 8f;
         protected override int MaxLevel => 15;
         public override float ManaCost => 80;
-        public override float MaxCooldown => 32 - Level / (float) MaxLevel * 8;
+        protected override float CooldownDuration => 32 - Level / (float) MaxLevel * 8;
         public override string Description => Translations.Get("rush_desc", Duration.ToString("0.0", CultureInfo.InvariantCulture));
         public override string DisplayName => Translations.Get("rush_skill");
         public override string[] Attributes => new[]

@@ -25,7 +25,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
             }
         }
         
-        protected override void BeforeDamaging(IEntity Victim, float Damage)
+        protected override void ApplyBonusToEnemy(IEntity Victim, ref float Damage)
         {
             if (Victim.SearchComponent<MarkedForDeathComponent>() == null)
             {

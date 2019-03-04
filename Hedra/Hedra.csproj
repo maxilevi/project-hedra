@@ -382,6 +382,8 @@
     <Compile Include="Engine\SkillSystem\Archer\Scout\Rush.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Scout\SteadyAim.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Scout\Swiftness.cs" />
+    <Compile Include="Engine\SkillSystem\DurationSingleAnimationSkillWithStance.cs" />
+    <Compile Include="Engine\SkillSystem\SingleAnimationSkillWithStance.cs" />
     <Compile Include="Engine\SkillSystem\WeaponBonusSkill.cs" />
     <Compile Include="Engine\SkillSystem\ChargeablePassiveSkill.cs" />
     <Compile Include="Engine\SkillSystem\ConditionedPassiveSkill.cs" />
@@ -447,8 +449,8 @@
     <Compile Include="Engine\SkillSystem\Warrior\Paladin\Prayer.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Paladin\Smite.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Resistance.cs" />
-    <Compile Include="Engine\SkillSystem\Warrior\Stun.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Whirlwind.cs" />
+    <Compile Include="Engine\SkillSystem\WeaponBonusWithAnimationSkill.cs" />
     <Compile Include="Engine\Steamworks\Steam.cs" />
     <Compile Include="Engine\StructureSystem\CachedVertexDataChunkWatcher.cs" />
     <Compile Include="Engine\StructureSystem\ChunkWatcher.cs" />
@@ -7336,13 +7338,7 @@
     <None Include="Assets\ClearSans-Bold.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\ClearSans-Light.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Assets\ClearSans-Regular.ttf">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Assets\ClearSans-Thin.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Assets\Bar.png">
@@ -8126,6 +8122,38 @@
     </Content>
     <Content Include="..\project-hedra-assets\Animations\RogueTigerStrike.dae">
       <Link>Assets\Chr\RogueTigerStrike.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Animations\WarriorBattleCry.dae">
+      <Link>Assets\Chr\WarriorBattleCry.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Animations\WarriorGroundStomp.dae">
+      <Link>Assets\Chr\WarriorGroundStomp.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Animations\WarriorHolyAttack.dae">
+      <Link>Assets\Chr\WarriorHolyAttack.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Animations\WarriorPrayer.dae">
+      <Link>Assets\Chr\WarriorPrayer.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Animations\WarriorPrayerStance.dae">
+      <Link>Assets\Chr\WarriorPrayerStance.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Animations\WarriorSacrifice.dae">
+      <Link>Assets\Chr\WarriorSacrifice.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Animations\WarriorSalvation.dae">
+      <Link>Assets\Chr\WarriorSalvation.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Animations\WarriorSalvationStance.dae">
+      <Link>Assets\Chr\WarriorSalvationStance.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Environment\Misc\Pebble0.ply">

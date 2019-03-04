@@ -131,7 +131,6 @@ namespace Hedra
             AddSkill("Resistance", typeof(Resistance));
             AddSkill("Whirlwind", typeof(Whirlwind));
             AddSkill("NoEscape", typeof(NoEscape));
-            AddSkill("Stun", typeof(Stun));
             AddSkill("Leap", typeof(Leap));
             
             AddSkill("Faith", typeof(Faith));

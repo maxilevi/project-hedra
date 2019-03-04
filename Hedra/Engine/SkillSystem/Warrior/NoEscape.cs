@@ -1,23 +1,46 @@
+using System.Globalization;
+using Hedra.Components.Effects;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.SkillSystem.Warrior
 {
-    public class NoEscape : PassiveSkill
+    public class NoEscape : ConditionedPassiveSkill
     {
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/NoEscape.png");
-        protected override void Add()
+        private SpeedBonusComponent _component;
+        
+        protected override void DoAdd()
         {
-            throw new System.NotImplementedException();
+            Player.AddComponent(_component = new SpeedBonusComponent(Player, Player.Speed * SpeedChange));
         }
 
-        protected override void Remove()
+        protected override void DoRemove()
         {
-            throw new System.NotImplementedException();
+            if(_component != null) Player.RemoveComponent(_component);
+            _component = null;
         }
-        
-        protected override int MaxLevel { get; }
+
+        protected override bool CheckIfCanDo()
+        {
+            var entities = World.Entities;
+            for (var i = 0; i < entities.Count; ++i)
+            {
+                if (entities[i] != Player && entities[i].Health < entities[i].MaxHealth * .3f)
+                    return true;
+            }
+            return false;
+        }
+
+        private float SpeedChange => .1f + .3f * (Level / (float) MaxLevel);
+        private float SearchRange => 64 + 80 * (Level / (float) MaxLevel);
+        protected override int MaxLevel => 10;
         public override string Description => Translations.Get("no_escape_desc");
         public override string DisplayName => Translations.Get("no_escape_skill");
+        public override string[] Attributes => new[]
+        {
+            Translations.Get("no_escape_speed_change", (int) (SpeedChange * 100)),
+            Translations.Get("no_escape_range_change", SearchRange.ToString("0.0", CultureInfo.InvariantCulture))
+        };
     }
 }

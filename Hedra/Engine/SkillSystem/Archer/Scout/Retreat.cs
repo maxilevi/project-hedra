@@ -19,6 +19,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
         private Vector3 _orientation;
         private Vector3 _accumulated;
         private float _multiplier;
+        
         protected override void OnExecution()
         {
             var reached = _accumulated.LengthSquared > Distance * 5 * Distance * 5;
@@ -34,7 +35,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
             Player.Movement.Orientate();
             Player.Movement.ForceJump(40);
             Player.Movement.CaptureMovement = false;
-            _orientation = -Player.LookingDirection.Xz.ToVector3().NormalizedFast();
+            _orientation = JumpDirection;
             _accumulated = Vector3.Zero;
             _multiplier = DefaultMultiplier;
             base.DoUse();
@@ -66,7 +67,8 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
             World.Particles.Emit();
         }
 
-        private float Distance => .5f + Level * .5f;
+        protected float Distance => .5f + Level * .5f;
+        protected virtual Vector3 JumpDirection => -Player.LookingDirection.Xz.ToVector3().NormalizedFast();
         protected override int MaxLevel => 15;
         public override float MaxCooldown => 20 - Level * .5f;
         public override float ManaCost => 0;

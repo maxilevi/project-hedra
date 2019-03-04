@@ -112,7 +112,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
         protected override float Duration => 21 + Level * 2f;
         protected override int MaxLevel => 15;
         public override float ManaCost => 80;
-        public override float MaxCooldown => Duration + 82 - Level;
+        protected override float CooldownDuration => 82 - Level;
         public override string Description => Translations.Get("shadow_warrior_desc");
         public override string DisplayName => Translations.Get("shadow_warrior_skill");
         public override string[] Attributes => new[]

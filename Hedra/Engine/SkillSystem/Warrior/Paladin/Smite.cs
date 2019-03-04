@@ -20,7 +20,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Paladin
         }
 
         protected override int MaxLevel => 15;
-        private float UndeadMultiplier => 2f * (Level / (float) MaxLevel);
+        private float UndeadMultiplier => 2.5f * (Level / (float) MaxLevel);
         public override string Description => Translations.Get("smite_desc");
         public override string DisplayName => Translations.Get("smite_skill");
         public override string[] Attributes => new[]

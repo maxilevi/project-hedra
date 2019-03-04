@@ -38,7 +38,6 @@ namespace Hedra.Engine.SkillSystem
         {
             if(SkillAnimation != SkillAnimation) throw new ArgumentOutOfRangeException($"SkillAnimation needs to be a singleton.");
             SkillAnimation.Loop = false;
-            SkillAnimation.Speed = AnimationSpeed;
             SkillAnimation.OnAnimationStart += Sender =>
             {
                 if(!_executedStart)
@@ -83,6 +82,7 @@ namespace Hedra.Engine.SkillSystem
             _executedStart = false;
             _executedMid = false;
             _executedEnd = false;
+            SkillAnimation.Speed = AnimationSpeed;
             Player.Model.BlendAnimation(SkillAnimation);
             OnEnable();
         }

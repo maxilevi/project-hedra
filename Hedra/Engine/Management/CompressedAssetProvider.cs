@@ -72,7 +72,7 @@ namespace Hedra.Engine.Management
         
         public void GrabShaders()
         {
-            this.CopyShaders();
+            CopyShaders();
             Log.Write($"[DEBUG] Rebuilding shader bundles...{Environment.NewLine}", ConsoleColor.Magenta);
             var pProcess = new System.Diagnostics.Process
             {
@@ -103,7 +103,7 @@ namespace Hedra.Engine.Management
 
             if ( Directory.Exists(TemporalFolder) ) Directory.Delete(TemporalFolder, true);
 
-            DirectoryInfo info = Directory.CreateDirectory(TemporalFolder);
+            var info = Directory.CreateDirectory(TemporalFolder);
             info.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
 
             //Decompress binary contents in there so there is not much ram usage

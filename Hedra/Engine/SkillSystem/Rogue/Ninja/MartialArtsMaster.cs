@@ -12,8 +12,8 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
         
         protected override void Add()
         {
-            Player.AddComponent(_previousResistance = new AttackResistanceBonusComponent(Player, ResistanceChange));
-            Player.AddComponent(_previousAttackSpeed = new AttackSpeedBonusComponent(Player, ResistanceChange));
+            Player.AddComponent(_previousResistance = new AttackResistanceBonusComponent(Player, Player.AttackResistance * ResistanceChange));
+            Player.AddComponent(_previousAttackSpeed = new AttackSpeedBonusComponent(Player, Player.BaseAttackSpeed * AttackSpeedChange));
         }
         
         protected override void Remove()

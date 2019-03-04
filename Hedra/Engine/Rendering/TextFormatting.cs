@@ -8,6 +8,7 @@ namespace Hedra.Engine.Rendering
         public const string Blue = "(BLUE)";
         public const string Cyan = "(CYAN)";
         public const string White = "(WHITE)";
+        public const string Pastel = "(PASTEL)";
         public const string Green = "(GREEN)";
         public const string Orange = "(ORANGE)";
         public const string Black = "(BLACK)";

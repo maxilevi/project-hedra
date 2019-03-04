@@ -36,7 +36,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
         private float AttackSpeedChange => .25f + Level * .065f;
         protected override float Duration => 8 + Level;
         protected override int MaxLevel => 15;
-        public override float MaxCooldown => Duration + 54;
+        protected override float CooldownDuration => 54;
         public override float ManaCost => 60;
         public override string Description => Translations.Get("swiftness_desc");
         public override string DisplayName => Translations.Get("swiftness_skill");
