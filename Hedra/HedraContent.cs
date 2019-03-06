@@ -137,7 +137,7 @@ namespace Hedra
             AddSkill("FireEnchant", typeof(FireEnchant));
             AddSkill("HolyAttack", typeof(HolyAttack));
             AddSkill("LearnHammer", typeof(LearnHammer));
-            AddSkill("Salvation", typeof(Salvation));
+            AddSkill("Conversion", typeof(Conversion));
             AddSkill("Prayer", typeof(Prayer));
             AddSkill("Smite", typeof(Smite));
             
@@ -191,6 +191,7 @@ namespace Hedra
                 SoundPlayer.LoadSound(SoundType.ItemEquip, "$DataFile$/Sounds/ItemEquip.ogg");
                 SoundPlayer.LoadSound(SoundType.BoatMove, "$DataFile$/Sounds/BoatMove.ogg");
                 SoundPlayer.LoadSound(SoundType.BearTrap, "$DataFile$/Sounds/BearTrap.ogg");
+                SoundPlayer.LoadSound(SoundType.HealSound, "$DataFile$/Sounds/HealEffect.ogg");
                 SoundPlayer.MarkAsReady();
                 Log.WriteLine("Finished loading sounds.");
             });

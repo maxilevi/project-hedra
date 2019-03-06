@@ -136,6 +136,7 @@ namespace Hedra.Sound
         Door,
         ItemEquip,
         BearTrap,
+        HealSound,
         MaxSounds
     }
 }

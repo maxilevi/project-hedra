@@ -16,7 +16,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         private readonly Vector2 _targetResolution = new Vector2(1366, 705);
         public AbilityTreeInterfaceItemInfo(InventoryItemRenderer Renderer) : base(Renderer)
         {
-            BackgroundTexture.Scale *= 1.125f;
+            BackgroundTexture.Scale *= 1.15f;
             ItemTexture.Scale *= .4f;
             ItemTexture.TextureElement.MaskId = InventoryArrayInterface.DefaultId;
         }
@@ -67,7 +67,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         {
             ItemDescription.Position = Position - Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .025f);
             ItemTexture.Position = Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .2f);
-            ItemAttributes.Position = ItemDescription.Position - (ItemDescription.Scale.Y + ItemAttributes.Scale.Y) * Vector2.UnitY - Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .075f);
+            ItemAttributes.Position = ItemDescription.Position - (ItemDescription.Scale.Y + ItemAttributes.Scale.Y) * Vector2.UnitY - Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .05f);
             SetTitlePosition();
         }
     }

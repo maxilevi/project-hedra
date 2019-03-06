@@ -3,7 +3,7 @@
   "Description": "paladin_class_description",
   "Icon": "$DataFile$/Assets/Skills/Paladin.png",
   "M11": "Faith",
-  "M12": "Salvation",
+  "M12": "Conversion",
   "M14": "Prayer",
   "M22": "HolyAttack",
   "M23": "FireEnchant",

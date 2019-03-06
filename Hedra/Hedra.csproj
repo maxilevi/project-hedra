@@ -384,6 +384,7 @@
     <Compile Include="Engine\SkillSystem\Archer\Scout\Swiftness.cs" />
     <Compile Include="Engine\SkillSystem\DurationSingleAnimationSkillWithStance.cs" />
     <Compile Include="Engine\SkillSystem\SingleAnimationSkillWithStance.cs" />
+    <Compile Include="Engine\SkillSystem\Warrior\Paladin\Conversion.cs" />
     <Compile Include="Engine\SkillSystem\WeaponBonusSkill.cs" />
     <Compile Include="Engine\SkillSystem\ChargeablePassiveSkill.cs" />
     <Compile Include="Engine\SkillSystem\ConditionedPassiveSkill.cs" />
@@ -445,7 +446,6 @@
     <Compile Include="Engine\SkillSystem\Warrior\Paladin\FireEnchant.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Paladin\HolyAttack.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Paladin\LearnHammer.cs" />
-    <Compile Include="Engine\SkillSystem\Warrior\Paladin\Salvation.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Paladin\Prayer.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Paladin\Smite.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Resistance.cs" />
@@ -8148,14 +8148,6 @@
       <Link>Assets\Chr\WarriorSacrifice.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\project-hedra-assets\Animations\WarriorSalvation.dae">
-      <Link>Assets\Chr\WarriorSalvation.dae</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\project-hedra-assets\Animations\WarriorSalvationStance.dae">
-      <Link>Assets\Chr\WarriorSalvationStance.dae</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="..\project-hedra-assets\Environment\Misc\Pebble0.ply">
       <Link>Assets\Env\Plants\Pebble0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -8246,6 +8238,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\Sounds\BearTrap.ogg">
       <Link>Sounds\BearTrap.ogg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Sounds\HealEffect.ogg">
+      <Link>Sounds\HealEffect.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0.ply">
