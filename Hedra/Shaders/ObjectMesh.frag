@@ -28,6 +28,7 @@ uniform sampler3D noiseTexture;
 uniform bool Outline;
 uniform vec4 OutlineColor;
 uniform float Time;
+uniform bool IgnoreSSAO;
 const float bias = 0.005;
 
 void main()
@@ -76,9 +77,17 @@ void main()
 	}
 	else
 	{
-	    // Ignore the gl_FragCoord.z since it causes issues with the water
-	    mat3 NormalMat = mat3(transpose(inverse(_modelViewMatrix)));
-		OutPosition = vec4((_modelViewMatrix * vec4(InPos, 1.0)).xyz * Alpha, 1.0);
-		OutNormal = vec4(NormalMat * InNorm.xyz, 1.0) * Alpha;
+	    if (IgnoreSSAO)
+	    {
+	        OutPosition = vec4(0.0, 0.0, 0.0, 0.0);
+        	OutNormal = vec4(0.0, 0.0, 0.0, 0.0);
+	    }
+	    else
+	    {
+            // Ignore the gl_FragCoord.z since it causes issues with the water
+            mat3 NormalMat = mat3(transpose(inverse(_modelViewMatrix)));
+            OutPosition = vec4((_modelViewMatrix * vec4(InPos, 1.0)).xyz * Alpha, 1.0);
+            OutNormal = vec4(NormalMat * InNorm.xyz, 1.0) * Alpha;
+		}
 	}
 }

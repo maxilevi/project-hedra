@@ -86,7 +86,7 @@ namespace Hedra.Engine.Player
         {
             if(Disposed) return;
 
-            if (_accumulatedVelocity == Vector3.Zero)
+            if (_accumulatedVelocity == Vector3.Zero && UsePhysics || !UsePhysics && Direction == Vector3.Zero)
             {
                 Direction = Propulsion.NormalizedFast();
                 _accumulatedVelocity = Propulsion + Vector3.UnitY * 7f;

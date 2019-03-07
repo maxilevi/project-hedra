@@ -31,6 +31,7 @@ namespace Hedra.Engine.Rendering
         public bool Dither { get; set; }
         public bool Outline { get; set; }
         public bool Pause { get; set; }
+        public bool ApplySSAO { get; set; } = true;
         public Vector4 OutlineColor { get; set; }
         public Vector4 Tint { get; set; } = new Vector4(1,1,1,1);
         public Vector4 BaseTint { get; set; } = new Vector4(0,0,0,0);
@@ -40,6 +41,7 @@ namespace Hedra.Engine.Rendering
         public Vector3 LocalRotationPoint { get; set; }
         public Vector3 LocalPosition { get; set; }
         public Vector3 BeforeRotation { get; set; }
+        
 
         private static readonly Texture3D NoiseTexture;
         private bool _rotMatrixCached;
@@ -178,6 +180,7 @@ namespace Hedra.Engine.Rendering
             Shader["Tint"] = Tint;
             Shader["BaseTint"] = BaseTint;
             Shader["PlayerPosition"] = GameManager.Player.Position;
+            Shader["IgnoreSSAO"] = ApplySSAO ? 0 : 1;
 
             Renderer.ActiveTexture(TextureUnit.Texture1);
             Renderer.BindTexture(TextureTarget.Texture3D, NoiseTexture.Id);

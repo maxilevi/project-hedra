@@ -99,8 +99,6 @@ namespace Hedra
             AddSkill("Rush", typeof(Rush));
             AddSkill("Swiftness", typeof(Swiftness));
             
-            AddSkill("FireRelease", typeof(FireRelease));
-            
             AddSkill("BurstOfSpeed", typeof(BurstOfSpeed));
             AddSkill("LearnClaw", typeof(LearnClaw));
             AddSkill("LearnKatar", typeof(LearnKatar));
@@ -147,7 +145,14 @@ namespace Hedra
             AddSkill("IronSkin", typeof(IronSkin));
             AddSkill("LearnAxe", typeof(LearnAxe));
             AddSkill("Sacrifice", typeof(Sacrifice));
-            AddSkill("BattleCry", typeof(BattleCry));           
+            AddSkill("BattleCry", typeof(BattleCry));     
+            
+            AddSkill("FireRelease", typeof(FireRelease));
+            AddSkill("Blaze", typeof(Blaze));
+            AddSkill("EnergyShield", typeof(EnergyShield));
+            AddSkill("FireImmunity", typeof(FireImmunity));
+            AddSkill("Meditation", typeof(Meditation));
+            AddSkill("Inferno", typeof(Inferno));
         }
 
         private static void RegisterSounds()

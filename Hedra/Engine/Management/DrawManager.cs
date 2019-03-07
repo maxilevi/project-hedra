@@ -24,8 +24,10 @@ namespace Hedra.Engine.Management
     public static class DrawManager
     {
         private static readonly object Lock = new object();
+        private static readonly object TransparentLock = new object();
         private static readonly HashSet<IRenderable> DrawFunctionsSet;
         private static readonly List<IRenderable> DrawFunctions;
+        private static readonly List<IRenderable> TransparentObjects;
         private static bool _initialized;
         private static CursorIcon _mouseCursorIcon;
         
@@ -45,6 +47,7 @@ namespace Hedra.Engine.Management
             DrawFunctions = new List<IRenderable>();
             ParticleRenderer = new List<IRenderable>();
             TrailRenderer = new List<IRenderable>();
+            TransparentObjects = new List<IRenderable>();
             UIRenderer = new GUIRenderer();
             DropShadows = new DropShadowRenderer();
         }
@@ -67,8 +70,20 @@ namespace Hedra.Engine.Management
                 DrawFunctions.Remove(Renderable);
             }
         }
-        
-        public static void BulkDraw()
+
+        public static void AddTransparent(IRenderable Renderable)
+        {
+            lock (TransparentLock)
+                TransparentObjects.Add(Renderable);
+        }
+
+        public static void RemoveTransparent(IRenderable Renderable)
+        {
+            lock (TransparentLock)
+                TransparentObjects.Remove(Renderable);
+        }
+
+        private static void BulkDraw()
         {
             SkyManager.Draw();
             World.CullTest();
@@ -109,7 +124,26 @@ namespace Hedra.Engine.Management
             {
                 ParticleRenderer[i].Draw();
             }
-    
+
+            lock (TransparentLock)
+            {
+                for (var i = TransparentObjects.Count - 1; i > -1; i--)
+                {
+                    if (TransparentObjects[i] is ICullable cullable)
+                    {
+                        if (!Culling.IsInside(cullable)) continue;
+                        TransparentObjects[i].Draw();
+                        drawedObjects++;
+                        drawedCullableObjects++;
+                    }
+                    else
+                    {
+                        TransparentObjects[i].Draw();
+                        drawedObjects++;
+                    }
+                }
+            }
+
             var worldCalls = 3;//Water + Static + Shadows
             int dropShadowCalls = DropShadows.Count;//Ideally
             CulledObjectsCount = CullableObjectsCount - drawedCullableObjects;

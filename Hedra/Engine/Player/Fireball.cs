@@ -35,7 +35,7 @@ namespace Hedra.Engine.Player
                 Direction = Direction,
                 UsePhysics = false,
                 UseLight = true,
-                Speed = 128,
+                Speed = 1.5f,
                 IgnoreEntities = IgnoreEntities
             };
             fireball.HitEventHandler += delegate(Projectile Projectile, IEntity Hit)

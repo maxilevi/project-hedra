@@ -13,7 +13,7 @@ namespace Hedra.Engine.SkillSystem
             _timer = new Timer(1);
         }
         
-        public override void Update()
+        public sealed override void Update()
         {
             base.Update();
             if (_timer.Tick() && _active)

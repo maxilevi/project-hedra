@@ -114,6 +114,12 @@ namespace Hedra.Engine.Rendering
             get => _buffer.Dither;
             set => _buffer.Dither = value;
         }
+        
+        public bool ApplySSAO
+        {
+            get => _buffer.ApplySSAO;
+            set => _buffer.ApplySSAO = value;
+        }
 
         public Vector3 Position
         {
