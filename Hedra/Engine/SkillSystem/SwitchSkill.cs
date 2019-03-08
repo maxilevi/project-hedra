@@ -13,30 +13,39 @@ namespace Hedra.Engine.SkillSystem
         protected virtual bool Orientate => true;
         protected override float OverlayBlending => _lerpBlending;
         public override bool PlaySound => false;
+        protected virtual bool HasAnimation => true;
+        protected virtual bool HasSound => true; 
 
         protected SwitchSkill()
         {
-            _stance = AnimationLoader.LoadAnimation(AnimationPath);
-            _stance.Loop = false;
-            _stance.OnAnimationEnd += delegate
+            if (HasAnimation)
             {
-                if (!Casting) return;
-                Player.Model.PlayAnimation(_stance);
-                Player.Model.BlendAnimation(_stance);
-            };
+                _stance = AnimationLoader.LoadAnimation(AnimationPath);
+                _stance.Loop = false;
+                _stance.OnAnimationEnd += delegate
+                {
+                    if (!Casting) return;
+                    Player.Model.PlayAnimation(_stance);
+                    Player.Model.BlendAnimation(_stance);
+                };
+            }
         }
 
         protected override void DoUse()
         {
             Casting = true;
-            SoundPlayer.PlaySoundWhile(SoundType, () => Casting, () => 1, () => 1);
-            Player.Model.PlayAnimation(_stance);
-            Player.Model.BlendAnimation(_stance);
+            if(HasSound) SoundPlayer.PlaySoundWhile(SoundType, () => Casting, () => 1, () => 1);
+            if (HasAnimation)
+            {
+                Player.Model.PlayAnimation(_stance);
+                Player.Model.BlendAnimation(_stance);
+            }
             Activate();
         }
 
         public override void KeyUp()
         {
+            if (!Casting) return;
             Casting = false;
             Deactivate();
         }
@@ -52,5 +61,9 @@ namespace Hedra.Engine.SkillSystem
             if (Orientate) Player.Movement.Orientate();
         }
 
+        public override float IsAffectingModifier => Casting ? 1 : 0;
+        public sealed override float ManaCost => 0;
+        public sealed override float MaxCooldown => 0;
+        protected sealed override bool HasCooldown => false;
     }
 }

@@ -18,7 +18,7 @@ namespace Hedra.Engine.SkillSystem.Mage
     /// </summary>
     public class FireRelease : SwitchSkill
     {
-        private const int ManaPerSecond = 5;
+        private const int ManaPerSecond = 6;
         private const int DamagePerSecond = 5;
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/FireRelease.png");
         public override string DisplayName => "Fire Release";

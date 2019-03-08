@@ -2,8 +2,8 @@
   "Name": "Mage",
   "Icon": "$DataFile$/Assets/Skills/Mage.png",
   "M12": "FireRelease",
-  "M21": "EnergyShield",
-  "M22": "Blaze",
+  "M22": "EnergyShield",
+  "M23": "Blaze",
   "M31": "Meditation",
   "M11": "FireImmunity",
   "M14": "Inferno"

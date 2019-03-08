@@ -387,7 +387,9 @@ fire_immunity_desc =
 fire_immunity_skill =
 blaze_desc = Ignite a fire trail when running
 blaze_skill = Blaze
-blaze_duration_change = Lasts for $(ORANGE)(BOLD){{0}s}
+blaze_speed_change = Increases speed by $(GREEN)(BOLD){{0}%}
+blaze_damage_change = Deals $(BOLD)(RED){{0}} damage on touch
+blaze_mana_cost = Uses $(BOLD)(BLUE){{0}} mana points per second
 inferno_desc =
 inferno_skill = Inferno
 # -- End Skill Names --

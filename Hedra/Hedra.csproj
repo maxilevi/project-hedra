@@ -382,6 +382,7 @@
     <Compile Include="Engine\SkillSystem\Archer\Scout\Rush.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Scout\SteadyAim.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Scout\Swiftness.cs" />
+    <Compile Include="Engine\SkillSystem\DrainSkill.cs" />
     <Compile Include="Engine\SkillSystem\DurationSingleAnimationSkillWithStance.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Blaze.cs" />
     <Compile Include="Engine\SkillSystem\Mage\EnergyShield.cs" />

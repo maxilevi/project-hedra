@@ -40,6 +40,7 @@ namespace Hedra.Engine.Rendering.Particles
         public bool VariateUniformly;
         public bool HasMultipleOutputs { get; set; }
         public bool Enabled { get; set; } = true;
+        public bool Collides { get; set; }
         
         
         public ParticleSystem(){
@@ -99,7 +100,7 @@ namespace Hedra.Engine.Rendering.Particles
             {
                 Particles.Add(new Particle3D(Position, ParticleCreator.UnitWithinCone(Direction, ConeAngle) * 25, Mathf.RandomVector3(Utils.Rng) * 360,
                              NewColor,
-                             Scale + ParticleScale, GravityEffect, ParticleLifetime));
+                             Scale + ParticleScale, GravityEffect, ParticleLifetime, Collides));
             }
             else if(Shape == ParticleShape.Sphere)
             {
@@ -108,13 +109,13 @@ namespace Hedra.Engine.Rendering.Particles
                    (PositionErrorMargin.X * PositionErrorMargin.X + PositionErrorMargin.Y * PositionErrorMargin.Y + PositionErrorMargin.Z * PositionErrorMargin.Z) / 4.0)
                 Particles.Add(new Particle3D(this.Position + ParticlePosition, Direction * 25, Mathf.RandomVector3(Utils.Rng) * 360,
                              NewColor,
-                             Scale + ParticleScale, GravityEffect, ParticleLifetime));
+                             Scale + ParticleScale, GravityEffect, ParticleLifetime, Collides));
             }
             else
             {
                 Particles.Add(new Particle3D(this.Position + ParticlePosition, Direction * 25, Mathf.RandomVector3(Utils.Rng) * 360,
                              NewColor,
-                             Scale + ParticleScale, GravityEffect, ParticleLifetime));
+                             Scale + ParticleScale, GravityEffect, ParticleLifetime, Collides));
             }
         }
         

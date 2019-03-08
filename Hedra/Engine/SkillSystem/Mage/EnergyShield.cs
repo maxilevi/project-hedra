@@ -40,11 +40,11 @@ namespace Hedra.Engine.SkillSystem.Mage
             
             public EnergyShieldComponent(IHumanoid Entity) : base(Entity)
             {
-                _shieldObject = ObjectMesh.FromVertexData(ShieldMesh.Clone().Scale(Vector3.One * Parent.Model.Height * .5f));
-                _shieldObject.Alpha = .35f;
+                _shieldObject = ObjectMesh.FromVertexData(ShieldMesh.Clone().Scale(Vector3.One * Parent.Model.Height * .45f));
+                _shieldObject.Alpha = .4f;
                 _shieldObject.Enabled = true;
-                Parent.Model.Outline = true;
-                Parent.Model.OutlineColor = Colors.LightBlue * 2f;
+                _shieldObject.Outline = Parent.Model.Outline = true;
+                _shieldObject.OutlineColor = Parent.Model.OutlineColor = Colors.LightBlue * .4f;
                 _shieldObject.ApplySSAO = false;
                 DrawManager.Remove(_shieldObject);
                 DrawManager.AddTransparent(_shieldObject);
@@ -53,6 +53,7 @@ namespace Hedra.Engine.SkillSystem.Mage
             public override void Update()
             {
                 _shieldObject.Position = Parent.Model.ModelPosition + Vector3.UnitY * Parent.Model.Height * .5f;
+                _shieldObject.Rotation += Vector3.One * Time.DeltaTime * 2000f;
             }
 
             public override void Dispose()
@@ -66,9 +67,9 @@ namespace Hedra.Engine.SkillSystem.Mage
 
         protected override int MaxLevel => 15;
         public override float ManaCost => 50f + 30f * (Level / (float) MaxLevel);
-        protected override float Duration => 5 + 8 * (Level / (float) MaxLevel);
+        protected override float Duration => 6 + 9 * (Level / (float) MaxLevel);
         protected override float CooldownDuration => 24;
-        private float ResistanceChange => .15f + .55f * (Level / (float) MaxLevel);
+        private float ResistanceChange => .2f + .55f * (Level / (float) MaxLevel);
         public override string Description => Translations.Get("energy_shield_desc");
         public override string DisplayName => Translations.Get("energy_shield_skill");
         public override string[] Attributes => new []

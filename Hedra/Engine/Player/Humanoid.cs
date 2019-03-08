@@ -130,7 +130,7 @@ namespace Hedra.Engine.Player
         {
             get
             {
-                var maxMana = 180 + RandomFactor * 60f;
+                var maxMana = 90 + RandomFactor * 60f;
                 for(var i = 1; i < this.Level; i++)
                 {
                     maxMana += Class.MaxManaFormula(RandomFactor);                    

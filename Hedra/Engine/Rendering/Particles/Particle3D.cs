@@ -50,21 +50,25 @@ namespace Hedra.Engine.Rendering.Particles
             
         }
         
-        public bool Update(){
-            this.Color = new Vector4(Color.Xyz, OriginalAlpha * 1);//(Lifetime / MaxLifetime) );
-            this.Scale = OriginalScale * (Lifetime / MaxLifetime);
-                
-            if(Collides && Position.Y < HeightAtY + 2){
-                Velocity = Velocity * new Vector3(1,0,1);    
-            }
+        public bool Update()
+        {
+            Color = new Vector4(Color.Xyz, OriginalAlpha * 1);//(Lifetime / MaxLifetime) );
+            Scale = OriginalScale * (Lifetime / MaxLifetime);    
             
             Position += Velocity * (UseTimeScale ? (float) Time.DeltaTime : Time.IndependantDeltaTime);
             Velocity.Y += 60 * Physics.Gravity * GravityEffect * (UseTimeScale ? (float) Time.DeltaTime : Time.IndependantDeltaTime);
             Lifetime -= UseTimeScale ? (float) Time.DeltaTime : Time.IndependantDeltaTime;
+            
+            if(Collides && Position.Y < HeightAtY + .5f)
+            {
+                Position = new Vector3(Position.X, HeightAtY + .5f, Position.Z);
+            }
+            
             return !(Lifetime < 0);
         }
         
-        public bool Collides{
+        public bool Collides
+        {
             get => _collides;
             set{ _collides = value;
                 if(value)

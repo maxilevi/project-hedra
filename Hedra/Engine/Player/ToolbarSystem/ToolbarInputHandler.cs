@@ -53,13 +53,14 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
                 if (ability != null && ability.MeetsRequirements() && this.AbilitiesBeingCasted() == 0 && (!_player.IsAttacking || ability.CanBeCastedWhileAttacking))
                 {
-                    SoundPlayer.PlaySound(SoundType.ButtonClick, _player.Position, false, 1f, 0.5f);
-
+                    if(!ability.Casting)
+                        SoundPlayer.PlaySound(SoundType.ButtonClick, _player.Position, false, 1f, 0.5f);
                     _player.Mana -= ability.ManaCost;
                     ability.Use();
                 }
                 else
                 {
+                    if (ability != null && ability.Casting) return;
                     SoundPlayer.PlayUISound(SoundType.ButtonHover);
                 }
             }
