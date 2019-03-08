@@ -150,7 +150,8 @@ namespace Hedra
             AddSkill("FireRelease", typeof(FireRelease));
             AddSkill("Blaze", typeof(Blaze));
             AddSkill("EnergyShield", typeof(EnergyShield));
-            AddSkill("FireImmunity", typeof(FireImmunity));
+            AddSkill("Teleport", typeof(Teleport));
+            AddSkill("FireMastery", typeof(FireMastery));
             AddSkill("Meditation", typeof(Meditation));
             AddSkill("Inferno", typeof(Inferno));
         }

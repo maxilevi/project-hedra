@@ -5,6 +5,7 @@
   "M22": "EnergyShield",
   "M23": "Blaze",
   "M31": "Meditation",
-  "M11": "FireImmunity",
-  "M14": "Inferno"
+  "M11": "FireMastery",
+  "M14": "Inferno",
+  "M33": "Teleport"
 }

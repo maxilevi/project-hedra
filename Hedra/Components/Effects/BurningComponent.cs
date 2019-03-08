@@ -29,10 +29,10 @@ namespace Hedra.Components.Effects
 
         public BurningComponent(IEntity Parent, IEntity Damager, float TotalTime, float TotalDamage) : base(Parent)
         {
-            this._totalTime = TotalTime;
-            this._totalDamage = TotalDamage;
-            this._damager = Damager;
-            this.Start();
+            _totalTime = TotalTime;
+            _totalDamage = TotalDamage * Damager?.Attributes.FireDamageMultiplier ?? 1;
+            _damager = Damager;
+            Start();
         }
         
         public BurningComponent(IEntity Parent, float TotalTime, float TotalDamage) : this(Parent, null, TotalTime, TotalDamage)
@@ -73,10 +73,9 @@ namespace Hedra.Components.Effects
             World.Particles.GravityEffect = 0.0f;
             World.Particles.PositionErrorMargin = Parent.Model.Dimensions.Size * .5f;            
             World.Particles.Emit();
-            
-            
+                
             if(!(_totalTime > _pTime && !Parent.IsDead && !Disposed && !Parent.IsUnderwater))
-                this.End();
+                End();
         }
 
         private void End()

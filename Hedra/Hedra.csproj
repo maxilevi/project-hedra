@@ -386,7 +386,7 @@
     <Compile Include="Engine\SkillSystem\DurationSingleAnimationSkillWithStance.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Blaze.cs" />
     <Compile Include="Engine\SkillSystem\Mage\EnergyShield.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\FireImmunity.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\FireMastery.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Inferno.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Teleport.cs" />
     <Compile Include="Engine\SkillSystem\SingleAnimationSkillWithStance.cs" />
