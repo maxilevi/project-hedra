@@ -198,6 +198,7 @@ namespace Hedra
                 SoundPlayer.LoadSound(SoundType.BoatMove, "$DataFile$/Sounds/BoatMove.ogg");
                 SoundPlayer.LoadSound(SoundType.BearTrap, "$DataFile$/Sounds/BearTrap.ogg");
                 SoundPlayer.LoadSound(SoundType.HealSound, "$DataFile$/Sounds/HealEffect.ogg");
+                SoundPlayer.LoadSound(SoundType.TeleportSound, "$DataFile$/Sounds/Teleport.ogg");
                 SoundPlayer.MarkAsReady();
                 Log.WriteLine("Finished loading sounds.");
             });

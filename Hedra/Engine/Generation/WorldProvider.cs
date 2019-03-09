@@ -584,7 +584,7 @@ namespace Hedra.Engine.Generation
         public Entity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed)
         {
             var mob = MobFactory.Build(Type, MobSeed);
-            var placeablePosition = this.FindPlaceablePosition(mob, DesiredPosition);
+            var placeablePosition = this.FindPlaceablePosition(mob, new Vector3(DesiredPosition.X, Physics.HeightAtPosition(DesiredPosition.X, DesiredPosition.Z), DesiredPosition.Z));
             mob.MobId = ++_previousId;
             mob.Seed = MobSeed;
             mob.Model.TargetRotation = new Vector3(0, (new Random(MobSeed)).NextFloat() * 360f, 0);
@@ -617,37 +617,17 @@ namespace Hedra.Engine.Generation
 
         public Vector3 FindPlaceablePosition(IEntity Mob, Vector3 DesiredPosition)
         {
-            var position = DesiredPosition;
-            var underChunk = this.GetChunkAt(position);
-            var structuresForPosition = StructureHandler.GetNearStructures(position);
+            var originalPosition = Mob.Physics.TargetPosition;
             var collidesOnSurface = true;
-            var box = Mob.Model.BaseBroadphaseBox.Cache.Translate(position.Xz.ToVector3()
-                                                                  + Vector3.UnitY *
-                                                                  Physics.HeightAtPosition(position.X, position.Z));
-            while (underChunk != null && collidesOnSurface)
+            Mob.Physics.TargetPosition = DesiredPosition;
+            while (!Mob.Physics.Translate(Vector3.One * .1f))
             {
-                try
-                {
-                    collidesOnSurface = underChunk.CollisionShapes.Any(Shape => Physics.Collides(Shape, box))
-                        || structuresForPosition.SelectMany(S => S.Colliders).Any(Shape => Physics.Collides(Shape, box));
-                }
-                catch (InvalidOperationException e)
-                {
-                    Log.WriteLine(e.Message);
-                    continue;
-                }
-                if (collidesOnSurface)
-                {
-                    position = position + new Vector3(Utils.Rng.NextFloat() * 32f - 16f, 0,
-                                   Utils.Rng.NextFloat() * 32f - 16f);
-                    underChunk = this.GetChunkAt(position);
-                    structuresForPosition = StructureHandler.GetNearStructures(position);
-                    box = Mob.Model.BaseBroadphaseBox.Cache.Translate(position.Xz.ToVector3()
-                                                                      + Vector3.UnitY *
-                                                                      Physics.HeightAtPosition(position.X, position.Z));
-                }
+                DesiredPosition += new Vector3(Utils.Rng.NextFloat() * 32f - 16f, 0, Utils.Rng.NextFloat() * 32f - 16f);
+                Mob.Physics.TargetPosition = DesiredPosition;
+                Mob.Physics.UpdateColliders();
             }
-            return position;
+            Mob.Physics.TargetPosition = originalPosition;
+            return DesiredPosition;
         }
 
         private Vector3 ToBlockSpace(float X, float Z)

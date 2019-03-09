@@ -72,6 +72,36 @@ namespace Hedra.Engine.EntitySystem
             get => Parent.BlockPosition * new Vector3(1, Chunk.BlockSize, 1);
             set => Parent.BlockPosition = new Vector3(value.X, value.Y / Chunk.BlockSize, value.Z);
         }
+        
+        public void UpdateColliders()
+        {
+            _underChunk = World.GetChunkAt(Parent.Physics.TargetPosition);
+            _underChunkR = World.GetChunkAt(Parent.Physics.TargetPosition + new Vector3(Chunk.Width, 0, 0));
+            _underChunkL = World.GetChunkAt(Parent.Physics.TargetPosition - new Vector3(Chunk.Width, 0, 0));
+            _underChunkF = World.GetChunkAt(Parent.Physics.TargetPosition + new Vector3(0, 0, Chunk.Width));
+            _underChunkB = World.GetChunkAt(Parent.Position - new Vector3(0, 0, Chunk.Width));
+
+            _collisions.Clear();
+            _collisions.AddRange(World.GlobalColliders);
+            if (_underChunk != null && _underChunk.Initialized)
+                _collisions.AddRange(_underChunk.CollisionShapes);
+            if (_underChunkL != null && _underChunkL.Initialized)
+                _collisions.AddRange(_underChunkL.CollisionShapes);
+            if (_underChunkR != null && _underChunkR.Initialized)
+                _collisions.AddRange(_underChunkR.CollisionShapes);
+            if (_underChunkF != null && _underChunkF.Initialized)
+                _collisions.AddRange(_underChunkF.CollisionShapes);
+            if (_underChunkB != null && _underChunkB.Initialized)
+                _collisions.AddRange(_underChunkB.CollisionShapes);
+
+            var nearCollisions = GameManager.Player.NearCollisions;
+            var currentOffset = World.ToChunkSpace(Parent.Physics.TargetPosition);
+            for (var i = 0; i < nearCollisions.Length; i++)
+            {
+                if(nearCollisions[i].Contains(currentOffset))
+                    _collisions.Add(nearCollisions[i]);
+            }
+        }
 
         public override void Update()
         {
@@ -83,32 +113,7 @@ namespace Hedra.Engine.EntitySystem
             if(!GameSettings.Paused) _lastPosition = Parent.BlockPosition;
             if ((CollidesWithStructures || UpdateColliderList) && !GameSettings.Paused)
             {
-                _underChunk = World.GetChunkAt(Parent.Position);
-                _underChunkR = World.GetChunkAt(Parent.Position + new Vector3(Chunk.Width, 0, 0));
-                _underChunkL = World.GetChunkAt(Parent.Position - new Vector3(Chunk.Width, 0, 0));
-                _underChunkF = World.GetChunkAt(Parent.Position + new Vector3(0, 0, Chunk.Width));
-                _underChunkB = World.GetChunkAt(Parent.Position - new Vector3(0, 0, Chunk.Width));
-
-                _collisions.Clear();
-                _collisions.AddRange(World.GlobalColliders);
-                if (_underChunk != null && _underChunk.Initialized)
-                    _collisions.AddRange(_underChunk.CollisionShapes);
-                if (_underChunkL != null && _underChunkL.Initialized)
-                    _collisions.AddRange(_underChunkL.CollisionShapes);
-                if (_underChunkR != null && _underChunkR.Initialized)
-                    _collisions.AddRange(_underChunkR.CollisionShapes);
-                if (_underChunkF != null && _underChunkF.Initialized)
-                    _collisions.AddRange(_underChunkF.CollisionShapes);
-                if (_underChunkB != null && _underChunkB.Initialized)
-                    _collisions.AddRange(_underChunkB.CollisionShapes);
-
-                var nearCollisions = GameManager.Player.NearCollisions;
-                var currentOffset = World.ToChunkSpace(Parent.Position);
-                for (var i = 0; i < nearCollisions.Length; i++)
-                {
-                    if(nearCollisions[i].Contains(currentOffset))
-                        _collisions.Add(nearCollisions[i]);
-                }
+                UpdateColliders();
             }
 
             var modifier = 1;

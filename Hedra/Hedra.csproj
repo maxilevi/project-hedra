@@ -8262,6 +8262,10 @@
       <Link>Sounds\HealEffect.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Sounds\Teleport.ogg">
+      <Link>Sounds\Teleport.ogg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0.ply">
       <Link>Assets\Env\Structures\GiantTree0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

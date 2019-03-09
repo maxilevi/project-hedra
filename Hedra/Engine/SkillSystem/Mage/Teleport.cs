@@ -8,6 +8,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Mage
@@ -30,7 +31,8 @@ namespace Hedra.Engine.SkillSystem.Mage
             base.OnDisable();
             Player.RemoveComponent(_component);
             _component = null;
-            Player.Physics.TargetPosition += Player.View.CrossDirection * Distance;
+            Player.Physics.TargetPosition += Player.View.LookingDirection * Distance;
+            Player.Physics.TargetPosition = World.FindPlaceablePosition(Player, Player.Physics.TargetPosition);
         }
 
         private class TeleportComponent : Component<IHumanoid>
@@ -54,6 +56,7 @@ namespace Hedra.Engine.SkillSystem.Mage
                 _meshObject.Scale = Vector3.Zero;
                 Parent.Model.Outline = true;
                 Parent.Model.OutlineColor = Vector4.Zero;
+                SoundPlayer.PlaySound(SoundType.TeleportSound, Parent.Position);
             }
 
             public override void Update()
@@ -69,7 +72,7 @@ namespace Hedra.Engine.SkillSystem.Mage
                 base.Dispose();
                 TaskScheduler.While(() => (_meshObject.Scale - Vector3.Zero).LengthFast > .005f, () =>
                 {
-                    _meshObject.Scale = Mathf.Lerp(_meshObject.Scale, Vector3.One, Time.DeltaTime * 3f);
+                    _meshObject.Scale = Mathf.Lerp(_meshObject.Scale, Vector3.Zero, Time.DeltaTime * 3f);
                 });
                 TaskScheduler.When(() => (_meshObject.Scale - Vector3.Zero).LengthFast < .005f, () =>
                 {
@@ -88,7 +91,7 @@ namespace Hedra.Engine.SkillSystem.Mage
 
         protected override int MaxLevel => 20;
         public override float MaxCooldown => 54 - 20 * (Level / (float) MaxLevel);
-        public override float ManaCost => 80;
+        public override float ManaCost => 1;
         private float Distance => 128 + 128 * (Level / (float) MaxLevel);
         public override string Description => Translations.Get("teleport_desc");
         public override string DisplayName => Translations.Get("teleport_skill");

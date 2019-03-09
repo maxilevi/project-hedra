@@ -24,6 +24,7 @@ namespace Hedra.EntitySystem
         bool Translate(Vector3 Delta);
         bool DeltaTranslate(Vector3 Delta, bool OnlyY = false);
         bool DeltaTranslate(MoveCommand Command);
+        void UpdateColliders();
         void ResetFall();
         void ResetSpeed();
         void Dispose();

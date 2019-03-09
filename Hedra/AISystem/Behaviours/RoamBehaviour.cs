@@ -34,8 +34,8 @@ namespace Hedra.AISystem.Behaviours
             {
                 if (this._moveTicker.Tick())
                 {
-                    var targetPosition = World.FindPlaceablePosition(Parent, SearchPoint + new Vector3(Utils.Rng.NextFloat() * Diameter - Radius, 0,
-                                             Utils.Rng.NextFloat() * Diameter - Radius));
+                    var randomPosition = SearchPoint + new Vector3(Utils.Rng.NextFloat() * Diameter - Radius, 0, Utils.Rng.NextFloat() * Diameter - Radius);        
+                    var targetPosition = World.FindPlaceablePosition(Parent, new Vector3(randomPosition.X, Physics.HeightAtPosition(randomPosition.X, randomPosition.Z), randomPosition.Z));
                     if (Physics.IsWaterBlock(targetPosition)) return;
                     Traverse.SetTarget(targetPosition, () => _currentBehaviour = Idle);
                     _currentBehaviour = Traverse;
