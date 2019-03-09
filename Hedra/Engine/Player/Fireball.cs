@@ -7,7 +7,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Player
 {
-    public sealed class Fireball : ParticleProjectile
+    public class Fireball : ParticleProjectile
     {
         private Fireball(IEntity Parent, Vector3 Origin) : base(Parent, Origin)
         {

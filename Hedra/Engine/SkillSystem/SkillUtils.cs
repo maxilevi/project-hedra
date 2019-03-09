@@ -18,20 +18,35 @@ namespace Hedra.Engine.SkillSystem
             });
         }
         
-        public static void DoNearby(IHumanoid Caster, float Radius, float Angle, Action<IEntity, float> Lambda)
+        public static void DoNearby(IHumanoid Caster, Vector3 Position, float Radius, float Angle, Action<IEntity, float> Lambda)
         {
             var entities = World.Entities;
             for(var i = 0; i< entities.Count; i++)
             {
                 if(entities[i] == Caster) continue;
                     
-                var toEntity = (entities[i].Position - Caster.Position).NormalizedFast();
+                var toEntity = (entities[i].Position - Position).NormalizedFast();
                 var dot = Vector3.Dot(toEntity, Caster.Orientation);
-                if(dot >= Angle && (entities[i].Position - Caster.Position).LengthSquared < Radius * Radius)
+                if(dot >= Angle && (entities[i].Position - Position).LengthSquared < Radius * Radius)
                 {
                     Lambda(entities[i], dot);
                 }
             }
+        }
+        
+        public static void DoNearby(IHumanoid Caster, float Radius, float Angle, Action<IEntity, float> Lambda)
+        {
+            DoNearby(Caster, Caster.Position, Radius, Angle, Lambda);
+        }
+        
+        public static void DoNearby(IHumanoid Caster, float Radius, Action<IEntity, float> Lambda)
+        {
+            DoNearby(Caster, -1, Radius, Lambda);
+        }
+        
+        public static void DoNearby(IHumanoid Caster, Vector3 Position, float Radius, Action<IEntity, float> Lambda)
+        {
+            DoNearby(Caster, Position, Radius, -1, Lambda);
         }
 
         public static bool IsBehindAny(IHumanoid Caster)

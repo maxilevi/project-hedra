@@ -8,6 +8,7 @@ using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
+using Hedra.Engine.IO;
 using OpenTK;
 
 namespace Hedra.Engine.Generation
@@ -63,7 +64,11 @@ namespace Hedra.Engine.Generation
                 break;
             }
             var k = i;
-            if (k >= _highlightedAreas.Length) throw new ArgumentException($"There are no available highlights");
+            if (k >= _highlightedAreas.Length)
+            {
+                Log.WriteLine($"There are no available highlights. Skipping...");//throw new ArgumentException($"There are no available highlights");
+                return null;
+            }
             if (Seconds < 0)
             {
                 var wrapper = new HighlightedAreaWrapper();
