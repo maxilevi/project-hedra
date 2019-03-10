@@ -398,6 +398,7 @@
     <Compile Include="Engine\SkillSystem\Mage\Necromancer\Terror.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Teleport.cs" />
     <Compile Include="Engine\SkillSystem\SingleAnimationSkillWithStance.cs" />
+    <Compile Include="Engine\SkillSystem\WarriorMinionComponent.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Paladin\Conversion.cs" />
     <Compile Include="Engine\SkillSystem\WeaponBonusSkill.cs" />
     <Compile Include="Engine\SkillSystem\ChargeablePassiveSkill.cs" />
@@ -8137,6 +8138,10 @@
       <Link>Assets\Chr\NecromancerBoneSpirit.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Animations\NecromancerRaiseSkeleton.dae">
+      <Link>Assets\Chr\NecromancerRaiseSkeleton.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Animations\NecromancerSiphonBlood.dae">
       <Link>Assets\Chr\NecromancerSiphonBlood.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -9211,6 +9216,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\BloodExchange.png">
       <Link>Assets\Skills\BloodExchange.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\BoneSoul.png">
+      <Link>Assets\Skills\BoneSoul.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\CleanCut.png">

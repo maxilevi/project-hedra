@@ -48,27 +48,15 @@ namespace Hedra.Engine.SkillSystem.Rogue
             _warrior = null;
         }
         
-        private class ShadowWarriorComponent : WarriorAIComponent
+        private class ShadowWarriorComponent : WarriorMinionComponent
         {
-            private readonly MinionAIComponent _aiComponent;
-            
-            public ShadowWarriorComponent(IHumanoid Parent, IHumanoid Owner) : base(Parent, default(bool))
+            public ShadowWarriorComponent(IHumanoid Parent, IHumanoid Owner) : base(Parent, Owner)
             {
-                IgnoreEntities = new IEntity[] { Owner };
-                _aiComponent = new MinionAIComponent(Parent, Owner);
-                _aiComponent.AlterBehaviour<AttackBehaviour>(
-                    new ShadowWarriorBehaviour(Parent, (T, M) =>
-                    {
-                        Parent.RotateTowards(T);
-                        base.OnAttack();
-                    })
-                );
             }
             
             public override void Update()
             {
-                _aiComponent.Update();
-                base.DoUpdate();
+                base.Update();
                 ShowParticles();
             }           
             
@@ -85,26 +73,6 @@ namespace Hedra.Engine.SkillSystem.Rogue
                 World.Particles.GravityEffect = 0.0f;
                 World.Particles.PositionErrorMargin = new Vector3(1.25f, Parent.Model.Height * .3f, 1.25f);
                 World.Particles.Emit();
-            }
-
-            public override void Dispose()
-            {
-                base.Dispose();
-                _aiComponent.Dispose();
-            }
-        }
-
-        private class ShadowWarriorBehaviour : AttackBehaviour
-        {
-            private readonly Action<IEntity, float> _lambda;
-            public ShadowWarriorBehaviour(IEntity Parent, Action<IEntity, float> Lambda) : base(Parent)
-            {
-                _lambda = Lambda;
-            }
-
-            protected override void Attack(float RangeModifier)
-            {
-                _lambda(Target, RangeModifier);
             }
         }
 
