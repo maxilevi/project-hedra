@@ -14,7 +14,8 @@ namespace Hedra.Engine.SkillSystem
         protected override float OverlayBlending => _lerpBlending;
         public override bool PlaySound => false;
         protected virtual bool HasAnimation => true;
-        protected virtual bool HasSound => true; 
+        protected virtual bool HasSound => true;
+        private int _previousLevel;
 
         protected SwitchSkill()
         {
@@ -33,6 +34,7 @@ namespace Hedra.Engine.SkillSystem
 
         protected override void DoUse()
         {
+            if(!Casting) InvokeStateUpdated();
             Casting = true;
             if(HasSound) SoundPlayer.PlaySoundWhile(SoundType, () => Casting, () => 1, () => 1);
             if (HasAnimation)
@@ -56,6 +58,11 @@ namespace Hedra.Engine.SkillSystem
         
         public override void Update()
         {
+            if (_previousLevel != Level)
+            {
+                if (Level == 0 && Casting) KeyUp();
+                _previousLevel = Level;
+            }
             _lerpBlending = Mathf.Lerp(_lerpBlending, Casting ? 1f : 0f, Time.DeltaTime * 2f);
             if (!Casting) return;
             if (Orientate) Player.Movement.Orientate();

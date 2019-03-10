@@ -23,11 +23,12 @@ namespace Hedra.Engine.SkillSystem.Mage
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/FireRelease.png");
         protected override string AnimationPath => "Assets/Chr/Mage-FireRelease.dae";
         protected override SoundType SoundType => SoundType.ArrowHit;
+        private FireCone _cone;
 
         protected override void Activate()
         {
             Player.Movement.CaptureMovement = false;
-            FireCone.Create(Player, 50,
+            _cone = FireCone.Create(Player, 50,
                 () => Player.Mana > ManaPerSecond && Casting,
                 () => Player.Mana -= ManaPerSecond * Time.DeltaTime);
         }
@@ -35,6 +36,8 @@ namespace Hedra.Engine.SkillSystem.Mage
         protected override void Deactivate()
         {
             Player.Movement.CaptureMovement = true;
+            _cone.Dispose();
+            _cone = null;
         }
 
         protected override int MaxLevel => 25;

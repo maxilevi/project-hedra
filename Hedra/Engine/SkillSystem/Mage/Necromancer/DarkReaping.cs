@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Globalization;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
@@ -13,25 +14,22 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
         
         protected override void Add()
         {
-            Player.AfterDamaging += AfterDamaging;
+            Player.Kill += OnKill;
         }
 
         protected override void Remove()
         {
-            Player.AfterDamaging -= AfterDamaging;
+            Player.Kill -= OnKill;
         }
 
-        private void AfterDamaging(IEntity Victim, float Damage)
+        private void OnKill(DeadEventArgs Args)
         {
-            if (Victim.IsDead)
-            {
-                Player.Mana = Math.Min(Player.Mana + ManaPerKill, Player.MaxMana);
-                Player.ShowText($"+{(int)ManaPerKill} MP", Color.CornflowerBlue, 12, 3);
-            }
+            Player.Mana = Math.Min(Player.Mana + ManaPerKill, Player.MaxMana);
+            Player.ShowText($"+{(int) ManaPerKill} MP", Color.CornflowerBlue, 12, 3);
         }
 
-        protected override int MaxLevel => 8;
-        private float ManaPerKill => 8 * (Level / (float) MaxLevel);
+        protected override int MaxLevel => 16;
+        private float ManaPerKill => 64 * (Level / (float) MaxLevel);
         public override string Description => Translations.Get("dark_reaping_desc");
         public override string DisplayName => Translations.Get("dark_reaping_skill");
         public override string[] Attributes => new []

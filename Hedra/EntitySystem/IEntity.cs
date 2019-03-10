@@ -18,6 +18,8 @@ namespace Hedra.EntitySystem
         event OnDamagingEventHandler BeforeDamaging;
 
         event OnDamageModifierEventHandler DamageModifiers;
+
+        event OnKillEventHandler Kill;
         
         EntityComponentManager ComponentManager { get; }
         

@@ -53,11 +53,13 @@ namespace Hedra.Engine.Player
             get => Equipment.MainWeapon;
             set => Equipment.MainWeapon = value;
         }
+        
         public virtual Item Ring
         {
             get => Equipment.Ring;
             set => Equipment.Ring = value;
         }
+        
         public ClassDesign Class
         {
             get => _class;
@@ -111,17 +113,16 @@ namespace Hedra.Engine.Player
         
         public float BaseSpeed => Class.BaseSpeed;
 
-        public override float MaxHealth
+        public override float MaxHealth => CalculateMaxHealth(Class, Level, RandomFactor) + AddonHealth;
+
+        public static float CalculateMaxHealth(ClassDesign Class, int Level, float RandomFactor)
         {
-            get
+            var maxHealth = 97 + RandomFactor * 20f;
+            for (var i = 1; i < Level; i++)
             {
-                var maxHealth = 97 + RandomFactor * 20f;
-                for (var i = 1; i < this.Level; i++)
-                {
-                    maxHealth += Class.MaxHealthFormula(RandomFactor);
-                }
-                return maxHealth + AddonHealth;                
+                maxHealth += Class.MaxHealthFormula(RandomFactor);
             }
+            return maxHealth;
         }
 
         public float MaxXP => MaxLevel == Level ? 0 : ClassDesign.XPFormula(this.Level);

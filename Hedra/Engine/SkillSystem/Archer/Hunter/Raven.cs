@@ -39,11 +39,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
             _raven.AddComponent(new HealthBarComponent(_raven, Translations.Get("raven_name"), HealthBarType.Friendly));
             _raven.SearchComponent<DamageComponent>().Ignore(E => E == Player);
             _raven.AttackDamage *= 1.0f + DamageMultiplier;
-            _raven.SearchComponent<DamageComponent>().OnDamageEvent += Args =>
-            {
-                if(_raven.IsDead)
-                    SpawnEffect(_raven.Physics.TargetPosition);
-            }; 
+            _raven.SearchComponent<DamageComponent>().OnDeadEvent += A => SpawnEffect(_raven.Physics.TargetPosition); 
 
             SpawnEffect(_raven.Physics.TargetPosition);
         }
@@ -51,17 +47,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
         private static void SpawnEffect(Vector3 Position)
         {
             SoundPlayer.PlaySound(SoundType.DarkSound, Position);
-            World.Particles.Color = Vector4.One * .25f;
-            World.Particles.ParticleLifetime = 1.25f;
-            World.Particles.GravityEffect = .0f;
-            World.Particles.Scale = new Vector3(.75f, .75f, .75f);
-            World.Particles.Position = Position;
-            World.Particles.PositionErrorMargin = Vector3.One * 1.75f;
-            for (var i = 0; i < 40; i++)
-            {
-                World.Particles.Direction = new Vector3(Utils.Rng.NextFloat(), Utils.Rng.NextFloat(), Utils.Rng.NextFloat()) * .15f;
-                World.Particles.Emit();
-            }
+            SkillUtils.DarkSpawnParticles(Position);
         }
 
         private float Duration => 18 + Level * 2;

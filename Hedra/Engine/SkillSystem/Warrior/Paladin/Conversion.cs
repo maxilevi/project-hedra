@@ -29,11 +29,8 @@ namespace Hedra.Engine.SkillSystem.Warrior.Paladin
                 Victim.IsFriendly = true;
                 Victim.RemoveComponent(Victim.SearchComponent<HealthBarComponent>());
                 Victim.AddComponent(new HealthBarComponent(Victim, Victim.Name, HealthBarType.Gold, OutlineColor.ToColor()));
-                Victim.SearchComponent<DamageComponent>().Ignore(E => E == Player);
-                Victim.SearchComponent<DamageComponent>().OnDamageEvent += Args =>
-                {
-                    if (Args.Victim.IsDead) _hasMinion = false;
-                };
+                Victim.SearchComponent<DamageComponent>().Ignore(E => E == Player || E.SearchComponent<MinionAIComponent>()?.Owner == Player);
+                Victim.SearchComponent<DamageComponent>().OnDeadEvent += A => _hasMinion = false;
             }
         }
 

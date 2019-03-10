@@ -84,7 +84,7 @@ namespace Hedra.Engine.SkillSystem.Mage
                     SkillUtils.DoNearby(Parent, 8, -1, (E, F) =>
                     {
                         if(E.SearchComponent<BurningComponent>() == null)
-                            E.AddComponent(new BurningComponent(E, Parent, 4, _damage));
+                            E.AddComponent(new BurningComponent(E, Parent, 3, _damage));
                     });
                 }
             }

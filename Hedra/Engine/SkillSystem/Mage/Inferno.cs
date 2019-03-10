@@ -31,9 +31,11 @@ namespace Hedra.Engine.SkillSystem.Mage
             );
         }
 
-        private float Damage => 15 + 40 * (Level /(float) MaxLevel);
+        private float Damage => 40 + 55 * (Level /(float) MaxLevel);
         private float Radius => 16 + 32 * (Level /(float) MaxLevel);
         protected override int MaxLevel => 20;
+        public override float MaxCooldown => 54;
+        public override float ManaCost => 110;
         public override string Description => Translations.Get("inferno_desc");
         public override string DisplayName => Translations.Get("inferno_skill");
         public override string[] Attributes => new[]

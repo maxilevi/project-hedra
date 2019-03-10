@@ -30,11 +30,13 @@ namespace Hedra.Engine.EntitySystem
     /// Description of DamageComponent.
     /// </summary>
     public delegate void OnDamageEventHandler(DamageEventArgs Args);
+    public delegate void OnDeadEventHandler(DeadEventArgs Args);
 
     public class DamageComponent : EntityComponent
     {
         public const float DefaultMissChance = 0.05f;
         public event OnDamageEventHandler OnDamageEvent;
+        public event OnDeadEventHandler OnDeadEvent;
         public float XpToGive { get; set; } = 8;
         public bool Immune { get; set; }
         public bool Delete { get; set; } = true;
@@ -45,11 +47,18 @@ namespace Hedra.Engine.EntitySystem
         private Vector4 _targetTint;
         private float _attackedTimer;
         private bool _hasBeenAttacked;
+        private bool _wasDead;
 
         public DamageComponent(IEntity Parent) : base(Parent)
         {
             _damageLabels = new List<BaseBillboard>();
             _ignoreList = new List<Predicate<IEntity>>();
+            OnDeadEvent += A => _wasDead = true;
+            OnDamageEvent += A =>
+            {
+                if (!_wasDead && Parent.IsDead)
+                    OnDeadEvent?.Invoke(new DeadEventArgs(A.Victim, A.Damager, A.Amount, A.Experience));
+            };
         }
 
         public override void Update()
@@ -144,10 +153,6 @@ namespace Hedra.Engine.EntitySystem
                 Parent.IsDead = true;
                 Parent.Physics.CollidesWithEntities = false;
                 Exp = XpToGive;
-                if(Damager is LocalPlayer)
-                {
-                    Parent.ShowText($"+{(int)Math.Ceiling(Exp)} XP", Color.Violet, 20);
-                }
                 RoutineManager.StartRoutine(this.DisposeCoroutine);
                 
             }
@@ -212,6 +217,13 @@ namespace Hedra.Engine.EntitySystem
             this.Damager = Damager;
             this.Amount = Amount;
             this.Experience = Experience;
+        }
+    }
+
+    public class DeadEventArgs : DamageEventArgs
+    {
+        public DeadEventArgs(IEntity Victim, IEntity Damager, float Amount, float Experience) : base(Victim, Damager, Amount, Experience)
+        {
         }
     }
 }

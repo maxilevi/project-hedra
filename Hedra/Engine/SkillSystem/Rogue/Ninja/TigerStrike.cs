@@ -30,7 +30,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
         public override float ManaCost => 0;
         public override float MaxCooldown => 24;
         private float Damage => 25f + 40f *  (Level / (float)MaxLevel);
-        private float StunChance => .1f + .25f * (Level / (float) MaxLevel);
+        private float StunChance => .2f + .3f * (Level / (float) MaxLevel);
         private float StunTime => 2.5f + 2f  * (Level / (float) MaxLevel);
         protected override int MaxLevel => 15;
         public override string Description => Translations.Get("tiger_strike_desc");

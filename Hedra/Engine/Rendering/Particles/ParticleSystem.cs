@@ -20,6 +20,7 @@ namespace Hedra.Engine.Rendering.Particles
     public class ParticleSystem : IRenderable, IUpdatable, IDisposable
     {
         public const int MaxParticleCount = 15000;
+        public bool Disposed { get; private set; }
         public int MaxParticles { get; set; } = MaxParticleCount; 
         public List<Particle3D> Particles = new List<Particle3D>();
         public static Shader Shader = Shader.Build("Shaders/Particle.vert","Shaders/Particle.frag");
@@ -240,8 +241,10 @@ namespace Hedra.Engine.Rendering.Particles
         
         public void Dispose()
         {
-            //ThreadManager.ExecuteOnMainThread(() => Renderer.DeleteBuffers(1, ref BufferID));
-            
+            var id = BufferID;
+            Executer.ExecuteOnMainThread(() => Renderer.DeleteBuffers(1, ref id));
+            BufferID = id;
+            Disposed = true;
             DrawManager.ParticleRenderer.Remove(this);
             UpdateManager.Remove(this);
         }

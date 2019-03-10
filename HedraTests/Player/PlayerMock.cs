@@ -53,6 +53,7 @@ namespace HedraTests.Player
         public event OnDamagingEventHandler AfterDamaging;
         public event OnDamagingEventHandler BeforeDamaging;
         public event OnDamageModifierEventHandler DamageModifiers;
+        public event OnKillEventHandler Kill;
         public event OnAttackEventHandler BeforeAttack;
         public event OnAttackEventHandler AfterAttack;
         public EntityComponentManager ComponentManager { get; }

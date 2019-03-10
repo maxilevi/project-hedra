@@ -408,10 +408,16 @@ bone_spirit_skill = Bone Soul
 dark_reaping_desc = Reap the essence of slayed enemies
 dark_reaping_skill = Dark Reaping
 dark_reaping_mana_change = Grants $(BOLD)(BLUE){{0}} mana when killing an enemy
-skeleton_mastery_desc =
-skeleton_mastery_skill = Skeleton Mastery
-raise_skeleton_desc =
+raise_skeleton_desc = Summon a skeleton to help you fight in your journey
 raise_skeleton_skill = Raise Skeleton
+raise_skeleton_max_change = You can summon up to $(BOLD)(BLUE){{0}} skeletons
+skeleton_mastery_desc = Increase the stats of your summoned skeletons
+skeleton_mastery_skill = Skeleton Mastery
+skeleton_mastery_resistance_change = Skeletons have damage resistance reduced by $(BOLD)(RED){{0}%}
+skeleton_mastery_health_change = Skeletons have $(GREEN)(BOLD){{0}} HP
+skeleton_mastery_damage_change = Skeletons deal $(BOLD)(RED){{0}%} damage of a normal attack
+skeleton_mastery_level_change = Skeletons are level $(BOLD)(BLUE){{0}}
+skeleton_mastery_minion_name = Skeleton
 # -- End Skill Names --
 
 skill_mana_cost = Mana Cost: $(BOLD)(BLUE){{0}}

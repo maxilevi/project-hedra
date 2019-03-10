@@ -38,6 +38,8 @@ namespace Hedra.Engine.EntitySystem
     public delegate void OnDamageModifierEventHandler(IEntity Victim, ref float Damage);
 
     public delegate void OnComponentAdded(IComponent<IEntity> Component);
+
+    public delegate void OnKillEventHandler(DeadEventArgs Args);
     
     public class Entity : IEntity
     {
@@ -64,6 +66,7 @@ namespace Hedra.Engine.EntitySystem
         public event OnDamagingEventHandler AfterDamaging;
         public event OnDamagingEventHandler BeforeDamaging;
         public event OnDamageModifierEventHandler DamageModifiers;
+        public event OnKillEventHandler Kill;
         public EntityAttributes Attributes { get; }
         public EntityComponentManager ComponentManager { get; }
         public float AttackDamage { get; set; } = 1.0f;
@@ -203,6 +206,23 @@ namespace Hedra.Engine.EntitySystem
             ComponentManager = new EntityComponentManager(this);
             Physics = new PhysicsComponent(this);
             _splashTimer = new Timer(1f) { AutoReset = false };
+            BeforeDamaging += OnBeforeDamaging;
+            AfterDamaging += OnAfterDamaging;
+        }
+        
+        private void OnBeforeDamaging(IEntity Victim, float Damage)
+        {
+            Victim.SearchComponent<DamageComponent>().OnDeadEvent += OnDead;
+        }
+        
+        private void OnAfterDamaging(IEntity Victim, float Damage)
+        {
+            Victim.SearchComponent<DamageComponent>().OnDeadEvent -= OnDead;
+        }
+
+        private void OnDead(DeadEventArgs Args)
+        {
+            Kill?.Invoke(Args);
         }
 
         public void ShowIcon(CacheItem? IconType)

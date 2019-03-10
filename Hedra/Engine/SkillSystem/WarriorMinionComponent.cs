@@ -8,10 +8,11 @@ namespace Hedra.Engine.SkillSystem
     public class WarriorMinionComponent : WarriorAIComponent
     {
         private readonly MinionAIComponent _aiComponent;
+        public IHumanoid Owner { get; }
             
         public WarriorMinionComponent(IHumanoid Parent, IHumanoid Owner) : base(Parent, default(bool))
         {
-            IgnoreEntities = new IEntity[] { Owner };
+            IgnoreEntities = new IEntity[] { this.Owner = Owner };
             _aiComponent = new MinionAIComponent(Parent, Owner);
             _aiComponent.AlterBehaviour<AttackBehaviour>(
                 new WarriorMinionBehaviour(Parent, (T, M) =>
@@ -27,7 +28,7 @@ namespace Hedra.Engine.SkillSystem
             _aiComponent.Update();
             base.DoUpdate();
         }
-
+        
         public override void Dispose()
         {
             base.Dispose();

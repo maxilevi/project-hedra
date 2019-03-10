@@ -129,6 +129,11 @@ namespace Hedra.Engine.Player
                 }
             });
 
+            Kill += A =>
+            {
+                A.Victim.ShowText($"+{(int)Math.Ceiling(A.Experience)} XP", Color.Violet, 20);
+            };
+            
             _damageHandler = SearchComponent<DamageComponent>();
             _damageHandler.Delete = false;
         }
@@ -443,6 +448,7 @@ namespace Hedra.Engine.Player
             Spawner.Enabled = true;
             HandLamp.Enabled = false;
             DodgeCost = DefaultDodgeCost;
+            Toolbar.ResetSkills();
             
             View.Reset();
             

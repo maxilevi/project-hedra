@@ -4,6 +4,7 @@ using System.Globalization;
 using Hedra.AISystem.Behaviours;
 using Hedra.AISystem.Humanoid;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.ItemSystem.ArmorSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
@@ -34,6 +35,10 @@ namespace Hedra.Engine.SkillSystem.Rogue
             _warrior.Health = _warrior.MaxHealth;
             _warrior.Ring = Player.Ring;
             _warrior.SetWeapon(WeaponFactory.Get(Player.MainWeapon));
+            _warrior.SetBoots(Player.Inventory.Boots?.Boots);
+            _warrior.SetPants(Player.Inventory.Pants?.Pants);
+            _warrior.SetChestplate(Player.Inventory.Chest?.Chestplate);
+            _warrior.SetHelmet(Player.Inventory.Helmet?.Helmet);
             _warrior.SearchComponent<DamageComponent>().Ignore(E => E == Player);
             _warrior.Physics.CanBePushed = false;
             _warrior.Physics.CollidesWithEntities = false;
@@ -62,22 +67,12 @@ namespace Hedra.Engine.SkillSystem.Rogue
             
             private void ShowParticles()
             {
-                World.Particles.Color = new Vector4(.2f, .2f, .2f, .8f);
-                World.Particles.VariateUniformly = true;
-                World.Particles.Position =
-                    Parent.Position + Vector3.UnitY * Parent.Model.Height * .3f;
-                World.Particles.Scale = Vector3.One * .25f;
-                World.Particles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
-                World.Particles.Direction = -Parent.Orientation * .05f;
-                World.Particles.ParticleLifetime = 1.0f;
-                World.Particles.GravityEffect = 0.0f;
-                World.Particles.PositionErrorMargin = new Vector3(1.25f, Parent.Model.Height * .3f, 1.25f);
-                World.Particles.Emit();
+                SkillUtils.DarkContinuousParticles(Parent);
             }
         }
 
         protected override bool ShouldDisable => !Player.HasWeapon || !(Player.LeftWeapon is MeleeWeapon);
-        protected override float Duration => 21 + Level * 2f;
+        protected override float Duration => 28 + Level * 2f;
         protected override int MaxLevel => 15;
         public override float ManaCost => 80;
         protected override float CooldownDuration => 82 - Level;

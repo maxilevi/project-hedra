@@ -87,6 +87,11 @@ namespace Hedra.Engine.ClassSystem
                 throw new ArgumentOutOfRangeException($"Provided argument '{Class}' is an invalid class type.");
             return ClassDesign.FromType(ClassMap[Class]);
         }
+        
+        public static ClassDesign FromString(Class ClassType)
+        {
+            return FromString(ClassType.ToString());
+        }
 
         public static ClassDesign FromType(Type Type)
         {

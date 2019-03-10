@@ -76,5 +76,35 @@ namespace Hedra.Engine.SkillSystem
             return Caster.InAttackRange(Victim, 2f) && Vector3.Dot(Victim.Orientation, Caster.Orientation) > -.75f 
                                                     && Vector3.Dot((Victim.Position - Caster.Position).Normalized(), Caster.Orientation) > .75f;
         }
+
+        public static void DarkSpawnParticles(Vector3 Position)
+        {
+            World.Particles.Color = Vector4.One * .25f;
+            World.Particles.ParticleLifetime = 1.25f;
+            World.Particles.GravityEffect = .0f;
+            World.Particles.Scale = new Vector3(.75f, .75f, .75f);
+            World.Particles.Position = Position;
+            World.Particles.PositionErrorMargin = Vector3.One * 1.75f;
+            for (var i = 0; i < 40; i++)
+            {
+                World.Particles.Direction = new Vector3(Utils.Rng.NextFloat(), Utils.Rng.NextFloat(), Utils.Rng.NextFloat()) * .15f;
+                World.Particles.Emit();
+            }
+        }
+
+        public static void DarkContinuousParticles(IHumanoid Parent)
+        {
+            World.Particles.Color = new Vector4(.2f, .2f, .2f, .8f);
+            World.Particles.VariateUniformly = true;
+            World.Particles.Position =
+                Parent.Position + Vector3.UnitY * Parent.Model.Height * .3f;
+            World.Particles.Scale = Vector3.One * .25f;
+            World.Particles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
+            World.Particles.Direction = -Parent.Orientation * .05f;
+            World.Particles.ParticleLifetime = 1.0f;
+            World.Particles.GravityEffect = 0.0f;
+            World.Particles.PositionErrorMargin = new Vector3(1.25f, Parent.Model.Height * .3f, 1.25f);
+            World.Particles.Emit();
+        }
     }
 }

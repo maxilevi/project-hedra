@@ -92,6 +92,14 @@ namespace Hedra.Engine.Player
         
         public Item Pet => throw new NotImplementedException();
         
+        public Item Helmet => throw new NotImplementedException();
+        
+        public Item Chest => throw new NotImplementedException();
+        
+        public Item Pants => throw new NotImplementedException();
+        
+        public Item Boots => throw new NotImplementedException();
+
         public int Length => throw new NotImplementedException();
 
         public Item this[int Index] => throw new NotImplementedException();

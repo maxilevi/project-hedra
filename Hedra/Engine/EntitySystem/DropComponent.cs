@@ -28,9 +28,8 @@ namespace Hedra.Engine.EntitySystem
         
         public DropComponent(IEntity Parent) : base(Parent)
         {
-            Parent.SearchComponent<DamageComponent>().OnDamageEvent += A =>
+            Parent.SearchComponent<DamageComponent>().OnDeadEvent += A =>
             {
-                if(!A.Victim.IsDead) return;
                 Drop(A.Damager);
             };
         }

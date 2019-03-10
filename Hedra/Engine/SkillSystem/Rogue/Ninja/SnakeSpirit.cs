@@ -22,7 +22,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
             Player.SearchComponent<DamageComponent>().MissChance = DamageComponent.DefaultMissChance;
         }
 
-        private float DodgeChance => .15f + .6f * (Level / (float) MaxLevel);
+        private float DodgeChance => .25f + .6f * (Level / (float) MaxLevel);
         protected override float Duration => 4.5f + 4f * (Level / (float) MaxLevel);
         protected override int MaxLevel => 15;
         public override float ManaCost => 60;

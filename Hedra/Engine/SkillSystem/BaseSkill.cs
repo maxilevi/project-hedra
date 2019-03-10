@@ -161,6 +161,12 @@ namespace Hedra.Engine.SkillSystem
             DoUse();
         }
 
+        public void Reset()
+        {
+            Level = 0;
+            Update();
+        }
+
         protected abstract void DoUse();
         public virtual void KeyUp(){}
         public virtual void Unload(){}

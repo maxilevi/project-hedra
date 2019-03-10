@@ -20,7 +20,7 @@ namespace Hedra.Engine.SkillSystem
                 if(Level > MaxLevel)
                     Player.AbilityTree.SetPoints(GetType(), MaxLevel);
                 if(_currentLevel != 0) Remove();
-                Add();
+                if(Level > 0) Add();
                 _currentLevel = Level;
                 _set = true;
             }

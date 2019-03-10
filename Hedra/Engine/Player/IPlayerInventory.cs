@@ -30,6 +30,10 @@ namespace Hedra.Engine.Player
         Item MainWeapon { get; }
         Item Vehicle { get; }
         Item Pet { get; }
+        Item Helmet { get; }
+        Item Chest { get; }
+        Item Pants { get; }
+        Item Boots { get; }
         int Length { get; }
         Item this[int Index] { get; }
         InventoryArray MainItemsArray { get; }

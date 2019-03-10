@@ -11,7 +11,7 @@
   
   "Model": {
     "Path": "$DataFile$/Assets/Chr/DeerIdle.dae",
-    "Scale": 1.5,
+    "Scale": 1.0,
     "IdleAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/DeerIdle.dae",

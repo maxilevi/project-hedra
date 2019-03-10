@@ -195,6 +195,11 @@ namespace Hedra.Engine.Player.ToolbarSystem
             }
         }
 
+        public void ResetSkills()
+        {
+            for (var i = 0; i < Skills.Length; ++i) Skills[i].Reset();
+        }
+        
         public void ResetCooldowns()
         {
             for (var i = 0; i < _skills.Length; ++i)

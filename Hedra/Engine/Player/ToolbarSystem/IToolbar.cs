@@ -18,5 +18,6 @@ namespace Hedra.Engine.Player.ToolbarSystem
         byte[] ToArray();
         void FromInformation(PlayerInformation Information);
         void ResetCooldowns();
+        void ResetSkills();
     }
 }

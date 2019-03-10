@@ -74,9 +74,9 @@ namespace Hedra.Engine.Player
             Create(Owner, DamagePerSecond, () => k > 0, () => k -= Time.DeltaTime);
         }
 
-        public static void Create(IHumanoid Owner, float DamagePerSecond, Func<bool> While, Action Do)
+        public static FireCone Create(IHumanoid Owner, float DamagePerSecond, Func<bool> While, Action Do)
         {
-            var release = new FireCone(Owner, Owner.Position)
+            return new FireCone(Owner, Owner.Position)
             {
                 Color = Particle3D.FireColor,
                 Direction = Vector3.Zero,
