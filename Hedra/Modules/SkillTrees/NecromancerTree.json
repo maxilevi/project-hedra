@@ -1,5 +1,12 @@
 {
   "Name": "Necromancer",
   "Icon": "$DataFile$/Assets/Skills/Necromancer.png",
-  "Description": "necromancer_class_description"
+  "Description": "necromancer_class_description",
+  "M11": "SiphonBlood",
+  "M13": "BloodExchange",
+  "M31": "RaiseSkeleton",
+  "M32": "SkeletonMastery",
+  "M22": "DarkReaping",
+  "M23": "Terror",
+  "M24": "BoneSpirit"
 }

@@ -190,6 +190,7 @@
     <Compile Include="Components\Effects\BleedComponent.cs" />
     <Compile Include="Components\Effects\BleedingComponent.cs" />
     <Compile Include="Components\Effects\BurningComponent.cs" />
+    <Compile Include="Components\Effects\FearComponent.cs" />
     <Compile Include="Components\Effects\FireComponent.cs" />
     <Compile Include="Components\Effects\FreezeComponent.cs" />
     <Compile Include="Components\Effects\FreezingComponent.cs" />
@@ -388,6 +389,13 @@
     <Compile Include="Engine\SkillSystem\Mage\EnergyShield.cs" />
     <Compile Include="Engine\SkillSystem\Mage\FireMastery.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Inferno.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\Necromancer\BloodExchange.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\Necromancer\BoneSpirit.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\Necromancer\DarkReaping.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\Necromancer\RaiseSkeleton.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\Necromancer\SiphonBlood.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\Necromancer\SkeletonMastery.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\Necromancer\Terror.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Teleport.cs" />
     <Compile Include="Engine\SkillSystem\SingleAnimationSkillWithStance.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Paladin\Conversion.cs" />
@@ -8080,7 +8088,6 @@
     <Folder Include="Assets\Items\Gems\" />
     <Folder Include="Assets\Items\Pants\" />
     <Folder Include="Engine\SkillSystem\Mage\Druid" />
-    <Folder Include="Engine\SkillSystem\Mage\Necromancer" />
     <Folder Include="Modules\Items\Boots\" />
     <Folder Include="Modules\Items\Gems\" />
     <Folder Include="Modules\Items\Pants\" />
@@ -8120,6 +8127,22 @@
     </Content>
     <Content Include="..\project-hedra-assets\Animations\MageTeleport.dae">
       <Link>Assets\Chr\MageTeleport.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Animations\NecromancerBloodExchange.dae">
+      <Link>Assets\Chr\NecromancerBloodExchange.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Animations\NecromancerBoneSpirit.dae">
+      <Link>Assets\Chr\NecromancerBoneSpirit.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Animations\NecromancerSiphonBlood.dae">
+      <Link>Assets\Chr\NecromancerSiphonBlood.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Animations\NecromancerTerror.dae">
+      <Link>Assets\Chr\NecromancerTerror.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Animations\RogueCutthroat.dae">
@@ -9186,6 +9209,10 @@
       <Link>Assets\Skills\Blaze.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\BloodExchange.png">
+      <Link>Assets\Skills\BloodExchange.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\CleanCut.png">
       <Link>Assets\Skills\CleanCut.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -9196,6 +9223,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Cutthroat.png">
       <Link>Assets\Skills\Cutthroat.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\DarkReaping.png">
+      <Link>Assets\Skills\DarkReaping.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Druid.png">
@@ -9306,6 +9337,10 @@
       <Link>Assets\Skills\QuietSteps.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\RaiseSkeletons.png">
+      <Link>Assets\Skills\RaiseSkeletons.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Raven.png">
       <Link>Assets\Skills\Raven.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -9342,6 +9377,14 @@
       <Link>Assets\Skills\ShadowWarrior.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\SiphonBlood.png">
+      <Link>Assets\Skills\SiphonBlood.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\SkeletonMastery.png">
+      <Link>Assets\Skills\SkeletonMastery.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Smite.png">
       <Link>Assets\Skills\Smite.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -9376,6 +9419,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Teleport.png">
       <Link>Assets\Skills\Teleport.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Terror.png">
+      <Link>Assets\Skills\Terror.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\TigerStrike.png">

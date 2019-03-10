@@ -50,6 +50,8 @@ namespace Hedra.Engine.PhysicsSystem
         
         public static Vector3 DirectionToEuler(Vector3 Direction)
         {
+            if(Direction == new Vector3(0, 1, 0)) return Vector3.UnitX * -90;
+            if(Direction == new Vector3(0, -1, 0)) return Vector3.UnitX * 90;
             var newForward = Direction.Xz.ToVector3().NormalizedFast();
             var defaultRot = Vector3.UnitX * CalculateNewX(Direction) + Vector3.UnitZ * GetRotation(Vector3.UnitZ, new Vector3(0, Direction.Y, 1).NormalizedFast(), Vector3.UnitY).Z;
             var xRot = GetRotation(Vector3.UnitZ, newForward, Vector3.UnitY);

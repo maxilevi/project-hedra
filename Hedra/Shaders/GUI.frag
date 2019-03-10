@@ -49,6 +49,6 @@ void main(void)
 	/*
 	* Render a redline in the middle of screen
 	if(abs(gl_FragCoord.x - 960.0) < 1.0){
-	    OutColor = vec4(1, 0, 0, 1);
+	    OutColor = vec4(1.0, 0.0, 0.0, 1.0);
 	}*/
 }	

@@ -23,8 +23,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Berserker
                 if(E == Player || E.IsStatic) return;
                 var range = 1 - Mathf.Clamp((Player.Position - E.Position).Xz.LengthFast / Range, 0, 1);
                 if (range < 0.005f) return;
-                E.AddComponent(new SlowingComponent(E, Player, 3f, 100 - Slowness * range));               
-                E.ShowIcon(CacheItem.FearIcon, Duration);
+                E.AddComponent(new FearComponent(E, Player, Duration, 100 - Slowness * range));
             });
             SoundPlayer.PlaySound(SoundType.GorillaGrowl, Player.Position);
         }

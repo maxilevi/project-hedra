@@ -8,6 +8,7 @@ using Hedra.Engine.SkillSystem.Archer;
 using Hedra.Engine.SkillSystem.Archer.Hunter;
 using Hedra.Engine.SkillSystem.Archer.Scout;
 using Hedra.Engine.SkillSystem.Mage;
+using Hedra.Engine.SkillSystem.Mage.Necromancer;
 using Hedra.Engine.SkillSystem.Rogue;
 using Hedra.Engine.SkillSystem.Rogue.Assassin;
 using Hedra.Engine.SkillSystem.Rogue.Ninja;
@@ -154,6 +155,14 @@ namespace Hedra
             AddSkill("FireMastery", typeof(FireMastery));
             AddSkill("Meditation", typeof(Meditation));
             AddSkill("Inferno", typeof(Inferno));
+            
+            AddSkill("BloodExchange", typeof(BloodExchange));
+            AddSkill("BoneSpirit", typeof(BoneSpirit));
+            AddSkill("DarkReaping", typeof(DarkReaping));
+            AddSkill("RaiseSkeleton", typeof(RaiseSkeleton));
+            AddSkill("SiphonBlood", typeof(SiphonBlood));
+            AddSkill("SkeletonMastery", typeof(SkeletonMastery));
+            AddSkill("Terror", typeof(Terror));
         }
 
         private static void RegisterSounds()

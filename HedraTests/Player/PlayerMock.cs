@@ -56,7 +56,7 @@ namespace HedraTests.Player
         public event OnAttackEventHandler BeforeAttack;
         public event OnAttackEventHandler AfterAttack;
         public EntityComponentManager ComponentManager { get; }
-        public EntityAttributes Attributes { get; }
+        public EntityAttributes Attributes { get; } = new EntityAttributes();
         public float AttackDamage { get; set; }
         public float AttackCooldown { get; set; }
         public float RandomFactor { get; set; }
