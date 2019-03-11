@@ -39,14 +39,14 @@ namespace Hedra.Engine.SkillSystem
             DoNearby(Caster, Caster.Position, Radius, Angle, Lambda);
         }
         
-        public static void DoNearby(IHumanoid Caster, float Radius, Action<IEntity, float> Lambda)
+        public static void DoNearby(IHumanoid Caster, float Radius, Action<IEntity> Lambda)
         {
-            DoNearby(Caster, -1, Radius, Lambda);
+            DoNearby(Caster, Radius, -1, (E,F) => Lambda(E));
         }
         
-        public static void DoNearby(IHumanoid Caster, Vector3 Position, float Radius, Action<IEntity, float> Lambda)
+        public static void DoNearby(IHumanoid Caster, Vector3 Position, float Radius, Action<IEntity> Lambda)
         {
-            DoNearby(Caster, Position, Radius, -1, Lambda);
+            DoNearby(Caster, Position, Radius, -1, (E,F) => Lambda(E));
         }
 
         public static bool IsBehindAny(IHumanoid Caster)

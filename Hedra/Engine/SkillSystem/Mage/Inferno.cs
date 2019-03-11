@@ -95,7 +95,7 @@ namespace Hedra.Engine.SkillSystem.Mage
 
             private void Explode()
             {
-                SkillUtils.DoNearby(_parent, Position, _radius, (E,F) =>
+                SkillUtils.DoNearby(_parent, Position, _radius, (E) =>
                 {
                     E.Damage(_damage, _parent, out var xp);
                     _parent.XP += xp;

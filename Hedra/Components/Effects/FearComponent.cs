@@ -14,7 +14,6 @@ namespace Hedra.Components.Effects
 
         public override void Update()
         {
-            throw new System.NotImplementedException();
         }
     }
 }
