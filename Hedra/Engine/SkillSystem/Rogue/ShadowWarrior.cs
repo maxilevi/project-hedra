@@ -39,7 +39,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
             _warrior.SetPants(Player.Inventory.Pants?.Pants);
             _warrior.SetChestplate(Player.Inventory.Chest?.Chestplate);
             _warrior.SetHelmet(Player.Inventory.Helmet?.Helmet);
-            _warrior.SearchComponent<DamageComponent>().Ignore(E => E == Player);
+            _warrior.SearchComponent<DamageComponent>().Ignore(E => E == Player || E == Player.Pet.Pet);
             _warrior.Physics.CanBePushed = false;
             _warrior.Physics.CollidesWithEntities = false;
             _warrior.Physics.CollidesWithStructures = false;

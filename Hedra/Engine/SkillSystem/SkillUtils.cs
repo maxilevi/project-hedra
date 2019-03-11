@@ -70,6 +70,25 @@ namespace Hedra.Engine.SkillSystem
             return false;
         }
         
+        public static IEntity GetNearest(IHumanoid Caster, float Radius, Func<IEntity, bool> Lambda)
+        {
+            var entities = World.Entities;
+            var highest = -1f;
+            IEntity entity = null;
+            for (var i = 0; i < entities.Count; ++i)
+            {
+                if(entities[i] == Caster) continue;
+                var toEntity = (entities[i].Position - Caster.Position).NormalizedFast();
+                var dot = Vector3.Dot(toEntity, Caster.Orientation);
+                if(Lambda(entities[i]) && dot > highest && (entities[i].Position - Caster.Position).LengthSquared < Radius * Radius)
+                {
+                    entity = entities[i];
+                    highest = dot;
+                }
+            }
+            return entity;
+        }
+        
         
         public static bool IsBehind(IHumanoid Caster, IEntity Victim)
         {

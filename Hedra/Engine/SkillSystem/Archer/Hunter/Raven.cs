@@ -37,7 +37,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
             _raven.AddComponent(new MinionAIComponent(_raven, Player));
             _raven.AddComponent(new SelfDestructComponent(_raven, Duration));
             _raven.AddComponent(new HealthBarComponent(_raven, Translations.Get("raven_name"), HealthBarType.Friendly));
-            _raven.SearchComponent<DamageComponent>().Ignore(E => E == Player);
+            _raven.SearchComponent<DamageComponent>().Ignore(E => E == Player || E == Player.Pet.Pet);
             _raven.AttackDamage *= 1.0f + DamageMultiplier;
             _raven.SearchComponent<DamageComponent>().OnDeadEvent += A => SpawnEffect(_raven.Physics.TargetPosition); 
 

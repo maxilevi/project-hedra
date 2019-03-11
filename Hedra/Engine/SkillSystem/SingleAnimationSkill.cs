@@ -28,6 +28,7 @@ namespace Hedra.Engine.SkillSystem
         protected virtual bool EquipWeapons => true;
         protected virtual bool CanMoveWhileCasting => true;
         protected virtual bool ShouldCancel => Player.Model.AnimationBlending != SkillAnimation;
+        public override float IsAffectingModifier => Casting ? 1 : 0;
         private float _frameCounter;
         private bool _shouldEnd;
         private bool _executedStart;
