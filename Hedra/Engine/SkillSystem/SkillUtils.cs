@@ -70,7 +70,7 @@ namespace Hedra.Engine.SkillSystem
             return false;
         }
         
-        public static IEntity GetNearest(IHumanoid Caster, float Radius, Func<IEntity, bool> Lambda)
+        public static IEntity GetNearest(IHumanoid Caster, Vector3 Direction, float Angle, float Radius, Func<IEntity, bool> Lambda)
         {
             var entities = World.Entities;
             var highest = -1f;
@@ -79,8 +79,8 @@ namespace Hedra.Engine.SkillSystem
             {
                 if(entities[i] == Caster) continue;
                 var toEntity = (entities[i].Position - Caster.Position).NormalizedFast();
-                var dot = Vector3.Dot(toEntity, Caster.Orientation);
-                if(Lambda(entities[i]) && dot > highest && (entities[i].Position - Caster.Position).LengthSquared < Radius * Radius)
+                var dot = Vector3.Dot(toEntity, Direction);
+                if(Lambda(entities[i]) && dot > Angle && dot > highest && (entities[i].Position - Caster.Position).LengthSquared < Radius * Radius)
                 {
                     entity = entities[i];
                     highest = dot;

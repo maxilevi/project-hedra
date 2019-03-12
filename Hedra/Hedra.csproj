@@ -391,6 +391,7 @@
     <Compile Include="Engine\SkillSystem\Mage\Inferno.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Necromancer\BloodExchange.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Necromancer\BloodProjectile.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\Necromancer\BloodSkill.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Necromancer\BoneSpirit.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Necromancer\DarkReaping.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Necromancer\RaiseSkeleton.cs" />
