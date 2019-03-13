@@ -9,6 +9,8 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/BoneSoul.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/NecromancerBoneSpirit.dae");
 
+        
+        
         protected override int MaxLevel => 15;
         public override string Description => Translations.Get("bone_spirit_desc");
         public override string DisplayName => Translations.Get("bone_spirit_skill");

@@ -21,7 +21,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
         protected override void OnAnimationMid()
         {
             base.OnAnimationMid();
-            World.HighlightArea(Player.Position, Vector4.One * .2f, Radius * 1.5f, Duration);
+            World.HighlightArea(Player.Position, Vector4.One * .2f, Radius * 1.5f, .5f);
             SpawnParticles();
             SoundPlayer.PlaySound(SoundType.GroundQuake, Player.Position);
             SkillUtils.DoNearby(Player, Radius, E =>
@@ -52,7 +52,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
         private float Radius => 24 + 32 * (Level / (float) MaxLevel);
         private float Duration => 4 + 5f * (Level / (float) MaxLevel);
         private float Slowness => 85 - 15f * (Level / (float) MaxLevel);
-        public override float MaxCooldown => 32 - 8 * (Level / (float) MaxLevel);
+        public override float MaxCooldown => 32 - 8 * (Level / (float) MaxLevel) + Duration;
         public override float ManaCost => 45;
         protected override int MaxLevel => 15;
         public override string Description => Translations.Get("terror_desc");

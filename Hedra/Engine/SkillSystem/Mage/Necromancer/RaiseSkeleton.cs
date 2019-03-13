@@ -35,7 +35,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
             skeleton.AttackPower = masterySkill.AttackPower;
             skeleton.AttackResistance = masterySkill.AttackResistance;
             skeleton.Level = masterySkill.SkeletonLevel;
-            skeleton.SearchComponent<DamageComponent>().Ignore(E => E == Player || E.SearchComponent<WarriorMinionComponent>()?.Owner == Player || E == Player.Pet.Pet);
+            skeleton.SearchComponent<DamageComponent>().Ignore(E => E == Player || E.SearchComponent<DamageComponent>().HasIgnoreFor(Player));
             skeleton.RemoveComponent(skeleton.SearchComponent<HealthBarComponent>());
             skeleton.AddComponent(new HealthBarComponent(skeleton, Translations.Get("skeleton_mastery_minion_name"), HealthBarType.Black, Color.FromArgb(255, 40, 40, 40)));
             skeleton.SearchComponent<DamageComponent>().OnDeadEvent += A => _currentMinions--;

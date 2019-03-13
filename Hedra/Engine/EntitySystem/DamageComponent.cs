@@ -196,6 +196,11 @@ namespace Hedra.Engine.EntitySystem
             _ignoreList.Add(Predicate);
         }
 
+        public bool HasIgnoreFor(IEntity Entity)
+        {
+            return _ignoreList.Any(P => P(Entity));
+        }
+
         public BaseBillboard[] Labels => _damageLabels.ToArray();
 
         /// <summary>

@@ -16,8 +16,8 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
         {
             _toHealth = Player.Health;
             _fromHealth = Victim.Health;
-            LaunchParticle(Player, Victim, OnReached);
-            LaunchParticle(Victim, Player, OnReached);
+            LaunchParticle(Player, Player, Victim, OnReached);
+            LaunchParticle(Player, Victim, Player, OnReached);
         }
 
         protected override void OnStart(IEntity Victim)

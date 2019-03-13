@@ -157,7 +157,7 @@ namespace Hedra
             AddSkill("Inferno", typeof(Inferno));
             
             AddSkill("BloodExchange", typeof(BloodExchange));
-            AddSkill("BoneSpirit", typeof(BoneSpirit));
+            AddSkill("Leech", typeof(Leech));
             AddSkill("DarkReaping", typeof(DarkReaping));
             AddSkill("RaiseSkeleton", typeof(RaiseSkeleton));
             AddSkill("SiphonBlood", typeof(SiphonBlood));

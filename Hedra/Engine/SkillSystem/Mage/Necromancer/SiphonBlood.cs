@@ -15,7 +15,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 
         protected override void SpawnParticle(IEntity Victim)
         {
-            LaunchParticle(Victim, Player, OnReached);
+            LaunchParticle(Player, Victim, Player, OnReached);
         }
 
         protected override void OnStart(IEntity Victim)

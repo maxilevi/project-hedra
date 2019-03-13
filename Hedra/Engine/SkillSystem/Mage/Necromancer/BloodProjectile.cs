@@ -33,7 +33,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
             Particles.Scale = Vector3.One * .35f;
             Particles.ScaleErrorMargin = new Vector3(.4f, .4f, .4f);
             Particles.VariateUniformly = true;
-            for(var i = 0; i < 5; ++i) Particles.Emit();
+            for(var i = 0; i < 10; ++i) Particles.Emit();
         }
     }
 }

@@ -424,6 +424,11 @@ skeleton_mastery_health_change = Skeletons have $(GREEN)(BOLD){{0}} HP
 skeleton_mastery_damage_change = Skeletons deal $(BOLD)(RED){{0}%} damage of a normal attack
 skeleton_mastery_level_change = Skeletons are level $(BOLD)(BLUE){{0}}
 skeleton_mastery_minion_name = Skeleton
+leech_desc = Curse enemies in an area around you, stealing their health every second
+leech_skill = Leech
+leech_duration_change = Effect lasts for $(BOLD)(BLUE){{0}} seconds
+leech_damage_and_health_change = Deals $(BOLD)(RED){{0}} damage per second and heals for $(BOLD)(GREEN){{1}}
+leech_radius_change = Affects enemies up to $(BOLD)(YELLOW){{0}} units
 # -- End Skill Names --
 
 skill_mana_cost = Mana Cost: $(BOLD)(BLUE){{0}}

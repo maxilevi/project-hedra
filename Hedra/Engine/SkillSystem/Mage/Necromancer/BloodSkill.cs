@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Hedra.Core;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
@@ -30,14 +31,14 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 
         protected abstract void SpawnParticle(IEntity Victim);
 
-        protected void LaunchParticle(IEntity From, IEntity To, Action<IEntity, IEntity> HitLambda)
+        public static void LaunchParticle(IPlayer Player, IEntity From, IEntity To, Action<IEntity, IEntity> HitLambda)
         {
             var blood = new BloodProjectile(From, To, From.Position + OpenTK.Vector3.UnitY * 3f)
             {
                 UsePhysics = false,
                 UseLight = true,
-                Speed = 1f,
-                IgnoreEntities = World.Entities.Where(E => E.SearchComponent<WarriorMinionComponent>()?.Owner == Player || E == Player.Pet.Pet).ToArray()
+                Speed = .75f,
+                IgnoreEntities = World.Entities.Where(E => E != Player).ToArray()
             };
             blood.LandEventHandler += _ => HitLambda(From, To);
             blood.HitEventHandler += (_, __) => HitLambda(From, To);
@@ -50,7 +51,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
         {
             return SkillUtils.GetNearest(Player, Player.LookingDirection, .5f, MaxRadius, E =>
             {
-                if (E == Player.Pet.Pet || E.SearchComponent<WarriorMinionComponent>()?.Owner == Player) return false;
+                if(E.SearchComponent<DamageComponent>().HasIgnoreFor(Player)) return false;
                 return true;
             });
         }
