@@ -1,5 +1,14 @@
 {
   "Name": "Druid",
   "Icon": "$DataFile$/Assets/Skills/Druid.png",
-  "Description": "druid_class_description"
+  "Description": "druid_class_description",
+  "M31": "CompanionMastery",
+  "M32": "WolfCompanion",
+  "M33": "BearCompanion",
+  "M34": "HawkCompanion",
+  "M11": "WindOfChange",
+  "M13": "ArcticBlast",
+  "M14": "GroundFissure",
+  "M22": "Werewolf",
+  "M23": "OakSpirit"
 }

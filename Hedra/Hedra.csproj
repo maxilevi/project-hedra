@@ -387,6 +387,18 @@
     <Compile Include="Engine\SkillSystem\DrainSkill.cs" />
     <Compile Include="Engine\SkillSystem\DurationSingleAnimationSkillWithStance.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Blaze.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\Druid\ArcticBlast.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\Druid\BearCompanion.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\Druid\CompanionMastery.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\Druid\CompanionSkill.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\Druid\GroundFissure.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\Druid\HawkCompanion.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\Druid\MorphSkill.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\Druid\OakSpirit.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\Druid\Werewolf.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\Druid\WindOfChange.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\Druid\WolfCompanion.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\Druid\WoodSpikes.cs" />
     <Compile Include="Engine\SkillSystem\Mage\EnergyShield.cs" />
     <Compile Include="Engine\SkillSystem\Mage\FireMastery.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Inferno.cs" />
@@ -400,6 +412,7 @@
     <Compile Include="Engine\SkillSystem\Mage\Necromancer\SiphonBlood.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Necromancer\SkeletonMastery.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Necromancer\Terror.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\RadiusEffectSkill.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Teleport.cs" />
     <Compile Include="Engine\SkillSystem\SingleAnimationSkillWithStance.cs" />
     <Compile Include="Engine\SkillSystem\WarriorMinionComponent.cs" />
@@ -8092,7 +8105,6 @@
     <Folder Include="Assets\Items\Boots\" />
     <Folder Include="Assets\Items\Gems\" />
     <Folder Include="Assets\Items\Pants\" />
-    <Folder Include="Engine\SkillSystem\Mage\Druid" />
     <Folder Include="Modules\Items\Boots\" />
     <Folder Include="Modules\Items\Gems\" />
     <Folder Include="Modules\Items\Pants\" />
@@ -8130,6 +8142,10 @@
       <Link>Assets\Chr\MageInferno.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Animations\MageStaffGroundHit.dae">
+      <Link>Assets\Chr\MageStaffGroundHit.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Animations\MageTeleport.dae">
       <Link>Assets\Chr\MageTeleport.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -8148,10 +8164,6 @@
     </Content>
     <Content Include="..\project-hedra-assets\Animations\NecromancerSiphonBlood.dae">
       <Link>Assets\Chr\NecromancerSiphonBlood.dae</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\project-hedra-assets\Animations\NecromancerTerror.dae">
-      <Link>Assets\Chr\NecromancerTerror.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Animations\RogueCutthroat.dae">

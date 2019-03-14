@@ -14,12 +14,11 @@ using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Archer.Hunter
 {
-    public class Raven : SingleAnimationSkill
+    public class Raven : CompanionSkill
     {
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Raven.png");
         protected override bool EquipWeapons => false;
         protected override bool CanMoveWhileCasting => false;
-        protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/ArcherWhistle.dae");
         private IEntity _raven;
         private bool IsActive => _raven != null && !_raven.Disposed;
 

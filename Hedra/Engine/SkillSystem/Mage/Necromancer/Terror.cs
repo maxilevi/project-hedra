@@ -11,12 +11,9 @@ using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 {
-    public class Terror : SingleAnimationSkill
+    public class Terror : RadiusEffectSkill
     {
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Terror.png");
-        protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/NecromancerTerror.dae");
-        protected override bool CanMoveWhileCasting => false;
-        protected override float AnimationSpeed => .75f;
 
         protected override void OnAnimationMid()
         {

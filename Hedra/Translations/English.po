@@ -429,6 +429,26 @@ leech_skill = Leech
 leech_duration_change = Effect lasts for $(BOLD)(BLUE){{0}} seconds
 leech_damage_and_health_change = Deals $(BOLD)(RED){{0}} damage per second and heals for $(BOLD)(GREEN){{1}}
 leech_radius_change = Affects enemies up to $(BOLD)(YELLOW){{0}} units
+arctic_blast_desc =
+arctic_blast_skill = Arctic Blast
+bear_companion_desc = 
+bear_companion_skill = Bear Companion
+companion_mastery_desc =
+companion_mastery_skill = Companion Mastery
+ground_fissure_desc =
+ground_fissure_skill = Ground Fissure
+hawk_companion_desc =
+hawk_companion_skill = Hawk Companion
+oak_spirit_desc =
+oak_spirit_skill = Oak Spirit
+werewolf_desc =
+werewolf_skill = Werewolf
+wind_of_change_desc =
+wind_of_change_skill = Wind Of Change  
+wolf_companion_desc =
+wolf_companion_skill = Wolf Companion
+wood_spikes_desc =
+wood_spikes_skill = Wood Spikes
 # -- End Skill Names --
 
 skill_mana_cost = Mana Cost: $(BOLD)(BLUE){{0}}

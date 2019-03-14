@@ -15,12 +15,9 @@ using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 {
-    public class Leech : SingleAnimationSkill
+    public class Leech : RadiusEffectSkill
     {
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Leech.png");
-        protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/NecromancerTerror.dae");
-        protected override bool CanMoveWhileCasting => false;
-        protected override float AnimationSpeed => .75f;
 
         protected override void OnAnimationEnd()
         {
