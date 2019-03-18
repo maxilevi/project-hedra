@@ -96,9 +96,9 @@ namespace Hedra.Engine.SkillSystem
                                                     && Vector3.Dot((Victim.Position - Caster.Position).Normalized(), Caster.Orientation) > .75f;
         }
 
-        public static void DarkSpawnParticles(Vector3 Position)
+        public static void SpawnParticles(Vector3 Position, Vector4 Color)
         {
-            World.Particles.Color = Vector4.One * .25f;
+            World.Particles.Color = Color;
             World.Particles.ParticleLifetime = 1.25f;
             World.Particles.GravityEffect = .0f;
             World.Particles.Scale = new Vector3(.75f, .75f, .75f);
@@ -109,6 +109,11 @@ namespace Hedra.Engine.SkillSystem
                 World.Particles.Direction = new Vector3(Utils.Rng.NextFloat(), Utils.Rng.NextFloat(), Utils.Rng.NextFloat()) * .15f;
                 World.Particles.Emit();
             }
+        }
+        
+        public static void DarkSpawnParticles(Vector3 Position)
+        {
+            SpawnParticles(Position, Vector4.One * .25f);
         }
 
         public static void DarkContinuousParticles(IHumanoid Parent)

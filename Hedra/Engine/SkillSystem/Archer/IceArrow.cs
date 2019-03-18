@@ -22,7 +22,7 @@ namespace Hedra.Engine.SkillSystem.Archer
     /// <summary>
     /// Description of ArcherPoisonArrow.
     /// </summary>
-    public class IceArrow : SpecialAttackSkill<Bow>
+    public class IceArrow : SpecialRangedAttackSkill
     {
         private const float BaseDamage = 40f;
         private const float BaseCooldown = 18f;
@@ -36,23 +36,16 @@ namespace Hedra.Engine.SkillSystem.Archer
         public override float ManaCost => BaseManaCost;
         protected override int MaxLevel => 99;
 
-        protected override void BeforeUse(Bow Weapon)
+        protected override void OnHit(Projectile Proj, IEntity Victim)
         {
-            void HandlerLambda(Projectile A) => ModifierHandler(Weapon, A, HandlerLambda);
-            Weapon.BowModifiers += HandlerLambda;
+            base.OnHit(Proj, Victim);
+            Victim.AddComponent( new FreezingComponent(Victim, Player, 3 + Utils.Rng.NextFloat() * 2f, Damage) );
         }
 
-        private void ModifierHandler(Bow Weapon, Projectile Arrow, OnArrowEvent Event)
+        protected override void OnMove(Projectile Proj)
         {
-            Arrow.MoveEventHandler += Sender =>
-            {
-                Arrow.Mesh.Tint = Colors.Blue * new Vector4(1,1,3,1) * .7f;
-            };
-            Arrow.HitEventHandler += delegate(Projectile Sender, IEntity Hit)
-            {                
-                Hit.AddComponent( new FreezingComponent(Hit, Player, 3 + Utils.Rng.NextFloat() * 2f, Damage) );
-            };
-            Weapon.BowModifiers -= Event;
+            base.OnMove(Proj);
+            Proj.Mesh.Tint = Colors.Blue * new Vector4(1,1,3,1) * .7f;
         }
     }
 }

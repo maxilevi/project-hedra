@@ -192,6 +192,16 @@ namespace Hedra.Engine.Player
             _restrictions.RemoveRestriction(ToCorrectItemSpace(Index), Type);
         }
 
+        public void SetRestrictions(int Index, string[] Restrictions)
+        {
+            _restrictions.SetRestrictions(ToCorrectItemSpace(Index), Restrictions);
+        }
+
+        public string[] GetRestrictions(int Index)
+        {
+            return _restrictions.GetRestrictions(ToCorrectItemSpace(Index));
+        }
+        
         private static int ToCorrectItemSpace(int Index)
         {
             return Index >= InventorySpaces ? Index - InventorySpaces : Index;

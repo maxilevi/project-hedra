@@ -175,7 +175,6 @@ namespace Hedra
             AddSkill("Werewolf", typeof(Werewolf));
             AddSkill("WindOfChange", typeof(WindOfChange));
             AddSkill("WolfCompanion", typeof(WolfCompanion));
-            AddSkill("WoodSpikes", typeof(WoodSpikes));
         }
 
         private static void RegisterSounds()

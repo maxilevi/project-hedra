@@ -9,6 +9,8 @@ namespace Hedra.Engine.ModuleSystem
     public interface IEnemyFactory
     {
         string Name { get; set; }
+        float MaxHealth { get; }
+        float AttackDamage { get; }
 
         void Apply(Entity Mob, bool NormalizeValues = true);
 

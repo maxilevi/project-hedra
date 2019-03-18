@@ -20,6 +20,7 @@ using Hedra.Engine.Player.QuestSystem;
 using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.WeaponSystem;
 using OpenTK;
@@ -54,6 +55,7 @@ namespace HedraTests.Player
         public event OnDamagingEventHandler BeforeDamaging;
         public event OnDamageModifierEventHandler DamageModifiers;
         public event OnKillEventHandler Kill;
+        public event OnDisposedEvent AfterDisposed;
         public event OnAttackEventHandler BeforeAttack;
         public event OnAttackEventHandler AfterAttack;
         public EntityComponentManager ComponentManager { get; }

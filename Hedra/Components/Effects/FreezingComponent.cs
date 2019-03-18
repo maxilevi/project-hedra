@@ -44,7 +44,7 @@ namespace Hedra.Components.Effects
                 return;
             }
                     
-            Parent.Model.BaseTint = Colors.LightBlue * new Vector4(1,1,2,1) * .7f;
+            Parent.Model.BaseTint = Colors.LightBlue * new Vector4(1, 1, 3, 1) * .7f;
             Parent.ComponentManager.AddComponentWhile(new SpeedBonusComponent(Parent, -Parent.Speed),
                 () => _totalTime > _pTime && !Parent.IsDead && !Disposed);
             Parent.Model.Pause = true;

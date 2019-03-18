@@ -110,7 +110,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         {
             base.SetPosition();
             ItemTexture.Position = Position + DefaultSize.Y * Vector2.UnitY *.15f;
-            _learnSpecializationButton.Position = BackgroundTexture.Position - DefaultSize.Y * Vector2.UnitY * .6f;
+            _learnSpecializationButton.Position = BackgroundTexture.Position - DefaultSize.Y * Vector2.UnitY * .65f;
             _learnSpecializationText.Position = _learnSpecializationButton.Position;
         }
 

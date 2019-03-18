@@ -10,7 +10,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Berserker
     public class Sacrifice : WeaponBonusWithAnimationSkill
     {
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Sacrifice.png");
-        protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSacrifice.dae");
+        protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/WarriorImbueAttack.dae");
 
         protected override void ApplyBonusToEnemy(IEntity Victim, ref float Damage)
         {

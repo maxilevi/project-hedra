@@ -599,6 +599,8 @@ namespace Hedra.Engine.Player
         Mandragora,
         TravellingMerchant,
         Gnoll,
+        WerewolfMorph,
+        EntMorph,
         Mage
     }
 }

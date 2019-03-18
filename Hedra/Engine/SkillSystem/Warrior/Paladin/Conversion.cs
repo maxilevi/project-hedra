@@ -14,7 +14,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Paladin
     public class Conversion : WeaponBonusWithAnimationSkill
     {
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Salvation.png");
-        protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/WarriorHolyAttack.dae");
+        protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/WarriorImbueAttack.dae");
         private bool _hasMinion;
         
         protected override void ApplyBonusToEnemy(IEntity Victim, ref float Damage)

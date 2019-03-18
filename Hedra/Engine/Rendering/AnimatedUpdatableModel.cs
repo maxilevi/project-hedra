@@ -32,8 +32,13 @@ namespace Hedra.Engine.Rendering
         {
             Model.RemoveModel(Data);
         }
-        
+
         public void Paint(Vector4[] Colors)
+        {
+            Paint(Model, ModelPath, Colors);
+        }
+        
+        public static void Paint(AnimatedModel Model, string Path, Vector4[] Colors)
         {
             if(Colors.Length > AssetManager.ColorCodes.Length)
                 throw new ArgumentOutOfRangeException($"Provided amount of colors cannot be higher than the color codes.");
@@ -43,7 +48,27 @@ namespace Hedra.Engine.Rendering
             {
                 colorMap.Add(AssetManager.ColorCodes[i].Xyz, Colors[i].Xyz);
             }
-            AnimationModelLoader.Paint(Model, ModelPath, colorMap);
+            AnimationModelLoader.Paint(Model, Path, colorMap);
+        }
+        
+        public AnimatedModel SwitchModel(AnimatedModel New)
+        {
+            var previous = Model;
+            New.Position = Model.Position;
+            New.Alpha = Model.Alpha;
+            New.Enabled = Model.Enabled;
+            New.Outline = Model.Outline;
+            New.OutlineColor = Model.OutlineColor;
+            New.Pause = Model.Pause;
+            New.Tint = Model.Tint;
+            New.BaseTint = Model.BaseTint;
+            New.ApplyFog = Model.ApplyFog;
+            New.LocalRotation = Model.LocalRotation;
+            New.TransformationMatrix = Model.TransformationMatrix;
+            New.AnimationSpeed = Model.AnimationSpeed;
+            New.PrematureCulling = Model.PrematureCulling;
+            Model = New;
+            return previous;
         }
     }
 }

@@ -3,6 +3,7 @@ using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
+using Hedra.Engine.WorldBuilding;
 using OpenTK;
 
 namespace Hedra.EntitySystem
@@ -20,6 +21,8 @@ namespace Hedra.EntitySystem
         event OnDamageModifierEventHandler DamageModifiers;
 
         event OnKillEventHandler Kill;
+
+        event OnDisposedEvent AfterDisposed;
         
         EntityComponentManager ComponentManager { get; }
         

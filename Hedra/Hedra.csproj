@@ -398,14 +398,12 @@
     <Compile Include="Engine\SkillSystem\Mage\Druid\Werewolf.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Druid\WindOfChange.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Druid\WolfCompanion.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Druid\WoodSpikes.cs" />
     <Compile Include="Engine\SkillSystem\Mage\EnergyShield.cs" />
     <Compile Include="Engine\SkillSystem\Mage\FireMastery.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Inferno.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Necromancer\BloodExchange.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Necromancer\BloodProjectile.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Necromancer\BloodSkill.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Necromancer\BoneSpirit.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Necromancer\DarkReaping.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Necromancer\Leech.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Necromancer\RaiseSkeleton.cs" />
@@ -415,6 +413,7 @@
     <Compile Include="Engine\SkillSystem\Mage\RadiusEffectSkill.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Teleport.cs" />
     <Compile Include="Engine\SkillSystem\SingleAnimationSkillWithStance.cs" />
+    <Compile Include="Engine\SkillSystem\SpecialRangedAttackSkill.cs" />
     <Compile Include="Engine\SkillSystem\WarriorMinionComponent.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Paladin\Conversion.cs" />
     <Compile Include="Engine\SkillSystem\WeaponBonusSkill.cs" />
@@ -8150,14 +8149,6 @@
       <Link>Assets\Chr\MageTeleport.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\project-hedra-assets\Animations\NecromancerBloodExchange.dae">
-      <Link>Assets\Chr\NecromancerBloodExchange.dae</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\project-hedra-assets\Animations\NecromancerBoneSpirit.dae">
-      <Link>Assets\Chr\NecromancerBoneSpirit.dae</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="..\project-hedra-assets\Animations\NecromancerRaiseSkeleton.dae">
       <Link>Assets\Chr\NecromancerRaiseSkeleton.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -8190,8 +8181,8 @@
       <Link>Assets\Chr\WarriorGroundStomp.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\project-hedra-assets\Animations\WarriorHolyAttack.dae">
-      <Link>Assets\Chr\WarriorHolyAttack.dae</Link>
+    <Content Include="..\project-hedra-assets\Animations\WarriorImbueAttack.dae">
+      <Link>Assets\Chr\WarriorImbueAttack.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Animations\WarriorPrayer.dae">
@@ -8200,10 +8191,6 @@
     </Content>
     <Content Include="..\project-hedra-assets\Animations\WarriorPrayerStance.dae">
       <Link>Assets\Chr\WarriorPrayerStance.dae</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\project-hedra-assets\Animations\WarriorSacrifice.dae">
-      <Link>Assets\Chr\WarriorSacrifice.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Environment\Misc\Pebble0.ply">
@@ -9214,6 +9201,10 @@
       <Link>Assets\Skills\Archer.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\ArcticBlast.png">
+      <Link>Assets\Skills\ArcticBlast.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\ArrowRain.png">
       <Link>Assets\Skills\ArrowRain.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -9224,6 +9215,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\BattleCry.png">
       <Link>Assets\Skills\BattleCry.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\BearCompanion.png">
+      <Link>Assets\Skills\BearCompanion.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Blaze.png">
@@ -9240,6 +9235,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\CleanCut.png">
       <Link>Assets\Skills\CleanCut.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\CompanionMastery.png">
+      <Link>Assets\Skills\CompanionMastery.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Concealment.png">
@@ -9290,8 +9289,16 @@
       <Link>Assets\Skills\Frenzy.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\GroundFissure.png">
+      <Link>Assets\Skills\GroundFissure.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\GroundStomp.png">
       <Link>Assets\Skills\GroundStomp.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\HawkCompanion.png">
+      <Link>Assets\Skills\HawkCompanion.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\HolyAttack.png">
@@ -9356,6 +9363,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\NoEscape.png">
       <Link>Assets\Skills\NoEscape.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\OakSpirit.png">
+      <Link>Assets\Skills\OakSpirit.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Prayer.png">
@@ -9460,6 +9471,22 @@
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Treason.png">
       <Link>Assets\Skills\Treason.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\Werewolf.png">
+      <Link>Assets\Skills\Werewolf.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\WindOfChange.png">
+      <Link>Assets\Skills\WindOfChange.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\WolfCompanion.png">
+      <Link>Assets\Skills\WolfCompanion.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\WoodSoul.png">
+      <Link>Assets\Skills\WoodSoul.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\StaminaAndOxygenBarBackground.png">
@@ -12677,7 +12704,13 @@
     <Content Include="Modules\Mobs\Pug.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\NPCs\EntMorph.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\NPCs\Skeleton.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\NPCs\WerewolfMorph.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\SkillTrees\ArcherTree.json">

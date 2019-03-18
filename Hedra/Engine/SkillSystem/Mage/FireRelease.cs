@@ -22,7 +22,7 @@ namespace Hedra.Engine.SkillSystem.Mage
     {
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/FireRelease.png");
         protected override string AnimationPath => "Assets/Chr/Mage-FireRelease.dae";
-        protected override SoundType SoundType => SoundType.ArrowHit;
+        protected override SoundType SoundType => SoundType.Spell;
         private FireCone _cone;
 
         protected override void Activate()

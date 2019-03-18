@@ -19,42 +19,18 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
     {
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Leech.png");
 
-        protected override void OnAnimationEnd()
+        protected override void Apply(IEntity Entity)
         {
-            base.OnAnimationEnd();
-            World.HighlightArea(Player.Position, Colors.Red * .5f, Radius * 2.0f, .5f);
-            SpawnParticles();
-            SoundPlayer.PlaySound(SoundType.GroundQuake, Player.Position);
-            SkillUtils.DoNearby(Player, Radius, E =>
-            {
-                if (E.SearchComponent<DamageComponent>().HasIgnoreFor(Player)) return;
-                E.AddComponentForSeconds(new LeechComponent(E, Player, Damage, Health), Duration);
-            });
+            if (Entity.SearchComponent<DamageComponent>().HasIgnoreFor(Player)) return;
+            Entity.AddComponentForSeconds(new LeechComponent(Entity, Player, Damage, Health), Duration);
         }
-        
-        private void SpawnParticles()
-        {
-            World.Particles.Color = Colors.Red * .5f;
-            World.Particles.VariateUniformly = true;
-            World.Particles.Position = Player.Position;
-            World.Particles.GravityEffect = 0f;
-            World.Particles.Scale = Vector3.One * .5f;
-            World.Particles.ScaleErrorMargin = Vector3.One * .35f;
-            World.Particles.PositionErrorMargin = Vector3.One * 2;
-            World.Particles.Shape = ParticleShape.Sphere;       
-            World.Particles.ParticleLifetime = .05f * Radius;       
-            for(var i = 0; i < 500; ++i)
-            {
-                var dir = new Vector3(Utils.Rng.NextFloat() * 2 - 1, 0f, Utils.Rng.NextFloat() * 2 - 1).NormalizedFast();
-                World.Particles.Direction = dir;
-                World.Particles.Emit();
-            }
-        }
+
+        protected override Vector4 HighlightColor => Colors.Red * .5f;
 
         protected override int MaxLevel => 15;
         public override string Description => Translations.Get("leech_desc");
         public override string DisplayName => Translations.Get("leech_skill");
-        private float Radius => 48 + 48 * (Level / (float) MaxLevel);
+        protected override float Radius => 48 + 48 * (Level / (float) MaxLevel);
         private float Health => Damage;
         private float Damage => Math.Min(10, 5 + 5 * (Level / 10));
         private float Duration => 7 + 10 * (Level / (float)MaxLevel);

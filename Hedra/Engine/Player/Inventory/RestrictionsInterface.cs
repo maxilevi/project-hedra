@@ -29,5 +29,15 @@ namespace Hedra.Engine.Player.Inventory
             if (restrictions == null) return false;
             return restrictions.Contains(Type);
         }
+
+        public void SetRestrictions(int Index, string[] Types)
+        {
+            _array.SetRestrictions(Index, Types);
+        }
+
+        public string[] GetRestrictions(int Index)
+        {
+            return _array.GetRestrictions(Index);
+        }
     }
 }

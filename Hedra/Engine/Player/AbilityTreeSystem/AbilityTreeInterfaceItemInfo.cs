@@ -31,7 +31,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 ItemDescription.Text = TextProvider.Wrap(realSkill.Description, 35);
                 ItemDescription.Color = Color.White;
                 ItemText.Text = Utils.FitString(realSkill.DisplayName, 18);
-                ItemAttributes.Text = TextProvider.Wrap(BuildAttributes(realSkill), 30);
+                ItemAttributes.Text = TextProvider.Wrap(BuildAttributes(realSkill), 35);
                 ItemTexture.TextureElement.TextureId = CurrentItem.HasAttribute("ImageId")
                     ? CurrentItem.GetAttribute<uint>("ImageId")
                     : GUIRenderer.TransparentTexture;

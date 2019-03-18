@@ -1,38 +1,125 @@
 using System.Globalization;
+using System.Linq;
+using Hedra.AISystem;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Localization;
+using Hedra.Engine.ModuleSystem;
+using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
+using Hedra.EntitySystem;
+using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Mage.Druid
 {
     public abstract class CompanionSkill : SingleAnimationSkill
     {
-        private static bool _isActive;
+        private static bool IsActive => _minion != null;
+        private static IEntity _minion;
         protected sealed override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/ArcherWhistle.dae");
-
+        protected override bool EquipWeapons => false;
+        protected override bool CanMoveWhileCasting => false;
         protected override int MaxLevel => 20;
-        protected override bool ShouldDisable => _isActive;
+        protected override bool ShouldDisable => IsActive && !_isActiveInstance;
+        private bool _isActiveInstance;
 
-        protected virtual void SpawnMinion()
+        protected override void DoUse()
         {
-            _raven = World.SpawnMob(MobType.Bee, Player.Position + Player.Orientation * 12, Utils.Rng);
-            _raven.RemoveComponent(_raven.SearchComponent<BasicAIComponent>());
-            _raven.RemoveComponent(_raven.SearchComponent<HealthBarComponent>());
-            _raven.AddComponent(new MinionAIComponent(_raven, Player));
-            _raven.AddComponent(new SelfDestructComponent(_raven, Duration));
-            _raven.AddComponent(new HealthBarComponent(_raven, Translations.Get("raven_name"), HealthBarType.Friendly));
-            _raven.SearchComponent<DamageComponent>().Ignore(E => E == Player || E == Player.Pet.Pet);
-            _raven.AttackDamage *= 1.0f + DamageMultiplier;
-            _raven.SearchComponent<DamageComponent>().OnDeadEvent += A => SpawnEffect(_raven.Physics.TargetPosition); 
+            if (_isActiveInstance)
+            {
+                Reset();
+            }
+            else
+            {
+                base.DoUse();
+            }
+        }
 
-            SpawnEffect(_raven.Physics.TargetPosition);
+        public override bool MeetsRequirements()
+        {
+            return _isActiveInstance || base.MeetsRequirements();
+        }
+
+        protected override void OnAnimationEnd()
+        {
+            Player.Movement.Orientate();
+            _minion = SpawnMinion();
+            _isActiveInstance = true;
+            Tint = new Vector3(2, .2f, .2f);
+        }
+
+        protected virtual IEntity SpawnMinion()
+        {
+            var minion = World.SpawnMob(CompanionType, Player.Position + Player.Orientation * 12, Utils.Rng);
+            minion.RemoveComponent(minion.SearchComponent<BasicAIComponent>());
+            minion.RemoveComponent(minion.SearchComponent<HealthBarComponent>());
+            minion.AddComponent(new MinionAIComponent(minion, Player));
+            minion.AddComponent(new HealthBarComponent(minion, Translations.Get($"{Keyword}_companion_name"), HealthBarType.Friendly));
+            minion.SearchComponent<DamageComponent>().Ignore(E => E == Player || E == Player.Pet.Pet);
+            minion.SearchComponent<DamageComponent>().OnDeadEvent += A => SpawnEffect(minion.Physics.TargetPosition);
+            var masterySkill = (CompanionMastery) Player.Toolbar.Skills.First(S => S.GetType() == typeof(CompanionMastery));
+            minion.MaxHealth *= masterySkill.HealthMultiplier;
+            minion.AttackResistance *= masterySkill.ResistanceMultiplier;
+            minion.AttackDamage *= masterySkill.DamageMultiplier;
+            minion.Health = minion.MaxHealth;
+            SpawnEffect(minion.Physics.TargetPosition);
+            return minion;
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            if (IsActive && _isActiveInstance)
+            {
+                if (_minion.Disposed) Disable();
+            }
+            if (_isActiveInstance)
+            {
+                Tint = new Vector3(1, .2f, .2f);
+                Cooldown = 0;
+            }
+            else
+            {
+                Tint = Vector3.One;
+            }
+        }
+
+        private void Disable()
+        {
+            _minion = null;
+            _isActiveInstance = false;
+            Tint = Vector3.One;
+            Cooldown = MaxCooldown;
+        }
+
+        private void Reset()
+        {
+            _minion.Dispose();
+            Disable();
         }
         
+        protected abstract MobType CompanionType { get; }
         
+        protected abstract void SpawnEffect(Vector3 TargetPosition);
 
-        public override float ManaCost => 140 - 70 * (Level / (float) MaxLevel);
+        protected override bool HasCooldown => !IsActive;
+        public override float ManaCost => _isActiveInstance ? 0 : 140 - 70 * (Level / (float) MaxLevel);
         public override float MaxCooldown => 54 - 30 * (Level / (float) MaxLevel);
         public sealed override string Description => Translations.Get($"{Keyword}_companion_desc");
         public sealed override string DisplayName => Translations.Get($"{Keyword}_companion_skill");
+
+        public override string[] Attributes
+        {
+            get
+            {
+                var template = World.MobFactory.GetFactory(CompanionType.ToString().ToLowerInvariant());
+                var masterySkill = (CompanionMastery) Player.Toolbar.Skills.First(S => S.GetType() == typeof(CompanionMastery));
+                return new[]
+                {
+                    Translations.Get("companion_mastery_health_change", (template.MaxHealth * masterySkill.HealthMultiplier).ToString("0.0", CultureInfo.InvariantCulture)),
+                    Translations.Get("companion_mastery_damage_change", (template.AttackDamage * masterySkill.DamageMultiplier).ToString("0.0", CultureInfo.InvariantCulture))
+                };
+            }
+        }
         protected abstract string Keyword { get; }
     }
 }

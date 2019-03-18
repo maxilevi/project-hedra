@@ -138,6 +138,7 @@ namespace Hedra.Sound
         BearTrap,
         HealSound,
         TeleportSound,
+        Spell,
         MaxSounds
     }
 }

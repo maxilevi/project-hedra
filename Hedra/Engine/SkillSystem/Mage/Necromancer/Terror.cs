@@ -5,6 +5,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.Particles;
+using Hedra.EntitySystem;
 using Hedra.Rendering.Particles;
 using Hedra.Sound;
 using OpenTK;
@@ -15,38 +16,14 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
     {
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Terror.png");
 
-        protected override void OnAnimationMid()
-        {
-            base.OnAnimationMid();
-            World.HighlightArea(Player.Position, Vector4.One * .2f, Radius * 1.5f, .5f);
-            SpawnParticles();
-            SoundPlayer.PlaySound(SoundType.GroundQuake, Player.Position);
-            SkillUtils.DoNearby(Player, Radius, E =>
-            {
-                E.AddComponent(new FearComponent(E, Player, Duration, Slowness));
-            });
-        }
+        protected override Vector4 HighlightColor => Vector4.One * .2f;
 
-        private void SpawnParticles()
+        protected override void Apply(IEntity Entity)
         {
-            World.Particles.Color = new Vector4(.2f, .2f, .2f, .8f);
-            World.Particles.VariateUniformly = true;
-            World.Particles.Position = Player.Position;
-            World.Particles.GravityEffect = 0f;
-            World.Particles.Scale = Vector3.One * .5f;
-            World.Particles.ScaleErrorMargin = Vector3.One * .35f;
-            World.Particles.PositionErrorMargin = Vector3.One * 2;
-            World.Particles.Shape = ParticleShape.Sphere;       
-            World.Particles.ParticleLifetime = .05f * Radius;       
-            for(var i = 0; i < 500; i++)
-            {
-                var dir = new Vector3(Utils.Rng.NextFloat() * 2 - 1, 0f, Utils.Rng.NextFloat() * 2 - 1).NormalizedFast();
-                World.Particles.Direction = dir;
-                World.Particles.Emit();
-            }
+            Entity.AddComponent(new FearComponent(Entity, Player, Duration, Slowness));
         }
         
-        private float Radius => 24 + 32 * (Level / (float) MaxLevel);
+        protected override float Radius => 24 + 32 * (Level / (float) MaxLevel);
         private float Duration => 4 + 5f * (Level / (float) MaxLevel);
         private float Slowness => 85 - 15f * (Level / (float) MaxLevel);
         public override float MaxCooldown => 32 - 8 * (Level / (float) MaxLevel) + Duration;

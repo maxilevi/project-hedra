@@ -24,6 +24,8 @@ namespace Hedra.Engine.Player
         void AddRestriction(int Index, string Type);
         void RemoveRestriction(int Index, EquipmentType Type);
         void RemoveRestriction(int Index, string Type);
+        void SetRestrictions(int Index, string[] Restrictions);
+        string[] GetRestrictions(int Index);
         Item Food { get; }
         Item Ammo { get; }
         bool HasAvailableSpace { get; }

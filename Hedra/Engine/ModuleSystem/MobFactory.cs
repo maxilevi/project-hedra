@@ -48,6 +48,12 @@ namespace Hedra.Engine.ModuleSystem
             }
         }
 
+        public IEnemyFactory GetFactory(string Type)
+        {
+            lock (_lock)
+                return _factories[Type.ToLowerInvariant()];
+        }
+
         public Entity Build(string Type, int Seed)
         {
             var mob = new Entity();

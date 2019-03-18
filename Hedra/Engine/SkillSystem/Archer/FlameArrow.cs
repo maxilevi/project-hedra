@@ -26,7 +26,7 @@ namespace Hedra.Engine.SkillSystem.Archer
     /// <summary>
     /// Description of ArcherPoisonArrow.
     /// </summary>
-    public class FlameArrow : SpecialAttackSkill<Bow>
+    public class FlameArrow : SpecialRangedAttackSkill
     {
         private const float BaseDamage = 60f;
         private const float BaseCooldown = 24f;
@@ -46,39 +46,33 @@ namespace Hedra.Engine.SkillSystem.Archer
         public override float ManaCost => BaseManaCost;
         protected override int MaxLevel => 99;
 
-        protected override void BeforeUse(Bow Weapon)
+        protected override void OnHit(Projectile Proj, IEntity Victim)
         {
-            void HandlerLambda(Projectile A) => ModifierHandler(Weapon, A, HandlerLambda);
-            Weapon.BowModifiers += HandlerLambda;
+            base.OnHit(Proj, Victim);
+            Victim.AddComponent( new BurningComponent(Victim, Player, 3 + Utils.Rng.NextFloat() * 2f, Damage) );
+            RoutineManager.StartRoutine( this.CreateFlames, Proj);
         }
 
-        private void ModifierHandler(Bow Weapon, Projectile Arrow, OnArrowEvent Event)
+        protected override void OnLand(Projectile Proj)
         {
-            Arrow.MoveEventHandler += Sender =>
-            {
-                Arrow.Mesh.Tint = Colors.LowHealthRed * new Vector4(1, 3, 1, 1) * .7f;
+            base.OnLand(Proj);
+            RoutineManager.StartRoutine(CreateFlames, Proj);
+        }
 
-                World.Particles.Color = Particle3D.FireColor;
-                World.Particles.VariateUniformly = false;
-                World.Particles.Position = Sender.Mesh.Position;
-                World.Particles.Scale = Vector3.One * .5f;
-                World.Particles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
-                World.Particles.Direction = Vector3.UnitY * .2f;
-                World.Particles.ParticleLifetime = 0.75f;
-                World.Particles.GravityEffect = 0.0f;
-                World.Particles.PositionErrorMargin = new Vector3(1.5f, 1.5f, 1.5f);
-                World.Particles.Emit();
-            };
-            Arrow.LandEventHandler += delegate 
-            { 
-                RoutineManager.StartRoutine(CreateFlames, Arrow);
-            };
-            Arrow.HitEventHandler += delegate(Projectile Sender, IEntity Hit)
-            {                
-                Hit.AddComponent( new BurningComponent(Hit, Player, 3 + Utils.Rng.NextFloat() * 2f, Damage) );
-                RoutineManager.StartRoutine( this.CreateFlames, Arrow);
-            };
-            Weapon.BowModifiers -= Event;
+        protected override void OnMove(Projectile Proj)
+        {
+            base.OnMove(Proj);
+            Proj.Mesh.Tint = Colors.LowHealthRed * new Vector4(1, 3, 1, 1) * .7f;
+            World.Particles.Color = Particle3D.FireColor;
+            World.Particles.VariateUniformly = false;
+            World.Particles.Position = Proj.Mesh.Position;
+            World.Particles.Scale = Vector3.One * .5f;
+            World.Particles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
+            World.Particles.Direction = Vector3.UnitY * .2f;
+            World.Particles.ParticleLifetime = 0.75f;
+            World.Particles.GravityEffect = 0.0f;
+            World.Particles.PositionErrorMargin = new Vector3(1.5f, 1.5f, 1.5f);
+            World.Particles.Emit();
         }
 
         private IEnumerator CreateFlames(object[] Params)

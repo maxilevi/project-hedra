@@ -67,6 +67,7 @@ namespace Hedra.Engine.EntitySystem
         public event OnDamagingEventHandler BeforeDamaging;
         public event OnDamageModifierEventHandler DamageModifiers;
         public event OnKillEventHandler Kill;
+        public event OnDisposedEvent AfterDisposed;
         public EntityAttributes Attributes { get; }
         public EntityComponentManager ComponentManager { get; }
         public float AttackDamage { get; set; } = 1.0f;
@@ -477,6 +478,7 @@ namespace Hedra.Engine.EntitySystem
 
             Physics.Dispose();
             Model.Dispose();
+            AfterDisposed?.Invoke();
         }
 
         public virtual void Draw()

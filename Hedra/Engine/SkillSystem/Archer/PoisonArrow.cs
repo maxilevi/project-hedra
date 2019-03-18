@@ -22,7 +22,7 @@ namespace Hedra.Engine.SkillSystem.Archer
     /// <summary>
     /// Description of ArcherPoisonArrow.
     /// </summary>
-    public class PoisonArrow : SpecialAttackSkill<Bow>
+    public class PoisonArrow : SpecialRangedAttackSkill
     {
         private const float BaseDamage = 11f;
         private const float BaseCooldown = 16f;
@@ -36,23 +36,14 @@ namespace Hedra.Engine.SkillSystem.Archer
         public override float ManaCost => BaseManaCost;
         protected override int MaxLevel => 99;
 
-        protected override void BeforeUse(Bow Weapon)
+        protected override void OnHit(Projectile Proj, IEntity Victim)
         {
-            void HandlerLambda(Projectile A) => ModifierHandler(Weapon, A, HandlerLambda);
-            Weapon.BowModifiers += HandlerLambda;
+            Victim.AddComponent(new PoisonComponent(Victim, Player, 3 + Utils.Rng.NextFloat() * 2f, Damage));
         }
 
-        private void ModifierHandler(Bow Weapon, Projectile Arrow, OnArrowEvent Event)
+        protected override void OnMove(Projectile Proj)
         {
-            Arrow.MoveEventHandler += Sender =>
-            {
-                Arrow.Mesh.Tint = Colors.PoisonGreen * new Vector4(1,3,1,1);
-            };
-            Arrow.HitEventHandler += delegate(Projectile Sender, IEntity Hit)
-            {                
-                Hit.AddComponent( new PoisonComponent(Hit, Player, 3 + Utils.Rng.NextFloat() * 2f, Damage));
-            };
-            Weapon.BowModifiers -= Event;
+            Proj.Mesh.Tint = Colors.PoisonGreen * new Vector4(1, 3, 1, 1);
         }
     }
 }

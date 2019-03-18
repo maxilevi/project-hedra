@@ -1,26 +1,27 @@
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.EntitySystem
 {
-    public class HealthBonusComponent : EntityComponent
+    public class HealthBonusComponent : Component<IHumanoid>
     {
         private readonly float _healthBonus;
-        public new Humanoid Parent;
 
-        public HealthBonusComponent(Humanoid Parent, float Health) : base(Parent)
+        public HealthBonusComponent(IHumanoid Parent, float Health) : base(Parent)
         {
-            this.Parent = Parent;
             _healthBonus = Health;
             Parent.AddonHealth += _healthBonus;
         }
 
-        public override void Update() {}
+        public override void Update(){}
 
         public override void Dispose()
         {
+            if(Disposed) return;
             Parent.AddonHealth -= _healthBonus;
+            base.Dispose();
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Hedra.Engine.Player
             for (var i = 0; i < 25; i++) Particles.Emit();
         }
 
-        public static void Create(IHumanoid Owner, Vector3 Position, Vector3 Direction, float Damage, params IEntity[] IgnoreEntities)
+        public static Projectile Create(IHumanoid Owner, Vector3 Position, Vector3 Direction, float Damage, params IEntity[] IgnoreEntities)
         {
             var fireball = new Fireball(Owner, Position)
             {
@@ -48,6 +48,7 @@ namespace Hedra.Engine.Player
                 Owner.XP += exp;
             };
             World.AddWorldObject(fireball);
+            return fireball;
         }
     }
 }

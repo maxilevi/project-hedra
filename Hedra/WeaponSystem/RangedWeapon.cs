@@ -6,12 +6,17 @@ using OpenTK;
 
 namespace Hedra.WeaponSystem
 {
+    public delegate void OnProjectileEvent(Projectile Arrow);
+    
     public abstract class RangedWeapon : Weapon
     {
         public override bool IsMelee => false;
         protected override bool ShouldPlaySound => false;
         protected override bool ContinousAttack => true;
-
+        public event OnProjectileEvent BowModifiers;
+        public event OnProjectileEvent Hit;
+        public event OnProjectileEvent Miss;
+        
         protected RangedWeapon(VertexData MeshData) : base(MeshData)
         {
         }
@@ -26,5 +31,23 @@ namespace Hedra.WeaponSystem
         }
         
         public abstract void Shoot(Vector3 Direction, AttackOptions Options, params IEntity[] ToIgnore);
+        
+        protected void AddModifiers(Projectile ArrowProj)
+        {
+            BowModifiers?.Invoke(ArrowProj);
+            /* This is because some arrows can penetrate through enemies */
+            var gotHit = false;
+            ArrowProj.LandEventHandler += S =>
+            {
+                Miss?.Invoke(ArrowProj);
+                if(!gotHit)
+                    Owner.ProcessHit(false);
+            };
+            ArrowProj.HitEventHandler += (S,V) =>
+            {
+                Hit?.Invoke(ArrowProj);
+                Owner.ProcessHit(gotHit = true);
+            };
+        }
     }
 }

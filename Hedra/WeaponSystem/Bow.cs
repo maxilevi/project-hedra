@@ -25,7 +25,6 @@ using OpenTK;
 
 namespace Hedra.WeaponSystem
 {
-    public delegate void OnArrowEvent(Projectile Arrow);
         
     public class Bow : RangedWeapon
     {
@@ -57,9 +56,6 @@ namespace Hedra.WeaponSystem
         }
         
         public Item Ammo { get; set; }
-        public event OnArrowEvent BowModifiers;
-        public event OnArrowEvent Hit;
-        public event OnArrowEvent Miss;
         public float ArrowDownForce { get; set; }
         private readonly ObjectMesh _quiver;
         private ObjectMesh _arrow;
@@ -157,12 +153,6 @@ namespace Hedra.WeaponSystem
             _arrow.Enabled = (base.InAttackStance || Owner.IsAttacking) && _quiver.Enabled; 
         }
 
-        private Projectile AddModifiers(Projectile ArrowProj)
-        {
-            BowModifiers?.Invoke(ArrowProj);
-            return ArrowProj;
-        }
-
         public override void Shoot(Vector3 Direction, AttackOptions Options, params IEntity[] ToIgnore)
         {
             //var currentAmmo = Owner.Inventory.Ammo;
@@ -182,20 +172,7 @@ namespace Hedra.WeaponSystem
                 Hit.Damage(Owner.DamageEquation * Options.DamageModifier, Owner, out var exp, true, false);
                 Owner.XP += exp;
             };
-            /* This is because some arrows can penetrate through enemies */
-            var gotHit = false;
-            arrowProj.LandEventHandler += S =>
-            {
-                Miss?.Invoke(arrowProj);
-                if(!gotHit)
-                    Owner.ProcessHit(false);
-            };
-            arrowProj.HitEventHandler += (S,V) =>
-            {
-                Hit?.Invoke(arrowProj);
-                Owner.ProcessHit(gotHit = true);
-            };
-            arrowProj = AddModifiers(arrowProj);
+            AddModifiers(arrowProj);
             World.AddWorldObject(arrowProj);
             SoundPlayer.PlaySound(SoundType.BowSound, Owner.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
         }

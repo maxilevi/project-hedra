@@ -1,0 +1,7 @@
+{
+  "Name": "EntMorph",
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/EntIdle.dae",
+    "Scale": 1.0
+  }
+}

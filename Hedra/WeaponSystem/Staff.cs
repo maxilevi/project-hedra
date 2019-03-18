@@ -37,13 +37,14 @@ namespace Hedra.WeaponSystem
 
         public override void Shoot(Vector3 Direction, AttackOptions Options, params IEntity[] ToIgnore)
         {
-            Fireball.Create(
+            var fireball = Fireball.Create(
                 Owner,
                 Owner.Position + Vector3.UnitY * 4f,
                 Direction,
                 Owner.DamageEquation * Options.DamageModifier,
                 ToIgnore.Concat(Options.IgnoreEntities).ToArray()
             );
+            AddModifiers(fireball);
         }
 
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)

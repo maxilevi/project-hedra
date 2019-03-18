@@ -1,25 +1,67 @@
+using System.Globalization;
+using Hedra.Components.Effects;
 using Hedra.Engine.Localization;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
+using Hedra.WeaponSystem;
 
 namespace Hedra.Engine.SkillSystem.Mage.Druid
 {
     public class Werewolf : MorphSkill
     {
+        private AttackSpeedBonusComponent _attackSpeed;
+        private AttackPowerBonusComponent _attackPower;
+        private SpeedBonusComponent _speedBonus;
+        
+        protected override void AddEffects()
+        {
+            Player.AddComponent(_attackSpeed = new AttackSpeedBonusComponent(Player, Player.AttackSpeed * AttackSpeedMultiplier));
+            Player.AddComponent(_attackPower = new AttackPowerBonusComponent(Player, Player.AttackPower * AttackPowerMultiplier));
+            Player.AddComponent(_speedBonus = new SpeedBonusComponent(Player, Player.Speed * SpeedMultiplier));
+        }
+
+        protected override void RemoveEffects()
+        {
+            Player.RemoveComponent(_attackSpeed);
+            Player.RemoveComponent(_attackPower);
+            Player.RemoveComponent(_speedBonus);
+            _speedBonus = null;
+            _attackPower = null;
+            _attackSpeed = null;
+        }
+
+        private float AttackSpeedMultiplier => .15f  + .6f * (Level / (float)MaxLevel);
+        private float AttackPowerMultiplier => .4f  + .85f * (Level / (float)MaxLevel);
+        private float SpeedMultiplier => .15f +  .3f * (Level / (float)MaxLevel);
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Werewolf.png");
-        protected override void DoEnable()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        protected override void DoDisable()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        protected override float Duration => 5;
-        protected override float CooldownDuration => 1;
-        protected override int MaxLevel => 15;
         public override string Description => Translations.Get("werewolf_desc");
         public override string DisplayName => Translations.Get("werewolf_skill");
+        protected override HumanType Type => HumanType.WerewolfMorph;
+        protected override bool RestrictWeapons => true;
+        protected override Weapon CustomWeapon => new WerewolfHands();
+
+        public override string[] Attributes => new []
+        {
+            Translations.Get("morph_time_change", Duration.ToString("0.0", CultureInfo.InvariantCulture)),
+            Translations.Get("werewolf_damage_change", (int)(AttackPowerMultiplier * 100)),
+            Translations.Get("werewolf_attack_speed_change", (int)(AttackSpeedMultiplier * 100)),
+            Translations.Get("werewolf_speed_change", (int)(SpeedMultiplier * 100))
+        };
+
+        private class WerewolfHands : Hands
+        {
+            protected override string AttackStanceName => "Assets/Chr/RogueBlade-Stance.dae";
+            protected override float PrimarySpeed => 2.0f;
+            protected override string[] PrimaryAnimationsNames => new []
+            {
+                "Assets/Chr/RogueBladeLeftAttack.dae",
+                "Assets/Chr/RogueBladeRightAttack.dae"
+            };
+            protected override float SecondarySpeed => 1.75f;
+            protected override string[] SecondaryAnimationsNames => new []
+            {
+                "Assets/Chr/RogueBladeDoubleAttack.dae"
+            }; 
+        }
     }
 }
