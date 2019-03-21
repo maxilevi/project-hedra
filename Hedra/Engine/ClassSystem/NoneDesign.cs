@@ -19,7 +19,8 @@ namespace Hedra.Engine.ClassSystem
         public override AbilityTreeBlueprint SecondSpecializationTree => throw new ArgumentException();
         public override KeyValuePair<int, Item>[] StartingItems => throw new ArgumentException();
         public override Item[] StartingRecipes => throw new ArgumentException();
-        public override float AttackResistance => throw new ArgumentException();
+        /* Do not delete. Used in tests */
+        public override float AttackResistance => 1f;
         public override float MaxStamina => throw new ArgumentException();
         /* Do not delete. Used in tests */
         public override float BaseDamage => 4f;

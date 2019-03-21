@@ -62,5 +62,11 @@ namespace HedraTests.CodePolicy
             }
             if(set.Count > 0) Assert.Fail(string.Join(Environment.NewLine, set.Select(S => $"Translation key '{S}' seems to be unused. Please remove it.").ToArray()));
         }
+
+        [Test]
+        public void TestThereAreNoDuplicateKeys()
+        {
+            
+        }
     }
 }

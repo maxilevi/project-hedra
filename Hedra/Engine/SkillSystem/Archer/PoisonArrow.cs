@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Globalization;
 using Hedra.Components.Effects;
 using Hedra.Core;
 using Hedra.Engine.Localization;
@@ -45,5 +46,10 @@ namespace Hedra.Engine.SkillSystem.Archer
         {
             Proj.Mesh.Tint = Colors.PoisonGreen * new Vector4(1, 3, 1, 1);
         }
+
+        public override string[] Attributes => new[]
+        {
+            Translations.Get("poison_arrow_damage_change", Damage.ToString("0.0", CultureInfo.InvariantCulture))
+        };
     }
 }

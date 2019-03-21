@@ -50,8 +50,12 @@ namespace Hedra.Engine.SkillSystem.Warrior
 
         protected override int MaxLevel => 10;
         
-        public override string Description => Translations.Get("resistance_desc", HealthFormula(true).ToString("0.0", CultureInfo.InvariantCulture));
+        public override string Description => Translations.Get("resistance_desc");
         public override string DisplayName => Translations.Get("resistance_skill");
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Health.png");
+        public override string[] Attributes => new[]
+        {
+            Translations.Get("resistance_health_change", HealthFormula(true).ToString("0.0", CultureInfo.InvariantCulture))
+        };
     }
 }

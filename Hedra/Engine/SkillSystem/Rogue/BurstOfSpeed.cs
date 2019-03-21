@@ -8,6 +8,8 @@
  */
 
 using System;
+using System.Globalization;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.SkillSystem.Rogue
@@ -37,7 +39,12 @@ namespace Hedra.Engine.SkillSystem.Rogue
             Player.AddBonusSpeedForSeconds(Speed, EffectDuration);
         }
 
-        public override string Description => "Temporarily obtain a speed burst.";
-        public override string DisplayName => "Burst Of Speed";
+        public override string Description => Translations.Get("burst_of_speed_desc");
+        public override string DisplayName => Translations.Get("burst_of_speed_skill");
+        public override string[] Attributes => new []
+        {
+            Translations.Get("burst_of_speed_duration_change", EffectDuration.ToString("0.0", CultureInfo.InvariantCulture)),
+            Translations.Get("burst_of_speed_bonus_change", Speed.ToString("0.0", CultureInfo.InvariantCulture))
+        };
     }
 }

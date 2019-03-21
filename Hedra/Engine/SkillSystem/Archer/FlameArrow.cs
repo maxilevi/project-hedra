@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections;
+using System.Globalization;
 using System.Linq;
 using Hedra.Components.Effects;
 using Hedra.Core;
@@ -107,5 +108,11 @@ namespace Hedra.Engine.SkillSystem.Archer
                 yield return null;
             }
         }
+        public override string[] Attributes => new[]
+        {
+            Translations.Get("flame_arrow_damage_change", Damage.ToString("0.0", CultureInfo.InvariantCulture)),
+            Translations.Get("flame_arrow_duration_change", EffectDuration.ToString("0.0", CultureInfo.InvariantCulture)),
+            Translations.Get("flame_arrow_radius_change", EffectRange.ToString("0.0", CultureInfo.InvariantCulture))
+        };
     }
 }

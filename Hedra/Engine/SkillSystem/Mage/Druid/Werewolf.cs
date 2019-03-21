@@ -38,6 +38,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
         public override string DisplayName => Translations.Get("werewolf_skill");
         protected override HumanType Type => HumanType.WerewolfMorph;
         protected override bool RestrictWeapons => true;
+        protected override bool CanUseOtherSkills => false;
         protected override Weapon CustomWeapon => new WerewolfHands();
 
         public override string[] Attributes => new []

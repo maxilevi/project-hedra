@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Globalization;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
@@ -122,5 +123,11 @@ namespace Hedra.Engine.SkillSystem.Warrior
                 World.Particles.Color = underChunk.Biome.Colors.GrassColor;
             World.Particles.Emit();
         }
+
+        public override string[] Attributes => new[]
+        {
+            Translations.Get("whirlwind_duration_change", WhirlwindTime.ToString("0.0", CultureInfo.InvariantCulture)),
+            Translations.Get("whirlwind_damage_change", Damage.ToString("0.0", CultureInfo.InvariantCulture))
+        };
     }
 }

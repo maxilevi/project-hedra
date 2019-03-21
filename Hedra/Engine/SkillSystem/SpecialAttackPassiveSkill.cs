@@ -48,7 +48,7 @@ namespace Hedra.Engine.SkillSystem
 
         private void InventoryUpdated()
         {
-            if(_lastWeapon == Player.Inventory.MainWeapon.Weapon) return;
+            if(_lastWeapon == Player.Inventory.MainWeapon?.Weapon) return;
             if (_lastWeapon == null && Player.Inventory.MainWeapon.Weapon is T generic)
             {
                 Add(generic);

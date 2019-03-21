@@ -62,7 +62,7 @@ namespace HedraTests.Player.Skills
             Skill.Update();
             Skill.Level = 0;
             Skill.Update();
-            Assert.AreEqual(1, timesCalled);
+            Assert.AreEqual(timesCalled, 1);
         }
     }
 }

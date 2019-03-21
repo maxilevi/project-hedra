@@ -37,6 +37,7 @@ namespace Hedra.Engine.Rendering.Particles
         public bool RandomRotation { get; set; } = true;
         public ParticleShape Shape { get; set; } = ParticleShape.Square;
         public float ConeAngle;
+        public float ConeSpeed = 1;
         public bool Grayscale;
         public bool VariateUniformly;
         public bool HasMultipleOutputs { get; set; }
@@ -99,7 +100,7 @@ namespace Hedra.Engine.Rendering.Particles
             
             if(Shape == ParticleShape.Cone)
             {
-                Particles.Add(new Particle3D(Position, ParticleCreator.UnitWithinCone(Direction, ConeAngle) * 25, Mathf.RandomVector3(Utils.Rng) * 360,
+                Particles.Add(new Particle3D(Position, ParticleCreator.UnitWithinCone(Direction, ConeAngle) * 25 * ConeSpeed, Mathf.RandomVector3(Utils.Rng) * 360,
                              NewColor,
                              Scale + ParticleScale, GravityEffect, ParticleLifetime, Collides));
             }

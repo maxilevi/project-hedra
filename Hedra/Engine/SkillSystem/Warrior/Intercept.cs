@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.Localization;
@@ -107,5 +108,11 @@ namespace Hedra.Engine.SkillSystem.Warrior
             Player.Movement.CaptureMovement = false;
             Player.Movement.Move(Player.Physics.MoveFormula(Player.View.LookingDirection.Xz.ToVector3().NormalizedFast()) * 1.5f, Duration, false);
         }
+
+        public override string[] Attributes => new[]
+        {
+            Translations.Get("intercept_damage_change", Damage.ToString("0.0", CultureInfo.InvariantCulture)),
+            Translations.Get("intercept_duration_change", Duration.ToString("0.0", CultureInfo.InvariantCulture))
+        };
     }
 }

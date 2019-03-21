@@ -8,8 +8,10 @@
  */
 
 using System;
+using System.Globalization;
 using System.Linq;
 using Hedra.Core;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
@@ -33,11 +35,11 @@ namespace Hedra.Engine.SkillSystem.Warrior
         private const float CooldownCap = 4;
         private const float CooldownChangeRate = -.25f;
         
-        private const float BaseRange = 8;
-        private const float RangeCap = 16;
+        private const float BaseRange = 16;
+        private const float RangeCap = 24;
         private const float RangeChangeRate = .25f;
         
-        private const float BaseRadius = .9f;
+        private const float BaseRadius = .75f;
         private const float RadiusCap = .65f;
         private const float RadiusChangeRate = -.01f;
         
@@ -84,8 +86,13 @@ namespace Hedra.Engine.SkillSystem.Warrior
         protected override int MaxLevel => 25;
         public override float MaxCooldown => Math.Max(BaseCooldown + CooldownChangeRate * Level, CooldownCap);
         public override float ManaCost => Math.Max(BaseManaCost + ManaCostChangeRate * Level, ManaCostCap);
-        public override string Description => "A powerful smashing blow.";
-        public override string DisplayName => "Bash";
+        public override string Description => Translations.Get("bash_desc");
+        public override string DisplayName => Translations.Get("bash_skill");
         public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Bash.png");
+        public override string[] Attributes => new []
+        {
+            Translations.Get("bash_damage_change", Damage.ToString("0.0", CultureInfo.InvariantCulture)),
+            Translations.Get("bash_radius_change", Radius.ToString("0.0", CultureInfo.InvariantCulture))
+        };
     }
 }

@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Globalization;
 using Hedra.Components.Effects;
 using Hedra.Core;
 using Hedra.Engine.Localization;
@@ -35,11 +36,12 @@ namespace Hedra.Engine.SkillSystem.Archer
         public override float MaxCooldown => Math.Max(BaseCooldown - 0.80f * base.Level, CooldownCap);
         public override float ManaCost => BaseManaCost;
         protected override int MaxLevel => 99;
+        private float FreezeDuration => 3;
 
         protected override void OnHit(Projectile Proj, IEntity Victim)
         {
             base.OnHit(Proj, Victim);
-            Victim.AddComponent( new FreezingComponent(Victim, Player, 3 + Utils.Rng.NextFloat() * 2f, Damage) );
+            Victim.AddComponent( new FreezingComponent(Victim, Player, FreezeDuration + Utils.Rng.NextFloat() * 2f, Damage) );
         }
 
         protected override void OnMove(Projectile Proj)
@@ -47,5 +49,11 @@ namespace Hedra.Engine.SkillSystem.Archer
             base.OnMove(Proj);
             Proj.Mesh.Tint = Colors.Blue * new Vector4(1,1,3,1) * .7f;
         }
+
+        public override string[] Attributes => new[]
+        {
+            Translations.Get("ice_arrow_damage_change", Damage.ToString("0.0", CultureInfo.InvariantCulture)),
+            Translations.Get("ice_arrow_duration_change", FreezeDuration.ToString("0.0", CultureInfo.InvariantCulture))
+        };
     }
 }

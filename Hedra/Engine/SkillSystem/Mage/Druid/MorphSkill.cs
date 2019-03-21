@@ -49,6 +49,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
             }
 
             MorphEffect();
+            Casting = !CanUseOtherSkills;
         }
 
         private void MorphEffect()
@@ -75,6 +76,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
                 }
             }
             MorphEffect();
+            Casting = false;
         }
 
         private AnimatedModel SwitchModel(AnimatedModel New)
@@ -91,6 +93,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
         }
         
         protected abstract HumanType Type { get; }
+        protected abstract bool CanUseOtherSkills { get; }
         protected sealed override float Duration => 18 + 32 * (Level / (float) MaxLevel);
         protected sealed override float CooldownDuration => 28;
         protected sealed override int MaxLevel => 15;

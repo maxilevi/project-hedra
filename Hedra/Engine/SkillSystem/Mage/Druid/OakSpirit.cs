@@ -53,5 +53,6 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
         };
         protected override HumanType Type => HumanType.EntMorph;
         protected override bool RestrictWeapons => false;
+        protected override bool CanUseOtherSkills => true;
     }
 }

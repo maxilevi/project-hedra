@@ -1,10 +1,10 @@
 {
   "Name": "Warrior",
   "Icon": "$DataFile$/Assets/Skills/Warrior.png",
-  "M12": "Whirlwind",
+  "M22": "Whirlwind",
   "M23": "Leap",
-  "M14": "Intercept",
+  "M13": "Intercept",
   "M21": "Bash",
   "M31": "Resistance",
-  "M33": "NoEscape"
+  "M32": "NoEscape"
 }
