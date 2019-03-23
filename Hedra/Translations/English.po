@@ -493,6 +493,9 @@ whirlwind_duration_change = Lasts for $(BOLD)(BLUE){{0}} seconds
 intercept_damage_change = Deals $(BOLD)(RED){{0}} damage
 intercept_duration_change = Lasts for $(BOLD)(BLUE){{0}} seconds
 round_slash_damage_change = Deals $(BOLD)(RED){{0}} damage
+thorns_desc = Return part of the damage received as extra damage
+thorns_skill = Thorns
+thorns_damage_change = You return $(BOLD)(RED){{0}%} of received damage
 # -- End Skill Names --
 
 skill_mana_cost = Mana Cost: $(BOLD)(BLUE){{0}}

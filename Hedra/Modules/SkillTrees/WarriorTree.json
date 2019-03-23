@@ -3,8 +3,9 @@
   "Icon": "$DataFile$/Assets/Skills/Warrior.png",
   "M22": "Whirlwind",
   "M23": "Leap",
-  "M13": "Intercept",
-  "M21": "Bash",
+  "M24": "Intercept",
+  "M11": "Bash",
+  "M13": "Thorns",
   "M31": "Resistance",
   "M32": "NoEscape"
 }

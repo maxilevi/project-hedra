@@ -12,7 +12,7 @@ namespace Hedra.AISystem.Behaviours
 
         protected override void SetPosition()
         {
-            Traverse.SetTarget(Parent.Position - (Target.Position - Parent.Position).NormalizedFast() * 4);
+            Traverse.SetTarget(Parent.Position - (Target.Position - Parent.Position).NormalizedFast() * 32);
         }
     }
 }
