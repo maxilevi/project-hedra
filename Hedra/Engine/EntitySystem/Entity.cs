@@ -306,12 +306,12 @@ namespace Hedra.Engine.EntitySystem
             if(Component is ITickable tickable) _tickSystem.Add(tickable);
         }
 
-        public void RemoveComponent(IComponent<IEntity> Component)
+        public void RemoveComponent(IComponent<IEntity> Component, bool Dispose = true)
         {
             if (Component == null) throw new ArgumentNullException($"{this.GetType()} component cannot be null");
             Components.Remove(Component);
             if (Component is ITickable tickable) _tickSystem.Remove(tickable);
-            Component.Dispose();
+            if (Dispose)Component.Dispose();
         }
 
         public T SearchComponent<T>()

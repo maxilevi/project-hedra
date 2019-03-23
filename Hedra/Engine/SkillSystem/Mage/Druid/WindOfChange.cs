@@ -75,7 +75,8 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
 
         protected override int MaxLevel => 15;
         protected override float Duration => .75f;
-        protected override float CooldownDuration => 0;
+        protected override float CooldownDuration => 24 - 6 * (Level / (float) MaxLevel);
+        public override float ManaCost => 55;
         private float PushDistance => 48 + 48 * (Level / (float) MaxLevel);
         private float Damage => 15 + 20f * (Level / (float )MaxLevel);
         public override string Description => Translations.Get("wind_of_change_desc");

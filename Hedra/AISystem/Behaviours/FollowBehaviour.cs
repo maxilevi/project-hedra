@@ -14,11 +14,16 @@ namespace Hedra.AISystem.Behaviours
 
         public override void Update()
         {
-            if(Enabled)
-                Traverse.SetTarget(Target.Position);
+            if (Enabled)
+                SetPosition();
             else
                 Traverse.Cancel();
             Traverse.Update();
+        }
+
+        protected virtual void SetPosition()
+        {
+            Traverse.SetTarget(Target.Position);
         }
         
         public bool Enabled => Target != null && !Target.IsDead && !Target.IsInvisible && !Target.Disposed;

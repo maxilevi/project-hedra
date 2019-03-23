@@ -353,6 +353,11 @@ namespace HedraTests.Player
             throw new NotImplementedException();
         }
 
+        public void RemoveComponent(IComponent<IEntity> Component, bool Dispose = true)
+        {
+            throw new NotImplementedException();
+        }
+
         public void RemoveComponent(IComponent<IEntity> Component)
         {
             throw new NotImplementedException();

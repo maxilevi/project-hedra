@@ -109,6 +109,7 @@
     <Compile Include="AISystem\Behaviours\FleeBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\FollowBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\GridStorage.cs" />
+    <Compile Include="AISystem\Behaviours\RunAwayBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\TraverseBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\GiantBeetleAttackBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\GorillaWarriorAttackBehaviour.cs" />
@@ -127,6 +128,7 @@
     <Compile Include="AISystem\CowAIComponent.cs" />
     <Compile Include="AISystem\CowFarmAIComponent.cs" />
     <Compile Include="AISystem\FarmAnimalAIComponent.cs" />
+    <Compile Include="AISystem\FearAIComponent.cs" />
     <Compile Include="AISystem\FriendlyAIComponent.cs" />
     <Compile Include="AISystem\GiantBeetleAIComponent.cs" />
     <Compile Include="AISystem\GoatAIComponent.cs" />

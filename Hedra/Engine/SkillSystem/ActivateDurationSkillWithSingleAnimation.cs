@@ -38,7 +38,7 @@ namespace Hedra.Engine.SkillSystem
         
         protected abstract float CooldownDuration { get; }
 
-        public override float MaxCooldown => _composition.MaxCooldown;
+        public sealed override float MaxCooldown => _composition.MaxCooldown;
 
         private class ActivateDurationSkillComposition : ActivateDurationSkill
         {

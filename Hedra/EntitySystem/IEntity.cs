@@ -122,7 +122,7 @@ namespace Hedra.EntitySystem
 
         void AddComponent(IComponent<IEntity> Component);
 
-        void RemoveComponent(IComponent<IEntity> Component);
+        void RemoveComponent(IComponent<IEntity> Component, bool Dispose = true);
 
         T SearchComponent<T>();
 
