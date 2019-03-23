@@ -35,13 +35,13 @@ namespace Hedra.WeaponSystem
         private readonly ObjectMesh _knifeSheath;
         private Vector3 _previousPosition;
         protected override string AttackStanceName => "Assets/Chr/ArcherShootStance.dae";
-        protected override float PrimarySpeed => 1.25f;
+        protected override float PrimarySpeed => 2.0f;
         protected override string[] PrimaryAnimationsNames => new []
         {
             "Assets/Chr/WarriorSlash-Left.dae",
             "Assets/Chr/WarriorSlash-Right.dae"
         };
-        protected override float SecondarySpeed => 2.0f;
+        protected override float SecondarySpeed => 3.0f;
         protected override string[] SecondaryAnimationsNames => new[]
         {
             "Assets/Chr/WarriorLunge.dae"
@@ -62,7 +62,7 @@ namespace Hedra.WeaponSystem
         protected override void OnPrimaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             if(AttackEventType.Mid != Type) return;
-            Owner.AttackSurroundings(Owner.DamageEquation * Options.DamageModifier, Options.IgnoreEntities, delegate(IEntity Mob)
+            Owner.AttackSurroundings(Owner.DamageEquation * Options.DamageModifier * 1.75f, Options.IgnoreEntities, delegate(IEntity Mob)
             {
                 if (Utils.Rng.Next(0, 5) == 1)
                     Mob.AddComponent(new BleedingComponent(Mob, this.Owner, 3f,
@@ -73,7 +73,7 @@ namespace Hedra.WeaponSystem
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             if(Type != AttackEventType.End) return;
-            Owner.AttackSurroundings(Owner.DamageEquation * Options.DamageModifier, Options.IgnoreEntities, delegate(IEntity Mob)
+            Owner.AttackSurroundings(Owner.DamageEquation * Options.DamageModifier * 1.75f, Options.IgnoreEntities, delegate(IEntity Mob)
             {
                 if (Utils.Rng.Next(0, 3) == 1 && Options.Charge > .75f)
                     Mob.AddComponent(new BleedingComponent(Mob, this.Owner, 4f,
