@@ -654,7 +654,6 @@ namespace Hedra.Engine.Rendering
 
         private void EnsureNoErrors()
         {
-#if DEBUG
             if(System.Threading.Thread.CurrentThread.ManagedThreadId != Loader.Hedra.MainThreadId)
                 throw new ArgumentException($"Invalid GL calls outside of the main thread.");
             var error = GL.GetError();
@@ -664,7 +663,6 @@ namespace Hedra.Engine.Rendering
                 Log.WriteResult(false, errorMsg);
                 if (ErrorSeverity.High == Severity) throw new RenderException(errorMsg);
             }
-#endif
         }
     }
 }

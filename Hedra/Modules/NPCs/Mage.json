@@ -12,5 +12,10 @@
   "AttackPower": 1.0, 
   "AttackSpeed": 1.0,
   "Components":  [],
-  "Weapons": []
+  "Weapons": [
+    {
+      "Tier": "Uncommon",
+      "Type": "Staff"
+    }
+  ]
 }

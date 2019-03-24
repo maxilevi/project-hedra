@@ -1,7 +1,7 @@
 {
   "Name": "WerewolfMorph",
   "Model": {
-    "Path": "$DataFile$/Assets/Chr/GnollIdle.dae",
+    "Path": "$DataFile$/Assets/Chr/WerewolfIdle.dae",
     "Scale": 1.0
   }
 }

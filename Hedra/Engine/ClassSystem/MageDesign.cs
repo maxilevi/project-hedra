@@ -7,7 +7,6 @@ using OpenTK;
 
 namespace Hedra.Engine.ClassSystem
 {
-    [HiddenClass]
     public class MageDesign : ClassDesign
     {       
         public override Matrix4 HelmetPlacement { get; } = Matrix4.Identity;
