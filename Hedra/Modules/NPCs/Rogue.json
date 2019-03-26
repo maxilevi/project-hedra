@@ -6,7 +6,6 @@
     "Scale": 1.0
   },
   "Class": "Rogue",
-  "AIType": "Melee",
   "Behaviour" : "Hostile", 
   "Immune": false,
   "XP": 2.5,

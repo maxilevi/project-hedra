@@ -12,6 +12,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
+using Hedra.WeaponSystem;
 
 namespace Hedra.Engine.ModuleSystem
 {
@@ -96,8 +97,7 @@ namespace Hedra.Engine.ModuleSystem
 
         public static void AddAI(IHumanoid Humanoid, bool Friendly)
         {
-            var template = HumanoidLoader.HumanoidTemplater[Humanoid.Type];
-            var aiType = template.AIType ?? (Humanoid.LeftWeapon.IsMelee ? "Melee" : throw new ArgumentOutOfRangeException($"Failed to determine the ai type for {Humanoid.Type}"));
+            var aiType = (Humanoid.LeftWeapon.IsMelee ? "Melee" : Humanoid.LeftWeapon is Staff ? "Mage" : "Archer");
             var instance = (Component<IHumanoid>) Activator.CreateInstance(_ais[aiType], Humanoid, Friendly);
             Humanoid.AddComponent(instance);
         }

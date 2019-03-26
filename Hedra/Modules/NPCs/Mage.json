@@ -1,7 +1,6 @@
 ﻿{
   "Name": "Mage",
   "DisplayName": "Mage",
-  "AIType": "Mage",
   "Model": {
     "Path": "$DataFile$/Assets/Chr/MageIdle.dae",
     "Scale": 1.0

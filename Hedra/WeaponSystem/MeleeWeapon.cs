@@ -16,7 +16,7 @@ namespace Hedra.WeaponSystem
     public abstract class MeleeWeapon : Weapon
     {
         public int WeaponCount { get; private set; }
-        public override bool IsMelee => true;
+        public sealed override bool IsMelee => true;
         public Vector3 MainWeaponSize { get; protected set; }
         protected TrailRenderer Trail { get; set; }
         private CollisionShape[] _shapesArray;

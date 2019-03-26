@@ -660,7 +660,7 @@ namespace Hedra.Engine.Rendering
             var error = GL.GetError();
             if (error != ErrorCode.NoError /*&& ErrorSeverity.Ignore != Severity*/)
             {
-                var errorMsg = $"Unexpected OpenGL error: {error}";
+                var errorMsg = $"Unexpected OpenGL error: {error} {Environment.NewLine} Stack:{Environment.NewLine}{new StackTrace()}";
                 Log.WriteResult(false, errorMsg);
                 if (ErrorSeverity.High == Severity) throw new RenderException(errorMsg);
             }

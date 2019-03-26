@@ -28,9 +28,6 @@ namespace Hedra.Engine.EntitySystem.BossSystem
     public class BossHealthBarComponent : BaseHealthBarComponent
     {
         private static uint _bossBarTexture;
-        public static uint _backgroundTextureId;
-        private static Vector2 _bossBarTextureSize;
-        private static Vector2 _backgroundTextureSize;
 
         private readonly Panel _panel;
         private readonly TexturedBar _healthBar;
@@ -43,6 +40,9 @@ namespace Hedra.Engine.EntitySystem.BossSystem
         private bool _initialized;
         public bool Enabled { get; set; }
         public string Name { get; }
+        private static Vector2 _bossBarTextureSize;
+        private static Vector2 _backgroundTextureSize;
+        private static uint _backgroundTextureId;
 
         static BossHealthBarComponent()
         {
@@ -54,9 +54,9 @@ namespace Hedra.Engine.EntitySystem.BossSystem
                     "BossHostile"
                 );
                 _backgroundTextureId = Graphics2D.LoadFromAssets("Assets/UI/BossHealthBarBackground.png");
+                _bossBarTextureSize = Graphics2D.SizeFromAssets("Assets/UI/BossHealthBar.png").As1920x1080() * .65f;
+                _backgroundTextureSize = Graphics2D.SizeFromAssets("Assets/UI/BossHealthBarBackground.png").As1920x1080() * .65f;
             });
-            _bossBarTextureSize = Graphics2D.SizeFromAssets("Assets/UI/BossHealthBar.png").As1920x1080() * .65f;
-            _backgroundTextureSize = Graphics2D.SizeFromAssets("Assets/UI/BossHealthBarBackground.png").As1920x1080() * .65f;
         }
         
         public BossHealthBarComponent(IEntity Parent, string Name) : base(Parent)
@@ -123,7 +123,6 @@ namespace Hedra.Engine.EntitySystem.BossSystem
                 if(!GameManager.Player.UI.GamePanel.Enabled)
                     elements[i].Disable();
             }
-            //_healthBar.Position = _barDefaultPosition + (1 - GetRatio()) * _healthBar.Scale.X * Vector2.UnitX;
             _percentageText.Text = $"{(int)Parent.Health}/{(int)Parent.MaxHealth}";
         }
 

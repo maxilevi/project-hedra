@@ -121,8 +121,13 @@ namespace Hedra.Engine.Rendering
                 Path = $"UI:Color:{TextureColor}"
             }, TextureMinFilter.Linear, TextureMagFilter.Linear, TextureWrapMode.Repeat);
         }
-        
+
         public static Bitmap ReplaceColor(Bitmap Bmp, Color Original, Color Replacement)
+        {
+            return ReplaceColor(Bmp, C => C.R == Original.R && C.G == Original.G && C.B == Original.B, Replacement);
+        }
+        
+        public static Bitmap ReplaceColor(Bitmap Bmp, Predicate<Color> Match, Color Replacement)
         {
             var data = Bmp.LockBits(new Rectangle(0,0,Bmp.Width,Bmp.Height), ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             unsafe
@@ -134,14 +139,11 @@ namespace Hedra.Engine.Rendering
                 {
                     for (var x = 0; x < Bmp.Width; x++)
                     {
-                        if(
-                            dataPtr[x * 4 + y * stride] != Original.B ||
-                            dataPtr[x * 4 + y * stride + 1] != Original.G ||
-                            dataPtr[x * 4 + y * stride + 2] != Original.R
-                        ) continue;
+                        if(!Match(Color.FromArgb(dataPtr[x * 4 + y * stride + 3], dataPtr[x * 4 + y * stride + 2], dataPtr[x * 4 + y * stride + 1], dataPtr[x * 4 + y * stride + 0])))
+                            continue;
                         dataPtr[x * 4 + y * stride] = Replacement.B;
                         dataPtr[x * 4 + y * stride + 1] = Replacement.G;
-                        dataPtr[x * 4 + y * stride + 2] = Replacement.R; 
+                        dataPtr[x * 4 + y * stride + 2] = Replacement.R;
                     }
                 }
             }

@@ -23,7 +23,7 @@ namespace Hedra.Engine.Rendering.UI
                 }
                 catch (ArgumentException e)
                 {
-                    Log.WriteLine($"Font '{Family.Name}' with size '{Size}' ans style '{entry.Style}' failed to create.");
+                    Log.WriteLine($"Font '{Family.Name}' with size '{Size}' and style '{entry.Style}' failed to create.{Environment.NewLine}Trace:{e}");
                     if(CachedFonts.Count > 0)
                         return CachedFonts.Values.First();
                     throw;

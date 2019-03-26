@@ -26,11 +26,16 @@ namespace Hedra.Engine.EntitySystem
         private static uint _friendlyTexture;
         private static uint _blackTexture;
         private static uint _goldTexture;
+        private static uint _backgroundTextureId;
+        private static Vector2 _backgroundTextureSize;
+        private static Vector2 _textureSize;
         
-        private const int ShowDistance = 48;       
+        private const int ShowDistance = 48;
+        private readonly Panel _panel;
+        private readonly Vector2 _barDefaultPosition;
+        private readonly RenderableTexture _backgroundTexture;
         private readonly TexturedBar _healthBar;
         private readonly RenderableText _text;
-        private readonly Vector2 _originalScale = new Vector2(0.075f, 0.025f) * .75f;
         private Vector2 _originalTextScale;
         private float _barSize;
         private string _name;
@@ -69,6 +74,10 @@ namespace Hedra.Engine.EntitySystem
                     "Gold"
                 );
                 blueprint.Dispose();
+                
+                _textureSize = Graphics2D.SizeFromAssets("Assets/UI/EntityHealthBar.png").As1920x1080() * .4f;
+                _backgroundTextureSize = Graphics2D.SizeFromAssets("Assets/UI/EntityHealthBarBackground.png").As1920x1080() * .4f;
+                _backgroundTextureId = Graphics2D.LoadFromAssets("Assets/UI/EntityHealthBarBackground.png");
             });
         }
         
@@ -81,28 +90,45 @@ namespace Hedra.Engine.EntitySystem
             _healthBar = new TexturedBar(
                 TextureFromType(Type),
                 Vector2.Zero,
-                Mathf.ScaleGui(new Vector2(1024, 578), _originalScale),
+                Vector2.One,
                 () => Parent.Health,
                 () => Parent.MaxHealth
             );
-            Executer.ExecuteOnMainThread(
-                () => _healthBar.TextureId = TextureFromType(Type)
+            _backgroundTexture = new RenderableTexture(
+                new Texture( 
+                    0,
+                    _healthBar.Position,
+                    _healthBar.Scale
+                ),
+                DrawOrder.After
             );
+            Executer.ExecuteOnMainThread(
+                () =>
+                {
+                    _healthBar.TextureId = TextureFromType(Type);
+                    _backgroundTexture.BaseTexture.TextureElement.TextureId = _backgroundTextureId;
+                });
             _text = new RenderableText(
                 string.Empty,
-                Vector2.Zero, Type == HealthBarType.Hostile || Type == HealthBarType.Black || Type == HealthBarType.Gold ? FontColor : Type == HealthBarType.Neutral ? Color.White : Friendly,
+                Vector2.Zero, Type == HealthBarType.Hostile || Type == HealthBarType.Black || Type == HealthBarType.Gold 
+                    ? FontColor 
+                    : Type == HealthBarType.Neutral 
+                        ? Color.White 
+                        : Friendly,
                 FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold)
             );
             _text.Stroke = true;
-            /*_text.StrokeWidth = true;
-            _text.StrokeColor = true;*/
             this.Name = Name;
             DrawManager.UIRenderer.Remove(_text);
+            DrawManager.UIRenderer.Remove(_backgroundTexture);
             DrawManager.UIRenderer.Remove(_healthBar);
             DrawManager.UIRenderer.Add(this, DrawOrder.After);
-            GameManager.Player.UI.GamePanel.AddElement(_text);
-            GameManager.Player.UI.GamePanel.AddElement(_healthBar);
-            GameManager.Player.UI.GamePanel.OnPanelStateChange += OnPanelStateChanged;
+            _panel = new Panel();
+            _panel.AddElement(_text);
+            _panel.AddElement(_healthBar);
+            _panel.AddElement(_backgroundTexture);
+            _panel.OnPanelStateChange += OnPanelStateChanged;
+            GameManager.Player.UI.GamePanel.AddElement(_panel);
         }
 
         public override void Update()
@@ -124,6 +150,7 @@ namespace Hedra.Engine.EntitySystem
             {
                 _healthBar.Disable();
                 _text.Disable();
+                _backgroundTexture.Disable();
                 _targetBarSize = 0;
                 _textEnabled = 0; 
             }
@@ -131,6 +158,7 @@ namespace Hedra.Engine.EntitySystem
             {
                 _healthBar.Enable();
                 _text.Enable();
+                _backgroundTexture.Enable();
                 _targetBarSize = 1;
                 _textEnabled = 1;
             }
@@ -159,10 +187,13 @@ namespace Hedra.Engine.EntitySystem
             );
             var homogeneousSpace = Vector4.Transform(eyeSpace, Culling.ProjectionMatrix);
             var ndc = homogeneousSpace.Xyz / homogeneousSpace.W;
-            _healthBar.Position = Mathf.Clamp(ndc.Xy, -.98f, .98f) + (1 - GetRatio()) * _originalScale.X * Vector2.UnitX;
-            _healthBar.Scale = _originalScale * _barSize * Math.Min(1, Parent.Model.Height / 7f);
-            _text.Position = _healthBar.Position + Vector2.UnitY * _originalScale * 3f - (1 - GetRatio()) * _originalScale.X * Vector2.UnitX;
+            _healthBar.Position = Mathf.Clamp(ndc.Xy, -.98f, .98f) + (1 - GetRatio()) * _textureSize.X * Vector2.UnitX;
+            _healthBar.Scale = _textureSize * _barSize;
+            _backgroundTexture.Position = _healthBar.Position;
+            _backgroundTexture.Scale = _backgroundTextureSize;
+            _text.Position = _healthBar.Position + _healthBar.Scale.Y * Vector2.UnitY * 3;
             _healthBar.Draw();
+            _backgroundTexture.Draw();
             _text.Draw();
         }
         

@@ -1,6 +1,9 @@
 #version 330 core
 
-float luma(vec3 color);
+float luma(vec3 color)
+{
+	return 0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
+}
 
 #define FXAA_QUALITY_PRESET 12
 
@@ -976,7 +979,7 @@ FxaaFloat4 FxaaPixelShader(
 //
 //----------------------------------------------------------------------------------
 
-precision highp float;
+precision mediump float;
 
 vec4 fxaaTexturePixel(sampler2D texture, vec2 texCoord, vec2 size)
 {
@@ -1007,11 +1010,6 @@ uniform vec2 Resolution;
 
 layout(location = 0) out vec4 OutColor;
 
-
-float luma(vec3 color)
-{
-	return 0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
-}
 
 void main(void)
 {
