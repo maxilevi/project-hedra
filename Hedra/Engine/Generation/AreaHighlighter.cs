@@ -69,15 +69,18 @@ namespace Hedra.Engine.Generation
                 Log.WriteLine($"There are no available highlights. Skipping...");//throw new ArgumentException($"There are no available highlights");
                 return null;
             }
-            if (Seconds < 0)
+
+            var isPermanent = Seconds < 0;
+            if (isPermanent)
             {
                 var wrapper = new HighlightedAreaWrapper();
                 RoutineManager.StartRoutine(CycleHighlight, _highlightedAreas[k], World.Seed, wrapper);
                 return wrapper;
             }
-            RoutineManager.StartRoutine(FadeHighlight, _highlightedAreas[k], area.Position, Seconds);
-
-            TaskScheduler.After(Seconds, () => RoutineManager.StartRoutine(FadeHighlight, _highlightedAreas[k], area.Position - Vector3.UnitY * 8));
+            area.Position = Position - Vector3.UnitY * 16;
+            RoutineManager.StartRoutine(FadeHighlight, area, Position, Seconds, false);
+            const float fadeTime = 1.5f;
+            TaskScheduler.After(Seconds, () => RoutineManager.StartRoutine(FadeHighlight, _highlightedAreas[k], area.Position - Vector3.UnitY * 8, fadeTime, true));        
             return null;
         }
 
@@ -85,24 +88,31 @@ namespace Hedra.Engine.Generation
         {
             var area = (HighlightedArea)Params[0];
             var targetPosition = (Vector3)Params[1];
-            var time = Params.Length > 2 ? (float) Params[2] : float.MaxValue;
+            var time = (float) Params[2];
+            var isFadingOut = (bool) Params[3];
+
             var passedTime = 0f;
-            var clear = targetPosition.Y != area.Position.Y; //Check if its fading in or out
-
-            while ((area.Position - targetPosition).LengthFast > .75f && passedTime < time)
+            const float fadeSpeed = 32;
+            if (isFadingOut)
             {
-
-                area.Position = Mathf.Lerp(area.Position, targetPosition, (float)Time.DeltaTime * 1f);
-                passedTime += Time.DeltaTime * 4f;
-                yield return null;
-            }
-
-            //Free the object if it's fading out
-            if (clear)
-            {
+                while (passedTime < time)
+                {
+                    area.Position -= Vector3.UnitY * fadeSpeed * Time.DeltaTime;
+                    passedTime += Time.DeltaTime;
+                    yield return null;
+                }
                 area.Radius = 0;
                 area.Color = Vector4.Zero;
                 area.Position = Vector3.Zero;
+            }
+            else
+            {
+                while (passedTime < time)
+                {
+                    area.Position = Mathf.Lerp(area.Position, targetPosition, Time.DeltaTime);
+                    passedTime += Time.DeltaTime;
+                    yield return null;
+                }
             }
         }
 

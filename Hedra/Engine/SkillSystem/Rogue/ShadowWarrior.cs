@@ -53,7 +53,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
             _warrior = null;
         }
         
-        private class ShadowWarriorComponent : WarriorMinionComponent
+        private class ShadowWarriorComponent : MeleeMinionComponent
         {
             public ShadowWarriorComponent(IHumanoid Parent, IHumanoid Owner) : base(Parent, Owner)
             {

@@ -654,15 +654,17 @@ namespace Hedra.Engine.Rendering
 
         private void EnsureNoErrors()
         {
+#if DEBUG
             if(System.Threading.Thread.CurrentThread.ManagedThreadId != Loader.Hedra.MainThreadId)
                 throw new ArgumentException($"Invalid GL calls outside of the main thread.");
             var error = GL.GetError();
-            if (error != ErrorCode.NoError && ErrorSeverity.Ignore != Severity)
+            if (error != ErrorCode.NoError /*&& ErrorSeverity.Ignore != Severity*/)
             {
                 var errorMsg = $"Unexpected OpenGL error: {error}";
                 Log.WriteResult(false, errorMsg);
                 if (ErrorSeverity.High == Severity) throw new RenderException(errorMsg);
             }
+#endif
         }
     }
 }

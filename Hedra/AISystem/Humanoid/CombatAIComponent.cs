@@ -213,6 +213,8 @@ namespace Hedra.AISystem.Humanoid
             _targetPoint = Position;
         }
 
+        public IEntity ChasingTarget => _chasingTarget;
+        
         public CombatAIBehaviour Behaviour
         {
             get => _behaviour;

@@ -8,6 +8,7 @@ namespace Hedra.Engine.ModuleSystem.Templates
         public string Name { get; set; }
         public float XP { get; set; } = 1.0f;
         public float MaxHealth { get; set; }
+        public string AIType { get; set; }
         public string DisplayName { get; set; }
         public string Behaviour { get; set; }
         public string Class { get; set; } = ClassDesign.None.ToString();

@@ -53,7 +53,6 @@ namespace Hedra.Engine.ItemSystem
             
             BlacklistedEquipment = new[]
             {
-                EquipmentType.Staff.ToString(),
                 EquipmentType.Chestplate.ToString()
             };
         }

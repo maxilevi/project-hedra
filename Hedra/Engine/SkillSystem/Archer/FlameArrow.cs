@@ -81,7 +81,7 @@ namespace Hedra.Engine.SkillSystem.Archer
             var arrowProj = (Projectile) Params[0];
             var position = arrowProj.Mesh.Position;    
             var time = 0f;
-            World.HighlightArea(position, Particle3D.FireColor, EffectRange, EffectDuration);
+            World.HighlightArea(position, Particle3D.FireColor, EffectRange * 1.5f, EffectDuration);
             while(time < EffectDuration)
             {
                 time += Time.DeltaTime;            

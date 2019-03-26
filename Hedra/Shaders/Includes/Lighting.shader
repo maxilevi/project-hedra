@@ -61,10 +61,10 @@ vec4 apply_highlights(vec4 linear_color, vec3 Position)
     for(int i = int(0.0); i < AreaCount; i++)
     {
         new_color = mix(
-            AreaColors[i],
             new_color,
+            AreaColors[i],
             clamp(
-                length(AreaPositions[i].xyz - Position) / AreaPositions[i].w,
+                1.5 * (1.0 - (length(AreaPositions[i].xyz - Position) / AreaPositions[i].w)),
                 0.0,
                 1.0
             )

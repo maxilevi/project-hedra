@@ -20,14 +20,14 @@ namespace Hedra.AISystem.Humanoid
     /// <summary>
     /// Description of WarriorAI.
     /// </summary>
-    public class WarriorAIComponent : CombatAIComponent
+    public class MeleeAIComponent : CombatAIComponent
     {
         private float _attackTimer;
         protected override float SearchRadius => 64;
         protected override float AttackRadius => throw new NotImplementedException();
         protected override float ForgetRadius => 64;
 
-        public WarriorAIComponent(IHumanoid Parent, bool IsFriendly) : base(Parent, IsFriendly)
+        public MeleeAIComponent(IHumanoid Parent, bool IsFriendly) : base(Parent, IsFriendly)
         {
         }
         

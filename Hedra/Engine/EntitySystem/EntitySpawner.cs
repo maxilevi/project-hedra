@@ -232,7 +232,6 @@ namespace Hedra.Engine.EntitySystem
         Pig,
         Boar,
         Bee,
-        Human,
         Horse,
         Wolf,
         Gorilla,

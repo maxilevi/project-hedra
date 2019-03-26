@@ -37,7 +37,7 @@ namespace Hedra.Engine.Player
             base.Update();
             if (Disposed) return;
             if (_shouldStop && Particles.Particles.Count == 0) Dispose();
-            PushEntitiesAway();
+            if(!_shouldStop) PushEntitiesAway();
         }
 
         private void CreateExplosion()

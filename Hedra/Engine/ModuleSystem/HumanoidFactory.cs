@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using Hedra.AISystem.Humanoid;
 using Hedra.Core;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.EntitySystem;
@@ -17,7 +18,8 @@ namespace Hedra.Engine.ModuleSystem
     public static class HumanoidFactory
     {
         private static Dictionary<string, HumanoidConfiguration> _behaviours;
-
+        private static Dictionary<string, Type> _ais;
+        
         static HumanoidFactory()
         {
             _behaviours = new Dictionary<string, HumanoidConfiguration>
@@ -25,6 +27,12 @@ namespace Hedra.Engine.ModuleSystem
                 {"Hostile", new HumanoidConfiguration(HealthBarType.Hostile)},
                 {"Neutral", new HumanoidConfiguration(HealthBarType.Neutral)},
                 {"Friendly", new HumanoidConfiguration(HealthBarType.Friendly)}
+            };
+            _ais = new Dictionary<string, Type>
+            {
+                {"Melee", typeof(MeleeAIComponent)},
+                {"Archer", typeof(RangedAIComponent)},
+                {"Mage", typeof(RangedAIComponent)}
             };
         }
 
@@ -41,7 +49,7 @@ namespace Hedra.Engine.ModuleSystem
             {
                 Level = Level,
                 Class = ClassDesign.FromString(template.Class),
-                MobType = MobType.Human
+                Type = HumanoidType
             };
             human.Model = new HumanoidModel(human, template.Model);
             human.Physics.CollidesWithStructures = true;
@@ -77,13 +85,21 @@ namespace Hedra.Engine.ModuleSystem
                 };
                 human.AddComponent(drop);
             }
-
+    
             human.AddComponent(new HealthBarComponent(human, template.DisplayName ?? template.Name, behaviour.Type));
             human.SearchComponent<DamageComponent>().Immune = template.Immune;
             human.SearchComponent<DamageComponent>().XpToGive = 6f;
             human.Removable = false;
             World.AddEntity(human);
             return human;
+        }
+
+        public static void AddAI(IHumanoid Humanoid, bool Friendly)
+        {
+            var template = HumanoidLoader.HumanoidTemplater[Humanoid.Type];
+            var aiType = template.AIType ?? (Humanoid.LeftWeapon.IsMelee ? "Melee" : throw new ArgumentOutOfRangeException($"Failed to determine the ai type for {Humanoid.Type}"));
+            var instance = (Component<IHumanoid>) Activator.CreateInstance(_ais[aiType], Humanoid, Friendly);
+            Humanoid.AddComponent(instance);
         }
         
         private static int GetDifficulty(Random Rng)

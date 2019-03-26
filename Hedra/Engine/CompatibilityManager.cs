@@ -9,13 +9,8 @@ using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Engine.Rendering.Geometry;
 using OpenTK;
-using OpenTK.Graphics.OpenGL;
-using DrawElementsType = OpenTK.Graphics.OpenGL4.DrawElementsType;
-using GetPName = OpenTK.Graphics.OpenGL4.GetPName;
-using GL = OpenTK.Graphics.OpenGL4.GL;
-using PrimitiveType = OpenTK.Graphics.OpenGL4.PrimitiveType;
-using StringName = OpenTK.Graphics.OpenGL4.StringName;
-using VertexAttribPointerType = OpenTK.Graphics.OpenGL4.VertexAttribPointerType;
+using OpenTK.Graphics.OpenGL4;
+
 
 namespace Hedra.Engine
 {
@@ -130,7 +125,7 @@ namespace Hedra.Engine
 
         private static VAO<Vector3> PrepareTestData(out VBO<uint> Indices, out VBO<Vector3> Buffer)
         {
-            var verts = new Vector3[]
+            var verts = new []
             {
                 new Vector3(0,0,1),
                 new Vector3(0,1,0), 
@@ -140,7 +135,7 @@ namespace Hedra.Engine
             Indices = new VBO<uint>(new uint[] {0, 1, 2}, sizeof(uint) * verts.Length, VertexAttribPointerType.UnsignedInt);
             return new VAO<Vector3>(Buffer);
         }
-        
+        /*
         public static int QueryAvailableVideoMemory()
         {
             var previousSeverity = Renderer.Severity;
@@ -161,6 +156,6 @@ namespace Hedra.Engine
             {
                 Renderer.Severity = previousSeverity;
             }
-        }
+        }*/
     }
 }

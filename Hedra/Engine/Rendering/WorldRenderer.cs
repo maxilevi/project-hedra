@@ -90,7 +90,6 @@ namespace Hedra.Engine.Rendering
 
         public static void Render(Dictionary<Vector2, Chunk> ToDraw, Dictionary<Vector2, Chunk> ToDrawShadow, WorldRenderType Type)
         {
-            
             if(ToDraw.Count == 0 || GameSettings.HideWorld) return;
             if((Type & WorldRenderType.Static) == WorldRenderType.Static)
             {
@@ -114,10 +113,7 @@ namespace Hedra.Engine.Rendering
         }
         
         private static void TerrainDraw(Dictionary<Vector2, Chunk> ToDraw, Dictionary<Vector2, Chunk> ShadowDraw)
-        { 
-            Renderer.EnableVertexAttribArray(0);
-            Renderer.EnableVertexAttribArray(1);
-
+        {
             if (GameSettings.Shadows)
             {
                 ShadowRenderer.Bind();
@@ -125,7 +121,6 @@ namespace Hedra.Engine.Rendering
                 ShadowRenderer.UnBind();
             }
             StaticBind();
-            Renderer.EnableVertexAttribArray(2);
             StaticBuffer.Draw(ToDraw);
         }
 

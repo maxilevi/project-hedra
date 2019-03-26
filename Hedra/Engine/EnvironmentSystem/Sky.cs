@@ -73,7 +73,7 @@ namespace Hedra.Engine.EnvironmentSystem
             DrawManager.UIRenderer.DrawQuad();
 
             _starsDome.ColorMultiplier = Vector4.One * (1-SkyManager.LastDayFactor) * 2f;
-            _starsDome.Draw();
+            //_starsDome.Draw();
             _sunDome.TransformationMatrix = Matrix4.CreateRotationX(Mathf.Radian * (1-SkyManager.StackedDaytimeModifier) * 180f);
             _sunDome.ColorMultiplier = Vector4.One * SkyManager.LastDayFactor * 2f;
             _sunDome.Draw();

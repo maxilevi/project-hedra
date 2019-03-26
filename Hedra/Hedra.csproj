@@ -134,7 +134,7 @@
     <Compile Include="AISystem\GoatAIComponent.cs" />
     <Compile Include="AISystem\GorillaWarriorAIComponent.cs" />
     <Compile Include="AISystem\HostileAIComponent.cs" />
-    <Compile Include="AISystem\Humanoid\ArcherAIComponent.cs" />
+    <Compile Include="AISystem\Humanoid\RangedAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\BaseHumanoidAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\BanditAIBehaviour.cs" />
     <Compile Include="AISystem\Humanoid\CombatAIComponent.cs" />
@@ -149,7 +149,7 @@
     <Compile Include="AISystem\Humanoid\RoamingVillagerAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\TraverseHumanoidAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\VillagerAISettings.cs" />
-    <Compile Include="AISystem\Humanoid\WarriorAIComponent.cs" />
+    <Compile Include="AISystem\Humanoid\MeleeAIComponent.cs" />
     <Compile Include="AISystem\IBehaviourComponent.cs" />
     <Compile Include="AISystem\IGuardAIComponent.cs" />
     <Compile Include="AISystem\ITraverseAIComponent.cs" />
@@ -362,6 +362,7 @@
     <Compile Include="Engine\Rendering\Frustum\OcclusionState.cs" />
     <Compile Include="Engine\Rendering\Frustum\Plane.cs" />
     <Compile Include="Engine\Rendering\Frustum\PlaneIntersectionType.cs" />
+    <Compile Include="Engine\Rendering\IBufferPool.cs" />
     <Compile Include="Engine\Rendering\TextFormatting.cs" />
     <Compile Include="Engine\Rendering\ITransparent.cs" />
     <Compile Include="Engine\Rendering\LodableObject.cs" />
@@ -416,7 +417,7 @@
     <Compile Include="Engine\SkillSystem\Mage\Teleport.cs" />
     <Compile Include="Engine\SkillSystem\SingleAnimationSkillWithStance.cs" />
     <Compile Include="Engine\SkillSystem\SpecialRangedAttackSkill.cs" />
-    <Compile Include="Engine\SkillSystem\WarriorMinionComponent.cs" />
+    <Compile Include="Engine\SkillSystem\MeleeMinionComponent.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Paladin\Conversion.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Thorns.cs" />
     <Compile Include="Engine\SkillSystem\WeaponBonusSkill.cs" />
@@ -8194,6 +8195,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\Animations\WarriorPrayerStance.dae">
       <Link>Assets\Chr\WarriorPrayerStance.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Animations\WerewolfIdle.dae">
+      <Link>Assets\Chr\WerewolfIdle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Environment\Misc\Pebble0.ply">

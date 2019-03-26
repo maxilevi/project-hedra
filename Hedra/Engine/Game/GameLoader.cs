@@ -26,6 +26,7 @@ namespace Hedra.Engine.Game
         {
             Log.WriteLine("Initializing world renderer...");
             WorldRenderer.Initialize();
+            WorldRenderer.Allocate();
             
             Log.WriteLine($"Detected video card type is '{OSManager.GraphicsCard}'");
             /*Log.WriteLine("Querying available VRAM ...");
@@ -36,7 +37,7 @@ namespace Hedra.Engine.Game
                 : GeneralSettings.MaxLoadingRadius;
             Log.WriteLine($"Setting max world radius to '{GeneralSettings.MaxLoadingRadius}'");*/
             Log.WriteLine("Allocating world memory...");
-            WorldRenderer.Allocate();
+            
             
             int staticMem = WorldRenderer.StaticBuffer.TotalMemory / 1024 / 1024;
             Log.WriteLine("Allocated " + staticMem + " MB of VRAM for static rendering.");

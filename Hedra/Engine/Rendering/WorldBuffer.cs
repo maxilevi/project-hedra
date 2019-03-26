@@ -20,7 +20,7 @@ namespace Hedra.Engine.Rendering
     /// <summary>
     /// Description of WorldBuffer.
     /// </summary>
-    public class WorldBuffer
+    public class WorldBuffer 
     {
         private readonly object _lock = new object();
         private readonly Dictionary<Vector2, ChunkRenderCommand> _chunkDict;
@@ -93,7 +93,7 @@ namespace Hedra.Engine.Rendering
             
             lock(_lock)
             {
-                if(_chunkDict.ContainsKey(Offset))
+                if (_chunkDict.ContainsKey(Offset))
                 {                    
                     var command = _chunkDict[Offset];                    
                     Indices.ObjectMap.Remove(command.Entries[0]);

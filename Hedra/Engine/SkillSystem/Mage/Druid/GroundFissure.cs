@@ -47,7 +47,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
 
         private void CreateExplosion(Vector3 ExplosionPosition)
         {
-            World.HighlightArea(ExplosionPosition, Particle3D.FireColor * 2, Radius * 1.5f, Duration);
+            World.HighlightArea(ExplosionPosition, Particle3D.FireColor * 2, Radius, Duration);
             _particles.Color = Particle3D.FireColor;
             _particles.Position = ExplosionPosition;
             _particles.GravityEffect = 0f;
@@ -81,7 +81,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
                 
             _particles.GravityEffect = 0.05f;
             _particles.ParticleLifetime = 1.2f + Utils.Rng.NextFloat();
-            _particles.PositionErrorMargin = new Vector3(GeyserRadius, 2f, GeyserRadius) * 0;
+            _particles.PositionErrorMargin = Vector3.Zero;
             _particles.Shape = ParticleShape.Cone;
             _particles.ConeAngle = 10 * Mathf.Radian;
             _particles.ConeSpeed = 2;
@@ -117,12 +117,11 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
         }
 
         protected override int MaxLevel => 15;
-        private float Radius => 64;
-        private float GeyserRadius => 1;
+        private float Radius => 32 + 32 * (Level / (float) MaxLevel);
         private float Duration => 8 + 8 * (Level / (float) MaxLevel);
         private float TotalDamage => 24 + 32 * (Level / (float) MaxLevel);
-        public override float ManaCost => 55;
-        public override float MaxCooldown => 2;
+        public override float ManaCost => 60;
+        public override float MaxCooldown => 33 - 7 * (Level / (float) MaxLevel);
         protected override bool HasCooldown => !_isActive;
         protected override bool ShouldDisable => _isActive;
         public override float IsAffectingModifier => _isActive ? 1 : 0;

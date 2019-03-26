@@ -1,6 +1,7 @@
 ﻿{
   "Name": "Warrior",
   "DisplayName": "Warrior",
+  "AIType": "Melee",
   "Model": {
     "Path": "$DataFile$/Assets/Chr/WarriorIdle.dae",
     "Scale": 1.0

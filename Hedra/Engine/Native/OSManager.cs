@@ -67,7 +67,7 @@ namespace Hedra.Engine.Native
                           "RAM = " + RamCount + "MB");
             
         }
-
+/*
         public static int GetAvailableGraphicsRam(int Default)
         {
             if (GraphicsCard == GraphicsCardType.Unknown || GraphicsCard == GraphicsCardType.Intel)
@@ -75,7 +75,7 @@ namespace Hedra.Engine.Native
             var mem = CompatibilityManager.QueryAvailableVideoMemory();
             if (mem == 0) return Default;
             return mem;
-        }
+        }*/
 
         private static GraphicsCardType DetectCard(string Card)
         {

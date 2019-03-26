@@ -20,20 +20,20 @@ namespace Hedra.AISystem.Humanoid
     /// <summary>
     /// Description of ArcherAI.
     /// </summary>
-    public class ArcherAIComponent : CombatAIComponent
+    public class RangedAIComponent : CombatAIComponent
     {
         private const int DefaultAttackRadius = 96;
         private float _secondAttackCooldown;
         private float _firstAttackCooldown;
         private float _attackRadius = DefaultAttackRadius;
-        private readonly Bow _leftWeapon;
+        private readonly RangedWeapon _leftWeapon;
         protected override float SearchRadius => 128;
         protected override float AttackRadius => _attackRadius;
         protected override float ForgetRadius => 192;
 
-        public ArcherAIComponent(IHumanoid Parent, bool IsFriendly) : base(Parent, IsFriendly)
+        public RangedAIComponent(IHumanoid Parent, bool IsFriendly) : base(Parent, IsFriendly)
         {
-            _leftWeapon = (Bow) Parent.LeftWeapon;
+            _leftWeapon = (RangedWeapon) Parent.LeftWeapon;
             _leftWeapon.Miss += OnMiss;
             _leftWeapon.Hit += OnHit;
             _leftWeapon.BowModifiers += BowModifiers;
@@ -47,7 +47,7 @@ namespace Hedra.AISystem.Humanoid
 
         protected override void OnAttack()
         {    
-            if (_secondAttackCooldown <= 0)
+            if (_secondAttackCooldown <= 0 && CanUseSecondAttack)
             {
                 _secondAttackCooldown = 4.5f;
                 _leftWeapon.Attack2(Parent, new AttackOptions
@@ -55,7 +55,7 @@ namespace Hedra.AISystem.Humanoid
                     IgnoreEntities = IgnoreEntities
                 });
             }
-            else if (_firstAttackCooldown <= 0)
+            else if (_firstAttackCooldown <= 0 && CanUseFirstAttack)
             {
                 _firstAttackCooldown = 1.5f;
                 _leftWeapon.Attack1(Parent, new AttackOptions
@@ -82,5 +82,7 @@ namespace Hedra.AISystem.Humanoid
         }
 
         protected override bool UseCollision => true;
+        protected virtual bool CanUseFirstAttack => true;
+        protected virtual bool CanUseSecondAttack => true;
     }
 }

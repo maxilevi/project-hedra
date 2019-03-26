@@ -23,6 +23,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.EntitySystem;
 
 namespace Hedra.Engine.WorldBuilding
 {
@@ -103,11 +104,8 @@ namespace Hedra.Engine.WorldBuilding
             var human = this.SpawnHumanoid(className, Level, Position, behaviour);
             if (isWerewolf) human.AddonHealth = human.MaxHealth * .5f;
             human.Health = human.MaxHealth;
-            
-            if(!human.MainWeapon.Weapon.IsMelee)
-                human.AddComponent( new ArcherAIComponent(human, Friendly) );
-            else
-                human.AddComponent(new WarriorAIComponent(human, Friendly));
+
+            HumanoidFactory.AddAI(human, Friendly);
             if(Friendly)
                 human.SearchComponent<DamageComponent>().Ignore(E => E is IPlayer);
             human.Name = (!Friendly) ? Undead ? "Skeleton" : "Bandit" : NameGenerator.PickMaleName(Utils.Rng);

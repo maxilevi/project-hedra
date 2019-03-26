@@ -28,7 +28,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
         private void SpawnMinion()
         {
             var skeleton = World.WorldBuilding.SpawnHumanoid(HumanType.Skeleton, Player.Position + Player.Orientation * 16);
-            skeleton.AddComponent(new WarriorMinionComponent(skeleton, Player));
+            skeleton.AddComponent(new MeleeMinionComponent(skeleton, Player));
             skeleton.SetWeapon(ItemPool.Grab(CommonItems.UncommonSilverSword).Weapon);
             var masterySkill = (SkeletonMastery) Player.Toolbar.Skills.First(S => S.GetType() == typeof(SkeletonMastery));
             skeleton.AddonHealth = masterySkill.HealthBonus;

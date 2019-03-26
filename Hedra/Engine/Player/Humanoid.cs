@@ -168,7 +168,6 @@ namespace Hedra.Engine.Player
             DodgeCost = DefaultDodgeCost;
             AttackPower = 1f;
             Speed = this.BaseSpeed;
-            MobType = MobType.Human;
             BaseAttackSpeed = .75f;
             AddComponent(new DamageComponent(this));
         }
