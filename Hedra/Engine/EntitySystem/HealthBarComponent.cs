@@ -187,7 +187,7 @@ namespace Hedra.Engine.EntitySystem
             );
             var homogeneousSpace = Vector4.Transform(eyeSpace, Culling.ProjectionMatrix);
             var ndc = homogeneousSpace.Xyz / homogeneousSpace.W;
-            _healthBar.Position = Mathf.Clamp(ndc.Xy, -.98f, .98f) + (1 - GetRatio()) * _textureSize.X * Vector2.UnitX;
+            _healthBar.Position = Mathf.Clamp(ndc.Xy, -.98f, .98f);
             _healthBar.Scale = _textureSize * _barSize;
             _backgroundTexture.Position = _healthBar.Position;
             _backgroundTexture.Scale = _backgroundTextureSize;
