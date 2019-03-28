@@ -93,8 +93,7 @@ namespace Hedra.Engine.Rendering
 
             void Cleanup()
             {
-                Renderer.ShaderBound = previousProgram;
-                Renderer.BindShader(Renderer.ShaderBound);
+                Renderer.BindShader(previousProgram);
             }
             if (InSameThread) Cleanup();
             else Executer.ExecuteOnMainThread(Cleanup);

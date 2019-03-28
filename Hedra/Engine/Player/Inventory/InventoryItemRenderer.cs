@@ -95,10 +95,10 @@ namespace Hedra.Engine.Player.Inventory
             var willTilt = TiltIfWeapon && IsWeapon;
             Mesh.Rotation = new Vector3(0, _itemRotation, willTilt ? 45 : 0);
 
-            Renderer.PushShader();
+            var previousBound = Renderer.ShaderBound;
             Renderer.PushFBO();
             Framebuffer.Bind();
-
+            
             var meshPrematureCulling = Mesh.PrematureCulling;
             Mesh.PrematureCulling = false;
 
@@ -118,7 +118,7 @@ namespace Hedra.Engine.Player.Inventory
             Renderer.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             Renderer.Enable(EnableCap.DepthTest);
             Renderer.Disable(EnableCap.Blend);
-
+            
             Mesh.Draw();
 
             /*
@@ -129,14 +129,13 @@ namespace Hedra.Engine.Player.Inventory
             
             Renderer.BindFramebuffer(FramebufferTarget.DrawFramebuffer, 0);
             Renderer.BindFramebuffer(FramebufferTarget.ReadFramebuffer, 0);
-            */
+          */  
             ShaderManager.SetLightColorInTheSameThread(currentDayColor);
             GameSettings.GlobalShadows = previousShadows;
             Renderer.PopFBO();
-            Renderer.PopShader();
             Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, Renderer.FBOBound);
             Renderer.Viewport(0, 0, GameSettings.Width, GameSettings.Height);
-            Renderer.BindShader(Renderer.ShaderBound);
+            Renderer.BindShader(previousBound);
             Renderer.Disable(EnableCap.DepthTest);
             Renderer.Enable(EnableCap.Blend);
             Mesh.PrematureCulling = meshPrematureCulling;

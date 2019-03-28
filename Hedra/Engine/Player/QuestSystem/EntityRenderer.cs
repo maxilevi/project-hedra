@@ -14,7 +14,7 @@ namespace Hedra.Engine.Player.QuestSystem
         
         public static uint Draw(AnimatedModel Model)
         {
-            Renderer.PushShader();
+            var previousBound = Renderer.ShaderBound;
             Renderer.PushFBO();
             Framebuffer.Bind();
 
@@ -48,9 +48,8 @@ namespace Hedra.Engine.Player.QuestSystem
             ShaderManager.SetLightColorInTheSameThread(currentDayColor);
             GameSettings.GlobalShadows = previousShadows;
             Renderer.PopFBO();
-            Renderer.PopShader();
             Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, Renderer.FBOBound);
-            Renderer.BindShader(Renderer.ShaderBound);
+            Renderer.BindShader(previousBound);
             Renderer.Disable(EnableCap.DepthTest);
             Renderer.Enable(EnableCap.Blend);
             Renderer.Viewport(0, 0, GameSettings.Width, GameSettings.Height);

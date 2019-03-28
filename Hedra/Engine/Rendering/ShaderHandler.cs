@@ -5,6 +5,7 @@ namespace Hedra.Engine.Rendering
     public class ShaderHandler
     {
         private uint _currentBound;
+        public uint Id => _currentBound;
         public int Skipped { get; private set; }
 
         public void ResetStats()

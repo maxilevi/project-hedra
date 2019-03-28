@@ -21,12 +21,11 @@ namespace Hedra.Engine.Rendering
     {
         public static IGLProvider Provider { get; set; } = new GLProvider();
         public static int FBOBound { get; set; }
-        public static int ShaderBound { get; set; }
+        public static uint ShaderBound => ShaderHandler.Id;
         public static Matrix4 ModelViewProjectionMatrix { get; private set; }
         public static Matrix4 ModelViewMatrix { get; private set; }
         public static Matrix4 ProjectionMatrix { get; private set; }
         public static StateManager FboManager { get; }
-        public static StateManager ShaderManager { get; }
         public static CapHandler CapHandler { get; }
         public static TextureHandler TextureHandler { get; }
         public static ShaderHandler ShaderHandler { get; }
@@ -40,8 +39,6 @@ namespace Hedra.Engine.Rendering
             VertexAttributeHandler = new VertexAttributeHandler();
             FboManager = new StateManager();
             FboManager.RegisterStateItem( () => FBOBound, O => FBOBound = (int) O);
-            ShaderManager = new StateManager();
-            ShaderManager.RegisterStateItem(() => ShaderBound, O => ShaderBound = (int)O);
         }
 
         public static void Load()
@@ -92,26 +89,15 @@ namespace Hedra.Engine.Rendering
             FboManager.CaptureState();
         }
 
-        public static void PushShader()
-        {
-            ShaderManager.CaptureState();
-        }
-
         public static int PopFBO()
         {
             FboManager.ReleaseState();
             return FBOBound;
         }
 
-        public static int PopShader()
+        public static void BindShader(uint Id)
         {
-            ShaderManager.ReleaseState();
-            return ShaderBound;
-        }
-
-        public static void BindShader(int Id)
-        {
-            ShaderHandler.Use((uint)Id);
+            ShaderHandler.Use(Id);
         }
 
         public static void BindFramebuffer(FramebufferTarget Target, int Id)
@@ -546,11 +532,6 @@ namespace Hedra.Engine.Rendering
         public static void UniformMatrix4(int Location, bool Transpose, ref Matrix4 Uniform)
         {
             Provider.UniformMatrix4(Location, Transpose, ref Uniform);
-        }
-
-        public static void UseProgram(int Program)
-        {
-            Provider.UseProgram((uint)Program);
         }
 
         public static void VertexAttribDivisor(int V0, int V1)

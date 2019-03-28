@@ -225,7 +225,12 @@ namespace Hedra.Engine.Rendering
 #endif
                         _mappings.Add(Key, new UniformMapping(location, value));
                     }
-                    if(this.ShaderId != Renderer.ShaderBound) throw new ArgumentException($"Uniforms need to be uploaded when the owner's shader is bound.");
+#if DEBUG
+                    if (Renderer.GetInteger(GetPName.CurrentProgram) != this.ShaderId)
+                        throw new ArgumentException($"Uniforms need to be uploaded when the owner's shader is bound.");
+#endif
+                    if (this.ShaderId != Renderer.ShaderBound) throw new ArgumentException($"Uniforms need to be uploaded when the owner's shader is bound.");
+
                     if (_mappings[Key].Value != value || !_mappings[Key].Loaded)
                     {
                         _mappings[Key].Value = value;
@@ -288,15 +293,13 @@ namespace Hedra.Engine.Rendering
         {
             if (ShaderId < 0) throw new GraphicsException($"{this.GetType().Name} is corrupt. {this.ShaderId}");
 
-            Renderer.UseProgram(ShaderId);
-            Renderer.ShaderBound = ShaderId;
+            Renderer.BindShader((uint)ShaderId);
             this.LoadBuiltinUniforms();
         }
         
         public void Unbind()
         {
-            Renderer.UseProgram(0);
-            Renderer.ShaderBound = 0;
+            Renderer.BindShader(0);
         }
         
         public void Dispose()

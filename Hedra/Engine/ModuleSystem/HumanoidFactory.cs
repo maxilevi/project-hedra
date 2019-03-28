@@ -33,7 +33,7 @@ namespace Hedra.Engine.ModuleSystem
             {
                 {"Melee", typeof(MeleeAIComponent)},
                 {"Archer", typeof(RangedAIComponent)},
-                {"Mage", typeof(RangedAIComponent)}
+                {"Mage", typeof(MageAIComponent)}
             };
         }
 
