@@ -184,7 +184,8 @@ namespace Hedra.AISystem.Humanoid
         
         private void GoToMarket()
         {
-            var nearestVillage = World.InRadius<Village>(Parent.Position, VillageDesign.MaxVillageRadius).First();
+            var nearestVillage = World.InRadius<Village>(Parent.Position, VillageDesign.MaxVillageRadius).FirstOrDefault();
+            if (nearestVillage == null) return;
             MoveTo(nearestVillage.Position.Xz, delegate
             {
                 _interactionTimer.MakeReady();

@@ -10,7 +10,7 @@ namespace Hedra.Engine.PlantSystem
 {
     public class CollectiblePlantDesign : StructureDesign
     {
-        public override int Radius 
+        public override int PlateauRadius 
             => throw new NotImplementedException();
 
         public override VertexData Icon

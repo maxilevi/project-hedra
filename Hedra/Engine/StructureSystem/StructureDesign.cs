@@ -9,6 +9,7 @@ using Hedra.Engine.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.IO;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.MapSystem;
@@ -21,7 +22,8 @@ namespace Hedra.Engine.StructureSystem
 {
     public abstract class StructureDesign
     {
-        public abstract int Radius { get; }
+        public abstract int PlateauRadius { get; }
+        public bool IsSmall => PlateauRadius < 300;
         public abstract VertexData Icon { get; }
 
         public abstract void Build(CollidableStructure Structure);
@@ -30,7 +32,7 @@ namespace Hedra.Engine.StructureSystem
         
         protected CollidableStructure Setup(Vector3 TargetPosition, Random Rng, BaseStructure Structure)
         {
-            var plateau = new RoundedPlateau(TargetPosition.Xz, Radius);
+            var plateau = new RoundedPlateau(TargetPosition.Xz, PlateauRadius);
             plateau.MaxHeight = World.WorldBuilding.ApplyMultiple(plateau.Position, plateau.MaxHeight);
             var collidable = new CollidableStructure(this, new Vector3(TargetPosition.X, plateau.MaxHeight, TargetPosition.Z), plateau, Structure);
             Structure.Position = collidable.Position;
@@ -44,9 +46,9 @@ namespace Hedra.Engine.StructureSystem
         
         public void CheckFor(Vector2 ChunkOffset, Region Biome, RandomDistribution Distribution)
         {
-            for (var x = Math.Min(-2, -Radius / Chunk.Width * 2); x < Math.Max(2, Radius / Chunk.Width * 2); x++)
+            for (var x = Math.Min(-2, -PlateauRadius / Chunk.Width * 2); x < Math.Max(2, PlateauRadius / Chunk.Width * 2); x++)
             {
-                for (var z = Math.Min(-2, -Radius / Chunk.Width * 2); z < Math.Max(2, Radius / Chunk.Width * 2); z++)
+                for (var z = Math.Min(-2, -PlateauRadius / Chunk.Width * 2); z < Math.Max(2, PlateauRadius / Chunk.Width * 2); z++)
                 {
                     var offset = new Vector2(ChunkOffset.X + x * Chunk.Width,
                         ChunkOffset.Y + z * Chunk.Width);
@@ -67,9 +69,9 @@ namespace Hedra.Engine.StructureSystem
         public virtual bool ShouldRemove(CollidableStructure Structure)
         {
             var chunkOffset = World.ToChunkSpace(Structure.Position);
-            for (var x = Math.Min(-2, -Radius / Chunk.Width * 2); x < Math.Max(2, Radius / Chunk.Width * 2); x++)
+            for (var x = Math.Min(-2, -PlateauRadius / Chunk.Width * 2); x < Math.Max(2, PlateauRadius / Chunk.Width * 2); x++)
             {
-                for (var z = Math.Min(-2, -Radius / Chunk.Width * 2); z < Math.Max(2, Radius / Chunk.Width * 2); z++)
+                for (var z = Math.Min(-2, -PlateauRadius / Chunk.Width * 2); z < Math.Max(2, PlateauRadius / Chunk.Width * 2); z++)
                 {
                     var offset = new Vector2(chunkOffset.X + x * Chunk.Width, chunkOffset.Y + z * Chunk.Width);
                     if (World.GetChunkByOffset(offset) != null)
@@ -105,26 +107,30 @@ namespace Hedra.Engine.StructureSystem
             return shouldBe && this.ShouldBuild(TargetPosition, Items, Biome.Structures.Designs);
         }
 
-        private bool ShouldBuild(Vector3 NewPosition, CollidableStructure[] Items, StructureDesign[] Designs)
+        private bool ShouldBuild(Vector3 NewPosition, CollidableStructure[] Items, StructureDesign[] AllDesigns)
         {
-            float wSeed = World.Seed * 0.0001f;
-            var voronoi = (int) (World.StructureHandler.SeedGenerator.GetValue(NewPosition.X * .0075f + wSeed, NewPosition.Z * .0075f + wSeed) * 100f);
-            var index = new Random(voronoi).Next(0, Designs.Length);
-            var isStructureRegion = index == Array.IndexOf(Designs, this);
+            var designSet = GetDesignSet(AllDesigns);
+            var voronoi = StructureGrid.Sample(NewPosition, IsSmall);
+            var index = new Random(voronoi).Next(0, designSet.Length);
+            var isStructureRegion = index == Array.IndexOf(designSet, this);
             if (isStructureRegion)
             {
                 lock (Items)
                 {
                     for (var i = 0; i < Items.Length; i++)
                     {
-                        if (Items[i].Design.GetType() == this.GetType() && (NewPosition.Xz - Items[i].Position.Xz).LengthFast < .05f)
+                        if (Items[i].Design.GetType() == this.GetType() && (NewPosition.Xz - Items[i].Position.Xz).LengthFast < 1f)
                             return false;
                     }
                 }
                 return true;
             }
             return false;
+        }
 
+        private StructureDesign[] GetDesignSet(StructureDesign[] Designs)
+        {
+            return Designs.Where(D => D.IsSmall == IsSmall).ToArray();
         }
 
         protected abstract bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng);

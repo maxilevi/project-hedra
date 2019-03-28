@@ -21,12 +21,13 @@ namespace Hedra.Engine.StructureSystem
     public class VillageDesign : StructureDesign
     {
         public const int MaxVillageSize = 20;
-        public const int MinVillageSize = 18;
         public const int PlateauVillageRatio = 64;
-        public const int MaxVillageRadius = MaxVillageSize * PlateauVillageRatio;
+        public const int MaxVillageRadius = 512;//MaxVillageSize * PlateauVillageRatio;
+        public const int MaxEffectiveRadius = 4096;
         public const int PathWidth = 16;
         public const float Spacing = 114;
-        public override int Radius { get; } = MaxVillageRadius;
+
+        public override int PlateauRadius { get; } = MaxVillageRadius;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.VillageIcon);
 
         public override void Build(CollidableStructure Structure)
@@ -60,10 +61,10 @@ namespace Hedra.Engine.StructureSystem
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
             var height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
-            return BiomeGenerator.PathFormula(ChunkOffset.X, ChunkOffset.Y) > 0 
-                   && Rng.Next(0, 65) == 1 
+            return BiomeGenerator.PathFormula(ChunkOffset.X, ChunkOffset.Y) > 0
+                   && Rng.Next(0, StructureGrid.VillageChance) == 1
                    && Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _) > BiomePool.SeaLevel
-                   && (TargetPosition - World.SpawnPoint).LengthFast > (World.SpawnVillagePoint - World.SpawnPoint).LengthFast;
+                   && (TargetPosition - World.SpawnPoint).LengthFast > (World.SpawnVillagePoint - World.SpawnPoint).LengthFast;//*  2;
         }
 
         public override void OnEnter(IPlayer Player)

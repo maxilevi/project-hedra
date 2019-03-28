@@ -173,7 +173,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 if (Parameters.InsidePaths && offset.LengthFast > _width - VillageDesign.PathWidth * 4) continue;
                 var transMatrix = Matrix4.CreateScale(6.0f + Utils.Rng.NextFloat() * .5f)
                                   * Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat() * Mathf.Radian * rotModifier)
-                                  * Matrix4.CreateTranslation(position);
+                                  * Matrix4.CreateTranslation(position - Vector3.UnitY);
                 added.Add(position);
                 var model = design.Model;
                 var region = World.BiomePool.GetRegion(position);

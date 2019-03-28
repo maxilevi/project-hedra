@@ -22,7 +22,7 @@ namespace Hedra.Engine.StructureSystem
 {
     public class GiantTreeDesign : StructureDesign
     {
-        public override int Radius { get; } = 700;
+        public override int PlateauRadius { get; } = 700;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.BossIcon);
 
         public override void Build(CollidableStructure Structure)
@@ -92,7 +92,7 @@ namespace Hedra.Engine.StructureSystem
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
             var height = Biome.Generation.GetHeight( TargetPosition.X, TargetPosition.Z, null, out _);
-            return Rng.Next(0, 100) == 1 && height > BiomePool.SeaLevel || Rng.Next(0, 500) == 1 && height <= BiomePool.SeaLevel;
+            return Rng.Next(0, StructureGrid.GiantTreeChance) == 1 && height > BiomePool.SeaLevel || Rng.Next(0, StructureGrid.WaterGiantTreeChance) == 1 && height <= BiomePool.SeaLevel;
         }
     }
 }

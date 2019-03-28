@@ -19,7 +19,7 @@ namespace Hedra.Engine.StructureSystem
     {
         private const int Level = 6;
         public const int MaxRadius = 80;
-        public override int Radius { get; } = 80;
+        public override int PlateauRadius { get; } = 80;
         public override VertexData Icon => null;
         public override int[] AmbientSongs { get; } =
         {
@@ -112,7 +112,7 @@ namespace Hedra.Engine.StructureSystem
         {
             var height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
 
-            return Rng.Next(0, 12) == 1 && height > BiomePool.SeaLevel && Math.Abs(LandscapeGenerator.River(TargetPosition.Xz)) < 0.005f;
+            return Rng.Next(0, StructureGrid.CampfireChance) == 1 && height > BiomePool.SeaLevel && Math.Abs(LandscapeGenerator.River(TargetPosition.Xz)) < 0.005f;
         }
 
 

@@ -27,5 +27,23 @@ namespace Hedra.Engine.Player.MapSystem
             }
             return null;
         }
+        /*
+        public static bool CollidesWithFutureStructure(Vector3 Position, StructureDesign Design, Region Biome)
+        {
+            var chunkOffset = World.ToChunkSpace(Position);
+            var rng = new RandomDistribution();
+            for (var i = 0; i < Biome.Structures.Designs.Length; i++)
+            {
+                var design = Biome.Structures.Designs[i];
+                if(Design == design) continue;
+                rng.Seed = StructureDesign.BuildRngSeed(chunkOffset);
+                var targetPosition = StructureDesign.BuildTargetPosition(chunkOffset, rng);
+                if (design.ShouldSetup(chunkOffset, targetPosition, EmptyItems, Biome, rng))
+                {
+                    return design;
+                }
+            }
+            return null;
+        }*/
     }
 }

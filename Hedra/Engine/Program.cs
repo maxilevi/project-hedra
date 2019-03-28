@@ -1,4 +1,5 @@
 using System;
+using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Steamworks;
 using Hedra.Engine.Game;
 using Hedra.Engine.IO;
@@ -32,7 +33,14 @@ namespace Hedra.Engine
             {
                 RunNormalAndDummyMode(dummyMode);
             }
-            
+/*
+            var voronoi = new Voronoi();
+            var voronoi2 = new Voronoi();
+            voronoi.DistanceEnabled = true;
+            for(var x = -20; x < 200; x++)
+            //for(var z = -20; z < 20; z++)
+                Console.WriteLine($"{voronoi.GetValue(x * .01f, 0 * .1f)} whole= {voronoi2.GetValue(x * .01f, 0 * .1f)}");
+            */
             Environment.Exit(0);
         }
 

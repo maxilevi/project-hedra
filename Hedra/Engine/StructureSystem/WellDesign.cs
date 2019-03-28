@@ -15,7 +15,7 @@ namespace Hedra.Engine.StructureSystem
 {
     public class WellDesign : StructureDesign
     {
-        public override int Radius => 80;
+        public override int PlateauRadius => 80;
         public override VertexData Icon => null;
         
         public override void Build(CollidableStructure Structure)
@@ -56,7 +56,7 @@ namespace Hedra.Engine.StructureSystem
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
             var height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
-            return Rng.Next(0, 80) == 1 && height > BiomePool.SeaLevel && Math.Abs(LandscapeGenerator.River(TargetPosition.Xz)) < 0.005f;
+            return Rng.Next(0, StructureGrid.WellChance) == 1 && height > BiomePool.SeaLevel && Math.Abs(LandscapeGenerator.River(TargetPosition.Xz)) < 0.005f;
         }
     }
 }

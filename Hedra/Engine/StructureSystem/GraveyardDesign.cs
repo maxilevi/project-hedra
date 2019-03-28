@@ -24,7 +24,7 @@ namespace Hedra.Engine.StructureSystem
     public class GraveyardDesign : StructureDesign
     {
         private const int Level = 9;
-        public override int Radius { get; } = 384;
+        public override int PlateauRadius { get; } = 384;
         public const int GraveyardSkyTime = 24000;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.GraveyardIcon);
 
@@ -99,7 +99,7 @@ namespace Hedra.Engine.StructureSystem
             Structure.AddCollisionShape(mausoleumShapes.ToArray());
             Structure.AddStaticElement(mausoleum);
             ((Graveyard) Structure.WorldObject).AreaWrapper =
-                World.HighlightArea(position, new Vector4(.1f, .1f, .1f, 1f), Radius * 1.75f, -1);
+                World.HighlightArea(position, new Vector4(.1f, .1f, .1f, 1f), PlateauRadius * 1.75f, -1);
 
             this.BuildLamps(position, Structure.WorldObject, Structure);
             BuildReward(position, (Graveyard) Structure.WorldObject, rng);
@@ -107,7 +107,7 @@ namespace Hedra.Engine.StructureSystem
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
         {
-            return base.Setup(TargetPosition, Rng, new Graveyard(TargetPosition, Radius));
+            return base.Setup(TargetPosition, Rng, new Graveyard(TargetPosition, PlateauRadius));
         }
 
         private static void BuildReward(Vector3 Position, Graveyard Cementery, Random Rng)
@@ -173,7 +173,7 @@ namespace Hedra.Engine.StructureSystem
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
             var height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
-            return Rng.Next(0, 125) == 1 && height > BiomePool.SeaLevel;
+            return Rng.Next(0, StructureGrid.GraveyardChance) == 1 && height > BiomePool.SeaLevel;
         }
         
         public override int[] AmbientSongs => new []

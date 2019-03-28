@@ -24,7 +24,7 @@ namespace Hedra.Engine.StructureSystem
     public class BanditCampDesign : StructureDesign
     {
         private const int Level = 18;
-        public override int Radius { get; } = 300;
+        public override int PlateauRadius { get; } = 328;
         public override VertexData Icon { get; } = CacheManager.GetModel(CacheItem.CampfireIcon);
         public override int[] AmbientSongs { get; } =
         {
@@ -153,7 +153,7 @@ namespace Hedra.Engine.StructureSystem
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
         {
-            var structure = base.Setup(TargetPosition, Rng, new BanditCamp(TargetPosition, this.Radius));
+            var structure = base.Setup(TargetPosition, Rng, new BanditCamp(TargetPosition, this.PlateauRadius));
             var scaleMatrix = Matrix4.CreateScale(3 + Rng.NextFloat() * 1.5f);
             var tents = this.SetupTents(TargetPosition, scaleMatrix, Rng);         
 
@@ -192,7 +192,7 @@ namespace Hedra.Engine.StructureSystem
             for (var i = 0; i < randomCampfires; i++)
             {
                 var rotationMatrix = Matrix4.CreateRotationY(360f * Rng.NextFloat()* Mathf.Radian);
-                var spawnRadius = Radius * .5f;
+                var spawnRadius = PlateauRadius * .5f;
                 var randomPosition = Vector3.UnitX * (Rng.NextFloat() * spawnRadius * 2f - spawnRadius)
                                      + Vector3.UnitZ * (Rng.NextFloat() * spawnRadius * 2f - spawnRadius);
                 var newPosition = TargetPosition + randomPosition;
@@ -213,7 +213,7 @@ namespace Hedra.Engine.StructureSystem
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
             var height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
-            return Rng.Next(0, 125) == 1 && height > BiomePool.SeaLevel;
+            return Rng.Next(0, StructureGrid.BanditCampChance) == 1 && height > BiomePool.SeaLevel;
         }
 
         public class TentParameters

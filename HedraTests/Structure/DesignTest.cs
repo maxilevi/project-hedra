@@ -99,15 +99,15 @@ namespace HedraTests.Structure
             Executer.Update();
             for (var i = 0; i < WorldEntities.Length; i++)
             {
-                if( (WorldEntities[i].BlockPosition.Xz - structure.Position.Xz).LengthFast > Design.Radius )
-                    Assert.Fail($"{WorldEntities[i].BlockPosition.Xz} is far from {structure.Position.Xz} by more than {Design.Radius}");
+                if( (WorldEntities[i].BlockPosition.Xz - structure.Position.Xz).LengthFast > Design.PlateauRadius )
+                    Assert.Fail($"{WorldEntities[i].BlockPosition.Xz} is far from {structure.Position.Xz} by more than {Design.PlateauRadius}");
             }
 
             var structures = GetStructureObjects(structure);
             for (var i = 0; i < structures.Length; i++)
             {
-                if( (structures[i].Position.Xz - structure.Position.Xz).LengthFast > Design.Radius )
-                    Assert.Fail($"'{structures[i]}': {structures[i].Position.Xz} is far from {structure.Position.Xz} by more than {Design.Radius}");
+                if( (structures[i].Position.Xz - structure.Position.Xz).LengthFast > Design.PlateauRadius )
+                    Assert.Fail($"'{structures[i]}': {structures[i].Position.Xz} is far from {structure.Position.Xz} by more than {Design.PlateauRadius}");
             }
         }
         
@@ -127,9 +127,9 @@ namespace HedraTests.Structure
             SetDesigns(design);
             var currentOffset = World.ToChunkSpace(new Vector3(Utils.Rng.Next(int.MinValue, int.MaxValue), 0, Utils.Rng.Next(int.MinValue, int.MaxValue)));
             var distribution = new RandomDistribution();
-            for (var x = Math.Min(-2, -design.Radius / Chunk.Width * 2); x < Math.Max(2, design.Radius / Chunk.Width * 2); x++)
+            for (var x = Math.Min(-2, -design.PlateauRadius / Chunk.Width * 2); x < Math.Max(2, design.PlateauRadius / Chunk.Width * 2); x++)
             {
-                for (var z = Math.Min(-2, -design.Radius / Chunk.Width * 2); z < Math.Max(2, design.Radius / Chunk.Width * 2); z++)
+                for (var z = Math.Min(-2, -design.PlateauRadius / Chunk.Width * 2); z < Math.Max(2, design.PlateauRadius / Chunk.Width * 2); z++)
                 {
                     var offset = new Vector2(currentOffset.X + x * Chunk.Width, currentOffset.Y + z * Chunk.Width);
                     distribution.Seed = StructureDesign.BuildRngSeed(offset);

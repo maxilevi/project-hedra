@@ -494,6 +494,7 @@
     <Compile Include="Engine\StructureSystem\SpawnCampfireDesign.cs" />
     <Compile Include="Engine\StructureSystem\SpawnVillage.cs" />
     <Compile Include="Engine\StructureSystem\SpawnVillageDesign.cs" />
+    <Compile Include="Engine\StructureSystem\StructureGrid.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Anvil.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\ILivableBuildingParameters.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\LivableBuildingBuilder.cs" />
@@ -1161,13 +1162,11 @@
     <Compile Include="Engine\StructureSystem\GiantTreeDesign.cs" />
     <Compile Include="Engine\StructureSystem\GraveyardDesign.cs" />
     <Compile Include="Engine\StructureSystem\ObeliskDesign.cs" />
-    <Compile Include="Engine\StructureSystem\TempleDesign.cs" />
     <Compile Include="Engine\StructureSystem\TravellingMerchantDesign.cs" />
     <Compile Include="Engine\StructureSystem\StructureDesign.cs" />
     <Compile Include="Engine\StructureSystem\VillageDesign.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\VillageLoader.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\VillageType.cs" />
-    <Compile Include="Engine\StructureSystem\WoodenFortDesign.cs" />
     <Compile Include="Engine\Time.cs" />
     <Compile Include="Engine\Generation\Block.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\Chunk.cs" />

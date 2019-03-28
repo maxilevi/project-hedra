@@ -11,11 +11,9 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             AddDesign(new VillageDesign());
             AddDesign(new GraveyardDesign());
             AddDesign(new GiantTreeDesign());
-            AddDesign(new WoodenFortDesign());
             AddDesign(new TravellingMerchantDesign());
             AddDesign(new ObeliskDesign());
             AddDesign(new CampfireDesign());
-            AddDesign(new TempleDesign());
             AddDesign(new BanditCampDesign());
             AddDesign(new WellDesign());
         }
