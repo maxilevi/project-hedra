@@ -48,15 +48,16 @@ namespace Hedra.Engine.EntitySystem.BossSystem
         {
             Executer.ExecuteOnMainThread(() =>
             {
-                _bossBarTexture = BuildTexture(
-                    Graphics2D.LoadBitmapFromAssets("Assets/UI/BossHealthBar.png"),
-                    Hostile,
-                    "BossHostile"
+                _bossBarTexture = Graphics2D.LoadTexture(new BitmapObject
+                    {
+                        Bitmap = Graphics2D.LoadBitmapFromAssets("Assets/UI/BossHealthBar.png"),
+                        Path = $"UI:Color:BossHealthBarComponent:BossHostile"
+                    }, TextureMinFilter.Nearest, TextureMagFilter.Nearest, TextureWrapMode.ClampToEdge
                 );
                 _backgroundTextureId = Graphics2D.LoadFromAssets("Assets/UI/BossHealthBarBackground.png");
-                _bossBarTextureSize = Graphics2D.SizeFromAssets("Assets/UI/BossHealthBar.png").As1920x1080() * .65f;
-                _backgroundTextureSize = Graphics2D.SizeFromAssets("Assets/UI/BossHealthBarBackground.png").As1920x1080() * .65f;
             });
+            _bossBarTextureSize = Graphics2D.SizeFromAssets("Assets/UI/BossHealthBar.png").As1920x1080() * .65f;
+            _backgroundTextureSize = Graphics2D.SizeFromAssets("Assets/UI/BossHealthBarBackground.png").As1920x1080() * .65f;
         }
         
         public BossHealthBarComponent(IEntity Parent, string Name) : base(Parent)
