@@ -25,7 +25,13 @@ namespace Hedra.Engine.Management
         private static Shader Passthrough { get; }
         private OcclusionState _state;
         private int _occlusionQueryId;
-        public bool Occluded { get; private set; }
+        private bool _occluded;
+
+        public bool Occluded
+        {
+            get => _occluded && GameSettings.OcclusionCulling;
+            set => _occluded = value;
+        }
 
         static Occludable()
         {

@@ -17,6 +17,7 @@ namespace Hedra.Engine.Rendering.Frustum
 
         public static bool IsInside(ICullable CullableObject)
         {
+            CullableObject.WasCulled = true;
             if (!CullableObject.Enabled) return false;
             if (CullableObject.PrematureCulling)
             {
@@ -26,7 +27,9 @@ namespace Hedra.Engine.Rendering.Frustum
             }
             var min = CullableObject.Min + CullableObject.Position;
             var max = CullableObject.Max + CullableObject.Position;
-            return Frustum.Contains(ref min, ref max);
+            var isContained = Frustum.Contains(ref min, ref max);
+            CullableObject.WasCulled = !isContained;
+            return isContained;
         }
         
         public static bool IsInside(Vector3 Point)

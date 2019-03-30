@@ -202,7 +202,7 @@ namespace Hedra.Engine.Generation
                     
                     if (Culling.IsInside(chunk.Mesh))
                     {
-                        if(!chunk.Mesh.Occluded || !GameSettings.OcclusionCulling)
+                        if(!chunk.Mesh.Occluded)
                             Output.Add(offset, chunk);
                         OutputIfFrustumCulled?.Add(offset, chunk);
                     }

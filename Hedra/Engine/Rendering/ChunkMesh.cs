@@ -29,6 +29,7 @@ namespace Hedra.Engine.Rendering
         public bool IsBuilded;
         public bool IsGenerated;
         public bool Enabled { get; set; }
+        public bool WasCulled { private get; set; }
         public bool PrematureCulling => false;
         public bool BuildedOnce { get; set; }
         public Vector3 Max { get; private set; }

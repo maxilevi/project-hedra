@@ -13,6 +13,7 @@ namespace Hedra.Engine.Management
     {
         bool Enabled { get; }
         bool PrematureCulling { get; }
+        bool WasCulled { set; }
         Vector3 Position { get; }
         Vector3 Max { get; }
         Vector3 Min { get; }

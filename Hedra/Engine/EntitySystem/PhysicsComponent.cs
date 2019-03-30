@@ -58,10 +58,12 @@ namespace Hedra.Engine.EntitySystem
         private Vector3 _lastPosition;
         private readonly Box _physicsBox;
         private readonly List<ICollidable> _collisions;
+        private readonly Timer _updateCollidersTimer;
         
         public PhysicsComponent(IEntity Parent) : base(Parent)
         {
             _physicsBox = new Box();
+            _updateCollidersTimer = new Timer(.5f);
             UsePhysics = true;
             UseTimescale = true;
             _collisions = new List<ICollidable>();
@@ -75,6 +77,7 @@ namespace Hedra.Engine.EntitySystem
         
         public void UpdateColliders()
         {
+            if(!_updateCollidersTimer.Tick()) return;
             _underChunk = World.GetChunkAt(Parent.Physics.TargetPosition);
             _underChunkR = World.GetChunkAt(Parent.Physics.TargetPosition + new Vector3(Chunk.Width, 0, 0));
             _underChunkL = World.GetChunkAt(Parent.Physics.TargetPosition - new Vector3(Chunk.Width, 0, 0));

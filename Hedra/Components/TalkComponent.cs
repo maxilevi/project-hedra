@@ -87,7 +87,7 @@ namespace Hedra.Components
                    && !PlayerInterface.Showing 
                    && !Parent.Model.IsMoving 
                    && CanTalk 
-                   && -Vector3.Dot(GameManager.Player.View.LookingDirection, Parent.Orientation) > .9f
+                   && Math.Abs(Vector3.Dot(GameManager.Player.View.LookingDirection, -Parent.Orientation)) > .5f
                    && !GameManager.Player.Physics.Raycast(Parent.Position);
         }
 
