@@ -24,7 +24,7 @@ namespace Hedra.Engine.Game
         {
             _player = Player;
             _loadingScreen = new Texture(Color.FromArgb(255, 30, 30, 30), Color.FromArgb(255, 60, 60, 60), Vector2.Zero, Vector2.One, GradientType.Diagonal);
-            _playerText = new GUIText(string.Empty, new Vector2(0, 0), Color.White, FontCache.GetNormal(16));
+            _playerText = new GUIText(string.Empty, new Vector2(0, 0), Color.White, FontCache.GetBold(16));
             _loadingScreen.TextureElement.Opacity = 0;
             _playerText.UIText.Opacity = 0;
             Log.WriteLine("Created loading screen.");

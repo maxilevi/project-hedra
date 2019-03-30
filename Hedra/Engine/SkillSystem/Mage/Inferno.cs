@@ -134,7 +134,7 @@ namespace Hedra.Engine.SkillSystem.Mage
 
             private void StartExplodeParticles()
             {
-                World.HighlightArea(Position, Particle3D.FireColor, _radius * 2, 2);
+                World.HighlightArea(Position, Particle3D.FireColor, _radius, 2);
                 _particles.Color = Particle3D.FireColor;
                 _particles.Position = Position;
                 _particles.GravityEffect = 0f;

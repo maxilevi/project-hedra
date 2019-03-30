@@ -177,14 +177,14 @@ namespace Hedra.Engine.Rendering.UI
                     ref Text,
                     DefaultFont,
                     FontMap,
-                    F => FontCache.Get(F.FontFamily, DefaultFont.Size, F.Style)
+                    F => FontCache.Get(F, DefaultFont.Size)
                 );
                 var lambdaFont = Font;
                 Font = Replace(
                     ref Text,
                     Font,
                     SizeMap,
-                    U => FontCache.Get(lambdaFont.FontFamily, lambdaFont.Size * U, lambdaFont.Style)
+                    U => FontCache.Get(lambdaFont, lambdaFont.Size * U)
                 );
                 Text = Replace(
                     ref Text,

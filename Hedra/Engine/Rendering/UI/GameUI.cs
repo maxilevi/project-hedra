@@ -181,8 +181,7 @@ namespace Hedra.Engine.Rendering.UI
             _consecutiveHits.TextColor = _player.ConsecutiveHits >= 4 && _player.ConsecutiveHits < 8
                 ? Color.Gold : _player.ConsecutiveHits >= 8 ? Color.Red : Color.White;
             _consecutiveHits.TextFont = 
-                FontCache.Get(_consecutiveHits.TextFont.FontFamily, _player.ConsecutiveHits >= 4 && _player.ConsecutiveHits < 8 ? 15f : _player.ConsecutiveHits >= 8 ? 17f : 14f,
-                _consecutiveHits.TextFont.Style);
+                FontCache.Get(_consecutiveHits.TextFont, _player.ConsecutiveHits >= 4 && _player.ConsecutiveHits < 8 ? 15f : _player.ConsecutiveHits >= 8 ? 17f : 14f);
             var hits = _player.ConsecutiveHits == 1 ? Translations.Get("hit_label") : Translations.Get("hits_label");
             _consecutiveHits.Text = _player.ConsecutiveHits > 0 ? $"{_player.ConsecutiveHits} {hits}" : string.Empty;
             if (_shouldPlay)

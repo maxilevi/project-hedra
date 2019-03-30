@@ -54,7 +54,7 @@ namespace Hedra.Engine.SkillSystem
                 Add(generic);
                 _lastWeapon = generic;
             }
-            else if (_lastWeapon != null && Player.Inventory.MainWeapon.Weapon == null)
+            else if (_lastWeapon != null && Player.Inventory.MainWeapon?.Weapon == null)
             {
                 Remove(_lastWeapon);
                 _lastWeapon = null;

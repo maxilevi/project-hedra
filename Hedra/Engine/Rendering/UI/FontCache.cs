@@ -20,8 +20,13 @@ namespace Hedra.Engine.Rendering.UI
             _normalFamily = NormalCollection;
             _boldFamily = BoldCollection;
         }
+
+        public static Font Get(Font Original, float Size)
+        {
+            return Get(Original.FontFamily, Size, Original.Style);
+        }
         
-        public static Font Get(FontFamily Family, float Size, FontStyle Style = FontStyle.Regular)
+        private static Font Get(FontFamily Family, float Size, FontStyle Style = FontStyle.Regular)
         {
             var entry = new FontEntry(Family, Size, Style);
             if (!CachedFonts.ContainsKey(entry))

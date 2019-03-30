@@ -9,16 +9,16 @@ namespace Hedra.Engine.StructureSystem
     public static class StructureGrid
     {
         /* Big structures */
-        public const int GraveyardChance = 16;
-        public const int GiantTreeChance = 12;
-        public const int WaterGiantTreeChance = 24;
-        public const int BanditCampChance = 16;
+        public const int GraveyardChance = 48;
+        public const int GiantTreeChance = 48;
+        public const int WaterGiantTreeChance = 96;
+        public const int BanditCampChance = 48;
         public const int VillageChance = 2;
         /* Small structures */
-        public const int WellChance = 1;//80;
-        public const int ObeliskChance = 1;//10;
-        public const int CampfireChance = 1;//12;
-        public const int TravellingMerchantChance = 1;//20;
+        public const int WellChance = 8;
+        public const int ObeliskChance = 2;
+        public const int CampfireChance = 2;
+        public const int TravellingMerchantChance = 8;
 
         private const int SampleTypes = 5;
         private const int BigSampleChance = 1;
@@ -63,7 +63,7 @@ namespace Hedra.Engine.StructureSystem
         
         private static bool SampleDefault(Vector2 Position, out int Seed)
         {
-            return Sampler(Position, I => I != BigSampleChance, 0.005f, out Seed);
+            return Sampler(Position, I => I != BigSampleChance, 0.0075f, out Seed);
         }
 
         private static bool Sampler(Vector2 Position, Predicate<int> IsType, float Frequency, out int Seed)

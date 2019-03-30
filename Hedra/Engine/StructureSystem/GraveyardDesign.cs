@@ -99,7 +99,7 @@ namespace Hedra.Engine.StructureSystem
             Structure.AddCollisionShape(mausoleumShapes.ToArray());
             Structure.AddStaticElement(mausoleum);
             ((Graveyard) Structure.WorldObject).AreaWrapper =
-                World.HighlightArea(position, new Vector4(.1f, .1f, .1f, 1f), PlateauRadius * 1.75f, -1);
+                World.HighlightArea(position, new Vector4(.1f, .1f, .1f, 1f), PlateauRadius, -1);
 
             this.BuildLamps(position, Structure.WorldObject, Structure);
             BuildReward(position, (Graveyard) Structure.WorldObject, rng);

@@ -45,6 +45,7 @@ namespace Hedra.Engine.BiomeSystem
             if (FullyGenerated) throw new ArgumentException($"Cannot generate a chunk multiple times");
             if (_firstGeneration)
             {
+                this.CheckForNearbyStructures();
                 this.BuildArray(Blocks);
                 this.BlocksSetted = true;
             }
@@ -569,6 +570,11 @@ namespace Hedra.Engine.BiomeSystem
                         InMerchant = true;
                 }
             }
+        }
+
+        private void CheckForNearbyStructures()
+        {
+            StructureHandler.CheckStructures( new Vector2(Chunk.OffsetX, Chunk.OffsetZ) );
         }
     }
 }

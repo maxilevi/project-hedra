@@ -16,7 +16,7 @@ namespace Hedra.Engine.SkillSystem.Mage
         protected override void OnAnimationEnd()
         {
             base.OnAnimationEnd();
-            World.HighlightArea(Player.Position, HighlightColor, Radius * 2f, .5f);
+            World.HighlightArea(Player.Position, HighlightColor, Radius, .5f);
             SpawnParticles();
             SoundPlayer.PlaySound(SoundType.GroundQuake, Player.Position);
             SkillUtils.DoNearby(Player, Radius, Apply);

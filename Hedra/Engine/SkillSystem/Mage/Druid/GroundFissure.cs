@@ -47,7 +47,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
 
         private void CreateExplosion(Vector3 ExplosionPosition)
         {
-            World.HighlightArea(ExplosionPosition, Particle3D.FireColor * 2, Radius, Duration);
+            World.HighlightArea(ExplosionPosition, Particle3D.FireColor * 2, Radius, Duration + .5f);
             _particles.Color = Particle3D.FireColor;
             _particles.Position = ExplosionPosition;
             _particles.GravityEffect = 0f;
@@ -117,7 +117,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
         }
 
         protected override int MaxLevel => 15;
-        private float Radius => 32 + 32 * (Level / (float) MaxLevel);
+        private float Radius => 64 + 48 * (Level / (float) MaxLevel);
         private float Duration => 8 + 8 * (Level / (float) MaxLevel);
         private float TotalDamage => 24 + 32 * (Level / (float) MaxLevel);
         public override float ManaCost => 60;
