@@ -160,6 +160,12 @@ namespace Hedra.Engine.Management
                         return true;
                 }
 
+                if (Parts[0] == "distfromvill")
+                {
+                    var dist = (Caster.Position - World.SpawnVillagePoint).Xz.LengthFast;
+                    Result = $"Spawn village is '{dist}' meters away";
+                    return true;
+                }
                 if (Parts[0] == "lvl")
                 {
                     Caster.Level = int.Parse(Parts[1]);

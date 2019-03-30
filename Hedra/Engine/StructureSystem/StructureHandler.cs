@@ -66,26 +66,7 @@ namespace Hedra.Engine.StructureSystem
         private static bool ShouldRemove(CollidableStructure Structure)
         {
             /* Offset is not used because this causes issues when chunks are deleted at chunk edges */
-            return Structure.Design.ShouldRemove(Structure) && Structure.Built;
-        }
-
-        public static void CheckStructures(Vector2 ChunkOffset)
-        {
-            if (!World.IsChunkOffset(ChunkOffset))
-                throw new ArgumentException("Provided parameter does not represent a valid offset");
-
-            var underChunk = World.GetChunkAt(ChunkOffset.ToVector3());
-            var region = underChunk != null
-                ? underChunk.Biome
-                : World.BiomePool.GetRegion(ChunkOffset.ToVector3());
-            var designs = region.Structures.Designs;
-            /* Beware! This is created locally and we don't maintain a static instance because of multi-threading issues. */
-            var distribution = new RandomDistribution(true);
-            for (var i = 0; i < designs.Length; i++)
-            {
-                if (designs[i].MeetsRequirements(ChunkOffset))
-                    designs[i].CheckFor(ChunkOffset, region, distribution);
-            }
+            return false;//Structure.Design.ShouldRemove(Structure) && Structure.Built;
         }
 
         public void Build(CollidableStructure Struct)

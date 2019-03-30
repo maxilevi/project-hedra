@@ -11,11 +11,11 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             AddDesign(new VillageDesign());
             AddDesign(new GraveyardDesign());
             AddDesign(new GiantTreeDesign());
-            AddDesign(new TravellingMerchantDesign());
-            AddDesign(new ObeliskDesign());
-            AddDesign(new CampfireDesign());
+            //AddDesign(new TravellingMerchantDesign());
+            //AddDesign(new ObeliskDesign());
+            //AddDesign(new CampfireDesign());
             AddDesign(new BanditCampDesign());
-            AddDesign(new WellDesign());
+            //AddDesign(new WellDesign());
         }
 
         public override VillageType VillageType => VillageType.Woodland;

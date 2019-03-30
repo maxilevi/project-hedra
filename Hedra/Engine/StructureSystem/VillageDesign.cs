@@ -22,7 +22,7 @@ namespace Hedra.Engine.StructureSystem
     {
         public const int MaxVillageSize = 20;
         public const int PlateauVillageRatio = 64;
-        public const int MaxVillageRadius = 512;//MaxVillageSize * PlateauVillageRatio;
+        public const int MaxVillageRadius = 1300;//MaxVillageSize * PlateauVillageRatio;
         public const int MaxEffectiveRadius = 4096;
         public const int PathWidth = 16;
         public const float Spacing = 114;
@@ -60,11 +60,10 @@ namespace Hedra.Engine.StructureSystem
 
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
-            var height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
-            return BiomeGenerator.PathFormula(ChunkOffset.X, ChunkOffset.Y) > 0
-                   && Rng.Next(0, StructureGrid.VillageChance) == 1
+            return /*BiomeGenerator.PathFormula(ChunkOffset.X, ChunkOffset.Y) > 0
+                   && */Rng.Next(0, StructureGrid.VillageChance) == 1
                    && Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _) > BiomePool.SeaLevel
-                   && (TargetPosition - World.SpawnPoint).LengthFast > (World.SpawnVillagePoint - World.SpawnPoint).LengthFast;//*  2;
+                   && (TargetPosition - World.SpawnPoint).LengthFast > (World.SpawnVillagePoint - World.SpawnPoint).LengthFast *  2;
         }
 
         public override void OnEnter(IPlayer Player)

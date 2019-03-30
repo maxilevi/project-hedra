@@ -9,7 +9,6 @@ using Hedra.Engine.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.IO;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.MapSystem;
@@ -23,7 +22,6 @@ namespace Hedra.Engine.StructureSystem
     public abstract class StructureDesign
     {
         public abstract int PlateauRadius { get; }
-        public bool IsSmall => PlateauRadius < 300;
         public abstract VertexData Icon { get; }
 
         public abstract void Build(CollidableStructure Structure);
@@ -42,28 +40,6 @@ namespace Hedra.Engine.StructureSystem
         protected static Random BuildRng(CollidableStructure Structure)
         {
             return new Random((int) (Structure.Position.X / 11 * (Structure.Position.Z / 13)));
-        }
-        
-        public void CheckFor(Vector2 ChunkOffset, Region Biome, RandomDistribution Distribution)
-        {
-            for (var x = Math.Min(-2, -PlateauRadius / Chunk.Width * 2); x < Math.Max(2, PlateauRadius / Chunk.Width * 2); x++)
-            {
-                for (var z = Math.Min(-2, -PlateauRadius / Chunk.Width * 2); z < Math.Max(2, PlateauRadius / Chunk.Width * 2); z++)
-                {
-                    var offset = new Vector2(ChunkOffset.X + x * Chunk.Width,
-                        ChunkOffset.Y + z * Chunk.Width);
-                    Distribution.Seed = BuildRngSeed(offset);
-                    var targetPosition = BuildTargetPosition(offset, Distribution);
-                    var items = World.StructureHandler.StructureItems;
-                    
-                    if (this.ShouldSetup(offset, targetPosition, items, Biome, Distribution))
-                    {
-                        var item = this.Setup(targetPosition, BuildRng(offset));
-                        World.StructureHandler.AddStructure(item);
-                        World.StructureHandler.Build(item);
-                    }
-                }
-            }
         }
 
         public virtual bool ShouldRemove(CollidableStructure Structure)
@@ -107,32 +83,24 @@ namespace Hedra.Engine.StructureSystem
             return shouldBe && this.ShouldBuild(TargetPosition, Items, Biome.Structures.Designs);
         }
 
-        private bool ShouldBuild(Vector3 NewPosition, CollidableStructure[] Items, StructureDesign[] AllDesigns)
+        private bool ShouldBuild(Vector3 NewPosition, CollidableStructure[] Items, StructureDesign[] Designs)
         {
-            var designSet = GetDesignSet(AllDesigns);
-            var voronoi = StructureGrid.Sample(NewPosition, IsSmall);
-            var index = new Random(voronoi).Next(0, designSet.Length);
-            var isStructureRegion = index == Array.IndexOf(designSet, this);
-            if (isStructureRegion)
+            return StructureGrid.Sample(World.ToChunkSpace(NewPosition), this, Designs) && !AlreadySpawnedStructure(NewPosition, Items);
+        }
+
+        private bool AlreadySpawnedStructure(Vector3 NewPosition, CollidableStructure[] Items)
+        {
+            lock (Items)
             {
-                lock (Items)
+                for (var i = 0; i < Items.Length; i++)
                 {
-                    for (var i = 0; i < Items.Length; i++)
-                    {
-                        if (Items[i].Design.GetType() == this.GetType() && (NewPosition.Xz - Items[i].Position.Xz).LengthFast < 1f)
-                            return false;
-                    }
+                    if (Items[i].Design.GetType() == this.GetType() && (NewPosition.Xz - Items[i].Position.Xz).LengthFast < .05f)
+                        return true;
                 }
-                return true;
             }
             return false;
         }
-
-        private StructureDesign[] GetDesignSet(StructureDesign[] Designs)
-        {
-            return Designs.Where(D => D.IsSmall == IsSmall).ToArray();
-        }
-
+        
         protected abstract bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng);
 
         public virtual bool MeetsRequirements(Vector2 ChunkOffset)

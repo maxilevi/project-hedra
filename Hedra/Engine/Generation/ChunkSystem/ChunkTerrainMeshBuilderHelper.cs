@@ -4,7 +4,6 @@ using Hedra.BiomeSystem;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Rendering.Geometry;
-using Hedra.Engine.StructureSystem;
 using OpenTK;
 
 namespace Hedra.Engine.Generation.ChunkSystem
@@ -81,12 +80,15 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     colorCount++;
                 }
             }
-            var rng = new Random(
-                new Random(
-                    StructureGrid.Sample(new Vector3(Cell.P[0].X + _offsetX, 0, Cell.P[0].Z + _offsetZ), false)
-                ).Next(0, 12)
-            );
-            return new Vector4(rng.NextFloat(), rng.NextFloat(), rng.NextFloat(), 1.0f);
+            float wSeed = World.Seed * 0.0001f;
+            var f = .005f;
+            var voronoi = (int) (World.StructureHandler.SeedGenerator.GetValue(_offsetX * f + wSeed, _offsetZ * f + wSeed) * 100f);
+            var rng = new Random(voronoi);
+            var pointCoords = World.StructureHandler.SeedGenerator.GetGridPoint(_offsetX * f + wSeed, _offsetZ * f + wSeed);
+            var chunkCoords = World.ToChunkSpace(new Vector2((int)((pointCoords.X - wSeed) / f), (int)((pointCoords.Y - wSeed) / f)));
+            var isPoint = chunkCoords == new Vector2(_offsetX, _offsetZ);
+            var c = new Vector4(rng.NextFloat(), rng.NextFloat(), rng.NextFloat(), 1.0f);
+            return isPoint ? new Vector4(0, 0, 0, 1.0f) : c;
             //return new Vector4(colorCount == 0 ? regionColor.DirtColor.Xyz : color.Xyz / colorCount, 1.0f);
         }
 

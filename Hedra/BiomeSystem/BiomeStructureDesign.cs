@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.VillageSystem;
 
@@ -6,17 +7,18 @@ namespace Hedra.BiomeSystem
 {
     public abstract class BiomeStructureDesign
     {
-        private List<StructureDesign> _designs { get; } = new List<StructureDesign>();
+        private List<StructureDesign> _designs { get; set; } = new List<StructureDesign>();
 
         protected BiomeStructureDesign()
         {
-            AddDesign(new SpawnCampfireDesign());
-            AddDesign(new SpawnVillageDesign());
+            //AddDesign(new SpawnCampfireDesign());
+            //AddDesign(new SpawnVillageDesign());
         }
         
         protected void AddDesign(StructureDesign Design)
         {
-            this._designs.Add(Design);
+            _designs.Add(Design);
+            _designs = _designs.OrderByDescending(D => D.PlateauRadius).ToList();
         }
 
         public virtual StructureDesign[] Designs => _designs.ToArray();
