@@ -171,13 +171,11 @@ namespace Hedra.Engine.Rendering.UI
         {
             if (_optionalText == null)
             {
-                Text = new RenderableText(_value() + " / " + _max(), Position, Color.White,
-                    FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold));
+                Text = new RenderableText(_value() + " / " + _max(), Position, Color.White, FontCache.GetBold(11));
             }
             else
             {
-                Text = new RenderableText(_optionalText, Position, Color.White,
-                    FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold));
+                Text = new RenderableText(_optionalText, Position, Color.White, FontCache.GetBold(11));
                 UpdateTextRatio = false;
             }
             DrawManager.UIRenderer.Add(this, this._order);

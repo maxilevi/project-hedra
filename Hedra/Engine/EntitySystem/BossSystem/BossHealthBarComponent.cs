@@ -77,8 +77,8 @@ namespace Hedra.Engine.EntitySystem.BossSystem
                 () => Parent.MaxHealth,
                 DrawOrder.Before
             );
-            _percentageText = new GUIText(string.Empty, _healthBar.Position, Color.White, FontCache.Get(AssetManager.BoldFamily, 10, FontStyle.Bold));
-            _nameText = new GUIText(Name.ToUpperInvariant(), new Vector2(0f, .815f), Color.White, FontCache.Get(AssetManager.BoldFamily, 12, FontStyle.Bold));
+            _percentageText = new GUIText(string.Empty, _healthBar.Position, Color.White, FontCache.GetBold(10));
+            _nameText = new GUIText(Name.ToUpperInvariant(), new Vector2(0f, .815f), Color.White, FontCache.GetBold(12));
 
             _panel.AddElement(_backgroundTexture);
             _panel.AddElement(_nameText);

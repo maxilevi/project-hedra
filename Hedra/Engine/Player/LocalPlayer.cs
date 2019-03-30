@@ -407,7 +407,7 @@ namespace Hedra.Engine.Player
             if (xpDiff > 0)
             {
                 var xp = new TextBillboard(6f, $"- {xpDiff} XP", Color.Purple,
-                    FontCache.Get(AssetManager.BoldFamily, 18f, FontStyle.Bold), () => this.Model.HeadPosition + Vector3.UnitY * 1f)
+                    FontCache.GetBold(18f), () => this.Model.HeadPosition + Vector3.UnitY * 1f)
                 {
                     Vanish = true,
                     VanishSpeed = 2
@@ -416,7 +416,7 @@ namespace Hedra.Engine.Player
             if (goldDiff > 0)
             {
                 var gold = new TextBillboard(6f, $"- {goldDiff} G", Color.Gold,
-                    FontCache.Get(AssetManager.BoldFamily, 18f, FontStyle.Bold), () => this.Model.HeadPosition + Vector3.UnitY * 2f)
+                    FontCache.GetBold(18f), () => this.Model.HeadPosition + Vector3.UnitY * 2f)
                 {
                     Vanish = true,
                     VanishSpeed = 2

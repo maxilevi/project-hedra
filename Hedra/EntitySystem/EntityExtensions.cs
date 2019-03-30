@@ -43,7 +43,7 @@ namespace Hedra.EntitySystem
             if (Parent.Model.Enabled)
             {
                 var newLabel = new TextBillboard(Lifetime, Text, FontColor,
-                    FontCache.Get(AssetManager.BoldFamily, FontSize, FontStyle.Bold), Position)
+                    FontCache.GetBold(FontSize), Position)
                 {
                     Vanish = true,
                     VanishSpeed = 4

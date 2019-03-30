@@ -47,7 +47,7 @@ namespace Hedra.Engine.Rendering.UI
         public GameUI(IPlayer Player)
         {
             _player = Player;
-            _consecutiveHits = new GUIText(string.Empty, new Vector2(0f, -0.7f), Color.Transparent, FontCache.Get(AssetManager.BoldFamily, 1f, FontStyle.Bold));
+            _consecutiveHits = new GUIText(string.Empty, new Vector2(0f, -0.7f), Color.Transparent, FontCache.GetBold(1f));
             _slingShot = new SlingShotAnimation();
             _slingShot.Play(_consecutiveHits);
             Player.OnHitLanded += delegate
@@ -114,11 +114,11 @@ namespace Hedra.Engine.Rendering.UI
 
             var skillTreeTranslation = Translation.Create("skill_tree_label");
             skillTreeTranslation.Concat(() => $" - {Controls.Skilltree}");
-            var skillTreeMsg = new GUIText(skillTreeTranslation, new Vector2(-.85f, -.9f), Color.FromArgb(200, 255, 255, 255), FontCache.Get(AssetManager.BoldFamily, 14));
+            var skillTreeMsg = new GUIText(skillTreeTranslation, new Vector2(-.85f, -.9f), Color.FromArgb(200, 255, 255, 255), FontCache.GetBold(14));
             
             var questLogTranslation = Translation.Create("quest_log_label");
             questLogTranslation.Concat(() => $" - {Controls.QuestLog}");
-            var questLogMsg = new GUIText(questLogTranslation, new Vector2(.85f, -.9f), Color.FromArgb(200, 255, 255, 255), FontCache.Get(AssetManager.BoldFamily, 14));
+            var questLogMsg = new GUIText(questLogTranslation, new Vector2(.85f, -.9f), Color.FromArgb(200, 255, 255, 255), FontCache.GetBold(14));
             
             Controls.OnControlsChanged += () =>
             {
@@ -180,9 +180,8 @@ namespace Hedra.Engine.Rendering.UI
 
             _consecutiveHits.TextColor = _player.ConsecutiveHits >= 4 && _player.ConsecutiveHits < 8
                 ? Color.Gold : _player.ConsecutiveHits >= 8 ? Color.Red : Color.White;
-            _consecutiveHits.TextFont = FontCache.Get(_consecutiveHits.TextFont.FontFamily,
-                _player.ConsecutiveHits >= 4 && _player.ConsecutiveHits < 8
-                    ? 15f : _player.ConsecutiveHits >= 8 ? 17f : 14f,
+            _consecutiveHits.TextFont = 
+                FontCache.Get(_consecutiveHits.TextFont.FontFamily, _player.ConsecutiveHits >= 4 && _player.ConsecutiveHits < 8 ? 15f : _player.ConsecutiveHits >= 8 ? 17f : 14f,
                 _consecutiveHits.TextFont.Style);
             var hits = _player.ConsecutiveHits == 1 ? Translations.Get("hit_label") : Translations.Get("hits_label");
             _consecutiveHits.Text = _player.ConsecutiveHits > 0 ? $"{_player.ConsecutiveHits} {hits}" : string.Empty;

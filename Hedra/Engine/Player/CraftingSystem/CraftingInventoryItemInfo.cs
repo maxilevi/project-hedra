@@ -53,7 +53,7 @@ namespace Hedra.Engine.Player.CraftingSystem
             HintTexture.Scale *= 1.5f;
             HintText.TextColor = Color.White;
             HintText.Position = HintTexture.Position;
-            HintText.TextFont = FontCache.Get(AssetManager.BoldFamily, 14, FontStyle.Bold);
+            HintText.TextFont = FontCache.GetBold(14);
             _craftButton = new Button(HintTexture.Position, HintTexture.Scale, GUIRenderer.TransparentTexture);
             _craftButton.Click += (O, E) => Craft(); 
             _panel.AddElement(_craftButton);

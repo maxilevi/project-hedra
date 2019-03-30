@@ -37,7 +37,7 @@ namespace Hedra.Engine.Player.QuestSystem
                 string.Empty,
                 _descriptionPosition = -Vector2.UnitY * _journalBackground.Scale.Y * .8f,
                 Color.White,
-                FontCache.Get(AssetManager.NormalFamily, 11)
+                FontCache.GetNormal(11)
             );
             _renderBackground = new Texture(
                 Graphics2D.LoadFromAssets("Assets/UI/QuestTextureBackground.png"),
@@ -61,7 +61,7 @@ namespace Hedra.Engine.Player.QuestSystem
                 abandonSize,
                 Translation.Create("abandon_quest"),
                 Color.Red,
-                FontCache.Get(AssetManager.BoldFamily, 10, FontStyle.Bold)
+                FontCache.GetBold(10)
             );
             _abandonButton.Click += (O, E) =>
             {

@@ -33,7 +33,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
                 };
                 if(i < Toolbar.InteractableItems) this.Array[i].SetAttribute("AbilityType", null);
                 this.ButtonsText[i].Position = this.Buttons[i].Position + new Vector2(0, -InventoryArrayInterface.DefaultSize.Y) * .65f;
-                this.ButtonsText[i].TextFont = FontCache.Get(AssetManager.BoldFamily, 9f, FontStyle.Bold);
+                this.ButtonsText[i].TextFont = FontCache.GetBold(9f);
                 DrawManager.UIRenderer.Remove(this.ButtonsText[i]);
                 _textBackgrounds[i] =
                     new RenderableTexture(new Texture("Assets/UI/InventoryCircle.png",

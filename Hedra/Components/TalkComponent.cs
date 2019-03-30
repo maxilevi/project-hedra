@@ -180,7 +180,7 @@ namespace Hedra.Components
             };
 
             _board = new TextBillboard(lifetime, string.Empty, Color.White,
-                FontCache.Get(AssetManager.NormalFamily, 10), FollowFunc);
+                FontCache.GetNormal(10), FollowFunc);
             
             RoutineManager.StartRoutine(TalkRoutine, _board);
 

@@ -41,6 +41,28 @@ namespace Hedra.Engine.StructureSystem
         {
             return new Random((int) (Structure.Position.X / 11 * (Structure.Position.Z / 13)));
         }
+        
+        public void CheckFor(Vector2 ChunkOffset, Region Biome, RandomDistribution Distribution)
+        {
+            for (var x = Math.Min(-2, -PlateauRadius / Chunk.Width * 2); x < Math.Max(2, PlateauRadius / Chunk.Width * 2); x++)
+            {
+                for (var z = Math.Min(-2, -PlateauRadius / Chunk.Width * 2); z < Math.Max(2, PlateauRadius / Chunk.Width * 2); z++)
+                {
+                    var offset = new Vector2(ChunkOffset.X + x * Chunk.Width,
+                        ChunkOffset.Y + z * Chunk.Width);
+                    Distribution.Seed = BuildRngSeed(offset);
+                    var targetPosition = BuildTargetPosition(offset, Distribution);
+                    var items = World.StructureHandler.StructureItems;
+                    
+                    if (this.ShouldSetup(offset, targetPosition, items, Biome, Distribution))
+                    {
+                        var item = this.Setup(targetPosition, BuildRng(offset));
+                        World.StructureHandler.AddStructure(item);
+                        World.StructureHandler.Build(item);
+                    }
+                }
+            }
+        }
 
         public virtual bool ShouldRemove(CollidableStructure Structure)
         {
@@ -78,7 +100,8 @@ namespace Hedra.Engine.StructureSystem
         public virtual bool ShouldSetup(Vector2 ChunkOffset, Vector3 TargetPosition, CollidableStructure[] Items, Region Biome, IRandom Rng)
         {
             var shouldBe = this.SetupRequirements(TargetPosition, ChunkOffset, Biome, Rng)
-                            && (TargetPosition - World.SpawnPoint).Xz.LengthSquared > 256 * 256;
+                            && (TargetPosition - World.SpawnPoint).Xz.LengthSquared > 256 * 256
+                            && (TargetPosition - World.SpawnVillagePoint).Xz.LengthSquared > VillageDesign.MaxVillageRadius * 1.5f * VillageDesign.MaxVillageRadius * 1.5f;
 
             return shouldBe && this.ShouldBuild(TargetPosition, Items, Biome.Structures.Designs);
         }

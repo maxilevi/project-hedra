@@ -56,11 +56,11 @@ namespace Hedra.Engine.Player.PagedInterface
             var barPosition = Vector2.UnitY * Rows * DefaultSize * .65f;
             var offset = Rows % 2 == 0 ? Vector2.UnitY * realScale.Y : Vector2.Zero;
             Title = new Texture(InventoryBackground.DefaultId, barPosition - offset, realScale);
-            TitleText = new GUIText(TitleTranslation, Title.Position, Color.White, FontCache.Get(AssetManager.BoldFamily, 12, FontStyle.Bold));
+            TitleText = new GUIText(TitleTranslation, Title.Position, Color.White, FontCache.GetBold(12));
             PageSelector = new Texture(InventoryBackground.DefaultId, -barPosition - offset, realScale);
             
-            CurrentPageText = new GUIText("00/00", PageSelector.Position, Color.White, FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold));
-            var footerFont = FontCache.Get(AssetManager.BoldFamily, 14, FontStyle.Bold);
+            CurrentPageText = new GUIText("00/00", PageSelector.Position, Color.White, FontCache.GetBold(11));
+            var footerFont = FontCache.GetBold(14);
             PreviousPageText = new Button(CurrentPageText.Position - Vector2.UnitX * CurrentPageText.Scale.X * 1.25f, Vector2.One, "\u25C0", Color.White, footerFont);
             PreviousPageText.Click += (O, E) => PreviousPage();
             NextPageText = new Button(CurrentPageText.Position + Vector2.UnitX * CurrentPageText.Scale.X * 1.25f, Vector2.One, "\u25B6", Color.White, footerFont);

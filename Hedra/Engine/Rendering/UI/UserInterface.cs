@@ -59,7 +59,7 @@ namespace Hedra.Engine.Rendering.UI
             
             
             _newRun = new Button(new Vector2(.1f, bandPosition.Y),
-                                new Vector2(0.15f,0.075f), Translation.Create("new_world"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
+                                new Vector2(0.15f,0.075f), Translation.Create("new_world"), DefaultFontColor, FontCache.GetNormal(fontSize));
 
             _newRun.Click += delegate
             {
@@ -76,7 +76,7 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             _loadButton = new Button(new Vector2(.3f, bandPosition.Y),
-                                         new Vector2(0.15f,0.075f), Translation.Create("load_world"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
+                                         new Vector2(0.15f,0.075f), Translation.Create("load_world"), DefaultFontColor, FontCache.GetNormal(fontSize));
             _loadButton.Click += delegate
             {
                 if(!GameManager.InStartMenu)
@@ -90,13 +90,13 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             var inviteFriends = new Button(new Vector2(.3f, bandPosition.Y), Vector2.Zero,
-                Translation.Create("invite_friends"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
+                Translation.Create("invite_friends"), DefaultFontColor, FontCache.GetNormal(fontSize));
             
             var hostWorld = new Button(new Vector2(.535f, bandPosition.Y),
-                                         new Vector2(0.15f,0.075f), Translation.Create("host_world"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
+                                         new Vector2(0.15f,0.075f), Translation.Create("host_world"), DefaultFontColor, FontCache.GetNormal(fontSize));
             
             var disconnect = new Button(new Vector2(.535f, bandPosition.Y),
-                                         new Vector2(0.15f,0.075f), Translation.Create("disconnect"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
+                                         new Vector2(0.15f,0.075f), Translation.Create("disconnect"), DefaultFontColor, FontCache.GetNormal(fontSize));
             
             inviteFriends.Click += delegate
             {
@@ -129,7 +129,7 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             Button options = new Button(new Vector2(.75f, bandPosition.Y),
-                                        new Vector2(0.15f,0.075f), Translation.Create("options"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
+                                        new Vector2(0.15f,0.075f), Translation.Create("options"), DefaultFontColor, FontCache.GetNormal(fontSize));
             
             options.Click += delegate
             {
@@ -137,13 +137,13 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             Button quit = new Button(new Vector2(.9f, bandPosition.Y),
-                                     new Vector2(0.15f,0.075f), Translation.Create("exit"), DefaultFontColor, FontCache.Get(AssetManager.NormalFamily, fontSize));
+                                     new Vector2(0.15f,0.075f), Translation.Create("exit"), DefaultFontColor, FontCache.GetNormal(fontSize));
             
             quit.Click += delegate { Program.GameWindow.Exit(); };
             
             if(Program.GameWindow.GameVersion != "Unknown")
             {
-                var versionText = new GUIText(Program.GameWindow.GameVersion, Vector2.Zero, Color.Black, FontCache.Get(AssetManager.NormalFamily, 8));
+                var versionText = new GUIText(Program.GameWindow.GameVersion, Vector2.Zero, Color.Black, FontCache.GetNormal(8));
                 versionText.Position = new Vector2(-1,1) + new Vector2(versionText.Scale.X, -versionText.Scale.Y);
                 Menu.AddElement(versionText);
             }

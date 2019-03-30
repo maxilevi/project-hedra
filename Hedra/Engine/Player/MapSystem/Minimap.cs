@@ -80,7 +80,7 @@ namespace Hedra.Engine.Player.MapSystem
             );
             var mapTranslation = Translation.Create("map_label");
             mapTranslation.Concat(() => $" - {Controls.Map}");
-            var mapMsg = new GUIText(mapTranslation, _miniMapRing.Position - _miniMapRing.Scale.Y * Vector2.UnitY * 1.5f, Color.FromArgb(200, 255, 255, 255), FontCache.Get(AssetManager.BoldFamily, 14));
+            var mapMsg = new GUIText(mapTranslation, _miniMapRing.Position - _miniMapRing.Scale.Y * Vector2.UnitY * 1.5f, Color.FromArgb(200, 255, 255, 255), FontCache.GetBold(14));
             Controls.OnControlsChanged += () => mapTranslation.UpdateTranslation();
             
             _panel.AddElement(mapMsg);

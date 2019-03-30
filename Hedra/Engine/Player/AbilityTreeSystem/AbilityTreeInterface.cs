@@ -41,9 +41,9 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 DrawOrder.Before
             );
             _linesUI = new TreeLinesUI();
-            _titleText = new GUIText(string.Empty, Vector2.Zero, Color.White, FontCache.Get(AssetManager.NormalFamily, 16f));
+            _titleText = new GUIText(string.Empty, Vector2.Zero, Color.White, FontCache.GetNormal(16f));
             _availablePointsText = new GUIText(string.Empty, _backgroundTexture.Position - _backgroundTexture.Scale.Y * Vector2.UnitY,
-                Color.White, FontCache.Get(AssetManager.BoldFamily, 12f, FontStyle.Bold));
+                Color.White, FontCache.GetBold(12f));
             _availablePointsText.Position += _availablePointsText.Scale.Y * Vector2.UnitY * 2;
             for (var i = 0; i < Buttons.Length; i++)
             {
@@ -51,7 +51,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 Buttons[i].Position = Textures[i].Position;
                 Buttons[i].Texture.IdPointer = null;
                 ButtonsText[i].Color = Color.White;
-                ButtonsText[i].TextFont = FontCache.Get(AssetManager.BoldFamily, 10f, FontStyle.Bold);
+                ButtonsText[i].TextFont = FontCache.GetBold(10f);
                 ButtonsText[i].Disable();
                 var skillPointSize = LabelSize * (float)(2.0 / 3.0);
                 ButtonsText[i].Position = Textures[i].Position - (Textures[i].Scale.Y + skillPointSize.Y) * Vector2.UnitY;

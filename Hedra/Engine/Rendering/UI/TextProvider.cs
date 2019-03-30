@@ -40,8 +40,8 @@ namespace Hedra.Engine.Rendering.UI
             };
             FontMap = new Dictionary<string, Font>
             {
-                {TextFormatting.Bold, FontCache.Get(AssetManager.BoldFamily, 1, FontStyle.Bold)},
-                {TextFormatting.Normal, FontCache.Get(AssetManager.NormalFamily, 1)}
+                {TextFormatting.Bold, FontCache.GetBold(1)},
+                {TextFormatting.Normal, FontCache.GetNormal(1)}
             };
             SizeMap = new Dictionary<string, float>
             {

@@ -62,7 +62,7 @@ namespace HedraTests.Rendering
         public void TestMultipleProperties()
         {
             var str = $"Hi, how ${TextFormatting.Bigger}{TextFormatting.Gold}{TextFormatting.Bold}{{are you?}}";
-            var defaultFont = FontCache.Get(AssetManager.NormalFamily, 1);
+            var defaultFont = FontCache.GetNormal(1);
             var output = TextProvider.BuildParams(str, defaultFont, Color.White);
             output.Texts.ToList().ForEach(TestContext.WriteLine);
             output.TextColors.ToList().ForEach(C => TestContext.WriteLine(C.ToString()));
@@ -80,7 +80,7 @@ namespace HedraTests.Rendering
             Assert.AreEqual(new []
             {
                 defaultFont,
-                FontCache.Get(AssetManager.BoldFamily, 1.5f, FontStyle.Bold),
+                FontCache.GetBold(1.5f),
             }, output.TextFonts);
         }
         
@@ -88,7 +88,7 @@ namespace HedraTests.Rendering
         public void TestSplittingWithNewlines()
         {
             var str = $"Hi, how {Environment.NewLine} I am $(GREEN){{very}}{Environment.NewLine} good!";
-            var defaultFont = FontCache.Get(AssetManager.BoldFamily, 1, FontStyle.Bold);
+            var defaultFont = FontCache.GetBold(1);
             var output = TextProvider.BuildParams(str, defaultFont, Color.White);
             output.Texts.ToList().ForEach(TestContext.WriteLine);
             Assert.AreEqual(new []
@@ -106,7 +106,7 @@ namespace HedraTests.Rendering
         public void TestSplitting()
         {
             var str = "Hi, how $(RED){are you?} I am $(GREEN){very} good!";
-            var defaultFont = FontCache.Get(AssetManager.BoldFamily, 1, FontStyle.Bold);
+            var defaultFont = FontCache.GetBold(1);
             var output = TextProvider.BuildParams(str, defaultFont, Color.White);
             output.Texts.ToList().ForEach(TestContext.WriteLine);
             output.TextColors.ToList().ForEach(C => TestContext.WriteLine(C.ToString()));

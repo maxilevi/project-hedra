@@ -13,6 +13,7 @@ using Hedra.Engine.IO;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
+using Hedra.Engine.Rendering.UI;
 using Hedra.Rendering;
 using OpenTK;
 
@@ -20,8 +21,6 @@ namespace Hedra.Engine.Management
 {
     public class CompressedAssetProvider : IAssetProvider
     {
-        private PrivateFontCollection _boldFonts;
-        private PrivateFontCollection _normalFonts;
         private List<ResourceHandler> _registeredHandlers;
         private bool _filesDecompressed;
         private Dictionary<string, VertexData> _hitboxCache;
@@ -32,22 +31,23 @@ namespace Hedra.Engine.Management
         public string AppPath { get; private set; }
         public string AppData { get; private set; }
         public string TemporalFolder { get; private set; }
-        public FontFamily BoldFamily => _boldFonts.Families[0];
-        public FontFamily NormalFamily => _normalFonts.Families[0];
         public string ShaderResource => "data1.db";
         public string SoundResource => "data2.db";
         public string AssetsResource => "data3.db";
         
         public void Load()
         {
-            _boldFonts = new PrivateFontCollection();
-            _normalFonts = new PrivateFontCollection();
+            var boldFonts = new PrivateFontCollection();
+            var normalFonts = new PrivateFontCollection();
             
             var sansBold = AssetManager.ReadBinary("Assets/ClearSans-Bold.ttf", AssetManager.AssetsResource);
-            _boldFonts.AddMemoryFont(Utils.IntPtrFromByteArray(sansBold), sansBold.Length);
+            boldFonts.AddMemoryFont(Utils.IntPtrFromByteArray(sansBold), sansBold.Length);
 
             var sansRegular = AssetManager.ReadBinary("Assets/ClearSans-Regular.ttf", AssetManager.AssetsResource);              
-            _normalFonts.AddMemoryFont(Utils.IntPtrFromByteArray(sansRegular), sansRegular.Length);
+            normalFonts.AddMemoryFont(Utils.IntPtrFromByteArray(sansRegular), sansRegular.Length);
+
+            FontCache.SetFonts(normalFonts.Families[0], boldFonts.Families[0]);
+            
             ReloadShaderSources();
             lock (_hitboxCacheLock)
             {

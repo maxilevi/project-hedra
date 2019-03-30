@@ -9,18 +9,21 @@ namespace Hedra.Engine.StructureSystem
     public static class StructureGrid
     {
         /* Big structures */
-        public const int GraveyardChance = 2;//125;
-        public const int GiantTreeChance = 2;//100;
-        public const int WaterGiantTreeChance = 2;//500;
-        public const int BanditCampChance = 2;//128;
-        public const int VillageChance = 2;//300;
+        public const int GraveyardChance = 16;
+        public const int GiantTreeChance = 12;
+        public const int WaterGiantTreeChance = 24;
+        public const int BanditCampChance = 16;
+        public const int VillageChance = 2;
         /* Small structures */
-        public const int WellChance = 80;
-        public const int ObeliskChance = 10;
-        public const int CampfireChance = 12;
-        public const int TravellingMerchantChance = 20;
+        public const int WellChance = 1;//80;
+        public const int ObeliskChance = 1;//10;
+        public const int CampfireChance = 1;//12;
+        public const int TravellingMerchantChance = 1;//20;
 
-
+        private const int SampleTypes = 5;
+        private const int BigSampleChance = 1;
+        
+        
         private static readonly SamplerType[] Ranges;
 
         static StructureGrid()
@@ -28,9 +31,7 @@ namespace Hedra.Engine.StructureSystem
             Ranges = new SamplerType[]
             {
                 Sample1024,
-                Sample512,
-                Sample128,
-                Sample80
+                SampleDefault
             };
         }
         
@@ -46,48 +47,33 @@ namespace Hedra.Engine.StructureSystem
         {
             if (Design.PlateauRadius >= 1024)
                 return Ranges[0];
-            if (Design.PlateauRadius >= 512)
-                return Ranges[1];
-            if (Design.PlateauRadius >= 128)
-                return Ranges[2];
-            return Ranges[3];
+            return Ranges[1];
         }
 
-        private static int BaseSample(Vector2 Position)
+        private static int BaseSample(Vector2 Position, float Frequency)
         {
             var wSeed = World.Seed * 0.0001f;
-            var frequency = 0.0005f;
-            return (int) ((float) World.StructureHandler.SeedGenerator.GetValue(Position.X * frequency + wSeed, Position.Y * frequency + wSeed) * 100f);
+            return (int) ((float) World.StructureHandler.SeedGenerator.GetValue(Position.X * Frequency + wSeed, Position.Y * Frequency + wSeed) * 100f);
         }
 
         private static bool Sample1024(Vector2 Position, out int Seed)
         {
-            return Sampler(Position, Array.IndexOf(Ranges, Sample1024), 0.0005f, out Seed);
+            return Sampler(Position, I => I == BigSampleChance, 0.0005f, out Seed);
         }
         
-        private static bool Sample512(Vector2 Position, out int Seed)
+        private static bool SampleDefault(Vector2 Position, out int Seed)
         {
-            return Sampler(Position, Array.IndexOf(Ranges, Sample512), 0.0005f, out Seed);
-        }
-        
-        private static bool Sample128(Vector2 Position, out int Seed)
-        {
-            return Sampler(Position, Array.IndexOf(Ranges, Sample128), 0.0015f, out Seed); 
-        }
-        
-        private static bool Sample80(Vector2 Position, out int Seed)
-        {
-            return Sampler(Position, Array.IndexOf(Ranges, Sample80), 0.0025f, out Seed); 
+            return Sampler(Position, I => I != BigSampleChance, 0.005f, out Seed);
         }
 
-        private static bool Sampler(Vector2 Position, int Index, float Frequency, out int Seed)
+        private static bool Sampler(Vector2 Position, Predicate<int> IsType, float Frequency, out int Seed)
         {
-            Seed = BaseSample(Position);
-            var index = new Random(Seed).Next(0, Ranges.Length);
-            return index == Index && IsPoint(Position, Frequency); 
+            var baseSeed = BaseSample(Position, .0005f);
+            Seed = BaseSample(Position, Frequency);
+            var index = new Random(baseSeed).Next(0, SampleTypes);
+            return IsType(index) && IsPoint(Position, Frequency); 
         }
         
-
         private static bool IsPoint(Vector2 Position, float Frequency)
         {
             var wSeed = World.Seed * 0.0001f;

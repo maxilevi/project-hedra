@@ -90,7 +90,7 @@ namespace Hedra.Engine.SkillSystem
             if (_cooldownSecondsText == null)
             {
                 _cooldownSecondsText = new RenderableText(string.Empty, Position, Color.White,
-                    FontCache.Get(AssetManager.BoldFamily, 12, FontStyle.Bold));
+                    FontCache.GetBold(12));
                 if(_panel.Enabled) _cooldownSecondsText.Enable();
                 _panel.AddElement(_cooldownSecondsText);
             }

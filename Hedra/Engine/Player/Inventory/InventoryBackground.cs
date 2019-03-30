@@ -25,17 +25,17 @@ namespace Hedra.Engine.Player.Inventory
             var offsetX = Vector2.UnitX * DefaultSize * .35f;
             var offsetY = Vector2.UnitY * DefaultSize * .25f;
             Name = new GUIText(string.Empty, Position + offsetY,
-                Color.White, FontCache.Get(AssetManager.BoldFamily, 24, FontStyle.Bold));
+                Color.White, FontCache.GetBold(24));
             Level = new GUIText(string.Empty, Position - offsetY,
-                Color.White, FontCache.Get(AssetManager.NormalFamily, 16));
+                Color.White, FontCache.GetNormal(16));
             TopLeftText = new GUIText(string.Empty, Position + offsetY - offsetX,
-                Color.Red, FontCache.Get(AssetManager.BoldFamily, 14, FontStyle.Bold));
+                Color.Red, FontCache.GetBold(14));
             BottomLeftText = new GUIText(string.Empty, Position - offsetY - offsetX,
-                Color.DodgerBlue, FontCache.Get(AssetManager.NormalFamily, 10));
+                Color.DodgerBlue, FontCache.GetNormal(10));
             TopRightText = new GUIText(string.Empty, Position + offsetY + offsetX,
-                Color.DarkViolet, FontCache.Get(AssetManager.BoldFamily, 14, FontStyle.Bold));
+                Color.DarkViolet, FontCache.GetBold(14));
             BottomRightText = new GUIText(string.Empty, Position - offsetY + offsetX,
-                Color.Gold, FontCache.Get(AssetManager.NormalFamily, 10));
+                Color.Gold, FontCache.GetNormal(10));
 
             Panel.AddElement(Name);
             Panel.AddElement(Level);

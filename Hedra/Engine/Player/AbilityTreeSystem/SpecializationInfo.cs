@@ -31,7 +31,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 Translation.Create("learn_specialization"),
                 _learnSpecializationButton.Position,
                 Color.White,
-                FontCache.Get(AssetManager.BoldFamily, 15, FontStyle.Bold)
+                FontCache.GetBold(15)
             );
             _learnSpecializationButton.Texture.Grayscale = true;
             ItemTexture.Scale *= 1.15f;

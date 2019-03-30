@@ -84,10 +84,10 @@ namespace Hedra.Engine.Player.MapSystem
 
             var hint = new GUIText(Translation.Create("mark_waypoint"), 
                 Vector2.UnitY * .8f, Color.White,
-                FontCache.Get(AssetManager.BoldFamily, 16f, FontStyle.Bold));
+                FontCache.GetBold(16f));
             var underline = new GUIText("＿＿＿＿＿＿＿＿",
                 Vector2.UnitY * .75f, Color.FromArgb(255, 30, 30, 30),
-                FontCache.Get(AssetManager.BoldFamily, 16f, FontStyle.Bold));
+                FontCache.GetBold(16f));
             _panel.AddElement(hint);
             _panel.AddElement(underline);
             EventDispatcher.RegisterMouseDown(this, delegate(object Sender, MouseButtonEventArgs Args)

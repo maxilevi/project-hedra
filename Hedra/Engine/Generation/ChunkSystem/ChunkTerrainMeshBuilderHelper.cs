@@ -80,7 +80,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     colorCount++;
                 }
             }
-            float wSeed = World.Seed * 0.0001f;
+            /*float wSeed = World.Seed * 0.0001f;
             var f = .005f;
             var voronoi = (int) (World.StructureHandler.SeedGenerator.GetValue(_offsetX * f + wSeed, _offsetZ * f + wSeed) * 100f);
             var rng = new Random(voronoi);
@@ -88,8 +88,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var chunkCoords = World.ToChunkSpace(new Vector2((int)((pointCoords.X - wSeed) / f), (int)((pointCoords.Y - wSeed) / f)));
             var isPoint = chunkCoords == new Vector2(_offsetX, _offsetZ);
             var c = new Vector4(rng.NextFloat(), rng.NextFloat(), rng.NextFloat(), 1.0f);
-            return isPoint ? new Vector4(0, 0, 0, 1.0f) : c;
-            //return new Vector4(colorCount == 0 ? regionColor.DirtColor.Xyz : color.Xyz / colorCount, 1.0f);
+            return isPoint ? new Vector4(0, 0, 0, 1.0f) : c;*/
+            return new Vector4(colorCount == 0 ? regionColor.DirtColor.Xyz : color.Xyz / colorCount, 1.0f);
         }
 
         public void CreateCell(ref GridCell Cell, ref int X, ref int Y, ref int Z, ref bool WaterCell, ref int Lod, out bool Success)

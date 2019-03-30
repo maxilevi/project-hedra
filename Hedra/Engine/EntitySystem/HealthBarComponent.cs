@@ -115,7 +115,7 @@ namespace Hedra.Engine.EntitySystem
                     : Type == HealthBarType.Neutral 
                         ? Color.White 
                         : Friendly,
-                FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold)
+                FontCache.GetBold(11)
             );
             _text.Stroke = true;
             this.Name = Name;

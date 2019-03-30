@@ -117,7 +117,7 @@ namespace Hedra.Engine.EntitySystem
                 {
                     color = Color.Red;
                 }
-                var font = FontCache.Get(AssetManager.BoldFamily, Math.Min(12 + 6 * dmgDiff, maxSize), FontStyle.Bold);
+                var font = FontCache.GetBold(Math.Min(12 + 6 * dmgDiff, maxSize));
                 var dmgString = ((int) Amount).ToString();
                 var missString = isImmune ? "IMMUNE" : "MISS";
                 var dmgLabel = new TextBillboard(1.8f, !isImmune && !shouldMiss ? dmgString : missString, color,

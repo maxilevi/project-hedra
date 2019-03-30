@@ -17,7 +17,7 @@ namespace Hedra.Engine.Rendering.UI
                 string.Empty,
                 _plaqueBackground.Position,
                 Color.White,
-                FontCache.Get(AssetManager.NormalFamily, 11)
+                FontCache.GetNormal(11)
              );
         }
         

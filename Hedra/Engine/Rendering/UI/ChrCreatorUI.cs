@@ -39,16 +39,16 @@ namespace Hedra.Engine.Rendering.UI
             {
                 UseTimeScale = false
             };
-            Font defaultFont = FontCache.Get(AssetManager.NormalFamily, 12);
+            Font defaultFont = FontCache.GetNormal(12);
             Color defaultColor = Color.White;//Color.FromArgb(255,39,39,39);
             
             Vector2 bandPosition = new Vector2(0f, .8f);
             Texture blackBand = new Texture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LeftRight);
 
-            var currentTab = new GUIText(Translation.Create("new_character"), new Vector2(0f, bandPosition.Y), Color.White, FontCache.Get(AssetManager.BoldFamily, 15, FontStyle.Bold));
+            var currentTab = new GUIText(Translation.Create("new_character"), new Vector2(0f, bandPosition.Y), Color.White, FontCache.GetBold(15));
 
             _openFolder = new Button(new Vector2(0.8f,bandPosition.Y), new Vector2(0.15f,0.05f),
-                Translation.Create("character_folder"), Color.White, FontCache.Get(AssetManager.NormalFamily, 13));
+                Translation.Create("character_folder"), Color.White, FontCache.GetNormal(13));
             _openFolder.Click += delegate
             {
                 System.Diagnostics.Process.Start($"{AssetManager.AppData}/Characters/");
@@ -98,7 +98,7 @@ namespace Hedra.Engine.Rendering.UI
             
             #region UI
             TextField nameField = new TextField(new Vector2(0,-.7f), new Vector2(.15f,.03f), this);
-            Button createChr = new Button(new Vector2(0f,-.8f), new Vector2(.15f,.05f), Translation.Create("create"), defaultColor, FontCache.Get(AssetManager.BoldFamily, 11, FontStyle.Bold));
+            Button createChr = new Button(new Vector2(0f,-.8f), new Vector2(.15f,.05f), Translation.Create("create"), defaultColor, FontCache.GetBold(11));
             createChr.Click += delegate {
                 for(var i = 0; i < DataManager.PlayerFiles.Length; i++)
                 {

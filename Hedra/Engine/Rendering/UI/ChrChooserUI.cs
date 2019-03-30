@@ -46,13 +46,13 @@ namespace Hedra.Engine.Rendering.UI
             var blackBand = new Texture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LeftRight);
             var blackBand2 = new Texture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), -bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LeftRight);    
             
-            var currentTab = new GUIText(Translation.Create("choose_character"), new Vector2(0f, bandPosition.Y), Color.White, FontCache.Get(AssetManager.BoldFamily, 15, FontStyle.Bold));
+            var currentTab = new GUIText(Translation.Create("choose_character"), new Vector2(0f, bandPosition.Y), Color.White, FontCache.GetBold(15));
 
             var newChr = new Button(new Vector2(0.8f,bandPosition.Y), new Vector2(0.15f,0.05f),
-                Translation.Create("new_character"), Color.White, FontCache.Get(AssetManager.NormalFamily, 13));
+                Translation.Create("new_character"), Color.White, FontCache.GetNormal(13));
             newChr.Click += delegate { this.Disable(); GameManager.Player.UI.ChrCreator.Enable(); };    
             
-            var playBtn = new Button(new Vector2(-.1f, -.8f), Vector2.One, Translation.Create("load"), Color.White, FontCache.Get(AssetManager.NormalFamily, 14));
+            var playBtn = new Button(new Vector2(-.1f, -.8f), Vector2.One, Translation.Create("load"), Color.White, FontCache.GetNormal(14));
             
             playBtn.Click += delegate 
             {
@@ -61,12 +61,12 @@ namespace Hedra.Engine.Rendering.UI
                     Connection.Instance.Host();
             };
             
-            var deleteButton = new Button(new Vector2(.1f, -.8f), Vector2.One, Translation.Create("delete"), Color.White, FontCache.Get(AssetManager.NormalFamily, 14));
+            var deleteButton = new Button(new Vector2(.1f, -.8f), Vector2.One, Translation.Create("delete"), Color.White, FontCache.GetNormal(14));
             
             deleteButton.Click += (O, S) => DeleteSelected();
             
-            _name = new GUIText(string.Empty, new Vector2(0, .55f), Color.White, FontCache.Get(AssetManager.BoldFamily, 24, FontStyle.Bold));
-            _level = new GUIText(string.Empty, new Vector2(0, .425f), Color.White, FontCache.Get(AssetManager.NormalFamily, 16));
+            _name = new GUIText(string.Empty, new Vector2(0, .55f), Color.White, FontCache.GetBold(24));
+            _level = new GUIText(string.Empty, new Vector2(0, .425f), Color.White, FontCache.GetNormal(16));
             
             this._dataElements.Add(_name);
             this._dataElements.Add(_level);

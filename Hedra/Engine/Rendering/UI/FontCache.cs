@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Linq;
 using Hedra.Engine.Game;
 using Hedra.Engine.IO;
@@ -11,7 +12,15 @@ namespace Hedra.Engine.Rendering.UI
     public static class FontCache
     {
         private static readonly Dictionary<FontEntry, Font> CachedFonts = new Dictionary<FontEntry, Font>();
-
+        private static FontFamily _normalFamily;
+        private static FontFamily _boldFamily;
+        
+        public static void SetFonts(FontFamily NormalCollection, FontFamily BoldCollection)
+        {
+            _normalFamily = NormalCollection;
+            _boldFamily = BoldCollection;
+        }
+        
         public static Font Get(FontFamily Family, float Size, FontStyle Style = FontStyle.Regular)
         {
             var entry = new FontEntry(Family, Size, Style);
@@ -32,7 +41,9 @@ namespace Hedra.Engine.Rendering.UI
             return CachedFonts[entry];
         }
 
-        public static Font Default => FontCache.Get(AssetManager.NormalFamily, 10);
+        public static Font Default => Get(_normalFamily, 10);
+        public static Font GetNormal(float Size) => Get(_normalFamily, Size);
+        public static Font GetBold(float Size) => Get(_boldFamily, Size, FontStyle.Bold);
     }
 
     public class FontEntry

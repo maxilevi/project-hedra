@@ -47,7 +47,7 @@ namespace Hedra.Engine.Loader
             _debugPanel = new Panel();
             _depthTexture = new Texture(0, Vector2.Zero, Vector2.One);
             _depthTexture.TextureElement.Flipped = true;
-            _debugText = new GUIText(string.Empty, new Vector2(.65f,-.5f), Color.Black, FontCache.Get(AssetManager.NormalFamily,12));
+            _debugText = new GUIText(string.Empty, new Vector2(.65f,-.5f), Color.Black, FontCache.GetNormal(12));
             _staticPool = new Texture(0, new Vector2(0f, 0.90f), new Vector2(1024f / GameSettings.Width, 48f / GameSettings.Height));
             _waterPool = new Texture(0, new Vector2(0f, 0.80f), new Vector2(1024f / GameSettings.Width, 16f / GameSettings.Height));
             _instancePool = new Texture(0, new Vector2(0f, 0.75f), new Vector2(1024f / GameSettings.Width, 16f / GameSettings.Height));

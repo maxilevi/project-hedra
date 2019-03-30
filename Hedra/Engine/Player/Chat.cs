@@ -39,7 +39,7 @@ namespace Hedra.Engine.Player
             this._player = Player;
             var barPosition = new Vector2(-0.95f, -0.75f);
             this._commandLine = new TextField(barPosition + Vector2.UnitX * .225f, new Vector2(.225f,.02f), _inPanel, false);
-            this._textBox = new GUIText(string.Empty, _textBoxPosition, Color.White, FontCache.Get(AssetManager.NormalFamily, 10));
+            this._textBox = new GUIText(string.Empty, _textBoxPosition, Color.White, FontCache.GetNormal(10));
             _inPanel.AddElement(this._textBox);
             _inPanel.AddElement(this._commandLine);
             _inPanel.Disable();

@@ -439,7 +439,7 @@ namespace Hedra.Engine.Player
                 Mana = MaxMana;
 
                 var label1 = new TextBillboard(4.0f, Translations.Get("level_up"), Color.Violet,
-                    FontCache.Get(AssetManager.BoldFamily, 48, FontStyle.Bold),
+                    FontCache.GetBold(48),
                     () => this.Position)
                 {
                     Scalar = .7f,

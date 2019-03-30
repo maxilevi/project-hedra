@@ -60,7 +60,7 @@ namespace Hedra.Engine.Rendering.UI
             }
             //Simple hack
             GUIText title = new GUIText(Name,Position + Mathf.ScaleGui(new Vector2(600,600),new Vector2(.15f,.15f / 8 * Colors.Length)) * .5f * 8 * .5f * Scale - new Vector2(0.1f,0) * (0.25f),
-                                        Color.FromArgb(255,39,39,39), FontCache.Get(AssetManager.NormalFamily, 14 * Scale.X));
+                                        Color.FromArgb(255,39,39,39), FontCache.GetNormal(14 * Scale.X));
             
             Elements.Add(title);
             InPanel.AddElement(title);

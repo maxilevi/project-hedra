@@ -46,8 +46,8 @@ namespace Hedra.Engine.Rendering.UI
             _backgrounds = new Button[_controlMapKeys.Length];
             const float spacing = 2.0f;
             var columnPosition = Vector2.UnitX * .2f;
-            var normalFont = FontCache.Get(AssetManager.NormalFamily, 12);
-            var boldFont = FontCache.Get(AssetManager.BoldFamily, 15, FontStyle.Bold);
+            var normalFont = FontCache.GetNormal(12);
+            var boldFont = FontCache.GetBold(15);
             var accumulatedOffset = Vector2.UnitY * .6f;
             var backgroundTexId = Graphics2D.ColorTexture(Color.FromArgb(170, 20, 20, 20).ToVector4());
             var maxWidth = 0f;
@@ -75,7 +75,7 @@ namespace Hedra.Engine.Rendering.UI
                 _labels[i].Position -= maxWidth * Vector2.UnitX;
             
             _resetToDefaults = new Button(accumulatedOffset, Vector2.One, backgroundTexId);
-            _resetToDefaultsText = new GUIText(Translation.Create("reset_to_default"), _resetToDefaults.Position, Color.White, FontCache.Get(AssetManager.BoldFamily, 14, FontStyle.Bold));
+            _resetToDefaultsText = new GUIText(Translation.Create("reset_to_default"), _resetToDefaults.Position, Color.White, FontCache.GetBold(14));
             SetButtonParameters(_resetToDefaults, _resetToDefaultsText);
             _resetToDefaults.Position += _resetToDefaults.Scale.X * Vector2.UnitX * 0f;
             _resetToDefaultsText.Position = _resetToDefaults.Position;

@@ -48,19 +48,19 @@ namespace Hedra.Engine.Player.Inventory
                 BackgroundTexture.Scale * .75f);
 
             this.ItemText = new RenderableText(string.Empty, Vector2.Zero, Color.White,
-                FontCache.Get(AssetManager.BoldFamily, 13, FontStyle.Bold));
+                FontCache.GetBold(13));
             DrawManager.UIRenderer.Add(ItemText, DrawOrder.After);
 
             this.ItemDescription = new RenderableText(string.Empty, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitY * -.25f),
-                Color.Bisque, FontCache.Get(AssetManager.BoldFamily, 10, FontStyle.Bold));
+                Color.Bisque, FontCache.GetBold(10));
             DrawManager.UIRenderer.Add(ItemDescription, DrawOrder.After);
 
             this.ItemAttributes = new RenderableText(string.Empty, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitX * -.05f + Vector2.UnitY * .15f),
-                Color.White, FontCache.Get(AssetManager.BoldFamily, 10, FontStyle.Bold));
+                Color.White, FontCache.GetBold(10));
             DrawManager.UIRenderer.Add(ItemAttributes, DrawOrder.After);
             
             this.HintTexture = new Texture(InventoryBackground.DefaultId, Vector2.UnitY * -.35f, InventoryBackground.DefaultSize * .15f);
-            this.HintText = new GUIText(string.Empty, HintTexture.Position, Color.White, FontCache.Get(AssetManager.BoldFamily, 7.As1920x1080(), FontStyle.Bold));
+            this.HintText = new GUIText(string.Empty, HintTexture.Position, Color.White, FontCache.GetBold(7.As1920x1080()));
 
             Panel.AddElement(HintTexture);
             Panel.AddElement(HintText);
