@@ -156,7 +156,7 @@ namespace Hedra.Engine.Rendering
         {
         }
 
-        public virtual void DisableVertexAttribArray(int N)
+        public virtual void DisableVertexAttribArray(uint N)
         {
         }
 
@@ -185,7 +185,7 @@ namespace Hedra.Engine.Rendering
         {
         }
 
-        public virtual void EnableVertexAttribArray(int Id)
+        public virtual void EnableVertexAttribArray(uint Id)
         {
         }
 

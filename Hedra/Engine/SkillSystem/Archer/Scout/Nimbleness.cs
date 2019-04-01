@@ -5,7 +5,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
 {
     public class Nimbleness : PassiveSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Nimbleness.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Nimbleness.png");
         protected override int MaxLevel => 15;
         private float _previousValue;
         

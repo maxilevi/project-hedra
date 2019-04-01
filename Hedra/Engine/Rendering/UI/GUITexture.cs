@@ -19,11 +19,10 @@ namespace Hedra.Engine.Rendering.UI
     /// <summary>
     /// Description of GUITexture.
     /// </summary>
-    public class GUITexture : IDisposable, ISimpleTexture, IAdjustable
+    public class GUITexture : DrawableTexture, IDisposable, ISimpleTexture, IAdjustable
     {
         public Vector2 AdjustedPosition { get; private set; }
         public bool Flipped { get; set; }
-        public uint TextureId { get; set; }
         public float Opacity { get; set; }
         public uint BackGroundId { get; set; }
         public Vector2 Scale { get; set; }
@@ -35,6 +34,7 @@ namespace Hedra.Engine.Rendering.UI
         public Func<uint> IdPointer { get; set; }
         private Vector2 _position;
         private bool _disposed;
+        private uint _id;
         private StackTrace _stack;
 
         public GUITexture(uint Id, Vector2 Scale, Vector2 Position)
@@ -73,19 +73,11 @@ namespace Hedra.Engine.Rendering.UI
         {
             if (Array.IndexOf(GUIRenderer.InmortalTextures, DisposeId) != -1 || DisposeId == 0) return DisposeId;
 
-            void DisposeProcess()
-            {
-                Graphics2D.Textures.Remove(DisposeId);
-                Renderer.DeleteTexture(DisposeId);
-            }
-            if(System.Threading.Thread.CurrentThread.ManagedThreadId != Loader.Hedra.MainThreadId)
-                Executer.ExecuteOnMainThread(DisposeProcess);
-            else
-                DisposeProcess();
+            TextureRegistry.Remove(DisposeId);
 
             return DisposeId;
         }
-                        
+        
         public uint Id => IdPointer?.Invoke() ?? TextureId;
         
         public bool UseMask => MaskId != 0;

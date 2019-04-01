@@ -10,7 +10,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 {
     public class DarkReaping : PassiveSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/DarkReaping.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/DarkReaping.png");
         
         protected override void Add()
         {

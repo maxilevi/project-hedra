@@ -16,7 +16,7 @@ namespace Hedra.Engine.SkillSystem.Mage
 {
     public class Inferno : SingleAnimationSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skill/Inferno.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skill/Inferno.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/MageInferno.dae");
         
         protected override void OnAnimationEnd()

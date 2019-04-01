@@ -33,9 +33,10 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
         private float AttackSpeedMultiplier => .15f  + .6f * (Level / (float)MaxLevel);
         private float AttackPowerMultiplier => .4f  + .85f * (Level / (float)MaxLevel);
         private float SpeedMultiplier => .15f +  .3f * (Level / (float)MaxLevel);
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Werewolf.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Werewolf.png");
         public override string Description => Translations.Get("werewolf_desc");
         public override string DisplayName => Translations.Get("werewolf_skill");
+        public override float ManaCost => 70;
         protected override HumanType Type => HumanType.WerewolfMorph;
         protected override bool RestrictWeapons => true;
         protected override bool CanUseOtherSkills => false;

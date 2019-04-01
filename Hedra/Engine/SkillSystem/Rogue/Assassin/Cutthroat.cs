@@ -8,7 +8,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
 {
     public class Cutthroat : SingleAnimationSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Cutthroat.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Cutthroat.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/RogueCutthroat.dae");
         protected override bool CanMoveWhileCasting => false;
         protected override float AnimationSpeed => 1.25f;
@@ -46,6 +46,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
         protected override bool ShouldDisable => !_canDo;
         protected override int MaxLevel => 15;
         public override float MaxCooldown => 55 - 10f * (Level / (float)MaxLevel);
+        public override float ManaCost => 40;
         private float DamagePercentage => .1f + .15f * (Level / (float) MaxLevel);
         public override string Description => Translations.Get("cutthroat_desc");
         public override string DisplayName => Translations.Get("cutthroat_skill");

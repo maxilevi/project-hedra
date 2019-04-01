@@ -13,7 +13,7 @@ namespace Hedra.Engine.SkillSystem.Mage
 {
     public class Blaze : DrainSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Blaze.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Blaze.png");
         private BlazeComponent _component;
         private SpeedBonusComponent _speedComponent;
         

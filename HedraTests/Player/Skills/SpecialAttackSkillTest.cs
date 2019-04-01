@@ -58,8 +58,10 @@ namespace HedraTests.Player.Skills
             public bool HasGrayscale => ShouldDisable;
             public override string Description => string.Empty;
             public override string DisplayName => string.Empty;
-            public override uint TextureId => 0;
+            public override uint IconId => 0;
             protected override int MaxLevel => 10;
+            public override float MaxCooldown => 0;
+            public override float ManaCost => 0;
             public Action<Bow> Callback { get; set; }
         
             protected override void BeforeUse(Bow Weapon)

@@ -8,7 +8,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
 {
     public class Treason : ConditionedPassiveSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Treason.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Treason.png");
         
         protected override void DoAdd()
         {

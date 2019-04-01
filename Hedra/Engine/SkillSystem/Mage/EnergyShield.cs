@@ -12,7 +12,7 @@ namespace Hedra.Engine.SkillSystem.Mage
 {
     public class EnergyShield : ActivateDurationSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/EnergyShield.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/EnergyShield.png");
         private EnergyShieldComponent _shield;
         private AttackResistanceBonusComponent _bonusResistance;
         

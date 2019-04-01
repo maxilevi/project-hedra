@@ -19,20 +19,20 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         private readonly Button _classSpecialization0;
         private readonly Button _classSpecialization1;
         private readonly Button _defaultClass;
-        private readonly Texture _defaultClassMarker;
-        private readonly Texture _classSpecialization0Marker;
-        private readonly Texture _classSpecialization1Marker;
+        private readonly BackgroundTexture _defaultClassMarker;
+        private readonly BackgroundTexture _classSpecialization0Marker;
+        private readonly BackgroundTexture _classSpecialization1Marker;
         private readonly RenderableTexture _specializationBackground;
         private readonly SpecializationInfo _specializationInfo;
         private readonly ArrowSelectorState _selectorState;
         
-        public SpecializationPanel(IPlayer Player, RenderableButton[] Buttons, Texture[] Textures, RenderableTexture BackgroundTexture)
+        public SpecializationPanel(IPlayer Player, RenderableButton[] Buttons, BackgroundTexture[] Textures, RenderableTexture BackgroundTexture)
         {
             _player = Player;
             var specializationBackgroundScale = new Vector2(BackgroundTexture.Scale.X * .925f,
                 InventoryBackground.DefaultSize.Y * .4f);
             _specializationBackground = new RenderableTexture(
-                new Texture(
+                new BackgroundTexture(
                     InventoryBackground.DefaultId,
                     BackgroundTexture.Position - (BackgroundTexture.Scale.Y + specializationBackgroundScale.Y * 2f) *
                     Vector2.UnitY,
@@ -80,9 +80,9 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             _classSpecialization1.Click += (S, A) => Show(Player.Class.SecondSpecializationTree, _player.AbilityTree.SecondTree);
 
             _specializationInfo = new SpecializationInfo(_player);
-            _defaultClassMarker = new Texture(PagedInventoryArrayInterface.SelectedId, _defaultClass.Position, _defaultClass.Scale * 1.1f);
-            _classSpecialization0Marker = new Texture(PagedInventoryArrayInterface.SelectedId, _classSpecialization0.Position, _classSpecialization0.Scale * 1.1f);
-            _classSpecialization1Marker = new Texture(PagedInventoryArrayInterface.SelectedId, _classSpecialization1.Position, _classSpecialization1.Scale * 1.1f);
+            _defaultClassMarker = new BackgroundTexture(PagedInventoryArrayInterface.SelectedId, _defaultClass.Position, _defaultClass.Scale * 1.1f);
+            _classSpecialization0Marker = new BackgroundTexture(PagedInventoryArrayInterface.SelectedId, _classSpecialization0.Position, _classSpecialization0.Scale * 1.1f);
+            _classSpecialization1Marker = new BackgroundTexture(PagedInventoryArrayInterface.SelectedId, _classSpecialization1.Position, _classSpecialization1.Scale * 1.1f);
             _selectorState = new ArrowSelectorState();
             
             AddElement(_defaultClassMarker);

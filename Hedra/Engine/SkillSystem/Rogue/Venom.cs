@@ -43,7 +43,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
         private float Chance => .1f + .1f * (Level / (float)MaxLevel);
         private float Duration => 3f + 3f * (Level / (float)MaxLevel);
         private float Damage => 15f + 30f * (Level / (float) MaxLevel);
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Venom.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Venom.png");
         public override string Description => Translations.Get("venom_desc");
         public override string DisplayName => Translations.Get("venom_skill");
         public override string[] Attributes => new[]

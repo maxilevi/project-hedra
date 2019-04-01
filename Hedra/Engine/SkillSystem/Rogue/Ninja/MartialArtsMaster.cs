@@ -6,7 +6,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
 {
     public class MartialArtsMaster : PassiveSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/MartialArtsMaster.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/MartialArtsMaster.png");
         private AttackResistanceBonusComponent _previousResistance;
         private AttackSpeedBonusComponent _previousAttackSpeed;
         

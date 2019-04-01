@@ -9,7 +9,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
     public class PassiveEffectsInterface : Panel
     {
         private const int MaxEffects = 8;
-        private readonly Texture[] _textures;
+        private readonly BackgroundTexture[] _textures;
         private readonly IPlayer _player;
         private Vector2 _previousOffset;
         private BaseSkill[] _skills;
@@ -17,13 +17,13 @@ namespace Hedra.Engine.Player.ToolbarSystem
         public PassiveEffectsInterface(IPlayer Player)
         {
             _player = Player;
-            _textures = new Texture[MaxEffects];
+            _textures = new BackgroundTexture[MaxEffects];
             var size = InventoryArrayInterface.DefaultSize * .25f;
             var padding = Vector2.UnitX * size.X * .35f;
             var offset = size.X * .5f * Vector2.UnitX * 0f;
             for (var i = 0; i < _textures.Length; ++i)
             {
-                _textures[i] = new Texture(GUIRenderer.TransparentTexture, offset, size)
+                _textures[i] = new BackgroundTexture(GUIRenderer.TransparentTexture, offset, size)
                 {
                     TextureElement =
                     {
@@ -56,7 +56,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
             var skills = _skills.Take(_textures.Length).ToArray();
             for (var i = 0; i < skills.Length; ++i)
             {
-                _textures[i].TextureElement.TextureId = skills[i].TextureId;
+                _textures[i].TextureElement.TextureId = skills[i].IconId;
             }
             var size = InventoryArrayInterface.DefaultSize * .25f;
             var padding = Vector2.UnitX * size.X * .35f;

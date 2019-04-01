@@ -12,7 +12,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
     public class Retreat : SingleAnimationSkill
     {
         private const float DefaultMultiplier = 100;
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Retreat.png");   
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Retreat.png");   
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/WarriorJump.dae");
         public override bool CanBeCastedWhileAttacking => true;
         protected override bool ShouldCancel => !Player.IsJumping;

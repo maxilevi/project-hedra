@@ -19,7 +19,7 @@ namespace Hedra.Engine.Player.Inventory
         public static Vector2 DefaultSize { get; } = Graphics2D.SizeFromAssets(DefaultIcon).As1920x1080() * UISizeMultiplier;
         private InventoryArray _array;
         private readonly InventoryItemRenderer _renderer;
-        private readonly Texture[] _inventoryTextures;
+        private readonly BackgroundTexture[] _inventoryTextures;
         private readonly RenderableButton[] _inventoryButtons;
         private readonly RenderableText[] _inventoryButtonsText;
         protected readonly Panel _panel;
@@ -37,7 +37,7 @@ namespace Hedra.Engine.Player.Inventory
             this._length = Length;
             this._offset = Offset;
             this._renderer = new InventoryItemRenderer(_array, _offset, _length);
-            this._inventoryTextures = new Texture[_length];
+            this._inventoryTextures = new BackgroundTexture[_length];
             this._inventoryButtons = new RenderableButton[_length];
             this._inventoryButtonsText = new RenderableText[_length];
             this._panel = new Panel{DisableKeys = true};
@@ -59,7 +59,7 @@ namespace Hedra.Engine.Player.Inventory
                 var customId = CustomIcons != null ? Graphics2D.LoadFromAssets(CustomIcons[i]) : GUIRenderer.TransparentTexture;
                 var customScale = /*CustomIcons != null ? Graphics2D.SizeFromAssets(CustomIcons[i]) : */InventoryArrayInterface.DefaultSize;
 
-                _inventoryTextures[i] = new Texture(CustomIcons != null ? customId : DefaultId, position, customScale * scale);
+                _inventoryTextures[i] = new BackgroundTexture(CustomIcons != null ? customId : DefaultId, position, customScale * scale);
                 _inventoryButtonsText[i] = new RenderableText(string.Empty, position + new Vector2(size.X, -size.Y) * .25f, Color.White, FontCache.GetBold(10));
                 _inventoryButtons[i] = new RenderableButton(position, size * scale * .8f, GUIRenderer.TransparentTexture);
                 _inventoryButtons[i].Texture.IdPointer = () => _renderer.Draw(k);
@@ -100,7 +100,7 @@ namespace Hedra.Engine.Player.Inventory
         public InventoryArray Array => _array;
         public RenderableButton[] Buttons => _inventoryButtons;
         public RenderableText[] ButtonsText => _inventoryButtonsText;
-        public Texture[] Textures => _inventoryTextures;
+        public BackgroundTexture[] Textures => _inventoryTextures;
 
         public virtual bool Enabled
         {

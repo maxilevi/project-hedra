@@ -17,7 +17,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 {
     public class Leech : RadiusEffectSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Leech.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Leech.png");
 
         protected override void Apply(IEntity Entity)
         {

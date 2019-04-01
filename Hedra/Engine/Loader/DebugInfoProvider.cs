@@ -28,10 +28,10 @@ namespace Hedra.Engine.Loader
     {
         private readonly Panel _debugPanel;
         private readonly GUIText _debugText;
-        private readonly Texture _staticPool;
-        private readonly Texture _waterPool;
-        private readonly Texture _instancePool;
-        private readonly Texture _depthTexture;
+        private readonly BackgroundTexture _staticPool;
+        private readonly BackgroundTexture _waterPool;
+        private readonly BackgroundTexture _instancePool;
+        private readonly BackgroundTexture _depthTexture;
         private readonly VBO<Vector3> _frustumPoints;
         private readonly VAO<Vector3> _frustumVAO;
         private float _passedTime;
@@ -45,12 +45,12 @@ namespace Hedra.Engine.Loader
         public DebugInfoProvider()
         {
             _debugPanel = new Panel();
-            _depthTexture = new Texture(0, Vector2.Zero, Vector2.One);
+            _depthTexture = new BackgroundTexture(0, Vector2.Zero, Vector2.One);
             _depthTexture.TextureElement.Flipped = true;
             _debugText = new GUIText(string.Empty, new Vector2(.65f,-.5f), Color.Black, FontCache.GetNormal(12));
-            _staticPool = new Texture(0, new Vector2(0f, 0.90f), new Vector2(1024f / GameSettings.Width, 48f / GameSettings.Height));
-            _waterPool = new Texture(0, new Vector2(0f, 0.80f), new Vector2(1024f / GameSettings.Width, 16f / GameSettings.Height));
-            _instancePool = new Texture(0, new Vector2(0f, 0.75f), new Vector2(1024f / GameSettings.Width, 16f / GameSettings.Height));
+            _staticPool = new BackgroundTexture(0, new Vector2(0f, 0.90f), new Vector2(1024f / GameSettings.Width, 48f / GameSettings.Height));
+            _waterPool = new BackgroundTexture(0, new Vector2(0f, 0.80f), new Vector2(1024f / GameSettings.Width, 16f / GameSettings.Height));
+            _instancePool = new BackgroundTexture(0, new Vector2(0f, 0.75f), new Vector2(1024f / GameSettings.Width, 16f / GameSettings.Height));
             _debugPanel.AddElement(_staticPool);
             _debugPanel.AddElement(_waterPool);
             _debugPanel.AddElement(_instancePool);
@@ -103,7 +103,7 @@ namespace Hedra.Engine.Loader
                 text += 
                     $"{lineBreak}Chunks={World.Chunks.Count} ChunkX={underChunk?.OffsetX ?? 0} ChunkZ={underChunk?.OffsetZ ?? 0}";
                 text +=
-                    $"{lineBreak}avg_vcount={_voxelCount / _chunkCount / 1000}k / {defaultVoxelCount/1000}k voxel_count={_voxelCount/1000}k";
+                    $"{lineBreak}Textures ={TextureRegistry.Count} Fonts={FontCache.Count} Texts={TextCache.Count}";
                 text += 
                     $"{lineBreak}AvgBuildTime={World.AverageBuildTime} MS AvgGenTime={World.AverageGenerationTime} MS Lights={ShaderManager.UsedLights}/{ShaderManager.MaxLights} Pitch={player.View.Pitch:0.00}";
                 text += 
@@ -111,7 +111,7 @@ namespace Hedra.Engine.Loader
                 text += 
                     $"{lineBreak}Watchers={World.StructureHandler.Watchers.Length} Structs={World.StructureHandler.Structures.Length}->{World.StructureHandler.Structures.Sum(S => S.Children.Length)} Plateaus={World.WorldBuilding.Plateaux.Length} Groundworks={World.WorldBuilding.Groundworks.Length}";
                 text += 
-                    $"{lineBreak}Textures ={Graphics2D.Textures.Count} Updates={UpdateManager.UpdateCount} Seed={World.Seed} FPS={Time.Framerate} MS={Time.Frametime}";
+                    $"{lineBreak}Updates={UpdateManager.UpdateCount} Seed={World.Seed} FPS={Time.Framerate} MS={Time.Frametime}";
                 text +=
                     $"{lineBreak}SkippedBinds={Renderer.TextureHandler.Skipped} SkippedUses={Renderer.ShaderHandler.Skipped} CulledObjects = {DrawManager.CulledObjectsCount}/{DrawManager.CullableObjectsCount}  Cache={CacheManager.CachedColors.Count}|{CacheManager.CachedExtradata.Count} Pitch={player.View.TargetPitch}";
 
@@ -122,12 +122,6 @@ namespace Hedra.Engine.Loader
                 if (_passedTime > 5.0f)
                 {
                     _passedTime = 0;
-                    Graphics2D.Textures.Remove(_staticPool.TextureElement.TextureId);
-                    Graphics2D.Textures.Remove(_waterPool.TextureElement.TextureId);
-                    Graphics2D.Textures.Remove(_instancePool.TextureElement.TextureId);
-                    Renderer.DeleteTexture(_staticPool.TextureElement.TextureId);
-                    Renderer.DeleteTexture(_waterPool.TextureElement.TextureId);
-                    Renderer.DeleteTexture(_instancePool.TextureElement.TextureId);
                     _staticPool.TextureElement.TextureId = Graphics2D.LoadTexture(new BitmapObject
                     {
                         Bitmap = WorldRenderer.StaticBuffer.Visualize(),

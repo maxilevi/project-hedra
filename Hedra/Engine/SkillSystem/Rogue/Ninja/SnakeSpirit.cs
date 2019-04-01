@@ -7,7 +7,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
 {
     public class SnakeSpirit : ActivateDurationSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/SnakeSpirit.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/SnakeSpirit.png");
         
         protected override void DoEnable()
         {

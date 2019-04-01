@@ -14,7 +14,7 @@ namespace Hedra.Engine.Game
 {
     public class LoadingScreen : IUpdatable, IDisposable
     {
-        private Texture _loadingScreen;
+        private BackgroundTexture _loadingScreen;
         private GUIText _playerText;
         private IPlayer _player;
         private float _time;
@@ -23,7 +23,7 @@ namespace Hedra.Engine.Game
         public LoadingScreen(IPlayer Player)
         {
             _player = Player;
-            _loadingScreen = new Texture(Color.FromArgb(255, 30, 30, 30), Color.FromArgb(255, 60, 60, 60), Vector2.Zero, Vector2.One, GradientType.Diagonal);
+            _loadingScreen = new BackgroundTexture(Color.FromArgb(255, 30, 30, 30), Color.FromArgb(255, 60, 60, 60), Vector2.Zero, Vector2.One, GradientType.Diagonal);
             _playerText = new GUIText(string.Empty, new Vector2(0, 0), Color.White, FontCache.GetBold(16));
             _loadingScreen.TextureElement.Opacity = 0;
             _playerText.UIText.Opacity = 0;

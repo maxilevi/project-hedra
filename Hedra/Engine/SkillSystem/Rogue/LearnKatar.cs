@@ -19,7 +19,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
     /// </summary>
     public class LearnKatar : LearningSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Katar.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Katar.png");
 
         protected override int RestrictionIndex => PlayerInventory.WeaponHolder;
         

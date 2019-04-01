@@ -52,7 +52,7 @@ namespace Hedra.Engine.SkillSystem.Warrior
         
         public override string Description => Translations.Get("resistance_desc");
         public override string DisplayName => Translations.Get("resistance_skill");
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Health.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Health.png");
         public override string[] Attributes => new[]
         {
             Translations.Get("resistance_health_change", HealthFormula(true).ToString("0.0", CultureInfo.InvariantCulture))

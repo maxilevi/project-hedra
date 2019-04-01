@@ -11,7 +11,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
 {
     public class WindOfChange : ActivateDurationSkillWithSingleAnimation
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/WindOfChange.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/WindOfChange.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/MageStaffGroundHit.dae");
         protected override float AnimationSpeed => 1.5f;
         private readonly Timer _timer = new Timer(.25f);

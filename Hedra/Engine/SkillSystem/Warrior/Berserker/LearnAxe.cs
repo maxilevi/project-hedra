@@ -19,7 +19,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Berserker
     /// </summary>
     public class LearnAxe : LearningSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Axe.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Axe.png");
         
         protected override EquipmentType Equipment => EquipmentType.Axe;
         

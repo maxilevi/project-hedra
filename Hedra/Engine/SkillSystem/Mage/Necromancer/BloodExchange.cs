@@ -8,7 +8,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 {
     public class BloodExchange : BloodSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/BloodExchange.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/BloodExchange.png");
         private float _fromHealth;
         private float _toHealth;
         

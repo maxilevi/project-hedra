@@ -44,7 +44,8 @@ namespace Hedra.Engine.SkillSystem
         {
             public override string Description => throw new NotImplementedException();
             public override string DisplayName => throw new NotImplementedException();
-            public override uint TextureId => throw new NotImplementedException();
+            public override float ManaCost => throw new NotImplementedException();
+            public override uint IconId => throw new NotImplementedException();
             protected override int MaxLevel => 1;
             protected override void DoEnable() => DoEnablePublic();
             protected override void DoDisable() => DoDisablePublic();

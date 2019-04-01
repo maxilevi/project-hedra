@@ -8,7 +8,7 @@ namespace Hedra.Engine.SkillSystem.Warrior
 {
     public class Thorns : PassiveSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Thorns.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Thorns.png");
         private ThornsComponent _component;
         
         protected override void Add()

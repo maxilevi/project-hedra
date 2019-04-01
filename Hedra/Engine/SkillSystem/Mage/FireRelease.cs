@@ -20,7 +20,7 @@ namespace Hedra.Engine.SkillSystem.Mage
     /// </summary>
     public class FireRelease : SwitchSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/FireRelease.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/FireRelease.png");
         protected override string AnimationPath => "Assets/Chr/Mage-FireRelease.dae";
         protected override SoundType SoundType => SoundType.Spell;
         private FireCone _cone;

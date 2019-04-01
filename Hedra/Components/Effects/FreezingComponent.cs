@@ -40,14 +40,15 @@ namespace Hedra.Components.Effects
             if (burning != null)
             {
                 Parent.RemoveComponent(burning);
-                this.End();
-                return;
+                Parent.RemoveComponent(this);
             }
-                    
-            Parent.Model.BaseTint = Colors.LightBlue * new Vector4(1, 1, 3, 1) * .7f;
-            Parent.ComponentManager.AddComponentWhile(new SpeedBonusComponent(Parent, -Parent.Speed),
-                () => _totalTime > _pTime && !Parent.IsDead && !Disposed);
-            Parent.Model.Pause = true;
+            else
+            {
+                Parent.Model.BaseTint = Colors.LightBlue * new Vector4(1, 1, 3, 1) * .7f;
+                Parent.ComponentManager.AddComponentWhile(new SpeedBonusComponent(Parent, -Parent.Speed),
+                    () => _totalTime > _pTime && !Parent.IsDead && !Disposed);
+                Parent.Model.Pause = true;
+            }
         }
         
         public override void Update()
@@ -62,16 +63,15 @@ namespace Hedra.Components.Effects
 
             if (!(_totalTime > _pTime && !Parent.IsDead && !Disposed))
             {
-                this.End();
+                Parent.RemoveComponent(this);
             }
         }
 
-        private void End()
+        public override void Dispose()
         {
+            base.Dispose();
             Parent.Model.BaseTint = Vector4.Zero;
             Parent.Model.Pause = false;
-            this.Dispose();
-            Parent.RemoveComponent(this);
         }
     }
 }

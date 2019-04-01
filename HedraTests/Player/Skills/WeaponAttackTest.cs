@@ -95,9 +95,9 @@ namespace HedraTests.Player.Skills
             {
                 var weapon = (Weapon) Activator.CreateInstance(weapons[i], new VertexData());
                 Skill.SetType(weapon, AttackType.Primary);
-                var primaryId = Skill.TextureId;
+                var primaryId = Skill.IconId;
                 Skill.SetType(weapon, AttackType.Secondary);
-                var secondaryId = Skill.TextureId;
+                var secondaryId = Skill.IconId;
                 Assert.False(Array.IndexOf(defaultIds, primaryId) != -1, 
                     $"Weapon '{weapons[i].Name}' has the default primary TextureId");
                 Assert.False(Array.IndexOf(defaultIds, secondaryId) != -1, 
@@ -116,9 +116,9 @@ namespace HedraTests.Player.Skills
             var hands = new Hands();
             var list = new uint[2];
             Skill.SetType(hands, AttackType.Primary);
-            list[0] = Skill.TextureId;
+            list[0] = Skill.IconId;
             Skill.SetType(hands, AttackType.Secondary);
-            list[1] = Skill.TextureId;
+            list[1] = Skill.IconId;
             return list;
         }
     }

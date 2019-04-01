@@ -28,7 +28,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
     public class Shuriken : SingleAnimationSkill
     {
         private static readonly VertexData ShurikenData = AssetManager.PLYLoader("Assets/Items/Shuriken.ply", new Vector3(1, 2, 1));
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Shuriken.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Shuriken.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/RogueShurikenThrow.dae");
         protected override bool EquipWeapons => false;
         protected override float AnimationSpeed => 1.25f;

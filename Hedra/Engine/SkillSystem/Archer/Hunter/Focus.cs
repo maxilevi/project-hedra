@@ -11,7 +11,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
 {
     public class Focus : ChargeablePassiveSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Focus.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Focus.png");
 
         protected override ChargeableComponent CreateComponent()
         {

@@ -19,7 +19,7 @@ namespace Hedra.Engine.SkillSystem.Archer
     /// </summary>
     public class LearnKnife : LearningSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/LearnKnife.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/LearnKnife.png");
         
         protected override int RestrictionIndex => PlayerInventory.WeaponHolder;
         

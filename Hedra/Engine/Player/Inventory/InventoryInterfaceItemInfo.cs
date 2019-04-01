@@ -19,12 +19,12 @@ namespace Hedra.Engine.Player.Inventory
         public static uint DefaultId { get; } = Graphics2D.LoadFromAssets("Assets/UI/InventoryItemInfo.png");
         public static Vector2 DefaultSize { get; } = Graphics2D.SizeFromAssets("Assets/UI/InventoryItemInfo.png").As1920x1080() * InventoryArrayInterface.UISizeMultiplier;
         protected Item CurrentItem;
-        protected readonly Texture BackgroundTexture;
-        protected readonly Texture ItemTexture;
+        protected readonly BackgroundTexture BackgroundTexture;
+        protected readonly BackgroundTexture ItemTexture;
         protected readonly RenderableText ItemText;
         protected readonly RenderableText ItemDescription;
         protected readonly RenderableText ItemAttributes;
-        protected readonly Texture HintTexture;
+        protected readonly BackgroundTexture HintTexture;
         protected readonly GUIText HintText;
         private readonly Vector2 _targetResolution = new Vector2(1366, 705);
         protected readonly Panel Panel;
@@ -43,8 +43,8 @@ namespace Hedra.Engine.Player.Inventory
             this._renderer = Renderer;
             this.Panel = new Panel {DisableKeys = true};
             var resFactor = 1366f / GameSettings.Width;
-            this.BackgroundTexture = new Texture(DefaultId, Vector2.Zero, DefaultSize * .525f * resFactor);
-            this.ItemTexture = new Texture(0, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, BackgroundTexture.Scale * new Vector2(.45f, .0f) + Vector2.UnitX * .025f),
+            this.BackgroundTexture = new BackgroundTexture(DefaultId, Vector2.Zero, DefaultSize * .525f * resFactor);
+            this.ItemTexture = new BackgroundTexture(0, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, BackgroundTexture.Scale * new Vector2(.45f, .0f) + Vector2.UnitX * .025f),
                 BackgroundTexture.Scale * .75f);
 
             this.ItemText = new RenderableText(string.Empty, Vector2.Zero, Color.White,
@@ -59,7 +59,7 @@ namespace Hedra.Engine.Player.Inventory
                 Color.White, FontCache.GetBold(10));
             DrawManager.UIRenderer.Add(ItemAttributes, DrawOrder.After);
             
-            this.HintTexture = new Texture(InventoryBackground.DefaultId, Vector2.UnitY * -.35f, InventoryBackground.DefaultSize * .15f);
+            this.HintTexture = new BackgroundTexture(InventoryBackground.DefaultId, Vector2.UnitY * -.35f, InventoryBackground.DefaultSize * .15f);
             this.HintText = new GUIText(string.Empty, HintTexture.Position, Color.White, FontCache.GetBold(7.As1920x1080()));
 
             Panel.AddElement(HintTexture);

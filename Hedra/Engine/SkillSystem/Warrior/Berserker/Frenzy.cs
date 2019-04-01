@@ -7,7 +7,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Berserker
 {
     public class Frenzy : ActivateDurationSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Frenzy.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Frenzy.png");
         private AttackSpeedBonusComponent _component;
         
         protected override void DoEnable()

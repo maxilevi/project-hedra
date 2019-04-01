@@ -6,7 +6,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
 {
     public class Stealth : PassiveSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Stealth.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Stealth.png");
         private SpeedBonusComponent _component;
         private bool _active;
 

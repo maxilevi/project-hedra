@@ -37,7 +37,7 @@ namespace Hedra.Engine.SkillSystem.Archer
         private const float BaseEffectDuration = 6;
         private const float BaseEffectRange = 24;
         private const float BaseManaCost = 40f;
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/FlameArrow.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/FlameArrow.png");
         public override string Description => Translations.Get("flame_arrow_desc");
         public override string DisplayName => Translations.Get("flame_arrow");
         private float Damage => BaseDamage * (base.Level * 0.75f) + BaseDamage;

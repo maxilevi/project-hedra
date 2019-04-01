@@ -10,7 +10,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
 {
     public class MarkedForDeath : WeaponBonusSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/MarkedForDeath.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/MarkedForDeath.png");
 
         private class MarkedForDeathComponent : EntityComponent
         {

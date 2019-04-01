@@ -13,7 +13,7 @@ namespace Hedra.Engine.SkillSystem.Warrior
 {
     public class Intercept : CappedSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Intercept.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Intercept.png");
         public override string Description => Translations.Get("intercept_desc");
         public override string DisplayName => Translations.Get("intercept_skill");
         private const float BaseDamage = 30f;

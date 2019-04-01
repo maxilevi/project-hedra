@@ -22,7 +22,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
     /// </summary>
     public class Fade : SingleAnimationSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Fade.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Fade.png");
         protected override int MaxLevel => 20;
         private float FadeTime => 14 + Level / (float) MaxLevel * 15f;
         public override float MaxCooldown => 28 - 8 * (Level / (float)MaxLevel) + FadeTime;

@@ -17,7 +17,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Paladin
 {
     public class Prayer : DurationSingleAnimationSkillWithStance
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Prayer.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Prayer.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/WarriorPrayer.dae");
         protected override Animation StanceAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/WarriorPrayerStance.dae");
         protected override bool EquipWeapons => false;

@@ -52,7 +52,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
                 filteredSkills[i].Scale = _toolbarInferface.Textures[0].Scale;
                 filteredSkills[i].Position = firstButton.Position;
 
-                this._bagInterface.Array[index].SetAttribute("ImageId", filteredSkills[i].TextureId);
+                this._bagInterface.Array[index].SetAttribute("ImageId", filteredSkills[i].IconId);
                 this._bagInterface.Array[index].SetAttribute("AbilityType", filteredSkills[i].GetType());
             }
         }
@@ -96,7 +96,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
                     filteredSkills[i].Scale = ToolbarScale;
                     filteredSkills[i].Position = firstButton.Position;
 
-                    this._bagInterface.Array[index].SetAttribute("ImageId", filteredSkills[i].TextureId);
+                    this._bagInterface.Array[index].SetAttribute("ImageId", filteredSkills[i].IconId);
                     this._bagInterface.Array[index].SetAttribute("AbilityType", filteredSkills[i].GetType());
                 }
             }

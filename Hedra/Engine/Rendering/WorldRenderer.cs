@@ -57,6 +57,7 @@ namespace Hedra.Engine.Rendering
                     }
                 }
             }
+            Log.WriteLine("Creating 3D noise texture ...");
             NoiseTexture = new Texture3D(noiseValues);
         }
 
@@ -117,7 +118,9 @@ namespace Hedra.Engine.Rendering
             if (GameSettings.Shadows)
             {
                 ShadowRenderer.Bind();
+
                 StaticBuffer.DrawShadows(ShadowDraw, ref _shadowOffsets, ref _shadowCounts);
+                
                 ShadowRenderer.UnBind();
             }
             StaticBind();
@@ -130,18 +133,8 @@ namespace Hedra.Engine.Rendering
             if (WaveMovement >= 5f)
                 WaveMovement = 0;
 
-            WaterBind();
-                
-            Renderer.EnableVertexAttribArray(0);
-            Renderer.EnableVertexAttribArray(1);
-            Renderer.EnableVertexAttribArray(2);
-
-            WaterBuffer.Draw(ToDraw);
-                
-            Renderer.DisableVertexAttribArray(0);
-            Renderer.DisableVertexAttribArray(1);
-            Renderer.DisableVertexAttribArray(2);    
-                
+            WaterBind();      
+            WaterBuffer.Draw(ToDraw);            
             WaterUnBind();
         }
 
@@ -236,7 +229,7 @@ namespace Hedra.Engine.Rendering
             WaterShader.Bind();
             WaterShader["PlayerPosition"] = GameManager.Player.Position;
                
-               Renderer.ActiveTexture(TextureUnit.Texture0);
+            Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, GameSettings.SSAO && GameSettings.Quality ? DrawManager.MainBuffer.Ssao.FirstPass.TextureId[1] : 0);
 
             WaterShader["TransformationMatrix"] = TransformationMatrix;

@@ -16,7 +16,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
 {
     public class ShadowWarrior : ActivateDurationSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/ShadowWarrior.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/ShadowWarrior.png");
         private IHumanoid _warrior;
         
         protected override void DoEnable()

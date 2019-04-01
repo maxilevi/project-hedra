@@ -31,7 +31,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
 
         private readonly Panel _panel;
         private readonly TexturedBar _healthBar;
-        private readonly Texture _backgroundTexture;
+        private readonly BackgroundTexture _backgroundTexture;
         private readonly GUIText _percentageText;
         private readonly Vector2 _barDefaultPosition;
         private readonly Vector2[] _originalScales;
@@ -64,7 +64,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
         {
             this.Name = Name;
             _panel = new Panel();
-             _backgroundTexture = new Texture(
+             _backgroundTexture = new BackgroundTexture(
                 0,
                 _barDefaultPosition = new Vector2(0f, .75f),
                 _backgroundTextureSize

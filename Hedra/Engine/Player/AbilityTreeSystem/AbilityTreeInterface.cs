@@ -37,7 +37,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             _player = Player;
             _skillPointsBackgroundTextures = new RenderableTexture[this.Buttons.Length];
             _backgroundTexture = new RenderableTexture(
-                new Texture(DefaultId, Mathf.ScaleGui(_targetResolution, new Vector2(.04f, .15f)), DefaultSize * .3f),
+                new BackgroundTexture(DefaultId, Mathf.ScaleGui(_targetResolution, new Vector2(.04f, .15f)), DefaultSize * .3f),
                 DrawOrder.Before
             );
             _linesUI = new TreeLinesUI();
@@ -57,7 +57,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 ButtonsText[i].Position = Textures[i].Position - (Textures[i].Scale.Y + skillPointSize.Y) * Vector2.UnitY;
                 _skillPointsBackgroundTextures[i] = 
                     new RenderableTexture(
-                        new Texture(LabelId, ButtonsText[i].Position, skillPointSize),
+                        new BackgroundTexture(LabelId, ButtonsText[i].Position, skillPointSize),
                         DrawOrder.Before
                     );
 

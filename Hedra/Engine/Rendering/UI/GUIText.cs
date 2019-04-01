@@ -6,6 +6,7 @@
  */
 
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -66,10 +67,13 @@ namespace Hedra.Engine.Rendering.UI
         {
             var obj = BuildBitmap(Text, TextColor, TextFont, BuildTextOptions(), out var measurements);
             var previousState = UIText?.Enabled ?? false;
-            DrawManager.UIRenderer.Remove(UIText);
-            UIText?.Dispose();
-            UIText = new GUITexture(GUIRenderer.TransparentTexture,
-                new Vector2(measurements.X / DefaultSize.X, measurements.Y / DefaultSize.Y), _temporalPosition);
+            if (UIText != null)
+            {
+                TextCache.Remove(UIText.TextureId);
+                DrawManager.UIRenderer.Remove(UIText);
+                UIText.Dispose();
+            }
+            UIText = new GUITexture(0, new Vector2(measurements.X / DefaultSize.X, measurements.Y / DefaultSize.Y), _temporalPosition);
             DrawManager.UIRenderer.Add(UIText);
 
             if (_align == AlignMode.Left)
@@ -78,10 +82,28 @@ namespace Hedra.Engine.Rendering.UI
             }
 
             UIText.Enabled = previousState;
-            if (Thread.CurrentThread.ManagedThreadId != Loader.Hedra.MainThreadId)
-                Executer.ExecuteOnMainThread(() => UIText.TextureId = Graphics2D.LoadTexture(obj));
+            if (Text != string.Empty)
+            {
+                var text = Text;
+                var font = TextFont;
+                var color = TextColor;
+                var t = new StackTrace();
+                void UpdateTexture()
+                {
+                    TextCache.Remove(UIText.TextureId);
+                    UIText.TextureId = TextCache.UseOrCreate(text, font, color, obj, t);
+                    obj.Bitmap.Dispose();
+                }
+
+                if (Thread.CurrentThread.ManagedThreadId != Loader.Hedra.MainThreadId)
+                    Executer.ExecuteOnMainThread(UpdateTexture);
+                else
+                    UpdateTexture(); 
+            }
             else
-                UIText.TextureId = Graphics2D.LoadTexture(obj);        
+            {
+                UIText.TextureId = 0;
+            }
         }
 
         private TextOptions BuildTextOptions()
@@ -183,7 +205,9 @@ namespace Hedra.Engine.Rendering.UI
 
         public void Dispose()
         {
-            UIText?.Dispose();
+            if (UIText == null) return;
+            TextCache.Remove(UIText.TextureId);
+            UIText.Dispose();
             DrawManager.UIRenderer.Remove(UIText);
         }
     }

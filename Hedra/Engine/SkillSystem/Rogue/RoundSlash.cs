@@ -23,7 +23,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
     /// </summary>
     public class RoundSlash : SingleAnimationSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/RoundSlash.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/RoundSlash.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/RogueBladeRoundAttack.dae");
         protected override float AnimationSpeed => 2.0f;
         protected override int MaxLevel => 20;

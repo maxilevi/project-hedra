@@ -5,7 +5,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Paladin
 {
     public class Smite : PassiveSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Smite.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Smite.png");
         private float _previousValue;
         
         protected override void Add()

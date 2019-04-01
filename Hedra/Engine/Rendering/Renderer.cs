@@ -176,11 +176,6 @@ namespace Hedra.Engine.Rendering
             Provider.BufferData(Target, Size, Data, Hint);
         }
 
-        public static void BufferSubData(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, IntPtr Ptr1)
-        {
-            Provider.BufferSubData(Target, Ptr0, Offset, Ptr1);
-        }
-
         public static void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, ref T Data) where T : struct
         {
             Provider.BufferSubData(Target, Ptr0, Offset, ref Data);
@@ -261,16 +256,6 @@ namespace Hedra.Engine.Rendering
             Provider.DeleteShader((uint)Program);
         }
 
-        public static void DeleteTexture(uint Texture)
-        {
-            TextureHandler.Delete(Texture);
-        }
-
-        public static void DeleteTextures(int Count, params uint[] Ids)
-        {
-            Provider.DeleteTextures(Count, Ids);
-        }
-        
         public static void DeleteVertexArrays(int Count, ref uint Id)
         {
             Provider.DeleteVertexArrays(Count, ref Id);
@@ -284,11 +269,6 @@ namespace Hedra.Engine.Rendering
         public static void DetachShader(int V0, int V1)
         {
             Provider.DetachShader((uint)V0, (uint)V1);
-        }
-
-        public static void DisableVertexAttribArray(int N)
-        {
-            Provider.DisableVertexAttribArray(N);
         }
 
         public static void DrawArrays(PrimitiveType Type, int Offset, int Count)
@@ -314,11 +294,6 @@ namespace Hedra.Engine.Rendering
         public static void DrawElementsInstanced(PrimitiveType Primitive, int Count, DrawElementsType Type, IntPtr Indices, int Instancecount)
         {
             Provider.DrawElementsInstanced(Primitive, Count, Type, Indices, Instancecount);
-        }
-
-        public static void EnableVertexAttribArray(int Id)
-        {
-            Provider.EnableVertexAttribArray(Id);
         }
 
         public static void EndQuery(QueryTarget Target)
@@ -353,7 +328,7 @@ namespace Hedra.Engine.Rendering
 
         public static uint GenTexture()
         {
-            return Provider.GenTexture();
+            return TextureHandler.Create();
         }
 
         public static void GenVertexArrays(int N, out uint V1)
@@ -381,11 +356,6 @@ namespace Hedra.Engine.Rendering
             return Provider.GetInteger(PName);
         }
         
-        public static void GetInteger(GetPName PName, out int Value)
-        {
-            Provider.GetInteger(PName, out Value);
-        }
-
         public static void GetQueryObject(int QueryObject, GetQueryObjectParam Parameter, out int Value)
         {
             Provider.GetQueryObject((uint)QueryObject, Parameter, out Value);
@@ -449,21 +419,6 @@ namespace Hedra.Engine.Rendering
         public static void ShaderSource(int V0, string Source)
         {
             Provider.ShaderSource(V0, Source);
-        }
-
-        public static void StencilFunc(StencilFunction Func, int V0, uint Id)
-        {
-            Provider.StencilFunc(Func, V0, Id);
-        }
-
-        public static void StencilMask(uint Mask)
-        {
-            Provider.StencilMask(Mask);
-        }
-
-        public static void StencilOp(StencilOp Fail, StencilOp ZFail, StencilOp ZPass)
-        {
-            Provider.StencilOp(Fail, ZFail, ZPass);
         }
 
         public static void TexImage2D(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3,

@@ -42,7 +42,8 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
 
         private float HealthBonus => 80 + 200 * (Level / (float) MaxLevel);
         private float ResistanceBonus => .3f + .7f * (Level / (float) MaxLevel);
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/OakSpirit.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/OakSpirit.png");
+        public override float ManaCost => 70;
         public override string Description => Translations.Get("oak_spirit_desc");
         public override string DisplayName => Translations.Get("oak_spirit_skill");
         public override string[] Attributes => new[]

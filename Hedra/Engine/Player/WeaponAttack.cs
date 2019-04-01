@@ -130,8 +130,10 @@ namespace Hedra.Engine.Player
         
         protected override bool ShouldDisable => !CanUse();
         private bool ShouldCharge => AttackType.Secondary == _type || Player.LeftWeapon.IsChargeable;
-        public override uint TextureId => _textureId;
+        public override uint IconId => _textureId;
         protected override bool HasCooldown => false;
+        public override float ManaCost => 0;
+        public override float MaxCooldown => 0;
         public override string Description => string.Empty;
         public override string DisplayName => string.Empty;
     }

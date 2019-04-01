@@ -45,10 +45,12 @@ namespace Hedra.Components.Effects
             if (freeze != null)
             {
                 Parent.RemoveComponent(freeze);
-                this.End();
-                return;
+                Parent.RemoveComponent(this);
             }
-            Parent.Model.BaseTint = Particle3D.FireColor * 3f;
+            else
+            {
+                Parent.Model.BaseTint = Particle3D.FireColor * 3f;
+            }
         }
         
         public override void Update()
@@ -75,14 +77,13 @@ namespace Hedra.Components.Effects
             World.Particles.Emit();
                 
             if(!(_totalTime > _pTime && !Parent.IsDead && !Disposed && !Parent.IsUnderwater))
-                End();
+                Parent.RemoveComponent(this);
         }
 
-        private void End()
+        public override void Dispose()
         {
+            base.Dispose();
             Parent.Model.BaseTint = Vector4.Zero;
-            this.Dispose();
-            Parent.RemoveComponent(this);
         }
     }
 }

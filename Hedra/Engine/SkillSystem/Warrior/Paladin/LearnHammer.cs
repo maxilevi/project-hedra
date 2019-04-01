@@ -19,7 +19,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Paladin
     /// </summary>
     public class LearnHammer : LearningSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Hammer.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Hammer.png");
         
         protected override EquipmentType Equipment => EquipmentType.Hammer;
         

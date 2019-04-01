@@ -34,7 +34,7 @@ namespace Hedra.Engine.Player.MapSystem
         private static readonly Shader Shader = Shader.Build("Shaders/GUI.vert", "Shaders/MinimapGUI.frag");
         private readonly LocalPlayer _player;
         private readonly Panel _panel;
-        private readonly Texture _miniMap;
+        private readonly BackgroundTexture _miniMap;
         private readonly RenderableTexture _mapCursor;
         private readonly RenderableTexture _miniMapRing;
         private readonly RenderableTexture _miniMapNorth;
@@ -55,27 +55,27 @@ namespace Hedra.Engine.Player.MapSystem
             this._panel = new Panel();
             const float mapScale = .75f;
             _mapFbo = new FBO(256, 256);
-            _miniMap = new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMap.png"), new Vector2(.8f, .75f), Graphics2D.SizeFromAssets("Assets/UI/MiniMap.png").As1920x1080() * mapScale);
+            _miniMap = new BackgroundTexture(Graphics2D.LoadFromAssets("Assets/UI/MiniMap.png"), new Vector2(.8f, .75f), Graphics2D.SizeFromAssets("Assets/UI/MiniMap.png").As1920x1080() * mapScale);
             DrawManager.UIRenderer.Remove(_miniMap.TextureElement);
             DrawManager.UIRenderer.Add(this, DrawOrder.After);
             _mapCursor = new RenderableTexture(
-                new Texture(Graphics2D.LoadFromAssets("Assets/UI/MapCursor.png"), new Vector2(.8f, .75f), Graphics2D.SizeFromAssets("Assets/UI/MiniMap.png").As1920x1080() * .1f * mapScale),
+                new BackgroundTexture(Graphics2D.LoadFromAssets("Assets/UI/MapCursor.png"), new Vector2(.8f, .75f), Graphics2D.SizeFromAssets("Assets/UI/MiniMap.png").As1920x1080() * .1f * mapScale),
                 DrawOrder.After
             );
             _miniMapRing = new RenderableTexture(
-                new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMapRing.png"), new Vector2(.8f, .75f), Graphics2D.SizeFromAssets("Assets/UI/MiniMapRing.png").As1920x1080() * mapScale),
+                new BackgroundTexture(Graphics2D.LoadFromAssets("Assets/UI/MiniMapRing.png"), new Vector2(.8f, .75f), Graphics2D.SizeFromAssets("Assets/UI/MiniMapRing.png").As1920x1080() * mapScale),
                 DrawOrder.After
             );
             _miniMapNorth = new RenderableTexture(
-                new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMapNorth.png"), new Vector2(.8f, .75f), Graphics2D.SizeFromAssets("Assets/UI/MiniMapNorth.png").As1920x1080() * mapScale),
+                new BackgroundTexture(Graphics2D.LoadFromAssets("Assets/UI/MiniMapNorth.png"), new Vector2(.8f, .75f), Graphics2D.SizeFromAssets("Assets/UI/MiniMapNorth.png").As1920x1080() * mapScale),
                 DrawOrder.After
             );
             _miniMapMarker = new RenderableTexture(
-                new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMapMarker.png"), new Vector2(.8f, .75f), Graphics2D.SizeFromAssets("Assets/UI/MiniMapMarker.png").As1920x1080() * mapScale),
+                new BackgroundTexture(Graphics2D.LoadFromAssets("Assets/UI/MiniMapMarker.png"), new Vector2(.8f, .75f), Graphics2D.SizeFromAssets("Assets/UI/MiniMapMarker.png").As1920x1080() * mapScale),
                 DrawOrder.After
             );
             _miniMapQuestMarker = new RenderableTexture(
-                new Texture(Graphics2D.LoadFromAssets("Assets/UI/MiniMapQuest.png"), new Vector2(.8f, .75f), Graphics2D.SizeFromAssets("Assets/UI/MiniMapQuest.png").As1920x1080() * mapScale),
+                new BackgroundTexture(Graphics2D.LoadFromAssets("Assets/UI/MiniMapQuest.png"), new Vector2(.8f, .75f), Graphics2D.SizeFromAssets("Assets/UI/MiniMapQuest.png").As1920x1080() * mapScale),
                 DrawOrder.After
             );
             var mapTranslation = Translation.Create("map_label");

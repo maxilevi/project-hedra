@@ -6,7 +6,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
 {
     public class NightStalker : ConditionedPassiveSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/NightStalker.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/NightStalker.png");
         private float _previousValue;
         
         protected override void DoAdd()

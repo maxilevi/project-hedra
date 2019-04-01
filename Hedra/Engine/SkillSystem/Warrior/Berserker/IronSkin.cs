@@ -6,7 +6,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Berserker
 {
     public class IronSkin : PassiveSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/IronSkin.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/IronSkin.png");
         private AttackResistanceBonusComponent _component;
         
         protected override void Add()

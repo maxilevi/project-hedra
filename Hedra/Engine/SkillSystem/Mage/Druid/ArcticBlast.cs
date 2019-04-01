@@ -9,7 +9,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
 {
     public class ArcticBlast : RadiusEffectSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skill/ArcticBlast.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skill/ArcticBlast.png");
 
         protected override void Apply(IEntity Entity)
         {

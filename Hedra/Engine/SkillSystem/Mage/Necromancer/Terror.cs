@@ -14,7 +14,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 {
     public class Terror : RadiusEffectSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Terror.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Terror.png");
 
         protected override Vector4 HighlightColor => Vector4.One * .2f;
 

@@ -10,7 +10,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
 {
     public class SteadyAim : ChargeablePassiveSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/SteadyAim.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/SteadyAim.png");
         protected override bool ShouldDisable => !Player.HasWeapon || !(Player.LeftWeapon is Bow);
 
         protected override ChargeableComponent CreateComponent()

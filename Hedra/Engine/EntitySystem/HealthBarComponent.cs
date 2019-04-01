@@ -95,7 +95,7 @@ namespace Hedra.Engine.EntitySystem
                 () => Parent.MaxHealth
             );
             _backgroundTexture = new RenderableTexture(
-                new Texture( 
+                new BackgroundTexture( 
                     0,
                     _healthBar.Position,
                     _healthBar.Scale

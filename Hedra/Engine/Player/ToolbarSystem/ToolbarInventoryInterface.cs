@@ -36,7 +36,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
                 this.ButtonsText[i].TextFont = FontCache.GetBold(9f);
                 DrawManager.UIRenderer.Remove(this.ButtonsText[i]);
                 _textBackgrounds[i] =
-                    new RenderableTexture(new Texture("Assets/UI/InventoryCircle.png",
+                    new RenderableTexture(new BackgroundTexture("Assets/UI/InventoryCircle.png",
                         this.ButtonsText[i].Position, Vector2.One * .35f), DrawOrder.After);
                 DrawManager.UIRenderer.Add(this.ButtonsText[i], DrawOrder.After);
                 _panel.AddElement(_textBackgrounds[i]);

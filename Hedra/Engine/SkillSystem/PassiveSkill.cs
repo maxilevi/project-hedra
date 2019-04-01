@@ -6,7 +6,9 @@ namespace Hedra.Engine.SkillSystem
     {
         public override bool Passive => true;
         protected abstract int MaxLevel { get; }
-        public abstract override uint TextureId { get; }
+        public abstract override uint IconId { get; }
+        public override float ManaCost => 0;
+        public override float MaxCooldown => 0;
         private bool _set;
         private int _currentLevel;
 

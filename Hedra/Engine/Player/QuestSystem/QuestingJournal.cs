@@ -18,12 +18,12 @@ namespace Hedra.Engine.Player.QuestSystem
 {
     public sealed class QuestingJournal : PagedInventoryArrayInterface
     {
-        private readonly Texture _journalBackground;
+        private readonly BackgroundTexture _journalBackground;
         private readonly GUIText _descriptionText;
-        private readonly Texture _renderTexture;
+        private readonly BackgroundTexture _renderTexture;
         private readonly Vector2 _descriptionPosition;
         private readonly Button _abandonButton;
-        private readonly Texture _renderBackground;
+        private readonly BackgroundTexture _renderBackground;
         private readonly IPlayer _player;
         
         public QuestingJournal(IPlayer Player) 
@@ -31,7 +31,7 @@ namespace Hedra.Engine.Player.QuestSystem
         {
             _player = Player;
             _journalBackground = 
-                new Texture(InventoryInterfaceItemInfo.DefaultId, Position, InventoryInterfaceItemInfo.DefaultSize * .55f);
+                new BackgroundTexture(InventoryInterfaceItemInfo.DefaultId, Position, InventoryInterfaceItemInfo.DefaultSize * .55f);
             _journalBackground.SendBack();
             _descriptionText = new GUIText(
                 string.Empty,
@@ -39,12 +39,12 @@ namespace Hedra.Engine.Player.QuestSystem
                 Color.White,
                 FontCache.GetNormal(11)
             );
-            _renderBackground = new Texture(
+            _renderBackground = new BackgroundTexture(
                 Graphics2D.LoadFromAssets("Assets/UI/QuestTextureBackground.png"),
                 Vector2.Zero,
                 Graphics2D.SizeFromAssets("Assets/UI/QuestTextureBackground.png").As1920x1080()
             );
-            _renderTexture = new Texture(
+            _renderTexture = new BackgroundTexture(
                 0,
                 _journalBackground.Position,
                 _journalBackground.Scale * .4f

@@ -9,7 +9,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
 {
     public class HotPursuit : PassiveSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/HotPursuit.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/HotPursuit.png");
         protected override int MaxLevel => 15;
         private readonly Timer _combatTimer;
         private bool _inCombat;

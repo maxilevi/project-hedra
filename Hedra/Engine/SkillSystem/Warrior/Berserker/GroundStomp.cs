@@ -10,7 +10,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Berserker
 {
     public class GroundStomp : SingleAnimationSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/GroundStomp.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/GroundStomp.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/WarriorGroundStomp.dae");
 
         protected override void OnAnimationMid()
@@ -51,6 +51,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Berserker
         private float StunChance => .15f + .35f * (Level / (float)MaxLevel);
         private float Damage => 10 + 30f * (Level / (float)MaxLevel);
         private float Range => 16 + 8f * (Level / (float)MaxLevel);
+        public override float ManaCost => 0;
         public override string Description => Translations.Get("ground_stomp_desc");
         public override string DisplayName => Translations.Get("ground_stomp_skill");
         public override string[] Attributes => new[]

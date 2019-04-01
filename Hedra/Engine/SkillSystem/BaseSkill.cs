@@ -25,22 +25,21 @@ namespace Hedra.Engine.SkillSystem
     /// <summary>
     /// Description of Skill.
     /// </summary>
-    public abstract class BaseSkill : UIElement, IRenderable, IUpdatable, ISimpleTexture, IAdjustable
+    public abstract class BaseSkill : DrawableTexture, UIElement, IRenderable, IUpdatable, ISimpleTexture, IAdjustable
     {
         private static readonly Shader Shader = Shader.Build("Shaders/Skills.vert", "Shaders/Skills.frag");
         private static readonly Vector3 NormalTint = Vector3.One;
         public event OnStateUpdated StateUpdated;
         public bool IsAffecting => IsAffectingModifier > 0;
-        public virtual float MaxCooldown { get; }
+        public abstract float MaxCooldown { get; }
+        public abstract float ManaCost { get; }
         public virtual float IsAffectingModifier => Passive ? 1 : 0;
-        public virtual float ManaCost { get; }
         public int Level { get; set; }
         public bool Active { get; set; } = true;
         public virtual bool Passive { get; set; }
         public abstract string Description { get; }
         public abstract string DisplayName { get; }
         public bool Casting { get; set; }
-        public abstract uint TextureId { get; }
         protected float Cooldown { get; set; }
         protected Vector3 Tint { get; set; }
         protected IPlayer Player => GameManager.Player;
@@ -52,6 +51,7 @@ namespace Hedra.Engine.SkillSystem
         private RenderableText _cooldownSecondsText;
         private Panel _panel;
         private Vector2 _position;
+        public abstract uint IconId { get; }
 
         protected BaseSkill()
         {
@@ -60,15 +60,16 @@ namespace Hedra.Engine.SkillSystem
 
         public virtual void Initialize(Vector2 Position, Vector2 Scale, Panel InPanel, IPlayer Player)
         {
-            this._panel = InPanel;
             this.Position = Position;
             this.Scale = Scale;
-            this.Tint = NormalTint;
+            TextureId = IconId;
+            Tint = NormalTint;
+            _panel = InPanel;
             _panel.AddElement(this);
             
             DrawManager.UIRenderer.Add(this, DrawOrder.After);
             UpdateManager.Add(this);
-            this._initialized = true;
+            _initialized = true;
         }
         
         public virtual bool MeetsRequirements()
@@ -85,7 +86,7 @@ namespace Hedra.Engine.SkillSystem
                 return;
             
             if(!_initialized) throw new ArgumentException("This skill hasn't been initialized yet.");
-
+            
             Cooldown -= Time.DeltaTime;
             if (_cooldownSecondsText == null)
             {
@@ -108,7 +109,7 @@ namespace Hedra.Engine.SkillSystem
             Shader["Cooldown"] = OverlayBlending;
             
             Renderer.ActiveTexture(TextureUnit.Texture0);
-            Renderer.BindTexture(TextureTarget.Texture2D, TextureId);
+            Renderer.BindTexture(TextureTarget.Texture2D, TextureId = IconId);
             
             Renderer.ActiveTexture(TextureUnit.Texture1);
             Renderer.BindTexture(TextureTarget.Texture2D, InventoryArrayInterface.DefaultId);
@@ -200,6 +201,7 @@ namespace Hedra.Engine.SkillSystem
         {
             DrawManager.Remove(this);
             UpdateManager.Remove(this);
+            TextureRegistry.Remove(IconId);
             _cooldownSecondsText.Dispose();
         }    
     }

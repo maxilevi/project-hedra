@@ -28,7 +28,7 @@ namespace Hedra.Engine.SkillSystem.Mage
         }
         
         public override string Description => Translations.Get("meditation_desc", ManaRegenFormula().ToString("0.0", CultureInfo.InvariantCulture));
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Meditation.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Meditation.png");
         public override string DisplayName => Translations.Get("meditation_skill");
     }
 }

@@ -13,9 +13,10 @@ namespace HedraTests.Player
         }
 
         public override string Description => throw new System.NotImplementedException();
-        
+        public override float ManaCost => throw new System.NotImplementedException();
+        public override float MaxCooldown => throw new System.NotImplementedException();
         public override string DisplayName => throw new System.NotImplementedException();
-        public override uint TextureId => 0;
+        public override uint IconId => 0;
 
         protected override void DoUse()
         {

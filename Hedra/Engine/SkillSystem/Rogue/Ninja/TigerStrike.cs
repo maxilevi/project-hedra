@@ -8,7 +8,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
 {
     public class TigerStrike : SingleAnimationSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/TigerStrike.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/TigerStrike.png");
         protected override Animation SkillAnimation { get; }  = AnimationLoader.LoadAnimation("Assets/Chr/RogueTigerStrike.dae");
         protected override bool EquipWeapons => false;
         protected override bool CanMoveWhileCasting => false;

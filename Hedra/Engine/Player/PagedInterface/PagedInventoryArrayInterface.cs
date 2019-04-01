@@ -16,15 +16,15 @@ namespace Hedra.Engine.Player.PagedInterface
     public abstract class PagedInventoryArrayInterface : InventoryArrayInterface
     {
         public static uint SelectedId { get; } = Graphics2D.LoadFromAssets("Assets/UI/SelectedInventorySlot.png");
-        protected Texture[] SelectedTextures { get; }
+        protected BackgroundTexture[] SelectedTextures { get; }
         protected Panel Panel { get; }
         protected IPlayer Player { get; }
         protected int PerPage { get; }
         protected int CurrentPage { get; private set; }
         protected int TotalPages { get; private set; }
-        protected Texture Title { get; }
+        protected BackgroundTexture Title { get; }
         protected GUIText TitleText { get; }
-        protected Texture PageSelector { get; }
+        protected BackgroundTexture PageSelector { get; }
         protected GUIText CurrentPageText { get; }
         protected Button PreviousPageText { get; }
         protected Button NextPageText { get; }
@@ -38,11 +38,11 @@ namespace Hedra.Engine.Player.PagedInterface
             {
                 DisableKeys = true
             };
-            SelectedTextures = new Texture[Buttons.Length];
+            SelectedTextures = new BackgroundTexture[Buttons.Length];
             for (var i = 0; i < Buttons.Length; i++)
             {
                 SelectedTextures[i] =
-                    new Texture(
+                    new BackgroundTexture(
                         SelectedId,
                         Textures[i].Position,
                         Textures[i].Scale
@@ -55,9 +55,9 @@ namespace Hedra.Engine.Player.PagedInterface
             var realScale = InventoryBackground.DefaultSize * barScale;
             var barPosition = Vector2.UnitY * Rows * DefaultSize * .65f;
             var offset = Rows % 2 == 0 ? Vector2.UnitY * realScale.Y : Vector2.Zero;
-            Title = new Texture(InventoryBackground.DefaultId, barPosition - offset, realScale);
+            Title = new BackgroundTexture(InventoryBackground.DefaultId, barPosition - offset, realScale);
             TitleText = new GUIText(TitleTranslation, Title.Position, Color.White, FontCache.GetBold(12));
-            PageSelector = new Texture(InventoryBackground.DefaultId, -barPosition - offset, realScale);
+            PageSelector = new BackgroundTexture(InventoryBackground.DefaultId, -barPosition - offset, realScale);
             
             CurrentPageText = new GUIText("00/00", PageSelector.Position, Color.White, FontCache.GetBold(11));
             var footerFont = FontCache.GetBold(14);

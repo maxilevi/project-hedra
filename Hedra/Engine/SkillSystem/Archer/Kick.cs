@@ -23,7 +23,7 @@ namespace Hedra.Engine.SkillSystem.Archer
     /// </summary>
     public class Kick : SingleAnimationSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Kick.png");    
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Kick.png");    
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/ArcherKick.dae");
         private const float BaseDamage = 15;
         private float Damage => BaseDamage + (BaseDamage * Level * .5f);

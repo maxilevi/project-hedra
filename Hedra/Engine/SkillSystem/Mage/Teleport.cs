@@ -15,7 +15,7 @@ namespace Hedra.Engine.SkillSystem.Mage
 {
     public class Teleport : SingleAnimationSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Teleport.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Teleport.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/MageTeleport.dae");
         protected override float AnimationSpeed => .5f;
         private TeleportComponent _component;

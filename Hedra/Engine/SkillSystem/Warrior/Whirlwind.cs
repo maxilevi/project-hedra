@@ -24,7 +24,7 @@ namespace Hedra.Engine.SkillSystem.Warrior
     /// </summary>
     public class Whirlwind : CappedSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Spin.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Spin.png");
         protected override bool ShouldDisable => Player.Toolbar.DisableAttack || !Player.HasWeapon;
         protected override int MaxLevel => 24;
         public override string Description => Translations.Get("whirlwind_desc");        

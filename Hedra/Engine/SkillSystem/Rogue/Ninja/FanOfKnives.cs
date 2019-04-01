@@ -17,7 +17,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
     public sealed class FanOfKnives : SingleAnimationSkill
     {
         private static readonly VertexData KnifeModel = AssetManager.PLYLoader("Assets/Items/Ammo/Kunai.ply", Vector3.One);
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/FanOfKnives.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/FanOfKnives.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/RogueKnifeThrow.dae");
         protected override bool EquipWeapons => false;
         protected override float AnimationSpeed => 1.25f;
@@ -46,7 +46,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
 
         private void Throw(Vector3 Direction)
         {
-            var weaponData = KnifeModel.Clone().Scale(Vector3.One *.7f).RotateX(90);
+            var weaponData = KnifeModel.Clone().Scale(Vector3.One).RotateX(90);
             var startingLocation = Player.Model.LeftWeaponPosition;
 
             var weaponProj = new Projectile(Player, startingLocation, weaponData)

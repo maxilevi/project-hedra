@@ -368,10 +368,14 @@
     <Compile Include="Engine\Rendering\LodableObject.cs" />
     <Compile Include="Engine\Rendering\LodedVertexData.cs" />
     <Compile Include="Engine\Rendering\TextBillboard.cs" />
+    <Compile Include="Engine\Rendering\Texture.cs" />
     <Compile Include="Engine\Rendering\TextureBillboard.cs" />
+    <Compile Include="Engine\Rendering\TextureRegistry.cs" />
     <Compile Include="Engine\Rendering\TextureParameter.cs" />
     <Compile Include="Engine\Rendering\UI\Plaque.cs" />
+    <Compile Include="Engine\Rendering\UI\TextCache.cs" />
     <Compile Include="Engine\Rendering\UI\TextOptions.cs" />
+    <Compile Include="Engine\Rendering\UI\DrawableTexture.cs" />
     <Compile Include="Engine\SkillSystem\ActivateDurationSkill.cs" />
     <Compile Include="Engine\SkillSystem\ActivateDurationSkillWithSingleAnimation.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Jab.cs" />
@@ -1143,7 +1147,7 @@
     <Compile Include="Engine\Rendering\UI\RenderableText.cs" />
     <Compile Include="Engine\Rendering\UI\RenderableTexture.cs" />
     <Compile Include="Engine\Rendering\UI\TextField.cs" />
-    <Compile Include="Engine\Rendering\UI\Texture.cs" />
+    <Compile Include="Engine\Rendering\UI\BackgroundTexture.cs" />
     <Compile Include="Engine\Rendering\UI\TexturedBar.cs" />
     <Compile Include="Engine\Rendering\UI\UIElement.cs" />
     <Compile Include="Engine\Rendering\UI\UserInterface.cs" />

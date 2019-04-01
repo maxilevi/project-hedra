@@ -11,7 +11,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Paladin
 {
     public class FireEnchant : WeaponBonusSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/FireEnchant.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/FireEnchant.png");
 
         protected override void ApplyBonusToEnemy(IEntity Victim, ref float Damage)
         {

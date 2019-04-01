@@ -7,7 +7,7 @@ namespace Hedra.Engine.SkillSystem.Warrior
 {
     public class NoEscape : ConditionedPassiveSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/NoEscape.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/NoEscape.png");
         private SpeedBonusComponent _component;
         
         protected override void DoAdd()

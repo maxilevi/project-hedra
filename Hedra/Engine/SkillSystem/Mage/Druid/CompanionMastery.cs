@@ -5,7 +5,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
 {
     public class CompanionMastery : PassiveSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/CompanionMastery.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/CompanionMastery.png");
         
         protected override void Add(){}
         protected override void Remove(){}

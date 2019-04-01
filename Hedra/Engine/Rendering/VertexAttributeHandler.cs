@@ -6,12 +6,12 @@ namespace Hedra.Engine.Rendering
     {
         protected override void DoEnable(uint Index)
         {
-            Renderer.EnableVertexAttribArray(Index);
+            Renderer.Provider.EnableVertexAttribArray(Index);
         }
 
         protected override void DoDisable(uint Index)
         {
-            Renderer.DisableVertexAttribArray(Index);
+            Renderer.Provider.DisableVertexAttribArray(Index);
         }
     }
 }

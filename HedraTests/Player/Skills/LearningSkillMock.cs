@@ -9,7 +9,7 @@ namespace HedraTests.Player.Skills
         public override string Description { get; }
         public override string DisplayName { get; }
         
-        public override uint TextureId { get; }
+        public override uint IconId { get; }
         
         public Action OnLearnCallback { get; set; }
 

@@ -49,6 +49,7 @@ namespace Hedra.Engine.Rendering.UI
         public static Font Default => Get(_normalFamily, 10);
         public static Font GetNormal(float Size) => Get(_normalFamily, Size);
         public static Font GetBold(float Size) => Get(_boldFamily, Size, FontStyle.Bold);
+        public static int Count => CachedFonts.Count;
     }
 
     public class FontEntry

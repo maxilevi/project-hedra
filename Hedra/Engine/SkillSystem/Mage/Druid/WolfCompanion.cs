@@ -6,7 +6,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
 {
     public class WolfCompanion : CompanionSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/WolfCompanion.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/WolfCompanion.png");
         protected override string Keyword => "wolf";
         
         protected override void SpawnEffect(Vector3 TargetPosition)

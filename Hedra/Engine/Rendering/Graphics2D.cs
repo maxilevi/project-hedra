@@ -15,6 +15,7 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using Hedra.Core;
 using Hedra.Engine.Game;
@@ -25,12 +26,15 @@ namespace Hedra.Engine.Rendering
     public static class Graphics2D
     {
         public static ITexture2DProvider Provider { get; set; } = new Texture2DProvider();
-        public static readonly List<uint> Textures = new List<uint>();
 
         public static uint LoadTexture(BitmapObject BitmapObject, TextureMinFilter Min = TextureMinFilter.Linear, TextureMagFilter Mag = TextureMagFilter.Linear, TextureWrapMode Wrap = TextureWrapMode.ClampToBorder)
         {
+            if (TextureRegistry.Contains(BitmapObject.Path, Min, Mag, Wrap, out var cachedId))
+                return cachedId;
+            
             var id = Provider.LoadTexture(BitmapObject, Min, Mag, Wrap);
-            Textures.Add(id);
+            TextureRegistry.Add(id, BitmapObject.Path);
+            
             if(Loader.Hedra.MainThreadId != Thread.CurrentThread.ManagedThreadId && !GameSettings.TestingMode)
                 Log.WriteLine($"[Error] Texture being created outside of the GL thread");
             return id;
@@ -191,7 +195,7 @@ namespace Hedra.Engine.Rendering
 
         public static void Dispose()
         {
-            Renderer.DeleteTextures(Textures.Count, Textures.ToArray());
+            Renderer.Provider.DeleteTextures(TextureRegistry.Count, TextureRegistry.All);
         }
     }
     

@@ -15,7 +15,7 @@ using Hedra.Engine.Management;
 namespace Hedra.Engine.Rendering.UI
 {
     
-    public class TexturedBar : IRenderable, UIElement, IAdjustable, ISimpleTexture
+    public class TexturedBar : DrawableTexture, IRenderable, UIElement, IAdjustable, ISimpleTexture
     {
         private static readonly Shader Shader;
         public Vector2 Scale {get; set;}
@@ -23,7 +23,6 @@ namespace Hedra.Engine.Rendering.UI
         public Vector2 AdjustedPosition { get; private set; }
         private readonly Func<float> _value;
         private readonly Func<float> _max;
-        public uint TextureId { get; set; }
         private bool _enabled;
         private float _barSize;
         private Vector2 _position;
@@ -41,7 +40,6 @@ namespace Hedra.Engine.Rendering.UI
             this.TextureId = TextureId;
 
             DrawManager.UIRenderer.Add(this, Order);
-
             this.Position = Position;
         }
         

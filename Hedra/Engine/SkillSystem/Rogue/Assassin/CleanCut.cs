@@ -10,7 +10,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
 {
     public class CleanCut : SpecialAttackPassiveSkill<RogueWeapon>
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/CleanCut.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/CleanCut.png");
         
         protected override void BeforeUse(RogueWeapon Weapon, AttackOptions Options)
         {

@@ -62,7 +62,7 @@ namespace Hedra.Engine.Rendering.UI
             _controlsPanel = new ControlsUI();
             
             var bandPosition = new Vector2(0f, .8f);
-            var blackBand = new Texture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LeftRight);
+            var blackBand = new BackgroundTexture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LeftRight);
             
             _graphics = new Button(new Vector2(0f, bandPosition.Y),
                                 new Vector2(0.15f,0.075f), Translation.Create("graphics"), Color.White, _normalFont);

@@ -13,7 +13,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 {
     public class RaiseSkeleton : SingleAnimationSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/RaiseSkeletons.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/RaiseSkeletons.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/NecromancerRaiseSkeleton.dae");
         protected override bool CanMoveWhileCasting => false;
         private int _currentMinions;

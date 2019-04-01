@@ -14,7 +14,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
     public class SteelArrows : SpecialAttackPassiveSkill<Bow>
     {
         protected override int MaxLevel => 15;
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/SteelArrows.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/SteelArrows.png");
         private Item SteelArrow { get; } = ItemPool.Grab(ItemType.SteelArrow);
         private Item _previousAmmo;
         

@@ -2,9 +2,9 @@
 
 precision mediump float;
 
+!include<"Includes/Lighting.shader">
 !include<"Includes/GammaCorrection.shader">
 !include<"Includes/Sky.shader">
-!include<"Includes/Lighting.shader">
 
 in float Config;
 in vec4 raw_color;

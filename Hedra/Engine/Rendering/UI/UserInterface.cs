@@ -33,7 +33,7 @@ namespace Hedra.Engine.Rendering.UI
         public ChrChooserUI ChrChooser { get; }
         public ChrCreatorUI ChrCreator { get; }
         private readonly NetworkUI ConnectPanel;
-        private readonly Texture _title;
+        private readonly BackgroundTexture _title;
         private readonly Button _newRun;
         private readonly Button _loadButton;
         public bool InMenu => Menu.Enabled || _optionsMenu.Enabled || ConnectPanel.Enabled;
@@ -52,10 +52,10 @@ namespace Hedra.Engine.Rendering.UI
 
             var bandPosition = new Vector2(0, -.8f);
             const int fontSize = 16;
-            _title = new Texture(Graphics2D.LoadFromAssets("Assets/UI/MenuLogo.png"),
+            _title = new BackgroundTexture(Graphics2D.LoadFromAssets("Assets/UI/MenuLogo.png"),
                                    new Vector2(-.405f, .35f), Graphics2D.SizeFromAssets("Assets/UI/MenuLogo.png").As1920x1080() * .75f);
 
-            var blackBand = new Texture(Color.FromArgb(0,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.09f / GameSettings.Height * 578), GradientType.LeftRight);
+            var blackBand = new BackgroundTexture(Color.FromArgb(0,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.09f / GameSettings.Height * 578), GradientType.LeftRight);
             
             
             _newRun = new Button(new Vector2(.1f, bandPosition.Y),

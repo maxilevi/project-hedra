@@ -258,7 +258,7 @@ namespace Hedra.Engine.Rendering
             EnsureNoErrors();
         }
 
-        public void DisableVertexAttribArray(int N)
+        public void DisableVertexAttribArray(uint N)
         {
             GL.DisableVertexAttribArray(N);
             EnsureNoErrors();
@@ -300,7 +300,7 @@ namespace Hedra.Engine.Rendering
             EnsureNoErrors();
         }
 
-        public void EnableVertexAttribArray(int Id)
+        public void EnableVertexAttribArray(uint Id)
         {
             GL.EnableVertexAttribArray(Id);
             EnsureNoErrors();
@@ -520,24 +520,6 @@ namespace Hedra.Engine.Rendering
         public void ShaderSource(int V0, string Source)
         {
             GL.ShaderSource(V0, Source);
-            EnsureNoErrors();
-        }
-
-        public void StencilFunc(StencilFunction Func, int V0, uint Id)
-        {
-            GL.StencilFunc(Func, V0, Id);
-            EnsureNoErrors();
-        }
-
-        public void StencilMask(uint Mask)
-        {
-            GL.StencilMask(Mask);
-            EnsureNoErrors();
-        }
-
-        public void StencilOp(StencilOp Fail, StencilOp ZFail, StencilOp ZPass)
-        {
-            GL.StencilOp(Fail, ZFail, ZPass);
             EnsureNoErrors();
         }
 

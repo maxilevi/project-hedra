@@ -88,7 +88,7 @@ namespace Hedra.Engine.SkillSystem.Warrior
         public override float ManaCost => Math.Max(BaseManaCost + ManaCostChangeRate * Level, ManaCostCap);
         public override string Description => Translations.Get("bash_desc");
         public override string DisplayName => Translations.Get("bash_skill");
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Bash.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Bash.png");
         public override string[] Attributes => new []
         {
             Translations.Get("bash_damage_change", Damage.ToString("0.0", CultureInfo.InvariantCulture)),

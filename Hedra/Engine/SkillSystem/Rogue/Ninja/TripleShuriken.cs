@@ -18,7 +18,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
     /// </summary>
     public class TripleShuriken : Shuriken
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/TripleShuriken.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/TripleShuriken.png");
         protected override float AnimationSpeed => 1.75f;
         private int _times;
 

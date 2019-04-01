@@ -5,7 +5,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
 {
     public class QuietSteps : PassiveSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/QuietSteps.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/QuietSteps.png");
         private float _previousValue;
         
         protected override void Add()

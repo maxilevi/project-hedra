@@ -23,9 +23,24 @@ namespace Hedra.Engine.Rendering
         {
             Skipped = 0;
         }
+
+        public uint Create()
+        {
+            var id = Renderer.Provider.GenTexture();
+            TextureRegistry.Register(id);
+            return id;
+        }
         
         public void Bind(TextureTarget Target, uint Id)
         {
+#if DEBUG
+            if (Target == TextureTarget.Texture2D && !TextureRegistry.IsKnown(Id))
+            {
+                var a = TextureRegistry.IsKnown(Id);
+                throw new ArgumentOutOfRangeException($"Found an unregistered texture '{Id}' that is being used.");
+            }
+#endif
+            
             if(!_states[_currentUnit].States.ContainsKey(Target))
                 _states[_currentUnit].States.Add(Target, uint.MaxValue);
 

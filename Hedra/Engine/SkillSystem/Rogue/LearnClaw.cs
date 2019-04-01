@@ -19,7 +19,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
     /// </summary>
     public class LearnClaw : LearningSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Claw.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Claw.png");
 
         protected override EquipmentType Equipment => EquipmentType.Claw;
         

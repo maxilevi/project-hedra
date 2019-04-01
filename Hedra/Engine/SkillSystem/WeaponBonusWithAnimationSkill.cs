@@ -41,7 +41,9 @@ namespace Hedra.Engine.SkillSystem
         {
             public override string Description => throw new NotImplementedException();
             public override string DisplayName => throw new NotImplementedException();
-            public override uint TextureId => throw new NotImplementedException();
+            public override uint IconId => throw new NotImplementedException();
+            public override float ManaCost => throw new NotImplementedException();
+            public override float MaxCooldown => throw new NotImplementedException();
 
             protected override void ApplyBonusToEnemy(IEntity Victim, ref float Damage) => ApplyBonusToEnemyPublic(Victim, ref Damage);
             protected override Vector4 OutlineColor => OutlineColorPublic;

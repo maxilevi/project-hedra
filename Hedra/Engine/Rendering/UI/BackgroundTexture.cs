@@ -18,32 +18,32 @@ namespace Hedra.Engine.Rendering.UI
     /// <summary>
     /// Description of Texture.
     /// </summary>
-    public class Texture : UIElement
+    public class BackgroundTexture : UIElement
     {
         public GUITexture TextureElement;
         public bool Enabled { get; private set; }
 
-        public Texture(string AssetPath, Vector2 Position, Vector2 Scale)
+        public BackgroundTexture(string AssetPath, Vector2 Position, Vector2 Scale)
         {
             this.TextureElement = new GUITexture(Graphics2D.LoadFromAssets(AssetPath),
                 Graphics2D.SizeFromAssets(AssetPath) * Scale, Position) {Enabled = true};
             DrawManager.UIRenderer.Add(this.TextureElement);
         }
 
-        public Texture(uint TextureId, Vector2 Position, Vector2 Scale)
+        public BackgroundTexture(uint TextureId, Vector2 Position, Vector2 Scale)
         {
             this.TextureElement = new GUITexture(TextureId, Scale, Position);
             this.TextureElement.Enabled = true;
             DrawManager.UIRenderer.Add(this.TextureElement);
         }
-        public Texture(Vector4 TextureColor, Vector2 Position, Vector2 Scale)
+        public BackgroundTexture(Vector4 TextureColor, Vector2 Position, Vector2 Scale)
         {
             this.TextureElement = new GUITexture(Graphics2D.ColorTexture(TextureColor), Scale, Position);
             this.TextureElement.Enabled = true;
             DrawManager.UIRenderer.Add(this.TextureElement);
         }
         
-        public Texture(Color GradientColor0, Color GradientColor1, Vector2 Position, Vector2 Scale, GradientType Type)
+        public BackgroundTexture(Color GradientColor0, Color GradientColor1, Vector2 Position, Vector2 Scale, GradientType Type)
         {
             this.TextureElement = new GUITexture(CreateGradient(Scale, GradientColor0, GradientColor1, Type), Scale, Position)
             {

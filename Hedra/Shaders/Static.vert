@@ -2,7 +2,6 @@
 
 !include<"Includes/GammaCorrection.shader">
 
-precision lowp float;
 
 layout(location = 0)in vec3 InVertex;
 layout(location = 1)in vec4 InColor;

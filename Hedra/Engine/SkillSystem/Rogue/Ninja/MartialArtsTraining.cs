@@ -6,7 +6,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
 {
     public class MartialArtsTraining : PassiveSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/MartialArtsTraining.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/MartialArtsTraining.png");
         private AttackPowerBonusComponent _attackPowerBonusComponent;
         
         protected override void Add()

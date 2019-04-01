@@ -9,7 +9,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 {
     public class SkeletonMastery : PassiveSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/SkeletonMastery.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/SkeletonMastery.png");
         
         protected override void Add()
         {

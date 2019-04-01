@@ -31,7 +31,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
         private float Speed => Math.Min(Level * 0.1f + BaseSpeed, SpeedCap);
         private float EffectDuration => Math.Max(BaseEffectDuration + 0.2f * Level, DurationCap);
         public override float ManaCost => BaseManaCost + Level * 5f;
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/BurstOfSpeed.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/BurstOfSpeed.png");
         protected override int MaxLevel => 15;
 
         protected override void DoUse()

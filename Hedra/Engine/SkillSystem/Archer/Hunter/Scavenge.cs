@@ -7,7 +7,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
     public class Scavenge : PassiveSkill
     {
         protected override int MaxLevel => 15;
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Scavenge.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Scavenge.png");
         private float _previousValue;
         
         protected override void Remove()

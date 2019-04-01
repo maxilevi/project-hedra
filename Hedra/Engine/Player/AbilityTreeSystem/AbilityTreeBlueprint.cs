@@ -43,7 +43,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                     Items[i][j] = skill != null ? new TreeItem
                     {
                         AbilityType = SkillFactory.Instance.Get(skill),
-                        Image = GameManager.Player.Toolbar.Skills.First(S => S.GetType() == SkillFactory.Instance.Get(skill)).TextureId,
+                        Image = GameManager.Player.Toolbar.Skills.First(S => S.GetType() == SkillFactory.Instance.Get(skill)).IconId,
                     } : new TreeItem();
                 }
             }

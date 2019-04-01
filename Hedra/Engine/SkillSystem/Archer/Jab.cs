@@ -10,10 +10,11 @@ namespace Hedra.Engine.SkillSystem.Archer
 {
     public class Jab : SingleAnimationSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Jab.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Jab.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/ArcherJab.dae");
         protected override int MaxLevel => 15;
         public override float MaxCooldown => 8;
+        public override float ManaCost => 0;
         protected override bool CanMoveWhileCasting => false;
         protected override float AnimationSpeed => 1.5f;
 

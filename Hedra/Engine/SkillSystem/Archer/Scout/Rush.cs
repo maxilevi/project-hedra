@@ -9,7 +9,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
 {
     public class Rush : ActivateDurationSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Rush.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Rush.png");
         private InfiniteStaminaComponent _staminaComponent;
         
         protected override void DoEnable()

@@ -29,7 +29,7 @@ namespace Hedra.Engine.SkillSystem.Archer
         private const float BaseCooldown = 18f;
         private const float CooldownCap = 12f;
         private const float BaseManaCost = 40f;
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/IceArrow.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/IceArrow.png");
         public override string Description => Translations.Get("ice_arrow_desc");
         public override string DisplayName => Translations.Get("ice_arrow");
         private float Damage => BaseDamage * (base.Level * 0.40f) + BaseDamage;

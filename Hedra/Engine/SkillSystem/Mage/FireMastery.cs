@@ -5,7 +5,7 @@ namespace Hedra.Engine.SkillSystem.Mage
 {
     public class FireMastery : PassiveSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/FireImmunity.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/FireImmunity.png");
         private float _previousValue;
         
         protected override void Add()

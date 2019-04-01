@@ -10,7 +10,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
 {
     public class SpikeTrap : SingleAnimationSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/SpikeTrap.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/SpikeTrap.png");
         protected override int MaxLevel => 15;
         protected override bool CanMoveWhileCasting => false;
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/ArcherLayTrap.dae");

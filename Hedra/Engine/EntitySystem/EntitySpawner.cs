@@ -151,7 +151,7 @@ namespace Hedra.Engine.EntitySystem
         private static bool ShouldSpawnMob(Vector3 NewPosition)
         {
             var region = World.BiomePool.GetRegion(NewPosition);
-            return Utils.Rng.Next(0, 50) != 1 || region.Mob.SpawnerSettings.MiniBosses.Length == 0;
+            return Utils.Rng.Next(0, 25) != 1 || region.Mob.SpawnerSettings.MiniBosses.Length == 0;
         }
 
         protected virtual SpawnTemplate SelectMobTemplate(Vector3 NewPosition)

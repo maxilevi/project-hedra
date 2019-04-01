@@ -27,7 +27,7 @@ namespace Hedra.Engine.SkillSystem.Archer
         private float TotalDamage => Player.DamageEquation * (.75f + Level / 10f);
         private float TotalTime => 2 + Level / 10.0f;
         private float BleedChance => .1f;
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/PierceArrows.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/PierceArrows.png");
 
         protected override void BeforeUse(Bow Weapon, AttackOptions Options)
         {

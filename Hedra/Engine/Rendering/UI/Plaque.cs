@@ -7,12 +7,12 @@ namespace Hedra.Engine.Rendering.UI
 {
     public class Plaque : UIElement, ITransparent
     {
-        private readonly Texture _plaqueBackground;
+        private readonly BackgroundTexture _plaqueBackground;
         private readonly GUIText _plaqueText;
         
         public Plaque(Vector2 Position)
         {
-            _plaqueBackground = new Texture("Assets/UI/Plaque.png", Position, Vector2.One * .45f);
+            _plaqueBackground = new BackgroundTexture("Assets/UI/Plaque.png", Position, Vector2.One * .45f);
             _plaqueText = new GUIText(
                 string.Empty,
                 _plaqueBackground.Position,

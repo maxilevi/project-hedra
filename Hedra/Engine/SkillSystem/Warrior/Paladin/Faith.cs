@@ -6,7 +6,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Paladin
 {
     public class Faith : PassiveSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Faith.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Faith.png");
         private AttackResistanceBonusComponent _component;
         
         protected override void Add()

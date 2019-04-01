@@ -10,7 +10,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
     public class FinishingBlow : SpecialAttackSkill<RogueWeapon>
     {
         private const float AttackPowerModifier = 1.25f;
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/FinishingBlow.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/FinishingBlow.png");
 
         protected override void DoUse()
         {

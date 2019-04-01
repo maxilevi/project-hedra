@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Hedra.Engine.Management;
 using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
@@ -22,9 +20,14 @@ namespace Hedra.Engine.Player
         private float _damage;
         private bool _shouldStop;
         private float _charge;
+        private readonly Timer _pushTimer;
 
         private Firewave(IEntity Parent, Vector3 Origin) : base(Parent, Origin)
         {
+            _pushTimer = new Timer(.35f)
+            {
+                AutoReset = false
+            };
         }
 
         private void Explode()
@@ -37,7 +40,8 @@ namespace Hedra.Engine.Player
             base.Update();
             if (Disposed) return;
             if (_shouldStop && Particles.Particles.Count == 0) Dispose();
-            if(!_shouldStop) PushEntitiesAway();
+            if(!_pushTimer.Ready) PushEntitiesAway();
+            _pushTimer.Tick();
         }
 
         private void CreateExplosion()
@@ -46,6 +50,7 @@ namespace Hedra.Engine.Player
             DamageEntities();
             SoundPlayer.PlaySound(SoundType.HitGround, Position);
             _shouldStop = true;
+            _pushTimer.Reset();
         }
         
         private void DamageEntities()
@@ -72,7 +77,7 @@ namespace Hedra.Engine.Player
                     if(_owner == entities[i] || Array.IndexOf(_ignore, entities[i]) != -1) continue;
                     
                     var direction = -(_owner.Position - entities[i].Position).NormalizedFast();
-                    entities[i].Physics.DeltaTranslate(direction * 128 * _charge);
+                    entities[i].Physics.DeltaTranslate(direction * 96 * _charge);
                 }
             }
         }

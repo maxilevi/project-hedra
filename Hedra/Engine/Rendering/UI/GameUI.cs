@@ -23,14 +23,14 @@ namespace Hedra.Engine.Rendering.UI
     /// </summary>
     public class GameUI : Panel
     {
-        public readonly Texture Cross;
-        private readonly Texture _compass;
+        public readonly BackgroundTexture Cross;
+        private readonly BackgroundTexture _compass;
         private readonly RenderableTexture _classLogo;
         private readonly RenderableTexture _oxygenBackground;
         private readonly RenderableTexture _staminaBackground;
         private readonly RenderableTexture _staminaIcon;
         private readonly RenderableTexture _oxygenIcon;
-        private readonly Texture _healthBackground, _xpBackground, _manaBackground;
+        private readonly BackgroundTexture _healthBackground, _xpBackground, _manaBackground;
         private readonly TexturedBar _healthBar;
         private readonly TexturedBar _manaBar;
         private readonly TexturedBar _xpBar;
@@ -56,13 +56,13 @@ namespace Hedra.Engine.Rendering.UI
                 _shouldPlay = true;
             };
             const float scale = .75f;
-            _healthBackground = new Texture(
+            _healthBackground = new BackgroundTexture(
                 Graphics2D.LoadFromAssets("Assets/UI/HealthBarBackground.png"), new Vector2(0, .765f), Graphics2D.SizeFromAssets("Assets/UI/HealthBarBackground.png").As1920x1080() * scale
             );
-            _manaBackground = new Texture(
+            _manaBackground = new BackgroundTexture(
                 Graphics2D.LoadFromAssets("Assets/UI/ManaBarBackground.png"), new Vector2(0, .7155f), Graphics2D.SizeFromAssets("Assets/UI/ManaBarBackground.png").As1920x1080()  * scale
             );
-            _xpBackground = new Texture(
+            _xpBackground = new BackgroundTexture(
                 Graphics2D.LoadFromAssets("Assets/UI/XpBarBackground.png"), new Vector2(0, .805f), Graphics2D.SizeFromAssets("Assets/UI/XpBarBackground.png").As1920x1080()  * scale
             );
 
@@ -82,7 +82,7 @@ namespace Hedra.Engine.Rendering.UI
             var oxygenAndStaminaBackgroundSize = Graphics2D.SizeFromAssets("Assets/UI/StaminaAndOxygenBarBackground.png").As1920x1080() * scale;
             
             _oxygenBackground = new RenderableTexture(
-                new Texture(oxygenAndStaminaBackgroundId, Vector2.Zero, oxygenAndStaminaBackgroundSize),
+                new BackgroundTexture(oxygenAndStaminaBackgroundId, Vector2.Zero, oxygenAndStaminaBackgroundSize),
                 DrawOrder.After
             );
             
@@ -91,26 +91,26 @@ namespace Hedra.Engine.Rendering.UI
                 () => Player.MaxOxygen);
 
             _staminaBackground = new RenderableTexture(
-                new Texture(oxygenAndStaminaBackgroundId, Vector2.Zero, oxygenAndStaminaBackgroundSize),
+                new BackgroundTexture(oxygenAndStaminaBackgroundId, Vector2.Zero, oxygenAndStaminaBackgroundSize),
                 DrawOrder.After
             );
             
             _staminaBar = new TexturedBar(Graphics2D.LoadFromAssets("Assets/UI/StaminaBar.png"), Vector2.Zero, Graphics2D.SizeFromAssets("Assets/UI/StaminaBar.png").As1920x1080() * scale,
                 () => Player.Stamina, () => Player.MaxStamina);
       
-            _classLogo = new RenderableTexture(new Texture(0, new Vector2(-.85f, .75f), Vector2.One), DrawOrder.After);
+            _classLogo = new RenderableTexture(new BackgroundTexture(0, new Vector2(-.85f, .75f), Vector2.One), DrawOrder.After);
             _oxygenIcon = new RenderableTexture(
-                new Texture(Graphics2D.LoadFromAssets("Assets/UI/OxygenIcon.png"), Vector2.Zero, Graphics2D.SizeFromAssets("Assets/UI/OxygenIcon.png").As1920x1080() * scale),
+                new BackgroundTexture(Graphics2D.LoadFromAssets("Assets/UI/OxygenIcon.png"), Vector2.Zero, Graphics2D.SizeFromAssets("Assets/UI/OxygenIcon.png").As1920x1080() * scale),
                 DrawOrder.After
             );
             _staminaIcon = new RenderableTexture(
-                new Texture(Graphics2D.LoadFromAssets("Assets/UI/StaminaIcon.png"), Vector2.Zero, Graphics2D.SizeFromAssets("Assets/UI/StaminaIcon.png").As1920x1080() * scale),
+                new BackgroundTexture(Graphics2D.LoadFromAssets("Assets/UI/StaminaIcon.png"), Vector2.Zero, Graphics2D.SizeFromAssets("Assets/UI/StaminaIcon.png").As1920x1080() * scale),
                 DrawOrder.After
             );
             
-            Cross = new Texture("Assets/UI/Pointer.png", new Vector2(0, 0f), Vector2.One * .1f);
+            Cross = new BackgroundTexture("Assets/UI/Pointer.png", new Vector2(0, 0f), Vector2.One * .1f);
             
-            _compass = new Texture(Graphics2D.LoadFromAssets("Assets/UI/Compass.png"), Vector2.One - new Vector2(0.0366f, 0.065f) * 2f, new Vector2(0.0366f, 0.065f));
+            _compass = new BackgroundTexture(Graphics2D.LoadFromAssets("Assets/UI/Compass.png"), Vector2.One - new Vector2(0.0366f, 0.065f) * 2f, new Vector2(0.0366f, 0.065f));
 
             var skillTreeTranslation = Translation.Create("skill_tree_label");
             skillTreeTranslation.Concat(() => $" - {Controls.Skilltree}");

@@ -8,7 +8,6 @@ namespace Hedra.Engine.Rendering
 {
     public class TextBillboard : BaseBillboard
     {
-        private uint _id;
         private Vector2 _scale;
         private readonly Color _color;
         private readonly Font _font;
@@ -28,19 +27,16 @@ namespace Hedra.Engine.Rendering
         
         public void UpdateText(string Text)
         {
-            _id = GUIText.BuildText(Text, _color, _font, out var measurements);
+            TextureId = GUIText.BuildText(Text, _color, _font, out var measurements);
             _scale = measurements.ToRelativeSize();
         }
 
         protected override Vector2 Measurements => _scale;
-        
-        protected override uint Id => _id;
-        
+
         /* We don't dispose fonts since they are from FontCache.cs */
         public override void Dispose()
         {
             base.Dispose();
-            Renderer.DeleteTexture(Id);
         }
     }
 }

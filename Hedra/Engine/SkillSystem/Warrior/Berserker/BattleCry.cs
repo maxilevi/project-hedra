@@ -12,7 +12,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Berserker
 {
     public class BattleCry : SingleAnimationSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/BattleCry.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/BattleCry.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/WarriorBattleCry.dae");
 
         protected override void OnAnimationMid()
@@ -32,6 +32,8 @@ namespace Hedra.Engine.SkillSystem.Warrior.Berserker
         private float Range => 24;
         private float Duration => 4 + 3 * (Level / (float) MaxLevel);
         private float Slowness => 25 + 30 * (Level / (float) MaxLevel);
+        public override float ManaCost => 0;
+        public override float MaxCooldown => 32f - 7f * (Level / (float) MaxLevel);
         public override string Description => Translations.Get("battle_cry_desc");
         public override string DisplayName => Translations.Get("battle_cry_skill");
         public override string[] Attributes => new[]

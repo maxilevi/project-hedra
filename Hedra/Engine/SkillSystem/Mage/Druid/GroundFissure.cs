@@ -14,7 +14,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
 {
     public class GroundFissure : SpecialRangedAttackSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/GroundFissure.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/GroundFissure.png");
         private readonly ParticleSystem _particles;
         private readonly Timer _timer;
         private readonly Timer _damageTimer;

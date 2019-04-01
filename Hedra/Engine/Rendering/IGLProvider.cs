@@ -44,14 +44,14 @@ namespace Hedra.Engine.Rendering
         void DepthMask(bool Flag);
         void DetachShader(uint V0, uint V1);
         void Disable(EnableCap Cap);
-        void DisableVertexAttribArray(int N);
+        void DisableVertexAttribArray(uint N);
         void DrawArrays(PrimitiveType Type, int Offset, int Count);
         void DrawBuffer(DrawBufferMode Mode);
         void DrawBuffers(int N, DrawBuffersEnum[] Enums);
         void DrawElements(PrimitiveType Primitive, int Count, DrawElementsType Type, IntPtr Indices);
         void DrawElementsInstanced(PrimitiveType Primitive, int Count, DrawElementsType Type, IntPtr Indices, int Instancecount);
         void Enable(EnableCap Cap);
-        void EnableVertexAttribArray(int Id);
+        void EnableVertexAttribArray(uint Id);
         void EndQuery(QueryTarget Target);
         void FramebufferTexture(FramebufferTarget Framebuffer, FramebufferAttachment DepthAttachment, uint Id, int V0);
         void FramebufferTexture2D(FramebufferTarget Target, FramebufferAttachment Attachment, TextureTarget Textarget, uint Texture, int Level);
@@ -79,9 +79,6 @@ namespace Hedra.Engine.Rendering
         void ReadBuffer(ReadBufferMode Mode);
         void ReadPixels(int V0, int V1, int V2, int V3, PixelFormat Format, PixelType Type, int[] Pixels);
         void ShaderSource(int V0, string Source);
-        void StencilFunc(StencilFunction Func, int V0, uint Id);
-        void StencilMask(uint Mask);
-        void StencilOp(StencilOp Fail, StencilOp ZFail, StencilOp ZPass);
         void TexImage2D(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3,
             PixelFormat Format, PixelType Type, IntPtr Ptr);
         void TexImage2DMultisample(TextureTargetMultisample Target, int Samples, PixelInternalFormat InternalFormat,

@@ -17,7 +17,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
 {
     public class Raven : CompanionSkill
     {
-        public override uint TextureId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Raven.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Raven.png");
 
         protected override IEntity SpawnMinion()
         {

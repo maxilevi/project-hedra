@@ -5,14 +5,14 @@ namespace Hedra.Engine.Player.Inventory
 {
     public abstract class BaseBackground
     {
-        protected readonly Texture Texture;
+        protected readonly BackgroundTexture Texture;
         protected readonly Panel Panel;
         private bool _enabled;
 
         protected BaseBackground(Vector2 Position, Vector2 Scale)
         {
             this.Scale = Scale;
-            Texture = new Texture(InventoryBackground.DefaultId, Position, InventoryBackground.DefaultSize * Scale);                       
+            Texture = new BackgroundTexture(InventoryBackground.DefaultId, Position, InventoryBackground.DefaultSize * Scale);                       
             Panel = new Panel();
             Panel.AddElement(Texture);
         }
