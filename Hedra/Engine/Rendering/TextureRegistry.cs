@@ -32,8 +32,9 @@ namespace Hedra.Engine.Rendering
         public static bool Contains(string Path, TextureMinFilter Min, TextureMagFilter Mag, TextureWrapMode Wrap, out uint Id)
         {
             Id = 0;
-            var cache = Textures.FirstOrDefault(P => P.Value.IsSame(Path, Min, Mag, Wrap)).Value;
-            if (cache == null) return false;
+            var cache = Textures.FirstOrDefault(P => P.Value.IsSame(Path, Min, Mag, Wrap));
+            if (cache.Value == null) return false;
+            Id = cache.Key;
             return true;
         }
 

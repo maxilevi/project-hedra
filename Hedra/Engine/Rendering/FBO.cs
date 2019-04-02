@@ -296,7 +296,10 @@ namespace Hedra.Engine.Rendering
         {
             if (TextureId != null)
             {
-                Renderer.DeleteTextures(TextureId.Length, TextureId);
+                for (var i = 0; i < TextureId.Length; ++i)
+                {
+                    TextureRegistry.Remove(TextureId[i]);
+                }
                 TextureId = null;
             }
 

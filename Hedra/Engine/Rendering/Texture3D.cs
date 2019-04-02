@@ -32,7 +32,7 @@ namespace Hedra.Engine.Rendering
 
         public void Dispose()
         {
-            Renderer.DeleteTexture(Id);
+            TextureRegistry.Remove(Id);
         }
     }
 }

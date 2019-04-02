@@ -118,9 +118,7 @@ namespace Hedra.Engine.Rendering
             if (GameSettings.Shadows)
             {
                 ShadowRenderer.Bind();
-
                 StaticBuffer.DrawShadows(ShadowDraw, ref _shadowOffsets, ref _shadowCounts);
-                
                 ShadowRenderer.UnBind();
             }
             StaticBind();
@@ -133,8 +131,14 @@ namespace Hedra.Engine.Rendering
             if (WaveMovement >= 5f)
                 WaveMovement = 0;
 
-            WaterBind();      
-            WaterBuffer.Draw(ToDraw);            
+            WaterBind();
+
+            WaterBuffer.Draw(ToDraw);
+                
+            Renderer.DisableVertexAttribArray(0);
+            Renderer.DisableVertexAttribArray(1);
+            Renderer.DisableVertexAttribArray(2);    
+                
             WaterUnBind();
         }
 
@@ -229,7 +233,7 @@ namespace Hedra.Engine.Rendering
             WaterShader.Bind();
             WaterShader["PlayerPosition"] = GameManager.Player.Position;
                
-            Renderer.ActiveTexture(TextureUnit.Texture0);
+               Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, GameSettings.SSAO && GameSettings.Quality ? DrawManager.MainBuffer.Ssao.FirstPass.TextureId[1] : 0);
 
             WaterShader["TransformationMatrix"] = TransformationMatrix;

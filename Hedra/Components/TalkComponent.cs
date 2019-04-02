@@ -58,6 +58,7 @@ namespace Hedra.Components
             {
                 _talkBackgroundSize = Graphics2D.SizeFromAssets("Assets/Skills/Dialog.png");
                 _talkBackground = Graphics2D.LoadFromAssets("Assets/Skills/Dialog.png");
+                TextureRegistry.MarkStatic(_talkBackground);
             });
         }
 
@@ -174,10 +175,7 @@ namespace Hedra.Components
             }
 
             var lifetime = _lines.Sum(S => TextProvider.StripFormat(S.Get()).Length * CharacterThreshold * 3f);
-            var backBoard = new TextureBillboard(lifetime, _talkBackground, FollowFunc, _talkBackgroundSize)
-            {
-                ShouldDisposeId = false
-            };
+            var backBoard = new TextureBillboard(lifetime, _talkBackground, FollowFunc, _talkBackgroundSize);
 
             _board = new TextBillboard(lifetime, string.Empty, Color.White,
                 FontCache.GetNormal(10), FollowFunc);

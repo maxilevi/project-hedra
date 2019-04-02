@@ -16,10 +16,9 @@ using Hedra.Engine.Rendering.UI;
 
 namespace Hedra.Engine.Rendering
 {
-    public abstract class BaseBillboard : IRenderable, IDisposable, IUpdatable
+    public abstract class BaseBillboard : DrawableTexture, IRenderable, IDisposable, IUpdatable
     {
         private static readonly Shader Shader;
-        protected abstract uint Id { get; }
         protected abstract Vector2 Measurements { get; }
         public bool Disposed { get; private set; }
         public float VanishSpeed { get; set; } = 2;
@@ -63,7 +62,7 @@ namespace Hedra.Engine.Rendering
 
             GUIRenderer.SetDraw(Shader);
             DrawManager.UIRenderer.SetupQuad();
-            GUIRenderer.SetTexture(0, Id);
+            GUIRenderer.SetTexture(0, TextureId);
             Shader["texture_sampler"] = 0;       
             Shader["scale"] = Measurements * Scalar;
             Shader["position"] = _position + _addedPosition;
@@ -86,6 +85,7 @@ namespace Hedra.Engine.Rendering
         {
             DrawManager.UIRenderer.Remove(this);
             UpdateManager.Remove(this);
+            TextureRegistry.Remove(TextureId);
             Disposed = true;
         }
     }
