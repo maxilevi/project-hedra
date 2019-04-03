@@ -98,7 +98,7 @@ namespace Hedra.Engine.Rendering.UI
             Shader["Position"] = AdjustedPosition;
             Shader["Color"] = BackgroundColor;
 
-            DrawManager.UIRenderer.SetupQuad();
+            DrawManager.UIRenderer.BindQuadVAO();
             DrawManager.UIRenderer.DrawQuad();
 
             Shader["Scale"] = ShowBar

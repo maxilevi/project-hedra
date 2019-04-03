@@ -101,7 +101,7 @@ namespace Hedra.Engine.Rendering
                 Renderer.Enable(EnableCap.Blend);
                 Renderer.Disable(EnableCap.DepthTest);
 
-                DrawManager.UIRenderer.SetupQuad();
+                DrawManager.UIRenderer.BindQuadVAO();
                 for (int i = 0; i < _shouldShadows.Count; i++)
                 {
                     if (_shouldShadows[i].DepthTest)

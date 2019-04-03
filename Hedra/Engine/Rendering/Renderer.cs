@@ -14,11 +14,10 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Rendering
 {
-    /// <summary>
-    /// Description of OpenGLStateManager.
-    /// </summary>
+    public delegate void ShaderChangeEvent();
     public static class Renderer
     {
+        public static event ShaderChangeEvent ShaderChanged;
         public static IGLProvider Provider { get; set; } = new GLProvider();
         public static int FBOBound { get; set; }
         public static uint ShaderBound => ShaderHandler.Id;
@@ -45,6 +44,7 @@ namespace Hedra.Engine.Rendering
         {
             BlendEquation(BlendEquationMode.FuncAdd);
             BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+            Shader.ShaderChanged += () => ShaderChanged?.Invoke();
         }
 
         public static void LoadProjection(Matrix4 Projection)

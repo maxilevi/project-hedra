@@ -61,7 +61,7 @@ namespace Hedra.Engine.Rendering
             var cameraUp = new Vector3(viewMat.M12, viewMat.M22, viewMat.M32).NormalizedFast();
 
             GUIRenderer.SetDraw(Shader);
-            DrawManager.UIRenderer.SetupQuad();
+            DrawManager.UIRenderer.BindQuadVAO();
             GUIRenderer.SetTexture(0, TextureId);
             Shader["texture_sampler"] = 0;       
             Shader["scale"] = Measurements * Scalar;

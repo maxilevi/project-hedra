@@ -216,7 +216,7 @@ namespace Hedra.Engine.Player.MapSystem
             Renderer.Enable(EnableCap.Blend);
             Renderer.Disable(EnableCap.DepthTest);
 
-            DrawManager.UIRenderer.SetupQuad();
+            DrawManager.UIRenderer.BindQuadVAO();
 
             Renderer.ActiveTexture(TextureUnit.Texture1);
             Renderer.BindTexture(TextureTarget.Texture2D, _mapFbo.TextureId[0]);

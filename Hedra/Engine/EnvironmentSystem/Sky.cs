@@ -67,7 +67,7 @@ namespace Hedra.Engine.EnvironmentSystem
             SkyGradientShader["topColor"] = TopColor;
             SkyGradientShader["botColor"] = BotColor;
             SkyGradientShader["height"] = (float) GameSettings.Height * (1 - GameManager.Player.View.Pitch * .25f);
-            DrawManager.UIRenderer.SetupQuad();
+            DrawManager.UIRenderer.BindQuadVAO();
             DrawManager.UIRenderer.DrawQuad();
 
             _starsDome.ColorMultiplier = Vector4.One * (1-SkyManager.LastDayFactor) * 2f;

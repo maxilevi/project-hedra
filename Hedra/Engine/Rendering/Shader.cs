@@ -23,6 +23,7 @@ namespace Hedra.Engine.Rendering
     /// </summary>
     public class Shader : IDisposable
     {
+        public static event ShaderChangeEvent ShaderChanged;
         public static Shader Passthrough { get; }
         private readonly Dictionary<string, bool> _knownMappings;
         private readonly Dictionary<string, UniformMapping> _mappings;
@@ -300,6 +301,7 @@ namespace Hedra.Engine.Rendering
         public void Unbind()
         {
             Renderer.BindShader(0);
+            ShaderChanged?.Invoke();
         }
         
         public void Dispose()

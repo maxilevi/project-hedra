@@ -135,10 +135,6 @@ namespace Hedra.Engine.Rendering
 
             WaterBuffer.Draw(ToDraw);
                 
-            Renderer.DisableVertexAttribArray(0);
-            Renderer.DisableVertexAttribArray(1);
-            Renderer.DisableVertexAttribArray(2);    
-                
             WaterUnBind();
         }
 

@@ -45,7 +45,7 @@ namespace Hedra.Engine.Rendering.Effects
         {
             Renderer.Disable(EnableCap.DepthTest);
             
-            DrawManager.UIRenderer.SetupQuad();
+            DrawManager.UIRenderer.BindQuadVAO();
             
             Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, TexID);

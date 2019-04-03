@@ -54,7 +54,7 @@ namespace Hedra.Engine.Rendering
             for(var i = 0; i < _buffers.Length; ++i)
             {
                 _buffers[i].Bind();
-                //Renderer.DisableVertexAttribArray(2);
+                Renderer.DisableVertexAttribArray(2);
                 _buffers[i].BindIndices();
                 var shadowCount = _buffers[i].BuildCounts(ShadowDraw, ref ShadowOffsets, ref ShadowCounts);
                 Renderer.MultiDrawElements(PrimitiveType.Triangles, ShadowCounts, DrawElementsType.UnsignedInt,

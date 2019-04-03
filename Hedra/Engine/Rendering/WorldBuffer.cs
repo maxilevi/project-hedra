@@ -231,9 +231,10 @@ namespace Hedra.Engine.Rendering
 
             }
             
-            uint NewCount = (uint) (Entries[1].Offset / Vertices.TypeSizeInBytes);
-            for(int i = 0; i < Data.Length; i++){
-                Data[i] += NewCount;
+            var newCount = (uint) (Entries[1].Offset / Vertices.TypeSizeInBytes);
+            for(var i = 0; i < Data.Length; i++)
+            {
+                Data[i] += newCount;
             }
             
             Renderer.BindBuffer(Indices.Buffer.BufferTarget, Indices.Buffer.ID);

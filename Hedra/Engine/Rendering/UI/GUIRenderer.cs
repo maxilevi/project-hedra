@@ -58,9 +58,14 @@ namespace Hedra.Engine.Rendering.UI
             InmortalTextures = new[] {TransparentTexture};
         }
 
-        public void SetupQuad()
+        public void BindQuadVAO()
         {
             _vao.Bind();
+        }
+
+        public void UnBindQuadVAO()
+        {
+            _vao.Unbind();
         }
 
         public void DrawQuad()
@@ -190,7 +195,7 @@ namespace Hedra.Engine.Rendering.UI
                 Shader["Mask"] = 2;
             }
 
-            this.SetupQuad();
+            BindQuadVAO();
             Shader["Scale"] = Texture.Scale;
             Shader["Position"] = Texture.AdjustedPosition;
             Shader["Flipped"] = Texture.IdPointer == null && !Texture.Flipped ? 0 : 1;
@@ -201,6 +206,7 @@ namespace Hedra.Engine.Rendering.UI
             Shader["UseMask"] = Texture.UseMask ? 1 : 0;
 
             this.DrawQuad();
+            UnBindQuadVAO();
         }
 
         public static void SetDraw(Shader CustomProgram = null)
