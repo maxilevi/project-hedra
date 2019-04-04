@@ -16,9 +16,9 @@ namespace Hedra.Engine.Rendering.Particles
     public sealed class ParticleCreator
     {    
         
-        public static VBO<Vector3> VerticesVBO;
-        public static VBO<ushort> IndicesVBO;
-        public static VBO<Vector3> NormalsVBO;
+        public static VBO<Vector3> VerticesVBO { get; private set; }
+        public static VBO<ushort> IndicesVBO { get; private set; }
+        public static VBO<Vector3> NormalsVBO { get; private set; }
         
         public static void Load(){
             if(VerticesVBO == null && IndicesVBO == null && NormalsVBO == null){

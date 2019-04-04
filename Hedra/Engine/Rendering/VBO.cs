@@ -30,7 +30,7 @@ namespace Hedra.Engine.Rendering
         /// <summary>
         /// The amount of values per element. 4 = Vector4, 3 = Vector3, etc.
         /// </summary>
-        public int Size {get; private set;}
+        public int Stride {get; private set;}
         
         /// <summary>
         /// The size in bytes of the elements in the VBO.
@@ -66,7 +66,7 @@ namespace Hedra.Engine.Rendering
             Renderer.BindBuffer(BufferTarget, ID);
             Renderer.BufferData(BufferTarget, (IntPtr)(SizeInBytes), Data, Hint);
             
-            this.Size = (Data is Vector4[]) ? 4 : (Data is Vector3[]) ?  3 : (Data is Vector2[]) ? 2 : 1;
+            this.Stride = (Data is Vector4[]) ? 4 : (Data is Vector3[]) ?  3 : (Data is Vector2[]) ? 2 : 1;
             this.BufferTarget = BufferTarget;
             this.PointerType = PointerType;
             this.SizeInBytes = SizeInBytes;
@@ -74,23 +74,11 @@ namespace Hedra.Engine.Rendering
             this.Hint = Hint;
         }
         
-        /// <summary>
-        /// Appends Data to the end of the buffer
-        /// </summary>
-        /// <param name="Data"></param>
-        /// <param name="SizeInBytes"></param>
-        public void Add(T[] Data, int SizeInBytes)
-        {
-            Renderer.BindBuffer(BufferTarget, ID);
-            Renderer.BufferSubData(BufferTarget, (IntPtr) (this.SizeInBytes), (IntPtr)(SizeInBytes), Data);
-            this.Count += Data.Length;
-            this.SizeInBytes += SizeInBytes;
-        }
-        
         public void Update(T[] Data, int SizeInBytes)
         {
             Renderer.BindBuffer(BufferTarget, ID);
-            Renderer.BufferData(BufferTarget, (IntPtr)(SizeInBytes), Data, Hint);
+            Renderer.BufferData(BufferTarget, (IntPtr)SizeInBytes, IntPtr.Zero, Hint);
+            Renderer.BufferSubData(BufferTarget, IntPtr.Zero, (IntPtr)SizeInBytes, Data);
             this.Count = Data.Length;
             this.SizeInBytes = SizeInBytes;
         }
@@ -108,8 +96,10 @@ namespace Hedra.Engine.Rendering
         /// <summary>
         /// Deletes all the data from the video card. It is automatically called at the end of the program.
         /// </summary>
-        public void Dispose(){
-            if(!Disposed){
+        public void Dispose()
+        {
+            if(!Disposed)
+            {
                 Disposed = true;
                 Executer.ExecuteOnMainThread( () => Renderer.DeleteBuffers(1, ref ID) );
             }

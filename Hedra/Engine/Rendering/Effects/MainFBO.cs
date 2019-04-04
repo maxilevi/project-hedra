@@ -95,8 +95,6 @@ namespace Hedra.Engine.Rendering.Effects
             
                 Renderer.Enable(EnableCap.Blend);
 
-                DrawManager.UIRenderer.BindQuadVAO();
-
                 Renderer.ActiveTexture(TextureUnit.Texture0);
                 Renderer.BindTexture(TextureTarget.Texture2D, Ssao.FirstPass.TextureId[1]);
                 
@@ -114,7 +112,6 @@ namespace Hedra.Engine.Rendering.Effects
                 Renderer.UniformMatrix4(Ssao.ProjectionUniform, false, ref Culling.ProjectionMatrix);
 
                 DrawManager.UIRenderer.DrawQuad();
-                DrawManager.UIRenderer.UnBindQuadVAO();
 
                 Ssao.FirstPassShader.Unbind();
 
@@ -227,8 +224,7 @@ namespace Hedra.Engine.Rendering.Effects
             Renderer.Disable(EnableCap.Blend);
             
             FXAAShader.Bind();
-            DrawManager.UIRenderer.BindQuadVAO();
-
+            
             Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, Texture);
             FXAAShader["Texture"] = 0;
@@ -242,7 +238,6 @@ namespace Hedra.Engine.Rendering.Effects
             FXAAShader["Resolution"] = new Vector2(1.0f / GameSettings.Width, 1.0f / GameSettings.Height);
             
             DrawManager.UIRenderer.DrawQuad();
-            DrawManager.UIRenderer.UnBindQuadVAO();
             
             Renderer.Enable(EnableCap.DepthTest);
             FXAAShader.Unbind();
@@ -253,7 +248,6 @@ namespace Hedra.Engine.Rendering.Effects
             Renderer.Disable(EnableCap.DepthTest);
             Renderer.Disable(EnableCap.Blend);
             
-            DrawManager.UIRenderer.BindQuadVAO();
             DefaultShader.Bind();
             
             Renderer.ActiveTexture(TextureUnit.Texture0);

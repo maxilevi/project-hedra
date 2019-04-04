@@ -363,6 +363,7 @@
     <Compile Include="Engine\Rendering\Frustum\Plane.cs" />
     <Compile Include="Engine\Rendering\Frustum\PlaneIntersectionType.cs" />
     <Compile Include="Engine\Rendering\IBufferPool.cs" />
+    <Compile Include="Engine\Rendering\Particles\ParticleVAO.cs" />
     <Compile Include="Engine\Rendering\TextFormatting.cs" />
     <Compile Include="Engine\Rendering\ITransparent.cs" />
     <Compile Include="Engine\Rendering\LodableObject.cs" />

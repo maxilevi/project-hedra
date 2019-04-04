@@ -115,7 +115,6 @@ namespace Hedra.Engine.SkillSystem
             Renderer.BindTexture(TextureTarget.Texture2D, InventoryArrayInterface.DefaultId);
             Shader["Mask"] = 1;
             
-            DrawManager.UIRenderer.BindQuadVAO();
             DrawManager.UIRenderer.DrawQuad();
             
             Shader.Unbind();

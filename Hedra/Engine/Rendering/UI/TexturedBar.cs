@@ -62,9 +62,8 @@ namespace Hedra.Engine.Rendering.UI
             Shader["Position"] = AdjustedPosition - (!Centered ? new Vector2(Scale.X * (1f - _barSize), 0f) : Vector2.Zero);
             Shader["Color"] = -Vector4.One;
 
-            DrawManager.UIRenderer.BindQuadVAO();
             DrawManager.UIRenderer.DrawQuad();
-            
+
             Renderer.Disable(EnableCap.Blend);
             Renderer.Enable(EnableCap.DepthTest);
             Renderer.Enable(EnableCap.CullFace);
