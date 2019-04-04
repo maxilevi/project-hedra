@@ -1,7 +1,5 @@
 #version 330 core
 
-precision mediump float;
-
 !include<"Includes/Lighting.shader">
 !include<"Includes/GammaCorrection.shader">
 !include<"Includes/Sky.shader">

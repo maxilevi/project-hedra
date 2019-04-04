@@ -96,7 +96,7 @@ namespace Hedra.Engine.Player.Inventory
             Mesh.Rotation = new Vector3(0, _itemRotation, willTilt ? 45 : 0);
 
             var previousBound = Renderer.ShaderBound;
-            Renderer.PushFBO();
+            var previousFBO = Renderer.FBOBound;
             Framebuffer.Bind();
             
             var meshPrematureCulling = Mesh.PrematureCulling;
@@ -132,8 +132,7 @@ namespace Hedra.Engine.Player.Inventory
           */  
             ShaderManager.SetLightColorInTheSameThread(currentDayColor);
             GameSettings.GlobalShadows = previousShadows;
-            Renderer.PopFBO();
-            Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, Renderer.FBOBound);
+            Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, previousFBO);
             Renderer.Viewport(0, 0, GameSettings.Width, GameSettings.Height);
             Renderer.BindShader(previousBound);
             Renderer.Disable(EnableCap.DepthTest);

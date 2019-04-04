@@ -355,7 +355,28 @@
     <Compile Include="Engine\QuestSystem\QuestThoughtsComponent.cs" />
     <Compile Include="Engine\QuestSystem\QuestTier.cs" />
     <Compile Include="Engine\Rendering\BufferBalancer.cs" />
-    <Compile Include="Engine\Rendering\DummyGLProvider.cs" />
+    <Compile Include="Engine\Rendering\Core\DrawAsserter.cs" />
+    <Compile Include="Engine\Rendering\Core\DummyGLProvider.cs" />
+    <Compile Include="Engine\Rendering\Core\ErrorSeverity.cs" />
+    <Compile Include="Engine\Rendering\Core\FBO.cs" />
+    <Compile Include="Engine\Rendering\Core\FramebufferHandler.cs" />
+    <Compile Include="Engine\Rendering\Core\GLObject.cs" />
+    <Compile Include="Engine\Rendering\Core\GLProvider.cs" />
+    <Compile Include="Engine\Rendering\Core\IdentifiableObject.cs" />
+    <Compile Include="Engine\Rendering\Core\IGLProvider.cs" />
+    <Compile Include="Engine\Rendering\Core\Renderer.cs" />
+    <Compile Include="Engine\Rendering\Core\RenderException.cs" />
+    <Compile Include="Engine\Rendering\Core\Shader.cs" />
+    <Compile Include="Engine\Rendering\Core\ShaderHandler.cs" />
+    <Compile Include="Engine\Rendering\Core\ShaderManager.cs" />
+    <Compile Include="Engine\Rendering\Core\Texture3D.cs" />
+    <Compile Include="Engine\Rendering\Core\TextureHandler.cs" />
+    <Compile Include="Engine\Rendering\Core\TextureParameter.cs" />
+    <Compile Include="Engine\Rendering\Core\TextureRegistry.cs" />
+    <Compile Include="Engine\Rendering\Core\VAO.cs" />
+    <Compile Include="Engine\Rendering\Core\VBO.cs" />
+    <Compile Include="Engine\Rendering\Core\VertexAttributeHandler.cs" />
+    <Compile Include="Engine\Rendering\Core\BufferHandler.cs" />
     <Compile Include="Engine\Rendering\Frustum\BoundingFrustum.cs" />
     <Compile Include="Engine\Rendering\Frustum\Culling.cs" />
     <Compile Include="Engine\Rendering\Frustum\Occludable.cs" />
@@ -364,6 +385,9 @@
     <Compile Include="Engine\Rendering\Frustum\PlaneIntersectionType.cs" />
     <Compile Include="Engine\Rendering\IBufferPool.cs" />
     <Compile Include="Engine\Rendering\Particles\ParticleVAO.cs" />
+    <Compile Include="Engine\Rendering\Shaders\ShaderInput.cs" />
+    <Compile Include="Engine\Rendering\Shaders\ShaderIO.cs" />
+    <Compile Include="Engine\Rendering\Shaders\ShaderOutput.cs" />
     <Compile Include="Engine\Rendering\TextFormatting.cs" />
     <Compile Include="Engine\Rendering\ITransparent.cs" />
     <Compile Include="Engine\Rendering\LodableObject.cs" />
@@ -371,8 +395,6 @@
     <Compile Include="Engine\Rendering\TextBillboard.cs" />
     <Compile Include="Engine\Rendering\Texture.cs" />
     <Compile Include="Engine\Rendering\TextureBillboard.cs" />
-    <Compile Include="Engine\Rendering\TextureRegistry.cs" />
-    <Compile Include="Engine\Rendering\TextureParameter.cs" />
     <Compile Include="Engine\Rendering\UI\Plaque.cs" />
     <Compile Include="Engine\Rendering\UI\TextCache.cs" />
     <Compile Include="Engine\Rendering\UI\TextOptions.cs" />
@@ -741,7 +763,6 @@
     <Compile Include="Engine\Rendering\CompressedValue.cs" />
     <Compile Include="Engine\Rendering\CompressedVertexData.cs" />
     <Compile Include="Engine\Rendering\CompressedVertexDataExtensions.cs" />
-    <Compile Include="Engine\Rendering\ErrorSeverity.cs" />
     <Compile Include="Engine\Rendering\Geometry\ChunkMeshBorderDetector.cs" />
     <Compile Include="Engine\Rendering\Geometry\Geometry.cs" />
     <Compile Include="Engine\Rendering\Geometry\IsoSurfaceCreator.cs" />
@@ -751,14 +772,9 @@
     <Compile Include="Engine\Rendering\Geometry\VertexOcclusion.cs" />
     <Compile Include="Engine\Rendering\Geometry\WaterEdgePatcher.cs" />
     <Compile Include="Engine\Rendering\Geometry\WaterMeshStitcher.cs" />
-    <Compile Include="Engine\Rendering\GLProvider.cs" />
-    <Compile Include="Engine\Rendering\IGLProvider.cs" />
     <Compile Include="Engine\Rendering\ITexture2DProvider.cs" />
     <Compile Include="Engine\Rendering\IVertexData.cs" />
-    <Compile Include="Engine\Rendering\RenderException.cs" />
-    <Compile Include="Engine\Rendering\ShaderHandler.cs" />
     <Compile Include="Engine\Rendering\Texture2DProvider.cs" />
-    <Compile Include="Engine\Rendering\TextureHandler.cs" />
     <Compile Include="Engine\Rendering\UI\IAdjustable.cs" />
     <Compile Include="Engine\Rendering\UI\ISimpleTexture.cs" />
     <Compile Include="Engine\Rendering\UI\ITextProvider.cs" />
@@ -895,7 +911,6 @@
     <Compile Include="Engine\WorldBuilding\Tombstone.cs" />
     <Compile Include="Engine\Rendering\CapHandler.cs" />
     <Compile Include="Engine\Rendering\GeometryData.cs" />
-    <Compile Include="Engine\Rendering\Renderer.cs" />
     <Compile Include="Engine\Management\SoundtrackManager.cs">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Compile>
@@ -916,7 +931,6 @@
     <Compile Include="Engine\Management\ICullable.cs" />
     <Compile Include="Engine\Management\IRenderable.cs" />
     <Compile Include="Engine\Management\IUpdatable.cs" />
-    <Compile Include="Engine\Rendering\ShaderManager.cs" />
     <Compile Include="Engine\Management\TaskScheduler.cs" />
     <Compile Include="Engine\Management\Executer.cs" />
     <Compile Include="Engine\Management\UpdateManager.cs" />
@@ -999,11 +1013,9 @@
     <Compile Include="Engine\Rendering\Shaders\UniformArray.cs" />
     <Compile Include="Engine\Rendering\Shaders\UniformMapping.cs" />
     <Compile Include="Engine\Rendering\StateHandler.cs" />
-    <Compile Include="Engine\Rendering\Texture3D.cs" />
     <Compile Include="Engine\Rendering\UI\PlayerInterface.cs" />
     <Compile Include="Engine\Rendering\UI\TextConfiguration.cs" />
     <Compile Include="Engine\Rendering\UI\TextureCommand.cs" />
-    <Compile Include="Engine\Rendering\VertexAttributeHandler.cs" />
     <Compile Include="Engine\StructureSystem\BanditCampDesign.cs" />
     <Compile Include="Engine\StructureSystem\StructureHandler.cs" />
     <Compile Include="Engine\WorldBuilding\TravellingMerchant.cs" />
@@ -1089,12 +1101,10 @@
     <Compile Include="Engine\Rendering\Effects\UnderWaterFilter.cs" />
     <Compile Include="Engine\Rendering\ObjectMesh.cs" />
     <Compile Include="Engine\Rendering\ObjectMeshBuffer.cs" />
-    <Compile Include="Engine\Rendering\FBO.cs" />
     <Compile Include="Engine\Rendering\DataContainer.cs" />
     <Compile Include="Engine\Rendering\GIF.cs" />
     <Compile Include="Engine\Rendering\MemoryEntry.cs" />
     <Compile Include="Engine\Rendering\GeometryPool.cs" />
-    <Compile Include="Engine\Rendering\InstanceBatch.cs" />
     <Compile Include="Engine\Rendering\InstanceData.cs" />
     <Compile Include="Engine\Rendering\MarchingData.cs" />
     <Compile Include="Engine\Rendering\IModel.cs" />
@@ -1125,7 +1135,6 @@
     <Compile Include="Engine\Rendering\ShadowRenderer.cs" />
     <Compile Include="Engine\Rendering\SurfaceNets.cs" />
     <Compile Include="Engine\Rendering\SymetricMatrix.cs" />
-    <Compile Include="Engine\Rendering\UBO.cs" />
     <Compile Include="Engine\Rendering\UI\Bar.cs" />
     <Compile Include="Engine\Rendering\UI\Button.cs" />
     <Compile Include="Engine\Rendering\UI\ChrChooserUI.cs" />
@@ -1152,7 +1161,6 @@
     <Compile Include="Engine\Rendering\UI\TexturedBar.cs" />
     <Compile Include="Engine\Rendering\UI\UIElement.cs" />
     <Compile Include="Engine\Rendering\UI\UserInterface.cs" />
-    <Compile Include="Engine\Rendering\VAO.cs" />
     <Compile Include="Engine\Rendering\WorldBuffer.cs" />
     <Compile Include="Engine\Rendering\WorldRenderer.cs" />
     <Compile Include="Engine\Scenes\MenuBackground.cs" />
@@ -1177,11 +1185,9 @@
     <Compile Include="Engine\Generation\ChunkSystem\Chunk.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkLoader.cs" />
     <Compile Include="Engine\Rendering\BasicGeometry.cs" />
-    <Compile Include="Engine\Rendering\VBO.cs" />
     <Compile Include="Engine\Rendering\CubeData.cs" />
     <Compile Include="Engine\Rendering\Graphics2D.cs" />
     <Compile Include="Engine\Rendering\ChunkMesh.cs" />
-    <Compile Include="Engine\Rendering\Shader.cs" />
     <Compile Include="Engine\TreeSystem\AppleDesign.cs" />
     <Compile Include="Engine\TreeSystem\CypressDesign.cs" />
     <Compile Include="Engine\TreeSystem\DeadTreeDesign.cs" />

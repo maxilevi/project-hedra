@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
@@ -28,12 +29,19 @@ namespace Hedra.Engine.Rendering.Particles
             Unbind(false);
         }
 
+        public override Type[] Types => base.Types.Concat(new[]
+        {
+            typeof(Vector4),
+            typeof(Vector4),
+            typeof(Vector4),
+            typeof(Vector4),
+            typeof(Vector4)
+        }).ToArray();
+
         public override void Bind(bool EnableAttributes = true)
         {
             base.Bind(EnableAttributes);
             if(!EnableAttributes) return;
-            Renderer.EnableVertexAttribArray(0);
-            Renderer.EnableVertexAttribArray(1);
             Renderer.EnableVertexAttribArray(2);
             Renderer.EnableVertexAttribArray(3);
             Renderer.EnableVertexAttribArray(4);
@@ -43,10 +51,8 @@ namespace Hedra.Engine.Rendering.Particles
 
         public override void Unbind(bool DisableAttributes = true)
         {
-            base.Bind(DisableAttributes);
+            base.Unbind(DisableAttributes);
             if(!DisableAttributes) return;
-            Renderer.DisableVertexAttribArray(0);
-            Renderer.DisableVertexAttribArray(1);
             Renderer.DisableVertexAttribArray(2);
             Renderer.DisableVertexAttribArray(3);
             Renderer.DisableVertexAttribArray(4);

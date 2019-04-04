@@ -38,7 +38,7 @@ namespace Hedra.Engine.Rendering.Effects
             this.DrawQuad(WaterEffect, Src.TextureId[0]);
             WaterEffect.Unbind();
             
-            Dst.UnBind();
+            Dst.Unbind();
         }
         
         public override void DrawQuad(Shader DrawingShader, uint TexID, uint Additive = 0, bool Flipped = false)

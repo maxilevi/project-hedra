@@ -41,13 +41,13 @@ namespace Hedra.Engine.Rendering
         public GeometryPool(int SizeInBytes, int TypeSizeInBytes, VertexAttribPointerType PointerType, BufferTarget BufferTarget = BufferTarget.ArrayBuffer, BufferUsageHint Hint = BufferUsageHint.StaticDraw)
         {
             ObjectMap = new List<MemoryEntry>();
-            Buffer = new VBO<T>(new T[]{}, 0, PointerType, BufferTarget, Hint);
+            Buffer = new VBO<T>(new T[0], 0, PointerType, BufferTarget, Hint);
 
             this._poolSize = (int) SizeInBytes;
             this.TypeSizeInBytes = TypeSizeInBytes;
             
-            Renderer.BindBuffer(Buffer.BufferTarget, Buffer.ID);
-            Renderer.BufferData(Buffer.BufferTarget, (IntPtr) TotalMemory, IntPtr.Zero, Buffer.Hint);
+            Buffer.Update(new T[0], TotalMemory);
+            
             var error = Renderer.GetError();
             if (error != ErrorCode.NoError)
                 Log.WriteLine($"GLError when creating GeometryPool<{typeof(T)}> {error}");
@@ -56,6 +56,11 @@ namespace Hedra.Engine.Rendering
         public void Bind()
         {
             Buffer.Bind();
+        }
+        
+        public void Unbind()
+        {
+            Buffer.Unbind();
         }
 
         public Bitmap Draw()
@@ -130,9 +135,13 @@ namespace Hedra.Engine.Rendering
                 ObjectMap.Add(Entry);
             }
             
-            Renderer.BindBuffer(Buffer.BufferTarget, Buffer.ID);
-            Renderer.BufferSubData(Buffer.BufferTarget, (IntPtr) Entry.Offset, (IntPtr) SizeInBytes, Data);
+            Buffer.Update(Data, Entry.Offset, SizeInBytes);
             return Entry;
+        }
+
+        public void UpdateBuffer(T[] Data, int Offset, int SizeInBytes)
+        {
+            Buffer.Update(Data, Offset, SizeInBytes);
         }
         
         public MemoryEntry Allocate(T[] Data, int SizeInBytes)
@@ -142,9 +151,8 @@ namespace Hedra.Engine.Rendering
 
         public void Discard()
         {
-            this.ObjectMap.Clear();
-            Renderer.BindBuffer(Buffer.BufferTarget, Buffer.ID);
-            Renderer.BufferData(Buffer.BufferTarget, (IntPtr) TotalMemory, IntPtr.Zero, Buffer.Hint);
+            ObjectMap.Clear();
+            Buffer.Update(new T[0], TotalMemory);
         }
 
         public void Dispose()

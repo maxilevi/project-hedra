@@ -10,11 +10,11 @@ namespace Hedra.Engine.Rendering
 {
     public interface IMeshBuffer
     {
-        VBO<Vector3> Vertices { get; set; }
-        VBO<Vector4> Colors { get; set; }
-        VBO<uint> Indices { get; set; }
-        VBO<Vector3> Normals { get; set; }
-        VAO<Vector3, Vector4, Vector3> Data { get; set; }
+        VBO<Vector3> Vertices { get; }
+        VBO<Vector4> Colors { get; }
+        VBO<uint> Indices { get; }
+        VBO<Vector3> Normals { get;  }
+        VAO<Vector3, Vector4, Vector3> Data { get; }
 
         void Draw();
 

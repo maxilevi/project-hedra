@@ -32,7 +32,7 @@ namespace Hedra.Engine.Rendering.Effects
             HBlurShader.Bind();
             this.DrawQuad(HBlurShader, Src.TextureId[0], 0);
             HBlurShader.Unbind();
-            Dst.UnBind();
+            Dst.Unbind();
 
             Src.Bind();
             
@@ -40,11 +40,11 @@ namespace Hedra.Engine.Rendering.Effects
             this.DrawQuad(VBlurShader, Dst.TextureId[0], 0);
             VBlurShader.Unbind();
             
-            Src.UnBind();
+            Src.Unbind();
             
             Dst.Bind();
             MainFBO.DrawQuad(Src.TextureId[0]);
-            Dst.UnBind();
+            Dst.Unbind();
         }
         
         public override void DrawQuad(Shader DrawingShader, uint TexID, uint Additive = 0, bool Flipped = false)

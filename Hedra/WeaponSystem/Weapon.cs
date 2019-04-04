@@ -100,7 +100,7 @@ namespace Hedra.WeaponSystem
             }
             else
             {
-                MainMesh = new ObjectMesh();
+                MainMesh = new ObjectMesh(VertexData.Empty);
             }
             CreateAnimations();
         }

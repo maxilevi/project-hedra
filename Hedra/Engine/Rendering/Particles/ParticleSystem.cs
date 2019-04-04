@@ -142,7 +142,7 @@ namespace Hedra.Engine.Rendering.Particles
         {
             if(!HasMultipleOutputs && (this.Position - LocalPlayer.Instance.Position).LengthSquared > GeneralSettings.DrawDistanceSquared) return;
             
-            if(Particles.Count > 0 && false)
+            if(Particles.Count > 0)
             {
                 Renderer.Enable(EnableCap.Blend);
                 Renderer.Enable(EnableCap.DepthTest);
@@ -153,6 +153,7 @@ namespace Hedra.Engine.Rendering.Particles
                 
                 ParticleCreator.IndicesVBO.Bind();
                 Renderer.DrawElementsInstanced(PrimitiveType.Triangles, ParticleCreator.IndicesVBO.Count, DrawElementsType.UnsignedShort, IntPtr.Zero, Particles.Count);
+                ParticleCreator.IndicesVBO.Unbind();
                 
                 _vao.Unbind();
                 
@@ -163,8 +164,7 @@ namespace Hedra.Engine.Rendering.Particles
         
         private void BuildBuffers()
         {
-            _particleVbo = new VBO<Vector4>(new Vector4[0], 0,
-                VertexAttribPointerType.Float, BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
+            _particleVbo = new VBO<Vector4>(new Vector4[0], 0, VertexAttribPointerType.Float, BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
             _vao = new ParticleVAO(ParticleCreator.VerticesVBO, ParticleCreator.NormalsVBO, _particleVbo);
         }
         
@@ -181,7 +181,7 @@ namespace Hedra.Engine.Rendering.Particles
                 vec4S[i * 5 + 3] = transMatrix.Column2;
                 vec4S[i * 5 + 4] = transMatrix.Column3;
             }
-            _particleVbo.Update(vec4S, vec4S.Length * Particle3D.SizeInBytes);
+            _particleVbo.Update(vec4S, vec4S.Length * Vector4.SizeInBytes);
         }
         
         private static Matrix4 ConstructTransformationMatrix(Vector3 Position, Vector3 Rotation, Vector3 Scale)

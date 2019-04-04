@@ -5,10 +5,13 @@
  *
  */
 using System;
+using System.Diagnostics;
 using Hedra.Core;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Management;
+using Hedra.Rendering;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
@@ -19,11 +22,11 @@ namespace Hedra.Engine.Rendering
     /// </summary>
     public class ObjectMeshBuffer : IMeshBuffer
     {
-        public VBO<Vector3> Vertices { get; set; }
-        public VBO<Vector4> Colors { get; set; }
-        public VBO<uint> Indices { get; set; }
-        public VBO<Vector3> Normals { get; set; }
-        public VAO<Vector3, Vector4, Vector3> Data { get; set; }
+        public VBO<Vector3> Vertices { get; private set; }
+        public VBO<Vector4> Colors { get; private set; }
+        public VBO<uint> Indices { get; private set; }
+        public VBO<Vector3> Normals { get; private set; }
+        public VAO<Vector3, Vector4, Vector3> Data { get; private set; }
         public static Shader Shader { get; }
         public bool ApplyFog { get; set; } = true;
         public float Alpha { get; set; } = 1;
@@ -68,6 +71,18 @@ namespace Hedra.Engine.Rendering
             NoiseTexture = new Texture3D(noiseValues);
         }
 
+        public ObjectMeshBuffer(VertexData ModelData)
+        {
+            Executer.ExecuteOnMainThread(() =>
+            {
+                Vertices = new VBO<Vector3>(ModelData.Vertices.ToArray(), ModelData.Vertices.Count * Vector3.SizeInBytes, VertexAttribPointerType.Float);
+                Colors = new VBO<Vector4>(ModelData.Colors.ToArray(), ModelData.Colors.Count * Vector4.SizeInBytes, VertexAttribPointerType.Float);
+                Normals = new VBO<Vector3>(ModelData.Normals.ToArray(), ModelData.Normals.Count * Vector3.SizeInBytes, VertexAttribPointerType.Float);
+                Indices = new VBO<uint>(ModelData.Indices.ToArray(), ModelData.Indices.Count * sizeof(uint), VertexAttribPointerType.UnsignedInt, BufferTarget.ElementArrayBuffer);
+                Data = new VAO<Vector3, Vector4, Vector3>(Vertices, Colors, Normals);
+            });
+        }
+
         public void Draw()
         {
             if (Indices == null || Data == null) return;
@@ -81,9 +96,10 @@ namespace Hedra.Engine.Rendering
             
             Data.Bind();
 
-            Renderer.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
+            Indices.Bind();
             Renderer.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
-
+            Indices.Unbind();
+            
             if (Outline)
             {
                 Renderer.Enable(EnableCap.Blend);
@@ -91,7 +107,7 @@ namespace Hedra.Engine.Rendering
                 Shader["Outline"] = this.Outline ? 1 : 0;
                 Shader["OutlineColor"] = this.OutlineColor;
                 Shader["Time"] = Time.IndependantDeltaTime;
-                Renderer.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.ID);
+                Renderer.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.Id);
                 Renderer.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
                 Renderer.Enable(EnableCap.DepthTest);
             }
@@ -184,7 +200,7 @@ namespace Hedra.Engine.Rendering
 
             Renderer.ActiveTexture(TextureUnit.Texture1);
             Renderer.BindTexture(TextureTarget.Texture3D, NoiseTexture.Id);
-            Shader["noiseTexture"] = 1;      
+            Shader["noiseTexture"] = 1;
             
             if (GameSettings.Shadows)
             {
@@ -211,11 +227,20 @@ namespace Hedra.Engine.Rendering
         public void Dispose()
         {
             _disposed = true;
-            Vertices?.Dispose();
-            Colors?.Dispose();
-            Indices?.Dispose();
-            Normals?.Dispose();
-            Data?.Dispose();
+
+            void DoDispose()
+            {
+                Vertices.Dispose();
+                Colors.Dispose();
+                Indices.Dispose();
+                Normals.Dispose();
+                Data.Dispose();
+            }
+
+            if (Data == null)
+                Executer.ExecuteOnMainThread(DoDispose);
+            else
+                DoDispose();
         }
     }
 }

@@ -3,19 +3,19 @@ using System.Collections.Generic;
 
 namespace Hedra.Engine.Management
 {
-    public class StateManager
+    public abstract class StateManager
     {
         protected readonly HashSet<TrackItem> _trackItems;
         protected readonly Dictionary<TrackItem, object> _cache;
         protected bool _state;
-   
-        public StateManager()
+
+        protected StateManager()
         {
             _trackItems = new HashSet<TrackItem>();
             _cache = new Dictionary<TrackItem, object>();
         }
 
-        public void RegisterStateItem(Func<object> Getter, Action<object> Setter, bool ReleaseFirst = false)
+        protected void RegisterStateItem(Func<object> Getter, Action<object> Setter, bool ReleaseFirst = false)
         {
             if (_state) throw new ArgumentException("A state cannot be registeres while the manager is active.");
             _trackItems.Add(new TrackItem(Getter,Setter, ReleaseFirst));

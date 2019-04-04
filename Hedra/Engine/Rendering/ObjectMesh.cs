@@ -5,6 +5,7 @@
  *
  */
 using System;
+using System.Diagnostics;
 using Hedra.Core;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Game;
@@ -12,6 +13,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 using OpenTK;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Rendering;
 
 namespace Hedra.Engine.Rendering
@@ -31,16 +33,21 @@ namespace Hedra.Engine.Rendering
         private Timer _underChunkTimer;
         private Vector3 _lastPosition;
 
-        public ObjectMesh()
+        public ObjectMesh(VertexData Data)
         {
-           _buffer = new ObjectMeshBuffer();
+           _buffer = new ObjectMeshBuffer(Data);
         }
 
-        private ObjectMesh(Vector3 Position)
+        private ObjectMesh(Vector3 Position, VertexData Data)
         {
             this.Enabled = true;
-            this._buffer = new ObjectMeshBuffer();
+            this._buffer = new ObjectMeshBuffer(Data);
             this.Mesh = new ChunkMesh(Position, _buffer);
+            Mesh.IsGenerated = true;
+            Mesh.IsBuilded = true;
+            Mesh.Enabled = true;
+            CullingBox = Physics.BuildBroadphaseBox(Data);
+            
             this.Position = Position;
             this.LocalRotation = Vector3.Zero;
             Mesh.Enabled = true;
@@ -197,19 +204,10 @@ namespace Hedra.Engine.Rendering
 
         public static ObjectMesh FromVertexData(VertexData Data, bool CullPrematurely = true)
         {
-            var mesh = new ObjectMesh(Vector3.Zero)
+            var mesh = new ObjectMesh(Vector3.Zero, Data)
             {
                 PrematureCulling = CullPrematurely
             };
-            Executer.ExecuteOnMainThread( delegate
-            {                                                  
-                mesh.Mesh.BuildFrom(Data, false);
-                mesh.Mesh.IsGenerated = true;
-                mesh.Mesh.IsBuilded = true;
-                mesh.Mesh.Enabled = true;
-                mesh.CullingBox = Physics.BuildBroadphaseBox(Data);
-            });
-            
             return mesh;
             
         }

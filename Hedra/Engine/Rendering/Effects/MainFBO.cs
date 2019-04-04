@@ -65,7 +65,7 @@ namespace Hedra.Engine.Rendering.Effects
                 DefaultShader.Bind();
                 DrawQuad(Default.TextureId[0]);
                 DefaultShader.Unbind();
-                FinalFbo.UnBind();
+                FinalFbo.Unbind();
                 
                 if(GameSettings.BlurFilter)
                 {
@@ -73,12 +73,12 @@ namespace Hedra.Engine.Rendering.Effects
                     DefaultShader.Bind();
                     DrawQuad(FinalFbo.TextureId[0]);
                     DefaultShader.Unbind();
-                    Default.UnBind();
+                    Default.Unbind();
                     
                     //Clear it
                     FinalFbo.Bind();
                     Renderer.ClearColor(Colors.Transparent);
-                    FinalFbo.UnBind();
+                    FinalFbo.Unbind();
                 }
             }
             #endregion
@@ -124,7 +124,7 @@ namespace Hedra.Engine.Rendering.Effects
 
                 DrawManager.UIRenderer.DrawQuad();
 
-                Ssao.ThirdPass.UnBind();
+                Ssao.ThirdPass.Unbind();
                 DrawFBO.Bind();
                 Ssao.ThirdPassShader.Bind();
 
@@ -141,7 +141,7 @@ namespace Hedra.Engine.Rendering.Effects
                 DrawManager.UIRenderer.DrawQuad();
 
                 Ssao.ThirdPassShader.Unbind();
-                DrawFBO.UnBind();//Unbind is the same
+                DrawFBO.Unbind();//Unbind is the same
                 
                 Renderer.Enable(EnableCap.CullFace);
                 Renderer.Disable(EnableCap.Blend);
@@ -190,18 +190,18 @@ namespace Hedra.Engine.Rendering.Effects
                 DefaultShader.Bind();
                 DrawQuad(FinalFbo.TextureId[0], 0, true);
                 DefaultShader.Unbind();
-                Default.UnBind();
+                Default.Unbind();
                    
                 FinalFbo.Bind();
                 DefaultShader.Bind();
                 DrawQuad(Default.TextureId[0], 0, false);
                 DefaultShader.Unbind();
-                FinalFbo.UnBind();
+                FinalFbo.Unbind();
                 
                 //Clear it
                 Default.Bind();
                 Renderer.ClearColor(Colors.Transparent);
-                Default.UnBind();
+                Default.Unbind();
             }
             #endregion
 
@@ -284,9 +284,9 @@ namespace Hedra.Engine.Rendering.Effects
         public void UnCaptureData()
         {
             if(!GameSettings.SSAO)
-                Default.UnBind();
+                Default.Unbind();
             else
-                Ssao.FirstPass.UnBind();//Unbind ids the same
+                Ssao.FirstPass.Unbind();//Unbind ids the same
         }
         
         public static MainFBO DefaultBuffer => DrawManager.MainBuffer;

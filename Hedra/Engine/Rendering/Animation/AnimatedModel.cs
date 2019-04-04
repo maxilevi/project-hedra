@@ -9,6 +9,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.Game;
@@ -90,7 +92,6 @@ namespace Hedra.Engine.Rendering.Animation
                     VertexAttribPointerType.Float);
                 _vertexWeights = new VBO<Vector3>(Model.VertexWeights,
                     Model.VertexWeights.Length * Vector3.SizeInBytes, VertexAttribPointerType.Float);
-
                 Data = new VAO<Vector3, Vector3, Vector3, Vector3, Vector3>(_vertices, _colors, _normals,
                     _jointIds, _vertexWeights);
             });
@@ -153,26 +154,26 @@ namespace Hedra.Engine.Rendering.Animation
                 Executer.ExecuteOnMainThread(delegate
                 {
                     _disposed = true;
-                    Data?.Dispose();
-                    _jointIds?.Dispose();
-                    _indices?.Dispose();
-                    _normals?.Dispose();
-                    _colors?.Dispose();
-                    _vertices?.Dispose();
-                    _vertexWeights?.Dispose();
+                    Data.Dispose();
+                    _jointIds.Dispose();
+                    _indices.Dispose();
+                    _normals.Dispose();
+                    _colors.Dispose();
+                    _vertices.Dispose();
+                    _vertexWeights.Dispose();
                     DrawManager.Remove(this);
                 });
             }
             else
             {
                 _disposed = true;
-                Data?.Dispose();
-                _jointIds?.Dispose();
-                _indices?.Dispose();
-                _normals?.Dispose();
-                _colors?.Dispose();
-                _vertices?.Dispose();
-                _vertexWeights?.Dispose();
+                Data.Dispose();
+                _jointIds.Dispose();
+                _indices.Dispose();
+                _normals.Dispose();
+                _colors.Dispose();
+                _vertices.Dispose();
+                _vertexWeights.Dispose();
                 DrawManager.Remove(this);
             }
         }
@@ -225,9 +226,10 @@ namespace Hedra.Engine.Rendering.Animation
 
             Data.Bind();
 
-            Renderer.BindBuffer(BufferTarget.ElementArrayBuffer, _indices.ID);
+            _indices.Bind();
             Renderer.DrawElements(PrimitiveType.Triangles, _indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
-
+            _indices.Unbind();
+            
             if (Outline)
             {
                 Renderer.Enable(EnableCap.Blend);
@@ -235,8 +237,9 @@ namespace Hedra.Engine.Rendering.Animation
                 _shader["Outline"] = Outline ? 1 : 0;
                 _shader["OutlineColor"] = OutlineColor;
                 _shader["Time"] = Time.IndependantDeltaTime;
-                Renderer.BindBuffer(BufferTarget.ElementArrayBuffer, _indices.ID);
+                _indices.Bind();
                 Renderer.DrawElements(PrimitiveType.Triangles, _indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
+                _indices.Unbind();
                 Renderer.Enable(EnableCap.DepthTest);
             }
             _shader["Outline"] = 0;

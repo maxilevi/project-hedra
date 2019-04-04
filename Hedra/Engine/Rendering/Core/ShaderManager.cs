@@ -26,30 +26,35 @@ namespace Hedra.Engine.Rendering
         private static Vector3 _lightPosition;
         private static Vector3 _lightColor;
         private static float _clipPlaneY;
-        private static readonly List<Shader> Shaders;
+        private static readonly List<Shader> _shaders;
         private static readonly List<PointLight> PointLights;
         public static PointLight[] Lights => PointLights.ToArray();
 
         static ShaderManager()
         {
-            Shaders = new List<Shader>();
+            _shaders = new List<Shader>();
             PointLights = new List<PointLight>(MaxLights);
             _lightPosition = new Vector3(0, 1000, 0);
         }
 
+        public static Shader GetById(uint Id)
+        {
+            return _shaders.First(S => S.ShaderId == Id);
+        }
+        
         public static void ReloadShaders()
         {
 #if DEBUG
             AssetManager.GrabShaders();
 #endif
             AssetManager.ReloadShaderSources();
-            var currentShaders = Shaders.ToArray();
+            var currentShaders = _shaders.ToArray();
             currentShaders.ToList().ForEach( S => S.Reload() );
         }
         
         public static void RegisterShader(Shader Entry)
         {
-            Shaders.Add(Entry);
+            _shaders.Add(Entry);
             Entry.LightCountLocation = Renderer.GetUniformLocation(Entry.ShaderId, "LightCount");
             Entry.LightColorLocation = Renderer.GetUniformLocation(Entry.ShaderId, "LightColor");
             Entry.LightPositionLocation = Renderer.GetUniformLocation(Entry.ShaderId, "LightPosition");
@@ -71,19 +76,24 @@ namespace Hedra.Engine.Rendering
             }
         }
 
+        public static void UnregisterShader(Shader Entry)
+        {
+            _shaders.Remove(Entry);
+        }
+        
         private static void Do(Func<Shader, bool> Condition, Action<Shader> Action, bool InSameThread = false)
         {
             var previousProgram = Renderer.ShaderBound;
             Renderer.BindShader(previousProgram);
-            for (var i = 0; i < Shaders.Count; i++)
+            for (var i = 0; i < _shaders.Count; i++)
             {
                 int k = i;
-                if (Condition(Shaders[k]))
+                if (Condition(_shaders[k]))
                 {
                     void Do()
                     {
-                        Shaders[k].Bind();
-                        Action(Shaders[k]);
+                        _shaders[k].Bind();
+                        Action(_shaders[k]);
                     }
 
                     if (InSameThread) Do();

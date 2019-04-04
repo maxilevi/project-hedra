@@ -58,6 +58,11 @@ namespace Hedra.Engine.Rendering
         {
             Indices.Bind();
         }
+        
+        public void UnbindIndices()
+        {
+            Indices.Unbind();
+        }
 
         public void Unbind()
         {
@@ -237,9 +242,7 @@ namespace Hedra.Engine.Rendering
                 Data[i] += newCount;
             }
             
-            Renderer.BindBuffer(Indices.Buffer.BufferTarget, Indices.Buffer.ID);
-            Renderer.BufferSubData(Indices.Buffer.BufferTarget, (IntPtr) Entry.Offset, (IntPtr) SizeInBytes, Data);
-            
+            Indices.UpdateBuffer(Data, Entry.Offset, SizeInBytes);
             return Entry;                                   
         }
 

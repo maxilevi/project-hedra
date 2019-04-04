@@ -35,19 +35,12 @@ namespace Hedra.Engine.EnvironmentSystem
                 out _fogSettingsSize
                 );
 
-            uint id;
-            Renderer.GenBuffers(1, out id);
+            Renderer.GenBuffers(1, out var id);
             UboId = id;
             
             Renderer.BindBuffer(BufferTarget.UniformBuffer, UboId);
             Renderer.BufferData(BufferTarget.UniformBuffer, (IntPtr)_fogSettingsSize, IntPtr.Zero, BufferUsageHint.DynamicDraw);
-
-            this.BindBlock(_fogSettingsIndex);
-        }
-        
-        public void BindBlock(int Index){
-            Renderer.BindBuffer(BufferTarget.UniformBuffer, UboId);
-            Renderer.BindBufferBase(BufferRangeTarget.UniformBuffer, Index, (int) UboId);
+            Renderer.BindBufferBase(BufferRangeTarget.UniformBuffer, _fogSettingsIndex, (int) UboId);
         }
         
         public void UpdateFogSettings(float MinDist, float MaxDist)
@@ -58,26 +51,21 @@ namespace Hedra.Engine.EnvironmentSystem
             FogValues = data;
             Renderer.BindBuffer(BufferTarget.UniformBuffer, UboId);
             Renderer.BufferSubData(BufferTarget.UniformBuffer, IntPtr.Zero, (IntPtr)_fogSettingsSize, ref data);
-            
-        }
-        
-        public void Enable(){
-            WorldRenderer.StaticShader.Bind();
-        }
-        public void Disable(){
-            WorldRenderer.StaticShader.Unbind();
+            Renderer.BindBuffer(BufferTarget.UniformBuffer, 0);
         }
     }
     
     [StructLayout(LayoutKind.Sequential)]
-    public struct FogData {
+    public struct FogData
+    {
         public Vector4 U_BotColor;
         public Vector4 U_TopColor;
-           public float MinDist;
+        public float MinDist;
         public float MaxDist;
         public float U_Height;
         
-        public FogData(float MinDist, float MaxDist, float Height, Vector4 U_BotColor, Vector4 U_TopColor){
+        public FogData(float MinDist, float MaxDist, float Height, Vector4 U_BotColor, Vector4 U_TopColor)
+        {
             this.MinDist = MinDist;
             this.MaxDist = MaxDist;
             this.U_Height = Height;

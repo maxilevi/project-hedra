@@ -49,6 +49,7 @@ namespace Hedra.Engine.Player.MapSystem
         private readonly List<ObjectMesh> _markers;
         private readonly ObjectMesh _marker;
         private readonly ObjectMesh _questMarker;
+        private readonly ObjectMesh _baseMesh;
         private readonly Panel _panel;
         private bool _show;
         private float _size;
@@ -316,8 +317,7 @@ namespace Hedra.Engine.Player.MapSystem
             var baseItem = this.FindByCoordinates(Coords);
             if (baseItem == null)
             {
-                var newMesh = new ObjectMesh();
-                baseItem = new MapBaseItem(MapSize, newMesh)
+                baseItem = new MapBaseItem(MapSize, null)
                 {
                     Coordinates = Coords
                 };
@@ -330,16 +330,15 @@ namespace Hedra.Engine.Player.MapSystem
         {
             TaskScheduler.Parallel(delegate
             {
-                var prevMesh = BaseItem.Mesh;
                 var item = _meshBuilder.BuildItem(Coords);
                 Executer.ExecuteOnMainThread(delegate
                 {
-                    item.Mesh.Position = prevMesh.Position;
+                    item.Mesh.Position = Vector3.Zero;
+                    BaseItem.Mesh?.Dispose();
                     BaseItem.Mesh = item.Mesh;
                     BaseItem.HasChunk = item.HasChunk;
                     BaseItem.Coordinates = Coords;
                     BaseItem.WasBuilt = item.WasBuilt;
-                    if (prevMesh?.Mesh != null) prevMesh.Dispose();
                 });
             });
         }
@@ -400,7 +399,6 @@ namespace Hedra.Engine.Player.MapSystem
                         SkyManager.PopTime();
                         _targetTime = float.MaxValue;
                         if(!_show) _height = 0f;
-
                     });
                     _player.Loader.UpdateFog(Force: true);
                 }

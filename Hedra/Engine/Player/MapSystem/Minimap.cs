@@ -132,7 +132,7 @@ namespace Hedra.Engine.Player.MapSystem
             if ((_lastPosition - _player.Position.Xz.ToVector3()).LengthSquared > 2 || _previousActiveChunks != _player.Loader.ActiveChunks)
             {
                 Renderer.Enable(EnableCap.DepthTest);
-                Renderer.PushFBO();
+                var previousFBO = Renderer.FBOBound;
                 var previousBound = Renderer.ShaderBound;
                 _mapFbo.Bind();
                 Renderer.ClearColor(SkyManager.FogManager.FogValues.U_BotColor);
@@ -179,8 +179,7 @@ namespace Hedra.Engine.Player.MapSystem
                 Renderer.Disable(EnableCap.DepthTest);
                 Renderer.Enable(EnableCap.Blend);
                 Renderer.ClearColor(Vector4.Zero);
-                Renderer.PopFBO();
-                Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, Renderer.FBOBound);
+                Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, previousFBO);
                 Renderer.Viewport(0, 0, GameSettings.Width, GameSettings.Height);
                 Renderer.BindShader(previousBound);
                 _lastPosition = _player.Position.Xz.ToVector3();

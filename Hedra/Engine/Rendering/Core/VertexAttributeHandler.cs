@@ -1,35 +1,37 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Rendering
 {
     public class VertexAttributeHandler
     {
+        private const int MaxAttributes = 16;
         private readonly Dictionary<uint, bool> _states;
-
+        private uint _currentlyBound;
+        
         public VertexAttributeHandler()
         {
-            _states = new Dictionary<uint, bool>
+            _states = new Dictionary<uint, bool>();
+            for (var i = 0u; i < MaxAttributes; ++i)
             {
-                {0, false},
-                {1, false},
-                {2, false},
-                {3, false},
-                {4, false},
-                {5, false},
-                {6, false},
-                {7, false},
-                {8, false},
-                {9, false},
-                {10, false},
-                {11, false},
-                {12, false},
-                {13, false},
-                {14, false},
-                {15, false}
-            };
+                _states.Add(i, false);
+            }
             Renderer.ShaderChanged += OnShaderChanged;
+        }
+
+        public int Count => _states.Count(S => S.Value);
+        
+        public bool IsEnabled(uint Index)
+        {
+            return _states[Index];
+        }
+
+        public void Bind(uint Id)
+        {
+            Renderer.Provider.BindVertexArray(Id);
+            _currentlyBound = Id;
         }
         
         public void Enable(uint Index)
@@ -44,7 +46,7 @@ namespace Hedra.Engine.Rendering
             DoDisable(Index);
         }
 
-        public void OnShaderChanged()
+        private void OnShaderChanged()
         {
             foreach (var state in _states)
             {
@@ -53,7 +55,7 @@ namespace Hedra.Engine.Rendering
             }
         }
 
-        private void EnsureValidity()
+        private static void EnsureValidity()
         {
             if (Renderer.ShaderBound == 0)
                 throw new ArgumentException("A shader needs to be bound before using vertex array objects.");
@@ -61,14 +63,20 @@ namespace Hedra.Engine.Rendering
         
         private void DoEnable(uint Index)
         {
+            if(Index > MaxAttributes)
+                throw new ArgumentOutOfRangeException($"A shader can only have up to '{MaxAttributes}'");
             Renderer.Provider.EnableVertexAttribArray(Index);
             _states[Index] = true;
         }
         
         private void DoDisable(uint Index)
         {
+            if(Index > MaxAttributes)
+                throw new ArgumentOutOfRangeException($"A shader can only have up to '{MaxAttributes}'");
             Renderer.Provider.EnableVertexAttribArray(Index);
             _states[Index] = false;
         }
+
+        public uint Id => _currentlyBound;
     }
 }

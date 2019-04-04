@@ -18,6 +18,7 @@ namespace Hedra.Engine.Player.MapSystem
         private readonly int _mapSize;
         private readonly int _chunkSize;
         private readonly CubeData _cubeData;
+        private readonly CubeData _fullData;
 
         public MapMeshBuilder(IPlayer Player, int MapSize, int ChunkSize)
         {
@@ -28,10 +29,14 @@ namespace Hedra.Engine.Player.MapSystem
             _cubeData = new CubeData();
             _cubeData.Scale(new Vector3(_chunkSize, _chunkSize * 3, _chunkSize));
             _cubeData.AddFace(Face.UP);
-            _cubeData.AddFace(Face.FRONT);
-            _cubeData.AddFace(Face.BACK);
-            _cubeData.AddFace(Face.RIGHT);
-            _cubeData.AddFace(Face.LEFT);
+            
+            _fullData = new CubeData();
+            _fullData.Scale(new Vector3(_chunkSize, _chunkSize * 3, _chunkSize));
+            _fullData.AddFace(Face.FRONT);
+            _fullData.AddFace(Face.BACK);
+            _fullData.AddFace(Face.RIGHT);
+            _fullData.AddFace(Face.LEFT);
+            _fullData.AddFace(Face.UP);
 
         }
 
@@ -53,11 +58,12 @@ namespace Hedra.Engine.Player.MapSystem
                     var region = World.BiomePool.GetRegion(chunkPosition.ToVector3());
                     var chunk = World.GetChunkByOffset(chunkPosition);
                     var useChunkMesh = MapBaseItem.UsableChunk(chunk);
+                    var useFullCube = !IsNeighbourEqual(chunkPosition, useChunkMesh);
                     if (!useChunkMesh)
                     {
                         var blockColor = Utils.UniformVariateColor(region.Colors.GrassColor, 25, rng);
                         item.HasChunk[x * _mapSize + z] = false;
-                        var cubeData = _cubeData.Clone();
+                        var cubeData = useFullCube ? _fullData.Clone() : _cubeData.Clone();
                         BlockType type;
                         cubeData.Scale(new Vector3(1, 2, 1));
                         cubeData.TransformVerts(new Vector3(realX, 0, realZ));
@@ -87,6 +93,21 @@ namespace Hedra.Engine.Player.MapSystem
             item.Mesh = baseMesh;
             item.WasBuilt = true;   
             return item;
+        }
+
+        private bool IsNeighbourEqual(Vector2 ChunkPosition, bool Condition)
+        {
+            for (var x = -1; x < 2; x++)
+            {
+                for (var z = -1; z < 2; z++)
+                {
+                    if(Math.Abs(z) == Math.Abs(x)) continue;
+                    var chunk = World.GetChunkByOffset(ChunkPosition + new Vector2(Chunk.Width * x, Chunk.Width * z));
+                    if (MapBaseItem.UsableChunk(chunk) != Condition) return false;
+                }
+            }
+
+            return true;
         }
     }
 }

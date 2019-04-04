@@ -8,6 +8,8 @@
  */
 
 using System;
+using System.Windows.Forms;
+using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
@@ -19,16 +21,19 @@ namespace Hedra.Engine.Rendering
     {
         public static event ShaderChangeEvent ShaderChanged;
         public static IGLProvider Provider { get; set; } = new GLProvider();
-        public static int FBOBound { get; set; }
         public static uint ShaderBound => ShaderHandler.Id;
+        public static uint FBOBound => FramebufferHandler.Id;
+        public static uint VAOBound => VertexAttributeHandler.Id;
+        public static uint VBOBound => BufferHandler.Id;
         public static Matrix4 ModelViewProjectionMatrix { get; private set; }
         public static Matrix4 ModelViewMatrix { get; private set; }
         public static Matrix4 ProjectionMatrix { get; private set; }
-        public static StateManager FboManager { get; }
         public static CapHandler CapHandler { get; }
         public static TextureHandler TextureHandler { get; }
         public static ShaderHandler ShaderHandler { get; }
         public static VertexAttributeHandler VertexAttributeHandler { get; }
+        public static FramebufferHandler FramebufferHandler { get; }
+        public static BufferHandler BufferHandler { get; }
 
         static Renderer()
         {
@@ -36,8 +41,8 @@ namespace Hedra.Engine.Rendering
             TextureHandler = new TextureHandler();
             ShaderHandler = new ShaderHandler();
             VertexAttributeHandler = new VertexAttributeHandler();
-            FboManager = new StateManager();
-            FboManager.RegisterStateItem( () => FBOBound, O => FBOBound = (int) O);
+            BufferHandler = new BufferHandler();
+            FramebufferHandler = new FramebufferHandler();
         }
 
         public static void Load()
@@ -46,22 +51,57 @@ namespace Hedra.Engine.Rendering
             BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
             Shader.ShaderChanged += () => ShaderChanged?.Invoke();
         }
-
-        public static void LoadProjection(Matrix4 Projection)
+        
+        public static void MultiDrawElements(PrimitiveType Type, int[] Counts, DrawElementsType ElementsType, IntPtr[] Offsets, int Length)
         {
-            ProjectionMatrix = Projection;
-            RebuildMVP();
+#if DEBUG
+            DrawAsserter.AssertMultiDrawElement(Type, Counts, ElementsType, Offsets, Length);
+#endif
+            CompatibilityManager.MultiDrawElementsMethod(Type, Counts, ElementsType, Offsets, Length);
+        }
+        
+        public static void DrawArrays(PrimitiveType Type, int Offset, int Count)
+        {
+#if DEBUG
+            DrawAsserter.AssertDrawArrays(Type, Offset, Count);
+#endif
+            Provider.DrawArrays(Type, Offset, Count);
         }
 
-        public static void LoadModelView(Matrix4 ModelView)
+        public static void DrawElements(PrimitiveType Primitive, int Count, DrawElementsType Type, IntPtr Indices)
         {
-            ModelViewMatrix = ModelView;
-            RebuildMVP();
+#if DEBUG
+            DrawAsserter.AssertDrawElements(Primitive, Count, Type, Indices);
+#endif
+            Provider.DrawElements(Primitive, Count, Type, Indices);
         }
 
-        private static void RebuildMVP()
+        public static void DrawElementsInstanced(PrimitiveType Primitive, int Count, DrawElementsType Type, IntPtr Indices, int InstanceCount)
         {
-            ModelViewProjectionMatrix = ModelViewMatrix * ProjectionMatrix;
+#if DEBUG
+            DrawAsserter.AssertDrawElementsInstanced(Primitive, Count, Type, Indices, InstanceCount);
+#endif
+            Provider.DrawElementsInstanced(Primitive, Count, Type, Indices, InstanceCount);
+        }
+        
+        public static void BindBuffer(BufferTarget Target, uint V0)
+        {
+            BufferHandler.Bind(Target, V0);
+        }
+        
+        public static void BindTexture(TextureTarget Target, uint Id)
+        {
+            TextureHandler.Bind(Target, Id);
+        }
+
+        public static void BindVAO(uint Id)
+        {
+            VertexAttributeHandler.Bind(Id);
+        }
+        
+        public static void BindFramebuffer(FramebufferTarget Target, uint Id)
+        {
+            FramebufferHandler.Bind(Target, Id);
         }
         
         public static void Enable(EnableCap Cap)
@@ -84,35 +124,41 @@ namespace Hedra.Engine.Rendering
             VertexAttributeHandler.Disable(Index);
         }
 
-        public static void PushFBO()
-        {
-            FboManager.CaptureState();
-        }
-
-        public static int PopFBO()
-        {
-            FboManager.ReleaseState();
-            return FBOBound;
-        }
-
         public static void BindShader(uint Id)
         {
             ShaderHandler.Use(Id);
-        }
-
-        public static void BindFramebuffer(FramebufferTarget Target, int Id)
-        {
-            Provider.BindFramebuffer(Target, (uint)Id);
-        }
-
-        public static void MultiDrawElements(PrimitiveType Type, int[] Counts, DrawElementsType ElementsType, IntPtr[] Offsets, int Length)
-        {
-            CompatibilityManager.MultiDrawElementsMethod(Type, Counts, ElementsType, Offsets, Length);
         }
         
         public static void ActiveTexture(TextureUnit Unit)
         {
             TextureHandler.Active(Unit);
+        }
+
+        public static void LoadProjection(Matrix4 Projection)
+        {
+            ProjectionMatrix = Projection;
+            RebuildMVP();
+        }
+
+        public static void LoadModelView(Matrix4 ModelView)
+        {
+            ModelViewMatrix = ModelView;
+            RebuildMVP();
+        }
+
+        private static void RebuildMVP()
+        {
+            ModelViewProjectionMatrix = ModelViewMatrix * ProjectionMatrix;
+        }
+        
+        public static void DrawBuffer(DrawBufferMode Mode)
+        {
+            Provider.DrawBuffer(Mode);
+        }
+
+        public static void DrawBuffers(int N, DrawBuffersEnum[] Enums)
+        {
+            Provider.DrawBuffers(N, Enums);
         }
 
         public static void AttachShader(int S0, int S1)
@@ -125,29 +171,9 @@ namespace Hedra.Engine.Rendering
             Provider.BeginQuery(Target, V0);
         }
 
-        public static void BindBuffer(BufferTarget Target, uint V0)
-        {
-            Provider.BindBuffer(Target, V0);
-        }
-
         public static void BindBufferBase(BufferRangeTarget Target, int V0, int V1)
         {
             Provider.BindBufferBase(Target, V0, V1);
-        }
-
-        public static void BindFramebuffer(FramebufferTarget Target, uint Id)
-        {
-            Provider.BindFramebuffer(Target, Id);
-        }
-
-        public static void BindTexture(TextureTarget Target, uint Id)
-        {
-            TextureHandler.Bind(Target, Id);
-        }
-
-        public static void BindVertexArray(uint Id)
-        {
-            Provider.BindVertexArray(Id);
         }
 
         public static void BlendEquation(BlendEquationMode Mode)
@@ -188,7 +214,7 @@ namespace Hedra.Engine.Rendering
 
         public static FramebufferErrorCode CheckFramebufferStatus(FramebufferTarget Target)
         {
-           return  Provider.CheckFramebufferStatus(Target);
+           return Provider.CheckFramebufferStatus(Target);
         }
 
         public static void Clear(ClearBufferMask Mask)
@@ -269,31 +295,6 @@ namespace Hedra.Engine.Rendering
         public static void DetachShader(int V0, int V1)
         {
             Provider.DetachShader((uint)V0, (uint)V1);
-        }
-
-        public static void DrawArrays(PrimitiveType Type, int Offset, int Count)
-        {
-            Provider.DrawArrays(Type, Offset, Count);
-        }
-
-        public static void DrawBuffer(DrawBufferMode Mode)
-        {
-            Provider.DrawBuffer(Mode);
-        }
-
-        public static void DrawBuffers(int N, DrawBuffersEnum[] Enums)
-        {
-            Provider.DrawBuffers(N, Enums);
-        }
-
-        public static void DrawElements(PrimitiveType Primitive, int Count, DrawElementsType Type, IntPtr Indices)
-        {
-            Provider.DrawElements(Primitive, Count, Type, Indices);
-        }
-
-        public static void DrawElementsInstanced(PrimitiveType Primitive, int Count, DrawElementsType Type, IntPtr Indices, int Instancecount)
-        {
-            Provider.DrawElementsInstanced(Primitive, Count, Type, Indices, Instancecount);
         }
 
         public static void EndQuery(QueryTarget Target)

@@ -7,7 +7,9 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using Hedra.Engine.IO;
+using Hedra.Engine.Rendering.Core;
 using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Rendering
@@ -15,40 +17,16 @@ namespace Hedra.Engine.Rendering
     /// <summary>
     /// Description of FBO.
     /// </summary>
-    public class FBO : IDisposable
+    public sealed class FBO : GLObject<FBO>
     {
-        /// <summary>
-        /// The ID for the entire framebuffer object.
-        /// </summary>
-        public uint BufferId { get; private set; }
-
-        /// <summary>
-        /// The IDs for each of the renderbuffer attachments.
-        /// </summary>
+        public override uint Id => _id;
         public uint[] TextureId { get; private set; }
-
-        /// <summary>
-        /// The ID for the sinGLe depth buffer attachment.
-        /// </summary>
         public uint DepthId { get; private set; }
-
-        /// <summary>
-        /// The size (in pixels) of all renderbuffers associated with this framebuffer.
-        /// </summary>
         public Size Size { get; private set; }
-
-        /// <summary>
-        /// The attachments used by this framebuffer.
-        /// </summary>
         public FramebufferAttachment[] Attachments { get; private set; }
-
-        /// <summary>
-        /// The internal pixel format for each of the renderbuffers (depth buffer not included).
-        /// </summary>
         public PixelInternalFormat[] Formats { get; private set; }
-
-        private bool _mipmaps;
-        private bool _multisample;
+        private readonly bool _multisample;
+        private uint _id;
         private int _samples;
 
         public FBO(int Width, int Height, bool Multisample = false, int Samples = 2, FramebufferAttachment Attachment = FramebufferAttachment.ColorAttachment0, PixelInternalFormat Format = PixelInternalFormat.Rgba8, bool Mipmaps = false, bool Depth = true)
@@ -86,14 +64,12 @@ namespace Hedra.Engine.Rendering
             this.Size = Size;
             this.Attachments = Attachments;
             this.Formats = Formats;
-            this._mipmaps = Mipmaps;
             this._multisample = Multisample;
             this._samples = (_multisample) ? Samples : 0;
             
             // First create the framebuffer
-            BufferId = (uint) Renderer.GenFramebuffer();
-            Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, BufferId);
-            Renderer.FBOBound = (int) BufferId;
+            _id = (uint) Renderer.GenFramebuffer();
+            Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, Id);
 
             if (Attachments.Length == 1 && Attachments[0] == FramebufferAttachment.DepthAttachment)
             {
@@ -215,7 +191,6 @@ namespace Hedra.Engine.Rendering
             }
 
             Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
-            Renderer.FBOBound = 0;
         }
         
 
@@ -225,7 +200,7 @@ namespace Hedra.Engine.Rendering
         ~FBO()
         {
             if(Program.GameWindow.IsExiting || Program.IsDummy) return;
-            if (DepthId != 0 || BufferId != 0 || TextureId != null)
+            if (DepthId != 0 || Id != 0 || TextureId != null)
             {
                 System.Diagnostics.Debug.Fail("FBO was not disposed of properly.");
             }
@@ -239,10 +214,9 @@ namespace Hedra.Engine.Rendering
         /// <param name="Clear">True to clear both the color and depth buffer bits of the FBO before enabling.</param>
         public void Bind(bool Clear = true)
         {
-            if(Renderer.FBOBound == BufferId) return;
+            if(Renderer.FBOBound == Id) return;
 
-            Renderer.FBOBound = (int) BufferId;
-            Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, BufferId);
+            Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, Id);
             if (Attachments.Length == 1)
             {
                 if(!_multisample){
@@ -282,18 +256,14 @@ namespace Hedra.Engine.Rendering
             }
         }
 
-        /// <summary>
-        /// Unbinds the framebuffer and then generates the mipmaps of each renderbuffer.
-        /// </summary>
-        public void UnBind()
+        public void Unbind()
         {
-            // unbind this framebuffer (does not guarantee the correct framebuffer is bound)
             Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
-            Renderer.FBOBound = 0;
         }
         
-        public void Dispose()
+        public override void Dispose()
         {
+            base.Dispose();
             if (TextureId != null)
             {
                 for (var i = 0; i < TextureId.Length; ++i)
@@ -303,10 +273,10 @@ namespace Hedra.Engine.Rendering
                 TextureId = null;
             }
 
-            if(BufferId != 0)
+            if(Id != 0)
             {
-                Renderer.DeleteFramebuffers(1, new uint[] {BufferId});
-                BufferId = 0;
+                Renderer.DeleteFramebuffers(1, new uint[] {_id});
+                _id = 0;
             }
 
             if(DepthId != 0)

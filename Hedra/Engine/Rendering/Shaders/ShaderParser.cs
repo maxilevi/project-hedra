@@ -61,9 +61,33 @@ namespace Hedra.Engine.Rendering.Shaders
             return mappings.ToArray();
         }
 
+        public ShaderInput[] ParseShaderInputs()
+        {
+            return ParseShaderIO<ShaderInput>(@"layout\s*\(\s*location\s*=\s*(\d)\)\s*in\s+(.*?)\s+(.*?);");
+        }
+        
+        public ShaderOutput[] ParseShaderOutputs()
+        {
+            return ParseShaderIO<ShaderOutput>(@"layout\s*\(\s*location\s*=\s*(\d)\)\s*out\s+(.*?)\s+(.*?);");
+        }
+        
+        private T[] ParseShaderIO<T>(string RegexString) where T : ShaderIO
+        {
+            var mappings = new List<T>();
+            var matches = Regex.Matches(Source, RegexString).Cast<Match>().ToArray();
+            for (var i = 0; i < matches.Length; i ++)
+            {
+                var location = uint.Parse(matches[i].Groups[1].Value);
+                var type = ParseType(matches[i].Groups[2].Value);
+                var name = matches[i].Groups[3].Value;
+                mappings.Add((T) Activator.CreateInstance(typeof(T), location, name, type));
+            }
+            return mappings.ToArray();
+        }
+        
         private int ParseArraySize(string Value)
         {
-            var tryInt = int.TryParse(Value, out int newValue);
+            var tryInt = int.TryParse(Value, out var newValue);
             if (!tryInt)
             {
                 newValue = int.Parse(this.GetValueFromConstant(Value));
@@ -98,7 +122,7 @@ namespace Hedra.Engine.Rendering.Shaders
                 case "int":
                     return typeof(int);
                 default:
-                    // FIXME: This doesnt work when obfuscated
+                    // FIXME: This does not work when obfuscated
                     var possibleType = InferType(Type);
                     if (possibleType != null) return possibleType;
                     throw new ArgumentException($"Type '{Type}' could not be mapped to a valid type");

@@ -43,7 +43,7 @@ namespace Hedra.Engine.Rendering.Effects
             this.DrawQuad(Bloom, Src.TextureId[0]);
             
             Bloom.Unbind();
-            HBloomFbo.UnBind();
+            HBloomFbo.Unbind();
             
             VBloomFbo.Bind();
             HBlurShader.Bind();
@@ -52,7 +52,7 @@ namespace Hedra.Engine.Rendering.Effects
             this.DrawQuad(HBlurShader, HBloomFbo.TextureId[0]);
             
             HBlurShader.Unbind();
-            VBloomFbo.UnBind();
+            VBloomFbo.Unbind();
             
             HBloomFbo.Bind();
             VBlurShader.Bind();
@@ -61,14 +61,14 @@ namespace Hedra.Engine.Rendering.Effects
             this.DrawQuad(VBlurShader, VBloomFbo.TextureId[0]);
             
             VBlurShader.Unbind();
-            HBloomFbo.UnBind();
+            HBloomFbo.Unbind();
             
             Dst.Bind();
             MainFBO.DefaultShader.Bind();
             Renderer.Clear(ClearBufferMask.ColorBufferBit);
             this.DrawQuad(MainFBO.DefaultShader, HBloomFbo.TextureId[0], 0);
             MainFBO.DefaultShader.Unbind();
-            Dst.UnBind();
+            Dst.Unbind();
         }
 
         public override void Dispose()

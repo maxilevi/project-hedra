@@ -6,6 +6,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Hedra.Engine.Game;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
@@ -51,70 +52,6 @@ namespace Hedra.Engine.Rendering
         {
             this.Max = Max;
             this.Min = Min;
-        }
-
-        public void BuildFrom(VertexData Data, bool ExtraData)
-        {
-            try
-            {
-                if (Data?.Colors == null)
-                    return;
-
-                Vector4[] colorBuffer;
-                if (ExtraData)
-                {
-                    colorBuffer = new Vector4[Data.Colors.Count];
-                    for (var i = 0; i < colorBuffer.Length; i++)
-                    {
-                        colorBuffer[i] = new Vector4(Data.Colors[i].Xyz, Data.Extradata[i]);
-                    }
-                }
-                else
-                {
-                    colorBuffer = Data.Colors.ToArray();
-                }
-
-                var colorBufferSize = (colorBuffer.Length * Vector4.SizeInBytes);
-                var vertexBufferSize = (Data.Vertices.Count * Vector3.SizeInBytes);
-                var indexBufferSize = (Data.Indices.Count * sizeof(int));
-                var normalBufferSize = (Data.Normals.Count * Vector3.SizeInBytes);
-
-                if (_buffer.Vertices == null)
-                    _buffer.Vertices = new VBO<Vector3>(Data.Vertices.ToArray(), vertexBufferSize,
-                        VertexAttribPointerType.Float);
-                else
-                    _buffer.Vertices.Update(Data.Vertices.ToArray(), vertexBufferSize);
-
-                if (_buffer.Indices == null)
-                    _buffer.Indices = new VBO<uint>(Data.Indices.ToArray(), indexBufferSize,
-                        VertexAttribPointerType.UnsignedInt, BufferTarget.ElementArrayBuffer);
-                else
-                    _buffer.Indices.Update(Data.Indices.ToArray(), indexBufferSize);
-
-
-                if (_buffer.Colors == null)
-                    _buffer.Colors = new VBO<Vector4>(colorBuffer, colorBufferSize, VertexAttribPointerType.Float);
-                else
-                    _buffer.Colors.Update(colorBuffer, colorBufferSize);
-
-                if (_buffer.Normals == null)
-                    _buffer.Normals = new VBO<Vector3>(Data.Normals.ToArray(), normalBufferSize,
-                        VertexAttribPointerType.Float);
-                else
-                    _buffer.Normals.Update(Data.Normals.ToArray(), normalBufferSize);
-
-                if (_buffer.Data == null)
-                    _buffer.Data =
-                        new VAO<Vector3, Vector4, Vector3>(_buffer.Vertices, _buffer.Colors, _buffer.Normals);
-
-                IsBuilded = true;
-                Enabled = true;
-                BuildedOnce = true;
-            }
-            catch (Exception e)
-            {
-                Log.WriteLine(e.ToString());
-            }
         }
 
         public void Draw()

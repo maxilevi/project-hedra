@@ -47,7 +47,7 @@ namespace Hedra.Engine.Rendering.Effects
             DrawQuad(WaterEffect, Src.TextureId[0]);
             WaterEffect.Unbind();
             
-            Dst.UnBind();
+            Dst.Unbind();
             Renderer.ActiveTexture(TextureUnit.Texture1);
             Renderer.BindTexture(TextureTarget.Texture2D, 0);
         }

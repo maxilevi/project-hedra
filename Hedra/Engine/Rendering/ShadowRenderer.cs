@@ -32,7 +32,7 @@ namespace Hedra.Engine.Rendering
         public static Matrix4 DepthView { get; set; }
         public static Matrix4 ShadowMvp { get; set; }
         private static float _shadowDistance;
-        private static int _prevFbo;
+        private static uint _prevFbo;
 
         static ShadowRenderer()
         {
@@ -85,7 +85,6 @@ namespace Hedra.Engine.Rendering
             Shader.Unbind();
             Renderer.CullFace(CullFaceMode.Back);
             Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, _prevFbo);
-            Renderer.FBOBound = _prevFbo;
         }
         
         public static void SetQuality(int Quality)

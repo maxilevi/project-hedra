@@ -28,13 +28,15 @@ namespace Hedra.Engine.Rendering
         private readonly Dictionary<string, bool> _knownMappings;
         private readonly Dictionary<string, UniformMapping> _mappings;
         private readonly Dictionary<string, UniformArray> _arrayMappings;
+        private readonly List<ShaderInput> _inputs;
+        private readonly List<ShaderOutput> _outputs;
         private readonly ShaderData _vertexShader;
         private readonly ShaderData _fragmentShader;
         private readonly ShaderData _geometryShader;
-        private readonly string _name;
         protected int ShaderVid { get; private set; }
         protected int ShaderFid { get; private set; }
         protected int ShaderGid { get; private set; }
+        public string Name { get; }
         public int ShaderId { get; private set; }
         public int ClipPlaneLocation { get; set; }
         public int LightCountLocation { get; set; }
@@ -43,10 +45,17 @@ namespace Hedra.Engine.Rendering
         public int[] PointLightsColorUniform { get; set; }
         public int[] PointLightsPositionUniform { get; set; }
         public int[] PointLightsRadiusUniform { get; set; }
+        public ShaderInput[] Inputs => _inputs.ToArray();
+        public ShaderOutput[] Outputs => _outputs.ToArray();
 
         static Shader()
         {
             Passthrough = Build("Shaders/Passthrough.vert", "Shaders/Passthrough.frag");
+        }
+
+        public static Shader GetById(uint Id)
+        {
+            return ShaderManager.GetById(Id);
         }
         
         public static Shader Build(string FileSourceV, string FileSourceF)
@@ -81,7 +90,9 @@ namespace Hedra.Engine.Rendering
             _mappings = new Dictionary<string, UniformMapping>();
             _arrayMappings = new Dictionary<string, UniformArray>();
             _knownMappings = new Dictionary<string, bool>();
-            _name = $"<{DataV?.Name ?? string.Empty}>:<{DataF?.Name ?? string.Empty}>:<{DataG?.Name ?? string.Empty}>";
+            _inputs = new List<ShaderInput>();
+            _outputs = new List<ShaderOutput>();
+            Name = $"<{DataV?.Name ?? string.Empty}>:<{DataF?.Name ?? string.Empty}>:<{DataG?.Name ?? string.Empty}>";
             this.CompileShaders(_vertexShader, _geometryShader, _fragmentShader);
         }
 
@@ -119,6 +130,8 @@ namespace Hedra.Engine.Rendering
                 _mappings.Clear();
                 _arrayMappings.Clear();
                 _knownMappings.Clear();
+                _outputs.Clear();
+                _inputs.Clear();
                 this.CompileShaders(_vertexShader, _geometryShader, _fragmentShader);
             }
         }
@@ -129,6 +142,20 @@ namespace Hedra.Engine.Rendering
             {
                 _arrayMappings.Add(Array[i].Key, Array[i]);
             }
+        }
+
+        private void AddShaderInputs(ShaderInput[] Array, ShaderType Type)
+        {
+            if(Type != ShaderType.VertexShader && Array.Length > 0)
+                throw new ArgumentException($"Expected '0' inputs for shader '{Name}' of type '{Type}' but got '{Array.Length}'");
+            _inputs.AddRange(Array);
+        }
+        
+        private void AddShaderOutputs(ShaderOutput[] Array, ShaderType Type)
+        {
+            if(Type != ShaderType.FragmentShader && Array.Length > 0)
+                throw new ArgumentException($"Expected '0' outputs for shader '{Name}' of type '{Type}' but got '{Array.Length}'");
+            _outputs.AddRange(Array);
         }
 
         private static void Compile(out int ID, string Source, string Name, ShaderType Type)
@@ -165,7 +192,7 @@ namespace Hedra.Engine.Rendering
         private void Combine()
         {
             ShaderId = Renderer.CreateProgram();
-            Log.WriteLine($"Shader'{_name}' compiled succesfully with Id '{ShaderId}'.", LogType.System);
+            Log.WriteLine($"Shader'{Name}' compiled succesfully with Id '{ShaderId}'.", LogType.System);
 
             if (ShaderVid > 0) Renderer.AttachShader(ShaderId, ShaderVid);              
             if (ShaderGid > 0) Renderer.AttachShader(ShaderId, ShaderGid);
@@ -183,14 +210,20 @@ namespace Hedra.Engine.Rendering
 
             var parser = new ShaderParser(_vertexShader.Source);
             this.AddArrayMappings(parser.ParseUniformArrays(ShaderId));
+            this.AddShaderInputs(parser.ParseShaderInputs(), ShaderType.VertexShader);
+            this.AddShaderOutputs(parser.ParseShaderOutputs(), ShaderType.VertexShader);
 
             parser.Source = _fragmentShader.Source;
             this.AddArrayMappings(parser.ParseUniformArrays(ShaderId));
+            this.AddShaderInputs(parser.ParseShaderInputs(), ShaderType.FragmentShader);
+            this.AddShaderOutputs(parser.ParseShaderOutputs(), ShaderType.FragmentShader);
 
             if (_geometryShader != null)
             {
                 parser.Source = _geometryShader.Source;
                 this.AddArrayMappings(parser.ParseUniformArrays(ShaderId));
+                this.AddShaderInputs(parser.ParseShaderInputs(), ShaderType.GeometryShader);
+                this.AddShaderOutputs(parser.ParseShaderOutputs(), ShaderType.GeometryShader);
             }
 
             ShaderManager.RegisterShader(this);
@@ -306,6 +339,7 @@ namespace Hedra.Engine.Rendering
         
         public void Dispose()
         {
+            ShaderManager.UnregisterShader(this);
             Renderer.DeleteProgram(ShaderId);
         }
     }
