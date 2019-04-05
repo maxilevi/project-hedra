@@ -38,7 +38,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Berserker
 
             for (var i = 0; i < 125; i++)
             {
-                World.Particles.Position = Player.Position + new Vector3(Utils.Rng.NextFloat() * 2f - 1f, 0, Utils.Rng.NextFloat() * 2f -1f) * 24f;
+                World.Particles.Position = Player.Position + new Vector3(Utils.Rng.NextFloat() * 2f - 1f, 0, Utils.Rng.NextFloat() * 2f -1f) * Range;
                 World.Particles.Direction = (Utils.Rng.NextFloat() * .5f + .5f) * Vector3.UnitY * 2f;
                 World.Particles.Color = color;
                 World.Particles.Emit();
@@ -50,7 +50,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Berserker
         public override float MaxCooldown => 22;
         private float StunChance => .15f + .35f * (Level / (float)MaxLevel);
         private float Damage => 10 + 30f * (Level / (float)MaxLevel);
-        private float Range => 16 + 8f * (Level / (float)MaxLevel);
+        private float Range => 24 + 16f * (Level / (float)MaxLevel);
         public override float ManaCost => 0;
         public override string Description => Translations.Get("ground_stomp_desc");
         public override string DisplayName => Translations.Get("ground_stomp_skill");

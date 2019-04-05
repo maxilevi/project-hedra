@@ -182,17 +182,20 @@ namespace Hedra.Engine.Rendering.UI
             
             if (_barBlueprint == 0)
             {
+                _barBlueprint = uint.MaxValue;
                 Executer.ExecuteOnMainThread(delegate
                 {
                     _barBlueprint = Graphics2D.LoadFromAssets("Assets/Bar.png"); 
-                    
+                    TextureRegistry.MarkStatic(_barBlueprint);
                 });
             }
-            if (_rectangleBlueprint == -1)
+            if (_rectangleBlueprint == 0)
             {
+                _rectangleBlueprint = uint.MaxValue;
                 Executer.ExecuteOnMainThread(delegate
                 {
                     _rectangleBlueprint = Graphics2D.ColorTexture(Colors.FromArgb(255, 29, 29, 29));
+                    TextureRegistry.MarkStatic(_rectangleBlueprint);
                 });
             }
         }

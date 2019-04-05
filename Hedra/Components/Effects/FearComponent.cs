@@ -17,8 +17,12 @@ namespace Hedra.Components.Effects
         {
             Parent.AddComponent(new SlowingComponent(Parent, Attacker, Duration, Slowness));               
             Parent.ShowIcon(CacheItem.FearIcon, Duration);
-            Parent.RemoveComponent(_previousAi = Parent.SearchComponent<BasicAIComponent>(), false);
-            Parent.AddComponent(_fearComponent = new FearAIComponent(Parent, Attacker));
+            _previousAi = Parent.SearchComponent<BasicAIComponent>();
+            if (_previousAi != null)
+            {
+                Parent.RemoveComponent(_previousAi, false);
+                Parent.AddComponent(_fearComponent = new FearAIComponent(Parent, Attacker));
+            }
             _duration = new Timer(Duration);
         }
 
@@ -36,7 +40,7 @@ namespace Hedra.Components.Effects
         public override void Dispose()
         {
             Parent.RemoveComponent(_fearComponent);
-            Parent.AddComponent(_previousAi);
+            if(_previousAi != null) Parent.AddComponent(_previousAi);
         }
     }
 }
