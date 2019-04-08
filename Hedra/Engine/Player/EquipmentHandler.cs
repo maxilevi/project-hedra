@@ -114,6 +114,15 @@ namespace Hedra.Engine.Player
                 }
             }
         }
+
+        public Item[] MainEquipment => new[]
+        {
+            _owner.Inventory.MainWeapon,
+            _owner.Inventory.Helmet,
+            _owner.Inventory.Chest,
+            _owner.Inventory.Pants,
+            _owner.Inventory.Boots
+        };
         
         public void Dispose()
         {

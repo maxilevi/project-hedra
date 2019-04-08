@@ -47,18 +47,6 @@ namespace Hedra.Engine.Player
         
         private FishingHandler Fisher { get; }
         private EquipmentHandler Equipment { get; }
-        public Weapon LeftWeapon => Equipment.LeftWeapon;
-        public virtual Item MainWeapon
-        {
-            get => Equipment.MainWeapon;
-            set => Equipment.MainWeapon = value;
-        }
-        
-        public virtual Item Ring
-        {
-            get => Equipment.Ring;
-            set => Equipment.Ring = value;
-        }
         
         public ClassDesign Class
         {
@@ -476,6 +464,22 @@ namespace Hedra.Engine.Player
             get => false;
             set => throw new NotImplementedException();
         }
+        
+        public Weapon LeftWeapon => Equipment.LeftWeapon;
+        
+        public virtual Item MainWeapon
+        {
+            get => Equipment.MainWeapon;
+            set => Equipment.MainWeapon = value;
+        }
+        
+        public virtual Item Ring
+        {
+            get => Equipment.Ring;
+            set => Equipment.Ring = value;
+        }
+
+        public Item[] MainEquipment => Equipment.MainEquipment;
 
         public override void Dispose()
         {

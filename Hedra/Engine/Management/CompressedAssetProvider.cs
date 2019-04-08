@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Globalization;
@@ -23,6 +24,7 @@ namespace Hedra.Engine.Management
     {
         private List<ResourceHandler> _registeredHandlers;
         private bool _filesDecompressed;
+        private string _uniqueId;
         private Dictionary<string, VertexData> _hitboxCache;
         private readonly object _hitboxCacheLock = new object();
         private readonly object _handlerLock = new object();
@@ -94,29 +96,38 @@ namespace Hedra.Engine.Management
 
         private void DecompileAssets()
         {
-            if(_filesDecompressed) return;            
+            if (_filesDecompressed) return;
 
+            _uniqueId = Guid.NewGuid().ToString();
             AppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/" + "Project Hedra/";
-            AppPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)+ "/";
+            AppPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/";
+            TryCleanupTemp(TemporalFolder = $"{AppData}/Temp/");
 
-            TemporalFolder = AppData + "/Temp/";
-
-            if ( Directory.Exists(TemporalFolder) ) Directory.Delete(TemporalFolder, true);
-
-            var info = Directory.CreateDirectory(TemporalFolder);
-            info.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
-
-            //Decompress binary contents in there so there is not much ram usage
-            File.WriteAllBytes(TemporalFolder + Path.GetFileNameWithoutExtension(AssetsResource),
-                ZipManager.UnZipBytes(File.ReadAllBytes(AppPath + AssetsResource))  );
-
-            File.WriteAllBytes(TemporalFolder + Path.GetFileNameWithoutExtension(SoundResource),
-                ZipManager.UnZipBytes(File.ReadAllBytes(AppPath + SoundResource))  );
+            var soundBytes = ZipManager.UnZipBytes(File.ReadAllBytes(AppPath + SoundResource));
+            var zipBytes = ZipManager.UnZipBytes(File.ReadAllBytes(AppPath + AssetsResource));
+            File.WriteAllBytes(GetResourceName(AssetsResource), zipBytes);
+            File.WriteAllBytes(GetResourceName(SoundResource), soundBytes);
 
             _registeredHandlers = new List<ResourceHandler>();
             _filesDecompressed = true;
         }
 
+        private string GetResourceName(string Resource) => $"{TemporalFolder}{Path.GetFileNameWithoutExtension(Resource)}-{_uniqueId}";
+        
+        private void TryCleanupTemp(string Temp)
+        {
+            try
+            {
+                if (Directory.Exists(TemporalFolder)) Directory.Delete(TemporalFolder, true);
+                var info = Directory.CreateDirectory(TemporalFolder);
+                info.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
+            }
+            catch (IOException e)
+            {
+                Log.WriteLine("Failed to clean temp directory.");
+            }
+        }
+        
         public byte[] ReadPath(string Path, bool Text = true)
         {
             bool external = !Path.Contains("$DataFile$");
@@ -158,7 +169,10 @@ namespace Hedra.Engine.Management
             {
                 lock (_handlerLock)
                 {
-                    selectedHandler =new ResourceHandler(File.OpenRead(TemporalFolder + Path.GetFileNameWithoutExtension(DataFile)), DataFile);
+                    selectedHandler = new ResourceHandler(
+                        File.OpenRead(GetResourceName(DataFile)),
+                        DataFile
+                    );
                     _registeredHandlers.Add(selectedHandler);
                 }
                 Log.WriteLine($"Registered resource handler... (Total = {_registeredHandlers.Count})", LogType.IO);
@@ -506,8 +520,6 @@ namespace Hedra.Engine.Management
             {
                 handler.Stream.Dispose();
             }
-            if (Directory.Exists(TemporalFolder)) Directory.Delete(TemporalFolder, true);
         }
-        
     }
 }

@@ -58,7 +58,7 @@ namespace Hedra.Engine.Rendering.UI
             {
                 GameManager.LoadCharacter(DataManager.PlayerFiles[_humans.IndexOf(_selectedHuman)]);
                 if(ShouldHost)
-                    Connection.Instance.Host();
+                    Network.Instance.Host();
             };
             
             var deleteButton = new Button(new Vector2(.1f, -.8f), Vector2.One, Translation.Create("delete"), Color.White, FontCache.GetNormal(14));

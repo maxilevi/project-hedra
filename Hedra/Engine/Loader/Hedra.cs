@@ -64,7 +64,6 @@ namespace Hedra.Engine.Loader
             NameGenerator.Load();
             CacheManager.Load();
             Translations.Load();
-            Connection.Load();
             Log.WriteLine("Translations loaded successfully.");
             
             GameLoader.CreateCharacterFolders(GameLoader.AppData, GameLoader.AppPath);
@@ -112,6 +111,7 @@ namespace Hedra.Engine.Loader
                 AutosaveManager.Update();
                 Executer.Update();
                 DistributedExecuter.Update();
+                Network.Instance.Update();
                 frameTime -= delta;
             }
             Time.Set(Delta);

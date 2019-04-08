@@ -70,7 +70,6 @@ namespace Hedra.EntitySystem
         void ProcessHit(bool HittedSomething);
         void ResetEquipment();
         void Greet();
-        Item MainWeapon { get; }
         Item Ring { get; set; }
         float BaseSpeed { get; }
         float MaxHealth { get; }
@@ -86,5 +85,7 @@ namespace Hedra.EntitySystem
         void SetBoots(BootsPiece Item);
         void InvokeBeforeAttackEvent(AttackOptions Options);
         void InvokeAfterAttackEvent(AttackOptions Options);
+        Item MainWeapon { get; }
+        Item[] MainEquipment { get; }
     }
 }

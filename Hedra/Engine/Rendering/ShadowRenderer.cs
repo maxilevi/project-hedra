@@ -38,6 +38,7 @@ namespace Hedra.Engine.Rendering
         {
             LightPosition = new Vector3(-500, 700, 0);
             Shader = Shader.Build("Shaders/Shadows.vert", "Shaders/Shadows.frag");
+            ShadowDistance = 1400;
         }
 
         public static float ShadowDistance
@@ -55,7 +56,6 @@ namespace Hedra.Engine.Rendering
 
         public static void Bind()
         {
-            ShadowDistance = 1400 / GeneralSettings.MaxLoadingRadius * GameSettings.ChunkLoaderRadius;
             _prevFbo = Renderer.FBOBound;
             if (ShadowFbo == null) ShadowRenderer.SetQuality(GameSettings.ShadowQuality);
             ShadowFbo.Bind();

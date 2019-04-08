@@ -68,6 +68,7 @@ namespace Hedra.Engine.Player
         private AreaSound _modelSound;
         private StaticModel _food;
         private AnimatedCollider _collider;
+        public HumanoidModelTemplate Template { get; private set; }
         public Vector3 RidingOffset { get; set; }
 
         public override CollisionShape BroadphaseCollider => _collider.Broadphase;
@@ -114,6 +115,7 @@ namespace Hedra.Engine.Player
 
         private void Load(IHumanoid Humanoid, HumanoidModelTemplate Template)
         {
+            this.Template = Template;
             Human = Humanoid;
             Scale = Vector3.One * Template.Scale;
             Tint = Vector4.One;

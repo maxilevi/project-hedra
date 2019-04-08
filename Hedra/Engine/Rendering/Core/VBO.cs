@@ -78,7 +78,6 @@ namespace Hedra.Engine.Rendering
             this.Hint = Hint;
             
             Renderer.GenBuffers(1, out _id);
-            Log.WriteLine($"Writing '{SizeInBytes / 1024f / 1024f}' MB into VBO and with target '{BufferTarget}' and hint '{Hint}'", LogType.System);
             Update(Data, SizeInBytes);
 
         }

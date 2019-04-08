@@ -132,7 +132,7 @@ namespace Hedra.Engine.ItemSystem
 
         public static Item FromArray(byte[] Array)
         {
-            var savedTemplate = ItemTemplate.FromJSON(Encoding.ASCII.GetString(Array));
+            var savedTemplate = ItemTemplate.FromJson(Encoding.ASCII.GetString(Array));
             if (savedTemplate == null || !ItemPool.Exists(savedTemplate.Name)) return null;
             var defaultTemplate = ItemLoader.Templater[savedTemplate.Name];
             savedTemplate.Model = defaultTemplate.Model;

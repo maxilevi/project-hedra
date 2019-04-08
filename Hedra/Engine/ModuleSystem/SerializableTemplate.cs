@@ -12,7 +12,7 @@ namespace Hedra.Engine.ModuleSystem
             return JObject.FromObject(Template).ToString(Formatting.None);
         }
 
-        public static T FromJSON(string Data)
+        public static T FromJson(string Data)
         {
             try
             {

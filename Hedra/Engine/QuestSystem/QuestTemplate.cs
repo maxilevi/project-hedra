@@ -24,7 +24,7 @@ namespace Hedra.Engine.QuestSystem
         public static QuestTemplate FromArray(byte[] Array)
         {
             var str = Encoding.ASCII.GetString(Array);
-            return FromJSON(str);
+            return FromJson(str);
         }
     }
 }

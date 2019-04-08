@@ -1,6 +1,6 @@
 namespace Hedra.Engine.ModuleSystem.Templates
 {
-    public class ModelTemplate
+    public class ModelTemplate : SerializableTemplate<ModelTemplate>
     {
         public string Handler { get; set; }
         public bool AlignWithTerrain { get; set; } = true;

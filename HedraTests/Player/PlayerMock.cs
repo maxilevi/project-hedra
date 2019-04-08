@@ -169,6 +169,7 @@ namespace HedraTests.Player
         }
 
         public Item MainWeapon { get; }
+        public Item[] MainEquipment { get; }
         public Item Ring { get; set; }
         public float BaseSpeed { get; }
         public bool Destroy { get; set; }

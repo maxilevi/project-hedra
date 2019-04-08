@@ -24,7 +24,16 @@ namespace Hedra.Engine
         {
             var dummyMode = Args.Length == 1 && Args[0] == "--dummy-mode";
             var serverMode = Args.Length == 1 && Args[0] == "--server-mode";
+            var joinArgs = Args.Length == 2 && Args[0] == "--join";
 
+            if (joinArgs)
+            {
+                Executer.ExecuteOnMainThread(() =>
+                {
+                    GameManager.MakeCurrent(DataManager.PlayerFiles[0]);
+                    Network.Instance.Connect(ulong.Parse(Args[1]));       
+                });
+            }
             if (serverMode)
             {
                 RunDedicatedServer();
@@ -33,14 +42,7 @@ namespace Hedra.Engine
             {
                 RunNormalAndDummyMode(dummyMode);
             }
-/*
-            var voronoi = new Voronoi();
-            var voronoi2 = new Voronoi();
-            voronoi.DistanceEnabled = true;
-            for(var x = -20; x < 200; x++)
-            //for(var z = -20; z < 20; z++)
-                Console.WriteLine($"{voronoi.GetValue(x * .01f, 0 * .1f)} whole= {voronoi2.GetValue(x * .01f, 0 * .1f)}");
-            */
+
             Environment.Exit(0);
         }
 

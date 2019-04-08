@@ -21,6 +21,7 @@ using OpenTK;
 using Hedra.Engine.Management;
 using Hedra.Engine.Networking;
 using Hedra.Engine.Player;
+using Hedra.Engine.Steamworks;
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -100,7 +101,7 @@ namespace Hedra.Engine.Rendering.UI
             
             inviteFriends.Click += delegate
             {
-                Connection.Instance.InviteFriends();
+                Network.Instance.InviteFriends();
             };
             
             hostWorld.Click += delegate
@@ -113,7 +114,7 @@ namespace Hedra.Engine.Rendering.UI
                 }
                 else
                 {
-                    Connection.Instance.Host();
+                    Network.Instance.Host();
                     UpdateButtons();
                     disconnect.CanClick = false;
                     TaskScheduler.After(.05f, () => disconnect.CanClick = true);
@@ -122,7 +123,7 @@ namespace Hedra.Engine.Rendering.UI
             
             disconnect.Click += delegate
             {
-                Connection.Instance.Disconnect();
+                Network.Instance.Disconnect();
                 UpdateButtons();
                 hostWorld.CanClick = false;
                 TaskScheduler.After(.05f, () => hostWorld.CanClick = true);
@@ -161,7 +162,8 @@ namespace Hedra.Engine.Rendering.UI
             Menu.OnPanelStateChange += delegate(object Sender, PanelState E)
             {
                 if (E != PanelState.Enabled) return;
-                if (Connection.Instance.IsAlive)
+                //if(!Steam.Instance.IsAvailable) hostWorld.Disable();
+                if (Network.Instance.IsAlive)
                 {
 
                     _newRun.Disable();
@@ -210,7 +212,7 @@ namespace Hedra.Engine.Rendering.UI
             GamePanel.Disable();
             ChrCreator.Disable();
             ConnectPanel.Disable();
-            if(!Connection.Instance.IsAlive)
+            if(!Network.Instance.IsAlive)
             {
                 GameSettings.Paused = true;
             }
