@@ -10,13 +10,11 @@ namespace Hedra.AISystem.Behaviours
     public class TraverseStorage : Singleton<TraverseStorage>
     {
         private readonly Dictionary<IEntity, GridStorage> _storage = new Dictionary<IEntity, GridStorage>();
-        private readonly HashSet<IEntity> _storageTest = new HashSet<IEntity>();
         private bool _init;
 
         private void Init()
         {
             _init = true;
-            Program.GameWindow.FrameChanged += () => _storageTest.Clear();
         }
         
         public void RebuildIfNecessary(IEntity Parent, bool NewTarget = false)
@@ -27,7 +25,6 @@ namespace Hedra.AISystem.Behaviours
         public void Update(IEntity Parent)
         {
             if (!_init) Init();
-            _storageTest.Add(Parent);
             _storage[Parent].Update();
         }
 

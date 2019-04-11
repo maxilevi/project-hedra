@@ -6,8 +6,7 @@ namespace Hedra.Engine.Loader
 {
     public interface IHedra : IHedraWindow
     {
-        DebugInfoProvider DebugProvider { get; }
-        SplashScreen SplashScreen { get; }
+        bool FinishedLoadingSplashScreen { get; }
         string GameVersion { get; }
         event OnFrameChanged FrameChanged;
     }

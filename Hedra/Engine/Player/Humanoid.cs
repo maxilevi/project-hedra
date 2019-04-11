@@ -76,7 +76,7 @@ namespace Hedra.Engine.Player
         public float BaseAttackSpeed { get; private set; }
         public float ManaRegenFactor { get; set; }
         public float AttackPower { get; set; }
-        public float AddonHealth { get; set; }
+        public float BonusHealth { get; set; }
         public float DodgeCost { get; set; }    
         public float RandomFactor { get; set; }
         
@@ -101,7 +101,7 @@ namespace Hedra.Engine.Player
         
         public float BaseSpeed => Class.BaseSpeed;
 
-        public override float MaxHealth => CalculateMaxHealth(Class, Level, RandomFactor) + AddonHealth;
+        public override float MaxHealth => CalculateMaxHealth(Class, Level, RandomFactor) + BonusHealth;
 
         public static float CalculateMaxHealth(ClassDesign Class, int Level, float RandomFactor)
         {
@@ -479,7 +479,9 @@ namespace Hedra.Engine.Player
             set => Equipment.Ring = value;
         }
 
-        public Item[] MainEquipment => Equipment.MainEquipment;
+        public Item[] GetMainEquipment() => Equipment.MainEquipment;
+        
+        public void SetMainEquipment(Item[] MainEquipment) => Equipment.MainEquipment = MainEquipment;
 
         public override void Dispose()
         {

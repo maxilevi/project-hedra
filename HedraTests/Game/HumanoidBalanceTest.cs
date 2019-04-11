@@ -219,7 +219,7 @@ namespace HedraTests.Game
 
         private static void LoadItems()
         {
-            AssetManager.Provider = new SimpleAssetProvider();
+            AssetManager.Provider = new DummyAssetProvider();
             if (!_loaded)
             {
                 _loaded = true;

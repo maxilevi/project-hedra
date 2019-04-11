@@ -7,6 +7,7 @@ namespace Hedra.Engine.Networking
         public static readonly byte[] Disconnect = { (byte)CommonMessageType.Disconnect };
         public static readonly byte[] DenyJoin = { (byte) CommonMessageType.DenyJoin };
         public static readonly byte[] Ping = { (byte) CommonMessageType.Ping };
+        public static readonly byte[] AskPlayerInformation = { (byte) CommonMessageType.AskPlayerInformation };
 
         public static bool IsCommonMessage(byte[] Message)
         {
@@ -27,6 +28,7 @@ namespace Hedra.Engine.Networking
         Disconnect,
         Ping,
         DenyJoin,
+        AskPlayerInformation,
         MaxType
     }
 }

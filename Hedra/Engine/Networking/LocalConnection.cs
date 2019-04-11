@@ -10,18 +10,20 @@ namespace Hedra.Engine.Networking
 {   
     public class LocalConnection : BaseConnection, IConnection
     {
-        private const int DummyId = 1;
+        public override ulong Myself => 1;
         public override event OnMessageReceived MessageReceived;
-        private readonly List<Action> _writeOrders;
         private bool _created;
         private bool _isListening;
         private Thread _thread;
+        private ulong _lastId;
+        private readonly Dictionary<ulong, TcpClient> _peers;
         private TcpClient _client;
         private TcpListener _listener;
         
         public LocalConnection(ConnectionType Type) : base(Type)
         {
-            _writeOrders = new List<Action>();
+            _lastId = Myself;
+            _peers = new Dictionary<ulong, TcpClient>();
         }
 
         public override void Setup()
@@ -36,21 +38,20 @@ namespace Hedra.Engine.Networking
         {
             _created = true;
             _listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 5000);
-            void Loop()
+
+            void ServerLoop()
             {
                 Log.WriteLine($"Started local connection loop of type '{Type}'...");
                 _listener.Start();
-                _client = _listener.AcceptTcpClient();
                 _isListening = true;
-                var buffer = new byte[4096];
                 while (Program.GameWindow.Exists)
                 {
-                    var count = _client.Client.Receive(buffer);
-                    if (count == 0) continue;
-                    ReceiveMessage(buffer.Take(count).ToArray());
+                    var client = _listener.AcceptTcpClient();
+                    var id = _lastId++; 
+                    BuildClientLoop(id, client);
                 }
             }
-            CreateLoop(Loop);
+            CreateLoop(ServerLoop);
         }
 
         private void SetupClient()
@@ -58,19 +59,7 @@ namespace Hedra.Engine.Networking
             _created = true;
             _client = new TcpClient("127.0.0.1", 5000);
             _isListening = true;
-            void Loop()
-            {
-                var buffer = new byte[4096];
-                while (Program.GameWindow.Exists)
-                {
-                    while (_writeOrders.Count == 0){}
-                    _writeOrders[0]();
-                    _writeOrders.RemoveAt(0);
-                    var count = _client.Client.Receive(buffer);
-                    ReceiveMessage(buffer.Take(count).ToArray());
-                }
-            }
-            CreateLoop(Loop);
+            BuildClientLoop(Myself, _client);
         }
 
 
@@ -80,21 +69,36 @@ namespace Hedra.Engine.Networking
             _thread.Start();
         }
 
-        private void ReceiveMessage(byte[] Message)
+        private void BuildClientLoop(ulong Id, TcpClient Client)
         {
-            Log.WriteLine($"Received message of length '{Message.Length}'");
-            MessageReceived?.Invoke(DummyId, Message);
+            _peers.Add(Id, Client);
+            void ClientLoop()
+            {
+                var buffer = new byte[4096];
+                while (Program.GameWindow.Exists)
+                {
+                    var count = Client.Client.Receive(buffer);
+                    if (count == 0) break;
+                    ReceiveMessage(Id, buffer.Take(count).ToArray());
+                }
+                _peers.Remove(Id);
+                Log.WriteLine("A client has disconnected from the server");
+            }
+            CreateLoop(ClientLoop);
+        }
+        
+
+        private void ReceiveMessage(ulong Sender, byte[] Message)
+        {
+            Log.WriteLine($"Received message of length '{Message.Length}' from '{Sender}'");
+            MessageReceived?.Invoke(Sender, Message);
         }
 
         public override void SendMessage(ulong Peer, byte[] Buffer, int Count)
         {
-            void WriteAction()
-            {
-                var stream = _client.GetStream();
-                stream.Write(Buffer, 0, Count);
-                stream.Flush();
-            }
-            _writeOrders.Add(WriteAction);
+            var stream = _peers[Peer].GetStream();
+            stream.Write(Buffer, 0, Count);
+            stream.Flush();
         }
 
         public override void Dispose()

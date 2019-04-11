@@ -8,7 +8,7 @@ using OpenTK.Graphics;
 
 namespace Hedra.Engine.Loader
 {
-    public class HedraWindow : NativeWindow, IEventProvider, IHedraWindow
+    public abstract class HedraWindow : NativeWindow, IEventProvider, IHedraWindow
     {
         private IGraphicsContext _glContext;
         private bool _isExiting;
@@ -102,7 +102,6 @@ namespace Hedra.Engine.Loader
         {
             EnsureUndisposed();
             Visible = true;
-            Visible = true;
             OnLoad(EventArgs.Empty);
             OnResize(EventArgs.Empty);
             _watch.Start();
@@ -133,14 +132,10 @@ namespace Hedra.Engine.Loader
             _dryRun = true;
             Run();
         }
-               
-        protected virtual void OnRenderFrame(double Delta)
-        {
-        }
 
-        protected virtual void OnUpdateFrame(double Delta)
-        {           
-        }
+        protected abstract void OnRenderFrame(double Delta);
+
+        protected abstract void OnUpdateFrame(double Delta);
 
         private void DispatchUpdateFrame(double Delta)
         {
@@ -170,13 +165,9 @@ namespace Hedra.Engine.Loader
         {
         }
 
-        protected virtual void OnLoad(EventArgs E)
-        {          
-        }
+        protected abstract void OnLoad(EventArgs E);
 
-        protected virtual void OnUnload(EventArgs E)
-        {       
-        }
+        protected abstract void OnUnload(EventArgs E);
 
         protected override void OnResize(EventArgs E)
         {

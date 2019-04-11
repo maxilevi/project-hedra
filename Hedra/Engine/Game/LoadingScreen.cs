@@ -86,7 +86,7 @@ namespace Hedra.Engine.Game
 
         public void Show()
         {
-            if(IsLoaded() || (!Program.GameWindow?.SplashScreen?.FinishedLoading ?? true)) return;
+            if(IsLoaded() || (!Program.GameWindow.FinishedLoadingSplashScreen)) return;
             IsLoading = true;
             _text = Translations.Get("loading");
         }

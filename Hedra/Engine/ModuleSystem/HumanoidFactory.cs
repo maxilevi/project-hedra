@@ -44,7 +44,6 @@ namespace Hedra.Engine.ModuleSystem
             var behaviour = Configuration ?? _behaviours[template.Behaviour];
 
             var difficulty = GetDifficulty(Utils.Rng);
-            var difficultyModifier = GetDifficultyModifier(difficulty);
 
             var human = new Humanoid
             {

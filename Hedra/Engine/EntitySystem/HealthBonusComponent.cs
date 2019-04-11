@@ -12,7 +12,7 @@ namespace Hedra.Engine.EntitySystem
         public HealthBonusComponent(IHumanoid Parent, float Health) : base(Parent)
         {
             _healthBonus = Health;
-            Parent.AddonHealth += _healthBonus;
+            Parent.BonusHealth += _healthBonus;
         }
 
         public override void Update(){}
@@ -20,7 +20,7 @@ namespace Hedra.Engine.EntitySystem
         public override void Dispose()
         {
             if(Disposed) return;
-            Parent.AddonHealth -= _healthBonus;
+            Parent.BonusHealth -= _healthBonus;
             base.Dispose();
         }
     }

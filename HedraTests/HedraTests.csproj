@@ -104,6 +104,8 @@
     <Compile Include="MathExtensions\PhysicsTest.cs" />
     <Compile Include="MathExtensions\RandomTest.cs" />
     <Compile Include="ModuleSystem\AssetProviderTest.cs" />
+    <Compile Include="Network\NetworkMessageTest.cs" />
+    <Compile Include="Network\PacketTest.cs" />
     <Compile Include="Pathfinding\FinderTest.cs" />
     <Compile Include="Pathfinding\GridCatalog.cs" />
     <Compile Include="Pathfinding\PathFinderTests.cs" />
@@ -147,7 +149,6 @@
     <Compile Include="Rendering\SimpleTextProviderMock.cs" />
     <Compile Include="Rendering\TextProviderTest.cs" />
     <Compile Include="SimpleAnimationProvider.cs" />
-    <Compile Include="SimpleAssetProvider.cs" />
     <Compile Include="SimpleColladaProvider.cs" />
     <Compile Include="SimpleEventProvider.cs" />
     <Compile Include="SimpleGameProviderMock.cs" />
@@ -159,7 +160,6 @@
     <Compile Include="Handling\ExecuterTest.cs" />
     <Compile Include="MathExtensions\QuaternionExtensionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sound\SimpleSoundProviderMock.cs" />
     <Compile Include="Sound\SoundtrackTest.cs" />
     <Compile Include="Structure\BanditCampDesignTest.cs" />
     <Compile Include="Structure\CampfireDesignTest.cs" />

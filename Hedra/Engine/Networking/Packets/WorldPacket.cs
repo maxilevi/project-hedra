@@ -1,10 +1,19 @@
 namespace Hedra.Engine.Networking.Packets
 {
-    public class WorldPacket : NetworkPacket<WorldPacket>
+    public class WorldPacket : WorldPacket<WorldPacket>
+    {
+    }
+
+    public interface IWorldPacket
+    {
+        int Seed { get; set; }
+    }
+    
+    public abstract class WorldPacket<T> : NetworkPacket<T>, IWorldPacket where T : IWorldPacket, new()
     {
         public int Seed { get; set; }
 
-        protected override void DoParse(PacketReader Reader, WorldPacket Empty)
+        protected override void DoParse(PacketReader Reader, T Empty)
         {
             Empty.Seed = Reader.ReadInt32();
         }

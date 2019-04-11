@@ -10,13 +10,11 @@ using OpenTK;
 
 namespace HedraTests
 {
-    public class SimpleAssetProvider : IAssetProvider
+    public class DummyAssetProvider : IAssetProvider
     {
         public string ShaderResource { get; }
         public string SoundResource { get; }
         public string AssetsResource { get; }
-        public FontFamily BoldFamily => new FontFamily(GenericFontFamilies.SansSerif);
-        public FontFamily NormalFamily => new FontFamily(GenericFontFamilies.SansSerif);
         public string AppPath { get; }
         public string AppData { get; }
         public string TemporalFolder { get; }

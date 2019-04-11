@@ -102,7 +102,7 @@ namespace Hedra.Engine.WorldBuilding
                     ? HumanType.Skeleton.ToString()
                     : classType.ToString();
             var human = this.SpawnHumanoid(className, Level, Position, behaviour);
-            if (isWerewolf) human.AddonHealth = human.MaxHealth * .5f;
+            if (isWerewolf) human.BonusHealth = human.MaxHealth * .5f;
             human.Health = human.MaxHealth;
 
             HumanoidFactory.AddAI(human, Friendly);

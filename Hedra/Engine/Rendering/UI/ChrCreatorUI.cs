@@ -109,7 +109,8 @@ namespace Hedra.Engine.Rendering.UI
                     }
                         
                 }
-                if(!LocalPlayer.CreatePlayer(nameField.Text, _classType)) return;            
+
+                if(!LocalPlayer.CreatePlayer(nameField.Text, _classType)) return;          
                 base.Disable();
                 GameManager.Player.UI.ChrChooser.Enable();
                 nameField.Text = string.Empty;    

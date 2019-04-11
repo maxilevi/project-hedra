@@ -42,7 +42,7 @@ namespace HedraTests.Game
         protected static IEnumerable<Item> All()
         {
             var obj = new T();
-            AssetManager.Provider = new SimpleAssetProvider();
+            AssetManager.Provider = new DummyAssetProvider();
             ItemLoader.LoadModules(GameLoader.AppPath);
             var templates = ItemLoader.Templater.Templates;
             for (var i = 0; i < templates.Length; i++)

@@ -60,7 +60,7 @@ namespace Hedra.EntitySystem
 
         bool InUpdateRange { get; }
 
-        bool IsBoss { get; set; }
+        bool IsBoss { get; }
         
         bool IsDead { get; set; }
         

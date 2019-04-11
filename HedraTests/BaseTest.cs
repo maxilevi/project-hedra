@@ -38,7 +38,7 @@ namespace HedraTests
         protected static void MockEngine()
         {
             World.Provider = new SimpleWorldProviderMock();
-            AssetManager.Provider = new SimpleAssetProvider();
+            AssetManager.Provider = new DummyAssetProvider();
             Graphics2D.Provider = new SimpleTexture2DProviderMock();
             Renderer.Provider = new DummyGLProvider();
             AnimationLoader.Provider = new SimpleAnimationProvider();

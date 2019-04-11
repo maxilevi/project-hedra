@@ -33,13 +33,13 @@ namespace Hedra.Engine.Loader
 {
     public delegate void OnFrameChanged();
     
-    class Hedra : HedraWindow, IHedra
+    public class Hedra : HedraWindow, IHedra
     {
+        public string GameVersion => "\u03B1 0.5";
         public event OnFrameChanged FrameChanged;
-        public DebugInfoProvider DebugProvider { get; private set; }
-        public SplashScreen SplashScreen { get; private set; }
+        private DebugInfoProvider _debugProvider;
+        private SplashScreen _splashScreen;
         public static int MainThreadId { get; private set; }
-        public string GameVersion { get; private set; }
         private float _lastValue = float.MinValue;
         private bool _forcingResize;
         private int _passedFrames;
@@ -48,13 +48,9 @@ namespace Hedra.Engine.Loader
         public Hedra(int Width, int Height, GraphicsMode Mode, string Title, DisplayDevice Device, int Minor, int Major) 
             : base(Width, Height, Mode, Title, GameWindowFlags.Default, Device, Major, Minor, GraphicsContextFlags.Default){}
 
-        protected override void OnLoad(EventArgs e)
+        public static bool LoadBoilerplate()
         {
-            base.OnLoad(e);
             MainThreadId = Thread.CurrentThread.ManagedThreadId;
-            GameVersion = "\u03B1 0.46";
-            Title = $"{Title} {GameVersion}";
-
             OSManager.Load(Assembly.GetExecutingAssembly().Location);
             AssetManager.Load();
             CompatibilityManager.Load();
@@ -86,18 +82,29 @@ namespace Hedra.Engine.Loader
             {
                 
                 OSManager.Show($"Minimum OpenGL version is 3.1, yours is {shadingOpenGlVersion}", "OpenGL Version not supported");
-                Exit();
+                return false;
             }
-            DebugProvider = new DebugInfoProvider();
-            SplashScreen = new SplashScreen();
             Log.WriteLine(glVersion);
+            return true;
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            Title = $"{Title} {GameVersion}";
+            if (!LoadBoilerplate())
+            {
+                Exit();
+            }
+            else
+            {
+                _debugProvider = new DebugInfoProvider();
+                _splashScreen = new SplashScreen();
+            }
+        }
+        
         protected override void OnUpdateFrame(double Delta)
         {
-            base.OnUpdateFrame(Delta);
-
-            this.SplashScreen.Update();
+            this._splashScreen.Update();
             var frameTime = Delta;
             while (frameTime > 0f)
             {
@@ -129,7 +136,7 @@ namespace Hedra.Engine.Loader
             {
                 _lastValue = newNumber;
             }
-            DebugProvider.Update();
+            _debugProvider.Update();
             Steam.Update();
             AnalyticsManager.PlayTime += (float) Delta;
             FrameChanged?.Invoke();
@@ -137,16 +144,15 @@ namespace Hedra.Engine.Loader
 
         protected override void OnRenderFrame(double Delta)
         {    
-            base.OnRenderFrame(Delta);
             Renderer.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit | ClearBufferMask.StencilBufferBit);        
-            if (!SplashScreen.FinishedLoading)
+            if (!_splashScreen.FinishedLoading)
             {
-                SplashScreen.Draw();
+                _splashScreen.Draw();
             }
             else
             {
                 DrawManager.Draw();
-                DebugProvider.Draw();
+                _debugProvider.Draw();
             }
             this.SwapBuffers();
         }
@@ -162,7 +168,7 @@ namespace Hedra.Engine.Loader
         protected override void OnFocusedChanged(EventArgs e)
         {
             base.OnFocusedChanged(e);
-            if(!this.Focused && SplashScreen.FinishedLoading)
+            if(!this.Focused && _splashScreen.FinishedLoading)
             {
                 if(!GameManager.InStartMenu && !GameManager.IsLoading && !GameSettings.Paused &&
                     GameManager.Player != null && !GameManager.Player.InterfaceOpened)
@@ -180,7 +186,6 @@ namespace Hedra.Engine.Loader
             Graphics2D.Dispose();
             DrawManager.Dispose();
             InventoryItemRenderer.Dispose();
-            base.OnUnload(e);
         }
 
         private static float GetShadingVersion(string GLVersion)
@@ -191,6 +196,8 @@ namespace Hedra.Engine.Loader
             var shadingOpenGlVersion = float.Parse(shadingStringVersion.Value, CultureInfo.InvariantCulture);
             return (shadingOpenGlVersion >= 310) ? shadingOpenGlVersion / 100f : shadingOpenGlVersion;
         }
+        
+        public bool FinishedLoadingSplashScreen => _splashScreen?.FinishedLoading ?? true;
     }
 }
 

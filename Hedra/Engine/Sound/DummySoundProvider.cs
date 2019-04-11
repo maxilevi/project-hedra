@@ -1,12 +1,10 @@
 using System;
-using Hedra.Engine.Sound;
-using Hedra.Sound;
 using OpenTK;
 using OpenTK.Audio.OpenAL;
 
-namespace HedraTests.Sound
+namespace Hedra.Engine.Sound
 {
-    public class SimpleSoundProviderMock : ISoundProvider
+    public class DummySoundProvider : ISoundProvider
     {
         public float Volume { get; set; }
         public Vector3 ListenerPosition { get; private set; }

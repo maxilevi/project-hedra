@@ -169,7 +169,17 @@ namespace HedraTests.Player
         }
 
         public Item MainWeapon { get; }
-        public Item[] MainEquipment { get; }
+        Item[] IHumanoid.GetMainEquipment()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetMainEquipment(Item[] Equipment)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Item[] GetMainEquipment { get; }
         public Item Ring { get; set; }
         public float BaseSpeed { get; }
         public bool Destroy { get; set; }
@@ -178,7 +188,7 @@ namespace HedraTests.Player
         public int Level { get; set; } = 1;
         public float AttackPower { get; set; }
         public float MaxStamina { get; set; }
-        public float AddonHealth { get; set; }
+        public float BonusHealth { get; set; }
         public float DodgeCost { get; set; }
         public float MaxOxygen { get; set; }
         public int MobId { get; set; }

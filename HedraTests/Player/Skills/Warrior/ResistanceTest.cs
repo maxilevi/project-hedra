@@ -9,31 +9,31 @@ namespace HedraTests.Player.Skills.Warrior
         [Test]
         public void TestAddonHealthIsGiven()
         {
-            var startingHealth = Player.AddonHealth;
+            var startingHealth = Player.BonusHealth;
             Skill.Level = 5;
             Skill.Update();
-            Assert.AreNotEqual(startingHealth, Player.AddonHealth);
+            Assert.AreNotEqual(startingHealth, Player.BonusHealth);
         }
         
         [Test]
         public void TestAddonHealthIsAddedWhenLoading()
         {
-            var startingHealth = Player.AddonHealth;
+            var startingHealth = Player.BonusHealth;
             Skill.Level = 5;
             Skill.Update();
             Skill.Unload();
             Skill.Load();
-            Assert.AreNotEqual(startingHealth, Player.AddonHealth);
+            Assert.AreNotEqual(startingHealth, Player.BonusHealth);
         }
         
         [Test]
         public void TestAddonHealthIsRemovedWhenUnloading()
         {
-            var startingHealth = Player.AddonHealth;
+            var startingHealth = Player.BonusHealth;
             Skill.Level = 5;
             Skill.Update();
             Skill.Unload();
-            Assert.AreEqual(startingHealth, Player.AddonHealth);
+            Assert.AreEqual(startingHealth, Player.BonusHealth);
         }
     }
 }

@@ -52,7 +52,7 @@ namespace Hedra.EntitySystem
         int Level { get; set; }
         float AttackPower { get; set; }
         float MaxStamina { get; }
-        float AddonHealth { get; set; }
+        float BonusHealth { get; set; }
         float DodgeCost { get; set; }    
         float RandomFactor { get; set; }
         float AttackResistance { get; set; }
@@ -86,6 +86,7 @@ namespace Hedra.EntitySystem
         void InvokeBeforeAttackEvent(AttackOptions Options);
         void InvokeAfterAttackEvent(AttackOptions Options);
         Item MainWeapon { get; }
-        Item[] MainEquipment { get; }
+        Item[] GetMainEquipment();
+        void SetMainEquipment(Item[] Equipment);
     }
 }

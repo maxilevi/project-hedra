@@ -31,7 +31,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
             skeleton.AddComponent(new MeleeMinionComponent(skeleton, Player));
             skeleton.SetWeapon(ItemPool.Grab(CommonItems.UncommonSilverSword).Weapon);
             var masterySkill = (SkeletonMastery) Player.Toolbar.Skills.First(S => S.GetType() == typeof(SkeletonMastery));
-            skeleton.AddonHealth = masterySkill.HealthBonus;
+            skeleton.BonusHealth = masterySkill.HealthBonus;
             skeleton.AttackPower = masterySkill.AttackPower;
             skeleton.AttackResistance = masterySkill.AttackResistance;
             skeleton.Level = masterySkill.SkeletonLevel;

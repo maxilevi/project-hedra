@@ -7,6 +7,8 @@ namespace Hedra.Engine.Networking
     public abstract class BaseConnection : IDisposable
     {
         public ConnectionType Type { get; }
+        
+        public abstract ulong Myself { get; }
 
         protected BaseConnection(ConnectionType Type)
         {

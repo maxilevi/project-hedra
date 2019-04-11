@@ -19,7 +19,7 @@ namespace HedraTests.CacheSystem
         [SetUp]
         public void Setup()
         {
-            AssetManager.Provider = new SimpleAssetProvider();
+            AssetManager.Provider = new DummyAssetProvider();
             Provider = new CacheProvider();
             Provider.Load();
         }

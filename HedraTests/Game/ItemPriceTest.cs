@@ -108,7 +108,7 @@ namespace HedraTests.Game
         
         private static IEnumerable<Item> All()
         {
-            AssetManager.Provider = new SimpleAssetProvider();
+            AssetManager.Provider = new DummyAssetProvider();
             ItemLoader.LoadModules(GameLoader.AppPath);
             var templates = ItemLoader.Templater.Templates;
             for (var i = 0; i < templates.Length; i++)

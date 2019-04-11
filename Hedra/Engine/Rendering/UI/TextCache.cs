@@ -46,6 +46,7 @@ namespace Hedra.Engine.Rendering.UI
             if (Contains(Text, TextFont, TextColor)) throw new ArgumentOutOfRangeException($"Duplicate cache for '{Text}'");
             var cache = Cache.FirstOrDefault(C => C.Id == Id);
             if (cache != null) throw new ArgumentOutOfRangeException($"Duplicate cache for '{Text}'");
+            if (Program.IsDummy) return;
             Cache.Add(new CacheOptions
             {
                 TextFont = TextFont,

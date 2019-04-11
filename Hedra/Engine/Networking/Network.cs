@@ -5,20 +5,29 @@ using Facepunch.Steamworks;
 using Hedra.Engine.Core;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
+using Hedra.Engine.Networking.Packets;
 using Hedra.Engine.Steamworks;
 
 namespace Hedra.Engine.Networking
 {
     public class Network : Singleton<Network>
     {
-        private readonly GameHost _host = new GameHost();
-        private readonly GameClient _client = new GameClient();
-        public bool IsAlive => Steam.Instance.IsAvailable && (_host.IsActive || _client.IsActive);
+        private readonly GameHost _host;
+        private readonly GameClient _client;
+        public bool IsAlive => (_host.IsActive || _client.IsActive);
 
+        public Network()
+        {
+            _host = new GameHost();
+            _client = new GameClient();
+            NetworkMessage.Load();
+        }
+        
         public void Host()
         {
-            //if (!Steam.Instance.IsAvailable) return;
+            Disconnect();
             _host.Host();
+            _client.ConnectLocally();
         }
         
         public void Disconnect()
@@ -26,8 +35,7 @@ namespace Hedra.Engine.Networking
             if (!Steam.Instance.IsAvailable) return;
             if (_host.IsActive)
                 _host.Disconnect(); 
-            else
-                _client.Disconnect();
+            _client.Disconnect();
         }
 
         public void Update()
@@ -38,6 +46,7 @@ namespace Hedra.Engine.Networking
         
         public void Connect(ulong Id)
         {
+            Disconnect();
             _client.RequestJoin(Id);
         }
 

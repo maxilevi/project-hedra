@@ -13,7 +13,6 @@ namespace Hedra.Engine.Networking
         
         private void OnMessageReceived(ulong Sender, byte[] Message)
         {
-            if(!IsActive) return;
             if (CommonMessages.IsCommonMessage(Message))
                 HandleCommonMessage(Sender, CommonMessages.Parse(Message));
             else

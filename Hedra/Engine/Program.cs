@@ -1,5 +1,7 @@
 using System;
+using Hedra.API;
 using Hedra.Engine.BiomeSystem;
+using Hedra.Engine.ClassSystem;
 using Hedra.Engine.Steamworks;
 using Hedra.Engine.Game;
 using Hedra.Engine.IO;
@@ -7,6 +9,7 @@ using Hedra.Engine.Loader;
 using Hedra.Engine.Management;
 using Hedra.Engine.Native;
 using Hedra.Engine.Networking;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using OpenTK;
 using OpenTK.Graphics;
@@ -17,6 +20,7 @@ namespace Hedra.Engine
     {
         public static bool IsDebug { get; private set; }
         public static bool IsRelease => !IsDebug;
+        public static bool IsServer { get; private set; }
         public static bool IsDummy { get; private set; }
         public static IHedra GameWindow { get; set; }
 
@@ -48,18 +52,33 @@ namespace Hedra.Engine
 
         private static void RunDedicatedServer()
         {
+            LoadLibraries();
+           
+            IsServer = IsDummy = true;
+            GameWindow = new HedraServer();
+            GameWindow.Run();
             
+            DisposeLibraries();
+        }
+
+        private static void LoadLibraries()
+        {
+#if DEBUG
+            IsDebug = true;
+#endif
+            GameLoader.LoadArchitectureSpecificFiles(GameLoader.AppPath);
+            Steam.Instance.Load();
+        }
+
+        private static void DisposeLibraries()
+        {
+            Steam.Instance.Dispose();
         }
         
         private static void RunNormalAndDummyMode(bool DummyMode)
         {
             if(DummyMode) EnableDummyMode();
-            #if DEBUG
-            IsDebug = true;
-            #endif
-
-            GameLoader.LoadArchitectureSpecificFiles(GameLoader.AppPath);
-            Steam.Instance.Load();
+            LoadLibraries();
             
             var device = DisplayDevice.Default;
             Log.WriteLine(device.Bounds.ToString());
@@ -90,7 +109,7 @@ namespace Hedra.Engine
 
             GameSettings.LoadWindowSettings(GameSettings.SettingsPath);
             Log.WriteLine("Window settings loading was Successful");
-            if (!IsDummy)
+            if (!IsDummy || IsDummy && IsServer)
             {
 #if DEBUG
                 GameWindow.Run();
@@ -112,8 +131,8 @@ namespace Hedra.Engine
                 Log.WriteLine("Project Hedra loaded successfully. Exiting...");
                 Environment.Exit(0);
             }
-            
-            Steam.Instance.Dispose();
+
+            DisposeLibraries();
         }
         
         private static void EnableDummyMode()

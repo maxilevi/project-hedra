@@ -458,22 +458,30 @@ namespace Hedra.Engine.Player
         
         public static bool CreatePlayer(string Name, ClassDesign ClassType)
         {
-            if(Name == string.Empty)
+            if (Name == string.Empty)
             {
                 Instance.MessageDispatcher.ShowNotification(Translations.Get("name_empty"), Color.Red, 3f);
                 return false;
             }
-            if(DataManager.CharacterCount >= GameSettings.MaxCharacters)
+            if (DataManager.CharacterCount >= GameSettings.MaxCharacters)
             {
                 Instance.MessageDispatcher.ShowNotification(Translations.Get("max_characters", GameSettings.MaxCharacters), Color.Red, GameSettings.MaxCharacters);
                 return false;
             }
             const int maxName = 12;
-            if(Name.Length > maxName)
+            if (Name.Length > maxName)
             {
                 Instance.MessageDispatcher.ShowNotification(Translations.Get("name_long", maxName), Color.Red, 3f);
                 return false;
             }
+
+            var information = BuildNewPlayer(Name, ClassType);
+            DataManager.SavePlayer(information);
+            return true;
+        }
+
+        public static PlayerInformation BuildNewPlayer(string Name, ClassDesign ClassType)
+        {
             var data = new PlayerInformation
             {
                 Name = Name,
@@ -502,9 +510,7 @@ namespace Hedra.Engine.Player
             {
                 data.AddRecipe(recipes[i].Name);
             }
-
-            DataManager.SavePlayer(data);
-            return true;
+            return data;
         }
 
         public void Dispose()

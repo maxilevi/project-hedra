@@ -1,14 +1,10 @@
+
 namespace Hedra.Engine.Networking.Packets
-{
-    public interface INetworkPacket
-    {
-        MessagePacketType Type { get; }   
-    }
-    
-    public abstract class NetworkPacket<T> : INetworkPacket where T : new()
+{    
+    public abstract class NetworkPacket<T> : IPacket, INetworkPacket<T> where T : new()
     {
         public abstract MessagePacketType Type { get; }
-        
+
         public T Parse(byte[] Contents)
         {
             var reader = new PacketReader(Contents);
@@ -33,6 +29,7 @@ namespace Hedra.Engine.Networking.Packets
             var writer = new PacketWriter();
             try
             {
+                writer.Write((byte)Type);
                 DoSerialize(writer);
                 return writer.ToArray();
             }

@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Hedra.Engine.ItemSystem;
+using OpenTK;
 
 namespace Hedra.Engine.Networking.Packets
 {
@@ -20,9 +21,29 @@ namespace Hedra.Engine.Networking.Packets
             return _reader.ReadInt32();
         }
 
+        public ulong ReadUInt64()
+        {
+            return _reader.ReadUInt64();
+        }
+
+        public bool ReadBoolean()
+        {
+            return _reader.ReadBoolean();
+        }
+        
         public string ReadString()
         {
             return _reader.ReadString();
+        }
+
+        public Vector3 ReadVector3()
+        {
+            return new Vector3(ReadSingle(), ReadSingle(), ReadSingle());
+        }
+
+        public float ReadSingle()
+        {
+            return _reader.ReadSingle();
         }
 
         public Item ReadItem()
