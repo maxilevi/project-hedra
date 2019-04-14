@@ -490,7 +490,7 @@ namespace Hedra.Engine.Management
                 Normals[j] = Vector3.TransformNormal(Normals[j], rotationMat);
             }
             
-            return new VertexData
+            var data = new VertexData
             {
                 Vertices = Vertices,
                 Indices = Indices,
@@ -498,6 +498,8 @@ namespace Hedra.Engine.Management
                 Colors = Colors,
                 UseCache = true
             };
+            data.Trim();
+            return data;
         }
 
         private bool HasHeader(byte[] Data, string Header, int HeaderSize)

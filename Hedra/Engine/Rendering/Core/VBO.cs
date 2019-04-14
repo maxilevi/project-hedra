@@ -18,9 +18,13 @@ namespace Hedra.Engine.Rendering
     /// </summary>
     public abstract class VBO : GLObject<VBO>
     {
+        public abstract int Count { get; protected set; }
+        public abstract int Stride { get; }
+        public abstract int SizeInBytes { get; protected set; }
+        public abstract Type ElementType { get; protected set; }
     }
     
-    public class VBO<T> : VBO where T : struct
+    public sealed class VBO<T> : VBO where T : struct
     {
         private bool _disposed;
         private uint _id;
@@ -33,17 +37,17 @@ namespace Hedra.Engine.Rendering
         /// <summary>
         /// The amount of elements.
         /// </summary>
-        public int Count { get; private set; }
+        public override int Count { get; protected set; }
         
         /// <summary>
         /// The amount of values per element. 4 = Vector4, 3 = Vector3, etc.
         /// </summary>
-        public int Stride { get; }
+        public override int Stride { get; }
         
         /// <summary>
         /// The size in bytes of the elements in the VBO.
         /// </summary>
-        public int SizeInBytes { get; private set; }
+        public override int SizeInBytes { get; protected set; }
         
         /// <summary>
         /// The BufferTarget this VBO is bound to.
@@ -59,7 +63,9 @@ namespace Hedra.Engine.Rendering
         /// The hint to use when uploading data to the buffer.
         /// </summary>
         public BufferUsageHint Hint { get; }
-        
+
+        public override Type ElementType { get; protected set; }
+
         /// <summary>
         /// Creates a and builds new Vertex Buffer Object from the following parameters.
         /// </summary>
@@ -71,15 +77,13 @@ namespace Hedra.Engine.Rendering
         public VBO(T[] Data, int SizeInBytes, VertexAttribPointerType PointerType, BufferTarget BufferTarget = BufferTarget.ArrayBuffer, BufferUsageHint Hint = BufferUsageHint.StaticDraw)
         {
             this.Stride = Data is Vector4[] ? 4 : Data is Vector3[] ?  3 : Data is Vector2[] ? 2 : 1;
+            this.ElementType = Data.GetType().GetElementType();
             this.BufferTarget = BufferTarget;
             this.PointerType = PointerType;
-            this.SizeInBytes = SizeInBytes;
-            this.Count = Data.Length;
             this.Hint = Hint;
             
             Renderer.GenBuffers(1, out _id);
             Update(Data, SizeInBytes);
-
         }
 
         public void Update(T[] Data, int Bytes)
@@ -96,6 +100,10 @@ namespace Hedra.Engine.Rendering
         {
             if(Offset + Bytes > SizeInBytes)
                 throw new ArgumentOutOfRangeException($"Provided data '{Offset + Bytes}' exceeds buffer size of '{SizeInBytes}'");
+            
+            if(Data.GetType().GetElementType() != ElementType)
+                throw new ArgumentOutOfRangeException($"Cannot change element type of VBO from '{ElementType}' to '{Data.GetType().GetElementType()}'");
+            
             Bind();
             Renderer.BufferSubData(BufferTarget, (IntPtr)Offset, (IntPtr)Bytes, Data);
             Unbind();
@@ -116,12 +124,10 @@ namespace Hedra.Engine.Rendering
         /// </summary>
         public void Dispose()
         {
-            if(!_disposed)
-            {
-                base.Dispose();
-                _disposed = true;
-                Executer.ExecuteOnMainThread( () => Renderer.DeleteBuffers(1, ref _id) );
-            }
+            if (_disposed) return;
+            base.Dispose();
+            _disposed = true;
+            Executer.ExecuteOnMainThread( () => Renderer.DeleteBuffers(1, ref _id) );
         }
     }
 }

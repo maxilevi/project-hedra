@@ -13,11 +13,11 @@ namespace Hedra.Engine.Rendering.Particles
             Bind(false);
             
             ParticleBuffer.Bind();
-            Renderer.VertexAttribPointer(2, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes * 5, IntPtr.Zero);            
-            Renderer.VertexAttribPointer(3, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes * 5, (IntPtr) (Vector4.SizeInBytes * 1));
-            Renderer.VertexAttribPointer(4, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes * 5, (IntPtr) (Vector4.SizeInBytes * 2));
-            Renderer.VertexAttribPointer(5, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes * 5, (IntPtr) (Vector4.SizeInBytes * 3));
-            Renderer.VertexAttribPointer(6, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes * 5, (IntPtr) (Vector4.SizeInBytes * 4));
+            Renderer.VertexAttribPointer(2, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes * InstanceStride, IntPtr.Zero);            
+            Renderer.VertexAttribPointer(3, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes * InstanceStride, (IntPtr) (Vector4.SizeInBytes * 1));
+            Renderer.VertexAttribPointer(4, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes * InstanceStride, (IntPtr) (Vector4.SizeInBytes * 2));
+            Renderer.VertexAttribPointer(5, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes * InstanceStride, (IntPtr) (Vector4.SizeInBytes * 3));
+            Renderer.VertexAttribPointer(6, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes * InstanceStride, (IntPtr) (Vector4.SizeInBytes * 4));
             
             Renderer.VertexAttribDivisor(2,1);
             Renderer.VertexAttribDivisor(3,1);
@@ -27,6 +27,8 @@ namespace Hedra.Engine.Rendering.Particles
             ParticleBuffer.Unbind();
             
             Unbind(false);
+            
+            Add(ParticleBuffer);
         }
 
         public override Type[] Types => base.Types.Concat(new[]
@@ -59,5 +61,8 @@ namespace Hedra.Engine.Rendering.Particles
             Renderer.DisableVertexAttribArray(5);
             Renderer.DisableVertexAttribArray(6);
         }
+
+        public int InstanceStride => 5;
+        public VBO ParticleBuffer => VBOs[VBOs.Length - 1];
     }
 }

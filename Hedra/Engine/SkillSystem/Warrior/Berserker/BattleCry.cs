@@ -14,6 +14,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Berserker
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/BattleCry.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/WarriorBattleCry.dae");
+        protected override bool EquipWeapons => false;
 
         protected override void OnAnimationMid()
         {

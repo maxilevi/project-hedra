@@ -130,6 +130,7 @@ namespace Hedra.Engine.Rendering
         {
             if (this.Data != null)
             {
+                Data.AssertTriangulated();
                 lock (_lock)
                 {
                     if (!_chunkDict.ContainsKey(Offset))

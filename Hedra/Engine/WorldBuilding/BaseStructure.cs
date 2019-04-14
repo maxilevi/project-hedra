@@ -33,7 +33,12 @@ namespace Hedra.Engine.WorldBuilding
         
         public void AddChildren(params BaseStructure[] Children)
         {
-            _children.AddRange(Children);
+            for (var i = 0; i < Children.Length; ++i)
+            {
+                if(Children[i] == null)
+                    throw new ArgumentNullException($"Cannot add a null children");
+                _children.AddRange(Children);
+            }
         }
         
         public virtual void Dispose()

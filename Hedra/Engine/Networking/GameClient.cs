@@ -57,13 +57,14 @@ namespace Hedra.Engine.Networking
 
         protected override void HandleCommonMessage(ulong Sender, CommonMessageType Message)
         {
+            Log.WriteLine($"Received common message of type '{Message}' from '{Sender}'");
             switch (Message)
             {
                 case CommonMessageType.Kick:
                     Disconnect();
                     break;
                 case CommonMessageType.AskPlayerInformation:
-                    SendPlayerInformation(Sender, Connection.Myself);
+                    SendPlayerInformation(Sender, _currentServer);
                     break;
             }
         }

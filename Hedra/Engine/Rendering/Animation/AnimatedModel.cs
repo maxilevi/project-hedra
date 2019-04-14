@@ -76,6 +76,7 @@ namespace Hedra.Engine.Rendering.Animation
 
         public AnimatedModel(ModelData Model, Joint RootJoint, int JointCount)
         {
+            Model.AssertTriangulated();
             _baseModelData = Model;
             _addedModels = new List<ModelData>();
             Executer.ExecuteOnMainThread(delegate

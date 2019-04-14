@@ -5,6 +5,7 @@
  *
  */
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using OpenTK.Graphics.OpenGL4;
 using Hedra.Engine.Management;
@@ -15,8 +16,15 @@ namespace Hedra.Engine.Rendering
     public abstract class VAO : GLObject<VAO>
     {
         protected uint _id;
+        public override uint Id => _id;
+        private readonly List<uint> _bufferIds;
         private bool _disposed;
 
+        protected VAO()
+        {
+            _bufferIds = new List<uint>();
+        }
+        
         public virtual void Bind(bool EnableAttributes = true)
         {
             Renderer.BindVAO(_id); 
@@ -25,6 +33,11 @@ namespace Hedra.Engine.Rendering
         public virtual void Unbind(bool DisableAttributes = true)
         {
             Renderer.BindVAO(0);
+        }
+
+        protected void Add(VBO Buffer)
+        {
+            _bufferIds.Add(Buffer.Id);
         }
         
         public void Dispose()
@@ -37,8 +50,9 @@ namespace Hedra.Engine.Rendering
                 Renderer.DeleteVertexArrays(1, ref _id);
             });
         }
-        
-        public override uint Id => _id;
+
+        public uint[] VBOIds => _bufferIds.ToArray();
+        public VBO[] VBOs => _bufferIds.Select(VBO.GetById).ToArray();
         public abstract Type[] Types { get; }
     }
     
@@ -54,6 +68,8 @@ namespace Hedra.Engine.Rendering
             Buffer.Unbind();
             
             Unbind(false);
+
+            Add(Buffer);
         }
 
         public override void Bind(bool EnableAttributes = true)
@@ -84,6 +100,8 @@ namespace Hedra.Engine.Rendering
             Buffer2.Unbind();
             
             Unbind(false);
+            
+            Add(Buffer2);
         }
 
         public override void Bind(bool EnableAttributes = true)
@@ -114,6 +132,8 @@ namespace Hedra.Engine.Rendering
             Buffer3.Unbind();
             
             Unbind(false);
+            
+            Add(Buffer3);
         }
 
         public override void Bind(bool EnableAttributes = true)
@@ -144,6 +164,8 @@ namespace Hedra.Engine.Rendering
             Buffer4.Unbind();
             
             Unbind(false);
+            
+            Add(Buffer4);
         }
 
         public override void Bind(bool EnableAttributes = true)
@@ -175,6 +197,8 @@ namespace Hedra.Engine.Rendering
             Buffer5.Unbind();
             
             Unbind(false);
+            
+            Add(Buffer5);
         }
 
         public override void Bind(bool EnableAttributes = true)

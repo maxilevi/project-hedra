@@ -21,7 +21,7 @@ namespace Hedra.Rendering
     /// <summary>
     /// Description of VertexData.
     /// </summary>
-    public sealed class VertexData : LodableObject<VertexData>, IDisposable, IVertexData
+    public sealed class VertexData : LodableObject<VertexData>, IDisposable, IModelData
     {
         public string Name { get; set; }
         public List<Vector3> Vertices { get; set; }
@@ -33,7 +33,7 @@ namespace Hedra.Rendering
         public bool UseCache { get; set; }
         public static VertexData Empty { get; }
         private readonly Dictionary<Vector3, int> _points;
-        
+
         static VertexData()
         {
             Empty = new VertexData();
@@ -49,6 +49,25 @@ namespace Hedra.Rendering
             _points = new Dictionary<Vector3, int>();
         }
 
+        public static void TrimExcess<T>(List<T> List)
+        {
+            var excess = (List.Count % 3);
+            if (excess == 0) return;
+            for (var i = 0; i < (3-excess); ++i)
+            {
+                List.Add(List[List.Count - 1]);
+            }
+        }
+        
+        public void Trim()
+        {
+            TrimExcess(Vertices);
+            TrimExcess(Colors);
+            TrimExcess(Normals);
+            TrimExcess(Indices);
+            TrimExcess(Extradata);
+        }
+        
         public Vector3 SupportPoint(Vector3 Direction)
         {
             return this.SupportPoint(Direction, -Vector4.One);
@@ -378,6 +397,11 @@ namespace Hedra.Rendering
                                   + Colors.Count * Vector4.SizeInBytes 
                                   + Extradata.Count * sizeof(float);
         public bool IsClone => Original != null;
+        
+        Vector3[] IModelData.Colors => Colors.Select(C => C.Xyz).ToArray();
+        Vector3[] IModelData.Normals => Normals.ToArray();
+        uint[] IModelData.Indices => Indices.ToArray();
+        Vector3[] IModelData.Vertices => Vertices.ToArray();
         
         public void Dispose()
         {

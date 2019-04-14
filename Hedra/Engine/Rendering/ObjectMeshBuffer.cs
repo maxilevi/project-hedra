@@ -73,6 +73,7 @@ namespace Hedra.Engine.Rendering
 
         public ObjectMeshBuffer(VertexData ModelData)
         {
+            ModelData.AssertTriangulated();
             Executer.ExecuteOnMainThread(() =>
             {
                 Vertices = new VBO<Vector3>(ModelData.Vertices.ToArray(), ModelData.Vertices.Count * Vector3.SizeInBytes, VertexAttribPointerType.Float);

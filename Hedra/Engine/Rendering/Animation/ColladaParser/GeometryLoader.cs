@@ -12,6 +12,7 @@ using OpenTK;
 using System.Xml;
 using System.Collections.Generic;
 using Hedra.Core;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.Rendering.Animation.ColladaParser
 {
@@ -47,30 +48,42 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
             this.RemoveUnusedVertices();
             this.InitArrays();
             this.ConvertDataToArrays();
-            
-            List<Vector3> Positions = new List<Vector3>(), JointIds = new List<Vector3>(),
-            Weights = new List<Vector3>(), NormalsList = new List<Vector3>(), ColorsList = new List<Vector3>();
-            for(int i = 0; i < Vertices.Count; i++){
-                Positions.Add(Vertices[i].Position);
-                NormalsList.Add(Normals[Vertices[i].NormalIndex]);
-                ColorsList.Add(Colors[Vertices[i].ColorIndex]);
+
+            var positions = new List<Vector3>();
+            var jointIds = new List<Vector3>();
+            var weights = new List<Vector3>();
+            var normalsList = new List<Vector3>();
+            var colorsList = new List<Vector3>();
+            for(var i = 0; i < Vertices.Count; i++)
+            {
+                positions.Add(Vertices[i].Position);
+                normalsList.Add(Normals[Vertices[i].NormalIndex]);
+                colorsList.Add(Colors[Vertices[i].ColorIndex]);
             }
-            for(int i = 0; i < JointIdsArray.Length; i += 3){
-                JointIds.Add( new Vector3(JointIdsArray[i+0], JointIdsArray[i+1], JointIdsArray[i+2]) );
+            for(var i = 0; i < JointIdsArray.Length; i += 3)
+            {
+                jointIds.Add( new Vector3(JointIdsArray[i+0], JointIdsArray[i+1], JointIdsArray[i+2]) );
             }
             
-            for(int i = 0; i < WeightsArray.Length; i += 3){
+            for(var i = 0; i < WeightsArray.Length; i += 3)
+            {
                 float s = WeightsArray[i+0], q = WeightsArray[i+1], r = WeightsArray[i+2];
                 
-                if(1-(s+q) != 0 && r == 0) q = 1-s;
-                if(1-(s+q+r) != 0 && r != 0) r = 1-(s+q);
+                if(Math.Abs(1-(s+q)) > 0.05f && Math.Abs(r) < 0.05f) q = 1-s;
+                if(Math.Abs(1-(s+q+r)) > 0.05f && Math.Abs(r) > 0.05f) r = 1-(s+q);
                 
-                Weights.Add(new Vector3(s,q,r));
+                weights.Add(new Vector3(s,q,r));
             }
-            return new ModelData(Positions.ToArray(), ColorsList.ToArray(), NormalsList.ToArray(), Indices.ToArray(), JointIds.ToArray(), Weights.ToArray());
+            VertexData.TrimExcess(positions);
+            VertexData.TrimExcess(jointIds);
+            VertexData.TrimExcess(weights);
+            VertexData.TrimExcess(normalsList);
+            VertexData.TrimExcess(colorsList);
+            return new ModelData(positions.ToArray(), colorsList.ToArray(), normalsList.ToArray(), Indices.ToArray(), jointIds.ToArray(), weights.ToArray());
         }
-    
-        private void ReadRawData(XmlNode PolyNode) {
+        
+        private void ReadRawData(XmlNode PolyNode)
+        {
             this.ReadPositions();
             this.ReadNormals(PolyNode);
             this.ReadColors(PolyNode);

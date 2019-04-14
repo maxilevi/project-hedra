@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using Hedra.Engine.Rendering.Particles;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
@@ -7,25 +9,102 @@ namespace Hedra.Engine.Rendering
 {
     public static class DrawAsserter
     {
-        public static void AssertMultiDrawElement(PrimitiveType Type, int[] Counts, DrawElementsType ElementsType, IntPtr[] Offsets, int Length)
+        private static readonly Dictionary<PrimitiveType, int> AllowedPrimitives = new Dictionary<PrimitiveType, int>
+        {
+            {PrimitiveType.Lines, 2},
+            {PrimitiveType.Triangles, 3},
+            {PrimitiveType.TriangleStrip, 1}
+        };
+
+        private static readonly Dictionary<DrawElementsType, Type> DrawTypeMap = new Dictionary<DrawElementsType, Type>
+        {
+            {DrawElementsType.UnsignedByte, typeof(byte)},
+            {DrawElementsType.UnsignedInt, typeof(uint)},
+            {DrawElementsType.UnsignedShort, typeof(ushort)},
+        };
+        
+        public static void AssertMultiDrawElement(PrimitiveType Primitive, int[] Counts, DrawElementsType ElementsType, IntPtr[] Offsets, int Length)
         {
             if(Counts.Length != Offsets.Length)
                 throw new ArgumentException($"Found difference in counts ('{Counts.Length}') and offsets ('{Offsets.Length}') arrays");
             
             BaseAssert();
             AssertElementBuffer();
+            AssertPrimitive(Primitive);
+            AssertDrawType(ElementsType);
         }
 
-        public static void AssertDrawElements(PrimitiveType Primitive, int Count, DrawElementsType Type, IntPtr Offset)
+        public static void AssertDrawElements(PrimitiveType Primitive, int Count, DrawElementsType ElementsType, IntPtr Offset)
+        {            
+            BaseAssert();
+            AssertElementBuffer();
+            AssertPrimitive(Primitive);
+            AssertDrawType(ElementsType);
+        }
+
+        public static void AssertDrawElementsInstanced(PrimitiveType Primitive, int Count, DrawElementsType ElementsType, IntPtr Indices, int InstanceCount)
         {
             BaseAssert();
             AssertElementBuffer();
+            AssertInstanceCount(Primitive, InstanceCount);
+            AssertDrawType(ElementsType);
+        }
+        
+        public static void AssertDrawArrays(PrimitiveType Primitive, int Offset, int Count)
+        {
+            if(Offset > Count) 
+                throw new ArgumentException($"Draw offset '{Offset}' cannot be higher than the amount of elements '{Count}'");
+            
+            if(Renderer.BufferHandler.Id != 0)
+                throw new ArgumentException($"Cannot have a bound VBO when using DrawArrays");
+            
+            BaseAssert();
+            AssertPrimitive(Primitive, false);
         }
 
-        public static void AssertDrawElementsInstanced(PrimitiveType Primitive, int Count, DrawElementsType Type, IntPtr Indices, int InstanceCount)
+        private static void AssertDrawType(DrawElementsType Type)
         {
-            BaseAssert();
-            AssertElementBuffer();
+            var vbo = VBO.GetById(Renderer.VBOBound);
+            var expectedType = DrawTypeMap[Type];
+            
+            if(vbo.ElementType != expectedType)
+                throw new ArgumentOutOfRangeException($"Draw method was called with '{Type}' but the indices are of type '{vbo.ElementType}'");
+        }
+        
+        private static void AssertCount(int Count)
+        {
+            var indicesVBO = VBO.GetById(Renderer.VBOBound);
+            if(Count >= indicesVBO.Count)
+                throw new ArgumentException($"Found unexpected count ('{Count}') and indices count ('{indicesVBO.Count}')");
+        }
+        
+        private static void AssertPrimitive(PrimitiveType Primitive, bool AssertIndices = true)
+        {
+            var mod = AllowedPrimitives[Primitive];
+            if(AssertIndices) AssertVBO(Primitive, VBO.GetById(Renderer.VBOBound), mod);
+            var vbos = VAO.GetById(Renderer.VAOBound).VBOs;
+            for (var i = 0; i < vbos.Length; ++i)
+            {
+                AssertVBO(Primitive, vbos[i], mod);
+            }
+        }
+
+        private static void AssertVBO(PrimitiveType Primitive, VBO Buffer, int Mod)
+        {  
+            if(Buffer.Count % Mod != 0)
+                throw new ArgumentOutOfRangeException($"Drawing with primitive '{Primitive}' requires your vbos to be a multiple of '{Mod}'");
+        }
+        
+        private static void AssertInstanceCount(PrimitiveType Primitive, int InstanceCount)
+        {
+            var vao = VAO.GetById(Renderer.VAOBound);
+            if(!(vao is ParticleVAO particle))
+                throw new ArgumentException($"Instanced drawing can only be used with particle vaos.");
+            
+            var particleBuffer = particle.ParticleBuffer;
+            var instances = particleBuffer.Count / particle.InstanceStride;
+            if(instances != InstanceCount)
+                throw new ArgumentException($"Bound VAO has '{instances}' but the draw call has '{InstanceCount}'");
         }
 
         private static void AssertElementBuffer()
@@ -35,17 +114,6 @@ namespace Hedra.Engine.Rendering
             
             if(Renderer.BufferHandler.Target != BufferTarget.ElementArrayBuffer)
                 throw new ArgumentException($"Bound VBO target is not 'ElementArrayBuffer'");
-        }
-        
-        public static void AssertDrawArrays(PrimitiveType Type, int Offset, int Count)
-        {
-            if(Offset > Count) 
-                throw new ArgumentException($"Draw offset '{Offset}' cannot be higher than the amount of elements '{Count}'");
-            
-            if(Renderer.BufferHandler.Id != 0)
-                throw new ArgumentException($"Cannot have a bound VBO when using DrawArrays");
-            
-            BaseAssert();
         }
         
         private static void BaseAssert()

@@ -9,6 +9,5 @@ namespace Hedra.Engine.Rendering
         List<Vector4> Colors { get; set; }
         List<Vector3> Normals { get; set; }
         List<uint> Indices { get; set; }
-        List<float> Extradata { get; set; }
     }
 }

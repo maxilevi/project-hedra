@@ -43,6 +43,7 @@ namespace Hedra.Engine.Rendering.Particles
         public bool HasMultipleOutputs { get; set; }
         public bool Enabled { get; set; } = true;
         public bool Collides { get; set; }
+        private int _particlesInMemory;
         
         
         public ParticleSystem(): this(Vector3.Zero)
@@ -152,7 +153,7 @@ namespace Hedra.Engine.Rendering.Particles
                 _vao.Bind();
                 
                 ParticleCreator.IndicesVBO.Bind();
-                Renderer.DrawElementsInstanced(PrimitiveType.Triangles, ParticleCreator.IndicesVBO.Count, DrawElementsType.UnsignedShort, IntPtr.Zero, Particles.Count);
+                Renderer.DrawElementsInstanced(PrimitiveType.Triangles, ParticleCreator.IndicesVBO.Count, DrawElementsType.UnsignedShort, IntPtr.Zero, _particlesInMemory);
                 ParticleCreator.IndicesVBO.Unbind();
                 
                 _vao.Unbind();
@@ -171,8 +172,9 @@ namespace Hedra.Engine.Rendering.Particles
         private void UpdateVbo()
         {
             if (Particles.Count <= 0) return;
-            var vec4S = new Vector4[Particles.Count * 5];
-            for(var i = Particles.Count-1; i > -1; i--)
+            var count = Particles.Count;
+            var vec4S = new Vector4[count * 5];
+            for(var i = count-1; i > -1; i--)
             {
                 var transMatrix = ConstructTransformationMatrix(Particles[i].Position, Particles[i].Rotation, Particles[i].Scale);
                 vec4S[i * 5 + 0] = Particles[i].Color;
@@ -182,6 +184,7 @@ namespace Hedra.Engine.Rendering.Particles
                 vec4S[i * 5 + 4] = transMatrix.Column3;
             }
             _particleVbo.Update(vec4S, vec4S.Length * Vector4.SizeInBytes);
+            _particlesInMemory = count;
         }
         
         private static Matrix4 ConstructTransformationMatrix(Vector3 Position, Vector3 Rotation, Vector3 Scale)

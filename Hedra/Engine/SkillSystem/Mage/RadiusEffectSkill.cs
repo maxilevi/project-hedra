@@ -11,7 +11,7 @@ namespace Hedra.Engine.SkillSystem.Mage
     {
         protected sealed override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/MageStaffGroundHit.dae");
         protected sealed override bool CanMoveWhileCasting => false;
-        protected sealed override float AnimationSpeed => .75f;
+        protected sealed override float AnimationSpeed => 1.5f;
         
         protected override void OnAnimationEnd()
         {

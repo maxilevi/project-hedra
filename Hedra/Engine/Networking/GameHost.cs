@@ -72,11 +72,15 @@ namespace Hedra.Engine.Networking
         
         protected override void HandleNormalMessage(ulong Sender, byte[] Message)
         {
-            Log.WriteLine($"Relaying normal message with length '{Message.Length}'");
-            /*SendAllIf(U => U != Sender, U =>
+            if(Message.Length == 0) return;
+            var header = (CommonMessageType) Message[0];
+            if (header == CommonMessageType.Relay)
             {
-                Connection.SendMessage(U, Message);
-            });*/
+                var id = BitConverter.ToUInt64(Message.Skip(1).Take(sizeof(ulong)).ToArray(), 0);
+                var message = Message.Skip(sizeof(ulong) + 1).ToArray();
+                Log.WriteLine($"Relaying normal message with length '{message.Length}' to user '{id}'");
+                Connection.SendMessage(id, message);
+            }
         }
 
         private void AnswerJoin(ulong Id)

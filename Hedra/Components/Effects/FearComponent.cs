@@ -39,7 +39,7 @@ namespace Hedra.Components.Effects
         
         public override void Dispose()
         {
-            Parent.RemoveComponent(_fearComponent);
+            if(_fearComponent != null) Parent.RemoveComponent(_fearComponent);
             if(_previousAi != null) Parent.AddComponent(_previousAi);
         }
     }

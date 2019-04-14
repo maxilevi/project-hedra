@@ -10,19 +10,19 @@ namespace Hedra.Engine.Networking
 {   
     public class LocalConnection : BaseConnection, IConnection
     {
-        public override ulong Myself => 1;
+        public override ulong Myself { get; }
         public override event OnMessageReceived MessageReceived;
+        private ulong _serverId;
         private bool _created;
         private bool _isListening;
         private Thread _thread;
-        private ulong _lastId;
         private readonly Dictionary<ulong, TcpClient> _peers;
         private TcpClient _client;
         private TcpListener _listener;
         
         public LocalConnection(ConnectionType Type) : base(Type)
         {
-            _lastId = Myself;
+            Myself = (ulong) Environment.TickCount;
             _peers = new Dictionary<ulong, TcpClient>();
         }
 
@@ -47,8 +47,8 @@ namespace Hedra.Engine.Networking
                 while (Program.GameWindow.Exists)
                 {
                     var client = _listener.AcceptTcpClient();
-                    var id = _lastId++; 
-                    BuildClientLoop(id, client);
+                    SendMessage(client, BitConverter.GetBytes(Myself), sizeof(ulong));
+                    BuildClientLoop(client);
                 }
             }
             CreateLoop(ServerLoop);
@@ -59,7 +59,8 @@ namespace Hedra.Engine.Networking
             _created = true;
             _client = new TcpClient("127.0.0.1", 5000);
             _isListening = true;
-            BuildClientLoop(Myself, _client);
+            SendMessage(_client, BitConverter.GetBytes(Myself), sizeof(ulong));
+            BuildClientLoop(_client);
         }
 
 
@@ -69,20 +70,32 @@ namespace Hedra.Engine.Networking
             _thread.Start();
         }
 
-        private void BuildClientLoop(ulong Id, TcpClient Client)
+        private void BuildClientLoop(TcpClient Client)
         {
-            _peers.Add(Id, Client);
             void ClientLoop()
             {
                 var buffer = new byte[4096];
+                var registered = false;
+                var id = 0ul;
                 while (Program.GameWindow.Exists)
                 {
-                    var count = Client.Client.Receive(buffer);
-                    if (count == 0) break;
-                    ReceiveMessage(Id, buffer.Take(count).ToArray());
+                    var count = Client.Client.Receive(buffer, 0, buffer.Length, SocketFlags.None, out var error);
+                    if(error != SocketError.Success) break;
+                    if (registered)
+                    {
+                        ReceiveMessage(id, buffer.Take(count).ToArray());
+                    }
+                    else
+                    {
+                        id = BitConverter.ToUInt64(buffer.Take(count).ToArray(), 0);
+                        _peers.Add(id, Client);
+                        registered = true;
+                        if (ConnectionType.Client == Type)
+                            _serverId = id;
+                    }
                 }
-                _peers.Remove(Id);
-                Log.WriteLine("A client has disconnected from the server");
+                _peers.Remove(id);
+                Log.WriteLine($"A client '{id}' has disconnected from the server");
             }
             CreateLoop(ClientLoop);
         }
@@ -96,11 +109,23 @@ namespace Hedra.Engine.Networking
 
         public override void SendMessage(ulong Peer, byte[] Buffer, int Count)
         {
-            var stream = _peers[Peer].GetStream();
+            if (!_peers.ContainsKey(Peer))
+            {
+                var target = Peer;
+                Peer = _serverId;
+                Buffer = CommonMessages.Relay.Concat(BitConverter.GetBytes(target)).Concat(Buffer).ToArray();
+                Count = Buffer.Length;
+            }
+            SendMessage(_peers[Peer], Buffer, Count);
+        }
+
+        private void SendMessage(TcpClient Client, byte[] Buffer, int Count)
+        {
+            var stream = Client.GetStream();
             stream.Write(Buffer, 0, Count);
             stream.Flush();
         }
-
+        
         public override void Dispose()
         {
 

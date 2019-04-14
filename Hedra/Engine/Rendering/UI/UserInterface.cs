@@ -162,6 +162,7 @@ namespace Hedra.Engine.Rendering.UI
             Menu.OnPanelStateChange += delegate(object Sender, PanelState E)
             {
                 if (E != PanelState.Enabled) return;
+                hostWorld.Disable();
                 //if(!Steam.Instance.IsAvailable) hostWorld.Disable();
                 if (Network.Instance.IsAlive)
                 {
