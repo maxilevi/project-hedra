@@ -60,6 +60,7 @@ namespace Hedra.WeaponSystem
         private readonly ObjectMesh _quiver;
         private ObjectMesh _arrow;
         private string _lastAmmoName;
+        protected override SoundType Sound => SoundType.BowSound;
 
         public Bow(VertexData Contents) : base(Contents)
         {
@@ -153,10 +154,8 @@ namespace Hedra.WeaponSystem
             _arrow.Enabled = (base.InAttackStance || Owner.IsAttacking) && _quiver.Enabled; 
         }
 
-        public override void Shoot(Vector3 Direction, AttackOptions Options, params IEntity[] ToIgnore)
+        protected override Projectile Shoot(Vector3 Direction, AttackOptions Options, params IEntity[] ToIgnore)
         {
-            //var currentAmmo = Owner.Inventory.Ammo;
-            //if (currentAmmo == null) return;
             var currentAmmo = ItemPool.Grab(ItemType.StoneArrow);
             var arrowProj = new Projectile(Owner,
                 Owner.Model.LeftWeaponPosition,
@@ -174,7 +173,7 @@ namespace Hedra.WeaponSystem
             };
             AddModifiers(arrowProj);
             World.AddWorldObject(arrowProj);
-            SoundPlayer.PlaySound(SoundType.BowSound, Owner.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
+            return arrowProj;
         }
 
         private VertexData RescaleArrow(VertexData Model)
@@ -183,26 +182,7 @@ namespace Hedra.WeaponSystem
             var size = (Model.SupportPoint(Vector3.One) - Model.SupportPoint(-Vector3.One)).LengthFast;
             return Model.Clone().Scale(Vector3.One * 3f * .75f / size);
         }
-
-        private bool AreThereNearbyMobs()
-        {
-            var entities = World.Entities;
-            for(var i = 0; i< entities.Count; i++)
-            {
-                if(entities[i] == Owner) continue;
-                    
-                var toEntity = (entities[i].Position - Owner.Position).NormalizedFast();
-                var dot = Vector3.Dot(toEntity, Owner.Orientation);
-                if (dot >= .75f && (entities[i].Position - Owner.Position).LengthSquared < 7 * 7) return true;
-            }
-
-            return false;
-        }
-
-        //public override bool CanDoAttack1 => base.CanDoAttack1 && !AreThereNearbyMobs();//Owner?.Inventory.Ammo != null;
         
-        //public override bool CanDoAttack2 => base.CanDoAttack2 && !AreThereNearbyMobs();//Owner?.Inventory.Ammo != null;
-
         public override void Dispose()
         {
             base.Dispose();

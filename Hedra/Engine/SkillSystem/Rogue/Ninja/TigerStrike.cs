@@ -12,7 +12,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
         protected override Animation SkillAnimation { get; }  = AnimationLoader.LoadAnimation("Assets/Chr/RogueTigerStrike.dae");
         protected override bool EquipWeapons => false;
         protected override bool CanMoveWhileCasting => false;
-        protected override float AnimationSpeed => 2.0f;
+        protected override float AnimationSpeed => 1.5f;
 
         protected override void OnAnimationMid()
         {

@@ -6,6 +6,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.WeaponSystem
@@ -29,13 +30,13 @@ namespace Hedra.WeaponSystem
 
         protected override Vector3 SheathedPosition => new Vector3(1.5f,-1.0f,-0.75f);
         protected override Vector3 SheathedRotation => new Vector3(-5,90,-125 );
-
+        protected override SoundType Sound => SoundType.SwooshSound;
 
         public Staff(VertexData Contents) : base(Contents)
         {  
         }
 
-        public override void Shoot(Vector3 Direction, AttackOptions Options, params IEntity[] ToIgnore)
+        protected override Projectile Shoot(Vector3 Direction, AttackOptions Options, params IEntity[] ToIgnore)
         {
             var fireball = Fireball.Create(
                 Owner,
@@ -45,6 +46,7 @@ namespace Hedra.WeaponSystem
                 ToIgnore.Concat(Options.IgnoreEntities).ToArray()
             );
             AddModifiers(fireball);
+            return fireball;
         }
 
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)

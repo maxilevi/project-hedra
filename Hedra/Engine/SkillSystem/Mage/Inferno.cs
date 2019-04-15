@@ -10,6 +10,7 @@ using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.EntitySystem;
 using Hedra.Rendering.Particles;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Mage
@@ -108,6 +109,7 @@ namespace Hedra.Engine.SkillSystem.Mage
 
                 StartExplodeParticles();
                 TaskScheduler.For(.5f, ExplodeParticles);
+                SoundPlayer.PlaySound(SoundType.GroundQuake, Position);
             }
 
             private void ExplodeParticles()

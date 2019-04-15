@@ -1,7 +1,9 @@
+using Hedra.Core;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.WeaponSystem
@@ -13,6 +15,7 @@ namespace Hedra.WeaponSystem
         public override bool IsMelee => false;
         protected override bool ShouldPlaySound => false;
         protected override bool ContinousAttack => true;
+        protected abstract SoundType Sound { get; }
         public event OnProjectileEvent BowModifiers;
         public event OnProjectileEvent Hit;
         public event OnProjectileEvent Miss;
@@ -28,9 +31,10 @@ namespace Hedra.WeaponSystem
             var player = Owner as IPlayer;
             var direction = player?.View.CrossDirection ?? Owner.Orientation;
             Shoot(direction, Options, player?.Pet?.Pet);
+            SoundPlayer.PlaySound(Sound, Owner.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
         }
         
-        public abstract void Shoot(Vector3 Direction, AttackOptions Options, params IEntity[] ToIgnore);
+        protected abstract Projectile Shoot(Vector3 Direction, AttackOptions Options, params IEntity[] ToIgnore);
         
         protected void AddModifiers(Projectile ArrowProj)
         {
