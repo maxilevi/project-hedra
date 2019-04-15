@@ -11,6 +11,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Berserker
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Sacrifice.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/WarriorImbueAttack.dae");
+        protected override float AnimationSpeed => 1.25f;
 
         protected override void ApplyBonusToEnemy(IEntity Victim, ref float Damage)
         {

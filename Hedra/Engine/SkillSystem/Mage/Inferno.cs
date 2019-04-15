@@ -18,7 +18,7 @@ namespace Hedra.Engine.SkillSystem.Mage
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skill/Inferno.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/MageInferno.dae");
-        protected override float AnimationSpeed => 1.5f;
+        protected override float AnimationSpeed => 1.75f;
 
         protected override void OnAnimationEnd()
         {

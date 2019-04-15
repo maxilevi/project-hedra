@@ -15,6 +15,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Paladin
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Salvation.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/WarriorImbueAttack.dae");
+        protected override float AnimationSpeed => 1.25f;
         private bool _hasMinion;
         
         protected override void ApplyBonusToEnemy(IEntity Victim, ref float Damage)

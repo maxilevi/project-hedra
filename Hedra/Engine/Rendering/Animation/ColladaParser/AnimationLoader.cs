@@ -11,6 +11,8 @@ using System.Globalization;
 using OpenTK;
 using System.Xml;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
+using System.Linq;
 using Hedra.Core;
 
 namespace Hedra.Engine.Rendering.Animation.ColladaParser
@@ -20,30 +22,38 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
     /// </summary>
     public class AnimationLoader
     {
+        private const string LinearInterpolationKeyword = "LINEAR";
+        private const string BezierInterpolationKeyword = "BEZIER";
         private const string ArmatureName = "Armature";
         private static readonly Matrix4 Correction = Matrix4.CreateRotationX( -90f * Mathf.Radian);
-        private XmlNode AnimationData;
-        private XmlNode JointHierarchy;
+        private readonly XmlNode _animationData;
+        private readonly XmlNode _jointHierarchy;
+        private readonly string[] _jointIds;
         
-        public AnimationLoader(XmlNode AnimationData, XmlNode JointHierarchy){
-            this.AnimationData = AnimationData;
-            this.JointHierarchy = JointHierarchy;
+        public AnimationLoader(XmlNode AnimationData, XmlNode JointHierarchy)
+        {
+            _animationData = AnimationData;
+            _jointHierarchy = JointHierarchy;
+            _jointIds = JointsLoader.GetJointIds(GetSkeletonNode());
         }
         
-        public AnimationData ExtractAnimation(){
-            string rootNode = FindRootJointName();
-            float[] times = GetKeyTimes();
-            float duration = times[times.Length-1];
-            KeyFrameData[] keyFrames = InitKeyFrames(times);
-            List<XmlNode> animationNodes = AnimationData.Children("animation");
-            for(int i = 0; i<animationNodes.Count; i++){
+        public AnimationData ExtractAnimation()
+        {
+            var rootNode = FindRootJointName();
+            var times = GetKeyTimes();
+            var duration = times[times.Length-1];
+            var keyFrames = InitKeyFrames(times);
+            var animationNodes = _animationData.Children("animation").ToArray();
+            for(var i = 0; i < animationNodes.Length; i++)
+            {
                 LoadJointTransforms(keyFrames, animationNodes[i], rootNode);
             }
             return new AnimationData(duration, keyFrames);
         }
         
-        private float[] GetKeyTimes(){
-            XmlNode timeData = AnimationData["animation"]["source"]["float_array"];
+        private float[] GetKeyTimes()
+        {
+            XmlNode timeData = _animationData["animation"]["source"]["float_array"];
             string[] rawTimes = timeData.InnerText.Split(' ');
             float[] times = new float[rawTimes.Length];
             for(int i=0;i<times.Length;i++){
@@ -52,18 +62,24 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
             return times;
         }
         
-        private KeyFrameData[] InitKeyFrames(float[] times){
-            KeyFrameData[] frames = new KeyFrameData[times.Length];
-            for(int i=0;i<frames.Length;i++){
-                frames[i] = new KeyFrameData(times[i]);
+        private static KeyFrameData[] InitKeyFrames(float[] Times)
+        {
+            var frames = new KeyFrameData[Times.Length];
+            for(var i=0; i < frames.Length; i++)
+            {
+                frames[i] = new KeyFrameData(Times[i]);
             }
             return frames;
         }
         
-        private void LoadJointTransforms(KeyFrameData[] frames, XmlNode JointData, String rootNodeId){
+        private void LoadJointTransforms(KeyFrameData[] frames, XmlNode JointData, String rootNodeId)
+        {
             string jointNameId = GetJointName(JointData);
+            if(Array.IndexOf(_jointIds, jointNameId) == -1) return;
+            
             string dataId = GetDataId(JointData);
             XmlNode transformData = JointData.ChildWithAttribute("source", "id", dataId);
+            AssertInterpolationMode(JointData.InnerText);
             string[] rawData = transformData["float_array"].InnerText.Split(' ');
             this.ProcessTransforms(jointNameId, rawData, frames, jointNameId == rootNodeId);
         }
@@ -73,7 +89,8 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
             return node.GetAttribute("source").Value.Substring(1);
         }
         
-        private string GetJointName(XmlNode jointData){
+        private string GetJointName(XmlNode jointData)
+        {
             XmlNode channelNode = jointData["channel"];
             string data = channelNode.GetAttribute("target").Value;
             return data.Split('/')[0].Replace($"{ArmatureName}_", string.Empty);
@@ -82,8 +99,10 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
         private void ProcessTransforms(String jointName, String[] rawData, KeyFrameData[] keyFrames, bool root)
         {
             float[] matrixData = new float[16];
-            for(int i=0; i<keyFrames.Length; i++){
-                for(int j=0; j<16; j++){
+            for(int i=0; i<keyFrames.Length; i++)
+            {
+                for(var j=0; j<16; j++)
+                {
                     matrixData[j] = float.Parse(rawData[i*16 + j], NumberStyles.Any, CultureInfo.InvariantCulture);
                 }
                 Matrix4 transform = new Matrix4(matrixData[0], matrixData[1], matrixData[2], matrixData[3],
@@ -97,9 +116,20 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
             }
         }
         
-        private string FindRootJointName(){
-            XmlNode skeleton = JointHierarchy["visual_scene"].ChildWithAttribute("node", "id", ArmatureName);
-            return skeleton["node"].GetAttribute("id");
+        private string FindRootJointName()
+        {
+            return GetSkeletonNode()["node"].GetAttribute("id");
+        }
+
+        private XmlNode GetSkeletonNode()
+        {
+            return _jointHierarchy["visual_scene"].ChildWithAttribute("node", "id", ArmatureName);
+        }
+
+        private static void AssertInterpolationMode(string Text)
+        {
+            if(Text.Contains(BezierInterpolationKeyword))
+                throw new ArgumentException($"Animation is '{BezierInterpolationKeyword}' interpolated but should be '{LinearInterpolationKeyword}'");
         }
     }
 }

@@ -54,7 +54,6 @@ namespace Hedra.Engine.Rendering.Animation
                 }
             }
             var frames = new KeyFrame[animationData.KeyFrames.Length];
-            
             for (var i = 0; i < frames.Length; i++) {
                 frames[i] = CreateKeyFrame(animationData.KeyFrames[i]);
             }

@@ -18,7 +18,8 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
         public readonly int JointCount;
         public readonly JointData HeadJoint;
         
-        public JointsData(int JointCount, JointData HeadJoint){
+        public JointsData(int JointCount, JointData HeadJoint)
+        {
             this.JointCount = JointCount;
             this.HeadJoint = HeadJoint;
         }

@@ -12,6 +12,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
     public class SiphonBlood : BloodSkill
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/SiphonBlood.png");
+        protected override float AnimationSpeed => 1.5f;
 
         protected override void SpawnParticle(IEntity Victim)
         {

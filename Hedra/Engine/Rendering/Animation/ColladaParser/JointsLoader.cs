@@ -37,11 +37,27 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
         {
             XmlNode headNode = ArmatureData["node"];
             JointData headJoint = LoadJointData(headNode, true);
-            if(BoneOrder.Count > JointCount) throw new ArgumentOutOfRangeException($"Some vertex groups have no attached joint ({BoneOrder.Count}). Probably check that the exported model has no duplicated vertex groups.");
+            if(BoneOrder.Count > JointCount) 
+                throw new ArgumentOutOfRangeException($"Some vertex groups have no attached joint ({BoneOrder.Count}). Probably check that the exported model has no duplicated vertex groups.");
             return new JointsData(JointCount, headJoint);
         }
         
-        private JointData LoadJointData(XmlNode JointNode, bool IsRoot){
+        public static string[] GetJointIds(XmlNode Node)
+        {
+            var names = new List<string>();
+            var name = GetJointId(Node);
+            if (Node.GetAttribute("type").Value == "JOINT")
+                names.Add(name);
+            var children = Node.Children("node");
+            for (var i = 0; i < children.Count; ++i)
+            {
+                names.AddRange(GetJointIds(children[i]));
+            }
+            return names.ToArray();
+        }
+        
+        private JointData LoadJointData(XmlNode JointNode, bool IsRoot)
+        {
             JointData joint = ExtractMainJointData(JointNode, IsRoot);
             List<XmlNode> Childs = JointNode.Children("node");
             for(int i = 0; i < Childs.Count; i++){
@@ -50,8 +66,9 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
             return joint;
         }
         
-        private JointData ExtractMainJointData(XmlNode JointNode, bool IsRoot){
-            string jointId = JointNode.GetAttribute("id").Value.Replace($"{ArmatureName}_", string.Empty);
+        private JointData ExtractMainJointData(XmlNode JointNode, bool IsRoot)
+        {
+            string jointId = GetJointId(JointNode);
             string jointSid = JointNode.GetAttribute("sid").Value;
             if(jointId != jointSid) throw new ArgumentException($"Joint ID '{jointId}' differs from Joint NAME '{jointSid}'.");
             int index = BoneOrder.IndexOf(jointId);
@@ -64,13 +81,19 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
             return new JointData(index, jointId, matrix);
         }
         
-        private Matrix4 Mat4FromString(String[] rawData){
+        private Matrix4 Mat4FromString(String[] rawData)
+        {
             if(rawData.Length != 16) throw new ArgumentException("Not enough values.");
             return new Matrix4( float.Parse(rawData[0], NumberStyles.Any, CultureInfo.InvariantCulture), float.Parse(rawData[1], NumberStyles.Any, CultureInfo.InvariantCulture), float.Parse(rawData[2], NumberStyles.Any, CultureInfo.InvariantCulture), float.Parse(rawData[3], NumberStyles.Any, CultureInfo.InvariantCulture),
                                 float.Parse(rawData[4], NumberStyles.Any, CultureInfo.InvariantCulture), float.Parse(rawData[5], NumberStyles.Any, CultureInfo.InvariantCulture), float.Parse(rawData[6], NumberStyles.Any, CultureInfo.InvariantCulture), float.Parse(rawData[7], NumberStyles.Any, CultureInfo.InvariantCulture),
                                 float.Parse(rawData[8], NumberStyles.Any, CultureInfo.InvariantCulture), float.Parse(rawData[9], NumberStyles.Any, CultureInfo.InvariantCulture), float.Parse(rawData[10], NumberStyles.Any, CultureInfo.InvariantCulture), float.Parse(rawData[11], NumberStyles.Any, CultureInfo.InvariantCulture),
                                 float.Parse(rawData[12], NumberStyles.Any, CultureInfo.InvariantCulture), float.Parse(rawData[13], NumberStyles.Any, CultureInfo.InvariantCulture), float.Parse(rawData[14], NumberStyles.Any, CultureInfo.InvariantCulture), float.Parse(rawData[15], NumberStyles.Any, CultureInfo.InvariantCulture)
                             );
+        }
+
+        private static string GetJointId(XmlNode JointNode)
+        {
+            return JointNode.GetAttribute("id").Value.Replace($"{ArmatureName}_", string.Empty);
         }
     }
 }
