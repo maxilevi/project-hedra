@@ -8,10 +8,12 @@ namespace Hedra.Engine.QuestSystem
         public int Gold { get; set; }
         public int Experience { get; set; }
         public Item Item { get; set; }
+        public int SkillPoint { get; set; }
 
         public bool HasGold => Gold != 0;
         public bool HasExperience => Experience != 0;
         public bool HasItem => Item != null;
+        public bool HasSkillPoint => SkillPoint != 0;
     }
 }
 /*

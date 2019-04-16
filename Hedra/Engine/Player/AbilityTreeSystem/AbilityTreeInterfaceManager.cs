@@ -109,7 +109,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             return null;
         }
 
-        public int AvailablePoints => _player.Level - UsedPoints;
+        public int AvailablePoints => _player.Level - UsedPoints + ExtraSkillPoints;
         public int UsedPoints
         {
             get
@@ -128,5 +128,6 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 return used;
             }
         }
+        public int ExtraSkillPoints { get; set; }
     }
 }

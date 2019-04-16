@@ -26,7 +26,7 @@ namespace Hedra.Engine.Management
     /// </summary>
     public static class DataManager
     {
-        private const float SaveVersion = 1.4f;
+        private const float SaveVersion = 1.5f;
         
         public static void SavePlayer(PlayerInformation Player)
         {
@@ -76,6 +76,7 @@ namespace Hedra.Engine.Management
                     bw.Write(Player.SecondSpecializationTreeArray);
                     
                     bw.Write(Player.SpecializationTreeIndex);
+                    bw.Write(Player.ExtraSkillPoints);
 
                     bw.Write(Player.ToolbarArray.Length);
                     bw.Write(Player.ToolbarArray);
@@ -147,7 +148,8 @@ namespace Hedra.Engine.Management
                 Recipes = Player.Crafting.RecipeNames,
                 Quests = Player.Questing.GetTemplates(),
                 MarkedDirection = Player.Minimap.MarkedDirection,
-                SpecializationTreeIndex = Player.AbilityTree.SpecializationTreeIndex
+                SpecializationTreeIndex = Player.AbilityTree.SpecializationTreeIndex,
+                ExtraSkillPoints = Player.AbilityTree.ExtraSkillPoints
             };
 
             return data;
@@ -209,6 +211,10 @@ namespace Hedra.Engine.Management
                 if (version >= 1.4f)
                 {
                     information.SpecializationTreeIndex = br.ReadInt32();
+                }
+                if(version >= 1.5f)
+                {
+                    information.ExtraSkillPoints = br.ReadInt32();
                 }
                 information.ToolbarArray = br.ReadBytes(br.ReadInt32());
                 information.TargetPosition = br.ReadVector3();

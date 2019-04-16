@@ -89,6 +89,7 @@ namespace Hedra.Engine.QuestSystem.Designs
                 Experience = rng < 0.3f ? (int) (Rng.Next(3, 9) * GetRewardMultiplier(Quest, Rng)) : 0,
                 Gold = rng > 0.3f && rng < 0.7f ? (int) (Rng.Next(11, 25) * GetRewardMultiplier(Quest, Rng)) : 0,
                 Item = rng > 0.75f && rng < 0.95f ? RandomReward(Rng) : null,
+                SkillPoint =  rng > 0.95f ? 1 : 0,
             };
         }
 

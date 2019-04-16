@@ -65,6 +65,15 @@ namespace Hedra.Engine.QuestSystem.Designs.Auxiliaries
                         MakeItemString(reward.Item)
                     }
                 };
+            if (reward.HasSkillPoint)
+                return new DialogObject
+                {
+                    Key = "quest_complete_reward_dialog",
+                    Params = new object[]
+                    {
+                        $"{reward.SkillPoint} {Translations.Get("quest_skill_point")}"
+                    }
+                };
             return new DialogObject
             {
                 Key = "quest_complete_dialog",
@@ -97,10 +106,16 @@ namespace Hedra.Engine.QuestSystem.Designs.Auxiliaries
                 SoundPlayer.PlayUISound(SoundType.TransactionSound);
             }
 
+            if (reward.HasSkillPoint)
+            {
+                Quest.Owner.AbilityTree.ExtraSkillPoints += reward.SkillPoint;
+                Quest.Owner.ShowText($"+{reward.SkillPoint} SP", Color.OrangeRed, 20);
+                SoundPlayer.PlayUISound(SoundType.NotificationSound);
+            }
             if (reward.HasItem)
             {
                 Quest.Owner.AddOrDropItem(reward.Item);
-                //SoundPlayer.PlayUISound(SoundType.Equip);
+                SoundPlayer.PlayUISound(SoundType.ItemEquip);
             }
         }
         

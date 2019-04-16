@@ -218,6 +218,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 
         public void FromInformation(PlayerInformation Information)
         {
+            ExtraSkillPoints = Information.ExtraSkillPoints;
             ShowBlueprint(Information.Class.FirstSpecializationTree, _firstTree, Information.FirstSpecializationTreeArray);
             ShowBlueprint(Information.Class.SecondSpecializationTree, _secondTree, Information.SecondSpecializationTreeArray);
             ShowBlueprint(Information.Class.MainTree, _mainTree, Information.MainTreeArray);
@@ -310,6 +311,11 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 SetInventoryState(_show);
                 SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
             }
+        }
+        public int ExtraSkillPoints
+        {
+            get => _manager.ExtraSkillPoints;
+            set => _manager.ExtraSkillPoints = value;
         }
     }
 }
