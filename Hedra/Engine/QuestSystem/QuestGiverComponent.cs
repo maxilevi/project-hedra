@@ -2,6 +2,7 @@ using System;
 using Hedra.Components;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
@@ -35,6 +36,10 @@ namespace Hedra.Engine.QuestSystem
         public override void Update()
         {
             _talk.CanTalk = _canGiveQuest;
+            if (Parent.IsNear(GameManager.Player, 16) && !_talk.Talking)
+            {
+                Parent.RotateTowards(GameManager.Player);
+            }
         }
 
         private void OnQuestCompleted(QuestObject Object)

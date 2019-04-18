@@ -1,4 +1,3 @@
-using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
@@ -6,12 +5,11 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
 {
-    public class Well : CraftingStation, IQuestStructure
+    public class Gazebo : BaseStructure, IQuestStructure
     {
         private readonly WorldLight _light;
-        public IHumanoid NPC { get; set; }
         
-        public Well(Vector3 Position, float Radius) : base(Position)
+        public Gazebo(Vector3 Position, float Radius) : base(Position)
         {
             _light = new WorldLight(Position)
             {
@@ -19,16 +17,14 @@ namespace Hedra.Engine.StructureSystem
                 LightColor = HandLamp.LightColor
             };
         }
-        
-        public override CraftingSystem.CraftingStation StationType => CraftingSystem.CraftingStation.Well;
 
-        protected override string CraftingMessage => Translations.Get("use_well");
+        public IHumanoid NPC { get; set; }
 
         public override void Dispose()
         {
             base.Dispose();
-            _light.Dispose();
             NPC?.Dispose();
+            _light.Dispose();
         }
     }
 }

@@ -200,9 +200,15 @@ namespace Hedra.Engine.Rendering.Particles
         
         public void Dispose()
         {
+            if(Disposed) return;
             Disposed = true;
-            _vao.Dispose();
-            _particleVbo.Dispose();
+            void DoDispose()
+            {
+                _vao.Dispose();
+                _particleVbo.Dispose();
+            };
+            if(_vao == null) Executer.ExecuteOnMainThread(DoDispose);
+            else DoDispose();
             DrawManager.ParticleRenderer.Remove(this);
             UpdateManager.Remove(this);
         }

@@ -170,7 +170,17 @@ namespace Hedra.Engine.Generation
             _unculledChunks.Clear();
             var toDrawArray = Chunks;
 
-            DoCullTest(toDrawArray, DrawingChunks, _unculledChunks);
+#if DEBUG
+            try
+            {
+#endif
+                DoCullTest(toDrawArray, DrawingChunks, _unculledChunks);
+            }
+            catch (Exception e)
+            {
+                AssertNoDuplicates(toDrawArray);
+                throw;
+            }
 
             if (GameSettings.Shadows && !GameSettings.LockFrustum)
             {
@@ -182,6 +192,12 @@ namespace Hedra.Engine.Generation
                 WorldRenderer.PrepareCameraMatrix();
             }
             _renderingComparer.Position = GameManager.Player.Position;
+        }
+
+        private static void AssertNoDuplicates(IList<Chunk> Chunks)
+        {
+            if(Chunks.Any(C => Chunks.Count(K => C.Position == K.Position) > 1))
+                throw new ArgumentException($"Found duplicate chunk at index {Chunks.IndexOf(Chunks.First(C => Chunks.Count(K => C.Position == K.Position) > 1))}");
         }
 
         private static void DoCullTest(ReadOnlyCollection<Chunk> ToDrawArray, Dictionary<Vector2, Chunk> Output, Dictionary<Vector2, Chunk> OutputIfFrustumCulled)

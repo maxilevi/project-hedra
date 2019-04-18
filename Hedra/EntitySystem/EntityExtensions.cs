@@ -1,3 +1,4 @@
+using System;
 using System.Drawing;
 using Hedra.Core;
 using Hedra.Engine;
@@ -12,6 +13,14 @@ namespace Hedra.EntitySystem
 {
     public static class EntityExtensions
     {
+        public static bool IsLookingAt(this IHumanoid Parent, IHumanoid Target, float Angle)
+        {
+            var comparer = Target.LookingDirection;
+            if(comparer == Vector3.Zero) comparer = Vector3.UnitZ;
+            var dot = Vector3.Dot(Parent.LookingDirection, -comparer);
+            return Math.Abs(dot) > Angle;
+        }
+        
         public static void RotateTowards(this IEntity Parent, IEntity Target)
         {
             var dir = (Target.Position - Parent.Position).Xz.NormalizedFast().ToVector3();

@@ -13,50 +13,19 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
 {
-    public class WellDesign : StructureDesign
+    public class WellDesign : QuestGiverStructureDesign<Well>
     {
         public override int PlateauRadius => 80;
         public override VertexData Icon => null;
-        
-        public override void Build(CollidableStructure Structure)
-        {
-            var originalModel = CacheManager.GetModel(CacheItem.Well);
-            var rng = BuildRng(Structure);
-            var transformation = Matrix4.CreateRotationY(Mathf.Radian * rng.NextFloat() * 360.0f) * 
-                                 Matrix4.CreateTranslation(Structure.Position);
+        protected override float EffectivePlateauRadius => 48;
+        protected override int StructureChance => StructureGrid.WellChance;
+        protected override CacheItem Cache => CacheItem.Well;
+        protected override Vector3 Offset => Vector3.UnitZ * 8f;
+        protected override float QuestChance => .33f;
 
-            if (rng.Next(0, 3) == 1)
-            {
-                var npc = World.WorldBuilding.SpawnVillager(
-                    Vector3.TransformPosition(Vector3.UnitZ * 8f, transformation),
-                    rng
-                );
-                npc.Physics.UsePhysics = false;
-                npc.IsSitting = true;
-                //npc.AddComponent(new QuestGiverComponent(npc, QuestPool.Grab().Build(npc.Position, Utils.Rng, npc)));
-                ((Well) Structure.WorldObject).NPC = npc;
-            }
-            
-            Structure.AddStaticElement(
-                originalModel.Clone().Transform(transformation)
-            );
-            Structure.AddCollisionShape(
-                CacheManager.GetShape(originalModel).DeepClone().Select(S => S.Transform(transformation)).ToArray()
-            );           
-        }
-
-        protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
+        protected override Well Create(Vector3 Position, float Size)
         {
-            var structure = base.Setup(TargetPosition, Rng, new Well(TargetPosition, 48));
-            structure.AddGroundwork(new RoundedGroundwork(TargetPosition, 24, BlockType.StonePath));
-            structure.Mountain.Radius = 48;
-            return structure;
-        }
-
-        protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
-        {
-            var height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
-            return Rng.Next(0, StructureGrid.WellChance) == 1 && height > BiomePool.SeaLevel && Math.Abs(LandscapeGenerator.River(TargetPosition.Xz)) < 0.005f;
+            return new Well(Position, Size);
         }
     }
 }

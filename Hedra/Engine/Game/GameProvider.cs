@@ -213,6 +213,7 @@ namespace Hedra.Engine.Game
             while (_loadingScreen.IsLoading)
             {
                 Player.Physics.ResetFall();
+                Player.Physics.ResetVelocity();
                 Player.Physics.UsePhysics = false;
                 yield return null;
             }

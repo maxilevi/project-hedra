@@ -82,14 +82,15 @@ namespace Hedra.Components
 
         private bool IsAvailableToTalk()
         {
-            return Parent.IsNear(GameManager.Player, TalkRadius) 
-                   && !Talking 
+            var earlyExit = Parent.IsNear(GameManager.Player, TalkRadius)
+                   && !Talking
                    && GameManager.Player.CanInteract
-                   && !PlayerInterface.Showing 
-                   && !Parent.Model.IsMoving 
-                   && CanTalk 
-                   && Math.Abs(Vector3.Dot(GameManager.Player.View.LookingDirection, -Parent.Orientation)) > .5f
-                   && !GameManager.Player.Physics.Raycast(Parent.Position);
+                   && !PlayerInterface.Showing
+                   && !Parent.Model.IsMoving
+                   && CanTalk;
+            if (!earlyExit) return false;
+            var raycast = !GameManager.Player.Physics.Raycast(Parent.Position);
+            return GameManager.Player.IsLookingAt(Parent, .5f); // && raycast;
         }
 
         public void AddDialogLine(Translation Dialog)

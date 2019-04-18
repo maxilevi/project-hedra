@@ -13,6 +13,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.MapSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
 using OpenTK;
@@ -126,6 +127,11 @@ namespace Hedra.Engine.StructureSystem
         
         protected abstract bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng);
 
+        protected static void DoWhenChunkReady(Vector3 Position, Action<Vector3> Do, CollidableStructure Structure)
+        {
+            DecorationsPlacer.PlaceWhenWorldReady(Position, Do, () => Structure.Disposed);
+        }
+        
         public virtual bool MeetsRequirements(Vector2 ChunkOffset)
         {
             return World.Seed != World.MenuSeed;

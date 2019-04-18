@@ -84,6 +84,7 @@ namespace Hedra.Engine.QuestSystem.Designs
                     Translation.Create("quest_craft_take_recipe")
                 );
                 Owner.AddOrDropItem(recipe);
+                Owner.MessageDispatcher.ShowPlaque(Translations.Get("quest_learn_recipe_plaque"), 3);
             }
 
             var startingItems = Quest.Parameters.Get<ItemCollect[]>("StartingItems");

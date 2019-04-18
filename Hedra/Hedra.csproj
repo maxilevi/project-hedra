@@ -218,6 +218,8 @@
     <Compile Include="Core\Mathf.cs" />
     <Compile Include="Engine\CacheSystem\CornCache.cs" />
     <Compile Include="Engine\CacheSystem\DeathIconCache.cs" />
+    <Compile Include="Engine\CacheSystem\GazeboCache.cs" />
+    <Compile Include="Engine\CacheSystem\GazeboIconCache.cs" />
     <Compile Include="Engine\CacheSystem\MultipleCollectiblePlacementDesign.cs" />
     <Compile Include="Engine\CacheSystem\MushroomCache.cs" />
     <Compile Include="Engine\CacheSystem\PebbleCache.cs" />
@@ -550,7 +552,11 @@
     <Compile Include="Engine\Steamworks\SteamObjectWrapper.cs" />
     <Compile Include="Engine\StructureSystem\CachedVertexDataChunkWatcher.cs" />
     <Compile Include="Engine\StructureSystem\ChunkWatcher.cs" />
+    <Compile Include="Engine\StructureSystem\Gazebo.cs" />
+    <Compile Include="Engine\StructureSystem\GazeboDesign.cs" />
     <Compile Include="Engine\StructureSystem\InstanceDataChunkWatcher.cs" />
+    <Compile Include="Engine\StructureSystem\IQuestStructure.cs" />
+    <Compile Include="Engine\StructureSystem\QuestGiverStructureDesign.cs" />
     <Compile Include="Engine\StructureSystem\SpawnCampfire.cs" />
     <Compile Include="Engine\StructureSystem\SpawnCampfireDesign.cs" />
     <Compile Include="Engine\StructureSystem\SpawnVillage.cs" />
@@ -8347,6 +8353,130 @@
     </Content>
     <Content Include="..\project-hedra-assets\Sounds\Teleport.ogg">
       <Link>Sounds\Teleport.ogg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0-Icon.ply">
+      <Link>Assets\Env\Structures\Gazebo0-Icon.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0.ply">
+      <Link>Assets\Env\Structures\Gazebo0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Collider0.ply">
+      <Link>Assets\Env\Colliders\Gazebo0_Collider0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Collider1.ply">
+      <Link>Assets\Env\Colliders\Gazebo0_Collider1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Collider10.ply">
+      <Link>Assets\Env\Colliders\Gazebo0_Collider10.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Collider11.ply">
+      <Link>Assets\Env\Colliders\Gazebo0_Collider11.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Collider12.ply">
+      <Link>Assets\Env\Colliders\Gazebo0_Collider12.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Collider13.ply">
+      <Link>Assets\Env\Colliders\Gazebo0_Collider13.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Collider14.ply">
+      <Link>Assets\Env\Colliders\Gazebo0_Collider14.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Collider15.ply">
+      <Link>Assets\Env\Colliders\Gazebo0_Collider15.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Collider16.ply">
+      <Link>Assets\Env\Colliders\Gazebo0_Collider16.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Collider17.ply">
+      <Link>Assets\Env\Colliders\Gazebo0_Collider17.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Collider18.ply">
+      <Link>Assets\Env\Colliders\Gazebo0_Collider18.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Collider19.ply">
+      <Link>Assets\Env\Colliders\Gazebo0_Collider19.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Collider2.ply">
+      <Link>Assets\Env\Colliders\Gazebo0_Collider2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Collider20.ply">
+      <Link>Assets\Env\Colliders\Gazebo0_Collider20.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Collider21.ply">
+      <Link>Assets\Env\Colliders\Gazebo0_Collider21.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Collider22.ply">
+      <Link>Assets\Env\Colliders\Gazebo0_Collider22.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Collider23.ply">
+      <Link>Assets\Env\Colliders\Gazebo0_Collider23.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Collider24.ply">
+      <Link>Assets\Env\Colliders\Gazebo0_Collider24.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Collider25.ply">
+      <Link>Assets\Env\Colliders\Gazebo0_Collider25.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Collider3.ply">
+      <Link>Assets\Env\Colliders\Gazebo0_Collider3.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Collider4.ply">
+      <Link>Assets\Env\Colliders\Gazebo0_Collider4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Collider5.ply">
+      <Link>Assets\Env\Colliders\Gazebo0_Collider5.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Collider6.ply">
+      <Link>Assets\Env\Colliders\Gazebo0_Collider6.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Collider7.ply">
+      <Link>Assets\Env\Colliders\Gazebo0_Collider7.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Collider8.ply">
+      <Link>Assets\Env\Colliders\Gazebo0_Collider8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Collider9.ply">
+      <Link>Assets\Env\Colliders\Gazebo0_Collider9.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Lod2.ply">
+      <Link>Assets\Env\Structures\Gazebo0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Lod4.ply">
+      <Link>Assets\Env\Structures\Gazebo0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0_Lod8.ply">
+      <Link>Assets\Env\Structures\Gazebo0_Lod8.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0.ply">

@@ -16,6 +16,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             AddDesign(new CampfireDesign());
             AddDesign(new BanditCampDesign());
             AddDesign(new WellDesign());
+            AddDesign(new GazeboDesign());
         }
 
         public override VillageType VillageType => VillageType.Woodland;

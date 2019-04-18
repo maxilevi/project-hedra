@@ -77,7 +77,7 @@ namespace Hedra.Engine.EntitySystem
         
         public void UpdateColliders()
         {
-            if(!_updateCollidersTimer.Tick()) return;
+            //if(!_updateCollidersTimer.Tick()) return;
             _underChunk = World.GetChunkAt(Parent.Physics.TargetPosition);
             _underChunkR = World.GetChunkAt(Parent.Physics.TargetPosition + new Vector3(Chunk.Width, 0, 0));
             _underChunkL = World.GetChunkAt(Parent.Physics.TargetPosition - new Vector3(Chunk.Width, 0, 0));
