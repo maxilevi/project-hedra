@@ -90,57 +90,60 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
         }
     
         private void ReadPositions() {
-            string positionsId = MeshData["vertices"]["input"].GetAttribute("source").Substring(1);
+            var positionsId = MeshData["vertices"]["input"].GetAttribute("source").Substring(1);
             XmlNode positionsData = MeshData.ChildWithAttribute("source", "id", positionsId)["float_array"];
-            int count = int.Parse( positionsData.GetAttribute("count").Value );
-            string[] posData = positionsData.InnerText.Split(' ');
-            for (int i = 0; i < count/3; i++) {
-                float x = float.Parse( posData[i * 3], NumberStyles.Any, CultureInfo.InvariantCulture);
-                float y = float.Parse( posData[i * 3 + 1], NumberStyles.Any, CultureInfo.InvariantCulture);
-                float z = float.Parse( posData[i * 3 + 2], NumberStyles.Any, CultureInfo.InvariantCulture);
-                Vector4 position = new Vector4(x, y, z, 1);
+            var count = int.Parse( positionsData.GetAttribute("count").Value );
+            var posData = positionsData.InnerText.Split(' ');
+            for (var i = 0; i < count/3; i++) {
+                var x = float.Parse( posData[i * 3], NumberStyles.Any, CultureInfo.InvariantCulture);
+                var y = float.Parse( posData[i * 3 + 1], NumberStyles.Any, CultureInfo.InvariantCulture);
+                var z = float.Parse( posData[i * 3 + 2], NumberStyles.Any, CultureInfo.InvariantCulture);
+                var position = new Vector4(x, y, z, 1);
                 position = Vector4.Transform(position, Correction);
                 Vertices.Add(new Vertex(Vertices.Count, position.Xyz, VertexWeights[Vertices.Count] ));
             }
         }
     
         private void ReadNormals(XmlNode PolyNode) {
-            string normalsId = PolyNode.ChildWithAttribute("input", "semantic", "NORMAL").GetAttribute("source").Value.Substring(1);
+            var normalsId = PolyNode.ChildWithAttribute("input", "semantic", "NORMAL").GetAttribute("source").Value.Substring(1);
             XmlNode normalsData = MeshData.ChildWithAttribute("source", "id", normalsId)["float_array"];
-            int count = int.Parse(normalsData.GetAttribute("count").Value);
-            string[] normData = normalsData.InnerText.Split(' ');
-            for (int i = 0; i < count/3; i++) {
-                float x = float.Parse(normData[i * 3], NumberStyles.Any, CultureInfo.InvariantCulture);
-                float y = float.Parse(normData[i * 3 + 1], NumberStyles.Any, CultureInfo.InvariantCulture);
-                float z = float.Parse(normData[i * 3 + 2], NumberStyles.Any, CultureInfo.InvariantCulture);
-                Vector4 norm = new Vector4(x, y, z, 1);
+            var count = int.Parse(normalsData.GetAttribute("count").Value);
+            var normData = normalsData.InnerText.Split(' ');
+            for (var i = 0; i < count/3; i++) {
+                var x = float.Parse(normData[i * 3], NumberStyles.Any, CultureInfo.InvariantCulture);
+                var y = float.Parse(normData[i * 3 + 1], NumberStyles.Any, CultureInfo.InvariantCulture);
+                var z = float.Parse(normData[i * 3 + 2], NumberStyles.Any, CultureInfo.InvariantCulture);
+                var norm = new Vector4(x, y, z, 1);
                 norm = Vector4.Transform(norm, Correction);
                 Normals.Add( norm.Xyz );
             }
         }
     
-        private void ReadColors(XmlNode PolyNode) {
-            string ColorsId = PolyNode.ChildWithAttribute("input", "semantic", "COLOR")
-                    .GetAttribute("source").Value.Substring(1);
-            XmlNode ColorsNode = MeshData.ChildWithAttribute("source", "id", ColorsId)["float_array"];
-            int count = int.Parse(ColorsNode.GetAttribute("count").Value);
-            string[] ColorsData = ColorsNode.InnerText.Split(' ');
-            for (int i = 0; i < count/3; i++) {
-                float s = float.Parse(ColorsData[i * 3 + 0], NumberStyles.Any, CultureInfo.InvariantCulture);
-                float t = float.Parse(ColorsData[i * 3 + 1], NumberStyles.Any, CultureInfo.InvariantCulture);
-                float q = float.Parse(ColorsData[i * 3 + 2], NumberStyles.Any, CultureInfo.InvariantCulture);
+        private void ReadColors(XmlNode PolyNode)
+        {
+            var colorsContainer = PolyNode.ChildWithAttribute("input", "semantic", "COLOR");
+            if(colorsContainer == null)
+                throw new ArgumentException($"Model does not have any vertex colors, are you sure you applied the materials?");
+            var colorsId = colorsContainer.GetAttribute("source").Value.Substring(1);
+            XmlNode ColorsNode = MeshData.ChildWithAttribute("source", "id", colorsId)["float_array"];
+            var count = int.Parse(ColorsNode.GetAttribute("count").Value);
+            var ColorsData = ColorsNode.InnerText.Split(' ');
+            for (var i = 0; i < count/3; i++) {
+                var s = float.Parse(ColorsData[i * 3 + 0], NumberStyles.Any, CultureInfo.InvariantCulture);
+                var t = float.Parse(ColorsData[i * 3 + 1], NumberStyles.Any, CultureInfo.InvariantCulture);
+                var q = float.Parse(ColorsData[i * 3 + 2], NumberStyles.Any, CultureInfo.InvariantCulture);
                 Colors.Add(new Vector3(s, t , q));
             }
         }
         
         private void AssembleVertices(XmlNode PolyNode)
         {
-            int typeCount = PolyNode.ChildrenCount("input");
-            string[] indexData = PolyNode["p"].InnerText.Split(' ');
-            for(int i=0; i < indexData.Length / typeCount; i++){
-                int PositionIndex = int.Parse(indexData[i * typeCount]);
-                int NormalIndex = int.Parse(indexData[i * typeCount + 1]);
-                int TexCoordIndex = int.Parse(indexData[i * typeCount + 2]);
+            var typeCount = PolyNode.ChildrenCount("input");
+            var indexData = PolyNode["p"].InnerText.Split(' ');
+            for(var i=0; i < indexData.Length / typeCount; i++){
+                var PositionIndex = int.Parse(indexData[i * typeCount]);
+                var NormalIndex = int.Parse(indexData[i * typeCount + 1]);
+                var TexCoordIndex = int.Parse(indexData[i * typeCount + 2]);
                 
                 this.ProcessVertex(PositionIndex, NormalIndex, TexCoordIndex);
             }
@@ -148,7 +151,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
         
     
         private Vertex ProcessVertex(int posIndex, int normIndex, int texIndex) {
-            Vertex CurrentVertex = Vertices[posIndex];
+            var CurrentVertex = Vertices[posIndex];
             
             if (!CurrentVertex.IsSet) {
                 
@@ -165,12 +168,12 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
     
         private float ConvertDataToArrays() {
             float furthestPoint = 0;
-            for (int i = 0; i < Vertices.Count; i++) {
-                Vertex currentVertex = Vertices[i];
+            for (var i = 0; i < Vertices.Count; i++) {
+                var currentVertex = Vertices[i];
                 if (currentVertex.Length > furthestPoint) {
                     furthestPoint = currentVertex.Length;
                 }
-                VertexSkinData weights = currentVertex.WeightsData;
+                var weights = currentVertex.WeightsData;
                 JointIdsArray[i * 3] = weights.JointIds[0];
                 JointIdsArray[i * 3 + 1] = weights.JointIds[1];
                 JointIdsArray[i * 3 + 2] = weights.JointIds[2];
@@ -187,11 +190,11 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
                 Indices.Add( (uint) previousVertex.Index);
                 return previousVertex;
             } else {
-                Vertex anotherVertex = previousVertex.DuplicateVertex;
+                var anotherVertex = previousVertex.DuplicateVertex;
                 if (anotherVertex != null) {
                     return DealWithAlreadyProcessedVertex(anotherVertex, newTextureIndex, newNormalIndex);
                 } else {
-                    Vertex duplicateVertex = new Vertex(Vertices.Count, previousVertex.Position, previousVertex.WeightsData);
+                    var duplicateVertex = new Vertex(Vertices.Count, previousVertex.Position, previousVertex.WeightsData);
                     duplicateVertex.ColorIndex = newTextureIndex;
                     duplicateVertex.NormalIndex = newNormalIndex;
                     previousVertex.DuplicateVertex = duplicateVertex;
@@ -209,7 +212,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
         }
     
         private void RemoveUnusedVertices() {
-            for (int i = 0; i < Vertices.Count; i++){
+            for (var i = 0; i < Vertices.Count; i++){
                 Vertices[i].AverageTangents();
                 if (!Vertices[i].IsSet) {
                     Vertices[i].ColorIndex = 0;

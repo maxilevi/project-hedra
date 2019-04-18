@@ -1,0 +1,40 @@
+{
+  "Name" : "Ghost",
+  "MaxHealth": 416.0,
+  "AttackDamage": 11.0,
+  "AttackCooldown": 1.5,
+  "Speed": 1.40,
+  "XP": 12.0,
+  "Level": 17,
+  "AIType": "Hostile",
+  "Effects": [],
+  "Drops": [],
+  "Model": {
+    "Handler": "Ghost",
+    "AlignWithTerrain" :  false,
+    "Path": "$DataFile$/Assets/Chr/Mob/Ghost/GhostIdle.dae",
+    "Scale": 1.0,
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/Ghost/GhostIdle.dae",
+        "Speed": 1.0
+      }
+    ],
+    "WalkAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/Ghost/GhostWalk.dae",
+        "Speed": 1.0
+      }
+    ],
+    "AttackAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/Ghost/GhostAttack0.dae",
+        "Speed": 3.0
+      },
+      {
+        "Path": "$DataFile$/Assets/Chr/Ghost/GhostAttack1.dae",
+        "Speed": 3.0
+      }
+    ]
+  }
+}

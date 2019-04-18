@@ -33,6 +33,11 @@ namespace Hedra.Engine.Rendering
             Model.RemoveModel(Data);
         }
 
+        public void ClearModel()
+        {
+            Model.ClearModel();
+        }
+        
         public void Paint(Vector4[] Colors)
         {
             Paint(Model, ModelPath, Colors);

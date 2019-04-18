@@ -52,8 +52,8 @@ namespace Hedra.Engine.Rendering.Animation
         public Vector3 Min => CullingBox?.Min ?? Vector3.Zero;
         public Vector3[] JointIdsArray => _baseModelData.JointIds;
         public Vector3[] VerticesArray => _baseModelData.Vertices;
+        private ModelData _baseModelData;
         private readonly List<ModelData> _addedModels;
-        private readonly ModelData _baseModelData;
         private readonly Matrix4[] _jointMatrices;
         private readonly Animator _animator;
         
@@ -121,6 +121,13 @@ namespace Hedra.Engine.Rendering.Animation
             RebuildBuffers();
         }
 
+        public void ClearModel()
+        {
+            _addedModels.Clear();
+            _baseModelData = ModelData.Empty;
+            RebuildBuffers();
+        }
+        
         private void RebuildBuffers()
         {
             var model = ModelData.Combine(_baseModelData, _addedModels.ToArray());

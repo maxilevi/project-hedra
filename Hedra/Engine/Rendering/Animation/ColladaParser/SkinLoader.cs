@@ -22,8 +22,11 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
         private readonly XmlNode SkinningData;
         private readonly int MaxWeights;
     
-        public SkinLoader(XmlNode ControllersNode, int MaxWeights) {
-            this.SkinningData = ControllersNode["controller"]["skin"];
+        public SkinLoader(XmlNode ControllersNode, int MaxWeights)
+        {
+            SkinningData = ControllersNode?["controller"]?["skin"];
+            if (SkinningData == null)
+                throw new ArgumentOutOfRangeException("Provided model has no skinning data.");
             this.MaxWeights = MaxWeights;
         }
     

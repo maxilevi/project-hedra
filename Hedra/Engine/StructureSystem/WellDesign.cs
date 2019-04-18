@@ -21,7 +21,7 @@ namespace Hedra.Engine.StructureSystem
         protected override int StructureChance => StructureGrid.WellChance;
         protected override CacheItem Cache => CacheItem.Well;
         protected override Vector3 Offset => Vector3.UnitZ * 8f;
-        protected override float QuestChance => .33f;
+        protected override float QuestChance => 0;
 
         protected override Well Create(Vector3 Position, float Size)
         {

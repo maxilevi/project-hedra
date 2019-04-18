@@ -545,6 +545,7 @@ troll = Troll
 turtle = Turtle
 wasp = Wasp
 wolf = Wolf
+ghost = Ghost
 # -- End mobs translations
 boss_get_xp = YOU EARNED {0} XP!
 mountains_of = Mountains of {0}

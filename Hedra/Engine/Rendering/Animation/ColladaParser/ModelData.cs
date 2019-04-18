@@ -74,5 +74,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
                 Models.SelectMany(M => M.VertexWeights).Concat(Model.VertexWeights).ToArray()
             );
         }
+
+        public static ModelData Empty { get; } = new ModelData(new Vector3[0], new Vector3[0], new Vector3[0], new uint[0], new Vector3[0], new Vector3[0]);
     }
 }

@@ -64,6 +64,7 @@ namespace Hedra
             AddAnimationEvent("Slash", typeof(Slash));
             
             AddModelHandler("Ent", typeof(EntHandler));
+            AddModelHandler("Ghost", typeof(GhostHandler));
             
             AddItemHandler("Recipe", typeof(RecipeHandler));
 

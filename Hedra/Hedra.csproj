@@ -1160,6 +1160,9 @@
     <Compile Include="ItemHandlers\ItemHandler.cs" />
     <Compile Include="ItemHandlers\RecipeHandler.cs" />
     <Compile Include="ModelHandlers\EntHandler.cs" />
+    <Compile Include="ModelHandlers\GhostFactory.cs" />
+    <Compile Include="ModelHandlers\GhostHandler.cs" />
+    <Compile Include="ModelHandlers\ModelFactory.cs" />
     <Compile Include="ModelHandlers\ModelHandler.cs" />
     <Compile Include="Rendering\Particles\ParticleShape.cs" />
     <Compile Include="Rendering\PointLight.cs" />
@@ -8251,6 +8254,70 @@
       <Link>Assets\Chr\WerewolfIdle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Chr\Ghost\GhostAccessory0.dae">
+      <Link>Assets\Chr\Mob\Ghost\GhostAccessory0.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Ghost\GhostAccessory1.dae">
+      <Link>Assets\Chr\Mob\Ghost\GhostAccessory1.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Ghost\GhostAccessory2.dae">
+      <Link>Assets\Chr\Mob\Ghost\GhostAccessory2.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Ghost\GhostAccessory3.dae">
+      <Link>Assets\Chr\Mob\Ghost\GhostAccessory3.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Ghost\GhostAttack0.dae">
+      <Link>Assets\Chr\Mob\Ghost\GhostAttack0.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Ghost\GhostAttack1.dae">
+      <Link>Assets\Chr\Mob\Ghost\GhostAttack1.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Ghost\GhostBody0.dae">
+      <Link>Assets\Chr\Mob\Ghost\GhostBody0.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Ghost\GhostBody1.dae">
+      <Link>Assets\Chr\Mob\Ghost\GhostBody1.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Ghost\GhostBody2.dae">
+      <Link>Assets\Chr\Mob\Ghost\GhostBody2.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Ghost\GhostBody3.dae">
+      <Link>Assets\Chr\Mob\Ghost\GhostBody3.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Ghost\GhostBody4.dae">
+      <Link>Assets\Chr\Mob\Ghost\GhostBody4.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Ghost\GhostBody5.dae">
+      <Link>Assets\Chr\Mob\Ghost\GhostBody5.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Ghost\GhostBody6.dae">
+      <Link>Assets\Chr\Mob\Ghost\GhostBody6.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Ghost\GhostBody7.dae">
+      <Link>Assets\Chr\Mob\Ghost\GhostBody7.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Ghost\GhostIdle.dae">
+      <Link>Assets\Chr\Mob\Ghost\GhostIdle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Ghost\GhostWalk.dae">
+      <Link>Assets\Chr\Mob\Ghost\GhostWalk.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Environment\Misc\Pebble0.ply">
       <Link>Assets\Env\Plants\Pebble0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -12886,6 +12953,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Mobs\Ent.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Mobs\Ghost.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Mobs\Pig.json">

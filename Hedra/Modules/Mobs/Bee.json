@@ -1,6 +1,6 @@
 ﻿{
   "Name" : "Bee", 
-  "MaxHealth": 168.0,
+  "MaxHealth": 128.0,
   "AttackDamage": 2.5,
   "Speed": 1.35,
   "XP": 2.0,
@@ -19,7 +19,7 @@
   
   "Model": {
     "Path": "$DataFile$/Assets/Chr/BeeIdle.dae",
-    "Scale": 1.0,
+    "Scale": 1.25,
     "IdleAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/BeeIdle.dae",
