@@ -11,6 +11,7 @@ using System.Collections.ObjectModel;
 using Hedra.BiomeSystem;
 using Hedra.Engine;
 using Hedra.Engine.BiomeSystem;
+using Hedra.Engine.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -99,9 +100,9 @@ namespace Hedra
             Provider.Update();
         }
 
-        public static void Recreate(int Seed)
+        public static void Recreate(int NewSeed, WorldType Type = WorldType.Overworld)
         {
-            Provider.Recreate(Seed);
+            Provider.Recreate(NewSeed, Type);
         }
 
         public static void Discard()
@@ -160,16 +161,6 @@ namespace Hedra
             return Provider.IsChunkOffset(Offset);
         }
 
-        public static Vector3 ToBlockSpace(float X, float Z)
-        {
-            return ToBlockSpace(new Vector3(X, 0, Z));
-        }
-
-        public static Vector2 ToChunkSpace(float X, float Z)
-        {
-            return ToChunkSpace(new Vector3(X, 0, Z));
-        }
-
         public static Vector3 ToBlockSpace(Vector3 Vec3)
         {
             return Provider.ToBlockSpace(Vec3);
@@ -187,11 +178,6 @@ namespace Hedra
         public static Chunk GetChunkAt(Vector3 Coordinates)
         {
             return Provider.GetChunkAt(Coordinates);
-        }
-
-        public static Block GetBlockAt(int X, int Y, int Z)
-        {
-            return GetBlockAt(new Vector3(X, Y, Z));
         }
 
         public static Block GetBlockAt(Vector3 Vec3)
@@ -234,11 +220,6 @@ namespace Hedra
             return Provider.GetLowestY(X, Z);
         }
 
-        public static Block GetLowestBlock(int X, int Z)
-        {
-            return Provider.GetLowestBlock(X, Z);
-        }
-
         public static HighlightedAreaWrapper HighlightArea(Vector3 Position, Vector4 Color, float Radius, float Seconds)
         {
             return Provider.HighlightArea(Position, Color, Radius, Seconds);
@@ -257,11 +238,6 @@ namespace Hedra
         public static Entity SpawnMob(string Type, Vector3 DesiredPosition, Random SeedRng)
         {
             return SpawnMob(Type, DesiredPosition, SeedRng.Next(ushort.MinValue, ushort.MaxValue));
-        }
-        
-        public static Entity SpawnMob(MobType Type, Vector3 DesiredPosition, int MobSeed)
-        {
-            return SpawnMob(Type.ToString(), DesiredPosition, MobSeed);
         }
 
         public static Entity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed)

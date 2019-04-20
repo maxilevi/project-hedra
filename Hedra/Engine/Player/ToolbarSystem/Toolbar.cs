@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -158,7 +159,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
         public BaseSkill[] Skills => _skills;
         
-        public byte[] ToArray()
+        public void Dump(BinaryWriter Writer)
         {
             var saveData = HeaderMarker;
             for (var i = 0; i < InteractableItems; i++)
@@ -166,13 +167,13 @@ namespace Hedra.Engine.Player.ToolbarSystem
                 var skill = this.SkillAt(i);
                 saveData += skill == null ? string.Empty + Toolbar.Marker : skill.GetType().Name + Toolbar.Marker;
             }
-            return Encoding.ASCII.GetBytes(saveData);
+            Writer.Write(saveData);
         }
         
-        public void FromInformation(PlayerInformation Information)
+        public void Load(BinaryReader Reader)
         {
             _manager.Empty();
-            var saveData = Encoding.ASCII.GetString(Information.ToolbarArray);
+            var saveData = Reader.ReadString();
             if(!saveData.StartsWith(HeaderMarker)) return;
             var splits = saveData.Substring(HeaderMarker.Length, saveData.Length-HeaderMarker.Length).Split(Toolbar.Marker);
             for (var k = 0; k < splits.Length; k++)

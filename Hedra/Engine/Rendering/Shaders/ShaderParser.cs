@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Hedra.Engine.Management;
+using Hedra.Engine.Rendering.Core;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering.Shaders

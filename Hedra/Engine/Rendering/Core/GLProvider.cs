@@ -5,7 +5,7 @@ using Hedra.Engine.IO;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
-namespace Hedra.Engine.Rendering
+namespace Hedra.Engine.Rendering.Core
 {
     public class GLProvider : IGLProvider
     {

@@ -12,6 +12,7 @@ using Hedra.Engine.Management;
 using System.Drawing;
 using Hedra.Core;
 using Hedra.Engine.Game;
+using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.UI;
 
 namespace Hedra.Engine.EnvironmentSystem

@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using OpenTK;
 
-namespace Hedra.Engine.Management
+namespace Hedra.Engine.Core
 {
     public interface ISearchable
     {

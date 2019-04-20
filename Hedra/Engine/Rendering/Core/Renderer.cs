@@ -8,13 +8,10 @@
  */
 
 using System;
-using System.Windows.Forms;
-using Hedra.Engine.IO;
-using Hedra.Engine.Management;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
-namespace Hedra.Engine.Rendering
+namespace Hedra.Engine.Rendering.Core
 {
     public delegate void ShaderChangeEvent();
     public static class Renderer

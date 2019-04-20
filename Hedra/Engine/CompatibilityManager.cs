@@ -7,6 +7,7 @@ using Hedra.Engine.IO;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
+using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Geometry;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;

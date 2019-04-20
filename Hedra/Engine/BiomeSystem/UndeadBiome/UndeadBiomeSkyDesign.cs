@@ -39,12 +39,12 @@ namespace Hedra.Engine.BiomeSystem.UndeadBiome
 
         public override Vector4 MiddayTop(int Seed)
         {
-            return ClearTop;
+            return ClearTop * .5f;
         }
 
         public override Vector4 MiddayBot(int Seed)
         {
-            return ClearBot;
+            return ClearBot * .25f;
         }
 
         private Vector4 ClearTop { get; } = Colors.FromHtml("#2f8e62");

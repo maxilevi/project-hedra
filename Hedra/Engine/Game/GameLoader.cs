@@ -7,6 +7,7 @@ using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Sound;
 using Hedra.Sound;
 using OpenTK.Graphics.OpenGL4;

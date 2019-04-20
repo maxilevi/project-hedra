@@ -13,6 +13,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Rendering.Core;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
 

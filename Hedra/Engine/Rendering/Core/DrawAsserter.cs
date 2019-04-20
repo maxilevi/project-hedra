@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Hedra.Engine.Rendering.Particles;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
-namespace Hedra.Engine.Rendering
+namespace Hedra.Engine.Rendering.Core
 {
     public static class DrawAsserter
     {

@@ -5,6 +5,7 @@ using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.StructureSystem;
+using Hedra.Engine.StructureSystem.Overworld;
 using OpenTK;
 
 namespace Hedra.Engine.QuestSystem.Designs

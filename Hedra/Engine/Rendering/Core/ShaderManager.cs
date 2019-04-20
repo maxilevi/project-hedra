@@ -13,9 +13,8 @@ using System.Linq;
 using Hedra.Engine.Management;
 using Hedra.Rendering;
 using OpenTK;
-using OpenTK.Graphics.OpenGL4;
 
-namespace Hedra.Engine.Rendering
+namespace Hedra.Engine.Rendering.Core
 {    
     public static class ShaderManager
     {

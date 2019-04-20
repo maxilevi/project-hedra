@@ -6,7 +6,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI;
 using OpenTK.Graphics.OpenGL4;
 
-namespace Hedra.Engine.Rendering
+namespace Hedra.Engine.Rendering.Core
 {
     public static class TextureRegistry
     {

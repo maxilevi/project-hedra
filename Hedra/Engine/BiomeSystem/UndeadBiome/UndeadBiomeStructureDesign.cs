@@ -1,5 +1,6 @@
 using Hedra.BiomeSystem;
 using Hedra.Engine.StructureSystem;
+using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.StructureSystem.VillageSystem;
 
 namespace Hedra.Engine.BiomeSystem.UndeadBiome

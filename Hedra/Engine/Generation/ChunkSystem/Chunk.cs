@@ -89,7 +89,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _regionCache = new RegionCache(Position, Position + new Vector3(Chunk.Width, 0, Chunk.Width));
 
             Biome = World.BiomePool.GetPredominantBiome(this);
-            Landscape = new LandscapeGenerator(this);
+            Landscape = World.BiomePool.GetGenerator(this);
         }
 
         public void Initialize()

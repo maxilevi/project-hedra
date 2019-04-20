@@ -1,6 +1,6 @@
 using System;
 
-namespace Hedra.Engine.Rendering
+namespace Hedra.Engine.Rendering.Core
 {
     public class RenderException : Exception
     {

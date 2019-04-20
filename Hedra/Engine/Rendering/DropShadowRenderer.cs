@@ -15,6 +15,7 @@ using OpenTK;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
+using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Frustum;
 
 namespace Hedra.Engine.Rendering

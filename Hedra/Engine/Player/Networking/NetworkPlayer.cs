@@ -17,6 +17,7 @@ namespace Hedra.Engine.Player.Networking
         public UserInterface UI => throw new System.NotImplementedException();
         public IToolbar Toolbar => throw new System.NotImplementedException();
         public IAbilityTree AbilityTree => throw new System.NotImplementedException();
+        public RealmHandler Realms => throw new System.NotImplementedException();
         public PetManager Pet => throw new System.NotImplementedException();
         public Chat Chat => throw new System.NotImplementedException();
         public Minimap Minimap => throw new System.NotImplementedException();

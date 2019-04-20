@@ -8,18 +8,6 @@ namespace Hedra.Engine.BiomeSystem.SnowBiome
 {
     public class SnowBiomeMobDesign : BiomeMobDesign
     {
-        private SpawnerSettings _settings;
-        public override SpawnerSettings Settings => _settings;
-
-        public SnowBiomeMobDesign()
-        {
-            this.WorldModulesReload(AssetManager.AppPath);
-            World.ModulesReload += this.WorldModulesReload;
-        }
-
-        private void WorldModulesReload(string AppPath)
-        {
-            _settings = SpawnerLoader.Load(AppPath, "SnowBiome");
-        }
+        protected override string Name => "SnowBiome";
     }
 }

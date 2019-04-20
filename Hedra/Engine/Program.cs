@@ -11,6 +11,7 @@ using Hedra.Engine.Native;
 using Hedra.Engine.Networking;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Core;
 using OpenTK;
 using OpenTK.Graphics;
 

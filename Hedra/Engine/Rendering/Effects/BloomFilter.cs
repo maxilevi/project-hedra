@@ -12,6 +12,7 @@ using OpenTK;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
+using Hedra.Engine.Rendering.Core;
 
 namespace Hedra.Engine.Rendering.Effects
 {

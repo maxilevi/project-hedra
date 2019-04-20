@@ -11,7 +11,7 @@ namespace Hedra.Engine.ModuleSystem
 
         public static SpawnerSettings Load(string AppPath, string Type)
         {
-            string data = File.ReadAllText(AppPath + $"/Modules/{Type}Spawner.json");
+            string data = File.ReadAllText(AppPath + $"/Modules/Spawners/{Type}.json");
             bool result;
             SpawnerSettings settings = FromJSON( data, out result);
             if(!result) throw new ArgumentException($"Could not load {Type}Spawner.json"); 

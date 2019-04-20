@@ -24,21 +24,13 @@ namespace Hedra.Engine.Player
     {
         public string Name { get; set; }
         public int Level { get; set; }
-        public int WorldSeed { get; set; }
-        public float Daytime { get; set; }
         public float Xp { get; set; }
         public float Mana { get; set; }
         public float Health { get; set; }
-        public Vector3 BlockPosition { get; set; }
         public Vector3 Rotation { get; set; }
-        public Vector3 TargetPosition { get; set; }
-        public Vector3 MarkedDirection { get; set; }
-        public byte[] MainTreeArray { get; set; }
-        public byte[] FirstSpecializationTreeArray { get; set; }
-        public byte[] SecondSpecializationTreeArray { get; set; }
-        public int SpecializationTreeIndex { get; set; }
-        public int ExtraSkillPoints { get; set; }
-        public byte[] ToolbarArray { get; set; }
+        public byte[] RealmData { get; set; }
+        public byte[] SkillsData { get; set; }
+        public byte[] ToolbarData { get; set; }
         public ClassDesign Class { get; set; }
         public float RandomFactor { get; set; }
         private Dictionary<int, Item> _items;
@@ -48,15 +40,13 @@ namespace Hedra.Engine.Player
         public PlayerInformation()
         {
             this.Level = 1;
-            this.Daytime = 12000;
             this.Health = 100;
             this._items = new Dictionary<int, Item>();
             this._learnedRecipes = new List<string>();
             this._quests = new List<QuestTemplate>();
-            this.MainTreeArray = new byte[0];
-            this.FirstSpecializationTreeArray = new byte[0];
-            this.SecondSpecializationTreeArray = new byte[0];
-            this.ToolbarArray = new byte[4];
+            this.ToolbarData = new byte[4];
+            this.SkillsData = new byte[20];
+            this.RealmData = new byte[0];
         }
 
         public void AddItem(int Index, Item ItemSpecification)
@@ -87,8 +77,6 @@ namespace Hedra.Engine.Player
             set => _quests = value.ToList();
         }
 
-        public bool IsCorrupt => 
-            BlockPosition.IsInvalid() || Rotation.IsInvalid() || TargetPosition.IsInvalid() ||
-            Daytime.IsInvalid() || Xp.IsInvalid() || Mana.IsInvalid() || Health.IsInvalid();
+        public bool IsCorrupt => Rotation.IsInvalid() || Xp.IsInvalid() || Mana.IsInvalid() || Health.IsInvalid();
     }
 }

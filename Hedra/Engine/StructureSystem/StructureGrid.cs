@@ -15,14 +15,20 @@ namespace Hedra.Engine.StructureSystem
         public const int BanditCampChance = 48;
         public const int VillageChance = 2;
         /* Small structures */
-        public const int GazeboChance = 24;
+        public const int GhostTownPortalChance = 32;
+        public const int GazeboChance = 32;
         public const int WellChance = 16;
         public const int ObeliskChance = 2;
         public const int CampfireChance = 2;
         public const int TravellingMerchantChance = 8;
+        
+        /* Dead realm structures */
+        public const int TombstoneChance = 2;
 
         private const int SampleTypes = 5;
         private const int BigSampleChance = 1;
+        
+        
         
         
         private static readonly SamplerType[] Ranges;

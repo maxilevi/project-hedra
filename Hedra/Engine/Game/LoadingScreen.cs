@@ -14,9 +14,9 @@ namespace Hedra.Engine.Game
 {
     public class LoadingScreen : IUpdatable, IDisposable
     {
-        private BackgroundTexture _loadingScreen;
-        private GUIText _playerText;
-        private IPlayer _player;
+        private readonly BackgroundTexture _loadingScreen;
+        private readonly GUIText _playerText;
+        private readonly IPlayer _player;
         private float _time;
         private string _text;
 
@@ -92,6 +92,8 @@ namespace Hedra.Engine.Game
         }
         
         public bool IsLoading { get; private set; }
+
+        public bool ShouldShow => !IsLoaded();
 
         public void Dispose()
         {

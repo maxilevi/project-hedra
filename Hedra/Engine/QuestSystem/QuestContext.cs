@@ -1,4 +1,5 @@
 using Hedra.Engine.StructureSystem;
+using Hedra.Engine.StructureSystem.Overworld;
 using OpenTK;
 
 namespace Hedra.Engine.QuestSystem

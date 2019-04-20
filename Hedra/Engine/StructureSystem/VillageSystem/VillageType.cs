@@ -7,5 +7,6 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         Desert,
         Volcanic,
         Ruins,
+        None
     }
 }

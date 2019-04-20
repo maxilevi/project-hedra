@@ -4,6 +4,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.UI;
 using NUnit.Framework;
 

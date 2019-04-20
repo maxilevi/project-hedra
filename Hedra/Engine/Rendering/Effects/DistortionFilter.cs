@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using Hedra.Engine.Rendering.Core;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using Hedra.Engine.Rendering.UI;

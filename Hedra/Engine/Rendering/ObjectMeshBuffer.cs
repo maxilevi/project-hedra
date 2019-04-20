@@ -11,6 +11,7 @@ using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
+using Hedra.Engine.Rendering.Core;
 using Hedra.Rendering;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
@@ -108,9 +109,10 @@ namespace Hedra.Engine.Rendering
                 Shader["Outline"] = this.Outline ? 1 : 0;
                 Shader["OutlineColor"] = this.OutlineColor;
                 Shader["Time"] = Time.IndependantDeltaTime;
-                Renderer.BindBuffer(BufferTarget.ElementArrayBuffer, Indices.Id);
+                Indices.Bind();
                 Renderer.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
                 Renderer.Enable(EnableCap.DepthTest);
+                Indices.Unbind();
             }
             Shader["Outline"] = 0;
 

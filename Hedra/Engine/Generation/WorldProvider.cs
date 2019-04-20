@@ -14,6 +14,7 @@ using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ClassSystem;
+using Hedra.Engine.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
@@ -27,11 +28,13 @@ using Hedra.Engine.Player;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
+using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Scenes;
 using Hedra.Engine.Sound;
 using Hedra.Engine.StructureSystem;
+using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
@@ -50,6 +53,7 @@ namespace Hedra.Engine.Generation
         private readonly SharedWorkerPool _genWorkerPool;
         private Vector3 _spawningVillagePoint;
         private Vector3 _spawningPoint;
+        private WorldType _type;
         private int _previousId;
 
         public WorldProvider()
@@ -98,7 +102,7 @@ namespace Hedra.Engine.Generation
             MenuBackground.Setup();
 
             Seed = MenuSeed;
-            BiomePool = new BiomePool();
+            BiomePool = new BiomePool(_type = WorldType.Overworld);
             TreeGenerator = new TreeGenerator();
             WorldBuilding = new WorldBuilding.WorldBuilding();
             StructureHandler = new StructureHandler();
@@ -246,14 +250,15 @@ namespace Hedra.Engine.Generation
             _chunkBuilder.Update();
         }
 
-        public void Recreate(int NewSeed)
+        public void Recreate(int NewSeed, WorldType Type)
         {
-            if (this.Seed == NewSeed)
+            if (Seed == NewSeed)
                 return;
 
             _previousId = 0;
             Seed = NewSeed;
-            BiomePool = new BiomePool();
+            _type = Type;
+            BiomePool = new BiomePool(_type);
             WorldBuilding = new WorldBuilding.WorldBuilding();
             OpenSimplexNoise.Load(NewSeed == MenuSeed ? 23123123 : NewSeed); //Not really the menu seed.
             _meshBuilder.Discard();
@@ -614,6 +619,7 @@ namespace Hedra.Engine.Generation
 
         public Vector3 FindSpawningPoint(Vector3 Around)
         {
+            if (_type != WorldType.Overworld) return Around;
             var point = Around;
             var rng = new Random(World.Seed + 43234);
             bool IsWater(Vector3 Point)

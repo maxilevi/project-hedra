@@ -20,6 +20,7 @@ using Hedra.Engine.Rendering.Animation.ColladaParser;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using Hedra.Engine.Player;
+using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Frustum;
 
 namespace Hedra.Engine.Rendering.Animation

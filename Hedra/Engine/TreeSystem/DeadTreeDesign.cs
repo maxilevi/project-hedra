@@ -9,7 +9,7 @@ namespace Hedra.Engine.TreeSystem
 {
     public class DeadTreeDesign : TreeDesign
     {
-        public override float Spacing => 60f;
+        public override float Spacing => 80f;
         public override VertexData Model => CacheManager.GetModel(CacheItem.DeadTrees);
         public override VertexData Paint(VertexData Data, Vector4 WoodColor, Vector4 LeafColor)
         {

@@ -1,14 +1,11 @@
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Text;
-using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Rendering;
 using OpenTK;
 
-namespace HedraTests
+namespace Hedra.Engine.Management
 {
     public class DummyAssetProvider : IAssetProvider
     {

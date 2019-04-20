@@ -61,7 +61,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
                         _lastCount = _queue.Count;
                     }
                     var chunk = _queue[0];
-                    if (chunk?.Disposed ?? false) return;
+                    if (chunk?.Disposed ?? false)
+                    {
+                        _queue.Remove(chunk);
+                        _hashQueue.Remove(chunk);
+                        return;
+                    }
                     var result = _pool.Work(this, delegate
                     {
                         try

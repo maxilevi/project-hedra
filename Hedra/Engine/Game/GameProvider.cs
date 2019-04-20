@@ -3,6 +3,7 @@ using System.Collections;
 using System.Drawing;
 using System.Linq;
 using Hedra.Core;
+using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
@@ -16,6 +17,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Scenes;
 using Hedra.Engine.StructureSystem;
+using Hedra.Engine.StructureSystem.Overworld;
 using OpenTK;
 
 namespace Hedra.Engine.Game
@@ -58,6 +60,7 @@ namespace Hedra.Engine.Game
             Player.UI.ChrChooser.Disable(); 
             Player.UI.Menu.Enable();
             _loadingScreen = new LoadingScreen(Player);
+            RoutineManager.StartRoutine(LoadingScreenCoroutine);
             LoadMenu();
             
             Log.WriteLine("Loading the character classes...");
@@ -76,7 +79,6 @@ namespace Hedra.Engine.Game
             SoundtrackManager.PlayTrack(SoundtrackManager.MainThemeIndex, true);
             RoutineManager.StartRoutine(MenuCoroutine);
             Player.Reset();
-            _loadingScreen.Show();
         }
         
         private IEnumerator MenuCoroutine()
@@ -98,7 +100,7 @@ namespace Hedra.Engine.Game
 
         public void LoadCharacter(PlayerInformation Information)
         {
-            if(Information.WorldSeed == 0)
+            if(Information.RealmData.Length == 0)
                 NewRun(Information);
             else
                 MakeCurrent(Information);
@@ -116,25 +118,20 @@ namespace Hedra.Engine.Game
             Player.XP = Information.Xp;
             Player.Mana = Information.Mana;
             Player.Health = Information.Health;
-            Player.BlockPosition = Information.BlockPosition;
             Player.Rotation = Information.Rotation;
             Player.Model.Dispose();
             Player.Physics.VelocityCap = float.MaxValue;
             Player.Model = new HumanoidModel(Player);
             Player.RandomFactor = Information.RandomFactor;
-            Player.AbilityTree.FromInformation(Information);
-            Player.Toolbar.FromInformation(Information);
+            Player.AbilityTree.UnSerialize(Information.SkillsData);
+            Player.Toolbar.UnSerialize(Information.ToolbarData);
+            Player.Realms.UnSerialize(Information.RealmData);
             Player.View.CameraHeight = Camera.DefaultCameraHeight;
             
-            if(Information.MarkedDirection != Vector3.Zero)
-                Player.Minimap.Mark(Information.MarkedDirection);
             if(Player.IsDead)
                 Player.Respawn();
-            World.Recreate(Information.WorldSeed);
             if(Player.IsDead)
                 Player.Respawn();
-            SkyManager.DayTime = Information.Daytime;
-            SkyManager.LoadTime = true;
             Player.Inventory.SetItems(Information.Items);
             Player.Crafting.SetRecipes(Information.Recipes);
             Player.Questing.SetQuests(Information.Quests);
@@ -181,9 +178,11 @@ namespace Hedra.Engine.Game
 
         public void NewRun(PlayerInformation Information)
         {
-            Information.WorldSeed = World.RandomSeed;
             GameManager.MakeCurrent(Information);
-            SkyManager.SetTime(12000);
+            Player.Realms.Reset();
+            Player.Realms.Create(World.RandomSeed);
+            Player.Realms.Create(World.RandomSeed, WorldType.GhostTown);
+            Player.Realms.GoTo(RealmHandler.Overworld);
             Player.Model = new HumanoidModel(Player);         
             if(Player.Inventory.MainWeapon != null)
             {
@@ -192,7 +191,6 @@ namespace Hedra.Engine.Game
             }
             SpawnCampfireDesign.AlignPlayer(Player);
             Player.Questing.Empty();
-            //Player.Questing.Start(QuestPool.Grab(Quests.SpawnQuest));
             Player.UI.HideMenu();
             Player.UI.Hide = false;
             Player.Enabled = true;
@@ -201,26 +199,20 @@ namespace Hedra.Engine.Game
         
         private IEnumerator SpawnCoroutine()
         {
-            _loadingScreen.Show();
             SoundtrackManager.PlayAmbient();
-            GameManager.Player.UI.HideMenu();
-            Player.UI.GamePanel.Disable();
             Player.Chat.Show = false;
             Player.SearchComponent<DamageComponent>().Immune = true;
-
             var chunkOffset = World.ToChunkSpace(Player.BlockPosition);
             StructureHandler.CheckStructures(chunkOffset);
+            
             while (_loadingScreen.IsLoading)
             {
-                Player.Physics.ResetFall();
-                Player.Physics.ResetVelocity();
-                Player.Physics.UsePhysics = false;
                 yield return null;
             }
-            Player.Physics.TargetPosition += Vector3.UnitY * 2;
-            Player.Physics.UsePhysics = true;
-            Player.SearchComponent<DamageComponent>().Immune = false;
+            Player.UI.HideMenu();
             Player.UI.GamePanel.Enable();
+
+            Player.SearchComponent<DamageComponent>().Immune = false;
             Player.Chat.Show = true;
             Player.Chat.LoseFocus();
             GameManager.SpawningEffect = true;
@@ -229,6 +221,40 @@ namespace Hedra.Engine.Game
             GameManager.Player.PlaySpawningAnimation = true;
             if (!GameManager.Player.MessageDispatcher.HasTitleMessages)
                 GameManager.Player.MessageDispatcher.ShowTitleMessage(World.WorldBuilding.GenerateName(), 1.5f);           
+        }
+
+        private IEnumerator LoadingScreenCoroutine()
+        {
+            var timer = new Timer(1f);
+            var lastSeed = World.Seed;
+            while (Program.GameWindow.Exists)
+            {
+                yield return null;
+                if (timer.Tick() || lastSeed != World.Seed)
+                {
+                    lastSeed = World.Seed;
+                    if (!_loadingScreen.ShouldShow) continue;
+                    var wasMenuEnabled = Player.UI.Menu.Enabled;
+                    var wasGameUiEnabled = Player.UI.GamePanel.Enabled;
+                    Player.UI.HideMenu();
+                    Player.UI.GamePanel.Disable();
+                    _loadingScreen.Show();
+                    while (_loadingScreen.IsLoading)
+                    {
+                        Player.Physics.ResetFall();
+                        Player.Physics.ResetVelocity();
+                        Player.Physics.UsePhysics = false;
+                        yield return null;
+                    }
+
+                    if (wasMenuEnabled)
+                        Player.UI.ShowMenu();
+                    else if (wasGameUiEnabled)
+                        Player.UI.GamePanel.Enable();
+                    Player.Physics.TargetPosition += Vector3.UnitY * 2;
+                    Player.Physics.UsePhysics = true;
+                }
+            }
         }
 
         public void Unload()

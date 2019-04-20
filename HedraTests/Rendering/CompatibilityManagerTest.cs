@@ -2,6 +2,7 @@ using System;
 using Hedra.Engine;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Core;
 using Moq;
 using NUnit.Framework;
 using OpenTK.Graphics.OpenGL4;

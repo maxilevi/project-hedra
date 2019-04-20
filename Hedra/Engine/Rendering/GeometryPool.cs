@@ -14,6 +14,7 @@ using System.IO;
 using Hedra.Engine.IO;
 using Hedra.Core;
 using Hedra.Engine.Management;
+using Hedra.Engine.Rendering.Core;
 using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Rendering

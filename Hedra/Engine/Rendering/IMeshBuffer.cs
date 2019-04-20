@@ -4,6 +4,8 @@
  * Time: 08:34 p.m.
  *
  */
+
+using Hedra.Engine.Rendering.Core;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering

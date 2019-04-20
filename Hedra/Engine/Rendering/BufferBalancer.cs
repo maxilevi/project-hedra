@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.Rendering.Core;
 using Hedra.Rendering;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;

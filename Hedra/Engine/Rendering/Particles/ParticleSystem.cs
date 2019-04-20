@@ -13,6 +13,7 @@ using Hedra.Engine.Game;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using Hedra.Engine.Management;
+using Hedra.Engine.Rendering.Core;
 using Hedra.Rendering.Particles;
 
 namespace Hedra.Engine.Rendering.Particles

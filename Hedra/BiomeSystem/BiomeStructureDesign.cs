@@ -8,12 +8,6 @@ namespace Hedra.BiomeSystem
     public abstract class BiomeStructureDesign
     {
         private List<StructureDesign> _designs { get; set; } = new List<StructureDesign>();
-
-        protected BiomeStructureDesign()
-        {
-            AddDesign(new SpawnCampfireDesign());
-            AddDesign(new SpawnVillageDesign());
-        }
         
         protected void AddDesign(StructureDesign Design)
         {

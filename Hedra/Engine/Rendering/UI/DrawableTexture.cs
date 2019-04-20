@@ -1,3 +1,5 @@
+using Hedra.Engine.Rendering.Core;
+
 namespace Hedra.Engine.Rendering.UI
 {
     public abstract class DrawableTexture

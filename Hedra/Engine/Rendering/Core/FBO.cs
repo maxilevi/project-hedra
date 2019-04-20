@@ -4,15 +4,13 @@
  * Time: 05:12 a.m.
  *
  */
+
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using Hedra.Engine.IO;
-using Hedra.Engine.Rendering.Core;
 using OpenTK.Graphics.OpenGL4;
 
-namespace Hedra.Engine.Rendering
+namespace Hedra.Engine.Rendering.Core
 {
     /// <summary>
     /// Description of FBO.

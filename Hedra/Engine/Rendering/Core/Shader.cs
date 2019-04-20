@@ -4,17 +4,17 @@
  * Time: 05:23 a.m.
  *
  */
+
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.IO;
-using OpenTK.Graphics.OpenGL4;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Shaders;
 using OpenTK;
+using OpenTK.Graphics.OpenGL4;
 
-namespace Hedra.Engine.Rendering
+namespace Hedra.Engine.Rendering.Core
 {
 
     /// <summary>

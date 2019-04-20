@@ -11,6 +11,7 @@ using Hedra.Core;
 using OpenTK;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Core;
 using Gen = Hedra.Engine.Generation;
 
 namespace Hedra.Engine.EnvironmentSystem

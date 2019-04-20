@@ -5,6 +5,7 @@ using System.Linq;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Rendering.Core;
 using Hedra.Rendering;
 
 namespace Hedra.Engine.Rendering

@@ -3,7 +3,7 @@ using Hedra.WeaponSystem;
 
 namespace Hedra.Engine.Player.ToolbarSystem
 {
-    public interface IToolbar
+    public interface IToolbar : ISerializableHandler
     {
         BaseSkill SkillAt(int Index);
         void Update();
@@ -15,8 +15,6 @@ namespace Hedra.Engine.Player.ToolbarSystem
         bool PassiveEffectsEnabled { get; set; }
         bool Listen { get; set; }
         bool Show { get; set; }
-        byte[] ToArray();
-        void FromInformation(PlayerInformation Information);
         void ResetCooldowns();
         void ResetSkills();
     }

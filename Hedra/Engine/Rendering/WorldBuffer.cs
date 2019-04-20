@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.Rendering.Core;
 using Hedra.Rendering;
 
 namespace Hedra.Engine.Rendering

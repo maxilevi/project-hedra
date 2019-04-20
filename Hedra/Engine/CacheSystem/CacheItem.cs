@@ -47,6 +47,9 @@ namespace Hedra.Engine.CacheSystem
         DeathIcon,
         Gazebo,
         GazeboIcon,
+        Portal,
+        PortalIcon,
+        DeadGrass,
         MaxEnums
     }
 }

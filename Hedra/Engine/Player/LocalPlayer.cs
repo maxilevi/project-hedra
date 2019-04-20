@@ -53,6 +53,7 @@ namespace Hedra.Engine.Player
         public IVehicle Boat { get; }
         public IVehicle Glider { get; }
         public IPlayerInventory Inventory { get; }
+        public RealmHandler Realms { get; }
         private PlayerInventoryInterface InventoryInterface { get; }
         public QuestInventory Questing { get; }
         private QuestInterface QuestInterface { get; }
@@ -105,6 +106,7 @@ namespace Hedra.Engine.Player
             this.MessageDispatcher = new VisualMessageDispatcher(this);
             this.Boat = new Boat(this);
             this.AmbientEffects = new AmbientEffectHandler(this);
+            this.Realms = new RealmHandler();
             this.Physics.CollidesWithStructures = true;
             this.AttackPower = 1.0f;
 
@@ -245,6 +247,7 @@ namespace Hedra.Engine.Player
             Boat.Update();
             Glider.Update();
             View.Update();
+            Realms.Update();
         }
 
         public override int Gold
@@ -433,6 +436,7 @@ namespace Hedra.Engine.Player
             ComponentManager.Clear();
             CraftingInterface.Reset();
             QuestInterface.Reset();
+            Realms.Reset();
             Minimap.Reset();
             Chat.Clear();
             Model.Alpha = 0f;
@@ -486,7 +490,6 @@ namespace Hedra.Engine.Player
             {
                 Name = Name,
                 RandomFactor = NewRandomFactor(),
-                WorldSeed = 0,
                 Class = ClassType
             };
 

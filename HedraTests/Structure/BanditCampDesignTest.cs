@@ -1,5 +1,6 @@
 using Hedra.Engine.Generation;
 using Hedra.Engine.StructureSystem;
+using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.WorldBuilding;
 using NUnit.Framework;
 using OpenTK;

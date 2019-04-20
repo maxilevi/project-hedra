@@ -9,7 +9,13 @@ namespace Hedra.Engine.BiomeSystem.UndeadBiome
         {
             Designs = new PlacementDesign[]
             {
+                new ReedPlacementDesign(),
                 new RockPlacementDesign(),
+                new ShrubsPlacementDesign(),
+                new MushroomPlacementDesign(),
+                new TimberAndSticksPlacementDesign(),
+                new PebblePlacementDesign(),
+                new DeadGrassPlacementDesign(), 
             };
         }
 

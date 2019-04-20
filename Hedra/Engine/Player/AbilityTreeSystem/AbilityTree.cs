@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using Hedra.Core;
@@ -160,12 +161,6 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             }
             SpecializationTreeIndex = 0;
         }
-
-        public byte[] MainTreeSave => BuildSaveData(_mainTree);
-        
-        public byte[] FirstTreeSave => BuildSaveData(_firstTree);
-        
-        public byte[] SecondTreeSave => BuildSaveData(_secondTree);
         
         private static byte[] BuildSaveData(InventoryArray Abilities)
         {
@@ -214,15 +209,6 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             }
 
             this.UpdateView();
-        }
-
-        public void FromInformation(PlayerInformation Information)
-        {
-            ExtraSkillPoints = Information.ExtraSkillPoints;
-            ShowBlueprint(Information.Class.FirstSpecializationTree, _firstTree, Information.FirstSpecializationTreeArray);
-            ShowBlueprint(Information.Class.SecondSpecializationTree, _secondTree, Information.SecondSpecializationTreeArray);
-            ShowBlueprint(Information.Class.MainTree, _mainTree, Information.MainTreeArray);
-            SpecializationTreeIndex = Information.SpecializationTreeIndex;
         }
 
         public AbilityTreeBlueprint Specialization => _blueprint;
@@ -312,10 +298,47 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
             }
         }
+        
         public int ExtraSkillPoints
         {
             get => _manager.ExtraSkillPoints;
             set => _manager.ExtraSkillPoints = value;
+        }
+
+
+        private byte[] MainTreeSave => BuildSaveData(_mainTree);
+
+        private byte[] FirstTreeSave => BuildSaveData(_firstTree);
+
+        private byte[] SecondTreeSave => BuildSaveData(_secondTree);
+
+        public void Dump(BinaryWriter Writer)
+        {
+            var main = MainTreeSave;
+            var first = FirstTreeSave;
+            var second = SecondTreeSave;
+            
+            Writer.Write(main.Length);
+            Writer.Write(main);
+            Writer.Write(first.Length);
+            Writer.Write(first);
+            Writer.Write(second.Length);
+            Writer.Write(second);
+            Writer.Write(SpecializationTreeIndex);
+            Writer.Write(ExtraSkillPoints);
+        }
+
+        public void Load(BinaryReader Reader)
+        {
+            var mainArray = Reader.ReadBytes(Reader.ReadInt32());
+            var firstArray = Reader.ReadBytes(Reader.ReadInt32());
+            var secondArray = Reader.ReadBytes(Reader.ReadInt32());
+            SpecializationTreeIndex = Reader.ReadInt32();
+            ExtraSkillPoints = Reader.ReadInt32();
+            
+            ShowBlueprint(_player.Class.FirstSpecializationTree, _firstTree, firstArray);
+            ShowBlueprint(_player.Class.SecondSpecializationTree, _secondTree, secondArray);
+            ShowBlueprint(_player.Class.MainTree, _mainTree, mainArray);
         }
     }
 }

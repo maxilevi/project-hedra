@@ -15,6 +15,7 @@ using Hedra.AISystem.Humanoid;
 using Hedra.Components;
 using Hedra.Components.Effects;
 using Hedra.Core;
+using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using OpenTK;
 using Hedra.Engine.Player;
@@ -29,6 +30,7 @@ using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Sound;
 using Hedra.Engine.StructureSystem;
+using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.WorldBuilding;
 
 namespace Hedra.Engine.Management
@@ -50,12 +52,6 @@ namespace Hedra.Engine.Management
                 {
                     case "tp":
                     {
-                        if(Parts[1] == "merchant"){
-                            if(World.StructureHandler.MerchantPosition != Vector3.Zero)
-                                Caster.BlockPosition = World.StructureHandler.MerchantPosition - Vector3.One.Xz.ToVector3() * 8;
-                            else 
-                                return false;
-                        }
 
                         if (Parts[1] == "spawn")
                         {
@@ -432,6 +428,16 @@ namespace Hedra.Engine.Management
                 {
                     World.SpawnChest(Caster.Position + Caster.Orientation * 32, ItemPool.Grab(Parts[1]) );
                     return true;
+                }
+
+                if (Parts[0] == "realm")
+                {
+
+                    if (Parts[1] == "ghosttown")
+                        Caster.Realms.GoTo(RealmHandler.GhostTown);
+                    else
+                        Caster.Realms.GoTo(int.Parse(Parts[1]));
+
                 }
                 Result = "Unknown command.";
                 Log.WriteLine("Unknown command.");

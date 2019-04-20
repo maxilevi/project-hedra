@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Hedra;
 using Hedra.Engine.BiomeSystem;
+using Hedra.Engine.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -74,6 +75,11 @@ namespace HedraTests
 
         public virtual void Update()
         {
+        }
+
+        public void Recreate(int NewSeed, WorldType Type)
+        {
+            throw new NotImplementedException();
         }
 
         public virtual void Recreate(int NewSeed)

@@ -1,5 +1,7 @@
 using Hedra.BiomeSystem;
 using Hedra.Engine.StructureSystem;
+using Hedra.Engine.StructureSystem.GhostTown;
+using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.StructureSystem.VillageSystem;
 
 namespace Hedra.Engine.BiomeSystem.NormalBiome
@@ -8,6 +10,10 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
     {
         public NormalBiomeStructureDesign()
         {
+            /* Default structures */
+            AddDesign(new SpawnCampfireDesign());
+            AddDesign(new SpawnVillageDesign());
+            
             AddDesign(new VillageDesign());
             AddDesign(new GraveyardDesign());
             AddDesign(new GiantTreeDesign());
@@ -17,6 +23,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             AddDesign(new BanditCampDesign());
             AddDesign(new WellDesign());
             AddDesign(new GazeboDesign());
+            AddDesign(new GhostTownPortalDesign());
         }
 
         public override VillageType VillageType => VillageType.Woodland;

@@ -13,6 +13,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.MapSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
@@ -100,10 +101,13 @@ namespace Hedra.Engine.StructureSystem
 
         public virtual bool ShouldSetup(Vector2 ChunkOffset, Vector3 TargetPosition, CollidableStructure[] Items, Region Biome, IRandom Rng)
         {
-            var shouldBe = this.SetupRequirements(TargetPosition, ChunkOffset, Biome, Rng)
-                            && (TargetPosition - World.SpawnPoint).Xz.LengthSquared > 512 * 512
-                            && (TargetPosition - World.SpawnVillagePoint).Xz.LengthSquared > VillageDesign.MaxVillageRadius * 1.5f * VillageDesign.MaxVillageRadius * 1.5f;
-
+            var shouldBe = this.SetupRequirements(TargetPosition, ChunkOffset, Biome, Rng);
+            if (World.BiomePool.Type == WorldType.Overworld)
+            {
+                shouldBe &= (TargetPosition - World.SpawnPoint).Xz.LengthSquared > 512 * 512;
+                shouldBe &= (TargetPosition - World.SpawnVillagePoint).Xz.LengthSquared >
+                            VillageDesign.MaxVillageRadius * 1.5f * VillageDesign.MaxVillageRadius * 1.5f;
+            }
             return shouldBe && this.ShouldBuild(TargetPosition, Items, Biome.Structures.Designs);
         }
 

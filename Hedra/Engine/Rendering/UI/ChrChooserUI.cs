@@ -119,8 +119,8 @@ namespace Hedra.Engine.Rendering.UI
 
                 for (var k = 0; k < _information.Length; k++)
                 {
-                    if (_information[k].Name + _information[k].Class + _information[k].BlockPosition + _information[k].Health + _information[k].Level
-                        != newInformation[k].Name + newInformation[k].Class + newInformation[k].BlockPosition + newInformation[k].Health + newInformation[k].Level)
+                    if (_information[k].Name + _information[k].Class + _information[k].Health + _information[k].Level
+                        != newInformation[k].Name + newInformation[k].Class + newInformation[k].Health + newInformation[k].Level)
                     {
                         same = false;
                     }

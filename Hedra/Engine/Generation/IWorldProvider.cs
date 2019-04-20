@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Hedra.Engine.BiomeSystem;
+using Hedra.Engine.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
@@ -84,7 +85,7 @@ namespace Hedra.Engine.Generation
 
         void Update();
 
-        void Recreate(int NewSeed);
+        void Recreate(int NewSeed, WorldType Type);
 
         void Discard();
 

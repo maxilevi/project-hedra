@@ -4,14 +4,13 @@
  * Time: 03:24 a.m.
  *
  */
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using OpenTK.Graphics.OpenGL4;
 using Hedra.Engine.Management;
-using Hedra.Engine.Rendering.Core;
 
-namespace Hedra.Engine.Rendering
+namespace Hedra.Engine.Rendering.Core
 {
     public abstract class VAO : GLObject<VAO>
     {

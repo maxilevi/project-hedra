@@ -11,9 +11,9 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Networking;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Sound;
 using Hedra.Sound;
-using HedraTests;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Input;
@@ -41,9 +41,7 @@ namespace Hedra.Engine.Loader
             Log.WriteLine("Starting hedra dedicated server...");
             Hedra.LoadBoilerplate();
             var information = LocalPlayer.BuildNewPlayer("HOST", ClassDesign.FromString(Class.Mage));
-            information.WorldSeed = World.RandomSeed;
             GameManager.MakeCurrent(information);
-            Log.WriteLine($"Hosting world with seed '{information.WorldSeed}'");
             Network.Instance.Host();
         }
 

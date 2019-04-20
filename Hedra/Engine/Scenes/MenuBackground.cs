@@ -21,6 +21,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Player;
+using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Sound;
 using Hedra.Rendering;
 using Hedra.Sound;

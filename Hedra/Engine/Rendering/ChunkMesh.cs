@@ -14,6 +14,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Frustum;
 using Hedra.Rendering;
 

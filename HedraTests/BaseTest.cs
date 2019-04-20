@@ -12,6 +12,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
+using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.UI;
 using HedraTests.Rendering;
 using Moq;

@@ -4,14 +4,12 @@ using OpenTK;
 
 namespace Hedra.Engine.BiomeSystem
 {
-    public interface IBiomePool
+    public interface IBiomePool 
     {
-        BiomeDesign GetBiomeDesign(Vector3 Offset);
+        WorldType Type { get; }
         Region GetRegion(Vector3 Position);
-        Region GetAverageRegion(Vector3 Offset, float Spacing);
         RegionColor GetAverageRegionColor(Vector3 Offset);
-        float VoronoiFormula(Vector3 Offset);
         Region GetPredominantBiome(Chunk Chunk);
-        Region GetPredominantBiome(Vector2 ChunkOffset);
+        BiomeGenerator GetGenerator(Chunk Chunk);
     }
 }

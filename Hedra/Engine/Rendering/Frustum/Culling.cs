@@ -2,6 +2,7 @@ using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Rendering.Core;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering.Frustum

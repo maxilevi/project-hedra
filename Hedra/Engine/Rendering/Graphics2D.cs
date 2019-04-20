@@ -20,6 +20,7 @@ using System.Threading;
 using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.IO;
+using Hedra.Engine.Rendering.Core;
 
 namespace Hedra.Engine.Rendering
 {

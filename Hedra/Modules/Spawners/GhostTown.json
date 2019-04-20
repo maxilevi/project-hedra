@@ -1,0 +1,23 @@
+{
+  "MiniBosses": [],
+  "Plains": [
+    {
+      "Type": "Ghost",
+      "Chance": 100.0
+    }
+  ],
+
+  "Mountain": [
+    {
+      "Type": "Ghost",
+      "Chance": 100.0
+    }
+  ],
+
+  "Forest": [
+    {
+      "Type": "Ghost",
+      "Chance": 100.0
+    }
+  ]
+}

@@ -73,7 +73,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             Height += frequency * -lakeNoise * 96.0;
         }
 
-        private static void AddStones(float X, float Z, ref double Height, ref BlockType Type, Dictionary<Vector2, float[]> HeightCache)
+        protected static void AddStones(float X, float Z, ref double Height, ref BlockType Type, Dictionary<Vector2, float[]> HeightCache)
         {
             var stones = Math.Max(0, OpenSimplexNoise.Evaluate(X * 0.005, Z * 0.005) - .5) *
                          48.0; // * Math.Min(moutainHeight, 1);
@@ -144,7 +144,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             Height += grassMountHeight;
         }
 
-        private static void AddBaseHeight(float X, float Z, ref double Height, ref BlockType Type, out double BaseHeight)
+        protected static void AddBaseHeight(float X, float Z, ref double Height, ref BlockType Type, out double BaseHeight)
         {
             var baseHeight = /*OpenSimplexNoise.Evaluate(X * 0.00005, Z * 0.00005) * 48.0 +*/ BiomePool.SeaLevel;
             var grassHeight = (OpenSimplexNoise.Evaluate(X * 0.004, Z * 0.004) + .25) * 3.0;

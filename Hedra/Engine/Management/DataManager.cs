@@ -26,11 +26,11 @@ namespace Hedra.Engine.Management
     /// </summary>
     public static class DataManager
     {
-        private const float SaveVersion = 1.5f;
+        private const float SaveVersion = 1.6f;
         
-        public static void SavePlayer(PlayerInformation Player)
+        public static void SavePlayer(PlayerInformation Information)
         {
-            var chrFile = $"{AssetManager.AppData}/Characters/{Player.Name}";
+            var chrFile = $"{AssetManager.AppData}/Characters/{Information.Name}";
             
             if(File.Exists(chrFile + ".db"))
             {
@@ -43,52 +43,37 @@ namespace Hedra.Engine.Management
                 var fInfo = new FileInfo(chrFile + ".db.bak");
                 fInfo.Attributes |= FileAttributes.Hidden;
             }
-            using (var fs = File.Create(AssetManager.AppData + "/Characters/" + Player.Name + ".db"))
+            using (var fs = File.Create(AssetManager.AppData + "/Characters/" + Information.Name + ".db"))
             {
                 using (var bw = new BinaryWriter(fs))
                 {
                     bw.Write(SaveVersion);
-                    bw.Write(Player.Name);
-                    bw.Write(Player.BlockPosition.X);
-                    bw.Write(Player.BlockPosition.Y);
-                    bw.Write(Player.BlockPosition.Z);
+                    bw.Write(Information.Name);
 
-                    bw.Write(Player.Rotation.X);
-                    bw.Write(Player.Rotation.Y);
-                    bw.Write(Player.Rotation.Z);
+                    bw.Write(Information.Rotation.X);
+                    bw.Write(Information.Rotation.Y);
+                    bw.Write(Information.Rotation.Z);
 
-                    bw.Write(Player.Health);
+                    bw.Write(Information.Health);
 
-                    bw.Write(Player.Xp);
-                    bw.Write(Player.Level);
+                    bw.Write(Information.Xp);
+                    bw.Write(Information.Level);
 
-                    bw.Write(Player.Mana);
+                    bw.Write(Information.Mana);
 
-                    bw.Write(Player.WorldSeed);
-
-                    bw.Write(Player.MainTreeArray.Length);
-                    bw.Write(Player.MainTreeArray);
+                    bw.Write(Information.SkillsData.Length);
+                    bw.Write(Information.SkillsData);
                     
-                    bw.Write(Player.FirstSpecializationTreeArray.Length);
-                    bw.Write(Player.FirstSpecializationTreeArray);
-                    
-                    bw.Write(Player.SecondSpecializationTreeArray.Length);
-                    bw.Write(Player.SecondSpecializationTreeArray);
-                    
-                    bw.Write(Player.SpecializationTreeIndex);
-                    bw.Write(Player.ExtraSkillPoints);
+                    bw.Write(Information.RealmData.Length);
+                    bw.Write(Information.RealmData);
 
-                    bw.Write(Player.ToolbarArray.Length);
-                    bw.Write(Player.ToolbarArray);
+                    bw.Write(Information.ToolbarData.Length);
+                    bw.Write(Information.ToolbarData);
 
-                    bw.Write(Player.TargetPosition);
-                    bw.Write(Player.MarkedDirection);
+                    bw.Write(Information.Class.Name);
+                    bw.Write(Information.RandomFactor);
 
-                    bw.Write(Player.Daytime);
-                    bw.Write(Player.Class.Name);
-                    bw.Write(Player.RandomFactor);
-
-                    var items = Player.Items;
+                    var items = Information.Items;
                     if (items != null)
                     {
                         bw.Write(items.Length);
@@ -100,7 +85,7 @@ namespace Hedra.Engine.Management
                             bw.Write(itemBytes);
                         }
                     }
-                    var recipes = Player.Recipes;
+                    var recipes = Information.Recipes;
                     if (recipes != null)
                     {
                         bw.Write(recipes.Length);
@@ -109,7 +94,7 @@ namespace Hedra.Engine.Management
                             bw.Write(recipes[i]);
                         } 
                     }
-                    var quests = Player.Quests;
+                    var quests = Information.Quests;
                     if (quests != null)
                     {
                         bw.Write(quests.Length);
@@ -132,24 +117,16 @@ namespace Hedra.Engine.Management
                 Health = Player.Health,
                 Mana = Player.MaxXP,
                 Xp = Player.XP,
-                WorldSeed = World.Seed,
                 Name = Player.Name,
                 Rotation = Player.Rotation,
-                BlockPosition = Player.BlockPosition,
-                MainTreeArray = Player.AbilityTree.MainTreeSave,
-                FirstSpecializationTreeArray = Player.AbilityTree.FirstTreeSave,
-                SecondSpecializationTreeArray = Player.AbilityTree.SecondTreeSave,
-                ToolbarArray = Player.Toolbar.ToArray(),
-                TargetPosition = Player.Physics.TargetPosition,
-                Daytime = EnvironmentSystem.SkyManager.DayTime,
                 Class = Player.Class,
                 RandomFactor = Player.RandomFactor,
                 Items = Player.Inventory.ToArray(),
                 Recipes = Player.Crafting.RecipeNames,
+                ToolbarData = Player.Toolbar.Serialize(),
                 Quests = Player.Questing.GetTemplates(),
-                MarkedDirection = Player.Minimap.MarkedDirection,
-                SpecializationTreeIndex = Player.AbilityTree.SpecializationTreeIndex,
-                ExtraSkillPoints = Player.AbilityTree.ExtraSkillPoints
+                SkillsData = Player.AbilityTree.Serialize(),
+                RealmData = Player.Realms.Serialize()
             };
 
             return data;
@@ -187,90 +164,85 @@ namespace Hedra.Engine.Management
         private static PlayerInformation LoadPlayer(Stream Str)
         {
             var information = new PlayerInformation();
-            Dictionary<int, Item> items;
             using (var br = new BinaryReader(Str))
             {
                 float version = br.ReadSingle();
-                if (version < 1.0f) return null;
-                if (version < 1.15f) return null;
+                if (version < 1.6f) return null;
                 information.Name = br.ReadString();
-                information.BlockPosition = new Vector3(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
                 information.Rotation = new Vector3(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
                 information.Health = br.ReadSingle();
                 information.Xp = br.ReadSingle();
                 information.Level = br.ReadInt32();
                 information.Mana = br.ReadSingle();
-                information.WorldSeed = br.ReadInt32();
-                information.MainTreeArray = br.ReadBytes(br.ReadInt32());
-                if (version >= 1.3f)
-                {
-                    information.FirstSpecializationTreeArray = br.ReadBytes(br.ReadInt32());
-                    information.SecondSpecializationTreeArray = br.ReadBytes(br.ReadInt32());
-                }
-
-                if (version >= 1.4f)
-                {
-                    information.SpecializationTreeIndex = br.ReadInt32();
-                }
-                if(version >= 1.5f)
-                {
-                    information.ExtraSkillPoints = br.ReadInt32();
-                }
-                information.ToolbarArray = br.ReadBytes(br.ReadInt32());
-                information.TargetPosition = br.ReadVector3();
-                if (version >= 1.35f) information.MarkedDirection = br.ReadVector3();
-                information.Daytime = br.ReadSingle();
+                
+                information.SkillsData = br.ReadBytes(br.ReadInt32());
+                information.RealmData = br.ReadBytes(br.ReadInt32()); 
+                information.ToolbarData = br.ReadBytes(br.ReadInt32());
+                
                 information.Class = ClassDesign.FromString(br.ReadString());
                 information.RandomFactor = br.ReadSingle();
-                items = new Dictionary<int, Item>();
-                var itemCount = br.ReadInt32();
-                for (var i = 0; i < itemCount; i++)
-                {
-                    var index = br.ReadInt32();
-                    var item = Item.FromArray(br.ReadBytes(br.ReadInt32()));
-                    if (item != null)
-                    {
-                        items.Add(index, item);
-                    }
-                    else
-                    {
-                        Log.WriteLine($"Found non-existent item, removing...");
-                    }
-                }
-                information.Items = items.ToArray();
-                if (version >= 1.2f)
-                {
-                    var recipes = new List<string>();
-                    var length = br.ReadInt32();
-                    for(var i = 0; i < length; ++i)
-                    {
-                        var name = br.ReadString();
-                        if(ItemPool.Exists(name))
-                            recipes.Add(name);
-                        else
-                            Log.WriteLine($"Found non-existent recipe '{name},' removing...");
-                    }
-                    information.Recipes = recipes.ToArray();
-                }
-                if (version >= 1.25f)
-                {
-                    var quests = new List<QuestTemplate>();
-                    var length = br.ReadInt32();
-                    for(var i = 0; i < length; ++i)
-                    {
-                        var quest = QuestTemplate.FromArray(br.ReadBytes(br.ReadInt32()));
-                        if(QuestPool.Exists(quest.Name))
-                            quests.Add(quest);
-                        else
-                            Log.WriteLine($"Found non-existent quest design '{quest.Name}', removing...");
-                    }
-                    information.Quests = quests.ToArray();
-                }
+
+                information.Items = LoadItems(br);
+                information.Recipes = LoadRecipes(br);
+                information.Quests = LoadQuests(br);
             }
             Str.Close();
             Str.Dispose();
             return information;
         }
+
+        private static QuestTemplate[] LoadQuests(BinaryReader Reader)
+        {
+            var quests = new List<QuestTemplate>();
+            var length = Reader.ReadInt32();
+            for(var i = 0; i < length; ++i)
+            {
+                var quest = QuestTemplate.FromArray(Reader.ReadBytes(Reader.ReadInt32()));
+                if(QuestPool.Exists(quest.Name))
+                    quests.Add(quest);
+                else
+                    Log.WriteLine($"Found non-existent quest design '{quest.Name}', removing...");
+            }
+            return quests.ToArray();
+        }
+        
+        private static string[] LoadRecipes(BinaryReader Reader)
+        {
+            var recipes = new List<string>();
+            var length = Reader.ReadInt32();
+            for(var i = 0; i < length; ++i)
+            {
+                var name = Reader.ReadString();
+                if(ItemPool.Exists(name))
+                    recipes.Add(name);
+                else
+                    Log.WriteLine($"Found non-existent recipe '{name},' removing...");
+            }
+
+            return recipes.ToArray();
+        }
+        
+        private static KeyValuePair<int, Item>[] LoadItems(BinaryReader Reader)
+        {
+            var items = new Dictionary<int, Item>();
+            var itemCount = Reader.ReadInt32();
+            for (var i = 0; i < itemCount; i++)
+            {
+                var index = Reader.ReadInt32();
+                var item = Item.FromArray(Reader.ReadBytes(Reader.ReadInt32()));
+                if (item != null)
+                {
+                    items.Add(index, item);
+                }
+                else
+                {
+                    Log.WriteLine($"Found non-existent item, removing...");
+                }
+            }
+            return items.ToArray();
+        }
+        
+        
         public static void DeleteCharacter(PlayerInformation Information)
         {
             File.Delete($"{AssetManager.AppData}/Characters/{Information.Name}.db");

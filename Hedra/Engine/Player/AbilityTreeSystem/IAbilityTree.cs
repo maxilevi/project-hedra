@@ -6,25 +6,20 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {
-    public interface IAbilityTree
+    public interface IAbilityTree : ISerializableHandler
     {
         event OnSkillUpdated SkillUpdated;
         void Update();
         void SetPoints(Type AbilityType, int Count);
         void SetPoints(int Index, int Count);
         void Reset();
-        byte[] MainTreeSave { get; }
-        byte[] FirstTreeSave { get; }
-        byte[] SecondTreeSave { get; }
         void ShowBlueprint(AbilityTreeBlueprint Blueprint, InventoryArray Array, byte[] AbilityTreeArray);
-        void FromInformation(PlayerInformation Information);
         int AvailablePoints { get; }
         Item[] TreeItems { get; }
         InventoryArray MainTree { get; }
         InventoryArray FirstTree { get; }
         InventoryArray SecondTree { get; }
         bool Show { get; set; }
-        int SpecializationTreeIndex { get; }
         AbilityTreeBlueprint Specialization { get; }
         void LearnSpecialization(AbilityTreeBlueprint Blueprint);
         bool IsTreeEnabled(AbilityTreeBlueprint Blueprint);

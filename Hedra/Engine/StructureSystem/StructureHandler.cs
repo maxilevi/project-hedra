@@ -28,10 +28,6 @@ namespace Hedra.Engine.StructureSystem
     public class StructureHandler
     {
         private readonly object _lock = new object();
-        public Vector3 MerchantPosition { get; set; }
-        public bool SpawnCampfireSpawned { get; set; }
-        public bool SpawnVillageSpawned { get; set; }
-        public bool MerchantSpawned { get; set; }
         public Voronoi SeedGenerator { get; }
         private readonly List<StructureWatcher> _itemWatchers;
         private CollidableStructure[] _itemsCache;
@@ -119,9 +115,6 @@ namespace Hedra.Engine.StructureSystem
 
         public void Discard()
         {
-            this.MerchantPosition = Vector3.Zero;
-            this.MerchantSpawned = false;
-            this.SpawnCampfireSpawned = false;
             lock (_lock)
             {
                 for (var i = _itemWatchers.Count - 1; i > -1; i--)

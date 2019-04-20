@@ -216,13 +216,25 @@
     <Compile Include="Components\TradeComponent.cs" />
     <Compile Include="Components\VillagerThoughtsComponent.cs" />
     <Compile Include="Core\Mathf.cs" />
+    <Compile Include="Engine\BiomeSystem\GhostTownHandler.cs" />
+    <Compile Include="Engine\BiomeSystem\GhostTown\GhostTownGenerationDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\GhostTown\GhostTownSkyDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\GhostTown\GhostTownMobDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\GhostTown\GhostTownBiomeStructureDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\GhostTown\GhostTownTreeDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\OverworldHandler.cs" />
+    <Compile Include="Engine\BiomeSystem\WorldHandler.cs" />
+    <Compile Include="Engine\BiomeSystem\WorldType.cs" />
     <Compile Include="Engine\CacheSystem\CornCache.cs" />
+    <Compile Include="Engine\CacheSystem\DeadGrassCache.cs" />
     <Compile Include="Engine\CacheSystem\DeathIconCache.cs" />
     <Compile Include="Engine\CacheSystem\GazeboCache.cs" />
     <Compile Include="Engine\CacheSystem\GazeboIconCache.cs" />
     <Compile Include="Engine\CacheSystem\MultipleCollectiblePlacementDesign.cs" />
     <Compile Include="Engine\CacheSystem\MushroomCache.cs" />
     <Compile Include="Engine\CacheSystem\PebbleCache.cs" />
+    <Compile Include="Engine\CacheSystem\PortalCache.cs" />
+    <Compile Include="Engine\CacheSystem\PortalIconCache.cs" />
     <Compile Include="Engine\CacheSystem\PumpkinCache.cs" />
     <Compile Include="Engine\CacheSystem\StickCache.cs" />
     <Compile Include="Engine\CacheSystem\SunflowerCache.cs" />
@@ -314,6 +326,8 @@
     <Compile Include="Engine\PlantSystem\CollectiblePlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\CollectiblePlantDesign.cs" />
     <Compile Include="Engine\PlantSystem\CornDesign.cs" />
+    <Compile Include="Engine\PlantSystem\DeadGrassDesign.cs" />
+    <Compile Include="Engine\PlantSystem\DeadGrassPlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\FarmPlantDesign.cs" />
     <Compile Include="Engine\PlantSystem\MushroomDesign.cs" />
     <Compile Include="Engine\PlantSystem\MushroomPlacementDesign.cs" />
@@ -343,12 +357,14 @@
     <Compile Include="Engine\Player\PagedInterface\PagedInventoryArrayInterface.cs" />
     <Compile Include="Engine\Player\PagedInterface\PagedInventoryArrayInterfaceManager.cs" />
     <Compile Include="Engine\Player\PagedInterface\PagedInventoryItemInfo.cs" />
+    <Compile Include="Engine\Player\ISerializableHandler.cs" />
     <Compile Include="Engine\Player\QuestSystem\EntityRenderer.cs" />
     <Compile Include="Engine\Player\QuestSystem\QuestingJournal.cs" />
     <Compile Include="Engine\Player\QuestSystem\QuestInterface.cs" />
     <Compile Include="Engine\Player\QuestSystem\Views\ModelView.cs" />
     <Compile Include="Engine\Player\QuestSystem\Views\EntityView.cs" />
     <Compile Include="Engine\Player\QuestSystem\Views\QuestView.cs" />
+    <Compile Include="Engine\Player\RealmHandler.cs" />
     <Compile Include="Engine\Player\ToolbarSystem\PassiveEffectsInterface.cs" />
     <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\AuxiliaryDesign.cs" />
     <Compile Include="Engine\QuestSystem\Designs\Auxiliaries\DummyDesign.cs" />
@@ -552,16 +568,43 @@
     <Compile Include="Engine\Steamworks\SteamObjectWrapper.cs" />
     <Compile Include="Engine\StructureSystem\CachedVertexDataChunkWatcher.cs" />
     <Compile Include="Engine\StructureSystem\ChunkWatcher.cs" />
-    <Compile Include="Engine\StructureSystem\Gazebo.cs" />
-    <Compile Include="Engine\StructureSystem\GazeboDesign.cs" />
+    <Compile Include="Engine\StructureSystem\GhostTown\SpawnGhostTownPortal.cs" />
+    <Compile Include="Engine\StructureSystem\GhostTown\SpawnGhostTownPortalDesign.cs" />
+    <Compile Include="Engine\StructureSystem\GhostTown\GhostTownPortal.cs" />
+    <Compile Include="Engine\StructureSystem\GhostTown\GhostTownPortalDesign.cs" />
+    <Compile Include="Engine\StructureSystem\GhostTown\TombStructureDesign.cs" />
     <Compile Include="Engine\StructureSystem\InstanceDataChunkWatcher.cs" />
     <Compile Include="Engine\StructureSystem\IQuestStructure.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\BanditCamp.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\BanditCampDesign.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\Campfire.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\CampfireDesign.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\Gazebo.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\GazeboDesign.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\GiantTree.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\GiantTreeDesign.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\Graveyard.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\GraveyardAmbientHandler.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\GraveyardDesign.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\Obelisk.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\ObeliskDesign.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\SpawnCampfire.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\SpawnCampfireDesign.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\SpawnVillage.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\SpawnVillageDesign.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\TravellingMerchantDesign.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\Village.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\VillageDesign.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\Well.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\WellDesign.cs" />
+    <Compile Include="Engine\StructureSystem\Portal.cs" />
+    <Compile Include="Engine\StructureSystem\PortalStructureDesign.cs" />
     <Compile Include="Engine\StructureSystem\QuestGiverStructureDesign.cs" />
-    <Compile Include="Engine\StructureSystem\SpawnCampfire.cs" />
-    <Compile Include="Engine\StructureSystem\SpawnCampfireDesign.cs" />
-    <Compile Include="Engine\StructureSystem\SpawnVillage.cs" />
-    <Compile Include="Engine\StructureSystem\SpawnVillageDesign.cs" />
+    <Compile Include="Engine\StructureSystem\SimpleStructureDesign.cs" />
+    <Compile Include="Engine\StructureSystem\StructureDesign.cs" />
     <Compile Include="Engine\StructureSystem\StructureGrid.cs" />
+    <Compile Include="Engine\StructureSystem\StructureHandler.cs" />
+    <Compile Include="Engine\StructureSystem\StructureWatcher.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Anvil.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\ILivableBuildingParameters.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\LivableBuildingBuilder.cs" />
@@ -589,8 +632,6 @@
     <Compile Include="Engine\StructureSystem\VillageSystem\Templates\WindmillDesignTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\VillageGraph.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\WindmillBlades.cs" />
-    <Compile Include="Engine\StructureSystem\Well.cs" />
-    <Compile Include="Engine\StructureSystem\WellDesign.cs" />
     <Compile Include="Engine\WorldBuilding\BaseGroundwork.cs" />
     <Compile Include="Engine\WorldBuilding\BasePlateau.cs" />
     <Compile Include="Engine\WorldBuilding\Bench.cs" />
@@ -826,14 +867,6 @@
     <Compile Include="Engine\Sound\ISoundProvider.cs" />
     <Compile Include="Engine\Sound\SoundFamily.cs" />
     <Compile Include="Engine\Sound\SoundProvider.cs" />
-    <Compile Include="Engine\StructureSystem\BanditCamp.cs" />
-    <Compile Include="Engine\StructureSystem\Campfire.cs" />
-    <Compile Include="Engine\StructureSystem\GiantTree.cs" />
-    <Compile Include="Engine\StructureSystem\Graveyard.cs" />
-    <Compile Include="Engine\StructureSystem\GraveyardAmbientHandler.cs" />
-    <Compile Include="Engine\StructureSystem\Obelisk.cs" />
-    <Compile Include="Engine\StructureSystem\StructureWatcher.cs" />
-    <Compile Include="Engine\StructureSystem\Village.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\CompressedBuildingOutput.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\HouseParameters.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\MarketParameters.cs" />
@@ -1056,8 +1089,6 @@
     <Compile Include="Engine\Rendering\UI\PlayerInterface.cs" />
     <Compile Include="Engine\Rendering\UI\TextConfiguration.cs" />
     <Compile Include="Engine\Rendering\UI\TextureCommand.cs" />
-    <Compile Include="Engine\StructureSystem\BanditCampDesign.cs" />
-    <Compile Include="Engine\StructureSystem\StructureHandler.cs" />
     <Compile Include="Engine\WorldBuilding\TravellingMerchant.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\BlacksmithBuilder.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\BlacksmithParameters.cs" />
@@ -1214,13 +1245,6 @@
     <Compile Include="Engine\Sound\SoundItem.cs" />
     <Compile Include="Engine\Program.cs" />
     <Compile Include="Engine\Sound\SoundSource.cs" />
-    <Compile Include="Engine\StructureSystem\CampfireDesign.cs" />
-    <Compile Include="Engine\StructureSystem\GiantTreeDesign.cs" />
-    <Compile Include="Engine\StructureSystem\GraveyardDesign.cs" />
-    <Compile Include="Engine\StructureSystem\ObeliskDesign.cs" />
-    <Compile Include="Engine\StructureSystem\TravellingMerchantDesign.cs" />
-    <Compile Include="Engine\StructureSystem\StructureDesign.cs" />
-    <Compile Include="Engine\StructureSystem\VillageDesign.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\VillageLoader.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\VillageType.cs" />
     <Compile Include="Engine\Time.cs" />
@@ -5354,6 +5378,9 @@
     <None Include="Modules\Mobs\Beetle.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Modules\Spawners\Overworld.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="OpenTK.dll.config" />
     <None Include="Shaders\Includes\Conditionals.shader">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -7786,9 +7813,6 @@
     <None Include="Modules\Items\Swords\UniqueCrystalSword.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\LavaBiomeSpawner.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Modules\Mobs\Bear.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -7852,9 +7876,6 @@
     <None Include="Modules\NPCs\Warrior.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\NormalBiomeSpawner.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Modules\Mobs\Spider.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -7865,12 +7886,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Mobs\Wolf.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Modules\SnowBiomeSpawner.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Modules\UndeadBiomeSpawner.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
@@ -8318,6 +8333,22 @@
       <Link>Assets\Chr\Mob\Ghost\GhostWalk.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Environment\DeadGrass\DeadGrass0.ply">
+      <Link>Assets\Env\Plants\DeadGrass0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\DeadGrass\DeadGrass0_Lod2.ply">
+      <Link>Assets\Env\Plants\DeadGrass0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\DeadGrass\DeadGrass0_Lod4.ply">
+      <Link>Assets\Env\Plants\DeadGrass0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\DeadGrass\DeadGrass0_Lod8.ply">
+      <Link>Assets\Env\Plants\DeadGrass0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Environment\Misc\Pebble0.ply">
       <Link>Assets\Env\Plants\Pebble0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -8408,6 +8439,14 @@
     </Content>
     <Content Include="..\project-hedra-assets\Objects\EnergyShield.ply">
       <Link>Assets\Env\EnergyShield.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Objects\Portal-Icon.ply">
+      <Link>Assets\Env\Objects\Portal-Icon.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Objects\Portal.ply">
+      <Link>Assets\Env\Objects\Portal.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Sounds\BearTrap.ogg">
@@ -9364,6 +9403,34 @@
     </Content>
     <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider99.ply">
       <Link>Assets\Env\Colliders\GiantTree0_Collider99.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Portal0\Portal0.ply">
+      <Link>Assets\Env\Structures\Portal0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Portal0\Portal0_Collider0.ply">
+      <Link>Assets\Env\Colliders\Portal0_Collider0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Portal0\Portal0_Collider1.ply">
+      <Link>Assets\Env\Colliders\Portal0_Collider1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Portal0\Portal0_Collider2.ply">
+      <Link>Assets\Env\Colliders\Portal0_Collider2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Portal0\Portal0_Collider3.ply">
+      <Link>Assets\Env\Colliders\Portal0_Collider3.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Portal0\Portal0_Collider4.ply">
+      <Link>Assets\Env\Colliders\Portal0_Collider4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Portal0\Portal0_Collider5.ply">
+      <Link>Assets\Env\Colliders\Portal0_Collider5.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\AbilityTreeBackground.png">
@@ -13007,6 +13074,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\SkillTrees\WarriorTree.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Spawners\GhostTown.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Villages\Woodland.json">
