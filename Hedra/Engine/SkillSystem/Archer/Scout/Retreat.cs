@@ -15,7 +15,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Retreat.png");   
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/WarriorJump.dae");
         public override bool CanBeCastedWhileAttacking => true;
-        protected override bool ShouldCancel => !Player.IsJumping;
+        protected override bool ShouldCancel => !User.IsJumping;
         private Vector3 _orientation;
         private Vector3 _accumulated;
         private float _multiplier;
@@ -25,16 +25,16 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
             var reached = _accumulated.LengthSquared > Distance * 5 * Distance * 5;
             _multiplier = Mathf.Lerp(_multiplier, reached ? 0 : DefaultMultiplier, Time.DeltaTime * 3f);
             var translation = _orientation * _multiplier;
-            Player.Physics.DeltaTranslate(translation);
+            User.Physics.DeltaTranslate(translation);
             _accumulated += translation * Time.DeltaTime;
             AddParticles();
         }
 
         protected override void DoUse()
         {
-            Player.Movement.Orientate();
-            Player.Movement.ForceJump(40);
-            Player.Movement.CaptureMovement = false;
+            User.Movement.Orientate();
+            User.Movement.ForceJump(40);
+            User.Movement.CaptureMovement = false;
             _orientation = JumpDirection;
             _accumulated = Vector3.Zero;
             _multiplier = DefaultMultiplier;
@@ -43,13 +43,13 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
 
         protected override void OnDisable()
         {
-            Player.Movement.CaptureMovement = true;
-            Player.Movement.CancelJump();
+            User.Movement.CaptureMovement = true;
+            User.Movement.CancelJump();
         }
 
         protected override void OnAnimationStart()
         {
-            SoundPlayer.PlaySound(SoundType.SwooshSound, Player.Position);
+            SoundPlayer.PlaySound(SoundType.SwooshSound, User.Position);
         }
 
         private void AddParticles()
@@ -57,10 +57,10 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
             World.Particles.Color = Vector4.One;
             World.Particles.VariateUniformly = true;
             World.Particles.Position =
-                Player.Position + Vector3.UnitY * Player.Model.Height * .25f;
+                User.Position + Vector3.UnitY * User.Model.Height * .25f;
             World.Particles.Scale = Vector3.One * .25f;
             World.Particles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
-            World.Particles.Direction = -Player.Orientation * .05f;
+            World.Particles.Direction = -User.Orientation * .05f;
             World.Particles.ParticleLifetime = 0.25f;
             World.Particles.GravityEffect = 0.0f;
             World.Particles.PositionErrorMargin = new Vector3(1.5f, 1.5f, 1.5f);
@@ -68,7 +68,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
         }
 
         protected float Distance => .5f + Level * .5f;
-        protected virtual Vector3 JumpDirection => -Player.LookingDirection.Xz.ToVector3().NormalizedFast();
+        protected virtual Vector3 JumpDirection => -User.LookingDirection.Xz.ToVector3().NormalizedFast();
         protected override int MaxLevel => 15;
         public override float MaxCooldown => 20 - Level * .5f;
         public override float ManaCost => 0;

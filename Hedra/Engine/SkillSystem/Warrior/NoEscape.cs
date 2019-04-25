@@ -12,12 +12,12 @@ namespace Hedra.Engine.SkillSystem.Warrior
         
         protected override void DoAdd()
         {
-            Player.AddComponent(_component = new SpeedBonusComponent(Player, Player.Speed * SpeedChange));
+            User.AddComponent(_component = new SpeedBonusComponent(User, User.Speed * SpeedChange));
         }
 
         protected override void DoRemove()
         {
-            if(_component != null) Player.RemoveComponent(_component);
+            if(_component != null) User.RemoveComponent(_component);
             _component = null;
         }
 
@@ -26,7 +26,7 @@ namespace Hedra.Engine.SkillSystem.Warrior
             var entities = World.Entities;
             for (var i = 0; i < entities.Count; ++i)
             {
-                if (entities[i] != Player && entities[i].Health < entities[i].MaxHealth * .3f)
+                if (entities[i] != User && entities[i].Health < entities[i].MaxHealth * .3f)
                     return true;
             }
             return false;

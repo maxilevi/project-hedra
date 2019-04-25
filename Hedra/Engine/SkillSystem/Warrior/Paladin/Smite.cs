@@ -10,12 +10,12 @@ namespace Hedra.Engine.SkillSystem.Warrior.Paladin
         
         protected override void Add()
         {
-            Player.Attributes.UndeadDamageModifier += _previousValue = UndeadMultiplier;
+            User.Attributes.UndeadDamageModifier += _previousValue = UndeadMultiplier;
         }
 
         protected override void Remove()
         {
-            Player.Attributes.UndeadDamageModifier -= _previousValue;
+            User.Attributes.UndeadDamageModifier -= _previousValue;
             _previousValue = 0;
         }
 

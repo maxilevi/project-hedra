@@ -12,41 +12,41 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
     {
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/ArcherConcealment.dae");
         protected override Animation StanceAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/ArcherConcealmentStance.dae");
-        protected override bool ShouldDisable => Player.Toolbar.DisableAttack || !(Player.LeftWeapon is Bow) || base.ShouldDisable;
+        protected override bool ShouldDisable => User.Toolbar.DisableAttack || !(User.LeftWeapon is Bow) || base.ShouldDisable;
         private Bow _bow;
 
         protected override void OnAnimationEnd()
         {
-            if(!(Player.LeftWeapon is Bow bow)) return;
+            if(!(User.LeftWeapon is Bow bow)) return;
             _bow = bow;
             Start();
         }
         
         protected override void DoStart()
         {
-            Player.Model.Outline = true;
-            Player.Model.OutlineColor = new Vector4(.2f, .2f, .2f, 1);
-            Player.LeftWeapon.SecondaryAttackEnabled = false;
-            Player.BeforeAttack += BeforeAttack;
+            User.Model.Outline = true;
+            User.Model.OutlineColor = new Vector4(.2f, .2f, .2f, 1);
+            User.LeftWeapon.SecondaryAttackEnabled = false;
+            User.BeforeAttack += BeforeAttack;
             _bow.BowModifiers += AddModifiers;
-            Player.SearchComponent<DamageComponent>().OnDamageEvent += OnDamaged;
+            User.SearchComponent<DamageComponent>().OnDamageEvent += OnDamaged;
         }
 
         protected override void DoEnd()
         {
-            Player.Model.BaseTint = Vector4.Zero;
-            Player.LeftWeapon.SecondaryAttackEnabled = true;
-            Player.BeforeAttack -= BeforeAttack;
-            Player.SearchComponent<DamageComponent>().OnDamageEvent -= OnDamaged;
+            User.Model.BaseTint = Vector4.Zero;
+            User.LeftWeapon.SecondaryAttackEnabled = true;
+            User.BeforeAttack -= BeforeAttack;
+            User.SearchComponent<DamageComponent>().OnDamageEvent -= OnDamaged;
             _bow.BowModifiers -= AddModifiers;
-            Player.Model.Outline = false;
+            User.Model.Outline = false;
         }
 
         private void OnDamaged(DamageEventArgs Args)
         {
-            if (!(Args.Amount > 0) || Args.Damager == null || Args.Damager == Player) return;
+            if (!(Args.Amount > 0) || Args.Damager == null || Args.Damager == User) return;
             End();
-            Player.KnockForSeconds(5);
+            User.KnockForSeconds(5);
         }
         
         private static void AddModifiers(Projectile Proj)
@@ -64,7 +64,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
             Options.DamageModifier *= 1 + DamageChange;
         }
 
-        protected override bool ShouldQuitStance => Player.IsMoving || !(Player.LeftWeapon is Bow);
+        protected override bool ShouldQuitStance => User.IsMoving || !(User.LeftWeapon is Bow);
         public override float MaxCooldown => 18;
         public override float ManaCost => 0;
         protected override int MaxLevel => 15;

@@ -19,14 +19,14 @@ namespace Hedra.Engine.SkillSystem.Mage
         
         protected override void Activate()
         {
-            Player.AddComponent(_component = new BlazeComponent(Player, Damage));
-            Player.AddComponent(_speedComponent = new SpeedBonusComponent(Player, Player.Speed * SpeedModifier));
+            User.AddComponent(_component = new BlazeComponent(User, Damage));
+            User.AddComponent(_speedComponent = new SpeedBonusComponent(User, User.Speed * SpeedModifier));
         }
 
         protected override void Deactivate()
         {
-            Player.RemoveComponent(_component);
-            Player.RemoveComponent(_speedComponent);
+            User.RemoveComponent(_component);
+            User.RemoveComponent(_speedComponent);
         }
 
         private class BlazeComponent : Component<IHumanoid>

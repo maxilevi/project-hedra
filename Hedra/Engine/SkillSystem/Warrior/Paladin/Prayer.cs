@@ -27,21 +27,21 @@ namespace Hedra.Engine.SkillSystem.Warrior.Paladin
         {
             base.DoStart();
             _targetBloom = 8.0f;
-            SkillUtils.DoNearby(Player, Radius, -1, OnHeal);
-            SoundPlayer.PlaySound(SoundType.HealSound, Player.Position);
+            SkillUtils.DoNearby(User, Radius, -1, OnHeal);
+            SoundPlayer.PlaySound(SoundType.HealSound, User.Position);
         }
 
         protected virtual void OnHeal(IEntity Entity, float Dot)
         {
-            Player.Health += HealBonus;
+            User.Health += HealBonus;
             if (!Entity.IsDead && Entity.IsFriendly)
             {
                 Entity.Health += HealBonus;
             }
             else if (!Entity.IsFriendly)
             {
-                Entity.Damage(Damage, Player, out var xp);
-                Player.XP += xp;
+                Entity.Damage(Damage, User, out var xp);
+                User.XP += xp;
             }
         }
         

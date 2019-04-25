@@ -1,25 +1,26 @@
 using System.Globalization;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Localization;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.SkillSystem.Rogue.Ninja
 {
-    public class SnakeSpirit : ActivateDurationSkill
+    public class SnakeSpirit : ActivateDurationSkill<IPlayer>
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/SnakeSpirit.png");
         
         protected override void DoEnable()
         {
-            Player.Model.Outline = true;
-            Player.Model.OutlineColor = Colors.GreenYellow;
-            Player.SearchComponent<DamageComponent>().MissChance = DodgeChance;
+            User.Model.Outline = true;
+            User.Model.OutlineColor = Colors.GreenYellow;
+            User.SearchComponent<DamageComponent>().MissChance = DodgeChance;
         }
 
         protected override void DoDisable()
         {
-            Player.Model.Outline = false;
-            Player.SearchComponent<DamageComponent>().MissChance = DamageComponent.DefaultMissChance;
+            User.Model.Outline = false;
+            User.SearchComponent<DamageComponent>().MissChance = DamageComponent.DefaultMissChance;
         }
 
         private float DodgeChance => .25f + .6f * (Level / (float) MaxLevel);

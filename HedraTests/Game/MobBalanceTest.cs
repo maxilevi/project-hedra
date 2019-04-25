@@ -80,7 +80,7 @@ namespace HedraTests.Game
             var factories = MobLoader.LoadModules(GameLoader.AppPath);
             for (var i = 0; i < factories.Length; i++)
             {
-                var mob = new Entity
+                var mob = new SkilledAnimableEntity
                 {
                     Type = factories[i].Name
                 };

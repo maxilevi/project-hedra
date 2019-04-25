@@ -22,12 +22,12 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
         
         protected override void Add()
         {
-            Player.SearchComponent<DamageComponent>().OnDamageEvent += OnDamageEvent;
+            User.SearchComponent<DamageComponent>().OnDamageEvent += OnDamageEvent;
         }
         
         protected override void Remove()
         {
-            Player.SearchComponent<DamageComponent>().OnDamageEvent -= OnDamageEvent;
+            User.SearchComponent<DamageComponent>().OnDamageEvent -= OnDamageEvent;
             DisableCombat();
         }
 
@@ -35,7 +35,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
         {
             base.Update();
             if(!_inCombat) return;
-            if (Player.IsDead)
+            if (User.IsDead)
                 DisableCombat();
             if (_combatTimer.Tick())
                 DisableCombat();
@@ -59,12 +59,12 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
             if (!previousValue) InvokeStateUpdated();
             _combatTimer.Reset();
             RemoveComponentIfNecessary();
-            Player.AddComponent(_component = new SpeedBonusComponent(Player, Player.Speed * SpeedChange));
+            User.AddComponent(_component = new SpeedBonusComponent(User, User.Speed * SpeedChange));
         }
 
         private void RemoveComponentIfNecessary()
         {
-            if (_component != null) Player.RemoveComponent(_component);
+            if (_component != null) User.RemoveComponent(_component);
             _component = null;
         }
 

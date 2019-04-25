@@ -9,16 +9,17 @@ namespace Hedra.Engine.SkillSystem
 {
     public class SkillUtils
     {
-        public static void DamageNearby(IHumanoid Caster, float Damage, float Radius, float Angle = 0, bool PlaySound = true)
+        public static void DamageNearby(IEntity Caster, float Damage, float Radius, float Angle = 0, bool PlaySound = true)
         {
             DoNearby(Caster, Radius, Angle, (E, D) =>
             {
                 E.Damage(Damage * D, Caster, out var exp, PlaySound);
-                Caster.XP += exp;
+                if(Caster is IHumanoid human)
+                    human.XP += exp;
             });
         }
         
-        public static void DoNearby(IHumanoid Caster, Vector3 Position, float Radius, float Angle, Action<IEntity, float> Lambda)
+        public static void DoNearby(IEntity Caster, Vector3 Position, float Radius, float Angle, Action<IEntity, float> Lambda)
         {
             var entities = World.Entities;
             for(var i = 0; i< entities.Count; i++)
@@ -34,27 +35,27 @@ namespace Hedra.Engine.SkillSystem
             }
         }
         
-        public static void DoNearby(IHumanoid Caster, float Radius, float Angle, Action<IEntity, float> Lambda)
+        public static void DoNearby(IEntity Caster, float Radius, float Angle, Action<IEntity, float> Lambda)
         {
             DoNearby(Caster, Caster.Position, Radius, Angle, Lambda);
         }
         
-        public static void DoNearby(IHumanoid Caster, float Radius, Action<IEntity> Lambda)
+        public static void DoNearby(IEntity Caster, float Radius, Action<IEntity> Lambda)
         {
             DoNearby(Caster, Radius, -1, (E,F) => Lambda(E));
         }
         
-        public static void DoNearby(IHumanoid Caster, Vector3 Position, float Radius, Action<IEntity> Lambda)
+        public static void DoNearby(IEntity Caster, Vector3 Position, float Radius, Action<IEntity> Lambda)
         {
             DoNearby(Caster, Position, Radius, -1, (E,F) => Lambda(E));
         }
 
-        public static bool IsBehindAny(IHumanoid Caster)
+        public static bool IsBehindAny(IEntity Caster)
         {
             return IsBehindAny(Caster, out _);
         }
         
-        public static bool IsBehindAny(IHumanoid Caster, out IEntity Entity)
+        public static bool IsBehindAny(IEntity Caster, out IEntity Entity)
         {
             var entities = World.Entities;
             for (var i = 0; i < entities.Count; ++i)
@@ -70,7 +71,7 @@ namespace Hedra.Engine.SkillSystem
             return false;
         }
         
-        public static IEntity GetNearest(IHumanoid Caster, Vector3 Direction, float Angle, float Radius, Func<IEntity, bool> Lambda)
+        public static IEntity GetNearest(IEntity Caster, Vector3 Direction, float Angle, float Radius, Func<IEntity, bool> Lambda)
         {
             var entities = World.Entities;
             var highest = -1f;
@@ -90,7 +91,7 @@ namespace Hedra.Engine.SkillSystem
         }
         
         
-        public static bool IsBehind(IHumanoid Caster, IEntity Victim)
+        public static bool IsBehind(IEntity Caster, IEntity Victim)
         {
             return Caster.InAttackRange(Victim, 2f) && Vector3.Dot(Victim.Orientation, Caster.Orientation) > -.75f 
                                                     && Vector3.Dot((Victim.Position - Caster.Position).Normalized(), Caster.Orientation) > .75f;
@@ -116,7 +117,7 @@ namespace Hedra.Engine.SkillSystem
             SpawnParticles(Position, Vector4.One * .25f);
         }
 
-        public static void DarkContinuousParticles(IHumanoid Parent)
+        public static void DarkContinuousParticles(IEntity Parent)
         {
             World.Particles.Color = new Vector4(.2f, .2f, .2f, .8f);
             World.Particles.VariateUniformly = true;

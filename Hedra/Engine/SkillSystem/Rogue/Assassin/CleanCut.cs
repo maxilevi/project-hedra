@@ -14,19 +14,19 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
         
         protected override void BeforeUse(RogueWeapon Weapon, AttackOptions Options)
         {
-            Player.AfterDamaging += AfterDamaging;
+            User.AfterDamaging += AfterDamaging;
         }
 
         protected override void AfterUse(RogueWeapon Weapon, AttackOptions Options)
         {
-            Player.AfterDamaging -= AfterDamaging;
+            User.AfterDamaging -= AfterDamaging;
         }
 
         private void AfterDamaging(IEntity Victim, float Amount)
         {
             if (Utils.Rng.NextFloat() < Chance && Victim.SearchComponent<BleedingComponent>() == null)
             {
-                Victim.AddComponent(new BleedingComponent(Victim, Player, 5, Damage));
+                Victim.AddComponent(new BleedingComponent(Victim, User, 5, Damage));
             }
         }
 

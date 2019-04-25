@@ -13,12 +13,12 @@ namespace Hedra.Engine.SkillSystem.Warrior
         
         protected override void Add()
         {
-            Player.AddComponent(_component = new ThornsComponent(Player, ReturnPercentage));
+            User.AddComponent(_component = new ThornsComponent(User, ReturnPercentage));
         }
 
         protected override void Remove()
         {
-            if(_component != null) Player.RemoveComponent(_component);
+            if(_component != null) User.RemoveComponent(_component);
             _component = null;
         }
 

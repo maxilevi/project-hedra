@@ -14,10 +14,10 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
 
         protected override void DoUse()
         {
-            var weapon = (RogueWeapon) Player.LeftWeapon;
+            var weapon = (RogueWeapon) User.LeftWeapon;
             var options = AttackOptions.Default;
-            Player.Movement.CaptureMovement = false;
-            Player.Movement.Orientate();
+            User.Movement.CaptureMovement = false;
+            User.Movement.Orientate();
             Casting = true;
             var k = 0;
             for (var i = 0; i < HitCount; ++i)
@@ -29,8 +29,8 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
                     LaunchAttack(weapon, options, S =>
                     {
                         weapon.PrimaryAttackAnimationSpeed = S * 2;
-                        Player.Movement.Move(Player.Orientation, weapon.PrimaryAttackDuration);
-                        weapon.Attack1(Player, options);
+                        User.Movement.Move(User.Orientation, weapon.PrimaryAttackDuration);
+                        weapon.Attack1(User, options);
                     });
                     k++;
                 });
@@ -39,15 +39,15 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
                     LaunchAttack(weapon, options, S =>
                     {
                         weapon.SecondaryAttackAnimationSpeed = S * 1.25f;
-                        Player.Movement.Move(Player.Orientation, weapon.SecondaryAttackDuration);
-                        weapon.Attack2(Player, options);
+                        User.Movement.Move(User.Orientation, weapon.SecondaryAttackDuration);
+                        weapon.Attack2(User, options);
                     });
                     k++;
                 });
             }
             TaskScheduler.When(() => k == HitCount-1, () =>
             {
-                Player.Movement.CaptureMovement = true;
+                User.Movement.CaptureMovement = true;
                 Casting = false;
             });
         }
@@ -55,15 +55,15 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
         private void LaunchAttack(Weapon Weapon, AttackOptions Options, Action<float> Closure)
         {
             var oldSpeed = Weapon.PrimaryAttackAnimationSpeed;
-            var oldPower = Player.AttackPower;
+            var oldPower = User.AttackPower;
             try
             {
-                Player.AttackPower *= AttackPowerModifier;
+                User.AttackPower *= AttackPowerModifier;
                 Closure(oldSpeed);
             }
             finally
             {
-                Player.AttackPower = oldPower;
+                User.AttackPower = oldPower;
                 Weapon.PrimaryAttackAnimationSpeed = oldSpeed;
             }
         }
@@ -77,7 +77,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
         public override string DisplayName => Translations.Get("finishing_blow_skill");
         public override string[] Attributes => new[]
         {
-            Translations.Get("finishing_blow_damage_change", (HitCount * Player.UnRandomizedDamageEquation * AttackPowerModifier).ToString("0.0", CultureInfo.InvariantCulture)),
+            Translations.Get("finishing_blow_damage_change", (HitCount * User.UnRandomizedDamageEquation * AttackPowerModifier).ToString("0.0", CultureInfo.InvariantCulture)),
             Translations.Get("finishing_blow_hit_change", HitCount)
         };
     }

@@ -4,27 +4,28 @@ using Hedra.Components.Effects;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.SkillSystem.Warrior.Berserker
 {
-    public class Berserk : ActivateDurationSkill
+    public class Berserk : ActivateDurationSkill<IPlayer>
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Berserk.png");
         private bool _hasSideEffect;
         
         protected override void DoEnable()
         {
-            Player.SearchComponent<DamageComponent>().Immune = true;
-            Player.Model.Outline = true;
-            Player.Model.OutlineColor = Colors.Red;
+            User.SearchComponent<DamageComponent>().Immune = true;
+            User.Model.Outline = true;
+            User.Model.OutlineColor = Colors.Red;
         }
 
         protected override void DoDisable()
         {
-            Player.Model.Outline = false;
-            Player.SearchComponent<DamageComponent>().Immune = false;
-            Player.ComponentManager.AddComponentForSeconds(new AttackResistanceBonusComponent(Player, -Player.AttackResistance * ResistanceReduction), Duration);
+            User.Model.Outline = false;
+            User.SearchComponent<DamageComponent>().Immune = false;
+            User.ComponentManager.AddComponentForSeconds(new AttackResistanceBonusComponent(User, -User.AttackResistance * ResistanceReduction), Duration);
             _hasSideEffect = true;
             TaskScheduler.After(Duration, () => _hasSideEffect = false);
         }

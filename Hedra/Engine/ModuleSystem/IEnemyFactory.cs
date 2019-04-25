@@ -12,7 +12,7 @@ namespace Hedra.Engine.ModuleSystem
         float MaxHealth { get; }
         float AttackDamage { get; }
 
-        void Apply(Entity Mob, bool NormalizeValues = true);
+        void Apply(SkilledAnimableEntity Mob, bool NormalizeValues = true);
 
         void Polish(Entity Mob);
     }

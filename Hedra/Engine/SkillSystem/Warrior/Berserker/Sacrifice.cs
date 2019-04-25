@@ -21,14 +21,14 @@ namespace Hedra.Engine.SkillSystem.Warrior.Berserker
         protected override void OnEnable()
         {
             base.OnEnable();
-            Player.Damage(HealthPenalty, null, out _);
+            User.Damage(HealthPenalty, null, out _);
         }
 
         protected override Vector4 OutlineColor => Colors.Red;
         protected override int MaxLevel => 15;
         private float BonusDamage => 30 + 70f * (Level / (float) MaxLevel);
         private float HealthPenalty => BonusDamage * .75f;
-        protected override bool ShouldDisable => Player.Health < HealthPenalty;
+        protected override bool ShouldDisable => User.Health < HealthPenalty;
         public override float MaxCooldown => 17 - 3 * (Level / (float) MaxLevel);
         public override float ManaCost => 0;
         public override string Description => Translations.Get("sacrifice_desc");

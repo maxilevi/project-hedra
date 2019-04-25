@@ -15,22 +15,22 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
                
         protected override void AddEffects()
         {
-            Player.AddComponent(_attackResistance = new AttackResistanceBonusComponent(Player, Player.AttackResistance * ResistanceBonus));
-            Player.AddComponent(_healthComponent = new HealthBonusComponent(Player, HealthBonus));
-            Player.Health += HealthBonus;
+            User.AddComponent(_attackResistance = new AttackResistanceBonusComponent(User, User.AttackResistance * ResistanceBonus));
+            User.AddComponent(_healthComponent = new HealthBonusComponent(User, HealthBonus));
+            User.Health += HealthBonus;
         }
 
         protected override void RemoveEffects()
         {
-            Player.RemoveComponent(_attackResistance);
-            Player.RemoveComponent(_healthComponent);
+            User.RemoveComponent(_attackResistance);
+            User.RemoveComponent(_healthComponent);
             _attackResistance = null;
             _healthComponent = null;
         }
 
         protected override void ApplyVisuals(AnimatedModel Model, string ModelPath)
         {
-            var region = World.BiomePool.GetRegion(Player.Position);
+            var region = World.BiomePool.GetRegion(User.Position);
             var woodColor = region.Colors.WoodColors[Utils.Rng.Next(0, region.Colors.WoodColors.Length)];
             AnimatedUpdatableModel.Paint(Model, ModelPath, new []
             {

@@ -3,6 +3,7 @@ using Hedra.Components.Effects;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
@@ -10,7 +11,7 @@ using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Mage
 {
-    public class EnergyShield : ActivateDurationSkill
+    public class EnergyShield : ActivateDurationSkill<IPlayer>
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/EnergyShield.png");
         private EnergyShieldComponent _shield;
@@ -18,14 +19,14 @@ namespace Hedra.Engine.SkillSystem.Mage
         
         protected override void DoEnable()
         {
-            Player.AddComponent(_shield = new EnergyShieldComponent(Player));
-            Player.AddComponent(_bonusResistance = new AttackResistanceBonusComponent(Player, Player.AttackResistance * ResistanceChange));
+            User.AddComponent(_shield = new EnergyShieldComponent(User));
+            User.AddComponent(_bonusResistance = new AttackResistanceBonusComponent(User, User.AttackResistance * ResistanceChange));
         }
 
         protected override void DoDisable()
         {
-            Player.RemoveComponent(_shield);
-            Player.RemoveComponent(_bonusResistance);
+            User.RemoveComponent(_shield);
+            User.RemoveComponent(_bonusResistance);
         }
 
         private class EnergyShieldComponent : Component<IHumanoid>

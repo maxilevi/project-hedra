@@ -103,6 +103,11 @@ villager_thought_5 = I need to craft some stone arrows before I go hunting
 explorer_thought_0 = I am looking for a witch hut, have you seen one?
 explorer_thought_1 = Did you know you can learn to craft new items by collect recipes?
 explorer_thought_2 = Doing quests is fun!
+explorer_thought_3 = Have you been to the realm of the undead?
+explorer_thought_4 = I am looking for a portal in order to explore other realms. Have you seen one?
+ghost_town_thought_0 = Beware! Dangerous creatures reside in this realm.
+ghost_town_thought_1 = I advise you against entering the portal, deadly creatures reside inside it.
+ghost_town_thought_2 = Portals are very useful for travelling between realms. But be careful, deadly creatures reside in these dimensions.
 saved_old_man = I am thankful to you for saving me. Take this item as a show of gratitude
 right_click_use = RIGHT-CLICK TO USE
 recipe_already_learned = YOU ALREADY LEARNED THAT RECIPE
@@ -546,6 +551,8 @@ turtle = Turtle
 wasp = Wasp
 wolf = Wolf
 ghost = Ghost
+skeleton = Skeleton
+skeletonkamikaze = Suicide Skeleton
 # -- End mobs translations
 boss_get_xp = YOU EARNED {0} XP!
 mountains_of = Mountains of {0}
@@ -565,4 +572,3 @@ assassin_class_description = Master of the shadows, specializes in stealth comba
 # -- End Class Names --
 need_specialize_to_unlock = YOU NEED TO SPECIALIZE INTO A \n{0} TO UNLOCK THIS SKILL
 specialization_level_requirement = YOU NEED TO BE AT LEAST LEVEL {0} TO SPECIALIZE
-

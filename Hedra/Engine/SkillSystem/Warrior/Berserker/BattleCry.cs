@@ -3,6 +3,7 @@ using Hedra.Components.Effects;
 using Hedra.Core;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Localization;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Sound;
@@ -10,7 +11,7 @@ using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Warrior.Berserker
 {
-    public class BattleCry : SingleAnimationSkill
+    public class BattleCry : SingleAnimationSkill<IPlayer>
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/BattleCry.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/WarriorBattleCry.dae");
@@ -18,15 +19,15 @@ namespace Hedra.Engine.SkillSystem.Warrior.Berserker
 
         protected override void OnAnimationMid()
         {
-            World.HighlightArea(Player.Position, Vector4.One * .05f, Range, Duration);
-            SkillUtils.DoNearby(Player, Range, -1, (E, F) =>
+            World.HighlightArea(User.Position, Vector4.One * .05f, Range, Duration);
+            SkillUtils.DoNearby(User, Range, -1, (E, F) =>
             {
-                if(E == Player || E.IsStatic) return;
-                var range = 1 - Mathf.Clamp((Player.Position - E.Position).Xz.LengthFast / Range, 0, 1);
+                if(E == User || E.IsStatic) return;
+                var range = 1 - Mathf.Clamp((User.Position - E.Position).Xz.LengthFast / Range, 0, 1);
                 if (range < 0.005f) return;
-                E.AddComponent(new FearComponent(E, Player, Duration, 100 - Slowness * range));
+                E.AddComponent(new FearComponent(E, User, Duration, 100 - Slowness * range));
             });
-            SoundPlayer.PlaySound(SoundType.GorillaGrowl, Player.Position);
+            SoundPlayer.PlaySound(SoundType.GorillaGrowl, User.Position);
         }
 
         protected override int MaxLevel => 15;

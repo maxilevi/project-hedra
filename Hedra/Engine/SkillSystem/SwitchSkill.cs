@@ -1,10 +1,11 @@
 using Hedra.Core;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Sound;
 
 namespace Hedra.Engine.SkillSystem
 {
-    public abstract class SwitchSkill : CappedSkill
+    public abstract class SwitchSkill : CappedSkill<IPlayer>
     {
         private readonly Animation _stance;
         private float _lerpBlending;
@@ -26,8 +27,8 @@ namespace Hedra.Engine.SkillSystem
                 _stance.OnAnimationEnd += delegate
                 {
                     if (!Casting) return;
-                    Player.Model.PlayAnimation(_stance);
-                    Player.Model.BlendAnimation(_stance);
+                    User.Model.PlayAnimation(_stance);
+                    User.Model.BlendAnimation(_stance);
                 };
             }
         }
@@ -39,8 +40,8 @@ namespace Hedra.Engine.SkillSystem
             if(HasSound) SoundPlayer.PlaySoundWhile(SoundType, () => Casting, () => 1, () => 1);
             if (HasAnimation)
             {
-                Player.Model.PlayAnimation(_stance);
-                Player.Model.BlendAnimation(_stance);
+                User.Model.PlayAnimation(_stance);
+                User.Model.BlendAnimation(_stance);
             }
             Activate();
         }
@@ -65,7 +66,7 @@ namespace Hedra.Engine.SkillSystem
             }
             _lerpBlending = Mathf.Lerp(_lerpBlending, Casting ? 1f : 0f, Time.DeltaTime * 2f);
             if (!Casting) return;
-            if (Orientate) Player.Movement.Orientate();
+            if (Orientate) User.Movement.Orientate();
         }
 
         public override float IsAffectingModifier => Casting ? 1 : 0;

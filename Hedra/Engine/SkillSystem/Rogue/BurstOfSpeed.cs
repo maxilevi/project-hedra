@@ -10,6 +10,7 @@
 using System;
 using System.Globalization;
 using Hedra.Engine.Localization;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.SkillSystem.Rogue
@@ -17,7 +18,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
     /// <summary>
     /// Description of WeaponThrow.
     /// </summary>
-    public class BurstOfSpeed : CappedSkill
+    public class BurstOfSpeed : CappedSkill<IPlayer>
     {
         private const float BaseSpeed = .25f;
         private const float BaseCooldown = 12f;
@@ -36,7 +37,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
 
         protected override void DoUse()
         {
-            Player.AddBonusSpeedForSeconds(Speed, EffectDuration);
+            User.AddBonusSpeedForSeconds(Speed, EffectDuration);
         }
 
         public override string Description => Translations.Get("burst_of_speed_desc");

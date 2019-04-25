@@ -1,8 +1,9 @@
+using Hedra.Engine.Player;
 using Hedra.Engine.SkillSystem;
 
 namespace HedraTests.Player
 {
-    public class CappedSkillMock : CappedSkill
+    public class CappedSkillMock : CappedSkill<IPlayer>
     {
         private int _maxLevel = 0;
         protected override int MaxLevel => _maxLevel;

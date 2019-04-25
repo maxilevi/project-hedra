@@ -7,7 +7,7 @@ using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 {
-    public class SkeletonMastery : PassiveSkill
+    public class SkeletonMastery : PassiveSkill, IMinionMastery
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/SkeletonMastery.png");
         

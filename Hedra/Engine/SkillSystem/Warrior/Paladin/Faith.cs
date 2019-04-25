@@ -11,12 +11,12 @@ namespace Hedra.Engine.SkillSystem.Warrior.Paladin
         
         protected override void Add()
         {
-            Player.AddComponent(_component = new AttackResistanceBonusComponent(Player, Player.AttackResistance * AttackResistanceChange));
+            User.AddComponent(_component = new AttackResistanceBonusComponent(User, User.AttackResistance * AttackResistanceChange));
         }
 
         protected override void Remove()
         {
-            Player.RemoveComponent(_component);
+            User.RemoveComponent(_component);
             _component = null;
         }
 

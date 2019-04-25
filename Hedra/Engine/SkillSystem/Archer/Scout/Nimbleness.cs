@@ -11,13 +11,13 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
         
         protected override void Remove()
         {
-            Player.Attributes.TumbleDistanceModifier -= _previousValue;
+            User.Attributes.TumbleDistanceModifier -= _previousValue;
             _previousValue = 0;
         }
 
         protected override void Add()
         {
-            Player.Attributes.TumbleDistanceModifier += _previousValue = DistanceChange;
+            User.Attributes.TumbleDistanceModifier += _previousValue = DistanceChange;
         }
         
         /* This will give us a range of 106% -> 200% */

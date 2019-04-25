@@ -21,8 +21,8 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 
         protected override void Apply(IEntity Entity)
         {
-            if (Entity.SearchComponent<DamageComponent>().HasIgnoreFor(Player)) return;
-            Entity.AddComponentForSeconds(new LeechComponent(Entity, Player, Damage, Health), Duration);
+            if (Entity.SearchComponent<DamageComponent>().HasIgnoreFor(User)) return;
+            Entity.AddComponentForSeconds(new LeechComponent(Entity, User, Damage, Health), Duration);
         }
 
         protected override Vector4 HighlightColor => Colors.Red * .5f;

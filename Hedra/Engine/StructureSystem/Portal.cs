@@ -1,5 +1,7 @@
 using System.Collections;
+using Hedra.Core;
 using Hedra.Engine.Game;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
@@ -13,7 +15,7 @@ namespace Hedra.Engine.StructureSystem
 {
     public class Portal : BaseStructure, IUpdatable
     {
-        private const int PortalRadius = 16;
+        private const int PortalRadius = 12;
         private static readonly VertexData PortalMesh;
         private readonly ObjectMesh _portalObject;
         private static readonly float _portalHeight;
@@ -22,15 +24,27 @@ namespace Hedra.Engine.StructureSystem
         private readonly WorldLight _portalLight;
         private bool _isTeleporting;
         private int _realm;
+        private Vector3 _defaultSpawn;
+        private bool _useLastPositionForSpawnPoint;
         
         static Portal()
         {
             PortalMesh = AssetManager.PLYLoader("Assets/Env/Objects/Portal.ply", Vector3.One * .35f);
             _portalHeight = PortalMesh.SupportPoint(Vector3.UnitY).Y - PortalMesh.SupportPoint(-Vector3.UnitY).Y;
         }
+
+        protected Portal(Vector3 Position, Vector3 Scale, int Realm) : this(Position, Scale, Realm, default(Vector3), true)
+        { 
+        }
         
-        protected Portal(Vector3 Position, Vector3 Scale, int Realm) : base(Position)
+        protected Portal(Vector3 Position, Vector3 Scale, int Realm, Vector3 DefaultSpawn) : this(Position, Scale, Realm, DefaultSpawn, false)
+        {  
+        }
+        
+        private Portal(Vector3 Position, Vector3 Scale, int Realm, Vector3 DefaultSpawn, bool UseLastPositionForSpawnPoint) : base(Position)
         {
+            _defaultSpawn = DefaultSpawn;
+            _useLastPositionForSpawnPoint = UseLastPositionForSpawnPoint;
             _realm = Realm;
             _portalObject = ObjectMesh.FromVertexData(PortalMesh.Clone().Scale(_scale = Scale));
             _portalObject.Alpha = .4f;
@@ -75,8 +89,14 @@ namespace Hedra.Engine.StructureSystem
         
         private void Teleport()
         {
-            GameManager.Player.Realms.GoTo(_realm);
             SoundPlayer.PlaySound(SoundType.TeleportSound, Position);
+            GameManager.Player.Realms.GoTo(_realm);
+            var tpPosition = _useLastPositionForSpawnPoint ? GameManager.Player.Physics.TargetPosition : _defaultSpawn;
+            GameManager.Player.Physics.TargetPosition =
+                World.FindPlaceablePosition(
+                    GameManager.Player,
+                    tpPosition + new Vector3(Chunk.Width, 0, Chunk.Width) * (Utils.Rng.NextFloat() * 2 - 1)
+                );
         }
 
         private IEnumerator TeleportEffect()

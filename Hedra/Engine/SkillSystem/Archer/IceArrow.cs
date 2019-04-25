@@ -41,7 +41,7 @@ namespace Hedra.Engine.SkillSystem.Archer
         protected override void OnHit(Projectile Proj, IEntity Victim)
         {
             base.OnHit(Proj, Victim);
-            Victim.AddComponent( new FreezingComponent(Victim, Player, FreezeDuration + Utils.Rng.NextFloat() * 2f, Damage) );
+            Victim.AddComponent( new FreezingComponent(Victim, User, FreezeDuration + Utils.Rng.NextFloat() * 2f, Damage) );
         }
 
         protected override void OnMove(Projectile Proj)

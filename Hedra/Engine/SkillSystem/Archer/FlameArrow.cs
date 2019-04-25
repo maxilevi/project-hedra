@@ -50,7 +50,7 @@ namespace Hedra.Engine.SkillSystem.Archer
         protected override void OnHit(Projectile Proj, IEntity Victim)
         {
             base.OnHit(Proj, Victim);
-            Victim.AddComponent( new BurningComponent(Victim, Player, 3 + Utils.Rng.NextFloat() * 2f, Damage) );
+            Victim.AddComponent( new BurningComponent(Victim, User, 3 + Utils.Rng.NextFloat() * 2f, Damage) );
             RoutineManager.StartRoutine( this.CreateFlames, Proj);
         }
 
@@ -102,7 +102,7 @@ namespace Hedra.Engine.SkillSystem.Archer
                     
                     if(Entity.SearchComponent<BurningComponent>() == null)
                     {
-                        Entity.AddComponent(new BurningComponent(Entity, Player, EffectDuration, Damage * .25f));
+                        Entity.AddComponent(new BurningComponent(Entity, User, EffectDuration, Damage * .25f));
                     }
                 });
                 yield return null;

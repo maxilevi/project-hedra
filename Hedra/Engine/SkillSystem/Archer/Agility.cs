@@ -26,12 +26,12 @@ namespace Hedra.Engine.SkillSystem.Archer
 
         protected override void Add()
         {
-            Player.DodgeCost = Humanoid.DefaultDodgeCost + StaminaFormula();
+            User.DodgeCost = Humanoid.DefaultDodgeCost + StaminaFormula();
         }
 
         protected override void Remove()
         {
-            Player.DodgeCost = Humanoid.DefaultDodgeCost;
+            User.DodgeCost = Humanoid.DefaultDodgeCost;
         }
 
         protected override int MaxLevel => 10;

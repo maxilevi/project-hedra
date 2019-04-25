@@ -5,6 +5,7 @@ using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ModuleSystem.AnimationEvents;
+using Hedra.Engine.SkillSystem;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
 using Hedra.Sound;
@@ -14,7 +15,7 @@ namespace Hedra.AnimationEvents
 {
     public class Growl : AnimationEvent
     {
-        public Growl(IEntity Parent) : base(Parent) { }
+        public Growl(ISkilledAnimableEntity Parent) : base(Parent) { }
 
         public override void Build()
         {

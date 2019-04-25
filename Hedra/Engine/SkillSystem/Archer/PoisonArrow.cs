@@ -39,7 +39,7 @@ namespace Hedra.Engine.SkillSystem.Archer
 
         protected override void OnHit(Projectile Proj, IEntity Victim)
         {
-            Victim.AddComponent(new PoisonComponent(Victim, Player, 3 + Utils.Rng.NextFloat() * 2f, Damage));
+            Victim.AddComponent(new PoisonComponent(Victim, User, 3 + Utils.Rng.NextFloat() * 2f, Damage));
         }
 
         protected override void OnMove(Projectile Proj)

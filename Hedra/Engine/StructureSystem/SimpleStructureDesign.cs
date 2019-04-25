@@ -18,21 +18,25 @@ namespace Hedra.Engine.StructureSystem
         protected virtual float EffectivePlateauRadius => PlateauRadius;
         protected abstract int StructureChance { get; }
         protected virtual BlockType PathType => BlockType.StonePath;
-        protected abstract CacheItem Cache { get; }
+        protected abstract CacheItem? Cache { get; }
         
         public sealed override void Build(CollidableStructure Structure)
         {
-            var originalModel = CacheManager.GetModel(Cache);
+            var originalModel = Cache != null ? CacheManager.GetModel(Cache.Value) : null;
             var rng = BuildRng(Structure);
             var rotation = Matrix4.CreateRotationY(Mathf.Radian * rng.NextFloat() * 360f);
             var translation = Matrix4.CreateTranslation(Structure.Position);
             var transformation = Matrix4.CreateScale(Scale) * rotation * translation;
-            Structure.AddStaticElement(
-                originalModel.Clone().Transform(transformation)
-            );
-            Structure.AddCollisionShape(
-                CacheManager.GetShape(originalModel).DeepClone().Select(S => S.Transform(transformation)).ToArray()
-            );
+            if (originalModel != null)
+            {
+                Structure.AddStaticElement(
+                    originalModel.Clone().Transform(transformation)
+                );
+                Structure.AddCollisionShape(
+                    CacheManager.GetShape(originalModel).DeepClone().Select(S => S.Transform(transformation)).ToArray()
+                );
+            }
+
             DoBuild(Structure, rotation, translation, rng);
         }
 

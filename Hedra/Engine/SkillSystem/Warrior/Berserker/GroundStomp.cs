@@ -1,6 +1,7 @@
 using System.Globalization;
 using Hedra.Core;
 using Hedra.Engine.Localization;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Rendering.Particles;
@@ -8,7 +9,7 @@ using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Warrior.Berserker
 {
-    public class GroundStomp : SingleAnimationSkill
+    public class GroundStomp : SingleAnimationSkill<IPlayer>
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/GroundStomp.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/WarriorGroundStomp.dae");
@@ -16,10 +17,10 @@ namespace Hedra.Engine.SkillSystem.Warrior.Berserker
         protected override void OnAnimationMid()
         {
             VisualEffect();
-            SkillUtils.DoNearby(Player, Range, -1, (E, F) =>
+            SkillUtils.DoNearby(User, Range, -1, (E, F) =>
             {
-                E.Damage(Damage, Player, out var xp);
-                Player.XP += xp;
+                E.Damage(Damage, User, out var xp);
+                User.XP += xp;
                 if(!E.IsDead && Utils.Rng.NextFloat() < StunChance)
                     E.KnockForSeconds(4f);
             });
@@ -27,7 +28,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Berserker
 
         private void VisualEffect()
         {
-            var color = World.GetRegion(Player.Position).Colors.DirtColor * .75f;
+            var color = World.GetRegion(User.Position).Colors.DirtColor * .75f;
             World.Particles.VariateUniformly = true;
             World.Particles.GravityEffect = .25f;
             World.Particles.Scale = Vector3.One;
@@ -38,12 +39,12 @@ namespace Hedra.Engine.SkillSystem.Warrior.Berserker
 
             for (var i = 0; i < 125; i++)
             {
-                World.Particles.Position = Player.Position + new Vector3(Utils.Rng.NextFloat() * 2f - 1f, 0, Utils.Rng.NextFloat() * 2f -1f) * Range;
+                World.Particles.Position = User.Position + new Vector3(Utils.Rng.NextFloat() * 2f - 1f, 0, Utils.Rng.NextFloat() * 2f -1f) * Range;
                 World.Particles.Direction = (Utils.Rng.NextFloat() * .5f + .5f) * Vector3.UnitY * 2f;
                 World.Particles.Color = color;
                 World.Particles.Emit();
             }
-            World.HighlightArea(Player.Position, color, Range, 1.5f);
+            World.HighlightArea(User.Position, color, Range, 1.5f);
         }
 
         protected override int MaxLevel => 15;

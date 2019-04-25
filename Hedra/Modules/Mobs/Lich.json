@@ -1,0 +1,55 @@
+{
+  "Name" : "Lich",
+  "MaxHealth": 680.0,
+  "AttackDamage": 13.0,
+  "AttackCooldown": 1.5,
+  "Speed": 1.40,
+  "XP": 26.0,
+  "Level": 25,
+  "AIType": "Hostile",
+  "Effects": [],
+  "Drops": [],
+  "Model": {
+    "Handler": "Ghost",
+    "AlignWithTerrain" :  false,
+    "Path": "$DataFile$/Assets/Chr/Mob/Ghost/GhostIdle.dae",
+    "Scale": 2.5,
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/Ghost/GhostIdle.dae",
+        "Speed": 1.0
+      }
+    ],
+    "WalkAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/Ghost/GhostWalk.dae",
+        "Speed": 1.0
+      }
+    ],
+    "AttackAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/Ghost/GhostAttack1.dae",
+        "Speed": 3.0,
+        "Chance": 0.5
+      },
+      {
+        "Path": "$DataFile$/Assets/Chr/Ghost/GhostAttack0.dae",
+        "Speed": 3.0,
+        "OnAnimationMid" : "SpawnSkeleton",
+        "Chance": 0.10
+      },
+      {
+        "Path": "$DataFile$/Assets/Chr/Ghost/GhostAttack0.dae",
+        "Speed": 3.0,
+        "OnAnimationMid" : "CastTerror",
+        "Chance": 0.10
+      },
+      {
+        "Path": "$DataFile$/Assets/Chr/Ghost/GhostAttack0.dae",
+        "Speed": 3.0,
+        "OnAnimationMid" : "CastSiphonBlood"
+      }
+    ]
+  }
+}
+

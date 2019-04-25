@@ -27,15 +27,15 @@ namespace Hedra.Engine.SkillSystem.Mage
 
         protected override void Activate()
         {
-            Player.Movement.CaptureMovement = false;
-            _cone = FireCone.Create(Player, 50,
-                () => Player.Mana > ManaPerSecond && Casting,
-                () => Player.Mana -= ManaPerSecond * Time.DeltaTime);
+            User.Movement.CaptureMovement = false;
+            _cone = FireCone.Create(User, 50,
+                () => User.Mana > ManaPerSecond && Casting,
+                () => User.Mana -= ManaPerSecond * Time.DeltaTime);
         }
 
         protected override void Deactivate()
         {
-            Player.Movement.CaptureMovement = true;
+            User.Movement.CaptureMovement = true;
             _cone.Dispose();
             _cone = null;
         }

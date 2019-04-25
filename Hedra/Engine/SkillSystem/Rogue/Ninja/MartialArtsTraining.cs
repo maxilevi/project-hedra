@@ -11,12 +11,12 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
         
         protected override void Add()
         {
-            Player.AddComponent(_attackPowerBonusComponent = new AttackPowerBonusComponent(Player, DamageChange));
+            User.AddComponent(_attackPowerBonusComponent = new AttackPowerBonusComponent(User, DamageChange));
         }
         
         protected override void Remove()
         {
-            Player.RemoveComponent(_attackPowerBonusComponent);
+            User.RemoveComponent(_attackPowerBonusComponent);
         }
 
         private float DamageChange => .05f + .2f * (Level / (float)MaxLevel);

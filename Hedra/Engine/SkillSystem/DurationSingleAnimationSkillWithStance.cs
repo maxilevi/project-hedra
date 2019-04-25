@@ -39,6 +39,6 @@ namespace Hedra.Engine.SkillSystem
         }
 
         protected abstract float Duration { get; }
-        protected override bool ShouldQuitStance => Player.IsMoving || _durationTimer.Ready;
+        protected override bool ShouldQuitStance => User.IsMoving || _durationTimer.Ready;
     }
 }

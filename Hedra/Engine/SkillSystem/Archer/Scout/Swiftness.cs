@@ -17,19 +17,19 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
 
         protected override void DoEnable()
         {
-            Player.AddComponent(_currentSpeedBonus = new SpeedBonusComponent(Player, Player.Speed * SpeedChange));
-            Player.AddComponent(_currentAttackSpeedBonus = new AttackSpeedBonusComponent(Player, Player.AttackSpeed * AttackSpeedChange));
-            Player.Model.Outline = true;
-            Player.Model.OutlineColor = Color.FromArgb(128, 102, 204, 255).ToVector4() * 2;
+            User.AddComponent(_currentSpeedBonus = new SpeedBonusComponent(User, User.Speed * SpeedChange));
+            User.AddComponent(_currentAttackSpeedBonus = new AttackSpeedBonusComponent(User, User.AttackSpeed * AttackSpeedChange));
+            User.Model.Outline = true;
+            User.Model.OutlineColor = Color.FromArgb(128, 102, 204, 255).ToVector4() * 2;
         }
         
         protected override void DoDisable()
         {
-            Player.RemoveComponent(_currentSpeedBonus);
-            Player.RemoveComponent(_currentAttackSpeedBonus);
+            User.RemoveComponent(_currentSpeedBonus);
+            User.RemoveComponent(_currentAttackSpeedBonus);
             _currentSpeedBonus = null;
             _currentAttackSpeedBonus = null;
-            Player.Model.Outline = false;
+            User.Model.Outline = false;
         }
 
         private float SpeedChange => .35f + Level * 0.025f;

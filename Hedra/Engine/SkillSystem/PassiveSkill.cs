@@ -1,8 +1,9 @@
 using System;
+using Hedra.Engine.Player;
 
 namespace Hedra.Engine.SkillSystem
 {
-    public abstract class PassiveSkill : BaseSkill
+    public abstract class PassiveSkill : BaseSkill<IPlayer>
     {
         public override bool Passive => true;
         protected abstract int MaxLevel { get; }
@@ -20,7 +21,7 @@ namespace Hedra.Engine.SkillSystem
             if (!_set)
             {
                 if(Level > MaxLevel)
-                    Player.AbilityTree.SetPoints(GetType(), MaxLevel);
+                    User.AbilityTree.SetPoints(GetType(), MaxLevel);
                 if(_currentLevel != 0) Remove();
                 if(Level > 0) Add();
                 _currentLevel = Level;

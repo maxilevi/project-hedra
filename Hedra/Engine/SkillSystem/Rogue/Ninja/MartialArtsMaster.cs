@@ -12,14 +12,14 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
         
         protected override void Add()
         {
-            Player.AddComponent(_previousResistance = new AttackResistanceBonusComponent(Player, Player.AttackResistance * ResistanceChange));
-            Player.AddComponent(_previousAttackSpeed = new AttackSpeedBonusComponent(Player, Player.BaseAttackSpeed * AttackSpeedChange));
+            User.AddComponent(_previousResistance = new AttackResistanceBonusComponent(User, User.AttackResistance * ResistanceChange));
+            User.AddComponent(_previousAttackSpeed = new AttackSpeedBonusComponent(User, User.BaseAttackSpeed * AttackSpeedChange));
         }
         
         protected override void Remove()
         {
-            Player.RemoveComponent(_previousResistance);
-            Player.RemoveComponent(_previousAttackSpeed);
+            User.RemoveComponent(_previousResistance);
+            User.RemoveComponent(_previousAttackSpeed);
         }
 
         private float ResistanceChange => .05f + .15f * (Level / (float)MaxLevel);

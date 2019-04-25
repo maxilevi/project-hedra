@@ -4,12 +4,13 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ItemSystem.ArmorSystem;
 using Hedra.Engine.Player;
+using Hedra.Engine.SkillSystem;
 using Hedra.WeaponSystem;
 using OpenTK;
 
 namespace Hedra.EntitySystem
 {
-    public interface IHumanoid : IEntity
+    public interface IHumanoid : ISkilledAnimableEntity
     {      
         event OnAttackEventHandler BeforeAttack;
         event OnAttackEventHandler AfterAttack;
@@ -46,7 +47,6 @@ namespace Hedra.EntitySystem
         float MaxXP { get; }
         float MaxMana { get; }
         float Health { get; set; }
-        float Mana { get; set; }
         float ManaRegenFactor { get; set; }
         float Stamina { get; set; }
         int Level { get; set; }
@@ -59,7 +59,6 @@ namespace Hedra.EntitySystem
         int Gold { get; set; }
         float DamageEquation { get; }
         float UnRandomizedDamageEquation { get; }
-        Vector3 LookingDirection { get; }
         void AttackSurroundings(float Damage, IEntity[] ToIgnore, Action<IEntity> Callback);
         void AttackSurroundings(float Damage, IEntity[] ToIgnore);
         void AttackSurroundings(float Damage, Action<IEntity> Callback);

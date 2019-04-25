@@ -14,18 +14,18 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
         
         protected override void Add()
         {
-            Player.Kill += OnKill;
+            User.Kill += OnKill;
         }
 
         protected override void Remove()
         {
-            Player.Kill -= OnKill;
+            User.Kill -= OnKill;
         }
 
         private void OnKill(DeadEventArgs Args)
         {
-            Player.Mana = Math.Min(Player.Mana + ManaPerKill, Player.MaxMana);
-            Player.ShowText($"+{(int) ManaPerKill} MP", Color.CornflowerBlue, 12, 3);
+            User.Mana = Math.Min(User.Mana + ManaPerKill, User.MaxMana);
+            User.ShowText($"+{(int) ManaPerKill} MP", Color.CornflowerBlue, 12, 3);
         }
 
         protected override int MaxLevel => 16;

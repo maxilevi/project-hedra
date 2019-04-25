@@ -25,7 +25,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
     /// <summary>
     /// Description of WeaponThrow.
     /// </summary>
-    public class Shuriken : SingleAnimationSkill
+    public class Shuriken : SingleAnimationSkill<IPlayer>
     {
         private static readonly VertexData ShurikenData = AssetManager.PLYLoader("Assets/Items/Shuriken.ply", new Vector3(1, 2, 1));
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Shuriken.png");
@@ -43,12 +43,12 @@ namespace Hedra.Engine.SkillSystem.Rogue
 
         protected void ShootShuriken()
         {
-            ShootShuriken(Player.View.LookingDirection);
+            ShootShuriken(User.View.LookingDirection);
         }
 
         protected void ShootShuriken(Vector3 Direction)
         {
-            ShootShuriken(Player, Direction, Damage, StunChance);
+            ShootShuriken(User, Direction, Damage, StunChance);
         }
         
         private static void ShootShuriken(IHumanoid Human, Vector3 Direction, float Damage, int KnockChance = -1)
@@ -86,7 +86,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
             World.Particles.GravityEffect = .0f;
             World.Particles.Direction = Vector3.Zero;
             World.Particles.Scale = Vector3.One * .25f;
-            World.Particles.Position = Player.Model.LeftWeaponPosition;
+            World.Particles.Position = User.Model.LeftWeaponPosition;
             World.Particles.PositionErrorMargin = Vector3.One * 0.75f;
             //World.Particles.Emit();            
         }

@@ -4,12 +4,13 @@ using Hedra.Engine.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
+using Hedra.Engine.Player;
 using Hedra.Engine.WorldBuilding;
 using OpenTK;
 
 namespace Hedra.EntitySystem
 {
-    public interface IEntity : IUpdatable, ISearchable, IDisposable, IRenderable
+    public interface IEntity : IUpdatable, ISearchable, IDisposable, IRenderable, IEntityWithAttributes, IObjectWithLifeCycle
     {
         IPhysicsComponent Physics { get; }
 
@@ -26,8 +27,6 @@ namespace Hedra.EntitySystem
         event OnDisposedEvent AfterDisposed;
         
         EntityComponentManager ComponentManager { get; }
-        
-        EntityAttributes Attributes { get; }
         
         float AttackDamage { get; set; }
         
@@ -62,9 +61,7 @@ namespace Hedra.EntitySystem
         bool InUpdateRange { get; }
 
         bool IsBoss { get; }
-        
-        bool IsDead { get; set; }
-        
+
         bool IsFriendly { get; set; }
         
         bool IsGrounded { get; set; }
@@ -78,8 +75,6 @@ namespace Hedra.EntitySystem
         bool IsStatic { get; }
         
         bool IsUnderwater { get; }
-        
-        bool IsKnocked { get; }
         
         bool IsMoving { get; }
         

@@ -10,6 +10,7 @@
 using System;
 using System.Globalization;
 using Hedra.Engine.Localization;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
@@ -21,7 +22,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
     /// <summary>
     /// Description of WeaponThrow.
     /// </summary>
-    public class RoundSlash : SingleAnimationSkill
+    public class RoundSlash : SingleAnimationSkill<IPlayer>
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/RoundSlash.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/RogueBladeRoundAttack.dae");
@@ -29,22 +30,22 @@ namespace Hedra.Engine.SkillSystem.Rogue
         protected override int MaxLevel => 20;
         public override float ManaCost => 75;
         public override float MaxCooldown => Math.Max(8, 16 - base.Level * .5f);
-        private float Damage => Player.DamageEquation * 2.5f;
-        private float TotalDamage => Player.DamageEquation * 2.5f * 4 * (SkillAnimation.Length / SkillAnimation.Speed);
+        private float Damage => User.DamageEquation * 2.5f;
+        private float TotalDamage => User.DamageEquation * 2.5f * 4 * (SkillAnimation.Length / SkillAnimation.Speed);
 
         protected override void OnAnimationStart()
         {
-            SoundPlayer.PlaySound(SoundType.SwooshSound, Player.Position, false, 0.8f, 1f);
+            SoundPlayer.PlaySound(SoundType.SwooshSound, User.Position, false, 0.8f, 1f);
         }
 
         protected override void OnQuarterSecond()
         {
             for (var i = World.Entities.Count - 1; i > 0; i--)
             {
-                if (!Player.InAttackRange(World.Entities[i], 2)) continue;
+                if (!User.InAttackRange(World.Entities[i], 2)) continue;
 
-                World.Entities[i].Damage(Damage, Player, out var exp, true);
-                Player.XP += exp;
+                World.Entities[i].Damage(Damage, User, out var exp, true);
+                User.XP += exp;
             }
         }
 
@@ -57,10 +58,10 @@ namespace Hedra.Engine.SkillSystem.Rogue
             World.Particles.Scale = Vector3.One * .15f;
             World.Particles.PositionErrorMargin = Vector3.One * 0.75f;
             
-            World.Particles.Position = Player.Model.LeftWeaponPosition;
+            World.Particles.Position = User.Model.LeftWeaponPosition;
             World.Particles.Emit();
             
-            World.Particles.Position = Player.Model.RightWeaponPosition;
+            World.Particles.Position = User.Model.RightWeaponPosition;
             World.Particles.Emit();
         }
 

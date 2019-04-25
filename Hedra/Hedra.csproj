@@ -159,10 +159,15 @@
     <Compile Include="AISystem\PugAIComponent.cs" />
     <Compile Include="AISystem\SheepAIComponent.cs" />
     <Compile Include="AISystem\SheepFarmAIComponent.cs" />
+    <Compile Include="AISystem\SkeletonKamikazeAIComponent.cs" />
     <Compile Include="AISystem\TrollAIComponent.cs" />
     <Compile Include="AnimationEvents\AnimationEvent.cs" />
     <Compile Include="AnimationEvents\Growl.cs" />
     <Compile Include="AnimationEvents\Quake.cs" />
+    <Compile Include="AnimationEvents\SkillAnimationEvent.cs" />
+    <Compile Include="AnimationEvents\SkillEvents\CastSiphonBlood.cs" />
+    <Compile Include="AnimationEvents\SkillEvents\CastTerror.cs" />
+    <Compile Include="AnimationEvents\SkillEvents\SpawnSkeleton.cs" />
     <Compile Include="AnimationEvents\Slash.cs" />
     <Compile Include="API\AIRegistry.cs" />
     <Compile Include="API\AnimationEventRegistry.cs" />
@@ -258,6 +263,9 @@
     <Compile Include="Engine\EntitySystem\BaseHealthBarComponent.cs" />
     <Compile Include="Engine\EntitySystem\DisposeComponent.cs" />
     <Compile Include="Engine\EntitySystem\EntityAttributes.cs" />
+    <Compile Include="Engine\EntitySystem\IEntityWithAttributes.cs" />
+    <Compile Include="Engine\EntitySystem\SkilledAnimableEntity.cs" />
+    <Compile Include="Engine\EntitySystem\SkilledEntity.cs" />
     <Compile Include="Engine\Game\Season.cs" />
     <Compile Include="Engine\Generation\FastComparer.cs" />
     <Compile Include="Engine\Input\ArrowSelector.cs" />
@@ -348,9 +356,15 @@
     <Compile Include="Engine\Player\CraftingSystem\CraftingInventoryItemInfo.cs" />
     <Compile Include="Engine\Player\DummyInventory.cs" />
     <Compile Include="Engine\Player\HumanoidModelAnimationState.cs" />
+    <Compile Include="Engine\Player\IObjectWithAnimation.cs" />
+    <Compile Include="Engine\Player\IObjectWithMana.cs" />
+    <Compile Include="Engine\Player\IObjectWithMovement.cs" />
+    <Compile Include="Engine\Player\IObjectWithWeapon.cs" />
     <Compile Include="Engine\Player\Inventory\AttributeFormatter.cs" />
     <Compile Include="Engine\Player\Inventory\BaseBackground.cs" />
     <Compile Include="Engine\Player\Inventory\PlayerInventoryInterface.cs" />
+    <Compile Include="Engine\Player\IObjectWithLifeCycle.cs" />
+    <Compile Include="Engine\Player\ISkillUser.cs" />
     <Compile Include="Engine\Player\Networking\NetworkHumanoidModel.cs" />
     <Compile Include="Engine\Player\Networking\NetworkHumanoidModelAnimationState.cs" />
     <Compile Include="Engine\Player\Networking\NetworkPlayer.cs" />
@@ -462,6 +476,8 @@
     <Compile Include="Engine\SkillSystem\Archer\Scout\SteadyAim.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Scout\Swiftness.cs" />
     <Compile Include="Engine\SkillSystem\DrainSkill.cs" />
+    <Compile Include="Engine\SkillSystem\ISkilledAnimableEntity.cs" />
+    <Compile Include="Engine\SkillSystem\ISkilledEntity.cs" />
     <Compile Include="Engine\SkillSystem\DurationSingleAnimationSkillWithStance.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Blaze.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Druid\ArcticBlast.cs" />
@@ -482,6 +498,7 @@
     <Compile Include="Engine\SkillSystem\Mage\Necromancer\BloodProjectile.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Necromancer\BloodSkill.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Necromancer\DarkReaping.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\Necromancer\IMinionMastery.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Necromancer\Leech.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Necromancer\RaiseSkeleton.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Necromancer\SiphonBlood.cs" />
@@ -568,6 +585,8 @@
     <Compile Include="Engine\Steamworks\SteamObjectWrapper.cs" />
     <Compile Include="Engine\StructureSystem\CachedVertexDataChunkWatcher.cs" />
     <Compile Include="Engine\StructureSystem\ChunkWatcher.cs" />
+    <Compile Include="Engine\StructureSystem\GhostTown\GhostTownBoss.cs" />
+    <Compile Include="Engine\StructureSystem\GhostTown\GhostTownBossDesign.cs" />
     <Compile Include="Engine\StructureSystem\GhostTown\SpawnGhostTownPortal.cs" />
     <Compile Include="Engine\StructureSystem\GhostTown\SpawnGhostTownPortalDesign.cs" />
     <Compile Include="Engine\StructureSystem\GhostTown\GhostTownPortal.cs" />
@@ -8245,6 +8264,10 @@
       <Link>Assets\Chr\RogueTigerStrike.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Animations\SkeletonKamikazeIdle.dae">
+      <Link>Assets\Chr\SkeletonKamikazeIdle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Animations\WarriorBattleCry.dae">
       <Link>Assets\Chr\WarriorBattleCry.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -8405,8 +8428,16 @@
       <Link>Assets\Items\Misc\Boat.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Misc\Bone.ply">
+      <Link>Assets\Items\Misc\Bone.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Misc\Cloth.ply">
       <Link>Assets\Items\Misc\Cloth.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Misc\DarkEssence.ply">
+      <Link>Assets\Items\Misc\DarkEssence.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Misc\Pebble.ply">
@@ -9431,6 +9462,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\Structures\Portal0\Portal0_Collider5.ply">
       <Link>Assets\Env\Colliders\Portal0_Collider5.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Portal0\Portal0_Collider6.ply">
+      <Link>Assets\Env\Colliders\Portal0_Collider6.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\AbilityTreeBackground.png">
@@ -12936,7 +12971,13 @@
     <Content Include="Modules\Items\Misc\Boat.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Misc\Bone.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Misc\Cloth.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Misc\DarkEssence.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Misc\EnchantedBranch.json">
@@ -13025,10 +13066,19 @@
     <Content Include="Modules\Mobs\Ghost.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Mobs\Lich.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Mobs\Pig.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Mobs\Pug.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Mobs\Skeleton.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Mobs\SkeletonKamikaze.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\NPCs\EntMorph.json">

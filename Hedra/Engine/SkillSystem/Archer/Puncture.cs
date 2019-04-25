@@ -24,7 +24,7 @@ namespace Hedra.Engine.SkillSystem.Archer
     public class Puncture : SpecialAttackPassiveSkill<Bow>
     {
         protected override int MaxLevel => 25;
-        private float TotalDamage => Player.DamageEquation * (.75f + Level / 10f);
+        private float TotalDamage => User.DamageEquation * (.75f + Level / 10f);
         private float TotalTime => 2 + Level / 10.0f;
         private float BleedChance => .1f;
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/PierceArrows.png");
@@ -46,7 +46,7 @@ namespace Hedra.Engine.SkillSystem.Archer
             {
                 if(Utils.Rng.NextFloat() < BleedChance && Hit.SearchComponent<BleedingComponent>() == null)
                 {
-                    Hit.AddComponent( new BleedingComponent(Hit, Player, TotalTime, TotalDamage));
+                    Hit.AddComponent( new BleedingComponent(Hit, User, TotalTime, TotalDamage));
                 }
             };
         }

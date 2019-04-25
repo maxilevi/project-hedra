@@ -26,6 +26,8 @@ using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem.ArmorSystem;
 using Hedra.Engine.Localization;
+using Hedra.Engine.Rendering.Animation;
+using Hedra.Engine.SkillSystem;
 using Hedra.EntitySystem;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
@@ -481,6 +483,24 @@ namespace Hedra.Engine.Player
 
         public Item[] GetMainEquipment() => Equipment.MainEquipment;
         
+        public Animation AnimationBlending => Model.AnimationBlending;
+        
+        public void ResetModel() => Model.Reset();
+
+        public void BlendAnimation(Animation Animation) => Model.BlendAnimation(Animation);
+
+        public bool CaptureMovement
+        {
+            set => Movement.CaptureMovement = value;
+        }
+
+        public void Orientate() => Movement.Orientate();
+
+        public bool InAttackStance
+        {
+            set => LeftWeapon.InAttackStance = value;
+        }
+        
         public void SetMainEquipment(Item[] MainEquipment) => Equipment.MainEquipment = MainEquipment;
 
         public override void Dispose()
@@ -489,5 +509,12 @@ namespace Hedra.Engine.Player
             Equipment.Dispose();
             this.HandLamp.Dispose();
         }
+
+        public bool CanCastSkill => throw new NotImplementedException();
+        
+        public void SetSkillPoints(Type Skill, int Points) => throw new NotImplementedException();
+
+        public T SearchSkill<T>() where T : BaseSkill => throw new NotImplementedException();
+ 
     }
 }

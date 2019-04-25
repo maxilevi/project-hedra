@@ -38,7 +38,9 @@ using Hedra.Engine.Player.QuestSystem;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.QuestSystem;
+using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.Geometry;
+using Hedra.Engine.SkillSystem;
 using Hedra.EntitySystem;
 using Hedra.Sound;
 using OpenTK.Input;
@@ -458,6 +460,18 @@ namespace Hedra.Engine.Player
             
             IsRiding = false;
             if (Health <= 0) Respawn();
+        }
+
+        public bool CanCastSkill => !IsEating && !IsRiding;
+
+        public void SetSkillPoints(Type Skill, int Points)
+        {
+            AbilityTree.SetPoints(Skill, Points);
+        }
+
+        public T SearchSkill<T>() where T : BaseSkill
+        {
+            return (T) Toolbar.Skills.First(S => S is T);
         }
         
         public static bool CreatePlayer(string Name, ClassDesign ClassType)

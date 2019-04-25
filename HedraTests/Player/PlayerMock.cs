@@ -19,7 +19,9 @@ using Hedra.Engine.Player.MapSystem;
 using Hedra.Engine.Player.QuestSystem;
 using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.QuestSystem;
+using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Engine.SkillSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.WeaponSystem;
@@ -29,6 +31,7 @@ namespace HedraTests.Player
 {
     public class PlayerMock : IPlayer
     {
+        private bool _canCastSkill;
         public event OnHitLandedEventHandler OnHitLanded;
         public SimpleMessageDispatcherMock MessageMock => MessageDispatcher as SimpleMessageDispatcherMock;
         public SimpleCameraMock CameraMock => View as SimpleCameraMock;
@@ -201,6 +204,11 @@ namespace HedraTests.Player
         public float MaxMana { get; set; } = 100;
         public float Health { get; set; }
         public float Mana { get; set; } = 100;
+        public bool CanCastSkill()
+        {
+            throw new NotImplementedException();
+        }
+
         public bool InUpdateRange { get; }
         public bool IsActive { get; set; }
         public bool IsBoss { get; set; }
@@ -256,6 +264,7 @@ namespace HedraTests.Player
         public bool IsRiding { get; set; }
         public bool IsClimbing { get; set; }
         public bool WasAttacking { get; set; }
+        public bool InAttackStance { get; set; }
         public bool IsUndead { get; }
         public float AttackSpeed { get; set; }
         public float BaseAttackSpeed { get; }
@@ -426,6 +435,34 @@ namespace HedraTests.Player
         }
 
         void IUpdatable.Update()
+        {
+            throw new NotImplementedException();
+        }
+
+        bool ISkillUser.CanCastSkill => _canCastSkill;
+        public void SetSkillPoints(Type Skill, int Points)
+        {
+            AbilityTree.SetPoints(Skill, Points);
+        }
+
+        public T SearchSkill<T>() where T : BaseSkill
+        {
+            throw new NotImplementedException();
+        }
+
+        public Animation AnimationBlending { get; }
+        public void ResetModel()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void BlendAnimation(Animation Animation)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool CaptureMovement { get; set; }
+        public void Orientate()
         {
             throw new NotImplementedException();
         }

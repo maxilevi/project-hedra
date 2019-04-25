@@ -14,7 +14,7 @@ using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Rogue.Ninja
 {
-    public sealed class FanOfKnives : SingleAnimationSkill
+    public sealed class FanOfKnives : SingleAnimationSkill<IPlayer>
     {
         private static readonly VertexData KnifeModel = AssetManager.PLYLoader("Assets/Items/Ammo/Kunai.ply", Vector3.One);
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/FanOfKnives.png");
@@ -32,7 +32,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
         
         private void ThrowAll()
         {
-            var direction = Player.View.LookingDirection;
+            var direction = User.View.LookingDirection;
             var left = direction.Xz.PerpendicularLeft.ToVector3() + Vector3.UnitY * direction.Y;
             var right = direction.Xz.PerpendicularRight.ToVector3() + Vector3.UnitY * direction.Y;
             Throw(left * .25f + direction * .75f);
@@ -47,21 +47,21 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
         private void Throw(Vector3 Direction)
         {
             var weaponData = KnifeModel.Clone().Scale(Vector3.One).RotateX(90);
-            var startingLocation = Player.Model.LeftWeaponPosition;
+            var startingLocation = User.Model.LeftWeaponPosition;
 
-            var weaponProj = new Projectile(Player, startingLocation, weaponData)
+            var weaponProj = new Projectile(User, startingLocation, weaponData)
             {
                 Propulsion = Direction * 3.0f,
                 Lifetime = 5f
             };
             weaponProj.HitEventHandler += delegate(Projectile Sender, IEntity Hit)
             {
-                Hit.Damage(Damage, Player, out var exp);
-                Player.XP += exp;
+                Hit.Damage(Damage, User, out var exp);
+                User.XP += exp;
                 if(Utils.Rng.NextFloat() < BleedChance && Hit.SearchComponent<BleedingComponent>() == null)
-                    Hit.AddComponent(new BleedingComponent(Hit, Player, 5f, Damage * .15f));
+                    Hit.AddComponent(new BleedingComponent(Hit, User, 5f, Damage * .15f));
             };
-            SoundPlayer.PlaySound(SoundType.BowSound, Player.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
+            SoundPlayer.PlaySound(SoundType.BowSound, User.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
             World.AddWorldObject(weaponProj);
         }
 

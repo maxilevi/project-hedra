@@ -15,7 +15,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
 
         protected override ChargeableComponent CreateComponent()
         {
-            return new FocusComponent(Player, ChargeTime, DamageBonus);
+            return new FocusComponent(User, ChargeTime, DamageBonus);
         }
 
         public override string Description => Translations.Get("focus_desc");

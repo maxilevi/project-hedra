@@ -24,13 +24,13 @@ namespace Hedra.Engine.SkillSystem.Warrior.Paladin
             {
                 _hasMinion = true;
                 Victim.RemoveComponent(Victim.SearchComponent<BasicAIComponent>());
-                Victim.AddComponent(new MinionAIComponent(Victim, Player));
+                Victim.AddComponent(new MinionAIComponent(Victim, User));
                 Victim.Model.Outline = true;
                 Victim.Model.OutlineColor = OutlineColor;
                 Victim.IsFriendly = true;
                 Victim.RemoveComponent(Victim.SearchComponent<HealthBarComponent>());
                 Victim.AddComponent(new HealthBarComponent(Victim, Victim.Name, HealthBarType.Gold, OutlineColor.ToColor()));
-                Victim.SearchComponent<DamageComponent>().Ignore(E => E == Player || E.SearchComponent<MinionAIComponent>()?.Owner == Player);
+                Victim.SearchComponent<DamageComponent>().Ignore(E => E == User || E.SearchComponent<MinionAIComponent>()?.Owner == User);
                 Victim.SearchComponent<DamageComponent>().OnDeadEvent += A => _hasMinion = false;
             }
         }

@@ -107,7 +107,7 @@ namespace Hedra.Engine.EntitySystem
         private static void SelectAndSpawnMiniBoss(Vector3 DesiredPosition, Random Rng)
         {
             var region = World.BiomePool.GetRegion(DesiredPosition);
-            var templates = region.Mob.SpawnerSettings.MiniBosses.OrderBy(T => T.Chance).ToArray();
+            var templates = region.Mob.SpawnerSettings.MiniBosses;
             var rng = Rng.NextFloat();
             var sum = Math.Abs(templates.Sum(T => T.Chance) - 100f);
             if(sum > 0.01f)
@@ -115,6 +115,7 @@ namespace Hedra.Engine.EntitySystem
             
             var template = default(MiniBossTemplate);
             var accum = 0f;
+            templates.Shuffle(Rng);
             for (var i = 0; i < templates.Length; ++i)
             {
                 var chance = templates[i].Chance / 100f;
@@ -178,8 +179,11 @@ namespace Hedra.Engine.EntitySystem
                 shore
             };
 
+            templates.Shuffle(Utils.Rng);
+            conditions.Shuffle(Utils.Rng);
             for (var i = 0; i < templates.Length; i++)
             {
+                if (templates[i] == null) continue;
                 if (conditions[i])
                 {
                     SpawnTemplate type = null;
@@ -240,6 +244,7 @@ namespace Hedra.Engine.EntitySystem
         Pug,
         Cow,
         Bear,
+        Lich,
         TotalCount,
         None,
         Unknown

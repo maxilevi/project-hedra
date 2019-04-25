@@ -12,17 +12,17 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
         
         protected override void DoAdd()
         {
-            Player.DamageModifiers += DamageModifier;
+            User.DamageModifiers += DamageModifier;
         }
 
         protected override void DoRemove()
         {
-            Player.DamageModifiers -= DamageModifier;
+            User.DamageModifiers -= DamageModifier;
         }
 
         private void DamageModifier(IEntity Victim, ref float Damage)
         {
-            if (SkillUtils.IsBehind(Player, Victim))
+            if (SkillUtils.IsBehind(User, Victim))
             {
                 Damage *= 1 + DamageBonus;
             }
@@ -30,7 +30,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
 
         protected override bool CheckIfCanDo()
         {
-            return SkillUtils.IsBehindAny(Player);
+            return SkillUtils.IsBehindAny(User);
         }
         
         protected override int MaxLevel => 15;

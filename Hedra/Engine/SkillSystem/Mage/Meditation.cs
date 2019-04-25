@@ -12,12 +12,12 @@ namespace Hedra.Engine.SkillSystem.Mage
         
         protected override void Add()
         {
-            Player.ManaRegenFactor += _accumulatedChange = ManaRegenFormula(); 
+            User.ManaRegenFactor += _accumulatedChange = ManaRegenFormula(); 
         }
 
         protected override void Remove()
         {
-            Player.ManaRegenFactor -= _accumulatedChange;
+            User.ManaRegenFactor -= _accumulatedChange;
             _accumulatedChange = 0;
         }
 

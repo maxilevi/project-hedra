@@ -1,4 +1,5 @@
 using Hedra.Core;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
 using Hedra.Rendering.Particles;
@@ -7,7 +8,12 @@ using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Mage
 {
-    public abstract class RadiusEffectSkill : SingleAnimationSkill
+    public abstract class RadiusEffectSkill : RadiusEffectSkill<IPlayer>
+    {     
+    }
+    
+    public abstract class RadiusEffectSkill<T> : SingleAnimationSkill<T> 
+        where T : class, ISkilledAnimableEntity
     {
         protected sealed override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/MageStaffGroundHit.dae");
         protected sealed override bool CanMoveWhileCasting => false;
@@ -16,18 +22,23 @@ namespace Hedra.Engine.SkillSystem.Mage
         protected override void OnAnimationEnd()
         {
             base.OnAnimationEnd();
-            World.HighlightArea(Player.Position, HighlightColor, Radius, .5f);
+            World.HighlightArea(User.Position, HighlightColor, Radius, .5f);
             SpawnParticles();
-            SoundPlayer.PlaySound(SoundType.GroundQuake, Player.Position);
-            SkillUtils.DoNearby(Player, Radius, Apply);
+            SoundPlayer.PlaySound(SoundType.GroundQuake, User.Position);
+            SkillUtils.DoNearby(User, Radius, Apply);
+        }
+
+
+        private void SpawnParticles()
+        {
+            SpawnParticles(User.Position, Radius, HighlightColor);
         }
         
-        
-        private void SpawnParticles()
+        public static void SpawnParticles(Vector3 Position, float Radius, Vector4 HighlightColor)
         {
             World.Particles.Color = HighlightColor;
             World.Particles.VariateUniformly = true;
-            World.Particles.Position = Player.Position;
+            World.Particles.Position = Position;
             World.Particles.GravityEffect = 0f;
             World.Particles.Scale = Vector3.One * .75f;
             World.Particles.ScaleErrorMargin = Vector3.One * .35f;

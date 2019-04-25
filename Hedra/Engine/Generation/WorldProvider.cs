@@ -602,7 +602,7 @@ namespace Hedra.Engine.Generation
             return model;
         }
 
-        public Entity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed)
+        public SkilledAnimableEntity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed)
         {
             var mob = MobFactory.Build(Type, MobSeed);
             var placeablePosition = this.FindPlaceablePosition(mob, new Vector3(DesiredPosition.X, Physics.HeightAtPosition(DesiredPosition.X, DesiredPosition.Z), DesiredPosition.Z));

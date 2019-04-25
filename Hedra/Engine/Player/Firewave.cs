@@ -16,7 +16,7 @@ namespace Hedra.Engine.Player
     {
         private const int DistanceSquared = 32 * 32;
         private IEntity[] _ignore;
-        private IHumanoid _owner;
+        private IEntity _owner;
         private float _damage;
         private bool _shouldStop;
         private float _charge;
@@ -62,7 +62,8 @@ namespace Hedra.Engine.Player
                 if ((entities[i].Position - _owner.Position).LengthSquared < DistanceSquared)
                 {
                     World.Entities[i].Damage(_damage, _owner, out var exp);
-                    _owner.XP += exp;
+                    if (_owner is IHumanoid humanoid)
+                        humanoid.XP += exp;
                 }
             }
         }
@@ -106,7 +107,7 @@ namespace Hedra.Engine.Player
         {
         }
 
-        public static void Create(IHumanoid Owner, float Damage, float Charge = 1, params IEntity[] Ignore)
+        public static void Create(IEntity Owner, float Damage, float Charge = 1, params IEntity[] Ignore)
         {
             var release = new Firewave(Owner, Owner.Position)
             {

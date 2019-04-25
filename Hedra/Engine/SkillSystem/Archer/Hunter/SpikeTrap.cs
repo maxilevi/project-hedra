@@ -2,13 +2,14 @@ using System.Globalization;
 using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Localization;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.WorldBuilding;
 
 namespace Hedra.Engine.SkillSystem.Archer.Hunter
 {
-    public class SpikeTrap : SingleAnimationSkill
+    public class SpikeTrap : SingleAnimationSkill<IPlayer>
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/SpikeTrap.png");
         protected override int MaxLevel => 15;
@@ -22,24 +23,24 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
 
         protected override void OnEnable()
         {
-            Player.SearchComponent<DamageComponent>().OnDamageEvent += OnCasterDamaged;
+            User.SearchComponent<DamageComponent>().OnDamageEvent += OnCasterDamaged;
         }
 
         protected override void OnDisable()
         {
-            Player.SearchComponent<DamageComponent>().OnDamageEvent -= OnCasterDamaged;
+            User.SearchComponent<DamageComponent>().OnDamageEvent -= OnCasterDamaged;
         }
 
         private void OnCasterDamaged(DamageEventArgs Args)
         {
             if(Args.Victim.IsDead) return;
-            Player.KnockForSeconds(3);
+            User.KnockForSeconds(3);
             Cancel();
         }
 
         private void Place()
         {
-            var trap = new BearTrap(Player, (Player.Model.RightWeaponPosition + Player.Model.LeftWeaponPosition) * .5f, Duration, Damage, Stun);
+            var trap = new BearTrap(User, (User.Model.RightWeaponPosition + User.Model.LeftWeaponPosition) * .5f, Duration, Damage, Stun);
             World.AddWorldObject(trap);
         }
         

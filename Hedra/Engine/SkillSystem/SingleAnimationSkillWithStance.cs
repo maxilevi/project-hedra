@@ -1,8 +1,9 @@
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.Animation;
 
 namespace Hedra.Engine.SkillSystem
 {
-    public abstract class SingleAnimationSkillWithStance : SingleAnimationSkill
+    public abstract class SingleAnimationSkillWithStance : SingleAnimationSkill<IPlayer>
     {
         protected abstract Animation StanceAnimation { get; }
         protected override bool ShouldDisable => _isActive;
@@ -14,8 +15,8 @@ namespace Hedra.Engine.SkillSystem
             base.Update();
             if (_isActive)
             {
-                Player.Model.PlayAnimation(StanceAnimation);
-                Player.LeftWeapon.InAttackStance = true;
+                User.Model.PlayAnimation(StanceAnimation);
+                User.LeftWeapon.InAttackStance = true;
                 if (ShouldQuitStance)
                     End();
             }
@@ -32,7 +33,7 @@ namespace Hedra.Engine.SkillSystem
         protected void End()
         {
             _isActive = false;
-            Player.Model.Reset();
+            User.Model.Reset();
             DoEnd();
             Cooldown = MaxCooldown;
         }

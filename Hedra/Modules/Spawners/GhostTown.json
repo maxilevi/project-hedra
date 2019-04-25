@@ -3,21 +3,45 @@
   "Plains": [
     {
       "Type": "Ghost",
-      "Chance": 100.0
+      "Chance": 25.0
+    },
+    {
+      "Type": "Skeleton",
+      "Chance": 65.0
+    },
+    {
+      "Type": "SkeletonKamikaze",
+      "Chance": 10.0
     }
   ],
 
   "Mountain": [
     {
       "Type": "Ghost",
-      "Chance": 100.0
+      "Chance": 25.0
+    },
+    {
+      "Type": "Skeleton",
+      "Chance": 65.0
+    },
+    {
+      "Type": "SkeletonKamikaze",
+      "Chance": 10.0
     }
   ],
 
   "Forest": [
     {
       "Type": "Ghost",
-      "Chance": 100.0
+      "Chance": 25.0
+    },
+    {
+      "Type": "Skeleton",
+      "Chance": 65.0
+    },
+    {
+      "Type": "SkeletonKamikaze",
+      "Chance": 10.0
     }
   ]
 }

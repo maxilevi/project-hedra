@@ -11,12 +11,12 @@ namespace Hedra.Engine.SkillSystem
 
         protected override void Add()
         {
-            Player.Inventory.AddRestriction(RestrictionIndex, Equipment);
+            User.Inventory.AddRestriction(RestrictionIndex, Equipment);
         }
 
         protected override void Remove()
         {
-            Player.Inventory.RemoveRestriction(RestrictionIndex, Equipment);
+            User.Inventory.RemoveRestriction(RestrictionIndex, Equipment);
         }
     }
 }

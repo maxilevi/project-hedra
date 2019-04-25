@@ -8,7 +8,12 @@
   "Level": 17,
   "AIType": "Hostile",
   "Effects": [],
-  "Drops": [],
+  "Drops": [
+    {
+      "Type": "DarkEssence",
+      "Chance": 15
+    }
+  ],
   "Model": {
     "Handler": "Ghost",
     "AlignWithTerrain" :  false,
@@ -29,11 +34,11 @@
     "AttackAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/Mob/Ghost/GhostAttack0.dae",
-        "Speed": 3.0
+        "Speed": 3.5
       },
       {
         "Path": "$DataFile$/Assets/Chr/Ghost/GhostAttack1.dae",
-        "Speed": 3.0
+        "Speed": 3.5
       }
     ]
   }

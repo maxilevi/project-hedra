@@ -14,15 +14,15 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
         
         protected override void DoEnable()
         {
-            Player.Model.Outline = true;
-            Player.Model.OutlineColor = Colors.Yellow;
-            Player.AddComponent(_staminaComponent = new InfiniteStaminaComponent(Player));
+            User.Model.Outline = true;
+            User.Model.OutlineColor = Colors.Yellow;
+            User.AddComponent(_staminaComponent = new InfiniteStaminaComponent(User));
         }
 
         protected override void DoDisable()
         {
-            Player.Model.Outline = false;
-            Player.RemoveComponent(_staminaComponent);
+            User.Model.Outline = false;
+            User.RemoveComponent(_staminaComponent);
             _staminaComponent = null;
         }
 

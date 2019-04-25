@@ -1,14 +1,15 @@
 using System;
+using Hedra.Engine.SkillSystem;
 using Hedra.EntitySystem;
 
 namespace Hedra.AnimationEvents
 {
     public abstract class AnimationEvent : IDisposable
     {
-        public IEntity Parent { get; set; }
+        public ISkilledAnimableEntity Parent { get; set; }
         public bool Disposed { get; protected set; }
 
-        protected AnimationEvent(IEntity Parent)
+        protected AnimationEvent(ISkilledAnimableEntity Parent)
         {
             this.Parent = Parent;
         }

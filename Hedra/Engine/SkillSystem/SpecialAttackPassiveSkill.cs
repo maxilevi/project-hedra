@@ -12,29 +12,29 @@ namespace Hedra.Engine.SkillSystem
         
         private void BeforeAttack(AttackOptions Options)
         {
-            if(Level > 0 && Player.HasWeapon && Player.LeftWeapon is T weapon)
+            if(Level > 0 && User.HasWeapon && User.LeftWeapon is T weapon)
                 BeforeUse(weapon, Options);
         }
         
         private void AfterAttack(AttackOptions Options)
         {
-            if(Level > 0 && Player.HasWeapon && Player.LeftWeapon is T weapon)
+            if(Level > 0 && User.HasWeapon && User.LeftWeapon is T weapon)
                 AfterUse(weapon, Options);
         }
 
         protected override void Remove()
         {
-            Player.BeforeAttack -= BeforeAttack;
-            Player.AfterAttack -= AfterAttack;
-            Player.Inventory.InventoryUpdated -= InventoryUpdated;
+            User.BeforeAttack -= BeforeAttack;
+            User.AfterAttack -= AfterAttack;
+            User.Inventory.InventoryUpdated -= InventoryUpdated;
             InventoryUpdated();
         }
 
         protected override void Add()
         {
-            Player.BeforeAttack += BeforeAttack;
-            Player.AfterAttack += AfterAttack;
-            Player.Inventory.InventoryUpdated += InventoryUpdated;
+            User.BeforeAttack += BeforeAttack;
+            User.AfterAttack += AfterAttack;
+            User.Inventory.InventoryUpdated += InventoryUpdated;
             InventoryUpdated();
         }
         
@@ -48,13 +48,13 @@ namespace Hedra.Engine.SkillSystem
 
         private void InventoryUpdated()
         {
-            if(_lastWeapon == Player.Inventory.MainWeapon?.Weapon) return;
-            if (_lastWeapon == null && Player.Inventory.MainWeapon.Weapon is T generic)
+            if(_lastWeapon == User.Inventory.MainWeapon?.Weapon) return;
+            if (_lastWeapon == null && User.Inventory.MainWeapon.Weapon is T generic)
             {
                 Add(generic);
                 _lastWeapon = generic;
             }
-            else if (_lastWeapon != null && Player.Inventory.MainWeapon?.Weapon == null)
+            else if (_lastWeapon != null && User.Inventory.MainWeapon?.Weapon == null)
             {
                 Remove(_lastWeapon);
                 _lastWeapon = null;

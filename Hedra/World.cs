@@ -240,7 +240,7 @@ namespace Hedra
             return SpawnMob(Type, DesiredPosition, SeedRng.Next(ushort.MinValue, ushort.MaxValue));
         }
 
-        public static Entity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed)
+        public static SkilledAnimableEntity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed)
         {
             return Provider.SpawnMob(Type, DesiredPosition, MobSeed);
         }

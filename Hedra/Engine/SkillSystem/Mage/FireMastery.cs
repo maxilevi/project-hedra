@@ -10,12 +10,12 @@ namespace Hedra.Engine.SkillSystem.Mage
         
         protected override void Add()
         {
-            Player.Attributes.FireDamageMultiplier += _previousValue = DamageChange;
+            User.Attributes.FireDamageMultiplier += _previousValue = DamageChange;
         }
 
         protected override void Remove()
         {
-            Player.Attributes.FireDamageMultiplier -= _previousValue;
+            User.Attributes.FireDamageMultiplier -= _previousValue;
             _previousValue = 0;
         }
         

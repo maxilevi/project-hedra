@@ -10,12 +10,12 @@ namespace Hedra.Engine.SkillSystem
 { 
     public class MinionAIComponent : BasicAIComponent
     {
-        public IHumanoid Owner { get; }
+        public IEntity Owner { get; }
         private readonly FollowBehaviour _follow;
         private readonly AttackBehaviour _attack;
         private bool _disposed;
 
-        public MinionAIComponent(IEntity Parent, IHumanoid Owner) : base(Parent)
+        public MinionAIComponent(IEntity Parent, IEntity Owner) : base(Parent)
         {
             this.Owner = Owner;
             this.Owner.SearchComponent<DamageComponent>().OnDamageEvent += OnDamage;
@@ -69,7 +69,8 @@ namespace Hedra.Engine.SkillSystem
 
         private void OnKill(DeadEventArgs Args)
         {
-            Owner.XP += Args.Experience;
+            if(Owner is IHumanoid humanoid)
+                humanoid.XP += Args.Experience;
         }
         
         private void Kill()

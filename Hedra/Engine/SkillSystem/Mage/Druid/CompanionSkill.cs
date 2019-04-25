@@ -4,6 +4,7 @@ using Hedra.AISystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.ModuleSystem;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
@@ -11,7 +12,7 @@ using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Mage.Druid
 {
-    public abstract class CompanionSkill : SingleAnimationSkill
+    public abstract class CompanionSkill : SingleAnimationSkill<IPlayer>
     {
         private static bool IsActive => _minion != null;
         private static IEntity _minion;
@@ -41,7 +42,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
 
         protected override void OnAnimationEnd()
         {
-            Player.Movement.Orientate();
+            User.Movement.Orientate();
             _minion = SpawnMinion();
             _isActiveInstance = true;
             Tint = new Vector3(2, .2f, .2f);
@@ -49,14 +50,14 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
 
         protected virtual IEntity SpawnMinion()
         {
-            var minion = World.SpawnMob(CompanionType, Player.Position + Player.Orientation * 12, Utils.Rng);
+            var minion = World.SpawnMob(CompanionType, User.Position + User.Orientation * 12, Utils.Rng);
             minion.RemoveComponent(minion.SearchComponent<BasicAIComponent>());
             minion.RemoveComponent(minion.SearchComponent<HealthBarComponent>());
-            minion.AddComponent(new MinionAIComponent(minion, Player));
+            minion.AddComponent(new MinionAIComponent(minion, User));
             minion.AddComponent(new HealthBarComponent(minion, Translations.Get($"{Keyword}_companion_name"), HealthBarType.Friendly));
-            minion.SearchComponent<DamageComponent>().Ignore(E => E == Player || E == Player.Pet.Pet);
+            minion.SearchComponent<DamageComponent>().Ignore(E => E == User || E == User.Pet.Pet);
             minion.SearchComponent<DamageComponent>().OnDeadEvent += A => SpawnEffect(minion.Physics.TargetPosition);
-            var masterySkill = (CompanionMastery) Player.Toolbar.Skills.First(S => S.GetType() == typeof(CompanionMastery));
+            var masterySkill = (CompanionMastery) User.Toolbar.Skills.First(S => S.GetType() == typeof(CompanionMastery));
             minion.MaxHealth *= masterySkill.HealthMultiplier;
             minion.AttackResistance *= masterySkill.ResistanceMultiplier;
             minion.AttackDamage *= masterySkill.DamageMultiplier;
@@ -112,7 +113,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
             get
             {
                 var template = World.MobFactory.GetFactory(CompanionType.ToString().ToLowerInvariant());
-                var masterySkill = (CompanionMastery) Player.Toolbar.Skills.First(S => S.GetType() == typeof(CompanionMastery));
+                var masterySkill = (CompanionMastery) User.Toolbar.Skills.First(S => S.GetType() == typeof(CompanionMastery));
                 return new[]
                 {
                     Translations.Get("companion_mastery_health_change", (template.MaxHealth * masterySkill.HealthMultiplier).ToString("0.0", CultureInfo.InvariantCulture)),

@@ -204,9 +204,9 @@ namespace HedraTests
             return default(WorldItem);
         }
 
-        public virtual Entity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed)
+        public virtual SkilledAnimableEntity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed)
         {
-            return default(Entity);
+            return default(SkilledAnimableEntity);
         }
 
         public virtual Vector3 FindPlaceablePosition(IEntity Mob, Vector3 DesiredPosition)

@@ -11,12 +11,12 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
         
         protected override void DoAdd()
         {
-            Player.Attributes.CooldownReductionModifier += _previousValue = CooldownReduction;
+            User.Attributes.CooldownReductionModifier += _previousValue = CooldownReduction;
         }
         
         protected override void DoRemove()
         {
-            Player.Attributes.CooldownReductionModifier -= _previousValue;
+            User.Attributes.CooldownReductionModifier -= _previousValue;
             _previousValue = 0;
         }
 

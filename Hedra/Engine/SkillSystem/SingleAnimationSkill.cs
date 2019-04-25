@@ -10,6 +10,7 @@
 using System;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Localization;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.Particles;
@@ -18,16 +19,17 @@ using OpenTK;
 
 namespace Hedra.Engine.SkillSystem
 {
-    /// <summary>
-    /// Description of WeaponThrow.
-    /// </summary>
-    public abstract class SingleAnimationSkill : CappedSkill
+    public abstract class SingleAnimationSkill : SingleAnimationSkill<IPlayer>
+    {
+    }
+    
+    public abstract class SingleAnimationSkill<T> : CappedSkill<T> where T : class, IObjectWithAnimation, ISkillUser, IObjectWithMovement, IObjectWithWeapon, IObjectWithLifeCycle
     {
         protected abstract Animation SkillAnimation { get; }
         protected virtual float AnimationSpeed { get; } = 1;
         protected virtual bool EquipWeapons => true;
         protected virtual bool CanMoveWhileCasting => true;
-        protected virtual bool ShouldCancel => Player.Model.AnimationBlending != SkillAnimation;
+        protected virtual bool ShouldCancel => User.AnimationBlending != SkillAnimation;
         public override float IsAffectingModifier => Casting ? 1 : 0;
         private float _frameCounter;
         private bool _shouldEnd;
@@ -65,34 +67,34 @@ namespace Hedra.Engine.SkillSystem
             Casting = true;
             if (EquipWeapons)
             {
-                Player.IsAttacking = true;
+                User.IsAttacking = true;
             }
             else
             {
-                Player.IsAttacking = false;
-                Player.WasAttacking = false;
-                Player.LeftWeapon.InAttackStance = false;
+                User.IsAttacking = false;
+                User.WasAttacking = false;
+                User.InAttackStance = false;
             }
 
             if (!CanMoveWhileCasting)
             {
-                Player.Movement.CaptureMovement = false;
+                User.CaptureMovement = false;
             }
-            Player.Movement.Orientate();
+            User.Orientate();
             _shouldEnd = false;
             _executedStart = false;
             _executedMid = false;
             _executedEnd = false;
             SkillAnimation.Speed = AnimationSpeed;
-            Player.Model.BlendAnimation(SkillAnimation);
+            User.BlendAnimation(SkillAnimation);
             OnEnable();
         }
 
         private void Disable()
         {
             Casting = false;
-            Player.Movement.CaptureMovement = true;
-            Player.Model.Reset();
+            User.CaptureMovement = true;
+            User.ResetModel();
             OnDisable();
         }
         
@@ -112,7 +114,7 @@ namespace Hedra.Engine.SkillSystem
             OnExecution();
         }
 
-        private bool ShouldEnd => Player.IsDead || Player.IsKnocked || _shouldEnd || ShouldCancel;
+        private bool ShouldEnd => User.IsDead || User.IsKnocked || _shouldEnd || ShouldCancel;
 
         protected void Cancel()
         {

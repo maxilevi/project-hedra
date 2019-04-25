@@ -15,7 +15,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Player
 {   
-    public interface IPlayer : IHumanoid
+    public interface IPlayer : IHumanoid, ISkillUser
     {
         IMessageDispatcher MessageDispatcher { get; }
         ICamera View { get; }

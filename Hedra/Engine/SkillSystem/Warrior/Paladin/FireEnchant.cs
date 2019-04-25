@@ -17,7 +17,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Paladin
         {
             if (Victim.SearchComponent<BurningComponent>() == null)
             {
-                Victim.AddComponent(new BurningComponent(Victim, Player, 5f, Damage));
+                Victim.AddComponent(new BurningComponent(Victim, User, 5f, Damage));
             }
         }
 
@@ -28,13 +28,13 @@ namespace Hedra.Engine.SkillSystem.Warrior.Paladin
             {
                 World.Particles.Color = Particle3D.FireColor;
                 World.Particles.VariateUniformly = false;
-                World.Particles.Position = Player.LeftWeapon.MainMesh.TransformPoint(Vector3.UnitY * (Player.LeftWeapon.MainMesh.CullingBox?.Size.Y * .25f ?? 0));
+                World.Particles.Position = User.LeftWeapon.MainMesh.TransformPoint(Vector3.UnitY * (User.LeftWeapon.MainMesh.CullingBox?.Size.Y * .25f ?? 0));
                 World.Particles.Scale = Vector3.One * .2f;
                 World.Particles.ScaleErrorMargin = new Vector3(.1f,.1f,.1f);
                 World.Particles.Direction = Vector3.UnitY * .2f;
                 World.Particles.ParticleLifetime = 0.75f;
                 World.Particles.GravityEffect = 0.0f;
-                World.Particles.PositionErrorMargin = Vector3.One * (Player.LeftWeapon.MainMesh.CullingBox?.Size.Y * .25f ?? 0);
+                World.Particles.PositionErrorMargin = Vector3.One * (User.LeftWeapon.MainMesh.CullingBox?.Size.Y * .25f ?? 0);
                 World.Particles.Emit();
             }
         }

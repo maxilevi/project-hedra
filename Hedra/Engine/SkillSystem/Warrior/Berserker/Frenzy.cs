@@ -1,32 +1,33 @@
 using System.Globalization;
 using Hedra.Components.Effects;
 using Hedra.Engine.Localization;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.SkillSystem.Warrior.Berserker
 {
-    public class Frenzy : ActivateDurationSkill
+    public class Frenzy : ActivateDurationSkill<IPlayer>
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Frenzy.png");
         private AttackSpeedBonusComponent _component;
         
         protected override void DoEnable()
         {
-            Player.Model.Outline = true;
-            Player.Model.OutlineColor = Colors.Red;
-            Player.AddComponent(_component = new AttackSpeedBonusComponent(Player, Player.BaseAttackSpeed * AttackSpeedChange));
-            Player.Damage(HealthCost, null, out _);
+            User.Model.Outline = true;
+            User.Model.OutlineColor = Colors.Red;
+            User.AddComponent(_component = new AttackSpeedBonusComponent(User, User.BaseAttackSpeed * AttackSpeedChange));
+            User.Damage(HealthCost, null, out _);
         }
 
         protected override void DoDisable()
         {
-            Player.Model.Outline = false;
-            Player.RemoveComponent(_component);
+            User.Model.Outline = false;
+            User.RemoveComponent(_component);
             _component = null;
         }
 
         protected override float CooldownDuration => 22;
-        protected override bool ShouldDisable => Player.Health < HealthCost;
+        protected override bool ShouldDisable => User.Health < HealthCost;
         protected override int MaxLevel => 15;
         protected override float Duration => 5 + 5 * (Level / (float) MaxLevel);
         public override float ManaCost => 0;

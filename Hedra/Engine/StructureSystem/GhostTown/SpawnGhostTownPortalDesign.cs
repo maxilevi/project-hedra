@@ -1,5 +1,6 @@
 using System;
 using Hedra.BiomeSystem;
+using Hedra.Engine.BiomeSystem.GhostTown;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
@@ -10,6 +11,8 @@ namespace Hedra.Engine.StructureSystem.GhostTown
 {
     public class SpawnGhostTownPortalDesign : GhostTownPortalDesign
     {
+        public override int PlateauRadius => 180;
+        protected override bool SpawnNPC => false;
         public static bool Spawned { get; set; }
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
@@ -20,13 +23,14 @@ namespace Hedra.Engine.StructureSystem.GhostTown
         
         public override bool ShouldSetup(Vector2 ChunkOffset, Vector3 TargetPosition, CollidableStructure[] Items, Region Biome, IRandom Rng)
         {
-           return ChunkOffset == World.ToChunkSpace(World.SpawnPoint) && !Spawned;
+           return ChunkOffset == World.ToChunkSpace(Position) && !Spawned;
         }
         
-        protected override GhostTownPortal Create(Vector3 Position, float Size)
+        protected override GhostTownPortal Create(Vector3 TargetPosition, float Size)
         {
             return new SpawnGhostTownPortal(Position, Scale);
         }
-        
+
+        public static Vector3 Position => World.SpawnPoint + GhostTownGenerationDesign.IslandRadius * -Vector3.One * .25f;
     }
 }

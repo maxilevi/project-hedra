@@ -1,8 +1,13 @@
 using Hedra.Engine.Management;
+using Hedra.Engine.Player;
 
 namespace Hedra.Engine.SkillSystem
 {
-    public abstract class ActivateDurationSkill : CappedSkill
+    public abstract class ActivateDurationSkill : ActivateDurationSkill<IPlayer>
+    {
+    }
+    
+    public abstract class ActivateDurationSkill<T> : CappedSkill<T> where T : ISkillUser
     {
         public override float IsAffectingModifier => _active ? 1 : 0;
         private readonly Timer _timer;

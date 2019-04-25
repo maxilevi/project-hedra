@@ -1,3 +1,4 @@
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.WeaponSystem;
@@ -5,23 +6,23 @@ using OpenTK;
 
 namespace Hedra.Engine.SkillSystem
 {
-    public abstract class WeaponBonusSkill : CappedSkill
+    public abstract class WeaponBonusSkill : CappedSkill<IPlayer>
     {
         private Weapon _activeWeapon;
         protected bool IsActive { get; set; }
         
         protected override void DoUse()
         {
-            Player.DamageModifiers += ApplyBonusToEnemy;
-            Player.AfterDamaging += AfterDamaging;
-            Player.AfterAttack += AfterAttack;
+            User.DamageModifiers += ApplyBonusToEnemy;
+            User.AfterDamaging += AfterDamaging;
+            User.AfterAttack += AfterAttack;
             IsActive = true;
         }
         private void AfterDamaging(IEntity Victim, float Damage)
         {
-            Player.DamageModifiers -= ApplyBonusToEnemy;
-            Player.AfterDamaging -= AfterDamaging;
-            Player.AfterAttack -= AfterAttack;
+            User.DamageModifiers -= ApplyBonusToEnemy;
+            User.AfterDamaging -= AfterDamaging;
+            User.AfterAttack -= AfterAttack;
             IsActive = false;
             _activeWeapon.Outline = false;
             _activeWeapon = null;
@@ -39,10 +40,10 @@ namespace Hedra.Engine.SkillSystem
         public override void Update()
         {
             base.Update();
-            if (IsActive && _activeWeapon != Player.LeftWeapon)
+            if (IsActive && _activeWeapon != User.LeftWeapon)
             {
                 if (_activeWeapon != null) _activeWeapon.Outline = false;
-                _activeWeapon = Player.LeftWeapon;
+                _activeWeapon = User.LeftWeapon;
                 _activeWeapon.Outline = true;
                 _activeWeapon.OutlineColor = OutlineColor;
             }

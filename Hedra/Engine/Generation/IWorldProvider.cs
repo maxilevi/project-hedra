@@ -131,7 +131,7 @@ namespace Hedra.Engine.Generation
 
         WorldItem DropItem(Item ItemSpec, Vector3 Position);
 
-        Entity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed);
+        SkilledAnimableEntity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed);
 
         Vector3 FindPlaceablePosition(IEntity Mob, Vector3 DesiredPosition);
 

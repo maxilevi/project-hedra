@@ -9,7 +9,7 @@ using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Mage.Druid
 {
-    public abstract class MorphSkill : ActivateDurationSkill
+    public abstract class MorphSkill : ActivateDurationSkill<IPlayer>
     {
         private const string EquipmentRestriction = "WerewolfHands";
         private static bool _isMorphed;
@@ -40,12 +40,12 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
             _oldModel.Enabled = false;
             if (RestrictWeapons)
             {
-                var oldWeapon = Player.Inventory.MainWeapon;
-                Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentRestriction);
-                Player.Inventory.SetItem(PlayerInventory.WeaponHolder, null);
-                if (oldWeapon != null) Player.Inventory.AddItem(oldWeapon);
-                _oldRestrictions = Player.Inventory.GetRestrictions(PlayerInventory.WeaponHolder);
-                Player.SetWeapon(CustomWeapon);
+                var oldWeapon = User.Inventory.MainWeapon;
+                User.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentRestriction);
+                User.Inventory.SetItem(PlayerInventory.WeaponHolder, null);
+                if (oldWeapon != null) User.Inventory.AddItem(oldWeapon);
+                _oldRestrictions = User.Inventory.GetRestrictions(PlayerInventory.WeaponHolder);
+                User.SetWeapon(CustomWeapon);
             }
 
             MorphEffect();
@@ -54,7 +54,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
 
         private void MorphEffect()
         {
-            SkillUtils.SpawnParticles(Player.Position, Vector4.One);
+            SkillUtils.SpawnParticles(User.Position, Vector4.One);
         }
         
         private void UnMorph()
@@ -65,14 +65,14 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
             _newModel = null;
             if (RestrictWeapons)
             {
-                Player.Inventory.SetRestrictions(PlayerInventory.WeaponHolder, _oldRestrictions);
-                Player.SetWeapon(null);
-                var weapon = Player.Inventory.Search(I =>
+                User.Inventory.SetRestrictions(PlayerInventory.WeaponHolder, _oldRestrictions);
+                User.SetWeapon(null);
+                var weapon = User.Inventory.Search(I =>
                     _oldRestrictions.Contains(I.EquipmentType) || _oldRestrictions.Length == 0);
                 if (weapon != null)
                 {
-                    Player.Inventory.SetItem(Player.Inventory.IndexOf(weapon), null);
-                    Player.Inventory.SetItem(PlayerInventory.WeaponHolder, weapon);
+                    User.Inventory.SetItem(User.Inventory.IndexOf(weapon), null);
+                    User.Inventory.SetItem(PlayerInventory.WeaponHolder, weapon);
                 }
             }
             MorphEffect();
@@ -81,7 +81,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
 
         private AnimatedModel SwitchModel(AnimatedModel New)
         {
-            return Player.Model.SwitchModel(New);
+            return User.Model.SwitchModel(New);
         }
 
         protected abstract void AddEffects();

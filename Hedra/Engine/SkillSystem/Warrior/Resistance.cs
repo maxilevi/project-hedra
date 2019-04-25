@@ -29,23 +29,23 @@ namespace Hedra.Engine.SkillSystem.Warrior
         protected override void Add()
         {
             _addonHealth = HealthFormula() * Level;
-            Player.BonusHealth += _addonHealth;
-            if(Player.Health > Player.MaxHealth) Player.Health = Player.MaxHealth;
+            User.BonusHealth += _addonHealth;
+            if(User.Health > User.MaxHealth) User.Health = User.MaxHealth;
         }
 
         protected override void Remove()
         {
-            Player.BonusHealth -= _addonHealth;
+            User.BonusHealth -= _addonHealth;
         }
 
         public override void Load()
         {
-            Player.BonusHealth += _addonHealth;
+            User.BonusHealth += _addonHealth;
         }
         
         public override void Unload()
         {
-            Player.BonusHealth -= _addonHealth;
+            User.BonusHealth -= _addonHealth;
         }
 
         protected override int MaxLevel => 10;

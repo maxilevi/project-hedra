@@ -14,25 +14,25 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
         
         protected override void SpawnParticle(IEntity Victim)
         {
-            _toHealth = Player.Health;
+            _toHealth = User.Health;
             _fromHealth = Victim.Health;
-            LaunchParticle(Player, Player, Victim, OnReached);
-            LaunchParticle(Player, Victim, Player, OnReached);
+            LaunchParticle(User, User, Victim, OnReached);
+            LaunchParticle(User, Victim, User, OnReached);
         }
 
         protected override void OnStart(IEntity Victim)
         {
             Victim.Model.Outline = true;
             Victim.Model.OutlineColor = Colors.Red;
-            Player.Model.Outline = true;
-            Player.Model.OutlineColor = Colors.Red;
+            User.Model.Outline = true;
+            User.Model.OutlineColor = Colors.Red;
         }
 
         private void OnReached(IEntity From, IEntity To)
         {
             To.Model.Outline = false;
-            if (Player == From) To.Health = _toHealth;
-            if (Player == To) To.Health = _fromHealth;
+            if (User == From) To.Health = _toHealth;
+            if (User == To) To.Health = _fromHealth;
         }
 
         protected override float MaxRadius => 48 + 48 * (Level / (float) MaxLevel);

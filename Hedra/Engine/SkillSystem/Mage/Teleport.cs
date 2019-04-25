@@ -4,6 +4,7 @@ using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
@@ -13,7 +14,7 @@ using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Mage
 {
-    public class Teleport : SingleAnimationSkill
+    public class Teleport : SingleAnimationSkill<IPlayer>
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Teleport.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/MageTeleport.dae");
@@ -23,16 +24,16 @@ namespace Hedra.Engine.SkillSystem.Mage
         protected override void OnEnable()
         {
             base.OnEnable();
-            Player.AddComponent(_component = new TeleportComponent(Player));
+            User.AddComponent(_component = new TeleportComponent(User));
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
-            Player.RemoveComponent(_component);
+            User.RemoveComponent(_component);
             _component = null;
-            Player.Physics.TargetPosition += Player.View.LookingDirection * Distance;
-            Player.Physics.TargetPosition = World.FindPlaceablePosition(Player, Player.Physics.TargetPosition);
+            User.Physics.TargetPosition += User.View.LookingDirection * Distance;
+            User.Physics.TargetPosition = World.FindPlaceablePosition(User, User.Physics.TargetPosition);
         }
 
         private class TeleportComponent : Component<IHumanoid>

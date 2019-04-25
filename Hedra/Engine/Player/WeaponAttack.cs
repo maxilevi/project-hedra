@@ -21,7 +21,7 @@ namespace Hedra.Engine.Player
     /// <summary>
     /// Description of WeaponAttack.
     /// </summary>
-    public class WeaponAttack : BaseSkill
+    public class WeaponAttack : BaseSkill<IPlayer>
     {
         private const float BaseChargeTime = 2.0f;
         private const float ExtraChargeTime = 2.5f;
@@ -65,9 +65,9 @@ namespace Hedra.Engine.Player
                     DamageModifier = AttackOptions.Default.DamageModifier * charge + .15f
                 };
                 if(_type == AttackType.Primary)
-                    Player.LeftWeapon.Attack1(Player, options);
+                    User.LeftWeapon.Attack1(User, options);
                 else
-                    Player.LeftWeapon.Attack2(Player, options);
+                    User.LeftWeapon.Attack2(User, options);
                 IsCharging = false;
             }
         }
@@ -88,22 +88,22 @@ namespace Hedra.Engine.Player
         public override void Update()
         {
             if(DisableWeapon) return;
-            if (Player.IsDead) _continousAttack = false;
+            if (User.IsDead) _continousAttack = false;
             if(_continousAttack)
             {
-                Player.LeftWeapon.Attack1(Player);
+                User.LeftWeapon.Attack1(User);
             }
             if (IsCharging)
             {
-                Player.LeftWeapon.InAttackStance = true;
-                Player.Movement.Orientate();
+                User.LeftWeapon.InAttackStance = true;
+                User.Movement.Orientate();
                 _chargeTime = Math.Min(_chargeTime + Time.DeltaTime, BaseChargeTime + ExtraChargeTime);
                 Charge = _chargeTime / (BaseChargeTime + ExtraChargeTime);
                 _shiverAnimation.Intensity = Charge;
                 _shiverAnimation.Update();
-                Player.LeftWeapon.ChargingIntensity = Charge;
+                User.LeftWeapon.ChargingIntensity = Charge;
             }
-            Player.LeftWeapon.IsCharging = IsCharging;
+            User.LeftWeapon.IsCharging = IsCharging;
             Tint = IsCharging ? new Vector3(1,0,0) * Charge + Vector3.One * .65f : Vector3.One;
         }
 
@@ -115,7 +115,7 @@ namespace Hedra.Engine.Player
                 _isCharging = value;
                 _chargeTime = value ? _chargeTime : 0;
                 Charge = value ? Charge : 0;
-                Player.LeftWeapon.Charging = value; 
+                User.LeftWeapon.Charging = value; 
                 if(value) _shiverAnimation.Play(this);
                 else _shiverAnimation.Stop();
             }
@@ -123,13 +123,13 @@ namespace Hedra.Engine.Player
 
         private bool CanUse()
         {
-            return !DisableWeapon && (!Player.IsAttacking && !Player.IsEating && Player.CanInteract
-                    && (Player.LeftWeapon.PrimaryAttackEnabled && _type == AttackType.Primary ||
-                        Player.LeftWeapon.SecondaryAttackEnabled && _type == AttackType.Secondary));
+            return !DisableWeapon && (!User.IsAttacking && !User.IsEating && User.CanInteract
+                    && (User.LeftWeapon.PrimaryAttackEnabled && _type == AttackType.Primary ||
+                        User.LeftWeapon.SecondaryAttackEnabled && _type == AttackType.Secondary));
         }
         
         protected override bool ShouldDisable => !CanUse();
-        private bool ShouldCharge => AttackType.Secondary == _type || Player.LeftWeapon.IsChargeable;
+        private bool ShouldCharge => AttackType.Secondary == _type || User.LeftWeapon.IsChargeable;
         public override uint IconId => _textureId;
         protected override bool HasCooldown => false;
         public override float ManaCost => 0;

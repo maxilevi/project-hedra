@@ -12,6 +12,7 @@ using System.Globalization;
 using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.Localization;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
@@ -23,7 +24,7 @@ namespace Hedra.Engine.SkillSystem.Warrior
     /// <summary>
     /// Description of Bash.
     /// </summary>
-    public sealed class Bash : CappedSkill
+    public sealed class Bash : CappedSkill<IPlayer>
     {
         private readonly Animation _bashAnimation;
         
@@ -57,27 +58,27 @@ namespace Hedra.Engine.SkillSystem.Warrior
         {
             World.Entities.ToList().ForEach(delegate(IEntity Entity)
             {
-                if(Entity == Player) return;
+                if(Entity == User) return;
                     
-                var dot = Vector3.Dot((Entity.Position - Player.Position).NormalizedFast(), Player.Orientation);
-                if(dot >= Radius && (Entity.Position - Player.Position).LengthSquared < Math.Pow(Range, 2))
+                var dot = Vector3.Dot((Entity.Position - User.Position).NormalizedFast(), User.Orientation);
+                if(dot >= Radius && (Entity.Position - User.Position).LengthSquared < Math.Pow(Range, 2))
                 {
                     if (Utils.Rng.Next(0, 5) == 1)
                     {
                         Entity.KnockForSeconds(1.5f);
                         Entity.Physics.Translate(-Entity.Orientation);
                     }
-                    Entity.Damage(Damage * dot * 1.25f, Player, out var exp);
-                    Player.XP += exp;
+                    Entity.Damage(Damage * dot * 1.25f, User, out var exp);
+                    User.XP += exp;
                 }
             });
-            Player.Movement.Orientate();
+            User.Movement.Orientate();
         }
 
         protected override void DoUse()
         {
-            SoundPlayer.PlaySound(SoundType.SlashSound, Player.Position);
-            Player.Model.BlendAnimation(_bashAnimation);
+            SoundPlayer.PlaySound(SoundType.SlashSound, User.Position);
+            User.Model.BlendAnimation(_bashAnimation);
         }
 
         private float Damage => Math.Min(BaseDamage + DamageChangeRate * Level, DamageCap);

@@ -3,12 +3,13 @@ using System.Globalization;
 using Hedra.Components.Effects;
 using Hedra.Core;
 using Hedra.Engine.Localization;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 
 namespace Hedra.Engine.SkillSystem.Archer
 {
-    public class Jab : SingleAnimationSkill
+    public class Jab : SingleAnimationSkill<IPlayer>
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Jab.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/ArcherJab.dae");
@@ -20,16 +21,16 @@ namespace Hedra.Engine.SkillSystem.Archer
 
         protected override void OnExecution()
         {
-            Player.Movement.Orientate();
+            User.Movement.Orientate();
         }
 
         protected override void OnAnimationMid()
         {
-            SkillUtils.DamageNearby(Player, Damage, 24, .65f);
-            SkillUtils.DoNearby(Player, 24, .75f, (E, D) =>
+            SkillUtils.DamageNearby(User, Damage, 24, .65f);
+            SkillUtils.DoNearby(User, 24, .75f, (E, D) =>
             {
                 if(Utils.Rng.NextFloat() < BleedChance && E.SearchComponent<BleedingComponent>() == null)
-                    E.AddComponent(new BleedingComponent(E, Player, 4, Damage * .5f));
+                    E.AddComponent(new BleedingComponent(E, User, 4, Damage * .5f));
             });
         }
 

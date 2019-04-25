@@ -1,12 +1,13 @@
 using System.Globalization;
 using Hedra.Core;
 using Hedra.Engine.Localization;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 
 namespace Hedra.Engine.SkillSystem.Rogue.Ninja
 {
-    public class TigerStrike : SingleAnimationSkill
+    public class TigerStrike : SingleAnimationSkill<IPlayer>
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/TigerStrike.png");
         protected override Animation SkillAnimation { get; }  = AnimationLoader.LoadAnimation("Assets/Chr/RogueTigerStrike.dae");
@@ -16,13 +17,13 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
 
         protected override void OnAnimationMid()
         {
-            SkillUtils.DoNearby(Player, 20f, .85f, (Entity, F) =>
+            SkillUtils.DoNearby(User, 20f, .85f, (Entity, F) =>
             {
-                Entity.Damage(Damage * F, Player, out var xp);
-                Player.XP += xp;
+                Entity.Damage(Damage * F, User, out var xp);
+                User.XP += xp;
                 if (Utils.Rng.NextFloat() < StunChance)
                 {
-                    Player.KnockForSeconds(StunTime);
+                    User.KnockForSeconds(StunTime);
                 }
             });
         }

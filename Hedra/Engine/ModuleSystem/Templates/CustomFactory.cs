@@ -8,6 +8,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem.ModelHandlers;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.SkillSystem;
 using Hedra.EntitySystem;
 
 namespace Hedra.Engine.ModuleSystem.Templates
@@ -35,7 +36,7 @@ namespace Hedra.Engine.ModuleSystem.Templates
             AssetManager.LoadHitbox(Model.Path);
         }
 
-        public void Apply(Entity Mob, bool NormalizeValues = true)
+        public void Apply(SkilledAnimableEntity Mob, bool NormalizeValues = true)
         {
             Mob.Model = new QuadrupedModel(Mob, Model);
             Mob.MaxHealth = MaxHealth;
@@ -67,7 +68,6 @@ namespace Hedra.Engine.ModuleSystem.Templates
                 DropChance = 50
             };
             Mob.AddComponent(drop);
-            
 
             foreach (var template in Drops)
             {

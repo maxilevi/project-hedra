@@ -4,6 +4,7 @@ using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
@@ -11,7 +12,7 @@ using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Warrior
 {
-    public class Intercept : CappedSkill
+    public class Intercept : CappedSkill<IPlayer>
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Intercept.png");
         public override string Description => Translations.Get("intercept_desc");
@@ -47,20 +48,20 @@ namespace Hedra.Engine.SkillSystem.Warrior
             base.Update();
 
             if (!_isMoving) return;
-            if (Player.Model.AnimationBlending == null)
+            if (User.Model.AnimationBlending == null)
             {
-                Player.Model.BlendAnimation(_interceptStance);
+                User.Model.BlendAnimation(_interceptStance);
             }
 
             if (_dmgTimer.Tick())
             {
                 World.Entities.ToList().ForEach(delegate(IEntity Entity)
                 {
-                    if ((Entity.Position - Player.Position).LengthSquared < 4 * 4 && !Entity.IsKnocked && Player != Entity)
+                    if ((Entity.Position - User.Position).LengthSquared < 4 * 4 && !Entity.IsKnocked && User != Entity)
                     {
                         Entity.KnockForSeconds(3f);
-                        Entity.Damage(Damage, Player, out var exp);
-                        Player.XP += exp;
+                        Entity.Damage(Damage, User, out var exp);
+                        User.XP += exp;
                     }
                 });
             }
@@ -75,38 +76,38 @@ namespace Hedra.Engine.SkillSystem.Warrior
 
         private void EmitParticles()
         {
-            var underChunk = World.GetChunkAt(Player.Position);
+            var underChunk = World.GetChunkAt(User.Position);
             if (underChunk != null)
             {
                 World.Particles.Color = Vector4.One;
                 World.Particles.VariateUniformly = true;
-                World.Particles.Position = Player.Position - Vector3.UnitY + Player.Orientation * 5f;
+                World.Particles.Position = User.Position - Vector3.UnitY + User.Orientation * 5f;
                 World.Particles.Scale = Vector3.One * .5f;
                 World.Particles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
-                World.Particles.Direction = (-Player.Orientation + Vector3.UnitY * 2.75f) * .15f;
+                World.Particles.Direction = (-User.Orientation + Vector3.UnitY * 2.75f) * .15f;
                 World.Particles.ParticleLifetime = 1f;
                 World.Particles.GravityEffect = .1f;
-                World.Particles.PositionErrorMargin = new Vector3(Player.Model.Dimensions.Size.X, 2, Player.Model.Dimensions.Size.Z) * .5f;
+                World.Particles.PositionErrorMargin = new Vector3(User.Model.Dimensions.Size.X, 2, User.Model.Dimensions.Size.Z) * .5f;
             }
             World.Particles.Emit();
         }
 
         private void End()
         {
-            Player.Movement.CaptureMovement = true;
-            Player.Model.Reset();
+            User.Movement.CaptureMovement = true;
+            User.Model.Reset();
         }
 
         protected override void DoUse()
         {
             if(_isMoving) return;
-            Player.Movement.Orientate();
-            Player.Model.BlendAnimation(_interceptStance);
+            User.Movement.Orientate();
+            User.Model.BlendAnimation(_interceptStance);
             _isMoving = true;
             _timer.AlertTime = Duration;
             _timer.Reset();
-            Player.Movement.CaptureMovement = false;
-            Player.Movement.Move(Player.Physics.MoveFormula(Player.View.LookingDirection.Xz.ToVector3().NormalizedFast()) * 1.5f, Duration, false);
+            User.Movement.CaptureMovement = false;
+            User.Movement.Move(User.Physics.MoveFormula(User.View.LookingDirection.Xz.ToVector3().NormalizedFast()) * 1.5f, Duration, false);
         }
 
         public override string[] Attributes => new[]

@@ -11,6 +11,7 @@ using System;
 using System.Globalization;
 using Hedra.Core;
 using Hedra.Engine.Localization;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Sound;
@@ -21,7 +22,7 @@ namespace Hedra.Engine.SkillSystem.Archer
     /// <summary>
     /// Description of Bash.
     /// </summary>
-    public class Kick : SingleAnimationSkill
+    public class Kick : SingleAnimationSkill<IPlayer>
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Kick.png");    
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/ArcherKick.dae");
@@ -31,18 +32,18 @@ namespace Hedra.Engine.SkillSystem.Archer
         public override float ManaCost => 40;
         protected override float AnimationSpeed => 1.3f;
         protected override int MaxLevel => 20;
-        protected override bool ShouldDisable => Player.IsAttacking || Player.IsCasting;
+        protected override bool ShouldDisable => User.IsAttacking || User.IsCasting;
         private bool _emitParticles;
         private bool _shouldPush;
 
         protected override void OnAnimationMid()
         {
             _shouldPush = true;
-            SkillUtils.DoNearby(Player, 24, .25f, (E, D) =>
+            SkillUtils.DoNearby(User, 24, .25f, (E, D) =>
             {
                 if(Utils.Rng.Next(0, 4) == 1 && !E.IsKnocked) E.KnockForSeconds(3f);
             });
-            SoundPlayer.PlaySound(SoundType.SwooshSound, Player.Position, false, 0.8f, 1f);
+            SoundPlayer.PlaySound(SoundType.SwooshSound, User.Position, false, 0.8f, 1f);
         }
 
         protected override void OnAnimationStart()
@@ -58,10 +59,10 @@ namespace Hedra.Engine.SkillSystem.Archer
 
         protected override void OnExecution()
         {
-            Player.Movement.Orientate();
+            User.Movement.Orientate();
             if(_shouldPush)
                 PushEntitiesAway();
-            SkillUtils.DamageNearby(Player, Damage * Time.DeltaTime, 24, .25f, false);
+            SkillUtils.DamageNearby(User, Damage * Time.DeltaTime, 24, .25f, false);
             
             if(_emitParticles) return;
             World.Particles.Color = new Vector4(1,1,1,1);
@@ -70,8 +71,8 @@ namespace Hedra.Engine.SkillSystem.Archer
             World.Particles.Direction = Vector3.Zero;
             World.Particles.Scale = new Vector3(.5f,.5f,.5f);
             World.Particles.Position = 
-                Player.Model.TransformFromJoint(Player.Model.JointDefaultPosition(Player.Model.RightFootJoint)
-                                                + Vector3.UnitZ * 3f, Player.Model.RightFootJoint);
+                User.Model.TransformFromJoint(User.Model.JointDefaultPosition(User.Model.RightFootJoint)
+                                                + Vector3.UnitZ * 3f, User.Model.RightFootJoint);
             World.Particles.PositionErrorMargin = Vector3.One * 0.75f;
                     
             for(var i = 0; i < 2; i++)
@@ -82,9 +83,9 @@ namespace Hedra.Engine.SkillSystem.Archer
         {
             for(var i = 0; i< World.Entities.Count; i++)
             {
-                if (Player == World.Entities[i]) continue;
-                if (!((Player.Position - World.Entities[i].Position).LengthSquared < 24 * 24)) continue;                  
-                var direction = -(Player.Position - World.Entities[i].Position).NormalizedFast();
+                if (User == World.Entities[i]) continue;
+                if (!((User.Position - World.Entities[i].Position).LengthSquared < 24 * 24)) continue;                  
+                var direction = -(User.Position - World.Entities[i].Position).NormalizedFast();
                 World.Entities[i].Physics.DeltaTranslate(direction * 64f);
             }
         }

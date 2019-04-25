@@ -1,11 +1,12 @@
 using System;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.SkillSystem
 {
-    public abstract class WeaponBonusWithAnimationSkill : SingleAnimationSkill
+    public abstract class WeaponBonusWithAnimationSkill : SingleAnimationSkill<IPlayer>
     {
         private readonly WeaponBonusSkillComposition _skill;
         

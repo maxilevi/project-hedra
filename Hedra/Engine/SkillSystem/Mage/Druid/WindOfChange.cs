@@ -27,10 +27,10 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
                 PushEnemies();
                 if (_timer.Tick())
                 {
-                    SkillUtils.DoNearby(Player, PushDistance, 0, (E, F) =>
+                    SkillUtils.DoNearby(User, PushDistance, 0, (E, F) =>
                     {
-                        E.Damage(Damage * F * _timer.AlertTime / Duration, Player, out var xp);
-                        Player.XP += xp;
+                        E.Damage(Damage * F * _timer.AlertTime / Duration, User, out var xp);
+                        User.XP += xp;
                     });
                 }
             }
@@ -48,17 +48,17 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
 
         private void SpawnEffect()
         {
-            Player.Movement.Orientate();
+            User.Movement.Orientate();
             _particles.Color = Vector4.One * 2f;
             _particles.VariateUniformly = true;
-            _particles.Position = Player.Position + Vector3.UnitY * Player.Model.Height * .5f - Player.LookingDirection.Xz.ToVector3() * 6f;
+            _particles.Position = User.Position + Vector3.UnitY * User.Model.Height * .5f - User.LookingDirection.Xz.ToVector3() * 6f;
             _particles.GravityEffect = 0.0f;
             _particles.Scale = Vector3.One * .75f;
             _particles.ScaleErrorMargin = Vector3.One * .35f;
             _particles.PositionErrorMargin = new Vector3(16, 16, 16) * 3f;
             _particles.Shape = ParticleShape.Sphere;
             _particles.ParticleLifetime = Duration;
-            _particles.Direction = Player.LookingDirection * 5f;
+            _particles.Direction = User.LookingDirection * 5f;
             for(var i = 0; i < 15; ++i)
             {
                 _particles.Emit();
@@ -67,9 +67,9 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
 
         private void PushEnemies()
         {
-            SkillUtils.DoNearby(Player, PushDistance, 0, (E, F) =>
+            SkillUtils.DoNearby(User, PushDistance, 0, (E, F) =>
             {
-                E.Physics.DeltaTranslate(-(Player.Position - E.Position).Xz.NormalizedFast().ToVector3() * 80f);
+                E.Physics.DeltaTranslate(-(User.Position - E.Position).Xz.NormalizedFast().ToVector3() * 80f);
             });
         }
 

@@ -8,7 +8,7 @@ namespace Hedra.Engine.BiomeSystem.GhostTown
 {
     public class GhostTownGenerationDesign : NormalBiomeGenerationDesign
     {
-        private const float Radius = 2048;
+        public const float IslandRadius = 2048;
         public override bool HasPaths => false;
         public override bool HasRivers => true;
         public override bool HasDirt => false;
@@ -27,7 +27,7 @@ namespace Hedra.Engine.BiomeSystem.GhostTown
 
         private static float HeightMultiplier(Vector2 Position)
         {
-            return 1f - Math.Max(0, Math.Min(1, (Position - World.SpawnPoint.Xz).LengthFast / Radius ));
+            return 1f - Math.Max(0, Math.Min(1, (Position - World.SpawnPoint.Xz).LengthFast / IslandRadius ));
         }
     }
 }

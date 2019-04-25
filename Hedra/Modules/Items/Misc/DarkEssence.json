@@ -1,0 +1,21 @@
+{
+  "Name": "DarkEssence",
+  "DisplayName": "DarkEssence",
+  "Tier": "Misc",
+  "Description": "Essential for crafting dark-style weapons",
+  "Attributes": [
+    {
+      "Name": "Amount",
+      "Value": 1
+    },
+    {
+      "Name": "Price",
+      "Value": 70.0,
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Misc/DarkEssence.ply"
+  }
+}

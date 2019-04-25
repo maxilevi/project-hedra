@@ -54,9 +54,9 @@ namespace Hedra.Engine.ModuleSystem
                 return _factories[Type.ToLowerInvariant()];
         }
 
-        public Entity Build(string Type, int Seed)
+        public SkilledAnimableEntity Build(string Type, int Seed)
         {
-            var mob = new Entity();
+            var mob = new SkilledAnimableEntity();
 
             lock (_lock)
             {

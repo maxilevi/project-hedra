@@ -1,16 +1,18 @@
+using Hedra.Engine.Player;
+using Hedra.EntitySystem;
 using Hedra.WeaponSystem;
 
 namespace Hedra.Engine.SkillSystem
 {
-    public abstract class SpecialAttackSkill<T> : CappedSkill where T : Weapon
+    public abstract class SpecialAttackSkill<T> : CappedSkill<IPlayer> where T : Weapon
     {
-        protected override bool ShouldDisable => !Player.HasWeapon || !(Player.LeftWeapon is T weapon) || !weapon.PrimaryAttackEnabled;
+        protected override bool ShouldDisable => !User.HasWeapon || !(User.LeftWeapon is T weapon) || !weapon.PrimaryAttackEnabled;
 
         protected override void DoUse()
         {
-            var weapon = (T) Player.LeftWeapon;
+            var weapon = (T) User.LeftWeapon;
             BeforeUse(weapon);
-            weapon.Attack1(Player);
+            weapon.Attack1(User);
         }
 
         public override void Update()

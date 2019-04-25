@@ -15,16 +15,16 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
         
         protected override void AddEffects()
         {
-            Player.AddComponent(_attackSpeed = new AttackSpeedBonusComponent(Player, Player.AttackSpeed * AttackSpeedMultiplier));
-            Player.AddComponent(_attackPower = new AttackPowerBonusComponent(Player, Player.AttackPower * AttackPowerMultiplier));
-            Player.AddComponent(_speedBonus = new SpeedBonusComponent(Player, Player.Speed * SpeedMultiplier));
+            User.AddComponent(_attackSpeed = new AttackSpeedBonusComponent(User, User.AttackSpeed * AttackSpeedMultiplier));
+            User.AddComponent(_attackPower = new AttackPowerBonusComponent(User, User.AttackPower * AttackPowerMultiplier));
+            User.AddComponent(_speedBonus = new SpeedBonusComponent(User, User.Speed * SpeedMultiplier));
         }
 
         protected override void RemoveEffects()
         {
-            Player.RemoveComponent(_attackSpeed);
-            Player.RemoveComponent(_attackPower);
-            Player.RemoveComponent(_speedBonus);
+            User.RemoveComponent(_attackSpeed);
+            User.RemoveComponent(_attackPower);
+            User.RemoveComponent(_speedBonus);
             _speedBonus = null;
             _attackPower = null;
             _attackSpeed = null;

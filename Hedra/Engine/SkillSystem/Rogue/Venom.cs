@@ -23,19 +23,19 @@ namespace Hedra.Engine.SkillSystem.Rogue
     {
         protected override void BeforeUse(RogueWeapon Weapon, AttackOptions Options)
         {
-            Player.AfterDamaging += AfterDamaging;
+            User.AfterDamaging += AfterDamaging;
         }
 
         protected override void AfterUse(RogueWeapon Weapon, AttackOptions Options)
         {
-            Player.AfterDamaging -= AfterDamaging;
+            User.AfterDamaging -= AfterDamaging;
         }
         
         private void AfterDamaging(IEntity Victim, float Amount)
         {
             if (Utils.Rng.NextFloat() < Chance && Victim.SearchComponent<PoisonComponent>() == null)
             {
-                Victim.AddComponent(new PoisonComponent(Victim, Player, 5, Damage));
+                Victim.AddComponent(new PoisonComponent(Victim, User, 5, Damage));
             }
         }
         

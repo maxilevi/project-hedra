@@ -1,0 +1,40 @@
+{
+  "Name" : "SkeletonKamikaze",
+  "MaxHealth": 84.0,
+  "AttackDamage": 24.0,
+  "AttackCooldown": 1.5,
+  "Speed": 1.4,
+  "XP": 4.0,
+  "Level": 11,
+  "AIType": "SkeletonKamikaze",
+  "Effects": [],
+  "Drops": [
+    {
+      "Type": "Bone",
+      "Chance": 25
+    }
+  ],
+  "Model": {
+    "AlignWithTerrain" :  false,
+    "Path": "$DataFile$/Assets/Chr/SkeletonKamikazeIdle.dae",
+    "Scale": 0.8,
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/SkeletonKamikazeIdle.dae",
+        "Speed": 1.0
+      }
+    ],
+    "WalkAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/WarriorWalk.dae",
+        "Speed": 1.0
+      }
+    ],
+    "AttackAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/WarriorHeadbutt.dae",
+        "Speed": 1.0
+      }
+    ]
+  }
+}

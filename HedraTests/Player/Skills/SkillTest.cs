@@ -28,7 +28,8 @@ namespace HedraTests.Player.Skills
             Player.LeftWeapon = weaponMock.Object;
             GameManager.Player = Player;
             Skill = new T();
-            Skill.Initialize(Vector2.Zero, Vector2.One, new Panel(), Player);
+            Skill.InitializeUI(Vector2.Zero, Vector2.One, new Panel());
+            Skill.Initialize(Player);
             var abilityTreeMock = new Mock<IAbilityTree>();
             abilityTreeMock.Setup(A => A.SetPoints(It.IsAny<Type>(), It.IsAny<int>())).Callback(delegate(Type T, int L)
             {

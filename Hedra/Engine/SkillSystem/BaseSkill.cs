@@ -16,34 +16,59 @@ using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.UI;
+using Hedra.EntitySystem;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.SkillSystem
 {
     public delegate void OnStateUpdated();
-    
-    /// <summary>
-    /// Description of Skill.
-    /// </summary>
-    public abstract class BaseSkill : DrawableTexture, UIElement, IRenderable, IUpdatable, ISimpleTexture, IAdjustable
+
+    public abstract class BaseSkill : DrawableTexture, UIElement
+    {
+        public event OnStateUpdated StateUpdated;
+        public int Level { get; set; }
+        public abstract uint IconId { get; }
+        public bool IsAffecting => IsAffectingModifier > 0;
+        public virtual bool Passive { get; set; }
+        public abstract float ManaCost { get; }
+        public bool Active { get; set; } = true;
+        public bool Casting { get; set; }
+        public abstract float MaxCooldown { get; }
+        public virtual float IsAffectingModifier => Passive ? 1 : 0;
+        public abstract Vector2 Scale { get; set; }
+        public abstract Vector2 Position { get; set; }
+        public abstract void InitializeUI(Vector2 Position, Vector2 Scale, Panel InPanel);
+        public abstract void Initialize(ISkillUser User);
+        public abstract void Enable();
+        public abstract void Disable();
+        public abstract void Dispose();
+        public abstract bool MeetsRequirements();
+        public abstract bool CanBeCastedWhileAttacking { get; }
+        public abstract void Use();
+        public abstract void Reset();
+        protected abstract void DoUse();
+        public abstract void ResetCooldown();
+        public abstract void KeyUp();
+        public abstract void Unload();
+        public abstract void Load();
+        public abstract string[] Attributes { get; }
+        public abstract string Description { get; }
+        public abstract string DisplayName { get; }
+        public abstract bool PlaySound { get; }
+        
+        protected void InvokeStateUpdated()
+        {
+            StateUpdated?.Invoke();
+        }
+    }
+    public abstract class BaseSkill<T> : BaseSkill, IRenderable, IUpdatable, ISimpleTexture, IAdjustable where T : ISkillUser
     {
         private static readonly Shader Shader = Shader.Build("Shaders/Skills.vert", "Shaders/Skills.frag");
         private static readonly Vector3 NormalTint = Vector3.One;
-        public event OnStateUpdated StateUpdated;
-        public bool IsAffecting => IsAffectingModifier > 0;
-        public abstract float MaxCooldown { get; }
-        public abstract float ManaCost { get; }
-        public virtual float IsAffectingModifier => Passive ? 1 : 0;
-        public int Level { get; set; }
-        public bool Active { get; set; } = true;
-        public virtual bool Passive { get; set; }
-        public abstract string Description { get; }
-        public abstract string DisplayName { get; }
-        public bool Casting { get; set; }
         protected float Cooldown { get; set; }
         protected Vector3 Tint { get; set; }
-        protected IPlayer Player => GameManager.Player;
+        protected T User { get; set; }
         protected virtual bool HasCooldown => true;
         protected virtual bool ShouldDisable { get; set; }
         private bool _initialized;
@@ -52,14 +77,21 @@ namespace Hedra.Engine.SkillSystem
         private RenderableText _cooldownSecondsText;
         private Panel _panel;
         private Vector2 _position;
-        public abstract uint IconId { get; }
 
         protected BaseSkill()
         {
             /* Invoked via reflection */
         }
 
-        public virtual void Initialize(Vector2 Position, Vector2 Scale, Panel InPanel, IPlayer Player)
+        public override void Initialize(ISkillUser User)
+        {
+            if(!(User is T))
+                throw new ArgumentException($"Provided user must be of type '{typeof(T)}' but is of type '{User.GetType()}'");
+            this.User = (T)User;
+            UpdateManager.Add(this);
+        }
+        
+        public override void InitializeUI(Vector2 Position, Vector2 Scale, Panel InPanel)
         {
             this.Position = Position;
             this.Scale = Scale;
@@ -69,16 +101,14 @@ namespace Hedra.Engine.SkillSystem
             _panel.AddElement(this);
             
             DrawManager.UIRenderer.Add(this, DrawOrder.After);
-            UpdateManager.Add(this);
             _initialized = true;
         }
         
-        public virtual bool MeetsRequirements()
+        public override bool MeetsRequirements()
         {
-            if (Cooldown > 0 || Player.Mana - ManaCost <= 0 ||
-                this.Level <= 0 || !Active || Player.IsEating) return false;
+            if (Cooldown > 0 || User.Mana - ManaCost <= 0 || Level <= 0 || !Active) return false;
 
-            return Player.IsRiding || !Player.IsRiding && !ShouldDisable;
+            return !ShouldDisable && User.CanCastSkill;
         }
         
         public virtual void Draw()
@@ -103,7 +133,7 @@ namespace Hedra.Engine.SkillSystem
             Renderer.Disable(EnableCap.CullFace);
             
             Shader.Bind();
-            Shader["Tint"] = Player.Mana - this.ManaCost < 0 && Tint == NormalTint ? new Vector3(.9f,.6f,.6f) : Tint;
+            Shader["Tint"] = User.Mana - this.ManaCost < 0 && Tint == NormalTint ? new Vector3(.9f,.6f,.6f) : Tint;
             Shader["Scale"] = Scale * new Vector2(1,-1);
             Shader["Position"] = _adjustedPosition;
             Shader["Bools"] = new Vector2(Level == 0 || ShouldDisable ? 1 : 0, 1);
@@ -137,47 +167,41 @@ namespace Hedra.Engine.SkillSystem
             _adjustedPosition = GUITexture.Adjust(Position);
         }
 
-        protected void InvokeStateUpdated()
-        {
-            StateUpdated?.Invoke();
-        }
-        
-        public void ResetCooldown()
+        public override void ResetCooldown()
         {
             Cooldown = 0;
         }
-
+        
         protected void SetOnCooldown()
         {
-            Cooldown = MaxCooldown / Player.Attributes.CooldownReductionModifier;
+            Cooldown = MaxCooldown / User.Attributes.CooldownReductionModifier;
         }
 
-        public virtual bool CanBeCastedWhileAttacking => false;
+        public override bool CanBeCastedWhileAttacking => false;
         protected virtual float OverlayBlending => Cooldown / MaxCooldown;
-        public virtual bool PlaySound => false;
+        public override bool PlaySound => false;
 
-        public void Use()
+        public override void Use()
         {
             SetOnCooldown();
             DoUse();
         }
 
-        public void Reset()
+        public override void Reset()
         {
             Level = 0;
             Update();
         }
 
-        protected abstract void DoUse();
-        public virtual void KeyUp(){}
-        public virtual void Unload(){}
-        public virtual void Load(){}
+        public override void KeyUp(){}
+        public override void Unload(){}
+        public override void Load(){}
         public abstract void Update();
 
-        public Vector2 Scale { get; set; }
-        public virtual string[] Attributes => new string[0];
+        public override Vector2 Scale { get; set; }
+        public override string[] Attributes => new string[0];
 
-        public Vector2 Position
+        public override Vector2 Position
         {
             get => _position;
             set
@@ -187,17 +211,17 @@ namespace Hedra.Engine.SkillSystem
             }
         }
 
-        public void Enable()
+        public override void Enable()
         {
             this.Enabled = true;
         }
         
-        public void Disable()
+        public override void Disable()
         {
             this.Enabled = false;
         }
         
-        public void Dispose()
+        public override void Dispose()
         {
             DrawManager.Remove(this);
             UpdateManager.Remove(this);

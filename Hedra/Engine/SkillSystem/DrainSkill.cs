@@ -16,8 +16,8 @@ namespace Hedra.Engine.SkillSystem
             base.Update();
             if (Casting)
             {
-                if(Player.Mana > ManaPerSecond)
-                    Player.Mana -= ManaPerSecond * Time.DeltaTime;
+                if(User.Mana > ManaPerSecond)
+                    User.Mana -= ManaPerSecond * Time.DeltaTime;
                 else
                     KeyUp();
             }

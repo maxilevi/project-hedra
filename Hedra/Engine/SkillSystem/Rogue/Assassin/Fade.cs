@@ -9,6 +9,7 @@
 
 using System.Globalization;
 using Hedra.Engine.Localization;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
@@ -20,7 +21,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
     /// <summary>
     /// Description of WeaponThrow.
     /// </summary>
-    public class Fade : SingleAnimationSkill
+    public class Fade : SingleAnimationSkill<IPlayer>
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Fade.png");
         protected override int MaxLevel => 20;
@@ -51,22 +52,22 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
 
         private void End()
         {
-            Player.Model.Outline = false;
-            Player.IsInvisible = false;
+            User.Model.Outline = false;
+            User.IsInvisible = false;
             _isFaded = false;
-            Player.AfterDamaging -= AfterDamaging;
+            User.AfterDamaging -= AfterDamaging;
         }
         
         private void Start()
         {
             _isFaded = true;
             _timeRemaining = FadeTime;
-            Player.Model.Outline = true;
-            Player.Model.OutlineColor = new Vector4(.15f, .15f, .15f, 1);
-            Player.IsInvisible = true;
+            User.Model.Outline = true;
+            User.Model.OutlineColor = new Vector4(.15f, .15f, .15f, 1);
+            User.IsInvisible = true;
             SoundPlayer.PlayUISound(SoundType.DarkSound, 1f, .25f);
             InvokeStateUpdated();
-            Player.AfterDamaging += AfterDamaging;
+            User.AfterDamaging += AfterDamaging;
         }
 
         private void AfterDamaging(IEntity Victim, float Damage)
@@ -84,13 +85,13 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
             World.Particles.Color = new Vector4(.2f, .2f, .2f, .8f);
             World.Particles.VariateUniformly = true;
             World.Particles.Position =
-                Player.Position + Vector3.UnitY * Player.Model.Height * .3f;
+                User.Position + Vector3.UnitY * User.Model.Height * .3f;
             World.Particles.Scale = Vector3.One * .25f;
             World.Particles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
-            World.Particles.Direction = -Player.Orientation * .05f;
+            World.Particles.Direction = -User.Orientation * .05f;
             World.Particles.ParticleLifetime = 1.0f;
             World.Particles.GravityEffect = 0.0f;
-            World.Particles.PositionErrorMargin = new Vector3(1.25f, Player.Model.Height * .3f, 1.25f);
+            World.Particles.PositionErrorMargin = new Vector3(1.25f, User.Model.Height * .3f, 1.25f);
             World.Particles.Emit();
         }
 

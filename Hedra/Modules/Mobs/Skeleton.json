@@ -1,0 +1,44 @@
+{
+  "Name" : "Skeleton",
+  "MaxHealth": 334.0,
+  "AttackDamage": 8.0,
+  "AttackCooldown": 1.5,
+  "Speed": 1.4,
+  "XP": 10.0,
+  "Level": 11,
+  "AIType": "Hostile",
+  "Effects": [],
+  "Drops": [
+    {
+      "Type": "Bone",
+      "Chance": 25
+    }
+  ],
+  "Model": {
+    "AlignWithTerrain" :  false,
+    "Path": "$DataFile$/Assets/Chr/SkeletonIdle.dae",
+    "Scale": 0.8,
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/SkeletonIdle.dae",
+        "Speed": 1.0
+      }
+    ],
+    "WalkAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/WarriorWalk.dae",
+        "Speed": 1.0
+      }
+    ],
+    "AttackAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/WarriorLeftPunch.dae",
+        "Speed": 1.25
+      },
+      {
+        "Path": "$DataFile$/Assets/Chr/WarriorRightPunch.dae",
+        "Speed": 1.25
+      }
+    ]
+  }
+}

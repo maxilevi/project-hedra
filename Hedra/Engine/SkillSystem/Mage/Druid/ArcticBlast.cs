@@ -13,7 +13,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
 
         protected override void Apply(IEntity Entity)
         {
-            Entity.AddComponent(new FreezingComponent(Entity, Player, FreezeDuration, 0));
+            Entity.AddComponent(new FreezingComponent(Entity, User, FreezeDuration, 0));
         }
 
         protected override Vector4 HighlightColor => new Vector4(0.4f, .4f, .85f, 1f);

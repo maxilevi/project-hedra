@@ -25,11 +25,11 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
         public override void Update()
         {
             base.Update();
-            if (_active && Player.IsInvisible && _component == null)
+            if (_active && User.IsInvisible && _component == null)
             {
-                Player.AddComponent(_component = new SpeedBonusComponent(Player, Player.Speed * SpeedBonus, false));
+                User.AddComponent(_component = new SpeedBonusComponent(User, User.Speed * SpeedBonus, false));
             }
-            if (_active && !Player.IsInvisible && _component != null)
+            if (_active && !User.IsInvisible && _component != null)
             {
                 Kill();
             }
@@ -37,7 +37,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
 
         private void Kill()
         {
-            if(_component != null) Player.RemoveComponent(_component);
+            if(_component != null) User.RemoveComponent(_component);
             _component = null;
         }
 

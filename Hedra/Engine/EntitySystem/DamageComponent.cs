@@ -40,6 +40,7 @@ namespace Hedra.Engine.EntitySystem
         public float XpToGive { get; set; } = 8;
         public bool Immune { get; set; }
         public bool Delete { get; set; } = true;
+        public bool PlayDeleteAnimation { get; set; } = true;
         public float MissChance { get; set; } = DefaultMissChance;
         private readonly List<BaseBillboard> _damageLabels;
         private readonly List<Predicate<IEntity>> _ignoreList;
@@ -153,7 +154,8 @@ namespace Hedra.Engine.EntitySystem
                 Parent.IsDead = true;
                 Parent.Physics.CollidesWithEntities = false;
                 Exp = XpToGive;
-                RoutineManager.StartRoutine(this.DisposeCoroutine);
+                if(PlayDeleteAnimation)
+                    RoutineManager.StartRoutine(this.DisposeCoroutine);
                 
             }
             if (OnDamageEvent != null && Math.Abs(Amount) > 0.005f)

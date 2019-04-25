@@ -16,15 +16,16 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 
         protected override void SpawnParticle(IEntity Victim)
         {
-            LaunchParticle(Player, Victim, Player, OnReached);
+            LaunchParticle(User, Victim, User, OnReached);
         }
 
         protected override void OnStart(IEntity Victim)
         {
             Victim.Model.Outline = true;
             Victim.Model.OutlineColor = Colors.Red;
-            Victim.Damage(Damage, Player, out var xp);
-            Player.XP += xp;
+            Victim.Damage(Damage, User, out var xp);
+            if(User is IHumanoid humanoid)
+                humanoid.XP += xp;
         }
         
         private void OnReached(IEntity From, IEntity To)

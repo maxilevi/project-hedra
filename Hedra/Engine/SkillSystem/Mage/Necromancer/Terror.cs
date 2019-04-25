@@ -12,7 +12,7 @@ using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 {
-    public class Terror : RadiusEffectSkill
+    public class Terror : RadiusEffectSkill<ISkilledAnimableEntity>
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Terror.png");
 
@@ -20,7 +20,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 
         protected override void Apply(IEntity Entity)
         {
-            Entity.AddComponent(new FearComponent(Entity, Player, Duration, Slowness));
+            Entity.AddComponent(new FearComponent(Entity, User, Duration, Slowness));
         }
         
         protected override float Radius => 24 + 32 * (Level / (float) MaxLevel);

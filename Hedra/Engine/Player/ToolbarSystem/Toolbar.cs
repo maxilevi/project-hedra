@@ -85,14 +85,17 @@ namespace Hedra.Engine.Player.ToolbarSystem
             for (var i = 0; i < _skills.Length; i++)
             {
                 _skills[i] = (BaseSkill) Activator.CreateInstance(types[i]);
-                _skills[i].Initialize(Vector2.Zero, InventoryArrayInterface.DefaultSize, _player.UI.GamePanel, _player);
+                _skills[i].InitializeUI(Vector2.Zero, InventoryArrayInterface.DefaultSize, _player.UI.GamePanel);
+                _skills[i].Initialize(_player);
                 _skills[i].StateUpdated += SkillStateUpdated;
                 _skills[i].Active = false;
             }
             _w1 = new WeaponAttack();
-            _w1.Initialize(_toolbarItemsInterface.Textures[4].Position, _toolbarItemsInterface.Textures[4].Scale, _player.UI.GamePanel, _player);
+            _w1.InitializeUI(_toolbarItemsInterface.Textures[4].Position, _toolbarItemsInterface.Textures[4].Scale, _player.UI.GamePanel);
+            _w1.Initialize(_player);
             _w2 = new WeaponAttack();
-            _w2.Initialize(_toolbarItemsInterface.Textures[5].Position, _toolbarItemsInterface.Textures[5].Scale, _player.UI.GamePanel, _player);
+            _w2.InitializeUI(_toolbarItemsInterface.Textures[5].Position, _toolbarItemsInterface.Textures[5].Scale, _player.UI.GamePanel);
+            _w2.Initialize(_player);
 
             EventDispatcher.RegisterMouseDown(this, this.MouseDown);
             EventDispatcher.RegisterMouseUp(this, this.MouseUp);

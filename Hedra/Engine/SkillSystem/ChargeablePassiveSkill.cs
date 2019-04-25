@@ -12,12 +12,12 @@ namespace Hedra.Engine.SkillSystem
         protected override void Remove()
         {
             _component.StateUpdated -= StateUpdated;
-            Player.RemoveComponent(_component);
+            User.RemoveComponent(_component);
         }
 
         protected override void Add()
         {
-            Player.AddComponent(_component = CreateComponent());
+            User.AddComponent(_component = CreateComponent());
             _component.StateUpdated += StateUpdated;
         }
 

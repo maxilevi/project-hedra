@@ -11,7 +11,7 @@ using Hedra.EntitySystem;
 
 namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 {
-    public class RaiseSkeleton : SingleAnimationSkill
+    public class RaiseSkeleton : SingleAnimationSkill<ISkilledAnimableEntity>
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/RaiseSkeletons.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/NecromancerRaiseSkeleton.dae");
@@ -22,26 +22,31 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
         protected override void OnAnimationEnd()
         {
             base.OnAnimationEnd();
-            SpawnMinion();
+            Spawn();
             InvokeStateUpdated();
         }
 
-        private void SpawnMinion()
+        private static IHumanoid SpawnMinion(IEntity Owner, IMinionMastery MasterySkill)
         {
-            var skeleton = World.WorldBuilding.SpawnHumanoid(HumanType.Skeleton, Player.Position + Player.Orientation * 16);
-            skeleton.AddComponent(new MeleeMinionComponent(skeleton, Player));
+            var skeleton = World.WorldBuilding.SpawnHumanoid(HumanType.Skeleton, Owner.Position + Owner.Orientation * 16);
+            skeleton.AddComponent(new MeleeMinionComponent(skeleton, Owner));
             skeleton.SetWeapon(ItemPool.Grab(CommonItems.UncommonSilverSword).Weapon);
-            var masterySkill = (SkeletonMastery) Player.Toolbar.Skills.First(S => S.GetType() == typeof(SkeletonMastery));
-            skeleton.BonusHealth = masterySkill.HealthBonus;
-            skeleton.AttackPower = masterySkill.AttackPower;
-            skeleton.AttackResistance = masterySkill.AttackResistance;
-            skeleton.Level = masterySkill.SkeletonLevel;
-            skeleton.SearchComponent<DamageComponent>().Ignore(E => E == Player || E.SearchComponent<DamageComponent>().HasIgnoreFor(Player));
+            skeleton.BonusHealth = MasterySkill.HealthBonus;
+            skeleton.AttackPower = MasterySkill.AttackPower;
+            skeleton.AttackResistance = MasterySkill.AttackResistance;
+            skeleton.Level = MasterySkill.SkeletonLevel;
+            skeleton.SearchComponent<DamageComponent>().Ignore(E => E == Owner || E.SearchComponent<DamageComponent>().HasIgnoreFor(Owner));
             skeleton.RemoveComponent(skeleton.SearchComponent<HealthBarComponent>());
             skeleton.AddComponent(new HealthBarComponent(skeleton, Translations.Get("skeleton_mastery_minion_name"), HealthBarType.Black, Color.FromArgb(255, 40, 40, 40)));
-            skeleton.SearchComponent<DamageComponent>().OnDeadEvent += A => _currentMinions--;
             skeleton.AddComponent(new SkeletonEffectComponent(skeleton));
             skeleton.RemoveComponent(skeleton.SearchComponent<DropComponent>());
+            return skeleton;
+        }
+
+        private void Spawn()
+        {
+            var skeleton = SpawnMinion(User, User.SearchSkill<SkeletonMastery>());
+            skeleton.SearchComponent<DamageComponent>().OnDeadEvent += A => _currentMinions--;
             _currentMinions++;
         }
         

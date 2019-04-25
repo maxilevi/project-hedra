@@ -1,12 +1,13 @@
 using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
 
 namespace Hedra.Engine.SkillSystem.Rogue.Assassin
 {
-    public class Cutthroat : SingleAnimationSkill
+    public class Cutthroat : SingleAnimationSkill<IPlayer>
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Cutthroat.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/RogueCutthroat.dae");
@@ -18,13 +19,13 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
         protected override void OnAnimationMid()
         {
             base.OnAnimationMid();
-            var isBehind = SkillUtils.IsBehindAny(Player, out var entity);
+            var isBehind = SkillUtils.IsBehindAny(User, out var entity);
             if (isBehind && entity is IHumanoid)
             {
-                entity.Damage(entity.MaxHealth * DamagePercentage, Player, out var xp);
-                Player.XP += xp;
+                entity.Damage(entity.MaxHealth * DamagePercentage, User, out var xp);
+                User.XP += xp;
                 if (entity.IsDead)
-                    Player.Toolbar.ResetCooldowns();
+                    User.Toolbar.ResetCooldowns();
             }
         }
 
@@ -33,14 +34,14 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
             base.Update();
             if (Level > 0 && _updateStatusTimer.Tick())
             {
-                var isBehind = SkillUtils.IsBehindAny(Player, out var entity);
+                var isBehind = SkillUtils.IsBehindAny(User, out var entity);
                 _canDo = isBehind && entity is IHumanoid;
             }
         }
 
         public override bool MeetsRequirements()
         {
-            return base.MeetsRequirements() && SkillUtils.IsBehindAny(Player, out var entity) && entity is IHumanoid;
+            return base.MeetsRequirements() && SkillUtils.IsBehindAny(User, out var entity) && entity is IHumanoid;
         }
 
         protected override bool ShouldDisable => !_canDo;

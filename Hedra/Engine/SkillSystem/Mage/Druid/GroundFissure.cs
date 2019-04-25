@@ -91,12 +91,12 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
 
         private void DamageEnemies()
         {
-            SkillUtils.DoNearby(Player, Radius, (E) =>
+            SkillUtils.DoNearby(User, Radius, (E) =>
             {
                 //E.Damage(TotalDamage * _timer.AlertTime / Duration, Player, out var xp);
                 //Player.XP += xp;
                 if(!E.IsDead && !E.Disposed && E.SearchComponent<BurningComponent>() == null)
-                    E.AddComponent(new BurningComponent(E, Player, Duration, TotalDamage));
+                    E.AddComponent(new BurningComponent(E, User, Duration, TotalDamage));
             });
         }
         

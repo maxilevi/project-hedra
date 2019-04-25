@@ -1,5 +1,6 @@
 using Hedra.AISystem;
 using Hedra.AnimationEvents;
+using Hedra.AnimationEvents.SkillEvents;
 using Hedra.API;
 using Hedra.Components.Effects;
 using Hedra.Engine.IO;
@@ -58,10 +59,14 @@ namespace Hedra
             AddAIType("Cow", typeof(CowAIComponent));
             AddAIType("Pig", typeof(PigAIComponent));
             AddAIType("Goat", typeof(GoatAIComponent));
+            AddAIType("SkeletonKamikaze", typeof(SkeletonKamikazeAIComponent));
             
             AddAnimationEvent("Growl", typeof(Growl));
             AddAnimationEvent("Quake", typeof(Quake));
             AddAnimationEvent("Slash", typeof(Slash));
+            AddAnimationEvent("SpawnSkeleton", typeof(SpawnSkeleton));
+            AddAnimationEvent("CastTerror", typeof(CastTerror));
+            AddAnimationEvent("CastSiphonBlood", typeof(CastSiphonBlood));
             
             AddModelHandler("Ent", typeof(EntHandler));
             AddModelHandler("Ghost", typeof(GhostHandler));

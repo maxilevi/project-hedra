@@ -10,12 +10,12 @@ namespace Hedra.Engine.SkillSystem.Rogue.Assassin
         
         protected override void Add()
         {
-            Player.Attributes.MobAggroModifier -= _previousValue = AggroChange;
+            User.Attributes.MobAggroModifier -= _previousValue = AggroChange;
         }
 
         protected override void Remove()
         {
-            Player.Attributes.MobAggroModifier += _previousValue;
+            User.Attributes.MobAggroModifier += _previousValue;
             _previousValue = 0;
         }
 

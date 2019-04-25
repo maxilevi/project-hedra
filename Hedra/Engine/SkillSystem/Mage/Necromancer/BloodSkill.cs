@@ -10,7 +10,7 @@ using Hedra.EntitySystem;
 
 namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 {
-    public abstract class BloodSkill : SingleAnimationSkill
+    public abstract class BloodSkill : SingleAnimationSkill<ISkilledAnimableEntity>
     {
         protected sealed override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/NecromancerSiphonBlood.dae");
         private readonly Timer _timer = new Timer(.1f);
@@ -31,7 +31,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 
         protected abstract void SpawnParticle(IEntity Victim);
 
-        public static void LaunchParticle(IPlayer Player, IEntity From, IEntity To, Action<IEntity, IEntity> HitLambda)
+        public static void LaunchParticle(ISkilledAnimableEntity Player, IEntity From, IEntity To, Action<IEntity, IEntity> HitLambda)
         {
             var blood = new BloodProjectile(From, To, From.Position + OpenTK.Vector3.UnitY * 3f)
             {
@@ -49,9 +49,9 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
         
         private IEntity FindNearestVictim()
         {
-            return SkillUtils.GetNearest(Player, Player.LookingDirection, .5f, MaxRadius, E =>
+            return SkillUtils.GetNearest(User, User.LookingDirection, .5f, MaxRadius, E =>
             {
-                if(E.SearchComponent<DamageComponent>().HasIgnoreFor(Player)) return false;
+                if(E.SearchComponent<DamageComponent>().HasIgnoreFor(User)) return false;
                 return true;
             });
         }

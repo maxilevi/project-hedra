@@ -14,6 +14,7 @@ namespace Hedra.Engine.BiomeSystem.GhostTown
         {
             AddDesign(new TombStructureDesign());
             AddDesign(new SpawnGhostTownPortalDesign());
+            AddDesign(new GhostTownBossDesign());
         }
     }
 }

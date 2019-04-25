@@ -15,7 +15,7 @@ using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Mage
 {
-    public class Inferno : SingleAnimationSkill
+    public class Inferno : SingleAnimationSkill<IPlayer>
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skill/Inferno.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/MageInferno.dae");
@@ -25,9 +25,9 @@ namespace Hedra.Engine.SkillSystem.Mage
         {
             base.OnAnimationEnd();
             InfernoFireball.Create(
-                Player,
-                Player.Position + Vector3.UnitY * 4f,
-                Player.LookingDirection,
+                User,
+                User.Position + Vector3.UnitY * 4f,
+                User.LookingDirection,
                 Radius,
                 Damage
             );

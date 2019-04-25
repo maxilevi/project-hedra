@@ -1,9 +1,10 @@
 using System;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.Animation;
 
 namespace Hedra.Engine.SkillSystem
 {
-    public abstract class ActivateDurationSkillWithSingleAnimation : SingleAnimationSkill
+    public abstract class ActivateDurationSkillWithSingleAnimation : SingleAnimationSkill<IPlayer>
     {
         private readonly ActivateDurationSkillComposition _composition;
 
@@ -40,7 +41,7 @@ namespace Hedra.Engine.SkillSystem
 
         public sealed override float MaxCooldown => _composition.MaxCooldown;
 
-        private class ActivateDurationSkillComposition : ActivateDurationSkill
+        private class ActivateDurationSkillComposition : ActivateDurationSkill<IPlayer>
         {
             public override string Description => throw new NotImplementedException();
             public override string DisplayName => throw new NotImplementedException();
