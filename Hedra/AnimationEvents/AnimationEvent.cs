@@ -15,7 +15,6 @@ namespace Hedra.AnimationEvents
         }
 
         public virtual void Build() { }
-        public virtual void Update() { }
 
         public virtual void Dispose()
         {

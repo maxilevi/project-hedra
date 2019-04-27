@@ -33,7 +33,12 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
             To.Health += HealthBonus;
             To.Model.Outline = true;
             To.Model.OutlineColor = Colors.FullHealthGreen;
-            TaskScheduler.After(.5f, () => To.Model.Outline = false);
+            To.Model.Tint = Colors.FullHealthGreen;
+            TaskScheduler.After(1f, () =>
+            {
+                To.Model.Outline = false;
+                To.Model.Tint = Colors.White;
+            });
             From.Model.Outline = false;
         }
         

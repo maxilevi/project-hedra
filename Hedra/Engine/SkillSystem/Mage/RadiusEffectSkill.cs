@@ -19,9 +19,9 @@ namespace Hedra.Engine.SkillSystem.Mage
         protected sealed override bool CanMoveWhileCasting => false;
         protected sealed override float AnimationSpeed => 1.5f;
         
-        protected override void OnAnimationEnd()
+        protected override void OnAnimationMid()
         {
-            base.OnAnimationEnd();
+            base.OnAnimationMid();
             World.HighlightArea(User.Position, HighlightColor, Radius, .5f);
             SpawnParticles();
             SoundPlayer.PlaySound(SoundType.GroundQuake, User.Position);

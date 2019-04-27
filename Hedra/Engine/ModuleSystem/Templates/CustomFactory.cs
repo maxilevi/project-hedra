@@ -33,6 +33,7 @@ namespace Hedra.Engine.ModuleSystem.Templates
 
         public void Load()
         {
+            Model.Resolve();
             AssetManager.LoadHitbox(Model.Path);
         }
 

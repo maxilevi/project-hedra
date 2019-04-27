@@ -1,3 +1,4 @@
+using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.SkillSystem;
 using Hedra.EntitySystem;
@@ -12,12 +13,17 @@ namespace Hedra.AnimationEvents
         {
             _skill = new T();
             _skill.Initialize(Parent);
+            _skill.Level = Level;
         }
 
         public override void Build()
         {
             base.Build();
             _skill.Use();
+            TaskScheduler.When(
+                () => !_skill.Casting,
+                Dispose
+            );
         }
 
         public override void Dispose()
@@ -25,5 +31,7 @@ namespace Hedra.AnimationEvents
             base.Dispose();
             _skill.Dispose();
         }
+
+        protected virtual int Level => 1;
     }
 }

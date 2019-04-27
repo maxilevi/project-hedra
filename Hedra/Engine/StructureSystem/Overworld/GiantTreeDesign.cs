@@ -50,35 +50,35 @@ namespace Hedra.Engine.StructureSystem.Overworld
             {
                 shapes[i].Transform(scaleMatrix * transMatrix);
             }
-
-            var underWater = region.Generation.GetHeight(position.X, position.Z, null, out _) < BiomePool.SeaLevel;
-            Executer.ExecuteOnMainThread(delegate
-            {
-                if (Structure.Disposed) return;
-                var chestOffset = Vector3.UnitZ * 10f + Vector3.UnitX * -80f;
-                var chestPosition = Vector3.TransformPosition(chestOffset, transMatrix);
-                IEntity treeBoss = null;
-                if (!underWater)
-                {
-                    treeBoss = BossGenerator.Generate(
-                        new [] { MobType.Beetle, MobType.Gorilla, MobType.Troll },
-                        Vector3.TransformPosition(chestOffset - Vector3.UnitZ * 50, transMatrix),
-                        rng);
-                    ((GiantTree)Structure.WorldObject).Boss = treeBoss;
-                }
-
-                var chest = World.SpawnChest(
-                    chestPosition,
-                    ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon))
-                    );
-                chest.Condition += () => treeBoss == null || treeBoss.IsDead;
-                chest.Rotation = Vector3.UnitY * 90f;
-                Structure.WorldObject.AddChildren(chest);
-            });
             Structure.AddCollisionShape(shapes.ToArray());
             Structure.AddStaticElement(model);
+            DoWhenChunkReady(position, P => PlaceBoss(P, region, Structure, transMatrix, rng), Structure);
         }
 
+        private void PlaceBoss(Vector3 Position, Region Region, CollidableStructure Structure, Matrix4 TransMatrix, Random Rng)
+        {
+            var underWater = Region.Generation.GetHeight(Position.X, Position.Z, null, out _) < BiomePool.SeaLevel;
+            var chestOffset = Vector3.UnitZ * 10f + Vector3.UnitX * -80f;
+            var chestPosition = Vector3.TransformPosition(chestOffset, TransMatrix);
+            IEntity treeBoss = null;
+            if (!underWater)
+            {
+                treeBoss = BossGenerator.Generate(
+                    new [] { MobType.Beetle, MobType.Gorilla, MobType.Troll },
+                    Vector3.TransformPosition(chestOffset - Vector3.UnitZ * 50, TransMatrix),
+                    Rng);
+                ((GiantTree)Structure.WorldObject).Boss = treeBoss;
+            }
+
+            var chest = World.SpawnChest(
+                chestPosition,
+                ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon))
+            );
+            chest.Condition += () => treeBoss == null || treeBoss.IsDead;
+            chest.Rotation = Vector3.UnitY * 90f;
+            Structure.WorldObject.AddChildren(chest);
+        }
+        
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
         {
             return base.Setup(TargetPosition, Rng, new GiantTree(TargetPosition));

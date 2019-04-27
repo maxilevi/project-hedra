@@ -28,6 +28,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 
         private static IHumanoid SpawnMinion(IEntity Owner, IMinionMastery MasterySkill)
         {
+            MasterySkill = MasterySkill ?? new DefaultMastery();
             var skeleton = World.WorldBuilding.SpawnHumanoid(HumanType.Skeleton, Owner.Position + Owner.Orientation * 16);
             skeleton.AddComponent(new MeleeMinionComponent(skeleton, Owner));
             skeleton.SetWeapon(ItemPool.Grab(CommonItems.UncommonSilverSword).Weapon);
@@ -40,6 +41,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
             skeleton.AddComponent(new HealthBarComponent(skeleton, Translations.Get("skeleton_mastery_minion_name"), HealthBarType.Black, Color.FromArgb(255, 40, 40, 40)));
             skeleton.AddComponent(new SkeletonEffectComponent(skeleton));
             skeleton.RemoveComponent(skeleton.SearchComponent<DropComponent>());
+            skeleton.AddComponent(new SelfDestructComponent(skeleton, () => Owner.IsDead));
             return skeleton;
         }
 
@@ -74,5 +76,13 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
         {
             Translations.Get("raise_skeleton_max_change", MaxMinions)
         };
+
+        private class DefaultMastery : IMinionMastery
+        {
+            public float HealthBonus => 0;
+            public int SkeletonLevel => 1;
+            public float AttackResistance => .5f;
+            public float AttackPower => .3f;
+        }
     }
 }

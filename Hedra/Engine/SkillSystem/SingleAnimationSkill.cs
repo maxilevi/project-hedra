@@ -100,6 +100,7 @@ namespace Hedra.Engine.SkillSystem
         
         public override void Update()
         {
+            var t = GetType();
             base.Update();
             if (!Casting) return;
             if (ShouldEnd) Disable();

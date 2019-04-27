@@ -59,5 +59,10 @@ namespace Hedra.EntitySystem
                 };
             }
         }
+
+        public static float Distance(this IEntity Parent, IEntity Target)
+        {
+            return (Parent.Position - Target.Position).LengthFast;
+        }
     }
 }

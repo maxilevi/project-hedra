@@ -29,11 +29,7 @@ namespace Hedra.AISystem.Behaviours
 
         public override void Update()
         {
-            if (FollowTimer.Tick() || !Follow.Enabled)
-            {
-                this.Target = null;
-                Follow.Target = this.Target;
-            }
+            HandleFollowing();
             if (!Parent.Model.IsAttacking && Target != null && !InAttackRange(Target, 1.15f))
             {
                 Follow.Update();
@@ -43,6 +39,13 @@ namespace Hedra.AISystem.Behaviours
                 FollowTimer.Reset();
                 this.Attack(2.0f);
             }
+        }
+
+        protected void HandleFollowing()
+        {
+            if (!FollowTimer.Tick() && Follow.Enabled) return;
+            Target = null;
+            Follow.Target = Target;
         }
 
         protected virtual void Attack(float RangeModifier)

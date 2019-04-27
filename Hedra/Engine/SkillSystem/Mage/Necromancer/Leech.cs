@@ -15,7 +15,7 @@ using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 {
-    public class Leech : RadiusEffectSkill
+    public class Leech : RadiusEffectSkill<ISkilledAnimableEntity>
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Leech.png");
 
@@ -45,12 +45,12 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 
         private class LeechComponent : EntityComponent
         {
-            private readonly IPlayer _caster;
+            private readonly ISkilledAnimableEntity _caster;
             private readonly Timer _timer;
             private readonly float _damagePerSecond;
             private readonly float _healPerSecond;
             
-            public LeechComponent(IEntity Entity, IPlayer Caster, float DamagePerSecond, float HealthPerSecond) : base(Entity)
+            public LeechComponent(IEntity Entity, ISkilledAnimableEntity Caster, float DamagePerSecond, float HealthPerSecond) : base(Entity)
             {
                 _caster = Caster;
                 _timer = new Timer(1 + Utils.Rng.NextFloat());
@@ -65,7 +65,8 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
                 if (_timer.Tick())
                 {
                     Parent.Damage(_damagePerSecond, _caster, out var xp);
-                    _caster.XP += xp;
+                    if(_caster is IHumanoid humanoid)
+                        humanoid.XP += xp;
                     BloodSkill.LaunchParticle(_caster, Parent, _caster, (_, __) =>
                     {
                         _caster.ShowText($"+{_healPerSecond} HP", Color.LawnGreen, 14);

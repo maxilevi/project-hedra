@@ -1,9 +1,12 @@
 using System;
 using Hedra.BiomeSystem;
+using Hedra.Core;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.EntitySystem.BossSystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.ItemSystem;
 using Hedra.Rendering;
 using OpenTK;
 
@@ -28,7 +31,13 @@ namespace Hedra.Engine.StructureSystem.GhostTown
             base.DoBuild(Structure, Rotation, Translation, Rng);
             DoWhenChunkReady(Vector3.TransformPosition(Vector3.Zero, Translation), P =>
             {
-                var boss = World.SpawnMob(MobType.Lich, P, Utils.Rng);
+                var offset = Vector3.UnitZ * 24;
+                var boss = BossGenerator.Generate(new []{MobType.Lich}, P + offset, Utils.Rng);
+                boss.AddComponent(new DropComponent(boss)
+                {
+                    DropChance = 100,
+                    ItemDrop = ItemPool.Grab(new ItemPoolSettings(ItemTier.Unique))
+                });
                 ((GhostTownBoss)Structure.WorldObject).Boss = boss;
             }, Structure);
         }

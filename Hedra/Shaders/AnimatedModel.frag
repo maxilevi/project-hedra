@@ -51,7 +51,7 @@ void main(void)
 	if (Outline)
     {
         vec3 unitToCamera = normalize( (inverse(_modelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - pass_position);
-        float outlineDot = max(0.0, 1.0 - dot(pass_normal, unitToCamera));
+        float outlineDot = max(0.4, 1.0 - dot(pass_normal, unitToCamera));
         out_colour = outlineDot * ( cos(Time * (pass_position.x + pass_position.z) * 0.001) ) * OutlineColor * Alpha;
         out_position = vec4(0.0, 0.0, 0.0, 0.0);
         out_normal = vec4(0.0, 0.0, 0.0, 0.0);

@@ -8,5 +8,7 @@ namespace Hedra.AnimationEvents.SkillEvents
         public CastTerror(ISkilledAnimableEntity Parent) : base(Parent)
         {
         }
+
+        protected override int Level => 5;
     }
 }

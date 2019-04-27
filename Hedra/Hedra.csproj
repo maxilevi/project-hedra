@@ -100,9 +100,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AISystem\AdaptiveAIComponent.cs" />
     <Compile Include="AISystem\AIFactory.cs" />
     <Compile Include="AISystem\AIType.cs" />
     <Compile Include="AISystem\BasicAIComponent.cs" />
+    <Compile Include="AISystem\Behaviours\AdaptiveAttackBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\AttackBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\Behaviour.cs" />
     <Compile Include="AISystem\Behaviours\ChargeBehaviour.cs" />
@@ -165,9 +167,10 @@
     <Compile Include="AnimationEvents\Growl.cs" />
     <Compile Include="AnimationEvents\Quake.cs" />
     <Compile Include="AnimationEvents\SkillAnimationEvent.cs" />
+    <Compile Include="AnimationEvents\SkillEvents\CastLeech.cs" />
     <Compile Include="AnimationEvents\SkillEvents\CastSiphonBlood.cs" />
     <Compile Include="AnimationEvents\SkillEvents\CastTerror.cs" />
-    <Compile Include="AnimationEvents\SkillEvents\SpawnSkeleton.cs" />
+    <Compile Include="AnimationEvents\SkillEvents\CastRaiseSkeleton.cs" />
     <Compile Include="AnimationEvents\Slash.cs" />
     <Compile Include="API\AIRegistry.cs" />
     <Compile Include="API\AnimationEventRegistry.cs" />
@@ -8354,6 +8357,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\Chr\Ghost\GhostWalk.dae">
       <Link>Assets\Chr\Mob\Ghost\GhostWalk.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Ghost\LichIdle.dae">
+      <Link>Assets\Chr\Mob\Ghost\LichIdle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Environment\DeadGrass\DeadGrass0.ply">

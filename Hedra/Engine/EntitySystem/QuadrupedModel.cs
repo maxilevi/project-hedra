@@ -39,11 +39,11 @@ namespace Hedra.Engine.EntitySystem
         public bool IsMountable { get; set; }
         public IHumanoid Rider { get; set; }
         public bool HasRider => Rider != null;
+        public AttackAnimationTemplate[] AttackTemplates { get; }
         public Animation[] AttackAnimations { get; }
         private Animation[] IdleAnimations { get; }
         private Animation[] WalkAnimations { get; }
         private AttackEvent[] AttackAnimationsEvents { get; }
-        private float[] AttackAnimationChances { get; }
         private AnimatedCollider Collider { get; }
         private readonly float[] _walkAnimationSpeed;
         private readonly float _originalMobSpeed;
@@ -75,8 +75,8 @@ namespace Hedra.Engine.EntitySystem
             WalkAnimations = new Animation[Template.WalkAnimations.Length];
             IdleAnimations = new Animation[Template.IdleAnimations.Length];
             AttackAnimations = new Animation[Template.AttackAnimations.Length];
-            AttackAnimationChances = new float[Template.AttackAnimations.Length];
             AttackAnimationsEvents = new AttackEvent[Template.AttackAnimations.Length];
+            AttackTemplates = Template.AttackAnimations;
             _walkAnimationSpeed = new float[WalkAnimations.Length];
             _originalMobSpeed = Parent.Speed;
 
@@ -98,13 +98,11 @@ namespace Hedra.Engine.EntitySystem
                 _walkAnimationSpeed[i] = WalkAnimations[i].Speed;
             }
 
-            var eachChance = CalculateChanceForUnassigned(Template.AttackAnimations);
             for (var i = 0; i < AttackAnimations.Length; i++)
             {
                 AttackAnimations[i] = AnimationLoader.LoadAnimation(Template.AttackAnimations[i].Path);
                 AttackAnimations[i].Speed = Template.AttackAnimations[i].Speed;
                 AttackAnimations[i].Loop = false;
-                AttackAnimationChances[i] = Math.Abs(Template.AttackAnimations[i].Chance) < 0.005f ? eachChance : Template.AttackAnimations[i].Chance;
 
                 int k = i;
                 if (Template.AttackAnimations[i].OnAnimationStart != null)
@@ -149,19 +147,6 @@ namespace Hedra.Engine.EntitySystem
             this.Idle();
             var soundType = Parent.MobType == MobType.Horse ? SoundType.HorseRun : SoundType.HumanRun;
             this._sound = new AreaSound(soundType, this.Position, 48f);
-        }
-
-        private static float CalculateChanceForUnassigned(AttackAnimationTemplate[] Templates)
-        {
-            var used = 0f;
-            var unusedCount = 0;
-            for (var i = 0; i < Templates.Length; ++i)
-            {
-                if (Math.Abs(Templates[i].Chance) < 0.005f)
-                    unusedCount++;
-                used += Templates[i].Chance;
-            }
-            return unusedCount == 0 ? 0 : (1 - used) / unusedCount;
         }
         
         public bool CanAttack()
@@ -335,9 +320,9 @@ namespace Hedra.Engine.EntitySystem
             for (var i = offset; i < offset + length; ++i)
             {
                 var index = Mathf.Modulo(i, length);
-                if (rng <= AttackAnimationChances[index])
+                if (rng <= AttackTemplates[index].Chance)
                     return AttackAnimations[index];
-                rng -= AttackAnimationChances[index];
+                rng -= AttackTemplates[index].Chance;
             }
             throw new ArgumentOutOfRangeException($"Failed to find suitable animation");
         }

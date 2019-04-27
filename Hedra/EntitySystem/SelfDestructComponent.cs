@@ -1,3 +1,4 @@
+using System;
 using Hedra.Engine.Management;
 using Hedra.Engine.EntitySystem;
 
@@ -5,17 +6,23 @@ namespace Hedra.EntitySystem
 {
     public class SelfDestructComponent : EntityComponent
     {
-        private readonly Timer _timer;
+        private readonly Func<bool> _condition;
         private bool _disposed;
+        
+        public SelfDestructComponent(IEntity Entity, Func<bool> When) : base(Entity)
+        {
+            _condition = When;
+        }
         
         public SelfDestructComponent(IEntity Entity, float Time) : base(Entity)
         {
-            _timer = new Timer(Time);
+            var timer = new Timer(Time);
+            _condition = () => timer.Tick();
         }
 
         public override void Update()
         {
-             if(_timer.Tick())
+             if(_condition())
                  Kill();
         }
         

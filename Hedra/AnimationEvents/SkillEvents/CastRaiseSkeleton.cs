@@ -3,9 +3,9 @@ using Hedra.Engine.SkillSystem.Mage.Necromancer;
 
 namespace Hedra.AnimationEvents.SkillEvents
 {
-    public class SpawnSkeleton : SkillAnimationEvent<RaiseSkeleton>
+    public class CastRaiseSkeleton : SkillAnimationEvent<RaiseSkeleton>
     {
-        public SpawnSkeleton(ISkilledAnimableEntity Parent) : base(Parent)
+        public CastRaiseSkeleton(ISkilledAnimableEntity Parent) : base(Parent)
         {
         }
     }

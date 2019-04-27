@@ -1,3 +1,4 @@
+using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.SkillSystem;
@@ -7,7 +8,16 @@ namespace Hedra.Engine.EntitySystem
 {
     public class SkilledAnimableEntity : SkilledEntity, ISkilledAnimableEntity
     {
-        public Animation AnimationBlending => default(Animation);
+        private readonly Timer _timer;
+        public Animation AnimationBlending { get; private set; }
+
+        public SkilledAnimableEntity()
+        {
+            _timer = new Timer(1)
+            {
+                AutoReset = false
+            };
+        }
         
         public void ResetModel()
         {
@@ -15,12 +25,23 @@ namespace Hedra.Engine.EntitySystem
 
         public void BlendAnimation(Animation Animation)
         {
+            AnimationBlending = Animation;
+            _timer.AlertTime = Animation?.Length ?? 1;
+            _timer.Reset();
         }
 
         public bool CaptureMovement { get; set; }
         
         public void Orientate()
         {
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            if (AnimationBlending == null) return;
+            AnimationBlending.DispatchEvents(_timer.Progress);
+            _timer.Tick();
         }
 
         public bool IsAttacking { get; set; }

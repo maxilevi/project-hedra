@@ -71,7 +71,7 @@ namespace Hedra.Engine.SkillSystem
         protected T User { get; set; }
         protected virtual bool HasCooldown => true;
         protected virtual bool ShouldDisable { get; set; }
-        private bool _initialized;
+        private bool _initializedUI;
         private bool Enabled { get; set; } = true;
         private Vector2 _adjustedPosition;
         private RenderableText _cooldownSecondsText;
@@ -100,8 +100,12 @@ namespace Hedra.Engine.SkillSystem
             _panel = InPanel;
             _panel.AddElement(this);
             
+            _cooldownSecondsText = new RenderableText(string.Empty, Position, Color.White, FontCache.GetBold(12));
+            _panel.AddElement(_cooldownSecondsText);
+            if(_panel.Enabled) _cooldownSecondsText.Enable();
+            
             DrawManager.UIRenderer.Add(this, DrawOrder.After);
-            _initialized = true;
+            _initializedUI = true;
         }
         
         public override bool MeetsRequirements()
@@ -116,16 +120,9 @@ namespace Hedra.Engine.SkillSystem
             if(!Enabled || !Active)
                 return;
             
-            if(!_initialized) throw new ArgumentException("This skill hasn't been initialized yet.");
+            if(!_initializedUI) throw new ArgumentException("This skill hasn't been initialized yet.");
             
             Cooldown -= Time.DeltaTime;
-            if (_cooldownSecondsText == null)
-            {
-                _cooldownSecondsText = new RenderableText(string.Empty, Position, Color.White,
-                    FontCache.GetBold(12));
-                if(_panel.Enabled) _cooldownSecondsText.Enable();
-                _panel.AddElement(_cooldownSecondsText);
-            }
             if (_cooldownSecondsText.Position != Position) _cooldownSecondsText.Position = Position;
             _cooldownSecondsText.Text = Cooldown > 0 && HasCooldown ? ((int)Cooldown + 1).ToString() : string.Empty;
             Renderer.Enable(EnableCap.Blend);
@@ -223,10 +220,13 @@ namespace Hedra.Engine.SkillSystem
         
         public override void Dispose()
         {
-            DrawManager.Remove(this);
             UpdateManager.Remove(this);
-            TextureRegistry.Remove(IconId);
-            _cooldownSecondsText.Dispose();
+            if (_initializedUI)
+            {
+                DrawManager.Remove(this);
+                TextureRegistry.Remove(IconId);
+                _cooldownSecondsText.Dispose();
+            }
         }    
     }
 }

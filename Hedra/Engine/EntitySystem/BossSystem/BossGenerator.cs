@@ -16,6 +16,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.EntitySystem.BossSystem
@@ -29,14 +30,19 @@ namespace Hedra.Engine.EntitySystem.BossSystem
         {
             var type = PossibleTypes[Rng.Next(0, PossibleTypes.Length)];
             var boss = World.SpawnMob(type, Vector3.Zero, Rng);
-            boss.Position = Position;
-            boss.SearchComponent<IGuardAIComponent>().GuardPosition = Position;
-            boss.SearchComponent<ITraverseAIComponent>().GridSize = new Vector2(32, 32);
-            var dmgComponent = boss.SearchComponent<DamageComponent>();
-            dmgComponent.Immune = true;
-            var healthBarComponent = new BossHealthBarComponent(boss, NameGenerator.Generate(World.Seed + Rng.Next(0, 999999)));
-            
-            boss.RemoveComponent(boss.SearchComponent<HealthBarComponent>());
+            boss.Physics.TargetPosition = Position;
+            MakeBoss(boss, Position, Rng);
+            return boss;
+        }
+
+        public static void MakeBoss(IEntity Entity, Vector3 Position, Random Rng)
+        {
+            if(Entity.SearchComponent<IGuardAIComponent>() != null)
+                Entity.SearchComponent<IGuardAIComponent>().GuardPosition = Position;
+            Entity.SearchComponent<ITraverseAIComponent>().GridSize = new Vector2(32, 32);
+            var dmgComponent = Entity.SearchComponent<DamageComponent>();
+            var healthBarComponent = new BossHealthBarComponent(Entity, NameGenerator.Generate(World.Seed + Rng.Next(0, 999999)));
+            Entity.RemoveComponent(Entity.SearchComponent<HealthBarComponent>());
             dmgComponent.OnDamageEvent += delegate(DamageEventArgs Args)
             {
                 if (!(Args.Victim.Health <= 0)) return;
@@ -44,16 +50,11 @@ namespace Hedra.Engine.EntitySystem.BossSystem
                 GameManager.Player.MessageDispatcher.ShowMessage(Translations.Get("boss_get_xp", (int) dmgComponent.XpToGive), 3f, Colors.Violet.ToColor());
                 healthBarComponent.Enabled = false;
             };
-            boss.AddComponent(new SpawnComponent(boss, Position, () => dmgComponent.Immune = false));
-            boss.Name = healthBarComponent.Name;
-            boss.IsBoss = true;
-            boss.Physics.CollidesWithStructures = true;
-            boss.Removable = false;
-            
-            boss.AddComponent(dmgComponent);
-            boss.AddComponent(healthBarComponent);
-            
-            return boss;           
+            Entity.Name = healthBarComponent.Name;
+            Entity.IsBoss = true;
+            Entity.Physics.CollidesWithStructures = true;
+            Entity.Removable = false;
+            Entity.AddComponent(healthBarComponent); 
         }
     }
 }

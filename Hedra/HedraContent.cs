@@ -60,13 +60,15 @@ namespace Hedra
             AddAIType("Pig", typeof(PigAIComponent));
             AddAIType("Goat", typeof(GoatAIComponent));
             AddAIType("SkeletonKamikaze", typeof(SkeletonKamikazeAIComponent));
+            AddAIType("Adaptive", typeof(AdaptiveAIComponent));
             
             AddAnimationEvent("Growl", typeof(Growl));
             AddAnimationEvent("Quake", typeof(Quake));
             AddAnimationEvent("Slash", typeof(Slash));
-            AddAnimationEvent("SpawnSkeleton", typeof(SpawnSkeleton));
+            AddAnimationEvent("CastRaiseSkeleton", typeof(CastRaiseSkeleton));
             AddAnimationEvent("CastTerror", typeof(CastTerror));
             AddAnimationEvent("CastSiphonBlood", typeof(CastSiphonBlood));
+            AddAnimationEvent("CastLeech", typeof(CastLeech));
             
             AddModelHandler("Ent", typeof(EntHandler));
             AddModelHandler("Ghost", typeof(GhostHandler));

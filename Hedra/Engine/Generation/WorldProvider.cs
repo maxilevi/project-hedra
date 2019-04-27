@@ -173,18 +173,7 @@ namespace Hedra.Engine.Generation
             ShadowDrawingChunks.Clear();
             _unculledChunks.Clear();
             var toDrawArray = Chunks;
-
-#if DEBUG
-            try
-            {
-#endif
-                DoCullTest(toDrawArray, DrawingChunks, _unculledChunks);
-            }
-            catch (Exception e)
-            {
-                AssertNoDuplicates(toDrawArray);
-                throw;
-            }
+            DoCullTest(toDrawArray, DrawingChunks, _unculledChunks);
 
             if (GameSettings.Shadows && !GameSettings.LockFrustum)
             {

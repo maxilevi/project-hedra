@@ -2,21 +2,20 @@
   "Name" : "Lich",
   "MaxHealth": 680.0,
   "AttackDamage": 13.0,
-  "AttackCooldown": 1.5,
+  "AttackCooldown": 3.0,
   "Speed": 1.40,
   "XP": 26.0,
   "Level": 25,
-  "AIType": "Hostile",
+  "AIType": "Adaptive",
   "Effects": [],
   "Drops": [],
   "Model": {
-    "Handler": "Ghost",
     "AlignWithTerrain" :  false,
-    "Path": "$DataFile$/Assets/Chr/Mob/Ghost/GhostIdle.dae",
-    "Scale": 2.5,
+    "Path": "$DataFile$/Assets/Chr/Mob/Ghost/LichIdle.dae",
+    "Scale": 2.0,
     "IdleAnimations": [
       {
-        "Path": "$DataFile$/Assets/Chr/Mob/Ghost/GhostIdle.dae",
+        "Path": "$DataFile$/Assets/Chr/Mob/Ghost/LichIdle.dae",
         "Speed": 1.0
       }
     ],
@@ -28,26 +27,36 @@
     ],
     "AttackAnimations": [
       {
-        "Path": "$DataFile$/Assets/Chr/Ghost/GhostAttack1.dae",
-        "Speed": 3.0,
-        "Chance": 0.5
+        "Path": "$DataFile$/Assets/Chr/NecromancerRaiseSkeleton.dae",
+        "Speed": 2.5,
+        "OnAnimationMid" : "CastRaiseSkeleton",
+        "Chance": 0.15,
+        "Range": 64,
+        "Cooldown": 24.0
       },
       {
-        "Path": "$DataFile$/Assets/Chr/Ghost/GhostAttack0.dae",
-        "Speed": 3.0,
-        "OnAnimationMid" : "SpawnSkeleton",
-        "Chance": 0.10
+        "Path": "$DataFile$/Assets/Chr/MageStaffGroundHit.dae",
+        "Speed": 2.0,
+        "OnAnimationMid" : "CastLeech",
+        "Chance": 0.075,
+        "Range": 24,
+        "Cooldown": 32.0
       },
       {
-        "Path": "$DataFile$/Assets/Chr/Ghost/GhostAttack0.dae",
-        "Speed": 3.0,
+        "Path": "$DataFile$/Assets/Chr/MageStaffGroundHit.dae",
+        "Speed": 2.0,
         "OnAnimationMid" : "CastTerror",
-        "Chance": 0.10
+        "Chance": 0.25,
+        "Range": 24,
+        "Cooldown": 8.0
       },
       {
-        "Path": "$DataFile$/Assets/Chr/Ghost/GhostAttack0.dae",
-        "Speed": 3.0,
-        "OnAnimationMid" : "CastSiphonBlood"
+        "Path": "$DataFile$/Assets/Chr/NecromancerSiphonBlood.dae",
+        "Speed": 1.5,
+        "OnAnimationMid" : "CastSiphonBlood",
+        "Chance": 0.425,
+        "Range": 32,
+        "Cooldown": 4.0
       }
     ]
   }

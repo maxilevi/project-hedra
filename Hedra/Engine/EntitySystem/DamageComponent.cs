@@ -17,6 +17,7 @@ using Hedra.Engine.Rendering.UI;
 using System.Drawing;
 using System.Linq;
 using Hedra.AISystem;
+using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Player;
@@ -32,7 +33,7 @@ namespace Hedra.Engine.EntitySystem
     public delegate void OnDamageEventHandler(DamageEventArgs Args);
     public delegate void OnDeadEventHandler(DeadEventArgs Args);
 
-    public class DamageComponent : EntityComponent
+    public class DamageComponent : SingularComponent<DamageComponent, IEntity>
     {
         public const float DefaultMissChance = 0.05f;
         public event OnDamageEventHandler OnDamageEvent;
