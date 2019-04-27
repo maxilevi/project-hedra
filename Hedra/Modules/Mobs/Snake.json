@@ -1,6 +1,6 @@
 ﻿{
   "Name" : "Snake", 
-  "MaxHealth": 220.0,
+  "MaxHealth": 120.0,
   "AttackDamage": 3.0,
   "Speed": 1.15,
   "XP": 3.0,

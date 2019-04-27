@@ -1,6 +1,6 @@
 {
   "Name" : "Roach", 
-  "MaxHealth": 292.0,
+  "MaxHealth": 192.0,
   "AttackDamage": 7.0,
   "Speed": 1.3,
   "XP": 7.0,
