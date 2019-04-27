@@ -99,7 +99,7 @@ namespace Hedra.Engine.SkillSystem.Mage
 
         protected override int MaxLevel => 15;
         protected override float ManaPerSecond => 28;
-        private float SpeedModifier => .2f + .2f * (Level / (float) MaxLevel);
+        private float SpeedModifier => .25f + .25f * (Level / (float) MaxLevel);
         private float Damage => 15f + 40f * (Level / (float) MaxLevel);
         public override string Description => Translations.Get("blaze_desc");
         public override string DisplayName => Translations.Get("blaze_skill");
