@@ -249,6 +249,8 @@
     <Compile Include="Engine\CacheSystem\SunflowerCache.cs" />
     <Compile Include="Engine\CacheSystem\TimberCache.cs" />
     <Compile Include="Engine\CacheSystem\WellCache.cs" />
+    <Compile Include="Engine\CacheSystem\WitchHutIcon.cs" />
+    <Compile Include="Engine\CacheSystem\WizardTowerIcon.cs" />
     <Compile Include="Engine\ClassSystem\AbilityTreeLoader.cs" />
     <Compile Include="Engine\ClassSystem\ClassLoader.cs" />
     <Compile Include="Engine\ClassSystem\RestrictionsFactory.cs" />

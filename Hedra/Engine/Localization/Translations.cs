@@ -10,12 +10,12 @@ namespace Hedra.Engine.Localization
     public static class Translations
     {
         private static readonly Dictionary<string, Dictionary<string, string>> _translations;
-        private static readonly List<Translation> LiveTranslation;
+        private static readonly List<Translation> _liveTranslations;
 
         static Translations()
         {
             _translations = new Dictionary<string, Dictionary<string, string>>();
-            LiveTranslation = new List<Translation>();
+            _liveTranslations = new List<Translation>();
         }
         
         public static void Load()
@@ -33,12 +33,12 @@ namespace Hedra.Engine.Localization
 
         public static void Add(Translation Key)
         {
-            LiveTranslation.Add(Key);
+            _liveTranslations.Add(Key);
         }
         
         public static void Remove(Translation Key)
         {
-            LiveTranslation.Remove(Key);
+            _liveTranslations.Remove(Key);
         }
  
         public static string Get(string Key)
@@ -107,9 +107,9 @@ namespace Hedra.Engine.Localization
             set
             {
                 _language = value;
-                for (var i = 0; i < LiveTranslation.Count; i++)
+                for (var i = 0; i < _liveTranslations.Count; i++)
                 {
-                    LiveTranslation[i].UpdateTranslation();
+                    _liveTranslations[i].UpdateTranslation();
                 }
             }
         }

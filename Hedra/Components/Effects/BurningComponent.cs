@@ -29,8 +29,9 @@ namespace Hedra.Components.Effects
 
         public BurningComponent(IEntity Parent, IEntity Damager, float TotalTime, float TotalDamage) : base(Parent)
         {
+            var weakness = Parent.SearchComponent<FireWeaknessComponent>();
             _totalTime = TotalTime;
-            _totalDamage = TotalDamage * Damager?.Attributes.FireDamageMultiplier ?? 1;
+            _totalDamage = (TotalDamage * Damager?.Attributes.FireDamageMultiplier ?? 1) * weakness?.Power ?? 1;
             _damager = Damager;
             Start();
         }

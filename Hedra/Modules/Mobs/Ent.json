@@ -7,7 +7,9 @@
   "XP": 12.0,
   "Level": 17,
   "AIType": "Hostile",
-  "Effects": [],
+  "Effects": [
+    {"Name": "FireWeakness"}
+  ],
   "Drops": [
     {
       "Type": "EnchantedBranch",

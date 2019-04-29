@@ -76,6 +76,7 @@ namespace Hedra
             AddItemHandler("Recipe", typeof(RecipeHandler));
 
             AddEffectType("Fire", typeof(FireComponent));
+            AddEffectType("FireWeakness", typeof(FireWeaknessComponent));
             AddEffectType("Poison", typeof(PoisonousComponent));
             AddEffectType("Toxic", typeof(ToxicComponent));
             AddEffectType("Freeze", typeof(FreezeComponent));
