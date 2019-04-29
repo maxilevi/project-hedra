@@ -202,6 +202,7 @@
     <Compile Include="Components\Effects\BurningComponent.cs" />
     <Compile Include="Components\Effects\FearComponent.cs" />
     <Compile Include="Components\Effects\FireComponent.cs" />
+    <Compile Include="Components\Effects\FireWeaknessComponent.cs" />
     <Compile Include="Components\Effects\FreezeComponent.cs" />
     <Compile Include="Components\Effects\FreezingComponent.cs" />
     <Compile Include="Components\Effects\KnockComponent.cs" />
@@ -619,6 +620,10 @@
     <Compile Include="Engine\StructureSystem\Overworld\VillageDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\Well.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\WellDesign.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\WitchHut.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\WitchHutDesign.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\WizardTower.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\WizardTowerDesign.cs" />
     <Compile Include="Engine\StructureSystem\Portal.cs" />
     <Compile Include="Engine\StructureSystem\PortalStructureDesign.cs" />
     <Compile Include="Engine\StructureSystem\QuestGiverStructureDesign.cs" />

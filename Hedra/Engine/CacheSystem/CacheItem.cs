@@ -50,6 +50,8 @@ namespace Hedra.Engine.CacheSystem
         Portal,
         PortalIcon,
         DeadGrass,
+        WitchHutIcon,
+        WizardTowerIcon,
         MaxEnums
     }
 }
