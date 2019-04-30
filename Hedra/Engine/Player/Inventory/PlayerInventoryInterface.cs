@@ -106,5 +106,7 @@ namespace Hedra.Engine.Player.Inventory
                 SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
             }
         }
+        
+        protected override bool HasExitAnimation => true;
     }
 }

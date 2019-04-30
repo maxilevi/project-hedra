@@ -28,7 +28,7 @@ namespace Hedra.Engine.Rendering.UI
             EventDispatcher.RegisterKeyDown(typeof(EventDispatcher), OnKeyDown);
         }
 
-        public bool HasExitAnimation => OnPlayerInterfaceStateChange?.GetInvocationList().Length > 0;
+        protected abstract bool HasExitAnimation { get; }
 
         protected void Invoke(bool Parameter)
         {
@@ -94,9 +94,9 @@ namespace Hedra.Engine.Rendering.UI
 
                 void DelayedAction(bool State)
                 {
-                    Interface.OnPlayerInterfaceStateChange -= DelayedAction;
                     if (!State)
                     {
+                        Interface.OnPlayerInterfaceStateChange -= DelayedAction;
                         _openedInterface = null;
                     }
                 }

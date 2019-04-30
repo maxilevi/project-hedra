@@ -196,5 +196,7 @@ namespace Hedra.Engine.Player.Inventory
                 else this.Cancel();
             }
         }
+        
+        protected override bool HasExitAnimation => true;
     }
 }

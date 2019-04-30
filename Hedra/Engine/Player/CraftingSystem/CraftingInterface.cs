@@ -23,7 +23,6 @@ namespace Hedra.Engine.Player.CraftingSystem
         private readonly CraftingInventoryItemInfo _itemInfo;
         private bool _show;
         
-        
         public CraftingInterface(IPlayer Player)
         {
             _player = Player;
@@ -93,5 +92,7 @@ namespace Hedra.Engine.Player.CraftingSystem
                 SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
             }
         }
+        
+        protected override bool HasExitAnimation => true;
     }
 }

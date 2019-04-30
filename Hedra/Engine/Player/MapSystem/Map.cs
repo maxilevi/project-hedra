@@ -411,5 +411,7 @@ namespace Hedra.Engine.Player.MapSystem
         {
             EventDispatcher.UnregisterMouseDown(this);
         }
+        
+        protected override bool HasExitAnimation => false;
     }
 }

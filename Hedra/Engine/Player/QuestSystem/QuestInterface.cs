@@ -110,5 +110,7 @@ namespace Hedra.Engine.Player.QuestSystem
                 SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
             }
         }
+        
+        protected override bool HasExitAnimation => true;
     }
 }

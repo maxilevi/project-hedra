@@ -75,7 +75,6 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             _manager = new AbilityTreeInterfaceManager(_player, itemInfo, _interface, _mainTree, _firstTree, _secondTree);
             _stateManager = new InventoryStateManager(_player);
             _background = new AbilityInventoryBackground(Vector2.UnitY * .65f);
-
             _stateManager.OnStateChange += State =>
             {
                 base.Invoke(State);
@@ -340,5 +339,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             ShowBlueprint(_player.Class.SecondSpecializationTree, _secondTree, secondArray);
             ShowBlueprint(_player.Class.MainTree, _mainTree, mainArray);
         }
+
+        protected override bool HasExitAnimation => true;
     }
 }

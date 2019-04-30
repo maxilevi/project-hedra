@@ -13,6 +13,6 @@ namespace Hedra.Components.Effects
         {
         }
 
-        public int Power => 4;
+        public int Power => 6;
     }
 }
