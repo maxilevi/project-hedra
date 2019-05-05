@@ -52,6 +52,7 @@ namespace Hedra.Engine.CacheSystem
         DeadGrass,
         WitchHutIcon,
         WizardTowerIcon,
+        WitchHut,
         MaxEnums
     }
 }

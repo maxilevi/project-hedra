@@ -16,7 +16,7 @@
   "MaxStamina": 100,
   "BaseDamage": 2.75,
   "AttackingSpeedModifier": 0.2,
-  "BaseHealthPerLevel": 7.5,
+  "BaseHealthPerLevel": 6.5,
   "BaseManaPerLevel": 11.0,
   "Model": {
     "Path": "$DataFile$/Assets/Chr/MageIdle.dae",

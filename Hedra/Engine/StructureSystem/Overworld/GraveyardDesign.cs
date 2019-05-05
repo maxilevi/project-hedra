@@ -21,12 +21,13 @@ using Region = Hedra.BiomeSystem.Region;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
-    public class GraveyardDesign : StructureDesign
+    public class GraveyardDesign : CompletableStructureDesign<Graveyard>
     {
         private const int Level = 9;
         public override int PlateauRadius { get; } = 384;
         public const int GraveyardSkyTime = 24000;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.GraveyardIcon);
+        public override VertexData QuestIcon => Icon;
 
         public override void Build(CollidableStructure Structure)
         {
@@ -67,12 +68,12 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 j++;
                 if (rng.Next(0, 4) == 1 || (j == 3 && k == 2)) continue;
 
-                Vector3 gravePosition = position + Vector3.UnitX * 28f * Chunk.BlockSize + Vector3.UnitZ * 18f * Chunk.BlockSize
+                var gravePosition = position + Vector3.UnitX * 28f * Chunk.BlockSize + Vector3.UnitZ * 18f * Chunk.BlockSize
                     + Vector3.UnitX * -11 * j * Chunk.BlockSize
                     + Vector3.UnitZ * -11 * k * Chunk.BlockSize;
                 gravePosition = new Vector3(gravePosition.X, position.Y, gravePosition.Z);
 
-                Vector3 graveScale = Vector3.One * (3.25f + rng.NextFloat() * .5f) * 1.5f;
+                var graveScale = Vector3.One * (3.25f + rng.NextFloat() * .5f) * 1.5f;
                 var originalGrave = CacheManager.GetModel(CacheItem.Grave);
                 var grave = originalGrave.ShallowClone();
                 grave.Scale(graveScale);
@@ -126,13 +127,14 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
             var prize = World.SpawnChest(Position + Vector3.UnitX * 40f, 
                     ItemPool.Grab( new ItemPoolSettings(ItemTier.Uncommon) ));
+            Cementery.Chest = prize;
             prize.Condition = delegate
             {
-                if (!Cementery.Restored)
+                if (!Cementery.Completed)
                 {
                     LocalPlayer.Instance.MessageDispatcher.ShowNotification(Translations.Get("enemies_around"), Color.DarkRed, 2f);
                 }
-                return Cementery.Restored;
+                return Cementery.Completed;
             };
             Cementery.AddChildren(prize);
         }
@@ -160,7 +162,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 }
                 Structure.AddCollisionShape(shapes.ToArray());
                 Structure.AddStaticElement(lampPost);
-
+                
                 var lamp = new WorldLight(lightPosition + Vector3.UnitY * 7)
                 {
                     Radius = PointLight.DefaultRadius,
@@ -180,5 +182,17 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             SoundtrackManager.GraveyardChampion
         };
+        
+        public override string DisplayName => Translations.Get("structure_graveyard");
+
+        protected override string GetShortDescription(Graveyard Structure)
+        {
+            return Translations.Get("quest_complete_structure_short_graveyard", DisplayName);
+        }
+
+        protected override string GetDescription(Graveyard Structure)
+        {
+            return Translations.Get("quest_complete_structure_description_graveyard", DisplayName, Structure.EnemiesLeft);
+        }
     }
 }

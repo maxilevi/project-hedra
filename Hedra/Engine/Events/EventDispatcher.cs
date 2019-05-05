@@ -130,7 +130,7 @@ namespace Hedra.Engine.Events
 
         }
 
-        public static void RegisterKeyDown(object Key, EventHandler<KeyEventArgs> EventHandler, EventPriority Priority = EventPriority.Low)
+        public static void RegisterKeyDown(object Key, EventHandler<KeyEventArgs> EventHandler, EventPriority Priority = EventPriority.Normal)
         {
             switch (Priority)
             {
@@ -168,7 +168,7 @@ namespace Hedra.Engine.Events
             }
         }
 
-        public static void RegisterKeyUp(object Key, EventHandler<KeyEventArgs> EventHandler, EventPriority Priority = EventPriority.Low)
+        public static void RegisterKeyUp(object Key, EventHandler<KeyEventArgs> EventHandler, EventPriority Priority = EventPriority.Normal)
         {
             switch (Priority)
             {

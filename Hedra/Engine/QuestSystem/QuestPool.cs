@@ -11,12 +11,14 @@ namespace Hedra.Engine.QuestSystem
         private static readonly List<QuestDesign> QuestDesigns = new List<QuestDesign>
         {
             new CollectDesign(),
-            new SpawnQuestDesign()
+            new SpawnQuestDesign(),
+            new FindOverworldStructureDesign()
         };
         
-        public static QuestDesign Grab(QuestTier Tier = QuestTier.Any)
+        public static QuestDesign Random(Vector3 Position, QuestTier Tier = QuestTier.Any)
         {
-            return QuestDesigns.First(D => D.Tier == Tier || Tier == QuestTier.Any);
+            var possibilities = QuestDesigns.Where(D => D.Tier == Tier || Tier == QuestTier.Any).Where(Q => Q.IsAvailable(Position)).ToArray();
+            return possibilities[Utils.Rng.Next(0, possibilities.Length)];
         }
 
         public static QuestDesign Grab(string Name)

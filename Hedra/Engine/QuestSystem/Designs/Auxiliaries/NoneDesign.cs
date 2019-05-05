@@ -4,19 +4,21 @@ namespace Hedra.Engine.QuestSystem.Designs.Auxiliaries
 {
     public class NoneDesign : AuxiliaryDesign
     {
+        public override bool ShowPlaque => false;
+
         public override string GetShortDescription(QuestObject Quest)
         {
-            throw new System.NotImplementedException();
+            return string.Empty;
         }
 
         public override string GetDescription(QuestObject Quest)
         {
-            throw new System.NotImplementedException();
+            return string.Empty;
         }
 
         public override QuestView BuildView(QuestObject Quest)
         {
-            throw new System.NotImplementedException();
+            return default(QuestView);
         }
 
         public override bool IsQuestCompleted(QuestObject Quest) => true;

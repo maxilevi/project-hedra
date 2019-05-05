@@ -40,7 +40,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                     villager.RemoveComponent(villager.SearchComponent<TalkComponent>());
                     villager.RemoveComponent(villager.SearchComponent<ThoughtsComponent>());
                     villager.AddComponent(
-                        new QuestGiverComponent(villager, QuestPool.Grab(QuestTier.Easy).Build(villager.Position, Utils.Rng, villager))
+                        new QuestGiverComponent(villager, QuestPool.Random(position, QuestTier.Easy).Build(position, Utils.Rng, villager))
                     );
                 }
             }

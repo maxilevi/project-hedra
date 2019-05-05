@@ -2,9 +2,9 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 
-namespace Hedra.Engine.QuestSystem.Designs
+namespace Hedra.Engine.QuestSystem
 {
-    public struct ItemCollect
+    public class ItemCollect
     {
         public int Amount { get; set; }
         public string Name { get; set; }

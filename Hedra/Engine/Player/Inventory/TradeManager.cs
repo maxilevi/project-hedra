@@ -14,6 +14,13 @@ namespace Hedra.Engine.Player.Inventory
 
     public class TradeManager
     {
+        private static readonly StaticTradeManager _staticTrader;
+
+        static TradeManager()
+        {
+            _staticTrader = new StaticTradeManager();
+        }
+        
         public event OnTransactionCompleteEventHandler OnTransactionComplete;
         private readonly InventoryArrayInterface _buyerInterface;
         private readonly InventoryArrayInterface _sellerInterface;
@@ -145,6 +152,17 @@ namespace Hedra.Engine.Player.Inventory
                 Buyer.MessageDispatcher.ShowNotification(Translations.Get("not_enough_money"), Color.Red, 3f);
             }
             OnTransactionComplete?.Invoke(Item, Price);
+        }
+
+        public static int Price(Item Item) => _staticTrader.ItemPrice(Item);
+
+        private class StaticTradeManager : TradeManager
+        {
+            public StaticTradeManager() : base(null, null)
+            {
+            }
+
+            protected override float GetPriceMultiplier(Item Item) => 1;
         }
     }
 }

@@ -38,6 +38,7 @@ namespace HedraTests
 
         protected static void MockEngine()
         {
+            GameSettings.TestingMode = true;
             World.Provider = new SimpleWorldProviderMock();
             AssetManager.Provider = new DummyAssetProvider();
             Graphics2D.Provider = new SimpleTexture2DProviderMock();

@@ -1,15 +1,15 @@
-using System;
-using Hedra.Components;
 using Hedra.Engine.Localization;
-using Hedra.Engine.Player.QuestSystem;
 using Hedra.Engine.Player.QuestSystem.Views;
-using Hedra.EntitySystem;
-using Hedra.Rendering;
+using OpenTK;
 
 namespace Hedra.Engine.QuestSystem.Designs.Auxiliaries
 {
     public class SpeakDesign : AuxiliaryDesign
     {
+        public override bool HasLocation => true;
+
+        public override Vector3 GetLocation(QuestObject Quest) => Quest.Parameters.Get<Vector3>("Location");
+
         public override string GetShortDescription(QuestObject Quest)
         {
             return Translations.Get(
@@ -51,6 +51,7 @@ namespace Hedra.Engine.QuestSystem.Designs.Auxiliaries
             };
             Quest.Giver.AddComponent(component);
             Quest.Parameters.Set("IsCompleted", false);
+            Quest.Parameters.Set("Location", Quest.Giver.Physics.TargetPosition);
             return Quest;
         }
 

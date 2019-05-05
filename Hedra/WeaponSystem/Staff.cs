@@ -42,7 +42,7 @@ namespace Hedra.WeaponSystem
                 Owner,
                 Owner.Position + Vector3.UnitY * 4f,
                 Direction,
-                Owner.DamageEquation * Options.DamageModifier,
+                Owner.DamageEquation * 2 * Options.DamageModifier,
                 ToIgnore.Concat(Options.IgnoreEntities).ToArray()
             );
             AddModifiers(fireball);
@@ -52,7 +52,7 @@ namespace Hedra.WeaponSystem
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             if(Type != AttackEventType.End) return;
-            Firewave.Create(Owner, Owner.DamageEquation * 3 * Options.Charge, Options.Charge, Options.IgnoreEntities);
+            Firewave.Create(Owner, Owner.DamageEquation * 3.5f * Options.Charge, Options.Charge, Options.IgnoreEntities);
         }
         
         protected override void OnSheathed()

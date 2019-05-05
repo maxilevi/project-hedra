@@ -203,8 +203,7 @@ namespace Hedra.Engine.Player
                     _playerText.UIText.Opacity = 1;
                     Thread.Sleep( (int) (Item.Time * 1000) );
                     _playerText.UIText.Opacity = 0;
-                    Callback();
-                });
+                }, Callback);
             }
             else
             {
@@ -256,8 +255,7 @@ namespace Hedra.Engine.Player
                     }
                     Thread.Sleep((int)(Item.Time * 1000));           
                     _playerText.UIText.Opacity = 0;
-                    Callback();
-                });
+                }, Callback);
             }
             else
             {

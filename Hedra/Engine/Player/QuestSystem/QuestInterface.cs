@@ -37,18 +37,21 @@ namespace Hedra.Engine.Player.QuestSystem
             _stateManager.OnStateChange += Invoke;
             _player.Questing.QuestAccepted += O =>
             {
+                if(!O.ShowPlaque) return;
                 _player.MessageDispatcher.ShowPlaque(
                     $"{Translations.Get("new_quest")}{Environment.NewLine}{O.ShortDescription}", 1f
                 );
             };
             _player.Questing.QuestCompleted += O =>
             {
+                if(!O.ShowPlaque) return;
                 _player.MessageDispatcher.ShowPlaque(
                     $"{Translations.Get("quest_completed")}{Environment.NewLine}{O.ShortDescription}", 1f
                 );
             };
             _player.Questing.QuestAbandoned += O =>
             {
+                if(!O.ShowPlaque) return;
                 _player.MessageDispatcher.ShowPlaque(
                     $"{Translations.Get("quest_abandoned")}{Environment.NewLine}{O.ShortDescription}", 1f, false
                 );

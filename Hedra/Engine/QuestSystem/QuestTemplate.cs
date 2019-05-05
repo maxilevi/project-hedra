@@ -11,7 +11,6 @@ namespace Hedra.Engine.QuestSystem
         public int Seed { get; set; }
         public int Steps { get; set; }
         public Dictionary<string, object> Content { get; set; }
-        public QuestContextType Context { get; set; }
         public GiverTemplate Giver { get; set; }
           
         public byte[] ToArray()

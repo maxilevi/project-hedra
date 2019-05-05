@@ -45,7 +45,7 @@ namespace Hedra.Engine.Management
         /// Executes the provided action asynchronously.
         /// </summary>
         /// <param name="Action">Action to execute.</param>
-        public static void Asynchronous(Action Action)
+        public static void Asynchronous(Action Action, Action Callback = null)
         {
             var trace = new StackTrace();
             Task.Factory.StartNew(delegate
@@ -58,6 +58,10 @@ namespace Hedra.Engine.Management
                 {
                     Log.WriteLine($"Failed to do job:{Environment.NewLine}{e}." +
                                   $"{Environment.NewLine}Trace: {trace}");
+                }
+                finally
+                {
+                    Callback?.Invoke();
                 }
             });
         }

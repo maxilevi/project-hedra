@@ -4,17 +4,19 @@ using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Localization;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
-    public class TravellingMerchantDesign : StructureDesign
+    public class TravellingMerchantDesign : FindableStructureDesign
     {
         public static bool Spawned { get; private set; }
         public override int PlateauRadius { get; } = 80;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.MerchantIcon);
+        public override VertexData QuestIcon => Icon;
 
         public override void Build(CollidableStructure Structure)
         {
@@ -50,5 +52,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                    Rng.Next(0, StructureGrid.TravellingMerchantChance) == 1 && BiomeGenerator.PathFormula(TargetPosition.X, TargetPosition.Y) > 0 && height > BiomePool.SeaLevel && !Spawned
                    && Math.Abs(LandscapeGenerator.River(TargetPosition.Xz)) < 0.005f;
         }
+        
+        public override string DisplayName => Translations.Get("structure_travelling_merchant");
     }
 }

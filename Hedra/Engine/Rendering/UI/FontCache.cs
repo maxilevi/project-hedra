@@ -12,8 +12,8 @@ namespace Hedra.Engine.Rendering.UI
     public static class FontCache
     {
         private static readonly Dictionary<FontEntry, Font> CachedFonts = new Dictionary<FontEntry, Font>();
-        private static FontFamily _normalFamily;
-        private static FontFamily _boldFamily;
+        private static FontFamily _normalFamily = new FontFamily(GenericFontFamilies.Serif);
+        private static FontFamily _boldFamily = new FontFamily(GenericFontFamilies.Serif);
         
         public static void SetFonts(FontFamily NormalCollection, FontFamily BoldCollection)
         {
@@ -37,7 +37,9 @@ namespace Hedra.Engine.Rendering.UI
                 }
                 catch (ArgumentException e)
                 {
-                    Log.WriteLine($"Font '{Family.Name}' with size '{Size}' and style '{entry.Style}' failed to create.{Environment.NewLine}Trace:{e}");
+                    Log.WriteLine(Family == null
+                        ? $"Provided font family was null.{Environment.NewLine}Trace:{e}"
+                        : $"Font '{Family.Name}' with size '{Size}' and style '{entry.Style}' failed to create.{Environment.NewLine}Trace:{e}");
                     if(CachedFonts.Count > 0)
                         return CachedFonts.Values.First();
                     throw;

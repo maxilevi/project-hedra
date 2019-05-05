@@ -8,6 +8,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EntitySystem.BossSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
@@ -15,10 +16,11 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
-    public class GiantTreeDesign : StructureDesign
+    public class GiantTreeDesign : CompletableStructureDesign<GiantTree>
     {
         public override int PlateauRadius { get; } = 700;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.BossIcon);
+        public override VertexData QuestIcon => Icon;
 
         public override void Build(CollidableStructure Structure)
         {
@@ -76,6 +78,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             );
             chest.Condition += () => treeBoss == null || treeBoss.IsDead;
             chest.Rotation = Vector3.UnitY * 90f;
+            ((GiantTree) Structure.WorldObject).Chest = chest;
             Structure.WorldObject.AddChildren(chest);
         }
         
@@ -89,6 +92,18 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var height = Biome.Generation.GetHeight( TargetPosition.X, TargetPosition.Z, null, out _);
             return Rng.Next(0, StructureGrid.GiantTreeChance) == 1 && height > BiomePool.SeaLevel 
                    || Rng.Next(0, StructureGrid.WaterGiantTreeChance) == 1 && height <= BiomePool.SeaLevel;
+        }
+        
+        public override string DisplayName => Translations.Get("structure_giant_tree");
+
+        protected override string GetShortDescription(GiantTree Structure)
+        {
+            return Translations.Get("quest_complete_structure_short_giant_tree", Structure.Boss.Name.ToUpperInvariant());
+        }
+
+        protected override string GetDescription(GiantTree Structure)
+        {
+            return Translations.Get("quest_complete_structure_description_giant_tree", Structure.Boss.Name.ToUpperInvariant(), DisplayName);
         }
     }
 }

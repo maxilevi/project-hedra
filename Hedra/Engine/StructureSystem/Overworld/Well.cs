@@ -1,5 +1,7 @@
+using System;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
+using Hedra.Engine.QuestSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using OpenTK;

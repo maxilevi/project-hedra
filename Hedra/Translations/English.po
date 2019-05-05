@@ -161,9 +161,24 @@ quest_complete_reward_dialog_1 = Thanks for helping me, here is your reward $(OR
 quest_find_structure_short = LOOK FOR THE $(BOLD)(ORANGE){{0}}.
 quest_find_structure_description = $(BLUE)(BOLD){{0}} told you there is a nearby $(BOLD)(ORANGE){{1}}.\n$(GRAY)(BOLD){HINT: }Open the map to see more details.
 quest_find_structure_dialog_0 = There is a nearby $(BOLD)(ORANGE)(CAPS){{0}}. You should go find it.
+quest_find_structure_dialog_1 = I've heard there is a nearby $(BOLD)(ORANGE)(CAPS){{0}}. It holds great rewards, but beware.
+quest_find_structure_dialog_2 = Rumors talk about a nearby $(BOLD)(ORANGE)(CAPS){{0}} which holds great treasures.
 quest_spawn_dialog_0 = This is my last stop, you will have to continue your journey alone.
 quest_spawn_find_structure = There is a nearby $(BOLD)(ORANGE)(CAPS){{0}}. You should go find it.
 quest_village = VILLAGE
+quest_complete_structure_short_giant_tree = DEFEAT $(BOLD)(ORANGE){{0}}
+quest_complete_structure_short_graveyard = FREE THE $(BOLD)(ORANGE){{0}} 
+quest_complete_structure_short_bandit_camp = RESCUE $(BOLD)(ORANGE){{0}} 
+quest_complete_structure_short_witch_hut =
+quest_complete_structure_description_giant_tree = Defeat $(BOLD)(BLUE){{0}} at the $(BOLD)(ORANGE){{1}}.
+quest_complete_structure_description_graveyard = Free the $(BOLD)(ORANGE){{0}} from the corruption of the demons.\nThere are $(BOLD)(VIOLET){{1}} enemies left.
+quest_complete_structure_description_bandit_camp = Kill the kidnappers and rescue $(BOLD)(BLUE){{0}} from the $(BOLD)(ORANGE){{1}}.\n\nThere are $(BOLD)(VIOLET){{2}} bandits left.
+quest_complete_structure_description_witch_hut =
+
+quest_pickup_item_short = PICK UP $(BOLD)(ORANGE){{0}}
+# quest_pickup_item_description = Pickup the nearby $(BOLD)(BLUE){{0}}
+quest_pickup_chest_description = Recover the lost $(BOLD)(BLUE){{0}} from the nearby chest.
+quest_pickup_get_item_description = Receive the $(BOLD)(BLUE){{0}} from $(BOLD)(ORANGE){{1}}
 
 # -- Class Names --
 mage = Mage
@@ -417,8 +432,6 @@ siphon_blood_desc = Absorb the blood of your enemies and heal yourself with it
 siphon_blood_skill = Siphon Blood
 siphon_blood_health_change = Heals $(BOLD)(GREEN){{0}} yourself 
 siphon_blood_damage_change = Deals $(BOLD)(RED){{0}} damage
-bone_spirit_desc = Launch a homing projectile 
-bone_spirit_skill = Bone Soul
 dark_reaping_desc = Reap the essence of slayed enemies
 dark_reaping_skill = Dark Reaping
 dark_reaping_mana_change = Grants $(BOLD)(BLUE){{0}} mana when killing an enemy
@@ -429,7 +442,6 @@ skeleton_mastery_desc = Increase the stats of your summoned skeletons
 skeleton_mastery_skill = Skeleton Mastery
 skeleton_mastery_resistance_change = Skeletons have damage resistance reduced by $(BOLD)(RED){{0}%}
 skeleton_mastery_health_change = Skeletons have $(GREEN)(BOLD){{0}} HP
-skeleton_mastery_damage_change = Skeletons deal $(BOLD)(RED){{0}%} damage of a normal attack
 skeleton_mastery_level_change = Skeletons are level $(BOLD)(BLUE){{0}}
 skeleton_mastery_minion_name = Skeleton
 leech_desc = Curse enemies in an area around you, stealing their health every second
@@ -450,7 +462,6 @@ companion_mastery_health_all_change = Increases companion health by $(BOLD)(GREE
 companion_mastery_resistance_all_change = Increases companion resistance by $(BOLD)(YELLOW){{0}%}
 companion_mastery_damage_all_change = Increases companion damage by $(BOLD)(RED){{0}%}
 companion_mastery_health_change = Has $(BOLD)(GREEN){{0}} health
-companion_mastery_resistance_change = Reduces external damage by $(BOLD)(YELLOW){{0}%}
 companion_mastery_damage_change = Deals $(BOLD)(RED){{0}} damage per hit
 ground_fissure_desc = Emerge a fire geyser from the ground
 ground_fissure_skill = Ground Fissure
@@ -572,3 +583,12 @@ assassin_class_description = Master of the shadows, specializes in stealth comba
 # -- End Class Names --
 need_specialize_to_unlock = YOU NEED TO SPECIALIZE INTO A \n{0} TO UNLOCK THIS SKILL
 specialization_level_requirement = YOU NEED TO BE AT LEAST LEVEL {0} TO SPECIALIZE
+# -- Structure Names --
+structure_portal = REALM PORTAL
+structure_bandit_camp = BANDIT CAMP
+structure_giant_tree = GIANT TREE
+structure_graveyard = GRAVEYARD
+structure_travelling_merchant = TRAVELLING MERCHANT
+structure_witch_hut = WITCH HUT
+structure_wizard_tower = WIZARD TOWER
+

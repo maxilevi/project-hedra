@@ -40,7 +40,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var wasInCementery = _inCementery;
             
             _inCementery = (_parent.Position.Xz - GameManager.Player.Position.Xz).LengthSquared <
-                           _parent.Radius * _parent.Radius * .5f * .5f && !_parent.Restored;
+                           _parent.Radius * _parent.Radius * .5f * .5f && !_parent.Completed;
             
             if(_inCementery && !wasInCementery)
             {
@@ -74,14 +74,14 @@ namespace Hedra.Engine.StructureSystem.Overworld
         
         private void HandleParticles()
         {
-            if (_parent.Restored && !_restoreSoundPlayed)
+            if (_parent.Completed && !_restoreSoundPlayed)
             {
                 _restoreSoundPlayed = true;
                 SoundPlayer.PlaySound(SoundType.DarkSound, GameManager.Player.Position);
 
             }
 
-            if (!_parent.Restored &&  (_parent.Position - GameManager.Player.Position).Xz.LengthSquared 
+            if (!_parent.Completed &&  (_parent.Position - GameManager.Player.Position).Xz.LengthSquared 
                 < _parent.Radius * _parent.Radius)
             {
             

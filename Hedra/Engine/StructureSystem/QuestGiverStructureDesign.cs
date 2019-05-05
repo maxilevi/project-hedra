@@ -33,7 +33,7 @@ namespace Hedra.Engine.StructureSystem
                     npc.Rotation = Physics.DirectionToEuler(npc.Orientation = -Vector3.TransformPosition(DefaultLookingDirection, Rotation));
                     npc.Physics.TargetPosition = position;
                     npc.Physics.UsePhysics = false;
-                    npc.AddComponent(new QuestGiverComponent(npc, QuestPool.Grab().Build(npc.Position, Utils.Rng, npc)));
+                    npc.AddComponent(new QuestGiverComponent(npc, QuestPool.Random(position).Build(position, Utils.Rng, npc)));
                     ((T) Structure.WorldObject).NPC = npc;
                 }, Structure);
             }

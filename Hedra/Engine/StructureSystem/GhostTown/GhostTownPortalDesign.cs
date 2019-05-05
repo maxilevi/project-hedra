@@ -11,10 +11,11 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.GhostTown
 {
-    public class GhostTownPortalDesign : SimpleStructureDesign<GhostTownPortal>
+    public class GhostTownPortalDesign : SimpleFindableStructureDesign<GhostTownPortal>
     {
         public override int PlateauRadius => 140;
         public override VertexData Icon { get; } = CacheManager.GetModel(CacheItem.PortalIcon);
+        public override VertexData QuestIcon => Icon;
         protected override int StructureChance => StructureGrid.GhostTownPortalChance;
         protected override CacheItem? Cache => CacheItem.Portal;
         protected override Vector3 Scale => Vector3.One * 10;
@@ -24,7 +25,7 @@ namespace Hedra.Engine.StructureSystem.GhostTown
         {
             base.DoBuild(Structure, Rotation, Translation, Rng);
             if(!SpawnNPC) return;
-            DoWhenChunkReady(Vector3.TransformPosition(-Vector3.UnitZ * 5 * Scale +- Vector3.UnitX * 2 * Scale, Rotation * Translation), P =>
+            DoWhenChunkReady(Vector3.TransformPosition(-Vector3.UnitZ * 5 * Scale - Vector3.UnitX * 2 * Scale, Rotation * Translation), P =>
             {
                 var human = World.WorldBuilding.SpawnHumanoid(HumanType.Mage, P);
                 human.Physics.UsePhysics = false;
@@ -42,6 +43,8 @@ namespace Hedra.Engine.StructureSystem.GhostTown
         {
             return new GhostTownPortal(Position, Scale, RealmHandler.GhostTown, SpawnGhostTownPortalDesign.Position);
         }
+        
+        public override string DisplayName => Translations.Get("structure_portal");
     }
 
     public class GhostTownThoughtsComponent : ThoughtsComponent

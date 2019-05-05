@@ -29,10 +29,10 @@ namespace Hedra.Engine.QuestSystem.Designs.Auxiliaries
             );
         }
 
-        protected override QuestParameters BuildParameters(QuestObject Previous, QuestContext Context, QuestParameters Parameters, Random Rng)
+        protected override QuestParameters BuildParameters(QuestObject Previous, QuestParameters Parameters, Random Rng)
         {
             Parameters.Set("Reward", Previous.Reward);
-            return base.BuildParameters(Previous, Context, Parameters, Rng);
+            return base.BuildParameters(Previous, Parameters, Rng);
         }
 
         private static DialogObject BuildDialog(QuestObject Quest)

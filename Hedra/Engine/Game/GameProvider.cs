@@ -234,7 +234,7 @@ namespace Hedra.Engine.Game
                 {
                     lastSeed = World.Seed;
                     if (!_loadingScreen.ShouldShow) continue;
-                    var wasMenuEnabled = Player.UI.Menu.Enabled;
+                    var wasMenuEnabled = Player.UI.Menu.Enabled || InStartMenu;
                     var wasGameUiEnabled = Player.UI.GamePanel.Enabled;
                     Player.UI.HideMenu();
                     Player.UI.GamePanel.Disable();

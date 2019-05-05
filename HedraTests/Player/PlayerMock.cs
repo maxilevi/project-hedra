@@ -234,6 +234,7 @@ namespace HedraTests.Player
 
         public Weapon LeftWeapon { get; set; }
         public MobType MobType { get; set; }
+        public event OnInteractionEvent Interact;
         public IMessageDispatcher MessageDispatcher { get; set; }
         public ICamera View { get; set; } = new SimpleCameraMock();
         public ChunkLoader Loader { get; }

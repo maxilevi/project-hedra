@@ -10,13 +10,17 @@ using Hedra.Engine.Player.MapSystem;
 using Hedra.Engine.Player.ToolbarSystem;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.Player
-{   
+{
+    public delegate void OnInteractionEvent();
+    
     public interface IPlayer : IHumanoid, ISkillUser
     {
+        event OnInteractionEvent Interact;
         IMessageDispatcher MessageDispatcher { get; }
         ICamera View { get; }
         ChunkLoader Loader { get; }

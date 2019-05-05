@@ -196,10 +196,11 @@ namespace Hedra.Engine.Management
                 
                 if (Parts[0] == "quest")
                 {
-                    var human = World.WorldBuilding.SpawnVillager(Caster.Position + Caster.Orientation * 16f, Utils.Rng);
+                    var position = Caster.Position + Caster.Orientation * 16f;
+                    var human = World.WorldBuilding.SpawnVillager(position, Utils.Rng);
                     var tier = Parts.Length == 2 ? (QuestTier) Enum.Parse(typeof(QuestTier), Parts[1], true) : QuestTier.Any;
                     human.AddComponent(
-                        new QuestGiverComponent(human, QuestPool.Grab(tier).Build(human.Position, Utils.Rng, human))
+                        new QuestGiverComponent(human, QuestPool.Grab(Quests.FindOverworldStructure).Build(position, Utils.Rng, human))
                     );
                     Result = "Success";
                     return true;

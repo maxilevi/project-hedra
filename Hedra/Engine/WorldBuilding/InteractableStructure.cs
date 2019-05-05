@@ -46,7 +46,7 @@ namespace Hedra.Engine.WorldBuilding
 
         protected InteractableStructure(Vector3 Position) : base(Position)
         {
-            EventDispatcher.RegisterKeyDown(this, OnKeyDown, EventPriority.Normal);
+            EventDispatcher.RegisterKeyDown(this, OnKeyDown, EventPriority.High);
             UpdateManager.Add(this);
         }
 

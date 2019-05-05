@@ -21,6 +21,10 @@ namespace Hedra.Engine.QuestSystem
             _activeQuests = new List<QuestObject>();
             _player.Inventory.InventoryUpdated += CheckForCompleteness;
             _player.StructureAware.StructureEnter += _ => CheckForCompleteness();
+            _player.StructureAware.StructureCompleted += _ => CheckForCompleteness();
+            _player.StructureAware.StructureLeave += _ => CheckForCompleteness();
+            _player.Kill += _ => CheckForCompleteness();
+            _player.Interact += CheckForCompleteness;
         }
         
         public void Start(QuestObject Quest)

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows.Forms;
 using Hedra.Core;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.CraftingSystem;
@@ -44,11 +45,13 @@ using Hedra.Engine.SkillSystem;
 using Hedra.EntitySystem;
 using Hedra.Sound;
 using OpenTK.Input;
+using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;
 
 namespace Hedra.Engine.Player
 {
     public class LocalPlayer : Humanoid, IPlayer
     {
+        public event OnInteractionEvent Interact;
         public ICamera View { get; }
         public ChunkLoader Loader { get; }
         public UserInterface UI { get; set; }
@@ -131,7 +134,9 @@ namespace Hedra.Engine.Player
                     HandLamp.Enabled = !HandLamp.Enabled;
                     SoundPlayer.PlaySound(SoundType.NotificationSound, Position);
                 }
-            });
+                if(Controls.Interact == Args.Key)
+                    Interact?.Invoke();
+            }, EventPriority.Low);
 
             Kill += A =>
             {

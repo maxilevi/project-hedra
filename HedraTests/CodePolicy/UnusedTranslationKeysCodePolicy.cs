@@ -20,24 +20,33 @@ namespace HedraTests.CodePolicy
             @"_\d",
             @"_key",
             "requires_.+",
+            ".+companion_desc",
+            ".+companion_name",
+            ".+companion_skill",
         };
-        
-        [Test]
-        public void TestThereAreNoUnusedKeys()
+
+        private void LoadKeys(out string[] Keys, out string[] SourceFiles)
         {
+            GameSettings.TestingMode = true;
             AbilityTreeLoader.LoadModules(GameLoader.AppPath);
             var mobNames = MobLoader.LoadModules(GameLoader.AppPath).Select(K => K.Name.ToLowerInvariant()).ToArray();
             var skillTreesNames = AbilityTreeLoader.Instance.Names.Select(S => S.ToLowerInvariant()).ToArray();
-            var englishKeys = IniParser.Parse(File.ReadAllText($"{GameLoader.AppPath}/Translations/English.po"))
+            Keys = IniParser.Parse(File.ReadAllText($"{GameLoader.AppPath}/Translations/English.po"))
                 .Select(P => P.Key)
                 .Where(K => _exceptions.ToList().All(E => !Regex.IsMatch(K, E)))
                 .Where(K => Array.IndexOf(skillTreesNames, K) == -1)
                 .Where(K => Array.IndexOf(mobNames, K) == -1)
                 .ToArray();
-            var set = new HashSet<string>(englishKeys);
-            var sourceFiles = GetAllFilesThatMatch(@"\bTranslation[|s]*\b")
+            SourceFiles = GetAllFilesThatMatch(@"\bTranslation[|s]*\b")
                 .Select(P => P.Key)
                 .ToArray();
+        }
+        
+        [Test]
+        public void TestThereAreNoUnusedKeys()
+        {
+            LoadKeys(out var englishKeys, out var sourceFiles);
+            var set = new HashSet<string>(englishKeys);
             for (var k = 0; k < sourceFiles.Length; ++k)
             {
                 for (var i = 0; i < englishKeys.Length; ++i)
@@ -46,7 +55,7 @@ namespace HedraTests.CodePolicy
                     if (source.Contains(englishKeys[i]))
                         set.Remove(englishKeys[i]);                    
                 }
-                englishKeys = set.ToArray();
+                englishKeys = englishKeys.ToArray();
             }
 
             var modules = GetAllModules();
@@ -64,9 +73,27 @@ namespace HedraTests.CodePolicy
         }
 
         [Test]
-        public void TestThereAreNoDuplicateKeys()
+        public void TestThereAreNoUndefinedKeys()
         {
-            
+            LoadKeys(out var englishKeys, out var sourceFiles);
+            var usedKeys = new HashSet<string>();
+            for (var k = 0; k < sourceFiles.Length; ++k)
+            {
+                var matches = Regex.Matches(File.ReadAllText(sourceFiles[k]), @"\bTranslation[s]*\.(Create|Get)\(""(.*?)""[\)\,]");
+                for (var i = 0; i < matches.Count; ++i)
+                {
+                    if (matches[i].Groups.Count == 3)
+                    {
+                        usedKeys.Add(matches[i].Groups[2].Value);
+                    }
+                }
+            }
+
+            for (var i = 0; i < englishKeys.Length; ++i)
+            {
+                usedKeys.Remove(englishKeys[i]);
+            }
+            if(usedKeys.Count > 0) Assert.Fail(string.Join(Environment.NewLine, usedKeys.Select(S => $"Translation key '{S}' is being used but it hasn't been defined in the English.po").ToArray()));
         }
     }
 }

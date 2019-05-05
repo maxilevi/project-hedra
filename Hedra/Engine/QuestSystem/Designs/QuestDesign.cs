@@ -16,7 +16,11 @@ namespace Hedra.Engine.QuestSystem.Designs
     {
         private bool IsAuxiliary => Tier == QuestTier.Auxiliary;
 
+        public virtual bool ShowPlaque => true;
+
         protected virtual bool HasNext => true;
+
+        public virtual bool CanSaveOnThisStep => true;
 
         public virtual bool HasLocation => false;
         
@@ -49,7 +53,7 @@ namespace Hedra.Engine.QuestSystem.Designs
         /// </summary>
         /// <param name="Quest">The quest object</param>
         /// <returns>A keyword to be used in the ThoughtsComponent.</returns>
-        public abstract string GetThoughtsKeyword(QuestObject Quest);
+        public virtual string GetThoughtsKeyword(QuestObject Quest) => throw new NotImplementedException();
 
         /// <summary>
         /// An unique name for the quest design. Used for loading.
@@ -61,7 +65,7 @@ namespace Hedra.Engine.QuestSystem.Designs
         /// </summary>
         /// <param name="Quest">The quest object</param>
         /// <returns>Parameters for the thought keyword.</returns>
-        public abstract object[] GetThoughtsParameters(QuestObject Quest);
+        public virtual object[] GetThoughtsParameters(QuestObject Quest)  => throw new NotImplementedException();
         
         /// <summary>
         /// Used to show a small description in the plaque.
@@ -103,7 +107,7 @@ namespace Hedra.Engine.QuestSystem.Designs
         /// <param name="Parameters"></param>
         /// <param name="Rng"></param>
         /// <returns>The same QuestParameters object.</returns>
-        protected virtual QuestParameters BuildParameters(QuestObject Previous, QuestContext Context, QuestParameters Parameters, Random Rng)
+        protected virtual QuestParameters BuildParameters(QuestObject Previous, QuestParameters Parameters, Random Rng)
         {
             return Parameters;
         }
@@ -183,11 +187,21 @@ namespace Hedra.Engine.QuestSystem.Designs
         {
         }
 
+        /// <summary>
+        /// Loads the content created in GetContent
+        /// </summary>
+        /// <param name="Quest"></param>
+        /// <param name="Content"></param>
         public virtual void LoadContent(QuestObject Quest, Dictionary<string, object> Content)
         {
             
         }
         
+        /// <summary>
+        /// Returns quest design specific content to save
+        /// </summary>
+        /// <param name="Quest"></param>
+        /// <returns></returns>
         public virtual Dictionary<string, object> GetContent(QuestObject Quest)
         {
             return null;
@@ -306,9 +320,10 @@ namespace Hedra.Engine.QuestSystem.Designs
             parameters.Set("Context", Context);
             parameters.Set("Next", NextDesign);
             parameters.Set("NextObject", NextObject);
+            parameters.Set("PreviousObject", Previous);
             return Setup(new QuestObject(
                 this,
-                BuildParameters(Previous, Context, parameters, new Random(parameters.Get<int>("Seed"))),
+                BuildParameters(Previous, parameters, new Random(parameters.Get<int>("Seed"))),
                 Giver,
                 BaseDesign ?? this,
                 Steps
@@ -316,6 +331,11 @@ namespace Hedra.Engine.QuestSystem.Designs
             {
                 Previous = Previous
             });
+        }
+
+        public virtual bool IsAvailable(Vector3 Position)
+        {
+            return true;
         }
     }
 }

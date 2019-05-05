@@ -1,4 +1,5 @@
 using System;
+using Hedra.Engine.Game;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering
@@ -15,6 +16,7 @@ namespace Hedra.Engine.Rendering
     {
         public static void AssertTriangulated(this IModelData Model)
         {
+            if(GameSettings.TestingMode) return;
             if(Model.Vertices.Length % 3 != 0)
                 throw new ArgumentOutOfRangeException($"ModelData with '{Model.Vertices.Length}' vertices is not triangulated correctly");
             if(Model.Colors.Length % 3 != 0)

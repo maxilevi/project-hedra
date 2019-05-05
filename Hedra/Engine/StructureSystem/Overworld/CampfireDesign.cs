@@ -5,6 +5,7 @@ using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
@@ -112,7 +113,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
             return Rng.Next(0, StructureGrid.CampfireChance) == 1 && height > BiomePool.SeaLevel && Math.Abs(LandscapeGenerator.River(TargetPosition.Xz)) < 0.005f;
         }
-
 
         public static Vector4 TentColor(Random Rng)
         {

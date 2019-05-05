@@ -16,7 +16,7 @@ namespace Hedra.Engine.QuestSystem.Designs
 
         protected abstract ItemCollect[] Templates(QuestObject Quest, Random Rng);
         
-        protected override QuestParameters BuildParameters(QuestObject Previous, QuestContext Context, QuestParameters Parameters, Random Rng)
+        protected override QuestParameters BuildParameters(QuestObject Previous, QuestParameters Parameters, Random Rng)
         { 
             return Parameters;
         }

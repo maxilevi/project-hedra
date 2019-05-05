@@ -33,3 +33,4 @@
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.EntitySystem'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.AISystem.Behaviours'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Rendering.Particles'):-rename")]
+[assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.AnimationEvents.SkillEvents'):-rename")]

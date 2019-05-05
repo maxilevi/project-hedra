@@ -20,6 +20,7 @@ namespace Hedra.Engine.QuestSystem
         public event OnQuestChanged QuestChanged;
         public QuestView View { get; private set; }
         public QuestDesign BaseDesign { get; }
+        public bool ShowPlaque => _design.ShowPlaque;
         public bool IsFirst => Previous == null;
         public bool HasLocation => _design.HasLocation;
         public Vector3 Location => _design.GetLocation(this);
@@ -28,6 +29,7 @@ namespace Hedra.Engine.QuestSystem
         public string ShortDescription => _design.GetShortDescription(this);
         public string Description => _design.GetDescription(this);
         public int Seed => Parameters.Get<int>("Seed");
+        public Vector3 Position => Parameters.Get<QuestContext>("Context").Position;
         public int Steps { get; private set; }
         public IHumanoid Giver { get; }
         public IPlayer Owner { get; private set; }
@@ -132,8 +134,7 @@ namespace Hedra.Engine.QuestSystem
             {
                 Name = BaseDesign.Name,
                 Seed = Parameters.Get<int>("Seed"),
-                Context = Parameters.Get<QuestContext>("Context").ContextType,
-                Steps = Steps,
+                Steps = Steps - (_design.CanSaveOnThisStep ? 1 : 0),
                 Giver = GiverTemplate.FromHumanoid(Giver),
                 Content = GetBaseObject().GetContent()
             };
@@ -144,7 +145,7 @@ namespace Hedra.Engine.QuestSystem
             try
             {
                 var quest = QuestPool.Grab(Template.Name).Build(
-                    new QuestContext(Template.Context),
+                    new QuestContext(Template.Giver.Position),
                     Template.Seed,
                     QuestPersistence.BuildQuestVillager(Template.Giver)
                 );

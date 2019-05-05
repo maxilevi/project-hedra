@@ -36,6 +36,7 @@ namespace Hedra.Engine.Generation
         public event OnModelAdded ModelAdded;
         public event OnInstanceAdded InstanceAdded;
         public Vector3 Position { get; }
+        public Vector2 MapPosition { get; set; }
         public RoundedPlateau Mountain { get; }
         public BaseStructure WorldObject { get; }
         public float Radius { get; private set; }

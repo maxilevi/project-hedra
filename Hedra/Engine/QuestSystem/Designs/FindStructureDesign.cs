@@ -6,6 +6,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Player.QuestSystem.Views;
 using Hedra.Engine.QuestSystem.Designs.Auxiliaries;
 using Hedra.Engine.StructureSystem;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.QuestSystem.Designs
@@ -19,10 +20,10 @@ namespace Hedra.Engine.QuestSystem.Designs
         public override Vector3 GetLocation(QuestObject Quest) => Quest.Parameters.Get<Vector3>("StructurePosition");
 
         public override string GetShortDescription(QuestObject Quest) 
-            => Translations.Get("quest_find_structure_short", StructureTypeName);
+            => Translations.Get("quest_find_structure_short", StructureTypeName(Quest));
 
         public override string GetDescription(QuestObject Quest)
-            => Translations.Get("quest_find_structure_description", Quest.Giver.Name, StructureTypeName);
+            => Translations.Get("quest_find_structure_description", Quest.Giver.Name, StructureTypeName(Quest));
         
         public override string GetThoughtsKeyword(QuestObject Quest)
             => "quest_find_structure_dialog";
@@ -30,7 +31,7 @@ namespace Hedra.Engine.QuestSystem.Designs
         public override object[] GetThoughtsParameters(QuestObject Quest)
             => new object[]
             {
-                StructureTypeName
+                StructureTypeName(Quest)
             };
 
         protected override QuestObject Setup(QuestObject Quest)
@@ -48,7 +49,7 @@ namespace Hedra.Engine.QuestSystem.Designs
         {
             return new ModelView(
                 Quest,
-                CacheManager.GetModel(IconCache).Clone().Scale(IconScale * Vector3.One)
+                IconModel(Quest).Clone().Scale(IconScale * Vector3.One)
             );
         }
 
@@ -59,9 +60,14 @@ namespace Hedra.Engine.QuestSystem.Designs
         }
 
         protected virtual float IconScale => 1;
+
+        protected abstract CacheItem IconCache(QuestObject Quest);
+
+        protected virtual VertexData IconModel(QuestObject Quest)
+        {
+            return CacheManager.GetModel(IconCache(Quest));
+        }
         
-        protected abstract CacheItem IconCache { get; }
-        
-        protected abstract string StructureTypeName { get; }
+        protected abstract string StructureTypeName(QuestObject Quest);
     }
 }

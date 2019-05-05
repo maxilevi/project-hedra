@@ -10,19 +10,29 @@ using OpenTK;
 namespace Hedra.Engine.Player
 {
     public delegate void OnStructureEnter(CollidableStructure Structure);
+    public delegate void OnStructureLeave(CollidableStructure Structure);
+    public delegate void OnStructureCompleted(CollidableStructure Structure);
     
     public class StructureAware : IStructureAware
     {
         public event OnStructureEnter StructureEnter;
+        public event OnStructureLeave StructureLeave;
+        public event OnStructureCompleted StructureCompleted;
         private bool _wasPlayingCustom;
         private readonly IPlayer _player;
+        private CollidableStructure _insideStructure;
         private CollidableStructure[] _currentNearStructures;
-        private Timer _enterTimer;
+        private readonly Timer _enterTimer;
+        private readonly Timer _insideTimer;
 
         public StructureAware(IPlayer Player)
         {
             _player = Player;
             _enterTimer = new Timer(12f)
+            {
+                AutoReset = false
+            };
+            _insideTimer = new Timer(2f)
             {
                 AutoReset = false
             };
@@ -41,7 +51,8 @@ namespace Hedra.Engine.Player
             }
 
             _enterTimer.Tick();
-            this.HandleSounds();
+            HandleSounds();
+            HandleEvents();
         }
 
         private void HandleSounds()
@@ -57,11 +68,6 @@ namespace Hedra.Engine.Player
                         var song = structure.Design.AmbientSongs[Utils.Rng.Next(0, structure.Design.AmbientSongs.Length)];
                         SoundtrackManager.PlayTrack(song, true);
                         _wasPlayingCustom = true;
-                        if (_enterTimer.Ready)
-                        {
-                            structure.Design.OnEnter(_player);
-                            StructureEnter?.Invoke(structure);
-                        }
                     }
                     none = false;
                 }
@@ -70,6 +76,34 @@ namespace Hedra.Engine.Player
             {
                 _wasPlayingCustom = false;
                 SoundtrackManager.PlayAmbient();
+            }
+        }
+
+        private void HandleEvents()
+        {
+            if(!_insideTimer.Tick()) return;
+            var isInsideAny = false;
+            for (var i = 0; i < _currentNearStructures.Length; i++)
+            {
+                var structure = _currentNearStructures[i];
+                if ((structure.Position.Xz - _player.Position.Xz).LengthFast < structure.Radius * .75f)
+                {
+                    isInsideAny = true;
+                    if (_insideStructure == null)
+                    {
+                        _insideStructure = structure;
+                        _insideStructure.Design.OnEnter(_player);
+                        StructureEnter?.Invoke(_insideStructure);
+                        break;
+                    }
+                }
+            }
+
+            if (!isInsideAny && _insideStructure != null)
+            {
+                /* _insideStructure.Design.OnLeave(_player); */
+                StructureLeave?.Invoke(_insideStructure);
+                _insideStructure = null;
             }
         }
         

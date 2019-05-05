@@ -1,4 +1,5 @@
 using Hedra.Engine.CacheSystem;
+using Hedra.Engine.Localization;
 using Hedra.Rendering;
 using OpenTK;
 
@@ -17,6 +18,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
         protected override Gazebo Create(Vector3 Position, float Size)
         {
             return new Gazebo(Position, Size);
-        }
+        }    
     }
 }

@@ -31,16 +31,16 @@ namespace Hedra.Engine.QuestSystem.Designs
 
         protected override float BuildStructureRadius(QuestObject Quest) => VillageDesign.MaxVillageRadius;
 
-        protected override string StructureTypeName => Translations.Get("quest_village");
+        protected override string StructureTypeName(QuestObject Quest) => Translations.Get("quest_village");
         
         public override void SetupDialog(QuestObject Quest, IPlayer Owner)
         {
             Quest.Giver.SearchComponent<TalkComponent>().AddDialogLine(
-                Translation.Create("quest_spawn_find_structure", new object[] {StructureTypeName})
+                Translation.Create("quest_spawn_find_structure", new object[] {StructureTypeName(Quest)})
             );
         }
 
-        protected override CacheItem IconCache => CacheItem.VillageIcon;
+        protected override CacheItem IconCache(QuestObject Quest) => CacheItem.VillageIcon;
 
         protected override float IconScale => .05f;
 

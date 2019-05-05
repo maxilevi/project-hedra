@@ -7,6 +7,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EntitySystem.BossSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
 using Hedra.Rendering;
 using OpenTK;
 
@@ -50,6 +51,6 @@ namespace Hedra.Engine.StructureSystem.GhostTown
         protected override GhostTownBoss Create(Vector3 Position, float Size)
         {
             return new GhostTownBoss(Position);
-        }
+        }      
     }
 }

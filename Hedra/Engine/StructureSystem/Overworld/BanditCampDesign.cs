@@ -10,6 +10,7 @@ using Hedra.Engine.ComplexMath;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
@@ -19,7 +20,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
-    public class BanditCampDesign : StructureDesign
+    public class BanditCampDesign : CompletableStructureDesign<BanditCamp>
     {
         private const int Level = 18;
         public override int PlateauRadius { get; } = 328;
@@ -212,6 +213,20 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             var height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
             return Rng.Next(0, StructureGrid.BanditCampChance) == 1 && height > BiomePool.SeaLevel;
+        }
+
+        public override string DisplayName => Translations.Get("structure_bandit_camp");
+        
+        public override VertexData QuestIcon => Icon;
+
+        protected override string GetShortDescription(BanditCamp Structure)
+        {
+            return Translations.Get("quest_complete_structure_short_bandit_camp", Structure.Rescuee.Name.ToUpperInvariant());
+        }
+
+        protected override string GetDescription(BanditCamp Structure)
+        {
+            return Translations.Get("quest_complete_structure_description_bandit_camp", Structure.Rescuee.Name.ToUpperInvariant(), DisplayName, Structure.EnemiesLeft);
         }
 
         public class TentParameters

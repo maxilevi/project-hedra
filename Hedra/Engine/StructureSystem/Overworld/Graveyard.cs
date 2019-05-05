@@ -7,9 +7,12 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
+using System.Linq;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
+using Hedra.Engine.QuestSystem;
 using Hedra.Engine.WorldBuilding;
 using OpenTK;
 
@@ -19,12 +22,13 @@ namespace Hedra.Engine.StructureSystem.Overworld
     /// <summary>
     /// Description of Cementary.
     /// </summary>
-    public sealed class Graveyard : BaseStructure, IUpdatable
+    public sealed class Graveyard : BaseStructureWithChest, IUpdatable, ICompletableStructure
     {
         private readonly GraveyardAmbientHandler _ambientHandler;
         public Entity[] Enemies { get; set; }
-        public bool Restored { get; private set; }
         public float Radius { get; }
+        public bool Completed => EnemiesLeft == 0;
+        public int EnemiesLeft => Enemies.Count(E => !E.IsDead);
         public HighlightedAreaWrapper AreaWrapper { get; set; }
 
         public Graveyard(Vector3 Position, float Radius) : base(Position)
@@ -36,22 +40,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
         
         public void Update()
         {
-
-            if (Enemies != null)
-            {
-                var allDead = true;
-                for (var i = 0; i < Enemies.Length; i++)
-                {
-                    if (Enemies[i] != null && !Enemies[i].IsDead && (Enemies[i].BlockPosition - Position).Xz.LengthSquared
-                        < Radius * Radius * .9f * .9f)
-                    {
-                        allDead = false;
-                    }
-                }
-
-                this.Restored = allDead;
-            }
-
             _ambientHandler.Update();
         }
         
@@ -69,5 +57,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
             UpdateManager.Remove(this);
             base.Dispose();
         }
+        
+        public ItemDescription DeliveryItem => 
+            ItemDescription.FromItem(Chest.ItemSpecification, Translations.Get("quest_pickup_chest_description", Chest.ItemSpecification.DisplayName));
     }
 }

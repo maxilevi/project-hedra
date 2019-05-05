@@ -132,7 +132,7 @@ namespace Hedra.Engine.Player.QuestSystem
             }
         }
 
-        private QuestObject CurrentQuest => Quests[Mathf.Modulo(CurrentPage, Quests.Length)];
+        private QuestObject CurrentQuest => Quests.Length != 0 ? Quests[Mathf.Modulo(CurrentPage, Quests.Length)] : null;
 
         protected override Translation TitleTranslation => Translation.Create("quests");
 

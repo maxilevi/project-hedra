@@ -100,6 +100,17 @@ namespace Hedra.Engine.StructureSystem
             }
         }
 
+        public CollidableStructure Find(Predicate<CollidableStructure> Match)
+        {
+            var items = StructureItems;
+            for (var i = 0; i < items.Length; ++i)
+            {
+                if (Match(items[i]))
+                    return items[i];
+            }
+            return null;
+        }
+
         public bool Has(CollidableStructure Structure)
         {
             lock (_lock)
