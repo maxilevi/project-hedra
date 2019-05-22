@@ -27,7 +27,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         private readonly GraveyardAmbientHandler _ambientHandler;
         public Entity[] Enemies { get; set; }
         public float Radius { get; }
-        public bool Completed => EnemiesLeft == 0;
+        public bool Completed => Enemies != null && EnemiesLeft == 0;
         public int EnemiesLeft => Enemies.Count(E => !E.IsDead);
         public HighlightedAreaWrapper AreaWrapper { get; set; }
 

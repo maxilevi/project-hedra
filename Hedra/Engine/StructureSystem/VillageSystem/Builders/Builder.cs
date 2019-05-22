@@ -20,6 +20,7 @@ using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using Hedra.EntitySystem;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
@@ -116,24 +117,41 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
         protected void AddDoors(T Parameters, VillageCache Cache, DoorTemplate[] Doors, Matrix4 Transformation, BuildingOutput Output)
         {
+            var doors = new List<Door>();
             for (var i = 0; i < Doors.Length; ++i)
             {
-                var doorTemplate = Doors[i];
-                var vertexData = Cache.GetOrCreate(doorTemplate.Path, Vector3.One * Parameters.Design.Scale);
-                var rotationPoint = Vector3.TransformPosition(Door.GetRotationPointFromMesh(vertexData, doorTemplate.InvertedPivot), Transformation);
-                vertexData.AverageCenter();
-                vertexData.Transform(Transformation);
-                var offset = Vector3.TransformPosition((doorTemplate.Position + Parameters.Design.Offset) * Parameters.Design.Scale, Transformation);
-                Output.Structures.Add(
-                    new Door(
-                        vertexData,
-                        rotationPoint,
-                        Parameters.Position + offset,
-                        doorTemplate.InvertedRotation,
-                        Structure
+                doors.Add(
+                    CreateDoor(
+                        Cache.GetOrCreate(Doors[i].Path, Vector3.One),
+                        Parameters.Position,
+                        Parameters.Design.Offset + Doors[i].Position,
+                        Parameters.Design.Scale * Vector3.One,
+                        Transformation,
+                        Structure,
+                        Doors[i].InvertedRotation,
+                        Doors[i].InvertedPivot
                     )
                 );
             }
+
+            Output.Structures.AddRange(doors.ToArray());
+        }
+        
+        public static Door CreateDoor(VertexData Model, Vector3 Position, Vector3 DoorPosition, Vector3 Scale,
+            Matrix4 Transformation, CollidableStructure Structure, bool InvertedRotation = false, bool InvertedPivot = false)
+        {
+            var vertexData = Model.Scale(Scale);
+            var rotationPoint = Vector3.TransformPosition(Door.GetRotationPointFromMesh(vertexData, InvertedPivot), Transformation);
+            vertexData.AverageCenter();
+            vertexData.Transform(Transformation);
+            var doorPosition = Vector3.TransformPosition(DoorPosition * Scale, Transformation);
+            return new Door(
+                vertexData,
+                rotationPoint,
+                Position + doorPosition,
+                InvertedRotation,
+                Structure
+            );
         }
         
         protected Matrix4 BuildTransformation(T Parameters)

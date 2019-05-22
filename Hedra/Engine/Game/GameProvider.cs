@@ -190,6 +190,8 @@ namespace Hedra.Engine.Game
                 Player.SetWeapon(Player.Inventory.MainWeapon.Weapon);               
             }
             SpawnCampfireDesign.AlignPlayer(Player);
+            Player.Health = Player.MaxHealth;
+            Player.Mana = Player.MaxMana;
             Player.Questing.Empty();
             Player.UI.HideMenu();
             Player.UI.Hide = false;

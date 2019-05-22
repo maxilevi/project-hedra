@@ -1,9 +1,8 @@
 using System;
 using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.PlantSystem;
 using OpenTK;
 
-namespace Hedra.Engine.CacheSystem
+namespace Hedra.Engine.PlantSystem
 {
     public abstract class MultipleCollectiblePlacementDesign : CollectiblePlacementDesign
     {

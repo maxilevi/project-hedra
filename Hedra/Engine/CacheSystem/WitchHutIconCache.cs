@@ -3,11 +3,11 @@ using OpenTK;
 
 namespace Hedra.Engine.CacheSystem
 {
-    public class WitchHutIcon : CacheType
+    public class WitchHutIconCache : CacheType
     {
         public override CacheItem Type => CacheItem.WitchHutIcon;
         
-        public WitchHutIcon()
+        public WitchHutIconCache()
         {
             AddModel(AssetManager.PLYLoader("Assets/Env/Structures/WitchHut0-Icon.ply", Vector3.One));
         }

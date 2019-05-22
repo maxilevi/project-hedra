@@ -14,7 +14,7 @@
   ],
   "AttackResistance": 1.075,
   "MaxStamina": 100.0,
-  "BaseDamage": 4.5,
+  "BaseDamage": 8.0,
   "AttackingSpeedModifier": 0.4,
   "BaseHealthPerLevel": 9.5,
   "BaseManaPerLevel": 7,

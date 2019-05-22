@@ -42,7 +42,7 @@ namespace Hedra.WeaponSystem
                 Owner,
                 Owner.Position + Vector3.UnitY * 4f,
                 Direction,
-                Owner.DamageEquation * 2 * Options.DamageModifier,
+                Owner.DamageEquation * Options.DamageModifier,
                 ToIgnore.Concat(Options.IgnoreEntities).ToArray()
             );
             AddModifiers(fireball);

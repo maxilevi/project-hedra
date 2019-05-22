@@ -388,7 +388,7 @@ namespace Hedra.Engine.Player
 
         public float ConsecutiveHitsModifier => Mathf.Clamp(ConsecutiveHits / 90f, 0f, .5f);
 
-        public float DamageEquation => UnRandomizedDamageEquation * ( .75f + Utils.Rng.NextFloat() * .5f);
+        public float DamageEquation => (UnRandomizedDamageEquation * ( .75f + Utils.Rng.NextFloat() * .5f)) * Balancer.HumanoidDamageMultiplier;
 
         public float UnRandomizedDamageEquation => BaseDamageEquation * (1f + ConsecutiveHitsModifier);
         

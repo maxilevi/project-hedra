@@ -218,6 +218,12 @@ namespace Hedra.Engine.Generation
                 }
                 else
                 {
+                    if (Output.ContainsKey(offset))
+                    {
+                        var b = Output[offset];
+                        int a = 0;
+                        continue;
+                    }
                     Output.Add(offset, chunk);
                 }
             }

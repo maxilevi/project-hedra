@@ -154,7 +154,7 @@ namespace Hedra.Engine.EntitySystem
             {
                 Parent.IsDead = true;
                 Parent.Physics.CollidesWithEntities = false;
-                Exp = XpToGive;
+                Exp = XpToGive * Balancer.XPObtainedMultiplier;
                 if(PlayDeleteAnimation)
                     RoutineManager.StartRoutine(this.DisposeCoroutine);
                 

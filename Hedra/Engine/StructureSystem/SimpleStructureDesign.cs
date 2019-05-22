@@ -7,7 +7,9 @@ using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
+using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.WorldBuilding;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
@@ -18,13 +20,14 @@ namespace Hedra.Engine.StructureSystem
         protected virtual float EffectivePlateauRadius => PlateauRadius;
         protected abstract int StructureChance { get; }
         protected virtual BlockType PathType => BlockType.StonePath;
+        protected virtual bool NoPlantsZone { get; }
         protected abstract CacheItem? Cache { get; }
         
         public sealed override void Build(CollidableStructure Structure)
         {
             var originalModel = Cache != null ? CacheManager.GetModel(Cache.Value) : null;
             var rng = BuildRng(Structure);
-            var rotation = Matrix4.CreateRotationY(Mathf.Radian * rng.NextFloat() * 360f);
+            var rotation = Matrix4.CreateRotationY(Mathf.Radian * BuildRotationAngle(rng));
             var translation = Matrix4.CreateTranslation(Structure.Position);
             var transformation = Matrix4.CreateScale(Scale) * rotation * translation;
             if (originalModel != null)
@@ -40,14 +43,22 @@ namespace Hedra.Engine.StructureSystem
             DoBuild(Structure, rotation, translation, rng);
         }
 
-        protected virtual void DoBuild(CollidableStructure Structure, Matrix4 Rotation, Matrix4 Translation, Random Rng)
+        protected virtual float BuildRotationAngle(Random Rng)
         {
+            return Rng.NextFloat() * 360f;
+        }
+        
+        protected virtual void DoBuild(CollidableStructure Structure, Matrix4 Rotation, Matrix4 Translation, Random Rng)
+        { 
         }
         
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
         {
             var structure = base.Setup(TargetPosition, Rng, Create(TargetPosition, EffectivePlateauRadius));
-            structure.AddGroundwork(new RoundedGroundwork(TargetPosition, EffectivePlateauRadius / 2, PathType));
+            structure.AddGroundwork(new RoundedGroundwork(TargetPosition, EffectivePlateauRadius / 2, PathType)
+            {
+                NoPlants = NoPlantsZone
+            });
             structure.Mountain.Radius = EffectivePlateauRadius;
             return structure;
         }
@@ -57,6 +68,22 @@ namespace Hedra.Engine.StructureSystem
             return Rng.Next(0, StructureChance) == 1 &&
                    Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _) > BiomePool.SeaLevel &&
                    Math.Abs(LandscapeGenerator.River(TargetPosition.Xz)) < 0.005f;
+        }
+
+        protected void AddDoor(VertexData Model, Vector3 DoorPosition, Matrix4 Transformation, CollidableStructure Structure, bool InvertedRotation, bool InvertedPivot)
+        {
+            Structure.WorldObject.AddChildren(
+                Builder<IBuildingParameters>.CreateDoor(
+                    Model,
+                    Structure.Position,
+                    DoorPosition,
+                    Scale,
+                    Transformation,
+                    Structure,
+                    InvertedRotation,
+                    InvertedPivot
+                )
+            );
         }
         
         protected abstract T Create(Vector3 Position, float Size);

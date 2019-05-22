@@ -40,7 +40,8 @@ namespace Hedra.Engine.Player
         public PlayerInformation()
         {
             this.Level = 1;
-            this.Health = 100;
+            this.Health = int.MaxValue;
+            this.Mana = int.MaxValue;
             this._items = new Dictionary<int, Item>();
             this._learnedRecipes = new List<string>();
             this._quests = new List<QuestTemplate>();

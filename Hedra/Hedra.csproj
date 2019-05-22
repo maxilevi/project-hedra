@@ -239,7 +239,6 @@
     <Compile Include="Engine\CacheSystem\DeathIconCache.cs" />
     <Compile Include="Engine\CacheSystem\GazeboCache.cs" />
     <Compile Include="Engine\CacheSystem\GazeboIconCache.cs" />
-    <Compile Include="Engine\CacheSystem\MultipleCollectiblePlacementDesign.cs" />
     <Compile Include="Engine\CacheSystem\MushroomCache.cs" />
     <Compile Include="Engine\CacheSystem\PebbleCache.cs" />
     <Compile Include="Engine\CacheSystem\PortalCache.cs" />
@@ -249,8 +248,8 @@
     <Compile Include="Engine\CacheSystem\SunflowerCache.cs" />
     <Compile Include="Engine\CacheSystem\TimberCache.cs" />
     <Compile Include="Engine\CacheSystem\WellCache.cs" />
-    <Compile Include="Engine\CacheSystem\WitchHut.cs" />
-    <Compile Include="Engine\CacheSystem\WitchHutIcon.cs" />
+    <Compile Include="Engine\CacheSystem\WitchHutCache.cs" />
+    <Compile Include="Engine\CacheSystem\WitchHutIconCache.cs" />
     <Compile Include="Engine\CacheSystem\WizardTowerIcon.cs" />
     <Compile Include="Engine\ClassSystem\AbilityTreeLoader.cs" />
     <Compile Include="Engine\ClassSystem\ClassLoader.cs" />
@@ -273,6 +272,7 @@
     <Compile Include="Engine\EntitySystem\IEntityWithAttributes.cs" />
     <Compile Include="Engine\EntitySystem\SkilledAnimableEntity.cs" />
     <Compile Include="Engine\EntitySystem\SkilledEntity.cs" />
+    <Compile Include="Engine\Game\Balancer.cs" />
     <Compile Include="Engine\Game\Season.cs" />
     <Compile Include="Engine\Generation\FastComparer.cs" />
     <Compile Include="Engine\Input\ArrowSelector.cs" />
@@ -344,6 +344,7 @@
     <Compile Include="Engine\PlantSystem\DeadGrassDesign.cs" />
     <Compile Include="Engine\PlantSystem\DeadGrassPlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\FarmPlantDesign.cs" />
+    <Compile Include="Engine\PlantSystem\MultipleCollectiblePlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\MushroomDesign.cs" />
     <Compile Include="Engine\PlantSystem\MushroomPlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\PebbleDesign.cs" />
@@ -9856,32 +9857,8 @@
       <Link>Assets\Env\Colliders\WitchHut0_Collider177.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\project-hedra-assets\Structures\WitchHut0\WitchHut0_Collider178.ply">
-      <Link>Assets\Env\Colliders\WitchHut0_Collider178.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\project-hedra-assets\Structures\WitchHut0\WitchHut0_Collider179.ply">
-      <Link>Assets\Env\Colliders\WitchHut0_Collider179.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="..\project-hedra-assets\Structures\WitchHut0\WitchHut0_Collider18.ply">
       <Link>Assets\Env\Colliders\WitchHut0_Collider18.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\project-hedra-assets\Structures\WitchHut0\WitchHut0_Collider180.ply">
-      <Link>Assets\Env\Colliders\WitchHut0_Collider180.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\project-hedra-assets\Structures\WitchHut0\WitchHut0_Collider181.ply">
-      <Link>Assets\Env\Colliders\WitchHut0_Collider181.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\project-hedra-assets\Structures\WitchHut0\WitchHut0_Collider182.ply">
-      <Link>Assets\Env\Colliders\WitchHut0_Collider182.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\project-hedra-assets\Structures\WitchHut0\WitchHut0_Collider183.ply">
-      <Link>Assets\Env\Colliders\WitchHut0_Collider183.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Structures\WitchHut0\WitchHut0_Collider19.ply">
