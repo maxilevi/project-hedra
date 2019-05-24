@@ -79,6 +79,7 @@ namespace Hedra.Engine.Game
             SoundtrackManager.PlayTrack(SoundtrackManager.MainThemeIndex, true);
             RoutineManager.StartRoutine(MenuCoroutine);
             Player.Reset();
+            Player.UI.ShowMenu();
         }
         
         private IEnumerator MenuCoroutine()
