@@ -8,6 +8,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using Hedra.Core;
 using Hedra.Engine.EnvironmentSystem;
@@ -30,6 +31,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public int ActiveChunks => (int) _activeChunks;
         public float MinFog { get; private set; }
         public float MaxFog { get; private set; }
+        private readonly object Lock = new object();
         private readonly List<ChunkWatcher> _chunkWatchers;
         private readonly List<Vector3> _candidates;
         private readonly ClosestComparer _closest;
@@ -98,15 +100,19 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 if(!_shouldUpdate) Thread.Sleep(1);
                 try
                 {
-                    var watchers = _chunkWatchers.ToArray();
+                    var watchers = Watchers;
                     for (var i = watchers.Length - 1; i > -1; --i)
                     {
                         watchers[i]?.Update();
-                        if (watchers[i]?.Disposed ?? false) _chunkWatchers.Remove(watchers[i]);
+                        if (watchers[i]?.Disposed ?? false)
+                        {
+                            lock (Lock)
+                                _chunkWatchers.Remove(watchers[i]);
+                        }
                     }
-                } catch (NullReferenceException e)
+                } catch (Exception e)
                 {
-                    Log.WriteLine(e);
+                    Log.WriteLine($"Failed to update chunk watchers{Environment.NewLine}{e}");
                 }
                 _shouldUpdate = false;
             }
@@ -137,7 +143,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
                         World.AddChunk(chunk);
                         var watcher = new ChunkWatcher(chunk);
                         watcher.OnChunkReady += O => OnChunkReady?.Invoke(O);
-                        _chunkWatchers.Add(watcher);
+                        lock (Lock)
+                            _chunkWatchers.Add(watcher);
                     }
 
                     _targetActivechunks = newTarget;
@@ -167,15 +174,35 @@ namespace Hedra.Engine.Generation.ChunkSystem
         
         public void Reset()
         {
-            for (var i = _chunkWatchers.Count - 1; i > -1; i--)
+            lock (Lock)
             {
-                _chunkWatchers[i]?.Kill();
+                for (var i = _chunkWatchers.Count - 1; i > -1; i--)
+                {
+                    _chunkWatchers[i]?.Kill();
+                }
             }
             _targetActivechunks = 0;
             _activeChunks = 0;
-            _chunkWatchers.Clear();
+            lock (Lock)
+                _chunkWatchers.Clear();
         }
 
-        public int WatcherCount => _chunkWatchers.Count;
+        private ChunkWatcher[] Watchers
+        {
+            get
+            {
+                lock (Lock)
+                    return _chunkWatchers.ToArray();
+            }
+        }
+
+        public int WatcherCount
+        {
+            get
+            {
+                lock (Lock)
+                    return _chunkWatchers.Count;
+            }   
+        }
     }
 }
