@@ -27,6 +27,14 @@ namespace Hedra.Engine
 
         private static void Main(string[] Args)
         {
+            AppDomain.CurrentDomain.UnhandledException += (S, E)=>
+            {
+                if (E.IsTerminating)
+                {
+                    Log.WriteLine($"UNEXPECTED EXCEPTION :{Environment.NewLine}{Environment.NewLine}----STACK TRACE----{Environment.NewLine}{Environment.NewLine}{E.ExceptionObject.ToString()}");
+                }
+            };
+            
             var dummyMode = Args.Length == 1 && Args[0] == "--dummy-mode";
             var serverMode = Args.Length == 1 && Args[0] == "--server-mode";
             var joinArgs = Args.Length == 2 && Args[0] == "--join";
@@ -112,19 +120,7 @@ namespace Hedra.Engine
             Log.WriteLine("Window settings loading was Successful");
             if (!IsDummy || IsDummy && IsServer)
             {
-#if DEBUG
                 GameWindow.Run();
-#else
-                try
-                {
-                    GameWindow.Run();
-                }
-                catch (Exception e)
-                {
-                    Log.WriteLine(e);
-                    throw;
-                }
-#endif
             }
             else
             {
