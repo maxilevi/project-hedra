@@ -72,7 +72,7 @@ namespace Hedra.Engine.Management
                 "Sounds/Soundtrack/GraveyardChampion.ogg",
                 "Sounds/Soundtrack/HostageSituation.ogg",
                 "Sounds/Soundtrack/OnTheLam.ogg",
-                // LoopableSongs
+                // Loopable Songs
                 forestTrack,
                 // Forest should always be first
                 "Sounds/Soundtrack/CardinalCity.ogg",
@@ -179,13 +179,15 @@ namespace Hedra.Engine.Management
                 return;
             }
             
-            if(_usedBuffer != null && !Source.IsPlaying && _receivedBytes != 0){
+            if(_usedBuffer != null && !Source.IsPlaying && _receivedBytes != 0)
+            {
                 AL.Source(Source.Id, ALSourcei.Buffer, (int) _usedBuffer.ID);
                 AL.SourcePlay(Source.Id);
                 _buildBuffers = true;
             }
             
-            if(_buildBuffers  && _receivedBytes != 0){
+            if(_buildBuffers  && _receivedBytes != 0)
+            {
                 _receivedBytes = _reader.ReadSamples(Buffer, 0, Buffer.Length);
                 if(_receivedBytes == 0){
                     _sleepTime = true;
@@ -208,7 +210,8 @@ namespace Hedra.Engine.Management
             }
          }
         
-        private static short[] CastBuffer(float[] Buffer, int Length){
+        private static short[] CastBuffer(float[] Buffer, int Length)
+        {
             short[] data = new short[Length];
             for (int i = 0; i < Length; i++)
             {
