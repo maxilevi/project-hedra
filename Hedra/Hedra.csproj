@@ -8401,6 +8401,118 @@
       <Link>Assets\Env\Plants\DeadGrass0_Lod8.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Cabbage0.ply">
+      <Link>Assets\Env\Plants\Cabbage0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Cabbage0_Lod2.ply">
+      <Link>Assets\Env\Plants\Cabbage0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Cabbage0_Lod4.ply">
+      <Link>Assets\Env\Plants\Cabbage0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Cabbage0_Lod8.ply">
+      <Link>Assets\Env\Plants\Cabbage0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Cabbage1.ply">
+      <Link>Assets\Env\Plants\Cabbage1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Cabbage1_Lod2.ply">
+      <Link>Assets\Env\Plants\Cabbage1_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Cabbage1_Lod4.ply">
+      <Link>Assets\Env\Plants\Cabbage1_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Cabbage1_Lod8.ply">
+      <Link>Assets\Env\Plants\Cabbage1_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Carrot0.ply">
+      <Link>Assets\Env\Plants\Carrot0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Carrot0_Lod2.ply">
+      <Link>Assets\Env\Plants\Carrot0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Carrot0_Lod4.ply">
+      <Link>Assets\Env\Plants\Carrot0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Carrot0_Lod8.ply">
+      <Link>Assets\Env\Plants\Carrot0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Onion0.ply">
+      <Link>Assets\Env\Plants\Onion0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Onion0_Lod2.ply">
+      <Link>Assets\Env\Plants\Onion0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Onion0_Lod4.ply">
+      <Link>Assets\Env\Plants\Onion0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Onion0_Lod8.ply">
+      <Link>Assets\Env\Plants\Onion0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Peas0.ply">
+      <Link>Assets\Env\Plants\Peas0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Peas0_Lod2.ply">
+      <Link>Assets\Env\Plants\Peas0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Peas0_Lod4.ply">
+      <Link>Assets\Env\Plants\Peas0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Peas0_Lod8.ply">
+      <Link>Assets\Env\Plants\Peas0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Tomato0.ply">
+      <Link>Assets\Env\Plants\Tomato0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Tomato0_Lod2.ply">
+      <Link>Assets\Env\Plants\Tomato0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Tomato0_Lod4.ply">
+      <Link>Assets\Env\Plants\Tomato0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Tomato0_Lod8.ply">
+      <Link>Assets\Env\Plants\Tomato0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Tomato1.ply">
+      <Link>Assets\Env\Plants\Tomato1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Tomato1_Lod2.ply">
+      <Link>Assets\Env\Plants\Tomato1_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Tomato1_Lod4.ply">
+      <Link>Assets\Env\Plants\Tomato1_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\FarmPlants\Tomato1_Lod8.ply">
+      <Link>Assets\Env\Plants\Tomato1_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Environment\Misc\Pebble0.ply">
       <Link>Assets\Env\Plants\Pebble0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
