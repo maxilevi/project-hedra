@@ -234,12 +234,16 @@
     <Compile Include="Engine\BiomeSystem\OverworldHandler.cs" />
     <Compile Include="Engine\BiomeSystem\WorldHandler.cs" />
     <Compile Include="Engine\BiomeSystem\WorldType.cs" />
+    <Compile Include="Engine\CacheSystem\CabbageCache.cs" />
+    <Compile Include="Engine\CacheSystem\CarrotCache.cs" />
     <Compile Include="Engine\CacheSystem\CornCache.cs" />
     <Compile Include="Engine\CacheSystem\DeadGrassCache.cs" />
     <Compile Include="Engine\CacheSystem\DeathIconCache.cs" />
     <Compile Include="Engine\CacheSystem\GazeboCache.cs" />
     <Compile Include="Engine\CacheSystem\GazeboIconCache.cs" />
     <Compile Include="Engine\CacheSystem\MushroomCache.cs" />
+    <Compile Include="Engine\CacheSystem\OnionPlantCache.cs" />
+    <Compile Include="Engine\CacheSystem\PeaPlantCache.cs" />
     <Compile Include="Engine\CacheSystem\PebbleCache.cs" />
     <Compile Include="Engine\CacheSystem\PortalCache.cs" />
     <Compile Include="Engine\CacheSystem\PortalIconCache.cs" />
@@ -247,6 +251,7 @@
     <Compile Include="Engine\CacheSystem\StickCache.cs" />
     <Compile Include="Engine\CacheSystem\SunflowerCache.cs" />
     <Compile Include="Engine\CacheSystem\TimberCache.cs" />
+    <Compile Include="Engine\CacheSystem\TomatoPlantCache.cs" />
     <Compile Include="Engine\CacheSystem\WellCache.cs" />
     <Compile Include="Engine\CacheSystem\WitchHutCache.cs" />
     <Compile Include="Engine\CacheSystem\WitchHutIconCache.cs" />
@@ -338,12 +343,24 @@
     <Compile Include="Engine\Pathfinding\Offset.cs" />
     <Compile Include="Engine\Pathfinding\PathFinder.cs" />
     <Compile Include="Engine\PhysicsSystem\Collision.cs" />
+    <Compile Include="Engine\PlantSystem\BerryBushDesign.cs" />
     <Compile Include="Engine\PlantSystem\CollectiblePlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\CollectiblePlantDesign.cs" />
     <Compile Include="Engine\PlantSystem\CornDesign.cs" />
     <Compile Include="Engine\PlantSystem\DeadGrassDesign.cs" />
     <Compile Include="Engine\PlantSystem\DeadGrassPlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\FarmPlantDesign.cs" />
+    <Compile Include="Engine\PlantSystem\Harvestables\HarvestableDesign.cs" />
+    <Compile Include="Engine\PlantSystem\Harvestables\CabbageDesign.cs" />
+    <Compile Include="Engine\PlantSystem\Harvestables\CabbagePlacementDesign.cs" />
+    <Compile Include="Engine\PlantSystem\Harvestables\CarrotDesign.cs" />
+    <Compile Include="Engine\PlantSystem\Harvestables\CarrotPlacementDesign.cs" />
+    <Compile Include="Engine\PlantSystem\Harvestables\OnionDesign.cs" />
+    <Compile Include="Engine\PlantSystem\Harvestables\OnionPlacementDesign.cs" />
+    <Compile Include="Engine\PlantSystem\Harvestables\PeasDesign.cs" />
+    <Compile Include="Engine\PlantSystem\Harvestables\PeasPlacementDesign.cs" />
+    <Compile Include="Engine\PlantSystem\Harvestables\TomatoDesign.cs" />
+    <Compile Include="Engine\PlantSystem\Harvestables\TomatoPlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\MultipleCollectiblePlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\MushroomDesign.cs" />
     <Compile Include="Engine\PlantSystem\MushroomPlacementDesign.cs" />
@@ -977,7 +994,6 @@
     <Compile Include="Engine\PhysicsSystem\BoneData.cs" />
     <Compile Include="Engine\PhysicsSystem\ConvexHull.cs" />
     <Compile Include="Engine\PhysicsSystem\ObjectMeshCollider.cs" />
-    <Compile Include="Engine\PlantSystem\BerryBushDesign.cs" />
     <Compile Include="Engine\PlantSystem\BerryBushPlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\BushDesign.cs" />
     <Compile Include="Engine\PlantSystem\CloudDesign.cs" />
@@ -13810,6 +13826,8 @@
     <Content Include="Modules\Items\Foods\Bread.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Foods\Cabbage.json" />
+    <Content Include="Modules\Items\Foods\Carrot.json" />
     <Content Include="Modules\Items\Foods\CookedMeat.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -13831,6 +13849,8 @@
     <Content Include="Modules\Items\Foods\MushroomStew.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Foods\Onion.json" />
+    <Content Include="Modules\Items\Foods\Peas.json" />
     <Content Include="Modules\Items\Foods\Pumpkin.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -13840,6 +13860,7 @@
     <Content Include="Modules\Items\Foods\RawMeat.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Foods\Tomato.json" />
     <Content Include="Modules\Items\Foods\WaterBowl.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

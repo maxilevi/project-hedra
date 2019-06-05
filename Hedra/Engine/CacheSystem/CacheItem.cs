@@ -53,6 +53,11 @@ namespace Hedra.Engine.CacheSystem
         WitchHutIcon,
         WizardTowerIcon,
         WitchHut,
+        Cabbage,
+        Onion,
+        Carrot,
+        Peas,
+        Tomato,
         MaxEnums
     }
 }
