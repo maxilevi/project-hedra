@@ -1,5 +1,6 @@
 ﻿using Hedra.BiomeSystem;
 using Hedra.Engine.PlantSystem;
+using Hedra.Engine.PlantSystem.Harvestables;
 
 namespace Hedra.Engine.BiomeSystem.NormalBiome
 {
@@ -18,6 +19,9 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
                 new MushroomPlacementDesign(),
                 new TimberAndSticksPlacementDesign(),
                 new PebblePlacementDesign(),
+                /* Harvestables */
+                new CarrotPlacementDesign(), 
+                new OnionPlacementDesign(), 
             };
         }
 

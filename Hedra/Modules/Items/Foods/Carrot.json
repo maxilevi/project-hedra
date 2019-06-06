@@ -1,8 +1,8 @@
 {
-  "Name": "Corn",
-  "DisplayName": "Corn",
+  "Name": "Carrot",
+  "DisplayName": "Carrot",
   "Tier": "Misc",
-  "Description": "A corn.",
+  "Description": "Bunnies love 'em",
   "Attributes": [
     {
       "Name": "Amount",
@@ -24,12 +24,12 @@
     },
     {
       "Name": "EatTime",
-      "Value": 4.0,
+      "Value": 3.0,
       "Hidden": true
     }
   ],
   "Model": {
-    "Scale": 1.0,
-    "Path": "$DataFile$/Items/Foods/Corn.ply"
+    "Scale": 2.5,
+    "Path": "$DataFile$/Items/Foods/Carrot.ply"
   }
 }

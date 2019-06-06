@@ -8573,8 +8573,28 @@
       <Link>Assets\Items\Foods\Bread.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Foods\Cabbage.ply">
+      <Link>Assets\Items\Foods\Cabbage.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Foods\Carrot.ply">
+      <Link>Assets\Items\Foods\Carrot.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Foods\Flour.ply">
       <Link>Assets\Items\Foods\Flour.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Foods\Onion.ply">
+      <Link>Assets\Items\Foods\Onion.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Foods\Peas.ply">
+      <Link>Assets\Items\Foods\Peas.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Foods\Tomato.ply">
+      <Link>Assets\Items\Foods\Tomato.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Foods\WaterBowl.ply">
@@ -13826,8 +13846,12 @@
     <Content Include="Modules\Items\Foods\Bread.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\Items\Foods\Cabbage.json" />
-    <Content Include="Modules\Items\Foods\Carrot.json" />
+    <Content Include="Modules\Items\Foods\Cabbage.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Foods\Carrot.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Foods\CookedMeat.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -13849,8 +13873,12 @@
     <Content Include="Modules\Items\Foods\MushroomStew.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\Items\Foods\Onion.json" />
-    <Content Include="Modules\Items\Foods\Peas.json" />
+    <Content Include="Modules\Items\Foods\Onion.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Foods\Peas.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Foods\Pumpkin.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -13860,7 +13888,9 @@
     <Content Include="Modules\Items\Foods\RawMeat.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\Items\Foods\Tomato.json" />
+    <Content Include="Modules\Items\Foods\Tomato.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Foods\WaterBowl.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

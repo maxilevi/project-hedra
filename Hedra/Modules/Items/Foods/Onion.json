@@ -1,8 +1,8 @@
 {
-  "Name": "Corn",
-  "DisplayName": "Corn",
+  "Name": "Onion",
+  "DisplayName": "Onion",
   "Tier": "Misc",
-  "Description": "A corn.",
+  "Description": "An onion.",
   "Attributes": [
     {
       "Name": "Amount",
@@ -10,11 +10,11 @@
     },
     {
       "Name": "Saturation",
-      "Value": 30
+      "Value": 20
     },
     {
       "Name": "Price",
-      "Value": 8,
+      "Value": 10,
       "Hidden": true
     },
     {
@@ -24,12 +24,12 @@
     },
     {
       "Name": "EatTime",
-      "Value": 4.0,
+      "Value": 5.0,
       "Hidden": true
     }
   ],
   "Model": {
-    "Scale": 1.0,
-    "Path": "$DataFile$/Items/Foods/Corn.ply"
+    "Scale": 2.0,
+    "Path": "$DataFile$/Items/Foods/Onion.ply"
   }
 }

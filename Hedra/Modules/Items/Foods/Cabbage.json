@@ -1,8 +1,8 @@
 {
-  "Name": "Corn",
-  "DisplayName": "Corn",
+  "Name": "Cabbage",
+  "DisplayName": "Cabbage",
   "Tier": "Misc",
-  "Description": "A corn.",
+  "Description": "No one likes it",
   "Attributes": [
     {
       "Name": "Amount",
@@ -10,11 +10,11 @@
     },
     {
       "Name": "Saturation",
-      "Value": 30
+      "Value": 15
     },
     {
       "Name": "Price",
-      "Value": 8,
+      "Value": 2,
       "Hidden": true
     },
     {
@@ -30,6 +30,6 @@
   ],
   "Model": {
     "Scale": 1.0,
-    "Path": "$DataFile$/Items/Foods/Corn.ply"
+    "Path": "$DataFile$/Items/Foods/Cabbage.ply"
   }
 }
