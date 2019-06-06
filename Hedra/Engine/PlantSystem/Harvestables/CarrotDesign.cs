@@ -1,3 +1,6 @@
+using Hedra.Engine.CacheSystem;
+using Hedra.Engine.ItemSystem;
+
 namespace Hedra.Engine.PlantSystem.Harvestables
 {
     public class CarrotDesign : HarvestableDesign

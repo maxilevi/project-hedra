@@ -235,7 +235,7 @@
     <Compile Include="Engine\BiomeSystem\WorldHandler.cs" />
     <Compile Include="Engine\BiomeSystem\WorldType.cs" />
     <Compile Include="Engine\CacheSystem\CabbageCache.cs" />
-    <Compile Include="Engine\CacheSystem\CarrotCache.cs" />
+    <Compile Include="Engine\CacheSystem\CarrotPlantCache.cs" />
     <Compile Include="Engine\CacheSystem\CornCache.cs" />
     <Compile Include="Engine\CacheSystem\DeadGrassCache.cs" />
     <Compile Include="Engine\CacheSystem\DeathIconCache.cs" />

@@ -31,6 +31,11 @@ namespace Hedra.Engine.ItemSystem
         StoneArrow,
         WoodenStick,
         SteelArrow,
+        Cabbage,
+        Onion,
+        Carrot,
+        Peas,
+        Tomato,
         MaxEnums
     }
 }
