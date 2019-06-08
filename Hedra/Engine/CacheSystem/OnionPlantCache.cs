@@ -9,7 +9,7 @@ namespace Hedra.Engine.CacheSystem
 
         public OnionPlantCache()
         {
-            AddModel(AssetManager.PLYLoader("Assets/Env/Plants/Onion0.ply", Vector3.One));
+            AddModel(AssetManager.PLYLoader("Assets/Env/Plants/Onion0.ply", Vector3.One * 1.25f));
         }
     }
 }
