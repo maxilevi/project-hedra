@@ -499,6 +499,7 @@ namespace Hedra.Engine.Management
                 UseCache = true
             };
             data.Trim();
+            data.Optimize();
             return data;
         }
 

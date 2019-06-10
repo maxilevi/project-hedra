@@ -82,6 +82,9 @@
       <HintPath>..\references\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MeshOptimizer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\MeshOptimizer.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\references\Newtonsoft.Json.dll</HintPath>

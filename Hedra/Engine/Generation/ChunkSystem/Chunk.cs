@@ -202,6 +202,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 new Vector3(staticMin.X, staticMin.Y, staticMin.Z),
                 new Vector3(staticMax.X, Math.Max(staticMax.Y, Input.WaterData.SupportPoint(Vector3.UnitY).Y), staticMax.Z)
             );
+            Input.StaticData.Optimize();
+            Input.InstanceData.Optimize();
+            Input.WaterData.Optimize();
             DistributedExecuter.Execute(delegate
             {
                 var staticResult = WorldRenderer.UpdateStatic(new Vector2(OffsetX, OffsetZ), Input.StaticData);

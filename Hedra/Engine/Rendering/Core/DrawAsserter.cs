@@ -34,7 +34,7 @@ namespace Hedra.Engine.Rendering.Core
         }
 
         public static void AssertDrawElements(PrimitiveType Primitive, int Count, DrawElementsType ElementsType, IntPtr Offset)
-        {            
+        {
             BaseAssert();
             AssertElementBuffer();
             AssertPrimitive(Primitive);
@@ -51,7 +51,7 @@ namespace Hedra.Engine.Rendering.Core
         
         public static void AssertDrawArrays(PrimitiveType Primitive, int Offset, int Count)
         {
-            if(Offset > Count) 
+            if (Offset > Count) 
                 throw new ArgumentException($"Draw offset '{Offset}' cannot be higher than the amount of elements '{Count}'");
             
             if(Renderer.BufferHandler.Id != 0)
@@ -81,11 +81,11 @@ namespace Hedra.Engine.Rendering.Core
         {
             var mod = AllowedPrimitives[Primitive];
             if(AssertIndices) AssertVBO(Primitive, VBO.GetById(Renderer.VBOBound), mod);
-            var vbos = VAO.GetById(Renderer.VAOBound).VBOs;
+            /*var vbos = VAO.GetById(Renderer.VAOBound).VBOs;
             for (var i = 0; i < vbos.Length; ++i)
             {
                 AssertVBO(Primitive, vbos[i], mod);
-            }
+            }*/
         }
 
         private static void AssertVBO(PrimitiveType Primitive, VBO Buffer, int Mod)

@@ -13,6 +13,7 @@ using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Rendering;
+using MeshOptimizer;
 using OpenTK;
 
 namespace Hedra.Rendering
@@ -31,6 +32,8 @@ namespace Hedra.Rendering
         public List<float> Extradata { get; set; }
         public VertexData Original { get; set; }
         public bool UseCache { get; set; }
+        public bool HasColors => Colors.Count != 0;
+        public bool HasExtradata => Extradata.Count == Vertices.Count;
         public static VertexData Empty { get; }
         private readonly Dictionary<Vector3, int> _points;
 
@@ -240,9 +243,34 @@ namespace Hedra.Rendering
             return this;
         }
 
-        public VertexData Optimize()
+        public void Optimize()
         {
-            if (Colors.Count == 0) return this;
+            if (!HasColors) return;
+            /* var originalVertices = Vertices.Count; */
+            var vertices = new MeshVertex[Vertices.Count];
+            for (var i = 0; i < vertices.Length; ++i)
+            {
+                vertices[i] = new MeshVertex
+                {
+                    Position = Vertices[i],
+                    Normal = Normals[i],
+                    Color = Colors[i]
+                };
+                if(HasExtradata) vertices[i].Extradata = Extradata[i];
+            }
+            var mesh = new Mesh<MeshVertex>(vertices, Indices.ToArray(), MeshVertex.SizeInBytes, MeshVertex.SizeInBytes);
+            MeshOperations.Optimize(mesh);
+            Indices = new List<uint>(mesh.Indices);
+            Normals = new List<Vector3>(mesh.Vertices.Select(V => V.Normal));
+            Colors = new List<Vector4>(mesh.Vertices.Select(V => V.Color));
+            if(HasExtradata) Extradata = new List<float>(mesh.Vertices.Select(V => V.Extradata));
+            Vertices = new List<Vector3>(mesh.Vertices.Select(V => V.Position));
+            /* Log.WriteLine($"Vertex Change % = {(1f - Vertices.Count / (float)originalVertices) * 100}, {Vertices.Count}/{originalVertices}"); */
+        }
+        
+        public void Smooth()
+        {
+            if (!HasColors) return;
 
             var decoupledVertices = Indices.Select(I => Vertices[(int)I]).ToList();
             var newIndices = new List<uint>();
@@ -267,7 +295,6 @@ namespace Hedra.Rendering
             Colors = newColors;
             Extradata = newExtradata;
             Normals = newNormals;
-            return this;
         }
 
         public VertexData RotateX(float EulerAngle)
@@ -397,11 +424,7 @@ namespace Hedra.Rendering
                                   + Colors.Count * Vector4.SizeInBytes 
                                   + Extradata.Count * sizeof(float);
         public bool IsClone => Original != null;
-        
-        Vector3[] IModelData.Colors => Colors.Select(C => C.Xyz).ToArray();
-        Vector3[] IModelData.Normals => Normals.ToArray();
         uint[] IModelData.Indices => Indices.ToArray();
-        Vector3[] IModelData.Vertices => Vertices.ToArray();
         
         public void Dispose()
         {
@@ -411,6 +434,15 @@ namespace Hedra.Rendering
             Vertices.Clear();
             Indices.Clear();
             Extradata.Clear();
+        }
+
+        struct MeshVertex
+        {
+            public static uint SizeInBytes => sizeof(float) * 11;
+            public Vector3 Position;
+            public Vector3 Normal;
+            public Vector4 Color;
+            public float Extradata;
         }
     }
 }
