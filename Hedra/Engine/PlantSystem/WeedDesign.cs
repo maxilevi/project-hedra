@@ -19,12 +19,12 @@ namespace Hedra.Engine.PlantSystem
             var underChunk = World.GetChunkAt(Position);
             var blockPosition = World.ToBlockSpace(Position);
             var addon = new Vector3(Rng.NextFloat() * 2f, 0, Rng.NextFloat() * 2f);
-            if (blockPosition.X + addon.X / Chunk.BlockSize > Chunk.Width / Chunk.BlockSize) return Matrix4.Identity;
-            if (blockPosition.Z + addon.Z / Chunk.BlockSize > Chunk.Width / Chunk.BlockSize) return Matrix4.Identity;
+            if (blockPosition.X + addon.X / Chunk.BlockSize > Chunk.Width / Chunk.BlockSize) return Matrix4.Zero;
+            if (blockPosition.Z + addon.Z / Chunk.BlockSize > Chunk.Width / Chunk.BlockSize) return Matrix4.Zero;
 
             float height = Physics.HeightAtPosition(Position + addon);
             var topBlock = World.GetHighestBlockAt((int)(Position.X + addon.X), (int)(Position.Z + addon.Z));
-            if (Block.Noise3D) return Matrix4.Identity;
+            if (Block.Noise3D) return Matrix4.Zero;
 
             for (int x = -1; x < 1; x++)
             {
@@ -32,7 +32,7 @@ namespace Hedra.Engine.PlantSystem
                 float blockDens = Physics.HeightAtPosition(new Vector3((blockPosition.X + x) * Chunk.BlockSize + underChunk.OffsetX, 0, (blockPosition.Z + 0) * Chunk.BlockSize + underChunk.OffsetZ));
                 float difference = Math.Abs(blockDens - height);
                 if (difference > 6)
-                    return Matrix4.Identity;
+                    return Matrix4.Zero;
             }
 
             for (int z = -1; z < 1; z++)
@@ -41,7 +41,7 @@ namespace Hedra.Engine.PlantSystem
                 float blockDens = Physics.HeightAtPosition(new Vector3((blockPosition.X + 0) * Chunk.BlockSize + underChunk.OffsetX, 0, (blockPosition.Z + z) * Chunk.BlockSize + underChunk.OffsetZ));
                 float difference = Math.Abs(blockDens - height);
                 if (difference > 6)
-                    return Matrix4.Identity;
+                    return Matrix4.Zero;
             }
             Matrix4 rotationMat4 = Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat() * Mathf.Radian);
             Matrix4 transMatrix = Matrix4.CreateScale(6.0f + Utils.Rng.NextFloat() * .5f);

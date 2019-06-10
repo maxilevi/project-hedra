@@ -26,7 +26,7 @@ namespace Hedra.Engine.PlantSystem
 
             float height = Physics.HeightAtPosition(Position + addon);
             var topBlock = World.GetHighestBlockAt((int)(Position.X + addon.X), (int)(Position.Z + addon.Z));
-            if (Block.Noise3D) return Matrix4.Identity;
+            if (Block.Noise3D) return Matrix4.Zero;
 
             for (int x = -3; x < 3; x++)
             {
@@ -34,7 +34,7 @@ namespace Hedra.Engine.PlantSystem
                 {
                     float bDens = Physics.HeightAtPosition(new Vector3((blockPosition.X + x) * Chunk.BlockSize + underChunk.OffsetX, 0, (blockPosition.Z + z) * Chunk.BlockSize + underChunk.OffsetZ));
                     float difference = Math.Abs(bDens - height);
-                    if (difference > 5f) return Matrix4.Identity;
+                    if (difference > 5f) return Matrix4.Zero;
                 }
             }
 

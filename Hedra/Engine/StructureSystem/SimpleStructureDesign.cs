@@ -7,6 +7,8 @@ using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
+using Hedra.Engine.PlantSystem;
+using Hedra.Engine.PlantSystem.Harvestables;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
@@ -83,6 +85,16 @@ namespace Hedra.Engine.StructureSystem
                     InvertedRotation,
                     InvertedPivot
                 )
+            );
+        }
+
+        protected void AddPlant(Vector3 Position, HarvestableDesign Design, Random Rng)
+        {
+            World.EnvironmentGenerator.GeneratePlant(
+                Position,
+                World.GetRegion(Position),
+                Design,
+                Matrix4.CreateScale(Design.Scale(Rng)) * Matrix4.CreateRotationY(Rng.NextFloat() * 360f) * Matrix4.CreateTranslation(Position)
             );
         }
         

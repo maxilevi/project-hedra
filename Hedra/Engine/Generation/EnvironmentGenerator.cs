@@ -27,16 +27,20 @@ namespace Hedra.Engine.Generation
     /// </summary>
     public class EnvironmentGenerator
     {
-        
         public void GeneratePlant(Vector3 Position, Region BiomeRegion, PlantDesign Design)
+        {
+            GeneratePlant(Position, BiomeRegion, Design, Matrix4.Zero);
+        }
+
+        public void GeneratePlant(Vector3 Position, Region BiomeRegion, PlantDesign Design, Matrix4 CustomTransformationMatrix)
         {
             var underChunk = World.GetChunkAt(Position);
             if (underChunk == null) return;
 
             var rng = underChunk.Landscape.RandomGen;
-            var transMatrix = Design.TransMatrix(Position, rng);
+            var transMatrix = CustomTransformationMatrix == Matrix4.Zero ? Design.TransMatrix(Position, rng) : CustomTransformationMatrix;
 
-            if (transMatrix == Matrix4.Identity) return;
+            if (transMatrix == Matrix4.Zero) return;
 
             var modelData = Design.Model;
             var modelDataClone = modelData.ShallowClone();

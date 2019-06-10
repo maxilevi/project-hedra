@@ -1,5 +1,6 @@
 using System.IO;
 using System.Linq;
+using Hedra.Core;
 using Hedra.Engine.Management;
 using Hedra.Rendering;
 using OpenTK;
@@ -29,8 +30,30 @@ namespace Hedra.Engine.CacheSystem
             shapes.ForEach(S => S.Transform(Offset * Scale));
             AddShapes(shapes);
         }
+
+        public static Vector3 PlantOffset { get; } = new Vector3(0, 0, .5f) * Scale;
         
-        private static Vector3 Offset => Vector3.UnitY * .15f;
+        public static Vector3[] PlantRows { get; } = new[]
+        {
+            new Vector3(-3.5f, 0.1f, -5f) * Scale + Offset,
+            new Vector3(-5.25f, 0.1f, -5f) * Scale + Offset,
+            new Vector3(-6.5f, 0.1f, -5f) * Scale + Offset,
+            new Vector3(-7.75f, 0.1f, -5f) * Scale + Offset,
+            new Vector3(-9.25f, 0.1f, -5f) * Scale + Offset,
+            new Vector3(-10.5f, 0.1f, -5f) * Scale + Offset
+        };
+        
+        public static int[] PlantWidths { get; } = new[]
+        {
+            4,
+            4,
+            5,
+            5,
+            5,
+            5
+        };
+        
+        private static Vector3 Offset => Vector3.UnitY * .2f;
         private static Vector3 Scale => Vector3.One * 3.25f;
         
         private static VertexData LoadCollisionShapesAsVertexData(string Filename, Vector3 Scale)
@@ -53,8 +76,8 @@ namespace Hedra.Engine.CacheSystem
         
         public static VertexData Hut0Door0 => _hut0Door0.Clone();
         public static VertexData Hut0Door1 => _hut0Door1.Clone();
-        public static Vector3 Hut0Door0Position => new Vector3(0.10415f, 1.57616f, -0.01544f) * Scale;
-        public static Vector3 Hut0Door1Position => new Vector3(-0.70139f, 0.98168f, -10.69296f) * Scale;
+        public static Vector3 Hut0Door0Position => new Vector3(0.10415f, 1.57616f, -0.01544f) * Scale + Offset;
+        public static Vector3 Hut0Door1Position => new Vector3(-0.70139f, 0.98168f, -10.69296f) * Scale + Offset;
         public static bool Hut0Door0InvertedPivot => true;
         public static bool Hut0Door1InvertedPivot => true;
         public static bool Hut0Door0InvertedRotation => false;

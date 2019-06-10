@@ -247,10 +247,10 @@ namespace Hedra.Rendering
         {
             if (!HasColors) return;
             /* var originalVertices = Vertices.Count; */
-            var vertices = new MeshVertex[Vertices.Count];
+            var vertices = new MeshOptimizerVertex[Vertices.Count];
             for (var i = 0; i < vertices.Length; ++i)
             {
-                vertices[i] = new MeshVertex
+                vertices[i] = new MeshOptimizerVertex
                 {
                     Position = Vertices[i],
                     Normal = Normals[i],
@@ -258,13 +258,12 @@ namespace Hedra.Rendering
                 };
                 if(HasExtradata) vertices[i].Extradata = Extradata[i];
             }
-            var mesh = new Mesh<MeshVertex>(vertices, Indices.ToArray(), MeshVertex.SizeInBytes, MeshVertex.SizeInBytes);
-            MeshOperations.Optimize(mesh);
-            Indices = new List<uint>(mesh.Indices);
-            Normals = new List<Vector3>(mesh.Vertices.Select(V => V.Normal));
-            Colors = new List<Vector4>(mesh.Vertices.Select(V => V.Color));
-            if(HasExtradata) Extradata = new List<float>(mesh.Vertices.Select(V => V.Extradata));
-            Vertices = new List<Vector3>(mesh.Vertices.Select(V => V.Position));
+            var result = MeshOperations.Optimize(vertices, Indices.ToArray(), MeshOptimizerVertex.SizeInBytes);
+            Indices = new List<uint>(result.Item2);
+            Normals = new List<Vector3>(result.Item1.Select(V => V.Normal));
+            Colors = new List<Vector4>(result.Item1.Select(V => V.Color));
+            if(HasExtradata) Extradata = new List<float>(result.Item1.Select(V => V.Extradata));
+            Vertices = new List<Vector3>(result.Item1.Select(V => V.Position));
             /* Log.WriteLine($"Vertex Change % = {(1f - Vertices.Count / (float)originalVertices) * 100}, {Vertices.Count}/{originalVertices}"); */
         }
         
@@ -436,7 +435,7 @@ namespace Hedra.Rendering
             Extradata.Clear();
         }
 
-        struct MeshVertex
+        private struct MeshOptimizerVertex
         {
             public static uint SizeInBytes => sizeof(float) * 11;
             public Vector3 Position;

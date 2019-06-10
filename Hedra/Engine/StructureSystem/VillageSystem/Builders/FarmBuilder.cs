@@ -140,25 +140,21 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             var rng = Rng.NextFloat();
             var rotModifier = 1;
             var minDistModifier = 2.5f;
-            var colorMultiplier = 1f;
 
             if (rng < .3f)
             {
                 design = new PumpkinDesign();
                 type = ItemType.Pumpkin;
-                colorMultiplier = 1.5f;
             }
             else if (rng < .6f)
             {
                 design = new CornDesign();
                 minDistModifier = 1.5f;
                 type = ItemType.Corn;
-                colorMultiplier = 2.5f;
             }
             else if (rng < .75f)
             {
                 design = new SunflowerDesign();
-                minDistModifier = 1.5f;
                 rotModifier = 0;
             }
 
@@ -180,11 +176,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 var region = World.BiomePool.GetRegion(position);
                 Output.Instances.Add(BuildPlant(model, design, region, transMatrix, Rng));
                 if(type != ItemType.MaxEnums && Rng.Next(0, 8) == 1)
-                    BuildPlantCollectible(type, model, design, region, transMatrix, Rng, colorMultiplier);
+                    BuildPlantCollectible(type, model, design, region, transMatrix, Rng);
             }
         }
 
-        private void BuildPlantCollectible(ItemType Type, VertexData Model, PlantDesign Design, Region Biome, Matrix4 Transformation, Random Rng, float ColorMultiplier)
+        private void BuildPlantCollectible(ItemType Type, VertexData Model, PlantDesign Design, Region Biome, Matrix4 Transformation, Random Rng)
         {
             var partModel = CacheManager.GetPart(Design.Type, Model);
             var data = BuildPlant(partModel, Design, Biome, Transformation, Rng, 1.5f);

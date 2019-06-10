@@ -12,7 +12,7 @@ namespace Hedra.Engine.PlantSystem
     {
         public override CacheItem Type => CacheItem.Timber;
 
-        protected override float Scale(Random Rng) => .75f + Rng.NextFloat() * .75f;
+        public override float Scale(Random Rng) => .75f + Rng.NextFloat() * .75f;
 
         public override VertexData Paint(VertexData Data, Region Region, Random Rng)
         {

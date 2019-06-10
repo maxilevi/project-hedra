@@ -16,7 +16,7 @@ namespace Hedra.Engine.PlantSystem
     {
         public override CacheItem Type => CacheItem.Mushroom;
 
-        protected override float Scale(Random Rng) => 1.0f + Rng.NextFloat() * .25f;
+        public override float Scale(Random Rng) => 1.0f + Rng.NextFloat() * .25f;
         
         protected override Item ItemCollect => ItemPool.Grab(ItemType.Mushroom);
     }
