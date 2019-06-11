@@ -495,6 +495,8 @@ namespace Hedra.Engine.Player
         Gnoll,
         WerewolfMorph,
         EntMorph,
+        FemaleWitch,
+        MaleWitch,
         Mage
     }
 }

@@ -31,6 +31,9 @@ namespace Hedra.Engine.CacheSystem
             AddShapes(shapes);
         }
 
+        public static Vector3 Hut0Witch0Position => new Vector3(0, 0, -5.5f) * Scale;
+        public static Vector3 Hut0Witch1Position => new Vector3(8, 0, -15f) * Scale;
+        
         public static Vector3 PlantOffset { get; } = new Vector3(0, 0, .5f) * Scale;
         
         public static Vector3[] PlantRows { get; } = new[]

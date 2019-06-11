@@ -8404,6 +8404,14 @@
       <Link>Assets\Chr\Mob\Ghost\LichIdle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Chr\Witch\Witch0Idle.dae">
+      <Link>Assets\Chr\NPC\Witch0Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Witch\Witch1Idle.dae">
+      <Link>Assets\Chr\NPC\Witch1Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Environment\DeadGrass\DeadGrass0.ply">
       <Link>Assets\Env\Plants\DeadGrass0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -14019,10 +14027,16 @@
     <Content Include="Modules\NPCs\EntMorph.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\NPCs\FemaleWitch.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\NPCs\Skeleton.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\NPCs\WerewolfMorph.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\NPCs\MaleWitch.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\SkillTrees\ArcherTree.json">

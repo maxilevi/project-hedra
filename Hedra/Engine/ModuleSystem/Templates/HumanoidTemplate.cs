@@ -12,6 +12,6 @@ namespace Hedra.Engine.ModuleSystem.Templates
         public bool Immune { get; set; }
         public HumanoidWeaponTemplate[] Weapons { get; set; }
         public HumanoidModelTemplate Model { get; set; }
-        public HumanoidComponentsItemTemplate[] Components { get; set; }
+        public HumanoidComponentsItemTemplate[] Components { get; set; } = new HumanoidComponentsItemTemplate[0];
     }
 }
