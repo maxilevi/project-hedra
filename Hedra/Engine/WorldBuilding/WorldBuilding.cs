@@ -162,7 +162,7 @@ namespace Hedra.Engine.WorldBuilding
         {
             lock (_plateauLock)
             {
-                Mount.MaxHeight = ApplyMultiple(Mount.Position, Mount.MaxHeight);
+                //Mount.MaxHeight = ApplyMultiple(Mount.Position, Mount.MaxHeight);
                 _plateaus.Add(Mount);
             }         
         }

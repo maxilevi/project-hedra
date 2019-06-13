@@ -4,6 +4,7 @@ using System.Linq;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.PlantSystem;
@@ -34,13 +35,30 @@ namespace Hedra.Engine.StructureSystem.Overworld
             AddDoor(WitchHutCache.Hut0Door1, WitchHutCache.Hut0Door1Position, Rotation, Structure, WitchHutCache.Hut0Door1InvertedRotation, WitchHutCache.Hut0Door1InvertedPivot);
             PlacePlants(Structure, Translation, Rotation, Rng);
             AddNPCs(Structure, Rotation * Translation, Rng);
+            AddDelivery((WitchHut)Structure.WorldObject, Rng);
         }
 
+        private void AddDelivery(WitchHut Structure, Random Rng)
+        {
+            var possibleItems = new[]
+            {
+                ItemType.Peas,
+                ItemType.Cabbage,
+                ItemType.Carrot,
+                ItemType.Mushroom,
+                ItemType.Onion
+            };
+            var possibleAmounts = new[] {1, 2, 3};
+            var item = ItemPool.Grab(possibleItems[Rng.Next(0, possibleItems.Length)]);
+            item.SetAttribute(CommonAttributes.Amount, possibleAmounts[Rng.Next(0, possibleAmounts.Length)]);
+            Structure.PickupItem = item;
+        }
+        
         private void AddNPCs(CollidableStructure Structure, Matrix4 Transformation, Random Rng)
         {
             var enemies = new List<IEntity>();
-            IHumanoid female, male;
-            if (true)
+            IHumanoid female = null, male = null;
+            if (Rng.Next(0, 8) != 1)
             {
                 female = World.WorldBuilding.SpawnHumanoid(
                     HumanType.FemaleWitch,
@@ -48,7 +66,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 );
                 HumanoidFactory.AddAI(female, false);
             }
-            if (true)
+            if (female == null || Rng.Next(0, 8) != 1)
             {
                 male = World.WorldBuilding.SpawnHumanoid(
                     HumanType.MaleWitch,
@@ -114,12 +132,17 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         protected override string GetDescription(WitchHut Structure)
         {
-            return "";//Translations.Get();
+            return Translations.Get(
+                "quest_complete_structure_description_witch_hut",
+                $"{Structure.PickupItem.GetAttribute<int>(CommonAttributes.Amount)} {Structure.PickupItem.DisplayName}",
+                DisplayName,
+                Structure.EnemiesLeft
+             );
         }
 
         protected override string GetShortDescription(WitchHut Structure)
         {
-            return "";//Translations.Get();
+            return Translations.Get("quest_complete_structure_short_witch_hut", DisplayName);
         }
 
         protected override float BuildRotationAngle(Random Rng)

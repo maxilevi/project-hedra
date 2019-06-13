@@ -169,14 +169,14 @@ quest_village = VILLAGE
 quest_complete_structure_short_giant_tree = DEFEAT $(BOLD)(ORANGE){{0}}
 quest_complete_structure_short_graveyard = FREE THE $(BOLD)(ORANGE){{0}} 
 quest_complete_structure_short_bandit_camp = RESCUE $(BOLD)(ORANGE){{0}} 
-quest_complete_structure_short_witch_hut =
+quest_complete_structure_short_witch_hut = RAID THE $(BOLD)(ORANGE){{0}}
 quest_complete_structure_description_giant_tree = Defeat $(BOLD)(BLUE){{0}} at the $(BOLD)(ORANGE){{1}}.
 quest_complete_structure_description_graveyard = Free the $(BOLD)(ORANGE){{0}} from the corruption of the demons.\nThere are $(BOLD)(VIOLET){{1}} enemies left.
 quest_complete_structure_description_bandit_camp = Kill the kidnappers and rescue $(BOLD)(BLUE){{0}} from the $(BOLD)(ORANGE){{1}}.\n\nThere are $(BOLD)(VIOLET){{2}} bandits left.
-quest_complete_structure_description_witch_hut =
+quest_complete_structure_description_witch_hut = Defeat the witches and steal $(BOLD)(BLUE){{0}} from the $(BOLD)(ORANGE){{1}}.\n\nThere are $(BOLD)(VIOLET){{2}} witches left.
 
 quest_pickup_item_short = PICK UP $(BOLD)(ORANGE){{0}}
-# quest_pickup_item_description = Pickup the nearby $(BOLD)(BLUE){{0}}
+quest_pickup_default_item_description = Pickup $(BOLD)(BLUE){{0}}
 quest_pickup_chest_description = Recover the lost $(BOLD)(BLUE){{0}} from the nearby chest.
 quest_pickup_get_item_description = Receive the $(BOLD)(BLUE){{0}} from $(BOLD)(ORANGE){{1}}
 
