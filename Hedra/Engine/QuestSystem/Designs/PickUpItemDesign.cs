@@ -23,7 +23,10 @@ namespace Hedra.Engine.QuestSystem.Designs
         {
             var itemCollect = Quest.Parameters.Get<ItemDescription>(PickupParameterName);
             if (itemCollect.PickupMessage != null) return itemCollect.PickupMessage;
-            else return Translations.Get("quest_pickup_default_item_description", $"{itemCollect.Amount}{ItemPool.Grab(itemCollect.Name).DisplayName}");
+            return Translations.Get(
+                "quest_pickup_default_item_description",
+                $"{itemCollect.Amount} {ItemPool.Grab(itemCollect.Name).DisplayName}"
+            );
         }
 
         public override QuestView BuildView(QuestObject Quest)

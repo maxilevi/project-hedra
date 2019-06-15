@@ -173,7 +173,7 @@ namespace HedraTests.Game
             {
                 yield return GrabWeapon(new ItemPoolSettings(ItemTier.Common)
                 {
-                    SameTier = true,
+                    RandomizeTier = true,
                     EquipmentType = EquipmentType.Sword.ToString()
                 });
             }
@@ -187,7 +187,7 @@ namespace HedraTests.Game
             {
                 yield return GrabWeapon(new ItemPoolSettings(ItemTier.Unique)
                 {
-                    SameTier = true,
+                    RandomizeTier = true,
                     EquipmentType = EquipmentType.Sword.ToString()
                 });
             }
@@ -201,7 +201,7 @@ namespace HedraTests.Game
             {
                 yield return GrabWeapon(new ItemPoolSettings(ItemTier.Divine)
                 {
-                    SameTier = true,
+                    RandomizeTier = true,
                     EquipmentType = EquipmentType.Sword.ToString()
                 });
             }

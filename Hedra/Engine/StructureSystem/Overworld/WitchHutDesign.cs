@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.CacheSystem;
+using Hedra.Engine.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
@@ -36,9 +37,10 @@ namespace Hedra.Engine.StructureSystem.Overworld
             PlacePlants(Structure, Translation, Rotation, Rng);
             AddNPCs(Structure, Rotation * Translation, Rng);
             AddDelivery((WitchHut)Structure.WorldObject, Rng);
+            AddReward((WitchHut) Structure.WorldObject, Rng);
         }
 
-        private void AddDelivery(WitchHut Structure, Random Rng)
+        private static void AddDelivery(WitchHut Structure, Random Rng)
         {
             var possibleItems = new[]
             {
@@ -53,8 +55,18 @@ namespace Hedra.Engine.StructureSystem.Overworld
             item.SetAttribute(CommonAttributes.Amount, possibleAmounts[Rng.Next(0, possibleAmounts.Length)]);
             Structure.PickupItem = item;
         }
+
+        private static void AddReward(WitchHut Hut, Random Rng)
+        {
+            if (Rng.Next(0, 5) == 1) return;
+            Hut.RewardItem = ItemPool.Grab(new ItemPoolSettings(ItemTier.Rare, EquipmentType.Potion)
+            {
+                Seed = Unique.RandomSeed(Rng),
+                SameTier = false
+            });
+        }
         
-        private void AddNPCs(CollidableStructure Structure, Matrix4 Transformation, Random Rng)
+        private static void AddNPCs(CollidableStructure Structure, Matrix4 Transformation, Random Rng)
         {
             var enemies = new List<IEntity>();
             IHumanoid female = null, male = null;

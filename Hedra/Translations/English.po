@@ -176,7 +176,7 @@ quest_complete_structure_description_bandit_camp = Kill the kidnappers and rescu
 quest_complete_structure_description_witch_hut = Defeat the witches and steal $(BOLD)(BLUE){{0}} from the $(BOLD)(ORANGE){{1}}.\n\nThere are $(BOLD)(VIOLET){{2}} witches left.
 
 quest_pickup_item_short = PICK UP $(BOLD)(ORANGE){{0}}
-quest_pickup_default_item_description = Pickup $(BOLD)(BLUE){{0}}
+quest_pickup_default_item_description = Pick up $(BOLD)(ORANGE)(CAPS){{0}}.
 quest_pickup_chest_description = Recover the lost $(BOLD)(BLUE){{0}} from the nearby chest.
 quest_pickup_get_item_description = Receive the $(BOLD)(BLUE){{0}} from $(BOLD)(ORANGE){{1}}
 

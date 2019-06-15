@@ -79,7 +79,7 @@ namespace Hedra.Engine.CraftingSystem
         public static Item GetOutputFromRecipe(Item Recipe)
         {
             var output = Recipe.RawAttribute("Output");
-            if (output is string name) return ItemPool.Grab(name, Unique.RandomSeed);
+            if (output is string name) return ItemPool.Grab(name, Unique.RandomSeed());
             var asJObject = Recipe.GetAttribute<JObject>("Output");
             var item = ItemPool.Grab((string)asJObject["Name"]);
             var amount = (int)asJObject["Amount"];

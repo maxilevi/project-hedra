@@ -20,6 +20,7 @@ namespace Hedra.Engine.ItemSystem
         Ring,
         Staff,
         Recipe,
+        Potion,
         Ammo
     }
 }

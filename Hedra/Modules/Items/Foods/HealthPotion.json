@@ -1,7 +1,8 @@
 {
   "Name": "HealthPotion",
   "DisplayName": "Health potion",
-  "Tier": "Misc",
+  "EquipmentType": "Potion",
+  "Tier": "Uncommon",
   "Description": "...",
   "Attributes": [
     {

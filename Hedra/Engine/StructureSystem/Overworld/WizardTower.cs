@@ -13,5 +13,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public WizardTower(Vector3 Position) : base(Position)
         {
         }
+        public QuestReward Reward => null;
     }
 }

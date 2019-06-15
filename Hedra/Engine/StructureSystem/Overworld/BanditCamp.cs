@@ -160,5 +160,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
         }
 
         public ItemDescription DeliveryItem => ItemDescription.FromItem(_item, Translations.Get("quest_pickup_get_item_description", _item.DisplayName, Rescuee.Name));
+        public QuestReward Reward => null;
     }
 }

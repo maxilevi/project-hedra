@@ -6,5 +6,6 @@ namespace Hedra.Engine.QuestSystem
     {
         bool Completed { get; }
         ItemDescription DeliveryItem { get; }
+        QuestReward Reward { get; }
     }
 }

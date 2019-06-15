@@ -61,10 +61,10 @@ namespace Hedra.Engine.ItemSystem
         {
             var rng = new Random(Settings.Seed);
             var templates = ItemLoader.Templater.Templates;
-            var selectedTier = Settings.SameTier ? Settings.Tier : SelectTier(Settings.Tier, rng);
+            var selectedTier = Settings.RandomizeTier ? Settings.Tier : SelectTier(Settings.Tier, rng);
             
             var newTemplates = templates.Where(Template =>
-                Template.Tier == selectedTier).ToArray();
+                Settings.SameTier ? Template.Tier == selectedTier : Template.Tier <= selectedTier).ToArray();
 
             if (Settings.EquipmentType != null)
             {
@@ -161,7 +161,7 @@ namespace Hedra.Engine.ItemSystem
         {
             return ItemLoader.Templater.Templates.Where(I => Searcher(I)).Select(I => ItemPool.Grab(I.Name)).ToArray();
         }
-        
+
         public static Item Grab(string Name)
         {
             return Item.FromTemplate(ItemLoader.Templater[Name]);

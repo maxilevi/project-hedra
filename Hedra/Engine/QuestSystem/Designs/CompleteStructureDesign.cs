@@ -19,7 +19,7 @@ namespace Hedra.Engine.QuestSystem.Designs
     public class CompleteStructureDesign : QuestDesign
     {
         private const string Reward = "QuestReward";
-        
+
         protected override QuestReward BuildReward(QuestObject Quest, Random Rng)
         {
             if (Quest.Parameters.Has(Reward)) return Quest.Parameters.Get<QuestReward>(Reward);
@@ -28,9 +28,10 @@ namespace Hedra.Engine.QuestSystem.Designs
             {
                 reward = new QuestReward
                 {
-                    Gold = (int)(TradeManager.Price(ItemPool.Grab(item.Name)) * (.75f + Utils.Rng.NextFloat() * .5f))
+                    Gold = (int) (TradeManager.Price(ItemPool.Grab(item.Name)) *
+                                  (1.25f + Utils.Rng.NextFloat() * .5f))
                 };
-            }
+            }    
             else
             {
                 reward = new QuestReward
@@ -97,7 +98,7 @@ namespace Hedra.Engine.QuestSystem.Designs
             if (HasDelivery(Quest, out var deliveryItem))
             {
                 Quest.Parameters.Set("QuestDescendants", GetRealDescendants(Quest));
-                Quest.Parameters.Set("QuestReward", CreateReward(Quest));
+                Quest.Parameters.Set(Reward, CreateReward(Quest));
             }
         }
 
@@ -110,8 +111,11 @@ namespace Hedra.Engine.QuestSystem.Designs
             }
             else
             {
-                item = GetStructure(Quest).DeliveryItem;
+                var structure = GetStructure(Quest);
+                item = structure.DeliveryItem;
                 Quest.Parameters.Set(PickUpItemDesign.PickupParameterName, item);
+                if(structure.Reward != null)
+                    Quest.Parameters.Set(Reward, structure.Reward);
             }              
             return (DeliveryItem = item) != null;
         }

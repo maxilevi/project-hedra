@@ -1,3 +1,4 @@
+using System;
 using OpenTK;
 
 namespace Hedra.Engine.Core
@@ -25,6 +26,8 @@ namespace Hedra.Engine.Core
             return seed2(sx ^ sy);
         }
 
-        public static int RandomSeed => Utils.Rng.Next(int.MinValue, int.MaxValue);
+        public static int RandomSeed() => RandomSeed(Utils.Rng);
+        
+        public static int RandomSeed(Random Rng) => Utils.Rng.Next(int.MinValue, int.MaxValue);
     }
 }

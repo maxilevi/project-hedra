@@ -6,7 +6,8 @@ namespace Hedra.Engine.ItemSystem
     public class ItemPoolSettings
     {
         public ItemTier Tier { get; set; }
-        public bool SameTier { get; set; } = false;
+        public bool RandomizeTier { get; set; }
+        public bool SameTier { get; set; } = true;
         public string EquipmentType { get; set; }
         public int Seed { get; set; }
 
@@ -33,7 +34,7 @@ namespace Hedra.Engine.ItemSystem
         {
             this.Tier = Tier;
             this.EquipmentType = WeaponType;
-            this.Seed = Unique.RandomSeed;
+            this.Seed = Unique.RandomSeed();
         }
     }
 
