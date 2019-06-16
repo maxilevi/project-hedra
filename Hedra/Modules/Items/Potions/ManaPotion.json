@@ -1,0 +1,36 @@
+{
+  "Name": "ManaPotion",
+  "DisplayName": "Mana potion",
+  "EquipmentType": "Potion",
+  "Tier": "Uncommon",
+  "Description": "Recovers mana when drank",
+  "Attributes": [
+    {
+      "Name": "Amount",
+      "Value": 1
+    },
+    {
+      "Name": "PotionBonus",
+      "Value": 180
+    },
+    {
+      "Name": "Price",
+      "Value": 24,
+      "Hidden": true
+    },
+    {
+      "Name": "IsConsumable",
+      "Value": true,
+      "Hidden": true
+    },
+    {
+      "Name": "Handler",
+      "Value": "Potion",
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Potions/ManaPotion.ply"
+  }
+}

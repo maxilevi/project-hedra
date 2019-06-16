@@ -124,6 +124,11 @@ namespace Hedra.Engine.Player.Inventory
             if (item != null && item.IsConsumable)
             {
                 var success = Consume(item);
+                if (success && item.GetAttribute(CommonAttributes.Amount, 1) > 1)
+                {
+                    item.SetAttribute(CommonAttributes.Amount, item.GetAttribute<int>(CommonAttributes.Amount) - 1);
+                    array[itemIndex] = item;
+                }
                 if (!success) array[itemIndex] = item;
             }
             else if (array.HasRestrictions(itemIndex) && item != null)

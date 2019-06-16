@@ -49,6 +49,7 @@ namespace Hedra.EntitySystem
         float Health { get; set; }
         float ManaRegenFactor { get; set; }
         float Stamina { get; set; }
+        float StaminaRegen { get; set; }
         int Level { get; set; }
         float AttackPower { get; set; }
         float MaxStamina { get; }

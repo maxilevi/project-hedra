@@ -22,6 +22,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
+using Hedra.Engine.Scripting;
 using Hedra.Engine.Sound;
 using Hedra.Engine.Steamworks;
 using Hedra.Engine.WorldBuilding;
@@ -86,6 +87,7 @@ namespace Hedra.Engine.Loader
                 return false;
             }
             Log.WriteLine(glVersion);
+            TaskScheduler.Parallel(Interpreter.Load);
             return true;
         }
 

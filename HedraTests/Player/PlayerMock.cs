@@ -187,6 +187,7 @@ namespace HedraTests.Player
         public float BaseSpeed { get; }
         public bool Destroy { get; set; }
         public float Stamina { get; set; }
+        public float StaminaRegen { get; set; }
         public float AttackingSpeedModifier { get; }
         public int Level { get; set; } = 1;
         public float AttackPower { get; set; }

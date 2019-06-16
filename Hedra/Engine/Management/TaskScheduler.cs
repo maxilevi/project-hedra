@@ -121,13 +121,18 @@ namespace Hedra.Engine.Management
         /// <param name="Do">Action to execute</param>
         public static void For(float Duration, Action Do)
         {
+            For(Duration, T => Do());
+        }
+        
+        public static void For(float Duration, Action<float> Do)
+        {
             var time = 0f;
             While(() => time < Duration,
-            delegate
-            {
-                Do();
-                time += Time.DeltaTime;
-            });
+                delegate
+                {
+                    Do(time);
+                    time += Time.DeltaTime;
+                });
         }
 
         #region HelperCoroutines

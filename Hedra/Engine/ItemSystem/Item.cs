@@ -56,6 +56,11 @@ namespace Hedra.Engine.ItemSystem
         {
             return this.GetAttribute<T>(Attribute.ToString());
         }
+        
+        public T GetAttribute<T>(CommonAttributes Attribute, T Default)
+        {
+            return HasAttribute(Attribute) ? this.GetAttribute<T>(Attribute.ToString()) : Default;
+        }
 
         public void DeleteAttribute(CommonAttributes Attribute)
         {

@@ -1,0 +1,41 @@
+{
+  "Name": "StaminaPotion",
+  "DisplayName": "Stamina potion",
+  "EquipmentType": "Potion",
+  "Tier": "Uncommon",
+  "Description": "Temporarily increases your stamina regen",
+  "Attributes": [
+    {
+      "Name": "Amount",
+      "Value": 1
+    },
+    {
+      "Name": "PotionDuration",
+      "Value": 50
+    },
+    {
+      "Name": "PotionBonus",
+      "Display": "Percentage",
+      "Value": 1
+    },
+    {
+      "Name": "Price",
+      "Value": 48,
+      "Hidden": true
+    },
+    {
+      "Name": "IsConsumable",
+      "Value": true,
+      "Hidden": true
+    },
+    {
+      "Name": "Handler",
+      "Value": "Potion",
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Potions/AgilityPotion.ply"
+  }
+}

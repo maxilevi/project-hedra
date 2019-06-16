@@ -1,0 +1,41 @@
+{
+  "Name": "SpeedPotion",
+  "DisplayName": "Speed potion",
+  "EquipmentType": "Potion",
+  "Tier": "Uncommon",
+  "Description": "Temporarily grants a speed bonus",
+  "Attributes": [
+    {
+      "Name": "Amount",
+      "Value": 1
+    },
+    {
+      "Name": "PotionDuration",
+      "Value": 50
+    },
+    {
+      "Name": "PotionBonus",
+      "Display": "Percentage",
+      "Value": 0.2
+    },
+    {
+      "Name": "Price",
+      "Value": 48,
+      "Hidden": true
+    },
+    {
+      "Name": "IsConsumable",
+      "Value": true,
+      "Hidden": true
+    },
+    {
+      "Name": "Handler",
+      "Value": "Potion",
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Potions/SpeedPotion.ply"
+  }
+}

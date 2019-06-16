@@ -28,6 +28,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Networking;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering.Particles;
+using Hedra.Engine.Scripting;
 using Hedra.Engine.Sound;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.Overworld;
@@ -430,7 +431,10 @@ namespace Hedra.Engine.Management
                     World.SpawnChest(Caster.Position + Caster.Orientation * 32, ItemPool.Grab(Parts[1]) );
                     return true;
                 }
-
+                if (Parts[0] == "exec")
+                {    
+                    Interpreter.Run(Parts[1], Parts[2])();
+                }
                 if (Parts[0] == "realm")
                 {
 

@@ -96,6 +96,7 @@ namespace Hedra.Engine.Player
         private bool _isGliding;
         private float _speedAddon;
         private readonly Timer _consecutiveHitsTimer;
+        private DamageComponent _damageHandler;
 
         #region Propierties ( MaxMana, MaxHealth, MaxXp)
 
@@ -141,6 +142,8 @@ namespace Hedra.Engine.Player
 
         public float HealthRegen => this.IsSleeping ? 6.0f * this.MaxHealth * .005f : 0;
 
+        public float StaminaRegen { get; set; } = 4;
+        
         #endregion
 
         public Humanoid()
@@ -159,7 +162,7 @@ namespace Hedra.Engine.Player
             AttackPower = 1f;
             Speed = this.BaseSpeed;
             BaseAttackSpeed = .75f;
-            AddComponent(new DamageComponent(this));
+            AddComponent(_damageHandler = new DamageComponent(this));
         }
 
         public override void Update()
@@ -169,6 +172,17 @@ namespace Hedra.Engine.Player
             Fisher.Update();
             Equipment.Update();
             UpdateHits();
+        }
+
+        private void UpdateStats()
+        {
+            Stamina += Time.DeltaTime * StaminaRegen;
+            if (!this.IsDead)
+            {
+                if(!_damageHandler.HasBeenAttacked)
+                    Health += HealthRegen * Time.IndependantDeltaTime;
+                Mana += ManaRegen * Time.IndependantDeltaTime;
+            }
         }
 
         public void ResetEquipment()

@@ -82,8 +82,29 @@
       <HintPath>..\references\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="IronPython, Version=2.7.5.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1">
+      <HintPath>..\packages\IronPython.2.7.5\lib\Net40\IronPython.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="IronPython.Modules, Version=2.7.5.0, Culture=neutral, PublicKeyToken=7f709c5b713576e1">
+      <HintPath>..\packages\IronPython.2.7.5\lib\Net40\IronPython.Modules.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="MeshOptimizer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\references\MeshOptimizer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Dynamic, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1">
+      <HintPath>..\packages\IronPython.2.7.5\lib\Net40\Microsoft.Dynamic.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Scripting, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1">
+      <HintPath>..\packages\IronPython.2.7.5\lib\Net40\Microsoft.Scripting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Scripting.Metadata, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1">
+      <HintPath>..\packages\IronPython.2.7.5\lib\Net40\Microsoft.Scripting.Metadata.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -93,7 +114,7 @@
     <Reference Include="NVorbis">
       <HintPath>..\references\NVorbis.dll</HintPath>
     </Reference>
-    <Reference Include="OpenTK, Version=3.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+    <Reference Include="OpenTK, Version=3.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4">
       <HintPath>..\references\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -215,6 +236,7 @@
     <Compile Include="Components\Effects\SlowingComponent.cs" />
     <Compile Include="Components\Effects\SpeedBonusComponent.cs" />
     <Compile Include="Components\Effects\SpeedComponent.cs" />
+    <Compile Include="Components\Effects\StaminaRegenComponent.cs" />
     <Compile Include="Components\Effects\ToxicComponent.cs" />
     <Compile Include="Components\ExplorerThoughtsComponent.cs" />
     <Compile Include="Components\FarmerThoughtsComponent.cs" />
@@ -287,6 +309,8 @@
     <Compile Include="Engine\Input\ArrowSelectorState.cs" />
     <Compile Include="Engine\ItemSystem\FoodSystem\FoodHandler.cs" />
     <Compile Include="Engine\ItemSystem\ItemHandlerFactory.cs" />
+    <Compile Include="Engine\ItemSystem\PotionAttributes.cs" />
+    <Compile Include="Engine\ItemSystem\PotionType.cs" />
     <Compile Include="Engine\ItemSystem\Templates\AttributeTemplate.cs" />
     <Compile Include="Engine\ItemSystem\Templates\ItemModelTemplate.cs" />
     <Compile Include="Engine\ItemSystem\Templates\ItemTemplate.cs" />
@@ -495,6 +519,8 @@
     <Compile Include="Engine\Rendering\UI\TextCache.cs" />
     <Compile Include="Engine\Rendering\UI\TextOptions.cs" />
     <Compile Include="Engine\Rendering\UI\DrawableTexture.cs" />
+    <Compile Include="Engine\Scripting\Interpreter.cs" />
+    <Compile Include="Engine\Scripting\VisualEffects.cs" />
     <Compile Include="Engine\SkillSystem\ActivateDurationSkill.cs" />
     <Compile Include="Engine\SkillSystem\ActivateDurationSkillWithSingleAnimation.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Jab.cs" />
@@ -1252,6 +1278,7 @@
     <Compile Include="EntitySystem\IHumanoid.cs" />
     <Compile Include="EntitySystem\IPhysicsComponent.cs" />
     <Compile Include="ItemHandlers\ItemHandler.cs" />
+    <Compile Include="ItemHandlers\PotionHandler.cs" />
     <Compile Include="ItemHandlers\RecipeHandler.cs" />
     <Compile Include="ModelHandlers\EntHandler.cs" />
     <Compile Include="ModelHandlers\GhostFactory.cs" />
@@ -2051,10 +2078,6 @@
     </None>
     <None Include="..\project-hedra-assets\Models\Blend\Foods\CornSoup.ply">
       <Link>Assets\Items\Foods\CornSoup.ply</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Models\Blend\Foods\HealthPotion.ply">
-      <Link>Assets\Items\Foods\HealthPotion.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Blend\Foods\Mushroom.ply">
@@ -5444,7 +5467,6 @@
     <None Include="Modules\Spawners\Overworld.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="OpenTK.dll.config" />
     <None Include="Shaders\Includes\Conditionals.shader">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -8646,6 +8668,26 @@
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Misc\Wool.ply">
       <Link>Assets\Items\Misc\Wool.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Potions\AgilityPotion.ply">
+      <Link>Assets\Items\Potions\AgilityPotion.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Potions\HealthPotion.ply">
+      <Link>Assets\Items\Potions\HealthPotion.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Potions\ManaPotion.ply">
+      <Link>Assets\Items\Potions\ManaPotion.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Potions\SpeedPotion.ply">
+      <Link>Assets\Items\Potions\SpeedPotion.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Potions\StrengthPotion.ply">
+      <Link>Assets\Items\Potions\StrengthPotion.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Objects\BearTrap.ply">
@@ -13875,9 +13917,6 @@
     <Content Include="Modules\Items\Foods\Flour.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\Items\Foods\HealthPotion.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Modules\Items\Foods\Mushroom.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -13952,6 +13991,21 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Misc\Wool.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Potions\HealthPotion.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Potions\ManaPotion.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Potions\SpeedPotion.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Potions\StaminaPotion.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Potions\StrengthPotion.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Recipes\BoatRecipe.json">
@@ -14079,6 +14133,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Villages\Woodland.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\Core.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\VisualEffects.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Shaders\Billboard.frag">

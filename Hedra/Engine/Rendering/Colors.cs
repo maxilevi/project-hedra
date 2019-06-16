@@ -32,6 +32,7 @@ namespace Hedra.Engine.Rendering
         public static Vector4 GreenYellow { get; } = Color.GreenYellow.ToVector4();
         public static Vector4 CooldownBlue { get; } = new Vector4(.2f, .2f, .85f, 1);
         public static Vector4 Brown { get; } = Color.FromArgb(255, 134, 94, 60).ToVector4() * .75f;
+        public static Vector4 Magenta { get; } = Color.Magenta.ToVector4();
 
         public static Vector4 FromHtml(string Hex)
         {

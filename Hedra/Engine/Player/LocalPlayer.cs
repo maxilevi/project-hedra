@@ -227,14 +227,7 @@ namespace Hedra.Engine.Player
                     (entities[i].Model as IAudible)?.StopSound();
                 }
             }
-
-            if (!this.IsDead)
-            {
-                if(!_damageHandler.HasBeenAttacked)
-                    this.Health += HealthRegen * Time.IndependantDeltaTime;
-                this.Mana += ManaRegen * Time.IndependantDeltaTime;
-                this.Stamina += (float)Time.DeltaTime * 4f;
-            }
+            
             this.Rotation = new Vector3(0, this.Rotation.Y, 0);
             this.View.AddedDistance = IsMoving || IsSwimming || IsTravelling ? 3.0f : 0.0f;
 
