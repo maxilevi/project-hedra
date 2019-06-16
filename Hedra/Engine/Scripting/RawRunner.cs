@@ -1,5 +1,6 @@
 using System.IO;
 using Hedra.Engine.Game;
+using Hedra.Engine.Management;
 using Microsoft.Scripting.Hosting;
 
 namespace Hedra.Engine.Scripting
@@ -23,11 +24,9 @@ namespace Hedra.Engine.Scripting
 
         private static string Get(string Name)
         {
-#if DEBUG
-            return File.ReadAllText($"../../Scripts/{Name}");
-#else
+            if(GameSettings.DebugMode) 
+                return File.ReadAllText($"../../Scripts/{Name}");
             return File.ReadAllText($"{AssetManager.AppPath}/Scripts/{Name}");
-#endif
         }
     }
 }
