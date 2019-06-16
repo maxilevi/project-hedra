@@ -251,9 +251,9 @@ namespace Hedra.Engine.EntitySystem
                         )
                     ).ExtractRotation() 
                     : Quaternion.Identity;
-                _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation, Time.IndependantDeltaTime * 8f);
+                _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation, Time.IndependentDeltaTime * 8f);
                 Model.TransformationMatrix = Matrix4.CreateFromQuaternion(_terrainOrientation);
-                _quaternionModelRotation = Quaternion.Slerp(_quaternionModelRotation, _quaternionTargetRotation, Time.IndependantDeltaTime * 14f);
+                _quaternionModelRotation = Quaternion.Slerp(_quaternionModelRotation, _quaternionTargetRotation, Time.IndependentDeltaTime * 14f);
                 Model.LocalRotation = _quaternionModelRotation.ToEuler();
                 Model.Position = this.Position;
                 this.LocalRotation = Model.LocalRotation;
@@ -266,7 +266,7 @@ namespace Hedra.Engine.EntitySystem
                 _sound.Pitch = Parent.Speed / PitchSpeed;
                 _sound.Update(this.IsWalking && Parent.IsGrounded);
             }
-            _attackCooldown -= Time.IndependantDeltaTime;
+            _attackCooldown -= Time.IndependentDeltaTime;
         }
 
         private void UpdateWalkAnimationsSpeed()

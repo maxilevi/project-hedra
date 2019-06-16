@@ -15,7 +15,7 @@ namespace Hedra.Components.Effects
 
         public override void Update()
         {
-            _cooldown -= Time.IndependantDeltaTime;
+            _cooldown -= Time.IndependentDeltaTime;
         }
 
         protected override void DoApply(IEntity Victim, float Amount)

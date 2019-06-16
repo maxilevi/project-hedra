@@ -88,5 +88,7 @@ namespace Hedra.Engine.Game
             get => Provider.Player;
             set => Provider.Player = value;
         }
+
+        public static bool PlayerExists => Provider.PlayerExists;
     }
 }

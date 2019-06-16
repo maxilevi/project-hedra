@@ -80,7 +80,7 @@ namespace Hedra.Engine.Rendering.Animation
             if (_currentAnimation == null || Stop) return false;
 
             var animationPose = CalculateCurrentAnimationPose(_currentPose);
-            _pose = InterpolatePoses(_pose, animationPose, Time.IndependantDeltaTime * 16f, out var interpolated);
+            _pose = InterpolatePoses(_pose, animationPose, Time.IndependentDeltaTime * 16f, out var interpolated);
             if (interpolated)
             {
                 ApplyPoseToJoints(_pose, _rootJoint, Matrix4.Identity);
@@ -95,7 +95,7 @@ namespace Hedra.Engine.Rendering.Animation
 
             if (_currentAnimation != null)
             {
-                AnimationTime += Time.IndependantDeltaTime * _currentAnimation.Speed * AnimationSpeed;
+                AnimationTime += Time.IndependentDeltaTime * _currentAnimation.Speed * AnimationSpeed;
                 _currentAnimation.DispatchEvents(AnimationTime / _currentAnimation.Length);
                 if (AnimationTime > _currentAnimation.Length)
                 {
@@ -106,7 +106,7 @@ namespace Hedra.Engine.Rendering.Animation
             }
 
             if(_blendingAnimation == null) return;
-            _blendingAnimationTime += Time.IndependantDeltaTime * _blendingAnimation.Speed * AnimationSpeed;
+            _blendingAnimationTime += Time.IndependentDeltaTime * _blendingAnimation.Speed * AnimationSpeed;
             _blendingAnimation.DispatchEvents(_blendingAnimationTime / _blendingAnimation.Length);
             if (_blendingAnimationTime > _blendingAnimation.Length)
             {

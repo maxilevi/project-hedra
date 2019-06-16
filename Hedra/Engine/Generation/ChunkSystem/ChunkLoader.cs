@@ -70,7 +70,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void Update()
         {
-            _activeChunks = Mathf.Lerp(_activeChunks, _targetActivechunks, Time.IndependantDeltaTime * .5f);
+            _activeChunks = Mathf.Lerp(_activeChunks, _targetActivechunks, Time.IndependentDeltaTime * .5f);
             this.UpdateFog();
         }
 

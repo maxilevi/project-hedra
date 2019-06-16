@@ -110,8 +110,8 @@ namespace Hedra.Engine.Player
 
             while(ShouldMove() && !GameManager.IsLoading && !GameManager.InStartMenu && TargetDistance > MinDistance)
             {
-                TargetDistance -= Time.IndependantDeltaTime;
-                Distance -= Time.IndependantDeltaTime;
+                TargetDistance -= Time.IndependentDeltaTime;
+                Distance -= Time.IndependentDeltaTime;
             }
 
             BuildCameraMatrix();
@@ -136,9 +136,9 @@ namespace Hedra.Engine.Player
             }
             _interpolatedZoomOut = Mathf.Lerp(_interpolatedZoomOut, _targetZoomOut, Time.DeltaTime * 2f);
             _interpolatedPosition = PositionDelegate() - _interpolatedZoomOut;
-            Pitch = Mathf.Lerp(Pitch, TargetPitch, Time.IndependantDeltaTime * 16f);
-            Yaw = Mathf.Lerp(Yaw, TargetYaw, Time.IndependantDeltaTime * 16f);
-            Distance = Mathf.Lerp(Distance, TargetDistance + AddedDistance * Time.TimeScale, Time.IndependantDeltaTime * 3f);
+            Pitch = Mathf.Lerp(Pitch, TargetPitch, Time.IndependentDeltaTime * 16f);
+            Yaw = Mathf.Lerp(Yaw, TargetYaw, Time.IndependentDeltaTime * 16f);
+            Distance = Mathf.Lerp(Distance, TargetDistance + AddedDistance * Time.TimeScale, Time.IndependentDeltaTime * 3f);
         }
 
         private void ClampYaw()

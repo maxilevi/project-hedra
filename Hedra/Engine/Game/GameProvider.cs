@@ -18,6 +18,7 @@ using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Scenes;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.Overworld;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.Game
@@ -76,7 +77,7 @@ namespace Hedra.Engine.Game
         {
             World.Recreate(World.MenuSeed);
             SkyManager.SetTime(12000);
-            SoundtrackManager.PlayTrack(SoundtrackManager.MainThemeIndex, true);
+            SoundtrackManager.PlayRepeating(SoundtrackManager.MainTheme);
             RoutineManager.StartRoutine(MenuCoroutine);
             Player.Reset();
             Player.UI.ShowMenu();
@@ -284,7 +285,7 @@ namespace Hedra.Engine.Game
                 GameSettings.BloomModifier = 8.0f;
                 TaskScheduler.While( () => Math.Abs(GameSettings.BloomModifier - 1.0f) > .005f, delegate
                 {
-                    GameSettings.BloomModifier = Mathf.Lerp(GameSettings.BloomModifier, 1.0f, Time.IndependantDeltaTime);
+                    GameSettings.BloomModifier = Mathf.Lerp(GameSettings.BloomModifier, 1.0f, Time.IndependentDeltaTime);
                 });
                 TaskScheduler.When( () => Math.Abs(GameSettings.BloomModifier - 1.0f) < .005f, delegate
                 {
@@ -299,5 +300,7 @@ namespace Hedra.Engine.Game
             get => _players.First();
             set => _players[0] = value;
         }
+
+        public bool PlayerExists => _players != null && _players.Length > 0;
     }
 }

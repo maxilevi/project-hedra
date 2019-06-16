@@ -5,6 +5,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.StructureSystem;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.Player
@@ -66,7 +67,7 @@ namespace Hedra.Engine.Player
                     if (!_wasPlayingCustom && structure.Design.AmbientSongs.Length > 0)
                     {
                         var song = structure.Design.AmbientSongs[Utils.Rng.Next(0, structure.Design.AmbientSongs.Length)];
-                        SoundtrackManager.PlayTrack(song, true);
+                        SoundtrackManager.PlayRepeating(song);
                         _wasPlayingCustom = true;
                     }
                     none = false;

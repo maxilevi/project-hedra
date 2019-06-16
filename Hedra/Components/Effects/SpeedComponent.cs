@@ -15,7 +15,7 @@ namespace Hedra.Components.Effects
         
         public override void Update()
         {
-            _speedTime -= Time.IndependantDeltaTime;
+            _speedTime -= Time.IndependentDeltaTime;
         }
 
         protected override void DoApply(IEntity Victim, float Amount)

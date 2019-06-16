@@ -11,6 +11,7 @@ using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.Overworld
@@ -70,7 +71,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         
         public override int[] AmbientSongs => new []
         {
-            SoundtrackManager.VillageIndex
+            SoundtrackManager.VillageAmbient
         };
     }
 }

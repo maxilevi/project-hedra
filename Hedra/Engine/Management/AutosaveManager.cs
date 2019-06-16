@@ -23,7 +23,7 @@ namespace Hedra.Engine.Management
         {
             if(!GameSettings.Autosave || GameManager.InStartMenu) return;
             
-            _passedTime += Time.IndependantDeltaTime;
+            _passedTime += Time.IndependentDeltaTime;
             if(_passedTime >= SecondsTimePerSave)
             {
                 Save();

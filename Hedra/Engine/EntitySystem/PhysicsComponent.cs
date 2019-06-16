@@ -202,7 +202,7 @@ namespace Hedra.Engine.EntitySystem
             return this.ExecuteTranslate(Command);
         }
 
-        private float Timestep => Time.IndependantDeltaTime * (UseTimescale ? Time.TimeScale : 1);
+        private float Timestep => Time.IndependentDeltaTime * (UseTimescale ? Time.TimeScale : 1);
 
         private bool ProcessCommand(MoveCommand Command)
         {

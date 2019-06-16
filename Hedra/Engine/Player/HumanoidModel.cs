@@ -191,7 +191,7 @@ namespace Hedra.Engine.Player
             var health = Food.GetAttribute<float>(CommonAttributes.Saturation);
             TaskScheduler.While( 
                 () => Human.IsEating && !Human.IsDead,
-                () => Human.Health += health * Time.IndependantDeltaTime * .3f);
+                () => Human.Health += health * Time.IndependentDeltaTime * .3f);
             TaskScheduler.When(
                 () => !Human.IsEating,
                 () => OnEatingEnd(Food)
@@ -288,10 +288,10 @@ namespace Hedra.Engine.Player
             base.Update();
             StateHandler.Update();
             _modelSound.Pitch = Human.Speed / PitchSpeed;
-            Model.Position = Mathf.Lerp(Model.Position, Position + RidingOffset, Time.IndependantDeltaTime * 24f);
-            _rotationQuaternionX = Quaternion.Slerp(_rotationQuaternionX, QuaternionMath.FromEuler(Vector3.UnitX * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 8f);
-            _rotationQuaternionY = Quaternion.Slerp(_rotationQuaternionY, QuaternionMath.FromEuler(Vector3.UnitY * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 8f);
-            _rotationQuaternionZ = Quaternion.Slerp(_rotationQuaternionZ, QuaternionMath.FromEuler(Vector3.UnitZ * TargetRotation * Mathf.Radian), Time.IndependantDeltaTime * 8f);
+            Model.Position = Mathf.Lerp(Model.Position, Position + RidingOffset, Time.IndependentDeltaTime * 24f);
+            _rotationQuaternionX = Quaternion.Slerp(_rotationQuaternionX, QuaternionMath.FromEuler(Vector3.UnitX * TargetRotation * Mathf.Radian), Time.IndependentDeltaTime * 8f);
+            _rotationQuaternionY = Quaternion.Slerp(_rotationQuaternionY, QuaternionMath.FromEuler(Vector3.UnitY * TargetRotation * Mathf.Radian), Time.IndependentDeltaTime * 8f);
+            _rotationQuaternionZ = Quaternion.Slerp(_rotationQuaternionZ, QuaternionMath.FromEuler(Vector3.UnitZ * TargetRotation * Mathf.Radian), Time.IndependentDeltaTime * 8f);
             Model.LocalRotation = new Vector3(
                 QuaternionMath.ToEuler(_rotationQuaternionX).X,
                 QuaternionMath.ToEuler(_rotationQuaternionY).Y,

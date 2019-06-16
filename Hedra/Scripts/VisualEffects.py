@@ -1,4 +1,4 @@
-
+from OpenTK import Vector4
 
 def outline(human, color, seconds):
     quarter = seconds * .25

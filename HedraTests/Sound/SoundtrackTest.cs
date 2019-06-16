@@ -3,6 +3,7 @@ using System.IO;
 using Hedra;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
+using Hedra.Sound;
 using NUnit.Framework;
 
 namespace HedraTests.Sound
@@ -17,7 +18,7 @@ namespace HedraTests.Sound
             World.Provider = new SimpleWorldProviderMock();
             AssetManager.Provider = new DummyAssetProvider();
             SoundtrackManager.Load(null);
-            Assert.Catch(typeof(InvalidDataException), () => SoundtrackManager.PlayTrack(0));
+            Assert.Catch(typeof(InvalidDataException), () => SoundtrackManager.PlayRepeating(0));
             Assert.Catch(typeof(NullReferenceException), SoundtrackManager.Update);
         }
     }

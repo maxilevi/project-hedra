@@ -245,7 +245,7 @@ namespace Hedra.Engine.Rendering.Animation
                 Renderer.Disable(EnableCap.DepthTest);
                 _shader["Outline"] = Outline ? 1 : 0;
                 _shader["OutlineColor"] = OutlineColor;
-                _shader["Time"] = Time.IndependantDeltaTime;
+                _shader["Time"] = Time.IndependentDeltaTime;
                 _indices.Bind();
                 Renderer.DrawElements(PrimitiveType.Triangles, _indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
                 _indices.Unbind();

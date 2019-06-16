@@ -68,5 +68,7 @@ namespace HedraTests
         {
             throw new NotImplementedException();
         }
+
+        public bool PlayerExists { get; }
     }
 }

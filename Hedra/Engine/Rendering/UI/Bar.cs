@@ -82,7 +82,7 @@ namespace Hedra.Engine.Rendering.UI
             if (!_enabled)
                 return;
 
-            _barSize = Mathf.Clamp(Mathf.Lerp(_barSize, _value() / _max(), Time.IndependantDeltaTime * 8f), 0, 1);
+            _barSize = Mathf.Clamp(Mathf.Lerp(_barSize, _value() / _max(), Time.IndependentDeltaTime * 8f), 0, 1);
 
             if (UpdateTextRatio)
                 Text.Text = (int) _value() + " / " + (int) _max();

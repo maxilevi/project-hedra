@@ -46,8 +46,8 @@ namespace Hedra.Engine.Loader
         {
             if (!this._finishedLoading)
             {
-                _studioBackground.Opacity = Mathf.Lerp(_studioBackground.Opacity, _splashOpacity, Time.IndependantDeltaTime);
-                _studioLogo.Opacity = Mathf.Lerp(_studioLogo.Opacity, _splashOpacity, Time.IndependantDeltaTime);
+                _studioBackground.Opacity = Mathf.Lerp(_studioBackground.Opacity, _splashOpacity, Time.IndependentDeltaTime);
+                _studioLogo.Opacity = Mathf.Lerp(_studioLogo.Opacity, _splashOpacity, Time.IndependentDeltaTime);
 
                 if (_splashOpacity < 0.05f && Math.Abs(_studioLogo.Opacity - _splashOpacity) < 0.05f)
                 {

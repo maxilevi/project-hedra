@@ -72,7 +72,7 @@ namespace Hedra.Engine.Player.BoatSystem
             _targetTerrainOrientation =
                 new Matrix3(Mathf.RotationAlign(Vector3.UnitY, waterNormal)).ExtractRotation();
             _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation,
-                Time.IndependantDeltaTime * 1f);
+                Time.IndependentDeltaTime * 1f);
             Transformation = Matrix4.CreateFromQuaternion(_terrainOrientation);
         }
         

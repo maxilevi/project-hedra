@@ -45,7 +45,7 @@ namespace Hedra.Engine.Management
                 }
                 _counter = 0;
             }
-            _counter += Time.IndependantDeltaTime;
+            _counter += Time.IndependentDeltaTime;
         }
     }
 }

@@ -172,15 +172,15 @@ namespace Hedra.Engine.EnvironmentSystem
                 TargetIntensity = .5f;
                 simplifiedFactor = (simplifiedTime - 8000f) / 2000f;
             }
-            _intensity = Mathf.Lerp(_intensity, TargetIntensity, Time.IndependantDeltaTime * 2f);
+            _intensity = Mathf.Lerp(_intensity, TargetIntensity, Time.IndependentDeltaTime * 2f);
             const float biomeInterpolateSpeed = .3f;
             _minLight = Mathf.Lerp(_minLight, _currentRegion.Sky.MinLight, biomeInterpolateSpeed);
             _maxLight = Mathf.Lerp(_maxLight, _currentRegion.Sky.MaxLight, biomeInterpolateSpeed);
 
-            _targetBiomeTopColor = Mathf.Lerp(_targetBiomeTopColor, _targetTopColor(), Time.IndependantDeltaTime * biomeInterpolateSpeed);
-            _targetBiomeBotColor = Mathf.Lerp(_targetBiomeBotColor, _targetBotColor(), Time.IndependantDeltaTime * biomeInterpolateSpeed);
-            _nextTargetBiomeTopColor = Mathf.Lerp(_nextTargetBiomeTopColor, _nextTargetTopColor(), Time.IndependantDeltaTime * biomeInterpolateSpeed);
-            _nextTargetBiomeBotColor = Mathf.Lerp(_nextTargetBiomeBotColor, _nextTargetBotColor(), Time.IndependantDeltaTime * biomeInterpolateSpeed);
+            _targetBiomeTopColor = Mathf.Lerp(_targetBiomeTopColor, _targetTopColor(), Time.IndependentDeltaTime * biomeInterpolateSpeed);
+            _targetBiomeBotColor = Mathf.Lerp(_targetBiomeBotColor, _targetBotColor(), Time.IndependentDeltaTime * biomeInterpolateSpeed);
+            _nextTargetBiomeTopColor = Mathf.Lerp(_nextTargetBiomeTopColor, _nextTargetTopColor(), Time.IndependentDeltaTime * biomeInterpolateSpeed);
+            _nextTargetBiomeBotColor = Mathf.Lerp(_nextTargetBiomeBotColor, _nextTargetBotColor(), Time.IndependentDeltaTime * biomeInterpolateSpeed);
 
             if (UpdateDayColors)
             {
@@ -199,7 +199,7 @@ namespace Hedra.Engine.EnvironmentSystem
 
             _targetLightColor = new Vector3(Math.Max(0f, newLightColor.X), Math.Max(0f, newLightColor.Y), Math.Max(0f, newLightColor.Z));
             var previousLightColor = ShaderManager.LightColor;
-            var interpolatedLightColor = Mathf.Lerp(ShaderManager.LightColor, _targetLightColor, Time.IndependantDeltaTime * 12f);
+            var interpolatedLightColor = Mathf.Lerp(ShaderManager.LightColor, _targetLightColor, Time.IndependentDeltaTime * 12f);
             if ((previousLightColor - interpolatedLightColor).Length > 0.005f)
             {
                 ShaderManager.LightColor = interpolatedLightColor;

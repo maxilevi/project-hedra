@@ -15,7 +15,8 @@ namespace Hedra.Engine.Scripting
     {
         private const string CoreLibrary = "Core.py";
         private static readonly ScriptEngine _engine;
-
+        private static readonly Runner _runner;
+        
         public static void Load(){}
         
         static Interpreter()
@@ -27,18 +28,20 @@ namespace Hedra.Engine.Scripting
             _engine.SetSearchPaths(GetSearchPath());
             _engine.Runtime.LoadAssembly(Assembly.Load(typeof(Interpreter).Assembly.FullName));
             _engine.Runtime.LoadAssembly(Assembly.Load(typeof(Vector4).Assembly.FullName));
+            _runner = GameSettings.DebugMode ? (Runner) new RawRunner(_engine) : new CompiledRunner(_engine);
             Log.WriteLine($"Python engine was successfully loaded in {watch.ElapsedMilliseconds} MS");
+            
             watch.Reset();
         }
 
         public static dynamic Run(string Library, string Function)
         {
-            var scope = _engine.CreateScope();
-            scope.SetVariable("player", GameManager.Player);
-            _engine.Execute(LoadSource(CoreLibrary), scope);
-            _engine.Execute(LoadSource(Library), scope);
-            var wrapper = scope.GetVariable(Function);
-            return wrapper;
+            return _runner.Run(Library, Function);
+        }
+
+        public static T GetConstant<T>(string Library, string Variable)
+        {
+            return _runner.GetConstant<T>(Library, Variable);
         }
 
 
@@ -48,16 +51,6 @@ namespace Hedra.Engine.Scripting
             return new [] {$"../../Scripts/"};
 #else
             return new [] {$"{AssetManager.AppPath}/Scripts/"};
-#endif
-        }
-        
-        private static string LoadSource(string Name)
-        {
-            Name = Name.EndsWith(".py") ? Name : Name + ".py";
-#if DEBUG
-            return File.ReadAllText($"../../Scripts/{Name}");
-#else
-            return File.ReadAllText($"{AssetManager.AppPath}/Scripts/{Name}");
 #endif
         }
     }

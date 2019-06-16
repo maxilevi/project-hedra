@@ -457,8 +457,8 @@ namespace Hedra.Engine.EntitySystem
                         animable.Recompose();
                         Model.Alpha = 1;
                     }
-                    Model.Alpha += Time.IndependantDeltaTime * 2.0f * .25f;
-                    animable.DisposeTime -= Time.IndependantDeltaTime * 2.0f;
+                    Model.Alpha += Time.IndependentDeltaTime * 2.0f * .25f;
+                    animable.DisposeTime -= Time.IndependentDeltaTime * 2.0f;
                 }
             }
         }

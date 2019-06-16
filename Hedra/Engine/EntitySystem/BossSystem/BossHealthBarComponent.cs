@@ -118,7 +118,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
                 else
                 {
                     elements[i].Scale = Mathf.Lerp(elements[i].Scale, _originalScales[i] * _targetSize,
-                        Time.IndependantDeltaTime * 8f);
+                        Time.IndependentDeltaTime * 8f);
                     DisableIfSmall(elements[i]);
                 }
                 if(!GameManager.Player.UI.GamePanel.Enabled)

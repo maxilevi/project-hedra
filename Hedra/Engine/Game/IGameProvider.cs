@@ -26,5 +26,6 @@ namespace Hedra.Engine.Game
         void Unload();
         void Reload();
         bool NearAnyPlayer(Vector3 Position, float Radius);
+        bool PlayerExists { get; }
     }
 }

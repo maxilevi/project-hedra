@@ -159,8 +159,8 @@ namespace Hedra.Engine.EntitySystem
         {
             if (_iterableModels.Count > 0)
             {
-                _iterableModels.ForEach(M => M.BaseTint = Mathf.Lerp(M.BaseTint, this.BaseTint, Time.IndependantDeltaTime * 6f));
-                _iterableModels.ForEach(M => M.Tint = Mathf.Lerp(M.Tint, this.Tint, Time.IndependantDeltaTime * 6f));
+                _iterableModels.ForEach(M => M.BaseTint = Mathf.Lerp(M.BaseTint, this.BaseTint, Time.IndependentDeltaTime * 6f));
+                _iterableModels.ForEach(M => M.Tint = Mathf.Lerp(M.Tint, this.Tint, Time.IndependentDeltaTime * 6f));
                 _iterableModels.ForEach(M => M.Alpha = Mathf.Lerp(M.Alpha, this.Alpha, Time.DeltaTime * 8f));
             }
 

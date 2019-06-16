@@ -318,17 +318,17 @@ namespace Hedra.Engine.Player
             var callback = (Action) Params[2];
             while (element.Opacity < 1 && (_player.UI.GamePanel.Enabled || _player.UI.InMenu))
             {
-                element.Opacity += Time.IndependantDeltaTime * FadeSpeed;
+                element.Opacity += Time.IndependentDeltaTime * FadeSpeed;
                 yield return null;
             }
             while (time < seconds && (_player.UI.GamePanel.Enabled || _player.UI.InMenu))
             {
-                time += Time.IndependantDeltaTime;
+                time += Time.IndependentDeltaTime;
                 yield return null;
             }
             while (element.Opacity > 0 && (_player.UI.GamePanel.Enabled || _player.UI.InMenu))
             {
-                element.Opacity -= Time.IndependantDeltaTime * FadeSpeed;
+                element.Opacity -= Time.IndependentDeltaTime * FadeSpeed;
                 yield return null;
             }
 

@@ -77,9 +77,10 @@ namespace Hedra.Engine.EnvironmentSystem
             get => _isRaining;
             set
             {
+                throw new NotImplementedException();
                 if (_isRaining == value) return;
                 _isRaining = value;
-                if (_isRaining)
+                /*if (_isRaining)
                 {
                     _previousTrackIndex = SoundtrackManager.TrackIndex;
                     _previousTrackState = SoundtrackManager.RepeatTrack;
@@ -88,7 +89,7 @@ namespace Hedra.Engine.EnvironmentSystem
                 else
                 {
                     SoundtrackManager.PlayTrack(_previousTrackIndex, _previousTrackState);
-                }
+                }*/
             }
         }
     }

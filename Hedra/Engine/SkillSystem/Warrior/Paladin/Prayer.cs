@@ -59,7 +59,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Paladin
             base.DoEnd();
             TaskScheduler.While(() => Math.Abs(GameSettings.BloomModifier - 1.0f) > .005f, delegate
             {
-                GameSettings.BloomModifier = Mathf.Lerp(GameSettings.BloomModifier, 1.0f, Time.IndependantDeltaTime);
+                GameSettings.BloomModifier = Mathf.Lerp(GameSettings.BloomModifier, 1.0f, Time.IndependentDeltaTime);
             });
             TaskScheduler.When(() => Math.Abs(GameSettings.BloomModifier - 1.0f) < .005f, delegate
             {

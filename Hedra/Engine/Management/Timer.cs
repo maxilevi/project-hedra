@@ -34,7 +34,7 @@ namespace Hedra.Engine.Management
         
         public bool Tick()
         {
-            _timerCount += UseTimeScale ? Time.DeltaTime : Time.IndependantDeltaTime;
+            _timerCount += UseTimeScale ? Time.DeltaTime : Time.IndependentDeltaTime;
 
             if (!Ready) return false;
             if (AutoReset)_timerCount = 0;

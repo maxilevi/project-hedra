@@ -33,6 +33,7 @@ using Hedra.Engine.Sound;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.WorldBuilding;
+using Hedra.Sound;
 
 namespace Hedra.Engine.Management
 {
@@ -104,10 +105,7 @@ namespace Hedra.Engine.Management
                     case "icon":
                         Caster.ShowIcon((CacheItem) Enum.Parse(typeof(CacheItem), Parts[1]));
                         break;
-
-                    case "track":
-                        SoundtrackManager.PlayTrack(int.Parse(Parts[1]), false);
-                        return true;
+                    
                     case "cfg":
                     {
                         var variable = Parts[1];

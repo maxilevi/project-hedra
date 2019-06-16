@@ -42,7 +42,7 @@ namespace Hedra.Engine.Game
         {
             if (IsLoading)
             {
-                _time += Time.IndependantDeltaTime;
+                _time += Time.IndependentDeltaTime;
                 if (_time >= .75f)
                 {
                     _text += ".";

@@ -128,7 +128,7 @@ namespace Hedra.Engine.Rendering
 
         private static void WaterDraw(Dictionary<Vector2, Chunk> ToDraw)
         {
-            WaveMovement += Time.IndependantDeltaTime * Mathf.Radian * 32;
+            WaveMovement += Time.IndependentDeltaTime * Mathf.Radian * 32;
             if (WaveMovement >= 5f)
                 WaveMovement = 0;
 

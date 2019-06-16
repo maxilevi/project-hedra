@@ -56,7 +56,7 @@ namespace Hedra.Engine.Player
 
         protected override void DoUpdate()
         {
-            _vehicleCooldown -= Time.IndependantDeltaTime;
+            _vehicleCooldown -= Time.IndependentDeltaTime;
             if (!CaptureMovement || _player.IsKnocked || _player.IsDead || !Human.CanInteract || GameSettings.Paused)
                 return;
 

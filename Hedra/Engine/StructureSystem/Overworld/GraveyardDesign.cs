@@ -16,6 +16,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
+using Hedra.Sound;
 using OpenTK;
 using Region = Hedra.BiomeSystem.Region;
 

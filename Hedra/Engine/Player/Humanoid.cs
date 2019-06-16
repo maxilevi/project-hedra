@@ -172,6 +172,7 @@ namespace Hedra.Engine.Player
             Fisher.Update();
             Equipment.Update();
             UpdateHits();
+            UpdateStats();
         }
 
         private void UpdateStats()
@@ -180,8 +181,8 @@ namespace Hedra.Engine.Player
             if (!this.IsDead)
             {
                 if(!_damageHandler.HasBeenAttacked)
-                    Health += HealthRegen * Time.IndependantDeltaTime;
-                Mana += ManaRegen * Time.IndependantDeltaTime;
+                    Health += HealthRegen * Time.IndependentDeltaTime;
+                Mana += ManaRegen * Time.IndependentDeltaTime;
             }
         }
 

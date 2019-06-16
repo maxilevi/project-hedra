@@ -10,6 +10,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
+using Hedra.Sound;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.Overworld
@@ -20,10 +21,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public const int MaxRadius = 80;
         public override int PlateauRadius { get; } = 80;
         public override VertexData Icon => null;
-        public override int[] AmbientSongs { get; } =
-        {
-            SoundtrackManager.OnTheLam
-        };
 
         public override void Build(CollidableStructure Structure)
         {

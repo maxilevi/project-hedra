@@ -119,7 +119,7 @@ namespace Hedra.Engine.Loader
                 Renderer.TextureHandler.ResetStats();
                 Renderer.ShaderHandler.ResetStats();
                 _debugText.Text = text;
-                _passedTime += Time.IndependantDeltaTime;
+                _passedTime += Time.IndependentDeltaTime;
                 if (_passedTime > 5.0f)
                 {
                     _passedTime = 0;

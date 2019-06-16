@@ -156,7 +156,7 @@ namespace Hedra.Engine.Management
             var action = (Action)Args[1];
             while (passedTime < targetTime)
             {
-                passedTime += Time.IndependantDeltaTime;
+                passedTime += Time.IndependentDeltaTime;
                 yield return null;
             }
             action();

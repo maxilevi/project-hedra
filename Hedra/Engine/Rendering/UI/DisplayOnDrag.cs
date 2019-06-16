@@ -27,7 +27,7 @@ namespace Hedra.Engine.Rendering.UI
         public override void OnMouseMove(object Sender, MouseMoveEventArgs E){
             
             if(_inFocus){
-                Value += E.XDelta * Increment * Time.IndependantDeltaTime;
+                Value += E.XDelta * Increment * Time.IndependentDeltaTime;
             }
             
             Vector2 coords = Mathf.ToNormalizedDeviceCoordinates(E.Mouse.X, E.Mouse.Y);

@@ -55,9 +55,9 @@ namespace Hedra.Engine.Rendering.Particles
             Color = new Vector4(Color.Xyz, OriginalAlpha * 1);//(Lifetime / MaxLifetime) );
             Scale = OriginalScale * (Lifetime / MaxLifetime);    
             
-            Position += Velocity * (UseTimeScale ? (float) Time.DeltaTime : Time.IndependantDeltaTime);
-            Velocity.Y += 60 * Physics.Gravity * GravityEffect * (UseTimeScale ? (float) Time.DeltaTime : Time.IndependantDeltaTime);
-            Lifetime -= UseTimeScale ? (float) Time.DeltaTime : Time.IndependantDeltaTime;
+            Position += Velocity * (UseTimeScale ? (float) Time.DeltaTime : Time.IndependentDeltaTime);
+            Velocity.Y += 60 * Physics.Gravity * GravityEffect * (UseTimeScale ? (float) Time.DeltaTime : Time.IndependentDeltaTime);
+            Lifetime -= UseTimeScale ? (float) Time.DeltaTime : Time.IndependentDeltaTime;
             
             if(Collides && Position.Y < HeightAtY + .5f)
             {

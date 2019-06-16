@@ -56,7 +56,7 @@ namespace Hedra.Engine.Rendering
         
         public uint CurrentFrame{
             get{
-                Frame += Time.IndependantDeltaTime * Speed;
+                Frame += Time.IndependentDeltaTime * Speed;
                 if( (int) Frame >= Textures.Length)
                     Frame = 0;
                 return Textures[ (int) Frame ];

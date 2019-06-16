@@ -72,12 +72,12 @@ namespace Hedra.Engine.EntitySystem
                 Parent.Model.Tint = Mathf.Lerp(Parent.Model.Tint, _targetTint, Time.DeltaTime * 12f);
             }
 
-            _tintTimer -= Time.IndependantDeltaTime;
+            _tintTimer -= Time.IndependentDeltaTime;
             _tintTimer = Math.Max(_tintTimer, 0);
 
             if (HasBeenAttacked)
             {
-                _attackedTimer -= Time.IndependantDeltaTime;
+                _attackedTimer -= Time.IndependentDeltaTime;
                 if (_attackedTimer < 0)
                 {
                     _hasBeenAttacked = false;
@@ -175,7 +175,7 @@ namespace Hedra.Engine.EntitySystem
 
                 while (currentTime < 4)
                 {
-                    currentTime += Time.IndependantDeltaTime * 2.0f;
+                    currentTime += Time.IndependentDeltaTime * 2.0f;
                     animable.DisposeTime = currentTime;
                     yield return null;
                 }
@@ -184,7 +184,7 @@ namespace Hedra.Engine.EntitySystem
             {
                 while (currentTime < 4)
                 {
-                    currentTime += Time.IndependantDeltaTime * 1f;
+                    currentTime += Time.IndependentDeltaTime * 1f;
                     Parent.Model.Alpha = 1.0f - currentTime / 4.0f;
                     yield return null;
                 }
