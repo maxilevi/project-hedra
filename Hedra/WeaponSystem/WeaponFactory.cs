@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Scripting;
 
 namespace Hedra.WeaponSystem
 {
@@ -26,7 +27,8 @@ namespace Hedra.WeaponSystem
 
         public static Weapon Get(Item Item)
         {
-            var weapon = (Weapon) Activator.CreateInstance(Weapons[Item.EquipmentType], Item.Model);
+            var type = Weapons[Item.EquipmentType];
+            Weapon weapon = Interpreter.GetInstance<Weapon>(type, Item.Model);
             weapon.Describer = EffectDescriber.FromItem(Item);
             return weapon;
         }

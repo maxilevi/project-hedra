@@ -1,3 +1,4 @@
+from Core import *
 from OpenTK import Vector4
 
 def outline(human, color, seconds):

@@ -15,6 +15,7 @@ namespace Hedra.Engine.Rendering
     /// </summary>
     public static class BasicGeometry
     {
+        private static readonly Line3D _line;
         private static readonly VBO<Vector3> _drawVerts;
         private static readonly VBO<uint> _drawIndices;
         private static readonly VAO<Vector3> _drawVao;
@@ -43,6 +44,7 @@ namespace Hedra.Engine.Rendering
             _drawVerts = new VBO<Vector3>(new Vector3[5], 5 * Vector3.SizeInBytes, VertexAttribPointerType.Float);
             _drawIndices = new VBO<uint>(new uint[5], 5 * sizeof(uint), VertexAttribPointerType.UnsignedInt, BufferTarget.ElementArrayBuffer);
             _drawVao = new VAO<Vector3>(_drawVerts);
+            _line = new Line3D();
         }
 
         public static void DrawBox(Vector3 Start, Vector3 End)
@@ -50,9 +52,24 @@ namespace Hedra.Engine.Rendering
             //TODO: 
         }
 
-        public static void DrawLine(Vector3 Start, Vector3 End, Vector4 Color)
+        public static void DrawLine(Vector3[] Points, Vector4[] Colors, float Width)
         {
-            //TODO:
+            _line.Width = Width;
+            _line.Update(Points, Colors);
+            _line.Draw();
+        }
+        
+        public static void DrawLine(Vector3 Start, Vector3 End, Vector4 Color, float Width = 1)
+        {
+            DrawLine(new []
+            {
+                Start,
+                End
+            }, new []
+            {
+                Color,
+                Color
+            }, Width);
         }
 
         public static void DrawShapes(CollisionShape[] Shapes, Vector4 DrawColor)

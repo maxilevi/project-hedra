@@ -431,7 +431,7 @@ namespace Hedra.Engine.Management
                 }
                 if (Parts[0] == "exec")
                 {    
-                    Interpreter.Run(Parts[1], Parts[2])();
+                    Interpreter.GetFunction(Parts[1], Parts[2])();
                 }
                 if (Parts[0] == "realm")
                 {

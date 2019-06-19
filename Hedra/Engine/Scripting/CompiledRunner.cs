@@ -22,9 +22,9 @@ namespace Hedra.Engine.Scripting
             }
         }
 
-        protected override dynamic DoRun(string Library, string Function)
+        protected override ScriptScope DoRun(string Library)
         {
-            return _main.GetVariable(Function);
+            throw new System.NotImplementedException();
         }
     }
 }

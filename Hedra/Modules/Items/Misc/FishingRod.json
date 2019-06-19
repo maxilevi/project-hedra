@@ -1,3 +1,21 @@
 {
-  
+  "Name": "FishingRod",
+  "DisplayName": "Fishing Rod",
+  "EquipmentType": "FishingRod",
+  "Tier": "Common",
+  "Description": "A rod used for fishing.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 2.5
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.25,
+    "Path": "$DataFile$/Items/Misc/FishingRod.ply"
+  }
 }

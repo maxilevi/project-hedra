@@ -14,7 +14,7 @@ namespace Hedra.API
 
         protected abstract void MeetsRequirements(T1 Key, T2 Value);
         
-        public void Add(T1 Key, T2 Value)
+        public virtual void Add(T1 Key, T2 Value)
         {
             DoAdd(Key, Value);
             _registeredTypes.Add(Key, Value);
@@ -24,7 +24,7 @@ namespace Hedra.API
 
         protected abstract void DoRemove(T1 Key, T2 Value);
 
-        public void Unregister()
+        public virtual void Unregister()
         {
             foreach (var pair in _registeredTypes)
             {

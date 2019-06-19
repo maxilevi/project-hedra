@@ -1,3 +1,4 @@
+using System;
 using Hedra.AISystem;
 using Hedra.AnimationEvents;
 using Hedra.AnimationEvents.SkillEvents;
@@ -5,6 +6,7 @@ using Hedra.API;
 using Hedra.Components.Effects;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
+using Hedra.Engine.Scripting;
 using Hedra.Engine.SkillSystem.Archer;
 using Hedra.Engine.SkillSystem.Archer.Hunter;
 using Hedra.Engine.SkillSystem.Archer.Scout;
@@ -20,8 +22,10 @@ using Hedra.Engine.SkillSystem.Warrior.Paladin;
 using Hedra.Engine.Sound;
 using Hedra.ItemHandlers;
 using Hedra.ModelHandlers;
+using Hedra.Rendering;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
+using IronPython.Runtime.Types;
 
 namespace Hedra
 {
@@ -45,9 +49,13 @@ namespace Hedra
             AddWeaponType("Staff", typeof(Staff));
             AddWeaponType("Knife", typeof(Knife));
             AddWeaponType("FarmingRake", typeof(FarmingRake));
+            AddWeaponType("FishingRod", typeof(FishingRod));
 
             AddClassRestriction(Class.Warrior, "FarmingRake");
-            
+            var classes = new []{Class.Warrior, Class.Mage, Class.Archer, Class.Rogue};
+            for(var i = 0; i < classes.Length; ++i)
+                AddClassRestriction(classes[i], "FishingRod");
+
             AddAIType("GiantBeetle", typeof(GiantBeetleAIComponent));
             AddAIType("GorillaWarrior", typeof(GorillaWarriorAIComponent));
             AddAIType("Friendly", typeof(FriendlyAIComponent));

@@ -1,3 +1,4 @@
+from Core import *
 from Hedra.Sound import SoundtrackManager
 
 INTERPOLATION_TIME = 0.75

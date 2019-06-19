@@ -176,7 +176,7 @@ namespace Hedra.Engine.Loader
                 var underChunk = World.GetChunkAt(player.Position);
 
                 if (underChunk != null)
-                {
+                {/*
                     for (var x = 0; x < Chunk.Width / Chunk.BlockSize; x++)
                     {
                         for (var z = 0; z < Chunk.Width / Chunk.BlockSize; z++)
@@ -188,7 +188,7 @@ namespace Hedra.Engine.Loader
 
                             BasicGeometry.DrawLine(basePosition, basePosition + normal * 2, Colors.Yellow);
                         }
-                    }
+                    }*/
                 }
                 var collisions = new List<ICollidable>();
                 if (player.NearCollisions != null)
@@ -210,6 +210,7 @@ namespace Hedra.Engine.Loader
 
                 if (false)
                 {
+                    
                     BasicGeometry.DrawLine(player.Position + Vector3.UnitZ * 2f, player.Position + Vector3.UnitZ * 4f,
                         Colors.Blue);
 

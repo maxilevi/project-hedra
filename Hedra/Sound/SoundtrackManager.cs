@@ -12,6 +12,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using Hedra.Engine.Scripting;
 using Hedra.Engine.Sound;
+using Microsoft.Scripting.Hosting;
 using NVorbis;
 using OpenTK.Audio.OpenAL;
 
@@ -27,6 +28,7 @@ namespace Hedra.Sound
         public static int Rain { get; private set; }
         public static int VillageAmbient { get; private set; }
         public static int OnTheLam { get; private set; }
+        private static ScriptScope _script;
         private static event OnSongEnd SongEnded;
         private static readonly float[] Buffer = new float[176400 * 2];
         private static SoundSource _source;
@@ -57,19 +59,19 @@ namespace Hedra.Sound
 
         private static void OnSongEnd()
         {
-            Interpreter.Run(LibraryName, "on_song_end")(_isPlayingAmbient, _currentActionSong, _currentAmbientSong);
+            _script.GetVariable("on_song_end")(_isPlayingAmbient, _currentActionSong, _currentAmbientSong);
         }
         
         public static void PlayAmbient()
         {
             _isPlayingAmbient = true;
-            _currentAmbientSong = Interpreter.Run(LibraryName, "resume_ambient")(_currentAmbientSong);
+            _currentAmbientSong = _script.GetVariable("resume_ambient")(_currentAmbientSong);
         }
 
         public static void PlayRepeating(int Index)
         {
             _isPlayingAmbient = false;
-            _currentActionSong = Interpreter.Run(LibraryName, "resume_action")(Index);
+            _currentActionSong = _script.GetVariable("resume_action")(Index);
         }
         
         public static void Update()
@@ -151,13 +153,14 @@ namespace Hedra.Sound
 
         private static void LoadLibrary()
         {
-            MainTheme = Interpreter.GetConstant<int>(LibraryName, "MAIN_THEME");
-            HostageSituation = Interpreter.GetConstant<int>(LibraryName, "HOSTAGE_SITUATION");
-            GraveyardChampion = Interpreter.GetConstant<int>(LibraryName, "GRAVEYARD_CHAMPION");
-            Rain = Interpreter.GetConstant<int>(LibraryName, "RAIN");
-            VillageAmbient = Interpreter.GetConstant<int>(LibraryName, "VILLAGE_AMBIENT");
-            OnTheLam = Interpreter.GetConstant<int>(LibraryName, "ON_THE_LAM");
-            Interpreter.Run(LibraryName, "soundtrack_setup")();
+            _script = Interpreter.GetScript(LibraryName);
+            MainTheme = _script.GetVariable<int>("MAIN_THEME");
+            HostageSituation = _script.GetVariable<int>("HOSTAGE_SITUATION");
+            GraveyardChampion = _script.GetVariable<int>("GRAVEYARD_CHAMPION");
+            Rain = _script.GetVariable<int>("RAIN");
+            VillageAmbient = _script.GetVariable<int>("VILLAGE_AMBIENT");
+            OnTheLam = _script.GetVariable<int>("ON_THE_LAM");
+            _script.GetVariable("soundtrack_setup")();
         }
     }
 }

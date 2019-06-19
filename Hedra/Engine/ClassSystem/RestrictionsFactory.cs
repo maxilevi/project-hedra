@@ -10,6 +10,21 @@ namespace Hedra.Engine.ClassSystem
             return Contains(Class) 
                 ? this[Class]
                 : new string[0];
-        }  
+        }
+
+        public bool Has(Type Key)
+        {
+            return Contains(Key);
+        }
+
+        public string[] Get(Type Key)
+        {
+            return this[Key];
+        }
+
+        public void Clear()
+        {
+            base.Clear();
+        }
     }
 }

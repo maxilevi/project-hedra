@@ -49,7 +49,7 @@ namespace Hedra.Engine.Player
             _sleepAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSleep.dae");
             _jumpAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorJump.dae");
             _sailingAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSit.dae");
-            _fishingAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorSit.dae");
+            _fishingAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorFishing.dae");
             _helloAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorHello.dae");
             _helloAnimation.Loop = false;
             _helloAnimation.OnAnimationEnd += delegate

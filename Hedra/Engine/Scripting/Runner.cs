@@ -14,14 +14,19 @@ namespace Hedra.Engine.Scripting
         }
         public abstract void Load();
 
-        public dynamic Run(string Library, string Function)
+        public dynamic GetFunction(string Library, string Function)
         {
-            return DoRun(ParseLibraryName(Library), Function);
+            return DoRun(ParseLibraryName(Library)).GetVariable(Function);
         }
         
         public T GetConstant<T>(string Library, string Variable)
         {
-            return (T) DoRun(ParseLibraryName(Library), Variable);
+            return (T) DoRun(ParseLibraryName(Library)).GetVariable(Variable);
+        }
+
+        public ScriptScope GetScript(string Library)
+        {
+            return DoRun(ParseLibraryName(Library));
         }
 
         private string ParseLibraryName(string Library)
@@ -29,6 +34,6 @@ namespace Hedra.Engine.Scripting
             return Library.EndsWith(".py") ? Library : Library + ".py";
         }
         
-        protected abstract dynamic DoRun(string Library, string Function);
+        protected abstract ScriptScope DoRun(string Library);
     }
 }

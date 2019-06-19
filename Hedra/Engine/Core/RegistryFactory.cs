@@ -26,6 +26,11 @@ namespace Hedra.Engine.Core
             _table.Remove(Name);
         }
 
+        protected void Clear()
+        {
+            _table.Clear();
+        }
+
         protected bool Contains(T2 Key)
         {
             return _table.ContainsKey(Key);
