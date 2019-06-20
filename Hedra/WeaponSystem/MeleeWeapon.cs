@@ -30,7 +30,7 @@ namespace Hedra.WeaponSystem
                 _weaponHeight = MeshData.SupportPoint(Vector3.UnitY).Y - MeshData.SupportPoint(-Vector3.UnitY).Y;
                 MainWeaponSize = new Vector3(
                     MeshData.SupportPoint(Vector3.UnitX).X - MeshData.SupportPoint(-Vector3.UnitX).X,
-                    MeshData.SupportPoint(Vector3.UnitY).Y - MeshData.SupportPoint(-Vector3.UnitY).Y,
+                    _weaponHeight,
                     MeshData.SupportPoint(Vector3.UnitZ).Z - MeshData.SupportPoint(-Vector3.UnitZ).Z
                );
             }
@@ -100,7 +100,7 @@ namespace Hedra.WeaponSystem
             this.Trail.Update();
         }
 
-        public override Vector3 WeaponTip => Vector3.Zero;//MainMesh.TransformPoint(Vector3.UnitY * _swordHeight);
+        public override Vector3 WeaponTip => MainMesh.TransformPoint(Vector3.UnitY * _weaponHeight);
 
         public override void Dispose()
         {

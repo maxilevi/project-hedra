@@ -12,7 +12,8 @@ namespace Hedra.Engine.Rendering.Core
         {
             {PrimitiveType.Lines, 2},
             {PrimitiveType.Triangles, 3},
-            {PrimitiveType.TriangleStrip, 1}
+            {PrimitiveType.TriangleStrip, 1},
+            {PrimitiveType.LineStrip, 1}
         };
 
         private static readonly Dictionary<DrawElementsType, Type> DrawTypeMap = new Dictionary<DrawElementsType, Type>

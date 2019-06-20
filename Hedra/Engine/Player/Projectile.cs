@@ -52,6 +52,12 @@ namespace Hedra.Engine.Player
         public float Speed { get; set; } = 1;
         public float Falloff { get; set; } = 1f;
         public IEntity[] IgnoreEntities { get; set; }
+        public bool CollideWithWater { get; set; }
+        public bool PlaySound { get; set; } = true;
+        public bool ShowParticlesOnDestroy { get; set; } = true;
+        public bool ManuallyDispose { get; set; } = false;
+        public float PropulsionDecay { get; set; } = 1;
+        public Vector3 Delta { get; set; }
 
         private readonly HashSet<IEntity> _collidedList;
         private readonly IEntity _parent;
@@ -61,6 +67,7 @@ namespace Hedra.Engine.Player
         private Vector2 _lastChunkCollisionPosition;
         private Vector2 _lastStructureCollisionPosition;
         private Vector3 _accumulatedVelocity;
+        private bool _landed;
 
 
         public Projectile(IEntity Parent, Vector3 Origin, VertexData MeshData)
@@ -96,10 +103,13 @@ namespace Hedra.Engine.Player
             Vector3 rotation;
             if (UsePhysics)
             {
-                Propulsion *= (float)Math.Pow(.75f, Time.DeltaTime);
+                Propulsion *= (float)Math.Pow(.75f, Time.DeltaTime) * PropulsionDecay;
                 _accumulatedVelocity += (Propulsion * 60f - Vector3.UnitY * 20f * Falloff) * Time.DeltaTime;
                 _accumulatedVelocity *= (float)Math.Pow(.8f, Time.DeltaTime);
-                Mesh.Position += _accumulatedVelocity * 2.25f * Time.DeltaTime;
+                var lastPosition = Mesh.Position;
+                if(!_landed)
+                    Mesh.Position += _accumulatedVelocity * 2.25f * Time.DeltaTime;
+                Delta = Mesh.Position - lastPosition;
                 rotation = Physics.DirectionToEuler(_accumulatedVelocity.NormalizedFast());
             }
             else
@@ -108,6 +118,7 @@ namespace Hedra.Engine.Player
                 rotation = Physics.DirectionToEuler(Direction);
             }
             Mesh.LocalRotation = rotation;
+            if(_landed) return;
             if (HandleLifecycle)
             {
                 if (Collide)
@@ -138,7 +149,7 @@ namespace Hedra.Engine.Player
                     _collisionBox.Translate(-Mesh.Position);
                 }
 
-                if (Lifetime < 0)
+                if (Lifetime < 0 && !ManuallyDispose)
                 {
                     this.Dispose();
                 }
@@ -149,6 +160,7 @@ namespace Hedra.Engine.Player
 
         private void ProcessCollision()
         {
+            if(_landed) return;
             Collision.Update(
                 Position,
                 _chunkCollisions,
@@ -176,25 +188,32 @@ namespace Hedra.Engine.Player
                 _collisionBox.Translate(-Mesh.Position);
             }
 
-            if (Mesh.Position.Y <= Physics.HeightAtPosition(Mesh.Position))
+            if (Mesh.Position.Y <= Physics.HeightAtPosition(Mesh.Position) || (CollideWithWater && Mesh.Position.Y <= Physics.WaterHeight(Mesh.Position)))
                 isColliding = true;          
             if (isColliding)
             {
-                SoundPlayer.PlaySound(SoundType.HitGround, Mesh.Position);
-                World.Particles.Color = new Vector4(1, 1, 1, 1);
-                World.Particles.ParticleLifetime = 0.75f;
-                World.Particles.GravityEffect = .0f;
-                World.Particles.Scale = new Vector3(.75f, .75f, .75f);
-                World.Particles.Position = Mesh.Position;
-                World.Particles.PositionErrorMargin = Vector3.One * 1.5f;
-                for (int i = 0; i < 10; i++)
+                if(PlaySound) 
+                    SoundPlayer.PlaySound(SoundType.HitGround, Mesh.Position);
+                if (ShowParticlesOnDestroy)
                 {
-                    World.Particles.Direction = new Vector3(Utils.Rng.NextFloat(), Utils.Rng.NextFloat(), Utils.Rng.NextFloat()) * .15f;
-                    World.Particles.Emit();
+                    World.Particles.Color = new Vector4(1, 1, 1, 1);
+                    World.Particles.ParticleLifetime = 0.75f;
+                    World.Particles.GravityEffect = .0f;
+                    World.Particles.Scale = new Vector3(.75f, .75f, .75f);
+                    World.Particles.Position = Mesh.Position;
+                    World.Particles.PositionErrorMargin = Vector3.One * 1.5f;
+                    for (var i = 0; i < 10; i++)
+                    {
+                        World.Particles.Direction =
+                            new Vector3(Utils.Rng.NextFloat(), Utils.Rng.NextFloat(), Utils.Rng.NextFloat()) * .15f;
+                        World.Particles.Emit();
+                    }
                 }
+
                 LandEventHandler?.Invoke(this);
 
-                this.Dispose();
+                _landed = true;
+                if(!ManuallyDispose) this.Dispose();
             }
         }
 

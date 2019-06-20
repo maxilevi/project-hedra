@@ -16,7 +16,8 @@ namespace Hedra.Engine.Scripting
 
         public dynamic GetFunction(string Library, string Function)
         {
-            return DoRun(ParseLibraryName(Library)).GetVariable(Function);
+            var scope = DoRun(ParseLibraryName(Library));
+            return scope.ContainsVariable(Function) ? scope.GetVariable(Function) : null;
         }
         
         public T GetConstant<T>(string Library, string Variable)

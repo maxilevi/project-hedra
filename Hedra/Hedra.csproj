@@ -496,6 +496,7 @@
     <Compile Include="Engine\Rendering\Core\VBO.cs" />
     <Compile Include="Engine\Rendering\Core\VertexAttributeHandler.cs" />
     <Compile Include="Engine\Rendering\Core\BufferHandler.cs" />
+    <Compile Include="Engine\Rendering\DynamicLine.cs" />
     <Compile Include="Engine\Rendering\Frustum\BoundingFrustum.cs" />
     <Compile Include="Engine\Rendering\Frustum\Culling.cs" />
     <Compile Include="Engine\Rendering\Frustum\Occludable.cs" />
@@ -521,6 +522,7 @@
     <Compile Include="Engine\Rendering\UI\TextOptions.cs" />
     <Compile Include="Engine\Rendering\UI\DrawableTexture.cs" />
     <Compile Include="Engine\Scripting\CompiledRunner.cs" />
+    <Compile Include="Engine\Scripting\ErrorReporter.cs" />
     <Compile Include="Engine\Scripting\Function.cs" />
     <Compile Include="Engine\Scripting\Interpreter.cs" />
     <Compile Include="Engine\Scripting\ObfuscationAdapter.cs" />
@@ -8722,6 +8724,10 @@
       <Link>Assets\Env\EnergyShield.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Objects\FishHook.ply">
+      <Link>Assets\Env\Objects\FishHook.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Objects\Portal-Icon.ply">
       <Link>Assets\Env\Objects\Portal-Icon.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -14179,6 +14185,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Shaders\Includes\Shadows.shader">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shaders\Lines3D.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Shaders\Lines3D.vert">
