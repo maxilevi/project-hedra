@@ -13,6 +13,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using Hedra.WeaponSystem;
+using Hedra.WorldObjects;
 using OpenTK;
 
 namespace Hedra.AISystem.Humanoid

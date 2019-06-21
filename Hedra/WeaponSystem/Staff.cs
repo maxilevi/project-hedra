@@ -7,6 +7,7 @@ using Hedra.Engine.Rendering.Particles;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
 using Hedra.Sound;
+using Hedra.WorldObjects;
 using OpenTK;
 
 namespace Hedra.WeaponSystem

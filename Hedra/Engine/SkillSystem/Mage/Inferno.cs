@@ -88,7 +88,7 @@ namespace Hedra.Engine.SkillSystem.Mage
                 {
                     fireball.Explode();
                 };
-                fireball.LandEventHandler += _ =>
+                fireball.LandEventHandler += (_, __) =>
                 {
                     fireball.Explode();
                 };

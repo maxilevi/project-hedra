@@ -5,6 +5,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.WeaponSystem;
+using Hedra.WorldObjects;
 
 namespace Hedra.Engine.SkillSystem.Archer.Scout
 {

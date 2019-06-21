@@ -362,7 +362,7 @@ namespace Hedra.WeaponSystem
             SetToDefault(MainMesh);
             
             if (Sheathed)
-                OnSheathed();           
+                OnSheathed();
 
             if (InAttackStance || Owner.WasAttacking || (ContinousAttack && Owner.IsAttacking))
                 OnAttackStance();
@@ -501,7 +501,8 @@ namespace Hedra.WeaponSystem
             }
             set
             {
-                if(value == true) _passedTimeInAttackStance = 0;
+                if(value) _passedTimeInAttackStance = 0;
+                if (_onAttackStance == value && InAttackStance != _onAttackStance) Owner.Model.ResetBlending();
                 if (_onAttackStance == value) return;
                 if (value)
                 {

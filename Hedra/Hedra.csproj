@@ -1150,7 +1150,6 @@
     <Compile Include="Engine\Player\MovementManager.cs" />
     <Compile Include="Engine\Player\HumanoidModel.cs" />
     <Compile Include="Engine\Player\ParticleProjectile.cs" />
-    <Compile Include="Engine\Player\Projectile.cs" />
     <Compile Include="Engine\Player\ToolbarSystem\Toolbar.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\AbilityTree.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\AbilityTreeBlueprint.cs" />
@@ -1382,6 +1381,8 @@
     <Compile Include="WeaponSystem\WeaponFactory.cs" />
     <Compile Include="WeaponSystem\WeaponIcons.cs" />
     <Compile Include="World.cs" />
+    <Compile Include="WorldObjects\LandType.cs" />
+    <Compile Include="WorldObjects\Projectile.cs" />
     <None Include="..\project-hedra-assets\Animations\BeetleAttack0.dae">
       <Link>Assets\Chr\BeetleAttack0.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

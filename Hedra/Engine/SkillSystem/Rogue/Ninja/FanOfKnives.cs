@@ -10,6 +10,7 @@ using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
 using Hedra.Sound;
+using Hedra.WorldObjects;
 using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Rogue.Ninja

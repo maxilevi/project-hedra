@@ -40,7 +40,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
                 Speed = .75f,
                 IgnoreEntities = World.Entities.Where(E => E != Player).ToArray()
             };
-            blood.LandEventHandler += _ => HitLambda(From, To);
+            blood.LandEventHandler += (_, __) => HitLambda(From, To);
             blood.HitEventHandler += (_, __) => HitLambda(From, To);
             World.AddWorldObject(blood);
         }

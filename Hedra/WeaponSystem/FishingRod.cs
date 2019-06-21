@@ -24,8 +24,7 @@ namespace Hedra.WeaponSystem
             _line = new Line3D();
             _state = new Dictionary<string, object>();
         }
-
-        protected override float PrimarySpeed => 1.0f;
+        protected override float PrimarySpeed => 1.5f;
 
         protected override string[] PrimaryAnimationsNames => new[]
         {
@@ -37,6 +36,12 @@ namespace Hedra.WeaponSystem
         public override void Update(IHumanoid Human)
         {
             base.Update(Human);
+            if (Human.IsFishing)
+            {
+                InAttackStance = false;
+                OnAttackStance();
+                //MainMesh.LocalRotation = new Vector3(0, 0, 30);
+            }
             Interpreter.GetFunction("Fishing.py", "update_rod")(Human, this, _line, _state);
         }
 
@@ -45,16 +50,23 @@ namespace Hedra.WeaponSystem
             "Assets/Chr/WarriorFish.dae"
         };
 
-        protected override void OnPrimaryAttack()
+        protected override void OnPrimaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
-            base.OnPrimaryAttack();
-            Interpreter.GetFunction("Fishing.py", "start_fishing")(Owner, _state, _hook);
+            base.OnPrimaryAttackEvent(Type, Options);
+            if(Type == AttackEventType.Mid)
+                Interpreter.GetFunction("Fishing.py", "start_fishing")(Owner, _state, _hook);
+        }
+
+        protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
+        {
+            base.OnSecondaryAttackEvent(Type, Options);
+            
         }
 
         protected override void OnSecondaryAttack()
         {
-            base.OnSecondaryAttack();
-            Interpreter.GetFunction("Fishing.py", "retrieve_fish")(Owner, _state);
+            if(Interpreter.GetFunction("Fishing.py", "retrieve_fish")(Owner, _state))
+                base.OnSecondaryAttack();
         }
 
         public override void Dispose()

@@ -20,6 +20,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.EntitySystem;
 using Hedra.WeaponSystem;
+using Hedra.WorldObjects;
 using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Archer
@@ -54,9 +55,9 @@ namespace Hedra.Engine.SkillSystem.Archer
             RoutineManager.StartRoutine( this.CreateFlames, Proj);
         }
 
-        protected override void OnLand(Projectile Proj)
+        protected override void OnLand(Projectile Proj, LandType Type)
         {
-            base.OnLand(Proj);
+            base.OnLand(Proj, Type);
             RoutineManager.StartRoutine(CreateFlames, Proj);
         }
 

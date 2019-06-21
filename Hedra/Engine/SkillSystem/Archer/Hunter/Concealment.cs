@@ -4,6 +4,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.WeaponSystem;
+using Hedra.WorldObjects;
 using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Archer.Hunter

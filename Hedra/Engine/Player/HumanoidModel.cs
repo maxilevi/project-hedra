@@ -184,7 +184,7 @@ namespace Hedra.Engine.Player
             Human.IsEating = false;
             Model.ResetBlending();
         }
-        
+
         private void DoEat(Item Food, Action<Item> OnEatingEnd)
         {
             Human.IsEating = true;

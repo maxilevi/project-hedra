@@ -6,31 +6,27 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using OpenTK;
+
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Hedra.Core;
-using Hedra.Engine.Rendering;
+using Hedra.Engine;
 using Hedra.Engine.Management;
-using Hedra.Engine.Generation;
-using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.Sound;
-using Hedra.EntitySystem;
-using Hedra.Engine.ComplexMath;
+using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
+using Hedra.EntitySystem;
 using Hedra.Rendering;
 using Hedra.Sound;
+using OpenTK;
 
-namespace Hedra.Engine.Player
+namespace Hedra.WorldObjects
 {
     /// <summary>
     /// Description of Projectile.
     /// </summary>
     public delegate void OnProjectileHitEvent(Projectile Sender, IEntity Hit);
-    public delegate void OnProjectileLandEvent(Projectile Sender);
+    public delegate void OnProjectileLandEvent(Projectile Sender, LandType Type);
     public delegate void OnProjectileMoveEvent(Projectile Sender);
     
     public class Projectile : IDisposable, IUpdatable, IWorldObject
@@ -38,7 +34,7 @@ namespace Hedra.Engine.Player
         public event OnDisposedEvent OnDispose;
         public event OnProjectileHitEvent HitEventHandler;
         public event OnProjectileMoveEvent MoveEventHandler;
-        public event OnProjectileMoveEvent LandEventHandler;
+        public event OnProjectileLandEvent LandEventHandler;
 
         public bool DisposeOnHit { get; set; } = true;
         public Vector3 Propulsion { get; set; }
@@ -161,6 +157,7 @@ namespace Hedra.Engine.Player
         private void ProcessCollision()
         {
             if(_landed) return;
+
             Collision.Update(
                 Position,
                 _chunkCollisions,
@@ -168,6 +165,7 @@ namespace Hedra.Engine.Player
                 ref _lastChunkCollisionPosition,
                 ref _lastStructureCollisionPosition
             );
+            var type = LandType.Structure;
             var isColliding = false;
             try
             {
@@ -188,8 +186,18 @@ namespace Hedra.Engine.Player
                 _collisionBox.Translate(-Mesh.Position);
             }
 
-            if (Mesh.Position.Y <= Physics.HeightAtPosition(Mesh.Position) || (CollideWithWater && Mesh.Position.Y <= Physics.WaterHeight(Mesh.Position)))
-                isColliding = true;          
+            if (Mesh.Position.Y <= Physics.HeightAtPosition(Mesh.Position))
+            {
+                isColliding = true;
+                type = LandType.Ground;
+            }
+
+            if (CollideWithWater && Mesh.Position.Y <= Physics.WaterHeight(Mesh.Position))
+            {
+                isColliding = true;
+                type = LandType.Water;
+            }
+
             if (isColliding)
             {
                 if(PlaySound) 
@@ -210,7 +218,7 @@ namespace Hedra.Engine.Player
                     }
                 }
 
-                LandEventHandler?.Invoke(this);
+                LandEventHandler?.Invoke(this, type);
 
                 _landed = true;
                 if(!ManuallyDispose) this.Dispose();

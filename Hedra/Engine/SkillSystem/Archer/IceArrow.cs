@@ -16,6 +16,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.WeaponSystem;
+using Hedra.WorldObjects;
 using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Archer

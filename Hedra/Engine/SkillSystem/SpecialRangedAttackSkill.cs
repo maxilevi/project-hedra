@@ -1,6 +1,7 @@
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using Hedra.WeaponSystem;
+using Hedra.WorldObjects;
 
 namespace Hedra.Engine.SkillSystem
 {
@@ -20,7 +21,7 @@ namespace Hedra.Engine.SkillSystem
             Weapon.BowModifiers -= Event;
         }
 
-        protected virtual void OnLand(Projectile Proj)
+        protected virtual void OnLand(Projectile Proj, LandType Type)
         {
             
         }

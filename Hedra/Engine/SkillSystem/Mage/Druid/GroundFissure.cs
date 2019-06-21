@@ -8,6 +8,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.EntitySystem;
 using Hedra.Rendering.Particles;
+using Hedra.WorldObjects;
 using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Mage.Druid
@@ -140,9 +141,9 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
             Enable(Proj);
         }
         
-        protected override void OnLand(Projectile Proj)
+        protected override void OnLand(Projectile Proj, LandType Type)
         {
-            base.OnLand(Proj);
+            base.OnLand(Proj, Type);
             Enable(Proj);
         }
     }

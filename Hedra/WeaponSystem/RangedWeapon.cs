@@ -4,6 +4,7 @@ using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
 using Hedra.Sound;
+using Hedra.WorldObjects;
 using OpenTK;
 
 namespace Hedra.WeaponSystem
@@ -41,7 +42,7 @@ namespace Hedra.WeaponSystem
             BowModifiers?.Invoke(ArrowProj);
             /* This is because some arrows can penetrate through enemies */
             var gotHit = false;
-            ArrowProj.LandEventHandler += S =>
+            ArrowProj.LandEventHandler += (S, _) =>
             {
                 Miss?.Invoke(ArrowProj);
                 if(!gotHit)

@@ -9,6 +9,7 @@ using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
 using Hedra.Sound;
+using Hedra.WorldObjects;
 using OpenTK;
 
 namespace Hedra.AISystem.Behaviours
