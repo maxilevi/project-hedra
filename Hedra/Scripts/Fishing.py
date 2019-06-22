@@ -30,6 +30,7 @@ def create_hook(human, hook_model, state):
 def disable_fishing(human, state):
     human.IsFishing = False
     human.IsSitting = False
+    human.LeftWeapon.InAttackStance = False
     state['fishing_hook'].Dispose()
 
 def setup_fishing(human, state, hook_model):
@@ -82,7 +83,7 @@ def update_rod(human, rod, rod_line, state):
         hook.Mesh.LocalRotation = Vector3.Zero
 
     
-    
+    rod.InAttackStance = True
     rod_line.Update(
         Array[Vector3](line_vertices),
         Array[Vector4]([Vector4.One] * len(line_vertices))

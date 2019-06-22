@@ -135,6 +135,7 @@ namespace Hedra.Engine.Player
             if (IsFishing)
             {
                 Current = _fishingAnimation;
+                Blend = _fishingAnimation;
             }
         }
 

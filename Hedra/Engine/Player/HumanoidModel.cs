@@ -45,10 +45,6 @@ namespace Hedra.Engine.Player
         public Joint LeftFootJoint { get; private set; }
         public Joint RightFootJoint { get; private set; }
         public Joint HeadJoint { get; private set; }
-        private Animation _animationPlaying;
-        private AreaSound _modelSound;
-        private StaticModel _food;
-        private AnimatedCollider _collider;
         public HumanoidModelTemplate Template { get; private set; }
         public HumanoidModelAnimationState StateHandler { get; private set; }
         public Vector3 RidingOffset { get; set; }
@@ -78,6 +74,10 @@ namespace Hedra.Engine.Player
         private bool _isDisposeAnimationPlaying;
         private bool _isEatingWhileSitting;
         private Timer _foodTimer;
+        private Animation _animationPlaying;
+        private AreaSound _modelSound;
+        private StaticModel _food;
+        private AnimatedCollider _collider;
 
 
         public HumanoidModel(IHumanoid Human, HumanoidModelTemplate Template) : base(Human)

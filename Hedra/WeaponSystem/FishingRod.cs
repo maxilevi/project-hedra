@@ -38,9 +38,9 @@ namespace Hedra.WeaponSystem
             base.Update(Human);
             if (Human.IsFishing)
             {
-                InAttackStance = false;
-                OnAttackStance();
-                //MainMesh.LocalRotation = new Vector3(0, 0, 30);
+                //InAttackStance = false;
+                //OnAttackStance();
+                MainMesh.LocalRotation = new Vector3(110, 0, 0);
             }
             Interpreter.GetFunction("Fishing.py", "update_rod")(Human, this, _line, _state);
         }
@@ -63,7 +63,7 @@ namespace Hedra.WeaponSystem
             
         }
 
-        protected override void OnSecondaryAttack()
+        public override void Attack2(IHumanoid Human, AttackOptions Options)
         {
             if(Interpreter.GetFunction("Fishing.py", "retrieve_fish")(Owner, _state))
                 base.OnSecondaryAttack();
