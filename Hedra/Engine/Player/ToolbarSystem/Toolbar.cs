@@ -18,10 +18,11 @@ using Hedra.Engine.Loader;
 using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.SkillSystem;
+using Hedra.Game;
 using Hedra.WeaponSystem;
 using OpenTK;
 using OpenTK.Input;
-using TaskScheduler = Hedra.Engine.Management.TaskScheduler;
+using TaskScheduler = Hedra.Core.TaskScheduler;
 
 namespace Hedra.Engine.Player.ToolbarSystem
 {

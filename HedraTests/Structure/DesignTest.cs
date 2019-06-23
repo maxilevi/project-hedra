@@ -24,6 +24,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player.MapSystem;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
+using Hedra.Game;
 using Hedra.Rendering;
 using HedraTests.Player;
 using Moq;

@@ -11,6 +11,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
@@ -61,6 +62,10 @@ namespace Hedra.WeaponSystem
         public float SecondaryAttackAnimationSpeed { get; set; } = 1.0f;     
         public virtual bool PrimaryAttackEnabled { get; set; } = true;       
         public virtual bool SecondaryAttackEnabled { get; set; } = true;
+        public virtual bool PrimaryAttackHasCooldown { get; set; }
+        public virtual bool SecondaryAttackHasCooldown { get; set; }
+        public virtual float PrimaryAttackCooldown { get; set; }
+        public virtual float SecondaryAttackCooldown { get; set; }
 
         private Animation[] _secondaryAnimations;
         private Animation[] _primaryAnimations;
@@ -502,7 +507,6 @@ namespace Hedra.WeaponSystem
             set
             {
                 if(value) _passedTimeInAttackStance = 0;
-                if (_onAttackStance == value && InAttackStance != _onAttackStance) Owner.Model.ResetBlending();
                 if (_onAttackStance == value) return;
                 if (value)
                 {

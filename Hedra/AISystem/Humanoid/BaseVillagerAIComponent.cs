@@ -16,6 +16,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.EntitySystem;
+using Hedra.Game;
 using OpenTK;
 
 namespace Hedra.AISystem.Humanoid

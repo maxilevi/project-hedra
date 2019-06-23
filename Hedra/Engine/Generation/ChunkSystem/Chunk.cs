@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Core;
 using Hedra.Engine.Management;

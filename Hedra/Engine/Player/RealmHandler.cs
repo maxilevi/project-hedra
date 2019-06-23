@@ -5,6 +5,7 @@ using System.Linq;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
+using Hedra.Game;
 using OpenTK;
 
 namespace Hedra.Engine.Player

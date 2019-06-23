@@ -22,6 +22,7 @@ using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
+using Hedra.Game;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
 using OpenTK;

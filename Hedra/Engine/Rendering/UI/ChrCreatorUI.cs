@@ -14,11 +14,13 @@ using System.Drawing;
 using OpenTK;
 using System.Collections;
 using System.Linq;
+using Hedra.Core;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering.Animation;
+using Hedra.Game;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Rendering.UI

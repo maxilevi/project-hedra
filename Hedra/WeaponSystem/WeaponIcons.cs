@@ -24,6 +24,8 @@ namespace Hedra.WeaponSystem
         public static readonly uint StaffPrimaryAttack;
         public static readonly uint StaffSecondaryAttack;
         public static readonly uint DefaultAttack;
+        public static readonly uint FishingRodPrimaryAttack;
+        public static readonly uint FishingRodSecondaryAttack;
 
         static WeaponIcons()
         {
@@ -46,6 +48,8 @@ namespace Hedra.WeaponSystem
             StaffPrimaryAttack = Graphics2D.LoadFromAssets("Assets/Skills/StaffAttack1.png");
             StaffSecondaryAttack = Graphics2D.LoadFromAssets("Assets/Skills/StaffAttack2.png");
             DefaultAttack = Graphics2D.LoadFromAssets("Assets/Skills/HolderSkill.png");
+            FishingRodPrimaryAttack = Graphics2D.LoadFromAssets("Assets/Skills/FishingRodAttack1.png");
+            FishingRodSecondaryAttack = Graphics2D.LoadFromAssets("Assets/Skills/FishingRodAttack2.png");
             
             TextureRegistry.MarkStatic(SwordPrimaryAttack);
             TextureRegistry.MarkStatic(SwordSecondaryAttack);
@@ -66,6 +70,8 @@ namespace Hedra.WeaponSystem
             TextureRegistry.MarkStatic(StaffPrimaryAttack);
             TextureRegistry.MarkStatic(StaffSecondaryAttack);
             TextureRegistry.MarkStatic(DefaultAttack);
+            TextureRegistry.MarkStatic(FishingRodPrimaryAttack);
+            TextureRegistry.MarkStatic(FishingRodSecondaryAttack);
         }
     }
 }

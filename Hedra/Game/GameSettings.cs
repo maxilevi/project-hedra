@@ -11,16 +11,15 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Hedra.Core;
-using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine;
+using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
-using Hedra.Engine.Management;
 using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
-using Hedra.Engine.Sound;
 using Hedra.Sound;
 using OpenTK;
 
-namespace Hedra.Engine.Game
+namespace Hedra.Game
 {
     [Obfuscation(Exclude = false, Feature = "-rename")]
     public static class GameSettings

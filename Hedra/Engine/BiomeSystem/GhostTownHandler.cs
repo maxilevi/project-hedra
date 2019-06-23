@@ -1,5 +1,6 @@
 using Hedra.Engine.Game;
 using Hedra.Engine.Rendering.Particles;
+using Hedra.Game;
 using OpenTK;
 
 namespace Hedra.Engine.BiomeSystem

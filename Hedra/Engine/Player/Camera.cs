@@ -13,6 +13,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.StructureSystem;
 using Hedra.EntitySystem;
+using Hedra.Game;
 using OpenTK;
 using OpenTK.Input;
 

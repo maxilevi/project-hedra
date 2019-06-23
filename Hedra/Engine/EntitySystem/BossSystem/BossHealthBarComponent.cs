@@ -16,6 +16,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.EntitySystem;
+using Hedra.Game;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 

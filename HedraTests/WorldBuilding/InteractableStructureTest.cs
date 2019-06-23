@@ -4,6 +4,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.Player;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
+using Hedra.Game;
 using HedraTests.Player;
 using NUnit.Framework;
 using OpenTK;

@@ -1,5 +1,6 @@
 using System;
 using System.Globalization;
+using Hedra.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;

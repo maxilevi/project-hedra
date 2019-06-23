@@ -4,6 +4,7 @@ using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
+using Hedra.Game;
 using OpenTK;
 
 namespace Hedra.AISystem.Humanoid

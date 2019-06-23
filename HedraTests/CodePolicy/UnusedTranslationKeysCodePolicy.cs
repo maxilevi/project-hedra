@@ -8,6 +8,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
+using Hedra.Game;
 using NUnit.Framework;
 
 namespace HedraTests.CodePolicy

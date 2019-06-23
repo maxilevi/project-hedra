@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.IO;
 using Hedra.Engine.Management;
 using System.Drawing;
+using Hedra.Core;
 
 namespace Hedra.Engine.Rendering
 {

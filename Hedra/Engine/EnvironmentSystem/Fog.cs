@@ -11,6 +11,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Effects;
+using Hedra.Game;
 using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.EnvironmentSystem

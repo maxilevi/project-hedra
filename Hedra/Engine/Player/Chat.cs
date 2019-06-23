@@ -17,6 +17,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Sound;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
+using Hedra.Game;
 using Hedra.Sound;
 
 namespace Hedra.Engine.Player

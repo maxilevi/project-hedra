@@ -8,6 +8,7 @@
  */
 
 using System;
+using Hedra.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
@@ -131,9 +132,13 @@ namespace Hedra.Engine.Player
         protected override bool ShouldDisable => !CanUse();
         private bool ShouldCharge => AttackType.Secondary == _type || User.LeftWeapon.IsChargeable;
         public override uint IconId => _textureId;
-        protected override bool HasCooldown => false;
+        protected override bool HasCooldown => AttackType.Secondary == _type 
+            ? User.LeftWeapon.SecondaryAttackHasCooldown 
+            : User.LeftWeapon.PrimaryAttackHasCooldown;
         public override float ManaCost => 0;
-        public override float MaxCooldown => 0;
+        public override float MaxCooldown => AttackType.Secondary == _type 
+            ? User.LeftWeapon.SecondaryAttackCooldown 
+            : User.LeftWeapon.PrimaryAttackCooldown;
         public override string Description => string.Empty;
         public override string DisplayName => string.Empty;
     }

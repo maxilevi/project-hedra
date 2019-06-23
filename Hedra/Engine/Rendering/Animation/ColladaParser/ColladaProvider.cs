@@ -1,6 +1,7 @@
 using System;
 using System.Xml;
 using Hedra.Engine.Game;
+using Hedra.Game;
 
 namespace Hedra.Engine.Rendering.Animation.ColladaParser
 {

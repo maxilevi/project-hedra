@@ -1,5 +1,6 @@
 using System;
 using Hedra.Engine.Game;
+using Hedra.Game;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering

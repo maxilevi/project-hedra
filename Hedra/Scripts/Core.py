@@ -1,8 +1,6 @@
-from Hedra.Engine.Management import TaskScheduler
-from Hedra.Core import Mathf
-from Hedra.Engine import Time
+from Hedra.Core import Mathf, TaskScheduler, Time
 from Hedra import Utils
-from Hedra.Engine.Game import GameManager, GameSettings
+from Hedra.Game import GameManager, GameSettings
 
 def do_for_seconds(duration, func, on_finished=None, scale_time=True):
     vars = {'time': 0}

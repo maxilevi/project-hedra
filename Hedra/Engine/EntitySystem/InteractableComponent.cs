@@ -5,6 +5,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
+using Hedra.Game;
 using OpenTK;
 using OpenTK.Input;
 

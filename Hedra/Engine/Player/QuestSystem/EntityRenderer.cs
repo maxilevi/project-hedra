@@ -4,6 +4,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Game;
 using Hedra.Engine.Rendering.Core;
+using Hedra.Game;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 

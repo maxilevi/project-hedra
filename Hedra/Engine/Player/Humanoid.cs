@@ -29,6 +29,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.SkillSystem;
 using Hedra.EntitySystem;
+using Hedra.Game;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
 

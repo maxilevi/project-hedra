@@ -17,6 +17,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Frustum;
+using Hedra.Game;
 
 namespace Hedra.Engine.Rendering
 {

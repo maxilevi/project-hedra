@@ -8,6 +8,7 @@
  */
 
 using System;
+using Hedra.Core;
 
 namespace Hedra.Engine.Management
 {

@@ -5,6 +5,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
 using OpenTK;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Game;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Player.BoatSystem

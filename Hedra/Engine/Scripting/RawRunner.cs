@@ -4,6 +4,7 @@ using System.IO;
 using Hedra.Engine.Game;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
+using Hedra.Game;
 using Microsoft.Scripting;
 using Microsoft.Scripting.Hosting;
 

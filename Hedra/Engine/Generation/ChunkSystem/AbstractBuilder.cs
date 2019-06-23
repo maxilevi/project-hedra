@@ -11,6 +11,7 @@ using System.Diagnostics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.IO;
+using Hedra.Game;
 using OpenTK;
 
 namespace Hedra.Engine.Generation.ChunkSystem

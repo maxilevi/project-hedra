@@ -16,6 +16,7 @@ using System.Threading;
 using System.Collections;
 using Hedra.Core;
 using Hedra.Engine.Game;
+using Hedra.Game;
 
 namespace Hedra.Engine.Rendering.UI
 {

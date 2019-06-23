@@ -4,6 +4,7 @@ using Hedra.AnimationEvents;
 using Hedra.AnimationEvents.SkillEvents;
 using Hedra.API;
 using Hedra.Components.Effects;
+using Hedra.Core;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Scripting;

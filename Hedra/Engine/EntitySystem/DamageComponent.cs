@@ -23,6 +23,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.Player;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
+using Hedra.Game;
 using Hedra.Sound;
 
 namespace Hedra.Engine.EntitySystem

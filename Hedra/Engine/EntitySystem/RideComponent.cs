@@ -18,6 +18,7 @@ using OpenTK;
 using OpenTK.Input;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
+using Hedra.Game;
 
 namespace Hedra.Engine.EntitySystem
 {

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Hedra.Components.Effects;
+using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;

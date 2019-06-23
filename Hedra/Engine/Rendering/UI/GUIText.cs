@@ -15,6 +15,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
 using OpenTK;
 using Hedra.Engine.Management;
+using Hedra.Game;
 
 namespace Hedra.Engine.Rendering.UI
 {

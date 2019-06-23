@@ -9,7 +9,9 @@
 using OpenTK;
 using System;
 using System.Collections.Generic;
+using Hedra.Core;
 using Hedra.Engine.Game;
+using Hedra.Game;
 
 namespace Hedra.Engine.Rendering.Animation
 {

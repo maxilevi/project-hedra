@@ -1,6 +1,7 @@
 using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using Hedra.EntitySystem;
+using Hedra.Game;
 
 namespace Hedra.Engine.EntitySystem
 {

@@ -16,6 +16,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Frustum;
+using Hedra.Game;
 
 namespace Hedra.Engine.Rendering.Effects
 {

@@ -17,6 +17,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
+using Hedra.Game;
 using OpenTK;
 
 namespace Hedra.Engine.EntitySystem.BossSystem

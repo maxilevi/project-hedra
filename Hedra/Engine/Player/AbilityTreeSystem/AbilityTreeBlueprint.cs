@@ -13,6 +13,7 @@ using Hedra.Engine.ClassSystem.Templates;
 using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
 using Hedra.Engine.SkillSystem;
+using Hedra.Game;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {

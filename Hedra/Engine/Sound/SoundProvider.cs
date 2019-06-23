@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Hedra.Core;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;

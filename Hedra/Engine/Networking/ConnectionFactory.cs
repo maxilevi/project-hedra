@@ -1,5 +1,6 @@
 using Hedra.Engine.Game;
 using Hedra.Engine.Steamworks;
+using Hedra.Game;
 
 namespace Hedra.Engine.Networking
 {

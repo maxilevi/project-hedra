@@ -2,6 +2,7 @@ using System.IO;
 using Hedra.Engine;
 using Hedra.Engine.Game;
 using Hedra.Engine.Management;
+using Hedra.Game;
 using NUnit.Framework;
 
 namespace HedraTests.Core

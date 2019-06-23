@@ -19,6 +19,7 @@ using System.Linq;
 using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Native;
+using Hedra.Game;
 using Hedra.Sound;
 using OpenTK.Input;
 

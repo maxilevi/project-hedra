@@ -5,6 +5,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Game;
 using OpenTK;
 
 namespace Hedra.Engine.Loader

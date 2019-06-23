@@ -14,6 +14,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.EntitySystem;
+using Hedra.Game;
 using HedraTests.Structure;
 using Moq;
 using NUnit.Framework;

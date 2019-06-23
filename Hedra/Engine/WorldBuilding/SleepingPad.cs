@@ -10,6 +10,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Scenes;
 using Hedra.EntitySystem;
 using Hedra.Engine.Localization;
+using Hedra.Game;
 using OpenTK;
 using OpenTK.Input;
 using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;

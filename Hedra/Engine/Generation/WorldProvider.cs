@@ -38,6 +38,7 @@ using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
+using Hedra.Game;
 using Hedra.Sound;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;

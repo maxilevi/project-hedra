@@ -99,6 +99,3 @@ def soundtrack_setup():
             on_resume()
         vars['state'] = new
     when_game_ready(lambda: do_every(0.25, update, scale_time=False))
-    
-def play():
-    play_track(ACTION_SONGS[ON_THE_LAM], False)

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
+using Hedra.Core;
 
 namespace Hedra.Engine.Management
 {

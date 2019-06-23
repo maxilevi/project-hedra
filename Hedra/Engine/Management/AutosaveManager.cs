@@ -7,7 +7,9 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
+using Hedra.Core;
 using Hedra.Engine.Game;
+using Hedra.Game;
 
 namespace Hedra.Engine.Management
 {

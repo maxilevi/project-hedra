@@ -6,6 +6,7 @@ using System.Reflection;
 using Hedra.Engine.Game;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
+using Hedra.Game;
 using Hedra.Rendering;
 using IronPython.Hosting;
 using IronPython.Runtime.Types;

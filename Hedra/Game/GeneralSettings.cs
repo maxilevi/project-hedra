@@ -9,7 +9,7 @@
 
 using OpenTK;
 
-namespace Hedra.Engine.Game
+namespace Hedra.Game
 {
     /// <summary>
     /// Description of GeneralSettings.

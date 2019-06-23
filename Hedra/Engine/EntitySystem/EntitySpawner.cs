@@ -22,6 +22,7 @@ using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.WorldBuilding;
+using Hedra.Game;
 
 namespace Hedra.Engine.EntitySystem
 {

@@ -250,6 +250,8 @@
     <Compile Include="Components\TradeComponent.cs" />
     <Compile Include="Components\VillagerThoughtsComponent.cs" />
     <Compile Include="Core\Mathf.cs" />
+    <Compile Include="Core\TaskScheduler.cs" />
+    <Compile Include="Core\Time.cs" />
     <Compile Include="Engine\BiomeSystem\GhostTownHandler.cs" />
     <Compile Include="Engine\BiomeSystem\GhostTown\GhostTownGenerationDesign.cs" />
     <Compile Include="Engine\BiomeSystem\GhostTown\GhostTownSkyDesign.cs" />
@@ -291,6 +293,7 @@
     <Compile Include="Engine\Core\ModuleLoader.cs" />
     <Compile Include="Engine\Core\Pair.cs" />
     <Compile Include="Engine\Core\Singleton.cs" />
+    <Compile Include="Engine\Core\Timer.cs" />
     <Compile Include="Engine\Core\TypeFactory.cs" />
     <Compile Include="Engine\Core\Unique.cs" />
     <Compile Include="Engine\CraftingSystem\CraftingInventory.cs" />
@@ -745,6 +748,9 @@
     <Compile Include="Engine\WorldBuilding\TravellingExplorers.cs" />
     <Compile Include="EntitySystem\EntityExtensions.cs" />
     <Compile Include="EntitySystem\SelfDestructComponent.cs" />
+    <Compile Include="Game\GameManager.cs" />
+    <Compile Include="Game\GameSettings.cs" />
+    <Compile Include="Game\GeneralSettings.cs" />
     <Compile Include="HedraContent.cs" />
     <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeColors.cs" />
     <Compile Include="Engine\BiomeSystem\DesertBiome\DesertBiomeEnviromentDesign.cs" />
@@ -847,9 +853,6 @@
     <Compile Include="Engine\EntitySystem\Component.cs" />
     <Compile Include="Engine\EntitySystem\EffectFactory.cs" />
     <Compile Include="Engine\Game\GameLoader.cs" />
-    <Compile Include="Engine\Game\GameManager.cs" />
-    <Compile Include="Engine\Game\GameSettings.cs" />
-    <Compile Include="Engine\Game\GeneralSettings.cs" />
     <Compile Include="Engine\Game\LoadingScreen.cs" />
     <Compile Include="Engine\Game\SettingAttribute.cs" />
     <Compile Include="Engine\Game\WindowSettingAttribute.cs" />
@@ -1081,7 +1084,6 @@
     <Compile Include="Engine\WorldBuilding\Tombstone.cs" />
     <Compile Include="Engine\Rendering\CapHandler.cs" />
     <Compile Include="Engine\Rendering\GeometryData.cs" />
-    <Compile Include="Engine\Management\Timer.cs" />
     <Compile Include="Engine\Management\WordFilter.cs" />
     <Compile Include="Engine\BiomeSystem\BiomePool.cs" />
     <Compile Include="Engine\Generation\BlockUtils.cs" />
@@ -1098,7 +1100,6 @@
     <Compile Include="Engine\Management\ICullable.cs" />
     <Compile Include="Engine\Management\IRenderable.cs" />
     <Compile Include="Engine\Management\IUpdatable.cs" />
-    <Compile Include="Engine\Management\TaskScheduler.cs" />
     <Compile Include="Engine\Management\Executer.cs" />
     <Compile Include="Engine\Management\UpdateManager.cs" />
     <Compile Include="Engine\Management\ZipManager.cs" />
@@ -1344,7 +1345,6 @@
     <Compile Include="Engine\Sound\SoundSource.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\VillageLoader.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\VillageType.cs" />
-    <Compile Include="Engine\Time.cs" />
     <Compile Include="Engine\Generation\Block.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\Chunk.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkLoader.cs" />
@@ -10631,6 +10631,14 @@
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\FireImmunity.png">
       <Link>Assets\Skills\FireImmunity.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\FishingRodAttack1.png">
+      <Link>Assets\Skills\FishingRodAttack1.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\Skills\FishingRodAttack2.png">
+      <Link>Assets\Skills\FishingRodAttack2.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\Skills\Focus.png">

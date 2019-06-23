@@ -3,6 +3,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Particles;
+using Hedra.Game;
 using OpenTK;
 
 namespace Hedra.Engine.EnvironmentSystem

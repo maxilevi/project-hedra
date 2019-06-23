@@ -8,6 +8,7 @@
  */
 
 using System.Collections;
+using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
@@ -45,7 +46,7 @@ namespace Hedra.Components.Effects
             Parent.Model.BaseTint = Colors.LowHealthRed * new Vector4(3,1,1,1) * .7f;
             while(_totalTime > _pTime && !Parent.IsDead && !Disposed){
                 
-                _time += Engine.Time.DeltaTime;
+                _time += Time.DeltaTime;
                 if(_time >= 1){
                     _pTime++;
                     _time = 0;

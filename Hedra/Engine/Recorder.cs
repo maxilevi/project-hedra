@@ -10,6 +10,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using System.IO;
+using Hedra.Core;
 using Hedra.Engine.Game;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
@@ -17,6 +18,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Steamworks;
+using Hedra.Game;
 
 namespace Hedra.Engine
 {

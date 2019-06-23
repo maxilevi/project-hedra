@@ -6,12 +6,13 @@
  */
 
 using System;
+using Hedra.Engine.Game;
 using Hedra.Engine.Input;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using OpenTK;
 
-namespace Hedra.Engine.Game
+namespace Hedra.Game
 {
 
     public static class GameManager

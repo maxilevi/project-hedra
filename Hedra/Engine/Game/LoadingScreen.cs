@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using Hedra.Core;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.IO;

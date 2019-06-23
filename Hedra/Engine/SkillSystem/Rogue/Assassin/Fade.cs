@@ -8,6 +8,7 @@
  */
 
 using System.Globalization;
+using Hedra.Core;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;

@@ -3,6 +3,7 @@ using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Game;
 using OpenTK;
 
 namespace Hedra.AISystem.Humanoid

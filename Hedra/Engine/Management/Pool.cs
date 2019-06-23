@@ -8,6 +8,7 @@
  */
 using System;
 using System.Collections.Generic;
+using Hedra.Core;
 using Hedra.Engine.IO;
 
 namespace Hedra.Engine.Management

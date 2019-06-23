@@ -4,6 +4,7 @@ using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.StructureSystem;
+using Hedra.Game;
 using Hedra.Rendering;
 using OpenTK;
 

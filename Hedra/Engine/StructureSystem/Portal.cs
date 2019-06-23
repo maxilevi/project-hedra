@@ -7,6 +7,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
+using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Sound;
 using OpenTK;

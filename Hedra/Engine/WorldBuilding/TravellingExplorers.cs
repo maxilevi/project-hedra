@@ -7,6 +7,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.EntitySystem;
+using Hedra.Game;
 using OpenTK;
 
 namespace Hedra.Engine.WorldBuilding

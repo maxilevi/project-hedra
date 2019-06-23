@@ -3,6 +3,7 @@ using System.Linq;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Sound;
+using Hedra.Game;
 using Hedra.Sound;
 using OpenTK.Input;
 

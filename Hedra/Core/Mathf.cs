@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Game;
+using Hedra.Game;
 using OpenTK;
 
 namespace Hedra.Core

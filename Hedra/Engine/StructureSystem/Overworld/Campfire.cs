@@ -18,6 +18,7 @@ using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Sound;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
+using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Sound;
 using OpenTK;

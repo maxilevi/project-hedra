@@ -25,9 +25,10 @@ def outline(human, color, seconds):
 
     after_seconds(seconds, finalize)
     
+def add_shiver_effect(human, intensity):
+    human.LeftWeapon.Charging = True
+    human.LeftWeapon.ChargingIntensity = intensity
 
-
-
- 
-def test():
-    outline(player, Vector4(1,0,0,1), 4.0)
+def remove_shiver_effect(human):
+    human.LeftWeapon.Charging = False
+    human.LeftWeapon.ChargingIntensity = 0

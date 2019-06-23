@@ -12,6 +12,7 @@ using Hedra.Engine.Networking;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
+using Hedra.Game;
 using OpenTK;
 using OpenTK.Graphics;
 

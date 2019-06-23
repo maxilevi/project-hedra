@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using Hedra.Engine.Game;
 using Hedra.Engine.IO;
+using Hedra.Game;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {

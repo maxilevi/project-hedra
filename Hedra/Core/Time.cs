@@ -4,10 +4,12 @@
  * Time: 02:43 p.m.
  *
  */
+
 using System;
 using Hedra.Engine.Game;
+using Hedra.Game;
 
-namespace Hedra.Engine
+namespace Hedra.Core
 {
     /// <summary>
     /// Time manager.

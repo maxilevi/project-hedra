@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Game;
 using OpenTK;
 
 namespace Hedra.Engine.PhysicsSystem

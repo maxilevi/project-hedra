@@ -41,7 +41,7 @@ namespace Hedra.Components.Effects
             Parent.Model.BaseTint = Colors.PoisonGreen *new Vector4(1,3,1,1);
             while(TotalTime > PTime && !Parent.IsDead && !Disposed){
                 
-                Time += Engine.Time.DeltaTime;
+                Time += Core.Time.DeltaTime;
                 if(Time >= 1){
                     PTime++;
                     Time = 0;
