@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Hedra.Engine.ModuleSystem.Templates;
-using Newtonsoft.Json.Linq;
 
 namespace Hedra.Engine.ClassSystem.Templates
 {

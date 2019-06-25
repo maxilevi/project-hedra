@@ -32,7 +32,7 @@ namespace Hedra.WeaponSystem
         public override void Attack2(IHumanoid Human, AttackOptions Options)
         {
             if (!MeetsRequirements()) return;
-            base.BasePrimaryAttack(Human, Options);
+            base.BaseSecondaryAttack(Human, Options);
         }
     }
 }

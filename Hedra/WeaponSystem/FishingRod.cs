@@ -63,6 +63,11 @@ namespace Hedra.WeaponSystem
                 _script.Get("retrieve_fish")(Owner, _state);
         }
 
+        public override void Attack2(IHumanoid Human, AttackOptions Options)
+        {
+            base.Attack2(Human, Options);
+        }
+
         public override void Attack1(IHumanoid Human, AttackOptions Options)
         {
             if (_script.Get("check_can_fish")(Human))

@@ -15,9 +15,9 @@ import clr
 clr.ImportExtensions(EntityExtensions)
 
 FISHING_DISTANCE = 24
-FISHING_CHANCE = 600
+FISHING_CHANCE = 600#1600
 FISHING_STRING_DETAIL = 7
-FISHING_CATCH_TIME = 4.0
+FISHING_CATCH_TIME = 2.5
 FISHING_ROD_COOLDOWN = 2
 FISHING_HOOK_SCALE = 0.5
 FISHING_HOOK_SPEED = 2
@@ -89,7 +89,6 @@ def setup_fishing(human, state, hook_model):
     state['on_water'] = False
     state['has_fish'] = False
     state['fish_timer'] = Timer(FISHING_CATCH_TIME)
-    consume_bait(human)
 
 def start_fishing(human, state, hook_model):
 
@@ -176,6 +175,7 @@ def check_for_fish(human, state):
     if state['has_fish'] and timer.Tick():
         VisualEffects.remove_shiver_effect(human)
         state['has_fish'] = False
+        consume_bait(human)
     
 def update_rod(human, rod, rod_line, state):
 
@@ -205,14 +205,9 @@ def update_rod(human, rod, rod_line, state):
 def do_retrieve_fish(human, state):
     pass
 
-def lose_bait(human, state):
-    pass
-
 def retrieve_fish(human, state):
     if state['has_fish']:
         do_retrieve_fish(human, state)
-    else:
-        lose_bait(human, state)
     disable_fishing(human, state)
 
     
