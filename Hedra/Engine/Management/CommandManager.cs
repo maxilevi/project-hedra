@@ -34,6 +34,7 @@ using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Game;
+using Hedra.Items;
 using Hedra.Sound;
 
 namespace Hedra.Engine.Management

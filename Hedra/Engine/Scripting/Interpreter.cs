@@ -44,15 +44,15 @@ namespace Hedra.Engine.Scripting
         {
             return new Function(_runner.GetFunction(Library, Function), Library, Function, _engine);
         }
-        
-        public static ScriptScope GetScript(string Library)
+
+        public static Script GetScript(string Library)
         {
-            return _runner.GetScript(Library);
+            return new Script(Library);
         }
 
         public static Type GetType(string Library, string Variable)
         {
-            var type = _runner.GetConstant<dynamic>(Library, Variable);
+            var type = _runner.GetFunction(Library, Variable);
             if (_types.ContainsKey(type))
                 _types.Remove(type);
             _types.Add(type, type);
@@ -61,7 +61,7 @@ namespace Hedra.Engine.Scripting
         
         public static T GetMember<T>(string Library, string Variable)
         {
-            return _runner.GetConstant<T>(Library, Variable);
+            return (T) _runner.GetFunction(Library, Variable);
         }
 
         public static dynamic GetInstance<T>(Type Type, params object[] Args)

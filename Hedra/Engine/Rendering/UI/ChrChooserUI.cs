@@ -23,6 +23,7 @@ using Hedra.Engine.Networking;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Frustum;
 using Hedra.Game;
+using Hedra.Localization;
 using Hedra.Sound;
 
 namespace Hedra.Engine.Rendering.UI

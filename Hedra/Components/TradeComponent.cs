@@ -10,6 +10,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Game;
+using Hedra.Localization;
 
 namespace Hedra.Components
 {

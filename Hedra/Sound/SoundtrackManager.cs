@@ -28,14 +28,17 @@ namespace Hedra.Sound
         public static int Rain { get; private set; }
         public static int VillageAmbient { get; private set; }
         public static int OnTheLam { get; private set; }
-        private static ScriptScope _script;
+        private static Script _script;
         private static event OnSongEnd SongEnded;
+        private static readonly object Lock = new object();
         private static readonly float[] Buffer = new float[176400 * 2];
         private static SoundSource _source;
         private static SoundBuffer _backBuffer;
         private static SoundBuffer _frontBuffer;
         private static SoundBuffer _usedBuffer;
         private static VorbisReader _reader;
+        private static int _sampleRate;
+        private static int _channels;
         private static bool _buildBuffers;
         private static int _receivedBytes;
         private static bool _loaded;
@@ -59,19 +62,19 @@ namespace Hedra.Sound
 
         private static void OnSongEnd()
         {
-            _script.GetVariable("on_song_end")(_isPlayingAmbient, _currentActionSong, _currentAmbientSong);
+            _script.Get("on_song_end")(_isPlayingAmbient, _currentActionSong, _currentAmbientSong);
         }
         
         public static void PlayAmbient()
         {
             _isPlayingAmbient = true;
-            _currentAmbientSong = _script.GetVariable("resume_ambient")(_currentAmbientSong);
+            _currentAmbientSong = _script.Get("resume_ambient")(_currentAmbientSong);
         }
 
         public static void PlayRepeating(int Index)
         {
             _isPlayingAmbient = false;
-            _currentActionSong = _script.GetVariable("resume_action")(Index);
+            _currentActionSong = _script.Get("resume_action")(Index);
         }
         
         public static void Update()
@@ -90,9 +93,13 @@ namespace Hedra.Sound
                 _buildBuffers = true;
             }
             
-            if(_buildBuffers  && _receivedBytes > 0)
+            if(_buildBuffers && _receivedBytes > -1)
             {
-                _receivedBytes = _reader.ReadSamples(Buffer, 0, Buffer.Length);
+                lock (Lock)
+                {
+                    _receivedBytes = _reader.ReadSamples(Buffer, 0, Buffer.Length);
+                }
+
                 if (_receivedBytes <= 0)
                 {
                     SongEnded?.Invoke();
@@ -102,13 +109,13 @@ namespace Hedra.Sound
                 if(_usedBuffer == null || (_frontBuffer != null && _usedBuffer.ID == _frontBuffer.ID))
                 {
                     _backBuffer?.Dispose();
-                    _backBuffer = new SoundBuffer(data, SoundPlayer.GetSoundFormat(_reader.Channels, 16), _reader.SampleRate);
+                    _backBuffer = new SoundBuffer(data, SoundPlayer.GetSoundFormat(_channels, 16), _sampleRate);
                     _usedBuffer = _backBuffer;
                 }
                 else if(_usedBuffer.ID == _backBuffer.ID)
                 {
                     _frontBuffer?.Dispose();
-                    _frontBuffer = new SoundBuffer(data, SoundPlayer.GetSoundFormat(_reader.Channels, 16), _reader.SampleRate);
+                    _frontBuffer = new SoundBuffer(data, SoundPlayer.GetSoundFormat(_channels, 16), _sampleRate);
                     _usedBuffer = _frontBuffer;
                 }
                 _buildBuffers = false;
@@ -134,12 +141,17 @@ namespace Hedra.Sound
             if(!_loaded) return;
             _usedBuffer = null;
             _buildBuffers = true;
-            _receivedBytes = -1;
-            _reader?.Dispose();
 
             var bytes = AssetManager.ReadBinary(Name, AssetManager.SoundResource);
             Stream stream = new MemoryStream(bytes);
-            _reader = new VorbisReader(stream, true);
+            lock (Lock)
+            {
+                _receivedBytes = 0;
+                _reader?.Dispose();
+                _reader = new VorbisReader(stream, true);
+                _sampleRate = _reader.SampleRate;
+                _channels = _reader.Channels;
+            }
         }
         
         private static float FinalVolume => Volume * PauseVolume * SongTransitionVolume;
@@ -154,13 +166,13 @@ namespace Hedra.Sound
         private static void LoadLibrary()
         {
             _script = Interpreter.GetScript(LibraryName);
-            MainTheme = _script.GetVariable<int>("MAIN_THEME");
-            HostageSituation = _script.GetVariable<int>("HOSTAGE_SITUATION");
-            GraveyardChampion = _script.GetVariable<int>("GRAVEYARD_CHAMPION");
-            Rain = _script.GetVariable<int>("RAIN");
-            VillageAmbient = _script.GetVariable<int>("VILLAGE_AMBIENT");
-            OnTheLam = _script.GetVariable<int>("ON_THE_LAM");
-            _script.GetVariable("soundtrack_setup")();
+            MainTheme = _script.Get<int>("MAIN_THEME");
+            HostageSituation = _script.Get<int>("HOSTAGE_SITUATION");
+            GraveyardChampion = _script.Get<int>("GRAVEYARD_CHAMPION");
+            Rain = _script.Get<int>("RAIN");
+            VillageAmbient = _script.Get<int>("VILLAGE_AMBIENT");
+            OnTheLam = _script.Get<int>("ON_THE_LAM");
+            _script.Get("soundtrack_setup")();
         }
     }
 }

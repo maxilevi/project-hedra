@@ -5,6 +5,7 @@ using Hedra.Core;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
+using Hedra.Localization;
 using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Archer.Scout

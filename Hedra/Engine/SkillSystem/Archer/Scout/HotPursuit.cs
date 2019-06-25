@@ -1,9 +1,11 @@
 using Hedra.Components.Effects;
+using Hedra.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
+using Hedra.Localization;
 
 namespace Hedra.Engine.SkillSystem.Archer.Scout
 {

@@ -4,6 +4,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.Particles;
+using Hedra.Localization;
 using Hedra.Sound;
 using OpenTK;
 

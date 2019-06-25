@@ -7,6 +7,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.IO;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
+using Hedra.Localization;
 
 namespace Hedra.Engine.ModuleSystem
 {

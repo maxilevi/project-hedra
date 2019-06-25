@@ -10,6 +10,7 @@ using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.SkillSystem;
+using Hedra.Localization;
 using OpenTK;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem

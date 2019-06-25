@@ -2,6 +2,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
+using Hedra.Localization;
 using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Rogue.Assassin

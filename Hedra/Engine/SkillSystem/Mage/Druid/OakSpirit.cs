@@ -5,6 +5,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
+using Hedra.Localization;
 
 namespace Hedra.Engine.SkillSystem.Mage.Druid
 {

@@ -1,4 +1,5 @@
 using System.Linq;
+using Hedra.Core;
 using Hedra.Engine.Management;
 using Hedra.EntitySystem;
 

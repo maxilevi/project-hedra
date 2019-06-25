@@ -1,5 +1,6 @@
 using Hedra.Engine.Localization;
 using Hedra.Engine.WorldBuilding;
+using Hedra.Localization;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem

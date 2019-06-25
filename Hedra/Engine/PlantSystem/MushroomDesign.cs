@@ -7,6 +7,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.PlantSystem.Harvestables;
 using Hedra.Engine.StructureSystem.VillageSystem;
+using Hedra.Items;
 using Hedra.Rendering;
 using OpenTK;
 

@@ -13,10 +13,12 @@ namespace Hedra.WeaponSystem
         private readonly Line3D _line;
         private static readonly VertexData _hook;
         private readonly Dictionary<string, object> _state;
+        private static readonly Script _script;
 
         static FishingRod()
         {
             _hook = AssetManager.PLYLoader("Assets/Env/Objects/FishHook.ply", Vector3.One);
+            _script = Interpreter.GetScript("Fishing.py");
         }
         
         public FishingRod(VertexData Contents) : base(Contents)
@@ -39,7 +41,7 @@ namespace Hedra.WeaponSystem
         public override void Update(IHumanoid Human)
         {
             base.Update(Human);
-            Interpreter.GetFunction("Fishing.py", "update_rod")(Human, this, _line, _state);
+            _script.Get("update_rod")(Human, this, _line, _state);
         }
 
         protected override string[] SecondaryAnimationsNames => new[]
@@ -51,25 +53,24 @@ namespace Hedra.WeaponSystem
         {
             base.OnPrimaryAttackEvent(Type, Options);
             if(Type == AttackEventType.Mid)
-                Interpreter.GetFunction("Fishing.py", "start_fishing")(Owner, _state, _hook);
+                _script.Get("start_fishing")(Owner, _state, _hook);
         }
 
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             base.OnSecondaryAttackEvent(Type, Options);
+            if(Type == AttackEventType.Mid)
+                _script.Get("retrieve_fish")(Owner, _state);
         }
 
-        public override void Attack2(IHumanoid Human, AttackOptions Options)
-        {
-            if(Interpreter.GetFunction("Fishing.py", "retrieve_fish")(Owner, _state))
-                base.Attack2(Human, Options);
-        }
-        
         public override void Attack1(IHumanoid Human, AttackOptions Options)
         {
-            if (Human.IsFishing)
-                Interpreter.GetFunction("Fishing.py", "disable_fishing")(Owner, _state);
-            base.Attack1(Human, Options);
+            if (_script.Get("check_can_fish")(Human))
+            {
+                if (Human.IsFishing)
+                    _script.Get("disable_fishing")(Owner, _state);
+                base.Attack1(Human, Options);
+            }
         }
 
         public override void Dispose()

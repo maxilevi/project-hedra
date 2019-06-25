@@ -10,6 +10,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.WorldBuilding;
+using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
 using OpenTK;

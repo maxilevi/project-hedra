@@ -6,6 +6,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Particles;
+using Hedra.Rendering;
 using Hedra.Rendering.Particles;
 using OpenTK;
 

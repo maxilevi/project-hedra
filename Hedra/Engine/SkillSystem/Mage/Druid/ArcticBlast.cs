@@ -3,6 +3,7 @@ using Hedra.Components.Effects;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
+using Hedra.Localization;
 using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Mage.Druid

@@ -10,6 +10,8 @@ using Hedra.Engine.Player.QuestSystem;
 using Hedra.Engine.Player.QuestSystem.Views;
 using Hedra.Engine.QuestSystem.Designs.Auxiliaries;
 using Hedra.Engine.Rendering;
+using Hedra.Items;
+using Hedra.Localization;
 using Hedra.Rendering;
 using OpenTK;
 

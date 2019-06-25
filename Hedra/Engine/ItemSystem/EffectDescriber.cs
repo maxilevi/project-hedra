@@ -2,6 +2,7 @@ using System;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Particles;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.ItemSystem

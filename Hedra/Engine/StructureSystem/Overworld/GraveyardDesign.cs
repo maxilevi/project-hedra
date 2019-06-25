@@ -15,6 +15,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
+using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
 using OpenTK;

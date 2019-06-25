@@ -1,4 +1,5 @@
 using System;
+using Hedra.Localization;
 
 namespace Hedra.Engine.Localization
 {

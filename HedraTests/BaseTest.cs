@@ -15,6 +15,7 @@ using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Game;
+using Hedra.Localization;
 using HedraTests.Rendering;
 using Moq;
 using NUnit.Framework;

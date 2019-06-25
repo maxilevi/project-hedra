@@ -10,11 +10,13 @@
 using System;
 using System.Drawing;
 using Hedra.AISystem;
+using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
+using Hedra.Localization;
 using OpenTK;
 
 namespace Hedra.Engine.Player

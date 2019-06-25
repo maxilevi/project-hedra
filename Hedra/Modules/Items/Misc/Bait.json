@@ -1,0 +1,21 @@
+{
+  "Name": "Bait",
+  "DisplayName": "Bait",
+  "Tier": "Misc",
+  "Description": "Mixture of dirt and raw food. Fish love it!",
+  "Attributes": [
+    {
+      "Name": "Amount",
+      "Value": 1
+    },
+    {
+      "Name": "Price",
+      "Value": 2.0,
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Misc/Bait.ply"
+  }
+}

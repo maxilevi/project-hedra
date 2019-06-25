@@ -20,6 +20,7 @@ using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Rendering.UI;
 using Hedra.EntitySystem;
 using Hedra.Game;
+using Hedra.Rendering;
 using Hedra.WeaponSystem;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;

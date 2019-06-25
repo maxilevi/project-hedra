@@ -36,11 +36,12 @@ namespace Hedra.WeaponSystem
             }
         }
 
+        protected virtual Vector3 SheathedOffset => -Vector3.UnitY * _weaponHeight * .5f;
+        
         protected override void OnSheathed()
         {
             this.SetToChest(MainMesh);
-            MainMesh.BeforeRotation =
-                (this.SheathedPosition + Vector3.UnitX * 2.25f + Vector3.UnitZ * 1.5f - Vector3.UnitY * 1.5f) * this.Scale;
+            MainMesh.BeforeRotation = (this.SheathedPosition + Vector3.UnitX * 2.25f + Vector3.UnitZ * 1.5f + SheathedOffset) * this.Scale;
         }
 
         protected override void OnAttackStance()

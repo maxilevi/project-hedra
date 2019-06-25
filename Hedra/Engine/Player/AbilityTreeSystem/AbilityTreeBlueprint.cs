@@ -14,6 +14,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
 using Hedra.Engine.SkillSystem;
 using Hedra.Game;
+using Hedra.Localization;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {

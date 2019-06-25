@@ -9,6 +9,7 @@ using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Sound;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
+using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
 using OpenTK;

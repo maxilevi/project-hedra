@@ -2,6 +2,7 @@ using System.Globalization;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.SkillSystem.Archer.Scout;
+using Hedra.Localization;
 using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Warrior

@@ -1,14 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
 using Hedra.Core;
 using OpenTK;
 
-namespace Hedra.Engine.Rendering
+namespace Hedra.Rendering
 {
     public static class Colors
     {
@@ -34,6 +30,11 @@ namespace Hedra.Engine.Rendering
         public static Vector4 Brown { get; } = Color.FromArgb(255, 134, 94, 60).ToVector4() * .75f;
         public static Vector4 Magenta { get; } = Color.Magenta.ToVector4();
 
+        public static Color ToColorStruct(Vector4 Color)
+        {
+            return Color.ToColor();
+        }
+        
         public static Vector4 FromHtml(string Hex)
         {
             var argb = int.Parse(Hex.Replace("#", string.Empty), NumberStyles.HexNumber);

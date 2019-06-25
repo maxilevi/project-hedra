@@ -24,8 +24,10 @@ using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.EntitySystem;
+using Hedra.Items;
+using Hedra.Localization;
 
-namespace Hedra.Engine.WorldBuilding
+    namespace Hedra.Engine.WorldBuilding
 {
 
     public class WorldBuilding : IWorldBuilding

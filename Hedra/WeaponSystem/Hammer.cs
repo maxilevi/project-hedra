@@ -15,6 +15,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
+using OpenTK;
 
 namespace Hedra.WeaponSystem
 {
@@ -40,5 +41,7 @@ namespace Hedra.WeaponSystem
                     Mob.KnockForSeconds(1.5f + Utils.Rng.NextFloat() * 2f);
             });
         }
+        
+        protected override Vector3 SheathedOffset => Vector3.Zero;
     }
 }

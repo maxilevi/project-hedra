@@ -8,6 +8,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
+using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
 using OpenTK;

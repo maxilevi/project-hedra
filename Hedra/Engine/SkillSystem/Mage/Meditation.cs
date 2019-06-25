@@ -1,6 +1,7 @@
 using System.Globalization;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
+using Hedra.Localization;
 
 namespace Hedra.Engine.SkillSystem.Mage
 {

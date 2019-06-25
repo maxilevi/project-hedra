@@ -10,6 +10,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.SkillSystem.Mage.Druid;
 using Hedra.EntitySystem;
+using Hedra.Localization;
 using Hedra.Sound;
 using OpenTK;
 

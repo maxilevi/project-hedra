@@ -1,5 +1,6 @@
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ItemSystem;
+using Hedra.Items;
 
 namespace Hedra.Engine.PlantSystem.Harvestables
 {

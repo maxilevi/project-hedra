@@ -44,6 +44,8 @@ using Hedra.Engine.Rendering.Geometry;
 using Hedra.Engine.SkillSystem;
 using Hedra.EntitySystem;
 using Hedra.Game;
+using Hedra.Items;
+using Hedra.Localization;
 using Hedra.Sound;
 using OpenTK.Input;
 using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;

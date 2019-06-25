@@ -3,6 +3,7 @@ using Hedra.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
+using Hedra.Rendering;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 

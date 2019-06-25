@@ -1,0 +1,49 @@
+{
+  "Name": "BaitRecipe",
+  "DisplayName": "Bait recipe",
+  "EquipmentType": "Recipe",
+  "Tier": "Common",
+  "Description": "...",
+  "Attributes": [
+    {
+      "Name": "CraftingStation",
+      "Value": "None"
+    },
+    {
+      "Name": "Ingredients",
+      "Value": [
+        {
+          "Name": "RawMeat",
+          "Amount": 1
+        },
+        {
+          "Name": "Carrot",
+          "Amount": 1
+        }
+      ],
+      "Display": "Bullets"
+    },
+    {
+      "Name": "Output",
+      "Value": {
+        "Name": "Bait",
+        "Amount": 4
+      },
+      "Hidden": true
+    },
+    {
+      "Name": "IsConsumable",
+      "Value": true,
+      "Hidden": true
+    },
+    {
+      "Name": "Handler",
+      "Value": "Recipe",
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 2.0,
+    "Path": "$DataFile$/Items/Misc/Recipe.ply"
+  }
+}

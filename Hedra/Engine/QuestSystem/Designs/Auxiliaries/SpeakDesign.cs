@@ -1,5 +1,6 @@
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player.QuestSystem.Views;
+using Hedra.Localization;
 using OpenTK;
 
 namespace Hedra.Engine.QuestSystem.Designs.Auxiliaries

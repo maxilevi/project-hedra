@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Items;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Player
@@ -23,18 +24,13 @@ namespace Hedra.Engine.Player
 
         public void UpdateInventory()
         {
-            throw new NotImplementedException();
         }
 
         public void ClearInventory()
         {
-            throw new NotImplementedException();
         }
 
-        public Item Search(Func<Item, bool> Matches)
-        {
-            throw new NotImplementedException();
-        }
+        public Item Search(Func<Item, bool> Matches) => null;
 
         public int IndexOf(Item Item)
         {
@@ -43,12 +39,10 @@ namespace Hedra.Engine.Player
 
         public void SetItem(int Index, Item New)
         {
-            throw new NotImplementedException();
         }
 
         public void SetItems(KeyValuePair<int, Item>[] Items)
         {
-            throw new NotImplementedException();
         }
 
         public KeyValuePair<int, Item>[] ItemsToArray()
@@ -63,57 +57,52 @@ namespace Hedra.Engine.Player
 
         public void AddRestriction(int Index, EquipmentType Type)
         {
-            throw new NotImplementedException();
         }
 
         public void AddRestriction(int Index, string Type)
         {
-            throw new NotImplementedException();
         }
 
         public void RemoveRestriction(int Index, EquipmentType Type)
         {
-            throw new NotImplementedException();
         }
 
         public void RemoveRestriction(int Index, string Type)
         {
-            throw new NotImplementedException();
         }
 
         public void SetRestrictions(int Index, string[] Restrictions)
         {
-            throw new NotImplementedException();
         }
 
         public string[] GetRestrictions(int Index)
         {
-            throw new NotImplementedException();
+            return new string[0];
         }
 
-        public Item Food => throw new NotImplementedException();
+        public Item Food => null;
         public Item Ammo => ItemPool.Grab(ItemType.StoneArrow);
 
-        public bool HasAvailableSpace => throw new NotImplementedException();
-        
-        public Item MainWeapon => throw new NotImplementedException();
-        
-        public Item Vehicle => throw new NotImplementedException();
-        
-        public Item Pet => throw new NotImplementedException();
-        
-        public Item Helmet => throw new NotImplementedException();
-        
-        public Item Chest => throw new NotImplementedException();
-        
-        public Item Pants => throw new NotImplementedException();
-        
-        public Item Boots => throw new NotImplementedException();
+        public bool HasAvailableSpace => false;
 
-        public int Length => throw new NotImplementedException();
+        public Item MainWeapon => null;
+        
+        public Item Vehicle => null;
+        
+        public Item Pet => null;
+        
+        public Item Helmet => null;
+        
+        public Item Chest => null;
+        
+        public Item Pants => null;
+        
+        public Item Boots => null;
+
+        public int Length => 0;
 
         public Item this[int Index] => throw new NotImplementedException();
-        public InventoryArray MainItemsArray { get; }
-        public InventoryArray ItemsArray { get; }
+        public InventoryArray MainItemsArray => null;
+        public InventoryArray ItemsArray => null;
     }
 }

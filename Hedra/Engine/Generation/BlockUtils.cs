@@ -8,6 +8,7 @@
 using System;
 using Hedra.BiomeSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.Generation

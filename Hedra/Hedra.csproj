@@ -252,6 +252,7 @@
     <Compile Include="Core\Mathf.cs" />
     <Compile Include="Core\TaskScheduler.cs" />
     <Compile Include="Core\Time.cs" />
+    <Compile Include="Core\Timer.cs" />
     <Compile Include="Engine\BiomeSystem\GhostTownHandler.cs" />
     <Compile Include="Engine\BiomeSystem\GhostTown\GhostTownGenerationDesign.cs" />
     <Compile Include="Engine\BiomeSystem\GhostTown\GhostTownSkyDesign.cs" />
@@ -293,7 +294,6 @@
     <Compile Include="Engine\Core\ModuleLoader.cs" />
     <Compile Include="Engine\Core\Pair.cs" />
     <Compile Include="Engine\Core\Singleton.cs" />
-    <Compile Include="Engine\Core\Timer.cs" />
     <Compile Include="Engine\Core\TypeFactory.cs" />
     <Compile Include="Engine\Core\Unique.cs" />
     <Compile Include="Engine\CraftingSystem\CraftingInventory.cs" />
@@ -531,6 +531,7 @@
     <Compile Include="Engine\Scripting\ObfuscationAdapter.cs" />
     <Compile Include="Engine\Scripting\RawRunner.cs" />
     <Compile Include="Engine\Scripting\Runner.cs" />
+    <Compile Include="Engine\Scripting\Script.cs" />
     <Compile Include="Engine\Scripting\VisualEffects.cs" />
     <Compile Include="Engine\SkillSystem\ActivateDurationSkill.cs" />
     <Compile Include="Engine\SkillSystem\ActivateDurationSkillWithSingleAnimation.cs" />
@@ -895,7 +896,6 @@
     <Compile Include="Engine\Loader\SplashScreen.cs" />
     <Compile Include="Engine\Localization\GameLanguage.cs" />
     <Compile Include="Engine\Localization\Translation.cs" />
-    <Compile Include="Engine\Localization\Translations.cs" />
     <Compile Include="Engine\Management\CompressedAssetProvider.cs" />
     <Compile Include="Engine\Management\IAssetProvider.cs" />
     <Compile Include="Engine\Management\ResourceHandler.cs" />
@@ -999,7 +999,6 @@
     <Compile Include="Engine\ItemSystem\ItemModelLoader.cs" />
     <Compile Include="Engine\ItemSystem\ItemPoolSettings.cs" />
     <Compile Include="Engine\ItemSystem\ItemTemplater.cs" />
-    <Compile Include="Engine\ItemSystem\ItemType.cs" />
     <Compile Include="Engine\ItemSystem\ItemUtils.cs" />
     <Compile Include="Engine\ItemSystem\EquipmentType.cs" />
     <Compile Include="Engine\Management\DistributedExecuter.cs" />
@@ -1170,7 +1169,6 @@
     <Compile Include="Engine\WorldBuilding\WorldBuilding.cs" />
     <Compile Include="Engine\WorldBuilding\BaseStructure.cs" />
     <Compile Include="Engine\Reflection.cs" />
-    <Compile Include="Engine\Rendering\Colors.cs" />
     <Compile Include="Engine\Rendering\Cubemap.cs" />
     <Compile Include="Engine\Rendering\PoolSize.cs" />
     <Compile Include="Engine\Rendering\Shaders\MappingType.cs" />
@@ -1282,14 +1280,17 @@
     <Compile Include="EntitySystem\IEntity.cs" />
     <Compile Include="EntitySystem\IHumanoid.cs" />
     <Compile Include="EntitySystem\IPhysicsComponent.cs" />
-    <Compile Include="ItemHandlers\ItemHandler.cs" />
-    <Compile Include="ItemHandlers\PotionHandler.cs" />
-    <Compile Include="ItemHandlers\RecipeHandler.cs" />
+    <Compile Include="Items\ItemHandler.cs" />
+    <Compile Include="Items\ItemType.cs" />
+    <Compile Include="Items\PotionHandler.cs" />
+    <Compile Include="Items\RecipeHandler.cs" />
+    <Compile Include="Localization\Translations.cs" />
     <Compile Include="ModelHandlers\EntHandler.cs" />
     <Compile Include="ModelHandlers\GhostFactory.cs" />
     <Compile Include="ModelHandlers\GhostHandler.cs" />
     <Compile Include="ModelHandlers\ModelFactory.cs" />
     <Compile Include="ModelHandlers\ModelHandler.cs" />
+    <Compile Include="Rendering\Colors.cs" />
     <Compile Include="Rendering\Particles\ParticleShape.cs" />
     <Compile Include="Rendering\PointLight.cs" />
     <Compile Include="Rendering\VertexData.cs" />
@@ -8653,6 +8654,10 @@
       <Link>Assets\Items\Foods\WaterBowl.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Misc\Bait.ply">
+      <Link>Assets\Items\Misc\Bait.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Misc\Boat.ply">
       <Link>Assets\Items\Misc\Boat.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -13985,6 +13990,9 @@
     <Content Include="Modules\Items\Helmets\FarmerHat.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Misc\Bait.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Misc\Boat.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -14043,6 +14051,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Potions\StrengthPotion.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Recipes\BaitRecipe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Recipes\BoatRecipe.json">

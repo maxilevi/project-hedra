@@ -8,6 +8,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
+using Hedra.Localization;
 
 namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 {

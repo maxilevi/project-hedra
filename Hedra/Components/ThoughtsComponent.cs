@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Localization;
 using Hedra.EntitySystem;
+using Hedra.Localization;
 
 namespace Hedra.Components
 {

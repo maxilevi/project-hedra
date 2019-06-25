@@ -27,6 +27,7 @@ using Hedra.Engine.Sound;
 using Hedra.Engine.Steamworks;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Game;
+using Hedra.Localization;
 using Hedra.Sound;
 using OpenTK;
 using OpenTK.Graphics;

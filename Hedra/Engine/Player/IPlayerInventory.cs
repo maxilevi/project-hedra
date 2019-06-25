@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
+using Hedra.EntitySystem;
+using Hedra.Items;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Player
@@ -44,12 +46,22 @@ namespace Hedra.Engine.Player
 
     public static class InventoryExtensions
     {
-        public static void AddOrDropItem(this IPlayer Owner, Item Item)
+        public static void AddOrDropItem(this IHumanoid Owner, Item Item)
         {
             if (!Owner.Inventory.AddItem(Item))
             {
                 World.DropItem(Item, Owner.Position);
             }
+        }
+
+        public static bool HasItem(this IHumanoid Owner, string Name)
+        {
+            return Owner.Inventory.Search(I => I.Name == Name.ToLowerInvariant()) != null;
+        }
+
+        public static bool HasItem(this IHumanoid Owner, ItemType Type)
+        {
+            return HasItem(Owner, Type.ToString());
         }
     }
 }

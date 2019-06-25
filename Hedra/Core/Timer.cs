@@ -8,9 +8,8 @@
  */
 
 using System;
-using Hedra.Core;
 
-namespace Hedra.Engine.Management
+namespace Hedra.Core
 {
     /// <summary>
     /// Description of Timer.

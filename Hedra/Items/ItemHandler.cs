@@ -1,7 +1,7 @@
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player;
 
-namespace Hedra.ItemHandlers
+namespace Hedra.Items
 {
     public abstract class ItemHandler
     {

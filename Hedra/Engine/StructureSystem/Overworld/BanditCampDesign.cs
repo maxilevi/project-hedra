@@ -15,6 +15,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.WorldBuilding;
+using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
 using OpenTK;

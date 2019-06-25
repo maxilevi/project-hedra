@@ -5,6 +5,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
+using Hedra.Localization;
 using Hedra.WeaponSystem;
 
 namespace Hedra.Engine.SkillSystem.Archer.Hunter

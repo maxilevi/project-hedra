@@ -2,6 +2,7 @@ using System.Globalization;
 using Hedra.Components.Effects;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
+using Hedra.Localization;
 
 namespace Hedra.Engine.SkillSystem.Warrior
 {

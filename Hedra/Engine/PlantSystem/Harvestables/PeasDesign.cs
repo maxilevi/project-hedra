@@ -3,6 +3,7 @@ using Hedra.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
+using Hedra.Items;
 using Hedra.Rendering;
 
 namespace Hedra.Engine.PlantSystem.Harvestables

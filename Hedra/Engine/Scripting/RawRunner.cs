@@ -13,10 +13,10 @@ namespace Hedra.Engine.Scripting
     public class RawRunner : Runner
     {
         private readonly Dictionary<string, string> _sources;
-        private readonly Dictionary<string, CompiledCode> _scripts;
+        private readonly Dictionary<string, ScriptScope> _scripts;
         public RawRunner(ScriptEngine Engine) : base(Engine)
         {
-            _scripts = new Dictionary<string, CompiledCode>();
+            _scripts = new Dictionary<string, ScriptScope>();
             _sources = new Dictionary<string, string>();
         }
 
@@ -26,34 +26,47 @@ namespace Hedra.Engine.Scripting
 
         protected override ScriptScope DoRun(string Library)
         {
-            var scope = Engine.CreateScope();
-            scope.SetVariable("player", GameManager.PlayerExists ? GameManager.Player : null);
-            var code = GetOrCompile(Library);
-            if (code != null)
-                code.Execute(scope);
-            else
-                Log.WriteLine("Failed to execute python call.");
-            return scope;
+            return GetOrCompile(Library);
         }
         
-        private CompiledCode GetOrCompile(string Library)
+        private ScriptScope GetOrCompile(string Library)
         {
             CheckForChanges(Library);
             if (_scripts.ContainsKey(Library)) return _scripts[Library];
             var source = _sources[Library];
-            var code = (CompiledCode) null;
+            var scope = Engine.CreateScope();
             if (source != null)
             {
                 var scriptSource = Engine.CreateScriptSourceFromString(source);
+                scope.SetVariable("player", GameManager.PlayerExists ? GameManager.Player : null);
                 var listener = new ErrorReporter();
-                code = scriptSource.Compile(listener);
+                var compiled = scriptSource.Compile(listener);
                 if (listener.Count == 0)
-                    _scripts.Add(Library, code);
+                {
+                    if(Execute(Library, compiled, scope))
+                        _scripts.Add(Library, scope);
+                }
                 else
+                {
                     listener.LogAll(Library);
-                
+                }
             }
-            return code;
+            return scope;
+        }
+
+        private bool Execute(string Name, CompiledCode Code, ScriptScope Scope)
+        {
+            try
+            {
+                Code.Execute(Scope);
+            }
+            catch (Exception e)
+            {
+                ReportFailure(Name, e);
+                return false;
+            }
+
+            return true;
         }
         
         private void CheckForChanges(string Library)
@@ -82,7 +95,7 @@ namespace Hedra.Engine.Scripting
             }
             catch (Exception e)
             {
-                Log.WriteLine(e);
+                ReportFailure(Name, e);
                 return null;
             }
         }

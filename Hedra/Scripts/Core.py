@@ -1,6 +1,7 @@
 from Hedra.Core import Mathf, TaskScheduler, Time
 from Hedra import Utils
 from Hedra.Game import GameManager, GameSettings
+from Hedra.Localization import Translations
 
 def do_for_seconds(duration, func, on_finished=None, scale_time=True):
     vars = {'time': 0}
@@ -55,3 +56,6 @@ def is_paused():
     
 def is_start_menu():
     return GameManager.InStartMenu
+
+def translate(msg, *args):
+    return Translations.Get(msg, *args)

@@ -9,6 +9,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Localization;
 using OpenTK;
 
 namespace Hedra.Engine.Game

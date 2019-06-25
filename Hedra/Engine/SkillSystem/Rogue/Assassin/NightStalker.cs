@@ -1,6 +1,7 @@
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
+using Hedra.Localization;
 
 namespace Hedra.Engine.SkillSystem.Rogue.Assassin
 {

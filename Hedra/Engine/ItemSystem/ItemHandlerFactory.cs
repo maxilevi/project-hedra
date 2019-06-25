@@ -1,6 +1,6 @@
 using System;
 using Hedra.Engine.Core;
-using Hedra.ItemHandlers;
+using Hedra.Items;
 
 namespace Hedra.Engine.ItemSystem
 {

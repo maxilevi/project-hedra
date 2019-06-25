@@ -2,28 +2,55 @@ import Core
 import math
 import VisualEffects
 from OpenTK import Vector3, Vector4
+from Hedra import World
 from Hedra.Core import Time, Timer
 from Hedra.WeaponSystem import FishingRod
 from Hedra.WorldObjects import Projectile, LandType
-from Hedra.Engine.Rendering import Colors
+from Hedra.Rendering import Colors
 from Hedra.Rendering.Particles import ParticleShape
-from Hedra import World
-from System import Array
-from System import Single
+from Hedra.Items import ItemType
+from System import Array, Single
+from Hedra.EntitySystem import EntityExtensions
+import clr
+clr.ImportExtensions(EntityExtensions)
 
 FISHING_DISTANCE = 24
-FISHING_CHANCE = 300
+FISHING_CHANCE = 600
 FISHING_STRING_DETAIL = 7
-FISHING_CATCH_TIME = 1.5
+FISHING_CATCH_TIME = 4.0
 FISHING_ROD_COOLDOWN = 2
 FISHING_HOOK_SCALE = 0.5
 FISHING_HOOK_SPEED = 2
 FISHING_HOOK_LIFETIME = 4
 
+def get_bait(human):
+    name = ItemType.Bait.ToString()
+    return human.Inventory.Search(lambda item: item.Name == name)
+
+def has_bait(human):
+    return get_bait(human) is not None
+
+def show_no_bait_msg(human):
+    human.MessageDispatcher.ShowNotification(Core.translate("fishing_no_bait"), Colors.ToColorStruct(Colors.Red), FISHING_ROD_COOLDOWN)
+
+def show_used_bait_msg(human):
+    human.ShowText(human.Position, Core.translate("fishing_used_bait"), Colors.ToColorStruct(Colors.Sienna), 14)
+
+def consume_bait(human):
+    human.Inventory.RemoveItem(get_bait(human), 1)
+    show_used_bait_msg(human)
+
+def check_can_fish(human):
+    if not has_bait(human):
+        show_no_bait_msg(human)
+        return False
+    human.Movement.CaptureMovement = False
+    return True
 
 def configure_rod(rod):
     rod.PrimaryAttackHasCooldown = True
     rod.PrimaryAttackCooldown = FISHING_ROD_COOLDOWN
+    rod.SecondaryAttackEnabled = False
 
 def on_land(human, state, land_type):
     if land_type == LandType.Water:
@@ -54,11 +81,15 @@ def disable_fishing(human, state):
 
 def setup_fishing(human, state, hook_model):
     human.IsFishing = True
+    human.LeftWeapon.SecondaryAttackEnabled = True
+    human.Movement.CaptureMovement = True
     state['fishing_position'] = human.Position
     state['fishing_hook'] = create_hook(human, hook_model, state)
     state['line_curvature'] = -1
     state['on_water'] = False
     state['has_fish'] = False
+    state['fish_timer'] = Timer(FISHING_CATCH_TIME)
+    consume_bait(human)
 
 def start_fishing(human, state, hook_model):
 
@@ -134,12 +165,18 @@ def calculate_line(rod, hook, state):
     return smooth_curve(rod_tip(rod), hook.Mesh.TransformPoint(Vector3.Zero), state['line_curvature'])
 
 def check_for_fish(human, state):
-    if not state['has_fish'] and Core.rand(0, FISHING_CHANCE) == 1:
+
+    timer = state['fish_timer']
+    if not state['has_fish'] and not Core.is_paused() and Core.rand(0, FISHING_CHANCE) == 1:
         VisualEffects.add_shiver_effect(human, 0.5)
         state['has_fish'] = True
-        state['fish_timer'] = Timer(3.0ffa)
+        timer.AlertTime = FISHING_CATCH_TIME
+        timer.Reset()
+
+    if state['has_fish'] and timer.Tick():
+        VisualEffects.remove_shiver_effect(human)
+        state['has_fish'] = False
     
-        
 def update_rod(human, rod, rod_line, state):
 
     rod_line.Enabled = human.IsFishing
@@ -148,7 +185,7 @@ def update_rod(human, rod, rod_line, state):
         hook = state['fishing_hook']
         
         if state['on_water']:
-            hook.Mesh.LocalPosition = calculate_hook_offset(state['has_fish'])
+            hook.Mesh.LocalPosition = Core.lerp(hook.Mesh.LocalPosition, calculate_hook_offset(state['has_fish']), Time.DeltaTime * 2.0)
             hook.Mesh.LocalRotation = Vector3.Zero
 
         if state['has_fish']:
@@ -156,7 +193,6 @@ def update_rod(human, rod, rod_line, state):
             
         line_vertices = calculate_line(rod, hook, state)
         rod.InAttackStance = True
-        rod.SecondaryAttackEnabled = state['has_fish']
         rod.MainMesh.LocalRotation = get_rod_rotation(state['has_fish'])
         rod_line.Update(
             Array[Vector3](line_vertices),
@@ -166,7 +202,17 @@ def update_rod(human, rod, rod_line, state):
         
         check_for_fish(human, state)
 
+def do_retrieve_fish(human, state):
+    pass
+
+def lose_bait(human, state):
+    pass
+
 def retrieve_fish(human, state):
-    return state['has_fish']
+    if state['has_fish']:
+        do_retrieve_fish(human, state)
+    else:
+        lose_bait(human, state)
+    disable_fishing(human, state)
 
     

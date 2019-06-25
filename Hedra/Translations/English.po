@@ -591,4 +591,6 @@ structure_graveyard = GRAVEYARD
 structure_travelling_merchant = TRAVELLING MERCHANT
 structure_witch_hut = WITCH HUT
 structure_wizard_tower = WIZARD TOWER
+fishing_no_bait = YOU NEED AT LEAST 1 BAIT IN ORDER TO FISH
+fishing_used_bait = -1 BAIT
 

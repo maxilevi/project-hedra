@@ -12,6 +12,7 @@ using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Components.Effects

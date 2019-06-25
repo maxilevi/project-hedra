@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Hedra.Engine.ItemSystem
+namespace Hedra.Items
 {
     public enum ItemType
     {
@@ -36,6 +31,7 @@ namespace Hedra.Engine.ItemSystem
         Carrot,
         Peas,
         Tomato,
+        Bait,
         MaxEnums
     }
 }

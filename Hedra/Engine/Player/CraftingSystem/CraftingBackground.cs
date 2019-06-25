@@ -2,6 +2,7 @@ using Hedra.Engine.CraftingSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player.Inventory;
 using Hedra.EntitySystem;
+using Hedra.Localization;
 using OpenTK;
 
 namespace Hedra.Engine.Player.CraftingSystem

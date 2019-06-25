@@ -10,6 +10,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
 using Hedra.Game;
+using Hedra.Localization;
 using Hedra.Rendering.Particles;
 using Hedra.Sound;
 using OpenTK;

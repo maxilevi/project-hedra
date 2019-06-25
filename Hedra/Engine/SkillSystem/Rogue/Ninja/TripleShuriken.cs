@@ -10,6 +10,7 @@
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
+using Hedra.Localization;
 
 namespace Hedra.Engine.SkillSystem.Rogue.Ninja
 {

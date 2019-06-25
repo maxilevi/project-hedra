@@ -19,6 +19,7 @@ using Hedra.Engine.Scenes;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Game;
+using Hedra.Items;
 using Hedra.Sound;
 using OpenTK;
 

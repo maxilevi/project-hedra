@@ -21,7 +21,7 @@ using Hedra.Engine.SkillSystem.Warrior;
 using Hedra.Engine.SkillSystem.Warrior.Berserker;
 using Hedra.Engine.SkillSystem.Warrior.Paladin;
 using Hedra.Engine.Sound;
-using Hedra.ItemHandlers;
+using Hedra.Items;
 using Hedra.ModelHandlers;
 using Hedra.Rendering;
 using Hedra.Sound;

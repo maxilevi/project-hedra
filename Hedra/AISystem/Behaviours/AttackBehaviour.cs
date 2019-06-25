@@ -1,4 +1,5 @@
 using System.Security.Cryptography;
+using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;

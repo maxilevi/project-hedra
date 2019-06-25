@@ -7,6 +7,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.EntitySystem;
+using Hedra.Localization;
 using Hedra.Rendering.Particles;
 using Hedra.WorldObjects;
 using OpenTK;

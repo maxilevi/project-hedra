@@ -23,6 +23,7 @@ using Hedra.Engine.Networking;
 using Hedra.Engine.Player;
 using Hedra.Engine.Steamworks;
 using Hedra.Game;
+using Hedra.Localization;
 
 namespace Hedra.Engine.Rendering.UI
 {

@@ -3,6 +3,8 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
+using Hedra.Localization;
+using Hedra.Rendering;
 using Hedra.WeaponSystem;
 using OpenTK;
 

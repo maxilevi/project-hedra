@@ -1,6 +1,7 @@
 using Hedra.Engine.Management;
 using Hedra.AISystem;
 using Hedra.AISystem.Behaviours;
+using Hedra.Core;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.EntitySystem;

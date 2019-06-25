@@ -13,6 +13,8 @@ using Hedra.Engine.PlantSystem.Harvestables;
 using Hedra.Engine.Player;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.EntitySystem;
+using Hedra.Items;
+using Hedra.Localization;
 using Hedra.Rendering;
 using OpenTK;
 

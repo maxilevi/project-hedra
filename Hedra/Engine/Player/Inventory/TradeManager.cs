@@ -6,6 +6,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Sound;
+using Hedra.Localization;
 using Hedra.Sound;
 
 namespace Hedra.Engine.Player.Inventory

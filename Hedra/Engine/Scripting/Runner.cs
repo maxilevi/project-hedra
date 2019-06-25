@@ -1,4 +1,6 @@
+using System;
 using Hedra.Core;
+using Hedra.Engine.IO;
 using Microsoft.Scripting.Hosting;
 
 namespace Hedra.Engine.Scripting
@@ -16,18 +18,36 @@ namespace Hedra.Engine.Scripting
 
         public dynamic GetFunction(string Library, string Function)
         {
-            var scope = DoRun(ParseLibraryName(Library));
-            return scope.ContainsVariable(Function) ? scope.GetVariable(Function) : null;
-        }
-        
-        public T GetConstant<T>(string Library, string Variable)
-        {
-            return (T) DoRun(ParseLibraryName(Library)).GetVariable(Variable);
+            try
+            {
+                var scope = DoRun(ParseLibraryName(Library));
+                return scope.ContainsVariable(Function) ? scope.GetVariable(Function) : null;
+            }
+            catch (Exception e)
+            {
+                ReportFailure($"{Library}::{Function}", e);
+            }
+
+            return null;
         }
 
         public ScriptScope GetScript(string Library)
         {
-            return DoRun(ParseLibraryName(Library));
+            try
+            {
+                return DoRun(ParseLibraryName(Library));
+            }
+            catch (Exception e)
+            {
+                ReportFailure(Library, e);
+            }
+
+            return null;
+        }
+
+        protected static void ReportFailure(string Name, Exception Exception)
+        {
+            Log.WriteLine($"INTERPRETER PANIC at '{Name}':{Environment.NewLine}{Environment.NewLine}{Exception}");
         }
 
         private string ParseLibraryName(string Library)

@@ -19,6 +19,8 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.EntitySystem;
+using Hedra.Localization;
+using Hedra.Rendering;
 using Hedra.WeaponSystem;
 using Hedra.WorldObjects;
 using OpenTK;

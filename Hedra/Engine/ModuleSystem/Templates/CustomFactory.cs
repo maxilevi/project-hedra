@@ -4,12 +4,14 @@ using System.Linq;
 using Hedra.AISystem;
 using Hedra.Core;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem.ModelHandlers;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.SkillSystem;
 using Hedra.EntitySystem;
+using Hedra.Items;
 
 namespace Hedra.Engine.ModuleSystem.Templates
 {
@@ -41,7 +43,7 @@ namespace Hedra.Engine.ModuleSystem.Templates
         {
             Mob.Model = new QuadrupedModel(Mob, Model);
             Mob.MaxHealth = MaxHealth;
-            Mob.AttackDamage = AttackDamage;
+            Mob.AttackDamage = AttackDamage * Balancer.MobDamageMultiplier;
             Mob.AttackCooldown = AttackCooldown;
             Mob.Speed = Speed;
             Mob.Level = Level;

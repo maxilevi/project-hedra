@@ -3,6 +3,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
+using Hedra.Localization;
 using OpenTK;
 
 namespace Hedra.Engine.WorldBuilding

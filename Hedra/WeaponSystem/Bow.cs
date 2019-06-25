@@ -19,6 +19,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
+using Hedra.Items;
 using Hedra.Rendering;
 using Hedra.Sound;
 using Hedra.WorldObjects;

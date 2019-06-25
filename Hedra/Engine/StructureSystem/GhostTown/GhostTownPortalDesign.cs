@@ -6,6 +6,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
+using Hedra.Localization;
 using Hedra.Rendering;
 using OpenTK;
 

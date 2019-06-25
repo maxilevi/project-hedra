@@ -7,6 +7,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player.Inventory;
+using Hedra.Items;
 using HedraTests.ItemSystem;
 using NUnit.Framework;
 

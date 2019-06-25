@@ -5,6 +5,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
+using Hedra.Localization;
 
 namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 {

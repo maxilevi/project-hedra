@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using Hedra.Engine.Game;
+using Hedra.Engine.Localization;
 
-namespace Hedra.Engine.Localization
+namespace Hedra.Localization
 {
     public static class Translations
     {

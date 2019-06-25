@@ -14,6 +14,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.WorldBuilding;
+using Hedra.Localization;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.Overworld

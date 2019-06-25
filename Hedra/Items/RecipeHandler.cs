@@ -2,8 +2,9 @@ using System.Drawing;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
+using Hedra.Localization;
 
-namespace Hedra.ItemHandlers
+namespace Hedra.Items
 {
     public class RecipeHandler : ItemHandler
     {

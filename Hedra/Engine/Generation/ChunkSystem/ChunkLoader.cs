@@ -19,7 +19,7 @@ using Hedra.Engine.Player;
 using OpenTK;
 using Hedra.Engine.IO;
 using Hedra.Game;
-using Timer = Hedra.Engine.Management.Timer;
+using Timer = Hedra.Core.Timer;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {

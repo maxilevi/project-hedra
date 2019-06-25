@@ -5,6 +5,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PlantSystem.Harvestables;
 using Hedra.Engine.Rendering;
+using Hedra.Items;
 using Hedra.Rendering;
 
 namespace Hedra.Engine.PlantSystem

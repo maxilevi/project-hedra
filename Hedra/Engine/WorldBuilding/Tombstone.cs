@@ -2,6 +2,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
+using Hedra.Localization;
 using Hedra.Sound;
 using OpenTK;
 using OpenTK.Input;

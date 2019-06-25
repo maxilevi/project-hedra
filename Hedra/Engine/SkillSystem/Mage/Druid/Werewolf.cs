@@ -3,6 +3,7 @@ using Hedra.Components.Effects;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
+using Hedra.Localization;
 using Hedra.WeaponSystem;
 
 namespace Hedra.Engine.SkillSystem.Mage.Druid

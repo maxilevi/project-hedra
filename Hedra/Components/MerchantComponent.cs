@@ -14,6 +14,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.Inventory;
+using Hedra.Items;
 
 namespace Hedra.Components
 {

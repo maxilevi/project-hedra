@@ -3,8 +3,9 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Scripting;
+using Hedra.Rendering;
 
-namespace Hedra.ItemHandlers
+namespace Hedra.Items
 {
     public class PotionHandler : ItemHandler
     {
