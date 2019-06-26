@@ -16,7 +16,8 @@ namespace Hedra.Engine.Game
 {
     public static class GameLoader
     {
-
+        private static bool _loadedArchitectureFiles;
+        
         public static string AppData =>
             $"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}/Project Hedra/".Replace("\\", "/");
         
@@ -89,13 +90,16 @@ namespace Hedra.Engine.Game
             }
         }
 
-        public static void LoadArchitectureSpecificFiles(string AppPath)
+        public static void LoadArchitectureSpecificFilesIfNecessary(string Path)
         {
-            string DLLPath = null;
-            if (IntPtr.Size == 8) DLLPath = AppPath + "x64/";
-            if (IntPtr.Size == 4) DLLPath = AppPath + "x86/";
-
-            Environment.SetEnvironmentVariable("PATH", Environment.GetEnvironmentVariable("PATH") + ";" + DLLPath);
+            if(_loadedArchitectureFiles) return;
+            
+            string dllPath = null;
+            if (IntPtr.Size == 8) dllPath = Path + "x64/";
+            if (IntPtr.Size == 4) dllPath = Path + "x86/";
+            Environment.SetEnvironmentVariable("PATH", Environment.GetEnvironmentVariable("PATH") + ";" + dllPath);
+            
+            _loadedArchitectureFiles = true;
         }
 
         public static void CreateCharacterFolders(string AppData, string AppPath)

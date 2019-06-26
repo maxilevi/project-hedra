@@ -22,6 +22,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Game;
 using Hedra.Localization;
+using Hedra.Rendering;
 using OpenTK;
 using OpenTK.Input;
 

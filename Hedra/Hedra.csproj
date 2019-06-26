@@ -1093,7 +1093,6 @@
     <Compile Include="Engine\Generation\Noise.cs" />
     <Compile Include="BiomeSystem\RegionColor.cs" />
     <Compile Include="Engine\Generation\TreeGenerator.cs" />
-    <Compile Include="Engine\ItemSystem\ItemPool.cs" />
     <Compile Include="Engine\Management\AssetManager.cs" />
     <Compile Include="Engine\Management\RoutineManager.cs" />
     <Compile Include="Engine\Management\DrawManager.cs" />
@@ -1263,7 +1262,6 @@
     <Compile Include="Engine\Rendering\Effects\IEffect.cs" />
     <Compile Include="Engine\Rendering\Effects\Filter.cs" />
     <Compile Include="Engine\Rendering\Effects\UnderWaterFilter.cs" />
-    <Compile Include="Engine\Rendering\ObjectMesh.cs" />
     <Compile Include="Engine\Rendering\ObjectMeshBuffer.cs" />
     <Compile Include="Engine\Rendering\DataContainer.cs" />
     <Compile Include="Engine\Rendering\GIF.cs" />
@@ -1281,7 +1279,9 @@
     <Compile Include="EntitySystem\IEntity.cs" />
     <Compile Include="EntitySystem\IHumanoid.cs" />
     <Compile Include="EntitySystem\IPhysicsComponent.cs" />
+    <Compile Include="Items\InventoryExtensions.cs" />
     <Compile Include="Items\ItemHandler.cs" />
+    <Compile Include="Items\ItemPool.cs" />
     <Compile Include="Items\ItemType.cs" />
     <Compile Include="Items\PotionHandler.cs" />
     <Compile Include="Items\RecipeHandler.cs" />
@@ -1292,6 +1292,7 @@
     <Compile Include="ModelHandlers\ModelFactory.cs" />
     <Compile Include="ModelHandlers\ModelHandler.cs" />
     <Compile Include="Rendering\Colors.cs" />
+    <Compile Include="Rendering\ObjectMesh.cs" />
     <Compile Include="Rendering\Particles\ParticleShape.cs" />
     <Compile Include="Rendering\PointLight.cs" />
     <Compile Include="Rendering\VertexData.cs" />
@@ -8375,6 +8376,10 @@
       <Link>Assets\Chr\WarriorPrayerStance.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Animations\WarriorRetrieveFish.dae">
+      <Link>Assets\Chr\WarriorRetrieveFish.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Animations\WerewolfIdle.dae">
       <Link>Assets\Chr\WerewolfIdle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -8613,6 +8618,30 @@
     </Content>
     <Content Include="..\project-hedra-assets\Environment\Misc\WoodenStick0_Lod8.ply">
       <Link>Assets\Env\Plants\WoodenStick0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Mobs\CookedFish.ply">
+      <Link>Assets\Items\Foods\CookedFish.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Mobs\CookedSalmon.ply">
+      <Link>Assets\Items\Foods\CookedSalmon.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Mobs\CookedTrout.ply">
+      <Link>Assets\Items\Foods\CookedTrout.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Mobs\RawFish.ply">
+      <Link>Assets\Items\Foods\RawFish.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Mobs\RawSalmon.ply">
+      <Link>Assets\Items\Foods\RawSalmon.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Mobs\RawTrout.ply">
+      <Link>Assets\Items\Foods\RawTrout.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Ammo\Kunai.ply">
@@ -13946,7 +13975,16 @@
     <Content Include="Modules\Items\Foods\Carrot.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Foods\CookedFish.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Foods\CookedMeat.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Foods\CookedSalmon.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Foods\CookedTrout.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Foods\Corn.json">
@@ -13976,7 +14014,16 @@
     <Content Include="Modules\Items\Foods\PumpkinPie.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Foods\RawFish.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Foods\RawMeat.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Foods\RawSalmon.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Foods\RawTrout.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Foods\Tomato.json">
@@ -14063,6 +14110,9 @@
     <Content Include="Modules\Items\Recipes\BreadRecipe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Recipes\CookedFishRecipe.json" />
+    <Content Include="Modules\Items\Recipes\CookedSalmonRecipe.json" />
+    <Content Include="Modules\Items\Recipes\CookedTroutRecipe.json" />
     <Content Include="Modules\Items\Recipes\FishingRodRecipe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -1,0 +1,47 @@
+{
+  "Name": "RawTrout",
+  "DisplayName": "Raw trout",
+  "Tier": "Misc",
+  "Description": "...",
+  "Attributes": [
+    {
+      "Name": "Amount",
+      "Value": 1
+    },
+    {
+      "Name": "Saturation",
+      "Value": 60
+    },
+    {
+      "Name": "Price",
+      "Value": 16,
+      "Hidden": true
+    },
+    {
+      "Name": "IsFood",
+      "Value": true,
+      "Hidden": true
+    },
+    {
+      "Name": "EatTime",
+      "Value": 5.0,
+      "Hidden": true
+    },
+    {
+      "Name": "EatEffects",
+      "Value": [
+        {
+          "Name": "Toxic",
+          "Chance": 40.0,
+          "Damage": 80.0,
+          "Duration": 5.0
+        }
+      ],
+      "Display": "Bullets"
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Foods/RawTrout.ply"
+  }
+}

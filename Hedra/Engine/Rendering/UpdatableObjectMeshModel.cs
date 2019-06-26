@@ -1,5 +1,6 @@
 using Hedra.Engine.EntitySystem;
 using Hedra.EntitySystem;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering

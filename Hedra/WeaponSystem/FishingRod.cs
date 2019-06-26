@@ -12,8 +12,8 @@ namespace Hedra.WeaponSystem
     {
         private readonly Line3D _line;
         private static readonly VertexData _hook;
-        private readonly Dictionary<string, object> _state;
         private static readonly Script _script;
+        private Dictionary<string, object> _state;
 
         static FishingRod()
         {
@@ -46,14 +46,19 @@ namespace Hedra.WeaponSystem
 
         protected override string[] SecondaryAnimationsNames => new[]
         {
-            "Assets/Chr/WarriorFish.dae"
+            "Assets/Chr/WarriorRetrieveFish.dae"
         };
+
+        private Dictionary<string, object> CreateState()
+        {
+            return _state = new Dictionary<string, object>();
+        }
 
         protected override void OnPrimaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             base.OnPrimaryAttackEvent(Type, Options);
             if(Type == AttackEventType.Mid)
-                _script.Get("start_fishing")(Owner, _state, _hook);
+                _script.Get("start_fishing")(Owner, CreateState(), _hook);
         }
 
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
@@ -65,7 +70,11 @@ namespace Hedra.WeaponSystem
 
         public override void Attack2(IHumanoid Human, AttackOptions Options)
         {
-            base.Attack2(Human, Options);
+            if (Human.IsFishing)
+            {
+                _script.Get("start_retrieval")(Owner, _state);
+                base.Attack2(Human, Options);
+            }
         }
 
         public override void Attack1(IHumanoid Human, AttackOptions Options)

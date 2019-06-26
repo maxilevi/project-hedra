@@ -4,19 +4,16 @@
  * Time: 09:08 p.m.
  *
  */
+
 using System;
-using System.Diagnostics;
 using Hedra.Core;
-using Hedra.Engine.ComplexMath;
-using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
-using OpenTK;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.Rendering.Animation.ColladaParser;
-using Hedra.Rendering;
+using Hedra.Engine.Rendering;
+using OpenTK;
 
-namespace Hedra.Engine.Rendering
+namespace Hedra.Rendering
 {
     public class ObjectMesh : IRenderable, IDisposable, ICullableModel, IUpdatable
     {

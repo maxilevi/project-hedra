@@ -4,6 +4,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.WorldBuilding
 {

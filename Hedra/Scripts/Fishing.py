@@ -1,31 +1,55 @@
 import Core
 import math
 import VisualEffects
+import clr
 from OpenTK import Vector3, Vector4
+from System import Array, Single, ArgumentOutOfRangeException
 from Hedra import World
 from Hedra.Core import Time, Timer
 from Hedra.WeaponSystem import FishingRod
 from Hedra.WorldObjects import Projectile, LandType
-from Hedra.Rendering import Colors
+from Hedra.Rendering import Colors, ObjectMesh
 from Hedra.Rendering.Particles import ParticleShape
-from Hedra.Items import ItemType
-from System import Array, Single
+from Hedra.Items import ItemType, ItemPool, InventoryExtensions
 from Hedra.EntitySystem import EntityExtensions
-import clr
+
 clr.ImportExtensions(EntityExtensions)
+clr.ImportExtensions(InventoryExtensions)
 
 FISHING_DISTANCE = 24
-FISHING_CHANCE = 600#1600
+FISHING_CHANCE = 2600
 FISHING_STRING_DETAIL = 7
 FISHING_CATCH_TIME = 2.5
 FISHING_ROD_COOLDOWN = 2
 FISHING_HOOK_SCALE = 0.5
-FISHING_HOOK_SPEED = 2
+FISHING_HOOK_SPEED = 1
 FISHING_HOOK_LIFETIME = 4
+ROD_LINE_WIDTH = 2
+PULL_SPEED = 1.0
+BAIT_ITEM_NAME = 'Bait'
+RAW_TROUT_NAME = 'RawTrout'
+RAW_SALMON_NAME = 'RawSalmon'
+RAW_FISH_NAME = 'RawFish'
+FISH_CHANCES = [
+    (RAW_SALMON_NAME, 0.15),
+    (RAW_TROUT_NAME, 0.3),
+    (RAW_FISH_NAME, 1.0)
+]
+
+def assert_constants():
+    for name, val in FISH_CHANCES + [(BAIT_ITEM_NAME, 0.0)]:
+        assert ItemPool.Exists(name)
+
+def get_random_fish():
+    roll = Core.rand_float()
+    for fish_name, chance in FISH_CHANCES:
+        if roll < chance:
+            return ItemPool.Grab(fish_name)
+    raise ArgumentOutOfRangeException('Failed to find a suitable fish')
+
 
 def get_bait(human):
-    name = ItemType.Bait.ToString()
-    return human.Inventory.Search(lambda item: item.Name == name)
+    return human.Inventory.Search(lambda item: item.Name == BAIT_ITEM_NAME)
 
 def has_bait(human):
     return get_bait(human) is not None
@@ -58,36 +82,33 @@ def on_land(human, state, land_type):
     else:
         disable_fishing(human, state)
 
-def create_hook(human, hook_model, state):
-    hook = Projectile(human, human.Model.LeftWeaponPosition, hook_model)
-    hook.Mesh.Scale = Vector3.One * Single(FISHING_HOOK_SCALE)
-    hook.Lifetime = FISHING_HOOK_LIFETIME
-    hook.Propulsion = human.LookingDirection * FISHING_HOOK_SPEED
-    hook.LandEventHandler += lambda _, land_type: on_land(human, state, land_type)
-    hook.PlaySound = False
-    hook.ShowParticlesOnDestroy = False
-    hook.CollideWithWater = True
-    hook.ManuallyDispose = True
-    World.AddWorldObject(hook)
-    return hook
-
 def disable_fishing(human, state):
     human.IsFishing = False
     human.IsSitting = False
     human.LeftWeapon.InAttackStance = False
     human.Model.Reset()
     VisualEffects.remove_shiver_effect(human)
+    state['is_retrieving'] = False
+    state['pull_back'] = False
+    dispose(state)
+
+def dispose(state):
     state['fishing_hook'].Dispose()
+    if 'fish_model' in state:
+        state['fish_model'].Dispose()
 
 def setup_fishing(human, state, hook_model):
     human.IsFishing = True
     human.LeftWeapon.SecondaryAttackEnabled = True
     human.Movement.CaptureMovement = True
+    state['fish'] = None
     state['fishing_position'] = human.Position
     state['fishing_hook'] = create_hook(human, hook_model, state)
     state['line_curvature'] = -1
     state['on_water'] = False
     state['has_fish'] = False
+    state['is_retrieving'] = False
+    state['pull_back'] = False
     state['fish_timer'] = Timer(FISHING_CATCH_TIME)
 
 def start_fishing(human, state, hook_model):
@@ -122,20 +143,6 @@ def get_water_color(position):
         return under_chunk.Biome.Colors.WaterColor
     return Colors.DeepSkyBlue
 
-def has_fish_effect(position):
-    World.Particles.VariateUniformly = True
-    World.Particles.Color = Vector4(get_water_color(position).Xyz, .5)
-    World.Particles.Position = position - Vector3.UnitY * 2
-    World.Particles.Scale = Vector3.One * Single(.5)
-    World.Particles.ScaleErrorMargin = Vector3(.25, .25, .25)
-    World.Particles.Direction = Vector3.UnitY * Single(.25)
-    World.Particles.ParticleLifetime = 1
-    World.Particles.GravityEffect = .05
-    World.Particles.PositionErrorMargin = Vector3(5, 1, 5)
-    World.Particles.Shape = ParticleShape.Sphere
-    World.Particles.Emit()
-
-
 def get_rod_rotation(has_fish):
     rot = Vector3(110, -45, 0)
     if has_fish:
@@ -159,7 +166,9 @@ def calculate_line(rod, hook, state):
     if state['has_fish']:
         target_curvature = 0.0
         interpolation_speed = 5.0
-
+    if state['pull_back']:
+        target_curvature = -1.0
+        interpolation_speed = 5.0
     state['line_curvature'] = Core.lerp(state['line_curvature'], target_curvature, Time.DeltaTime * interpolation_speed)
     return smooth_curve(rod_tip(rod), hook.Mesh.TransformPoint(Vector3.Zero), state['line_curvature'])
 
@@ -169,19 +178,27 @@ def check_for_fish(human, state):
     if not state['has_fish'] and not Core.is_paused() and Core.rand(0, FISHING_CHANCE) == 1:
         VisualEffects.add_shiver_effect(human, 0.5)
         state['has_fish'] = True
+        consume_bait(human)
         timer.AlertTime = FISHING_CATCH_TIME
         timer.Reset()
 
     if state['has_fish'] and timer.Tick():
         VisualEffects.remove_shiver_effect(human)
         state['has_fish'] = False
-        consume_bait(human)
-    
+
+def end_pull(human, state):
+    disable_fishing(human, state)
+    if state['fish']:
+        human.AddOrDropItem(state['fish'])
+        human.ShowText(human.Position, "+ 1 " + state['fish'].DisplayName.upper(), Colors.ToColorStruct(Colors.Gray), 14)
+
+
 def update_rod(human, rod, rod_line, state):
 
-    rod_line.Enabled = human.IsFishing
+    is_retrieving = ('is_retrieving' in state and state['is_retrieving'])
+    rod_line.Enabled = human.IsFishing or is_retrieving
     
-    if human.IsFishing:
+    if rod_line.Enabled:
         hook = state['fishing_hook']
         
         if state['on_water']:
@@ -198,16 +215,69 @@ def update_rod(human, rod, rod_line, state):
             Array[Vector3](line_vertices),
             Array[Vector4]([Vector4.One] * len(line_vertices))
         )
-        rod_line.Width = 2.0
+        rod_line.Width = ROD_LINE_WIDTH
         
         check_for_fish(human, state)
+        if state['pull_back']:
+            update_pull(human, state, hook)
 
-def do_retrieve_fish(human, state):
-    pass
+def update_pull(human, state, hook):
+    update_pull_hook(human, state, hook)
+    update_fish_model(hook, state)
+    if state['pull_time'] >= 1.0:
+        end_pull(human, state)
+
+def update_pull_hook(human, state, hook):
+    state['pull_time'] += Time.DeltaTime * PULL_SPEED
+    start, end = state['pull_position'], human.Model.LeftWeaponPosition
+    middle = (start + end) * Single(0.5) + Vector3.UnitY * 36
+    hook.Position = curve(start, middle, end, state['pull_time'])
+
+def update_fish_model(hook, state):
+    if 'fish_model' in state:
+        hook.Mesh.Enabled = False
+        fish_model = state['fish_model']
+        fish_model.Position = hook.Mesh.TransformPoint(Vector3.Zero)
+
+def start_retrieval(human, state):
+    human.IsFishing = False
+    human.IsSitting = False
+    human.LeftWeapon.InAttackStance = False
+    state['is_retrieving'] = True
 
 def retrieve_fish(human, state):
+    state['pull_time'] = 0
+    state['pull_back'] = True
+    state['pull_position'] = state['fishing_hook'].Position
     if state['has_fish']:
-        do_retrieve_fish(human, state)
-    disable_fishing(human, state)
+        state['fish'] = get_random_fish()
+        state['fish_model'] = ObjectMesh.FromVertexData(state['fish'].Model.Clone().Scale(Vector3.One * 2))
 
-    
+def has_fish_effect(position):
+    World.Particles.VariateUniformly = True
+    World.Particles.Color = Vector4(get_water_color(position).Xyz, .5)
+    World.Particles.Position = position - Vector3.UnitY * 2
+    World.Particles.Scale = Vector3.One * Single(.5)
+    World.Particles.ScaleErrorMargin = Vector3(.25, .25, .25)
+    World.Particles.Direction = Vector3.UnitY * Single(.25)
+    World.Particles.ParticleLifetime = 1
+    World.Particles.GravityEffect = .05
+    World.Particles.PositionErrorMargin = Vector3(5, 1, 5)
+    World.Particles.Shape = ParticleShape.Sphere
+    World.Particles.Emit()
+
+def create_hook(human, hook_model, state):
+    hook = Projectile(human, human.Model.LeftWeaponPosition, hook_model)
+    hook.Mesh.Scale = Vector3.One * Single(FISHING_HOOK_SCALE)
+    hook.Lifetime = FISHING_HOOK_LIFETIME
+    hook.Propulsion = human.LookingDirection * FISHING_HOOK_SPEED
+    hook.LandEventHandler += lambda _, land_type: on_land(human, state, land_type)
+    hook.PlaySound = False
+    hook.ShowParticlesOnDestroy = False
+    hook.CollideWithWater = True
+    hook.ManuallyDispose = True
+    World.AddWorldObject(hook)
+    return hook
+
+
+assert_constants()

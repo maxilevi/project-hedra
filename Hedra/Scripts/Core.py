@@ -39,6 +39,9 @@ def lerp(a, b, t):
 def rand(start, end):
     return Utils.Rng.Next(start, end)
 
+def rand_float():
+    return float(Utils.Rng.NextDouble())
+
 def shuffle(songs):
     for i in reversed(xrange(0, len(songs))):
         j = rand(0, i)

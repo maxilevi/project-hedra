@@ -15,6 +15,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Components

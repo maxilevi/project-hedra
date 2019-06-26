@@ -8,6 +8,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.VillageSystem;
+using Hedra.Items;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenTK;

@@ -10,6 +10,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.AbilityTreeSystem;
+using Hedra.Items;
 using Newtonsoft.Json.Linq;
 using OpenTK;
 

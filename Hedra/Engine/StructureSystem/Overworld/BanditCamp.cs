@@ -14,6 +14,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Game;
+using Hedra.Items;
 using Hedra.Localization;
 using OpenTK;
 

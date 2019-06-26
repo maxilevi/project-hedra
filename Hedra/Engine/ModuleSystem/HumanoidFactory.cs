@@ -12,6 +12,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
+using Hedra.Items;
 using Hedra.WeaponSystem;
 
 namespace Hedra.Engine.ModuleSystem

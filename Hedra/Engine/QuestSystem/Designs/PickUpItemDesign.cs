@@ -3,6 +3,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player.QuestSystem.Views;
 using Hedra.Engine.QuestSystem.Designs.Auxiliaries;
+using Hedra.Items;
 using Hedra.Localization;
 
 namespace Hedra.Engine.QuestSystem.Designs

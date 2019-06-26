@@ -18,6 +18,7 @@ using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Items;
 
 namespace Hedra.Engine.Management
 {

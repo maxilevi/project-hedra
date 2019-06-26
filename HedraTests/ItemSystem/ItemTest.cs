@@ -1,5 +1,6 @@
 ﻿using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
+using Hedra.Items;
 using NUnit.Framework;
 
 namespace HedraTests.ItemSystem

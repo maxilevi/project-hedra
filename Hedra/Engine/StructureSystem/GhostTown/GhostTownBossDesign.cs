@@ -8,6 +8,7 @@ using Hedra.Engine.EntitySystem.BossSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
+using Hedra.Items;
 using Hedra.Rendering;
 using OpenTK;
 

@@ -10,10 +10,10 @@
 using System;
 using System.Linq;
 using Hedra.Core;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ItemSystem.Templates;
-using Hedra.Items;
 
-namespace Hedra.Engine.ItemSystem
+namespace Hedra.Items
 {
     /// <summary>
     /// Description of ItemPool.

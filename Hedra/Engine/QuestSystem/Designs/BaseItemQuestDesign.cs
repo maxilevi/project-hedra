@@ -4,6 +4,7 @@ using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player.QuestSystem.Views;
+using Hedra.Items;
 using Hedra.Rendering;
 using Newtonsoft.Json.Linq;
 using OpenTK;

@@ -13,6 +13,7 @@ using OpenTK;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.EntitySystem;
+using Hedra.Items;
 
 namespace Hedra.Engine.EntitySystem
 {

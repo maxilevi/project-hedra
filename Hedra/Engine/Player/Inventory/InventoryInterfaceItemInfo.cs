@@ -12,6 +12,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Game;
 using Hedra.Localization;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.Player.Inventory

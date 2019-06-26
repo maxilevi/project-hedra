@@ -1,6 +1,7 @@
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
+using Hedra.Items;
 
 namespace Hedra.Engine.QuestSystem
 {

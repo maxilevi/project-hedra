@@ -51,6 +51,7 @@ namespace HedraTests
             GUIText.Provider = new SimpleTextProviderMock();
             ClassLoader.LoadModules(GameLoader.AppPath);
             Program.GameWindow = new SimpleHedraWindowMock();
+            GameLoader.LoadArchitectureSpecificFilesIfNecessary(GameLoader.AppPath);
             if(!_translationsLoaded) Translations.Load();
             _translationsLoaded = true;
             GameSettings.Width = 1920;

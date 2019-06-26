@@ -76,7 +76,7 @@ namespace Hedra.Engine
 #if DEBUG
             IsDebug = true;
 #endif
-            GameLoader.LoadArchitectureSpecificFiles(GameLoader.AppPath);
+            GameLoader.LoadArchitectureSpecificFilesIfNecessary(GameLoader.AppPath);
             Steam.Instance.Load();
         }
 

@@ -1,0 +1,35 @@
+{
+  "Name": "CookedFish",
+  "DisplayName": "Cooked fish",
+  "Tier": "Misc",
+  "Description": "...",
+  "Attributes": [
+    {
+      "Name": "Amount",
+      "Value": 1
+    },
+    {
+      "Name": "Saturation",
+      "Value": 120
+    },
+    {
+      "Name": "Price",
+      "Value": 40,
+      "Hidden": true
+    },
+    {
+      "Name": "IsFood",
+      "Value": true,
+      "Hidden": true
+    },
+    {
+      "Name": "EatTime",
+      "Value": 5.0,
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Foods/CookedFish.ply"
+  }
+}

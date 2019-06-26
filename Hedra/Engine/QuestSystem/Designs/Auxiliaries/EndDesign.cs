@@ -5,6 +5,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
+using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Sound;
 using SoundPlayer = Hedra.Sound.SoundPlayer;

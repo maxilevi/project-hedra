@@ -24,6 +24,7 @@ using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.SkillSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
+using Hedra.Items;
 using Hedra.WeaponSystem;
 using OpenTK;
 

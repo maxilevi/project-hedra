@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using Hedra.Engine.ItemSystem.ArmorSystem;
 using Hedra.Engine.ItemSystem.Templates;
+using Hedra.Items;
 using Hedra.Rendering;
 using Hedra.WeaponSystem;
 

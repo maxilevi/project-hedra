@@ -5,6 +5,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ItemSystem.ArmorSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.SkillSystem;
+using Hedra.Items;
 using Hedra.WeaponSystem;
 using OpenTK;
 
