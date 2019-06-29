@@ -70,6 +70,11 @@ namespace HedraTests.Player
         public float AttackResistance { get; set; }
         public float ManaRegenFactor { get; set; }
         public int Gold { get; set; }
+        public void SetGold(int Amount, bool Silent = false)
+        {
+            throw new NotImplementedException();
+        }
+
         public float DamageEquation { get; }
         public float UnRandomizedDamageEquation { get; }
         public Vector3 LookingDirection { get; }
@@ -282,6 +287,11 @@ namespace HedraTests.Player
         public MovementManager Movement { get; }
         public ClassDesign Class { get; set; }
         public float XP { get; set; }
+        public void SetXP(float Amount, bool Silent)
+        {
+            throw new NotImplementedException();
+        }
+
         public float MaxXP { get; }
 
         BaseUpdatableModel IEntity.Model

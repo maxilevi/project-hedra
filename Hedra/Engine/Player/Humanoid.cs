@@ -91,7 +91,6 @@ namespace Hedra.Engine.Player
         public virtual Vector3 LookingDirection => Orientation;
         public MovementManager Movement { get; protected set; }
         public HandLamp HandLamp { get; }
-        public virtual int Gold { get; set; }
         private float _mana;
         private float _xp;
         private ClassDesign _class;
@@ -431,21 +430,26 @@ namespace Hedra.Engine.Player
         public float XP
         {
             get => _xp;
-            set
+            set => SetXP(value, false);
+        }
+
+        protected void SetXP(float Amount, bool Silent)
+        {
+            if (Level == MaxLevel) return;
+            _xp = Amount;
+            if (_xp < MaxXP) return;
+
+            _xp = Amount - MaxXP;
+            if (++Level == MaxLevel)
             {
-                if (Level == MaxLevel) return;
-                _xp = value;
-                if (_xp < MaxXP) return;
+                _xp = 0;
+            }
 
-                _xp = value - MaxXP;
-                if (++Level == MaxLevel)
-                {
-                    _xp = 0;
-                }
+            Health = MaxHealth;
+            Mana = MaxMana;
 
-                Health = MaxHealth;
-                Mana = MaxMana;
-
+            if (!Silent)
+            {
                 var label1 = new TextBillboard(4.0f, Translations.Get("level_up"), Color.Violet,
                     FontCache.GetBold(48),
                     () => this.Position)
@@ -454,11 +458,13 @@ namespace Hedra.Engine.Player
                     Vanish = true,
                 };
                 SoundPlayer.PlaySound(SoundType.NotificationSound, Position, false, 1, .65f);
-
-                /* So it keeps looping */
-                if (_xp >= MaxXP) XP = _xp;
             }
+
+            /* So it keeps looping */
+            if (_xp >= MaxXP) XP = _xp;
         }
+        
+        public virtual int Gold { get; set; }
 
         public float Stamina
         {

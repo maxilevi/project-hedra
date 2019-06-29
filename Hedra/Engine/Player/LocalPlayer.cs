@@ -255,27 +255,28 @@ namespace Hedra.Engine.Player
 
         public override int Gold
         {
-            get
+            get => Inventory.Search(I => I.IsGold)?.GetAttribute<int>(CommonAttributes.Amount) ?? 0;
+            set => SetGold(value, false);
+        }
+
+        private void SetGold(int Amount, bool Silent)
+        {
+            if (Amount < 0) return;
+            if(!Silent)
+                this.ShowText(Model.HeadPosition, $"+ {Amount - Gold} {Translations.Get("quest_gold")}", Color.Gold, 18);
+            var currentGold = Inventory.Search(I => I.IsGold);
+            if (currentGold == null)
             {
-                return Inventory.Search(I => I.IsGold)?.GetAttribute<int>(CommonAttributes.Amount) ?? 0;
+                var gold = ItemPool.Grab(ItemType.Gold);
+                gold.SetAttribute(CommonAttributes.Amount, Amount);
+                Inventory.AddItem(gold);
             }
-            set
+            else
             {
-                if (value < 0) return;
-                this.ShowText(Model.HeadPosition, $"+ {value - Gold} {Translations.Get("quest_gold")}", Color.Gold, 18);
-                var currentGold = Inventory.Search(I => I.IsGold);
-                if (currentGold == null)
-                {
-                    var gold = ItemPool.Grab(ItemType.Gold);
-                    gold.SetAttribute(CommonAttributes.Amount, value);
-                    Inventory.AddItem(gold);
-                }
-                else
-                {
-                    currentGold.SetAttribute(CommonAttributes.Amount, value);
-                }
+                currentGold.SetAttribute(CommonAttributes.Amount, Amount);
             }
         }
+
         public override Item MainWeapon => Inventory.MainWeapon;
 
         public void EatFood()
@@ -367,8 +368,7 @@ namespace Hedra.Engine.Player
         public override bool IsSailing => Boat.Enabled;
 
         public bool InterfaceOpened => InventoryInterface.Show || Trade.Show 
-                                                               || CraftingInterface.Show 
-                                                               || AbilityTree.Show 
+                                       || AbilityTree.Show 
                                                                || QuestInterface.Show;
         public void HideInterfaces()
         {
@@ -408,8 +408,8 @@ namespace Hedra.Engine.Player
 
             var xpDiff = (int)(XP * .15f);
             var goldDiff = (int)(Gold * .1f);
-            XP = Math.Max(XP - xpDiff, 0);
-            Gold = (int)(Gold - goldDiff);
+            SetXP(Math.Max(XP - xpDiff, 0), true);
+            SetGold(Gold - goldDiff, true);
             if (xpDiff > 0)
             {
                 var xp = new TextBillboard(6f, $"- {xpDiff} XP", Color.Purple,
