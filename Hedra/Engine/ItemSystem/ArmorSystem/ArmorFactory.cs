@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
+using Hedra.Items;
 
 namespace Hedra.Engine.ItemSystem.ArmorSystem
 {

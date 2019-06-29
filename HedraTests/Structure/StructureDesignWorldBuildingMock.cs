@@ -7,6 +7,7 @@ using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.Player;
 using Hedra.Engine.WorldBuilding;
+using Hedra.Items;
 using OpenTK;
 
 namespace HedraTests.Structure

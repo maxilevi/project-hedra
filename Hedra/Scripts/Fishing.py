@@ -289,6 +289,4 @@ def create_hook(human, hook_model, state):
     World.AddWorldObject(hook)
     return hook
 
-class 
-
 assert_constants()

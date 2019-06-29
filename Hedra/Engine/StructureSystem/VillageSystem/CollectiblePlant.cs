@@ -5,6 +5,7 @@ using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
 using Hedra.EntitySystem;
+using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Sound;
 using OpenTK;

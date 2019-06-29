@@ -1,5 +1,6 @@
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.WorldBuilding;
+using Hedra.Items;
 using NUnit.Framework;
 using OpenTK;
 

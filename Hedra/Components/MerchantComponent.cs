@@ -9,11 +9,13 @@
 
 using System;
 using System.Collections.Generic;
+using Hedra.Core;
 using Hedra.Engine.Core;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.Inventory;
+using Hedra.Engine.Scripting;
 using Hedra.Items;
 
 namespace Hedra.Components
@@ -24,6 +26,7 @@ namespace Hedra.Components
     /// </summary>
     public class MerchantComponent : TradeComponent
     {
+        private static readonly Script Script = Interpreter.GetScript("Merchant.py");
         private readonly bool _isTravellingMerchant;
 
         public MerchantComponent(Humanoid Parent, bool TravellingMerchant) : base(Parent)
@@ -33,36 +36,10 @@ namespace Hedra.Components
 
         public override Dictionary<int, Item> BuildInventory()
         {
-            var rng = new Random(World.Seed + Unique.GenerateSeed(Parent.BlockPosition.Xz));
-            var berry = ItemPool.Grab(ItemType.Berry);
-            berry.SetAttribute(CommonAttributes.Amount, int.MaxValue);
-            var flask = ItemPool.Grab(ItemType.GlassFlask);
-            flask.SetAttribute(CommonAttributes.Amount, int.MaxValue);
-            var bowl = ItemPool.Grab(ItemType.WoodenBowl);
-            bowl.SetAttribute(CommonAttributes.Amount, int.MaxValue);
-            var stoneArrow = ItemPool.Grab(ItemType.StoneArrow);
-            stoneArrow.SetAttribute(CommonAttributes.Amount, int.MaxValue);
-            var recipes = new[]
-            {
-                ItemPool.Grab(ItemType.PumpkinPieRecipe),
-                ItemPool.Grab(ItemType.CookedMeatRecipe),
-                ItemPool.Grab(ItemType.HealthPotionRecipe),
-                ItemPool.Grab(ItemType.CornSoupRecipe),
-            };
-            var newItems = new Dictionary<int, Item>
-            {
-                {TradeInventory.MerchantSpaces - 1, berry},
-                {TradeInventory.MerchantSpaces - 2, flask},
-                {TradeInventory.MerchantSpaces - 3, bowl},
-                //{TradeInventory.MerchantSpaces - 4, rng.NextBool() ? stoneArrow : null},
-                {TradeInventory.MerchantSpaces - 5, null /*recipes[rng.Next(0, recipes.Length)]*/},
-            };
-            if (_isTravellingMerchant)
-            {
-                newItems.Add(0, ItemPool.Grab("HorseMount"));
-                newItems.Add(2, ItemPool.Grab(ItemType.Boat));
-            }
-            return newItems;
+            var rng = new Random(World.Seed + Unique.GenerateSeed(Parent.Position.Xz));
+            var dict = new Dictionary<int, Item>();
+            Script.Get("build_inventory")(dict, _isTravellingMerchant, TradeInventory.MerchantSpaces, rng);
+            return dict;
         }
     }
 }

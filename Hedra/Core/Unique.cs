@@ -1,7 +1,7 @@
 using System;
 using OpenTK;
 
-namespace Hedra.Engine.Core
+namespace Hedra.Core
 {
     public static class Unique
     {

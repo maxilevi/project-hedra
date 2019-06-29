@@ -1,6 +1,7 @@
 using System.Linq;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.ModuleSystem.Templates;
+using Hedra.Items;
 
 namespace Hedra.Engine.ItemSystem.Templates
 {    

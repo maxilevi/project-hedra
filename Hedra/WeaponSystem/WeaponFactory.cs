@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Scripting;
+using Hedra.Items;
 
 namespace Hedra.WeaponSystem
 {

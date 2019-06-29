@@ -8,6 +8,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Items;
 using OpenTK;
 using OpenTK.Platform.MacOS;
 

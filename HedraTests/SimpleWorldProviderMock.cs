@@ -17,6 +17,7 @@ using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
+using Hedra.Items;
 using OpenTK;
 
 namespace HedraTests

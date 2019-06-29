@@ -8,6 +8,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.StructureSystem.VillageSystem;
+using Hedra.Items;
 using Hedra.Rendering;
 using OpenTK;
 

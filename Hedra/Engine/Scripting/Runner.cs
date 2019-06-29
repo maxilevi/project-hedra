@@ -7,7 +7,6 @@ namespace Hedra.Engine.Scripting
 {
     public abstract class Runner
     {
-        protected string CoreLibrary = "Core.py";
         protected readonly ScriptEngine Engine;
 
         protected Runner(ScriptEngine Engine)
@@ -45,6 +44,8 @@ namespace Hedra.Engine.Scripting
             return null;
         }
 
+        public abstract void Prepare(string Library);
+        
         protected static void ReportFailure(string Name, Exception Exception)
         {
             Log.WriteLine($"INTERPRETER PANIC at '{Name}':{Environment.NewLine}{Environment.NewLine}{Exception}");

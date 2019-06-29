@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.ItemSystem;
+using Hedra.Items;
 
 namespace Hedra.Engine.Player.Inventory
 {

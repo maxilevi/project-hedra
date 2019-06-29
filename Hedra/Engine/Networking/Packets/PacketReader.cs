@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using Hedra.Engine.ItemSystem;
+using Hedra.Items;
 using OpenTK;
 
 namespace Hedra.Engine.Networking.Packets

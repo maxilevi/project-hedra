@@ -10,12 +10,14 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Game;
+using Hedra.Items;
 using Hedra.Localization;
 
 namespace Hedra.Components
 {
     public abstract class TradeComponent : EntityComponent
     {
+        protected int MerchantSpaces => TradeInventory.MerchantSpaces;
         private const int TradeRadius = 12;
         public new Humanoid Parent;
         public Dictionary<int, Item> Items { get; private set; }

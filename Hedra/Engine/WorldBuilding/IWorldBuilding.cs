@@ -4,6 +4,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.Player;
+using Hedra.Items;
 using OpenTK;
 
 namespace Hedra.Engine.WorldBuilding

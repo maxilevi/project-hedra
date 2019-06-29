@@ -18,6 +18,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
+using Hedra.Items;
 using Hedra.Rendering;
 using Hedra.Sound;
 

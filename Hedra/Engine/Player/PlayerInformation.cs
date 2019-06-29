@@ -13,6 +13,7 @@ using Hedra.Engine.Game;
 using OpenTK;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.QuestSystem;
+using Hedra.Items;
 
 
 namespace Hedra.Engine.Player

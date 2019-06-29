@@ -43,7 +43,8 @@ namespace Hedra.Engine.Player.Inventory
         private Humanoid _trader;
         private bool _show;
 
-        public TradeInventory(LocalPlayer Player){
+        public TradeInventory(LocalPlayer Player)
+        {
             _player = Player;
             _merchantItems = new InventoryArray(MerchantSpaces);
             _playerItems = new InventoryArray(PlayerInventory.InventorySpaces);

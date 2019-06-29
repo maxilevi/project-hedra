@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player.Inventory;
+using Hedra.Items;
 using Hedra.WeaponSystem;
 
 

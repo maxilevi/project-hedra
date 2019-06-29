@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Hedra.Engine.Game;
 using Hedra.Engine.IO;
@@ -21,8 +22,21 @@ namespace Hedra.Engine.Scripting
         private static readonly ScriptEngine _engine;
         private static readonly Runner _runner;
         private static readonly Dictionary<Type, dynamic> _types;
-        
-        public static void Load(){}
+
+        public static void Load()
+        {
+            var paths = GetSearchPath();
+            for (var i = 0; i < paths.Length; ++i)
+            {
+                var files = Directory.GetFiles(paths[i]);
+                for (var j = 0; j < files.Length; ++j)
+                {
+                    var name = Path.GetFileName(files[j]);
+                    if (!name.EndsWith(".py")) continue;
+                    _runner.Prepare(name);
+                }
+            }
+        }
         
         static Interpreter()
         {
@@ -33,13 +47,12 @@ namespace Hedra.Engine.Scripting
             _engine.SetSearchPaths(GetSearchPath());
             _engine.Runtime.LoadAssembly(Assembly.Load(typeof(Interpreter).Assembly.FullName));
             _engine.Runtime.LoadAssembly(Assembly.Load(typeof(Vector4).Assembly.FullName));
-            _runner = GameSettings.DebugMode ? (Runner) new RawRunner(_engine) : new CompiledRunner(_engine);
+            _runner = new CompiledRunner(_engine);
             _types = new Dictionary<Type, dynamic>();
             Log.WriteLine($"Python engine was successfully loaded in {watch.ElapsedMilliseconds} MS");
             
             watch.Reset();
         }
-
         public static dynamic GetFunction(string Library, string Function)
         {
             return new Function(_runner.GetFunction(Library, Function), Library, Function, _engine);

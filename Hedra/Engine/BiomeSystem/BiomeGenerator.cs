@@ -6,6 +6,7 @@
  */
 using System;
 using System.Collections.Generic;
+using Hedra.Core;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Core;
 using OpenTK;

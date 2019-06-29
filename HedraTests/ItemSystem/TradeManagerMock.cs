@@ -1,5 +1,6 @@
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player.Inventory;
+using Hedra.Items;
 
 namespace HedraTests.ItemSystem
 {

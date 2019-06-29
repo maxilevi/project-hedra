@@ -19,6 +19,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
+using Hedra.Items;
 using Hedra.Localization;
 
 namespace Hedra.Engine.WorldBuilding

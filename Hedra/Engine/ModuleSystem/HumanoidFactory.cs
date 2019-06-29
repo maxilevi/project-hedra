@@ -11,9 +11,11 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.Player;
+using Hedra.Engine.Scripting;
 using Hedra.EntitySystem;
 using Hedra.Items;
 using Hedra.WeaponSystem;
+using Microsoft.Scripting;
 
 namespace Hedra.Engine.ModuleSystem
 {
@@ -60,16 +62,7 @@ namespace Hedra.Engine.ModuleSystem
             var components = HumanoidLoader.HumanoidTemplater[HumanoidType].Components;
             for (var i = 0; i < components.Length; i++)
             {
-                var type = Type.GetType(components[i].Type);
-                var paramsList = new List<object>
-                {
-                    human
-                };
-                paramsList.AddRange(components[i].Parameters);
-
-                var newComponent = (IComponent<IEntity>) Activator.CreateInstance(type, paramsList.ToArray());
-
-                human.AddComponent(newComponent);
+                human.AddComponent(CreateComponentFromTemplate(human, components[i]));
             }
 
             if (template.Weapons != null && template.Weapons.Length > 0)
@@ -100,6 +93,15 @@ namespace Hedra.Engine.ModuleSystem
             var aiType = (Humanoid.LeftWeapon.IsMelee ? "Melee" : Humanoid.LeftWeapon is Staff ? "Mage" : "Archer");
             var instance = (Component<IHumanoid>) Activator.CreateInstance(_ais[aiType], Humanoid, Friendly);
             Humanoid.AddComponent(instance);
+        }
+
+        private static IComponent<IEntity> CreateComponentFromTemplate(IHumanoid Human, HumanoidComponentsItemTemplate Template)
+        {
+            var paramsList = new List<object>(new[] {Human});
+            paramsList.AddRange(Template.Parameters);
+            var type = Type.GetType(Template.Type); 
+            var component = (IComponent<IEntity>) Activator.CreateInstance(type, paramsList.ToArray()); 
+            return component;
         }
         
         private static int GetDifficulty(Random Rng)

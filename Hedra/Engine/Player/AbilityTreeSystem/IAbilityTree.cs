@@ -2,6 +2,7 @@ using System;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Items;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem

@@ -4,6 +4,7 @@ using Hedra.API;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.AbilityTreeSystem;
+using Hedra.Items;
 using OpenTK;
 
 namespace Hedra.Engine.ClassSystem

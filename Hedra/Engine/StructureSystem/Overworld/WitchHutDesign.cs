@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.Core;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Core;
 using Hedra.Engine.EntitySystem;

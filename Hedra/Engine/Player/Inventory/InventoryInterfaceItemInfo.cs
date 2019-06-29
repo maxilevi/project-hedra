@@ -11,6 +11,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Game;
+using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Rendering;
 using OpenTK;

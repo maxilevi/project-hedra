@@ -23,6 +23,7 @@ using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
+using Hedra.Items;
 using Hedra.Rendering;
 using Hedra.Sound;
 

@@ -254,6 +254,7 @@
     <Compile Include="Core\TaskScheduler.cs" />
     <Compile Include="Core\Time.cs" />
     <Compile Include="Core\Timer.cs" />
+    <Compile Include="Core\Unique.cs" />
     <Compile Include="Engine\BiomeSystem\GhostTownHandler.cs" />
     <Compile Include="Engine\BiomeSystem\GhostTown\GhostTownGenerationDesign.cs" />
     <Compile Include="Engine\BiomeSystem\GhostTown\GhostTownSkyDesign.cs" />
@@ -296,7 +297,6 @@
     <Compile Include="Engine\Core\Pair.cs" />
     <Compile Include="Engine\Core\Singleton.cs" />
     <Compile Include="Engine\Core\TypeFactory.cs" />
-    <Compile Include="Engine\Core\Unique.cs" />
     <Compile Include="Engine\CraftingSystem\CraftingInventory.cs" />
     <Compile Include="Engine\CraftingSystem\CraftingStation.cs" />
     <Compile Include="Engine\CraftingSystem\Templates\IngredientsTemplate.cs" />
@@ -312,6 +312,7 @@
     <Compile Include="Engine\Input\ArrowSelector.cs" />
     <Compile Include="Engine\Input\ArrowSelectorState.cs" />
     <Compile Include="Engine\ItemSystem\FoodSystem\FoodHandler.cs" />
+    <Compile Include="Engine\ItemSystem\Item.cs" />
     <Compile Include="Engine\ItemSystem\ItemHandlerFactory.cs" />
     <Compile Include="Engine\ItemSystem\PotionAttributes.cs" />
     <Compile Include="Engine\ItemSystem\PotionType.cs" />
@@ -525,12 +526,11 @@
     <Compile Include="Engine\Rendering\UI\TextCache.cs" />
     <Compile Include="Engine\Rendering\UI\TextOptions.cs" />
     <Compile Include="Engine\Rendering\UI\DrawableTexture.cs" />
-    <Compile Include="Engine\Scripting\CompiledRunner.cs" />
     <Compile Include="Engine\Scripting\ErrorReporter.cs" />
     <Compile Include="Engine\Scripting\Function.cs" />
     <Compile Include="Engine\Scripting\Interpreter.cs" />
     <Compile Include="Engine\Scripting\ObfuscationAdapter.cs" />
-    <Compile Include="Engine\Scripting\RawRunner.cs" />
+    <Compile Include="Engine\Scripting\CompiledRunner.cs" />
     <Compile Include="Engine\Scripting\Runner.cs" />
     <Compile Include="Engine\Scripting\Script.cs" />
     <Compile Include="Engine\Scripting\VisualEffects.cs" />
@@ -995,7 +995,6 @@
     <Compile Include="Engine\ItemSystem\CommonAttributes.cs" />
     <Compile Include="Engine\ItemSystem\CommonItems.cs" />
     <Compile Include="Engine\ItemSystem\EffectDescriber.cs" />
-    <Compile Include="Engine\ItemSystem\Item.cs" />
     <Compile Include="Engine\ItemSystem\ItemLoader.cs" />
     <Compile Include="Engine\ItemSystem\ItemModelLoader.cs" />
     <Compile Include="Engine\ItemSystem\ItemPoolSettings.cs" />
@@ -14246,6 +14245,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\Fishing.py" />
+    <Content Include="Scripts\Merchant.py" />
     <Content Include="Scripts\Soundtrack.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
