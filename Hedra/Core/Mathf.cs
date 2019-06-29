@@ -112,11 +112,10 @@ namespace Hedra.Core
             Vector3 vector1 = new Vector3(V2.X - V1.X, V2.Y - V1.Y, V2.Z - V1.Z);
             Vector3 vector2 = new Vector3(V3.X - V1.X, V3.Y - V1.Y, V3.Z - V1.Z);
               
-             Vector3 cross = Vector3.Cross(vector1, vector2);
+            Vector3 cross = Vector3.Cross(vector1, vector2);
               
-             cross.Normalize();
-              
-             return cross;
+            cross.Normalize();
+            return cross;
         }
 
         public static Vector4 ToVector4(this Color C)
