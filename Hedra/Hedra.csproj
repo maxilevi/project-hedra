@@ -14110,9 +14110,15 @@
     <Content Include="Modules\Items\Recipes\BreadRecipe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\Items\Recipes\CookedFishRecipe.json" />
-    <Content Include="Modules\Items\Recipes\CookedSalmonRecipe.json" />
-    <Content Include="Modules\Items\Recipes\CookedTroutRecipe.json" />
+    <Content Include="Modules\Items\Recipes\CookedFishRecipe.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Recipes\CookedSalmonRecipe.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Recipes\CookedTroutRecipe.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Recipes\FishingRodRecipe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

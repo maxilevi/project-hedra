@@ -1,3 +1,42 @@
 {
-  
+  "Name": "CookedFishRecipe",
+  "DisplayName": "Cooked fish recipe",
+  "EquipmentType": "Recipe",
+  "Tier": "Common",
+  "Description": "...",
+  "Attributes": [
+    {
+      "Name": "CraftingStation",
+      "Value": "Campfire"
+    },
+    {
+      "Name": "Ingredients",
+      "Value": [
+        {
+          "Name": "RawFish",
+          "Amount": 1
+        }
+      ],
+      "Display": "Bullets"
+    },
+    {
+      "Name": "Output",
+      "Value": "CookedFish",
+      "Hidden": true
+    },
+    {
+      "Name": "IsConsumable",
+      "Value": true,
+      "Hidden": true
+    },
+    {
+      "Name": "Handler",
+      "Value": "Recipe",
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 2.0,
+    "Path": "$DataFile$/Items/Misc/Recipe.ply"
+  }
 }
