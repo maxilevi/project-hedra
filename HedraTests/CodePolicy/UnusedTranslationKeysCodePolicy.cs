@@ -59,13 +59,13 @@ namespace HedraTests.CodePolicy
                 englishKeys = englishKeys.ToArray();
             }
 
-            var modules = GetAllModules();
+            var modules = GetAllModules().Concat(GetAllScripts()).ToArray();
             for (var k = 0; k < modules.Length; ++k)
             {
                 for (var i = 0; i < englishKeys.Length; ++i)
                 {
                     var source = File.ReadAllText(modules[k]);
-                    if (Regex.IsMatch(source, $"\"{englishKeys[i]}\""))
+                    if (Regex.IsMatch(source, $"[\"']{englishKeys[i]}[\"']"))
                         set.Remove(englishKeys[i]);                    
                 }
                 englishKeys = set.ToArray();

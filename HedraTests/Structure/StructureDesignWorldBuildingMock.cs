@@ -58,7 +58,6 @@ namespace HedraTests.Structure
             var human = new Humanoid();
             human.Position = DesiredPosition;
             human.AddComponent(new HealthBarComponent(human, string.Empty, HealthBarType.Neutral));
-            human.AddComponent(new DamageComponent(human));
             World.AddEntity(human);
             return human;
         }

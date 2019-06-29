@@ -29,10 +29,10 @@ namespace Hedra.Engine.Management
         private Dictionary<string, VertexData> _hitboxCache;
         private readonly object _hitboxCacheLock = new object();
         private readonly object _handlerLock = new object();
+        private string _appPath;
+        private string _appData;
 
         public string ShaderCode { get; private set; }
-        public string AppPath { get; private set; }
-        public string AppData { get; private set; }
         public string TemporalFolder { get; private set; }
         public string ShaderResource => "data1.db";
         public string SoundResource => "data2.db";
@@ -100,8 +100,6 @@ namespace Hedra.Engine.Management
             if (_filesDecompressed) return;
 
             _uniqueId = Guid.NewGuid().ToString();
-            AppData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/" + "Project Hedra/";
-            AppPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/";
             TryCleanupTemp(TemporalFolder = $"{AppData}/Temp/");
 
             var soundBytes = ZipManager.UnZipBytes(File.ReadAllBytes(AppPath + SoundResource));
@@ -523,6 +521,24 @@ namespace Hedra.Engine.Management
             foreach (var handler in _registeredHandlers)
             {
                 handler.Stream.Dispose();
+            }
+        }
+        
+        public string AppData
+        {
+            get
+            {
+                if (_appData != null) return _appData;
+                return _appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/" + "Project Hedra/";
+            }
+        }
+
+        public string AppPath
+        {
+            get
+            {
+                if (_appPath != null) return _appPath;
+                return _appPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "/";
             }
         }
     }

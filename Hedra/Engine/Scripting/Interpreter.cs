@@ -25,34 +25,31 @@ namespace Hedra.Engine.Scripting
 
         public static void Load()
         {
-            var paths = GetSearchPath();
-            for (var i = 0; i < paths.Length; ++i)
+            var files = Directory.GetFiles(SearchPath);
+            for (var j = 0; j < files.Length; ++j)
             {
-                var files = Directory.GetFiles(paths[i]);
-                for (var j = 0; j < files.Length; ++j)
-                {
-                    var name = Path.GetFileName(files[j]);
-                    if (!name.EndsWith(".py")) continue;
-                    _runner.Prepare(name);
-                }
+                var name = Path.GetFileName(files[j]);
+                if (!name.EndsWith(".py")) continue;
+                _runner.Prepare(name);
             }
         }
-        
+
         static Interpreter()
         {
             var watch = new Stopwatch();
             watch.Start();
             Log.WriteLine("Loading Python engine...");
             _engine = Python.CreateEngine();
-            _engine.SetSearchPaths(GetSearchPath());
+            _engine.SetSearchPaths(new []{SearchPath});
             _engine.Runtime.LoadAssembly(Assembly.Load(typeof(Interpreter).Assembly.FullName));
             _engine.Runtime.LoadAssembly(Assembly.Load(typeof(Vector4).Assembly.FullName));
             _runner = new CompiledRunner(_engine);
             _types = new Dictionary<Type, dynamic>();
             Log.WriteLine($"Python engine was successfully loaded in {watch.ElapsedMilliseconds} MS");
-            
+
             watch.Reset();
         }
+
         public static dynamic GetFunction(string Library, string Function)
         {
             return new Function(_runner.GetFunction(Library, Function), Library, Function, _engine);
@@ -71,7 +68,7 @@ namespace Hedra.Engine.Scripting
             _types.Add(type, type);
             return type;
         }
-        
+
         public static T GetMember<T>(string Library, string Variable)
         {
             return (T) _runner.GetFunction(Library, Variable);
@@ -84,13 +81,15 @@ namespace Hedra.Engine.Scripting
             return (T) Activator.CreateInstance(Type, Args);
         }
 
-        private static string[] GetSearchPath()
+        public static string SearchPath
         {
-#if DEBUG
-            return new [] {$"../../Scripts/"};
-#else
-            return new [] {$"{AssetManager.AppPath}/Scripts/"};
-#endif
+
+            get
+            {
+                if (GameSettings.DebugMode && !GameSettings.TestingMode)
+                    return $"../../Scripts/";
+                return $"{AssetManager.AppPath}/Scripts/";
+            }
         }
     }
 }

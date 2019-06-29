@@ -49,5 +49,10 @@ namespace HedraTests.CodePolicy
         {
             return Directory.GetFiles($"{SolutionDirectory}/Hedra/Modules/", "*.json", SearchOption.AllDirectories);
         }
+
+        protected string[] GetAllScripts()
+        {
+            return Directory.GetFiles($"{SolutionDirectory}/Hedra/Scripts/", "*.py", SearchOption.AllDirectories);
+        }
     }
 }

@@ -12,8 +12,8 @@ namespace Hedra.Engine.Management
         public string ShaderResource { get; }
         public string SoundResource { get; }
         public string AssetsResource { get; }
-        public string AppPath { get; }
-        public string AppData { get; }
+        public string AppPath => new CompressedAssetProvider().AppPath;
+        public string AppData => new CompressedAssetProvider().AppData;
         public string TemporalFolder { get; }
         public string ShaderCode { get; }
         

@@ -105,7 +105,7 @@ namespace Hedra.Engine.Scripting
             }
         }
 
-        private static string DirectoryPath => GameSettings.DebugMode ? "../../Scripts/" : $"{AssetManager.AppPath}/Scripts/";
+        private static string DirectoryPath => Interpreter.SearchPath;
         protected bool WatchChanges => true;
     }
 }

@@ -10,6 +10,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using Hedra.Engine.WorldBuilding;
+using Hedra.Game;
 using Hedra.Rendering;
 using OpenTK;
 
@@ -64,7 +65,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
         public static void PlaceWhenWorldReady(Vector3 TargetPosition, Action<Vector3> Place, Func<bool> ShouldDispose)
         {
-            RoutineManager.StartRoutine(DoPlace, TargetPosition, Place, ShouldDispose);
+            if (GameSettings.TestingMode)
+                Place(TargetPosition);
+            else
+                RoutineManager.StartRoutine(DoPlace, TargetPosition, Place, ShouldDispose);
         }
 
         private static T SelectTemplate<T>(IList<T> Templates, Random Rng) where T : DesignTemplate
