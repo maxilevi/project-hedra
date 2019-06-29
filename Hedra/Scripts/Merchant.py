@@ -11,6 +11,8 @@ PUMPKIN_PIE_RECIPE = 'PumpkinPieRecipe'
 COOKED_MEAT_RECIPE = 'CookedMeatRecipe'
 HEALTH_POTION_RECIPE = 'HealthPotionRecipe'
 CORN_SOUP_RECIPE = 'CornSoupRecipe'
+FISHING_ROD = 'FishingRod'
+BAIT = 'Bait'
 
 def build_inventory(item_dict, is_travelling_merchant, inventory_size, rng):
     items = get_base_items(inventory_size, rng)
@@ -21,26 +23,32 @@ def build_inventory(item_dict, is_travelling_merchant, inventory_size, rng):
 
 def get_base_items(inventory_size, rng):
     recipes = get_base_recipes()
-    return [
+    items = [
         (inventory_size - 1, get_infinity_item(BERRY)),
         (inventory_size - 2, get_infinity_item(GLASS_FLASK)),
         (inventory_size - 3, get_infinity_item(WOODEN_BOWL)),
         (inventory_size - 4, get_infinity_item(STONE_ARROW) if rng.Next(0, 2) == 1 else None),
-        (inventory_size - 5, None), #recipes[rng.Next(0, len(recipes))]
+        (inventory_size - 5, ItemPool.Grab(recipes[rng.Next(0, len(recipes))])),
     ]
+    if rng.Next(0, 2) == 1:
+        items += [
+            (3, FISHING_ROD),
+            (4, get_infinity_item(BAIT))
+        ]
+    return items
 
 def get_base_recipes():
     return [
-        ItemPool.Grab(PUMPKIN_PIE_RECIPE),
-        ItemPool.Grab(COOKED_MEAT_RECIPE),
-        ItemPool.Grab(HEALTH_POTION_RECIPE),
-        ItemPool.Grab(CORN_SOUP_RECIPE),
+        PUMPKIN_PIE_RECIPE,
+        COOKED_MEAT_RECIPE,
+        HEALTH_POTION_RECIPE,
+        CORN_SOUP_RECIPE,
     ]
 
 def get_special_items():
     return [
         (0, ItemPool.Grab(HORSE_MOUNT)),
-        (2, ItemPool.Grab(BOAT))
+        (1, ItemPool.Grab(BOAT))
     ]
 
 def get_infinity_item(item_name):
@@ -58,3 +66,5 @@ assert ItemPool.Exists(PUMPKIN_PIE_RECIPE)
 assert ItemPool.Exists(COOKED_MEAT_RECIPE)
 assert ItemPool.Exists(HEALTH_POTION_RECIPE)
 assert ItemPool.Exists(CORN_SOUP_RECIPE)
+assert ItemPool.Exists(FISHING_ROD)
+assert ItemPool.Exists(BAIT)
