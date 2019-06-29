@@ -26,23 +26,33 @@ FISHING_HOOK_SPEED = 1
 FISHING_HOOK_LIFETIME = 4
 ROD_LINE_WIDTH = 2
 PULL_SPEED = 1.0
+
 BAIT_ITEM_NAME = 'Bait'
 RAW_TROUT_NAME = 'RawTrout'
 RAW_SALMON_NAME = 'RawSalmon'
 RAW_FISH_NAME = 'RawFish'
-FISH_CHANCES = [
-    (RAW_SALMON_NAME, 0.15),
-    (RAW_TROUT_NAME, 0.3),
+HEALTH_POTION_NAME = 'HealthPotion'
+STRENGTH_POTION_NAME = 'StrengthPotion'
+SPEED_POTION_NAME = 'SpeedPotion'
+DEXTERITY_POTION_NAME = 'StaminaPotion'
+
+FISHING_REWARDS = [
+    (STRENGTH_POTION_NAME, 0.025),
+    (SPEED_POTION_NAME, 0.05),
+    (DEXTERITY_POTION_NAME, 0.075),
+    (HEALTH_POTION_NAME, 0.125),
+    (RAW_SALMON_NAME, 0.20),
+    (RAW_TROUT_NAME, 0.30),
     (RAW_FISH_NAME, 1.0)
 ]
 
 def assert_constants():
-    for name, val in FISH_CHANCES + [(BAIT_ITEM_NAME, 0.0)]:
+    for name, val in FISHING_REWARDS + [(BAIT_ITEM_NAME, 0.0)]:
         assert ItemPool.Exists(name)
 
 def get_random_fish():
     roll = Core.rand_float()
-    for fish_name, chance in FISH_CHANCES:
+    for fish_name, chance in FISHING_REWARDS:
         if roll < chance:
             return ItemPool.Grab(fish_name)
     raise ArgumentOutOfRangeException('Failed to find a suitable fish')
@@ -116,9 +126,9 @@ def start_fishing(human, state, hook_model):
     setup_fishing(human, state, hook_model)
         
     def should_stop_fishing():
-        return not isinstance(human.LeftWeapon, FishingRod) \
+        return (not isinstance(human.LeftWeapon, FishingRod) \
                or (human.Position - state['fishing_position']).LengthFast > FISHING_DISTANCE \
-               or human.IsMoving
+               or human.IsMoving) and not state['is_retrieving']
 
     Core.when(should_stop_fishing, lambda: disable_fishing(human, state))
 
@@ -279,5 +289,6 @@ def create_hook(human, hook_model, state):
     World.AddWorldObject(hook)
     return hook
 
+class 
 
 assert_constants()
