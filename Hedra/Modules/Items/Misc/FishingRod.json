@@ -2,7 +2,7 @@
   "Name": "FishingRod",
   "DisplayName": "Fishing Rod",
   "EquipmentType": "FishingRod",
-  "Tier": "Common",
+  "Tier": "Misc",
   "Description": "A rod used for fishing.",
   "Attributes": [
     {
