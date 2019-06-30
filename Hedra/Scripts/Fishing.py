@@ -2,7 +2,7 @@ import Core
 import math
 import VisualEffects
 import clr
-from OpenTK import Vector3, Vector4
+from OpenTK import Vector3, Vector4, Matrix4
 from System import Array, Single, ArgumentOutOfRangeException
 from Hedra import World
 from Hedra.Core import Time, Timer
@@ -132,21 +132,6 @@ def start_fishing(human, state, hook_model):
 
     Core.when(should_stop_fishing, lambda: disable_fishing(human, state))
 
-def rod_tip(rod):
-    return rod.MainMesh.TransformPoint((rod.MainWeaponSize.Y+4) * Vector3.UnitY)
-
-def curve(p0, p1, p2, t):
-    return Single((1.0 - t) ** 2) * p0 + Single(2.0 * (1.0 - t) * t) * p1 + Single(t ** 2.0) * p2
-
-def smooth_curve(start, end, curvature):
-    middle = (start + end) * Single(0.5) - Vector3.UnitY * 6 * Single(curvature)
-    vertices = []
-    vertex_count = FISHING_STRING_DETAIL
-    for i in xrange(0, vertex_count):
-        t = i / float(vertex_count - 1)
-        vertices.append(curve(start, middle, end, Single(t)))
-    return vertices
-
 def get_water_color(position):
     under_chunk = World.GetChunkAt(position)
     if under_chunk:
@@ -202,34 +187,64 @@ def end_pull(human, state):
         human.AddOrDropItem(state['fish'])
         human.ShowText(human.Position, "+ 1 " + state['fish'].DisplayName.upper(), Colors.ToColorStruct(Colors.Gray), 14)
 
+def rod_position(rod, offset):
+    return rod.MainMesh.TransformPoint(offset)
+
+def rod_tip(rod, offset=Vector3.Zero):
+    return rod.MainMesh.TransformPoint((rod.MainWeaponSize.Y+4) * Vector3.UnitY + offset)
+
+def curve(p0, p1, p2, t):
+    return Single((1.0 - t) ** 2) * p0 + Single(2.0 * (1.0 - t) * t) * p1 + Single(t ** 2.0) * p2
+
+def smooth_curve(start, end, curvature, orientation=Vector3.UnitY):
+    middle = (start + end) * Single(0.5) - orientation * 6 * Single(curvature)
+    vertices = []
+    vertex_count = FISHING_STRING_DETAIL
+    for i in xrange(0, vertex_count):
+        t = i / float(vertex_count - 1)
+        vertices.append(curve(start, middle, end, Single(t)))
+    return vertices
 
 def update_rod(human, rod, rod_line, state):
 
     is_retrieving = ('is_retrieving' in state and state['is_retrieving'])
-    rod_line.Enabled = human.IsFishing or is_retrieving
+    is_active = human.IsFishing or is_retrieving
+    rod_line.Enabled = True #human.LeftWeapon is FishingRod
     
     if rod_line.Enabled:
-        hook = state['fishing_hook']
-        
-        if state['on_water']:
-            hook.Mesh.LocalPosition = Core.lerp(hook.Mesh.LocalPosition, calculate_hook_offset(state['has_fish']), Time.DeltaTime * 2.0)
-            hook.Mesh.LocalRotation = Vector3.Zero
-
-        if state['has_fish']:
-            has_fish_effect(hook.Position)
-            
-        line_vertices = calculate_line(rod, hook, state)
-        rod.InAttackStance = True
-        rod.MainMesh.LocalRotation = get_rod_rotation(state['has_fish'])
+        if is_active:
+            line_vertices = on_rod_active(human, rod, state)
+        else:
+            line_vertices = on_rod_idle(rod)
+    
         rod_line.Update(
             Array[Vector3](line_vertices),
             Array[Vector4]([Vector4.One] * len(line_vertices))
         )
         rod_line.Width = ROD_LINE_WIDTH
+
+def on_rod_idle(rod):
+    rot_mat = Matrix4.CreateFromQuaternion(rod.MainMesh.TransformationMatrix.ExtractRotation())
+    rod_tip_offset = Vector3.UnitZ * Single(0.125) + Vector3.UnitX * Single(-0.125)
+    rod_mid_offset = Single(-0.25) * Vector3.UnitX + Vector3.UnitY * 2
+    curvature = -0.05
+    return smooth_curve(rod_tip(rod, rod_tip_offset), rod_position(rod, rod_mid_offset), curvature, Vector3.TransformPosition(Vector3.UnitZ, rot_mat))
+
+def on_rod_active(human, rod, state):
+    hook = state['fishing_hook']
+    human.LeftWeapon.InAttackStance = True
+
+    if state['on_water']:
+        hook.Mesh.LocalPosition = Core.lerp(hook.Mesh.LocalPosition, calculate_hook_offset(state['has_fish']), Time.DeltaTime * 2.0)
+        hook.Mesh.LocalRotation = Vector3.Zero
+
+    if state['has_fish']:
+        has_fish_effect(hook.Position)
         
-        check_for_fish(human, state)
-        if state['pull_back']:
-            update_pull(human, state, hook)
+    check_for_fish(human, state)
+    if state['pull_back']:
+        update_pull(human, state, hook)
+    return calculate_line(rod, hook, state)
 
 def update_pull(human, state, hook):
     update_pull_hook(human, state, hook)
