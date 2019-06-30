@@ -153,11 +153,12 @@ namespace Hedra.Engine.Game
                 ItemType.HealthPotionRecipe,
                 ItemType.PumpkinPieRecipe,
                 ItemType.CookedMeatRecipe,
-                ItemType.CornSoupRecipe,/*
+                ItemType.CornSoupRecipe,
                 ItemType.BaitRecipe,
+                ItemType.FishingRodRecipe,
                 ItemType.CookedSalmonRecipe,
                 ItemType.CookedTroutRecipe,
-                ItemType.CookedFishRecipe*/
+                ItemType.CookedFishRecipe
             }.Select(T => T.ToString()).ToArray();
             for (var i = 0; i < defaultRecipes.Length; i++)
             {
