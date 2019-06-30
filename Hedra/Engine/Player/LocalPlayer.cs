@@ -262,8 +262,13 @@ namespace Hedra.Engine.Player
         private void SetGold(int Amount, bool Silent)
         {
             if (Amount < 0) return;
-            if(!Silent)
-                this.ShowText(Model.HeadPosition, $"+ {Amount - Gold} {Translations.Get("quest_gold")}", Color.Gold, 18);
+            if (!Silent)
+            {
+                var sign = Amount > 0 ? "+" : "-";
+                this.ShowText(Model.HeadPosition, $"{sign} {Math.Abs(Amount - Gold)} {Translations.Get("quest_gold")}", Color.Gold,
+                    18);
+            }
+
             var currentGold = Inventory.Search(I => I.IsGold);
             if (currentGold == null)
             {
