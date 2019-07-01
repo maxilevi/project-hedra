@@ -475,7 +475,7 @@ namespace Hedra.Engine.Player
             AbilityTree.SetPoints(Skill, Points);
         }
 
-        public T SearchSkill<T>() where T : BaseSkill
+        public T SearchSkill<T>() where T : AbstractBaseSkill
         {
             return (T) Toolbar.Skills.First(S => S is T);
         }

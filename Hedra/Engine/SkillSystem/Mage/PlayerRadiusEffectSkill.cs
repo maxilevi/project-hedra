@@ -8,7 +8,7 @@ using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Mage
 {
-    public abstract class RadiusEffectSkill : RadiusEffectSkill<IPlayer>
+    public abstract class PlayerRadiusEffectSkill : RadiusEffectSkill<IPlayer>
     {     
     }
     

@@ -12,7 +12,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
         private readonly BackgroundTexture[] _textures;
         private readonly IPlayer _player;
         private Vector2 _previousOffset;
-        private BaseSkill[] _skills;
+        private AbstractBaseSkill[] _skills;
         
         public PassiveEffectsInterface(IPlayer Player)
         {
@@ -46,7 +46,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
             }
         }
 
-        public void UpdateView(BaseSkill[] Skills)
+        public void UpdateView(AbstractBaseSkill[] Skills)
         {
             _skills = Skills;
             for (var i = 0; i < _textures.Length; ++i)

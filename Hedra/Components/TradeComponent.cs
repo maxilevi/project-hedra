@@ -9,6 +9,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.Inventory;
+using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Items;
 using Hedra.Localization;

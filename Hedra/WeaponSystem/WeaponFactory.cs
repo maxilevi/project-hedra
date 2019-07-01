@@ -29,7 +29,7 @@ namespace Hedra.WeaponSystem
         public static Weapon Get(Item Item)
         {
             var type = Weapons[Item.EquipmentType];
-            Weapon weapon = Interpreter.GetInstance<Weapon>(type, Item.Model);
+            var weapon = (Weapon) Activator.CreateInstance(type, Item.Model);
             weapon.Describer = EffectDescriber.FromItem(Item);
             return weapon;
         }

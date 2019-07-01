@@ -43,7 +43,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
         private readonly PassiveEffectsInterface _passiveEffectsInterface;
         private readonly ToolbarInterfaceManager _manager;
         private readonly ToolbarInputHandler _inputHandler;
-        private BaseSkill[] _skills;
+        private AbstractBaseSkill[] _skills;
         private WeaponAttack _w1;
         private WeaponAttack _w2;
         private bool _show;
@@ -82,10 +82,10 @@ namespace Hedra.Engine.Player.ToolbarSystem
         private void LoadSkills()
         {
             var types = SkillFactory.Instance.GetAll();
-            _skills = new BaseSkill[types.Length];
+            _skills = new AbstractBaseSkill[types.Length];
             for (var i = 0; i < _skills.Length; i++)
             {
-                _skills[i] = (BaseSkill) Activator.CreateInstance(types[i]);
+                _skills[i] = (AbstractBaseSkill) Activator.CreateInstance(types[i]);
                 _skills[i].InitializeUI(Vector2.Zero, InventoryArrayInterface.DefaultSize, _player.UI.GamePanel);
                 _skills[i].Initialize(_player);
                 _skills[i].StateUpdated += SkillStateUpdated;
@@ -138,7 +138,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
             }
         }
 
-        public BaseSkill SkillAt(int Index)
+        public AbstractBaseSkill SkillAt(int Index)
         {
             return _skills.FirstOrDefault(S => _barItems[Index].HasAttribute("AbilityType") 
                 && S.GetType() == _barItems[Index].GetAttribute<Type>("AbilityType"));
@@ -161,7 +161,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
             _w2.SetType(CurrentWeapon, AttackType.Secondary);
         }
 
-        public BaseSkill[] Skills => _skills;
+        public AbstractBaseSkill[] Skills => _skills;
         
         public void Dump(BinaryWriter Writer)
         {

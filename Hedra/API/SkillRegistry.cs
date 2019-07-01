@@ -15,6 +15,6 @@ namespace Hedra.API
             SkillFactory.Instance.Unregister(Key);
         }
 
-        protected override Type RegistryType => typeof(BaseSkill);
+        protected override Type RegistryType => typeof(AbstractBaseSkill);
     }
 }

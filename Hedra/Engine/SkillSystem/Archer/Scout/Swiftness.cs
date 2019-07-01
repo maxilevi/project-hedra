@@ -10,7 +10,7 @@ using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Archer.Scout
 {
-    public class Swiftness : ActivateDurationSkill
+    public class Swiftness : PlayerActivateDurationSkill
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Swiftness.png");
         private SpeedBonusComponent _currentSpeedBonus;

@@ -39,7 +39,7 @@ namespace Hedra.Engine.Loader
     
     public class Hedra : HedraWindow, IHedra
     {
-        public string GameVersion => "\u03B1 0.5";
+        public string GameVersion => "\u03B1 0.55";
         public event OnFrameChanged FrameChanged;
         private DebugInfoProvider _debugProvider;
         private SplashScreen _splashScreen;
@@ -88,9 +88,17 @@ namespace Hedra.Engine.Loader
                 OSManager.Show($"Minimum OpenGL version is 3.1, yours is {shadingOpenGlVersion}", "OpenGL Version not supported");
                 return false;
             }
+            LoadInterpreter();
             Log.WriteLine(glVersion);
-            TaskScheduler.Parallel(Interpreter.Load);
             return true;
+        }
+
+        private static void LoadInterpreter()
+        {
+            //if(GameSettings.DebugMode)
+            //    TaskScheduler.Parallel(Interpreter.Load);
+            //else
+                Interpreter.Load();
         }
 
         protected override void OnLoad(EventArgs e)

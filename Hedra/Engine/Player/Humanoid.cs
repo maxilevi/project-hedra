@@ -8,25 +8,18 @@
  */
 
 using System;
-using OpenTK;
-using Hedra.Engine.Generation;
-using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Sound;
 using System.Drawing;
-using Hedra.Engine.ClassSystem;
-using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Rendering;
-using Hedra.Engine.Management;
-using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.Rendering.UI;
 using System.Linq;
 using Hedra.Components.Effects;
 using Hedra.Core;
+using Hedra.Engine.ClassSystem;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ItemSystem.ArmorSystem;
-using Hedra.Engine.Localization;
+using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
+using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.SkillSystem;
 using Hedra.EntitySystem;
 using Hedra.Game;
@@ -34,6 +27,7 @@ using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
+using OpenTK;
 
 namespace Hedra.Engine.Player
 {
@@ -49,8 +43,6 @@ namespace Hedra.Engine.Player
         public event OnAttackEventHandler AfterAttack;
         public event OnAttackEventHandler BeforeAttack;
         public event OnHitLandedEventHandler OnHitLanded;
-        
-        private FishingHandler Fisher { get; }
         private EquipmentHandler Equipment { get; }
         
         public ClassDesign Class
@@ -155,7 +147,6 @@ namespace Hedra.Engine.Player
             MessageDispatcher = new DummyMessageDispatcher();
             HandLamp = new HandLamp(this);
             Movement = new MovementManager(this);
-            Fisher = new FishingHandler(this);
             Equipment = new EquipmentHandler(this);
             Class = new WarriorDesign();
             RandomFactor = NewRandomFactor();
@@ -171,7 +162,6 @@ namespace Hedra.Engine.Player
         {
             base.Update();
             Movement.Update();
-            Fisher.Update();
             Equipment.Update();
             UpdateHits();
             UpdateStats();
@@ -538,7 +528,7 @@ namespace Hedra.Engine.Player
         
         public void SetSkillPoints(Type Skill, int Points) => throw new NotImplementedException();
 
-        public T SearchSkill<T>() where T : BaseSkill => throw new NotImplementedException();
+        public T SearchSkill<T>() where T : AbstractBaseSkill => throw new NotImplementedException();
  
     }
 }

@@ -458,7 +458,7 @@ namespace HedraTests.Player
             AbilityTree.SetPoints(Skill, Points);
         }
 
-        public T SearchSkill<T>() where T : BaseSkill
+        public T SearchSkill<T>() where T : AbstractBaseSkill
         {
             throw new NotImplementedException();
         }

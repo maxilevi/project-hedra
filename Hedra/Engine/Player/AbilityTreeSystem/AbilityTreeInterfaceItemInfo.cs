@@ -24,7 +24,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 
         protected override void UpdateView()
         {
-            var realSkill = CurrentItem.GetAttribute<BaseSkill>("Skill");
+            var realSkill = CurrentItem.GetAttribute<AbstractBaseSkill>("Skill");
             var originalLevel = realSkill.Level;
             try
             {
@@ -44,7 +44,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             }
         }
 
-        private static string BuildAttributes(BaseSkill RealSkill)
+        private static string BuildAttributes(AbstractBaseSkill RealSkill)
         {
             var manaCost = RealSkill.ManaCost > 0
                 ? $"• {Translations.Get("skill_mana_cost", RealSkill.ManaCost.ToString("0.0", CultureInfo.InvariantCulture))}{Environment.NewLine}"

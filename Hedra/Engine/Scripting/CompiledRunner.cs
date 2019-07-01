@@ -31,6 +31,7 @@ namespace Hedra.Engine.Scripting
 
         public override void Prepare(string Library)
         {
+            Log.WriteLine($"Loading {Library}...");
             DoRun(Library);
         }
 
@@ -106,6 +107,6 @@ namespace Hedra.Engine.Scripting
         }
 
         private static string DirectoryPath => Interpreter.SearchPath;
-        protected bool WatchChanges => true;
+        protected bool WatchChanges => GameSettings.DebugMode;
     }
 }

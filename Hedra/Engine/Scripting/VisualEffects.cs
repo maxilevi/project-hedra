@@ -10,7 +10,7 @@ namespace Hedra.Engine.Scripting
         
         public static void Outline(IHumanoid Humanoid, Vector4 Color, float Seconds)
         {
-            Interpreter.GetFunction(Name, "outline")(Humanoid, Color, Seconds);
+            Interpreter.GetFunction(Name, "outline").Invoke(Humanoid, Color, Seconds);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Hedra.Engine.Scripting
             _name = Name;
         }
 
-        public dynamic Get(string Function)
+        public Function Get(string Function)
         {
             return Interpreter.GetFunction(_name, Function);
         }

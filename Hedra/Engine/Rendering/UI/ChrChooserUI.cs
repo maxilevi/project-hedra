@@ -22,6 +22,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.Networking;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Frustum;
+using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Items;
 using Hedra.Localization;

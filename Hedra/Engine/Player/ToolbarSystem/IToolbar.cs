@@ -5,11 +5,11 @@ namespace Hedra.Engine.Player.ToolbarSystem
 {
     public interface IToolbar : ISerializableHandler
     {
-        BaseSkill SkillAt(int Index);
+        AbstractBaseSkill SkillAt(int Index);
         void Update();
         void UpdateView();
         void SetAttackType(Weapon CurrentWeapon);
-        BaseSkill[] Skills { get; }
+        AbstractBaseSkill[] Skills { get; }
         bool DisableAttack { get; set; }
         bool BagEnabled { get; set; }
         bool PassiveEffectsEnabled { get; set; }

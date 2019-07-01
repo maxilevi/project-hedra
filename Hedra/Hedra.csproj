@@ -69,10 +69,6 @@
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <FileAlignment>4096</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
-    <UseVSHostingProcess>true</UseVSHostingProcess>
-    <PlatformTarget>x86</PlatformTarget>
-  </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Reference Include="Facepunch.Steamworks">
@@ -93,10 +89,8 @@
     <Reference Include="MeshOptimizer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\references\MeshOptimizer.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Dynamic, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1">
       <HintPath>..\packages\IronPython.2.7.5\lib\Net40\Microsoft.Dynamic.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Scripting, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1">
       <HintPath>..\packages\IronPython.2.7.5\lib\Net40\Microsoft.Scripting.dll</HintPath>
@@ -367,6 +361,8 @@
     <Compile Include="Engine\Networking\Packets\PositionAndRotationPacket.cs" />
     <Compile Include="Engine\Networking\Packets\WorldPacket.cs" />
     <Compile Include="Engine\Networking\SteamConnection.cs" />
+    <Compile Include="Engine\Obfuscation\ObfuscatorSettings.cs" />
+    <Compile Include="Engine\Obfuscation\ScriptSettings.cs" />
     <Compile Include="Engine\Pathfinding\Finder.cs" />
     <Compile Include="Engine\Pathfinding\Grid.cs" />
     <Compile Include="Engine\Pathfinding\MinHeap.cs" />
@@ -412,6 +408,7 @@
     <Compile Include="Engine\Player\CraftingSystem\CraftingInventoryArrayInterfaceManager.cs" />
     <Compile Include="Engine\Player\CraftingSystem\CraftingInventoryItemInfo.cs" />
     <Compile Include="Engine\Player\DummyInventory.cs" />
+    <Compile Include="Engine\Player\Humanoid.cs" />
     <Compile Include="Engine\Player\HumanoidModelAnimationState.cs" />
     <Compile Include="Engine\Player\IObjectWithAnimation.cs" />
     <Compile Include="Engine\Player\IObjectWithMana.cs" />
@@ -534,7 +531,7 @@
     <Compile Include="Engine\Scripting\Runner.cs" />
     <Compile Include="Engine\Scripting\Script.cs" />
     <Compile Include="Engine\Scripting\VisualEffects.cs" />
-    <Compile Include="Engine\SkillSystem\ActivateDurationSkill.cs" />
+    <Compile Include="Engine\SkillSystem\PlayerActivateDurationSkill.cs" />
     <Compile Include="Engine\SkillSystem\ActivateDurationSkillWithSingleAnimation.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Jab.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Hunter\Concealment.cs" />
@@ -578,7 +575,7 @@
     <Compile Include="Engine\SkillSystem\Mage\Necromancer\SiphonBlood.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Necromancer\SkeletonMastery.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Necromancer\Terror.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\RadiusEffectSkill.cs" />
+    <Compile Include="Engine\SkillSystem\Mage\PlayerRadiusEffectSkill.cs" />
     <Compile Include="Engine\SkillSystem\Mage\Teleport.cs" />
     <Compile Include="Engine\SkillSystem\SingleAnimationSkillWithStance.cs" />
     <Compile Include="Engine\SkillSystem\SpecialRangedAttackSkill.cs" />
@@ -605,7 +602,7 @@
     <Compile Include="Engine\SkillSystem\Rogue\Ninja\TigerStrike.cs" />
     <Compile Include="Engine\SkillSystem\Rogue\Ninja\TripleShuriken.cs" />
     <Compile Include="Engine\SkillSystem\Rogue\ShadowWarrior.cs" />
-    <Compile Include="Engine\SkillSystem\SingleAnimationSkill.cs" />
+    <Compile Include="Engine\SkillSystem\PlayerSingleAnimationSkill.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Agility.cs" />
     <Compile Include="Engine\SkillSystem\Archer\FlameArrow.cs" />
     <Compile Include="Engine\SkillSystem\Archer\IceArrow.cs" />
@@ -613,7 +610,7 @@
     <Compile Include="Engine\SkillSystem\Archer\LearnKnife.cs" />
     <Compile Include="Engine\SkillSystem\Archer\PoisonArrow.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Puncture.cs" />
-    <Compile Include="Engine\SkillSystem\BaseSkill.cs" />
+    <Compile Include="Engine\SkillSystem\AbstractBaseSkill.cs" />
     <Compile Include="Engine\SkillSystem\CappedSkill.cs" />
     <Compile Include="Engine\SkillSystem\LearningSkill.cs" />
     <Compile Include="Engine\SkillSystem\Mage\FireRelease.cs" />
@@ -926,7 +923,6 @@
     <Compile Include="Engine\Player\Fireball.cs" />
     <Compile Include="Engine\Player\FireCone.cs" />
     <Compile Include="Engine\Player\Firewave.cs" />
-    <Compile Include="Engine\Player\FishingHandler.cs" />
     <Compile Include="Engine\Player\IAmbientEffectHandler.cs" />
     <Compile Include="Engine\Player\IPlayerInventory.cs" />
     <Compile Include="Engine\Player\IVehicle.cs" />
@@ -1025,7 +1021,6 @@
     <Compile Include="Engine\EntitySystem\EntitySpawner.cs" />
     <Compile Include="Engine\Generation\HighlightedArea.cs" />
     <Compile Include="Engine\Generation\AreaHighlighter.cs" />
-    <Compile Include="Engine\ObfuscatorSettings.cs" />
     <Compile Include="Engine\PhysicsSystem\AnimatedCollider.cs" />
     <Compile Include="Engine\PhysicsSystem\AnimatedColliderBuilder.cs" />
     <Compile Include="Engine\PhysicsSystem\AnimatedColliderData.cs" />
@@ -1124,7 +1119,6 @@
     <Compile Include="Engine\Player\Chat.cs" />
     <Compile Include="Engine\Player\DummyMessageDispatcher.cs" />
     <Compile Include="Engine\Player\GliderModel.cs" />
-    <Compile Include="Engine\Player\Humanoid.cs" />
     <Compile Include="Engine\EntitySystem\EntityComponentManager.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryArrayInterface.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryArrayInterfaceManager.cs" />
@@ -14241,6 +14235,10 @@
     <Content Include="Modules\Villages\Woodland.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\Chat.py" />
+    <Content Include="Scripts\Companion.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\Core.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -14317,6 +14315,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ScriptMapper\ScriptMapper.csproj">
+      <Project>{4798438d-3653-4ca7-b695-d4414186c333}</Project>
+      <Name>ScriptMapper</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent Condition="'$(OS)' == 'Windows_NT' ">
         call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" normal text
@@ -14333,6 +14337,9 @@
     <ErrorReport>prompt</ErrorReport>
     <ConsolePause>False</ConsolePause>
     <OutputPath>bin\Release\</OutputPath>
+    <PreBuildEvent Condition="'$(OS)' == 'Windows_NT' ">
+        call "$(ProjectDir)/../ScriptMapper/bin/$(Configuration)/ScriptMapper.exe" "$(ProjectDir)/Scripts/" "$(ProjectDir)/Engine/Obfuscation/ScriptSettings.cs"
+    </PreBuildEvent>
     <PostBuildEvent Condition="'$(OS)' == 'Windows_NT' ">
     	call "$(ProjectDir)/../hedra-obfuscator/Confuser.CLI.exe" "$(ProjectDir)/Hedra.crproj"
         call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" normal text
@@ -14349,6 +14356,9 @@
     <WarningLevel>1</WarningLevel>
     <DocumentationFile>
     </DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
   <ProjectExtensions />
   <Target Name="AfterCompile">

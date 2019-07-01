@@ -28,7 +28,7 @@ using Cursor = Hedra.Engine.Input.Cursor;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {
-    public delegate void OnSkillUpdated(BaseSkill Skill);
+    public delegate void OnSkillUpdated(AbstractBaseSkill Skill);
     
     public class AbilityTree : PlayerInterface, IAbilityTree
     {

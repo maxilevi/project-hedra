@@ -5,33 +5,37 @@ using Microsoft.Scripting.Hosting;
 
 namespace Hedra.Engine.Scripting
 {
-    public class Function : DynamicObject
+    public class Function
     {
-        private readonly dynamic _base;
+        private readonly object _base;
         private readonly string _library;
         private readonly string _name;
         private readonly ScriptEngine _engine;
         
-        public Function(dynamic Base, string Library, string Name, ScriptEngine Engine)
+        public Function(object Base, string Library, string Name, ScriptEngine Engine)
         {
             _base = Base;
             _library = Library;
             _name = Name;
             _engine = Engine;
         }
-        
-        public override bool TryInvoke(InvokeBinder Binder, object[] Args, out object Result)
+
+        public T Invoke<T>(params object[] Args)
         {
-            Result = null;
+            return (T) Invoke(Args);
+        }
+        public object Invoke(params object[] Args)
+        {
+            var result = default(object);
             try
             {
-                Result = _engine.Operations.Invoke(_base, Args);
+                result = _engine.Operations.Invoke(_base, Args);
             }
             catch (Exception e)
             {
                 Log.WriteLine($"Python call '{_name}' from '{_library}' failed with the following exception:\n\n{e}");
             }
-            return true;
+            return result;
         }
     }
 }

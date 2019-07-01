@@ -2,6 +2,7 @@ using Hedra.Engine.ClassSystem;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.Player;
+using Hedra.EntitySystem;
 using NUnit.Framework;
 
 namespace HedraTests.Player

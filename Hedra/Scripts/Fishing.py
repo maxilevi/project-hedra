@@ -209,7 +209,7 @@ def update_rod(human, rod, rod_line, state):
 
     is_retrieving = ('is_retrieving' in state and state['is_retrieving'])
     is_active = human.IsFishing or is_retrieving
-    rod_line.Enabled = True #human.LeftWeapon is FishingRod
+    rod_line.Enabled = True
     
     if rod_line.Enabled:
         if is_active:
@@ -228,7 +228,8 @@ def on_rod_idle(rod):
     rod_tip_offset = Vector3.UnitZ * Single(0.125) + Vector3.UnitX * Single(-0.125)
     rod_mid_offset = Single(-0.25) * Vector3.UnitX + Vector3.UnitY * 2
     curvature = -0.05
-    return smooth_curve(rod_tip(rod, rod_tip_offset), rod_position(rod, rod_mid_offset), curvature, Vector3.TransformPosition(Vector3.UnitZ, rot_mat))
+    offset = Vector3.TransformPosition(Vector3.UnitX if rod.InAttackStance else Vector3.UnitZ, rot_mat)
+    return smooth_curve(rod_tip(rod, rod_tip_offset), rod_position(rod, rod_mid_offset), curvature, offset)
 
 def on_rod_active(human, rod, state):
     hook = state['fishing_hook']

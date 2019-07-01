@@ -8,7 +8,7 @@ using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Mage.Druid
 {
-    public class ArcticBlast : RadiusEffectSkill
+    public class ArcticBlast : PlayerRadiusEffectSkill
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skill/ArcticBlast.png");
 

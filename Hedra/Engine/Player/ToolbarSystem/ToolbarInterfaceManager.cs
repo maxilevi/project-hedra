@@ -71,7 +71,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
                 if (this._toolbarInferface.Array[i].HasAttribute("AbilityType"))
                     usedTypes.Add(this._toolbarInferface.Array[i].GetAttribute<Type>("AbilityType"));
             }
-            var allSkills = _player.Toolbar.Skills ?? new BaseSkill[0];
+            var allSkills = _player.Toolbar.Skills ?? new AbstractBaseSkill[0];
             allSkills.ToList().ForEach( S => S.Active = false);
 
             var filteredSkills = GetActiveFilteredSkills();
@@ -157,7 +157,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
             From.SetAttribute("AbilityType", null);
         }
 
-        private BaseSkill[] GetFilteredSkills()
+        private AbstractBaseSkill[] GetFilteredSkills()
         {
             var items = _player.AbilityTree.TreeItems;
             return _player.Toolbar.Skills?.Where(S =>
@@ -165,10 +165,10 @@ namespace Hedra.Engine.Player.ToolbarSystem
                 if(!CanLearnSkill(S)) return false;
                 var item = items.FirstOrDefault(I => I != null && I.HasAttribute("AbilityType") && I.GetAttribute<Type>("AbilityType") == S.GetType());
                 return item != null && item.GetAttribute<bool>("Enabled");
-            }).ToArray() ?? new BaseSkill[0];
+            }).ToArray() ?? new AbstractBaseSkill[0];
         }
 
-        private bool CanLearnSkill(BaseSkill S)
+        private bool CanLearnSkill(AbstractBaseSkill S)
         {
             if (_player.AbilityTree == null) return true;
             var correctBlueprint = _player.AbilityTree.HasSpecialization
@@ -177,12 +177,12 @@ namespace Hedra.Engine.Player.ToolbarSystem
             return (_player.Class.MainTree?.Has(S.GetType()) ?? false) || (correctBlueprint?.Has(S.GetType()) ?? false);
         }
         
-        public BaseSkill[] GetActiveFilteredSkills()
+        public AbstractBaseSkill[] GetActiveFilteredSkills()
         {
             return GetFilteredSkills().Where(S => !S.Passive).ToArray();
         }
 
-        private BaseSkill[] GetPassiveAndEnabledFilteredSkills()
+        private AbstractBaseSkill[] GetPassiveAndEnabledFilteredSkills()
         {
             return GetFilteredSkills().Where(S =>S.Level > 0 && S.IsAffecting).ToArray();
         }

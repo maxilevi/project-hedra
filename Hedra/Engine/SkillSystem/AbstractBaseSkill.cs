@@ -25,7 +25,7 @@ namespace Hedra.Engine.SkillSystem
 {
     public delegate void OnStateUpdated();
 
-    public abstract class BaseSkill : DrawableTexture, UIElement
+    public abstract class AbstractBaseSkill : DrawableTexture, UIElement
     {
         public event OnStateUpdated StateUpdated;
         public int Level { get; set; }
@@ -63,7 +63,7 @@ namespace Hedra.Engine.SkillSystem
             StateUpdated?.Invoke();
         }
     }
-    public abstract class BaseSkill<T> : BaseSkill, IRenderable, IUpdatable, ISimpleTexture, IAdjustable where T : ISkillUser
+    public abstract class BaseSkill<T> : AbstractBaseSkill, IRenderable, IUpdatable, ISimpleTexture, IAdjustable where T : ISkillUser
     {
         private static readonly Shader Shader = Shader.Build("Shaders/Skills.vert", "Shaders/Skills.frag");
         private static readonly Vector3 NormalTint = Vector3.One;

@@ -20,6 +20,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering.Animation;
+using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Localization;
 using OpenTK.Input;

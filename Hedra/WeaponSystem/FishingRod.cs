@@ -25,7 +25,7 @@ namespace Hedra.WeaponSystem
         {
             _line = new Line3D();
             _state = new Dictionary<string, object>();
-            Interpreter.GetFunction("Fishing.py", "configure_rod")(this);
+            Interpreter.GetFunction("Fishing.py", "configure_rod").Invoke(this);
         }
         public override uint PrimaryAttackIcon => WeaponIcons.FishingRodPrimaryAttack;
         public override uint SecondaryAttackIcon => WeaponIcons.FishingRodSecondaryAttack;
@@ -41,7 +41,7 @@ namespace Hedra.WeaponSystem
         public override void Update(IHumanoid Human)
         {
             base.Update(Human);
-            _script.Get("update_rod")(Human, this, _line, _state);
+            _script.Get("update_rod").Invoke(Human, this, _line, _state);
         }
 
         protected override string[] SecondaryAnimationsNames => new[]
@@ -58,31 +58,31 @@ namespace Hedra.WeaponSystem
         {
             base.OnPrimaryAttackEvent(Type, Options);
             if(Type == AttackEventType.Mid)
-                _script.Get("start_fishing")(Owner, CreateState(), _hook);
+                _script.Get("start_fishing").Invoke(Owner, CreateState(), _hook);
         }
 
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             base.OnSecondaryAttackEvent(Type, Options);
             if(Type == AttackEventType.Mid)
-                _script.Get("retrieve_fish")(Owner, _state);
+                _script.Get("retrieve_fish").Invoke(Owner, _state);
         }
 
         public override void Attack2(IHumanoid Human, AttackOptions Options)
         {
             if (Human.IsFishing)
             {
-                _script.Get("start_retrieval")(Owner, _state);
+                _script.Get("start_retrieval").Invoke(Owner, _state);
                 base.Attack2(Human, Options);
             }
         }
 
         public override void Attack1(IHumanoid Human, AttackOptions Options)
         {
-            if (_script.Get("check_can_fish")(Human))
+            if (_script.Get("check_can_fish").Invoke<bool>(Human))
             {
                 if (Human.IsFishing)
-                    _script.Get("disable_fishing")(Owner, _state);
+                    _script.Get("disable_fishing").Invoke(Owner, _state);
                 base.Attack1(Human, Options);
             }
         }

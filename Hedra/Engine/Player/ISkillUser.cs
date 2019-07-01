@@ -9,6 +9,6 @@ namespace Hedra.Engine.Player
     {
         bool CanCastSkill { get; }
         void SetSkillPoints(Type Skill, int Points);
-        T SearchSkill<T>() where T : BaseSkill;
+        T SearchSkill<T>() where T : AbstractBaseSkill;
     }
 }

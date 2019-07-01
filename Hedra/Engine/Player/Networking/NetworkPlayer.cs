@@ -10,6 +10,7 @@ using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.SkillSystem;
+using Hedra.EntitySystem;
 
 namespace Hedra.Engine.Player.Networking
 {
@@ -40,7 +41,7 @@ namespace Hedra.Engine.Player.Networking
             throw new NotImplementedException();
         }
 
-        public T SearchSkill<T>() where T : BaseSkill
+        public T SearchSkill<T>() where T : AbstractBaseSkill
         {
             throw new NotImplementedException();
         }

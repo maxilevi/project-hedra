@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player;
+using Hedra.EntitySystem;
 using Hedra.Items;
 
 namespace Hedra.Components

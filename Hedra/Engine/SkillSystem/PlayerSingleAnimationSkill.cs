@@ -20,7 +20,7 @@ using OpenTK;
 
 namespace Hedra.Engine.SkillSystem
 {
-    public abstract class SingleAnimationSkill : SingleAnimationSkill<IPlayer>
+    public abstract class PlayerSingleAnimationSkill : SingleAnimationSkill<IPlayer>
     {
     }
     

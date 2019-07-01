@@ -15,7 +15,7 @@ using OpenTK;
 
 namespace HedraTests.Player.Skills
 {
-    public abstract class SkillTest<T> : BaseTest where T : BaseSkill, new()
+    public abstract class SkillTest<T> : BaseTest where T : AbstractBaseSkill, new()
     {
         protected PlayerMock Player;
         protected T Skill;

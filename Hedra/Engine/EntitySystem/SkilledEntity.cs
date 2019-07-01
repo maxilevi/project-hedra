@@ -18,7 +18,7 @@ namespace Hedra.Engine.EntitySystem
         {
         }
 
-        public T SearchSkill<T>() where T : BaseSkill
+        public T SearchSkill<T>() where T : AbstractBaseSkill
         {
             return default(T);
         }

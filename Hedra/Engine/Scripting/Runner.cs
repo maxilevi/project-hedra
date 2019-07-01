@@ -15,7 +15,7 @@ namespace Hedra.Engine.Scripting
         }
         public abstract void Load();
 
-        public dynamic GetFunction(string Library, string Function)
+        public object GetFunction(string Library, string Function)
         {
             try
             {

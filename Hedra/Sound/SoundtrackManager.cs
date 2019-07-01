@@ -9,6 +9,7 @@
 
 using System.IO;
 using Hedra.Engine.Game;
+using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Scripting;
 using Hedra.Engine.Sound;
@@ -62,19 +63,21 @@ namespace Hedra.Sound
 
         private static void OnSongEnd()
         {
-            _script.Get("on_song_end")(_isPlayingAmbient, _currentActionSong, _currentAmbientSong);
+            _script.Get("on_song_end").Invoke(_isPlayingAmbient, _currentActionSong, _currentAmbientSong);
         }
         
         public static void PlayAmbient()
         {
+            if (!_loaded) return;
             _isPlayingAmbient = true;
-            _currentAmbientSong = _script.Get("resume_ambient")(_currentAmbientSong);
+            _currentAmbientSong = _script.Get("resume_ambient").Invoke<int>(_currentAmbientSong);
         }
 
         public static void PlayRepeating(int Index)
         {
+            if (!_loaded) return;
             _isPlayingAmbient = false;
-            _currentActionSong = _script.Get("resume_action")(Index);
+            _currentActionSong = _script.Get("resume_action").Invoke<int>(Index);
         }
         
         public static void Update()
@@ -172,7 +175,7 @@ namespace Hedra.Sound
             Rain = _script.Get<int>("RAIN");
             VillageAmbient = _script.Get<int>("VILLAGE_AMBIENT");
             OnTheLam = _script.Get<int>("ON_THE_LAM");
-            _script.Get("soundtrack_setup")();
+            _script.Get("soundtrack_setup").Invoke();
         }
     }
 }

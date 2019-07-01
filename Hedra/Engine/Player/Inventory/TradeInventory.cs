@@ -17,6 +17,7 @@ using Hedra.Engine.Input;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI;
+using Hedra.EntitySystem;
 using OpenTK;
 using OpenTK.Input;
 

@@ -10,7 +10,7 @@ using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Archer.Scout
 {
-    public class Retreat : SingleAnimationSkill
+    public class Retreat : PlayerSingleAnimationSkill
     {
         private const float DefaultMultiplier = 100;
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Retreat.png");   

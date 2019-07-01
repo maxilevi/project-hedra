@@ -16,6 +16,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Scripting;
+using Hedra.EntitySystem;
 using Hedra.Items;
 
 namespace Hedra.Components
@@ -38,7 +39,7 @@ namespace Hedra.Components
         {
             var rng = new Random(World.Seed + Unique.GenerateSeed(Parent.Position.Xz));
             var dict = new Dictionary<int, Item>();
-            Script.Get("build_inventory")(dict, _isTravellingMerchant, TradeInventory.MerchantSpaces, rng);
+            Script.Get("build_inventory").Invoke(dict, _isTravellingMerchant, TradeInventory.MerchantSpaces, rng);
             return dict;
         }
     }

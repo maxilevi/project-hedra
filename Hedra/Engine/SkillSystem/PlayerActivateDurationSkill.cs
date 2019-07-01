@@ -4,7 +4,7 @@ using Hedra.Engine.Player;
 
 namespace Hedra.Engine.SkillSystem
 {
-    public abstract class ActivateDurationSkill : ActivateDurationSkill<IPlayer>
+    public abstract class PlayerActivateDurationSkill : ActivateDurationSkill<IPlayer>
     {
     }
     

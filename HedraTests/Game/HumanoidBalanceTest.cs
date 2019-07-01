@@ -9,6 +9,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.Player;
+using Hedra.EntitySystem;
 using Hedra.Items;
 using NUnit.Framework;
 

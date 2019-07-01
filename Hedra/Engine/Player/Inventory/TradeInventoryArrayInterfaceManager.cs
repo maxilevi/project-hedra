@@ -4,6 +4,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
+using Hedra.EntitySystem;
 using Hedra.Sound;
 using OpenTK.Input;
 
