@@ -6,19 +6,20 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using System;
-using System.Drawing;
-using Hedra.Engine.Events;
-using Hedra.Engine.Management;
-using OpenTK;
-using OpenTK.Input;
-using System.Threading;
 using System.Collections;
 using Hedra.Core;
-using Hedra.Engine.Game;
+using Hedra.Engine;
+using Hedra.Engine.Events;
+using Hedra.Engine.Management;
+using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.UI;
 using Hedra.Game;
+using OpenTK;
+using OpenTK.Input;
 
-namespace Hedra.Engine.Rendering.UI
+namespace Hedra.Rendering.UI
 {
     /// <summary>
     /// Description of TextField.
@@ -32,9 +33,9 @@ namespace Hedra.Engine.Rendering.UI
         public bool UseNumbersOnly {get; set;}
         public bool ShowCaret {get; set;}
         
-        public TextField(Vector2 Position, Vector2 Scale, Panel InPanel, bool CurveBorders = true) : base()
+        public TextField(Vector2 Position, Vector2 Scale, Panel InPanel, bool CurvedBorders = true) : base()
         {
-            _textBar = new Bar(Position, Scale, () => 1, () => 1, Vector4.One, InPanel, DrawOrder.After, CurveBorders);
+            _textBar = new Bar(Position, Scale, () => 1, () => 1, Vector4.One, InPanel, DrawOrder.After, CurvedBorders);
             _textBar.ShowBar = false;
             this.Text = string.Empty;
             _textBar.UpdateTextRatio = false;
@@ -165,20 +166,25 @@ namespace Hedra.Engine.Rendering.UI
         }
         
         private bool _mInFocus;
-        public bool InFocus{
-            get{ return _mInFocus; }
-            set{
+        public bool InFocus
+        {
+            get => _mInFocus;
+            set
+            {
                 _mInFocus = value;
-                if(_mInFocus){
+                if(_mInFocus)
+                {
                     this._textBar.BackgroundColor = new Vector4(0.0784313725f,0.0784313725f,0.0784313725f,1);
-                    if(ShowCaret){
+                    if(ShowCaret)
+                    {
                         _caret.Enable();
                         _caretIndex = this.Text.Length-1;
                         this.UpdateCaret();
                     }
                 }else{
                     this._textBar.BackgroundColor = new Vector4(0.1529f,0.1529f,0.1529f,1);
-                    if(ShowCaret){
+                    if(ShowCaret)
+                    {
                         _caret.Disable();
                         _caretIndex = 0;
                         this.UpdateCaret();
@@ -187,19 +193,22 @@ namespace Hedra.Engine.Rendering.UI
             }
         }
         
-        public string Text{
-            get{ return this._textBar.Text.Text; }
-            set{ this._textBar.Text.Text = value;}
+        public string Text
+        {
+            get => this._textBar.Text.Text;
+            set => this._textBar.Text.Text = value;
         }
         
-        public Vector2 Scale{
-            get{ return _textBar.Scale; }
-            set{ _textBar.Scale = _textBar.Scale; }
+        public Vector2 Scale
+        {
+            get => _textBar.Scale;
+            set => _textBar.Scale = value;
         }
         
-        public Vector2 Position{
-            get{ return _textBar.Position; }
-            set{ _textBar.Position = _textBar.Position; }
+        public Vector2 Position
+        {
+            get => _textBar.Position;
+            set => _textBar.Position = value;
         }
         
         private bool _enabled;

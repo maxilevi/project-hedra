@@ -233,25 +233,8 @@ namespace Hedra.Engine.Player
         {
             if (_registeredKeys.ContainsKey(EventArgs.Key)) _registeredKeys[EventArgs.Key]();
 
-            var pushedText = false;
-            if (EventArgs.Key == Key.Enter && _player.Chat.Focused)
-            {
-                _player.Chat.PushText();
-                pushedText = true;
-            }
-
-            if (EventArgs.Key == Key.Enter && !GameSettings.Paused && !_player.InterfaceOpened && !_player.IsDead && Human.CanInteract && !pushedText)
-            {
-                _player.Chat.Focus();
-            }
-
             if (EventArgs.Key == Key.Escape && !_player.UI.GamePanel.Enabled && !_player.UI.Hide)
                 SoundPlayer.PlayUISound(SoundType.ButtonClick);
-
-            if (EventArgs.Key == Key.Escape && _player.Chat.Focused)
-            {
-                _player.Chat.LoseFocus();
-            }
 
             if (EventArgs.Key == Key.F2)
             {
@@ -268,7 +251,7 @@ namespace Hedra.Engine.Player
             {
                 World.ReloadModules();
 
-                _player.Chat.AddLine("Modules reloaded.");
+                //_player.Chat.AddLine("Modules reloaded.");
             }
             if (GameSettings.DebugView && EventArgs.Key == Key.F6)
             {
@@ -282,7 +265,7 @@ namespace Hedra.Engine.Player
                     }
                 }
                 World.StructureHandler.Discard();
-                _player.Chat.AddLine("Chunks discarded.");
+                //_player.Chat.AddLine("Chunks discarded.");
             }
 #if DEBUG
             if (EventArgs.Key == Key.F10)

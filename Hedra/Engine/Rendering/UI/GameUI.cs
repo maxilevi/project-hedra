@@ -17,6 +17,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Game;
 using Hedra.Localization;
+using Hedra.Rendering.UI;
 
 namespace Hedra.Engine.Rendering.UI
 {

@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Hedra.Engine.Management;
 using Hedra.Engine.Native;
+using Hedra.Rendering.UI;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering.UI

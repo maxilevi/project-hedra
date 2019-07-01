@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using Hedra.Engine.Game;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Rendering.UI;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering

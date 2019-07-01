@@ -5,19 +5,17 @@
  *
  */
 
-using System;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
 using System.Threading;
-using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
-using OpenTK;
 using Hedra.Engine.Management;
+using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.UI;
 using Hedra.Game;
+using OpenTK;
 
-namespace Hedra.Engine.Rendering.UI
+namespace Hedra.Rendering.UI
 {
     /// <summary>
     /// Description of GUIText.
@@ -96,7 +94,7 @@ namespace Hedra.Engine.Rendering.UI
                     obj.Bitmap.Dispose();
                 }
 
-                if (Thread.CurrentThread.ManagedThreadId != Loader.Hedra.MainThreadId)
+                if (Thread.CurrentThread.ManagedThreadId != Engine.Loader.Hedra.MainThreadId)
                     Executer.ExecuteOnMainThread(UpdateTexture);
                 else
                     UpdateTexture(); 
@@ -203,6 +201,8 @@ namespace Hedra.Engine.Rendering.UI
         {
             UIText.Enabled = false;
         }
+
+        public bool Enabled => UIText.Enabled;
 
         public void Dispose()
         {

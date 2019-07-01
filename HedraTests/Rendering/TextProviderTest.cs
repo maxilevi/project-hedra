@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Rendering.UI;
 using NUnit.Framework;
 
 namespace HedraTests.Rendering

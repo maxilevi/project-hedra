@@ -6,9 +6,8 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
 
-namespace Hedra.Engine.Management
+namespace Hedra.User
 {
     /// <summary>
     /// Description of WordFilter.

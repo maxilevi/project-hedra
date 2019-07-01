@@ -212,6 +212,8 @@
     <Compile Include="BiomeSystem\BiomeSkyDesign.cs" />
     <Compile Include="BiomeSystem\BiomeStructureDesign.cs" />
     <Compile Include="BiomeSystem\BiomeTreeDesign.cs" />
+    <Compile Include="User\CommandManager.cs" />
+    <Compile Include="User\WordFilter.cs" />
     <Compile Include="Components\BlacksmithComponent.cs" />
     <Compile Include="Components\Effects\AttackPowerBonusComponent.cs" />
     <Compile Include="Components\Effects\AttackResistanceBonusComponent.cs" />
@@ -856,7 +858,6 @@
     <Compile Include="Engine\Game\SettingAttribute.cs" />
     <Compile Include="Engine\Game\WindowSettingAttribute.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkSparsity.cs" />
-    <Compile Include="Engine\Input\Cursor.cs" />
     <Compile Include="Engine\Input\KeyboardManager.cs" />
     <Compile Include="Engine\ItemSystem\ArmorSystem\BootsPiece.cs" />
     <Compile Include="Engine\ItemSystem\ArmorSystem\HelmetPiece.cs" />
@@ -1066,7 +1067,6 @@
     <Compile Include="Engine\Management\AutosaveManager.cs" />
     <Compile Include="Engine\Management\Pool.cs" />
     <Compile Include="Engine\CacheSystem\CacheProvider.cs" />
-    <Compile Include="Engine\Management\CommandManager.cs" />
     <Compile Include="Engine\Management\DataManager.cs" />
     <Compile Include="Engine\Player\Customization\CustomizationOptions.cs" />
     <Compile Include="Engine\Player\Customization\ModelCustomization.cs" />
@@ -1078,7 +1078,6 @@
     <Compile Include="Engine\WorldBuilding\Tombstone.cs" />
     <Compile Include="Engine\Rendering\CapHandler.cs" />
     <Compile Include="Engine\Rendering\GeometryData.cs" />
-    <Compile Include="Engine\Management\WordFilter.cs" />
     <Compile Include="Engine\BiomeSystem\BiomePool.cs" />
     <Compile Include="Engine\Generation\BlockUtils.cs" />
     <Compile Include="Engine\BiomeSystem\BiomeGenerator.cs" />
@@ -1272,6 +1271,7 @@
     <Compile Include="EntitySystem\IEntity.cs" />
     <Compile Include="EntitySystem\IHumanoid.cs" />
     <Compile Include="EntitySystem\IPhysicsComponent.cs" />
+    <Compile Include="Input\Cursor.cs" />
     <Compile Include="Items\InventoryExtensions.cs" />
     <Compile Include="Items\ItemHandler.cs" />
     <Compile Include="Items\ItemPool.cs" />
@@ -1288,6 +1288,10 @@
     <Compile Include="Rendering\ObjectMesh.cs" />
     <Compile Include="Rendering\Particles\ParticleShape.cs" />
     <Compile Include="Rendering\PointLight.cs" />
+    <Compile Include="Rendering\UI\FontCache.cs" />
+    <Compile Include="Rendering\UI\GUIText.cs" />
+    <Compile Include="Rendering\UI\Panel.cs" />
+    <Compile Include="Rendering\UI\TextField.cs" />
     <Compile Include="Rendering\VertexData.cs" />
     <Compile Include="Sound\SoundPlayer.cs" />
     <Compile Include="Sound\SoundtrackManager.cs">
@@ -1311,20 +1315,16 @@
     <Compile Include="Engine\Rendering\UI\ControlsUI.cs" />
     <Compile Include="Engine\Rendering\UI\CursorIcon.cs" />
     <Compile Include="Engine\Rendering\UI\DisplayOnDrag.cs" />
-    <Compile Include="Engine\Rendering\UI\FontCache.cs" />
     <Compile Include="Engine\Rendering\UI\GameUI.cs" />
     <Compile Include="Engine\Rendering\UI\GUIRenderer.cs" />
-    <Compile Include="Engine\Rendering\UI\GUIText.cs" />
     <Compile Include="Engine\Rendering\UI\GUITexture.cs" />
     <Compile Include="Engine\Rendering\UI\NetworkUI.cs" />
     <Compile Include="Engine\Rendering\UI\OptionChooser.cs" />
     <Compile Include="Engine\Rendering\UI\OptionsUI.cs" />
-    <Compile Include="Engine\Rendering\UI\Panel.cs" />
     <Compile Include="Engine\Rendering\UI\ProgressBar.cs" />
     <Compile Include="Engine\Rendering\UI\RenderableButton.cs" />
     <Compile Include="Engine\Rendering\UI\RenderableText.cs" />
     <Compile Include="Engine\Rendering\UI\RenderableTexture.cs" />
-    <Compile Include="Engine\Rendering\UI\TextField.cs" />
     <Compile Include="Engine\Rendering\UI\BackgroundTexture.cs" />
     <Compile Include="Engine\Rendering\UI\TexturedBar.cs" />
     <Compile Include="Engine\Rendering\UI\UIElement.cs" />

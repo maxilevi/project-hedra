@@ -23,7 +23,9 @@ using Hedra.Engine.Networking;
 using Hedra.Engine.Player;
 using Hedra.Engine.Steamworks;
 using Hedra.Game;
+using Hedra.Input;
 using Hedra.Localization;
+using Hedra.Rendering.UI;
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -226,7 +228,6 @@ namespace Hedra.Engine.Rendering.UI
                 _player.CanInteract = false;
             }
             Cursor.Show = true;
-            LocalPlayer.Instance.Chat.Show = false;
             GameSettings.DarkEffect = false;
             Cursor.Center();
         }
@@ -244,8 +245,6 @@ namespace Hedra.Engine.Rendering.UI
             ChrCreator.Disable();
             ConnectPanel.Disable();
             Cursor.Show = false;
-            LocalPlayer.Instance.Chat.Show = true;
-            LocalPlayer.Instance.Chat.LoseFocus();
             Cursor.Center();
         }
         

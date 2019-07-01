@@ -17,6 +17,7 @@ using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Game;
 using Hedra.Rendering;
+using Hedra.Rendering.UI;
 using OpenTK;
 
 namespace Hedra.Engine.Management

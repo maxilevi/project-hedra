@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Linq;
-using Hedra.Engine.Game;
 using Hedra.Engine.IO;
-using Hedra.Engine.Management;
 
-namespace Hedra.Engine.Rendering.UI
+namespace Hedra.Rendering.UI
 {
     public static class FontCache
     {

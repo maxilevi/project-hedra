@@ -14,6 +14,7 @@ using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.StructureSystem;
 using Hedra.EntitySystem;
 using Hedra.Game;
+using Hedra.Input;
 using OpenTK;
 using OpenTK.Input;
 

@@ -9,6 +9,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Player.CraftingSystem;
 using Hedra.Engine.Player.PagedInterface;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Rendering.UI;
 using NUnit.Framework;
 
 namespace HedraTests.CodePolicy

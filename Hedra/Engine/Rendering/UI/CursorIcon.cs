@@ -12,6 +12,7 @@ using Hedra.Engine.Input;
 using OpenTK;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
+using Hedra.Input;
 
 namespace Hedra.Engine.Rendering.UI
 {

@@ -8,6 +8,7 @@ using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.SkillSystem;
 using Hedra.Game;
 using Hedra.Rendering;
+using Hedra.Rendering.UI;
 using Hedra.WeaponSystem;
 using Moq;
 using NUnit.Framework;

@@ -6,6 +6,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Rendering.UI;
 using OpenTK;
 using OpenTK.Input;
 

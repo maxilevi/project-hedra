@@ -21,6 +21,7 @@ using Hedra.Engine.Rendering.UI;
 using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Rendering;
+using Hedra.Rendering.UI;
 using Hedra.WeaponSystem;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;

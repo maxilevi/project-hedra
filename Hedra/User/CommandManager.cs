@@ -6,6 +6,7 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using System;
 using System.Drawing;
 using System.Globalization;
@@ -15,29 +16,22 @@ using Hedra.AISystem.Humanoid;
 using Hedra.Components;
 using Hedra.Components.Effects;
 using Hedra.Core;
-using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
-using OpenTK;
-using Hedra.Engine.Player;
-using Hedra.Engine.Generation;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
-using Hedra.Engine.Game;
 using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Networking;
+using Hedra.Engine.Player;
 using Hedra.Engine.QuestSystem;
-using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Scripting;
-using Hedra.Engine.Sound;
-using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Game;
 using Hedra.Items;
-using Hedra.Sound;
+using OpenTK;
 
-namespace Hedra.Engine.Management
+namespace Hedra.User
 {
     /// <summary>
     /// Description of CommandManager.
@@ -429,6 +423,13 @@ namespace Hedra.Engine.Management
                 if(Parts[0] == "chest")
                 {
                     World.SpawnChest(Caster.Position + Caster.Orientation * 32, ItemPool.Grab(Parts[1]) );
+                    return true;
+                }
+
+                if (Parts[0] == "watch")
+                {
+                    GameSettings.WatchScriptChanges = !GameSettings.WatchScriptChanges;
+                    Result = $"Watching script changes is now: {(GameSettings.WatchScriptChanges ? "ON" : "OFF")}";
                     return true;
                 }
                 if (Parts[0] == "exec")

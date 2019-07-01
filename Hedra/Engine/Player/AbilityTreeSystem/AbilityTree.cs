@@ -24,7 +24,7 @@ using Hedra.Rendering;
 using Hedra.Sound;
 using OpenTK;
 using OpenTK.Input;
-using Cursor = Hedra.Engine.Input.Cursor;
+using Cursor = Hedra.Input.Cursor;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {

@@ -4,18 +4,17 @@
  * Time: 12:54 a.m.
  *
  */
+
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using OpenTK;
-using Hedra.Engine.Management;
 using Hedra.Engine.Events;
-using Hedra.Engine.Localization;
+using Hedra.Engine.Rendering.UI;
+using OpenTK;
 using OpenTK.Input;
 
-namespace Hedra.Engine.Rendering.UI
+namespace Hedra.Rendering.UI
 {
     /// <summary>-
     /// Description of Panel.

@@ -3,6 +3,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Items;
+using Hedra.Rendering.UI;
 using OpenTK;
 
 namespace Hedra.Engine.Player.Inventory

@@ -5,6 +5,7 @@ using Hedra.Engine.Input;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Input;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
 using OpenTK;

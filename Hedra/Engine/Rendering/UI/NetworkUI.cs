@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using Hedra.Engine.Game;
 using Hedra.Engine.Player;
 using Hedra.Game;
+using Hedra.Rendering.UI;
 
 namespace Hedra.Engine.Rendering.UI
 {

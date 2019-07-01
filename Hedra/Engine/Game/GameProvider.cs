@@ -211,7 +211,6 @@ namespace Hedra.Engine.Game
         private IEnumerator SpawnCoroutine()
         {
             SoundtrackManager.PlayAmbient();
-            Player.Chat.Show = false;
             Player.SearchComponent<DamageComponent>().Immune = true;
             var chunkOffset = World.ToChunkSpace(Player.BlockPosition);
             StructureHandler.CheckStructures(chunkOffset);
@@ -224,8 +223,6 @@ namespace Hedra.Engine.Game
             Player.UI.GamePanel.Enable();
 
             Player.SearchComponent<DamageComponent>().Immune = false;
-            Player.Chat.Show = true;
-            Player.Chat.LoseFocus();
             GameManager.SpawningEffect = true;
             Player.Model.ApplyFog = true;
             Player.CanInteract = true;

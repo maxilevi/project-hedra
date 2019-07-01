@@ -8,6 +8,7 @@ using System;
 using System.Drawing;
 using System.Linq;
 using Hedra.Engine.Localization;
+using Hedra.Rendering.UI;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering.UI

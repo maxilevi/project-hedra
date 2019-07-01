@@ -1,6 +1,7 @@
 using System.Linq;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
+using Hedra.Game;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
@@ -38,6 +39,7 @@ namespace Hedra.Engine.Rendering
             Renderer.LineWidth(Width);
 
             _data.Bind();
+            LineShader["PlayerPosition"] = GameManager.Player.Position;
             Renderer.DrawArrays(PrimitiveType.LineStrip, 0, _vertices.Count);   
             _data.Unbind();
 

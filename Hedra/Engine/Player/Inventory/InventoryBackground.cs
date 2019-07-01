@@ -4,6 +4,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.EntitySystem;
+using Hedra.Rendering.UI;
 using OpenTK;
 
 namespace Hedra.Engine.Player.Inventory

@@ -23,6 +23,7 @@ using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Localization;
+using Hedra.Rendering.UI;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Rendering.UI
