@@ -91,6 +91,7 @@ namespace Hedra.Engine.Player
         private float _speedAddon;
         private readonly Timer _consecutiveHitsTimer;
         private DamageComponent _damageHandler;
+        private bool _ignoreHitCombo;
 
         #region Propierties ( MaxMana, MaxHealth, MaxXp)
 
@@ -275,6 +276,7 @@ namespace Hedra.Engine.Player
 
         public void ProcessHit(bool HittedSomething)
         {
+            if(_ignoreHitCombo) return;
             if (!HittedSomething)
             {
                 ConsecutiveHits = 0;
@@ -291,6 +293,19 @@ namespace Hedra.Engine.Player
                 }
                 Mana = Mathf.Clamp(Mana + 8, 0, MaxMana);
                 OnHitLanded?.Invoke(this, ConsecutiveHits);
+            }
+        }
+
+        public void DoIgnoringHitCombo(Action Lambda)
+        {
+            _ignoreHitCombo = true;
+            try
+            {
+                Lambda();
+            }
+            finally
+            {
+                _ignoreHitCombo = false;
             }
         }
 

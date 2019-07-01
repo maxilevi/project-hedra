@@ -62,8 +62,13 @@ namespace Hedra.Engine.Player
                 
                 if(dot >= .75f && distanceVector.LengthSquared < ConeDistanceSquared)
                 {
-                    World.Entities[i].Damage(_damagePerSecond * dot * Time.DeltaTime, _owner, out var exp, false, false);
-                    _owner.XP += exp;
+                    var k = i;
+                    _owner.DoIgnoringHitCombo(() =>
+                    {
+                        World.Entities[k].Damage(_damagePerSecond * dot * Time.DeltaTime, _owner, out var exp, false,
+                            false);
+                        _owner.XP += exp;
+                    });
                 }
             }
         }
