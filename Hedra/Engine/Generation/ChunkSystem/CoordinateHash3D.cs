@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using OpenTK;
 
@@ -7,43 +8,33 @@ namespace Hedra.Engine.Generation.ChunkSystem
     [StructLayout(LayoutKind.Sequential)]
     public struct CoordinateHash3D : IEquatable<CoordinateHash3D>
     {
-        private readonly byte X;
-        private readonly byte Y;
-        private readonly byte Z;
+        public const int MaxCoordinateSizeXZ = 32;
+        public const int MaxCoordinateSizeY = 64;
+        private readonly ushort _bits;
 
-        public CoordinateHash3D(byte X, byte Y, byte Z)
+        public CoordinateHash3D(Vector3 Coordinates): this((byte)Coordinates.X, (byte)Coordinates.Y, (byte)Coordinates.Z)
         {
-            this.X = X;
-            this.Y = Y;
-            this.Z = Z;
         }
 
-        public CoordinateHash3D(Vector3 Coordinates)
+        private CoordinateHash3D(byte X, byte Y, byte Z)
         {
-            this.X = (byte)Coordinates.X;
-            this.Y = (byte)Coordinates.Y;
-            this.Z = (byte)Coordinates.Z;
+#if DEBUG
+            if (MaxCoordinateSizeXZ != (int)(Chunk.Width / Chunk.BlockSize) || MaxCoordinateSizeY != (int)(Chunk.Height / Chunk.BlockSize))
+                throw new ArgumentOutOfRangeException($"Invalid coordinate size.");
+#endif
+            _bits = (ushort) (X | (Z << 5) | (Y << 10));
         }
 
         public Vector3 ToVector3()
         {
-            return new Vector3(X, Y, Z);
+            return new Vector3(_bits & 31, (_bits >> 10) & 63, (_bits >> 5) & 31);
         }
         
         public bool Equals(CoordinateHash3D Other)
         {
-            return X == Other.X && Y == Other.Y && Z == Other.Z;
+            return _bits == Other._bits;
         }
 
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                int hashCode = X.GetHashCode();
-                hashCode = (hashCode * 397) ^ Y.GetHashCode();
-                hashCode = (hashCode * 397) ^ Z.GetHashCode();
-                return hashCode;
-            }
-        }
+        public override int GetHashCode() => _bits.GetHashCode();
     }
 }

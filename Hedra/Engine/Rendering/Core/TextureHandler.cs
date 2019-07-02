@@ -39,7 +39,7 @@ namespace Hedra.Engine.Rendering.Core
             if (!Program.IsDummy && Target == TextureTarget.Texture2D && !TextureRegistry.IsKnown(Id))
             {
                 var a = TextureRegistry.IsKnown(Id);
-                throw new ArgumentOutOfRangeException($"Found an unregistered texture '{Id}' that is being used.");
+                //throw new ArgumentOutOfRangeException($"Found an unregistered texture '{Id}' that is being used.");
             }
 #endif
             

@@ -19,7 +19,7 @@ namespace Hedra.Engine.Scripting
         {
             try
             {
-                var scope = DoRun(ParseLibraryName(Library));
+                var scope = DoRun(Library);
                 return scope.ContainsVariable(Function) ? scope.GetVariable(Function) : null;
             }
             catch (Exception e)
@@ -34,7 +34,7 @@ namespace Hedra.Engine.Scripting
         {
             try
             {
-                return DoRun(ParseLibraryName(Library));
+                return DoRun(Library);
             }
             catch (Exception e)
             {
@@ -51,11 +51,6 @@ namespace Hedra.Engine.Scripting
             Log.WriteLine($"INTERPRETER PANIC at '{Name}':{Environment.NewLine}{Environment.NewLine}{Exception}");
         }
 
-        private string ParseLibraryName(string Library)
-        {
-            return Library.EndsWith(".py") ? Library : Library + ".py";
-        }
-        
         protected abstract ScriptScope DoRun(string Library);
     }
 }

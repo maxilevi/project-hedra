@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using Hedra.Core;
 using Hedra.Engine.Game;
@@ -64,10 +66,11 @@ namespace Hedra.Engine.Player
         {
             _riverAreaSound.Update(_nearestWater < MaxRange);
             _riverAreaSound.Type = GameSettings.UnderWaterEffect ? SoundType.Underwater : SoundType.River;
-            if ((_lastPosition - _player.Position).LengthSquared < 1f && !_wasAnyNull) return;
+            const float errorMargin = (Chunk.BlockSize * 2) * (Chunk.BlockSize * 2);
+            if ((_lastPosition - _player.Position).LengthSquared < errorMargin && !_wasAnyNull) return;
             _riverAreaSound.Position = _player.Position;
             _nearestWater = NearestWaterBlock();
-            _riverAreaSound.Volume = (1-Math.Min(_nearestWater, MaxRange) / MaxRange)*.1f;
+            _riverAreaSound.Volume = (1-Math.Min(_nearestWater, MaxRange) / MaxRange) * .75f;
             _lastPosition = _player.Position;
         }
 
@@ -99,12 +102,12 @@ namespace Hedra.Engine.Player
             for (var i = 0; i < positions.Length; i++)
             {
                 var realPosition = positions[i].ToVector3() * Chunk.BlockSize + UnderChunk.Position;
-                var dist = (realPosition - Position).LengthSquared;
+                var dist = (realPosition - Position).Xz.LengthSquared;
                 if (dist < nearest) nearest = dist;
             }
             return nearest;
         }
-
+        
         public void Dispose()
         {
             _riverAreaSound.Dispose();

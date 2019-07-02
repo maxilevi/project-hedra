@@ -73,10 +73,10 @@ namespace ScriptMapper
                 "using System.Reflection;",
                 Environment.NewLine
             };
-            var lines = Names.Select(
+            var lines = Names.OrderBy(N => N).Select(
                 N => $"[assembly: Obfuscation(Exclude = false, Feature = \"match-name('^{N}$') and (member-type('field') or member-type('property') or member-type('method') or member-type('event')):-rename\")]"
             ).ToArray();
-            File.WriteAllText(Path, string.Join(Environment.NewLine, headers) + Environment.NewLine + string.Join(Environment.NewLine, lines));
+            File.WriteAllText(Path, string.Join(Environment.NewLine, headers) + string.Join(Environment.NewLine, lines));
         }
 
         private static void DisplayHelp()

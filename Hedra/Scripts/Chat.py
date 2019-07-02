@@ -105,8 +105,8 @@ def push_text(state):
     command_text = command_line.Text
     if command_text:
         if '/' == command_text[0]:
-            result = None
-            if CommandManager.ProcessCommand(command_text, state['user'], out result):
+            success, result = CommandManager.ProcessCommand(command_text, state['user'])
+            if success:
                 add_line(state, result)
         else:
             output_msg = state['user'].Name + ": " + WordFilter.Filter(command_text)

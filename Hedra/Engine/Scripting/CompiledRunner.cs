@@ -9,12 +9,12 @@ namespace Hedra.Engine.Scripting
 {
     public class CompiledRunner : Runner
     {
-        private readonly Dictionary<string, string> _sources;
+        private readonly Dictionary<string, DateTime> _sources;
         private readonly Dictionary<string, ScriptScope> _scripts;
         public CompiledRunner(ScriptEngine Engine) : base(Engine)
         {
             _scripts = new Dictionary<string, ScriptScope>();
-            _sources = new Dictionary<string, string>();
+            _sources = new Dictionary<string, DateTime>();
         }
 
         public override void Load()
@@ -34,24 +34,42 @@ namespace Hedra.Engine.Scripting
 
         private ScriptScope GetOrCompile(string Library)
         {
-            CheckForChanges(Library);
-            if (_scripts.ContainsKey(Library)) return _scripts[Library];
-            var source = _sources[Library];
-            var scope = Engine.CreateScope();
-            if (source != null)
+            if (!WatchChanges && _scripts.ContainsKey(Library)) return _scripts[Library];
+            var lastWrite = _sources.ContainsKey(Library) ? _sources[Library] : DateTime.MinValue;
+            if (ScriptChanged(Library, lastWrite, out var newWrite))
             {
-                var scriptSource = Engine.CreateScriptSourceFromString(source);
+                return Compile(Library, Get(Library), newWrite);
+            }
+            return _scripts[Library];
+        }
+
+        private ScriptScope Compile(string Name, string Source, DateTime Date)
+        {
+            var scope = Engine.CreateScope();
+            if (Source != null)
+            {
+                var scriptSource = Engine.CreateScriptSourceFromString(Source);
                 scope.SetVariable("player", GameManager.PlayerExists ? GameManager.Player : null);
                 var listener = new ErrorReporter();
                 var compiled = scriptSource.Compile(listener);
                 if (listener.Count == 0)
                 {
-                    if(Execute(Library, compiled, scope))
-                        _scripts.Add(Library, scope);
+                    if (Execute(Name, compiled, scope))
+                    {
+                        if (_scripts.ContainsKey(Name))
+                            _scripts.Remove(Name);
+                        
+                        _scripts.Add(Name, scope);
+                        
+                        if (_sources.ContainsKey(Name))
+                            _sources.Remove(Name);
+                        
+                        _sources.Add(Name, Date);
+                    }
                 }
                 else
                 {
-                    listener.LogAll(Library);
+                    listener.LogAll(Name);
                 }
             }
             return scope;
@@ -71,22 +89,19 @@ namespace Hedra.Engine.Scripting
 
             return true;
         }
-        
-        private void CheckForChanges(string Library)
+
+        private static bool ScriptChanged(string Name, DateTime LastTime, out DateTime NewWrite)
         {
-            var source = _sources.ContainsKey(Library) ? _sources[Library] : null;
-            if (!WatchChanges && source != null) return;
-            var newSource = Get(Library);
-            if (newSource != source)
+            NewWrite = default(DateTime);
+            try
             {
-                if (_sources.ContainsKey(Library))
-                    _sources[Library] = newSource;
-                else
-                    _sources.Add(Library, newSource);
-                
-                if(_scripts.ContainsKey(Library))
-                    _scripts.Remove(Library);
-                GetOrCompile(Library);
+                NewWrite = File.GetLastWriteTime($"{DirectoryPath}{Name}");
+                return !NewWrite.Equals(LastTime);
+            }
+            catch (Exception e)
+            {
+                ReportFailure(Name, e);
+                return false;
             }
         }
 

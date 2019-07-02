@@ -30,6 +30,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
                 this.Array[i].SetAttribute("ImageId", 0);
                 this.Textures[i].Scale = Vector2.Zero;
             }
+            _panel.Disable();
         }
 
         public sealed override void UpdateView()

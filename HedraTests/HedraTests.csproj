@@ -93,6 +93,7 @@
     <Compile Include="Game\SkillBalanceTest.cs" />
     <Compile Include="Game\UniqueBalanceEntry.cs" />
     <Compile Include="Generation\ChunkComparerTest.cs" />
+    <Compile Include="Generation\CoordinateHashTest.cs" />
     <Compile Include="Generation\RenderingComparerTest.cs" />
     <Compile Include="Handling\CoroutineTest.cs" />
     <Compile Include="HedraReflectionTest.cs" />

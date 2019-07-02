@@ -11,7 +11,9 @@ using System;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using Hedra.Engine.Management;
+using Hedra.Rendering;
 using Hedra.Rendering.UI;
+using Hedra.Game;
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -29,7 +31,8 @@ namespace Hedra.Engine.Rendering.UI
 
         public void Draw()
         {
-            if (!UIText.UIText.Enabled) return;
+            if (!UIText.UIText.Enabled || UIText.UIText.IdPointer == null && UIText.UIText.Id == GUIRenderer.TransparentTexture) return;
+            if ((UIText.UIText.Scale * new Vector2(GameSettings.Width, GameSettings.Height)).LengthSquared < 2) return;
             DrawManager.UIRenderer.Draw(UIText.UIText);
         }
 

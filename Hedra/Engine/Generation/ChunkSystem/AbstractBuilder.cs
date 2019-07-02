@@ -78,11 +78,15 @@ namespace Hedra.Engine.Generation.ChunkSystem
                         }
                         catch (Exception e)
                         {
-                            Log.WriteLine($"Failed to do job: {Environment.NewLine}{e}");
-                            _queue.Remove(chunk);
-                            _hashQueue.Remove(chunk);
+                            lock (_lock)
+                            {
+                                Log.WriteLine($"Failed to do job: {Environment.NewLine}{e}");
+                                _queue.Remove(chunk);
+                                _hashQueue.Remove(chunk);
+                            }
                         }
-                        _hashQueue.Remove(chunk);
+                        lock (_lock)
+                            _hashQueue.Remove(chunk);
                     }, SleepTime);
                     if (result)
                     {
@@ -115,14 +119,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 if (Chunk == null || !_hashQueue.Contains(Chunk)) return;
                 _queue.Remove(Chunk);
                 _hashQueue.Remove(Chunk);
-            }
-        }
-
-        public bool Contains(Chunk Chunk)
-        {
-            lock (_lock)
-            {
-                return _hashQueue.Contains(Chunk);
             }
         }
 

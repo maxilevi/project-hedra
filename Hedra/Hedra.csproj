@@ -879,7 +879,6 @@
     <Compile Include="Engine\Generation\ChunkSystem\ChunkTerrainMeshBuilderHelper.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkMeshBuildOutput.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkWatcher.cs" />
-    <Compile Include="Engine\Generation\ChunkSystem\CoordinateHash2D.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\CoordinateHash3D.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\LoadBalancer.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\SharedWorkerPool.cs" />
@@ -14235,7 +14234,9 @@
     <Content Include="Modules\Villages\Woodland.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Scripts\Chat.py" />
+    <Content Include="Scripts\Chat.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\Companion.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
