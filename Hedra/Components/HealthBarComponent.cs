@@ -1,21 +1,17 @@
 using System;
 using System.Drawing;
-using System.Globalization;
 using Hedra.Core;
-using Hedra.Engine.Game;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
-using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Rendering.UI;
-using Hedra.Engine.Scenes;
 using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Rendering.UI;
 using OpenTK;
-using OpenTK.Graphics.OpenGL4;
 
-namespace Hedra.Engine.EntitySystem
+namespace Hedra.Components
 {
     /// <inheritdoc cref="EntityComponent" />
     /// <summary>

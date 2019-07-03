@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using Hedra.AISystem;
+using Hedra.Components;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.IO;

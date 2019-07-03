@@ -8,6 +8,7 @@ using System.Diagnostics;
 using Hedra;
 using Hedra.AISystem;
 using Hedra.BiomeSystem;
+using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.BiomeSystem;

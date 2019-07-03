@@ -31,7 +31,7 @@ namespace Hedra.WeaponSystem
             if(Type != AttackEventType.Mid) return;
             var player = Owner as IPlayer;
             var direction = player?.View.CrossDirection ?? Owner.Orientation;
-            Shoot(direction, Options, player?.Pet?.Pet);
+            Shoot(direction, Options, player?.Companion?.Entity);
             SoundPlayer.PlaySound(Sound, Owner.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
         }
         

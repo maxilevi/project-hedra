@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Globalization;
 using Hedra.AISystem.Behaviours;
 using Hedra.AISystem.Humanoid;
+using Hedra.Components;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem.ArmorSystem;
 using Hedra.Engine.Localization;
@@ -40,7 +41,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
             _warrior.SetPants(User.Inventory.Pants?.Pants);
             _warrior.SetChestplate(User.Inventory.Chest?.Chestplate);
             _warrior.SetHelmet(User.Inventory.Helmet?.Helmet);
-            _warrior.SearchComponent<DamageComponent>().Ignore(E => E == User || E == User.Pet.Pet);
+            _warrior.SearchComponent<DamageComponent>().Ignore(E => E == User || E == User.Companion.Entity);
             _warrior.Physics.CanBePushed = false;
             _warrior.Physics.CollidesWithEntities = false;
             _warrior.Physics.CollidesWithStructures = false;

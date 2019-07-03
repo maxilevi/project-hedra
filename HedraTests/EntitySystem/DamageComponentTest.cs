@@ -2,6 +2,7 @@ using System.Runtime.InteropServices;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using System.Collections.Generic;
+using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Management;

@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
+using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.CraftingSystem;
@@ -72,7 +73,7 @@ namespace Hedra.Engine.Player
         public IToolbar Toolbar { get; }
         public IAbilityTree AbilityTree { get; }
         public IStructureAware StructureAware { get; }
-        public PetManager Pet { get; }
+        public CompanionHandler Companion { get; }
         public Chat Chat { get; }
         public Minimap Minimap { get; }
         public Map Map { get; }
@@ -106,7 +107,7 @@ namespace Hedra.Engine.Player
             this.AbilityTree = new AbilityTree(this);
             this.Questing = new QuestInventory(this);
             this.QuestInterface = new QuestInterface(this);
-            this.Pet = new PetManager(this);
+            this.Companion = new CompanionHandler(this);
             this.Chat = new Chat(this);
             this.Minimap = new Minimap(this);
             this.Map = new Map(this);
@@ -170,7 +171,7 @@ namespace Hedra.Engine.Player
             {
                 if (!(entities[i] is LocalPlayer) &&
                     (entities[i].Position.Xz - this.Position.Xz).LengthSquared < 256 * 256 ||
-                    Pet.Pet == entities[i])
+                    Companion.Entity == entities[i])
                 {
                     entities[i].Draw();
                 }
@@ -221,7 +222,7 @@ namespace Hedra.Engine.Player
                 if (entities[i] != player && entities[i].InUpdateRange && !GameSettings.Paused &&
                     !GameManager.IsLoading
 
-                    || Pet.Pet == entities[i] || entities[i].IsBoss)
+                    || Companion.Entity == entities[i] || entities[i].IsBoss)
                 {
 
                     entities[i].Update();
@@ -244,7 +245,7 @@ namespace Hedra.Engine.Player
             AbilityTree.Update();
             Toolbar.Update();
             UI.Update();
-            Pet.Update();
+            Companion.Update();
             Chat.Update();
             Map.Update();
             Trade.Update();
@@ -373,9 +374,7 @@ namespace Hedra.Engine.Player
         
         public override bool IsSailing => Boat.Enabled;
 
-        public bool InterfaceOpened => InventoryInterface.Show || Trade.Show 
-                                       || AbilityTree.Show 
-                                                               || QuestInterface.Show;
+        public bool InterfaceOpened => PlayerInterface.Showing;
         public void HideInterfaces()
         {
             InventoryInterface.Show = false;
@@ -440,7 +439,7 @@ namespace Hedra.Engine.Player
         {
             IsRiding = false;
             /* Finish removing the mount */
-            Pet.Pet?.Update();
+            Companion.Entity?.Update();
             Inventory.ClearInventory();
             ComponentManager.Clear();
             CraftingInterface.Reset();

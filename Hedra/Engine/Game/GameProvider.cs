@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Drawing;
 using System.Linq;
+using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.ClassSystem;

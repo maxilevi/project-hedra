@@ -1,6 +1,7 @@
 using System;
 using Hedra.AISystem;
 using Hedra.AISystem.Behaviours;
+using Hedra.Components;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.SkillSystem.Archer.Hunter;

@@ -29,7 +29,7 @@ namespace Hedra.Engine.Player
         IToolbar Toolbar { get; }
         IAbilityTree AbilityTree { get; }
         RealmHandler Realms { get; }
-        PetManager Pet { get; }
+        CompanionHandler Companion { get; }
         Chat Chat { get; }
         Minimap Minimap { get; }
         TradeInventory Trade { get; }

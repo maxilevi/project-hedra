@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Linq;
+using Hedra.Components;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;

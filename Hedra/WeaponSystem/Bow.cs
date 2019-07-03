@@ -81,12 +81,12 @@ namespace Hedra.WeaponSystem
             var direction = player?.View.LookingDirection ?? Owner.Orientation;
             var left = direction.Xz.PerpendicularLeft.ToVector3() + Vector3.UnitY * direction.Y;
             var right = direction.Xz.PerpendicularRight.ToVector3() + Vector3.UnitY * direction.Y;
-            Shoot(right * .15f + direction * .85f, Options, player?.Pet?.Pet);
+            Shoot(right * .15f + direction * .85f, Options, player?.Companion?.Entity);
             TaskScheduler.After(.15f,
-                () => Shoot(direction, Options, player?.Pet?.Pet)
+                () => Shoot(direction, Options, player?.Companion?.Entity)
             );
             TaskScheduler.After(.25f,
-                () => Shoot(left * .15f + direction * .85f, Options, player?.Pet?.Pet)
+                () => Shoot(left * .15f + direction * .85f, Options, player?.Companion?.Entity)
             );
         }
 

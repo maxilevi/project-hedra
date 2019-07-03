@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Globalization;
+using Hedra.Components;
 using Hedra.Engine.Management;
 using Hedra.Core;
 using Hedra.Engine.EntitySystem;

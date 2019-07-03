@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.AISystem.Humanoid;
+using Hedra.Components;
 using Hedra.Core;
 using OpenTK;
 using Hedra.Engine.ClassSystem;

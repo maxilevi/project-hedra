@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using Hedra.AISystem.Humanoid;
+using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.EntitySystem;

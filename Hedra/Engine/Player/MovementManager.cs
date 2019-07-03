@@ -47,7 +47,7 @@ namespace Hedra.Engine.Player
                     Human.Physics.TargetPosition.X,
                     minHeight,
                     Human.Physics.TargetPosition.Z
-                    );
+                );
             }
         }
 

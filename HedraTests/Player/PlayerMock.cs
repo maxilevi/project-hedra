@@ -258,7 +258,7 @@ namespace HedraTests.Player
         public QuestInterface QuestInterface { get; }
         public IAbilityTree AbilityTree { get; set; }
         public RealmHandler Realms { get; }
-        public PetManager Pet { get; }
+        public CompanionHandler Companion { get; }
         public Chat Chat { get; }
         public Minimap Minimap { get; }
         public Map Map { get; }

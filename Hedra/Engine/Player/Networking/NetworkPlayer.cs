@@ -23,7 +23,7 @@ namespace Hedra.Engine.Player.Networking
         public IToolbar Toolbar => throw new System.NotImplementedException();
         public IAbilityTree AbilityTree => throw new System.NotImplementedException();
         public RealmHandler Realms => throw new System.NotImplementedException();
-        public PetManager Pet => throw new System.NotImplementedException();
+        public CompanionHandler Companion => throw new System.NotImplementedException();
         public Chat Chat => throw new System.NotImplementedException();
         public Minimap Minimap => throw new System.NotImplementedException();
         public TradeInventory Trade => throw new System.NotImplementedException();

@@ -1,5 +1,6 @@
 using System;
 using Hedra;
+using Hedra.Components;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;

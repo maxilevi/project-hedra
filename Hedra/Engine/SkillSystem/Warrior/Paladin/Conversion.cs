@@ -1,6 +1,7 @@
 using System.Drawing;
 using Hedra.AISystem;
 using Hedra.AISystem.Humanoid;
+using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Localization;

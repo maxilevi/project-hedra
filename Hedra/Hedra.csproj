@@ -174,6 +174,7 @@
     <Compile Include="AISystem\IBehaviourComponent.cs" />
     <Compile Include="AISystem\IGuardAIComponent.cs" />
     <Compile Include="AISystem\ITraverseAIComponent.cs" />
+    <Compile Include="AISystem\MountAIComponent.cs" />
     <Compile Include="AISystem\NeutralAIComponent.cs" />
     <Compile Include="AISystem\PigAIComponent.cs" />
     <Compile Include="AISystem\PigFarmAIComponent.cs" />
@@ -212,6 +213,8 @@
     <Compile Include="BiomeSystem\BiomeSkyDesign.cs" />
     <Compile Include="BiomeSystem\BiomeStructureDesign.cs" />
     <Compile Include="BiomeSystem\BiomeTreeDesign.cs" />
+    <Compile Include="Components\DamageComponent.cs" />
+    <Compile Include="Components\HealthBarComponent.cs" />
     <Compile Include="User\CommandManager.cs" />
     <Compile Include="User\WordFilter.cs" />
     <Compile Include="Components\BlacksmithComponent.cs" />
@@ -1012,9 +1015,7 @@
     <Compile Include="Engine\EntitySystem\CollectibleComponent.cs" />
     <Compile Include="Engine\EntitySystem\IMountable.cs" />
     <Compile Include="Engine\ModuleSystem\MobFactory.cs" />
-    <Compile Include="Engine\EntitySystem\MountAIComponent.cs" />
     <Compile Include="Engine\EntitySystem\RideComponent.cs" />
-    <Compile Include="Engine\EntitySystem\DamageComponent.cs" />
     <Compile Include="Engine\EntitySystem\DropComponent.cs" />
     <Compile Include="Engine\EntitySystem\Entity.cs" />
     <Compile Include="Engine\EntitySystem\EntityComponent.cs" />
@@ -1041,7 +1042,6 @@
     <Compile Include="Engine\PlantSystem\RockDesign.cs" />
     <Compile Include="Engine\PlantSystem\RockPlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\WheatDesign.cs" />
-    <Compile Include="Engine\EntitySystem\HealthBarComponent.cs" />
     <Compile Include="Engine\ItemSystem\WorldItem.cs" />
     <Compile Include="Engine\EntitySystem\PhysicsComponent.cs" />
     <Compile Include="Engine\EntitySystem\QuadrupedModel.cs" />
@@ -1136,7 +1136,7 @@
     <Compile Include="Engine\Player\LocalPlayer.cs" />
     <Compile Include="Engine\Player\MapSystem\Map.cs" />
     <Compile Include="Engine\Player\MapSystem\Minimap.cs" />
-    <Compile Include="Engine\Player\PetManager.cs" />
+    <Compile Include="Engine\Player\CompanionHandler.cs" />
     <Compile Include="Engine\Player\PlayerInformation.cs" />
     <Compile Include="Engine\Player\MovementManager.cs" />
     <Compile Include="Engine\Player\HumanoidModel.cs" />

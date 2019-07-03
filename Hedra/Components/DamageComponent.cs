@@ -8,26 +8,23 @@
  */
 
 using System;
-using OpenTK;
 using System.Collections;
 using System.Collections.Generic;
-using Hedra.Engine.Management;
-using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.UI;
 using System.Drawing;
 using System.Linq;
 using Hedra.AISystem;
-using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine.Game;
+using Hedra.Engine.Management;
 using Hedra.Engine.Player;
-using Hedra.Engine.Sound;
+using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
+using OpenTK;
 
-namespace Hedra.Engine.EntitySystem
+namespace Hedra.Components
 {
     /// <summary>
     /// Description of DamageComponent.

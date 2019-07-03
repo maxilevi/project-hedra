@@ -1,5 +1,6 @@
 using System;
 using System.Windows.Forms;
+using Hedra.Components;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;

@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Linq;
 using Hedra.AISystem;
+using Hedra.Components;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.ModuleSystem;
@@ -56,7 +57,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
             minion.RemoveComponent(minion.SearchComponent<HealthBarComponent>());
             minion.AddComponent(new MinionAIComponent(minion, User));
             minion.AddComponent(new HealthBarComponent(minion, Translations.Get($"{Keyword}_companion_name"), HealthBarType.Friendly));
-            minion.SearchComponent<DamageComponent>().Ignore(E => E == User || E == User.Pet.Pet);
+            minion.SearchComponent<DamageComponent>().Ignore(E => E == User || E == User.Companion.Entity);
             minion.SearchComponent<DamageComponent>().OnDeadEvent += A => SpawnEffect(minion.Physics.TargetPosition);
             var masterySkill = (CompanionMastery) User.Toolbar.Skills.First(S => S.GetType() == typeof(CompanionMastery));
             minion.MaxHealth *= masterySkill.HealthMultiplier;

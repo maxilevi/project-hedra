@@ -8,6 +8,7 @@
  */
 
 using System;
+using Hedra.Components;
 using Hedra.Core;
 using OpenTK;
 using Hedra.Engine.ItemSystem;

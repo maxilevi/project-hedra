@@ -8,6 +8,7 @@
  */
 
 using System;
+using Hedra.Components;
 using Hedra.Components.Effects;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;

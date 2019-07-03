@@ -1,3 +1,4 @@
+using Hedra.Components;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
