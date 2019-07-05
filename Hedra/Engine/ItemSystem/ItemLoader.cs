@@ -19,6 +19,14 @@ namespace Hedra.Engine.ItemSystem
             Templater = new ItemTemplater(Templates, Lock);
         }
 
+        public void Load(params ItemTemplate[] NewTemplates)
+        {
+            for (var i = 0; i < NewTemplates.Length; ++i)
+            {
+                Templates.Add(NewTemplates[i].Name.ToLowerInvariant(), NewTemplates[i]);
+            }
+        }
+        
         protected override string FolderPrefix => "Items";
     }
 }

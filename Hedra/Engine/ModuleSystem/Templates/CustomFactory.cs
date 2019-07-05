@@ -28,7 +28,6 @@ namespace Hedra.Engine.ModuleSystem.Templates
         public float Speed { get; set; }
         public float XP { get; set; }
         public string AIType { get; set; }
-        public bool Ridable { get; set; }
         public EffectTemplate[] Effects { get; set; }
         public DropTemplate[] Drops { get; set; }
         public ModelTemplate Model { get; set; }
@@ -54,10 +53,7 @@ namespace Hedra.Engine.ModuleSystem.Templates
                 XpToGive = NormalizeValues ? NormalizeXp(XP) : XP
             };
             Mob.AddComponent(dmg);
-
-            if (Ridable)
-                Mob.AddComponent(new RideComponent(Mob));
-
+            
             foreach (var template in Effects)
             {
                 Mob.AddComponent(EffectFactory.Instance.Build(template, Mob));

@@ -1,6 +1,6 @@
 using System;
 using Hedra.Core;
-using Hedra.Engine.Core;
+using Hedra.Items;
 
 namespace Hedra.Engine.ItemSystem
 {
@@ -37,16 +37,5 @@ namespace Hedra.Engine.ItemSystem
             this.EquipmentType = WeaponType;
             this.Seed = Unique.RandomSeed();
         }
-    }
-
-    public enum ItemTier
-    {
-        Common,
-        Uncommon,
-        Rare,
-        Unique,
-        Legendary,
-        Divine,
-        Misc
     }
 }

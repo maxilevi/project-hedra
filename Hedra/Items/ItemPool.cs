@@ -194,6 +194,11 @@ namespace Hedra.Items
         {
             return ItemLoader.Templater.Contains(Name);
         }
+
+        public static void Load(params ItemTemplate[] Templates)
+        {
+            ItemLoader.Instance.Load(Templates);
+        }
     }
 
     public enum EffectType{

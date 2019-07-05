@@ -1,4 +1,5 @@
 using System.Drawing;
+using Hedra.Items;
 
 namespace Hedra.Engine.ItemSystem
 {

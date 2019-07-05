@@ -1,5 +1,3 @@
-using System.Reflection;
-
 namespace Hedra.Engine.ItemSystem.Templates
 {
     public class AttributeTemplate

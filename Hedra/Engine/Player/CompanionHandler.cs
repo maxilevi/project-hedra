@@ -19,7 +19,7 @@ namespace Hedra.Engine.Player
     {
         private readonly Script _script;
         private readonly Dictionary<string, object> _state;
-        public IEntity Entity => _script.Get("get_entity").Invoke<IEntity>(_state);
+        public IEntity Entity => (IEntity) _state["pet"];
 
         public CompanionHandler(IPlayer Player)
         {

@@ -6,40 +6,41 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using System.Drawing;
 using Hedra.AISystem;
-using Hedra.Components;
 using Hedra.Components.Effects;
 using Hedra.Core;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Events;
-using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
-using OpenTK;
-using OpenTK.Input;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Localization;
+using OpenTK;
 
-namespace Hedra.Engine.EntitySystem
+namespace Hedra.Components
 {
     /// <summary>
     /// Description of RideComponent.
     /// </summary>
     public class RideComponent : EntityComponent, ITickable
     {
-        public bool HasRider { get; private set; }
         private IHumanoid _rider;
         private BasicAIComponent _ai;
         private HealthBarComponent _healthBar;
+        private bool _hasRider;
         private bool _shouldRide;
         private bool _shouldUnride;
         private bool _canRide;
         private bool _canUnride;
+        private readonly float _heightMultiplier;
 
-        public RideComponent(IEntity Parent) : base(Parent)
+        public RideComponent(IEntity Parent, float HeightMultiplier) : base(Parent)
         {
+            _heightMultiplier = HeightMultiplier;
             EventDispatcher.RegisterKeyDown(this, delegate(object Object, KeyEventArgs EventArgs)
             {
                 _shouldRide = EventArgs.Key == Controls.Interact && _canRide;
@@ -50,7 +51,7 @@ namespace Hedra.Engine.EntitySystem
         public override void Update()
         {
             var player = GameManager.Player;
-            if (!HasRider && (player.BlockPosition - Parent.BlockPosition).LengthSquared < 12 * 12 && !player.IsRiding &&
+            if (!_hasRider && (player.BlockPosition - Parent.BlockPosition).LengthSquared < 12 * 12 && !player.IsRiding &&
                 !player.IsCasting
                 && Vector3.Dot((Parent.BlockPosition - player.BlockPosition).NormalizedFast(), player.View.LookingDirection) >
                 .6f)
@@ -72,7 +73,7 @@ namespace Hedra.Engine.EntitySystem
                 _canRide = false;
             }
 
-            if (HasRider && _rider.IsRiding)
+            if (_hasRider && _rider.IsRiding)
             {
                 _canUnride = true;
             }
@@ -80,11 +81,11 @@ namespace Hedra.Engine.EntitySystem
             {
                 _canUnride = false;
             }
-            if( HasRider && _rider is LocalPlayer && _shouldUnride || HasRider && _rider.IsDead )
+            if( _hasRider && _rider is LocalPlayer && _shouldUnride || _hasRider && _rider.IsDead )
                 _rider.IsRiding = false;
 
 
-            if(HasRider && !_rider.IsRiding)
+            if(_hasRider && !_rider.IsRiding)
             {
                 Quit();
             }
@@ -92,14 +93,14 @@ namespace Hedra.Engine.EntitySystem
 
         private void Ride(IHumanoid Entity)
         {
-            if(HasRider || Entity.IsRiding) return;
+            if(_hasRider || Entity.IsRiding) return;
             
             _rider = Entity;
             _rider.ComponentManager.AddComponentWhile(new SpeedBonusComponent(_rider, -_rider.Speed + 2.25f), () => _rider != null && _rider.IsRiding);
-            HasRider = true;
+            _hasRider = true;
             var model = (QuadrupedModel) Parent.Model;
             _rider.IsRiding = true;
-            _rider.Model.RidingOffset = model.Height * Vector3.UnitY * .5f;
+            _rider.Model.RidingOffset = model.Height * Vector3.UnitY * _heightMultiplier;
             model.AlignWithTerrain = false;
             model.Rider = _rider;
             Parent.Physics.UsePhysics = false;
@@ -120,7 +121,7 @@ namespace Hedra.Engine.EntitySystem
             model.Rider = null;
             _rider.IsRiding = false;
             _rider.Model.RidingOffset = Vector3.Zero;
-            HasRider = false;
+            _hasRider = false;
             _ai.Enabled = true;
             _healthBar.Hide = false;
 
@@ -133,7 +134,7 @@ namespace Hedra.Engine.EntitySystem
         public override void Dispose()
         {
             EventDispatcher.UnregisterKeyDown(this);
-            if (!HasRider) return;
+            if (!_hasRider) return;
             this.Quit();
         }
     }

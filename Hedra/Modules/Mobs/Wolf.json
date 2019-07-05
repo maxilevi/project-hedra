@@ -6,7 +6,6 @@
   "XP": 4.0,
   "Level": 8,
   "AIType": "Hostile",
-  "Ridable": true,
   "Effects": [
     {
       "Name": "Bleed",

@@ -1,15 +1,44 @@
 from Core import translate
+from System import Array, Single
 from OpenTK import Vector3
-from Hedra.Core import Timer
+from Hedra.Core import Timer, Time
 from Hedra import World, Utils
-from Hedra.Components import HealthBarComponent, HealthBarType
+from Hedra.Components import HealthBarComponent, HealthBarType, RideComponent
 from Hedra.AISystem import MountAIComponent, BasicAIComponent
+from Hedra.Engine.ItemSystem.Templates import ItemTemplate, ItemModelTemplate, AttributeTemplate
+from Hedra.Items import ItemTier, ItemPool
 
-PET_RESPAWN_TIME = 8
+COMPANION_RESPAWN_TIME = 8
+COMPANION_EQUIPMENT_TYPE = 'Pet'
+CAGE_MODEL_SCALE = 0.65
+CAGE_MODEL_PATH = 'Assets/Items/Misc/CompanionCage.ply'
+GROWTH_ATTRIB_NAME = 'Growth'
+IS_GROWN_ATTRIB_NAME = 'IsGrown'
+CAN_RIDE_ATTRIB_NAME = 'CanRide'
+MAX_SCALE_ATTRIB_NAME = 'MaxScale'
+MOB_TYPE_ATTRIB_NAME = 'MobType'
+BASE_GROWTH_SCALE = 0.5
+GROWTH_TIME = .5 * 60.0 # 8 Minutes
+GROWTH_SPEED = 1.0 / GROWTH_TIME
+COMPANION_TYPES = [
+    ('Pug', ItemTier.Common, True),
+    ('Bee', ItemTier.Common, True),
+    ('Wasp', ItemTier.Common, True),
+    ('Ooze', ItemTier.Common, True),
+    ('Pig', ItemTier.Common, True),
+    ('Sheep', ItemTier.Common, True),
+    ('Wolf', ItemTier.Common, True),
+    ('Horse', ItemTier.Common, True)
+]
+DEFAULT_RIDE_INFO = 0.5
+RIDE_INFO = {
+    'Pug': 0.4,
+    'Bee': 0.625
+}
 
 def init(user, state):
     state['user'] = user
-    state['dead_timer'] = Timer(PET_RESPAWN_TIME)
+    state['dead_timer'] = Timer(COMPANION_RESPAWN_TIME)
     state['dead_timer_set'] = False
     state['pet'] = None
     state['pet_item'] = None
@@ -33,7 +62,43 @@ def update(state):
     if (pet_item != state['pet_item']) or (pet and pet.IsDead and state['dead_timer'].Tick()):
         spawn_pet(state, pet_item)
         state['dead_timer_set'] = False
+        
+    if pet_item:
+        update_growth(pet_item, pet)
 
+
+def update_growth(pet_item, pet):
+
+    current_growth = pet_item.GetAttribute[float](GROWTH_ATTRIB_NAME)
+    if not pet_item.HasAttribute(IS_GROWN_ATTRIB_NAME) and pet:
+        max_scale = unserialize_pet_max_scale(pet_item)
+        if abs(current_growth - 1.0) > 0.005:
+            new_growth = Time.DeltaTime * GROWTH_SPEED
+            pet_item.SetAttribute(GROWTH_ATTRIB_NAME, current_growth + new_growth)
+            
+            base_scale = max_scale * Single(BASE_GROWTH_SCALE)
+            growth_scale = max_scale * Single((1.0 - BASE_GROWTH_SCALE) * current_growth)
+            pet.Model.Scale = base_scale + growth_scale
+        else:
+            pet_item.SetAttribute(GROWTH_ATTRIB_NAME, 1.0)
+            pet_item.SetAttribute(IS_GROWN_ATTRIB_NAME, True, Hidden=True)
+            pet.Model.IsMountable = True
+            pet.Model.Scale = max_scale
+   
+def unserialize_pet_max_scale(pet_item):
+    scale_array = pet_item.GetAttribute[Array[Single]](MAX_SCALE_ATTRIB_NAME)
+    return Vector3(scale_array[0], scale_array[1], scale_array[2])
+
+def serialize_pet_max_scale(pet_item, max_scale):
+    pet_item.SetAttribute(
+        MAX_SCALE_ATTRIB_NAME,
+        Array[Single]([
+            max_scale.X,
+            max_scale.Y,
+            max_scale.Z
+        ]),
+        Hidden=True
+    )
 
 def handle_model(user, pet, state):
     if user.IsRiding or not pet.Model.Enabled:
@@ -49,6 +114,7 @@ def handle_model(user, pet, state):
     state['was_riding'] = user.IsRiding
 
 
+
 def spawn_pet(state, pet_item):
     pet = state['pet']
     if pet:
@@ -57,18 +123,78 @@ def spawn_pet(state, pet_item):
     
     if pet_item:
         user = state['user']
-        pet = World.SpawnMob(pet_item.GetAttribute[str]("MobType"), user.Position + Vector3.UnitX * 12, Utils.Rng)
+        type = pet_item.GetAttribute[str](MOB_TYPE_ATTRIB_NAME)
+        pet = World.SpawnMob(type, user.Position + Vector3.UnitX * 12, Utils.Rng)
         pet.Health = pet.MaxHealth
         pet.Level = 1
+        serialize_pet_max_scale(pet_item, pet.Model.Scale)
         pet.RemoveComponent(pet.SearchComponent[HealthBarComponent]())
         pet.AddComponent(HealthBarComponent(pet, translate(pet.Name.ToLowerInvariant()), HealthBarType.Friendly))
         pet.RemoveComponent(pet.SearchComponent[BasicAIComponent]())
         pet.AddComponent(MountAIComponent(pet, user))
+        pet.SearchComponent[MountAIComponent]().Enabled = True
         pet.Removable = False
         pet.IsFriendly = True
-        pet.Model.IsMountable = True
+        if pet_item.GetAttribute[bool](CAN_RIDE_ATTRIB_NAME):
+            pet.AddComponent(RideComponent(pet, RIDE_INFO[type] if type in RIDE_INFO else DEFAULT_RIDE_INFO))
+            pet.Model.IsMountable = pet_item.HasAttribute(IS_GROWN_ATTRIB_NAME)
         state['pet'] = pet
     state['pet_item'] = pet_item
+  
+# Companion items are dynamically generated from the list above
+
+
+def create_companion_templates():
+    items = []
+    for type, tier, can_ride in COMPANION_TYPES:
+        items += [create_companion_template(type, tier, can_ride)]
+    return Array[ItemTemplate](items)
+   
+     
+def create_companion_template(type, tier, can_ride):
+    model_template = ItemModelTemplate()
+    model_template.Path = CAGE_MODEL_PATH
+    model_template.Scale = CAGE_MODEL_SCALE
+    
+    template = ItemTemplate()
+    template.Name = 'Companion' + type
+    template.DisplayName = translate('generic_companion_item_name', translate(type.lower()))
+    template.Description = translate('generic_companion_item_desc', translate(type.lower()))
+    template.Tier = tier
+    template.EquipmentType = COMPANION_EQUIPMENT_TYPE
+    template.Attributes = create_companion_attributes(type, can_ride)
+    template.Model = model_template
+    return template
+
+
+def create_companion_attributes(type, can_ride):
+    can_ride = can_ride
+    pet_attribute = AttributeTemplate()
+    pet_attribute.Name = MOB_TYPE_ATTRIB_NAME
+    pet_attribute.Value = type
+    pet_attribute.Hidden = True
+    
+    ride_attribute = AttributeTemplate()
+    ride_attribute.Name = CAN_RIDE_ATTRIB_NAME
+    ride_attribute.Value = can_ride
+    ride_attribute.Hidden = True
+
+    life_attribute = AttributeTemplate()
+    life_attribute.Value = 0.0
+    life_attribute.Name = GROWTH_ATTRIB_NAME
+    life_attribute.Display = 'Percentage'
+
+    return Array[AttributeTemplate]([
+        pet_attribute,
+        ride_attribute,
+        life_attribute
+    ])
+    
         
-def get_entity(state):
-    return state['pet']
+for name, _, _ in COMPANION_TYPES:
+    assert World.MobFactory.ContainsFactory(name)
+
+templates = create_companion_templates()
+for template in templates:
+    if not ItemPool.Exists(template.Name):
+        ItemPool.Load(template)

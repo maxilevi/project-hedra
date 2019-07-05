@@ -215,6 +215,9 @@
     <Compile Include="BiomeSystem\BiomeTreeDesign.cs" />
     <Compile Include="Components\DamageComponent.cs" />
     <Compile Include="Components\HealthBarComponent.cs" />
+    <Compile Include="Components\RideComponent.cs" />
+    <Compile Include="Engine\ItemSystem\Item.cs" />
+    <Compile Include="Items\ItemTier.cs" />
     <Compile Include="User\CommandManager.cs" />
     <Compile Include="User\WordFilter.cs" />
     <Compile Include="Components\BlacksmithComponent.cs" />
@@ -311,7 +314,6 @@
     <Compile Include="Engine\Input\ArrowSelector.cs" />
     <Compile Include="Engine\Input\ArrowSelectorState.cs" />
     <Compile Include="Engine\ItemSystem\FoodSystem\FoodHandler.cs" />
-    <Compile Include="Engine\ItemSystem\Item.cs" />
     <Compile Include="Engine\ItemSystem\ItemHandlerFactory.cs" />
     <Compile Include="Engine\ItemSystem\PotionAttributes.cs" />
     <Compile Include="Engine\ItemSystem\PotionType.cs" />
@@ -1015,7 +1017,6 @@
     <Compile Include="Engine\EntitySystem\CollectibleComponent.cs" />
     <Compile Include="Engine\EntitySystem\IMountable.cs" />
     <Compile Include="Engine\ModuleSystem\MobFactory.cs" />
-    <Compile Include="Engine\EntitySystem\RideComponent.cs" />
     <Compile Include="Engine\EntitySystem\DropComponent.cs" />
     <Compile Include="Engine\EntitySystem\Entity.cs" />
     <Compile Include="Engine\EntitySystem\EntityComponent.cs" />
@@ -8690,6 +8691,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Misc\Cloth.ply">
       <Link>Assets\Items\Misc\Cloth.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Misc\CompanionCage.ply">
+      <Link>Assets\Items\Misc\CompanionCage.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Misc\DarkEssence.ply">
