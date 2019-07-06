@@ -80,7 +80,7 @@ namespace Hedra.Engine.ItemSystem
 
         public void SetAttribute(CommonAttributes Attribute, object Value, bool Hidden, string Display)
         {
-            this.SetAttribute(Attribute.ToString(), Value, Hidden, Display);
+            this.SetAttribute(Attribute.ToString(), Value, Hidden, Display, false);
         }
 
         public void SetAttribute(string Attribute, object Value)
@@ -92,10 +92,15 @@ namespace Hedra.Engine.ItemSystem
         {
             this.SetAttribute(Attribute, Value, Hidden, null);
         }
-
+        
         public void SetAttribute(string Attribute, object Value, bool Hidden, string Display)
         {
-            _attributes.Set(Attribute, Value, Hidden, Display);
+            this.SetAttribute(Attribute, Value, Hidden, Display, false);
+        }
+
+        public void SetAttribute(string Attribute, object Value, bool Hidden, string Display, bool Persist)
+        {
+            _attributes.Set(Attribute, Value, Hidden, Display, Persist);
         }
 
         public T GetAttribute<T>(string Attribute)
@@ -146,16 +151,40 @@ namespace Hedra.Engine.ItemSystem
             savedTemplate.DisplayName = defaultTemplate.DisplayName;
             savedTemplate.Tier = defaultTemplate.Tier;
             var item = FromTemplate(savedTemplate);
-            if (item.HasAttribute(CommonAttributes.Amount)) return UpdateAttributes(item);
-            
             var newItem = ItemPool.Grab(savedTemplate.Name);
+            if (item.HasAttribute(CommonAttributes.Amount)) return UpdateAttributes(item, newItem);
+            if (HasInformation(item)) return PersistAttributes(item, newItem);
+            
             if (!item.HasAttribute(CommonAttributes.Seed)) item.SetAttribute(CommonAttributes.Seed, Utils.Rng.Next(int.MinValue, int.MaxValue), true);
 
             newItem.SetAttribute(CommonAttributes.Seed, item.GetAttribute<int>(CommonAttributes.Seed), true);
             return ItemPool.Randomize(newItem, new Random(newItem.GetAttribute<int>(CommonAttributes.Seed)));           
         }
 
-        private static Item UpdateAttributes(Item Item)
+        private static Item PersistAttributes(Item Item, Item NewItem)
+        {
+            var newItem = ItemPool.Grab(Item.Name);
+            var attributes = Item.GetAttributes();
+            for (var i = 0; i < attributes.Length; ++i)
+            {
+                if (attributes[i].Persist)
+                    newItem.SetAttribute(attributes[i].Name, attributes[i].Value, attributes[i].Hidden, attributes[i].Display, attributes[i].Persist);
+            }
+            return newItem;
+        }
+        
+        private static bool HasInformation(Item Item)
+        {
+            var attributes = Item.GetAttributes();
+            for (var i = 0; i < attributes.Length; ++i)
+            {
+                if (attributes[i].Persist)
+                    return true;
+            }
+            return false;
+        }
+
+        private static Item UpdateAttributes(Item Item, Item NewItem)
         {
             var amount = Item.GetAttribute<int>(CommonAttributes.Amount);
             var newItem = ItemPool.Grab(Item.Name);

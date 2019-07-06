@@ -20,12 +20,12 @@ namespace Hedra.Engine.ItemSystem
             return _attributes.ContainsKey(Attribute);
         }
 
-        public void Set(string Attribute, object Value, bool Hidden = false, string Display = null)
+        public void Set(string Attribute, object Value, bool Hidden = false, string Display = null, bool Persist = false)
         {
             if (!_attributes.ContainsKey(Attribute))
-                _attributes.Add(Attribute, new AttributeObject(Value, Hidden, Display));
+                _attributes.Add(Attribute, new AttributeObject(Value, Hidden, Display, Persist));
             else
-                _attributes[Attribute] = new AttributeObject(Value, Hidden, Display ?? _attributes[Attribute].Display);
+                _attributes[Attribute] = new AttributeObject(Value, Hidden, Display ?? _attributes[Attribute].Display, Persist);
         }
 
         public object Raw(string Attribute)
@@ -58,7 +58,8 @@ namespace Hedra.Engine.ItemSystem
                     Name = pair.Key,
                     Value = pair.Value.Value,
                     Hidden = pair.Value.Hidden,
-                    Display = pair.Value.Display
+                    Display = pair.Value.Display,
+                    Persist = pair.Value.Persist
                 });
             }
             return list.ToArray();
@@ -75,12 +76,14 @@ namespace Hedra.Engine.ItemSystem
         public object Value { get; set; }
         public bool Hidden { get; set; }
         public string Display { get; set; }
+        public bool Persist { get; set; }
 
-        public AttributeObject(object Value, bool Hidden, string Display)
+        public AttributeObject(object Value, bool Hidden, string Display, bool Persist)
         {
             this.Value = Value;
             this.Hidden = Hidden;
             this.Display = Display;
+            this.Persist = Persist;
         }
     }
 }

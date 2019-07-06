@@ -8,6 +8,7 @@ using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ItemSystem.Templates;
 using Hedra.Engine.ModuleSystem.Templates;
+using Hedra.Engine.Scripting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -15,10 +16,12 @@ namespace Hedra.Engine.Player.Inventory
 {
     public static class AttributeFormatter
     {
+        private static readonly Script Script;
         private static readonly Dictionary<string, Type> Codecs;
 
         static AttributeFormatter()
         {
+            Script = Interpreter.GetScript("TextDisplay.py");
             Codecs = new Dictionary<string, Type>
             {
                 {CommonAttributes.Ingredients.ToString(), typeof(IngredientsTemplate)},
@@ -57,19 +60,13 @@ namespace Hedra.Engine.Player.Inventory
         {
             if (Value is double || Value is float)
             {
-                var asNumber = (float) Convert.ChangeType(Value, typeof(float));
-                if (Display == null) return asNumber.ToString("0.00", CultureInfo.InvariantCulture);
-                switch ((AttributeDisplay) Enum.Parse(typeof(AttributeDisplay), Display))
-                {
-                    case AttributeDisplay.Percentage:
-                        return $"{(asNumber > 0 ? "+" : asNumber == 0 ? string.Empty : "-")}{ (int) (asNumber * 100f)}%";
-                    case AttributeDisplay.Flat:
-                        return asNumber.ToString("0.00", CultureInfo.InvariantCulture);
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
+                return Script.Get("format").Invoke<string>(Value, Display);
             }
-            if (!(Value is int) && !(Value is long)) return GetString(Value, Name, Padding);
+
+            if (!(Value is int) && !(Value is long))
+            {
+                return GetString(Value, Name, Padding);
+            }
             return (int)Convert.ChangeType(Value, typeof(int)) == int.MaxValue ? "∞" : Value.ToString();
         }
 

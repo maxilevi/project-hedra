@@ -6,5 +6,6 @@ namespace Hedra.Engine.ItemSystem.Templates
         public object Value { get; set; }
         public bool Hidden { get; set; }
         public string Display { get; set; }
+        public bool Persist { get; set; }
     }
 }

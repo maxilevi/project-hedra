@@ -1,3 +1,4 @@
+import TextDisplay
 from Core import translate
 from System import Array, Single
 from OpenTK import Vector3
@@ -16,7 +17,8 @@ GROWTH_ATTRIB_NAME = 'Growth'
 IS_GROWN_ATTRIB_NAME = 'IsGrown'
 CAN_RIDE_ATTRIB_NAME = 'CanRide'
 MAX_SCALE_ATTRIB_NAME = 'MaxScale'
-MOB_TYPE_ATTRIB_NAME = 'MobType'
+XP_ATTRIB_NAME = 'PetXp'
+MOB_TYPE_ATTRIB_NAME = 'Type'
 BASE_GROWTH_SCALE = 0.5
 GROWTH_TIME = .5 * 60.0 # 8 Minutes
 GROWTH_SPEED = 1.0 / GROWTH_TIME
@@ -179,15 +181,23 @@ def create_companion_attributes(type, can_ride):
     ride_attribute.Value = can_ride
     ride_attribute.Hidden = True
 
-    life_attribute = AttributeTemplate()
-    life_attribute.Value = 0.0
-    life_attribute.Name = GROWTH_ATTRIB_NAME
-    life_attribute.Display = 'Percentage'
+    growth_attribute = AttributeTemplate()
+    growth_attribute.Value = 0.0
+    growth_attribute.Name = GROWTH_ATTRIB_NAME
+    growth_attribute.Display = TextDisplay.PERCENTAGE_DISPLAY
+    growth_attribute.Persist = True
 
+    xp_attribute = AttributeTemplate()
+    xp_attribute.Value = 0.0
+    xp_attribute.Name = XP_ATTRIB_NAME
+    xp_attribute.Hidden = True
+    xp_attribute.Persist = True
+    
     return Array[AttributeTemplate]([
         pet_attribute,
         ride_attribute,
-        life_attribute
+        growth_attribute,
+        xp_attribute
     ])
     
         
