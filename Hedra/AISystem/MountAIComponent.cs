@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
+using Hedra.AISystem.Behaviours;
 using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine;
@@ -23,41 +24,58 @@ namespace Hedra.AISystem
     /// </summary>
     public class MountAIComponent : BasicAIComponent
     {
-        private Entity _target;
-        private readonly Entity _owner;
-        private RideComponent _rideComp;
+        public override AIType Type => AIType.Friendly;
+        private readonly IEntity _owner;
+        private AttackBehaviour Attack { get; }
+        private FollowBehaviour Follow { get; }
         
-        public MountAIComponent(IEntity Parent, Entity Owner) : base(Parent)
+        public MountAIComponent(IEntity Parent, IEntity Owner) : base(Parent)
         {
-            this._owner = Owner;
-            this._target = Owner;
+            Attack = new AttackBehaviour(Parent);
+            Follow = new FollowBehaviour(Parent)
+            {
+                ErrorMargin = 4 * Chunk.BlockSize,
+                Target = Owner
+            };
+            _owner = Owner;
+            _owner.SearchComponent<DamageComponent>().OnDamageEvent += OnOwnerDamaged;
+            _owner.AfterDamaging += OnOwnerDamaging;
         }
         
         public override void Update()
         {
-            if(!Enabled) return;
-            
-            if( _target != null && _target != _owner && (_target.Position - Parent.Position).LengthSquared > 72*72 ){
-                _target = _owner;
-            }
-            
-            if( (Parent.Position - _owner.Position).LengthSquared > 128*128)
+            if (!Enabled) return;
+            if((Parent.Position - _owner.Position).LengthSquared > 128*128)
             {
                 Parent.Position = _owner.BlockPosition + Vector3.UnitX * 12f;
+                Attack.ResetTarget();
             }
-            
-            float distance = (_target == _owner) ? 8 : 3;
-            var distSqr = distance * distance;
 
-            if (_target != null && ((_target.Position - Parent.Position).LengthSquared > distSqr * Chunk.BlockSize * Chunk.BlockSize && !Parent.IsMoving
-                || (_target.Position - Parent.Position).LengthSquared > distSqr * .75f * Chunk.BlockSize * Chunk.BlockSize && Parent.IsMoving))
+            if (Attack.Enabled)
             {
-                Parent.Orientation = (_target.Position - Parent.Position).Xz.NormalizedFast().ToVector3();
-                Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
-                Parent.Physics.Move();
+                Attack.Update();
+            }
+            else
+            {
+                Follow.Update();
             }
         }
-        
-        public override AIType Type => AIType.Friendly;
+
+        private void OnOwnerDamaged(DamageEventArgs Args)
+        {
+            Attack.SetTarget(Args.Damager);
+        }
+
+        private void OnOwnerDamaging(IEntity Victim, float Amount)
+        {
+            Attack.SetTarget(Victim);
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            _owner.SearchComponent<DamageComponent>().OnDamageEvent -= OnOwnerDamaged;
+            _owner.AfterDamaging -= OnOwnerDamaging;
+        }
     }
 }

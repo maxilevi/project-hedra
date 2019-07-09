@@ -60,7 +60,7 @@ namespace Hedra.Engine.Player.Inventory
         {
             if (Value is double || Value is float)
             {
-                return Script.Get("format").Invoke<string>(Value, Display);
+                return Script.Get("format").Invoke<string>(Value, Display ?? AttributeDisplay.Flat.ToString());
             }
 
             if (!(Value is int) && !(Value is long))

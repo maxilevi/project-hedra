@@ -9,9 +9,9 @@ from Hedra.AISystem import MountAIComponent, BasicAIComponent
 from Hedra.Engine.ItemSystem.Templates import ItemTemplate, ItemModelTemplate, AttributeTemplate
 from Hedra.Items import ItemTier, ItemPool
 
-COMPANION_RESPAWN_TIME = 8
+COMPANION_RESPAWN_TIME = 24
 COMPANION_EQUIPMENT_TYPE = 'Pet'
-CAGE_MODEL_SCALE = 0.65
+CAGE_MODEL_SCALE = 0.1
 CAGE_MODEL_PATH = 'Assets/Items/Misc/CompanionCage.ply'
 GROWTH_ATTRIB_NAME = 'Growth'
 IS_GROWN_ATTRIB_NAME = 'IsGrown'
@@ -157,8 +157,8 @@ def create_companion_templates():
 def create_companion_template(type, tier, can_ride):
     mob_template = World.MobFactory.GetFactory(type)
     model_template = ItemModelTemplate()
-    model_template.Path = mob_template.Model.Path
-    model_template.Scale = mob_template.Model.Scale * .05
+    model_template.Path = CAGE_MODEL_PATH#mob_template.Model.Path
+    model_template.Scale = CAGE_MODEL_SCALE#mob_template.Model.Scale * .05
     
     template = ItemTemplate()
     template.Name = 'Companion' + type

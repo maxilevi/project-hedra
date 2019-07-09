@@ -122,6 +122,7 @@ namespace Hedra.Engine.Player
                 }
                 _player.Model.TiltMatrix =
                     Matrix4.CreateRotationZ(_angles.Z * Mathf.Radian * (_player.IsUnderwater ? 0.0f : 1.0f));
+                _player.Model.TransformationMatrix = Matrix4.Identity;
                 if (GameManager.Keyboard[Controls.Backward])
                 {
                     this.ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Backward) * keysPresses);

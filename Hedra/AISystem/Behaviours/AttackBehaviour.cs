@@ -45,8 +45,7 @@ namespace Hedra.AISystem.Behaviours
         protected void HandleFollowing()
         {
             if (!FollowTimer.Tick() && Follow.Enabled) return;
-            Target = null;
-            Follow.Target = Target;
+            ResetTarget();
         }
 
         protected virtual void Attack(float RangeModifier)
@@ -57,6 +56,12 @@ namespace Hedra.AISystem.Behaviours
                 Parent.Model.Attack(Target, RangeModifier);
                 //if (!Target.IsMoving && !Target.IsKnocked && Utils.Rng.Next(0, 6) == 1) Target.KnockForSeconds(1.5f);
             }
+        }
+
+        public void ResetTarget()
+        {
+            Target = null;
+            Follow.Target = Target;
         }
         
         protected bool InAttackRange(IEntity Entity, float RangeModifier = 1f)
