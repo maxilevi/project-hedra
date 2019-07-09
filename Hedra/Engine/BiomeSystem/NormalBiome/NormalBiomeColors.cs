@@ -50,9 +50,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
         public override Vector4 StoneColor(int Seed)
         {
             var rng = new Random(Seed + 632);
-
-            var colorN = rng.Next(0, 10);//4
-            switch (colorN)
+            switch (rng.Next(0, 9))
             {
                 case 0:
                     return Colors.FromHtml("#393939");
@@ -71,8 +69,6 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
                 case 7:
                     return Colors.FromHtml("#9A8F97");
                 case 8:
-                    return Colors.FromHtml("#E9E3E6");
-                case 9:
                     return Colors.FromHtml("#808782");
                 default:
                     throw new ArgumentException("Region color does not exist");
