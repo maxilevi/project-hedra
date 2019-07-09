@@ -1,7 +1,9 @@
 using Hedra.Components.Effects;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.EntitySystem;
+using Hedra.Rendering;
 using Hedra.Rendering.Particles;
 using Hedra.WorldObjects;
 using OpenTK;
@@ -26,6 +28,11 @@ namespace Hedra.Engine.Player
             Particles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
             Particles.VariateUniformly = false;
             for (var i = 0; i < 25; i++) Particles.Emit();
+        }
+        
+        protected override Box GetCollisionBox(VertexData MeshData)
+        {
+            return new Box(-Size * 1.5f, Size * 1.5f);
         }
 
         public static Projectile Create(IHumanoid Owner, Vector3 Position, Vector3 Direction, float Damage, params IEntity[] IgnoreEntities)

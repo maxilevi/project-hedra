@@ -79,6 +79,7 @@ namespace Hedra.Engine.Player
         private AreaSound _modelSound;
         private StaticModel _food;
         private AnimatedCollider _collider;
+        private Matrix4 _transformationMatrix = Matrix4.Identity;
 
 
         public HumanoidModel(IHumanoid Human, HumanoidModelTemplate Template) : base(Human)
@@ -299,6 +300,7 @@ namespace Hedra.Engine.Player
                 QuaternionMath.ToEuler(_rotationQuaternionZ).Z
                 );
             LocalRotation = Model.LocalRotation;
+            HandleTransformationMatrix();
             HandleState();
             if ( _isEatingWhileSitting && !Human.IsSitting && Human.IsEating) StopEating();
             if (_foodTimer.Tick() && Human.IsEating) StopEating();
@@ -329,6 +331,20 @@ namespace Hedra.Engine.Player
                 HandleEatingEffects();
                 _foodTimer.Tick();
             }
+        }
+
+        private void HandleTransformationMatrix()
+        {
+            
+            var ridingOffsetMatrix = Matrix4.CreateTranslation(RidingOffset);
+            var ridingOffsetMatrixInverted = Matrix4.CreateTranslation(-RidingOffset);
+            var tiltTransformation = 
+                Matrix4.CreateRotationY(-Model.LocalRotation.Y * Mathf.Radian) *
+                ridingOffsetMatrix *
+                TiltMatrix *
+                ridingOffsetMatrixInverted *
+                Matrix4.CreateRotationY(Model.LocalRotation.Y * Mathf.Radian);
+            Model.TransformationMatrix = tiltTransformation * _transformationMatrix;
         }
 
         public void StopSound()
@@ -451,9 +467,11 @@ namespace Hedra.Engine.Player
 
         public Matrix4 TransformationMatrix
         {
-            get => Model.TransformationMatrix;
-            set => Model.TransformationMatrix = value;
+            get => _transformationMatrix;
+            set => _transformationMatrix = value;
         }
+
+        public Matrix4 TiltMatrix { get; set; } = Matrix4.Identity;
         
         public override Vector3 LocalRotation { get; set; }
 

@@ -104,7 +104,7 @@ namespace Hedra.Engine.Player
                 if (keysPresses < 1f) keysPresses *= 1.5f;
 
                 _targetAngles.Z = 7.5f * (_player.View.StackedYaw - _yaw);
-                _targetAngles = Mathf.Clamp(_targetAngles, -15f, 15f);
+                _targetAngles = Mathf.Clamp(_targetAngles, -17.5f, 17.5f);
                 _angles = Mathf.Lerp(_angles, _targetAngles * (GameManager.Keyboard[Controls.Forward] ? 1.0F : 0.0F), (float)Time.DeltaTime * 8f);
                 _yaw = Mathf.Lerp(_yaw, _player.View.StackedYaw, (float)Time.DeltaTime * 2f);
                 IsMovingForward = GameManager.Keyboard[Controls.Forward];
@@ -120,10 +120,8 @@ namespace Hedra.Engine.Player
                     this.ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Forward) * keysPresses);                   
                     this.Orientate();
                 }
-                _player.Model.TransformationMatrix = 
-                    Matrix4.CreateRotationY(-_player.Model.LocalRotation.Y * Mathf.Radian) *
-                    Matrix4.CreateRotationZ(_angles.Z * Mathf.Radian * (_player.IsUnderwater ? 0.0f : 1.0f)) *
-                    Matrix4.CreateRotationY(_player.Model.LocalRotation.Y * Mathf.Radian);
+                _player.Model.TiltMatrix =
+                    Matrix4.CreateRotationZ(_angles.Z * Mathf.Radian * (_player.IsUnderwater ? 0.0f : 1.0f));
                 if (GameManager.Keyboard[Controls.Backward])
                 {
                     this.ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Backward) * keysPresses);

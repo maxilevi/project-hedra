@@ -63,7 +63,7 @@ namespace Hedra.Items
             var rng = new Random(Settings.Seed);
             var templates = ItemLoader.Templater.Templates;
             var selectedTier = Settings.RandomizeTier ? Settings.Tier : SelectTier(Settings.Tier, rng);
-            
+
             var newTemplates = templates.Where(Template =>
                 Settings.SameTier ? Template.Tier == selectedTier : Template.Tier <= selectedTier).ToArray();
 

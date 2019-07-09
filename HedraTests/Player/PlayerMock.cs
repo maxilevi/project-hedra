@@ -357,6 +357,17 @@ namespace HedraTests.Player
             throw new NotImplementedException();
         }
 
+        public void Damage(float Amount, IEntity Damager, out float Exp, out float Inflicted, bool PlaySound = true,
+            bool PushBack = true)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Damage(float Amount, IEntity Damager, out float Exp, out float Inflicted)
+        {
+            throw new NotImplementedException();
+        }
+
         public void AddBonusSpeedWhile(float BonusSpeed, Func<bool> Condition, bool ShowParticles = true)
         {
             throw new NotImplementedException();

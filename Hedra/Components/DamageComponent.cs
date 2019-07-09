@@ -91,10 +91,15 @@ namespace Hedra.Components
 
         public void Damage(float Amount, IEntity Damager, out float Exp, bool PlaySound, bool PushBack)
         {
+            Damage(Amount, Damager, out Exp, out _, PlaySound, PushBack);
+        }
+        
+        public void Damage(float Amount, IEntity Damager, out float Exp, out float Inflicted, bool PlaySound, bool PushBack)
+        {
             Exp = 0;
-            
+            Inflicted = 0;
             Amount *= (1.0f / Parent.AttackResistance);
-            Amount *= Parent.IsUndead ? Damager?.Attributes.UndeadDamageModifier ?? 1 : 1; 
+            Amount *= Parent.IsUndead ? Damager?.Attributes.UndeadDamageModifier ?? 1 : 1;
             if (Parent.IsDead || Damager != null && _ignoreList.Any(I => I.Invoke(Damager))) return;
             
 
@@ -137,7 +142,9 @@ namespace Hedra.Components
             }
 
             if (shouldMiss || isImmune) return;
+            
             _tintTimer = 0.25f;
+            Inflicted = Amount;
             Parent.Health = Math.Max(Parent.Health - Amount, 0);
             if (Damager != null && Damager != Parent && PushBack 
                 && Parent.Size.LengthFast < Damager.Size.LengthFast)

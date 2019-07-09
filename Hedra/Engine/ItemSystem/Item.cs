@@ -127,7 +127,7 @@ namespace Hedra.Engine.ItemSystem
         {
             foreach (var attribute in Templates)
             {
-                this.SetAttribute(attribute.Name, attribute.Value, attribute.Hidden, attribute.Display);
+                this.SetAttribute(attribute.Name, attribute.Value, attribute.Hidden, attribute.Display, attribute.Persist);
             }
         }
 

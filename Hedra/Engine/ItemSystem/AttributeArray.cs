@@ -25,7 +25,9 @@ namespace Hedra.Engine.ItemSystem
             if (!_attributes.ContainsKey(Attribute))
                 _attributes.Add(Attribute, new AttributeObject(Value, Hidden, Display, Persist));
             else
-                _attributes[Attribute] = new AttributeObject(Value, Hidden, Display ?? _attributes[Attribute].Display, Persist);
+            {
+                _attributes[Attribute] = new AttributeObject(Value, _attributes[Attribute].Hidden, Display ?? _attributes[Attribute].Display, _attributes[Attribute].Persist);
+            }
         }
 
         public object Raw(string Attribute)

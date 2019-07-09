@@ -249,6 +249,11 @@ namespace Hedra.Engine.EntitySystem
 
         public void Damage(float Amount, IEntity Damager, out float Exp, bool PlaySound = true, bool PushBack = true)
         {
+            Damage(Amount, Damager, out Exp, out _, PlaySound, PushBack);
+        }
+
+        public void Damage(float Amount, IEntity Damager, out float Exp, out float Inflicted, bool PlaySound = true, bool PushBack = true)
+        {
             for (var i = 0; i < Components.Count; i++)
             {
                 if (Components[i] is DamageComponent dmg)
@@ -256,12 +261,13 @@ namespace Hedra.Engine.EntitySystem
             }
 
             Exp = 0;
+            Inflicted = 0;
             if (_damageManager == null)
                 return;
 
             Damager?.InvokeBeforeDamaging(this, Amount);
             Damager?.InvokeDamageModifier(this, ref Amount);
-            _damageManager.Damage(Amount, Damager, out Exp, PlaySound, PushBack);
+            _damageManager.Damage(Amount, Damager, out Exp, out Inflicted, PlaySound, PushBack);
             Damager?.InvokeAfterDamaging(this, Amount);
         }
 

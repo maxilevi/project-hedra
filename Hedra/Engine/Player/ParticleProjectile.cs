@@ -72,7 +72,7 @@ namespace Hedra.Engine.Player
             for (var i = 0; i < 35; i++) Particles.Emit();
         }
 
-        private static Vector3 Size => Vector3.One;
+        protected static Vector3 Size => Vector3.One;
 
         private void UpdateLighting()
         {

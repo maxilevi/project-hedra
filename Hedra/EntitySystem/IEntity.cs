@@ -107,6 +107,8 @@ namespace Hedra.EntitySystem
         void ShowIcon(CacheItem? IconType, float Seconds);
 
         void Damage(float Amount, IEntity Damager, out float Exp, bool PlaySound = true, bool PushBack = true);
+        
+        void Damage(float Amount, IEntity Damager, out float Exp, out float Inflicted, bool PlaySound = true, bool PushBack = true);
 
         void AddBonusSpeedWhile(float BonusSpeed, Func<bool> Condition, bool ShowParticles = true);
 

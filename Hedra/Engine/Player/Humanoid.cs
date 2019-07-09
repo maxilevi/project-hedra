@@ -263,10 +263,11 @@ namespace Hedra.Engine.Player
                 if(dot > 0.60f / wideModifier && this.InAttackRange(target, rangeModifier))
                 {
                     var damageToDeal = Damage * dot;
-                    target.Damage(damageToDeal, this, out float exp);
+                    target.Damage(damageToDeal, this, out var exp, out var inflicted);
                     Callback?.Invoke(target);
                     this.XP += exp;
-                    atLeastOneHit = true;
+                    if (inflicted > 0)
+                        atLeastOneHit = true;
                 }
             }
             if(!atLeastOneHit)

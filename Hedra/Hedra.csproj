@@ -7863,9 +7863,6 @@
     <None Include="Modules\Items\Rings\CommonBronzeRing.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Misc\HorseMount.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Modules\Items\Hammers\UncommonIronWarhammer.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

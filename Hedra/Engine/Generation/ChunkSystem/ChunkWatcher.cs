@@ -44,6 +44,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private bool ManageState()
         {
+            if (_object == null) return false;
             if(_object.Disposed)
             {
                 Kill();

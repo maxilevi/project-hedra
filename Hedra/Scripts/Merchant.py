@@ -19,7 +19,8 @@ def build_inventory(item_dict, is_travelling_merchant, inventory_size, rng):
     if is_travelling_merchant:
         items += get_special_items()
     for index, item in items:
-        item_dict.Add(index, item)
+        if item:
+            item_dict.Add(index, item)
 
 def get_base_items(inventory_size, rng):
     recipes = get_base_recipes()
@@ -47,7 +48,7 @@ def get_base_recipes():
 
 def get_special_items():
     return [
-        (0, ItemPool.Grab(HORSE_MOUNT)),
+       # (0, ItemPool.Grab(HORSE_MOUNT)),
         (1, ItemPool.Grab(BOAT))
     ]
 
@@ -60,7 +61,6 @@ assert ItemPool.Exists(STONE_ARROW)
 assert ItemPool.Exists(GLASS_FLASK)
 assert ItemPool.Exists(WOODEN_BOWL)
 assert ItemPool.Exists(BERRY)
-assert ItemPool.Exists(HORSE_MOUNT)
 assert ItemPool.Exists(BOAT)
 assert ItemPool.Exists(PUMPKIN_PIE_RECIPE)
 assert ItemPool.Exists(COOKED_MEAT_RECIPE)

@@ -4,7 +4,7 @@ from System import Array, Single
 from OpenTK import Vector3
 from Hedra.Core import Timer, Time
 from Hedra import World, Utils
-from Hedra.Components import HealthBarComponent, HealthBarType, RideComponent
+from Hedra.Components import HealthBarComponent, HealthBarType, RideComponent, DamageComponent
 from Hedra.AISystem import MountAIComponent, BasicAIComponent
 from Hedra.Engine.ItemSystem.Templates import ItemTemplate, ItemModelTemplate, AttributeTemplate
 from Hedra.Items import ItemTier, ItemPool
@@ -20,14 +20,14 @@ MAX_SCALE_ATTRIB_NAME = 'MaxScale'
 XP_ATTRIB_NAME = 'PetXp'
 MOB_TYPE_ATTRIB_NAME = 'Type'
 BASE_GROWTH_SCALE = 0.5
-GROWTH_TIME = .5 * 60.0 # 8 Minutes
+GROWTH_TIME = .1 * 60.0 # 8 Minutes
 GROWTH_SPEED = 1.0 / GROWTH_TIME
 COMPANION_TYPES = [
     ('Pug', ItemTier.Common, True),
     ('Bee', ItemTier.Common, True),
     ('Wasp', ItemTier.Common, True),
-    ('Ooze', ItemTier.Common, True),
-    ('Pig', ItemTier.Common, True),
+    ('Ooze', ItemTier.Common, False),
+    ('Pig', ItemTier.Common, False),
     ('Sheep', ItemTier.Common, True),
     ('Wolf', ItemTier.Common, True),
     ('Horse', ItemTier.Common, True)
@@ -35,7 +35,7 @@ COMPANION_TYPES = [
 DEFAULT_RIDE_INFO = 0.5
 RIDE_INFO = {
     'Pug': 0.4,
-    'Bee': 0.625
+    'Bee': 0.630
 }
 
 def init(user, state):
@@ -130,6 +130,7 @@ def spawn_pet(state, pet_item):
         pet.Health = pet.MaxHealth
         pet.Level = 1
         serialize_pet_max_scale(pet_item, pet.Model.Scale)
+        pet.SearchComponent[DamageComponent]().Ignore(lambda entity: entity == user)
         pet.RemoveComponent(pet.SearchComponent[HealthBarComponent]())
         pet.AddComponent(HealthBarComponent(pet, translate(pet.Name.ToLowerInvariant()), HealthBarType.Friendly))
         pet.RemoveComponent(pet.SearchComponent[BasicAIComponent]())
@@ -154,9 +155,10 @@ def create_companion_templates():
    
      
 def create_companion_template(type, tier, can_ride):
+    mob_template = World.MobFactory.GetFactory(type)
     model_template = ItemModelTemplate()
-    model_template.Path = CAGE_MODEL_PATH
-    model_template.Scale = CAGE_MODEL_SCALE
+    model_template.Path = mob_template.Model.Path
+    model_template.Scale = mob_template.Model.Scale * .05
     
     template = ItemTemplate()
     template.Name = 'Companion' + type
