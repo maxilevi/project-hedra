@@ -20,18 +20,21 @@ using OpenTK;
 namespace Hedra.AISystem
 {
     /// <summary>
-    /// Description of MountAIComponent.
+    /// Description of CompanionAIComponent.
     /// </summary>
-    public class MountAIComponent : BasicAIComponent
+    public class CompanionAIComponent : BasicAIComponent
     {
         public override AIType Type => AIType.Friendly;
         private readonly IEntity _owner;
+        private bool _isStayingStill;
         private AttackBehaviour Attack { get; }
         private FollowBehaviour Follow { get; }
+        private TraverseBehaviour Traverse { get; }
         
-        public MountAIComponent(IEntity Parent, IEntity Owner) : base(Parent)
+        public CompanionAIComponent(IEntity Parent, IEntity Owner) : base(Parent)
         {
             Attack = new AttackBehaviour(Parent);
+            Traverse = new TraverseBehaviour(Parent);
             Follow = new FollowBehaviour(Parent)
             {
                 ErrorMargin = 4 * Chunk.BlockSize,
@@ -51,14 +54,33 @@ namespace Hedra.AISystem
                 Attack.ResetTarget();
             }
 
-            if (Attack.Enabled)
+            if (!_isStayingStill)
             {
-                Attack.Update();
+                if (Attack.Enabled)
+                {
+                    Attack.Update();
+                }
+                else
+                {
+                    Follow.Target = _owner;
+                    Follow.Update();
+                }
             }
             else
             {
-                Follow.Update();
+                Traverse.Update();
             }
+        }
+
+        public void StartStayStillAt(Vector3 Position)
+        {
+            _isStayingStill = true;
+            Traverse.SetTarget(Position);
+        }
+
+        public void StopStayingStillAt()
+        {
+            _isStayingStill = false;
         }
 
         private void OnOwnerDamaged(DamageEventArgs Args)

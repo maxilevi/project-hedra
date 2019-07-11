@@ -14,7 +14,7 @@ namespace Hedra.Engine.Player.QuestSystem
     {
         private static float _rotation;
         
-        public static uint Draw(AnimatedModel Model)
+        public static uint Draw(AnimatedModel Model, float ModelHeight)
         {
             var previousBound = Renderer.ShaderBound;
             var previousFBO = Renderer.FBOBound;
@@ -32,7 +32,7 @@ namespace Hedra.Engine.Player.QuestSystem
             const float aspect = 1.33f;
             var projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(40 * Mathf.Radian, aspect, 1, 1024f);
             Renderer.LoadProjection(projectionMatrix);
-            var offset = Vector3.UnitY * 3;
+            var offset = Vector3.UnitY * ModelHeight * .5f;
             var eyeOffset = offset + Vector3.UnitZ * 10;
             var rotMat = Matrix4.CreateRotationY(_rotation * Mathf.Radian);
             var lookAt = Matrix4.LookAt(

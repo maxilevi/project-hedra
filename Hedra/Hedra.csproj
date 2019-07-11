@@ -174,7 +174,7 @@
     <Compile Include="AISystem\IBehaviourComponent.cs" />
     <Compile Include="AISystem\IGuardAIComponent.cs" />
     <Compile Include="AISystem\ITraverseAIComponent.cs" />
-    <Compile Include="AISystem\MountAIComponent.cs" />
+    <Compile Include="AISystem\CompanionAIComponent.cs" />
     <Compile Include="AISystem\NeutralAIComponent.cs" />
     <Compile Include="AISystem\PigAIComponent.cs" />
     <Compile Include="AISystem\PigFarmAIComponent.cs" />
@@ -216,7 +216,10 @@
     <Compile Include="Components\DamageComponent.cs" />
     <Compile Include="Components\HealthBarComponent.cs" />
     <Compile Include="Components\RideComponent.cs" />
+    <Compile Include="Components\CompanionXPComponent.cs" />
     <Compile Include="Engine\ItemSystem\Item.cs" />
+    <Compile Include="Engine\Rendering\UI\CompanionProfileUIElement.cs" />
+    <Compile Include="Engine\Rendering\UI\ProfileUIElement.cs" />
     <Compile Include="Items\ItemTier.cs" />
     <Compile Include="User\CommandManager.cs" />
     <Compile Include="User\WordFilter.cs" />
@@ -10508,6 +10511,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\UI\BossHealthBarBackground.png">
       <Link>Assets\UI\BossHealthBarBackground.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\UI\EmptyLogo.png">
+      <Link>Assets\UI\EmptyLogo.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\UI\EntityHealthBar.png">

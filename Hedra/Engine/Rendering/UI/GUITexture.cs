@@ -84,7 +84,7 @@ namespace Hedra.Engine.Rendering.UI
         
         public bool UseMask => MaskId != 0;
         
-        public Matrix3 RotationMatrix => Matrix3.CreateFromAxisAngle(Vector3.UnitZ, Angle * Mathf.Radian);
+        public Matrix2 RotationMatrix => Matrix2.CreateRotation(Angle * Mathf.Radian);
 
         public Vector2 Position
         {

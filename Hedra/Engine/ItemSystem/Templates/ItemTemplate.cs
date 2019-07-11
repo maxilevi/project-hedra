@@ -24,7 +24,7 @@ namespace Hedra.Engine.ItemSystem.Templates
                 Tier = Item.Tier,
                 EquipmentType = Item.EquipmentType,
                 Description = Item.Description,
-                Attributes = Item.GetAttributes(),
+                Attributes = Item.GetAttributes().Where(A => A.Persist).ToArray(),
                 Model = Item.ModelTemplate
             };
         }

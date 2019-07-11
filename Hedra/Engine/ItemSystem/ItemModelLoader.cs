@@ -26,26 +26,14 @@ namespace Hedra.Engine.ItemSystem
             var path = ModelTemplate.Path;
             if (!ModelCache.ContainsKey(path))
             {
-                ModelCache.Add(path, ProcessPath(path));
+                ModelCache.Add(path, AdjustModel(AssetManager.LoadModel(path, Vector3.One)));
             }
 
             var returnModel = ModelCache[path].Clone();
-            returnModel.Transform( Matrix4.CreateScale(ModelTemplate.Scale));
+            returnModel.Transform(Matrix4.CreateScale(ModelTemplate.Scale));
             return returnModel;
         }
 
-        private static VertexData ProcessPath(string Path)
-        {
-            VertexData model;
-            if (Path.EndsWith(".dae"))
-                model = AdjustModel(AssetManager.DAELoader(Path).ToVertexData());
-            else if (Path.EndsWith(".ply"))
-                model = AssetManager.PLYLoader(Path, Vector3.One);
-            else
-                throw new ArgumentOutOfRangeException($"Unsupported model '{Path}'.");
-            return model;
-        }
-        
         private static VertexData AdjustModel(VertexData Model)
         {
             //var center = Model.Vertices.Aggregate( (V1,V2) => V1+V2) / Model.Vertices.Count;

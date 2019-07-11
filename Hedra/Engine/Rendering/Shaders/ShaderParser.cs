@@ -110,6 +110,8 @@ namespace Hedra.Engine.Rendering.Shaders
                     return typeof(Matrix4);
                 case "mat3":
                     return typeof(Matrix3);
+                case "mat2":
+                    return typeof(Matrix2);
                 case "vec4":
                     return typeof(Vector4);
                 case "vec3":

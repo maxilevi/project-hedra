@@ -4,24 +4,28 @@ from System import Array, Single
 from OpenTK import Vector3
 from Hedra.Core import Timer, Time
 from Hedra import World, Utils
-from Hedra.Components import HealthBarComponent, HealthBarType, RideComponent, DamageComponent
-from Hedra.AISystem import MountAIComponent, BasicAIComponent
+from Hedra.Components import HealthBarComponent, HealthBarType, RideComponent, DamageComponent, CompanionXPComponent
+from Hedra.AISystem import CompanionAIComponent, BasicAIComponent
 from Hedra.Engine.ItemSystem.Templates import ItemTemplate, ItemModelTemplate, AttributeTemplate
 from Hedra.Items import ItemTier, ItemPool
+from Hedra.Rendering import VertexData
 
 COMPANION_RESPAWN_TIME = 24
 COMPANION_EQUIPMENT_TYPE = 'Pet'
-CAGE_MODEL_SCALE = 0.1
+CAGE_MODEL_SCALE = 0.15
 CAGE_MODEL_PATH = 'Assets/Items/Misc/CompanionCage.ply'
 GROWTH_ATTRIB_NAME = 'Growth'
 IS_GROWN_ATTRIB_NAME = 'IsGrown'
 CAN_RIDE_ATTRIB_NAME = 'CanRide'
 MAX_SCALE_ATTRIB_NAME = 'MaxScale'
+MODEL_ATTRIB_NAME = 'CompanionModel'
 XP_ATTRIB_NAME = 'PetXp'
 MOB_TYPE_ATTRIB_NAME = 'Type'
+PRICE_ATTRIB_NAME = 'Price'
 BASE_GROWTH_SCALE = 0.5
-GROWTH_TIME = .1 * 60.0 # 8 Minutes
+GROWTH_TIME = 8.0 * 60.0 # 8 Minutes
 GROWTH_SPEED = 1.0 / GROWTH_TIME
+BASE_PRICE = 35
 COMPANION_TYPES = [
     ('Pug', ItemTier.Common, True),
     ('Bee', ItemTier.Common, True),
@@ -134,8 +138,9 @@ def spawn_pet(state, pet_item):
         pet.RemoveComponent(pet.SearchComponent[HealthBarComponent]())
         pet.AddComponent(HealthBarComponent(pet, translate(pet.Name.ToLowerInvariant()), HealthBarType.Friendly))
         pet.RemoveComponent(pet.SearchComponent[BasicAIComponent]())
-        pet.AddComponent(MountAIComponent(pet, user))
-        pet.SearchComponent[MountAIComponent]().Enabled = True
+        pet.AddComponent(CompanionAIComponent(pet, user))
+        pet.SearchComponent[CompanionAIComponent]().Enabled = True
+        pet.AddComponent(CompanionXPComponent(pet, pet_item))
         pet.Removable = False
         pet.IsFriendly = True
         if pet_item.GetAttribute[bool](CAN_RIDE_ATTRIB_NAME):
@@ -157,8 +162,8 @@ def create_companion_templates():
 def create_companion_template(type, tier, can_ride):
     mob_template = World.MobFactory.GetFactory(type)
     model_template = ItemModelTemplate()
-    model_template.Path = CAGE_MODEL_PATH#mob_template.Model.Path
-    model_template.Scale = CAGE_MODEL_SCALE#mob_template.Model.Scale * .05
+    model_template.Path = CAGE_MODEL_PATH
+    model_template.Scale = CAGE_MODEL_SCALE
     
     template = ItemTemplate()
     template.Name = 'Companion' + type
@@ -166,12 +171,12 @@ def create_companion_template(type, tier, can_ride):
     template.Description = translate('generic_companion_item_desc', translate(type.lower()))
     template.Tier = tier
     template.EquipmentType = COMPANION_EQUIPMENT_TYPE
-    template.Attributes = create_companion_attributes(type, can_ride)
+    template.Attributes = create_companion_attributes(type, can_ride, mob_template)
     template.Model = model_template
     return template
 
 
-def create_companion_attributes(type, can_ride):
+def create_companion_attributes(type, can_ride, mob_template):
     can_ride = can_ride
     pet_attribute = AttributeTemplate()
     pet_attribute.Name = MOB_TYPE_ATTRIB_NAME
@@ -195,11 +200,23 @@ def create_companion_attributes(type, can_ride):
     xp_attribute.Hidden = True
     xp_attribute.Persist = True
     
+    price_attribute = AttributeTemplate()
+    price_attribute.Value = BASE_PRICE * mob_template.Level
+    price_attribute.Hidden = True
+    price_attribute.Name = PRICE_ATTRIB_NAME
+    
+    model_attribute = AttributeTemplate()
+    model_attribute.Value = VertexData.Load(mob_template.Model.Path, Vector3.One * Single(mob_template.Model.Scale * .1))
+    model_attribute.Hidden = True
+    model_attribute.Name = MODEL_ATTRIB_NAME
+    
     return Array[AttributeTemplate]([
         pet_attribute,
         ride_attribute,
         growth_attribute,
-        xp_attribute
+        xp_attribute,
+        price_attribute,
+        model_attribute
     ])
     
         

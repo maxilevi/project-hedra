@@ -20,7 +20,7 @@ namespace Hedra.Engine.Rendering
         
         public uint DrawPreview()
         {
-            return EntityRenderer.Draw(Model);
+            return EntityRenderer.Draw(Model, Height);
         }
 
         public void AddModel(ModelData Data)

@@ -5,8 +5,10 @@
  *
  */
 
+using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
@@ -121,6 +123,18 @@ namespace Hedra.Engine.Management
         public static ModelData DAELoader(string File)
         {
             return Provider.DAELoader(File);
+        }
+
+        public static VertexData LoadModel(string File, Vector3 Scale)
+        {
+            VertexData model;
+            if (File.EndsWith(".dae"))
+                model = DAELoader(File).ToVertexData();
+            else if (File.EndsWith(".ply"))
+                model = PLYLoader(File, Vector3.One);
+            else
+                throw new ArgumentOutOfRangeException($"Unsupported model '{File}'.");
+            return model; 
         }
 
         public static void Dispose()

@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.CacheSystem;
+using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using MeshOptimizer;
 using OpenTK;
@@ -442,6 +443,11 @@ namespace Hedra.Rendering
             public Vector3 Normal;
             public Vector4 Color;
             public float Extradata;
+        }
+
+        public static VertexData Load(string Path, Vector3 Scale)
+        {
+            return AssetManager.LoadModel(Path, Scale);
         }
     }
 }
