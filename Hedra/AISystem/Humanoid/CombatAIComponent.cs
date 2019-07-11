@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Hedra.Components;
 using Hedra.Core;
@@ -69,7 +70,8 @@ namespace Hedra.AISystem.Humanoid
         protected override void OnDamageEvent(DamageEventArgs Args)
         {
             base.OnDamageEvent(Args);
-            SetTarget(Args.Damager);
+            if(!Array.Exists(IgnoreEntities, E => E == Args.Damager))
+                SetTarget(Args.Damager);
         }
 
         public override void Update()
