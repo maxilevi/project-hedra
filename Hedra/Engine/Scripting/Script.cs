@@ -14,7 +14,17 @@ namespace Hedra.Engine.Scripting
             return Interpreter.GetFunction(_name, Function);
         }
 
-        public T Get<T>(string Member, params object[] Params)
+        public T Execute<T>(string Function, params object[] Params)
+        {
+            return Interpreter.GetFunction(_name, Function).Invoke<T>(Params);
+        }
+        
+        public void Execute(string Function, params object[] Params)
+        {
+            Interpreter.GetFunction(_name, Function).Invoke(Params);
+        }
+        
+        public T Get<T>(string Member)
         {
             return Interpreter.GetMember<T>(_name, Member);
         }

@@ -34,7 +34,7 @@ namespace Hedra.Engine.Player.CraftingSystem
                 Position = interfacePosition,
                 Scale = Vector2.One * 1.05f
             };
-            _itemInfo = new CraftingInventoryItemInfo(_player, _recipesItemInterface.Renderer)
+            _itemInfo = new CraftingInventoryItemInfo(_player)
             {
                 Position = Vector2.UnitY * _recipesItemInterface.Position.Y + interfacePosition.X * -Vector2.UnitX
             };

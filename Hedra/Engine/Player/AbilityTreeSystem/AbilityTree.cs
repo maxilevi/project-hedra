@@ -69,7 +69,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                     Position = Mathf.ScaleGui(_targetResolution, Vector2.UnitX * .6f + Vector2.UnitY * .35f)
                 }
             };
-            var itemInfo = new AbilityTreeInterfaceItemInfo(_interface.Renderer)
+            var itemInfo = new AbilityTreeInterfaceItemInfo
             {
                 Position = _interface.SpecializationInfo.Position
             };

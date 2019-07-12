@@ -63,6 +63,11 @@ namespace Hedra.Engine.Scripting
             return (T) _runner.GetFunction(Library, Variable);
         }
 
+        public static void Reload()
+        {
+            _runner.Reload();
+        }
+
         public static string SearchPath
         {
 

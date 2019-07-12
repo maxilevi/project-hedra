@@ -151,7 +151,6 @@ def spawn_pet(state, pet_item):
   
 # Companion items are dynamically generated from the list above
 
-
 def create_companion_templates():
     items = []
     for type, tier, can_ride in COMPANION_TYPES:
@@ -218,8 +217,28 @@ def create_companion_attributes(type, can_ride, mob_template):
         price_attribute,
         model_attribute
     ])
+
+def setup_ui(pet_item, pet_entity, top_left, top_right, bottom_left, bottom_right, level, name):
+    top_left.Text = '{0} {1}'.format(
+        int(pet_entity.Health),
+        translate('health_points')
+    )
     
-        
+    top_right.Text = '{0}/{1} {2}'.format(
+        int(pet_entity.SearchComponent[CompanionXPComponent]().XP),
+        int(pet_entity.SearchComponent[CompanionXPComponent]().MaxXP),
+        translate('experience_points')
+    )
+
+    level.Text = '{0} {1}'.format(translate('level').upper(), pet_entity.SearchComponent[CompanionXPComponent]().Level)
+
+    name.Text = pet_entity.Name
+
+    bottom_left.Text = '{0} {1}'.format('{:.2f}'.format(pet_entity.AttackDamage), 'AD')
+    
+    bottom_right.Text = '{0} {1}'.format('{:.2f}'.format(pet_entity.Speed), translate('speed_label'))
+
+
 for name, _, _ in COMPANION_TYPES:
     assert World.MobFactory.ContainsFactory(name)
 

@@ -218,6 +218,7 @@
     <Compile Include="Components\RideComponent.cs" />
     <Compile Include="Components\CompanionXPComponent.cs" />
     <Compile Include="Engine\ItemSystem\Item.cs" />
+    <Compile Include="Engine\Player\Inventory\InventoryCompanionInfo.cs" />
     <Compile Include="Engine\Rendering\UI\CompanionProfileUIElement.cs" />
     <Compile Include="Engine\Rendering\UI\ProfileUIElement.cs" />
     <Compile Include="Items\ItemTier.cs" />

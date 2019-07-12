@@ -59,7 +59,7 @@ namespace Hedra.Engine.Player.Inventory
             {
                 Position = Vector2.UnitX * -.5f + Vector2.UnitY * -.1f
             };
-            var itemInfoInterface = new TradeInventoryInterfaceItemInfo(_playerItemsInterface.Renderer)
+            var itemInfoInterface = new TradeInventoryInterfaceItemInfo
             {
                 Position = Vector2.UnitY * .1f
             };

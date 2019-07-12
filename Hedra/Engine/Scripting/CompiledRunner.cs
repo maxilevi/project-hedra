@@ -16,9 +16,11 @@ namespace Hedra.Engine.Scripting
             _scripts = new Dictionary<string, ScriptScope>();
             _sources = new Dictionary<string, DateTime>();
         }
-
-        public override void Load()
+        
+        public override void Reload()
         {
+            _scripts.Clear();
+            _sources.Clear();
         }
 
         protected override ScriptScope DoRun(string Library)

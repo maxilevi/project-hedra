@@ -32,7 +32,7 @@ namespace Hedra.Engine.Player.CraftingSystem
         private readonly Panel _panel;
         private float _descriptionHeight;
 
-        public CraftingInventoryItemInfo(IPlayer Player, InventoryItemRenderer Renderer) : base(Renderer)
+        public CraftingInventoryItemInfo(IPlayer Player)
         {
             _player = Player;
             _normalTint = new Vector4(Color.Orange.ToVector4().Xyz * 5f, 1);

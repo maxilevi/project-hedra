@@ -12,7 +12,7 @@ namespace Hedra.Engine.Player.Inventory
     {
         private TradeManager _manager;
 
-        public TradeInventoryInterfaceItemInfo(InventoryItemRenderer Renderer) : base(Renderer)
+        public TradeInventoryInterfaceItemInfo()
         {
             HintText.TextFont = FontCache.GetBold(10);
             HintText.TextColor = Color.Gold;

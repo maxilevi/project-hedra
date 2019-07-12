@@ -23,6 +23,7 @@ namespace Hedra.Engine.Player.Inventory
         private readonly InventoryArrayInterfaceManager _interfaceManager;
         private readonly InventoryBackground _inventoryBackground;
         private readonly InventoryStateManager _stateManager;
+        private readonly InventoryCompanionInfo _companionInterface;
         private bool _show;
 
         public PlayerInventoryInterface(IPlayer Player)
@@ -44,7 +45,11 @@ namespace Hedra.Engine.Player.Inventory
             {
                 Position = Vector2.UnitY * .05f + Vector2.UnitX * +.25f + Vector2.UnitY * .05f
             };
-            var itemInfoInterface = new InventoryInterfaceItemInfo(_itemsArrayInterface.Renderer)
+            _companionInterface = new InventoryCompanionInfo
+            {
+                Position = Vector2.UnitX * -.65f + Vector2.UnitY * .1f
+            };
+            var itemInfoInterface = new InventoryInterfaceItemInfo
             {
                 Position = Vector2.UnitX * .6f + Vector2.UnitY * .1f
             };
@@ -79,18 +84,21 @@ namespace Hedra.Engine.Player.Inventory
         private void SetCompanionState(bool State)
         {
             if (_player.Companion.Entity == null) return;
-            var companionAI = _player.Companion.Entity.SearchComponent<CompanionAIComponent>();
             if (State)
-            {
-                companionAI.StartStayStillAt(
-                    _player.Position + Vector3.Cross(_player.Orientation, Vector3.UnitY) * 12 + _player.Orientation
-                );
-                _player.Companion.Entity.Orientation = _player.Orientation;
-            }
+                _companionInterface.Show(_player.Companion.Item, _player.Companion.Entity);
             else
-            {
-                companionAI.StopStayingStillAt();
-            }
+                _companionInterface.Hide();
+            
+        }
+
+        private void UpdateCompanionUI()
+        {
+            if (_player.Companion.Item == _companionInterface.ShowingCompanion) return;
+            
+            if(_player.Companion.Item == null)
+                _companionInterface.Hide();
+            else
+                _companionInterface.Show(_player.Companion.Item, _player.Companion.Entity);
         }
 
         public void Update()
@@ -105,6 +113,7 @@ namespace Hedra.Engine.Player.Inventory
                 _player.View.CameraHeight = Mathf.Lerp(_player.View.CameraHeight, Vector3.UnitY * 4,
                     (float) Time.DeltaTime * 16f);
                 _inventoryBackground.UpdateView(_player);
+                UpdateCompanionUI();
             }
         }
 

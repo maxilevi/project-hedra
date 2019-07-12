@@ -13,8 +13,6 @@ namespace Hedra.Engine.Scripting
         {
             this.Engine = Engine;
         }
-        public abstract void Load();
-
         public object GetFunction(string Library, string Function)
         {
             try
@@ -30,19 +28,7 @@ namespace Hedra.Engine.Scripting
             return null;
         }
 
-        public ScriptScope GetScript(string Library)
-        {
-            try
-            {
-                return DoRun(Library);
-            }
-            catch (Exception e)
-            {
-                ReportFailure(Library, e);
-            }
-
-            return null;
-        }
+        public abstract void Reload();
 
         public abstract void Prepare(string Library);
         

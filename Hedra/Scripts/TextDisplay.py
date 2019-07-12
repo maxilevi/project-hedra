@@ -1,4 +1,23 @@
+from System import Environment
 
+RED = "(RED)"
+GRAY = "(GRAY)"
+VIOLET = "(VIOLET)"
+BLUE = "(BLUE)"
+CYAN = "(CYAN)"
+WHITE = "(WHITE)"
+PASTEL = "(PASTEL)"
+GREEN = "(GREEN)"
+ORANGE = "(ORANGE)"
+BLACK = "(BLACK)"
+GOLD = "(GOLD)"
+YELLOW = "(YELLOW)"
+BOLD = "(BOLD)"
+NORMAL = "(NORMAL)"
+SMALLER = "(SMALLER)"
+BIGGER = "(BIGGER)"
+CAPS = "(CAPS)"
+NEW_LINE = Environment.NewLine
 PERCENTAGE_DISPLAY = 'Percentage'
 COLORED_PERCENTAGE_DISPLAY = 'ColoredPercentage'
 FLAT_DISPLAY = 'Flat'
@@ -26,6 +45,10 @@ DISPLAY_METHODS = {
 
 def format(value, display_type):
     return DISPLAY_METHODS[display_type](value)
+
+def modify(string, *modifiers):
+    buffer = ''.join(modifiers)
+    return '$' + buffer + '{' + '{0}'.format(string) + '}'
 
 assert DISPLAY_METHODS[FLAT_DISPLAY](1) == '1.00'
 assert DISPLAY_METHODS[FLAT_DISPLAY](1.000) == '1.00'

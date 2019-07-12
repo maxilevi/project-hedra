@@ -433,8 +433,20 @@ namespace Hedra.User
                     return true;
                 }
                 if (Parts[0] == "exec")
-                {    
+                {
+                    if (Parts.Length != 2)
+                    {
+                        Result = "Invalid arguments";
+                        return false;
+                    }
                     Interpreter.GetFunction(Parts[1], Parts[2]).Invoke();
+                    return true;
+                }
+
+                if (Parts[0] == "reload")
+                {
+                    Interpreter.Reload();
+                    return true;
                 }
                 if (Parts[0] == "realm")
                 {

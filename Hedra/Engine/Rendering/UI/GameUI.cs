@@ -29,7 +29,6 @@ namespace Hedra.Engine.Rendering.UI
     public class GameUI : Panel
     {
         private readonly ProfileUIElement _playerProfile;
-        private readonly CompanionProfileUIElement _companionProfile;
         public readonly BackgroundTexture Cross;
         private readonly BackgroundTexture _compass;
         private readonly RenderableTexture _oxygenBackground;
@@ -58,8 +57,7 @@ namespace Hedra.Engine.Rendering.UI
             const float scale = .75f;
 
             _playerProfile = new ProfileUIElement(Player, new Vector2(-.85f, .75f), scale);
-            _companionProfile = new CompanionProfileUIElement(Player, new Vector2(-.85f, .5f), scale * .85f);
-            
+
             var oxygenAndStaminaBackgroundId = Graphics2D.LoadFromAssets("Assets/UI/StaminaAndOxygenBarBackground.png");
             var oxygenAndStaminaBackgroundSize = Graphics2D.SizeFromAssets("Assets/UI/StaminaAndOxygenBarBackground.png").As1920x1080() * scale;
             
@@ -107,7 +105,6 @@ namespace Hedra.Engine.Rendering.UI
                 skillTreeTranslation.UpdateTranslation();
             };
             
-            AddElement(_companionProfile);
             AddElement(_playerProfile);
             AddElement(questLogMsg);
             AddElement(skillTreeMsg);
@@ -134,7 +131,6 @@ namespace Hedra.Engine.Rendering.UI
             _compass.TextureElement.Angle = _player.Model.LocalRotation.Y;
 
             _playerProfile.Update();
-            _companionProfile.Update();
 
             _staminaBackground.Position = _playerProfile.ClassLogo.Position - Vector2.UnitY * _playerProfile.ClassLogo.Scale * 1.5f;
             _oxygenBackground.Position = _playerProfile.ClassLogo.Position - Vector2.UnitY * _playerProfile.ClassLogo.Scale * 2.25f;

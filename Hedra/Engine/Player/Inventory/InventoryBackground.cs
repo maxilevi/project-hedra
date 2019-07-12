@@ -4,6 +4,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.EntitySystem;
+using Hedra.Localization;
 using Hedra.Rendering.UI;
 using OpenTK;
 
@@ -49,12 +50,12 @@ namespace Hedra.Engine.Player.Inventory
         public virtual void UpdateView(IHumanoid Human)
         {
             Name.Text = Human.Name;
-            Level.Text = $"LEVEL {Human.Level}";
-            TopLeftText.Text = $"{(int) Human.Health}/{(int) Human.MaxHealth} HP";
-            BottomLeftText.Text = $"{(int)Human.Mana}/{(int) Human.MaxMana} MP";
-            TopRightText.Text = $"{(int)Human.XP}/{(int)Human.MaxXP} XP";
+            Level.Text = $"{Translations.Get("level").ToUpperInvariant()} {Human.Level}";
+            TopLeftText.Text = $"{(int) Human.Health}/{(int) Human.MaxHealth} {Translations.Get("health_points")}";
+            BottomLeftText.Text = $"{(int)Human.Mana}/{(int) Human.MaxMana} {Translations.Get("mana_points")}";
+            TopRightText.Text = $"{(int)Human.XP}/{(int)Human.MaxXP} {Translations.Get("experience_points")}";
             var gold = Human.Gold == int.MaxValue ? "∞" : Human.Gold.ToString();
-            BottomRightText.Text = $"{gold} G";
+            BottomRightText.Text = $"{gold} {Translations.Get("gold_points")}";
         }
     }
 }

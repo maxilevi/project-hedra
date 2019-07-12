@@ -22,7 +22,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         private AbilityTreeBlueprint _blueprint;
         private readonly IPlayer _player;
 
-        public SpecializationInfo(IPlayer Player) : base(null)
+        public SpecializationInfo(IPlayer Player)
         {
             _player = Player;
             _learnSpecializationButton = new Button(

@@ -1,5 +1,5 @@
 import Core
-from System import Environment
+import TextDisplay
 from OpenTK import Vector2
 from OpenTK.Input import Key
 from Hedra.Core import Time
@@ -13,7 +13,6 @@ from Hedra.Rendering.UI import Panel, GUIText, TextField, FontCache
 TEXT_BOX_POSITION = Vector2(-0.95, -.65)
 COMMAND_LINE_POSITION = Vector2(-0.825, -0.725)
 COMMAND_LINE_SIZE = Vector2(.225, .02)
-NEW_LINE = Environment.NewLine
 MAX_HISTORY = 25
 MAX_LINES = 10
 MAX_FADE_TIME = 4.0
@@ -120,7 +119,7 @@ def add_line(state, line):
     if len(text) > MAX_LINES:
         text = text[1:]
     text_box = state['ui_text_box']
-    text_box.Text = NEW_LINE.join(text)
+    text_box.Text = TextDisplay.NEW_LINE.join(text)
     state['text'] = text
 
 def add_history(state, line):

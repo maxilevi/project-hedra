@@ -33,7 +33,6 @@ namespace Hedra.Engine.Player.Inventory
         protected readonly GUIText HintText;
         private readonly Vector2 _targetResolution = new Vector2(1366, 705);
         protected readonly Panel Panel;
-        private readonly InventoryItemRenderer _renderer;
         private readonly Vector2 _weaponItemAttributesPosition;
         private readonly Vector2 _weaponItemTexturePosition;
         protected readonly Vector2 WeaponItemTextureScale;
@@ -43,29 +42,27 @@ namespace Hedra.Engine.Player.Inventory
         private Vector3 _currentItemMeshSize;
         private bool _enabled;
 
-        public InventoryInterfaceItemInfo(InventoryItemRenderer Renderer)
+        public InventoryInterfaceItemInfo(float Scale = 1f)
         {
-            this._renderer = Renderer;
-            this.Panel = new Panel {DisableKeys = true};
+            Panel = new Panel {DisableKeys = true};
             var resFactor = 1366f / GameSettings.Width;
-            this.BackgroundTexture = new BackgroundTexture(DefaultId, Vector2.Zero, DefaultSize * .525f * resFactor);
-            this.ItemTexture = new BackgroundTexture(0, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, BackgroundTexture.Scale * new Vector2(.45f, .0f) + Vector2.UnitX * .025f),
+            BackgroundTexture = new BackgroundTexture(DefaultId, Vector2.Zero, DefaultSize * .525f * resFactor * Scale);
+            ItemTexture = new BackgroundTexture(0, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, BackgroundTexture.Scale * new Vector2(.45f, .0f) + Vector2.UnitX * .025f),
                 BackgroundTexture.Scale * .75f);
 
-            this.ItemText = new RenderableText(string.Empty, Vector2.Zero, Color.White,
-                FontCache.GetBold(13));
+            ItemText = new RenderableText(string.Empty, Vector2.Zero, Color.White, FontCache.GetBold(13));
             DrawManager.UIRenderer.Add(ItemText, DrawOrder.After);
 
-            this.ItemDescription = new RenderableText(string.Empty, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitY * -.25f),
+            ItemDescription = new RenderableText(string.Empty, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitY * -.25f),
                 Color.Bisque, FontCache.GetBold(10));
             DrawManager.UIRenderer.Add(ItemDescription, DrawOrder.After);
 
-            this.ItemAttributes = new RenderableText(string.Empty, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitX * -.05f + Vector2.UnitY * .15f),
+            ItemAttributes = new RenderableText(string.Empty, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitX * -.05f + Vector2.UnitY * .15f),
                 Color.White, FontCache.GetBold(10));
             DrawManager.UIRenderer.Add(ItemAttributes, DrawOrder.After);
             
-            this.HintTexture = new BackgroundTexture(InventoryBackground.DefaultId, Vector2.UnitY * -.35f, InventoryBackground.DefaultSize * .15f);
-            this.HintText = new GUIText(string.Empty, HintTexture.Position, Color.White, FontCache.GetBold(7.As1920x1080()));
+            HintTexture = new BackgroundTexture(InventoryBackground.DefaultId, Vector2.UnitY * -.35f, InventoryBackground.DefaultSize * .15f);
+            HintText = new GUIText(string.Empty, HintTexture.Position, Color.White, FontCache.GetBold(7.As1920x1080()));
 
             Panel.AddElement(HintTexture);
             Panel.AddElement(HintText);
@@ -164,8 +161,13 @@ namespace Hedra.Engine.Player.Inventory
 
         protected virtual void UpdateItemMesh()
         {
+            UpdateItemMesh(CurrentItem.Model);
+        }
+        
+        protected void UpdateItemMesh(VertexData Model)
+        {
             _currentItemMesh?.Dispose();
-            _currentItemMesh = InventoryItemRenderer.BuildModel(CurrentItem.Model, out _currentItemMeshSize);
+            _currentItemMesh = InventoryItemRenderer.BuildModel(Model, out _currentItemMeshSize);
         }
 
         protected virtual void AddAttributes()
@@ -195,8 +197,8 @@ namespace Hedra.Engine.Player.Inventory
         {
             if(Item == null) return;
             CurrentItem = Item;
-            this.Enabled = true;
-            this.UpdateView();
+            Enabled = true;
+            UpdateView();
         }
 
         public virtual void Hide()
@@ -206,7 +208,7 @@ namespace Hedra.Engine.Player.Inventory
             _currentItemMesh = null;
             CurrentItem = null;
             Panel.Disable();
-            this.Enabled = false;
+            Enabled = false;
         }
 
         public bool Showing => CurrentItem != null;
@@ -234,9 +236,13 @@ namespace Hedra.Engine.Player.Inventory
             {
                 _enabled = value;
                 if (_enabled && CurrentItem != null)
+                {
                     Panel.Enable();
+                }
                 else
+                {
                     Panel.Disable();
+                }
                 HintText.Disable();
                 HintTexture.Disable();
             }
