@@ -174,7 +174,7 @@
     <Compile Include="AISystem\IBehaviourComponent.cs" />
     <Compile Include="AISystem\IGuardAIComponent.cs" />
     <Compile Include="AISystem\ITraverseAIComponent.cs" />
-    <Compile Include="AISystem\CompanionAIComponent.cs" />
+    <Compile Include="AISystem\MinionAIComponent.cs" />
     <Compile Include="AISystem\NeutralAIComponent.cs" />
     <Compile Include="AISystem\PigAIComponent.cs" />
     <Compile Include="AISystem\PigFarmAIComponent.cs" />
@@ -216,7 +216,7 @@
     <Compile Include="Components\DamageComponent.cs" />
     <Compile Include="Components\HealthBarComponent.cs" />
     <Compile Include="Components\RideComponent.cs" />
-    <Compile Include="Components\CompanionXPComponent.cs" />
+    <Compile Include="Components\CompanionStatsComponent.cs" />
     <Compile Include="Engine\ItemSystem\Item.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryCompanionInfo.cs" />
     <Compile Include="Engine\Rendering\UI\CompanionProfileUIElement.cs" />
@@ -596,7 +596,6 @@
     <Compile Include="Engine\SkillSystem\WeaponBonusSkill.cs" />
     <Compile Include="Engine\SkillSystem\ChargeablePassiveSkill.cs" />
     <Compile Include="Engine\SkillSystem\ConditionedPassiveSkill.cs" />
-    <Compile Include="Engine\SkillSystem\MinionAIComponent.cs" />
     <Compile Include="Engine\SkillSystem\Rogue\Assassin\Cutthroat.cs" />
     <Compile Include="Engine\SkillSystem\Rogue\Assassin\Fade.cs" />
     <Compile Include="Engine\SkillSystem\Rogue\Assassin\MarkedForDeath.cs" />

@@ -28,6 +28,7 @@ namespace Hedra.Components
     /// </summary>
     public class RideComponent : EntityComponent, ITickable
     {
+        public const float SpeedMultiplier = 1.75f;
         private IHumanoid _rider;
         private BasicAIComponent _ai;
         private HealthBarComponent _healthBar;
@@ -96,7 +97,7 @@ namespace Hedra.Components
             if(_hasRider || Entity.IsRiding) return;
             
             _rider = Entity;
-            _rider.ComponentManager.AddComponentWhile(new SpeedBonusComponent(_rider, -_rider.Speed + Parent.Speed * 1.75f), () => _rider != null && _rider.IsRiding);
+            _rider.ComponentManager.AddComponentWhile(new SpeedBonusComponent(_rider, -_rider.Speed + Parent.Speed * SpeedMultiplier), () => _rider != null && _rider.IsRiding);
             _hasRider = true;
             var model = (QuadrupedModel) Parent.Model;
             _rider.IsRiding = true;
@@ -124,8 +125,7 @@ namespace Hedra.Components
             _hasRider = false;
             _ai.Enabled = true;
             _healthBar.Hide = false;
-
-
+            
             Parent.Physics.UsePhysics = true;
             Parent.Physics.CollidesWithEntities = true;
             Parent.SearchComponent<DamageComponent>().Immune = false;

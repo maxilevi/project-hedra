@@ -1,16 +1,16 @@
 using System;
-using Hedra.AISystem;
 using Hedra.AISystem.Behaviours;
 using Hedra.Components;
-using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
-using Hedra.Engine.SkillSystem.Archer.Hunter;
 using Hedra.EntitySystem;
+using OpenTK;
 
-namespace Hedra.Engine.SkillSystem
+namespace Hedra.AISystem
 { 
     public class MinionAIComponent : BasicAIComponent
     {
+        private const int MaxSeparatedDistance = 128 * 128;
         public IEntity Owner { get; }
         private readonly FollowBehaviour _follow;
         private readonly AttackBehaviour _attack;
@@ -21,6 +21,7 @@ namespace Hedra.Engine.SkillSystem
             this.Owner = Owner;
             this.Owner.SearchComponent<DamageComponent>().OnDamageEvent += OnDamage;
             this.Owner.AfterDamaging += OnDamaging;
+            this.Owner.Kill += OnOwnerKill;
             Parent.BeforeDamaging += BeforeDamaging;
             Parent.AfterDamaging += AfterDamaging;
             Parent.Kill += OnKill;
@@ -28,12 +29,18 @@ namespace Hedra.Engine.SkillSystem
             _follow = new FollowBehaviour(Parent)
             {
                 Target = this.Owner,
-                ErrorMargin = 16
+                ErrorMargin = 4 * Chunk.BlockSize
             };
         }
 
         public override void Update()
         {
+            if((Parent.Position - Owner.Position).LengthSquared > MaxSeparatedDistance)
+            {
+                Parent.Position = Owner.BlockPosition + Vector3.Cross(Parent.Orientation, Vector3.UnitY) * 12f;
+                _attack.ResetTarget();
+            }
+            
             if (_attack.Enabled)
             {
                 _attack.Update();
@@ -73,6 +80,12 @@ namespace Hedra.Engine.SkillSystem
             if(Owner is IHumanoid humanoid)
                 humanoid.XP += Args.Experience;
         }
+
+        private void OnOwnerKill(DeadEventArgs Args)
+        {
+            if(Parent.SearchComponent<CompanionStatsComponent>() != null)
+                Parent.SearchComponent<CompanionStatsComponent>().XP += Args.Experience;
+        }
         
         private void Kill()
         {
@@ -86,6 +99,7 @@ namespace Hedra.Engine.SkillSystem
             base.Dispose();
             Owner.SearchComponent<DamageComponent>().OnDamageEvent -= OnDamage;
             Owner.AfterDamaging -= OnDamaging;
+            Owner.Kill -= OnOwnerKill;
         }
 
         public override AIType Type => throw new NotImplementedException();

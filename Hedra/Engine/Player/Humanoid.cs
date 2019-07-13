@@ -480,7 +480,6 @@ namespace Hedra.Engine.Player
             set => _stamina = Mathf.Clamp(value, 0, MaxStamina);
         }
         
-
         public float Mana
         {
             get => _mana;

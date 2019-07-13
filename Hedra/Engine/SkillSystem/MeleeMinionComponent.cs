@@ -1,4 +1,5 @@
 using System;
+using Hedra.AISystem;
 using Hedra.AISystem.Behaviours;
 using Hedra.AISystem.Humanoid;
 using Hedra.EntitySystem;

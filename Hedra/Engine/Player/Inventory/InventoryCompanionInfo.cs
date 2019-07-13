@@ -64,9 +64,14 @@ namespace Hedra.Engine.Player.Inventory
 
             ItemTexture.Scale *= .65f;
             ItemTexture.Position += BackgroundTexture.Scale * Vector2.UnitY * .15f;
-            Script.Execute("setup_ui", CurrentItem, _companion, TopLeftText, TopRightText, BottomLeftText, BottomRightText, Level, ItemText);
+            UpdateStats(CurrentItem, _companion);
         }
 
+        public void UpdateStats(Item Item, IEntity Companion)
+        {
+            Script.Execute("update_ui", Item, Companion, TopLeftText, TopRightText, BottomLeftText, BottomRightText, Level, ItemText);
+        }
+        
         protected override void UpdateItemMesh()
         {
             UpdateItemMesh(CurrentItem.GetAttribute<VertexData>("CompanionModel"));

@@ -47,7 +47,7 @@ namespace Hedra.AISystem.Humanoid
             this.Graph = Graph;
             _reachedTarget = true;
             _movementTimer = new Timer(WaitTime);
-            _movementTimer.MakeReady();
+            _movementTimer.MarkReady();
             MaxSpeed = Utils.Rng.NextFloat() * .25f + .8f;
             _timeoutTimer = new Timer(48 + Utils.Rng.NextFloat() * 40);
             _interactionTimer = new Timer(8 + Utils.Rng.NextFloat() * 14f);
@@ -190,7 +190,7 @@ namespace Hedra.AISystem.Humanoid
             if (nearestVillage == null) return;
             MoveTo(nearestVillage.Position.Xz, delegate
             {
-                _interactionTimer.MakeReady();
+                _interactionTimer.MarkReady();
             }, MarketParameters.MarketSize * .25f);
         }
         
@@ -244,7 +244,7 @@ namespace Hedra.AISystem.Humanoid
         {
             base.OnMovementStuck();
             _reachedTarget = true;
-            _movementTimer.MakeReady();
+            _movementTimer.MarkReady();
         }
 
         private void MoveTo(Vector2 Position, Action Callback, float ErrorMargin = DefaultErrorMargin)

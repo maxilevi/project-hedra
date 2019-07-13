@@ -99,6 +99,7 @@ namespace Hedra.Engine.Player
             this.Model = new HumanoidModel(this);
             this.StructureAware = new StructureAware(this);
             this.Inventory = new PlayerInventory(this);
+            this.Companion = new CompanionHandler(this);
             this.InventoryInterface = new PlayerInventoryInterface(this);
             this.Crafting = new CraftingInventory(this.Inventory);
             this.CraftingInterface = new CraftingInterface(this);
@@ -107,7 +108,6 @@ namespace Hedra.Engine.Player
             this.AbilityTree = new AbilityTree(this);
             this.Questing = new QuestInventory(this);
             this.QuestInterface = new QuestInterface(this);
-            this.Companion = new CompanionHandler(this);
             this.Chat = new Chat(this);
             this.Minimap = new Minimap(this);
             this.Map = new Map(this);

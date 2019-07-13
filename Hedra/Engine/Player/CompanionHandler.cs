@@ -13,16 +13,16 @@ using Hedra.EntitySystem;
 
 namespace Hedra.Engine.Player
 {
-    /// <summary>
-    ///     Description of PetManager.
-    /// </summary>
+    public delegate void OnCompanionChanged(Item NewItem, IEntity NewPet);
     public class CompanionHandler
     {
+        public OnCompanionChanged CompanionChanged;
         private readonly IPlayer _player;
         private readonly Script _script;
         private readonly Dictionary<string, object> _state;
         public IEntity Entity => (IEntity) _state["pet"];
         public bool IsActive => Entity != null;
+        private IEntity _lastPet;
 
         public CompanionHandler(IPlayer Player)
         {
@@ -35,6 +35,11 @@ namespace Hedra.Engine.Player
         public void Update()
         {
             _script.Get("update").Invoke(_state);
+            if (_lastPet != Entity)
+            {
+                CompanionChanged.Invoke(Item, Entity);
+                _lastPet = Entity;
+            }
         }
 
         public Item Item => _player.Inventory.Pet;

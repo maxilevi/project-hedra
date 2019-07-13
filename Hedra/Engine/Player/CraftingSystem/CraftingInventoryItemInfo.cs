@@ -41,7 +41,7 @@ namespace Hedra.Engine.Player.CraftingSystem
             {
                 AutoReset = false,
             };
-            _cooldownTimer.MakeReady();
+            _cooldownTimer.MarkReady();
             _panel = new Panel();
             _ingredientsText = new GUIText[MaxIngredients+1];
             for (var i = 0; i < _ingredientsText.Length; i++)

@@ -4,13 +4,13 @@ from System import Array, Single
 from OpenTK import Vector3
 from Hedra.Core import Timer, Time
 from Hedra import World, Utils
-from Hedra.Components import HealthBarComponent, HealthBarType, RideComponent, DamageComponent, CompanionXPComponent
-from Hedra.AISystem import CompanionAIComponent, BasicAIComponent
+from Hedra.Components import HealthBarComponent, HealthBarType, RideComponent, DamageComponent, CompanionStatsComponent
+from Hedra.AISystem import MinionAIComponent, BasicAIComponent
 from Hedra.Engine.ItemSystem.Templates import ItemTemplate, ItemModelTemplate, AttributeTemplate
 from Hedra.Items import ItemTier, ItemPool
 from Hedra.Rendering import VertexData
 
-COMPANION_RESPAWN_TIME = 24
+COMPANION_RESPAWN_TIME = 48 # Seconds
 COMPANION_EQUIPMENT_TYPE = 'Pet'
 CAGE_MODEL_SCALE = 0.15
 CAGE_MODEL_PATH = 'Assets/Items/Misc/CompanionCage.ply'
@@ -20,6 +20,8 @@ CAN_RIDE_ATTRIB_NAME = 'CanRide'
 MAX_SCALE_ATTRIB_NAME = 'MaxScale'
 MODEL_ATTRIB_NAME = 'CompanionModel'
 XP_ATTRIB_NAME = 'PetXp'
+DEAD_TIMER_ATTRIB_NAME = 'DeadTimer'
+HEALTH_ATTRIB_NAME = 'PetHealth'
 MOB_TYPE_ATTRIB_NAME = 'Type'
 PRICE_ATTRIB_NAME = 'Price'
 BASE_GROWTH_SCALE = 0.5
@@ -44,8 +46,6 @@ RIDE_INFO = {
 
 def init(user, state):
     state['user'] = user
-    state['dead_timer'] = Timer(COMPANION_RESPAWN_TIME)
-    state['dead_timer_set'] = False
     state['pet'] = None
     state['pet_item'] = None
     state['pet_previous_enabled'] = True
@@ -59,19 +59,23 @@ def update(state):
 
     if pet:
         handle_model(user, pet, state)
-        
-    if pet and pet.IsDead and not state['dead_timer_set']:
-        state['dead_timer'].Reset()
-        state['dead_timer_set'] = True
 
     pet_item = user.Inventory.Pet
-    if (pet_item != state['pet_item']) or (pet and pet.IsDead and state['dead_timer'].Tick()):
+    if pet and pet.IsDead and pet_item and get_dead_timer(pet_item).Ready:
+        get_dead_timer(pet_item).Reset()
+
+    if pet_item != state['pet_item'] and ((pet_item and get_dead_timer(pet_item).Ready) or (not pet_item)):
         spawn_pet(state, pet_item)
-        state['dead_timer_set'] = False
+
+    if pet and pet.IsDead and pet_item and get_dead_timer(pet_item).Tick():
+        pet_item.SetAttribute(HEALTH_ATTRIB_NAME, pet.MaxHealth)
+        spawn_pet(state, pet_item)
         
     if pet_item:
         update_growth(pet_item, pet)
 
+def get_dead_timer(pet_item):
+    return pet_item.GetAttribute[Timer](DEAD_TIMER_ATTRIB_NAME)
 
 def update_growth(pet_item, pet):
 
@@ -131,16 +135,13 @@ def spawn_pet(state, pet_item):
         user = state['user']
         type = pet_item.GetAttribute[str](MOB_TYPE_ATTRIB_NAME)
         pet = World.SpawnMob(type, user.Position + Vector3.UnitX * 12, Utils.Rng)
-        pet.Health = pet.MaxHealth
-        pet.Level = 1
         serialize_pet_max_scale(pet_item, pet.Model.Scale)
         pet.SearchComponent[DamageComponent]().Ignore(lambda entity: entity == user)
         pet.RemoveComponent(pet.SearchComponent[HealthBarComponent]())
         pet.AddComponent(HealthBarComponent(pet, translate(pet.Name.ToLowerInvariant()), HealthBarType.Friendly))
         pet.RemoveComponent(pet.SearchComponent[BasicAIComponent]())
-        pet.AddComponent(CompanionAIComponent(pet, user))
-        pet.SearchComponent[CompanionAIComponent]().Enabled = True
-        pet.AddComponent(CompanionXPComponent(pet, pet_item))
+        pet.AddComponent(MinionAIComponent(pet, user))
+        pet.AddComponent(CompanionStatsComponent(pet, pet_item))
         pet.Removable = False
         pet.IsFriendly = True
         if pet_item.GetAttribute[bool](CAN_RIDE_ATTRIB_NAME):
@@ -209,34 +210,57 @@ def create_companion_attributes(type, can_ride, mob_template):
     model_attribute.Hidden = True
     model_attribute.Name = MODEL_ATTRIB_NAME
     
+    health_attribute = AttributeTemplate()
+    health_attribute.Value = mob_template.MaxHealth
+    health_attribute.Persist = True
+    health_attribute.Hidden = True
+    health_attribute.Name = HEALTH_ATTRIB_NAME
+
+    dead_timer = Timer(COMPANION_RESPAWN_TIME)
+    dead_timer.AutoReset = False
+    dead_timer.MarkReady()
+    
+    dead_timer_attribute = AttributeTemplate()
+    dead_timer_attribute.Value = dead_timer
+    dead_timer_attribute.Hidden = True
+    dead_timer_attribute.Name = DEAD_TIMER_ATTRIB_NAME
+    
     return Array[AttributeTemplate]([
         pet_attribute,
         ride_attribute,
         growth_attribute,
         xp_attribute,
         price_attribute,
-        model_attribute
+        model_attribute,
+        health_attribute,
+        dead_timer_attribute
     ])
 
-def setup_ui(pet_item, pet_entity, top_left, top_right, bottom_left, bottom_right, level, name):
+def update_ui(pet_item, pet_entity, top_left, top_right, bottom_left, bottom_right, level, name):
+    if not pet_entity: return
+    
+    name.Text = pet_entity.Name
     top_left.Text = '{0} {1}'.format(
         int(pet_entity.Health),
         translate('health_points')
     )
-    
     top_right.Text = '{0}/{1} {2}'.format(
-        int(pet_entity.SearchComponent[CompanionXPComponent]().XP),
-        int(pet_entity.SearchComponent[CompanionXPComponent]().MaxXP),
+        int(pet_entity.SearchComponent[CompanionStatsComponent]().XP),
+        int(pet_entity.SearchComponent[CompanionStatsComponent]().MaxXP),
         translate('experience_points')
     )
-
-    level.Text = '{0} {1}'.format(translate('level').upper(), pet_entity.SearchComponent[CompanionXPComponent]().Level)
-
-    name.Text = pet_entity.Name
-
-    bottom_left.Text = '{0} {1}'.format('{:.2f}'.format(pet_entity.AttackDamage), 'AD')
-    
-    bottom_right.Text = '{0} {1}'.format('{:.2f}'.format(pet_entity.Speed), translate('speed_label'))
+    level.Text = '{0} {1}'.format(
+        translate('level').upper(),
+        pet_entity.SearchComponent[CompanionStatsComponent]().Level
+    )
+    bottom_left.Text = '{0} {1}'.format(
+        '{:.2f}'.format(pet_entity.AttackDamage),
+        translate('attack_damage_label')
+    )
+    bottom_right.Text = '{0} {1}'.format(
+        '{:.2f}'.format(pet_entity.Speed * RideComponent.SpeedMultiplier),
+        translate('speed_label')
+    )
 
 
 for name, _, _ in COMPANION_TYPES:

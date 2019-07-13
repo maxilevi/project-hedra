@@ -38,7 +38,7 @@ namespace Hedra.Engine.Player
             {
                 AutoReset = false
             };
-            _enterTimer.MakeReady();
+            _enterTimer.MarkReady();
             NearCollisions = new CollisionGroup[0];
         }
         

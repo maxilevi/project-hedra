@@ -75,7 +75,7 @@ namespace Hedra.Engine.Rendering.UI
         
         protected override float MaxHealth => _currentPet?.MaxHealth ?? 0;
         protected override float Health => _currentPet?.Health ?? 0;
-        protected override float MaxXP => _currentPet?.SearchComponent<CompanionXPComponent>().MaxXP ?? 0;
-        protected override float XP => _currentPet?.SearchComponent<CompanionXPComponent>().XP ?? 0;
+        protected override float MaxXP => _currentPet?.SearchComponent<CompanionStatsComponent>().MaxXP ?? 0;
+        protected override float XP => _currentPet?.SearchComponent<CompanionStatsComponent>().XP ?? 0;
     }
 }

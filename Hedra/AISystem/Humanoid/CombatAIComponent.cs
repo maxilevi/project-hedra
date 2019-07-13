@@ -43,7 +43,7 @@ namespace Hedra.AISystem.Humanoid
             Behaviour = new BanditAIBehaviour(Entity);
             _targetPoint = Behaviour.FindPoint();
             _originalPosition = Parent.BlockPosition;
-            _movementTimer.MakeReady();
+            _movementTimer.MarkReady();
         }
 
         protected override bool ShouldWakeup

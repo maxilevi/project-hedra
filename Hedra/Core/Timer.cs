@@ -42,7 +42,7 @@ namespace Hedra.Core
             return true;
         }
 
-        public void MakeReady()
+        public void MarkReady()
         {
             _timerCount = AlertTime;
         }

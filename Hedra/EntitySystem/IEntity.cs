@@ -128,8 +128,6 @@ namespace Hedra.EntitySystem
         
         void KnockForSeconds(float Time);
 
-        void SpawnAnimation();
-
         void Dispose();
 
         void Draw();
