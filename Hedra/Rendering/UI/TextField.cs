@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections;
+using System.Drawing;
 using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.Events;
@@ -209,6 +210,12 @@ namespace Hedra.Rendering.UI
         {
             get => _textBar.Position;
             set => _textBar.Position = value;
+        }
+
+        public Font TextFont
+        {
+            get => _textBar.Text.TextFont;
+            set => _textBar.Text.TextFont = value;
         }
         
         private bool _enabled;

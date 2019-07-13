@@ -1,3 +1,4 @@
+using Hedra.Core;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem;
@@ -10,15 +11,18 @@ namespace Hedra.Components
     public class CompanionStatsComponent : EntityComponent
     {
         private const string LibraryName = "Companion.py";
+        private static readonly string NameAttributeName = Interpreter.GetMember<string>(LibraryName, "NAME_ATTRIB_NAME");
         private static readonly string XPAttributeName = Interpreter.GetMember<string>(LibraryName, "XP_ATTRIB_NAME");
         private static readonly string HealthAttributeName = Interpreter.GetMember<string>(LibraryName, "HEALTH_ATTRIB_NAME");
         private readonly Item _storage;
-        private float _baseAttackDamage;
+        private readonly Timer _saveTimer;
+        private readonly float _baseAttackDamage;
         private int _level = 1;
 
         public CompanionStatsComponent(IEntity Entity, Item Storage) : base(Entity)
         {
             _storage = Storage;
+            _saveTimer = new Timer(1);
             _baseAttackDamage = Parent.AttackDamage;
             /* Force update the xp */
             XP = XP;
@@ -27,9 +31,16 @@ namespace Hedra.Components
 
         public override void Update()
         {
-            _storage.SetAttribute(HealthAttributeName, Parent.Health);
+            if(_saveTimer.Tick())
+                _storage.SetAttribute(HealthAttributeName, Parent.Health);
             if(!Parent.SearchComponent<DamageComponent>().HasBeenAttacked && !Parent.IsAttacking)
-                Parent.Health += HealthRegen * Hedra.Core.Time.DeltaTime;
+                Parent.Health += HealthRegen * Time.DeltaTime;
+        }
+
+        public string Name
+        {
+            get => _storage.GetAttribute<string>(NameAttributeName);
+            set => _storage.SetAttribute(NameAttributeName, value);
         }
 
         public float XP

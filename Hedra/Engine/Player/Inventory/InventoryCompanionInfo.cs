@@ -1,12 +1,16 @@
 using System.Drawing;
 using System.Text;
+using Hedra.Engine.Events;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.Localization;
+using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Scripting;
 using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using OpenTK;
+using OpenTK.Input;
 
 namespace Hedra.Engine.Player.Inventory
 {
@@ -18,6 +22,9 @@ namespace Hedra.Engine.Player.Inventory
         private GUIText BottomLeftText { get; }
         private GUIText TopRightText { get; }
         private GUIText BottomRightText { get; }
+        private readonly Button _renameButton;
+        private readonly TextField _renameField;
+        private bool _isRenaming;
         private IEntity _companion;
         
         public InventoryCompanionInfo() : base((1f / (1366f / GameSettings.Width)) * .9f)
@@ -28,12 +35,22 @@ namespace Hedra.Engine.Player.Inventory
             TopRightText = new GUIText(string.Empty, Vector2.Zero, Color.DarkViolet, FontCache.GetBold(14));
             BottomRightText = new GUIText(string.Empty, Vector2.Zero, Color.LightBlue, FontCache.GetNormal(10));
             ItemText.TextFont = FontCache.GetBold(28);
+            HintTexture.Scale *= .8f; 
+            HintText.TextFont = FontCache.GetBold(12);
+            HintText.SetTranslation(Translation.Create("rename_btn"));
+            _renameField = new TextField(Vector2.Zero, Vector2.Zero, Panel, false);
+            _renameButton = new Button(Vector2.Zero, HintTexture.Scale, GUIRenderer.TransparentTexture);
+            _renameButton.Click += OnRename;
             
+            Panel.AddElement(_renameField);
+            Panel.AddElement(_renameButton);
             Panel.AddElement(Level);
             Panel.AddElement(TopLeftText);
             Panel.AddElement(BottomLeftText);
             Panel.AddElement(TopRightText);
             Panel.AddElement(BottomRightText);
+            
+            EventDispatcher.RegisterKeyDown(this, OnKeyDown);
         }
 
         public void Show(Item Item, IEntity Companion)
@@ -61,10 +78,43 @@ namespace Hedra.Engine.Player.Inventory
             BottomLeftText.Position = Position - marginY - marginX + offset + statsOffset;
             TopRightText.Position = Position + marginY + marginX + offset + statsOffset;
             BottomRightText.Position = Position - marginY + marginX + offset + statsOffset;
-
+            
+            HintTexture.Position = BackgroundTexture.Position - (HintTexture.Scale.Y * 1.5f + BackgroundTexture.Scale.Y) * Vector2.UnitY;
+            HintText.Position = HintTexture.Position;
+            _renameField.Position = ItemText.Position;
+            _renameButton.Position = HintTexture.Position;
+            
             ItemTexture.Scale *= .65f;
             ItemTexture.Position += BackgroundTexture.Scale * Vector2.UnitY * .15f;
             UpdateStats(CurrentItem, _companion);
+            SetupRenameUI();
+        }
+
+        private void SetupRenameUI()
+        {
+            if (_isRenaming)
+            {
+                _renameField.Enable();
+                _renameButton.Disable();
+                HintTexture.Disable();
+                HintText.Disable();
+                ItemText.Disable();
+                _renameField.TextFont = ItemText.TextFont;
+                _renameField.Scale = BackgroundTexture.Scale.X * Vector2.UnitX + ItemText.Scale.Y * Vector2.UnitY * 1.25f;
+                _renameField.Text = ItemText.Text;
+            }
+            else
+            {
+                _renameField.Disable();
+                _renameButton.Enable();
+                HintTexture.Enable();
+                HintText.Enable();
+                ItemText.Enable();
+            }
+        }
+
+        protected override void AddHint()
+        {
         }
 
         public void UpdateStats(Item Item, IEntity Companion)
@@ -84,6 +134,38 @@ namespace Hedra.Engine.Player.Inventory
             ItemAttributes.Text = string.Empty;
         }
 
+        private void OnRename(object Sender, MouseButtonEventArgs Args)
+        {
+            _isRenaming = true;
+            UpdateView();
+        }
+
+        private void OnKeyDown(object Sender, KeyEventArgs Args)
+        {
+            if(!Enabled || !_isRenaming) return;
+            if (Args.Key == Key.Enter)
+            {
+                CurrentItem.SetAttribute("PetName", _renameField.Text);
+                _isRenaming = false;
+                UpdateView();
+            }
+            else if (Args.Key == Key.Escape)
+            {
+                _isRenaming = false;
+                UpdateView();
+            }
+        }
+
+        public override bool Enabled
+        {
+            get => base.Enabled;
+            set
+            {
+                if (!value)
+                    _isRenaming = false;
+                base.Enabled = value;
+            }
+        }
         public Item ShowingCompanion => CurrentItem;
     }
 }

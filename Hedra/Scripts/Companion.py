@@ -20,6 +20,7 @@ CAN_RIDE_ATTRIB_NAME = 'CanRide'
 MAX_SCALE_ATTRIB_NAME = 'MaxScale'
 MODEL_ATTRIB_NAME = 'CompanionModel'
 XP_ATTRIB_NAME = 'PetXp'
+NAME_ATTRIB_NAME = 'PetName'
 DEAD_TIMER_ATTRIB_NAME = 'DeadTimer'
 HEALTH_ATTRIB_NAME = 'PetHealth'
 MOB_TYPE_ATTRIB_NAME = 'Type'
@@ -135,10 +136,11 @@ def spawn_pet(state, pet_item):
         user = state['user']
         type = pet_item.GetAttribute[str](MOB_TYPE_ATTRIB_NAME)
         pet = World.SpawnMob(type, user.Position + Vector3.UnitX * 12, Utils.Rng)
+        pet.Name = pet_item.GetAttribute[str](NAME_ATTRIB_NAME)
         serialize_pet_max_scale(pet_item, pet.Model.Scale)
         pet.SearchComponent[DamageComponent]().Ignore(lambda entity: entity == user)
         pet.RemoveComponent(pet.SearchComponent[HealthBarComponent]())
-        pet.AddComponent(HealthBarComponent(pet, translate(pet.Name.ToLowerInvariant()), HealthBarType.Friendly))
+        pet.AddComponent(HealthBarComponent(pet, pet.Name, HealthBarType.Friendly))
         pet.RemoveComponent(pet.SearchComponent[BasicAIComponent]())
         pet.AddComponent(MinionAIComponent(pet, user))
         pet.AddComponent(CompanionStatsComponent(pet, pet_item))
@@ -225,6 +227,11 @@ def create_companion_attributes(type, can_ride, mob_template):
     dead_timer_attribute.Hidden = True
     dead_timer_attribute.Name = DEAD_TIMER_ATTRIB_NAME
     
+    name_attribute = AttributeTemplate()
+    name_attribute.Value = translate(mob_template.Name.ToLowerInvariant())
+    name_attribute.Hidden = True
+    name_attribute.Name = NAME_ATTRIB_NAME
+    
     return Array[AttributeTemplate]([
         pet_attribute,
         ride_attribute,
@@ -233,13 +240,14 @@ def create_companion_attributes(type, can_ride, mob_template):
         price_attribute,
         model_attribute,
         health_attribute,
-        dead_timer_attribute
+        dead_timer_attribute,
+        name_attribute
     ])
 
 def update_ui(pet_item, pet_entity, top_left, top_right, bottom_left, bottom_right, level, name):
-    if not pet_entity: return
+    if not pet_item or not pet_entity: return
     
-    name.Text = pet_entity.Name
+    name.Text = pet_item.GetAttribute[str](NAME_ATTRIB_NAME)
     top_left.Text = '{0} {1}'.format(
         int(pet_entity.Health),
         translate('health_points')

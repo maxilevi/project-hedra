@@ -604,4 +604,5 @@ hp_per_second = HP/s
 mp_per_second = MP/s
 attack_speed_label = AS
 attack_damage_label = AD
+rename_btn = RENAME
 
