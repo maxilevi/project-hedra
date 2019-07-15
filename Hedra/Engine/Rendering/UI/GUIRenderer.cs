@@ -5,6 +5,7 @@ using System.Linq;
 using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
+using Hedra.Rendering;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 

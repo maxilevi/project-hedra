@@ -14,6 +14,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Localization;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.SkillSystem.Archer
 {

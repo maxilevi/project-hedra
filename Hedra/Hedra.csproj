@@ -222,6 +222,7 @@
     <Compile Include="Engine\Rendering\UI\CompanionProfileUIElement.cs" />
     <Compile Include="Engine\Rendering\UI\ProfileUIElement.cs" />
     <Compile Include="Items\ItemTier.cs" />
+    <Compile Include="Rendering\Graphics2D.cs" />
     <Compile Include="User\CommandManager.cs" />
     <Compile Include="User\WordFilter.cs" />
     <Compile Include="Components\BlacksmithComponent.cs" />
@@ -1349,7 +1350,6 @@
     <Compile Include="Engine\Generation\ChunkSystem\ChunkLoader.cs" />
     <Compile Include="Engine\Rendering\BasicGeometry.cs" />
     <Compile Include="Engine\Rendering\CubeData.cs" />
-    <Compile Include="Engine\Rendering\Graphics2D.cs" />
     <Compile Include="Engine\Rendering\ChunkMesh.cs" />
     <Compile Include="Engine\TreeSystem\AppleDesign.cs" />
     <Compile Include="Engine\TreeSystem\CypressDesign.cs" />
@@ -14262,6 +14262,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\Soundtrack.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\TextField.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\VisualEffects.py">

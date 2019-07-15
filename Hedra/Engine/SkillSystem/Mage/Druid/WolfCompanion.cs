@@ -1,5 +1,6 @@
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Rendering;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Mage.Druid

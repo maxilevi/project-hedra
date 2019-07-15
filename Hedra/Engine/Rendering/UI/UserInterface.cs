@@ -25,6 +25,7 @@ using Hedra.Engine.Steamworks;
 using Hedra.Game;
 using Hedra.Input;
 using Hedra.Localization;
+using Hedra.Rendering;
 using Hedra.Rendering.UI;
 
 namespace Hedra.Engine.Rendering.UI

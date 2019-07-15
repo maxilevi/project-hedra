@@ -9,6 +9,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.EntitySystem;
 using Hedra.Localization;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.SkillSystem.Mage

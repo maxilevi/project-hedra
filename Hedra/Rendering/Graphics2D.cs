@@ -6,24 +6,23 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+
 using System;
-using Hedra.Engine.Management;
-using System.IO; 
 using System.Drawing;
 using System.Drawing.Imaging;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+using System.IO;
 using System.Threading;
 using Hedra.Core;
-using Hedra.Engine.Game;
 using Hedra.Engine.IO;
+using Hedra.Engine.Management;
+using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
+using Hedra.Engine.Rendering.UI;
 using Hedra.Game;
+using OpenTK;
+using OpenTK.Graphics.OpenGL4;
 
-namespace Hedra.Engine.Rendering
+namespace Hedra.Rendering
 {
     public static class Graphics2D
     {
@@ -37,7 +36,7 @@ namespace Hedra.Engine.Rendering
             var id = Provider.LoadTexture(BitmapObject, Min, Mag, Wrap);
             TextureRegistry.Add(id, BitmapObject.Path);
             
-            if(Loader.Hedra.MainThreadId != Thread.CurrentThread.ManagedThreadId && !GameSettings.TestingMode)
+            if(Engine.Loader.Hedra.MainThreadId != Thread.CurrentThread.ManagedThreadId && !GameSettings.TestingMode)
                 Log.WriteLine($"[Error] Texture being created outside of the GL thread");
             return id;
         }
@@ -59,11 +58,6 @@ namespace Hedra.Engine.Rendering
             return new Vector2(bmp.Width, bmp.Height).ToRelativeSize();
         }
 
-        public static Bitmap Clone(Bitmap Original)
-        {
-            return Original.Clone(new RectangleF(0, 0, Original.Width, Original.Height), System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-        }
-
         public static Vector2 As1920x1080(this Vector2 Size)
         {
             return new Vector2(Size.X / 1920 * GameSettings.Width, Size.Y / 1080 * GameSettings.Height);
@@ -77,12 +71,6 @@ namespace Hedra.Engine.Rendering
         public static Vector2 SizeFromAssets(string Path)
         {
             return TextureSize( new Bitmap( new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.AssetsResource))));
-        }
-        
-        public static Vector2 SizeFromAssets(string Path, Vector2 OriginalResolution)
-        {
-            var size = SizeFromAssets(Path).ToPixelSize();
-            return new Vector2(size.X / OriginalResolution.X, size.Y / OriginalResolution.Y);
         }
 
         public static uint LoadFromAssets(string Path, TextureMinFilter Min = TextureMinFilter.Linear, TextureMagFilter Mag = TextureMagFilter.Linear, TextureWrapMode Wrap = TextureWrapMode.ClampToBorder)
@@ -102,15 +90,11 @@ namespace Hedra.Engine.Rendering
             return new Bitmap( new MemoryStream(AssetManager.ReadBinary(Path, AssetManager.AssetsResource)));
         }
         
-        public static Vector2 LineSize(string Text, Font F)
+        public static Vector2 MeasureString(string Text, Font TextFont)
         {
-            var bmp = new Bitmap(1,1);
-            using (var graphics = Graphics.FromImage(bmp))
-            { 
-                var s = graphics.MeasureString(Text, F);
-                return new Vector2(s.Width, s.Height);
-                
-            }  
+            if(Text == string.Empty) return Vector2.Zero;
+            var size = TextProvider.CalculateNeededSize(new TextParams(new[] {Text}, new[] {0}, new[] {TextFont}, null, null));
+            return new Vector2(size.Width / GameSettings.Width, size.Height / GameSettings.Height);
         }
         
         public static uint ColorTexture(Vector4 TextureColor)

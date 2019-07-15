@@ -13,6 +13,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.SkillSystem;
+using Hedra.Rendering;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
 using OpenTK;

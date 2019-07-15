@@ -21,7 +21,7 @@ FADE_SPEED = 1.0
 def init(user, state):
     panel = Panel()
     
-    command_line = TextField(Vector2.Zero, COMMAND_LINE_SIZE, panel, CurvedBorders=False)
+    command_line = TextField(Vector2.Zero, COMMAND_LINE_SIZE, CurvedBorders=False)
     text_box = GUIText(str(), Vector2.Zero, Colors.ToColorStruct(Colors.White), FontCache.GetNormal(10))
     
     panel.AddElement(command_line)
@@ -134,7 +134,6 @@ def open(state):
     Cursor.Show = True
     
     user = state['user']
-    user.CanInteract = False
     user.View.CaptureMovement = False
     user.View.LockMouse = False
     user.UI.GamePanel.Cross.Disable()
@@ -142,7 +141,7 @@ def open(state):
     command_line = state['ui_command_line']
     command_line.Enable()
     command_line.Text = str()
-    command_line.InFocus = True
+    command_line.Focus()
     
     state['open'] = True
     state['command_history_index'] = 0
@@ -159,7 +158,7 @@ def close(state):
 
     command_line = state['ui_command_line']
     command_line.Disable()
-    command_line.InFocus = False
+    command_line.Defocus()
     state['open'] = False
 
 def can_open(user):

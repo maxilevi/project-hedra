@@ -23,6 +23,7 @@ using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Localization;
+using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using OpenTK.Input;
 
@@ -102,7 +103,7 @@ namespace Hedra.Engine.Rendering.UI
             classChooser.CurrentValue.UpdateText(); 
             
             #region UI
-            TextField nameField = new TextField(new Vector2(0,-.7f), new Vector2(.15f,.03f), this);
+            TextField nameField = new TextField(new Vector2(0,-.7f), new Vector2(.15f,.03f));
             Button createChr = new Button(new Vector2(0f,-.8f), new Vector2(.15f,.05f), Translation.Create("create"), defaultColor, FontCache.GetBold(11));
             createChr.Click += delegate {
                 for(var i = 0; i < DataManager.PlayerFiles.Length; i++)

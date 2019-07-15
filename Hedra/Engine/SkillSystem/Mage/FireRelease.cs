@@ -13,6 +13,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Localization;
+using Hedra.Rendering;
 using Hedra.Sound;
 
 namespace Hedra.Engine.SkillSystem.Mage

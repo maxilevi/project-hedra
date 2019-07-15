@@ -10,6 +10,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Localization;
+using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using OpenTK;
 

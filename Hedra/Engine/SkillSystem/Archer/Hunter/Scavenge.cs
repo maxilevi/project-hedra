@@ -2,6 +2,7 @@ using System;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
 using Hedra.Localization;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.SkillSystem.Archer.Hunter
 {

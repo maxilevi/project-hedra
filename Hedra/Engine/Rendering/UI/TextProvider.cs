@@ -333,7 +333,7 @@ namespace Hedra.Engine.Rendering.UI
             }
         }
         
-        private static SizeF CalculateNeededSize(TextParams Params)
+        public static SizeF CalculateNeededSize(TextParams Params)
         {
             var max = SizeF.Empty;
             var sizes = new SizeF[Params.Texts.Length];

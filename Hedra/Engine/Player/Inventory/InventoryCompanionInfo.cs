@@ -38,7 +38,7 @@ namespace Hedra.Engine.Player.Inventory
             HintTexture.Scale *= .8f; 
             HintText.TextFont = FontCache.GetBold(12);
             HintText.SetTranslation(Translation.Create("rename_btn"));
-            _renameField = new TextField(Vector2.Zero, Vector2.Zero, Panel, false);
+            _renameField = new TextField(Vector2.Zero, Vector2.Zero, false);
             _renameButton = new Button(Vector2.Zero, HintTexture.Scale, GUIRenderer.TransparentTexture);
             _renameButton.Click += OnRename;
             

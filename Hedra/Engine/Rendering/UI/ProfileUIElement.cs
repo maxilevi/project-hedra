@@ -1,5 +1,6 @@
 using System;
 using Hedra.Engine.Player;
+using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using OpenTK;
 

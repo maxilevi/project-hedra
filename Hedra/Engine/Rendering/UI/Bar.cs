@@ -28,7 +28,6 @@ namespace Hedra.Engine.Rendering.UI
 
         private static readonly Shader Shader = Shader.Build("Shaders/Bar.vert", "Shaders/Bar.frag");
         private float _barSize;
-        private bool _enabled;
         private Panel _inPanel;
         private Func<float> _max;
 
@@ -42,7 +41,7 @@ namespace Hedra.Engine.Rendering.UI
         private DrawOrder _order;
         public bool ShowBar = true;
         private readonly Vector2 _targetResolution = new Vector2(1024, 578);
-        public RenderableText Text;
+        private RenderableText _barText;
         private readonly Vector4 _uniformColor;
         public Vector2 AdjustedPosition { get; set; }
 
@@ -76,19 +75,19 @@ namespace Hedra.Engine.Rendering.UI
 
         public void Dispose()
         {
-            Text.Dispose();
+            _barText.Dispose();
             DrawManager.UIRenderer.Remove(this);
         }
 
         public void Draw()
         {
-            if (!_enabled)
+            if (!Enabled)
                 return;
 
             _barSize = Mathf.Clamp(Mathf.Lerp(_barSize, _value() / _max(), Time.IndependentDeltaTime * 8f), 0, 1);
 
             if (UpdateTextRatio)
-                Text.Text = (int) _value() + " / " + (int) _max();
+                _barText.Text = (int) _value() + " / " + (int) _max();
             Shader.Bind();          
             Renderer.Disable(EnableCap.DepthTest);
             Renderer.Enable(EnableCap.Blend);
@@ -122,7 +121,7 @@ namespace Hedra.Engine.Rendering.UI
             Renderer.Enable(EnableCap.CullFace);
             Shader.Unbind();
 
-            Text.Draw();
+            _barText.Draw();
         }
 
         public Vector2 Scale { get; set; }
@@ -133,23 +132,43 @@ namespace Hedra.Engine.Rendering.UI
             set
             {
                 _position = value;
-                if (Text != null)
-                    Text.Position = _position;
+                if (_barText != null)
+                    _barText.Position = _position;
                 this.Adjust();
             }
         }
 
+        public string Text
+        {
+            get => _barText.Text;
+            set => _barText.Text = value;
+        }
+
+        public Color TextColor
+        {
+            get => _barText.Color;
+            set => _barText.Color = value;
+        }
+        
+        public Font TextFont
+        {
+            get => _barText.TextFont;
+            set => _barText.TextFont = value;
+        }
+        
         public void Enable()
         {
-            _enabled = true;
-            Text.Enable();
+            Enabled = true;
+            _barText.Enable();
         }
 
         public void Disable()
         {
-            _enabled = false;
-            Text.Disable();
+            Enabled = false;
+            _barText.Disable();
         }
+
+        public bool Enabled { get; private set; }
 
         public void Adjust()
         {
@@ -174,15 +193,15 @@ namespace Hedra.Engine.Rendering.UI
         {
             if (_optionalText == null)
             {
-                Text = new RenderableText(_value() + " / " + _max(), Position, Color.White, FontCache.GetBold(11));
+                _barText = new RenderableText(_value() + " / " + _max(), Position, Color.White, FontCache.GetBold(11));
             }
             else
             {
-                Text = new RenderableText(_optionalText, Position, Color.White, FontCache.GetBold(11));
+                _barText = new RenderableText(_optionalText, Position, Color.White, FontCache.GetBold(11));
                 UpdateTextRatio = false;
             }
             DrawManager.UIRenderer.Add(this, this._order);
-            _inPanel?.AddElement(Text);
+            _inPanel?.AddElement(_barText);
             
             if (_barBlueprint == 0)
             {

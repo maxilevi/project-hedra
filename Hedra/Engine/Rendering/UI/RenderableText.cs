@@ -24,7 +24,8 @@ namespace Hedra.Engine.Rendering.UI
     {
         public readonly GUIText UIText;
 
-        public RenderableText(string Text, Vector2 Position, Color FontColor, Font FontType){
+        public RenderableText(string Text, Vector2 Position, Color FontColor, Font FontType)
+        {
             this.UIText = new GUIText(Text, Position, FontColor, FontType);
             DrawManager.UIRenderer.Remove(this.UIText.UIText);
         }
@@ -110,6 +111,8 @@ namespace Hedra.Engine.Rendering.UI
         {
             UIText.Disable();
         }
+
+        public bool Enabled => UIText.Enabled;
         
         public void Dispose()
         {

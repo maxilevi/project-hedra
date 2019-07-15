@@ -5,6 +5,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Rendering.Geometry;
+using Hedra.Rendering;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 

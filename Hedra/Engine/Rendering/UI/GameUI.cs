@@ -19,6 +19,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Player.QuestSystem;
 using Hedra.Game;
 using Hedra.Localization;
+using Hedra.Rendering;
 using Hedra.Rendering.UI;
 
 namespace Hedra.Engine.Rendering.UI

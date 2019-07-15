@@ -6,6 +6,7 @@ using Hedra.Engine.ClassSystem.Templates;
 using Hedra.Engine.Core;
 using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.ClassSystem
 {

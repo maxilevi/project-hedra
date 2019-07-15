@@ -11,6 +11,7 @@ using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
 using Hedra.Items;
 using Hedra.Localization;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 {

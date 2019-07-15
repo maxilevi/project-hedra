@@ -13,6 +13,7 @@ using Hedra.Engine.Management;
 using System.IO;
 using Hedra.Engine.Game;
 using Hedra.Game;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.Rendering.UI
 {

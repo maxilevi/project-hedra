@@ -5,6 +5,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Localization;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.SkillSystem.Rogue.Ninja
 {

@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using Hedra.Engine.Game;
 using Hedra.Engine.Player;
 using Hedra.Game;
+using Hedra.Rendering;
 using Hedra.Rendering.UI;
 
 namespace Hedra.Engine.Rendering.UI
@@ -26,7 +27,8 @@ namespace Hedra.Engine.Rendering.UI
         private List<UIElement> _joinButtons = new List<UIElement>();
         private List<UIElement> _hostButtons = new List<UIElement>();
         
-        public NetworkUI() : base(){
+        public NetworkUI()
+        {
             int fontSize = 14;
             Color fontColor = Color.White;
             
@@ -49,7 +51,7 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             GUIText gameId = new GUIText("Game ID", new Vector2(0,-.25f), Color.White, FontCache.GetNormal(fontSize));
-            _ipField = new TextField(new Vector2(0,-.4f), new Vector2(.20f,.05f), this);
+            _ipField = new TextField(new Vector2(0,-.4f), new Vector2(.20f,.05f));
             _ipField.Text = string.Empty;
             
             var join = new Button(new Vector2(0,-.65f), new Vector2(.15f,.05f), "Join", Color.White, FontCache.GetNormal(fontSize));
