@@ -80,7 +80,7 @@ namespace Hedra.Engine.Rendering.UI
             };*/
 
             this._joinButtons.Add(_ipField);
-            this._joinButtons.Add(@join);
+            this._joinButtons.Add(join);
             this._joinButtons.Add(gameId);
             this._hostButtons.Add(host);
             this.AddElement(blackBand);

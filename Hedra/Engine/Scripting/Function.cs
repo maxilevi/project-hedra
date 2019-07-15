@@ -33,7 +33,7 @@ namespace Hedra.Engine.Scripting
             }
             catch (Exception e)
             {
-                Log.WriteLine($"Python call '{_name}' from '{_library}' failed with the following exception:\n\n{e}");
+                Log.WriteLine(_engine.GetService<ExceptionOperations>().FormatException(e));
             }
             return result;
         }

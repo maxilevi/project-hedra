@@ -62,3 +62,6 @@ def is_start_menu():
 
 def translate(msg, *args):
     return Translations.Get(msg, *args)
+
+def get_player():
+    return GameManager.Player

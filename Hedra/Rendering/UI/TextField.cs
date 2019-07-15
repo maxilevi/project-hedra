@@ -46,11 +46,7 @@ namespace Hedra.Rendering.UI
             };
             _focusButton = new Button(Position, Scale, GUIRenderer.TransparentTexture);
             _caret = new RenderableText(string.Empty, Vector2.Zero, _textBar.TextColor, _textBar.TextFont);
-            _state = new Dictionary<string, object>
-            {
-                {"ui_bar", _textBar},
-                {"ui_caret", _caret}
-            };
+            _state = new Dictionary<string, object>();
             Script.Execute("init", _state, _textBar, _caret, _focusButton);
             UpdateManager.Add(this);
             DrawManager.UIRenderer.Add(_caret, DrawOrder.After);

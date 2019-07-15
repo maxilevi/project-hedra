@@ -1,3 +1,4 @@
+from Core import get_player
 from OpenTK.Input import Key
 from OpenTK import Vector4, Vector2
 from Hedra.Core import Timer
@@ -49,6 +50,7 @@ def update_caret(state):
     
     if focused:
         bar.BackgroundColor = FOCUS_COLOR
+        get_player().CanInteract = False
     else:
         bar.BackgroundColor = DEFOCUS_COLOR
 
@@ -117,19 +119,20 @@ def update_size(state):
 
 def focus(state):
     state['in_focus'] = True
-    state['caret_index'] = len(state['text'])
-    state['previous_can_interact'] = player.CanInteract
-    player.CanInteract = False
+    set_caret_position(state, len(state['text']))
+    state['previous_can_interact'] = get_player().CanInteract
+    
     
 def defocus(state):
     state['in_focus'] = False
     if 'previous_can_interact' in state:
-        player.CanInteract = state['previous_can_interact']
+        get_player().CanInteract = state['previous_can_interact']
 
 def in_focus(state):
     return state['in_focus']
 
 def set_text(text, state):
     state['text'] = text
+    update_size(state)
     set_caret_position(state, len(text))
     

@@ -23,7 +23,7 @@ namespace Hedra.Engine.Player.Inventory
         private GUIText TopRightText { get; }
         private GUIText BottomRightText { get; }
         private readonly Button _renameButton;
-        private readonly TextField _renameField;
+        private readonly InventoryCompanionRenamePanel _renamePanel;
         private bool _isRenaming;
         private IEntity _companion;
         
@@ -38,11 +38,12 @@ namespace Hedra.Engine.Player.Inventory
             HintTexture.Scale *= .8f; 
             HintText.TextFont = FontCache.GetBold(12);
             HintText.SetTranslation(Translation.Create("rename_btn"));
-            _renameField = new TextField(Vector2.Zero, Vector2.Zero, false);
+            _renamePanel = new InventoryCompanionRenamePanel();
+            _renamePanel.Apply += ApplyRename;
             _renameButton = new Button(Vector2.Zero, HintTexture.Scale, GUIRenderer.TransparentTexture);
             _renameButton.Click += OnRename;
             
-            Panel.AddElement(_renameField);
+            Panel.AddElement(_renamePanel);
             Panel.AddElement(_renameButton);
             Panel.AddElement(Level);
             Panel.AddElement(TopLeftText);
@@ -81,7 +82,7 @@ namespace Hedra.Engine.Player.Inventory
             
             HintTexture.Position = BackgroundTexture.Position - (HintTexture.Scale.Y * 1.5f + BackgroundTexture.Scale.Y) * Vector2.UnitY;
             HintText.Position = HintTexture.Position;
-            _renameField.Position = ItemText.Position;
+            _renamePanel.Position = BackgroundTexture.Position - BackgroundTexture.Scale * 1.5f * Vector2.UnitY;
             _renameButton.Position = HintTexture.Position;
             
             ItemTexture.Scale *= .65f;
@@ -94,22 +95,19 @@ namespace Hedra.Engine.Player.Inventory
         {
             if (_isRenaming)
             {
-                _renameField.Enable();
+                _renamePanel.Enable();
                 _renameButton.Disable();
                 HintTexture.Disable();
                 HintText.Disable();
-                ItemText.Disable();
-                _renameField.TextFont = ItemText.TextFont;
-                _renameField.Scale = BackgroundTexture.Scale.X * Vector2.UnitX + ItemText.Scale.Y * Vector2.UnitY * 1.25f;
-                _renameField.Text = ItemText.Text;
+                _renamePanel.Text = ItemText.Text;
+                _renamePanel.UpdateView();
             }
             else
             {
-                _renameField.Disable();
+                _renamePanel.Disable();
                 _renameButton.Enable();
                 HintTexture.Enable();
                 HintText.Enable();
-                ItemText.Enable();
             }
         }
 
@@ -145,15 +143,20 @@ namespace Hedra.Engine.Player.Inventory
             if(!Enabled || !_isRenaming) return;
             if (Args.Key == Key.Enter)
             {
-                CurrentItem.SetAttribute("PetName", _renameField.Text);
-                _isRenaming = false;
-                UpdateView();
+                ApplyRename();
             }
             else if (Args.Key == Key.Escape)
             {
                 _isRenaming = false;
                 UpdateView();
             }
+        }
+
+        private void ApplyRename()
+        {
+            CurrentItem.SetAttribute("PetName", _renamePanel.Text);
+            _isRenaming = false;
+            UpdateView();
         }
 
         public override bool Enabled

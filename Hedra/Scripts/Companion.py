@@ -230,6 +230,7 @@ def create_companion_attributes(type, can_ride, mob_template):
     name_attribute = AttributeTemplate()
     name_attribute.Value = translate(mob_template.Name.ToLowerInvariant())
     name_attribute.Hidden = True
+    name_attribute.Persist = True
     name_attribute.Name = NAME_ATTRIB_NAME
     
     return Array[AttributeTemplate]([

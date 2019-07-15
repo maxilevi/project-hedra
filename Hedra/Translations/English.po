@@ -605,4 +605,6 @@ mp_per_second = MP/s
 attack_speed_label = AS
 attack_damage_label = AD
 rename_btn = RENAME
+rename_pet_title = RENAME COMPANION
+apply_rename_btn = APPLY
 
