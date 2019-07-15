@@ -269,7 +269,7 @@ namespace Hedra.Engine.Events
             LowOnKeyDownEvent?.Invoke(Sender, keyEvent);
             for (var i = 0; i < EventListeners.Count; i++)
             {
-                EventListeners[i].OnKeyDown(Sender, E);
+                EventListeners[i].OnKeyDown(Sender, keyEvent);
             }
         }
 
@@ -281,7 +281,7 @@ namespace Hedra.Engine.Events
             LowOnKeyUpEvent?.Invoke(Sender, keyEvent);
             for (var i = 0; i < EventListeners.Count; i++)
             {
-                EventListeners[i].OnKeyUp(Sender, E);
+                EventListeners[i].OnKeyUp(Sender, keyEvent);
             }
         }
         

@@ -138,7 +138,7 @@ namespace Hedra.Rendering.UI
             _prevY = 0;
         }
 
-        public override void OnKeyDown(object Sender, KeyboardKeyEventArgs EventArgs)
+        public override void OnKeyDown(object Sender, KeyEventArgs EventArgs)
         {
             if(!Enabled || DisableKeys) return;
             

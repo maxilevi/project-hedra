@@ -41,7 +41,8 @@ namespace Hedra.Rendering.UI
             _textBar = new Bar(Position, Scale, () => 1, () => 1, Vector4.One, this, DrawOrder.After, CurvedBorders)
             {
                 ShowBar = false,
-                UpdateTextRatio = false
+                UpdateTextRatio = false,
+                AlignLeft = true
             };
             _focusButton = new Button(Position, Scale, GUIRenderer.TransparentTexture);
             _caret = new RenderableText(string.Empty, Vector2.Zero, _textBar.TextColor, _textBar.TextFont);
@@ -89,7 +90,7 @@ namespace Hedra.Rendering.UI
         public string Text
         {
             get => this._textBar.Text;
-            set => this._textBar.Text = value;
+            set => Script.Execute("set_text", value, _state);
         }
         
         public Vector2 Scale

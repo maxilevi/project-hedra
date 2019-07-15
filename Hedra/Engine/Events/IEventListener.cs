@@ -20,9 +20,9 @@ namespace Hedra.Engine.Events
         
         void OnMouseMove(object sender, MouseMoveEventArgs e);
         
-        void OnKeyDown(object sender, KeyboardKeyEventArgs EventArgs);
+        void OnKeyDown(object sender, KeyEventArgs EventArgs);
         
-        void OnKeyUp(object sender, KeyboardKeyEventArgs e);
+        void OnKeyUp(object sender, KeyEventArgs e);
         
         void OnKeyPress(object sender, KeyPressEventArgs e);
     }

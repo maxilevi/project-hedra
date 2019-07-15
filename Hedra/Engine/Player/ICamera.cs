@@ -35,12 +35,5 @@ namespace Hedra.Engine.Player
         void Update();
         void BuildCameraMatrix();
         void Reset();
-        void OnMouseWheel(object Sender, MouseWheelEventArgs E);
-        void OnMouseButtonUp(object Sender, MouseButtonEventArgs e);
-        void OnMouseButtonDown(object Sender, MouseButtonEventArgs e);
-        void OnMouseMove(object Sender, MouseMoveEventArgs e);
-        void OnKeyDown(object Sender, KeyboardKeyEventArgs EventArgs);
-        void OnKeyUp(object Sender, KeyboardKeyEventArgs e);
-        void OnKeyPress(object Sender, KeyPressEventArgs e);
     }
 }

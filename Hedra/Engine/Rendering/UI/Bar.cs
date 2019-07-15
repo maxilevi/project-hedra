@@ -43,6 +43,7 @@ namespace Hedra.Engine.Rendering.UI
         private readonly Vector2 _targetResolution = new Vector2(1024, 578);
         private RenderableText _barText;
         private readonly Vector4 _uniformColor;
+        public bool AlignLeft { get; set; }
         public Vector2 AdjustedPosition { get; set; }
 
         public bool UpdateTextRatio = true;
@@ -85,6 +86,8 @@ namespace Hedra.Engine.Rendering.UI
                 return;
 
             _barSize = Mathf.Clamp(Mathf.Lerp(_barSize, _value() / _max(), Time.IndependentDeltaTime * 8f), 0, 1);
+            if(AlignLeft)
+                _barText.Position = Position + _barText.Scale.X * Vector2.UnitX - Scale.X * Vector2.UnitX * .5f;
 
             if (UpdateTextRatio)
                 _barText.Text = (int) _value() + " / " + (int) _max();

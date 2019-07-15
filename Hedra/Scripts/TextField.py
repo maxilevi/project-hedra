@@ -19,6 +19,7 @@ def init(state, ui_bar, ui_caret, ui_focus_button):
     state['caret_timer'] = Timer(0.5)
     state['caret_timer'].UseTimeScale = False
     state['caret_offset'] = Vector2()
+    state['last_size'] = 0
     
 def on_click(event_args, state):
     if is_enabled(state):
@@ -29,13 +30,13 @@ def update_caret(state):
     caret = state['ui_caret']
     bar = state['ui_bar']
     focused = state['in_focus']
-    state['ui_bar'].Text = state['text']
     
     if is_enabled(state):
         if not focused and caret.Enabled:
             caret.Disable()
         elif focused and not caret.Enabled:
             caret.Enable()
+        state['ui_bar'].Text = state['text']
         
             
     if caret.Enabled:
@@ -51,8 +52,11 @@ def update_caret(state):
     else:
         bar.BackgroundColor = DEFOCUS_COLOR
 
+def has_space_left(state):
+    return state['last_size'] < state['ui_bar'].Scale.X * .5
+
 def on_key_press(event_args, state):
-    if is_enabled(state) and state['in_focus']:
+    if is_enabled(state) and state['in_focus'] and has_space_left(state):
         add_character(state, event_args.KeyChar)
 
 def is_enabled(state):
@@ -79,15 +83,19 @@ def on_key_down(event_args, state):
     
 
 def delete_character(state):
-    if len(state['text']) > 0:
-        i = state['caret_index']
+    if not state['text']: return
+    
+    i = state['caret_index']
+    if i > 0:
         state['text'] = str(state['text'][0:i-1]) + str(state['text'][i:])
         move_caret(state, -1)
+        update_size(state)
 
 def add_character(state, char):
     i = state['caret_index']
     state['text'] = str(state['text'][0:i]) + char + str(state['text'][i:])
     move_caret(state, 1)
+    update_size(state)
 
 def move_caret(state, dir):
     index = (state['caret_index'] + dir)
@@ -98,15 +106,30 @@ def move_caret(state, dir):
     if index > len(state['text']):
         index = len(state['text'])
 
-    state['caret_offset'] = (Graphics2D.MeasureString(str(state['text'][0:index]), state['ui_bar'].TextFont).X * Single(1.0)) * Vector2.UnitX
+    set_caret_position(state, index)
+
+def set_caret_position(state, index):
+    state['caret_offset'] = (Graphics2D.MeasureString(str(state['text'][0:index]), state['ui_bar'].TextFont).X * Single(2.0) - state['ui_bar'].Scale.X * Single(0.5)) * Vector2.UnitX
     state['caret_index'] = index
+
+def update_size(state):
+    state['last_size'] = Graphics2D.MeasureString(state['text'], state['ui_bar'].TextFont).X
 
 def focus(state):
     state['in_focus'] = True
     state['caret_index'] = len(state['text'])
+    state['previous_can_interact'] = player.CanInteract
+    player.CanInteract = False
     
 def defocus(state):
     state['in_focus'] = False
+    if 'previous_can_interact' in state:
+        player.CanInteract = state['previous_can_interact']
 
 def in_focus(state):
     return state['in_focus']
+
+def set_text(text, state):
+    state['text'] = text
+    set_caret_position(state, len(text))
+    
