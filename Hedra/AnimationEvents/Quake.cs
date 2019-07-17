@@ -18,6 +18,7 @@ namespace Hedra.AnimationEvents
 
         public override void Build()
         {
+            var radius = 16 * Parent.Model.Scale.Average();
             var position = Parent.Position + Parent.Orientation * Parent.Model.Scale * 6f;
 
             World.Particles.VariateUniformly = true;
@@ -30,21 +31,21 @@ namespace Hedra.AnimationEvents
 
             for (var i = 0; i < 125; i++)
             {
-                World.Particles.Position = position + new Vector3(Utils.Rng.NextFloat() * 2f - 1f, 0, Utils.Rng.NextFloat() * 2f -1f) * 24f;
+                World.Particles.Position = position + new Vector3(Utils.Rng.NextFloat() * 2f - 1f, 0, Utils.Rng.NextFloat() * 2f -1f) * radius * .5f;
                 World.Particles.Direction = (Utils.Rng.NextFloat() * .5f + .5f) * Vector3.UnitY * 2f;
                 World.Particles.Color = World.GetRegion(position).Colors.DirtColor;
                 World.Particles.Emit();
             }
-            World.HighlightArea(position, World.GetRegion(position).Colors.DirtColor * 1.5f, 48f, 1.5f);
+            World.HighlightArea(position, World.GetRegion(position).Colors.DirtColor * 1.5f, radius, 1.5f);
 
             var entities = World.Entities;
             foreach (var entity in entities)
             {
                 if(!entity.IsGrounded) continue;
-                var damage = Parent.AttackDamage * (1-Mathf.Clamp((position - entity.Position).Xz.LengthFast / 48f, 0, 1)) * 3.0F;
+                var damage = Parent.AttackDamage * (1-Mathf.Clamp((position - entity.Position).Xz.LengthFast / radius, 0, 1)) * 3.0F;
                 if (damage > 0 && Parent != entity)
                 {
-                    entity.Damage(damage, Parent, out float xp);
+                    entity.Damage(damage, Parent, out _);
                 }           
             }
             SoundPlayer.PlaySound(SoundType.GroundQuake, position, false, 1f, 5f);
