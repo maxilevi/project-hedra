@@ -1,3 +1,5 @@
+using System;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
@@ -9,14 +11,12 @@ namespace Hedra.ModelHandlers
     {
         public override void Process(IEntity Entity, AnimatedUpdatableModel Model)
         {
-            Model.Paint(BeetleColors[Utils.Rng.Next(0, BeetleColors.Length)]);
+            if(string.Equals(Entity.Type, MobType.RangedBeetle.ToString(), StringComparison.InvariantCultureIgnoreCase))
+                Model.Paint(Colors.FromHtml("#45659E")); /* Blue */
+            else if (string.Equals(Entity.Type, MobType.MeleeBeetle.ToString(), StringComparison.InvariantCultureIgnoreCase))
+                Model.Paint(Colors.FromHtml("#4C9639")); /* Green */
+            else if(string.Equals(Entity.Type, MobType.GiantBeetle.ToString(), StringComparison.InvariantCultureIgnoreCase))
+                Model.Paint(Colors.FromHtml("#F24353")); /* Red */
         }
-
-        private static readonly Vector4[] BeetleColors = new[]
-        {
-            Colors.FromHtml("#F24353"),
-            Colors.FromHtml("#7CF23C"),
-            Colors.FromHtml("#619CF2")
-        };
     }
 }

@@ -13,6 +13,6 @@ namespace Hedra.Engine.PlantSystem.Harvestables
             BlockType.Dirt
         };
 
-        protected override bool ShouldPlace(Random Rng) => Rng.Next(0, 1500) == 1;
+        protected override bool ShouldPlace(Random Rng) => Rng.Next(0, 2000) == 1;
     }
 }

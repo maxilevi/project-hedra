@@ -5,8 +5,12 @@
       "Chance": 30.0
     },
     {
+      "Type": "Gorilla",
+      "Chance": 10.0
+    },
+    {
       "Type": "Explorers",
-      "Chance": 70.0,
+      "Chance": 60.0,
       "IsCustom": true
     }
   ],
@@ -20,13 +24,13 @@
   "Plains": [
     {
       "Type": "Cow",
-      "Chance": 15.0,
+      "Chance": 10.0,
       "MinGroup": 1,
       "MaxGroup": 2
     },
     {
       "Type": "Sheep",
-      "Chance": 35.0,
+      "Chance": 25.0,
       "MinGroup" : 3,
       "MaxGroup": 5
     },
@@ -51,19 +55,31 @@
       "Chance": 10,
       "MinGroup": 1,
       "MaxGroup": 2
+    },
+    {
+      "Type": "MeleeBeetle",
+      "Chance": 15,
+      "MinGroup": 1,
+      "MaxGroup": 2
     }
   ],
 
   "Mountain": [
     {
       "Type": "Goat",
-      "Chance": 95.0,
+      "Chance": 75.0,
       "MinGroup": 1,
       "MaxGroup": 3
     },
     {
       "Type": "Roach",
-      "Chance": 5.0
+      "Chance": 10.0
+    },
+    {
+      "Type": "RangedBeetle",
+      "Chance": 15.0,
+      "MinGroup": 1,
+      "MaxGroup": 2
     }
   ],
 
@@ -85,8 +101,14 @@
       "Chance": 7.5
     },
     {
-      "Type": "Fox",
-      "Chance": 17.5,
+      "Type": "RangedBeetle",
+      "Chance": 7.5,
+      "MinGroup": 1,
+      "MaxGroup": 2
+    },
+    {
+      "Type": "MeleeBeetle",
+      "Chance": 10,
       "MinGroup": 1,
       "MaxGroup": 2
     },

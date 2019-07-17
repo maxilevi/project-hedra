@@ -33,10 +33,10 @@ namespace Hedra.AnimationEvents
             {
                 World.Particles.Position = position + new Vector3(Utils.Rng.NextFloat() * 2f - 1f, 0, Utils.Rng.NextFloat() * 2f -1f) * radius * .5f;
                 World.Particles.Direction = (Utils.Rng.NextFloat() * .5f + .5f) * Vector3.UnitY * 2f;
-                World.Particles.Color = World.GetRegion(position).Colors.DirtColor;
+                World.Particles.Color = World.GetRegion(position).Colors.DirtColor * .75f;
                 World.Particles.Emit();
             }
-            World.HighlightArea(position, World.GetRegion(position).Colors.DirtColor * 1.5f, radius, 1.5f);
+            World.HighlightArea(position, World.GetRegion(position).Colors.DirtColor * .75f, radius, 1.5f);
 
             var entities = World.Entities;
             foreach (var entity in entities)

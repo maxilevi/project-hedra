@@ -124,6 +124,7 @@ def add_line(state, line):
 
 def add_history(state, line):
     history = state['command_history']
+    if history and history[0] == line: return
     history.insert(0, line)
     state['command_history'] = history[:MAX_HISTORY]
 
