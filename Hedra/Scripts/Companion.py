@@ -26,23 +26,28 @@ HEALTH_ATTRIB_NAME = 'PetHealth'
 MOB_TYPE_ATTRIB_NAME = 'Type'
 PRICE_ATTRIB_NAME = 'Price'
 BASE_GROWTH_SCALE = 0.5
-GROWTH_TIME = 8.0 * 60.0 # 8 Minutes
+GROWTH_TIME = .1 * 60.0 # 8 Minutes
 GROWTH_SPEED = 1.0 / GROWTH_TIME
 BASE_PRICE = 35
 COMPANION_TYPES = [
     ('Pug', ItemTier.Common, True),
     ('Bee', ItemTier.Common, True),
     ('Wasp', ItemTier.Common, True),
-    ('Ooze', ItemTier.Common, False),
+    ('Ooze', ItemTier.Uncommon, False),
     ('Pig', ItemTier.Common, False),
-    ('Sheep', ItemTier.Common, True),
+    ('Sheep', ItemTier.Common, False),
     ('Wolf', ItemTier.Common, True),
-    ('Horse', ItemTier.Common, True)
+    ('Horse', ItemTier.Common, True),
+    ('Deer', ItemTier.Uncommon, True)
 ]
 DEFAULT_RIDE_INFO = 0.5
 RIDE_INFO = {
     'Pug': 0.4,
-    'Bee': 0.630
+    'Bee': 0.630,
+    'Deer': 0.41,
+    'Horse': 0.5,
+    'Wasp' : 0.5,
+    'Wolf': 0.5
 }
 
 def init(user, state):
@@ -116,12 +121,15 @@ def handle_model(user, pet, state):
         if not state['was_riding'] and user.IsRiding:
             state['pet_previous_enabled'] = pet.Model.Enabled
             state['pet_previous_alpha'] = pet.Model.Alpha
+            pet.SearchComponent[MinionAIComponent]().Enabled = False
 
         pet.Model.Alpha = user.Model.Alpha
         pet.Model.Enabled = user.Model.Enabled
-    else:
-        pet.Model.Alpha = state['pet_previous_alpha']
-        pet.Model.Enabled = state['pet_previous_enabled']
+    elif not user.IsRiding:
+        if state['was_riding']:
+            pet.Model.Alpha = state['pet_previous_alpha']
+            pet.Model.Enabled = state['pet_previous_enabled']
+            pet.SearchComponent[MinionAIComponent]().Enabled = True
     state['was_riding'] = user.IsRiding
 
 
