@@ -15,6 +15,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Berserker
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/GroundStomp.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/WarriorGroundStomp.dae");
+        protected override float AnimationSpeed => 1.25f;
 
         protected override void OnAnimationMid()
         {
