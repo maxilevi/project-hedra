@@ -119,7 +119,7 @@ namespace Hedra.Components
             }
             if (Talking && Parent.IsNear(_talker, TalkRadius))
             {
-                Parent.RotateTowards(_talker);
+                Parent.LookAt(_talker);
             }
             if(_wasAvailableToTalk && !availableToTalk)
             {

@@ -1,0 +1,43 @@
+{
+  "DisplayName": "Beetle",
+  "Name" : "MeleeBeetle",
+  "MaxHealth": 244.0,
+  "AttackDamage": 6.0,
+  "AttackCooldown": 1.0,
+  "Speed": 1.45,
+  "XP": 6.0,
+  "Level": 8,
+  "AIType": "MeleeBeetle",
+  "Effects": [
+    {
+      "Name": "Poison",
+      "Chance": 15.0,
+      "Damage": 8.0,
+      "Duration": 5.0
+    }
+  ],
+  "Drops": [],
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/BeetleIdle.dae",
+    "Scale": 1.25,
+    "Handler": "Beetle",
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/BeetleIdle.dae",
+        "Speed": 1.0
+      }
+    ],
+    "WalkAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/BeetleWalk.dae",
+        "Speed": 1.0
+      }
+    ],
+    "AttackAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/BeetleAttack0.dae",
+        "Speed": 1.5
+      }
+    ]
+  }
+}

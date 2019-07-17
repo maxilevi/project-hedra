@@ -239,6 +239,8 @@ namespace Hedra.Engine.EntitySystem
         Bee,
         Horse,
         Wolf,
+        GorillaWarrior,
+        GiantBeetle,
         Gorilla,
         Beetle,
         Troll,

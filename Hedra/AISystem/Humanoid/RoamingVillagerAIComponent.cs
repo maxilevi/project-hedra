@@ -68,7 +68,7 @@ namespace Hedra.AISystem.Humanoid
 
             if (Parent.IsNear(GameManager.Player, 16) && !_isInteracting || (Parent.SearchComponent<TalkComponent>()?.Talking ?? false))
             {
-                Parent.RotateTowards(GameManager.Player);
+                Parent.LookAt(GameManager.Player);
                 _targetSpeed = 0;
             }
             else
@@ -156,7 +156,7 @@ namespace Hedra.AISystem.Humanoid
         /* Called from RoamingVillagerAIComponent::Talk */
         private void TalkWith(IHumanoid Humanoid, float Time)
         {
-            Parent.RotateTowards(Humanoid);
+            Parent.LookAt(Humanoid);
             Parent.SearchComponent<TalkComponent>()?.Simulate(Humanoid, Time, delegate
             {
                 _talkTimer.Reset();

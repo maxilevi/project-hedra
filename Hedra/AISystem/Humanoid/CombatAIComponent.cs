@@ -98,7 +98,7 @@ namespace Hedra.AISystem.Humanoid
 
         private void Stare(IEntity Entity)
         {
-            Parent.RotateTowards(Entity);
+            Parent.LookAt(Entity);
             if (_hasTargetPoint)
             {
                 CancelMovement();

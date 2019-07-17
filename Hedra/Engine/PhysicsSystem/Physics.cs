@@ -137,7 +137,8 @@ namespace Hedra.Engine.PhysicsSystem
             var yh = GetHighest( (int) BlockPosition.X, (int) BlockPosition.Z);
                 
             var blockSpace = World.ToBlockSpace(BlockPosition);
-            var coords = new Vector2(Math.Abs(BlockPosition.X) % Chunk.BlockSize , Math.Abs(BlockPosition.Z) % Chunk.BlockSize) / Chunk.BlockSize;
+            var coords = new Vector2(BlockPosition.X % Chunk.BlockSize , BlockPosition.Z % Chunk.BlockSize) / Chunk.BlockSize;
+            coords = new Vector2(coords.X < 0 ? 1 + coords.X : coords.X, coords.Y < 0 ? 1 + coords.Y : coords.Y);
             
             var bottom = new Vector3(blockSpace.X, yh, blockSpace.Z);
             var right = new Vector3(blockSpace.X+1, yx, blockSpace.Z);

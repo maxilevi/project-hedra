@@ -22,7 +22,7 @@ namespace Hedra.EntitySystem
             return Math.Abs(dot) > Angle;
         }
         
-        public static void RotateTowards(this IEntity Parent, IEntity Target)
+        public static void LookAt(this IEntity Parent, IEntity Target)
         {
             var dir = (Target.Position - Parent.Position).Xz.NormalizedFast().ToVector3();
             Parent.Rotation = Physics.DirectionToEuler(dir);

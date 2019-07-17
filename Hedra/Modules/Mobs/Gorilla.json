@@ -1,40 +1,35 @@
-﻿{
-	"Name" : "Gorilla", 
-	"MaxHealth": 624.0,
-	"AttackDamage": 12.0,
-	"AttackCooldown": 1.5,
-	"Speed": 1.3,
-	"XP": 18.0,
-	"Level": 24,
-	"AIType": "GorillaWarrior",
-	"Effects": [],
-	"Drops": [],
-	"Model": {
-		"Path": "$DataFile$/Assets/Chr/GorillaIdle.dae",
-		"Scale": 3.0,
-		"IdleAnimations": [
-			{
-				"Path": "$DataFile$/Assets/Chr/GorillaIdle.dae",
-				"Speed": 0.25
-			}
-		],
-		"WalkAnimations": [
-			{
-				"Path": "$DataFile$/Assets/Chr/GorillaWalk.dae",
-				"Speed": 1.0
-			}
-		],
-		"AttackAnimations": [
-			{
-				"Path": "$DataFile$/Assets/Chr/GorillaAttack0.dae",
-				"Speed": 1.5,
-				"OnAnimationMid" : "Quake"
-			},
-			{
-				"Path": "$DataFile$/Assets/Chr/GorillaAttack1.dae",
-				"Speed": 1.5,
-				"OnAnimationStart" : "Growl"
-			}
-		]
-	} 
+{
+  "Name" : "Gorilla",
+  "MaxHealth": 488.0,
+  "AttackDamage": 10.0,
+  "AttackCooldown": 2.5,
+  "Speed": 1.3,
+  "XP": 12.0,
+  "Level": 17,
+  "AIType": "Hostile",
+  "Effects": [],
+  "Drops": [],
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/GorillaIdle.dae",
+    "Scale": 2.0,
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/GorillaIdle.dae",
+        "Speed": 0.25
+      }
+    ],
+    "WalkAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/GorillaWalk.dae",
+        "Speed": 1.0
+      }
+    ],
+    "AttackAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/GorillaAttack0.dae",
+        "Speed": 1.5,
+        "OnAnimationMid" : "Quake"
+      }
+    ]
+  }
 }

@@ -20,7 +20,7 @@ namespace Hedra.AISystem.Behaviours
             if(_timer.Tick()) _lookingAt = World.InRadius<IHumanoid>(Parent.Position, 16f).FirstOrDefault(H => !H.IsInvisible);
             if (_lookingAt != null)
             {
-                Parent.RotateTowards(_lookingAt);
+                Parent.LookAt(_lookingAt);
             }
         }
     }

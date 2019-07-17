@@ -18,7 +18,7 @@ namespace Hedra.Engine.SkillSystem
             _aiComponent.AlterBehaviour<AttackBehaviour>(
                 new WarriorMinionBehaviour(Parent, (T, M) =>
                 {
-                    Parent.RotateTowards(T);
+                    Parent.LookAt(T);
                     base.OnAttack();
                 })
             );

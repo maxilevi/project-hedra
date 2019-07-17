@@ -1,5 +1,6 @@
 ﻿{
-	"Name" : "Beetle", 
+	"DisplayName": "Beetle",
+	"Name" : "GiantBeetle",
 	"MaxHealth": 488.0,
 	"AttackDamage": 10.0,
 	"AttackCooldown": 1.0,
@@ -17,8 +18,9 @@
 	],
 	"Drops": [],
 	"Model": {
-		"Path": "$DataFile$/Assets/Chr/BeetleIdle.dae",
+		"Path": "$DataFile$/Assets/Chr/GiantBeetleIdle.dae",
 		"Scale": 2.75,
+		"Handler": "Beetle",
 		"IdleAnimations": [
 			{
 				"Path": "$DataFile$/Assets/Chr/BeetleIdle.dae",
@@ -41,5 +43,5 @@
 				"Speed": 1.0
 			}
 		]
-	} 
+	}
 }

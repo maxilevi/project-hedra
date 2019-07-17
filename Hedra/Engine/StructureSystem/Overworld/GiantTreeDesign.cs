@@ -68,7 +68,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             if (!underWater)
             {
                 treeBoss = BossGenerator.Generate(
-                    new [] { MobType.Beetle, MobType.Gorilla, MobType.Troll },
+                    new [] { MobType.GiantBeetle, MobType.GorillaWarrior, MobType.Troll },
                     Vector3.TransformPosition(chestOffset - Vector3.UnitZ * 50, TransMatrix),
                     Rng);
                 ((GiantTree)Structure.WorldObject).Boss = treeBoss;

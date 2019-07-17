@@ -74,9 +74,9 @@ namespace Hedra.Engine.ModuleSystem
             
             var mobDifficulty = GetMobDifficulty(new Random(Seed));
             var mobDifficultyModifier = GetMobDifficultyModifier(mobDifficulty);
-            var mobName = Translations.Has(mob.Type.ToLowerInvariant()) ? Translations.Get(mob.Type.ToLowerInvariant()) : mob.Type.AddSpacesToSentence(true);
-            if(!Translations.Has(mob.Type.ToLowerInvariant()))
-                Log.WriteLine($"Failed to find translation for mob '{mob.Type}', using name as default.");
+            var mobName = Translations.Has(mob.Name.ToLowerInvariant()) ? Translations.Get(mob.Name.ToLowerInvariant()) : mob.Name.AddSpacesToSentence(true);
+            if(!Translations.Has(mob.Name.ToLowerInvariant()))
+                Log.WriteLine($"Failed to find translation for mob '{mob.Name}', using name as default.");
             
             var barComponent = new HealthBarComponent(
                 mob,

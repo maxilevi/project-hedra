@@ -58,6 +58,8 @@ namespace Hedra
                 AddClassRestriction(classes[i], "FishingRod");
 
             AddAIType("GiantBeetle", typeof(GiantBeetleAIComponent));
+            AddAIType("RangedBeetle", typeof(RangedBeetleAIComponent));
+            AddAIType("MeleeBeetle", typeof(MeleeBeetleAIComponent));
             AddAIType("GorillaWarrior", typeof(GorillaWarriorAIComponent));
             AddAIType("Friendly", typeof(FriendlyAIComponent));
             AddAIType("Hostile", typeof(HostileAIComponent));
@@ -70,7 +72,7 @@ namespace Hedra
             AddAIType("Goat", typeof(GoatAIComponent));
             AddAIType("SkeletonKamikaze", typeof(SkeletonKamikazeAIComponent));
             AddAIType("Adaptive", typeof(AdaptiveAIComponent));
-            
+
             AddAnimationEvent("Growl", typeof(Growl));
             AddAnimationEvent("Quake", typeof(Quake));
             AddAnimationEvent("Slash", typeof(Slash));
@@ -81,6 +83,7 @@ namespace Hedra
             
             AddModelHandler("Ent", typeof(EntHandler));
             AddModelHandler("Ghost", typeof(GhostHandler));
+            AddModelHandler("Beetle", typeof(BeetleHandler));
             
             AddItemHandler("Recipe", typeof(RecipeHandler));
             AddItemHandler("Potion", typeof(PotionHandler));

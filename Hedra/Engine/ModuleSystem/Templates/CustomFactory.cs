@@ -21,6 +21,7 @@ namespace Hedra.Engine.ModuleSystem.Templates
         public const float MinXpFactor = .45f;
         public const float MaxXpFactor = .75f;
 
+        public string DisplayName { get; set; }
         public string Name { get; set; }
         public float MaxHealth { get; set; }
         public float AttackDamage { get; set; }
@@ -47,7 +48,7 @@ namespace Hedra.Engine.ModuleSystem.Templates
             Mob.AttackCooldown = AttackCooldown;
             Mob.Speed = Speed;
             Mob.Level = Level;
-            Mob.Name = Name;
+            Mob.Name = DisplayName ?? Name;
             var dmg = new DamageComponent(Mob)
             {
                 XpToGive = NormalizeValues ? NormalizeXp(XP) : XP

@@ -12,6 +12,7 @@ namespace Hedra.AISystem
     {
         private const int MaxSeparatedDistance = 128 * 128;
         public IEntity Owner { get; }
+        public bool Enabled { get; set; } = true;
         private readonly FollowBehaviour _follow;
         private readonly AttackBehaviour _attack;
         private bool _disposed;
@@ -35,6 +36,7 @@ namespace Hedra.AISystem
 
         public override void Update()
         {
+            if(!Enabled) return;
             if((Parent.Position - Owner.Position).LengthSquared > MaxSeparatedDistance)
             {
                 Parent.Position = Owner.BlockPosition + Vector3.Cross(Parent.Orientation, Vector3.UnitY) * 12f;

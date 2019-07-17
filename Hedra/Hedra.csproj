@@ -122,14 +122,18 @@
     <Compile Include="AISystem\AdaptiveAIComponent.cs" />
     <Compile Include="AISystem\AIFactory.cs" />
     <Compile Include="AISystem\AIType.cs" />
+    <Compile Include="AISystem\BaseBeetleAIComponent.cs" />
     <Compile Include="AISystem\BasicAIComponent.cs" />
     <Compile Include="AISystem\Behaviours\AdaptiveAttackBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\AttackBehaviour.cs" />
+    <Compile Include="AISystem\Behaviours\BaseBeetleAttackBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\Behaviour.cs" />
     <Compile Include="AISystem\Behaviours\ChargeBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\FleeBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\FollowBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\GridStorage.cs" />
+    <Compile Include="AISystem\Behaviours\MeleeBeetleAttackBehaviour.cs" />
+    <Compile Include="AISystem\Behaviours\RangedBeetleAttackBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\RunAwayBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\TraverseBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\GiantBeetleAttackBehaviour.cs" />
@@ -174,11 +178,13 @@
     <Compile Include="AISystem\IBehaviourComponent.cs" />
     <Compile Include="AISystem\IGuardAIComponent.cs" />
     <Compile Include="AISystem\ITraverseAIComponent.cs" />
+    <Compile Include="AISystem\MeleeBeetleAIComponent.cs" />
     <Compile Include="AISystem\MinionAIComponent.cs" />
     <Compile Include="AISystem\NeutralAIComponent.cs" />
     <Compile Include="AISystem\PigAIComponent.cs" />
     <Compile Include="AISystem\PigFarmAIComponent.cs" />
     <Compile Include="AISystem\PugAIComponent.cs" />
+    <Compile Include="AISystem\RangedBeetleAIComponent.cs" />
     <Compile Include="AISystem\SheepAIComponent.cs" />
     <Compile Include="AISystem\SheepFarmAIComponent.cs" />
     <Compile Include="AISystem\SkeletonKamikazeAIComponent.cs" />
@@ -223,6 +229,7 @@
     <Compile Include="Engine\Rendering\UI\CompanionProfileUIElement.cs" />
     <Compile Include="Engine\Rendering\UI\ProfileUIElement.cs" />
     <Compile Include="Items\ItemTier.cs" />
+    <Compile Include="ModelHandlers\BeetleHandler.cs" />
     <Compile Include="Rendering\Graphics2D.cs" />
     <Compile Include="User\CommandManager.cs" />
     <Compile Include="User\WordFilter.cs" />
@@ -5472,7 +5479,7 @@
     <None Include="Modules\Items\Staves\UniqueWorldEaterStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Mobs\Beetle.json">
+    <None Include="Modules\Mobs\GiantBeetle.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Modules\Spawners\Overworld.json">
@@ -8300,6 +8307,14 @@
     </Content>
     <Content Include="..\project-hedra-assets\Animations\ArcherWhistle.dae">
       <Link>Assets\Chr\ArcherWhistle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Animations\GiantBeetleIdle.dae">
+      <Link>Assets\Chr\GiantBeetleIdle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Animations\GorillaWarriorIdle.dae">
+      <Link>Assets\Chr\GorillaWarriorIdle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Animations\MageInferno.dae">
@@ -13941,7 +13956,7 @@
     <Content Include="Assets\UI\SelectedInventorySlot.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Modules\Mobs\Gorilla.json">
+    <None Include="Modules\Mobs\GorillaWarrior.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="Mods\README.txt">
@@ -14163,6 +14178,12 @@
     <Content Include="Modules\Items\Recipes\WoodenBowlRecipe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Mobs\MeleeBeetle.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Mobs\RangedBeetle.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Mobs\Cow.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -14170,6 +14191,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Mobs\Ghost.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Mobs\Gorilla.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Mobs\Lich.json">

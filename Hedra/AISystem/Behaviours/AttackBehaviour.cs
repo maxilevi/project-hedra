@@ -50,7 +50,7 @@ namespace Hedra.AISystem.Behaviours
 
         protected virtual void Attack(float RangeModifier)
         {
-            Parent.RotateTowards(Target);
+            Parent.LookAt(Target);
             if (Parent.Model.CanAttack(Target, RangeModifier))
             {
                 Parent.Model.Attack(Target, RangeModifier);

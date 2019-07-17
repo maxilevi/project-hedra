@@ -35,7 +35,7 @@ namespace Hedra.AISystem.Behaviours
             }
             else if(!Parent.Model.IsAttacking && HasTarget)
             {
-                Parent.RotateTowards(Target);
+                Parent.LookAt(Target);
             }
             if (CanAttack(availableAttacks))
             {

@@ -24,7 +24,7 @@ def init(state, ui_bar, ui_caret, ui_focus_button):
     
 def on_click(event_args, state):
     if is_enabled(state):
-        state['in_focus'] = True
+        focus(state)
 
 def update_caret(state):
 
@@ -124,8 +124,8 @@ def focus(state):
     
     
 def defocus(state):
-    state['in_focus'] = False
-    if 'previous_can_interact' in state:
+    if in_focus(state):
+        state['in_focus'] = False
         get_player().CanInteract = state['previous_can_interact']
 
 def in_focus(state):

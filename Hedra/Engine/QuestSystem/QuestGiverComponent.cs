@@ -39,7 +39,7 @@ namespace Hedra.Engine.QuestSystem
             _talk.CanTalk = _canGiveQuest;
             if (Parent.IsNear(GameManager.Player, 16) && !_talk.Talking)
             {
-                Parent.RotateTowards(GameManager.Player);
+                Parent.LookAt(GameManager.Player);
             }
         }
 

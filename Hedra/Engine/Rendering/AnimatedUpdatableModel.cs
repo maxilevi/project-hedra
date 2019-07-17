@@ -38,12 +38,12 @@ namespace Hedra.Engine.Rendering
             Model.ClearModel();
         }
         
-        public void Paint(Vector4[] Colors)
+        public void Paint(params Vector4[] Colors)
         {
             Paint(Model, ModelPath, Colors);
         }
         
-        public static void Paint(AnimatedModel Model, string Path, Vector4[] Colors)
+        public static void Paint(AnimatedModel Model, string Path, params Vector4[] Colors)
         {
             if(Colors.Length > AssetManager.ColorCodes.Length)
                 throw new ArgumentOutOfRangeException($"Provided amount of colors cannot be higher than the color codes.");
