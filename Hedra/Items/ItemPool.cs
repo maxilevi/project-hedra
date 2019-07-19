@@ -195,6 +195,11 @@ namespace Hedra.Items
             return ItemLoader.Templater.Contains(Name);
         }
 
+        public static Item Grab(ItemTier Tier, string EquipmentType)
+        {
+            return Grab(new ItemPoolSettings(Tier, EquipmentType));
+        }
+
         public static void Load(params ItemTemplate[] Templates)
         {
             ItemLoader.Instance.Load(Templates);

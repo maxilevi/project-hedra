@@ -1,11 +1,10 @@
-from Hedra.Items import ItemPool
+from Hedra.Items import ItemPool, ItemTier
 
 AMOUNT_ATTRIBUTE = 'Amount'
 STONE_ARROW = 'StoneArrow'
 GLASS_FLASK = 'GlassFlask'
 WOODEN_BOWL = 'WoodenBowl'
 BERRY = 'Berry'
-HORSE_MOUNT = 'HorseMount'
 BOAT = 'Boat'
 PUMPKIN_PIE_RECIPE = 'PumpkinPieRecipe'
 COOKED_MEAT_RECIPE = 'CookedMeatRecipe'
@@ -13,6 +12,7 @@ HEALTH_POTION_RECIPE = 'HealthPotionRecipe'
 CORN_SOUP_RECIPE = 'CornSoupRecipe'
 FISHING_ROD = 'FishingRod'
 BAIT = 'Bait'
+COMPANION_EQUIPMENT_TYPE = 'Pet'
 
 def build_inventory(item_dict, is_travelling_merchant, inventory_size, rng):
     items = get_base_items(inventory_size, rng)
@@ -48,8 +48,10 @@ def get_base_recipes():
 
 def get_special_items():
     return [
-       # (0, ItemPool.Grab(HORSE_MOUNT)),
-        (1, ItemPool.Grab(BOAT))
+        (0, ItemPool.Grab(ItemPool.Grab(ItemTier.Common, COMPANION_EQUIPMENT_TYPE))),
+        (1, ItemPool.Grab(ItemPool.Grab(ItemTier.Common, COMPANION_EQUIPMENT_TYPE))),
+        (2, ItemPool.Grab(ItemPool.Grab(ItemTier.Common, COMPANION_EQUIPMENT_TYPE))),
+        (3, ItemPool.Grab(BOAT))
     ]
 
 def get_infinity_item(item_name):
