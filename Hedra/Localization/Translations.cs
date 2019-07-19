@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
+using Hedra.Game;
 
 namespace Hedra.Localization
 {
@@ -11,6 +12,7 @@ namespace Hedra.Localization
     {
         private static readonly Dictionary<string, Dictionary<string, string>> _translations;
         private static readonly List<Translation> _liveTranslations;
+        private static DateTime _lastWrite;
 
         static Translations()
         {
@@ -21,7 +23,7 @@ namespace Hedra.Localization
         public static void Load()
         {
             _translations.Clear();
-            var files = Directory.GetFiles($"{GameLoader.AppPath}/Translations/");
+            var files = Directory.GetFiles(TranslationsFolder);
             for (var i = 0; i < files.Length; i++)
             {
                 _translations.Add(
@@ -29,6 +31,7 @@ namespace Hedra.Localization
                     IniParser.Parse(File.ReadAllText(files[i]))
                 );
             }
+            _lastWrite = Directory.GetLastWriteTime(TranslationsFolder);
         }
 
         public static void Add(Translation Key)
@@ -58,6 +61,7 @@ namespace Hedra.Localization
 
         private static string Get(string Key,  object[] Params, string AppLanguage)
         {
+            ReloadIfNecessary();
             string Fail()
             {
                 if (AppLanguage == GameLanguage.English.ToString())
@@ -113,5 +117,15 @@ namespace Hedra.Localization
                 }
             }
         }
+
+        private static void ReloadIfNecessary()
+        {
+#if DEBUG
+            if(Directory.GetLastWriteTime(TranslationsFolder) != _lastWrite)
+                Load();
+#endif
+        }
+
+        private static string TranslationsFolder => GameSettings.DebugMode ? $"../../Translations/" : $"{GameLoader.AppPath}/Translations/";
     }
 }
