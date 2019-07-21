@@ -34,7 +34,7 @@ namespace ScriptMapper
             var regex = new Regex(
                 $@"{
                     string.Join(string.Empty, blacklist.Select(S => $@"(?<!{S}\.)").ToArray())
-                   }(?<=\.)([a-zA-Z]*?)[\.\(\s=]"
+                   }(?<=\.)([a-zA-Z]*?)[\.\(\s=\[\)]"
             );
             for (var j = 0; j < scripts.Length; j++)
             {

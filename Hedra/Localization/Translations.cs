@@ -96,7 +96,7 @@ namespace Hedra.Localization
         {
             for (var i = 0; i < Params.Length; i++)
             {
-                Value = Value.Replace("{" + i + "}", Params[i].ToString());
+                Value = Value.Replace($"{{{i}}}", Params[i].ToString());
             }
             return Value.Replace(@"\n", Environment.NewLine);
         }
