@@ -74,7 +74,7 @@ namespace Hedra.Engine.ClassSystem
        
         public static float XPFormula(int TargetLevel)
         {
-            return TargetLevel * 10f + 38;
+            return (float) Math.Pow(TargetLevel, 1.05f) * 10f + 38;
         }
         
         public override string ToString()

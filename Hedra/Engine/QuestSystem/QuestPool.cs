@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.QuestSystem.Designs;
-using Hedra.Engine.QuestSystem.Designs.Auxiliaries;
 using OpenTK;
 
 namespace Hedra.Engine.QuestSystem

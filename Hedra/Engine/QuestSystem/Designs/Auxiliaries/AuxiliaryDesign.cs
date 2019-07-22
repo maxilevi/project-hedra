@@ -1,5 +1,4 @@
 using System;
-using Hedra.Engine.Player.QuestSystem;
 
 namespace Hedra.Engine.QuestSystem.Designs.Auxiliaries
 {

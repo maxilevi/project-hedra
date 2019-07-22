@@ -13,6 +13,11 @@ namespace Hedra.Engine.Scripting
         {
             return Interpreter.GetFunction(_name, Function);
         }
+        
+        public bool HasMember(string Member)
+        {
+            return Interpreter.HasMember(_name, Member);
+        }
 
         public T Execute<T>(string Function, params object[] Params)
         {

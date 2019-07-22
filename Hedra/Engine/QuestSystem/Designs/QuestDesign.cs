@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using Hedra.Components;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
-using Hedra.Engine.Player.QuestSystem;
 using Hedra.Engine.Player.QuestSystem.Views;
 using Hedra.Engine.QuestSystem.Designs.Auxiliaries;
 using Hedra.EntitySystem;
-using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.QuestSystem.Designs

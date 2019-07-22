@@ -24,7 +24,7 @@ namespace Hedra.Engine.Scripting
 
         public static void Load()
         {
-            var files = Directory.GetFiles(SearchPath);
+            var files = Directory.GetFiles(SearchPath, "*", SearchOption.AllDirectories);
             for (var j = 0; j < files.Length; ++j)
             {
                 var name = Path.GetFileName(files[j]);
@@ -58,9 +58,28 @@ namespace Hedra.Engine.Scripting
             return new Script(Library);
         }
 
+        public static Script[] GetScripts(string FolderPath)
+        {
+            var scripts = new List<Script>();
+            var files = Directory.GetFiles($"{SearchPath}{FolderPath}", "*.py", SearchOption.AllDirectories);
+            for (var i = 0; i < files.Length; ++i)
+            {
+                var name = Path.GetFileName(files[i]);
+                if (!name.EndsWith(".py")) continue;
+                scripts.Add(GetScript(name));
+            }
+
+            return scripts.ToArray();
+        }
+
         public static T GetMember<T>(string Library, string Variable)
         {
             return (T) _runner.GetFunction(Library, Variable);
+        }
+        
+        public static bool HasMember(string Library, string Variable)
+        {
+            return _runner.HasMember(Library, Variable);
         }
 
         public static void Reload()

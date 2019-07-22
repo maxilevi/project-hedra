@@ -1,18 +1,12 @@
 using System;
 using System.Collections.Generic;
 using Hedra.Core;
-using Hedra.Engine.Generation;
-using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.QuestSystem.Views;
 using Hedra.Engine.QuestSystem.Designs.Auxiliaries;
 using Hedra.Engine.StructureSystem;
-using Hedra.Engine.WorldBuilding;
 using Hedra.Items;
 using Hedra.Rendering;
-using Newtonsoft.Json.Linq;
 using OpenTK;
 
 namespace Hedra.Engine.QuestSystem.Designs

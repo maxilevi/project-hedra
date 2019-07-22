@@ -1,9 +1,6 @@
 using System;
 using System.Drawing;
-using System.Media;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Localization;
-using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using Hedra.Items;
 using Hedra.Localization;

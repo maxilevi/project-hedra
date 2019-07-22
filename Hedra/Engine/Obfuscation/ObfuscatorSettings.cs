@@ -38,4 +38,5 @@
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.WorldObjects'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Game'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.User'):-rename")]
+[assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Mission'):-rename")]
 //[assembly: Obfuscation(Exclude = false, Feature = @"match-name('^Hedra(?!\.Engine).+'):-rename")]

@@ -28,6 +28,12 @@ namespace Hedra.Engine.Scripting
             return null;
         }
 
+        public bool HasMember(string Library, string Member)
+        {
+            var scope = DoRun(Library);
+            return scope.ContainsVariable(Member);
+        }
+
         public abstract void Reload();
 
         public abstract void Prepare(string Library);

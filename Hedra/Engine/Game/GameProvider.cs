@@ -139,7 +139,7 @@ namespace Hedra.Engine.Game
                 Player.Respawn();
             Player.Inventory.SetItems(Information.Items);
             Player.Crafting.SetRecipes(Information.Recipes);
-            Player.Questing.SetQuests(Information.Quests);
+            /* Player.Questing.SetQuests(Information.Quests); */
             AddDefaultRecipes(Information);
             SetRestrictions(Information);
             GameSettings.DarkEffect = false;

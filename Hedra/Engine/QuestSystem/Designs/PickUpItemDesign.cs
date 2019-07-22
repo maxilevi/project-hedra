@@ -1,6 +1,4 @@
 using System;
-using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Player.QuestSystem.Views;
 using Hedra.Engine.QuestSystem.Designs.Auxiliaries;
 using Hedra.Items;

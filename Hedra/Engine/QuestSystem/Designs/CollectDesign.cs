@@ -1,19 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using Hedra.Core;
 using Hedra.Engine.CraftingSystem;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Localization;
-using Hedra.Engine.Player;
-using Hedra.Engine.Player.QuestSystem;
-using Hedra.Engine.Player.QuestSystem.Views;
 using Hedra.Engine.QuestSystem.Designs.Auxiliaries;
-using Hedra.Engine.Rendering;
 using Hedra.Items;
 using Hedra.Localization;
-using Hedra.Rendering;
-using OpenTK;
 
 namespace Hedra.Engine.QuestSystem.Designs
 {
