@@ -1,18 +1,18 @@
 using System.Collections.Generic;
-using Hedra.Engine.QuestSystem.Designs;
+using Hedra.Mission.Blocks;
 
 namespace Hedra.Mission
 {
     public class MissionBuilder
     {
-        private readonly List<QuestDesign> _designs;
+        private readonly List<MissionBlock> _designs;
         
         public MissionBuilder()
         {
-            _designs = new List<QuestDesign>();
+            _designs = new List<MissionBlock>();
         }
         
-        public void Next(QuestDesign Design)
+        public void Next(MissionBlock Design)
         {
             _designs.Add(Design);
         }

@@ -1,6 +1,4 @@
-using System;
 using Hedra.Engine.ItemSystem;
-using Hedra.Items;
 
 namespace Hedra.Engine.QuestSystem
 {

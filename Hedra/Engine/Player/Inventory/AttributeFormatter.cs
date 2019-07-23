@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using Hedra.Engine.CraftingSystem.Templates;
+using Hedra.Crafting.Templates;
 using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ItemSystem.Templates;

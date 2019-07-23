@@ -46,7 +46,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             _fireParticles.HasMultipleOutputs = true;
         }
 
-        public override CraftingSystem.CraftingStation StationType => CraftingSystem.CraftingStation.Campfire;
+        public override Crafting.CraftingStation StationType => Crafting.CraftingStation.Campfire;
         
         protected virtual Vector3 FirePosition => Position;
         

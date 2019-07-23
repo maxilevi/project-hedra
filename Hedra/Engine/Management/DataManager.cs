@@ -19,6 +19,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Items;
+using Hedra.Mission;
 
 namespace Hedra.Engine.Management
 {
@@ -199,7 +200,7 @@ namespace Hedra.Engine.Management
             for(var i = 0; i < length; ++i)
             {
                 var quest = QuestTemplate.FromArray(Reader.ReadBytes(Reader.ReadInt32()));
-                if(QuestPool.Exists(quest.Name))
+                if(MissionPool.Exists(quest.Name))
                     quests.Add(quest);
                 else
                     Log.WriteLine($"Found non-existent quest design '{quest.Name}', removing...");

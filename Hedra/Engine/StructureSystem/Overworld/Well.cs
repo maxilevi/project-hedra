@@ -23,7 +23,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             };
         }
         
-        public override CraftingSystem.CraftingStation StationType => CraftingSystem.CraftingStation.Well;
+        public override Crafting.CraftingStation StationType => Crafting.CraftingStation.Well;
 
         protected override string CraftingMessage => Translations.Get("use_well");
 

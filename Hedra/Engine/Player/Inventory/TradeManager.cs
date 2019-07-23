@@ -1,7 +1,7 @@
 using System;
 using System.Drawing;
 using System.Linq;
-using Hedra.Engine.CraftingSystem;
+using Hedra.Crafting;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;

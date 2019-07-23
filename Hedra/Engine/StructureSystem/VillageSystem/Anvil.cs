@@ -11,7 +11,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         {
         }
 
-        public override CraftingSystem.CraftingStation StationType => CraftingSystem.CraftingStation.Anvil;
+        public override Crafting.CraftingStation StationType => Crafting.CraftingStation.Anvil;
         
         protected override string CraftingMessage => Translations.Get("use_anvil");
     }

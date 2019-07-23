@@ -1,8 +1,6 @@
-using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Localization;
 using Hedra.Items;
 
-namespace Hedra.Engine.CraftingSystem.Templates
+namespace Hedra.Crafting.Templates
 {
     public class IngredientsTemplate
     {

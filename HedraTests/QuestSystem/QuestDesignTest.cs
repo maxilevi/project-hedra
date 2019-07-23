@@ -1,6 +1,7 @@
 using System.Linq;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.QuestSystem;
+using Hedra.Mission;
 using NUnit.Framework;
 
 namespace HedraTests.QuestSystem
@@ -11,7 +12,8 @@ namespace HedraTests.QuestSystem
         [Test]
         public void TestNamesDoNotConflict()
         {
-            var designs = QuestPool.Designs;
+            MissionPool.Load();
+            var designs = MissionPool.Designs;
             var nameList = designs.Select(D => D.Name).ToList();
             Assert.True(designs.All(D =>
             {

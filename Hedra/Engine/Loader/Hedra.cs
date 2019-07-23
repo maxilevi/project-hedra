@@ -28,6 +28,7 @@ using Hedra.Engine.Steamworks;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Game;
 using Hedra.Localization;
+using Hedra.Mission;
 using Hedra.Rendering;
 using Hedra.Sound;
 using OpenTK;
@@ -100,6 +101,7 @@ namespace Hedra.Engine.Loader
             //    TaskScheduler.Parallel(Interpreter.Load);
             //else
                 Interpreter.Load();
+            MissionPool.Load();
         }
 
         protected override void OnLoad(EventArgs e)

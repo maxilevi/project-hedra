@@ -13,6 +13,7 @@ using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using Hedra.Engine.WorldBuilding;
+using Hedra.Mission;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
@@ -39,8 +40,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 {
                     villager.RemoveComponent(villager.SearchComponent<TalkComponent>());
                     villager.RemoveComponent(villager.SearchComponent<ThoughtsComponent>());
+                    var questDesign = MissionPool.Random(position, QuestTier.Easy);
                     villager.AddComponent(
-                        new QuestGiverComponent(villager, QuestPool.Random(position, QuestTier.Easy).Build(position, Utils.Rng, villager))
+                        new QuestGiverComponent(villager, questDesign)
                     );
                 }
             }

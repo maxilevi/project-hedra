@@ -3,14 +3,13 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Items;
 
-namespace Hedra.Engine.QuestSystem
+namespace Hedra.Mission
 {
     public class ItemCollect
     {
         public int Amount { get; set; }
         public string Name { get; set; }
         public string Recipe { get; set; }
-        public ItemCollect[] StartingItems { get; set; }
 
         public void Consume(IPlayer Player)
         {

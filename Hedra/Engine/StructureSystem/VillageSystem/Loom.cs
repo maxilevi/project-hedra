@@ -11,7 +11,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         {
         }
 
-        public override CraftingSystem.CraftingStation StationType => CraftingSystem.CraftingStation.Loom;
+        public override Crafting.CraftingStation StationType => Crafting.CraftingStation.Loom;
         
         protected override string CraftingMessage => Translations.Get("use_loom");
     }

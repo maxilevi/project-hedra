@@ -29,6 +29,7 @@ using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Game;
 using Hedra.Items;
+using Hedra.Mission;
 using OpenTK;
 
 namespace Hedra.User
@@ -193,10 +194,8 @@ namespace Hedra.User
                 {
                     var position = Caster.Position + Caster.Orientation * 16f;
                     var human = World.WorldBuilding.SpawnVillager(position, Utils.Rng);
-                    var tier = Parts.Length == 2 ? (QuestTier) Enum.Parse(typeof(QuestTier), Parts[1], true) : QuestTier.Any;
-                    human.AddComponent(
-                        new QuestGiverComponent(human, QuestPool.Grab(Quests.FindOverworldStructure).Build(position, Utils.Rng, human))
-                    );
+                    var quest = MissionPool.Random(position);
+                    human.AddComponent(new QuestGiverComponent(human, quest));
                     Result = "Success";
                     return true;
                 }

@@ -2,19 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Core;
-using Hedra.Engine.Core;
-using Hedra.Engine.CraftingSystem.Templates;
+using Hedra.Crafting.Templates;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
-using Hedra.Engine.StructureSystem;
-using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.Items;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OpenTK;
 
-namespace Hedra.Engine.CraftingSystem
+namespace Hedra.Crafting
 {
     public delegate void OnCraft(IngredientsTemplate[] Ingredients, Item Recipe, Item Output);
     
@@ -52,7 +49,7 @@ namespace Hedra.Engine.CraftingSystem
 
         public static CraftingStation GetCurrentStation(Vector3 Position)
         {
-            var structs = World.InRadius<WorldBuilding.CraftingStation>(Position, CraftingStationRadius);
+            var structs = World.InRadius<Engine.WorldBuilding.CraftingStation>(Position, CraftingStationRadius);
             var waterStation = structs.Any(S => S.StationType == CraftingStation.Well) || Physics.NearestWaterBlock(Position) < 12 ? CraftingStation.Water : CraftingStation.None;
             var currentStation = CraftingStation.None;
             for (var i = 0; i < structs.Length; ++i)

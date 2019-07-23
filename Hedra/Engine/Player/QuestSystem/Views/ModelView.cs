@@ -11,7 +11,7 @@ namespace Hedra.Engine.Player.QuestSystem.Views
         private readonly ObjectMesh _currentItemMesh;
         private readonly Vector3 _currentItemMeshSize;
   
-        public ModelView(QuestObject Quest, VertexData PreviewMesh) : base(Quest)
+        public ModelView(VertexData PreviewMesh)
         {
             _currentItemMesh = 
                 InventoryItemRenderer.BuildModel(PreviewMesh, out _currentItemMeshSize);

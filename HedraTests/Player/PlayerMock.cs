@@ -1,7 +1,7 @@
 using System;
+using Hedra.Crafting;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ClassSystem;
-using Hedra.Engine.CraftingSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;

@@ -36,7 +36,7 @@ using OpenTK.Input;
 
 namespace Hedra.Components
 {
-    public delegate void OnTalkEventHandler(IEntity Talkee);
+    public delegate void OnTalkEventHandler(IEntity Talker);
 
     public class TalkComponent : Component<IHumanoid>, ITickable
     {

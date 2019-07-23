@@ -1,10 +1,21 @@
+using Hedra.Engine.Player;
+using Hedra.Engine.Player.QuestSystem.Views;
+using Hedra.EntitySystem;
+using OpenTK;
+
 namespace Hedra.Mission.Blocks
 {
-    public class MissionBlock
+    public abstract class MissionBlock
     {
-        public bool IsCompleted(MissionObject Mission)
-        {
-            return false;
-        }
+        public IPlayer Owner { get; set; }
+        public IHumanoid Giver { get; set; }
+        public abstract bool IsCompleted { get; }
+        public abstract void Setup();
+        public abstract void Dispose();
+        public abstract QuestView BuildView();
+        public abstract bool HasLocation { get; }
+        public virtual Vector3 Location { get; }
+        public abstract string ShortDescription { get; }
+        public abstract string Description { get; }
     }
 }

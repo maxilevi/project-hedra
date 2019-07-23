@@ -15,7 +15,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public override void Dispose()
         {
             base.Dispose();
-            QuestPersistence.DisposeIfNecessary(Villager);
             SpawnCampfireDesign.Spawned  = false;
         }
     }

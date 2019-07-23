@@ -1,5 +1,5 @@
 using System;
-using Hedra.Engine.CraftingSystem;
+using Hedra.Crafting;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;

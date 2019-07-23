@@ -7,7 +7,7 @@ namespace Hedra.Engine.Player.QuestSystem.Views
     {
         private readonly AnimatedUpdatableModel _model;
         
-        public EntityView(QuestObject Quest, AnimatedUpdatableModel Model) : base(Quest)
+        public EntityView(AnimatedUpdatableModel Model)
         {
             _model = Model;
         }

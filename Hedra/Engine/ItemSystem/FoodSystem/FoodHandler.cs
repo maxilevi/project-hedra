@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Hedra.Core;
-using Hedra.Engine.CraftingSystem.Templates;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.EntitySystem;

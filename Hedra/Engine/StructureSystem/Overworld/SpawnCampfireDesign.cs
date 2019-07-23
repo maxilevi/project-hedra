@@ -6,6 +6,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
+using Hedra.Mission;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.Overworld
@@ -31,11 +32,9 @@ namespace Hedra.Engine.StructureSystem.Overworld
         private static IHumanoid CreateVillager(CollidableStructure Structure, Random Rng)
         {
             var position = Structure.Position + -SpawnOffset;
-            if (QuestPersistence.SpawnVillager(position, Rng, out var villager))
-            {
-                var quest = QuestPool.Grab(Quests.SpawnQuest).Build(position, new Random(World.Seed), villager);
-                QuestPersistence.SetupQuest(quest, quest.Giver);
-            }
+            var missionDesign = MissionPool.Grab(Quests.VisitSpawnVillage);
+            var villager = World.WorldBuilding.SpawnVillager(position, Rng);
+            villager.AddComponent(new QuestGiverComponent(villager, missionDesign));
             villager.Physics.TargetPosition = position;
             villager.Physics.UsePhysics = false;
             villager.IsSitting = true;

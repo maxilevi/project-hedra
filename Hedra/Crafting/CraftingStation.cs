@@ -1,6 +1,6 @@
 using System;
 
-namespace Hedra.Engine.CraftingSystem
+namespace Hedra.Crafting
 {
     [Flags]
     public enum CraftingStation

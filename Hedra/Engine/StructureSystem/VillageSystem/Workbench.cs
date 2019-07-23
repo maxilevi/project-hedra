@@ -11,7 +11,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         {
         }
 
-        public override CraftingSystem.CraftingStation StationType => CraftingSystem.CraftingStation.Workbench;
+        public override Crafting.CraftingStation StationType => Crafting.CraftingStation.Workbench;
         
         protected override string CraftingMessage => Translations.Get("use_workbench");
     }

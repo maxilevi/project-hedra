@@ -9,6 +9,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.WorldBuilding;
+using Hedra.Mission;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem
@@ -33,7 +34,7 @@ namespace Hedra.Engine.StructureSystem
                     npc.Rotation = Physics.DirectionToEuler(npc.Orientation = -Vector3.TransformPosition(DefaultLookingDirection, Rotation));
                     npc.Physics.TargetPosition = position;
                     npc.Physics.UsePhysics = false;
-                    npc.AddComponent(new QuestGiverComponent(npc, QuestPool.Random(position).Build(position, Utils.Rng, npc)));
+                    npc.AddComponent(new QuestGiverComponent(npc, MissionPool.Random(position)));
                     ((T) Structure.WorldObject).NPC = npc;
                 }, Structure);
             }

@@ -16,7 +16,7 @@ namespace Hedra.Engine.WorldBuilding
         
         protected abstract string CraftingMessage { get; }
         
-        public abstract CraftingSystem.CraftingStation StationType { get; }
+        public abstract Crafting.CraftingStation StationType { get; }
 
         protected virtual bool CanCraft => true;
 

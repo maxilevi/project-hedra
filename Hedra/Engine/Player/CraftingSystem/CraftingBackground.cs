@@ -1,4 +1,4 @@
-using Hedra.Engine.CraftingSystem;
+using Hedra.Crafting;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player.Inventory;
 using Hedra.EntitySystem;

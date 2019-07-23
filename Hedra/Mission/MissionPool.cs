@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Hedra.Engine.Scripting;
+using OpenTK;
 
 namespace Hedra.Mission
 {
@@ -10,11 +12,11 @@ namespace Hedra.Mission
         private const string CanGiveName = "can_give";
         private const string IsQuestName = "IS_QUEST";
 
-        private static readonly List<Script> MissionScripts;
+        private static readonly List<MissionDesign> MissionScripts;
 
         static MissionPool()
         {
-            MissionScripts = new List<Script>();
+            MissionScripts = new List<MissionDesign>();
         }
 
         public static void Load()
@@ -24,14 +26,46 @@ namespace Hedra.Mission
             for (var i = 0; i < scripts.Length; ++i)
             {
                 if(IsMission(scripts[i]))
-                    MissionScripts.Add(scripts[i]);
+                    MissionScripts.Add(new MissionDesign(scripts[i]));
             }
         }
-        
+
+        public static MissionDesign Grab(string Name)
+        {
+            return MissionScripts.First(M => M.Name == Name);
+        }
+
+        public static MissionDesign Grab(Quests Name)
+        {
+            return Grab(Name.ToString());
+        }
+
+        public static MissionDesign Random(Vector3 Position, QuestTier Tier = QuestTier.Any)
+        {
+            return null;
+        }
+
+        public static bool Exists(string Name)
+        {
+            return MissionScripts.Any(M => M.Name == Name);
+        }
         
         private static bool IsMission(Script Mission)
         {
             return Mission.HasMember(IsQuestName);
         }
+
+        public static MissionDesign[] Designs => MissionScripts.ToArray();
+    }
+
+    public enum Quests
+    {
+        VisitSpawnVillage
+    }
+
+    public enum QuestTier
+    {
+        Any,
+        Easy
     }
 }

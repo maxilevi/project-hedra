@@ -311,7 +311,6 @@ namespace Hedra.Engine.Generation
             StructureHandler.Discard();
             WorldRenderer.ForceDiscard();
             CacheManager.Discard();
-            QuestPersistence.Discard();
 
             this.AddEntity(GameManager.Player);
 

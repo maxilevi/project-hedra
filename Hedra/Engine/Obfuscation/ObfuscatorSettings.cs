@@ -8,10 +8,10 @@
 /* Template namespaces */
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.ModuleSystem.Templates'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.ItemSystem.Templates'):-rename")]
-[assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.CraftingSystem.Templates'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.StructureSystem.VillageSystem.Templates'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.ClassSystem.Templates'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.Obfuscation'):-rename")]
+[assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Crafting.Templates'):-rename")]
 
 /* API namespaces */
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra'):-rename")]
@@ -39,4 +39,5 @@
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Game'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.User'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Mission'):-rename")]
+[assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Crafting'):-rename")]
 //[assembly: Obfuscation(Exclude = false, Feature = @"match-name('^Hedra(?!\.Engine).+'):-rename")]

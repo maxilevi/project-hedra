@@ -12,6 +12,8 @@ using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Localization;
+using Hedra.Mission;
+using Hedra.Mission.Blocks;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
@@ -134,11 +136,11 @@ namespace Hedra.Engine.Player.QuestSystem
                 _player.Minimap.UnMarkQuest();
             }
         }
-
-        private QuestObject CurrentQuest => Quests.Length != 0 ? Quests[Mathf.Modulo(CurrentPage, Quests.Length)] : null;
+        
+        private MissionObject CurrentQuest => Quests.Length != 0 ? Quests[Mathf.Modulo(CurrentPage, Quests.Length)] : null;
 
         protected override Translation TitleTranslation => Translation.Create("quests");
 
-        private QuestObject[] Quests => Player.Questing.ActiveQuests;
+        private MissionObject[] Quests => Player.Questing.ActiveQuests;
     }
 }
