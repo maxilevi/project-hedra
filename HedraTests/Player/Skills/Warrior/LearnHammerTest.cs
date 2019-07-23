@@ -2,6 +2,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.SkillSystem.Warrior;
 using Hedra.Engine.SkillSystem.Warrior.Paladin;
+using Hedra.Items;
 
 namespace HedraTests.Player.Skills.Warrior
 {

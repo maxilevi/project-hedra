@@ -1,6 +1,6 @@
 using Hedra.Engine.ItemSystem;
 
-namespace Hedra.Engine.QuestSystem
+namespace Hedra.Mission
 {
     public class QuestReward
     {

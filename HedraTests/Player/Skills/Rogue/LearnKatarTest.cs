@@ -1,6 +1,7 @@
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.SkillSystem.Rogue;
+using Hedra.Items;
 
 namespace HedraTests.Player.Skills.Rogue
 {

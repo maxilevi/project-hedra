@@ -14,7 +14,7 @@ namespace Hedra.Mission.Blocks
         public ItemCollect[] Items { get; set; }
         public sealed override bool IsCompleted => Items.All(I => I.IsCompleted(Owner, out _));
         public sealed override bool HasLocation => false;
-        public sealed override void Dispose()
+        public sealed override void End()
         {
             for (var i = 0; i < Items.Length; ++i)
             {

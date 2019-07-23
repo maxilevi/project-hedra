@@ -199,10 +199,10 @@ namespace Hedra.Engine.ItemSystem
 
         public bool IsGold => Name == GoldItemName;
         public bool IsFood => HasAttribute(CommonAttributes.IsFood) && GetAttribute<bool>(CommonAttributes.IsFood) || Name == "Berry";
-        public bool IsAmmo => string.Equals(EquipmentType, Engine.ItemSystem.EquipmentType.Ammo.ToString(), StringComparison.InvariantCultureIgnoreCase);
+        public bool IsAmmo => string.Equals(EquipmentType, Items.EquipmentType.Ammo.ToString(), StringComparison.InvariantCultureIgnoreCase);
         public bool IsWeapon => WeaponFactory.Contains(this);
         public bool IsArmor => ArmorFactory.Contains(this);
-        public bool IsRing => EquipmentType == Engine.ItemSystem.EquipmentType.Ring.ToString();
+        public bool IsRing => EquipmentType == Items.EquipmentType.Ring.ToString();
         public bool IsEquipment => IsWeapon || IsRing || IsArmor;
         public bool IsConsumable => HasAttribute(CommonAttributes.IsConsumable) && GetAttribute<bool>(CommonAttributes.IsConsumable);
         public bool IsRecipe => HasAttribute(CommonAttributes.Handler) && GetAttribute<string>(CommonAttributes.Handler) == "Recipe";

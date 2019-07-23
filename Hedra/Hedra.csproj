@@ -237,7 +237,6 @@
     <Compile Include="Engine\QuestSystem\QuestComponent.cs" />
     <Compile Include="Engine\QuestSystem\QuestGiverComponent.cs" />
     <Compile Include="Engine\QuestSystem\QuestInventory.cs" />
-    <Compile Include="Engine\QuestSystem\QuestReward.cs" />
     <Compile Include="Engine\QuestSystem\QuestTemplate.cs" />
     <Compile Include="Engine\QuestSystem\QuestThoughtsComponent.cs" />
     <Compile Include="Engine\Rendering\UI\CompanionProfileUIElement.cs" />
@@ -254,6 +253,7 @@
     <Compile Include="Mission\MissionDesign.cs" />
     <Compile Include="Mission\MissionObject.cs" />
     <Compile Include="Mission\MissionPool.cs" />
+    <Compile Include="Mission\QuestReward.cs" />
     <Compile Include="ModelHandlers\BeetleHandler.cs" />
     <Compile Include="Mission\MissionBuilder.cs" />
     <Compile Include="Rendering\Graphics2D.cs" />

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,8 +9,6 @@ namespace Hedra.Mission
 {
     public static class MissionPool
     {
-        private const string SetupTimelineName = "setup_timeline";
-        private const string CanGiveName = "can_give";
         private const string IsQuestName = "IS_QUEST";
 
         private static readonly List<MissionDesign> MissionScripts;
@@ -42,7 +41,10 @@ namespace Hedra.Mission
 
         public static MissionDesign Random(Vector3 Position, QuestTier Tier = QuestTier.Any)
         {
-            return null;
+            var possibilities = MissionScripts.Where(M => M.CanGive(Position) && (Tier == QuestTier.Any || M.Tier == Tier)).ToArray();
+            if(possibilities.Length == 0)
+                throw new ArgumentOutOfRangeException($"Failed to find quests that meet the given criteria");
+            return possibilities[Utils.Rng.Next(0, possibilities.Length)];
         }
 
         public static bool Exists(string Name)

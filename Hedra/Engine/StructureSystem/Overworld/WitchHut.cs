@@ -8,6 +8,7 @@ using Hedra.Engine.QuestSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Items;
+using Hedra.Mission;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.Overworld

@@ -27,7 +27,7 @@ namespace Hedra.Engine.Scripting
             var files = Directory.GetFiles(SearchPath, "*", SearchOption.AllDirectories);
             for (var j = 0; j < files.Length; ++j)
             {
-                var name = Path.GetFileName(files[j]);
+                var name = files[j].Replace(SearchPath, string.Empty);
                 if (!name.EndsWith(".py")) continue;
                 _runner.Prepare(name);
             }
@@ -64,7 +64,7 @@ namespace Hedra.Engine.Scripting
             var files = Directory.GetFiles($"{SearchPath}{FolderPath}", "*.py", SearchOption.AllDirectories);
             for (var i = 0; i < files.Length; ++i)
             {
-                var name = Path.GetFileName(files[i]);
+                var name = files[i].Replace(SearchPath, string.Empty);
                 if (!name.EndsWith(".py")) continue;
                 scripts.Add(GetScript(name));
             }

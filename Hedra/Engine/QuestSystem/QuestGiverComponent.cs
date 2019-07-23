@@ -23,6 +23,7 @@ namespace Hedra.Engine.QuestSystem
             _questArchetype = QuestArchetype;
             Parent.ShowIcon(CacheItem.AttentionIcon);
             _talk = new TalkComponent(Parent);
+            _talk.OnTalkingStarted += CreateQuest;
             _talk.OnTalkingEnded += AddQuest;
             Parent.AddComponent(_talk);
         }
@@ -48,14 +49,23 @@ namespace Hedra.Engine.QuestSystem
                 Parent.RemoveComponent(this);
         }
 
-        private void AddQuest(IEntity Interactee)
+        private void AddQuest(IEntity Talker)
         {
-            if(!(Interactee is IPlayer player) || (Parent.Position - player.Position).LengthSquared > 32 * 32) return;
+            if(!(Talker is IPlayer player) || (Parent.Position - player.Position).LengthSquared > 32 * 32) return;
             _canGiveQuest = false;
-            _quest = _questArchetype.Build(Parent.Position, Parent, player);
             player.Questing.Start(Parent, _quest);
             player.Questing.QuestAbandoned += OnQuestAbandoned;
             player.Questing.QuestCompleted += OnQuestCompleted;
+        }
+
+        private void CreateQuest(IEntity Talker)
+        {
+            if (!(Talker is IPlayer player)) return;
+            _quest?.Dispose();
+            _quest = _questArchetype.Build(Parent.Position, Parent, player);
+            if(Parent.SearchComponent<QuestThoughtsComponent>() != null)
+                Parent.RemoveComponent(Parent.SearchComponent<QuestThoughtsComponent>());
+            Parent.AddComponent(new QuestThoughtsComponent(Parent, _quest.OpeningDialogKeyword, _quest.OpeningDialogArguments));
         }
 
         public override void Dispose()

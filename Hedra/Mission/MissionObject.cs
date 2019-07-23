@@ -14,12 +14,16 @@ namespace Hedra.Mission
         private IHumanoid _giver;
         private QuestView _view;
         
-        public MissionObject(MissionBlock[] Blocks)
+        public MissionObject(MissionBlock[] Blocks, string OpeningDialogKeyword, object[] OpeningDialogArguments)
         {
+            this.OpeningDialogKeyword = OpeningDialogKeyword;
+            this.OpeningDialogArguments = OpeningDialogArguments;
             _blocks = Blocks;
             _index = -1;
         }
 
+        public string OpeningDialogKeyword { get; }
+        public object[] OpeningDialogArguments { get; }
         public bool HasLocation => Current.HasLocation;
         public Vector3 Location => Current.Location;
         public string Description => Current.Description;
@@ -35,7 +39,7 @@ namespace Hedra.Mission
 
         public void Trigger()
         {
-            Current.Dispose();
+            Current.End();
             if(HasNext)
                 _owner.Questing.Start(_giver, this);
         }
@@ -55,6 +59,7 @@ namespace Hedra.Mission
                 Current.Owner = _owner;
                 Current.Giver = _giver;
                 Current.Setup();
+                _view?.Dispose();
                 _view = Current.BuildView();
             }
         }
@@ -63,5 +68,13 @@ namespace Hedra.Mission
 
         public MissionBlock Current => _index < _blocks.Length ? _blocks[_index] : null;
         public IPlayer Owner => _owner;
+
+        public void Dispose()
+        {
+            for (var i = 0; i < _blocks.Length; ++i)
+            {
+                _blocks[i].Dispose();
+            }
+        }
     }
 }

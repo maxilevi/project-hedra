@@ -1,13 +1,15 @@
 from Core import translate
-from Hedra.Mission import MissionBuilder, ItemCollect
+from Hedra.Mission import MissionBuilder, ItemCollect, QuestReward, QuestTier
 from Hedra.Mission.Blocks import CollectMission, TalkMission, CraftMission
 from Hedra.Items import ItemPool, ItemTier, ItemType, EquipmentType
 from Hedra.Crafting import CraftingStation, CraftingInventory
 from System import Array, ArgumentOutOfRangeException, Math, Object
 
-QUEST_NAME = 'CollectAndCraft'
 IS_QUEST = True
+QUEST_NAME = 'CollectAndCraft'
+QUEST_TIER = QuestTier.Easy
 STATION_ATTRIB_NAME = 'CraftingStation'
+MAX_COLLECT_ITEM_TYPES = 1
 
 def setup_timeline(position, giver, owner, rng):
     builder = MissionBuilder()
@@ -15,27 +17,26 @@ def setup_timeline(position, giver, owner, rng):
     
     if has_crafting:
         add_craft_mission(builder, owner, giver, items)
-        
+    
+    keyword, arguments = get_opening_dialog(items)
+    reward = build_reward(items, rng)
+    
+    builder.SetOpeningDialog(keyword, arguments)
+    builder.SetReward(reward)
     return builder
 
 def add_collect_mission(builder, giver, owner, rng):
-    items = random_items(owner, rng)
+    items = select_items(owner, rng)
     has_crafting = can_craft(items)
     
     collect = CollectMission()
     collect.Items = items
-
-    keyword, arguments = get_collect_thoughts(items)
-    talk = TalkMission(keyword, arguments)
-    talk.Humanoid = giver
     
     builder.Next(collect)
-    builder.Next(talk)
-    
     return has_crafting, items
 
-def get_collect_thoughts(items):
-    params = ', '.join(map(lambda i: i.ToString(), items)).ToUpperInvariant()
+def get_opening_dialog(items):
+    params = Array[Object]([', '.join(map(lambda i: i.ToString(), items)).ToUpperInvariant()])
     return 'quest_collect_dialog', params
 
 def add_craft_mission(builder, owner, giver, previous_items):
@@ -69,12 +70,20 @@ def get_craft_thoughts(station, item_collect):
         return 'quest_craft_dialog', params
     return 'quest_craft_anywhere_dialog', params
     
-    
+def select_items(owner, rng):
+    templates = random_items(owner, rng)
+    items = []
+    for i in xrange(0, MAX_COLLECT_ITEM_TYPES):
+        template = templates[rng.Next(0, templates.Length)]
+        if template not in items:
+            items.append(template)
+    return Array[ItemCollect](items)
+
 def random_items(owner, rng):
     possible_items = ItemPool.Matching(lambda x: x.Tier == ItemTier.Misc and x.Name != ItemType.Gold.ToString())
     recipes = ItemPool.Matching(lambda t: t.EquipmentType == EquipmentType.Recipe.ToString())
-    owner_recipes = owner.Crafting.RecipeOutputs.Select(lambda x: x.Name)
-    possible_items = list(filter(lambda x: all(lambda r: CraftingInventory.GetOutputFromRecipe(r).Name != x.Name or x.Name in owner_recipes, recipes), possible_items))
+    owner_recipes = map(lambda x: x.Name, owner.Crafting.RecipeOutputs)
+    possible_items = list(filter(lambda x: all([CraftingInventory.GetOutputFromRecipe(r).Name != x.Name or x.Name in owner_recipes for r in recipes]), possible_items))
                          
     def to_item_collect(item):
         collect = ItemCollect()
@@ -93,13 +102,13 @@ def amount_from_item(item, rng):
     return rng.Next(lower_bound, upper_bound)
 
 def recipe_from_item(name, recipes, rng):
-    possible_recipes = list(filter(lambda r: any(lambda i: i.Name == name, CraftingInventory.GetIngredients(r)), recipes))
+    possible_recipes = list(filter(lambda r: any([i.Name == name for i in CraftingInventory.GetIngredients(r)]), recipes))
     if possible_recipes:
-        return possible_recipes[rng.Next(0, possible_recipes.Length)].Name
+        return possible_recipes[rng.Next(0, len(possible_recipes))].Name
     return None
 
 def can_craft(items):
-    return all(lambda x: x.Recipe, items)
+    return all([x.Recipe for x in items])
 
 def random_crafts(items):
     item = items[0]
@@ -112,8 +121,34 @@ def random_crafts(items):
     item_collect.Amount = Math.Max(1, int(item.Amount / ingredient_template.Amount))
     return recipe, station, item_collect
 
-def can_give():
+def can_give(position):
     return True
 
-def get_reward():
+def build_reward(items, rng):
+
+    def get_multiplier():
+        return sum([ItemPool.Grab(x.Name).GetAttribute[int]('Price') * x.Amount for x in items]) / 25.0
+
+    def get_random_item():
+        possibilities = []
+        n = rng.NextDouble()
+        if n < 0.3:
+            possibilities = ItemPool.Matching(lambda x: x.EquipmentType == EquipmentType.Recipe.ToString() and int(x.Tier) is int(ItemTier.Uncommon))
+        elif n < 0.8:
+            possibilities = ItemPool.Matching(lambda x: x.EquipmentType == EquipmentType.Recipe.ToString() and int(x.Tier) is int(ItemTier.Common))
+        elif n < 1.0:
+            possibilities = ItemPool.Matching(lambda x: x.Tier == ItemTier.Misc)
     
+        return possibilities[rng.Next(0, len(possibilities))]
+    
+    n = rng.NextDouble()
+    reward = QuestReward()
+    if n < 0.3:
+        reward.Experience = int(rng.Next(3, 9) * get_multiplier())
+    elif n < 0.7:
+        reward.Gold = int(rng.Next(11, 25) * get_multiplier())
+    elif 0.75 < n < 0.95:
+        reward.Item = get_random_item()
+    elif n > 0.95:
+        reward.SkillPoint = 1
+    return reward

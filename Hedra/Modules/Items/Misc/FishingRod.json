@@ -12,6 +12,10 @@
     {
       "Name": "AttackSpeed",
       "Value": 1.0
+    },
+    {
+      "Name": "Price",
+      "Value": 80
     }
   ],
   "Model": {

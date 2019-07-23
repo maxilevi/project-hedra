@@ -17,6 +17,7 @@ using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Items;
 using Hedra.Localization;
+using Hedra.Mission;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.Overworld

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.SkillSystem;
+using Hedra.Items;
 using Moq;
 using NUnit.Framework;
 

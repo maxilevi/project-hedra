@@ -22,5 +22,10 @@ namespace Hedra.Engine.Player.QuestSystem.Views
         {
             return InventoryItemRenderer.Draw(_currentItemMesh, false, false, _currentItemMeshSize);
         }
+
+        public override void Dispose()
+        {
+            _currentItemMesh.Dispose();
+        }
     }
 }

@@ -49,7 +49,7 @@ namespace Hedra.Mission.Blocks
             _talk.AddDialogLine(Translation.Default(Text));
         }
         
-        public override void Dispose()
+        public override void End()
         {
             Humanoid.RemoveComponent(Humanoid.SearchComponent<TalkComponent>());
         }

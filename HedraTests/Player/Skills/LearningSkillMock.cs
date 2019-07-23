@@ -1,6 +1,7 @@
 using System;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.SkillSystem;
+using Hedra.Items;
 
 namespace HedraTests.Player.Skills
 {

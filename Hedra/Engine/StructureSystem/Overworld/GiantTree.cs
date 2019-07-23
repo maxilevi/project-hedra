@@ -4,6 +4,7 @@ using Hedra.Engine.QuestSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Localization;
+using Hedra.Mission;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.Overworld
