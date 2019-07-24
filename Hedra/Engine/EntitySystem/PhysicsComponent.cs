@@ -485,7 +485,7 @@ namespace Hedra.Engine.EntitySystem
                 TargetPosition,
                 End
             });
-            return _collisions.Any(S => Physics.Collides(S, shape));
+                return _collisions.Any(S => Physics.Collides(S, shape));
         }
         
         public bool CollidesWithOffset(Vector3 Offset)

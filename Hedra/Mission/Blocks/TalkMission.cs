@@ -32,7 +32,7 @@ namespace Hedra.Mission.Blocks
         {
             _talk = new TalkComponent(Humanoid);
             _talk.OnTalkingStarted += OnTalkingStarted;
-            _talk.OnTalkingEnded += Talker => _isCompleted = true;
+            _talk.OnTalkingEnded += OnTalkingEnded;
             Humanoid.AddComponent(_talk);
         }
 
@@ -42,16 +42,21 @@ namespace Hedra.Mission.Blocks
             Humanoid.AddComponent(thoughts);
             OnTalk?.Invoke(Talker);
         }
-        
+
+        protected virtual void OnTalkingEnded(IEntity Talker)
+        {
+            _isCompleted = true;
+        }
 
         public void AddDialogLine(string Text)
         {
             _talk.AddDialogLine(Translation.Default(Text));
         }
         
-        public override void End()
+        public override void Cleanup()
         {
             Humanoid.RemoveComponent(Humanoid.SearchComponent<TalkComponent>());
+            Humanoid.RemoveComponent(Humanoid.SearchComponent<ThoughtsComponent>());
         }
 
         public override QuestView BuildView()

@@ -62,7 +62,7 @@ namespace Hedra.Engine.QuestSystem
                     var quest = _activeQuests[i];
                     _activeQuests.RemoveAt(i);
                     QuestCompleted?.Invoke(quest);
-                    quest.Trigger();
+                    quest.CleanupAndAdvance();
                 }
             }
         }

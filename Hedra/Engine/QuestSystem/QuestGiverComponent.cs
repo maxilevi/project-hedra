@@ -11,9 +11,8 @@ namespace Hedra.Engine.QuestSystem
     public class QuestGiverComponent : QuestComponent
     {
         private readonly TalkComponent _talk;
-        private MissionObject _quest;
         private readonly MissionDesign _questArchetype;
-        private QuestThoughtsComponent _thoughts;
+        private MissionObject _quest;
         private bool _canGiveQuest = true;
         
         public QuestGiverComponent(IHumanoid Parent, MissionDesign QuestArchetype) : base(Parent)
@@ -56,6 +55,7 @@ namespace Hedra.Engine.QuestSystem
             player.Questing.Start(Parent, _quest);
             player.Questing.QuestAbandoned += OnQuestAbandoned;
             player.Questing.QuestCompleted += OnQuestCompleted;
+            RemoveThoughtsIfNecessary();
         }
 
         private void CreateQuest(IEntity Talker)
@@ -63,9 +63,14 @@ namespace Hedra.Engine.QuestSystem
             if (!(Talker is IPlayer player)) return;
             _quest?.Dispose();
             _quest = _questArchetype.Build(Parent.Position, Parent, player);
-            if(Parent.SearchComponent<QuestThoughtsComponent>() != null)
-                Parent.RemoveComponent(Parent.SearchComponent<QuestThoughtsComponent>());
+            RemoveThoughtsIfNecessary();
             Parent.AddComponent(new QuestThoughtsComponent(Parent, _quest.OpeningDialogKeyword, _quest.OpeningDialogArguments));
+        }
+
+        private void RemoveThoughtsIfNecessary()
+        {
+            if(Parent.SearchComponent<ThoughtsComponent>() != null)
+                Parent.RemoveComponent(Parent.SearchComponent<ThoughtsComponent>());
         }
 
         public override void Dispose()
@@ -74,7 +79,6 @@ namespace Hedra.Engine.QuestSystem
             {
                 _quest.Owner.Questing.QuestAbandoned -= OnQuestAbandoned;
                 _quest.Owner.Questing.QuestCompleted -= OnQuestCompleted;
-                Parent.RemoveComponent(_thoughts);
             }
             Parent.RemoveComponent(_talk);
             Parent.ShowIcon(null);

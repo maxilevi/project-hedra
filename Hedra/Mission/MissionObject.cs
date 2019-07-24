@@ -8,6 +8,7 @@ namespace Hedra.Mission
 {
     public class MissionObject
     {
+        public event OnMissionEnd MissionEnd;
         private readonly MissionBlock[] _blocks;
         private int _index;
         private IPlayer _owner;
@@ -37,9 +38,9 @@ namespace Hedra.Mission
 
         }
 
-        public void Trigger()
+        public void CleanupAndAdvance()
         {
-            Current.End();
+            Current.Cleanup();
             if(HasNext)
                 _owner.Questing.Start(_giver, this);
         }
@@ -61,6 +62,10 @@ namespace Hedra.Mission
                 Current.Setup();
                 _view?.Dispose();
                 _view = Current.BuildView();
+            }
+            else
+            {
+                MissionEnd?.Invoke();
             }
         }
 

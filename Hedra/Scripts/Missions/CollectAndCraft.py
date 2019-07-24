@@ -31,8 +31,10 @@ def add_collect_mission(builder, giver, owner, rng):
     
     collect = CollectMission()
     collect.Items = items
-    
+
     builder.Next(collect)
+    if not has_crafting:
+        builder.MissionEnd += lambda: collect.ConsumeItems()
     return has_crafting, items
 
 def get_opening_dialog(items):
@@ -52,14 +54,16 @@ def add_craft_mission(builder, owner, giver, previous_items):
         owner.MessageDispatcher.ShowPlaque(translate("quest_learn_recipe_plaque"), 3)
 
     talk.Humanoid = giver
-    talk.OnTalk += give_recipe
+    talk.OnTalk += lambda _: give_recipe()
 
     craft = CraftMission()
     craft.Station = station
-    craft.Items = [item_collect]
+    craft.Items = Array[ItemCollect]([item_collect])
+
 
     builder.Next(talk)
     builder.Next(craft)
+    builder.MissionEnd += lambda: craft.ConsumeItems()
 
 def get_craft_thoughts(station, item_collect):
     name = item_collect.ToString().ToUpperInvariant()
@@ -99,7 +103,7 @@ def amount_from_item(item, rng):
         raise ArgumentOutOfRangeException("Item '{0}' does not have a price attribute.".format(item.DisplayName))
     lower_bound = int(Math.Round(18.0 / item.GetAttribute[int]('Price')))
     upper_bound = int(Math.Round(42.0 / item.GetAttribute[int]('Price')))
-    return rng.Next(lower_bound, upper_bound)
+    return max(1, rng.Next(lower_bound, upper_bound))
 
 def recipe_from_item(name, recipes, rng):
     possible_recipes = list(filter(lambda r: any([i.Name == name for i in CraftingInventory.GetIngredients(r)]), recipes))
@@ -115,7 +119,7 @@ def random_crafts(items):
     recipe = ItemPool.Grab(item.Recipe)
     station = recipe.GetAttribute[CraftingStation](STATION_ATTRIB_NAME)
     output = CraftingInventory.GetOutputFromRecipe(recipe)
-    ingredient_template = next(lambda i: i.Name == item.Name, CraftingInventory.GetIngredients(recipe))
+    ingredient_template = [i for i in CraftingInventory.GetIngredients(recipe) if i.Name == item.Name][0]
     item_collect = ItemCollect()
     item_collect.Name = output.Name
     item_collect.Amount = Math.Max(1, int(item.Amount / ingredient_template.Amount))
@@ -130,15 +134,13 @@ def build_reward(items, rng):
         return sum([ItemPool.Grab(x.Name).GetAttribute[int]('Price') * x.Amount for x in items]) / 25.0
 
     def get_random_item():
-        possibilities = []
         n = rng.NextDouble()
         if n < 0.3:
-            possibilities = ItemPool.Matching(lambda x: x.EquipmentType == EquipmentType.Recipe.ToString() and int(x.Tier) is int(ItemTier.Uncommon))
+            possibilities = ItemPool.Matching(lambda x: x.EquipmentType == EquipmentType.Recipe.ToString() and int(x.Tier) == int(ItemTier.Uncommon))
         elif n < 0.8:
-            possibilities = ItemPool.Matching(lambda x: x.EquipmentType == EquipmentType.Recipe.ToString() and int(x.Tier) is int(ItemTier.Common))
-        elif n < 1.0:
+            possibilities = ItemPool.Matching(lambda x: x.EquipmentType == EquipmentType.Recipe.ToString() and int(x.Tier) == int(ItemTier.Common))
+        else:
             possibilities = ItemPool.Matching(lambda x: x.Tier == ItemTier.Misc)
-    
         return possibilities[rng.Next(0, len(possibilities))]
     
     n = rng.NextDouble()

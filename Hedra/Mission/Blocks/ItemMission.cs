@@ -14,13 +14,7 @@ namespace Hedra.Mission.Blocks
         public ItemCollect[] Items { get; set; }
         public sealed override bool IsCompleted => Items.All(I => I.IsCompleted(Owner, out _));
         public sealed override bool HasLocation => false;
-        public sealed override void End()
-        {
-            for (var i = 0; i < Items.Length; ++i)
-            {
-                Items[i].Consume(Owner);
-            }
-        }
+
         public sealed override QuestView BuildView()
         {
             var items = Items.Select(T => ItemPool.Grab(T.Name)).ToArray();
@@ -32,6 +26,13 @@ namespace Hedra.Mission.Blocks
                 model += items[i].Model.Clone().Transform(transform);
             }
             return new ModelView(model);
+        }
+        public void ConsumeItems()
+        {
+            for (var i = 0; i < Items.Length; ++i)
+            {
+                Items[i].Consume(Owner);
+            }
         }
     }
 }

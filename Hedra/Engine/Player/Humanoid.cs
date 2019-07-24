@@ -57,7 +57,7 @@ namespace Hedra.Engine.Player
             }
         }
 
-        public IPlayerInventory Inventory { get; }
+        public IPlayerInventory Inventory { get; protected set; }
         public IMessageDispatcher MessageDispatcher { get; set; }
         public int ConsecutiveHits { get; private set; }
         public bool IsAttacking { get; set; }
@@ -546,6 +546,13 @@ namespace Hedra.Engine.Player
         public void SetSkillPoints(Type Skill, int Points) => throw new NotImplementedException();
 
         public T SearchSkill<T>() where T : AbstractBaseSkill => throw new NotImplementedException();
- 
+
+        public void AddOrDropItem(Item Item)
+        {
+            if (!Inventory.AddItem(Item))
+            {
+                World.DropItem(Item, Position);
+            }
+        }
     }
 }

@@ -90,5 +90,6 @@ namespace Hedra.EntitySystem
         Item[] GetMainEquipment();
         void SetMainEquipment(Item[] Equipment);
         void DoIgnoringHitCombo(Action Lambda);
+        void AddOrDropItem(Item Item);
     }
 }

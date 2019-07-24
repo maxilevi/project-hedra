@@ -127,6 +127,7 @@ well = well
 anvil = anvil
 campfire = campfire
 workbench = workbench
+loom = loom
 use_anvil = USE ANVIL
 use_campfire = USE CAMPFIRE
 use_well = USE WELL

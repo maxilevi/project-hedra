@@ -62,7 +62,6 @@ namespace Hedra.Engine.Player
         public UserInterface UI { get; set; }
         public IVehicle Boat { get; }
         public IVehicle Glider { get; }
-        public IPlayerInventory Inventory { get; }
         public RealmHandler Realms { get; }
         private PlayerInventoryInterface InventoryInterface { get; }
         public QuestInventory Questing { get; }

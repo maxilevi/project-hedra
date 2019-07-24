@@ -193,6 +193,11 @@ namespace HedraTests.Player
             throw new NotImplementedException();
         }
 
+        public void AddOrDropItem(Item Item)
+        {
+            throw new NotImplementedException();
+        }
+
         public Item[] GetMainEquipment { get; }
         public Item Ring { get; set; }
         public float BaseSpeed { get; }

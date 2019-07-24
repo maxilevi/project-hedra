@@ -16,7 +16,12 @@ namespace Hedra.Mission.Blocks
         {
             _reward = Reward;
         }
-        
+
+        protected override void OnTalkingEnded(IEntity Talker)
+        {
+            base.OnTalkingEnded(Talker);
+            Owner.Questing.Trigger();
+        }
 
         private static DialogObject DialogFromReward(QuestReward Reward)
         {
@@ -100,9 +105,9 @@ namespace Hedra.Mission.Blocks
             }
         }
 
-        public override void End()
+        public override void Cleanup()
         {
-            base.End();
+            base.Cleanup();
             GiveReward();
             Giver.ShowIcon(null);
         }
