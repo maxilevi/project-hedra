@@ -241,14 +241,18 @@
     <Compile Include="Engine\QuestSystem\QuestThoughtsComponent.cs" />
     <Compile Include="Engine\Rendering\UI\CompanionProfileUIElement.cs" />
     <Compile Include="Engine\Rendering\UI\ProfileUIElement.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\SpawnCampfire.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\SpawnCampfireDesign.cs" />
     <Compile Include="Items\EquipmentType.cs" />
     <Compile Include="Items\ItemTier.cs" />
     <Compile Include="Mission\Blocks\CollectMission.cs" />
     <Compile Include="Mission\Blocks\CraftMission.cs" />
     <Compile Include="Mission\Blocks\EndMission.cs" />
+    <Compile Include="Mission\Blocks\FindStructureMission.cs" />
     <Compile Include="Mission\Blocks\ItemMission.cs" />
     <Compile Include="Mission\Blocks\MissionBlock.cs" />
     <Compile Include="Mission\Blocks\TalkMission.cs" />
+    <Compile Include="Mission\DialogObject.cs" />
     <Compile Include="Mission\ItemCollect.cs" />
     <Compile Include="Mission\MissionDesign.cs" />
     <Compile Include="Mission\MissionObject.cs" />
@@ -257,6 +261,8 @@
     <Compile Include="ModelHandlers\BeetleHandler.cs" />
     <Compile Include="Mission\MissionBuilder.cs" />
     <Compile Include="Rendering\Graphics2D.cs" />
+    <Compile Include="Structures\SpawnVillage.cs" />
+    <Compile Include="Structures\SpawnVillageDesign.cs" />
     <Compile Include="User\CommandManager.cs" />
     <Compile Include="User\WordFilter.cs" />
     <Compile Include="Components\BlacksmithComponent.cs" />
@@ -682,10 +688,6 @@
     <Compile Include="Engine\StructureSystem\Overworld\GraveyardDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\Obelisk.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\ObeliskDesign.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\SpawnCampfire.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\SpawnCampfireDesign.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\SpawnVillage.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\SpawnVillageDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\TravellingMerchantDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\Village.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\VillageDesign.cs" />
@@ -14264,10 +14266,9 @@
     <Content Include="Scripts\Missions\CollectAndCraft.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Scripts\Missions\QuestCore.py">
+    <Content Include="Scripts\Missions\VisitSpawnVillage.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Scripts\Missions\VisitSpawnVillage.py" />
     <Content Include="Scripts\TextDisplay.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

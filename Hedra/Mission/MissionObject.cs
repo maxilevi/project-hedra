@@ -15,16 +15,14 @@ namespace Hedra.Mission
         private IHumanoid _giver;
         private QuestView _view;
         
-        public MissionObject(MissionBlock[] Blocks, string OpeningDialogKeyword, object[] OpeningDialogArguments)
+        public MissionObject(MissionBlock[] Blocks, DialogObject Dialog)
         {
-            this.OpeningDialogKeyword = OpeningDialogKeyword;
-            this.OpeningDialogArguments = OpeningDialogArguments;
+            OpeningDialog = Dialog; 
             _blocks = Blocks;
             _index = -1;
         }
 
-        public string OpeningDialogKeyword { get; }
-        public object[] OpeningDialogArguments { get; }
+        public DialogObject OpeningDialog { get; }
         public bool HasLocation => Current.HasLocation;
         public Vector3 Location => Current.Location;
         public string Description => Current.Description;

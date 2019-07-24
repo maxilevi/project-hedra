@@ -1,6 +1,7 @@
+using Hedra.Engine.StructureSystem.Overworld;
 using OpenTK;
 
-namespace Hedra.Engine.StructureSystem.Overworld
+namespace Hedra.Structures
 {
     public class SpawnVillage : Village
     {

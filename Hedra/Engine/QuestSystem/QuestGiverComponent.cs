@@ -64,7 +64,7 @@ namespace Hedra.Engine.QuestSystem
             _quest?.Dispose();
             _quest = _questArchetype.Build(Parent.Position, Parent, player);
             RemoveThoughtsIfNecessary();
-            Parent.AddComponent(new QuestThoughtsComponent(Parent, _quest.OpeningDialogKeyword, _quest.OpeningDialogArguments));
+            Parent.AddComponent(new QuestThoughtsComponent(Parent, _quest.OpeningDialog));
         }
 
         private void RemoveThoughtsIfNecessary()

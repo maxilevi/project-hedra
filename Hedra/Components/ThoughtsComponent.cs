@@ -33,5 +33,8 @@ namespace Hedra.Components
         public override void Update()
         {
         }
+        
+        public virtual Translation[] BeforeDialog { get; } = new Translation[0];
+        public virtual Translation[] AfterDialog { get; }= new Translation[0];
     }
 }

@@ -131,9 +131,8 @@ namespace Hedra.Components
         private Translation SelectMainThought()
         {
             if (_thought != null) return _thought;
-            var thoughtComponent = Parent.SearchComponent<ThoughtsComponent>();
-            if (thoughtComponent != null)
-                return _thought = thoughtComponent.Thoughts[Utils.Rng.Next(0, thoughtComponent.Thoughts.Length)];
+            if (ThoughtComponent != null)
+                return _thought = ThoughtComponent.Thoughts[Utils.Rng.Next(0, ThoughtComponent.Thoughts.Length)];
             return null;
         }
 
@@ -162,11 +161,27 @@ namespace Hedra.Components
         {
             if (_dialogCreated) return;
             _dialogCreated = true;
+            
             var dialog = SelectMainThought();
-            if(dialog != null)
-                _lines.Insert(0, dialog);
-            if (_lines.Count == 0)
-                _lines.Add(Phrases[Utils.Rng.Next(0, Phrases.Length)]);
+            _lines.AddRange(GetBeforeLines());
+            if(dialog != null) _lines.Insert(0, dialog);
+            _lines.AddRange(GetAfterLines());
+            
+            if (_lines.Count == 0) _lines.Add(Phrases[Utils.Rng.Next(0, Phrases.Length)]);
+        }
+
+        private Translation[] GetBeforeLines()
+        {
+            if (ThoughtComponent != null)
+                return ThoughtComponent.BeforeDialog;
+            return new Translation[0];
+        }
+        
+        private Translation[] GetAfterLines()
+        {
+            if (ThoughtComponent != null)
+                return ThoughtComponent.AfterDialog;
+            return new Translation[0];
         }
 
         private void TalkToPlayer()
@@ -249,5 +264,7 @@ namespace Hedra.Components
         {
             Translation.Default("...")
         };
+        
+        private ThoughtsComponent ThoughtComponent => Parent.SearchComponent<ThoughtsComponent>();
     }
 }

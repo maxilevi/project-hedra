@@ -12,20 +12,13 @@ namespace Hedra.Mission.Blocks
     {
         public event OnTalkEventHandler OnTalk;
         public IHumanoid Humanoid { get; set; }
-        private readonly string _keyword;
-        private readonly object[] _arguments;
+        private readonly DialogObject _dialog;
         private TalkComponent _talk;
         private bool _isCompleted;
 
-        protected TalkMission(DialogObject Dialog)
+        public TalkMission(DialogObject Dialog)
         {
-            _keyword = Dialog.Key;
-            _arguments = Dialog.Params;   
-        }
-
-        public TalkMission(string Keyword, params object[] Arguments)
-            : this(new DialogObject { Key = Keyword, Params = Arguments })
-        {
+            _dialog = Dialog;
         }
 
         public override void Setup()
@@ -38,7 +31,7 @@ namespace Hedra.Mission.Blocks
 
         private void OnTalkingStarted(IEntity Talker)
         {
-            var thoughts = new QuestThoughtsComponent(Humanoid, _keyword, _arguments);
+            var thoughts = new QuestThoughtsComponent(Humanoid, _dialog);
             Humanoid.AddComponent(thoughts);
             OnTalk?.Invoke(Talker);
         }
@@ -52,7 +45,9 @@ namespace Hedra.Mission.Blocks
         {
             _talk.AddDialogLine(Translation.Default(Text));
         }
-        
+
+        public override DialogObject DefaultOpeningDialog => default(DialogObject);
+
         public override void Cleanup()
         {
             Humanoid.RemoveComponent(Humanoid.SearchComponent<TalkComponent>());
@@ -69,11 +64,5 @@ namespace Hedra.Mission.Blocks
         public override Vector3 Location => Humanoid.Position;
         public override string ShortDescription => Translations.Get("quest_speak_short", Humanoid.Name);
         public override string Description => Translations.Get("quest_speak_description", Humanoid.Name);
-        
-        protected struct DialogObject
-        {
-            public string Key { get; set; }
-            public object[] Params { get; set; }
-        }
     }
 }

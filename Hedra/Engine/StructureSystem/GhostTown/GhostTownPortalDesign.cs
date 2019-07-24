@@ -16,7 +16,6 @@ namespace Hedra.Engine.StructureSystem.GhostTown
     {
         public override int PlateauRadius => 140;
         public override VertexData Icon { get; } = CacheManager.GetModel(CacheItem.PortalIcon);
-        public override VertexData QuestIcon => Icon;
         protected override int StructureChance => StructureGrid.GhostTownPortalChance;
         protected override CacheItem? Cache => CacheItem.Portal;
         protected override Vector3 Scale => Vector3.One * 10;

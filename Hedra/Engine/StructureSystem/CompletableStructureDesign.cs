@@ -7,7 +7,6 @@ namespace Hedra.Engine.StructureSystem
     public abstract class CompletableStructureDesign<T> : StructureDesign, ICompletableStructureDesign, IFindableStructureDesign where T : BaseStructure, ICompletableStructure
     {
         public abstract string DisplayName { get; }
-        public abstract VertexData QuestIcon { get; }
         protected abstract string GetShortDescription(T Structure);
         protected abstract string GetDescription(T Structure);
         public string GetDescription(IStructure Structure) => GetDescription((T) Structure);

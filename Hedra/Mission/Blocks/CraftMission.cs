@@ -34,7 +34,18 @@ namespace Hedra.Mission.Blocks
                 );
             }
         }
-        
+
+        public override DialogObject DefaultOpeningDialog => new DialogObject
+        {
+            Keyword = Station != CraftingStation.None ? "quest_craft_dialog" : "quest_craft_anywhere_dialog",
+            Arguments = Station == CraftingStation.None
+                ? new object[] {Items.First().ToString().ToUpperInvariant()}
+                : new object[]
+                {
+                    Items.First().ToString().ToUpperInvariant(),
+                    Translations.Get(Station.ToString().ToLowerInvariant()).ToUpperInvariant()
+                }
+        };
         public CraftingStation Station { get; set; }
     }
 }

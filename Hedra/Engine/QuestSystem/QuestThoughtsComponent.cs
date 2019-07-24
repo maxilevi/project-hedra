@@ -1,16 +1,25 @@
+using System.Linq;
 using Hedra.Components;
+using Hedra.Engine.Localization;
 using Hedra.EntitySystem;
+using Hedra.Mission;
 
 namespace Hedra.Engine.QuestSystem
 {
     public class QuestThoughtsComponent : ThoughtsComponent
     {
-        public QuestThoughtsComponent(IEntity Entity, string Keyword, params object[] Parameters) : base(Entity, Parameters)
+        private readonly Translation[] _beforeDialog;
+        private readonly Translation[] _afterDialog;
+        public QuestThoughtsComponent(IEntity Entity, DialogObject Dialog) : base(Entity, Dialog.Arguments)
         {
-            ThoughtKeyword = Keyword;
+            _beforeDialog = Dialog.BeforeDialog.Select(Translation.Default).ToArray();
+            _afterDialog = Dialog.AfterDialog.Select(Translation.Default).ToArray();
+            ThoughtKeyword = Dialog.Keyword;
             UpdateThoughts();
         }
 
         protected override string ThoughtKeyword { get; }
+        public override Translation[] AfterDialog => _afterDialog;
+        public override Translation[] BeforeDialog => _beforeDialog;
     }
 }

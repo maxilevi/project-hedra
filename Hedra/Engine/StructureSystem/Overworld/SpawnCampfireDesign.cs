@@ -1,5 +1,6 @@
 using System;
 using Hedra.BiomeSystem;
+using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
@@ -7,6 +8,7 @@ using Hedra.Engine.QuestSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Mission;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.Overworld

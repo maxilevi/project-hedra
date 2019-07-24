@@ -218,8 +218,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
         }
 
         public override string DisplayName => Translations.Get("structure_bandit_camp");
-        
-        public override VertexData QuestIcon => Icon;
 
         protected override string GetShortDescription(BanditCamp Structure)
         {

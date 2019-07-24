@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Hedra.Engine.QuestSystem;
 using Hedra.Mission.Blocks;
@@ -10,8 +11,6 @@ namespace Hedra.Mission
     {
         public event OnMissionEnd MissionEnd;
         private readonly List<MissionBlock> _designs;
-        private string _thoughtsKeyword;
-        private object[] _thoughtsArguments;
 
         public MissionBuilder()
         {
@@ -28,19 +27,15 @@ namespace Hedra.Mission
             Reward = New;
         }
 
-        public void SetOpeningDialog(string Keyword, object[] Arguments)
-        {
-            _thoughtsKeyword = Keyword;
-            _thoughtsArguments = Arguments;
-        }
-
-        public QuestReward Reward { get; private set; }
+        public QuestReward Reward { get; private set; } = new QuestReward();
 
         public MissionObject Mission
         {
             get
             {
-                var mission = new MissionObject(_designs.ToArray(), _thoughtsKeyword, _thoughtsArguments);
+                if(_designs.Count == 0)
+                    throw new ArgumentOutOfRangeException($"A mission needs at least 1 mission block");
+                var mission = new MissionObject(_designs.ToArray(), _designs[0].OpeningDialog);
                 mission.MissionEnd += MissionEnd;
                 return mission;
             }

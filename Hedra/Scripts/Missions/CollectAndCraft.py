@@ -18,10 +18,7 @@ def setup_timeline(position, giver, owner, rng):
     if has_crafting:
         add_craft_mission(builder, owner, giver, items)
     
-    keyword, arguments = get_opening_dialog(items)
     reward = build_reward(items, rng)
-    
-    builder.SetOpeningDialog(keyword, arguments)
     builder.SetReward(reward)
     return builder
 
@@ -37,15 +34,14 @@ def add_collect_mission(builder, giver, owner, rng):
         builder.MissionEnd += lambda: collect.ConsumeItems()
     return has_crafting, items
 
-def get_opening_dialog(items):
-    params = Array[Object]([', '.join(map(lambda i: i.ToString(), items)).ToUpperInvariant()])
-    return 'quest_collect_dialog', params
-
 def add_craft_mission(builder, owner, giver, previous_items):
     recipe, station, item_collect = random_crafts(previous_items)
 
-    keyword, arguments = get_craft_thoughts(station, item_collect)
-    talk = TalkMission(keyword, arguments)
+    craft = CraftMission()
+    craft.Station = station
+    craft.Items = Array[ItemCollect]([item_collect])
+
+    talk = TalkMission(craft.DefaultOpeningDialog)
     def give_recipe():
         if owner.Crafting.HasRecipe(recipe.Name):
             return
@@ -56,23 +52,9 @@ def add_craft_mission(builder, owner, giver, previous_items):
     talk.Humanoid = giver
     talk.OnTalk += lambda _: give_recipe()
 
-    craft = CraftMission()
-    craft.Station = station
-    craft.Items = Array[ItemCollect]([item_collect])
-
-
     builder.Next(talk)
     builder.Next(craft)
     builder.MissionEnd += lambda: craft.ConsumeItems()
-
-def get_craft_thoughts(station, item_collect):
-    name = item_collect.ToString().ToUpperInvariant()
-    station_name = translate(station.ToString().ToLowerInvariant()).ToUpperInvariant()
-    params = Array[Object]([name, station_name])
-    
-    if station != CraftingStation.None:
-        return 'quest_craft_dialog', params
-    return 'quest_craft_anywhere_dialog', params
     
 def select_items(owner, rng):
     templates = random_items(owner, rng)

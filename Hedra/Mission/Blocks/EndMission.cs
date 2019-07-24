@@ -28,8 +28,8 @@ namespace Hedra.Mission.Blocks
             if (Reward.HasExperience)
                 return new DialogObject
                 {
-                    Key = "quest_complete_reward_dialog",
-                    Params = new object[]
+                    Keyword = "quest_complete_reward_dialog",
+                    Arguments = new object[]
                     {
                         $"{Reward.Experience} {Translations.Get("quest_experience")}"
                     }
@@ -37,8 +37,8 @@ namespace Hedra.Mission.Blocks
             if (Reward.HasGold)
                 return new DialogObject
                 {
-                    Key = "quest_complete_reward_dialog",
-                    Params = new object[]
+                    Keyword = "quest_complete_reward_dialog",
+                    Arguments = new object[]
                     {
                         $"{Reward.Gold} {Translations.Get("quest_gold")}"
                     }
@@ -46,8 +46,8 @@ namespace Hedra.Mission.Blocks
             if (Reward.HasItem)
                 return new DialogObject
                 {
-                    Key = "quest_complete_reward_dialog",
-                    Params = new object[]
+                    Keyword = "quest_complete_reward_dialog",
+                    Arguments = new object[]
                     {
                         MakeItemString(Reward.Item)
                     }
@@ -55,16 +55,16 @@ namespace Hedra.Mission.Blocks
             if (Reward.HasSkillPoint)
                 return new DialogObject
                 {
-                    Key = "quest_complete_reward_dialog",
-                    Params = new object[]
+                    Keyword = "quest_complete_reward_dialog",
+                    Arguments = new object[]
                     {
                         $"{Reward.SkillPoint} {Translations.Get("quest_skill_point")}"
                     }
                 };
             return new DialogObject
             {
-                Key = "quest_complete_dialog",
-                Params = new object[0]
+                Keyword = "quest_complete_dialog",
+                Arguments = new object[0]
             };
         }
 

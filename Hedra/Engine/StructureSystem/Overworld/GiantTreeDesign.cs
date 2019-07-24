@@ -22,7 +22,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
     {
         public override int PlateauRadius { get; } = 700;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.BossIcon);
-        public override VertexData QuestIcon => Icon;
 
         public override void Build(CollidableStructure Structure)
         {
@@ -32,8 +31,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var originalModel = CacheManager.GetModel(CacheItem.GiantTree);
             var model = originalModel.ShallowClone();
 
-            Matrix4 scaleMatrix = Matrix4.CreateScale(Vector3.One * 100f);
-            Matrix4 transMatrix = Matrix4.CreateRotationY(rng.NextFloat() * 360 * Mathf.Radian);
+            var scaleMatrix = Matrix4.CreateScale(Vector3.One * 100f);
+            var transMatrix = Matrix4.CreateRotationY(rng.NextFloat() * 360 * Mathf.Radian);
             transMatrix *= Matrix4.CreateTranslation(position + Vector3.UnitY * 7f);
             model.Transform(scaleMatrix * transMatrix);
 

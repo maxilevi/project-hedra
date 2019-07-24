@@ -7,6 +7,7 @@ namespace Hedra.Mission.Blocks
 {
     public abstract class MissionBlock
     {
+        private DialogObject _newDialog;
         public IPlayer Owner { get; set; }
         public IHumanoid Giver { get; set; }
         public abstract bool IsCompleted { get; }
@@ -16,6 +17,14 @@ namespace Hedra.Mission.Blocks
         public virtual Vector3 Location { get; }
         public abstract string ShortDescription { get; }
         public abstract string Description { get; }
+        public abstract DialogObject DefaultOpeningDialog { get; }
+        public void OverrideOpeningDialog(DialogObject Dialog)
+        {
+            _newDialog = Dialog;
+        }
+
+        public DialogObject OpeningDialog => _newDialog ?? DefaultOpeningDialog;
+        
         public virtual void Cleanup()
         {
             
