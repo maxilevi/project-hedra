@@ -19,7 +19,7 @@ using OpenTK;
 
 namespace Hedra.AISystem.Humanoid
 {
-    public sealed class RoamingVillagerAIComponent : RawMovementHumanoidAIComponent
+    public sealed class RoamingVillagerAIComponent : TraverseHumanoidAIComponent
     {
         private const int BenchSearchRadius = 24;
         private const int TalkSearchRadius = 8;
@@ -114,7 +114,7 @@ namespace Hedra.AISystem.Humanoid
 
         private void ManageInteractions()
         {
-            if ((Parent.BlockPosition.Xz - _lastPosition).LengthSquared < 1) return;
+            if ((Parent.BlockPosition.Xz - _lastPosition).LengthSquared < Chunk.BlockSize*Chunk.BlockSize) return;
             _lastPosition = Parent.BlockPosition.Xz;
             if (ShouldSit && CanSit(out var bench))
                 Sit(bench);
@@ -262,7 +262,7 @@ namespace Hedra.AISystem.Humanoid
 
         private bool ShouldTalk => true;//Utils.Rng.Next(0, 2) == 1;
         
-        protected float WaitTime => 4;//6 + Utils.Rng.NextFloat() * 10;
+        protected float WaitTime => 8 + Utils.Rng.NextFloat() * 10;
 
         protected Vector3 NewPoint => Graph.GetNearestVertex(RandomPointInsideVillage).ToVector3();
     }

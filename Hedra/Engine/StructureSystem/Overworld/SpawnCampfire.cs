@@ -14,6 +14,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public override void Dispose()
         {
             base.Dispose();
+            Villager.Dispose();
             SpawnCampfireDesign.Spawned  = false;
         }
     }

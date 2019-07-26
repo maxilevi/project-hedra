@@ -159,7 +159,7 @@ namespace Hedra.Engine.Management
                 MainBuffer.CaptureData();
                 BulkDraw();
                 MainBuffer.UnCaptureData();
-            }
+             }
              MainBuffer.Draw();
             
             UIRenderer.Draw();
@@ -168,7 +168,7 @@ namespace Hedra.Engine.Management
             
             #if DEBUG
             {
-                ErrorCode code = Renderer.GetError();
+                var code = Renderer.GetError();
                 if(code != ErrorCode.NoError)
                     Log.WriteResult(false, "OpenGL error: "+code.ToString());
             }

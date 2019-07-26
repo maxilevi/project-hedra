@@ -31,8 +31,8 @@ namespace Hedra.Engine.Management
          
         public static void Update()
         {
-             lock(Lock)
-             {
+            lock(Lock)
+            {
                 for(var i = Routines.Count-1; i > -1; i--)
                 {
                     var passed = Routines[i].MoveNext();

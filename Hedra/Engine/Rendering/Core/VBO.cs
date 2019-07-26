@@ -6,21 +6,27 @@
  */
 
 using System;
+using System.Drawing;
 using Hedra.Engine.Management;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Rendering.Core
 {
+    public delegate void OnIdChanged();
     /// <summary>
     /// A Vertex Buffer Object.
     /// </summary>
     public abstract class VBO : GLObject<VBO>
     {
+        public OnIdChanged IdChanged;
         public abstract int Count { get; protected set; }
         public abstract int Stride { get; }
         public abstract int SizeInBytes { get; protected set; }
         public abstract Type ElementType { get; protected set; }
+        public abstract void Bind();
+        public abstract void Unbind();
+        public abstract VertexAttribPointerType PointerType { get; }
     }
     
     public sealed class VBO<T> : VBO where T : struct
@@ -49,15 +55,15 @@ namespace Hedra.Engine.Rendering.Core
         public override int SizeInBytes { get; protected set; }
         
         /// <summary>
+        /// The VertexAttribPointerType of this VBO.
+        /// </summary>
+        public override VertexAttribPointerType PointerType { get; }
+        
+        /// <summary>
         /// The BufferTarget this VBO is bound to.
         /// </summary>
         public BufferTarget BufferTarget { get; }
-        
-        /// <summary>
-        /// The VertexAttribPointerType of this VBO.
-        /// </summary>
-        public VertexAttribPointerType PointerType { get; }
-        
+
         /// <summary>
         /// The hint to use when uploading data to the buffer.
         /// </summary>
@@ -75,24 +81,29 @@ namespace Hedra.Engine.Rendering.Core
         /// <param name="Hint">The BufferUsageHint this VBO should use.</param>
         public VBO(T[] Data, int SizeInBytes, VertexAttribPointerType PointerType, BufferTarget BufferTarget = BufferTarget.ArrayBuffer, BufferUsageHint Hint = BufferUsageHint.StaticDraw)
         {
-            this.Stride = Data is Vector4[] ? 4 : Data is Vector3[] ?  3 : Data is Vector2[] ? 2 : 1;
+            this.Stride = Data is Vector4[] ? 4 : Data is Vector3[] ? 3 : Data is Vector2[] ? 2 : 1;
             this.ElementType = Data.GetType().GetElementType();
             this.BufferTarget = BufferTarget;
             this.PointerType = PointerType;
             this.Hint = Hint;
-            
-            Renderer.GenBuffers(1, out _id);
-            Update(Data, SizeInBytes);
+            this.Count = Data.Length;
+            this.SizeInBytes = SizeInBytes;
+            if (!VBOCache.Exists(Data, SizeInBytes, PointerType, BufferTarget, Hint, out _id))
+            {
+                VBOCache.Create(Data, SizeInBytes, PointerType, BufferTarget, Hint, out _id);
+            }
         }
 
         public void Update(T[] Data, int Bytes)
         {
-            Bind();
-            Renderer.BufferData(BufferTarget, (IntPtr) Bytes, IntPtr.Zero, Hint);
-            Renderer.BufferSubData(BufferTarget, IntPtr.Zero, (IntPtr) Bytes, Data);
-            Unbind();
             Count = Data.Length;
             SizeInBytes = Bytes;
+            var originalId = _id;
+            VBOCache.Update(Data, SizeInBytes, PointerType, BufferTarget, Hint, ref _id);
+            if (_id != originalId)
+            {
+                IdChanged?.Invoke();
+            }
         }
 
         public void Update(T[] Data, int Offset, int Bytes)
@@ -108,16 +119,16 @@ namespace Hedra.Engine.Rendering.Core
             Unbind();
         }
 
-        public void Bind()
+        public override void Bind()
         {
             Renderer.BindBuffer(BufferTarget, Id);
         }
 
-        public void Unbind()
+        public override void Unbind()
         {
             Renderer.BindBuffer(BufferTarget, 0);
         }
-        
+
         /// <summary>
         /// Deletes all the data from the video card. It is automatically called at the end of the program.
         /// </summary>
@@ -126,7 +137,7 @@ namespace Hedra.Engine.Rendering.Core
             if (_disposed) return;
             base.Dispose();
             _disposed = true;
-            Executer.ExecuteOnMainThread( () => Renderer.DeleteBuffers(1, ref _id) );
+            VBOCache.Delete(ref _id);
         }
     }
 }

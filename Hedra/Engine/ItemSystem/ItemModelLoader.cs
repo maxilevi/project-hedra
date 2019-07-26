@@ -15,6 +15,7 @@ namespace Hedra.Engine.ItemSystem
     public static class ItemModelLoader
     {
         private static readonly Dictionary<string, VertexData> ModelCache;
+        private static readonly object Lock = new object();
 
         static ItemModelLoader()
         {
@@ -24,11 +25,13 @@ namespace Hedra.Engine.ItemSystem
         public static VertexData Load(ItemModelTemplate ModelTemplate)
         {
             var path = ModelTemplate.Path;
-            if (!ModelCache.ContainsKey(path))
+            lock (Lock)
             {
-                ModelCache.Add(path, AdjustModel(AssetManager.LoadModel(path, Vector3.One)));
+                if (!ModelCache.ContainsKey(path))
+                {
+                    ModelCache.Add(path, AdjustModel(AssetManager.LoadModel(path, Vector3.One)));
+                }
             }
-
             var returnModel = ModelCache[path].Clone();
             returnModel.Transform(Matrix4.CreateScale(ModelTemplate.Scale));
             return returnModel;

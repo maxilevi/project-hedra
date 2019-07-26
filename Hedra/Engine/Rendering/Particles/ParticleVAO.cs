@@ -11,24 +11,27 @@ namespace Hedra.Engine.Rendering.Particles
         public ParticleVAO(VBO<Vector3> Vertices, VBO<Vector3> Normals, VBO<Vector4> ParticleBuffer)
             : base(Vertices, Normals)
         {
-            Bind(false);
+            void Rebind()
+            {
+                Bind(false);
+                ParticleBuffer.Bind();
+                Renderer.VertexAttribPointer(2, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes * InstanceStride, IntPtr.Zero);            
+                Renderer.VertexAttribPointer(3, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes * InstanceStride, (IntPtr) (Vector4.SizeInBytes * 1));
+                Renderer.VertexAttribPointer(4, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes * InstanceStride, (IntPtr) (Vector4.SizeInBytes * 2));
+                Renderer.VertexAttribPointer(5, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes * InstanceStride, (IntPtr) (Vector4.SizeInBytes * 3));
+                Renderer.VertexAttribPointer(6, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes * InstanceStride, (IntPtr) (Vector4.SizeInBytes * 4));
             
-            ParticleBuffer.Bind();
-            Renderer.VertexAttribPointer(2, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes * InstanceStride, IntPtr.Zero);            
-            Renderer.VertexAttribPointer(3, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes * InstanceStride, (IntPtr) (Vector4.SizeInBytes * 1));
-            Renderer.VertexAttribPointer(4, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes * InstanceStride, (IntPtr) (Vector4.SizeInBytes * 2));
-            Renderer.VertexAttribPointer(5, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes * InstanceStride, (IntPtr) (Vector4.SizeInBytes * 3));
-            Renderer.VertexAttribPointer(6, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes * InstanceStride, (IntPtr) (Vector4.SizeInBytes * 4));
-            
-            Renderer.VertexAttribDivisor(2,1);
-            Renderer.VertexAttribDivisor(3,1);
-            Renderer.VertexAttribDivisor(4,1);
-            Renderer.VertexAttribDivisor(5,1);
-            Renderer.VertexAttribDivisor(6,1);
-            ParticleBuffer.Unbind();
-            
-            Unbind(false);
-            
+                Renderer.VertexAttribDivisor(2,1);
+                Renderer.VertexAttribDivisor(3,1);
+                Renderer.VertexAttribDivisor(4,1);
+                Renderer.VertexAttribDivisor(5,1);
+                Renderer.VertexAttribDivisor(6,1);
+                ParticleBuffer.Unbind();
+                Unbind(false);
+            }
+            Rebind();
+            ParticleBuffer.IdChanged += Rebind;
+
             Add(ParticleBuffer);
         }
 

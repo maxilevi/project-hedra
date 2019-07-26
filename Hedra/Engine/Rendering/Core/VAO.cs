@@ -16,12 +16,12 @@ namespace Hedra.Engine.Rendering.Core
     {
         protected uint _id;
         public override uint Id => _id;
-        private readonly List<uint> _bufferIds;
+        private readonly List<VBO> _buffers;
         private bool _disposed;
 
         protected VAO()
         {
-            _bufferIds = new List<uint>();
+            _buffers = new List<VBO>();
         }
         
         public virtual void Bind(bool EnableAttributes = true)
@@ -36,7 +36,7 @@ namespace Hedra.Engine.Rendering.Core
 
         protected void Add(VBO Buffer)
         {
-            _bufferIds.Add(Buffer.Id);
+            _buffers.Add(Buffer);
         }
         
         public void Dispose()
@@ -44,14 +44,15 @@ namespace Hedra.Engine.Rendering.Core
             if (_disposed) return;
             base.Dispose();
             _disposed = true;
+            _buffers.Clear();
             Executer.ExecuteOnMainThread(delegate
             {
                 Renderer.DeleteVertexArrays(1, ref _id);
             });
         }
 
-        public uint[] VBOIds => _bufferIds.ToArray();
-        public VBO[] VBOs => _bufferIds.Select(VBO.GetById).ToArray();
+        public uint[] VBOIds => _buffers.Select(B => B.Id).ToArray();
+        public VBO[] VBOs => _buffers.ToArray();
         public abstract Type[] Types { get; }
     }
     
@@ -60,15 +61,22 @@ namespace Hedra.Engine.Rendering.Core
         public VAO(VBO<T1> Buffer)
         {
             Renderer.GenVertexArrays(1, out _id);
-            Bind(false);
-            
-            Buffer.Bind();
-            Renderer.VertexAttribPointer(0, Buffer.Stride, Buffer.PointerType, false, 0, 0);
-            Buffer.Unbind();
-            
-            Unbind(false);
+            BindAndAdd(0, Buffer);
+        }
 
+        protected void BindAndAdd(int Position, VBO Buffer)
+        {
+            void Rebind()
+            {
+                Bind(false);
+                Buffer.Bind();
+                Renderer.VertexAttribPointer(Position, Buffer.Stride, Buffer.PointerType, false, 0, 0);
+                Buffer.Unbind();
+                Unbind(false);
+            }
+            Rebind();
             Add(Buffer);
+            Buffer.IdChanged += Rebind;
         }
 
         public override void Bind(bool EnableAttributes = true)
@@ -92,15 +100,7 @@ namespace Hedra.Engine.Rendering.Core
     {
         public VAO(VBO<T1> Buffer1, VBO<T2> Buffer2) : base(Buffer1)
         {
-            Bind(false);
-
-            Buffer2.Bind();
-            Renderer.VertexAttribPointer(1, Buffer2.Stride, Buffer2.PointerType, false, 0, 0);
-            Buffer2.Unbind();
-            
-            Unbind(false);
-            
-            Add(Buffer2);
+            BindAndAdd(1, Buffer2);
         }
 
         public override void Bind(bool EnableAttributes = true)
@@ -124,15 +124,7 @@ namespace Hedra.Engine.Rendering.Core
     {
         public VAO(VBO<T1> Buffer1, VBO<T2> Buffer2, VBO<T3> Buffer3) : base(Buffer1, Buffer2)
         {
-            Bind(false);
-            
-            Buffer3.Bind();
-            Renderer.VertexAttribPointer(2, Buffer3.Stride, Buffer3.PointerType, false, 0, 0);
-            Buffer3.Unbind();
-            
-            Unbind(false);
-            
-            Add(Buffer3);
+            BindAndAdd(2, Buffer3);
         }
 
         public override void Bind(bool EnableAttributes = true)
@@ -156,15 +148,7 @@ namespace Hedra.Engine.Rendering.Core
     {
         public VAO(VBO<T1> Buffer1, VBO<T2> Buffer2, VBO<T3> Buffer3, VBO<T4> Buffer4) : base(Buffer1, Buffer2, Buffer3)
         {
-            Bind(false);
-            
-            Buffer4.Bind();
-            Renderer.VertexAttribPointer(3, Buffer4.Stride, Buffer4.PointerType, false, 0, 0);
-            Buffer4.Unbind();
-            
-            Unbind(false);
-            
-            Add(Buffer4);
+            BindAndAdd(3, Buffer4);
         }
 
         public override void Bind(bool EnableAttributes = true)
@@ -189,15 +173,7 @@ namespace Hedra.Engine.Rendering.Core
         public VAO(VBO<T1> Buffer1, VBO<T2> Buffer2, VBO<T3> Buffer3, VBO<T4> Buffer4, VBO<T5> Buffer5)
             : base(Buffer1, Buffer2, Buffer3, Buffer4)
         {
-            Bind(false);
-            
-            Buffer5.Bind();
-            Renderer.VertexAttribPointer(4, Buffer5.Stride, Buffer5.PointerType, false, 0, 0);
-            Buffer5.Unbind();
-            
-            Unbind(false);
-            
-            Add(Buffer5);
+            BindAndAdd(4, Buffer5);
         }
 
         public override void Bind(bool EnableAttributes = true)

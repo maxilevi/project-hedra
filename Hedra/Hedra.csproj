@@ -170,7 +170,6 @@
     <Compile Include="AISystem\Humanoid\CombatAIBehaviour.cs" />
     <Compile Include="AISystem\Humanoid\MageAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\BaseVillagerAIComponent.cs" />
-    <Compile Include="AISystem\Humanoid\RawMovementHumanoidAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\RoamingVillagerAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\TraverseHumanoidAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\VillagerAISettings.cs" />
@@ -239,6 +238,7 @@
     <Compile Include="Engine\QuestSystem\QuestInventory.cs" />
     <Compile Include="Engine\QuestSystem\QuestTemplate.cs" />
     <Compile Include="Engine\QuestSystem\QuestThoughtsComponent.cs" />
+    <Compile Include="Engine\Rendering\Core\VBOCache.cs" />
     <Compile Include="Engine\Rendering\UI\CompanionProfileUIElement.cs" />
     <Compile Include="Engine\Rendering\UI\ProfileUIElement.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\SpawnCampfire.cs" />
@@ -14263,9 +14263,12 @@
     <Content Include="Scripts\Fishing.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\Missions\CatchAPet.py" />
+    <Content Include="Scripts\Missions\ClearGraveyard.py" />
     <Content Include="Scripts\Missions\CollectAndCraft.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\Missions\KillLichAndBringRewards.py" />
     <Content Include="Scripts\Missions\VisitSpawnVillage.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

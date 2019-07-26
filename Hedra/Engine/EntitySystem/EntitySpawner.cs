@@ -63,7 +63,7 @@ namespace Hedra.Engine.EntitySystem
             }
             #endif
             
-            if(!Enabled) return;
+            if(!Enabled || GameSettings.Paused) return;
 
             if (World.Entities.Count >= MobCap || !(Utils.Rng.NextFloat() <= SpawnChance) ) return;
             var desiredPosition = this.PlacementPosition();

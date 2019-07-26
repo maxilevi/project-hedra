@@ -61,6 +61,7 @@ namespace Hedra.Rendering.UI
         
         public void Update()
         {
+            if(!Enabled) return;
             Script.Execute("update_caret", _state);
         }
         

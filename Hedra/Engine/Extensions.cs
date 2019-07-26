@@ -137,9 +137,9 @@ namespace Hedra.Engine
         
         public static Quaternion SlerpExt(Quaternion a, Quaternion b, float blend)
         {
-            Quaternion result = new Quaternion(0, 0, 0, 1);
-            float dot = a.W * b.W + a.X * b.X + a.Y * b.Y + a.Z * b.Z;
-            float blendI = 1f - blend;
+            var result = new Quaternion(0, 0, 0, 1);
+            var dot = a.W * b.W + a.X * b.X + a.Y * b.Y + a.Z * b.Z;
+            var blendI = 1f - blend;
             if (dot < 0)
             {
                 result.W = blendI * a.W + blend * -b.W;
@@ -154,8 +154,18 @@ namespace Hedra.Engine
                 result.Y = blendI * a.Y + blend * b.Y;
                 result.Z = blendI * a.Z + blend * b.Z;
             }
-            return result.Normalized();
+            return result.NormalizedFast();
         }
+
+        public static Quaternion NormalizedFast(this Quaternion Quat)
+        {
+            float x = Quat.X, y = Quat.Y, z = Quat.Z, w = Quat.W;
+            float n = 1f / Mathf.FastSqrt(x * x + y * y + z * z + w * w);
+            Quat.W *= n;
+            Quat.Xyz *= n;
+            return Quat;
+        }
+        
         ///<sumary>
         /// Do NOT touch this function. It's not a real ToMatrix, it's an adhoc version.
         /// For a real one look Matrix4.CreateFromQuaterion();

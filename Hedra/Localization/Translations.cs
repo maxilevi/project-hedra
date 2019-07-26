@@ -61,7 +61,8 @@ namespace Hedra.Localization
 
         private static string Get(string Key,  object[] Params, string AppLanguage)
         {
-            ReloadIfNecessary();
+            if(GameSettings.WatchScriptChanges)
+                ReloadIfNecessary();
             string Fail()
             {
                 if (AppLanguage == GameLanguage.English.ToString())

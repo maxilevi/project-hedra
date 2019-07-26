@@ -40,5 +40,7 @@ namespace Hedra.Mission
                 return mission;
             }
         }
+
+        public bool ReturnToComplete { get; set; } = true;
     }
 }

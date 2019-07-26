@@ -97,6 +97,7 @@ namespace Hedra.Engine.Game
             string dllPath = null;
             if (IntPtr.Size == 8) dllPath = Path + "x64/";
             if (IntPtr.Size == 4) dllPath = Path + "x86/";
+            Log.WriteLine($"Appending '{dllPath}' to the PATH for library finding.");
             Environment.SetEnvironmentVariable("PATH", Environment.GetEnvironmentVariable("PATH") + ";" + dllPath);
             
             _loadedArchitectureFiles = true;

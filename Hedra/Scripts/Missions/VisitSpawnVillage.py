@@ -18,6 +18,7 @@ def setup_timeline(position, giver, owner, rng):
     find.OverrideOpeningDialog(create_dialog(find.Design.DisplayName))
     
     builder.Next(find)
+    builder.ReturnToComplete = False
     return builder
 
 def create_dialog(name):

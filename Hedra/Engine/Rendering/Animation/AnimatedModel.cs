@@ -303,11 +303,18 @@ namespace Hedra.Engine.Rendering.Animation
 
         private void AddJointsToArray(Joint HeadJoint, Matrix4[] JointMatrices)
         {
-            JointMatrices[HeadJoint.Index] = HeadJoint.AnimatedTransform * ScaleMatrix * RotationMatrix *
-                                             HeadJoint.TransformationMatrix * TransformationMatrix * PositionMatrix;
-            for (var i = 0; i < HeadJoint.Children.Count; i++)
+            var scaleAndRotation = ScaleMatrix * RotationMatrix;
+            var transformationAndPosition = TransformationMatrix * PositionMatrix;
+            var queue = new Queue<Joint>();
+            queue.Enqueue(HeadJoint);
+            while (queue.Count != 0)
             {
-                AddJointsToArray(HeadJoint.Children[i], JointMatrices);
+                var current = queue.Dequeue();
+                JointMatrices[current.Index] = current.AnimatedTransform * scaleAndRotation * current.TransformationMatrix * transformationAndPosition;
+                for (var i = 0; i < current.Children.Count; i++)
+                {
+                    queue.Enqueue(current.Children[i]);
+                }
             }
         }
 

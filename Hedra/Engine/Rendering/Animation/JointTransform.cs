@@ -18,11 +18,18 @@ namespace Hedra.Engine.Rendering.Animation
     {
         public Vector3 Position { get; }
         public Quaternion Rotation { get; }
+        
+        private Matrix4 _lastLocalTransform;
+        private Quaternion _lastRotation;
+        private Vector3 _lastPosition;
     
         public JointTransform(Vector3 Position, Quaternion Rotation)
         {
             this.Position = Position;
             this.Rotation = Rotation;
+            _lastLocalTransform = Matrix4.Identity;
+            _lastRotation = Quaternion.Identity;
+            _lastPosition = Vector3.Zero;
         }
     
         /**
@@ -40,9 +47,12 @@ namespace Hedra.Engine.Rendering.Animation
         {
             get
             {
+                if (_lastPosition == Position && _lastRotation == Rotation) return _lastLocalTransform;
+                _lastPosition = Position;
+                _lastRotation = Rotation;
                 var matrix = Matrix4.CreateTranslation(Position);
                 matrix = Rotation.ToMatrix() * matrix;
-                return matrix;
+                return _lastLocalTransform = matrix;
             }
         }
     
@@ -69,7 +79,7 @@ namespace Hedra.Engine.Rendering.Animation
          */
         public static JointTransform Interpolate(JointTransform FrameA, JointTransform FrameB, float Progression)
         {
-            var pos = JointTransform.Interpolate(FrameA.Position, FrameB.Position, Progression);
+            var pos = Interpolate(FrameA.Position, FrameB.Position, Progression);
             var rot = Extensions.SlerpExt(FrameA.Rotation, FrameB.Rotation, Progression);
             return new JointTransform(pos, rot);
         }

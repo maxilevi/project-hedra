@@ -18,12 +18,15 @@ namespace Hedra.Mission
         public MissionObject Build(Vector3 Position, IHumanoid Giver, IPlayer Owner)
         {
             var builder = _design.Execute<MissionBuilder>("setup_timeline", Position, Giver, Owner, Utils.Rng);
-            builder.Next(new EndMission(builder.Reward)
+            if (builder.ReturnToComplete)
             {
-                Humanoid = Giver,
-                Giver = Giver,
-                Owner = Owner
-            });
+                builder.Next(new EndMission(builder.Reward)
+                {
+                    Humanoid = Giver,
+                    Giver = Giver,
+                    Owner = Owner
+                });
+            }
             return builder.Mission;
         }
 

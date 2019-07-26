@@ -33,7 +33,7 @@ def get_base_items(inventory_size, rng):
     ]
     if rng.Next(0, 2) == 1:
         items += [
-            (3, FISHING_ROD),
+            (3, ItemPool.Grab(FISHING_ROD)),
             (4, get_infinity_item(BAIT))
         ]
     return items

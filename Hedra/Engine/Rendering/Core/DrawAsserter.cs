@@ -142,7 +142,7 @@ namespace Hedra.Engine.Rendering.Core
             }
 
             var types = VAOBound.Types;
-            /* We dont check for different sizes because the VAO might have some attributes disabled */
+            /* We don't check for different sizes because the VAO might have some attributes disabled */
             for (var i = 0; i < Renderer.VertexAttributeHandler.Count; ++i)
             {
                 if(inputs[i].Type != types[i])

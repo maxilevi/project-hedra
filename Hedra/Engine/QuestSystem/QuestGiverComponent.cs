@@ -75,7 +75,7 @@ namespace Hedra.Engine.QuestSystem
 
         public override void Dispose()
         {
-            if (_quest.Owner != null)
+            if (_quest != null && _quest.Owner != null)
             {
                 _quest.Owner.Questing.QuestAbandoned -= OnQuestAbandoned;
                 _quest.Owner.Questing.QuestCompleted -= OnQuestCompleted;

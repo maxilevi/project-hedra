@@ -6,6 +6,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Hedra.Engine.Management
 {
@@ -14,28 +15,22 @@ namespace Hedra.Engine.Management
     /// </summary>
     public static class Executer
     {
-        private static readonly List<KeyValuePair<Action, Action>> Functions = new List<KeyValuePair<Action, Action>>();
-        private static readonly List<KeyValuePair<Action, Action>> StandBy = new List<KeyValuePair<Action, Action>>();
-        private static object _lock = new object();
+        private static readonly List<InvokerCall> Functions = new List<InvokerCall>();
+        private static readonly List<InvokerCall> StandBy = new List<InvokerCall>();
+        private static readonly object Lock = new object();
         
         /// <summary>
         /// Executes the give method on the main thread after a frame has passed.
         /// </summary>
          public static void ExecuteOnMainThread(Action Func)
          {
-             lock (_lock)
-                StandBy.Add( new KeyValuePair<Action, Action>(Func, delegate {}) );
-         }
-         
-         public static void ExecuteOnMainThread(Action Func, Action Callback)
-         {
-            lock (_lock)
-                StandBy.Add( new KeyValuePair<Action, Action>(Func, Callback));
+             lock (Lock)
+                StandBy.Add(new InvokerCall(Func));
          }
 
         public static void Update()
         {
-            lock (_lock)
+            lock (Lock)
             {
                 Functions.AddRange(StandBy.ToArray());
                 StandBy.Clear();
@@ -43,10 +38,24 @@ namespace Hedra.Engine.Management
 
             for (var i = 0; i < Functions.Count; i++)
             {
-                Functions[i].Key();
-                Functions[i].Value();
+                Functions[i].Call();
             }
             Functions.Clear();
+        }
+
+        private struct InvokerCall
+        {
+            /* Used for debugging */
+            public StackTrace Trace;
+            public Action Call;
+
+            public InvokerCall(Action Call)
+            {
+                this.Call = Call;
+#if DEBUG
+                Trace = new StackTrace();
+#endif
+            }
         }
     }
 }

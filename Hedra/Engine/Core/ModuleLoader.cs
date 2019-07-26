@@ -14,11 +14,19 @@ namespace Hedra.Engine.Core
     {
         void DoLoadModules(string AppPath);
     }
+
+    public abstract class ModuleLoader<T, U> : ModuleLoader<string, T, U> where T : class, IModuleLoader, new() where U : INamedTemplate
+    {
+        protected override string ParseKey(string Name)
+        {
+            return Name.ToLowerInvariant();
+        }
+    }
     
-    public abstract class ModuleLoader<T, U> : Singleton<T>, IModuleLoader where T : class, IModuleLoader, new() where U : INamedTemplate
+    public abstract class ModuleLoader<S, T, U> : Singleton<T>, IModuleLoader where T : class, IModuleLoader, new() where U : INamedTemplate
     {
         protected readonly object Lock = new object();
-        protected readonly Dictionary<string, U> Templates = new Dictionary<string, U>();
+        protected readonly Dictionary<S, U> Templates = new Dictionary<S, U>();
         protected abstract string FolderPrefix { get; }
         
         public void DoLoadModules(string AppPath)
@@ -32,10 +40,12 @@ namespace Hedra.Engine.Core
                 var templates = Load<U>(modules.Concat(mods).ToArray());
                 foreach (var template in templates)
                 {
-                    Templates.Add(template.Name.ToLowerInvariant(), template);
+                    Templates.Add(ParseKey(template.Name), template);
                 }
             }
         }
+
+        protected abstract S ParseKey(string Name);
 
         public static void LoadModules(string AppPath)
         {

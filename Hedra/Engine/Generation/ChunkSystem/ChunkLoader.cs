@@ -157,6 +157,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private void BuildCandidates(List<Vector3> Candidates)
         {
+            if(World.ToChunkSpace(_closest.Position) == World.ToChunkSpace(_player.Position)) return;
             Candidates.Clear();
             var radius = (int) (GameSettings.ChunkLoaderRadius * .5f);
             for (var x = -radius; x < radius; x++)

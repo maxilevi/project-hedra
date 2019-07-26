@@ -61,7 +61,7 @@ namespace Hedra.Game
 #if DEBUG
             DebugMode = true;
 #endif
-            WatchScriptChanges = DebugMode;
+            WatchScriptChanges = false; // DebugMode;
         }
 
         public static string SettingsPath => $"{GameLoader.AppData}settings.cfg";

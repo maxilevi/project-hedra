@@ -77,7 +77,7 @@ namespace Hedra.Engine.Rendering.Particles
 
         public void Update()
         {
-            if(Time.Paused || !_buffersCreated || _disposed) return;
+            if(Time.Paused || !_buffersCreated || _disposed || _points.Count == 0 && !Emit) return;
 
             for (var i = _tipPoints.Count - 1; i > -1; i--)
             {

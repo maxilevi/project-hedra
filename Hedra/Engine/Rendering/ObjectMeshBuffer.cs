@@ -75,6 +75,7 @@ namespace Hedra.Engine.Rendering
 
         public ObjectMeshBuffer(VertexData ModelData)
         {
+            if(ModelData.IsEmpty) return;
             ModelData.AssertTriangulated();
             Executer.ExecuteOnMainThread(() =>
             {
@@ -231,14 +232,13 @@ namespace Hedra.Engine.Rendering
         public void Dispose()
         {
             _disposed = true;
-
             void DoDispose()
             {
-                Vertices.Dispose();
-                Colors.Dispose();
-                Indices.Dispose();
-                Normals.Dispose();
-                Data.Dispose();
+                Vertices?.Dispose();
+                Colors?.Dispose();
+                Indices?.Dispose();
+                Normals?.Dispose();
+                Data?.Dispose();
             }
 
             if (Data == null)
