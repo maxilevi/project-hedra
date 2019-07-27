@@ -19,7 +19,7 @@ using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;
 
 namespace Hedra.Engine.WorldBuilding
 {
-    public class SleepingPad : InteractableStructure, IUpdatable, ITickable
+    public class SleepingPad : InteractableStructure, ITickable
     {
         public bool IsOccupied => Sleeper != null;
         public IHumanoid Sleeper { get; private set; }
@@ -33,7 +33,7 @@ namespace Hedra.Engine.WorldBuilding
         {
         }
 
-        public override string Message => Translations.Get("to_sleep", Controls.Interact);
+        public override string Message => Translations.Get("to_sleep");
 
         public override int InteractDistance => 12;
 
