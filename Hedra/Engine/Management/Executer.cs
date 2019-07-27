@@ -54,6 +54,8 @@ namespace Hedra.Engine.Management
                 this.Call = Call;
 #if DEBUG
                 Trace = new StackTrace();
+#else
+                Trace = null;
 #endif
             }
         }

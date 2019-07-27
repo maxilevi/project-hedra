@@ -210,7 +210,7 @@ namespace Hedra.Engine.Player
             }
 
             EntityUpdater.Dispatch();
-            Companion?.Entity.Update();
+            Companion.Entity?.Update();
             
             Rotation = new Vector3(0, this.Rotation.Y, 0);
             View.AddedDistance = IsMoving || IsSwimming || IsTravelling ? 3.0f : 0.0f;

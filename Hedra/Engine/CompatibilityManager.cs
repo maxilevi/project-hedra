@@ -9,6 +9,7 @@ using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Geometry;
+using MeshOptimizer;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
@@ -23,13 +24,29 @@ namespace Hedra.Engine
     {
         public static Action<PrimitiveType, int[], DrawElementsType, IntPtr[], int> MultiDrawElementsMethod { get; private set; }
         public static bool SupportsGeometryShaders { get; private set; } = true;
+        public static bool SupportsMeshOptimizer { get; private set; } = true;
 
         public static void Load()
         {
-            CompatibilityManager.DetectGeometryShaderSupport();
-            CompatibilityManager.DefineMultiDrawElementsMethod();
+            DetectGeometryShaderSupport();
+            DefineMultiDrawElementsMethod();
+            DetectMeshOptimizerSupport();
         }
 
+        private static void DetectMeshOptimizerSupport()
+        {
+            SupportsMeshOptimizer = true;
+            try
+            {
+                MeshOperations.OptimizeCache(new uint[0], 0);
+            }
+            catch (DllNotFoundException e)
+            {
+                Log.WriteLine($"Failed to load meshoptimizer with the following error: {e}");
+                SupportsMeshOptimizer = false;
+            }
+        }
+        
         private static void DetectGeometryShaderSupport()
         {
             SupportsGeometryShaders = true;

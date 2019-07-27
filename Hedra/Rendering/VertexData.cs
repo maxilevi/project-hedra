@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Core;
+using Hedra.Engine;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
@@ -246,7 +247,7 @@ namespace Hedra.Rendering
 
         public void Optimize()
         {
-            if (!HasColors) return;
+            if (!HasColors || !CompatibilityManager.SupportsMeshOptimizer) return;
             /* var originalVertices = Vertices.Count; */
             var vertices = new MeshOptimizerVertex[Vertices.Count];
             for (var i = 0; i < vertices.Length; ++i)

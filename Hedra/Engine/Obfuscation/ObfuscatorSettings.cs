@@ -40,4 +40,6 @@
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.User'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Mission'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Crafting'):-rename")]
+[assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Mission.Blocks'):-rename")]
+[assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Structures'):-rename")]
 //[assembly: Obfuscation(Exclude = false, Feature = @"match-name('^Hedra(?!\.Engine).+'):-rename")]

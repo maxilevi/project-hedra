@@ -57,8 +57,8 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             Blocktype = BlockType.Air;
 
             AddBaseHeight(X, Z, ref height, ref Blocktype, out var baseHeight);
-            //AddMountainHeight(X, Z, ref height, ref Blocktype);
-            //AddMountHeight(X, Z, ref height, ref Blocktype, HeightCache);
+            AddMountainHeight(X, Z, ref height, ref Blocktype);
+            AddMountHeight(X, Z, ref height, ref Blocktype, HeightCache);
             AddBigMountainsHeight(X, Z,ref height, ref Blocktype, HeightCache);
             AddLakes(X, Z, ref height);
             AddStones(X, Z, ref height, ref Blocktype, HeightCache);
@@ -90,44 +90,27 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
         {
             if (World.Seed == World.MenuSeed) return;
 
-            var rawMountainHeight = Math.Pow(Math.Min(Math.Max(0f, OpenSimplexNoise.Evaluate(X * 0.00075, Z * 0.00075)), 1), 4);
-            var moutainHeight = rawMountainHeight * 200.0;
+            var rawMountainHeight = Math.Pow(Math.Min(Math.Max(0f, OpenSimplexNoise.Evaluate(X * 0.00025, Z * 0.00025)), 1), 2);
+            var moutainHeight = rawMountainHeight * 256.0;
             if (moutainHeight > 0)
             {
                 var smallerMountains = OpenSimplexNoise.Evaluate(X * 0.02, Z * 0.02) * 12f * OpenSimplexNoise.Evaluate(X * 0.001, Z * 0.001);
                 Height += smallerMountains * Math.Min(1f, rawMountainHeight);
-                if (smallerMountains > 0)
-                    Type = BlockType.Stone;
-                //var evenSmallerMountains = OpenSimplexNoise.Evaluate(X * 0.01, Z * 0.01) * 4f;
-                //Height += smallerMountains * Math.Min(1f, rawMountainHeight);
-                /*
-                var stones = Math.Min(Math.Max(0, OpenSimplexNoise.Evaluate(X * 0.0025, Z * 0.0025) - .5) * 2048.0, 16.0)
-                * Math.Min(moutainHeight, 1);
-                Height += stones;
-                if (stones > 0)
-                {
-                    HeightCache?.Add(new Vector2(X, Z), new []{ (float) stones});
-                    Height += BiomeGenerator.SmallFrequency(X + 234, Z + 12123) * 2.0;
-                    Type = BlockType.Stone;
-                }*/
             }
             Height += moutainHeight;
         }
 
         private static void AddMountHeight(float X, float Z, ref double Height, ref BlockType Type, Dictionary<Vector2, float[]> HeightCache)
         {
-            var mountHeight = Math.Min(Math.Max((OpenSimplexNoise.Evaluate(X * 0.004, Z * 0.004) - .6f) * 2048, 0.0), 32.0);
+            var mountHeight = Math.Min(Math.Max((OpenSimplexNoise.Evaluate(X * 0.004, Z * 0.004) - .6f) * 2048, 0.0), 16.0);
 
             if (mountHeight > 0)
             {
                 Type = BlockType.Stone;
-                var mod = (World.MenuSeed == World.Seed) ? 0 : .4f;//Mathf.Clamp(OpenSimplexNoise.Evaluate(x * 0.005f, z * 0.005f) * .5f - .1f, 0.0, 2.0);
+                var mod = (World.MenuSeed == World.Seed) ? 0 : 1;
                 mountHeight *= mod;
                 var Mult = Math.Min(Math.Max(OpenSimplexNoise.Evaluate(X * 0.0005, Z * 0.0005) * 4.0, 0.0), 1.0);
                 mountHeight *= Mult;
-
-                //if (mountHeight > 0)
-                //    HeightCache?.Add(new Vector2(X, Z), new[] { (float)mountHeight, (float)Height, (float)(Mult * mod) });
                 Height += mountHeight;
             }
 
@@ -137,12 +120,8 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
         
         private static void AddMountainHeight(float X, float Z, ref double Height, ref BlockType Type)
         {
-            var grassMountHeight = Math.Max(0, OpenSimplexNoise.Evaluate(X * 0.0008, Z * 0.0008) * 80.0);
-            if (grassMountHeight != 0)
-            {
-                Type = BlockType.Grass;
-            }
-            Height += grassMountHeight;
+            var rawMountainHeight = Math.Pow(Math.Min(Math.Max(0f, OpenSimplexNoise.Evaluate(X * 0.00075, Z * 0.00075)), 1), 3);
+            Height += rawMountainHeight * 512.0;
         }
 
         protected static void AddBaseHeight(float X, float Z, ref double Height, ref BlockType Type, out double BaseHeight)
