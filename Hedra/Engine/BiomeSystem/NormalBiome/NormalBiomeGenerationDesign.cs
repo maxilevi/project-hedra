@@ -90,13 +90,14 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
         {
             if (World.Seed == World.MenuSeed) return;
 
-            var rawMountainHeight = Math.Max(0f, OpenSimplexNoise.Evaluate(X * 0.001, Z * 0.001)    );
-            var moutainHeight = rawMountainHeight * 64.0;
+            var rawMountainHeight = Math.Pow(Math.Min(Math.Max(0f, OpenSimplexNoise.Evaluate(X * 0.00075, Z * 0.00075)), 1), 4);
+            var moutainHeight = rawMountainHeight * 200.0;
             if (moutainHeight > 0)
             {
-                var smallerMountains = OpenSimplexNoise.Evaluate(X * 0.01, Z * 0.01) * 12f;
+                var smallerMountains = OpenSimplexNoise.Evaluate(X * 0.02, Z * 0.02) * 12f * OpenSimplexNoise.Evaluate(X * 0.001, Z * 0.001);
                 Height += smallerMountains * Math.Min(1f, rawMountainHeight);
-
+                if (smallerMountains > 0)
+                    Type = BlockType.Stone;
                 //var evenSmallerMountains = OpenSimplexNoise.Evaluate(X * 0.01, Z * 0.01) * 4f;
                 //Height += smallerMountains * Math.Min(1f, rawMountainHeight);
                 /*

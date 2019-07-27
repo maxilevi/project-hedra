@@ -135,10 +135,11 @@ namespace Hedra.Engine.Rendering.Particles
                 points.Add(smoothPoints[smoothPoints.Count - 1]);
                 colors.Add(new Vector4(Color.Xyz, Color.W * points[points.Count-1].Alpha ));
             }
-
-            _points.Update(points.Select( p => p.Point).ToArray(), points.Count * Vector3.SizeInBytes);
-            _colors.Update(colors.ToArray(), colors.Count * Vector4.SizeInBytes);
-                
+            Executer.ExecuteOnMainThread(() =>
+            {
+                _points.Update(points.Select(p => p.Point).ToArray(), points.Count * Vector3.SizeInBytes);
+                _colors.Update(colors.ToArray(), colors.Count * Vector4.SizeInBytes);
+            });
             if (!Emit) return;
 
             if(_times % UpdateRate == 0)

@@ -60,12 +60,11 @@ namespace Hedra.Engine.EntitySystem
         private Vector3 _lastPosition;
         private readonly Box _physicsBox;
         private readonly List<ICollidable> _collisions;
-        private readonly Timer _updateCollidersTimer;
+        private readonly object _syncRoot = new object();
         
         public PhysicsComponent(IEntity Parent) : base(Parent)
         {
             _physicsBox = new Box();
-            _updateCollidersTimer = new Timer(.5f);
             UsePhysics = true;
             UseTimescale = true;
             _collisions = new List<ICollidable>();
@@ -79,32 +78,34 @@ namespace Hedra.Engine.EntitySystem
         
         public void UpdateColliders()
         {
-            //if(!_updateCollidersTimer.Tick()) return;
             _underChunk = World.GetChunkAt(Parent.Physics.TargetPosition);
             _underChunkR = World.GetChunkAt(Parent.Physics.TargetPosition + new Vector3(Chunk.Width, 0, 0));
             _underChunkL = World.GetChunkAt(Parent.Physics.TargetPosition - new Vector3(Chunk.Width, 0, 0));
             _underChunkF = World.GetChunkAt(Parent.Physics.TargetPosition + new Vector3(0, 0, Chunk.Width));
             _underChunkB = World.GetChunkAt(Parent.Position - new Vector3(0, 0, Chunk.Width));
 
-            _collisions.Clear();
-            _collisions.AddRange(World.GlobalColliders);
-            if (_underChunk != null && _underChunk.Initialized)
-                _collisions.AddRange(_underChunk.CollisionShapes);
-            if (_underChunkL != null && _underChunkL.Initialized)
-                _collisions.AddRange(_underChunkL.CollisionShapes);
-            if (_underChunkR != null && _underChunkR.Initialized)
-                _collisions.AddRange(_underChunkR.CollisionShapes);
-            if (_underChunkF != null && _underChunkF.Initialized)
-                _collisions.AddRange(_underChunkF.CollisionShapes);
-            if (_underChunkB != null && _underChunkB.Initialized)
-                _collisions.AddRange(_underChunkB.CollisionShapes);
-
-            var nearCollisions = GameManager.Player.NearCollisions;
-            var currentOffset = World.ToChunkSpace(Parent.Physics.TargetPosition);
-            for (var i = 0; i < nearCollisions.Length; i++)
+            lock (_syncRoot)
             {
-                if(nearCollisions[i].Contains(currentOffset))
-                    _collisions.Add(nearCollisions[i]);
+                _collisions.Clear();
+                _collisions.AddRange(World.GlobalColliders);
+                if (_underChunk != null && _underChunk.Initialized)
+                    _collisions.AddRange(_underChunk.CollisionShapes);
+                if (_underChunkL != null && _underChunkL.Initialized)
+                    _collisions.AddRange(_underChunkL.CollisionShapes);
+                if (_underChunkR != null && _underChunkR.Initialized)
+                    _collisions.AddRange(_underChunkR.CollisionShapes);
+                if (_underChunkF != null && _underChunkF.Initialized)
+                    _collisions.AddRange(_underChunkF.CollisionShapes);
+                if (_underChunkB != null && _underChunkB.Initialized)
+                    _collisions.AddRange(_underChunkB.CollisionShapes);
+
+                var nearCollisions = GameManager.Player.NearCollisions;
+                var currentOffset = World.ToChunkSpace(Parent.Physics.TargetPosition);
+                for (var i = 0; i < nearCollisions.Length; i++)
+                {
+                    if (nearCollisions[i].Contains(currentOffset))
+                        _collisions.Add(nearCollisions[i]);
+                }
             }
         }
 
@@ -257,32 +258,36 @@ namespace Hedra.Engine.EntitySystem
             _physicsBox.Min += Command.Delta;
             _physicsBox.Max += Command.Delta;
             var shape = Parent.Model.BroadphaseBox.Cache.Translate(Command.Delta).AsShape();
-            for (var i = _collisions.Count - 1; i > -1; i--)
+            lock (_syncRoot)
             {
-                if (!Physics.Collides(_collisions[i], shape)) continue;
-                if (!Command.OnlyY)
+                for (var i = _collisions.Count - 1; i > -1; i--)
                 {
-                    var collided = true;
-                    collided &= HandleSlopes(Command, _collisions[i], shape);
-                    if(collided) HandleSliding(Command, _collisions[i], shape);
-                    collided &= HandleSlidingCorners(Command, _collisions[i], shape);
-                    if (collided) return false;
-                }
-                else
-                {
-                    if (Command.Delta.Y < 0)
+                    if (!Physics.Collides(_collisions[i], shape)) continue;
+                    if (!Command.OnlyY)
                     {
-                        Parent.IsGrounded = true;
+                        var collided = true;
+                        collided &= HandleSlopes(Command, _collisions[i], shape);
+                        if (collided) HandleSliding(Command, _collisions[i], shape);
+                        collided &= HandleSlidingCorners(Command, _collisions[i], shape);
+                        if (collided) return false;
                     }
                     else
                     {
-                        if (!CollidesWithOffset(_collisions[i], shape, Vector3.UnitY * -.5f))
-                            Parent.BlockPosition -= .05f * Vector3.UnitY;
-                        Parent.IsGrounded = false;
+                        if (Command.Delta.Y < 0)
+                        {
+                            Parent.IsGrounded = true;
+                        }
+                        else
+                        {
+                            if (!CollidesWithOffset(_collisions[i], shape, Vector3.UnitY * -.5f))
+                                Parent.BlockPosition -= .05f * Vector3.UnitY;
+                            Parent.IsGrounded = false;
+                        }
+
+                        return false;
                     }
-                    return false;
                 }
-            }         
+            }
             return true;
         }
 
@@ -485,18 +490,21 @@ namespace Hedra.Engine.EntitySystem
                 TargetPosition,
                 End
             });
+            lock(_syncRoot)
                 return _collisions.Any(S => Physics.Collides(S, shape));
         }
         
         public bool CollidesWithOffset(Vector3 Offset)
         {
             var shape = Parent.Model.BroadphaseBox.Cache.Translate(Offset).AsShape();
-            return _collisions.Any(S => Physics.Collides(S, shape));
+            lock(_syncRoot)
+                return _collisions.Any(S => Physics.Collides(S, shape));
         }
         
         public override void Dispose()
         {
-            _collisions.Clear();
+            lock(_syncRoot)
+                _collisions.Clear();
             _underChunk = null;
             _underChunkR = null;
             _underChunkL = null;

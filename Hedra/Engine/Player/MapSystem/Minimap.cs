@@ -23,6 +23,7 @@ using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Game;
+using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using OpenTK;

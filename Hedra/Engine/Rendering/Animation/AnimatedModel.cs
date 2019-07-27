@@ -58,7 +58,7 @@ namespace Hedra.Engine.Rendering.Animation
         private readonly List<ModelData> _addedModels;
         private readonly Matrix4[] _jointMatrices;
         private readonly Animator _animator;
-        
+        private readonly object _syncRoot;
         private Shader _shader = DefaultShader;
         private VAO<Vector3, Vector3, Vector3, Vector3, Vector3> Data { get; set; }
         private VBO<Vector3> _vertices, _normals, _jointIds, _vertexWeights;
@@ -101,6 +101,7 @@ namespace Hedra.Engine.Rendering.Animation
             this.RootJoint = RootJoint;
             this.JointCount = JointCount;
             _animator = new Animator(this.RootJoint);
+            _syncRoot = new object();
             this.RootJoint.CalculateInverseBindTransform(Matrix4.Identity);
             Alpha = 1.0f;
             Tint = Vector4.One;
@@ -202,6 +203,17 @@ namespace Hedra.Engine.Rendering.Animation
             Renderer.Disable(EnableCap.Blend);
             if (Alpha < 0.95f) Renderer.Enable(EnableCap.Blend);
 
+            lock (_syncRoot)
+            {
+                DoDrawModel(ProjectionViewMat, ViewMatrix);
+            }
+            Renderer.ActiveTexture(TextureUnit.Texture0);
+            Renderer.BindTexture(TextureTarget.Texture2D, 0);
+            Renderer.Disable(EnableCap.Blend);
+        }
+
+        private void DoDrawModel(Matrix4 ProjectionViewMat, Matrix4 ViewMatrix)
+        {
             _shader.Bind();
 
             if (_shader == DeathShader && CompatibilityManager.SupportsGeometryShaders)
@@ -256,9 +268,6 @@ namespace Hedra.Engine.Rendering.Animation
             
             Data.Unbind();
             _shader.Unbind();
-            Renderer.ActiveTexture(TextureUnit.Texture0);
-            Renderer.BindTexture(TextureTarget.Texture2D, 0);
-            Renderer.Disable(EnableCap.Blend);
         }
 
         public void PlayAnimation(Animation Animation)
@@ -355,7 +364,8 @@ namespace Hedra.Engine.Rendering.Animation
 
         public void SwitchShader(Shader NewShader)
         {
-            _shader = NewShader;
+            lock(_syncRoot)
+                _shader = NewShader;
         }
 
         private bool BuffersCreated => Data != null;

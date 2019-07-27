@@ -19,7 +19,7 @@ using OpenTK;
 
 namespace Hedra.AISystem.Humanoid
 {
-    public sealed class RoamingVillagerAIComponent : TraverseHumanoidAIComponent
+    public sealed class RoamingVillagerAIComponent : RawMovementHumanoidAIComponent
     {
         private const int BenchSearchRadius = 24;
         private const int TalkSearchRadius = 8;

@@ -524,6 +524,7 @@ forward_key = Move Forward
 leftward_key = Move Leftward
 backward_key = Move Backwards
 rightward_key = Move Rightward
+open_chat_key = Open Chat
 climb_key = Climb
 jump_key = Jump
 descend_key = Descend / Wake up / Unmount

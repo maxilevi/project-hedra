@@ -27,6 +27,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
             _player = Player;
             _panel = new Panel();
             _textBackgrounds = new RenderableTexture[this.ButtonsText.Length];
+            _player.Inventory.InventoryUpdated += OnInventoryUpdated;
             for (var i = 0; i < this.ButtonsText.Length; i++)
             {
                 this.Array[i] = new Item
@@ -78,8 +79,11 @@ namespace Hedra.Engine.Player.ToolbarSystem
                 _foodMesh = InventoryItemRenderer.BuildModel(_foodItem.Model, out _foodSize);
                 _builtFoodItem = _foodItem;
             }
-            this.ButtonsText[this.ButtonsText.Length - 1].Text =
-                _player.Inventory.Food?.GetAttribute<int>(CommonAttributes.Amount).ToString() ?? string.Empty;
+        }
+
+        private void OnInventoryUpdated()
+        {
+            this.ButtonsText[this.ButtonsText.Length - 1].Text = _player.Inventory.Food?.GetAttribute<int>(CommonAttributes.Amount).ToString() ?? string.Empty;
         }
 
         public override bool Enabled

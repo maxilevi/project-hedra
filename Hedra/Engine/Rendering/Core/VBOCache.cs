@@ -95,18 +95,12 @@ namespace Hedra.Engine.Rendering.Core
 
         public static void Delete(ref uint Id)
         {
-            var id = Id;
+            if(Id == 0) return;
             _referenceCounter[Id]--;
             if (_referenceCounter[Id] == 0)
             {
-                Executer.ExecuteOnMainThread(
-                    () => Renderer.DeleteBuffers(1, ref id));
+                Renderer.DeleteBuffers(1, ref Id);
                 _referenceCounter.Remove(Id);
-                asasdd.Add(new adssa()
-                {
-                    id = Id,
-                    trace = new StackTrace()
-                });
                 if (!_uncachedVBOs.Contains(Id))
                     _hashedReferences.Remove(HashFromId(Id));
                 else
@@ -114,14 +108,7 @@ namespace Hedra.Engine.Rendering.Core
             }
             Id = 0;
         }
-        private static List<adssa> asasdd = new List<adssa>();
 
-        struct adssa
-        {
-            public StackTrace trace;
-            public uint id;
-        }
-            
         private static string Hash<T>(T[] Data, int SizeInBytes, VertexAttribPointerType PointerType, BufferTarget BufferTarget, BufferUsageHint Hint)
         {
             var size = Data.Length != 0 ? Marshal.SizeOf(Data[0]) : 0;
@@ -162,5 +149,7 @@ namespace Hedra.Engine.Rendering.Core
             }
             Marshal.FreeHGlobal(ptr);
         }
+
+        public static int CachedVBOs => _referenceCounter.Count;
     }
 }

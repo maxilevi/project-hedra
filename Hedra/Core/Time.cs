@@ -6,6 +6,8 @@
  */
 
 using System;
+using System.Collections.Generic;
+using System.Threading;
 using Hedra.Engine.Game;
 using Hedra.Game;
 
@@ -16,42 +18,53 @@ namespace Hedra.Core
     /// </summary>
     public static class Time
     {
-        public static int Framerate { get; private set; }
-        public static float Frametime { get; private set; } 
-        public static bool Paused => TimeScale <= 0.005f; 
-        public static float DeltaTime { get; private set; }
-        public static float IndependentDeltaTime { get; private set; }
+        private static Dictionary<int, TimeProvider> Providers = new Dictionary<int, TimeProvider>();
         public static float TimeScale { get; private set; } = 1;
-        public static float AccumulatedFrameTime { get; private set; }
-        public static float IndependentAccumulatedFrameTime { get; private set; }
-        public static float LastFrameUpdate { get; set; }
+        public static bool Paused => TimeScale <= 0.005f;
+        public static void IncrementFrame(double Time) => IncrementFrame((float)Time);
+        public static void IncrementFrame(float Time) => Current.IncrementFrame(Time);
+        public static void Set(double Time, bool UpdateCounter = true) => Set((float) Time, UpdateCounter);
+        public static void Set(float Time, bool UpdateCounter) => Current.Set(Time, UpdateCounter);
+        private static TimeProvider Current => Providers[Thread.CurrentThread.ManagedThreadId];
+        public static int Framerate => Current.Framerate;
+        public static float Frametime => Current.Frametime;
+        public static float DeltaTime => Current.DeltaTime;
+        public static float IndependentDeltaTime => Current.IndependentDeltaTime;
+        public static float AccumulatedFrameTime => Current.AccumulatedFrameTime;
+        public static float IndependentAccumulatedFrameTime => Current.IndependentAccumulatedFrameTime;
+        public static float LastFrameUpdate => Current.LastFrameUpdate;
 
-        public static void IncrementFrame(double Time)
+        public static void RegisterThread()
         {
-            IncrementFrame((float)Time);
+            Providers.Add(Thread.CurrentThread.ManagedThreadId, new TimeProvider());
         }
 
-        public static void IncrementFrame(float Time)
+        private class TimeProvider
         {
-            AccumulatedFrameTime += Time * TimeScale;
-            IndependentAccumulatedFrameTime += Time;
-        }
+            public int Framerate { get; private set; }
+            public float Frametime { get; private set; }
+            public float DeltaTime { get; private set; }
+            public float IndependentDeltaTime { get; private set; }
+            public float AccumulatedFrameTime { get; private set; }
+            public float IndependentAccumulatedFrameTime { get; private set; }
+            public float LastFrameUpdate { get; private set; }
 
-        public static void Set(double Time, bool UpdateCounter = true)
-        {
-            Set((float) Time, UpdateCounter);
-        }
-
-        public static void Set(float Time, bool UpdateCounter)
-        {
-            TimeScale = GameSettings.Paused ? 0 : 1;
-            IndependentDeltaTime = Time;
-            DeltaTime = IndependentDeltaTime * TimeScale;
-            if (Math.Abs(LastFrameUpdate - Environment.TickCount) > 1000 && UpdateCounter)
+            public void Set(float Time, bool UpdateCounter)
             {
-                Framerate = (int) (1.0 / Time);
-                Frametime = (float) Time;
-                LastFrameUpdate = Environment.TickCount;
+                TimeScale = GameSettings.Paused ? 0 : 1;
+                IndependentDeltaTime = Time;
+                DeltaTime = IndependentDeltaTime * TimeScale;
+                if (Math.Abs(LastFrameUpdate - Environment.TickCount) > 1000 && UpdateCounter)
+                {
+                    Framerate = (int) (1.0 / Time);
+                    Frametime = (float) Time;
+                    LastFrameUpdate = Environment.TickCount;
+                }
+            }
+            public void IncrementFrame(float Time)
+            {
+                AccumulatedFrameTime += Time * TimeScale;
+                IndependentAccumulatedFrameTime += Time;
             }
         }
     }

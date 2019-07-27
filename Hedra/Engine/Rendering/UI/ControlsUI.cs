@@ -80,7 +80,8 @@ namespace Hedra.Engine.Rendering.UI
             
             _resetToDefaults = new Button(accumulatedOffset, Vector2.One, backgroundTexId);
             _resetToDefaultsText = new GUIText(Translation.Create("reset_to_default"), _resetToDefaults.Position, Color.White, FontCache.GetBold(14));
-            SetButtonParameters(_resetToDefaults, _resetToDefaultsText);
+            SetButtonParameters(_resetToDefaults, _resetToDefaultsText, false);
+            _resetToDefaults.Click += (_, __) => ResetToDefaults();
             _resetToDefaults.Position += _resetToDefaults.Scale.X * Vector2.UnitX * 0f;
             _resetToDefaultsText.Position = _resetToDefaults.Position;
             AddElement(_resetToDefaultsText);
@@ -90,9 +91,10 @@ namespace Hedra.Engine.Rendering.UI
             EventDispatcher.RegisterKeyDown(this, OnKeyDown);
         }
 
-        private void SetButtonParameters(Button Background, GUIText Text)
+        private void SetButtonParameters(Button Background, GUIText Text, bool AddClickEvent = true)
         {
-            Background.Click += (Sender, Args) => OnClick(Background, Args);
+            if(AddClickEvent)
+                Background.Click += (Sender, Args) => OnClick(Background, Args);
             Background.HoverEnter += (Sender, Args) =>
             {
                 Text.TextColor = Color.OrangeRed;
@@ -106,6 +108,12 @@ namespace Hedra.Engine.Rendering.UI
                 Background.Scale /= 1.25f;
             };
             Background.Scale = Text.Scale.X * 1.05f * Vector2.UnitX + Vector2.UnitY * (Text.Scale.Y * 1.25f);
+        }
+
+        private void ResetToDefaults()
+        {
+            Controls.Reset();
+            FillMappings();
         }
         
         private void FillMappings()
@@ -133,6 +141,7 @@ namespace Hedra.Engine.Rendering.UI
             if (_currentSelected != -1) Reset();
             _currentSelected = Array.IndexOf(_backgrounds, Sender);
             _keys[_currentSelected].SetTranslation(Translation.Default("."));
+            
         }
 
         private void Reset()

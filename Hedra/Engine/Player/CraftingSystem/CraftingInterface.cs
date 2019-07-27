@@ -6,6 +6,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Input;
+using Hedra.Localization;
 using Hedra.Sound;
 using OpenTK;
 using OpenTK.Input;

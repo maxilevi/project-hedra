@@ -170,6 +170,7 @@
     <Compile Include="AISystem\Humanoid\CombatAIBehaviour.cs" />
     <Compile Include="AISystem\Humanoid\MageAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\BaseVillagerAIComponent.cs" />
+    <Compile Include="AISystem\Humanoid\RawMovementHumanoidAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\RoamingVillagerAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\TraverseHumanoidAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\VillagerAISettings.cs" />
@@ -226,6 +227,7 @@
     <Compile Include="Crafting\CraftingStation.cs" />
     <Compile Include="Crafting\Templates\IngredientsTemplate.cs" />
     <Compile Include="Engine\ItemSystem\Item.cs" />
+    <Compile Include="Engine\Player\EntityUpdater.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryCompanionInfo.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryCompanionRenamePanel.cs" />
     <Compile Include="Engine\QuestSystem\BaseStructureWithChest.cs" />
@@ -245,6 +247,7 @@
     <Compile Include="Engine\StructureSystem\Overworld\SpawnCampfireDesign.cs" />
     <Compile Include="Items\EquipmentType.cs" />
     <Compile Include="Items\ItemTier.cs" />
+    <Compile Include="Localization\Controls.cs" />
     <Compile Include="Mission\Blocks\CollectMission.cs" />
     <Compile Include="Mission\Blocks\CraftMission.cs" />
     <Compile Include="Mission\Blocks\EndMission.cs" />
@@ -363,7 +366,6 @@
     <Compile Include="Engine\ItemSystem\Templates\ItemModelTemplate.cs" />
     <Compile Include="Engine\ItemSystem\Templates\ItemTemplate.cs" />
     <Compile Include="Engine\Loader\HedraServer.cs" />
-    <Compile Include="Engine\Localization\Controls.cs" />
     <Compile Include="Engine\Localization\IniParser.cs" />
     <Compile Include="Engine\Management\DummyAssetProvider.cs" />
     <Compile Include="Engine\Management\WaitForChunk.cs" />

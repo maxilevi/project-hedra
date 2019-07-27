@@ -57,6 +57,7 @@ namespace Hedra.Engine.Loader
         public static bool LoadBoilerplate()
         {
             MainThreadId = Thread.CurrentThread.ManagedThreadId;
+            Time.RegisterThread();
             OSManager.Load(Assembly.GetExecutingAssembly().Location);
             AssetManager.Load();
             CompatibilityManager.Load();

@@ -95,8 +95,7 @@ namespace Hedra.Components
                    && !Parent.Model.IsMoving
                    && CanTalk;
             if (!earlyExit) return false;
-            var raycast = !GameManager.Player.Physics.Raycast(Parent.Position);
-            return GameManager.Player.IsLookingAt(Parent, .5f); // && raycast;
+            return GameManager.Player.IsLookingAt(Parent, .5f);
         }
 
         public void AddDialogLine(Translation Dialog)

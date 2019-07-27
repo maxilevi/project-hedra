@@ -121,6 +121,7 @@ namespace Hedra.Engine.Player
 
             this.SetupHandlers();
 
+            EntityUpdater.Load();
             World.AddEntity(this);
             DrawManager.Add(this);
             UpdateManager.Add(this);
@@ -168,9 +169,7 @@ namespace Hedra.Engine.Player
             var entities = World.Entities.ToArray();
             for (var i = entities.Length - 1; i > -1; i--)
             {
-                if (!(entities[i] is LocalPlayer) &&
-                    (entities[i].Position.Xz - this.Position.Xz).LengthSquared < 256 * 256 ||
-                    Companion.Entity == entities[i])
+                if (!(entities[i] is LocalPlayer) && (entities[i].Position.Xz - this.Position.Xz).LengthSquared < 256 * 256 || Companion.Entity == entities[i])
                 {
                     entities[i].Draw();
                 }
@@ -187,16 +186,12 @@ namespace Hedra.Engine.Player
             if (this.IsSleeping != _wasSleeping)
             {
                 SkyManager.DaytimeSpeed = _wasSleeping ? 1.0f : 40.0f;
-                //GameSettings.DarkEffect = !_wasSleeping;
             }
-            _wasSleeping = this.IsSleeping;       
-            
-            //Dont cull the back chunk so that shadows can render
-            Vector2 chunkPos = World.ToChunkSpace(this.Position);
-            Chunk underChunk = World.GetChunkAt(this.Position);
+            _wasSleeping = this.IsSleeping;
+            var underChunk = World.GetChunkAt(this.Position);
 
-            
-            if( this.Model.Enabled && (_previousPosition - Model.Human.BlockPosition).LengthFast > 0.25f && Model.Human.IsGrounded && underChunk != null){
+            if( this.Model.Enabled && (_previousPosition - Model.Human.BlockPosition).LengthFast > 0.25f && Model.Human.IsGrounded && underChunk != null)
+            {
                 World.Particles.VariateUniformly = true;
                 World.Particles.Color = World.GetHighestBlockAt( (int) Model.Human.Position.X, (int) Model.Human.Position.Z).GetColor(underChunk.Biome.Colors);
                 World.Particles.Position = Model.Human.Position - Vector3.UnitY;
@@ -214,27 +209,11 @@ namespace Hedra.Engine.Player
                 _previousPosition = Model.Human.BlockPosition;
             }
 
-            var entities = World.Entities.ToArray();
-            for (int i = entities.Length - 1; i > -1; i--)
-            {
-                var player = GameManager.Player;
-                if (entities[i] != player && entities[i].InUpdateRange && !GameSettings.Paused &&
-                    !GameManager.IsLoading
-
-                    || Companion.Entity == entities[i] || entities[i].IsBoss)
-                {
-
-                    entities[i].Update();
-                }
-                else if (entities[i] != player && entities[i].InUpdateRange && GameSettings.Paused)
-                {
-                    (entities[i].Model as IAudible)?.StopSound();
-                }
-            }
+            EntityUpdater.Dispatch();
+            Companion?.Entity.Update();
             
-            this.Rotation = new Vector3(0, this.Rotation.Y, 0);
-            this.View.AddedDistance = IsMoving || IsSwimming || IsTravelling ? 3.0f : 0.0f;
-
+            Rotation = new Vector3(0, this.Rotation.Y, 0);
+            View.AddedDistance = IsMoving || IsSwimming || IsTravelling ? 3.0f : 0.0f;
             AmbientEffects.Update();
             StructureAware.Update();
             Loader.Update();

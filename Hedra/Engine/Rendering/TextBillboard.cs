@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using Hedra.Engine.Game;
+using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
@@ -29,8 +30,11 @@ namespace Hedra.Engine.Rendering
         
         public void UpdateText(string Text)
         {
-            TextureId = GUIText.BuildText(Text, _color, _font, out var measurements);
-            _scale = measurements.ToRelativeSize();
+            Executer.ExecuteOnMainThread(() =>
+            {
+                TextureId = GUIText.BuildText(Text, _color, _font, out var measurements);
+                _scale = measurements.ToRelativeSize();
+            });
         }
 
         protected override Vector2 Measurements => _scale;

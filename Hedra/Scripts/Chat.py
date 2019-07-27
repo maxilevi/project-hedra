@@ -9,6 +9,7 @@ from Hedra.Input import Cursor
 from Hedra.Sound import SoundPlayer, SoundType
 from Hedra.Rendering import Colors
 from Hedra.Rendering.UI import Panel, GUIText, TextField, FontCache
+from Hedra.Localization import Controls
 
 TEXT_BOX_POSITION = Vector2(-0.95, -.65)
 COMMAND_LINE_POSITION = Vector2(-0.825, -0.725)
@@ -75,7 +76,7 @@ def update_fade(state):
 
 def on_key_down(event_args, state):
     success = False
-    if event_args.Key == Key.Enter:
+    if event_args.Key == Controls.OpenChat:
         if not state['open'] and can_open(state['user']):
             open(state)
             success = True

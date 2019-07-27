@@ -1,11 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using Hedra.Engine.Game;
 using Newtonsoft.Json;
 using OpenTK.Input;
 
-namespace Hedra.Engine.Localization
+namespace Hedra.Localization
 {
     public delegate void OnControlsChangedEvent();
     
@@ -32,9 +31,10 @@ namespace Hedra.Engine.Localization
             {"special_item_key", Key.G},
             {"crafting_key", Key.C},
             {"quest_log_key", Key.T},
+            {"open_chat_key", Key.Enter}
         };
 
-        private static readonly Dictionary<string, Key> Mappings = DefaultMappings;
+        private static Dictionary<string, Key> Mappings = DefaultMappings;
         
         public static Key InventoryOpen => Mappings["inventory_open_key"];
         public static Key Interact => Mappings["interact_key"];
@@ -53,6 +53,7 @@ namespace Hedra.Engine.Localization
         public static Key SpecialItem => Mappings["special_item_key"];
         public static Key Crafting => Mappings["crafting_key"];
         public static Key QuestLog => Mappings["quest_log_key"];
+        public static Key OpenChat => Mappings["open_chat_key"];
 
         public static void UpdateMapping(string Key, Key New)
         {
@@ -66,10 +67,27 @@ namespace Hedra.Engine.Localization
         static Controls()
         {
             Mappings = File.Exists(SavePath) 
-                ? JsonConvert.DeserializeObject<Dictionary<string, Key>>(File.ReadAllText(SavePath))
+                ? Deserialize(SavePath)
                 : new Dictionary<string, Key>(DefaultMappings);
         }
 
+        private static Dictionary<string, Key> Deserialize(string Path)
+        {
+            var saved = JsonConvert.DeserializeObject<Dictionary<string, Key>>(File.ReadAllText(Path));
+            foreach (var pair in DefaultMappings)
+            {
+                if(!saved.ContainsKey(pair.Key))
+                    saved.Add(pair.Key, pair.Value);
+            }
+
+            return saved;
+        }
+        
+        public static void Reset()
+        {
+            Mappings = new Dictionary<string, Key>(DefaultMappings);
+        }
+        
         private static void Save()
         {
             File.WriteAllText(SavePath, JsonConvert.SerializeObject(Mappings, Formatting.Indented));

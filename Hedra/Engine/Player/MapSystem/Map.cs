@@ -24,6 +24,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
 using Hedra.Game;
+using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using Hedra.Sound;

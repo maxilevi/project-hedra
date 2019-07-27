@@ -20,7 +20,7 @@ namespace Hedra.Engine.Rendering
 {
     public abstract class BaseBillboard : DrawableTexture, IRenderable, IDisposable, IUpdatable
     {
-        private static readonly Shader Shader;
+        private static Shader Shader;
         protected abstract Vector2 Measurements { get; }
         public bool Disposed { get; private set; }
         public float VanishSpeed { get; set; } = 2;
@@ -33,11 +33,6 @@ namespace Hedra.Engine.Rendering
         private readonly float _maxLifetime;
         private float _life;
         private float _opacity = 1;
-
-        static BaseBillboard()
-        {
-            Shader = Shader.Build("Shaders/Billboard.vert", "Shaders/Billboard.frag");
-        }
 
         protected BaseBillboard(float Lifetime, Func<Vector3> Follow)
         {
@@ -58,6 +53,9 @@ namespace Hedra.Engine.Rendering
 
         public void Draw()
         {
+            if(Shader == null)
+                Shader = Shader.Build("Shaders/Billboard.vert", "Shaders/Billboard.frag");
+            
             var viewMat = GameManager.Player.View.ModelViewMatrix;
             var cameraRight = new Vector3(viewMat.M11, viewMat.M21, viewMat.M31).NormalizedFast();
             var cameraUp = new Vector3(viewMat.M12, viewMat.M22, viewMat.M32).NormalizedFast();

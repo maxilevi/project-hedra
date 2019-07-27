@@ -7,16 +7,16 @@ namespace Hedra.Engine.Rendering.Core
 {
     public abstract class GLObject<T> : IDisposable, IdentifiableObject where T : class, IdentifiableObject
     {
-        private static readonly Dictionary<uint, GLObjectCounter> Elements;
-        private static readonly List<T> Pending;
-        private static readonly object Lock;
+        private static readonly Dictionary<uint, T> Indexed;
+        private static readonly List<T> Elements;
+        private static readonly object SyncRoot;
         private bool _disposed;
 
         static GLObject()
         {
-            Elements = new Dictionary<uint, GLObjectCounter>();
-            Pending = new List<T>();
-            Lock = new object();
+            Elements = new List<T>();
+            Indexed = new Dictionary<uint, T>();
+            SyncRoot = new object();
         }
 
         public abstract uint Id { get; }
@@ -24,61 +24,39 @@ namespace Hedra.Engine.Rendering.Core
         {
             get
             {
-                lock (Lock)
+                lock (SyncRoot)
                     return Elements.Count;
             }
         }
 
         protected GLObject()
         {
-            lock(Lock)
-                Pending.Add(this as T);
-            TaskScheduler.When(() => Id != 0 || _disposed, () =>
-            {
-                if(_disposed) return;
-                lock (Lock)
-                {
-                    Pending.Remove(this as T);
-                    if (Elements.ContainsKey(Id))
-                        Elements[Id].Count++;
-                    else
-                        Elements.Add(Id, new GLObjectCounter
-                        {
-                            GLObject = this as T,
-                            Count = 1
-                        });
-                }
-            });
+            lock(SyncRoot)
+                Elements.Add(this as T);
         }
         
         public static T GetById(uint Id)
         {
-            if (Id == 0) return default(T);
-            lock (Lock)
+            if (Id == 0) return null;
+            lock (SyncRoot)
             {
-                if (!Elements.ContainsKey(Id))
-                    return Pending.FirstOrDefault(O => O.Id == Id);
-                return Elements[Id].GLObject;
+                if (!Indexed.ContainsKey(Id))
+                {
+                    Indexed.Add(Id, Elements.First(O => O.Id == Id));
+                    //Elements.Remove(Indexed[Id]);
+                }
+                return Indexed[Id];
             }
         }
 
         public virtual void Dispose()
         {
             _disposed = true;
-            lock (Lock)
+            lock (SyncRoot)
             {
-                if(!Elements.ContainsKey(Id)) return;
-                if (Elements[Id].Count == 1)
-                    Elements.Remove(Id);
-                else
-                    Elements[Id].Count--;
+                Elements.Remove(this as T);
+                Indexed.Remove(Id);
             }
-        }
-        
-        private class GLObjectCounter
-        {
-            public T GLObject;
-            public int Count;
         }
     }
 }

@@ -41,6 +41,7 @@ namespace Hedra.Components
         private bool _show;
         private float _targetBarSize = 1;
         private float _textEnabled;
+        private float _lastProduct;
 
         static HealthBarComponent()
         {
@@ -132,20 +133,21 @@ namespace Hedra.Components
 
         public override void Update()
         {
-            _show = (Parent.Model.Position.Xz - GameManager.Player.Position.Xz).LengthSquared < ShowDistance * ShowDistance 
-                && !Hide
-                && !Parent.IsDead
-                && !GameSettings.Paused
-                && !GameManager.IsLoading;
+            _show = (Parent.Model.Position.Xz - GameManager.Player.Position.Xz).LengthSquared <
+                    ShowDistance * ShowDistance
+                    && !Hide
+                    && !Parent.IsDead
+                    && !GameSettings.Paused
+                    && !GameManager.IsLoading;
 
             _targetBarSize = _show ? 1 : 0;
 
             _barSize = Mathf.Lerp(_barSize, _targetBarSize, Time.DeltaTime * 16f);
             _text.Scale = _originalTextScale * _barSize * _textEnabled;
 
-            var product = 
-                Vector3.Dot(GameManager.Player.View.CrossDirection, (Parent.Position - GameManager.Player.Position).NormalizedFast());
-            if (_barSize <= 0.5f || product <= 0.0f)
+            var product = Vector3.Dot(GameManager.Player.View.CrossDirection, (Parent.Position - GameManager.Player.Position).NormalizedFast());
+            _lastProduct = Mathf.Lerp(_lastProduct, product, Time.DeltaTime * 2f);
+            if (_barSize <= 0.5f || _lastProduct <= 0f)
             {
                 _healthBar.Disable();
                 _text.Disable();
@@ -179,10 +181,11 @@ namespace Hedra.Components
         }
         public override void Draw()
         {
-            if(Parent.Model == null || !Parent.InUpdateRange) return;
-
+            if(Parent.Model == null || _barSize < 0.05f) return;
+            
             var eyeSpace = Vector4.Transform(
-                new Vector4(Parent.Position + Parent.Model.Height * (1.5f) * Vector3.UnitY, 1), Culling.ModelViewMatrix
+                new Vector4(Parent.Position + Parent.Model.Height * (1.5f) * Vector3.UnitY, 1),
+                Culling.ModelViewMatrix
             );
             var homogeneousSpace = Vector4.Transform(eyeSpace, Culling.ProjectionMatrix);
             var ndc = homogeneousSpace.Xyz / homogeneousSpace.W;
@@ -191,6 +194,7 @@ namespace Hedra.Components
             _backgroundTexture.Position = _healthBar.Position;
             _backgroundTexture.Scale = _backgroundTextureSize;
             _text.Position = _healthBar.Position + _healthBar.Scale.Y * Vector2.UnitY * 3;
+
             _healthBar.Draw();
             _backgroundTexture.Draw();
             _text.Draw();

@@ -26,6 +26,7 @@ namespace Hedra.Engine.Player
         private CollidableStructure[] _currentNearStructures;
         private readonly Timer _enterTimer;
         private readonly Timer _insideTimer;
+        private readonly Timer _updateTimer;
 
         public StructureAware(IPlayer Player)
         {
@@ -38,6 +39,7 @@ namespace Hedra.Engine.Player
             {
                 AutoReset = false
             };
+            _updateTimer = new Timer(.5f);
             _enterTimer.MarkReady();
             NearCollisions = new CollisionGroup[0];
         }
@@ -46,7 +48,7 @@ namespace Hedra.Engine.Player
         {
             var collidableStructures = StructureHandler.GetNearStructures(_player.Position);
 
-            if (this.NeedsUpdating(collidableStructures))
+            if (_updateTimer.Tick() && NeedsUpdating(collidableStructures))
             {
                 _currentNearStructures = collidableStructures.ToArray();
                 NearCollisions = collidableStructures.SelectMany(S => S.Colliders).ToArray();               
@@ -59,6 +61,7 @@ namespace Hedra.Engine.Player
 
         private void HandleSounds()
         {
+            if(_currentNearStructures == null) return;
             var none = true;
             for (var i = 0; i < _currentNearStructures.Length; i++)
             {
@@ -83,7 +86,7 @@ namespace Hedra.Engine.Player
 
         private void HandleEvents()
         {
-            if(!_insideTimer.Tick()) return;
+            if(!_insideTimer.Tick() || _currentNearStructures == null) return;
             var isInsideAny = false;
             for (var i = 0; i < _currentNearStructures.Length; i++)
             {
@@ -111,8 +114,7 @@ namespace Hedra.Engine.Player
         
         private bool NeedsUpdating(CollidableStructure[] Structures)
         {
-            if (_currentNearStructures == null || Structures.Length != _currentNearStructures.Length 
-                || Structures.Sum(S => S.Colliders.Length) != NearCollisions.Length) return true;
+            if (_currentNearStructures == null || Structures.Length != _currentNearStructures.Length || Structures.Sum(S => S.Colliders.Length) != NearCollisions.Length) return true;
             var differences = false;
             for (var i = 0; i < Structures.Length; i++)
             {

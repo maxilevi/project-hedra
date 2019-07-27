@@ -302,7 +302,7 @@ namespace Hedra.Engine.Game
 
         public IPlayer Player
         {
-            get => _players.First();
+            get => _players[0];
             set => _players[0] = value;
         }
 

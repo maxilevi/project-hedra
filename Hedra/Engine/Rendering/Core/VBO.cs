@@ -137,7 +137,7 @@ namespace Hedra.Engine.Rendering.Core
             if (_disposed) return;
             base.Dispose();
             _disposed = true;
-            VBOCache.Delete(ref _id);
+            Executer.ExecuteOnMainThread(() => VBOCache.Delete(ref _id));
         }
     }
 }

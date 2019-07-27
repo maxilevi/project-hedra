@@ -17,6 +17,7 @@ using Hedra.Game;
 using Hedra.Input;
 using OpenTK;
 using OpenTK.Input;
+using Cursor = System.Windows.Forms.Cursor;
 
 namespace Hedra.Engine.Player
 {
@@ -60,6 +61,7 @@ namespace Hedra.Engine.Player
         private readonly List<ICollidable> _structureCollisions;
         private readonly List<ICollidable> _chunkCollisions;
         private readonly Box _cameraBox;
+        private Vector2 _lastMousePosition;
 
         public Camera(IPlayer Player)
         {
@@ -94,10 +96,11 @@ namespace Hedra.Engine.Player
 
             if ( !GameSettings.Paused && !GameManager.IsLoading && !_player.IsDead && !GameSettings.ContinousMove)
             {
-                _xDelta = Cursor.Position.X - GameSettings.Width / 2f;
-                _yDelta = Cursor.Position.Y - GameSettings.Height / 2f;
-                if (LockMouse) Cursor.Center();
-                
+                var position = Cursor.Position;
+                _xDelta = position.X - GameSettings.Width / 2f;
+                _yDelta = position.Y - GameSettings.Height / 2f;
+                if (LockMouse) Hedra.Input.Cursor.Center();
+
                 if (CaptureMovement)
                 {
                     ManageRotations();

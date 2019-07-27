@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace Hedra.Engine.Rendering.Core
 {
     public class ShaderHandler
