@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Hedra.BiomeSystem;
+using Hedra.Core;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using OpenTK;
@@ -102,15 +103,17 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
 
         private static void AddMountHeight(float X, float Z, ref double Height, ref BlockType Type, Dictionary<Vector2, float[]> HeightCache)
         {
-            var mountHeight = Math.Min(Math.Max((OpenSimplexNoise.Evaluate(X * 0.004, Z * 0.004) - .6f) * 2048, 0.0), 16.0);
-
+            var max = 8f;
+            var mu = Math.Min(Math.Max((OpenSimplexNoise.Evaluate(X * 0.004, Z * 0.004) - .6f) * 96, 0.0), max) / max;
+            var mountHeight = (double) Mathf.CosineInterpolate(0.0f, max, (float) (mu * mu * mu));
             if (mountHeight > 0)
             {
                 Type = BlockType.Stone;
                 var mod = (World.MenuSeed == World.Seed) ? 0 : 1;
                 mountHeight *= mod;
-                var Mult = Math.Min(Math.Max(OpenSimplexNoise.Evaluate(X * 0.0005, Z * 0.0005) * 4.0, 0.0), 1.0);
-                mountHeight *= Mult;
+                var mult = Math.Min(Math.Max(OpenSimplexNoise.Evaluate(X * 0.0005, Z * 0.0005) * 4.0, 0.0), 1.0);
+                mountHeight *= mult;
+                
                 Height += mountHeight;
             }
 
