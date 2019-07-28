@@ -41,14 +41,12 @@ namespace Hedra.Engine.EntitySystem
             if (!Parent.IsDead || Dropped) return;
             var chance = Utils.Rng.NextFloat() * 100f;
             var item = RandomDrop ? ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon)) : ItemDrop;
-            chance = chance / (item != null && item.IsFood ? Killer.Attributes.FoodDropChanceModifier : 1);
+            chance /= (item != null && item.IsFood ? Killer.Attributes.FoodDropChanceModifier : 1);
             if (chance < DropChance)
             {
                 if (item != null)
                 {
-                    World.DropItem(item,
-                        Parent.Position + Vector3.UnitY * 2f +
-                        new Vector3(Utils.Rng.NextFloat() * 8f - 4f, 0, Utils.Rng.NextFloat() * 8f - 4f));
+                    World.DropItem(item, Parent.Position + Vector3.UnitY * 2f + new Vector3(Utils.Rng.NextFloat() * 8f - 4f, 0, Utils.Rng.NextFloat() * 8f - 4f));
                 }
             }
             Dropped = true;

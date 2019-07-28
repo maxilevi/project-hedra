@@ -10,7 +10,6 @@ namespace Hedra.Engine.WorldBuilding
     
     public interface IWorldObject : IUpdatable
     {
-        event OnDisposedEvent OnDispose;
         Vector3 Position { get; set; }
         void Dispose();
     }

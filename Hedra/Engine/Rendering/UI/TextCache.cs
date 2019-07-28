@@ -9,11 +9,13 @@ namespace Hedra.Engine.Rendering.UI
 {
     public static class TextCache
     {
+        private static readonly object Lock = new object();
         private static readonly List<CacheOptions> Cache = new List<CacheOptions>();
         
         private static CacheOptions GetCache(string Text, Font TextFont, Color TextColor)
         {
-            return Cache.FirstOrDefault(C => C.Text == Text && Math.Abs(C.TextFont.Size - TextFont.Size) < 0.005f && C.TextFont.Style == TextFont.Style && TextColor == C.TextColor);
+            lock(Lock)
+                return Cache.FirstOrDefault(C => C.Text == Text && Math.Abs(C.TextFont.Size - TextFont.Size) < 0.005f && C.TextFont.Style == TextFont.Style && TextColor == C.TextColor);
         }
 
         private static bool Contains(string Text, Font TextFont, Color TextColor)
@@ -23,7 +25,8 @@ namespace Hedra.Engine.Rendering.UI
 
         public static bool Exists(uint Id)
         {
-            return Cache.FirstOrDefault(C => C.Id == Id) != null;
+            lock(Lock)
+                return Cache.FirstOrDefault(C => C.Id == Id) != null;
         }
         
         public static uint UseOrCreate(string Text, Font TextFont, Color TextColor, BitmapObject Bitmap, StackTrace _t)
@@ -45,30 +48,44 @@ namespace Hedra.Engine.Rendering.UI
         private static void Add(string Text, Font TextFont, Color TextColor, uint Id, StackTrace T)
         {
             if (Contains(Text, TextFont, TextColor)) throw new ArgumentOutOfRangeException($"Duplicate cache for '{Text}'");
-            var cache = Cache.FirstOrDefault(C => C.Id == Id);
-            if (cache != null) throw new ArgumentOutOfRangeException($"Duplicate cache for '{Text}'");
-            if (Program.IsDummy) return;
-            Cache.Add(new CacheOptions
+            lock (Lock)
             {
-                TextFont = TextFont,
-                Text = Text,
-                TextColor = TextColor,
-                Id = Id,
-                Uses = 1,
-                _stack = T
-            });
+                var cache = Cache.FirstOrDefault(C => C.Id == Id);
+                if (cache != null) throw new ArgumentOutOfRangeException($"Duplicate cache for '{Text}'");
+                if (Program.IsDummy) return;
+                Cache.Add(new CacheOptions
+                {
+                    TextFont = TextFont,
+                    Text = Text,
+                    TextColor = TextColor,
+                    Id = Id,
+                    Uses = 1,
+                    _stack = T
+                });
+            }
         }
 
         public static void Remove(uint Id)
         {
             if(Id == 0) return;
-            var cache = Cache.FirstOrDefault(C => C.Id == Id);
-            if (cache == null) return;// throw new ArgumentOutOfRangeException($"Cache does not exist for id '{Id}'");
-            if ((--cache.Uses) == 0)
-                Cache.Remove(cache);
+            lock (Lock)
+            {
+                var cache = Cache.FirstOrDefault(C => C.Id == Id);
+                if (cache == null)
+                    return; // throw new ArgumentOutOfRangeException($"Cache does not exist for id '{Id}'");
+                if ((--cache.Uses) == 0)
+                    Cache.Remove(cache);
+            }
         }
 
-        public static int Count => Cache.Count;
+        public static int Count
+        {
+            get
+            {
+                lock(Lock)
+                    return Cache.Count;
+            }
+        }
         
         private class CacheOptions
         {
@@ -77,7 +94,14 @@ namespace Hedra.Engine.Rendering.UI
             public Color TextColor { get; set; }
             public uint Id { get; set; }
             public uint Uses { get; set; }
-            public StackTrace _stack = new StackTrace();
+            public StackTrace _stack;
+
+            public CacheOptions()
+            {
+                #if DEBUG
+                    _stack = new StackTrace();
+                #endif
+            }
 
             public override string ToString()
             {

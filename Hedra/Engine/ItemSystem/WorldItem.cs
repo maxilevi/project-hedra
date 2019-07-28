@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using Hedra.Core;
 using Hedra.Engine.EntitySystem;
@@ -38,10 +39,13 @@ namespace Hedra.Engine.ItemSystem
         public ushort ItemId { get; }
         public Item ItemSpecification { get; }
         public event OnItemCollect OnPickup;
+        private readonly DropShadow _shadow;
+        private readonly bool _initialized;
         private readonly float _height;
         private bool _isColliding;
         private bool _shouldPickup;
         private bool _canPickup;
+        private bool _disposed;
 
         public WorldItem(Item ItemSpecification, Vector3 Position) : base(null)
         {
@@ -60,20 +64,21 @@ namespace Hedra.Engine.ItemSystem
             {
                 if (_canPickup && Controls.Interact == EventArgs.Key) _shouldPickup = true;
             });
-            var shadow = new DropShadow
+            _shadow = new DropShadow
             {
                 Position = Position - Vector3.UnitY * 1.5f,
                 DepthTest = true,
-                DeleteWhen = () => this.Disposed,
                 Rotation = new Matrix3(Mathf.RotationAlign(Vector3.UnitY, Physics.NormalAtPosition(Position))),
                 IsCosmeticShadow = true,
                 Opacity = .5f
             };
-            DrawManager.DropShadows.Add(shadow);
+            DrawManager.DropShadows.Add(_shadow);
+            _initialized = true;
         }
         
         public override void Update()
         {
+            if(!_initialized) return;
             base.Update();
             this.Model.Alpha = this.Alpha;
             if(this.PickedUp) return;
@@ -129,9 +134,10 @@ namespace Hedra.Engine.ItemSystem
         
         public new void Dispose()
         {
-            EventDispatcher.UnregisterKeyDown(this);
-            World.RemoveItem(this);
+            _disposed = true;
             base.Dispose();
+            DrawManager.DropShadows.Remove(_shadow);
+            EventDispatcher.UnregisterKeyDown(this);
         }
     }
 }

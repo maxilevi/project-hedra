@@ -45,6 +45,7 @@ namespace Hedra.Engine.EntitySystem
     
     public class Entity : IEntity
     {
+        private readonly object _componentsLock = new object();
         public virtual float AttackingSpeedModifier => 0.75f;
         private DamageComponent _damageManager;
         private int _drowningSoundTimer;
@@ -61,7 +62,7 @@ namespace Hedra.Engine.EntitySystem
         private readonly TickSystem _tickSystem;
         public IPhysicsComponent Physics { get; }
 
-        private List<IComponent<IEntity>> Components = new List<IComponent<IEntity>>();
+        private readonly List<IComponent<IEntity>> _components = new List<IComponent<IEntity>>();
         private bool Splashed { get; set; }
 
         public event OnComponentAdded ComponentAdded;
@@ -254,9 +255,9 @@ namespace Hedra.Engine.EntitySystem
 
         public void Damage(float Amount, IEntity Damager, out float Exp, out float Inflicted, bool PlaySound = true, bool PushBack = true)
         {
-            for (var i = 0; i < Components.Count; i++)
+            for (var i = 0; i < _components.Count; i++)
             {
-                if (Components[i] is DamageComponent dmg)
+                if (_components[i] is DamageComponent dmg)
                     _damageManager = dmg;
             }
 
@@ -310,23 +311,25 @@ namespace Hedra.Engine.EntitySystem
         {
             if(Component == null) throw new ArgumentNullException($"{this.GetType()} component cannot be null");
             ComponentAdded?.Invoke(Component);
-            Components.Add(Component);
+            lock(_componentsLock)
+                _components.Add(Component);
             if(Component is ITickable tickable) _tickSystem.Add(tickable);
         }
 
         public void RemoveComponent(IComponent<IEntity> Component, bool Dispose = true)
         {
             if (Component == null) throw new ArgumentNullException($"{this.GetType()} component cannot be null");
-            Components.Remove(Component);
+            lock(_componentsLock)
+                _components.Remove(Component);
             if (Component is ITickable tickable) _tickSystem.Remove(tickable);
             if (Dispose)Component.Dispose();
         }
 
         public T SearchComponent<T>()
         {
-            for (var i = 0; i < Components.Count; i++)
+            for (var i = 0; i < _components.Count; i++)
             {
-                if (Components[i] is T variable)
+                if (_components[i] is T variable)
                     return variable;
             }
 
@@ -336,9 +339,9 @@ namespace Hedra.Engine.EntitySystem
         public T[] GetComponents<T>()
         {
             var list = new List<T>();
-            for (var i = 0; i < Components.Count; i++)
+            for (var i = 0; i < _components.Count; i++)
             {
-                if (Components[i] is T variable)
+                if (_components[i] is T variable)
                     list.Add(variable);
             }
             return list.ToArray();
@@ -476,7 +479,7 @@ namespace Hedra.Engine.EntitySystem
             if (Disposed) return;
 
             World.RemoveEntity(this);
-            var components = Components.ToArray(); 
+            var components = _components.ToArray(); 
             for (var i = components.Length-1; i > -1; --i)
             {
                 components[i]?.Dispose();
@@ -494,10 +497,10 @@ namespace Hedra.Engine.EntitySystem
             if (IsDead) return;
 
             Physics.Draw();
-            for (var i = Components.Count - 1; i > -1; --i)
+            for (var i = _components.Count - 1; i > -1; --i)
             {
-                if (!Components[i]?.Drawable ?? false)
-                    Components[i].Draw();
+                if (!_components[i]?.Drawable ?? false)
+                    _components[i].Draw();
             }
         }
 
@@ -511,11 +514,14 @@ namespace Hedra.Engine.EntitySystem
             this.Physics.Update();
             this.UpdateEnvironment();
             this._tickSystem.Tick();
-            var beforeComponents = Components.ToArray();
-            for (var i = beforeComponents.Length-1; i > -1; --i)
+            var beforeComponents = default(IComponent<IEntity>[]);
+            lock (_componentsLock)
+                beforeComponents = _components.ToArray();
+            for (var i = beforeComponents.Length - 1; i > -1; --i)
             {
                 beforeComponents[i]?.Update();
             }
+            
 
             if (IsKnocked)
             {

@@ -561,7 +561,6 @@ namespace Hedra.Engine.Generation
                 if (_worldObjects.Contains(WorldObject))
                     throw new ArgumentException("WorldObject already exists in this world.");
                 _worldObjects.Add(WorldObject);
-                WorldObject.OnDispose += () => RemoveObject(WorldObject);
             }
             _isWorldObjectCacheDirty = true;
         }
@@ -569,8 +568,6 @@ namespace Hedra.Engine.Generation
         public WorldItem DropItem(Item ItemSpec, Vector3 Position)
         {
             var model = new WorldItem(ItemSpec, Position);
-            AddWorldObject(model);
-
             model.OnPickup += delegate(IPlayer Player)
             {
                 TaskScheduler.While(() => !model.Disposed, delegate

@@ -27,7 +27,7 @@ namespace Hedra.Engine.Player
         {
             base.Update();
             if(Disposed) return;
-            if(_shouldStop && Particles.Particles.Count == 0) Dispose();
+            if(_shouldStop && Particles.ParticleCount == 0) Dispose();
             UpdateDamage();
             _do();
             if (!_while()) _shouldStop = true;

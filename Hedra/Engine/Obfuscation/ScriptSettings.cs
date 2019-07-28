@@ -101,7 +101,7 @@ using System.Reflection;
 [assembly: Obfuscation(Exclude = false, Feature = "match-name('^Ready$') and (member-type('field') or member-type('property') or member-type('method') or member-type('event')):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "match-name('^Removable$') and (member-type('field') or member-type('property') or member-type('method') or member-type('event')):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "match-name('^RemoveComponent$') and (member-type('field') or member-type('property') or member-type('method') or member-type('event')):-rename")]
-[assembly: Obfuscation(Exclude = false, Feature = "match-name('^RemoveItem$') and (member-type('field') or member-type('property') or member-type('method') or member-type('event')):-rename")]
+[assembly: Obfuscation(Exclude = false, Feature = "match-name('^RemoveWorldObject$') and (member-type('field') or member-type('property') or member-type('method') or member-type('event')):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "match-name('^Reset$') and (member-type('field') or member-type('property') or member-type('method') or member-type('event')):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "match-name('^Scale$') and (member-type('field') or member-type('property') or member-type('method') or member-type('event')):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "match-name('^ScaleErrorMargin$') and (member-type('field') or member-type('property') or member-type('method') or member-type('event')):-rename")]

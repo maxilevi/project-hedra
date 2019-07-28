@@ -70,8 +70,6 @@ namespace Hedra.Engine.EnvironmentSystem
             {
                 _rain.Emit();
             }
-
-            _rain.Particles[_rain.Particles.Count - 1].Collides = true;
         }
 
         public bool IsRaining

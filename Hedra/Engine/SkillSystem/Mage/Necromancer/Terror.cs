@@ -22,7 +22,8 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 
         protected override void Apply(IEntity Entity)
         {
-            Entity.AddComponent(new FearComponent(Entity, User, Duration, Slowness));
+            if(Entity.SearchComponent<FearComponent>() == null)
+                Entity.AddComponent(new FearComponent(Entity, User, Duration, Slowness));
         }
         
         protected override float Radius => 24 + 32 * (Level / (float) MaxLevel);

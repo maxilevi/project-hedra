@@ -22,10 +22,11 @@ namespace Hedra.Engine.Rendering.Particles
     public class ParticleSystem : IRenderable, IUpdatable, IDisposable
     {
         public const int MaxParticleCount = 15000;
+        private static readonly Shader Shader = Shader.Build("Shaders/Particle.vert","Shaders/Particle.frag");
+        private readonly object _lock = new object();
         public bool Disposed { get; private set; }
         public int MaxParticles { get; set; } = MaxParticleCount; 
-        public List<Particle3D> Particles = new List<Particle3D>();
-        public static Shader Shader = Shader.Build("Shaders/Particle.vert","Shaders/Particle.frag");
+        private readonly List<Particle3D> _particles = new List<Particle3D>();
         private VBO<Vector4> _particleVbo;
         private ParticleVAO _vao;
         public Vector3 Position { get; set; }
@@ -45,6 +46,15 @@ namespace Hedra.Engine.Rendering.Particles
         public bool HasMultipleOutputs { get; set; }
         public bool Enabled { get; set; } = true;
         public bool Collides { get; set; }
+
+        public int ParticleCount
+        {
+            get
+            {
+                lock (_lock)
+                    return _particles.Count;
+            }
+        }
         private int _particlesInMemory;
         
         
@@ -69,7 +79,7 @@ namespace Hedra.Engine.Rendering.Particles
         {
             if((this.Position - LocalPlayer.Instance.Position).LengthSquared > GeneralSettings.DrawDistanceSquared) return;
             
-            if(Particles.Count == MaxParticles || !Enabled || (GameSettings.Paused && Particle3D.UseTimeScale)) return;
+            if(ParticleCount == MaxParticles || !Enabled || (GameSettings.Paused && Particle3D.UseTimeScale)) return;
             
             var localPositionX = PositionErrorMargin.X * Utils.Rng.NextFloat() * 2f - PositionErrorMargin.X;
             var localPositionY = PositionErrorMargin.Y * Utils.Rng.NextFloat() * 2f - PositionErrorMargin.Y;
@@ -103,24 +113,41 @@ namespace Hedra.Engine.Rendering.Particles
             
             if(Shape == ParticleShape.Cone)
             {
-                Particles.Add(new Particle3D(Position, ParticleCreator.UnitWithinCone(Direction, ConeAngle) * 25 * ConeSpeed, Mathf.RandomVector3(Utils.Rng) * 360,
-                             newColor,
-                             Scale + particleScale, GravityEffect, ParticleLifetime, Collides));
+                lock (_lock)
+                {
+                    _particles.Add(new Particle3D(Position,
+                        ParticleCreator.UnitWithinCone(Direction, ConeAngle) * 25 * ConeSpeed,
+                        Mathf.RandomVector3(Utils.Rng) * 360,
+                        newColor,
+                        Scale + particleScale, GravityEffect, ParticleLifetime, Collides));
+                }
             }
             else if(Shape == ParticleShape.Sphere)
             {
-                
-                if(particlePosition.X * particlePosition.X + particlePosition.Y * particlePosition.Y + particlePosition.Z * particlePosition.Z <=
-                   (PositionErrorMargin.X * PositionErrorMargin.X + PositionErrorMargin.Y * PositionErrorMargin.Y + PositionErrorMargin.Z * PositionErrorMargin.Z) / 4.0)
-                Particles.Add(new Particle3D(this.Position + particlePosition, Direction * 25, Mathf.RandomVector3(Utils.Rng) * 360,
-                             newColor,
-                             Scale + particleScale, GravityEffect, ParticleLifetime, Collides));
+
+                if (particlePosition.X * particlePosition.X + particlePosition.Y * particlePosition.Y +
+                    particlePosition.Z * particlePosition.Z <=
+                    (PositionErrorMargin.X * PositionErrorMargin.X + PositionErrorMargin.Y * PositionErrorMargin.Y +
+                     PositionErrorMargin.Z * PositionErrorMargin.Z) / 4.0)
+                {
+                    lock (_lock)
+                    {
+                        _particles.Add(new Particle3D(this.Position + particlePosition, Direction * 25,
+                            Mathf.RandomVector3(Utils.Rng) * 360,
+                            newColor,
+                            Scale + particleScale, GravityEffect, ParticleLifetime, Collides));
+                    }
+                }
             }
             else
             {
-                Particles.Add(new Particle3D(this.Position + particlePosition, Direction * 25, Mathf.RandomVector3(Utils.Rng) * 360,
-                             newColor,
-                             Scale + particleScale, GravityEffect, ParticleLifetime, Collides));
+                lock (_lock)
+                {
+                    _particles.Add(new Particle3D(this.Position + particlePosition, Direction * 25,
+                        Mathf.RandomVector3(Utils.Rng) * 360,
+                        newColor,
+                        Scale + particleScale, GravityEffect, ParticleLifetime, Collides));
+                }
             }
         }
         
@@ -128,38 +155,42 @@ namespace Hedra.Engine.Rendering.Particles
         public void Update()
         {
             if(!HasMultipleOutputs && (this.Position - LocalPlayer.Instance.Position).LengthSquared > GeneralSettings.DrawDistanceSquared) return;
-            
-            for(var i = 0; i < Particles.Count; i++)
+
+            lock (_lock)
             {
-                if(this.RandomRotation)
-                    Particles[i].Rotation += Mathf.RandomVector3(Utils.Rng) * 150 * (float) Time.DeltaTime;
-                if(!Particles[i].Update())
+                for (var i = 0; i < _particles.Count; i++)
                 {
-                    Particles.RemoveAt(i);
+                    if (this.RandomRotation)
+                        _particles[i].Rotation += Mathf.RandomVector3(Utils.Rng) * 150 * (float) Time.DeltaTime;
+                    if (!_particles[i].Update())
+                    {
+                        _particles.RemoveAt(i);
+                    }
                 }
+
+                UpdateVbo();
             }
-            UpdateVbo();
         }
         
         public void Draw()
         {
             if(!HasMultipleOutputs && (this.Position - LocalPlayer.Instance.Position).LengthSquared > GeneralSettings.DrawDistanceSquared) return;
-            
-            if(Particles.Count > 0)
+            if (ParticleCount > 0)
             {
                 Renderer.Enable(EnableCap.Blend);
                 Renderer.Enable(EnableCap.DepthTest);
                 Shader.Bind();
                 Shader["PlayerPosition"] = GameManager.Player.Position;
-                
+
                 _vao.Bind();
-                
+
                 ParticleCreator.IndicesVBO.Bind();
-                Renderer.DrawElementsInstanced(PrimitiveType.Triangles, ParticleCreator.IndicesVBO.Count, DrawElementsType.UnsignedShort, IntPtr.Zero, _particlesInMemory);
+                Renderer.DrawElementsInstanced(PrimitiveType.Triangles, ParticleCreator.IndicesVBO.Count,
+                    DrawElementsType.UnsignedShort, IntPtr.Zero, _particlesInMemory);
                 ParticleCreator.IndicesVBO.Unbind();
-                
+
                 _vao.Unbind();
-                
+
                 Shader.Unbind();
                 Renderer.Disable(EnableCap.Blend);
             }
@@ -173,13 +204,13 @@ namespace Hedra.Engine.Rendering.Particles
         
         private void UpdateVbo()
         {
-            if (Particles.Count <= 0) return;
-            var count = Particles.Count;
+            if (_particles.Count <= 0) return;
+            var count = _particles.Count;
             var vec4S = new Vector4[count * 5];
             for(var i = count-1; i > -1; i--)
             {
-                var transMatrix = ConstructTransformationMatrix(Particles[i].Position, Particles[i].Rotation, Particles[i].Scale);
-                vec4S[i * 5 + 0] = Particles[i].Color;
+                var transMatrix = ConstructTransformationMatrix(_particles[i].Position, _particles[i].Rotation, _particles[i].Scale);
+                vec4S[i * 5 + 0] = _particles[i].Color;
                 vec4S[i * 5 + 1] = transMatrix.Column0;
                 vec4S[i * 5 + 2] = transMatrix.Column1;
                 vec4S[i * 5 + 3] = transMatrix.Column2;

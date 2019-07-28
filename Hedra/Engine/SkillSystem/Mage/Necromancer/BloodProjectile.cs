@@ -10,14 +10,17 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
     public class BloodProjectile : ParticleProjectile
     {
         private readonly IEntity _to;
+        private readonly bool _initialized;
         
         public BloodProjectile(IEntity From, IEntity To, Vector3 Origin) : base(From, Origin)
         {
             _to = To;
+            _initialized = true;
         }
 
         public override void Update()
         {
+            if(!_initialized) return;
             Direction = (_to.Position + Vector3.UnitY * _to.Model.Height * .5f - Position).NormalizedFast();
             base.Update();
         }

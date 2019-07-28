@@ -136,9 +136,9 @@ namespace Hedra
             Provider.RemoveEntity(Entity);
         }
 
-        public static void RemoveItem(WorldItem Item)
+        public static void RemoveWorldObject(IWorldObject Object)
         {
-            Provider.RemoveObject(Item);
+            Provider.RemoveObject(Object);
         }
 
         public static void AddChunk(Chunk Chunk)
