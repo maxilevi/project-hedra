@@ -43,12 +43,15 @@ namespace Hedra.Engine.Rendering.Core
             return DefaultId == Id || Textures[Id].IsDefault || Textures[Id].Uses > 0;
         }
         
-        public static void Add(uint Id, string Path)
+        public static void Add(uint Id, string Path, TextureMinFilter Min, TextureMagFilter Mag, TextureWrapMode Wrap)
         {
             if (Id == 0) throw new ArgumentOutOfRangeException();
             var information = new TextureInformation
             {
                 Path = Path,
+                Min = Min,
+                Mag = Mag,
+                Wrap = Wrap,
                 Uses = 0
             };
             if (Textures.ContainsKey(Id))

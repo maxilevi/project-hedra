@@ -28,13 +28,19 @@ namespace Hedra.Rendering
     {
         public static ITexture2DProvider Provider { get; set; } = new Texture2DProvider();
 
-        public static uint LoadTexture(BitmapObject BitmapObject, TextureMinFilter Min = TextureMinFilter.Linear, TextureMagFilter Mag = TextureMagFilter.Linear, TextureWrapMode Wrap = TextureWrapMode.ClampToBorder)
+        public static uint LoadTexture(BitmapObject BitmapObject, bool UseCache)
         {
-            if (TextureRegistry.Contains(BitmapObject.Path, Min, Mag, Wrap, out var cachedId))
+            return LoadTexture(BitmapObject, TextureMinFilter.Linear, TextureMagFilter.Linear, TextureWrapMode.ClampToBorder, UseCache);
+        }
+
+        public static uint LoadTexture(BitmapObject BitmapObject, TextureMinFilter Min = TextureMinFilter.Linear, TextureMagFilter Mag = TextureMagFilter.Linear, TextureWrapMode Wrap = TextureWrapMode.ClampToBorder, bool UseCache = true)
+        {
+            if (UseCache && TextureRegistry.Contains(BitmapObject.Path, Min, Mag, Wrap, out var cachedId))
                 return cachedId;
             
             var id = Provider.LoadTexture(BitmapObject, Min, Mag, Wrap);
-            TextureRegistry.Add(id, BitmapObject.Path);
+            if(UseCache)
+                TextureRegistry.Add(id, BitmapObject.Path, Min, Mag, Wrap);
             
             if(Engine.Loader.Hedra.MainThreadId != Thread.CurrentThread.ManagedThreadId && !GameSettings.TestingMode)
                 Log.WriteLine($"[Error] Texture being created outside of the GL thread");

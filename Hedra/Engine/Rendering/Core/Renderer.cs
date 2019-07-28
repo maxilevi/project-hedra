@@ -18,6 +18,7 @@ namespace Hedra.Engine.Rendering.Core
     {
         public static event ShaderChangeEvent ShaderChanged;
         public static IGLProvider Provider { get; set; } = new GLProvider();
+        
         public static uint ShaderBound => ShaderHandler.Id;
         public static uint FBOBound => FramebufferHandler.Id;
         public static uint VAOBound => VertexAttributeHandler.Id;
@@ -181,12 +182,6 @@ namespace Hedra.Engine.Rendering.Core
         public static void BlendFunc(BlendingFactor Src, BlendingFactor Dst)
         {
             Provider.BlendFunc(Src, Dst);
-        }
-
-        public static void BlitFramebuffer(int SrcX0, int SrcY0, int SrcX1, int SrcY1, int DstX0, int DstY0, int DstX1, int DstY1,
-            ClearBufferMask Mask, BlitFramebufferFilter Filter)
-        {
-            Provider.BlitFramebuffer(SrcX0, SrcY0, SrcX1, SrcY1, DstX0, DstY0, DstX1, DstY1, Mask, Filter);
         }
 
         public static void BufferData(BufferTarget Target, IntPtr Size, IntPtr Data, BufferUsageHint Hint)

@@ -32,7 +32,7 @@ namespace Hedra.Engine.Rendering.UI
             var id = 0u;
             if (cache == null)
             {
-                Add(Text, TextFont, TextColor, id = Graphics2D.LoadTexture(Bitmap), _t);
+                Add(Text, TextFont, TextColor, id = Graphics2D.LoadTexture(Bitmap, false), _t);
             }
             else
             {
