@@ -24,6 +24,7 @@ FISHING_ROD_COOLDOWN = 2
 FISHING_HOOK_SCALE = 0.5
 FISHING_HOOK_SPEED = 1
 FISHING_HOOK_LIFETIME = 4
+REWARD_CHANCE = .33
 ROD_LINE_WIDTH = 2
 PULL_SPEED = 1.0
 
@@ -51,10 +52,13 @@ def assert_constants():
         assert ItemPool.Exists(name)
 
 def get_random_fish():
-    roll = Core.rand_float()
-    for fish_name, chance in FISHING_REWARDS:
-        if roll < chance:
-            return ItemPool.Grab(fish_name)
+    if Core.rand_float() < REWARD_CHANCE:
+        roll = Core.rand_float()
+        for fish_name, chance in FISHING_REWARDS:
+            if roll < chance:
+                return ItemPool.Grab(fish_name)
+    else:
+        return None
     raise ArgumentOutOfRangeException('Failed to find a suitable fish')
 
 
@@ -277,7 +281,8 @@ def retrieve_fish(human, state):
     state['pull_position'] = state['fishing_hook'].Position
     if state['has_fish']:
         state['fish'] = get_random_fish()
-        state['fish_model'] = ObjectMesh.FromVertexData(state['fish'].Model.Clone().Scale(Vector3.One * 2))
+        if state['fish']:
+            state['fish_model'] = ObjectMesh.FromVertexData(state['fish'].Model.Clone().Scale(Vector3.One * 2))
 
 def has_fish_effect(position):
     World.Particles.VariateUniformly = True
