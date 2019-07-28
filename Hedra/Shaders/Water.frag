@@ -25,9 +25,10 @@ void main()
 	{
 		discard;
 	}
-	if(Dither){
+	if(Dither)
+	{
 		float d = dot( gl_FragCoord.xy, vec2(.5,.5));
-		if( d-floor(d) < 0.5) discard;
+		if(d - floor(d) < 0.5) discard;
 	}
 	vec4 InputColor = Color;
 	vec2 TexCoords = (ClipSpace.xy / ClipSpace.w) / 2.0 + 0.5;

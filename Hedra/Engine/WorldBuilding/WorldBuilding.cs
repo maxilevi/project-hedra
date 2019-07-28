@@ -165,7 +165,8 @@ using Hedra.Localization;
         {
             lock (_plateauLock)
             {
-                //Mount.MaxHeight = ApplyMultiple(Mount.Position, Mount.MaxHeight);
+                /* This is here so that houses get correctly positioned on mountains */
+                Mount.MaxHeight = ApplyMultiple(Mount.Position, Mount.MaxHeight);
                 _plateaus.Add(Mount);
             }         
         }

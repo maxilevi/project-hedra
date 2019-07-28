@@ -218,8 +218,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         
         protected bool PushGroundwork(GroundworkItem Item)
         {
-            //if(Item.Plateau != null)
-            //    Structure.AddPlateau(Item.Plateau);
+            if(Item.Plateau != null)
+                Structure.AddPlateau(Item.Plateau);
             if (Item.Groundwork != null)
             {
                 Structure.AddGroundwork(Item.Groundwork);
