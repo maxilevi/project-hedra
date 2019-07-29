@@ -81,7 +81,9 @@ using Hedra.Localization;
                 HumanType.Warrior,
                 HumanType.Rogue,
                 HumanType.Mage,
-                HumanType.Archer
+                HumanType.Archer,
+                HumanType.Scholar,
+                HumanType.Bard
             };
             var villager = SpawnHumanoid(types[rng.Next(0, types.Length)], DesiredPosition, new HumanoidConfiguration(HealthBarType.Friendly));
             villager.Seed = Seed;

@@ -319,7 +319,8 @@ namespace Hedra.Engine.Rendering.Animation
             while (queue.Count != 0)
             {
                 var current = queue.Dequeue();
-                JointMatrices[current.Index] = current.AnimatedTransform * scaleAndRotation * current.TransformationMatrix * transformationAndPosition;
+                if(current.Index != -1)
+                    JointMatrices[current.Index] = current.AnimatedTransform * scaleAndRotation * current.TransformationMatrix * transformationAndPosition;
                 for (var i = 0; i < current.Children.Count; i++)
                 {
                     queue.Enqueue(current.Children[i]);

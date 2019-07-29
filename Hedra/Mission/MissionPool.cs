@@ -41,7 +41,7 @@ namespace Hedra.Mission
 
         public static MissionDesign Random(Vector3 Position, QuestTier Tier = QuestTier.Any)
         {
-            var possibilities = MissionScripts.Where(M => M.CanGive(Position) && (Tier == QuestTier.Any || M.Tier == Tier)).ToArray();
+            var possibilities = MissionScripts.Where(M => M.CanGive(Position) && (Tier == QuestTier.Any || M.Tier <= Tier)).ToArray();
             if(possibilities.Length == 0)
                 throw new ArgumentOutOfRangeException($"Failed to find quests that meet the given criteria");
             return possibilities[Utils.Rng.Next(0, possibilities.Length)];
@@ -68,6 +68,7 @@ namespace Hedra.Mission
     public enum QuestTier
     {
         Any,
-        Easy
+        Easy,
+        Medium
     }
 }

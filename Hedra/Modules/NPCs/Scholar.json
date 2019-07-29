@@ -1,0 +1,17 @@
+{
+  "Name": "Scholar",
+  "DisplayName": "Scholar",
+  "Models": [
+    {
+      "Path": "$DataFile$/Assets/Chr/Mob/Erudites/Scholar0Idle.dae",
+      "Scale": 1.0
+    },
+    {
+      "Path": "$DataFile$/Assets/Chr/Mob/Erudites/Scholar1Idle.dae",
+      "Scale": 1.0
+    }
+  ],
+  "Class": "Mage",
+  "Behaviour" : "Friendly",
+  "Weapons": []
+}

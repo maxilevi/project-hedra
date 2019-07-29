@@ -1,0 +1,17 @@
+{
+  "Name": "Clothier",
+  "DisplayName": "Clothier",
+  "Models": [
+    {
+      "Path": "$DataFile$/Assets/Chr/Mob/Erudites/Clothier0Idle.dae",
+      "Scale": 1.0
+    },
+    {
+      "Path": "$DataFile$/Assets/Chr/Mob/Erudites/Clothier1Idle.dae",
+      "Scale": 1.0
+    }
+  ],
+  "Class": "Mage",
+  "Behaviour" : "Friendly",
+  "Weapons": []
+}

@@ -1,0 +1,22 @@
+{
+  "Name": "Witch",
+  "DisplayName": "Witch",
+  "Models": [
+    {
+      "Path": "$DataFile$/Assets/Chr/Witch0Idle.dae",
+      "Scale": 1.0
+    },
+    {
+      "Path": "$DataFile$/Assets/Chr/Witch1Idle.dae",
+      "Scale": 1.0
+    }
+  ],
+  "Class": "Mage",
+  "Behaviour" : "Hostile",
+  "Weapons": [
+    {
+      "Tier": "Rare",
+      "Type": "Staff"
+    }
+  ]
+}

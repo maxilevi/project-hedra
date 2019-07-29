@@ -217,7 +217,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         
         private void SpawnFarmer(Vector3 Position, Vector2 FarmPosition, Random Rng)
         {
-            var farmer = SpawnVillager(Position, Rng);
+            var farmer = SpawnHumanoid(HumanType.Farmer, Position);
             farmer.RemoveComponent(farmer.SearchComponent<VillagerThoughtsComponent>());
             farmer.SearchComponent<HealthBarComponent>().Name = Translations.Get("farmer");
             farmer.RemoveComponent(farmer.SearchComponent<RoamingVillagerAIComponent>());

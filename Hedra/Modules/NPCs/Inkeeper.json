@@ -1,0 +1,17 @@
+{
+  "Name": "Inkeeper",
+  "DisplayName": "Inkeeper",
+  "Models": [
+    {
+      "Path": "$DataFile$/Assets/Chr/Mob/Erudites/Inkeeper0Idle.dae",
+      "Scale": 1.0
+    },
+    {
+      "Path": "$DataFile$/Assets/Chr/Mob/Erudites/Inkeeper1Idle.dae",
+      "Scale": 1.0
+    }
+  ],
+  "Class": "Mage",
+  "Behaviour" : "Friendly",
+  "Weapons": []
+}

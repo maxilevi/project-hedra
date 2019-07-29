@@ -8378,6 +8378,30 @@
       <Link>Assets\Chr\WerewolfIdle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Chr\Beasthunter\Beasthunter0Idle.dae">
+      <Link>Assets\Chr\Mob\Beasthunter\Beasthunter0Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Beasthunter\Beasthunter1Idle.dae">
+      <Link>Assets\Chr\Mob\Beasthunter\Beasthunter1Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Erudites\Bard0Idle.dae">
+      <Link>Assets\Chr\Mob\Erudites\Bard0Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Erudites\Bard1Idle.dae">
+      <Link>Assets\Chr\Mob\Erudites\Bard1Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Erudites\Scholar0Idle.dae">
+      <Link>Assets\Chr\Mob\Erudites\Scholar0Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Erudites\Scholar1Idle.dae">
+      <Link>Assets\Chr\Mob\Erudites\Scholar1Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Chr\Ghost\GhostAccessory0.dae">
       <Link>Assets\Chr\Mob\Ghost\GhostAccessory0.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -8444,6 +8468,58 @@
     </Content>
     <Content Include="..\project-hedra-assets\Chr\Ghost\LichIdle.dae">
       <Link>Assets\Chr\Mob\Ghost\LichIdle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\StoneGolem\StoneGolem0Idle.dae">
+      <Link>Assets\Chr\Mob\StoneGolem\StoneGolem0Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Town\Adventurer0Idle.dae">
+      <Link>Assets\Chr\Mob\Town\Adventurer0Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Town\Adventurer1Idle.dae">
+      <Link>Assets\Chr\Mob\Town\Adventurer1Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Town\Blacksmith0Idle.dae">
+      <Link>Assets\Chr\Mob\Town\Blacksmith0Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Town\Blacksmith1Idle.dae">
+      <Link>Assets\Chr\Mob\Town\Blacksmith1Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Town\Clothier0Idle.dae">
+      <Link>Assets\Chr\Mob\Town\Clothier0Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Town\Clothier1Idle.dae">
+      <Link>Assets\Chr\Mob\Town\Clothier1Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Town\Farmer0Idle.dae">
+      <Link>Assets\Chr\Mob\Town\Farmer0Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Town\Farmer1Idle.dae">
+      <Link>Assets\Chr\Mob\Town\Farmer1Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Town\Innkeeper0Idle.dae">
+      <Link>Assets\Chr\Mob\Town\Innkeeper0Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Town\Innkeeper1Idle.dae">
+      <Link>Assets\Chr\Mob\Town\Innkeeper1Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Town\Mason0Idle.dae">
+      <Link>Assets\Chr\Mob\Town\Mason0Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Town\Mason1Idle.dae">
+      <Link>Assets\Chr\Mob\Town\Mason1Idle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Chr\Witch\Witch0Idle.dae">
@@ -14196,19 +14272,27 @@
     <Content Include="Modules\Mobs\SkeletonKamikaze.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Mobs\StoneGolem.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\NPCs\Clothier.json" />
     <Content Include="Modules\NPCs\EntMorph.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\NPCs\FemaleWitch.json">
+    <Content Include="Modules\NPCs\Bard.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\NPCs\Inkeeper.json" />
+    <Content Include="Modules\NPCs\Scholar.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\NPCs\Witch.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\NPCs\Skeleton.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\NPCs\WerewolfMorph.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Modules\NPCs\MaleWitch.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\SkillTrees\ArcherTree.json">

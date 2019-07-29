@@ -89,7 +89,7 @@ namespace Hedra.Engine.Player
 
         public HumanoidModel(IHumanoid Human, HumanType Type) : base(Human)
         {
-            Load(Human, HumanoidLoader.HumanoidTemplater[Type].Model);
+            Load(Human, HumanoidLoader.HumanoidTemplater[Type].RandomModel);
         }
 
         public HumanoidModel(IHumanoid Human) : base(Human)
@@ -514,8 +514,12 @@ namespace Hedra.Engine.Player
         Gnoll,
         WerewolfMorph,
         EntMorph,
-        FemaleWitch,
-        MaleWitch,
-        Mage
+        Witch,
+        Bard,
+        Scholar,
+        Farmer,
+        Mage,
+        Innkeeper,
+        Clothier
     }
 }

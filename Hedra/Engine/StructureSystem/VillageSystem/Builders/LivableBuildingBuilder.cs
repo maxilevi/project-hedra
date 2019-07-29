@@ -15,7 +15,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
     {
         protected override bool LookAtCenter => true;
         protected override bool GraduateColor => false;
-        private float _width;
+        protected float _width;
         
         protected LivableBuildingBuilder(CollidableStructure Structure) : base(Structure)
         {

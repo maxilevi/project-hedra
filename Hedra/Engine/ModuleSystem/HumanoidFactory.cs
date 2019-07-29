@@ -55,7 +55,7 @@ namespace Hedra.Engine.ModuleSystem
                 Class = ClassDesign.FromString(template.Class),
                 Type = HumanoidType
             };
-            human.Model = new HumanoidModel(human, template.Model);
+            human.Model = new HumanoidModel(human, template.RandomModel);
             human.Physics.CollidesWithStructures = true;
             human.Physics.CollidesWithEntities = true;
             human.Health = human.MaxHealth;

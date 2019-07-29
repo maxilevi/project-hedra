@@ -76,7 +76,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             if (Rng.Next(0, 8) != 1)
             {
                 female = World.WorldBuilding.SpawnHumanoid(
-                    HumanType.FemaleWitch,
+                    HumanType.Witch,
                     Vector3.TransformPosition(WitchHutCache.Hut0Witch0Position, Transformation)
                 );
                 HumanoidFactory.AddAI(female, false);
@@ -84,7 +84,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             if (female == null || Rng.Next(0, 8) != 1)
             {
                 male = World.WorldBuilding.SpawnHumanoid(
-                    HumanType.MaleWitch,
+                    HumanType.Witch,
                     Vector3.TransformPosition(WitchHutCache.Hut0Witch1Position, Transformation)
                 );
                 HumanoidFactory.AddAI(male, false);

@@ -22,8 +22,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
     {
         protected override bool LookAtCenter => true;
         protected override bool GraduateColor => false;
-        private float _width;
-        
+
         public HouseBuilder(CollidableStructure Structure) : base(Structure)
         {
         }
@@ -33,17 +32,23 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             var position = Parameters.Position + Vector3.TransformPosition(Vector3.UnitX * _width,
                                Matrix4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian));
             
-            if (Rng.Next(0, 4) == 1)
+            if (Rng.Next(0, 3) == 1)
             {
                 var villager = SpawnVillager(position, Rng);
-                if (Utils.Rng.Next(0, 5) == 1)
+                if (Utils.Rng.Next(0, 4) == 1)
                 {
                     villager.RemoveComponent(villager.SearchComponent<TalkComponent>());
                     villager.RemoveComponent(villager.SearchComponent<ThoughtsComponent>());
-                    var questDesign = MissionPool.Random(position, QuestTier.Easy);
-                    villager.AddComponent(
-                        new QuestGiverComponent(villager, questDesign)
-                    );
+                    var scholars = new[]
+                    {
+                        HumanType.Scholar.ToString().ToLowerInvariant(),
+                        HumanType.Bard.ToString().ToLowerInvariant()
+                    };
+                    var questDifficulty = Array.IndexOf(scholars, villager.Type.ToLowerInvariant()) != -1
+                        ? QuestTier.Medium
+                        : QuestTier.Easy;
+                    var questDesign = MissionPool.Random(position, questDifficulty);
+                    villager.AddComponent(new QuestGiverComponent(villager, questDesign));
                 }
             }
             else if (Rng.Next(0, 6) == 1)
