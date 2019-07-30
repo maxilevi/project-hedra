@@ -29,10 +29,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         
         public override void Polish(HouseParameters Parameters, VillageRoot Root, Random Rng)
         {
-            var position = Parameters.Position + Vector3.TransformPosition(Vector3.UnitX * _width,
+            var position = Parameters.Position + Vector3.TransformPosition(Vector3.UnitX * Width,
                                Matrix4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian));
             
-            if (Rng.Next(0, 3) == 1)
+            if (Rng.Next(0, 2) == 1)
             {
                 var villager = SpawnVillager(position, Rng);
                 if (Utils.Rng.Next(0, 4) == 1)

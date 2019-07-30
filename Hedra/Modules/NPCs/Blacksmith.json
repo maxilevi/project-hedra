@@ -1,10 +1,20 @@
 ﻿{
   "Name": "Blacksmith",
   "DisplayName": "Blacksmith",
-  "Model": {
-    "Path": "$DataFile$/Assets/Chr/BlacksmithIdle.dae",
-    "Scale": 1.0
-  },
+  "Models": [
+    {
+      "Path": "$DataFile$/Assets/Chr/BlacksmithIdle.dae",
+      "Scale": 1.0
+    },
+    {
+      "Path": "$DataFile$/Assets/Chr/Mob/Town/Blacksmith0Idle.dae",
+      "Scale": 1.0
+    },
+    {
+      "Path": "$DataFile$/Assets/Chr/Mob/Town/Blacksmith1Idle.dae",
+      "Scale": 1.0
+    }
+  ],
   "Class": "Warrior", 
   "Behaviour" : "Friendly",  
   "Immune": true,

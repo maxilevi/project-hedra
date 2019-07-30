@@ -520,6 +520,8 @@ namespace Hedra.Engine.Player
         Farmer,
         Mage,
         Innkeeper,
-        Clothier
+        Clothier,
+        Mason,
+        GreenVillager
     }
 }

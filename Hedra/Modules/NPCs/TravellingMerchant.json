@@ -13,10 +13,8 @@
   "AttackSpeed": 1.0,
   "Components":  [
     {
-      "Type": "Hedra.Components.MerchantComponent",
-      "Parameters": [
-        true
-      ]
+      "Type": "Hedra.Components.TravellingMerchantComponent",
+      "Parameters": []
     }
   ],
   "Weapons": []

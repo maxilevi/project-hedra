@@ -8,7 +8,7 @@ namespace Hedra.Engine.TreeSystem
 {
     public class CypressDesign : TreeDesign
     {
-        public override float Spacing => 75f;
+        public override float Spacing => 55f;
         public override VertexData Model => CacheManager.GetModel(CacheItem.CypressTrees);
 
         public override VertexData Paint(VertexData Data, Vector4 WoodColor, Vector4 LeafColor)

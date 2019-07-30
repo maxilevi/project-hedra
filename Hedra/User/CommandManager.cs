@@ -183,7 +183,7 @@ namespace Hedra.User
                     var vill = World.InRadius<Village>(Caster.Position, VillageDesign.MaxVillageRadius).FirstOrDefault();
                     Result = "Couldn't find any near village";
                     if (vill == null) return false;
-                    var human = World.WorldBuilding.SpawnHumanoid(HumanType.Warrior, Caster.Position + Caster.Orientation * 16f);
+                    var human = World.WorldBuilding.SpawnHumanoid(HumanType.Bard, Caster.Position + Caster.Orientation * 16f);
                     human.AddComponent(new TalkComponent(human));
                     human.AddComponent(new RoamingVillagerAIComponent(human, vill.Graph));
                     Result = "Success";

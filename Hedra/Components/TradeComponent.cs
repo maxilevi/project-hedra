@@ -16,17 +16,15 @@ using Hedra.Localization;
 
 namespace Hedra.Components
 {
-    public abstract class TradeComponent : EntityComponent
+    public abstract class TradeComponent : Component<IHumanoid>
     {
         protected int MerchantSpaces => TradeInventory.MerchantSpaces;
         private const int TradeRadius = 12;
-        public new Humanoid Parent;
         public Dictionary<int, Item> Items { get; private set; }
         private Dictionary<int, Item> _originalItems;
 
-        protected TradeComponent(Humanoid Parent) : base(Parent)
+        protected TradeComponent(IHumanoid Parent) : base(Parent)
         {
-            this.Parent = Parent;
             this.Parent.Gold = int.MaxValue;
         }
 

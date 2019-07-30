@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using Hedra.Engine.Generation;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Player;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.StructureSystem.VillageSystem.Layout;
 using Hedra.Engine.StructureSystem.VillageSystem.Placers;
@@ -38,11 +39,23 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             HousePlacer = new HousePlacer(Root.Template.House.Designs, Root.Template.Well.Designs, Rng);
             StablePlacer = new Placer<BuildingParameters>(Root.Template.Stable.Designs, Rng);
             MarketPlacer = new MarketPlacer(Root.Template.Well.Designs, Rng);
-            InnPlacer = new GenericPlacer(Root.Template.Inn.Designs, Rng, 1);//Rng.Next(1, 4));
-            MayorPlacer = new GenericPlacer(Root.Template.Mayor.Designs, Rng, 1);    
-            MasonryPlacer = new GenericPlacer(Root.Template.Masonry.Designs, Rng, 1);//Rng.Next(0, 3));
-            ClothierPlacer = new GenericPlacer(Root.Template.Clothier.Designs, Rng, 1);//Rng.Next(0, 3));
-            ShopPlacer = new GenericPlacer(Root.Template.Shop.Designs, Rng, 1);//Rng.Next(0, 3));
+            InnPlacer = new GenericPlacer(Root.Template.Inn.Designs, Rng, 1, new GenericNPCSettings
+            {
+                Type = HumanType.Innkeeper,
+            });
+            MayorPlacer = new GenericPlacer(Root.Template.Mayor.Designs, Rng, 1, null);    
+            MasonryPlacer = new GenericPlacer(Root.Template.Masonry.Designs, Rng, 1, new GenericNPCSettings
+            {
+                Type = HumanType.Mason,
+            });
+            ClothierPlacer = new GenericPlacer(Root.Template.Clothier.Designs, Rng, 1, new GenericNPCSettings
+            {
+                Type = HumanType.Clothier,
+            });
+            ShopPlacer = new GenericPlacer(Root.Template.Shop.Designs, Rng, 1, new GenericNPCSettings
+            {
+                Type = HumanType.GreenVillager
+            });
         }
 
         public abstract PlacementDesign CreateDesign();

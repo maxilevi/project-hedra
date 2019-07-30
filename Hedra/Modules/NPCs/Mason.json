@@ -1,0 +1,26 @@
+{
+  "Name": "Mason",
+  "DisplayName": "Mason",
+  "Models": [
+    {
+      "Path": "$DataFile$/Assets/Chr/Mob/Town/Mason0Idle.dae",
+      "Scale": 1.0
+    },
+    {
+      "Path": "$DataFile$/Assets/Chr/Mob/Town/Mason1Idle.dae",
+      "Scale": 1.0
+    }
+  ],
+  "Class": "Warrior",
+  "Behaviour" : "Friendly",
+  "Immune": true,
+  "AttackPower": 1.0,
+  "AttackSpeed": 1.0,
+  "Components":  [
+    {
+      "Type": "Hedra.Components.MasonComponent",
+      "Parameters": []
+    }
+  ],
+  "Weapons": []
+}

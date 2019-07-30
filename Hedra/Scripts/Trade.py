@@ -14,50 +14,62 @@ FISHING_ROD = 'FishingRod'
 BAIT = 'Bait'
 COMPANION_EQUIPMENT_TYPE = 'Pet'
 
-def build_inventory(item_dict, is_travelling_merchant, inventory_size, rng):
-    items = get_base_items(inventory_size, rng)
-    if is_travelling_merchant:
-        items += get_special_items()
-    for index, item in items:
-        if item:
-            item_dict.Add(index, item)
+def build_innkeeper_inventory(item_dict, inventory_size, rng):
+    items = []
+    add_items(items, item_dict)
 
-def get_base_items(inventory_size, rng):
-    recipes = get_base_recipes()
+def build_merchant_inventory(item_dict, inventory_size, rng):
+
+    recipes = [
+        ItemPool.Grab(PUMPKIN_PIE_RECIPE),
+        ItemPool.Grab(COOKED_MEAT_RECIPE),
+        ItemPool.Grab(HEALTH_POTION_RECIPE),
+        ItemPool.Grab(CORN_SOUP_RECIPE),
+    ]
     items = [
         (inventory_size - 1, get_infinity_item(BERRY)),
         (inventory_size - 2, get_infinity_item(GLASS_FLASK)),
         (inventory_size - 3, get_infinity_item(WOODEN_BOWL)),
         (inventory_size - 4, get_infinity_item(STONE_ARROW) if rng.Next(0, 2) == 1 else None),
-        (inventory_size - 5, ItemPool.Grab(recipes[rng.Next(0, len(recipes))])),
+        (inventory_size - 5, recipes[rng.Next(0, len(recipes))]),
+    ]
+    fishing_items = [
+        (3, ItemPool.Grab(FISHING_ROD)),
+        (4, get_infinity_item(BAIT))
     ]
     if rng.Next(0, 2) == 1:
-        items += [
-            (3, ItemPool.Grab(FISHING_ROD)),
-            (4, get_infinity_item(BAIT))
-        ]
-    return items
+        items += fishing_items
+    add_items(items, item_dict)
 
-def get_base_recipes():
-    return [
-        PUMPKIN_PIE_RECIPE,
-        COOKED_MEAT_RECIPE,
-        HEALTH_POTION_RECIPE,
-        CORN_SOUP_RECIPE,
-    ]
-
-def get_special_items():
-    return [
+    
+def build_travelling_merchant_inventory(item_dict, inventory_size, rng):
+    build_merchant_inventory(item_dict, inventory_size, rng)
+    special_items = [
         (0, ItemPool.Grab(ItemPool.Grab(ItemTier.Common, COMPANION_EQUIPMENT_TYPE))),
         (1, ItemPool.Grab(ItemPool.Grab(ItemTier.Common, COMPANION_EQUIPMENT_TYPE))),
         (2, ItemPool.Grab(ItemPool.Grab(ItemTier.Common, COMPANION_EQUIPMENT_TYPE))),
         (3, ItemPool.Grab(BOAT))
     ]
+    add_items(special_items, item_dict)
+    
+    
+def build_clothier_inventory(item_dict, inventory_size, rng):
+    items = []
+    add_items(items, item_dict)
+
+def build_mason_inventory(item_dict, inventory_size, rng):
+    items = []
+    add_items(items, item_dict)
+
+def add_items(items, dict):
+    for index, item in items:
+        if item: dict.Add(index, item)
 
 def get_infinity_item(item_name):
     item = ItemPool.Grab(item_name)
     item.SetAttribute(AMOUNT_ATTRIBUTE, int.MaxValue)
     return item
+
 
 assert ItemPool.Exists(STONE_ARROW)
 assert ItemPool.Exists(GLASS_FLASK)

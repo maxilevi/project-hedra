@@ -24,7 +24,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         private readonly StableBuilder _stableBuilder;
         private readonly MarketWellBuilder _marketWellBuilder;
         private readonly MarketBuilder _marketBuilder;
-        private readonly GenericBuilder _genericBuilder;
+        private readonly GenericBuilderWithNPC _genericBuilder;
         private readonly IPlacementDesigner _designer;
         private readonly Random _rng;
         private readonly CollidableStructure _structure;
@@ -38,7 +38,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             _stableBuilder = new StableBuilder(_structure);
             _marketWellBuilder = new MarketWellBuilder(_structure);
             _marketBuilder = new MarketBuilder(_structure);
-            _genericBuilder = new GenericBuilder(_structure);
+            _genericBuilder = new GenericBuilderWithNPC(_structure);
             _root = Root;
             _rng = Rng;
             Size = VillageDesign.MaxVillageSize;//Rng.Next(VillageDesign.MinVillageSize, VillageDesign.MaxVillageSize);

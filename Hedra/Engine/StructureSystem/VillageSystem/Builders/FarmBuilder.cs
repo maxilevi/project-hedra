@@ -218,9 +218,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         private void SpawnFarmer(Vector3 Position, Vector2 FarmPosition, Random Rng)
         {
             var farmer = SpawnHumanoid(HumanType.Farmer, Position);
-            farmer.RemoveComponent(farmer.SearchComponent<VillagerThoughtsComponent>());
             farmer.SearchComponent<HealthBarComponent>().Name = Translations.Get("farmer");
-            farmer.RemoveComponent(farmer.SearchComponent<RoamingVillagerAIComponent>());
             farmer.SetHelmet(ItemPool.Grab(ItemType.FarmerHat).Helmet);
             farmer.SetWeapon(ItemPool.Grab(ItemType.FarmingRake).Weapon);
             farmer.AddComponent(new FarmerAIComponent(farmer, FarmPosition, Vector2.One * _width));

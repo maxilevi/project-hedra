@@ -25,22 +25,12 @@ namespace Hedra.Components
     /// <summary>
     /// Description of MerchantComponent.
     /// </summary>
-    public class MerchantComponent : TradeComponent
+    public class MerchantComponent : ScriptedTradeComponent
     {
-        private static readonly Script Script = Interpreter.GetScript("Merchant.py");
-        private readonly bool _isTravellingMerchant;
-
-        public MerchantComponent(Humanoid Parent, bool TravellingMerchant) : base(Parent)
+        public MerchantComponent(IHumanoid Parent) : base(Parent)
         {
-            _isTravellingMerchant = TravellingMerchant;
         }
 
-        public override Dictionary<int, Item> BuildInventory()
-        {
-            var rng = new Random(World.Seed + Unique.GenerateSeed(Parent.Position.Xz));
-            var dict = new Dictionary<int, Item>();
-            Script.Get("build_inventory").Invoke(dict, _isTravellingMerchant, TradeInventory.MerchantSpaces, rng);
-            return dict;
-        }
+        protected override string BuildInventoryFunctionName => "build_merchant_inventory";
     }
 }

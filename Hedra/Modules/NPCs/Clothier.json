@@ -13,5 +13,11 @@
   ],
   "Class": "Mage",
   "Behaviour" : "Friendly",
+  "Components":  [
+    {
+      "Type": "Hedra.Components.ClothierComponent",
+      "Parameters": []
+    }
+  ],
   "Weapons": []
 }

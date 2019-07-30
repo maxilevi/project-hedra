@@ -1,5 +1,6 @@
 using System;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Player;
 using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using Hedra.Engine.WorldBuilding;
 using OpenTK;
@@ -14,6 +15,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         public Random Rng { get; set; }
         public BlockType Type { get; set; } = BlockType.Grass;
         public GroundworkType GroundworkType { get; set; }
+        public bool HasNPC => NPCSettings != null;
+        public GenericNPCSettings NPCSettings { get; set; }
 
         BuildingDesignTemplate ILivableBuildingParameters.Design => Design;
         

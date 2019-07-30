@@ -15,7 +15,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
     {
         protected override bool LookAtCenter => true;
         protected override bool GraduateColor => false;
-        protected float _width;
+        protected float Width { get; private set; }
         
         protected LivableBuildingBuilder(CollidableStructure Structure) : base(Structure)
         {
@@ -23,8 +23,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         
         public override bool Place(T Parameters, VillageCache Cache)
         {
-            _width = Parameters.GetSize(Cache) * 2f;
-            var ground = new RoundedGroundwork(Parameters.Position, _width * .5f * .75f, Parameters.Type)
+            Width = Parameters.GetSize(Cache) * 2f;
+            var ground = new RoundedGroundwork(Parameters.Position, Width * .5f * .75f, Parameters.Type)
             {
                 NoPlants = true,
                 NoTrees = true
@@ -40,8 +40,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         private BasePlateau CreatePlateau(T Parameters)
         {
             return GroundworkType.Squared == Parameters.GroundworkType
-                ? (BasePlateau) new SquaredPlateau(Parameters.Position.Xz, _width) { Hardness = 3.0f }
-                : new RoundedPlateau(Parameters.Position.Xz, _width * .5f * 1.5f) { Hardness = 3.0f };
+                ? (BasePlateau) new SquaredPlateau(Parameters.Position.Xz, Width) { Hardness = 3.0f }
+                : new RoundedPlateau(Parameters.Position.Xz, Width * .5f * 1.5f) { Hardness = 3.0f };
         }
 
         public override void Polish(T Parameters, VillageRoot Root, Random Rng)
@@ -51,7 +51,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 var width = VillageDesign.Spacing * .5f;
                 var offset = Vector3.TransformPosition(-width * .5f * Vector3.UnitZ - width * .5f * Vector3.UnitX,
                     Matrix4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian));
-                DecorationsPlacer.PlaceLamp(Parameters.Position + offset, Structure, Root, _width, Rng);
+                DecorationsPlacer.PlaceLamp(Parameters.Position + offset, Structure, Root, Width, Rng);
             }
         }
 

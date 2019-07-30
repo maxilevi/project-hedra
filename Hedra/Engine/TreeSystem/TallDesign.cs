@@ -12,7 +12,7 @@ namespace Hedra.Engine.TreeSystem
 {
     public class TallDesign : TreeDesign
     {
-        public override float Spacing => 50f;
+        public override float Spacing => 40f;
         public override VertexData Model => CacheManager.GetModel(CacheItem.TallTrees);
         public override VertexData Paint(VertexData Data, Vector4 WoodColor, Vector4 LeafColor)
         {

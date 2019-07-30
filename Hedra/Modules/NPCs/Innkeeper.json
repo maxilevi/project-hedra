@@ -1,0 +1,26 @@
+{
+  "Name": "Innkeeper",
+  "DisplayName": "Innkeeper",
+  "Models": [
+    {
+      "Path": "$DataFile$/Assets/Chr/Mob/Town/Innkeeper0Idle.dae",
+      "Scale": 1.0
+    },
+    {
+      "Path": "$DataFile$/Assets/Chr/Mob/Town/Innkeeper1Idle.dae",
+      "Scale": 1.0
+    }
+  ],
+  "Class": "Warrior",
+  "Behaviour" : "Friendly",
+  "Immune": true,
+  "AttackPower": 1.0,
+  "AttackSpeed": 1.0,
+  "Components":  [
+    {
+      "Type": "Hedra.Components.InnkeeperComponent",
+      "Parameters": []
+    }
+  ],
+  "Weapons": []
+}

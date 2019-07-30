@@ -1,0 +1,21 @@
+{
+  "Name": "Farmer",
+  "DisplayName": "Farmer",
+  "Models": [
+    {
+      "Path": "$DataFile$/Assets/Chr/Mob/Town/Farmer0Idle.dae",
+      "Scale": 1.0
+    },
+    {
+      "Path": "$DataFile$/Assets/Chr/Mob/Town/Farmer1Idle.dae",
+      "Scale": 1.0
+    }
+  ],
+  "Class": "Warrior",
+  "Behaviour" : "Friendly",
+  "Immune": true,
+  "AttackPower": 1.0,
+  "AttackSpeed": 1.0,
+  "Components": [],
+  "Weapons": []
+}

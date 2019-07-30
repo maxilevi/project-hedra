@@ -159,6 +159,7 @@
     <Compile Include="AISystem\GoatAIComponent.cs" />
     <Compile Include="AISystem\GorillaWarriorAIComponent.cs" />
     <Compile Include="AISystem\HostileAIComponent.cs" />
+    <Compile Include="AISystem\Humanoid\NPCAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\RangedAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\BaseHumanoidAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\BanditAIBehaviour.cs" />
@@ -219,10 +220,15 @@
     <Compile Include="BiomeSystem\BiomeSkyDesign.cs" />
     <Compile Include="BiomeSystem\BiomeStructureDesign.cs" />
     <Compile Include="BiomeSystem\BiomeTreeDesign.cs" />
+    <Compile Include="Components\ClothierComponent.cs" />
     <Compile Include="Components\DamageComponent.cs" />
     <Compile Include="Components\HealthBarComponent.cs" />
+    <Compile Include="Components\InnkeeperComponent.cs" />
+    <Compile Include="Components\MasonComponent.cs" />
     <Compile Include="Components\RideComponent.cs" />
     <Compile Include="Components\CompanionStatsComponent.cs" />
+    <Compile Include="Components\ScriptedTradeComponent.cs" />
+    <Compile Include="Components\TravellingMerchantComponent.cs" />
     <Compile Include="Crafting\CraftingInventory.cs" />
     <Compile Include="Crafting\CraftingStation.cs" />
     <Compile Include="Crafting\Templates\IngredientsTemplate.cs" />
@@ -245,6 +251,8 @@
     <Compile Include="Engine\Rendering\UI\ProfileUIElement.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\SpawnCampfire.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\SpawnCampfireDesign.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\Builders\GenericBuilderWithNPC.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\GenericNPCSettings.cs" />
     <Compile Include="Items\EquipmentType.cs" />
     <Compile Include="Items\ItemTier.cs" />
     <Compile Include="Localization\Controls.cs" />
@@ -8474,14 +8482,6 @@
       <Link>Assets\Chr\Mob\StoneGolem\StoneGolem0Idle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\project-hedra-assets\Chr\Town\Adventurer0Idle.dae">
-      <Link>Assets\Chr\Mob\Town\Adventurer0Idle.dae</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\project-hedra-assets\Chr\Town\Adventurer1Idle.dae">
-      <Link>Assets\Chr\Mob\Town\Adventurer1Idle.dae</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="..\project-hedra-assets\Chr\Town\Blacksmith0Idle.dae">
       <Link>Assets\Chr\Mob\Town\Blacksmith0Idle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -8504,6 +8504,14 @@
     </Content>
     <Content Include="..\project-hedra-assets\Chr\Town\Farmer1Idle.dae">
       <Link>Assets\Chr\Mob\Town\Farmer1Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Town\GreenVillager0Idle.dae">
+      <Link>Assets\Chr\Mob\Town\GreenVillager0Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\Town\GreenVillager1Idle.dae">
+      <Link>Assets\Chr\Mob\Town\GreenVillager1Idle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Chr\Town\Innkeeper0Idle.dae">
@@ -14275,14 +14283,25 @@
     <Content Include="Modules\Mobs\StoneGolem.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\NPCs\Clothier.json" />
+    <Content Include="Modules\NPCs\Beasthunter.json" />
+    <Content Include="Modules\NPCs\Clothier.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\NPCs\EntMorph.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\NPCs\Bard.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\NPCs\Inkeeper.json" />
+    <Content Include="Modules\NPCs\Farmer.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\NPCs\Innkeeper.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\NPCs\Mason.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\NPCs\Scholar.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -14361,13 +14380,13 @@
     <Content Include="Scripts\TextDisplay.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Scripts\Merchant.py">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="Scripts\Soundtrack.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\TextField.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\Trade.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\VisualEffects.py">

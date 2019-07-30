@@ -10,9 +10,7 @@
   "Components":  [
     {
       "Type": "Hedra.Components.MerchantComponent",
-      "Parameters": [
-        false
-      ]
+      "Parameters": []
     }
   ],
   "Weapons": [],

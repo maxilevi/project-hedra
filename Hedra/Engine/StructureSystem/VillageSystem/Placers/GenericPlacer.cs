@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Hedra.Engine.Player;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 
@@ -10,9 +11,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
         private readonly GenericDesignTemplate[] _designs;
         private readonly int _maxPlacements;
         private int _placements;
+        private readonly GenericNPCSettings _settings;
         
-        public GenericPlacer(GenericDesignTemplate[] Designs, Random Rng, int MaxPlacements) : base(Designs, Rng)
+        public GenericPlacer(GenericDesignTemplate[] Designs, Random Rng, int MaxPlacements, GenericNPCSettings Settings) : base(Designs, Rng)
         {
+            _settings = Settings;
             _designs = Designs;
             _maxPlacements = MaxPlacements;
         }
@@ -29,7 +32,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Placers
             {
                 Design = SelectRandom(_designs),
                 Position = Point.Position,
-                Rng = Rng
+                Rng = Rng,
+                NPCSettings = _settings
             };
         }
     }
