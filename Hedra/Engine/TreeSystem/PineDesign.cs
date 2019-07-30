@@ -12,7 +12,7 @@ namespace Hedra.Engine.TreeSystem
 {
     public class PineDesign : TreeDesign
     {
-        public override float Spacing => 40f;
+        public override float Spacing => 35f;
         public override VertexData Model => CacheManager.GetModel(CacheItem.PineTrees);
         public override VertexData Paint(VertexData Data, Vector4 WoodColor, Vector4 LeafColor)
         {
