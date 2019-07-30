@@ -101,8 +101,6 @@ namespace Hedra.Engine.Generation
 
         public void Load()
         {
-            MenuBackground.Setup();
-
             Seed = MenuSeed;
             BiomePool = new BiomePool(_type = WorldType.Overworld);
             TreeGenerator = new TreeGenerator();
@@ -120,6 +118,7 @@ namespace Hedra.Engine.Generation
             WorldRenderer.StaticBuffer.Comparer = _renderingComparer;
             WorldRenderer.WaterBuffer.Comparer = _renderingComparer;
             WorldRenderer.InstanceBuffer.Comparer = _renderingComparer;
+            MenuBackground.Setup();
         }
 
         public void ReloadModules()

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Hedra.Engine.Rendering.UI;
 using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Rendering.Core
@@ -36,7 +37,7 @@ namespace Hedra.Engine.Rendering.Core
         public void Bind(TextureTarget Target, uint Id)
         {
 #if DEBUG
-            if (!Program.IsDummy && Target == TextureTarget.Texture2D && !TextureRegistry.IsKnown(Id))
+            if (!Program.IsDummy && Target == TextureTarget.Texture2D && !TextCache.Exists(Id) && !TextureRegistry.IsKnown(Id))
             {
                 var a = TextureRegistry.IsKnown(Id);
                 //throw new ArgumentOutOfRangeException($"Found an unregistered texture '{Id}' that is being used.");

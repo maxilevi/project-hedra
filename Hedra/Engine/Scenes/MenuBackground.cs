@@ -23,6 +23,7 @@ using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Sound;
+using Hedra.Engine.WorldBuilding;
 using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Sound;
@@ -44,9 +45,16 @@ namespace Hedra.Engine.Scenes
         public static Dictionary<Vector3, int> Locations = new Dictionary<Vector3, int>();
         public static float Increment = 0;
         
-        public static void Setup(){
+        public static void Setup()
+        {
             RoutineManager.StartRoutine(MakeFire);
             RoutineManager.StartRoutine(MakePlatform);
+            var plateau = new RoundedPlateau(CampfirePosition.Xz, 24);
+            var groundwork = new RoundedGroundwork(CampfirePosition, 24, BlockType.StonePath);
+            var structure = new CollidableStructure(null, CampfirePosition, plateau, null);
+            structure.AddGroundwork(groundwork);
+            structure.AddPlateau(new RoundedPlateau(CreatorPosition.Xz, 16));
+            World.WorldBuilding.SetupStructure(structure);
         }
         
         private static IEnumerator MakePlatform(){

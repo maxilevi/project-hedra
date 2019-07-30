@@ -38,7 +38,7 @@ namespace Hedra.Engine.WorldBuilding
         public override float Density(Vector2 Point)
         {
             var dist = (Position - Point).LengthFast;
-            return Math.Min(1.0f, Math.Max(1 - Math.Min(dist / Radius, 1), 0) * Hardness);
+            return (float) Math.Min(1.0f, Math.Max(1 - Math.Min(dist / Radius, 1), 0) * Hardness);
         }
 
         public override BoundingBox ToBoundingBox()

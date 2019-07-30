@@ -4,6 +4,7 @@ namespace Hedra.Engine.Rendering.UI
 {
     public abstract class DrawableTexture
     {
+        public bool UseTextureCache { get; set; }
         private uint _id;
         
         public virtual uint TextureId
@@ -13,9 +14,11 @@ namespace Hedra.Engine.Rendering.UI
             {
                 if (_id == value) return;
                 /* If its the first time a texture is added, dont try to delete it */
-                TextureRegistry.Remove(_id);
+                if(UseTextureCache)
+                    TextureRegistry.Remove(_id);
                 _id = value;
-                TextureRegistry.Use(_id);
+                if(UseTextureCache)
+                    TextureRegistry.Use(_id);
             }
         }    
     }

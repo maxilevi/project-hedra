@@ -73,6 +73,7 @@ namespace Hedra.Rendering.UI
                 UIText.Dispose();
             }
             UIText = new GUITexture(0, new Vector2(measurements.X / DefaultSize.X, measurements.Y / DefaultSize.Y), _temporalPosition);
+            UIText.UseTextureCache = false;
             DrawManager.UIRenderer.Add(UIText);
 
             if (_align == AlignMode.Left)

@@ -26,7 +26,16 @@ namespace Hedra.Engine.Rendering.Core
 
         public static void Register(uint Id)
         {
-            Textures.Add(Id, TextureInformation.Default);
+            Textures.Add(Id, new TextureInformation
+            {
+                Path = TextureInformation.Default.Path,
+                Uses = 0
+            });
+        }
+        
+        public static void Unregister(uint Id)
+        {
+            Textures.Remove(Id);
         }
         
         public static bool Contains(string Path, TextureMinFilter Min, TextureMagFilter Mag, TextureWrapMode Wrap, out uint Id)

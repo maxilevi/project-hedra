@@ -64,12 +64,18 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             AddLakes(X, Z, ref height);
             AddStones(X, Z, ref height, ref Blocktype, HeightCache);
 
+            const float buffer = 28;
+            var maxHeight = Chunk.Height - Chunk.BlockSize;
+            var cutoff = maxHeight - buffer;
+            var lerp = Mathf.Clamp((float) (height - cutoff) / buffer, 0f, 1f);
+            height = Mathf.Lerp((float)height, maxHeight, lerp);
+
             return (float)height + BiomeGenerator.SmallFrequency(X, Z) * 1.5f;
         }
 
         private static void AddLakes(float X, float Z, ref double Height)
         {
-            var lakeNoise = Math.Max(0, OpenSimplexNoise.Evaluate(X * 0.001, Z * 0.001));
+            var lakeNoise = Math.Pow(Math.Max(0, OpenSimplexNoise.Evaluate(X * 0.001, Z * 0.001)), 2);
             var frequency = Math.Max(0, OpenSimplexNoise.Evaluate(X * 0.0005, Z * 0.0005));
             Height += frequency * -lakeNoise * 96.0;
         }
@@ -89,8 +95,6 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
 
         private static void AddBigMountainsHeight(float X, float Z, ref double Height, ref BlockType Type, Dictionary<Vector2, float[]> HeightCache)
         {
-            if (World.Seed == World.MenuSeed) return;
-
             var rawMountainHeight = Math.Pow(Math.Min(Math.Max(0f, OpenSimplexNoise.Evaluate(X * 0.00025, Z * 0.00025)), 1), 2);
             var moutainHeight = rawMountainHeight * 256.0;
             if (moutainHeight > 0)
@@ -104,13 +108,11 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
         private static void AddMountHeight(float X, float Z, ref double Height, ref BlockType Type, Dictionary<Vector2, float[]> HeightCache)
         {
             var max = 8f;
-            var mu = Math.Min(Math.Max((OpenSimplexNoise.Evaluate(X * 0.004, Z * 0.004) - .6f) * 96, 0.0), max) / max;
+            var mu = Math.Min(Math.Max((OpenSimplexNoise.Evaluate(X * 0.004, Z * 0.004) - .6f) * 128, 0.0), max) / max;
             var mountHeight = (double) Mathf.CosineInterpolate(0.0f, max, (float) (mu * mu * mu));
             if (mountHeight > 0)
             {
                 Type = BlockType.Stone;
-                var mod = (World.MenuSeed == World.Seed) ? 0 : 1;
-                mountHeight *= mod;
                 var mult = Math.Min(Math.Max(OpenSimplexNoise.Evaluate(X * 0.0005, Z * 0.0005) * 4.0, 0.0), 1.0);
                 mountHeight *= mult;
                 
