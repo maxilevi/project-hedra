@@ -69,6 +69,7 @@ namespace Hedra.Engine.Rendering.UI
 
             _newRun.Click += delegate
             {
+                GameSettings.NewWorld = true;
                 ChrChooser.ShouldHost = false;
                 if(GameManager.InStartMenu)
                 {
@@ -85,6 +86,7 @@ namespace Hedra.Engine.Rendering.UI
                                          new Vector2(0.15f,0.075f), Translation.Create("load_world"), DefaultFontColor, FontCache.GetNormal(fontSize));
             _loadButton.Click += delegate
             {
+                GameSettings.NewWorld = false;
                 if(!GameManager.InStartMenu)
                 {
                     AutosaveManager.Save();

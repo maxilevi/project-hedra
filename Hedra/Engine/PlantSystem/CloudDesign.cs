@@ -18,7 +18,7 @@ namespace Hedra.Engine.PlantSystem
 
         public override Matrix4 TransMatrix(Vector3 Position, Random Rng)
         {
-            var cloudPosition = new Vector3(Position.X, 800f + Rng.NextFloat() * 32f - 16f, Position.Z);
+            var cloudPosition = new Vector3(Position.X, 256f + 1024f + Rng.NextFloat() * 32f - 16f, Position.Z);
             var transMatrix = Matrix4.CreateScale(Rng.NextFloat() * 6.0f + 40f);
             transMatrix *= Matrix4.CreateRotationY(360f * Rng.NextFloat() * Mathf.Radian);
             transMatrix *= Matrix4.CreateTranslation(cloudPosition);

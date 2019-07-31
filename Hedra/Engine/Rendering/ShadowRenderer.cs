@@ -14,6 +14,7 @@ using OpenTK;
 using Hedra.Engine.Management;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.IO;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.Core;
@@ -63,7 +64,7 @@ namespace Hedra.Engine.Rendering
             ShadowFbo.Bind();
 
             //ShaderManager.LightPosition = Vector3.TransformNormal(LightPosition.NormalizedFast(), Matrix4.CreateRotationY(SkyManager.SkyModifier * 360 * Mathf.RADIAN));
-            Vector3 Position = GameManager.Player.View.CameraEyePosition.Xz.ToVector3() + Vector3.UnitY * 800;
+            Vector3 Position = GameManager.Player.View.CameraEyePosition.Xz.ToVector3() + Vector3.UnitY * (GameManager.Player.Position.Y + 512);
             Vector3 NormalizedLight =
                 (new Vector3(LightPosition.X, LightPosition.Y, LightPosition.Z))
                 .NormalizedFast(); //ShaderManager.LightPosition

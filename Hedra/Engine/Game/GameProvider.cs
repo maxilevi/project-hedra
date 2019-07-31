@@ -105,7 +105,7 @@ namespace Hedra.Engine.Game
 
         public void LoadCharacter(PlayerInformation Information)
         {
-            if(Information.RealmData.Length == 0)
+            if(Information.RealmData.Length == 0 || GameSettings.NewWorld)
                 NewRun(Information);
             else
                 MakeCurrent(Information);

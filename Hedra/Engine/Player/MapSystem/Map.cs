@@ -155,7 +155,7 @@ namespace Hedra.Engine.Player.MapSystem
                 WorldRenderer.Scale = Mathf.Lerp(Vector3.One,
                     Vector3.One * (ChunkSize / (float)Chunk.Width), 1f) + Vector3.One * 0.002f;
                 WorldRenderer.BakedOffset = -(mapPosition + Vector3.UnitY * _targetHeight);
-                WorldRenderer.Offset = mapPosition + Vector3.UnitY * (_targetHeight + 80f);
+                WorldRenderer.Offset = mapPosition + Vector3.UnitY * (_targetHeight + 35);
                 WorldRenderer.WaterSmoothness = ChunkSize / (float)Chunk.Width;
                 this.UpdateChunks();
             }
@@ -380,7 +380,7 @@ namespace Hedra.Engine.Player.MapSystem
                     this._player.View.MaxPitch = -0.2f;
                     this._player.View.MinPitch = -1.4f;
                     this._player.View.WheelSpeed = 5f;
-                    this._targetHeight = 2500f;
+                    this._targetHeight = _player.Position.Y + 1024f;
                     this._height = _targetHeight;
                     this._targetTime = 12000;
                     this._player.Toolbar.Listen = false;
