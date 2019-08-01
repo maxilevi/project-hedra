@@ -32,7 +32,7 @@ namespace Hedra.Engine.QuestSystem
         public void Start(IHumanoid Giver, MissionObject Quest)
         {
             Quest.Start(Giver, _player);
-            _activeQuests.Add(Quest);
+            _activeQuests.Insert(0, Quest);
             QuestAccepted?.Invoke(Quest);
             CheckForCompleteness();
         }

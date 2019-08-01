@@ -1,35 +1,33 @@
+using Hedra.AISystem.Behaviours;
 using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.EntitySystem;
 using Hedra.Game;
 using OpenTK;
 
 namespace Hedra.AISystem.Humanoid
 {
     /// <inheritdoc />
-    public class EscapeAIComponent : EntityComponent
+    public class EscapeAIComponent : BasicAIComponent
     {
-        private readonly Entity _target;
-        private readonly float _speed;
-        private Vector3 _targetDirection;
+        protected EscapeBehaviour Escape { get; set; }
 
-        public EscapeAIComponent(Entity Parent, Entity Target) : base(Parent)
+        public EscapeAIComponent(IEntity Parent, IEntity Target) : base(Parent)
         {
-            _target = Target;
-            _speed = _target.Speed;
+            Escape = new EscapeBehaviour(Parent)
+            {
+                Target = Target
+            };
         }
 
         public override void Update()
         {
-            _targetDirection = (_target.Position - Parent.Position).Xz.ToVector3().NormalizedFast();
-            Parent.Orientation = -_targetDirection;
-            if ((_target.Position - Parent.Position).Xz.ToVector3().LengthSquared < GeneralSettings.UpdateDistanceSquared * .75f)
-            {
-                Parent.Physics.Move();
-            }
-            Parent.Model.TargetRotation = Physics.DirectionToEuler( Parent.Orientation );
+            Escape.Update();
         }
+
+        public override AIType Type => AIType.Neutral;
     }
 }

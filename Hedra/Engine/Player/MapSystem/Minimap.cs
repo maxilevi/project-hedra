@@ -211,7 +211,7 @@ namespace Hedra.Engine.Player.MapSystem
 
             UpdateRingObject(_miniMapMarker, MarkedDirection, HasMarker);
             UpdateRingObject(_miniMapQuestMarker, (MarkedQuestPosition - _player.Position).Xz.NormalizedFast().ToVector3(), HasQuestMarker);
-            if((MarkedQuestPosition - _player.Position).Xz.LengthSquared < Chunk.Width * .5f * Chunk.Width * .5f)
+            if((MarkedQuestPosition - _player.Position).Xz.LengthSquared < Chunk.Width * .25f * Chunk.Width * .25f)
                 _miniMapQuestMarker.Disable();
 
             this.DrawMap();

@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
+using System.Diagnostics;
 using System.Drawing;
 using Hedra.Core;
 using Hedra.Engine.Game;
@@ -33,6 +34,7 @@ namespace Hedra.Engine.Rendering
         private readonly float _maxLifetime;
         private float _life;
         private float _opacity = 1;
+        private StackTrace _trace = new StackTrace();
 
         protected BaseBillboard(float Lifetime, Func<Vector3> Follow)
         {

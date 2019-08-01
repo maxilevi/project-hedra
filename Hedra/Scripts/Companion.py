@@ -96,10 +96,13 @@ def update_growth(pet_item, pet):
             growth_scale = max_scale * Single((1.0 - BASE_GROWTH_SCALE) * current_growth)
             pet.Model.Scale = base_scale + growth_scale
         else:
-            pet_item.SetAttribute(GROWTH_ATTRIB_NAME, 1.0)
-            pet_item.SetAttribute(IS_GROWN_ATTRIB_NAME, True, Hidden=True)
+            set_max_growth(pet_item)
             pet.Model.IsMountable = True
             pet.Model.Scale = max_scale
+
+def set_max_growth(pet_item):
+    pet_item.SetAttribute(GROWTH_ATTRIB_NAME, 1.0)
+    pet_item.SetAttribute(IS_GROWN_ATTRIB_NAME, True, Hidden=True)
    
 def unserialize_pet_max_scale(pet_item):
     scale_array = pet_item.GetAttribute[Array[Single]](MAX_SCALE_ATTRIB_NAME)
@@ -278,7 +281,6 @@ def update_ui(pet_item, pet_entity, top_left, top_right, bottom_left, bottom_rig
         '{:.2f}'.format(pet_entity.Speed * RideComponent.SpeedMultiplier),
         translate('speed_label')
     )
-
 
 for name, _, _ in COMPANION_TYPES:
     assert World.MobFactory.ContainsFactory(name)

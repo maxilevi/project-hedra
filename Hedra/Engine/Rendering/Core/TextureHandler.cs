@@ -39,7 +39,7 @@ namespace Hedra.Engine.Rendering.Core
 #if DEBUG
             if (!Program.IsDummy && Target == TextureTarget.Texture2D && !TextCache.Exists(Id) && !TextureRegistry.IsKnown(Id))
             {
-                var a = TextureRegistry.IsKnown(Id);
+            //    var a = TextureRegistry.IsKnown(Id);
                 //throw new ArgumentOutOfRangeException($"Found an unregistered texture '{Id}' that is being used.");
             }
 #endif

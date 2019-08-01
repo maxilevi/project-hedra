@@ -219,7 +219,6 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         {
             var farmer = SpawnHumanoid(HumanType.Farmer, Position);
             farmer.SearchComponent<HealthBarComponent>().Name = Translations.Get("farmer");
-            farmer.SetHelmet(ItemPool.Grab(ItemType.FarmerHat).Helmet);
             farmer.SetWeapon(ItemPool.Grab(ItemType.FarmingRake).Weapon);
             farmer.AddComponent(new FarmerAIComponent(farmer, FarmPosition, Vector2.One * _width));
             farmer.AddComponent(new FarmerThoughtsComponent(farmer));

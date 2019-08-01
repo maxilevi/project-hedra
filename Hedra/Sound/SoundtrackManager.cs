@@ -96,7 +96,7 @@ namespace Hedra.Sound
                 _buildBuffers = true;
             }
             
-            if(_buildBuffers && _receivedBytes > -1)
+            if(_buildBuffers && _receivedBytes > -1 && _reader != null)
             {
                 lock (Lock)
                 {

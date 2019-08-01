@@ -22,6 +22,7 @@ namespace Hedra.Engine.Rendering.Core
         public static void MarkStatic(uint Id)
         {
             Use(Id);
+            Textures[Id].Static = true;
         }
 
         public static void Register(uint Id)
@@ -82,6 +83,8 @@ namespace Hedra.Engine.Rendering.Core
             Textures[Id].Uses--;
             if (Textures[Id].Uses == 0)
             {
+                if(Textures[Id].Static)
+                    throw new ArgumentOutOfRangeException();
                 Dispose(Id);
             }
         }
@@ -116,6 +119,7 @@ namespace Hedra.Engine.Rendering.Core
             public TextureMagFilter Mag { get; set; }
             public TextureWrapMode Wrap { get; set; }
             public int Uses { get; set; }
+            public bool Static { get; set; }
             private StackTrace _trace = new StackTrace();
 
             public bool IsSame(string Path, TextureMinFilter Min, TextureMagFilter Mag, TextureWrapMode Wrap)

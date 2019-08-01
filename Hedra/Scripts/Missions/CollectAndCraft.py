@@ -133,6 +133,4 @@ def build_reward(items, rng):
         reward.Gold = int(rng.Next(11, 25) * get_multiplier())
     elif 0.75 < n < 0.95:
         reward.Item = get_random_item()
-    elif n > 0.95:
-        reward.SkillPoint = 1
     return reward

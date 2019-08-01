@@ -13,6 +13,8 @@ namespace Hedra.Mission
         public bool HasExperience => Experience != 0;
         public bool HasItem => Item != null;
         public bool HasSkillPoint => SkillPoint != 0;
+        
+        public DialogObject CustomDialog { get; set; }
     }
 }
 /*

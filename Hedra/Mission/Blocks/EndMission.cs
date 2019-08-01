@@ -25,6 +25,7 @@ namespace Hedra.Mission.Blocks
 
         private static DialogObject DialogFromReward(QuestReward Reward)
         {
+            if (Reward.CustomDialog != null) return Reward.CustomDialog;
             if (Reward.HasExperience)
                 return new DialogObject
                 {
@@ -101,6 +102,7 @@ namespace Hedra.Mission.Blocks
             if (_reward.HasItem)
             {
                 Owner.AddOrDropItem(_reward.Item);
+                Owner.ShowText($"+1 {_reward.Item.DisplayName.ToUpperInvariant()}", Color.Bisque, 20);
                 SoundPlayer.PlayUISound(SoundType.ItemEquip);
             }
         }

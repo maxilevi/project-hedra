@@ -129,6 +129,7 @@
     <Compile Include="AISystem\Behaviours\BaseBeetleAttackBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\Behaviour.cs" />
     <Compile Include="AISystem\Behaviours\ChargeBehaviour.cs" />
+    <Compile Include="AISystem\Behaviours\EscapeBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\FleeBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\FollowBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\GridStorage.cs" />
@@ -256,6 +257,7 @@
     <Compile Include="Items\EquipmentType.cs" />
     <Compile Include="Items\ItemTier.cs" />
     <Compile Include="Localization\Controls.cs" />
+    <Compile Include="Mission\Blocks\CatchAnimalMission.cs" />
     <Compile Include="Mission\Blocks\CollectMission.cs" />
     <Compile Include="Mission\Blocks\CraftMission.cs" />
     <Compile Include="Mission\Blocks\EndMission.cs" />
@@ -14294,6 +14296,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\NPCs\Farmer.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\NPCs\GreenVillager.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\NPCs\Innkeeper.json">

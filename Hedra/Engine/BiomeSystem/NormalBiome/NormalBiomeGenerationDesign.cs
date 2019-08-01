@@ -131,8 +131,8 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
         
         private static void AddMountainHeight(float X, float Z, ref double Height, ref BlockType Type)
         {
-            var rawMountainHeight = Math.Pow(Math.Min(Math.Max(0f, OpenSimplexNoise.Evaluate(X * 0.00075, Z * 0.00075)), 1), 3);
-            //Height += rawMountainHeight * 512.0;
+            var rawMountainHeight = Math.Pow(Math.Min(Math.Max(0f, OpenSimplexNoise.Evaluate(X * 0.0005, Z * 0.0005)), 1), 3);
+            Height += rawMountainHeight * 512.0;
         }
 
         protected static void AddBaseHeight(float X, float Z, ref double Height, ref BlockType Type, out double BaseHeight)

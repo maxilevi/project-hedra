@@ -1,0 +1,18 @@
+{
+  "Name": "GreenVillager",
+  "DisplayName": "Villager",
+  "Models": [
+    {
+      "Path": "$DataFile$/Assets/Chr/Mob/Town/GreenVillager0Idle.dae",
+      "Scale": 1.0
+    },
+    {
+      "Path": "$DataFile$/Assets/Chr/Mob/Town/GreenVillager1Idle.dae",
+      "Scale": 1.0
+    }
+  ],
+  "Class": "Mage",
+  "Behaviour" : "Friendly",
+  "Components":  [],
+  "Weapons": []
+}

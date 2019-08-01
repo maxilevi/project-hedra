@@ -180,6 +180,11 @@ quest_pickup_default_item_description = Pick up $(BOLD)(ORANGE)(CAPS){{0}}.
 quest_pickup_chest_description = Recover the lost $(BOLD)(BLUE){{0}} from the nearby chest.
 quest_pickup_get_item_description = Receive the $(BOLD)(BLUE){{0}} from $(BOLD)(ORANGE){{1}}
 
+quest_catch_animal_short = BRING $(BLUE)(BOLD){{0}} BACK.
+quest_catch_animal_description = $(BLUE)(BOLD){{0}} is in need of help. Help him find his pet $(VIOLET)(BOLD){{1}}.
+quest_catch_animal_dialog_0 = My pet $(ORANGE)(BOLD){{0}} has ran away. Can you help me find him?
+quest_catch_animal_item_0 = Thank you for helping me but it looks like $(ORANGE)(BOLD){{0}} wants to stay with you. Please take care of him. 
+
 # -- Class Names --
 mage = Mage
 warrior = Warrior
