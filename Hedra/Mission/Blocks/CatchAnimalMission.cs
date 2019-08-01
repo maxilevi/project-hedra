@@ -2,6 +2,7 @@ using System.Media;
 using Hedra.AISystem;
 using Hedra.AISystem.Humanoid;
 using Hedra.Components.Effects;
+using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Player;
@@ -24,6 +25,7 @@ namespace Hedra.Mission.Blocks
         {
             if(Animal.SearchComponent<BasicAIComponent>() != null)
                 Animal.RemoveComponent(Animal.SearchComponent<BasicAIComponent>());
+            Animal.ShowIcon(CacheItem.AttentionIcon);
             Animal.AddComponent(new SpeedBonusComponent(Animal, -Animal.Speed + Owner.Speed - 0.15f));
             Animal.AddComponent(new EscapeAIComponent(Animal, Owner));
             Animal.AddComponent(new CatchComponent(Animal, Owner));

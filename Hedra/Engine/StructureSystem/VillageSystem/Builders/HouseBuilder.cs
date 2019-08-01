@@ -35,7 +35,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             if (Rng.Next(0, 2) == 1)
             {
                 var villager = SpawnVillager(position, Rng);
-                if (Utils.Rng.Next(0, 4) == 1)
+                if (Utils.Rng.Next(0, 3) == 1)
                 {
                     villager.RemoveComponent(villager.SearchComponent<TalkComponent>());
                     villager.RemoveComponent(villager.SearchComponent<ThoughtsComponent>());

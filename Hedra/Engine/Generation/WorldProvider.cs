@@ -57,7 +57,7 @@ namespace Hedra.Engine.Generation
         private Vector3 _spawningPoint;
         private WorldType _type;
         private int _previousId;
-
+    
         public WorldProvider()
         {
             _meshWorkerPool = new SharedWorkerPool(2);
