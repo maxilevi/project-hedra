@@ -8,23 +8,19 @@ namespace Hedra.Mission.Blocks
 {
     public class FishItemMission : ItemMission
     {
+        private const float Chance = 0.5f;
         private FishingZone _zone;
         private Item _item;
         public override void Setup()
         {
-            _zone = new FishingZone(Zone, Colors.OrangeRed, Radius);
+            _zone = new FishingZone(Zone, Colors.OrangeRed, Radius, Chance, Item);
             World.FishingZoneHandler.AddZone(_zone);
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-            World.FishingZoneHandler.RemoveZone(_zone);
         }
 
         public override void Cleanup()
         {
             base.Cleanup();
+            World.FishingZoneHandler.RemoveZone(_zone);
             ConsumeItems();
         }
 

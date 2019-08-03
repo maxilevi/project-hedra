@@ -191,8 +191,8 @@ quest_complete_portal_short = ENTER THE $(BLUE)(BOLD){PORTAL}
 quest_defeat_lich_description = Defeat the lich and its minions.
 quest_defeat_lich_short = DEFEAT THE $(RED)(BOLD){LICH}
 
-quest_fish_item_dialog_0 = Please help me! I lost my $(ORANGE)(BOLD)(CAPS){{0}} in the river
-quest_fish_item_short = FISH $(BLUE)(BOLD)(CAPS){{0}}'S $(ORANGE)(BOLD)(CAPS){{1}}
+quest_fish_item_dialog_0 = Adventurer! Please help me! I lost my $(ORANGE)(BOLD)(CAPS){{0}} in the river. Can you help me retrieve it?
+quest_fish_item_short = FISH OUT $(BLUE)(BOLD)(CAPS){{0}}'S $(ORANGE)(BOLD)(CAPS){{1}}
 quest_fish_item_description = $(BLUE)(BOLD){{0}} lost his precious $(ORANGE)(BOLD)(CAPS){{1}} while swimming. Help him retrieve it by fishing near the marked zone. \n\n$(GRAY)(BOLD){HINT: }You can buy a fishing rod from the merchant at the village.
 quest_fish_item_item_reward_0 = Thank you for helping me but it looks like the $(ORANGE)(BOLD){{0}} got a little bit rusty. You can keep it.
 

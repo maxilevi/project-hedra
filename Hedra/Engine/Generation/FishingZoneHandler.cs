@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Hedra.Engine.ItemSystem;
 using IronPython.Runtime;
 using OpenTK;
 
@@ -39,11 +40,24 @@ namespace Hedra.Engine.Generation
     public class FishingZone
     {
         private readonly HighlightedAreaWrapper _area;
+        private readonly Vector3 _zone;
+        private readonly float _radius;
+        public float Chance { get; }
+        public Item FishingReward { get; }
 
-        public FishingZone(Vector3 Zone, Vector4 Color, float Radius)
+        public FishingZone(Vector3 Zone, Vector4 Color, float Radius, float Chance, Item FishingReward)
         {
-            _area = World.Highlighter.HighlightAreaPermanently(Zone, Color, Radius * 2f);
+            this.FishingReward = FishingReward;
+            this.Chance = Chance;
+            _radius = Radius;
+            _zone = Zone;
+            _area = World.Highlighter.HighlightAreaPermanently(_zone, Color, _radius * 2f);
             _area.OnlyWater = true;
+        }
+
+        public bool Affects(Vector3 Position)
+        {
+            return (Position - _zone).Xz.LengthSquared < _radius * _radius;
         }
 
         public void Dispose()

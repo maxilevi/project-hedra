@@ -107,9 +107,7 @@ namespace Hedra.Engine.Generation
                     passedTime += Time.DeltaTime;
                     yield return null;
                 }
-                area.Radius = 0;
-                area.Color = Vector4.Zero;
-                area.Position = Vector3.Zero;
+                area.Reset();
             }
             else
             {
@@ -129,7 +127,7 @@ namespace Hedra.Engine.Generation
             var wrapper = (HighlightedAreaWrapper) Params[2];
             var areaClone = wrapper.Area = new HighlightedArea(area.Position, area.Color, area.Radius);
             var player = GameManager.Player;
-
+            
             while (World.Seed == seed && !areaClone.Stop)
             {
                 if ((player.Position.Xz - areaClone.Position.Xz).LengthFast < areaClone.Radius + 256)
@@ -145,29 +143,24 @@ namespace Hedra.Engine.Generation
                             }
                         }
                         if (area == null) throw new ArgumentException("Highlighted areas exceded maxium count.");
-                        area.Position = areaClone.Position;
-                        area.Radius = areaClone.Radius;
-                        area.Color = areaClone.Color;
+                        area.Copy(areaClone);
                     }
                 }
                 else
                 {
                     if (area != null)
                     {
-                        area.Position = Vector3.Zero;
-                        area.Radius = 0;
-                        area.Color = Vector4.Zero;
+                        area.Reset();
                         area = null;
                     }
                 }
+                area?.Copy(areaClone);
                 yield return null;
             }
 
             if (area != null)
             {
-                area.Position = Vector3.Zero;
-                area.Radius = 0;
-                area.Color = Vector4.Zero;
+                area.Reset();
             }
 
         }

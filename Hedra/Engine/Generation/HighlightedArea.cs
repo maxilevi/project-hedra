@@ -28,6 +28,22 @@ namespace Hedra.Engine.Generation
 
         public bool IsEmpty => Position == Vector3.Zero && Color == Vector4.Zero && Math.Abs(Radius) < 0.0005f;
 
+        public void Reset()
+        {
+            Radius = 0;
+            Color = Vector4.Zero;
+            Position = Vector3.Zero;
+            OnlyWater = false;
+        }
+
+        public void Copy(HighlightedArea Area)
+        {
+            Position = Area.Position;
+            Radius = Area.Radius;
+            Color = Area.Color;
+            OnlyWater = Area.OnlyWater;
+        }
+        
         public void Dispose()
         {
             Stop = true;
@@ -41,7 +57,12 @@ namespace Hedra.Engine.Generation
         public HighlightedArea Area
         {
             get => _area;
-            set => _area.OnlyWater = OnlyWater;
+            set
+            {
+                _area = value;
+                if(_area != null)
+                    _area.OnlyWater = OnlyWater;
+            }
         }
 
         public void Dispose()

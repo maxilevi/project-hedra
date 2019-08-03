@@ -64,8 +64,7 @@ def get_fished_item(position):
 
 def get_fishing_zone_rewards(position):
     zones = filter(lambda x: x.Affects(position), World.FishingZoneHandler.Zones)
-    items = []
-    return map(lambda x: (x, ), items)
+    return map(lambda x: (x.FishingReward.Name, x.Chance), zones)
 
 def get_bait(human):
     return human.Inventory.Search(lambda item: item.Name == BAIT_ITEM_NAME)
@@ -281,11 +280,12 @@ def start_retrieval(human, state):
     state['is_retrieving'] = True
 
 def retrieve_fish(human, state):
+    position = state['fishing_hook'].Position
     state['pull_time'] = 0
     state['pull_back'] = True
-    state['pull_position'] = state['fishing_hook'].Position
+    state['pull_position'] = position
     if state['has_fish']:
-        state['fish'] = get_fished_item(state['hook'].Position)
+        state['fish'] = get_fished_item(position)
         if state['fish']:
             state['fish_model'] = ObjectMesh.FromVertexData(state['fish'].Model.Clone().Scale(Vector3.One * 2))
 
