@@ -6,8 +6,10 @@ using Hedra.Components;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.QuestSystem;
 using Hedra.EntitySystem;
 using Hedra.Game;
+using Hedra.Mission;
 using OpenTK;
 
 namespace Hedra.Engine.WorldBuilding
@@ -24,8 +26,16 @@ namespace Hedra.Engine.WorldBuilding
                 var explorer = World.WorldBuilding.SpawnBandit(Position + Vector3.UnitZ * i * Chunk.BlockSize * 2, 8, friendly, Rng.Next(0, 5) == 1);
                 if (friendly)
                 {
-                    explorer.AddComponent(new ExplorerThoughtsComponent(explorer));
-                    explorer.AddComponent(new TalkComponent(explorer));
+                    if (Rng.Next(0, 3) == 1)
+                    {
+                        var quest = MissionPool.Random(Position);
+                        explorer.AddComponent(new QuestGiverComponent(explorer, quest));   
+                    }
+                    else
+                    {
+                        explorer.AddComponent(new ExplorerThoughtsComponent(explorer));
+                        explorer.AddComponent(new TalkComponent(explorer));
+                    }
                 }
                 explorer.AddComponent(new DisposeComponent(explorer, Chunk.Width * GeneralSettings.MaxLoadingRadius + Chunk.Width));
                 explorers.Add(explorer);
