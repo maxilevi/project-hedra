@@ -1,7 +1,9 @@
 using System.Linq;
+using Hedra.Engine.ItemSystem.ArmorSystem;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Items;
+using Hedra.WeaponSystem;
 
 namespace Hedra.Engine.ItemSystem.Templates
 {    
@@ -14,6 +16,8 @@ namespace Hedra.Engine.ItemSystem.Templates
         public string Description { get; set; }
         public AttributeTemplate[] Attributes { get; set; }
         public ItemModelTemplate Model { get; set; }
+        public bool IsWeapon => WeaponFactory.Contains(EquipmentType);
+        public bool IsArmor => ArmorFactory.Contains(EquipmentType);
 
         public static ItemTemplate FromItem(Item Item)
         {

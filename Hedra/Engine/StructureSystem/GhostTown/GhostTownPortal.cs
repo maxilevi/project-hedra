@@ -1,10 +1,13 @@
+using Hedra.Engine.QuestSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
+using Hedra.Mission;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.GhostTown
 {
-    public class GhostTownPortal : Portal
+    public class GhostTownPortal : Portal, ICompletableStructure
     {
         public IHumanoid NPC { get; set; }
         
@@ -22,5 +25,7 @@ namespace Hedra.Engine.StructureSystem.GhostTown
             base.Dispose();
             NPC?.Dispose();
         }
+
+        public bool Completed => TeleportedRecently;
     }
 }

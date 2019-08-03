@@ -50,6 +50,11 @@ namespace Hedra.Engine.Generation
         }
 
         public int AreaCount => _highlightedAreas.Sum(H => !H.IsEmpty ? 1 : 0);
+
+        public HighlightedAreaWrapper HighlightAreaPermanently(Vector3 Position, Vector4 Color, float Radius)
+        {
+            return HighlightArea(Position, Color, Radius, -1);
+        }
         
         public HighlightedAreaWrapper HighlightArea(Vector3 Position, Vector4 Color, float Radius, float Seconds)
         {
@@ -176,5 +181,7 @@ namespace Hedra.Engine.Generation
                 _highlightedAreas[i].Radius = 0f;
             }
         }
+
+        public HighlightedArea[] Highlights => _highlightedAreas;
     }
 }

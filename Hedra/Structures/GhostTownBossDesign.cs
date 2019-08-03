@@ -1,20 +1,22 @@
 using System;
 using Hedra.BiomeSystem;
-using Hedra.Core;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EntitySystem.BossSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Localization;
+using Hedra.Engine.StructureSystem;
+using Hedra.Engine.StructureSystem.GhostTown;
+using Hedra.Engine.WorldBuilding;
 using Hedra.Items;
+using Hedra.Localization;
 using Hedra.Rendering;
 using OpenTK;
 
-namespace Hedra.Engine.StructureSystem.GhostTown
+namespace Hedra.Structures
 {
-    public class GhostTownBossDesign : SimpleStructureDesign<GhostTownBoss>
+    public class GhostTownBossDesign : SimpleStructureDesign<GhostTownBoss>, ICompletableStructureDesign
     {
         public override int PlateauRadius => 256;
         public override VertexData Icon => null;
@@ -52,6 +54,10 @@ namespace Hedra.Engine.StructureSystem.GhostTown
         protected override GhostTownBoss Create(Vector3 Position, float Size)
         {
             return new GhostTownBoss(Position);
-        }      
+        }
+
+        public string GetShortDescription(IStructure Structure) => Translations.Get("quest_defeat_lich_short");
+        public string GetDescription(IStructure Structure) => Translations.Get("quest_defeat_lich_description");
+        public static Vector3 Position => World.SpawnPoint;
     }
 }

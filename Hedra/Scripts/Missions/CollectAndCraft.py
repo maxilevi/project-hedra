@@ -1,7 +1,7 @@
 from Core import translate
 from Hedra.Mission import MissionBuilder, ItemCollect, QuestReward, QuestTier
 from Hedra.Mission.Blocks import CollectMission, TalkMission, CraftMission
-from Hedra.Items import ItemPool, ItemTier, ItemType, EquipmentType
+from Hedra.Items import ItemPool, ItemTier, ItemType, EquipmentType, Trader
 from Hedra.Crafting import CraftingStation, CraftingInventory
 from System import Array, ArgumentOutOfRangeException, Math, Object
 
@@ -113,7 +113,7 @@ def can_give(position):
 def build_reward(items, rng):
 
     def get_multiplier():
-        return sum([ItemPool.Grab(x.Name).GetAttribute[int]('Price') * x.Amount for x in items]) / 25.0
+        return sum([Trader.Price(ItemPool.Grab(x.Name)) * x.Amount for x in items]) / 25.0
 
     def get_random_item():
         n = rng.NextDouble()

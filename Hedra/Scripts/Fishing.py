@@ -51,16 +51,21 @@ def assert_constants():
     for name, val in FISHING_REWARDS + [(BAIT_ITEM_NAME, 0.0)]:
         assert ItemPool.Exists(name)
 
-def get_random_fish():
-    if Core.rand_float() < REWARD_CHANCE:
+def get_fished_item(position):
+    if Core.rand_float() < REWARD_CHANCE:    
+        rewards = sorted(FISHING_REWARDS + get_fishing_zone_rewards(position), key=lambda x: x[1])
         roll = Core.rand_float()
-        for fish_name, chance in FISHING_REWARDS:
+        for fish_name, chance in rewards:
             if roll < chance:
                 return ItemPool.Grab(fish_name)
     else:
         return None
     raise ArgumentOutOfRangeException('Failed to find a suitable fish')
 
+def get_fishing_zone_rewards(position):
+    zones = filter(lambda x: x.Affects(position), World.FishingZoneHandler.Zones)
+    items = []
+    return map(lambda x: (x, ), items)
 
 def get_bait(human):
     return human.Inventory.Search(lambda item: item.Name == BAIT_ITEM_NAME)
@@ -280,7 +285,7 @@ def retrieve_fish(human, state):
     state['pull_back'] = True
     state['pull_position'] = state['fishing_hook'].Position
     if state['has_fish']:
-        state['fish'] = get_random_fish()
+        state['fish'] = get_fished_item(state['hook'].Position)
         if state['fish']:
             state['fish_model'] = ObjectMesh.FromVertexData(state['fish'].Model.Clone().Scale(Vector3.One * 2))
 

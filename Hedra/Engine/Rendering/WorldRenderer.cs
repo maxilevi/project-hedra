@@ -13,6 +13,7 @@ using Hedra.Engine.Management;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 using System.Collections.Generic;
+using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
@@ -195,9 +196,11 @@ namespace Hedra.Engine.Rendering
             StaticShader["Scale"] = Scale;
             StaticShader["Offset"] = Offset;
             StaticShader["TransformationMatrix"] = TransformationMatrix;
-            StaticShader["AreaCount"] = World.Highlighter.AreaCount;
-            StaticShader["AreaPositions"] = World.Highlighter.AreaPositions;
-            StaticShader["AreaColors"] = World.Highlighter.AreaColors;
+            
+            var highlights = World.Highlighter.Highlights.Where(H => !H.OnlyWater).ToArray();
+            StaticShader["AreaCount"] = highlights.Length;
+            StaticShader["AreaPositions"] = highlights.Select(H => H.AreaPosition).ToArray();
+            StaticShader["AreaColors"] = highlights.Select(H => H.AreaColor).ToArray();
             
             Renderer.ActiveTexture(TextureUnit.Texture1);
             Renderer.BindTexture(TextureTarget.Texture3D, NoiseTexture.Id);

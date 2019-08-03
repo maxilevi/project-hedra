@@ -59,10 +59,5 @@ namespace Hedra.Engine.StructureSystem.Overworld
             UpdateManager.Remove(this);
             base.Dispose();
         }
-        
-        public ItemDescription DeliveryItem => 
-            ItemDescription.FromItem(Chest.ItemSpecification, Translations.Get("quest_pickup_chest_description", Chest.ItemSpecification.DisplayName));
-        
-        public QuestReward Reward => null;
     }
 }

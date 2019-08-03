@@ -50,7 +50,7 @@ namespace Hedra.Crafting
         public static CraftingStation GetCurrentStation(Vector3 Position)
         {
             var structs = World.InRadius<Engine.WorldBuilding.CraftingStation>(Position, CraftingStationRadius);
-            var waterStation = structs.Any(S => S.StationType == CraftingStation.Well) || Physics.NearestWaterBlock(Position) < 12 ? CraftingStation.Water : CraftingStation.None;
+            var waterStation = structs.Any(S => S.StationType == CraftingStation.Well) || World.NearestWaterBlockOnChunk(Position, out _) < 12 ? CraftingStation.Water : CraftingStation.None;
             var currentStation = CraftingStation.None;
             for (var i = 0; i < structs.Length; ++i)
             {

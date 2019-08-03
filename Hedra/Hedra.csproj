@@ -233,6 +233,7 @@
     <Compile Include="Crafting\CraftingInventory.cs" />
     <Compile Include="Crafting\CraftingStation.cs" />
     <Compile Include="Crafting\Templates\IngredientsTemplate.cs" />
+    <Compile Include="Engine\Generation\FishingZoneHandler.cs" />
     <Compile Include="Engine\ItemSystem\Item.cs" />
     <Compile Include="Engine\Player\EntityUpdater.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryCompanionInfo.cs" />
@@ -256,12 +257,15 @@
     <Compile Include="Engine\StructureSystem\VillageSystem\GenericNPCSettings.cs" />
     <Compile Include="Items\EquipmentType.cs" />
     <Compile Include="Items\ItemTier.cs" />
+    <Compile Include="Items\Trader.cs" />
     <Compile Include="Localization\Controls.cs" />
     <Compile Include="Mission\Blocks\CatchAnimalMission.cs" />
     <Compile Include="Mission\Blocks\CollectMission.cs" />
+    <Compile Include="Mission\Blocks\CompleteStructureMission.cs" />
     <Compile Include="Mission\Blocks\CraftMission.cs" />
     <Compile Include="Mission\Blocks\EndMission.cs" />
     <Compile Include="Mission\Blocks\FindStructureMission.cs" />
+    <Compile Include="Mission\Blocks\FishItemMission.cs" />
     <Compile Include="Mission\Blocks\ItemMission.cs" />
     <Compile Include="Mission\Blocks\MissionBlock.cs" />
     <Compile Include="Mission\Blocks\TalkMission.cs" />
@@ -274,6 +278,10 @@
     <Compile Include="ModelHandlers\BeetleHandler.cs" />
     <Compile Include="Mission\MissionBuilder.cs" />
     <Compile Include="Rendering\Graphics2D.cs" />
+    <Compile Include="Structures\GhostTownBossDesign.cs" />
+    <Compile Include="Structures\GhostTownPortalDesign.cs" />
+    <Compile Include="Structures\MapBuilder.cs" />
+    <Compile Include="Structures\SpawnGhostTownPortalDesign.cs" />
     <Compile Include="Structures\SpawnVillage.cs" />
     <Compile Include="Structures\SpawnVillageDesign.cs" />
     <Compile Include="User\CommandManager.cs" />
@@ -677,11 +685,8 @@
     <Compile Include="Engine\StructureSystem\ChunkWatcher.cs" />
     <Compile Include="Engine\StructureSystem\FindableStructureDesign.cs" />
     <Compile Include="Engine\StructureSystem\GhostTown\GhostTownBoss.cs" />
-    <Compile Include="Engine\StructureSystem\GhostTown\GhostTownBossDesign.cs" />
     <Compile Include="Engine\StructureSystem\GhostTown\SpawnGhostTownPortal.cs" />
-    <Compile Include="Engine\StructureSystem\GhostTown\SpawnGhostTownPortalDesign.cs" />
     <Compile Include="Engine\StructureSystem\GhostTown\GhostTownPortal.cs" />
-    <Compile Include="Engine\StructureSystem\GhostTown\GhostTownPortalDesign.cs" />
     <Compile Include="Engine\StructureSystem\GhostTown\TombStructureDesign.cs" />
     <Compile Include="Engine\StructureSystem\ICompletableStructureDesign.cs" />
     <Compile Include="Engine\StructureSystem\IFindableStructureDesign.cs" />
@@ -1110,7 +1115,6 @@
     <Compile Include="Engine\PhysicsSystem\MoveCommand.cs" />
     <Compile Include="Engine\PhysicsSystem\Simplex.cs" />
     <Compile Include="Engine\PhysicsSystem\SimplexVertex.cs" />
-    <Compile Include="Engine\Player\MapSystem\MapBuilder.cs" />
     <Compile Include="Engine\Player\MapSystem\MapItem.cs" />
     <Compile Include="Engine\Player\MapSystem\MapStateManager.cs" />
     <Compile Include="Engine\Player\ToolbarSystem\AbilityBagInventoryInterface.cs" />
@@ -14373,12 +14377,28 @@
     <Content Include="Scripts\Fishing.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Scripts\Missions\CatchAPet.py" />
-    <Content Include="Scripts\Missions\ClearGraveyard.py" />
+    <Content Include="Scripts\Missions\CatchAPet.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\Missions\ClearGraveyard.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\Missions\CollectAndCraft.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Scripts\Missions\KillLichAndBringRewards.py" />
+    <Content Include="Scripts\Missions\FindAndKillLich.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\Missions\FishAnItem.py" />
+    <Content Include="Scripts\Missions\MissionCore.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\Missions\StealWitchFarm.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\Missions\StealWitchPotion.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\Missions\VisitSpawnVillage.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

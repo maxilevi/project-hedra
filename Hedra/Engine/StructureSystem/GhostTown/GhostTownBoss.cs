@@ -1,6 +1,7 @@
 using Facepunch.Steamworks;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
+using Hedra.Structures;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.GhostTown

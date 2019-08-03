@@ -1,13 +1,13 @@
 using System;
 using Hedra.BiomeSystem;
 using Hedra.Engine.BiomeSystem.GhostTown;
-using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
-using Hedra.Rendering;
+using Hedra.Engine.StructureSystem;
+using Hedra.Engine.StructureSystem.GhostTown;
 using OpenTK;
 
-namespace Hedra.Engine.StructureSystem.GhostTown
+namespace Hedra.Structures
 {
     public class SpawnGhostTownPortalDesign : GhostTownPortalDesign
     {

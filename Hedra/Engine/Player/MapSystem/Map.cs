@@ -28,6 +28,7 @@ using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
+using Hedra.Structures;
 using OpenTK;
 using OpenTK.Input;
 

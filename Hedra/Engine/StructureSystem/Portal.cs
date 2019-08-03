@@ -23,10 +23,12 @@ namespace Hedra.Engine.StructureSystem
         private readonly Vector3 _scale;
         private readonly WorldLight _ambientLight;
         private readonly WorldLight _portalLight;
+        private readonly int _realm;
+        private readonly Vector3 _defaultSpawn;
+        private readonly bool _useLastPositionForSpawnPoint;
         private bool _isTeleporting;
-        private int _realm;
-        private Vector3 _defaultSpawn;
-        private bool _useLastPositionForSpawnPoint;
+        private readonly Timer _teleportedRecentlyTimer;
+        protected bool TeleportedRecently { get; private set; }
         
         static Portal()
         {
@@ -53,6 +55,7 @@ namespace Hedra.Engine.StructureSystem
             _portalObject.Outline = true;
             _portalObject.OutlineColor = Colors.LightBlue * 2f;
             _portalObject.ApplySSAO = false;
+            _teleportedRecentlyTimer = new Timer(2f);
             DrawManager.Remove(_portalObject);
             DrawManager.AddTransparent(_portalObject);
             UpdateManager.Add(this);
@@ -77,6 +80,8 @@ namespace Hedra.Engine.StructureSystem
             _ambientLight.Update();
             _portalLight.Update();
             CheckTeleport();
+            if (_teleportedRecentlyTimer.Tick())
+                TeleportedRecently = false;
         }
 
         private void CheckTeleport()
@@ -98,6 +103,8 @@ namespace Hedra.Engine.StructureSystem
                     GameManager.Player,
                     tpPosition + new Vector3(Chunk.Width, 0, Chunk.Width) * (Utils.Rng.NextFloat() * 2 - 1)
                 );
+            TeleportedRecently = true;
+            _teleportedRecentlyTimer.Reset();
         }
 
         private IEnumerator TeleportEffect()

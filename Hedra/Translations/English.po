@@ -164,7 +164,7 @@ quest_find_structure_dialog_0 = There is a nearby $(BOLD)(ORANGE)(CAPS){{0}}. Yo
 quest_find_structure_dialog_1 = I've heard there is a nearby $(BOLD)(ORANGE)(CAPS){{0}}. It holds great rewards, but beware.
 quest_find_structure_dialog_2 = Rumors talk about a nearby $(BOLD)(ORANGE)(CAPS){{0}} which holds great treasures.
 quest_spawn_dialog_0 = This is my last stop, you will have to continue your journey alone.
-quest_spawn_find_structure = There is a nearby $(BOLD)(ORANGE)(CAPS){{0}}. You should go find it.
+quest_generic_find_structure = There is a nearby $(BOLD)(ORANGE)(CAPS){{0}}. You should go find it.
 quest_village = VILLAGE
 quest_complete_structure_short_giant_tree = DEFEAT $(BOLD)(ORANGE){{0}}
 quest_complete_structure_short_graveyard = FREE THE $(BOLD)(ORANGE){{0}} 
@@ -184,6 +184,18 @@ quest_catch_animal_short = BRING $(BLUE)(BOLD){{0}} BACK.
 quest_catch_animal_description = $(BLUE)(BOLD){{0}} is in need of help. His pet has escaped and its wandering nearby.\nHelp him find his pet $(VIOLET)(BOLD){{1}}. \n$(GRAY)(BOLD){HINT: }See the map for more details.
 quest_catch_animal_dialog_0 = My pet $(ORANGE)(BOLD){{0}} has ran away. Can you help me find him?
 quest_catch_animal_item_0 = Thank you for helping me but it looks like $(ORANGE)(BOLD){{0}} wants to stay with you. Please take care of him. 
+
+quest_kill_lich_dialog_0 = Rumors say there is a powerful lich
+quest_complete_portal_description = Enter the $(BLUE)(BOLD){PORTAL} to travel to another realm.
+quest_complete_portal_short = ENTER THE $(BLUE)(BOLD){PORTAL}
+quest_defeat_lich_description = Defeat the lich and its minions.
+quest_defeat_lich_short = DEFEAT THE $(RED)(BOLD){LICH}
+
+quest_fish_item_dialog_0 = Please help me! I lost my $(ORANGE)(BOLD)(CAPS){{0}} in the river
+quest_fish_item_short = FISH $(BLUE)(BOLD)(CAPS){{0}}'S $(ORANGE)(BOLD)(CAPS){{1}}
+quest_fish_item_description = $(BLUE)(BOLD){{0}} lost his precious $(ORANGE)(BOLD)(CAPS){{1}} while swimming. Help him retrieve it by fishing near the marked zone. \n\n$(GRAY)(BOLD){HINT: }You can buy a fishing rod from the merchant at the village.
+quest_fish_item_item_reward_0 = Thank you for helping me but it looks like the $(ORANGE)(BOLD){{0}} got a little bit rusty. You can keep it.
+
 
 # -- Class Names --
 mage = Mage

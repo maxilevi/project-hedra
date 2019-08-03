@@ -1,18 +1,19 @@
 using System;
 using Hedra.Components;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
-using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
+using Hedra.Engine.StructureSystem;
+using Hedra.Engine.StructureSystem.GhostTown;
+using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Rendering;
 using OpenTK;
 
-namespace Hedra.Engine.StructureSystem.GhostTown
+namespace Hedra.Structures
 {
-    public class GhostTownPortalDesign : SimpleFindableStructureDesign<GhostTownPortal>
+    public class GhostTownPortalDesign : SimpleFindableStructureDesign<GhostTownPortal>, ICompletableStructureDesign
     {
         public override int PlateauRadius => 140;
         public override VertexData Icon { get; } = CacheManager.GetModel(CacheItem.PortalIcon);
@@ -45,6 +46,8 @@ namespace Hedra.Engine.StructureSystem.GhostTown
         }
         
         public override string DisplayName => Translations.Get("structure_portal");
+        public string GetShortDescription(IStructure Structure) => Translations.Get("quest_complete_portal_short");
+        public string GetDescription(IStructure Structure) => Translations.Get("quest_complete_portal_description");
     }
 
     public class GhostTownThoughtsComponent : ThoughtsComponent

@@ -34,6 +34,7 @@ namespace HedraTests
         public virtual TreeGenerator TreeGenerator => null;
         public virtual IWorldBuilding WorldBuilding => null;
         public virtual StructureHandler StructureHandler => null;
+        public FishingZoneHandler FishingZoneHandler => null;
         public int AverageBuildTime => 0;
         public int AverageGenerationTime => 0;
         public virtual int Seed => 0;
@@ -183,6 +184,39 @@ namespace HedraTests
 
         public void AddWorldObject(IWorldObject WorldObject)
         {
+        }
+
+        public float NearestWaterBlock(Vector3 Position, float SearchRange, out Vector3 WaterPosition)
+        {
+            WaterPosition = Vector3.Zero;
+            return 0;
+        }
+
+        public float NearestWaterBlockOnChunk(Chunk Chunk, Vector3 Position, out Vector3 WaterPosition)
+        {
+            WaterPosition = Vector3.Zero;
+            return 0;
+        }
+
+        public float NearestWaterBlockOnChunk(Vector3 Position, out Vector3 WaterPosition)
+        {
+            WaterPosition = Vector3.Zero;
+            return 0;
+        }
+
+        public float NearestWaterBlock(Vector3 Position, float SearchRange)
+        {
+            return default(float);
+        }
+
+        public float NearestWaterBlockOnChunk(Chunk Chunk, Vector3 Position)
+        {
+            return default(float);
+        }
+
+        public float NearestWaterBlockOnChunk(Vector3 Position)
+        {
+            return default(float);
         }
 
         public virtual int GetLowestY(int X, int Z)

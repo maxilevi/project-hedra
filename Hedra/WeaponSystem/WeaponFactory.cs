@@ -23,7 +23,12 @@ namespace Hedra.WeaponSystem
         
         public static bool Contains(Item Item)
         {
-            return Item.EquipmentType != null && Weapons.ContainsKey(Item.EquipmentType);
+            return Contains(Item.EquipmentType);
+        }
+
+        public static bool Contains(string EquipmentType)
+        {
+            return EquipmentType != null && Weapons.ContainsKey(EquipmentType);
         }
 
         public static Weapon Get(Item Item)

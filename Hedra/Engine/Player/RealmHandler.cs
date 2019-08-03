@@ -104,6 +104,7 @@ namespace Hedra.Engine.Player
                 SkyManager.LoadTime = true;
                 GameManager.Player.Physics.TargetPosition = Position;
                 GameManager.Player.Minimap.UnMark();
+                GameManager.Player.Questing.Trigger();
                 if (MarkedDirection != Vector3.Zero)
                     GameManager.Player.Minimap.Mark(MarkedDirection);
                 _handler?.Dispose();

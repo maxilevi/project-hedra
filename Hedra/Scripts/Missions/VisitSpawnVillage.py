@@ -25,7 +25,7 @@ def create_dialog(name):
     dialog = DialogObject()
     dialog.Keyword = 'quest_spawn_dialog'
     dialog.Arguments = Array[Object]([])
-    dialog.AddAfterLine(translate('quest_spawn_find_structure', Array[Object]([name])))
+    dialog.AddAfterLine(translate('quest_generic_find_structure', Array[Object]([name])))
     return dialog
 
 def can_give(position):

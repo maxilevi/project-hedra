@@ -88,26 +88,13 @@ namespace Hedra.Engine.Player
                         _wasAnyNull = chunk == null || !chunk.BuildedWithStructures;
                         continue;
                     }
-                    var dist = NearestWaterBlockOnChunk(chunk, _player.Position);
+                    var dist = World.NearestWaterBlockOnChunk(chunk, _player.Position, out _);
                     if (dist < nearest) nearest = dist;
                 } 
             }
             return (float) Math.Sqrt(nearest);
         }
-        
-        private static float NearestWaterBlockOnChunk(Chunk UnderChunk, Vector3 Position)
-        {
-            var nearest = float.MaxValue;
-            var positions = UnderChunk.GetWaterPositions();
-            for (var i = 0; i < positions.Length; i++)
-            {
-                var realPosition = positions[i].ToVector3() * Chunk.BlockSize + UnderChunk.Position;
-                var dist = (realPosition - Position).Xz.LengthSquared;
-                if (dist < nearest) nearest = dist;
-            }
-            return nearest;
-        }
-        
+
         public void Dispose()
         {
             _riverAreaSound.Dispose();

@@ -3,6 +3,7 @@ using Hedra.BiomeSystem;
 using Hedra.Engine.StructureSystem.GhostTown;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.StructureSystem.VillageSystem;
+using Hedra.Structures;
 
 namespace Hedra.Engine.BiomeSystem.GhostTown
 {

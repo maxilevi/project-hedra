@@ -56,17 +56,17 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var possibleAmounts = new[] {1, 2, 3};
             var item = ItemPool.Grab(possibleItems[Rng.Next(0, possibleItems.Length)]);
             item.SetAttribute(CommonAttributes.Amount, possibleAmounts[Rng.Next(0, possibleAmounts.Length)]);
-            Structure.PickupItem = item;
+            //Structure.PickupItem = item;
         }
 
         private static void AddReward(WitchHut Hut, Random Rng)
         {
             if (Rng.Next(0, 5) == 1) return;
-            Hut.RewardItem = ItemPool.Grab(new ItemPoolSettings(ItemTier.Rare, EquipmentType.Potion)
+            /*Hut.RewardItem = ItemPool.Grab(new ItemPoolSettings(ItemTier.Rare, EquipmentType.Potion)
             {
                 Seed = Unique.RandomSeed(Rng),
                 SameTier = false
-            });
+            });*/
         }
         
         private static void AddNPCs(CollidableStructure Structure, Matrix4 Transformation, Random Rng)
@@ -147,11 +147,11 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         protected override string GetDescription(WitchHut Structure)
         {
-            return Translations.Get(
+            return Translations.Get(""/*
                 "quest_complete_structure_description_witch_hut",
                 $"{Structure.PickupItem.GetAttribute<int>(CommonAttributes.Amount)} {Structure.PickupItem.DisplayName}",
                 DisplayName,
-                Structure.EnemiesLeft
+                Structure.EnemiesLeft*/
              );
         }
 

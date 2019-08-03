@@ -39,7 +39,8 @@ namespace Hedra.Engine.Scripting
             watch.Start();
             Log.WriteLine("Loading Python engine...");
             _engine = Python.CreateEngine();
-            _engine.SetSearchPaths(new []{SearchPath});
+            var searchPaths = Directory.GetDirectories(SearchPath, "*", SearchOption.AllDirectories).Concat<string>(new []{SearchPath}).ToArray();
+            _engine.SetSearchPaths(searchPaths);
             _engine.Runtime.LoadAssembly(Assembly.Load(typeof(Interpreter).Assembly.FullName));
             _engine.Runtime.LoadAssembly(Assembly.Load(typeof(Vector4).Assembly.FullName));
             _runner = new CompiledRunner(_engine);

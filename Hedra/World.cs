@@ -59,7 +59,7 @@ namespace Hedra
         public static Dictionary<Vector2, Chunk> ShadowDrawingChunks => Provider.ShadowDrawingChunks;
         public static int AverageBuildTime => Provider.AverageBuildTime;
         public static int AverageGenerationTime => Provider.AverageGenerationTime;
-
+        public static FishingZoneHandler FishingZoneHandler => Provider.FishingZoneHandler;
         public static Vector3 SpawnPoint => Provider.SpawnPoint;
         public static Vector3 SpawnVillagePoint => Provider.SpawnVillagePoint;
         public static int Seed => Provider.Seed;
@@ -274,6 +274,20 @@ namespace Hedra
         public static Region GetRegion(Vector3 Position)
         {
             return BiomePool.GetRegion(Position);
+        }
+
+        public static float NearestWaterBlock(Vector3 Position, float SearchRange, out Vector3 WaterPosition)
+        {
+            return Provider.NearestWaterBlock(Position, SearchRange, out WaterPosition);
+        }
+
+        public static float NearestWaterBlockOnChunk(Chunk Chunk, Vector3 Position, out Vector3 WaterPosition)
+        {
+            return Provider.NearestWaterBlockOnChunk(Chunk, Position, out WaterPosition);
+        }
+        public static float NearestWaterBlockOnChunk(Vector3 Position, out Vector3 WaterPosition)
+        {
+            return Provider.NearestWaterBlockOnChunk(Position, out WaterPosition);
         }
     }
 }

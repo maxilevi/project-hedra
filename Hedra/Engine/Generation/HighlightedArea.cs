@@ -9,6 +9,7 @@ namespace Hedra.Engine.Generation
         public Vector4 Color { get; set; }
         public float Radius { get; set; }
         public bool Stop { get; private set; }
+        public bool OnlyWater { get; set; }
 
         public HighlightedArea()
         {           
@@ -35,11 +36,19 @@ namespace Hedra.Engine.Generation
 
     public sealed class HighlightedAreaWrapper : IDisposable
     {
-        public HighlightedArea Area { get; set; }
+        private HighlightedArea _area;
+
+        public HighlightedArea Area
+        {
+            get => _area;
+            set => _area.OnlyWater = OnlyWater;
+        }
 
         public void Dispose()
         {
             Area?.Dispose();
         }
+        
+        public bool OnlyWater { get; set; }
     }
 }

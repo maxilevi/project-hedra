@@ -18,8 +18,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public IEntity[] Enemies { get; set; }
         public int EnemiesLeft => Enemies.Count(E => !E.IsDead);
         public bool Completed => EnemiesLeft == 0;
-        public Item PickupItem { get; set; }
-        public Item RewardItem { get; set; }
 
         public WitchHut(Vector3 Position) : base(Position)
         {
@@ -34,14 +32,5 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 Enemies[i].Dispose();   
             }
         }
-        
-        public ItemDescription DeliveryItem => ItemDescription.FromItem(PickupItem, null);
-
-        public QuestReward Reward => (RewardItem != null)
-            ? new QuestReward
-            {
-                Item = RewardItem
-            }
-            : null;
     }
 }

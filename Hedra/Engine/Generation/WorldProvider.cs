@@ -81,6 +81,7 @@ namespace Hedra.Engine.Generation
         public AreaHighlighter Highlighter { get; private set; }
         public ParticleSystem Particles { get; private set; }
         public EnvironmentGenerator EnvironmentGenerator { get; private set; }
+        public FishingZoneHandler FishingZoneHandler { get; private set; }
         public IBiomePool BiomePool { get; private set; }
         public MobFactory MobFactory { get; private set; }
         public TreeGenerator TreeGenerator { get; private set; }
@@ -109,6 +110,7 @@ namespace Hedra.Engine.Generation
             EnvironmentGenerator = new EnvironmentGenerator();
             MobFactory = new MobFactory();
             Highlighter = new AreaHighlighter();
+            FishingZoneHandler = new FishingZoneHandler();
             Particles = new ParticleSystem
             {
                 HasMultipleOutputs = true
@@ -309,6 +311,7 @@ namespace Hedra.Engine.Generation
 
             StructureHandler.Discard();
             WorldRenderer.ForceDiscard();
+            FishingZoneHandler.Discard();
             CacheManager.Discard();
 
             this.AddEntity(GameManager.Player);
@@ -658,6 +661,48 @@ namespace Hedra.Engine.Generation
 
             var blockChunk = GetChunkByOffset((int) chunkSpace.X, (int) chunkSpace.Y);
             return blockChunk?.GetBlockAt((int) blockSpace.X, (int) Vec3.Y, (int) blockSpace.Z) ?? new Block();
+        }
+        
+        public float NearestWaterBlock(Vector3 Position, float SearchRange, out Vector3 WaterPosition)
+        {
+            var nearest = Math.Pow(SearchRange+1, 2);
+            WaterPosition = Vector3.Zero;
+            for (var x = -1; x < 2; x++)
+            {
+                for (var z = -1; z < 2; z++)
+                {
+                    var chunk = World.GetChunkAt(Position + new Vector3(x, 0, z) * Chunk.Width);
+                    if (chunk == null || !chunk.BuildedWithStructures || !chunk.HasWater)
+                    {
+                        continue;
+                    }
+                    var dist = NearestWaterBlockOnChunk(chunk, Position, out WaterPosition);
+                    if (dist < nearest) nearest = dist;
+                } 
+            }
+            return (float) Math.Sqrt(nearest);
+        }
+
+        public float NearestWaterBlockOnChunk(Chunk Chunk, Vector3 Position, out Vector3 WaterPosition)
+        {
+            var nearest = float.MaxValue;
+            WaterPosition = Vector3.Zero;
+            var positions = Chunk.GetWaterPositions();
+            for (var i = 0; i < positions.Length; i++)
+            {
+                WaterPosition = positions[i].ToVector3() * Chunk.BlockSize + Chunk.Position;
+                var dist = (WaterPosition - Position).Xz.LengthSquared;
+                if (dist < nearest) nearest = dist;
+            }
+            return nearest;
+        }
+        public float NearestWaterBlockOnChunk(Vector3 Position, out Vector3 WaterPosition)
+        {
+            var nearest = float.MaxValue;
+            var chunk = World.GetChunkAt(Position);
+            WaterPosition = Vector3.Zero;
+            if (chunk == null || !chunk.HasWater) return nearest;
+            return NearestWaterBlockOnChunk(chunk, Position, out WaterPosition);
         }
 
         #region Propierties

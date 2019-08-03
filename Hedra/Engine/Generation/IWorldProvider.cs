@@ -41,6 +41,7 @@ namespace Hedra.Engine.Generation
         IWorldBuilding WorldBuilding { get; }
 
         StructureHandler StructureHandler { get; }
+        FishingZoneHandler FishingZoneHandler { get; }
         
         int AverageBuildTime { get; }
         
@@ -143,5 +144,11 @@ namespace Hedra.Engine.Generation
         void SetupStructure(CollidableStructure Structure);
 
         void AddWorldObject(IWorldObject WorldObject);
+        
+        float NearestWaterBlock(Vector3 Position, float SearchRange, out Vector3 WaterPosition);
+        
+        float NearestWaterBlockOnChunk(Chunk Chunk, Vector3 Position, out Vector3 WaterPosition);
+        
+        float NearestWaterBlockOnChunk(Vector3 Position, out Vector3 WaterPosition);
     }
 }

@@ -27,6 +27,7 @@ using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Rendering;
+using Hedra.Structures;
 using HedraTests.Player;
 using Moq;
 using OpenTK;

@@ -1,11 +1,10 @@
 using Hedra.BiomeSystem;
-using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
 using Hedra.Engine.StructureSystem;
 using OpenTK;
 
-namespace Hedra.Engine.Player.MapSystem
+namespace Hedra.Structures
 {
     public class MapBuilder
     {

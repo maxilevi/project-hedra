@@ -21,7 +21,12 @@ namespace Hedra.Engine.ItemSystem.ArmorSystem
 
         public static bool Contains(Item Item)
         {
-            return Item.EquipmentType != null && Armors.ContainsKey(Item.EquipmentType);
+            return Contains(Item.EquipmentType);
+        }
+
+        public static bool Contains(string Equipment)
+        {
+            return Equipment != null && Armors.ContainsKey(Equipment);
         }
 
         public static ArmorPiece Get(Item Item)
