@@ -41,7 +41,6 @@ namespace Hedra.Engine.Rendering.Geometry
 
                 var mesh = BuildComponent(component.ToArray());
                 mesh.Optimize();
-                mesh.Translate(Vector3.UnitY * (Utils.Rng.NextFloat() * 48f - 24)); 
                 list.Add(mesh);
             }
             return list.ToArray();
