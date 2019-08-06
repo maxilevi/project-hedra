@@ -149,6 +149,7 @@
     <Compile Include="Rendering\MeshStitcherTest.cs" />
     <Compile Include="Rendering\SimpleTextProviderMock.cs" />
     <Compile Include="Rendering\TextProviderTest.cs" />
+    <Compile Include="Rendering\MeshAnalyzerTest.cs" />
     <Compile Include="SimpleAnimationProvider.cs" />
     <Compile Include="SimpleColladaProvider.cs" />
     <Compile Include="SimpleEventProvider.cs" />

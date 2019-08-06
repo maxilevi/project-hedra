@@ -10,31 +10,38 @@ namespace Hedra.Engine.Rendering
     public class Line3D : IRenderable
     {
         private static readonly Shader LineShader = Shader.Build("Shaders/Lines3D.vert", "Shaders/Lines3D.frag");
-        private readonly VAO<Vector3, Vector4> _data;
-        private readonly VBO<Vector3> _vertices;
-        private readonly VBO<Vector4> _colors;
+        private VAO<Vector3, Vector4> _data;
+        private VBO<Vector3> _vertices;
+        private VBO<Vector4> _colors;
         private Vector3[] _pointsArray;
         private Vector4[] _colorsArray;
         private bool _enabled;
         
         public Line3D()
         {
-            _vertices = new VBO<Vector3>(new Vector3[0], 0, VertexAttribPointerType.Float);
-            _colors = new VBO<Vector4>(new Vector4[0], 0, VertexAttribPointerType.Float);
-            _data = new VAO<Vector3, Vector4>(_vertices, _colors);
+            Executer.ExecuteOnMainThread(() =>
+            {
+                _vertices = new VBO<Vector3>(new Vector3[0], 0, VertexAttribPointerType.Float);
+                _colors = new VBO<Vector4>(new Vector4[0], 0, VertexAttribPointerType.Float);
+                _data = new VAO<Vector3, Vector4>(_vertices, _colors);
+            });
             DrawManager.TrailRenderer.Add(this);
         }
 
         public void Update(Vector3[] Points, Vector4[] Colors)
         {
-            if(_pointsArray != null && Points.SequenceEqual(_pointsArray) && _colorsArray != null && Colors.SequenceEqual(_colorsArray)) return;
-            _vertices.Update(_pointsArray = Points, Points.Length * Vector3.SizeInBytes);
-            _colors.Update(_colorsArray = Colors, Colors.Length * Vector4.SizeInBytes);
+            Executer.ExecuteOnMainThread(() =>
+            {
+                if (_pointsArray != null && Points.SequenceEqual(_pointsArray) && _colorsArray != null &&
+                    Colors.SequenceEqual(_colorsArray)) return;
+                _vertices.Update(_pointsArray = Points, Points.Length * Vector3.SizeInBytes);
+                _colors.Update(_colorsArray = Colors, Colors.Length * Vector4.SizeInBytes);
+            });
         }
         
         public void Draw()
         {
-            if(!Enabled) return;
+            if(!Enabled || _data == null) return;
             LineShader.Bind();
             Renderer.LineWidth(Width);
 
@@ -53,9 +60,16 @@ namespace Hedra.Engine.Rendering
 
         public void Dispose()
         {
-            _data.Dispose();
-            _vertices.Dispose();
-            _colors.Dispose();
+            void Dispose()
+            {
+                _data.Dispose();
+                _vertices.Dispose();
+                _colors.Dispose();
+            }
+            if(_data == null)
+                Executer.ExecuteOnMainThread(Dispose);
+            else
+                Dispose();
             DrawManager.UIRenderer.Remove(this);
         }
     }

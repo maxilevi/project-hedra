@@ -127,6 +127,6 @@ namespace Hedra.Localization
 #endif
         }
 
-        private static string TranslationsFolder => GameSettings.DebugMode ? $"../../Translations/" : $"{GameLoader.AppPath}/Translations/";
+        private static string TranslationsFolder => GameSettings.DebugMode && !GameSettings.TestingMode ? $"../../Translations/" : $"{GameLoader.AppPath}/Translations/";
     }
 }

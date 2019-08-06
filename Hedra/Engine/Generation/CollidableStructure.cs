@@ -130,9 +130,10 @@ namespace Hedra.Engine.Generation
         {
             lock (_lock)
             {
-                for (var i = 0; i < Models.Length; i++)
+                var models = Models.SelectMany(M => M.Ungroup()).ToArray();
+                for (var i = 0; i < models.Length; i++)
                 {
-                    var model = CachedVertexData.FromVertexData(Models[i]);
+                    var model = CachedVertexData.FromVertexData(models[i]);
                     _models.Add(model);
                     ModelAdded?.Invoke(model);
                 }

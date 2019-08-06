@@ -9,13 +9,14 @@ namespace Hedra.Engine.StructureSystem
     public static class StructureGrid
     {
         /* Big structures */
-        public const int GraveyardChance = 36;
-        public const int GiantTreeChance = 36;
+        public const int GraveyardChance = 24;
+        public const int GiantTreeChance = 24;
         public const int WaterGiantTreeChance = 80;
         public const int BanditCampChance = 40;
         public const int VillageChance = 2;
         /* Small structures */
-        public const int GhostTownPortalChance = 80;
+        public const int FishingPostChance = 8;
+        public const int GhostTownPortalChance = 64;
         public const int WizardTower = 256;
         public const int WitchHut = 128;
         public const int GazeboChance = 48;

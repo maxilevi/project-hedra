@@ -41,7 +41,7 @@ namespace Hedra.Engine.Loader
     
     public class Hedra : HedraWindow, IHedra
     {
-        public string GameVersion => "\u03B1 0.55";
+        public string GameVersion => "\u03B1 0.6";
         public event OnFrameChanged FrameChanged;
         private DebugInfoProvider _debugProvider;
         private SplashScreen _splashScreen;

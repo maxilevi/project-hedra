@@ -16,7 +16,7 @@ using OpenTK;
 
 namespace Hedra.Structures
 {
-    public class GhostTownBossDesign : SimpleStructureDesign<GhostTownBoss>, ICompletableStructureDesign
+    public class GhostTownBossDesign : SimpleStructureDesign<GhostTownBoss>, ICompletableStructureDesign, IFindableStructureDesign
     {
         public override int PlateauRadius => 256;
         public override VertexData Icon => null;
@@ -59,5 +59,6 @@ namespace Hedra.Structures
         public string GetShortDescription(IStructure Structure) => Translations.Get("quest_defeat_lich_short");
         public string GetDescription(IStructure Structure) => Translations.Get("quest_defeat_lich_description");
         public static Vector3 Position => World.SpawnPoint;
+        public string DisplayName => Translations.Get("structure_ghost_town_boss");
     }
 }

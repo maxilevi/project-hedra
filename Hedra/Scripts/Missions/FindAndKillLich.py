@@ -27,10 +27,10 @@ def find_and_defeat_lich(builder):
     find.OverrideOpeningDialog(create_dialog(find.Design.DisplayName))
     builder.Next(find)
     
-    back_portal = MissionCore.find_structure(SpawnGhostTownPortalDesign.Position, SpawnGhostTownPortalDesign, 1024)
+    lich = MissionCore.find_structure(GhostTownBossDesign.Position, GhostTownBossDesign, 1024)
     complete = CompleteStructureMission()
-    complete.StructureObject = back_portal.WorldObject
-    complete.StructureDesign = back_portal.Design
+    complete.StructureObject = lich.WorldObject
+    complete.StructureDesign = lich.Design
     builder.Next(complete)
 
 def find_and_use_wayback_portal(position, builder, rng):

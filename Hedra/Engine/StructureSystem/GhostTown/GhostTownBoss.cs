@@ -1,4 +1,5 @@
 using Facepunch.Steamworks;
+using Hedra.Engine.QuestSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Structures;
@@ -6,7 +7,7 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.GhostTown
 {
-    public class GhostTownBoss : BaseStructure
+    public class GhostTownBoss : BaseStructure, ICompletableStructure
     {
         public IEntity Boss { get; set; }
         public GhostTownBoss(Vector3 Position) : base(Position)
@@ -19,5 +20,7 @@ namespace Hedra.Engine.StructureSystem.GhostTown
             Boss?.Dispose();
             GhostTownBossDesign.Spawned = false;
         }
+
+        public bool Completed => Boss.IsDead;
     }
 }

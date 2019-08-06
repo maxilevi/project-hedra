@@ -151,7 +151,7 @@ namespace Hedra.Engine.Player.MapSystem
                 _player.View.Yaw = -1.55f;
                 _player.View.Distance = 100f;
                 _player.View.Pitch = -10f;
-                _player.View.CameraHeight = Vector3.UnitY * (24);
+                _player.View.CameraHeight = Vector3.UnitY * (512);
                 _player.View.BuildCameraMatrix();
 
                 Culling.BuildFrustum(_player.View.ModelViewMatrix);

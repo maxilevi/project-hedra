@@ -112,7 +112,7 @@ namespace Hedra.Engine.StructureSystem
             return shouldBe && this.ShouldBuild(TargetPosition, Items, Biome.Structures.Designs);
         }
 
-        private bool ShouldBuild(Vector3 NewPosition, CollidableStructure[] Items, StructureDesign[] Designs)
+        protected virtual bool ShouldBuild(Vector3 NewPosition, CollidableStructure[] Items, StructureDesign[] Designs)
         {
             return StructureGrid.Sample(World.ToChunkSpace(NewPosition), this, Designs) && !AlreadySpawnedStructure(NewPosition, Items);
         }

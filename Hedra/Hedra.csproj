@@ -233,6 +233,9 @@
     <Compile Include="Crafting\CraftingInventory.cs" />
     <Compile Include="Crafting\CraftingStation.cs" />
     <Compile Include="Crafting\Templates\IngredientsTemplate.cs" />
+    <Compile Include="Engine\CacheSystem\DynamicCache.cs" />
+    <Compile Include="Engine\CacheSystem\FishingPostCache.cs" />
+    <Compile Include="Engine\CacheSystem\FishingPostIconCache.cs" />
     <Compile Include="Engine\Generation\FishingZoneHandler.cs" />
     <Compile Include="Engine\ItemSystem\Item.cs" />
     <Compile Include="Engine\Player\EntityUpdater.cs" />
@@ -249,8 +252,11 @@
     <Compile Include="Engine\QuestSystem\QuestTemplate.cs" />
     <Compile Include="Engine\QuestSystem\QuestThoughtsComponent.cs" />
     <Compile Include="Engine\Rendering\Core\VBOCache.cs" />
+    <Compile Include="Engine\Rendering\Geometry\MeshAnalyzer.cs" />
     <Compile Include="Engine\Rendering\UI\CompanionProfileUIElement.cs" />
     <Compile Include="Engine\Rendering\UI\ProfileUIElement.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\FishingPost.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\FishingPostDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\SpawnCampfire.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\SpawnCampfireDesign.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\GenericBuilderWithNPC.cs" />
@@ -8870,6 +8876,30 @@
     </Content>
     <Content Include="..\project-hedra-assets\Sounds\Teleport.ogg">
       <Link>Sounds\Teleport.ogg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\FishingDock0\Caravan0.ply">
+      <Link>Assets\Env\Structures\FishingSettlement\Caravan0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\FishingDock0\Crates0.ply">
+      <Link>Assets\Env\Structures\FishingSettlement\Crates0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\FishingDock0\FishingDock0-Icon.ply">
+      <Link>Assets\Env\Structures\FishingSettlement\FishingDock0-Icon.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\FishingDock0\FishingDock0-Mesh.ply">
+      <Link>Assets\Env\Structures\FishingSettlement\FishingDock0-Mesh.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\FishingDock0\Fountain0.ply">
+      <Link>Assets\Env\Structures\FishingSettlement\Fountain0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\FishingDock0\PunchingBag0.ply">
+      <Link>Assets\Env\Structures\FishingSettlement\PunchingBag0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0-Icon.ply">

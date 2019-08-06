@@ -11,6 +11,5 @@ namespace Hedra.Engine.StructureSystem
         protected abstract string GetDescription(T Structure);
         public string GetDescription(IStructure Structure) => GetDescription((T) Structure);
         public string GetShortDescription(IStructure Structure) => GetShortDescription((T) Structure);
-        public bool IsCompletable => true;
     }
 }

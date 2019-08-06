@@ -546,8 +546,10 @@ namespace Hedra.Engine.Rendering.Geometry
     {
         public Vector3[] P;
         
-        public bool Contains(Vector3 Vertex){
-            for(int i = 0; i < P.Length; i++){
+        public bool Contains(Vector3 Vertex)
+        {
+            for(int i = 0; i < P.Length; i++)
+            {
                 if(P[i] == Vertex)
                     return true;
             }

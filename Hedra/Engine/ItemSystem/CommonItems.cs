@@ -11,6 +11,7 @@ namespace Hedra.Engine.ItemSystem
         CommonWoodenBow,
         CommonBronzeDoubleBlades,
         CommonBronzeStaff,
-        UncommonSilverSword
+        UncommonSilverSword,
+        FishingRod
     }
 }
