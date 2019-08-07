@@ -39,7 +39,7 @@ namespace Hedra.AISystem
             if(!Enabled) return;
             if((Parent.Position - Owner.Position).LengthSquared > MaxSeparatedDistance)
             {
-                Parent.Position = Owner.BlockPosition + Vector3.Cross(Parent.Orientation, Vector3.UnitY) * 12f;
+                Parent.Position = Owner.Position + Vector3.Cross(Parent.Orientation, Vector3.UnitY) * 12f;
                 _attack.ResetTarget();
             }
             

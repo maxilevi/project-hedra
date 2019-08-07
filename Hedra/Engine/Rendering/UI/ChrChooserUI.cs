@@ -170,7 +170,7 @@ namespace Hedra.Engine.Rendering.UI
                 
                 _humans[i].Class = _information[i].Class;
                 _humans[i].Model = new HumanoidModel(_humans[i]);
-                _humans[i].BlockPosition = Scenes.MenuBackground.FirePosition + offset;
+                _humans[i].Position = Scenes.MenuBackground.FirePosition + offset;
                 _humans[i].Model.LocalRotation = Physics.DirectionToEuler(-offset.Normalized().Xz.ToVector3());
                 _humans[i].Model.TargetRotation = _humans[i].Model.LocalRotation;
                 _humans[i].Model.Enabled = true;
@@ -178,12 +178,12 @@ namespace Hedra.Engine.Rendering.UI
                 _humans[i].Level = _information[i].Level;
                 _humans[i].PlaySpawningAnimation = false;
                 _humans[i].SearchComponent<DamageComponent>().Immune = true;
-                _humans[i].Physics.TargetPosition = new Vector3(
-                    _humans[i].BlockPosition.X,
-                    Physics.HeightAtPosition(_humans[i].BlockPosition),
-                    _humans[i].BlockPosition.Z
+                _humans[i].Position = new Vector3(
+                    _humans[i].Position.X,
+                    Physics.HeightAtPosition(_humans[i].Position),
+                    _humans[i].Position.Z
                 );
-                _humans[i].Model.Position = _humans[i].Physics.TargetPosition;
+                _humans[i].Model.Position = _humans[i].Position;
                 foreach (var pair in _information[i].Items)
                 {
                     var item = pair.Value;
@@ -227,7 +227,7 @@ namespace Hedra.Engine.Rendering.UI
                     for(var k = 0; k <_humans.Count; k++){
                         if (_previousHuman != _humans[k]) continue;
                         Vector3 fPos = Scenes.MenuBackground.FirePosition + this.FireDirection(k, 8);
-                        _previousHuman.BlockPosition = new Vector3(fPos.X, _previousHuman.BlockPosition.Y, fPos.Z);
+                        _previousHuman.Position = new Vector3(fPos.X, _previousHuman.Position.Y, fPos.Z);
                         _previousHuman.Model.LocalRotation = new Vector3(0, Physics.DirectionToEuler(this.FireDirection(k, 8).NormalizedFast().Xz.ToVector3()).Y+180, 0);
                         _previousHuman.Model.TargetRotation = new Vector3(0, Physics.DirectionToEuler(this.FireDirection(k, 8).NormalizedFast().Xz.ToVector3()).Y+180, 0);
                     }
@@ -289,7 +289,7 @@ namespace Hedra.Engine.Rendering.UI
                     if(_humans[k].MainWeapon != null && _humans[k].MainWeapon.Weapon.InAttackStance)
                         _humans[k].Model.BlendAnimation(_humans[k].MainWeapon.Weapon.AttackStanceAnimation);                             
                         
-                    _humans[i].Model.Enabled = (_humans[i].Model.ModelPosition.Xz - _humans[i].BlockPosition.Xz).LengthFast < 8;
+                    _humans[i].Model.Enabled = (_humans[i].Model.ModelPosition.Xz - _humans[i].Position.Xz).LengthFast < 8;
                     _humans[i].Update();                    
                 }
             }
@@ -351,7 +351,7 @@ namespace Hedra.Engine.Rendering.UI
                     Vector3 target = FireDirection(i, 4.8f);
                     if(_selectedHuman.MainWeapon != null)
                         _selectedHuman.MainWeapon.Weapon.InAttackStance = true;
-                    if( (_selectedHuman.BlockPosition.Xz - Scenes.MenuBackground.FirePosition.Xz).LengthSquared > 4*4)
+                    if( (_selectedHuman.Position.Xz - Scenes.MenuBackground.FirePosition.Xz).LengthSquared > 4*4)
                     {
                         _selectedHuman.Physics.Translate(-target.NormalizedFast() * 6f * Time.IndependentDeltaTime);
                     }
@@ -371,7 +371,7 @@ namespace Hedra.Engine.Rendering.UI
                     Vector3 backTarget = FireDirection(i, 10);
                     if (_previousHuman.MainWeapon != null)
                         _previousHuman.MainWeapon.Weapon.InAttackStance = false;
-                    if ( (_previousHuman.BlockPosition.Xz - Scenes.MenuBackground.FirePosition.Xz - backTarget.Xz).LengthSquared > 1*1){
+                    if ( (_previousHuman.Position.Xz - Scenes.MenuBackground.FirePosition.Xz - backTarget.Xz).LengthSquared > 1*1){
                         _previousHuman.Physics.Translate(backTarget.NormalizedFast() * 6f * Time.IndependentDeltaTime);
                         _previousHuman.Model.LocalRotation = Physics.DirectionToEuler(backTarget.NormalizedFast().Xz.ToVector3());
                         _previousHuman.Model.TargetRotation = _previousHuman.Model.LocalRotation;

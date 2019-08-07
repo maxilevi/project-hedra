@@ -71,6 +71,10 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <Reference Include="BulletSharp, Version=2.87.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\BulletSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Facepunch.Steamworks">
       <HintPath>..\references\Facepunch.Steamworks.dll</HintPath>
     </Reference>
@@ -233,6 +237,11 @@
     <Compile Include="Crafting\CraftingInventory.cs" />
     <Compile Include="Crafting\CraftingStation.cs" />
     <Compile Include="Crafting\Templates\IngredientsTemplate.cs" />
+    <Compile Include="Engine\BulletPhysics\BulletDraw.cs" />
+    <Compile Include="Engine\BulletPhysics\BulletInterop.cs" />
+    <Compile Include="Engine\BulletPhysics\BulletPhysics.cs" />
+    <Compile Include="Engine\BulletPhysics\PhysicsComponent.cs" />
+    <Compile Include="Engine\BulletPhysics\PhysicsComponentMotionState.cs" />
     <Compile Include="Engine\CacheSystem\DynamicCache.cs" />
     <Compile Include="Engine\CacheSystem\FishingPostCache.cs" />
     <Compile Include="Engine\CacheSystem\FishingPostIconCache.cs" />
@@ -1062,7 +1071,6 @@
     <Compile Include="Engine\PlantSystem\RockPlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\WheatDesign.cs" />
     <Compile Include="Engine\ItemSystem\WorldItem.cs" />
-    <Compile Include="Engine\EntitySystem\PhysicsComponent.cs" />
     <Compile Include="Engine\EntitySystem\QuadrupedModel.cs" />
     <Compile Include="Engine\EntitySystem\StaticModel.cs" />
     <Compile Include="Engine\EntitySystem\TameComponent.cs" />
@@ -14552,6 +14560,9 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Prefer32bit>false</Prefer32bit>
   </PropertyGroup>
   <ProjectExtensions />
   <Target Name="AfterCompile">

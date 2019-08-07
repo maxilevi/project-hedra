@@ -67,6 +67,7 @@ namespace Hedra.Engine.Loader
             NameGenerator.Load();
             CacheManager.Load();
             Translations.Load();
+            BulletPhysics.BulletPhysics.Load();
             Log.WriteLine("Translations loaded successfully.");
             
             GameLoader.CreateCharacterFolders(GameLoader.AppData, GameLoader.AppPath);
@@ -127,6 +128,7 @@ namespace Hedra.Engine.Loader
             {
                 var delta = Math.Min(frameTime, Physics.Timestep);
                 Time.Set(delta, false);
+                BulletPhysics.BulletPhysics.Update();
                 RoutineManager.Update();
                 UpdateManager.Update();
                 World.Update();
@@ -169,6 +171,7 @@ namespace Hedra.Engine.Loader
             else
             {
                 DrawManager.Draw();
+                BulletPhysics.BulletPhysics.Draw();
                 _debugProvider.Draw();
             }
             this.SwapBuffers();

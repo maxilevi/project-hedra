@@ -49,9 +49,7 @@ namespace Hedra.EntitySystem
         Vector3 Orientation { get; set; }
         
         bool Removable { get; set; }
-        
-        Vector3 BlockPosition { get; set; }
-        
+
         bool PlaySpawningAnimation { get; set; }
         
         float Speed { get; set; }

@@ -190,7 +190,7 @@ namespace Hedra.Engine.Player
             _wasSleeping = this.IsSleeping;
             var underChunk = World.GetChunkAt(this.Position);
 
-            if( this.Model.Enabled && (_previousPosition - Model.Human.BlockPosition).LengthFast > 0.25f && Model.Human.IsGrounded && underChunk != null)
+            if( this.Model.Enabled && (_previousPosition - Model.Human.Position).LengthFast > 0.25f && Model.Human.IsGrounded && underChunk != null)
             {
                 World.Particles.VariateUniformly = true;
                 World.Particles.Color = World.GetHighestBlockAt( (int) Model.Human.Position.X, (int) Model.Human.Position.Z).GetColor(underChunk.Biome.Colors);
@@ -206,7 +206,7 @@ namespace Hedra.Engine.Player
                 
                 if( (int) Time.AccumulatedFrameTime % 2 == 0) World.Particles.Emit();
                 
-                _previousPosition = Model.Human.BlockPosition;
+                _previousPosition = Model.Human.Position;
             }
 
             EntityUpdater.Dispatch();
@@ -382,10 +382,10 @@ namespace Hedra.Engine.Player
             this.PlaySpawningAnimation = true;
             this.IsRiding = false;
             var newOffset = new Vector3( (192f * Utils.Rng.NextFloat() - 96f) * Chunk.BlockSize, 0, (192f * Utils.Rng.NextFloat() - 96f) * Chunk.BlockSize);
-            var newPosition = World.FindSpawningPoint(newOffset + this.BlockPosition);
+            var newPosition = World.FindSpawningPoint(newOffset + this.Position);
             newPosition = World.FindPlaceablePosition(this, new Vector3(newPosition.X, PhysicsSystem.Physics.HeightAtPosition(newPosition.X, newPosition.Z), newPosition.Z));
             this.Model.Position = newPosition;
-            this.Physics.TargetPosition = newPosition;
+            this.Position = newPosition;
             this.IsKnocked = false;
             IsRolling = false;
 

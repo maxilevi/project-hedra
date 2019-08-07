@@ -127,7 +127,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             };
             while (GameManager.Exists)
             {
-                Offset = World.ToChunkSpace(_player.BlockPosition);
+                Offset = World.ToChunkSpace(_player.Position);
                 if (World.IsGenerated && Enabled && creationTimer.Tick())
                 {
                     var hadChanges = false;

@@ -58,13 +58,13 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
             minion.AddComponent(new MinionAIComponent(minion, User));
             minion.AddComponent(new HealthBarComponent(minion, Translations.Get($"{Keyword}_companion_name"), HealthBarType.Friendly));
             minion.SearchComponent<DamageComponent>().Ignore(E => E == User || E == User.Companion.Entity);
-            minion.SearchComponent<DamageComponent>().OnDeadEvent += A => SpawnEffect(minion.Physics.TargetPosition);
+            minion.SearchComponent<DamageComponent>().OnDeadEvent += A => SpawnEffect(minion.Position);
             var masterySkill = (CompanionMastery) User.Toolbar.Skills.First(S => S.GetType() == typeof(CompanionMastery));
             minion.MaxHealth *= masterySkill.HealthMultiplier;
             minion.AttackResistance *= masterySkill.ResistanceMultiplier;
             minion.AttackDamage *= masterySkill.DamageMultiplier;
             minion.Health = minion.MaxHealth;
-            SpawnEffect(minion.Physics.TargetPosition);
+            SpawnEffect(minion.Position);
             return minion;
         }
 

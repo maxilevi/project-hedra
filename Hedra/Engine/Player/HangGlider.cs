@@ -95,10 +95,10 @@ namespace Hedra.Engine.Player
                     * Matrix4.CreateTranslation(Vector3.UnitY * 10f);
                 _player.Movement.Orientate();
                 _player.Physics.GravityDirection = -Vector3.UnitY * 1f;
-                _player.Physics.VelocityCap = 160f * Math.Max(ClampedPitch, 0) + 1f *
+                /*_player.Physics.VelocityCap = 160f * Math.Max(ClampedPitch, 0) + 1f *
                                               (1.0f - Math.Min(1f,
                                                    (_accumulatedVelocity.Average() - _decaySpeed) / _decaySpeed)) + 15f
-                                              + 20f * Math.Max(0, _angles.Z / 90f);
+                                              + 20f * Math.Max(0, _angles.Z / 90f);*/
                 var propulsion = Vector3.One * 20f;
                 propulsion *= 1f + _angles.X / 45f;
                 propulsion *= _angles.X < 15f ? 1.4f : 4.0f;
@@ -166,7 +166,6 @@ namespace Hedra.Engine.Player
             _player.Model.TransformationMatrix = Matrix4.Identity;
             _player.Model.Pause = false;
             _player.Physics.GravityDirection = -Vector3.UnitY;
-            _player.Physics.VelocityCap = float.MaxValue;
             _leftTrail.Emit = false;
             this.Enabled = false;
         }

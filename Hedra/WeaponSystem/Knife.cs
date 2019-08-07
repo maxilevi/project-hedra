@@ -130,7 +130,7 @@ namespace Hedra.WeaponSystem
                 this.MainMesh.LocalRotation = new Vector3(180,0,0);
                 this.MainMesh.BeforeRotation = Vector3.UnitY * -0.7f;
                 
-                if(_previousPosition != Owner.Model.Human.BlockPosition && Owner.Model.Human.IsGrounded)
+                if(_previousPosition != Owner.Model.Human.Position && Owner.Model.Human.IsGrounded)
                 {
                     Chunk underChunk = World.GetChunkAt(Owner.Model.Position);
                     World.Particles.VariateUniformly = true;
@@ -151,7 +151,7 @@ namespace Hedra.WeaponSystem
                         World.Particles.Emit();
                     }
                 }
-                _previousPosition = Owner.BlockPosition;
+                _previousPosition = Owner.Position;
             }
             base.SetToDefault(_knifeSheath);
 

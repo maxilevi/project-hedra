@@ -104,7 +104,7 @@ namespace Hedra.Engine.Loader
                 var chunkBound = Chunk.Width / Chunk.BlockSize;
                 var defaultVoxelCount = chunkBound * Chunk.Height * chunkBound;
                 var lineBreak = $"{Environment.NewLine}{Environment.NewLine}";
-                var text = $"X = {(int)player.BlockPosition.X} Y = {(int)(player.BlockPosition.Y)} Z={(int)player.BlockPosition.Z} Routines={RoutineManager.Count} Watchers={player.Loader.WatcherCount}";
+                var text = $"X = {(int)player.Position.X} Y = {(int)(player.Position.Y)} Z={(int)player.Position.Z} Routines={RoutineManager.Count} Watchers={player.Loader.WatcherCount}";
                 text += 
                     $"{lineBreak}Chunks={World.Chunks.Count} ChunkX={underChunk?.OffsetX ?? 0} ChunkZ={underChunk?.OffsetZ ?? 0}";
                 text +=
@@ -174,9 +174,10 @@ namespace Hedra.Engine.Loader
 
         public void Draw()
         {
+            var player = GameManager.Player;
+
             if (GameSettings.DebugView && _extraDebugView)
             {
-                var player = GameManager.Player;
                 var underChunk = World.GetChunkAt(player.Position);
 
                 if (underChunk != null)

@@ -34,7 +34,7 @@ namespace Hedra.Engine.WorldBuilding
             _currentHost = Host;
             if (IsOccupied)
             {
-                Host.Physics.TargetPosition = Position + _sitOffset;
+                Host.Position = Position + _sitOffset;
                 Host.Rotation = _sitRotation;
             }
         }

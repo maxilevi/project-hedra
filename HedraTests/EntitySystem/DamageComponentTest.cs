@@ -4,6 +4,7 @@ using Hedra.Engine.EntitySystem;
 using System.Collections.Generic;
 using Hedra.Components;
 using Hedra.Core;
+using Hedra.Engine.BulletPhysics;
 using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;

@@ -30,7 +30,7 @@ namespace Hedra.Structures
             {
                 var human = World.WorldBuilding.SpawnHumanoid(HumanType.Mage, P);
                 human.Physics.UsePhysics = false;
-                human.Physics.TargetPosition = P;
+                human.Position = P;
                 human.SearchComponent<DamageComponent>().Immune = true;
                 human.RemoveComponent(human.SearchComponent<HealthBarComponent>());
                 human.AddComponent(new HealthBarComponent(human, Translations.Get(HumanType.Mage.ToString().ToLowerInvariant()), HealthBarType.Friendly));

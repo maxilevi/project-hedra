@@ -35,7 +35,7 @@ namespace Hedra.Engine.Networking.Packets
                 Id = Id,
                 ModelTemplate = Humanoid.Model.Template,
                 Equipment = Humanoid.GetMainEquipment(),
-                Position = Humanoid.Physics.TargetPosition
+                Position = Humanoid.Position
             };
         }
         

@@ -43,10 +43,10 @@ namespace Hedra.Engine.Player
             var minHeight = Physics.HeightAtPosition(Player.Position);
             if (Player.Position.Y < minHeight)
             {
-                Human.Physics.TargetPosition = new Vector3(
-                    Human.Physics.TargetPosition.X,
+                Human.Position = new Vector3(
+                    Human.Position.X,
                     minHeight,
-                    Human.Physics.TargetPosition.Z
+                    Human.Position.Z
                 );
             }
         }
@@ -54,17 +54,17 @@ namespace Hedra.Engine.Player
         public void MoveInWater(bool Up)
         {
             if(Human.IsRolling || Human.IsDead || !Human.CanInteract || !Human.IsUnderwater) return;
-            if(Human.Position.Y + Human.Model.Height + 1 > Physics.WaterHeight(Human.Physics.TargetPosition) && Up) return;
+            if(Human.Position.Y + Human.Model.Height + 1 > Physics.WaterHeight(Human.Position) && Up) return;
             Human.IsGrounded = false;
-            Human.Physics.Velocity = Vector3.Zero;
+            Human.Physics.ResetVelocity();
             Human.Model.LocalRotation = new Vector3(0, Human.Model.LocalRotation.Y, 0);
-            if(Up) Human.Physics.TargetPosition += Vector3.UnitY * 12.5f * (float) Time.DeltaTime;
-            else Human.Physics.TargetPosition -= Vector3.UnitY * 12.5f * (float) Time.DeltaTime;
+            if(Up) Human.Position += Vector3.UnitY * 12.5f * (float) Time.DeltaTime;
+            else Human.Position -= Vector3.UnitY * 12.5f * (float) Time.DeltaTime;
 
-            Human.Physics.TargetPosition = new Vector3(
-                Human.Physics.TargetPosition.X,
-                Math.Max(Physics.HeightAtPosition(Human.Physics.TargetPosition)+2, Human.Physics.TargetPosition.Y),
-                Human.Physics.TargetPosition.Z);
+            Human.Position = new Vector3(
+                Human.Position.X,
+                Math.Max(Physics.HeightAtPosition(Human.Position)+2, Human.Position.Y),
+                Human.Position.Z);
         }
 
         protected void Jump()
@@ -72,7 +72,7 @@ namespace Hedra.Engine.Player
             var canJump = Human.IsGrounded || Human.Position.Y - Human.Model.Height * .5f < Physics.HeightAtPosition(Human.Position);
             if (IsJumping || Human.IsKnocked || Human.IsCasting || Human.IsRiding ||
                 Human.IsRolling || Human.IsDead || !canJump || !Human.CanInteract ||
-                Math.Abs(Human.Physics.TargetPosition.Y - Human.Position.Y) > 2.0f || !this.CaptureMovement)
+                Math.Abs(Human.Position.Y - Human.Position.Y) > 2.0f || !this.CaptureMovement)
                 return;
 
             ForceJump();

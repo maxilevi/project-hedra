@@ -80,7 +80,7 @@ namespace Hedra.Engine.EntitySystem
         public override CollisionShape[] Colliders => new []{ BroadphaseBox.ToShape() };
         public override CollisionShape BroadphaseCollider => BroadphaseBox.ToShape();
         public override CollisionShape HorizontalBroadphaseCollider => BaseBroadphaseBox.ToShape();
-        public override Box BroadphaseBox => BaseBroadphaseBox.Cache.Translate(Parent.Physics.TargetPosition);
+        public override Box BroadphaseBox => BaseBroadphaseBox.Cache.Translate(Parent.Position);
         public override Box Dimensions { get; protected set; }
 
         public override Box BaseBroadphaseBox
@@ -167,7 +167,7 @@ namespace Hedra.Engine.EntitySystem
             if (Parent != null)
             {
                 if (IsMoving && _movingTimer.Tick()) IsMoving = false;
-                Position = Parent.Physics.TargetPosition;
+                Position = Parent.Position;
             }
         }
 

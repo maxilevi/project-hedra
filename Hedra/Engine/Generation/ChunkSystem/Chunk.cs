@@ -55,14 +55,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private static readonly Block[][] _dummyBlocks;
         private Dictionary<CoordinateHash3D, Half> _waterDensity;
         private readonly object _waterLock = new object();
-        private readonly VertexData _nearestVertexData;
         private readonly ChunkTerrainMeshBuilder _terrainBuilder;
         private readonly ChunkStructuresMeshBuilder _structuresBuilder;
-        private readonly object _terrainVerticesLock;
         private readonly object _blocksLock;
         private readonly RegionCache _regionCache;
-        private GridCell _nearestVertexCell;
-        private Vector3[] _terrainVertices;
 
         static Chunk()
         {
@@ -81,11 +77,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (World.GetChunkByOffset(this.OffsetX, this.OffsetZ) != null)
                 throw new ArgumentNullException($"A chunk with the coodinates ({OffsetX}, {OffsetZ}) already exists.");
             _blocks = new Block[(int) (Width / BlockSize)][][];
-            _nearestVertexData = new VertexData();
             _terrainBuilder = new ChunkTerrainMeshBuilder(this);
             _structuresBuilder = new ChunkStructuresMeshBuilder(this);
-            _terrainVertices = new Vector3[0];
-            _terrainVerticesLock = new object();
             _blocksLock = new object();
             _regionCache = new RegionCache(Position, Position + new Vector3(Chunk.Width, 0, Chunk.Width));
 
@@ -119,6 +112,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var buildingLod = this.Lod;
             this.PrepareForBuilding();
             var output = this.CreateTerrainMesh(buildingLod);
+            BulletPhysics.BulletPhysics.AddChunk(Position.Xz, output.StaticData);
 
             if (output == null) return;
             this.SetChunkStatus(output);
@@ -485,11 +479,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
             ? _dummyBlocks
             : _blocks[Index];
 
-        public Vector3[] TerrainVertices => _terrainVertices;
-
         private void ForceDispose()
         {
             Disposed = true;
+            BulletPhysics.BulletPhysics.RemoveChunk(Position.Xz);
             _waterDensity?.Clear();
             if (Mesh != null)
             {

@@ -91,7 +91,7 @@ namespace Hedra.Engine.Game
             while(GameManager.InStartMenu)
             {               
                 var location = MenuBackground.NewLocation;            
-                Player.Physics.TargetPosition = location;
+                Player.Position = location;
                 Player.Model.Position = location;
                 Player.Model.Alpha = 0f;
                 yield return null;
@@ -125,7 +125,6 @@ namespace Hedra.Engine.Game
             Player.Health = Information.Health;
             Player.Rotation = Information.Rotation;
             Player.Model.Dispose();
-            Player.Physics.VelocityCap = float.MaxValue;
             Player.Model = new HumanoidModel(Player);
             Player.RandomFactor = Information.RandomFactor;
             Player.AbilityTree.UnSerialize(Information.SkillsData);
@@ -213,7 +212,7 @@ namespace Hedra.Engine.Game
         {
             SoundtrackManager.PlayAmbient();
             Player.SearchComponent<DamageComponent>().Immune = true;
-            var chunkOffset = World.ToChunkSpace(Player.BlockPosition);
+            var chunkOffset = World.ToChunkSpace(Player.Position);
             StructureHandler.CheckStructures(chunkOffset);
             
             while (_loadingScreen.IsLoading)
@@ -260,7 +259,7 @@ namespace Hedra.Engine.Game
                         Player.UI.ShowMenu();
                     else if (wasGameUiEnabled)
                         Player.UI.GamePanel.Enable();
-                    Player.Physics.TargetPosition += Vector3.UnitY * 2;
+                    Player.Position += Vector3.UnitY * 2;
                     Player.Physics.UsePhysics = true;
                 }
             }

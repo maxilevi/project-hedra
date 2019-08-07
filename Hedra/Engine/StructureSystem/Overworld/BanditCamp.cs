@@ -59,7 +59,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 var allDead = true;
                 for (var i = 0; i < Enemies.Length; i++)
                 {
-                    if (Enemies[i] != null && !Enemies[i].IsDead && (Enemies[i].BlockPosition - Position).Xz.LengthSquared
+                    if (Enemies[i] != null && !Enemies[i].IsDead && (Enemies[i].Position - Position).Xz.LengthSquared
                         < Radius * Radius * .9f * .9f)
                     {
                         allDead = false;
@@ -108,7 +108,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             if (Completed) return;
 
             Rescuee.Model.TransformationMatrix = this.BuildRescueeMatrix();
-            Rescuee.Physics.TargetPosition = this.Position.Xz.ToVector3() + Vector3.UnitY * Physics.HeightAtPosition(this.Position);
+            Rescuee.Position = this.Position.Xz.ToVector3() + Vector3.UnitY * Physics.HeightAtPosition(this.Position);
 
             if (!Rescuee.InUpdateRange)
                 Rescuee.Update();
@@ -145,7 +145,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             Rescuee.Physics.UsePhysics = true;
             Rescuee.Physics.CollidesWithEntities = true;
             Rescuee.Physics.CollidesWithStructures = true;
-            Rescuee.BlockPosition = new Vector3(this.Position.X + 8f, Physics.HeightAtPosition(this.Position) / Chunk.BlockSize, this.Position.Z);
+            Rescuee.Position = new Vector3(this.Position.X + 8f, Physics.HeightAtPosition(this.Position) / Chunk.BlockSize, this.Position.Z);
             Rescuee.Rotation = Vector3.Zero;
         }
 

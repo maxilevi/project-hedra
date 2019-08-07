@@ -27,7 +27,7 @@ namespace Hedra.AISystem.Humanoid
                     var newPoint =
                         new Vector3(Utils.Rng.NextFloat() * _moveRadius - _moveRadius * .5f, 0,
                             Utils.Rng.NextFloat() * _moveRadius - _moveRadius * .5f) + _center.ToVector3();
-                    if (!Parent.Physics.CollidesWithOffset(-Parent.Physics.TargetPosition + new Vector3(newPoint.X, Physics.HeightAtPosition(newPoint), newPoint.Z)))
+                    if (!Parent.Physics.CollidesWithOffset(-Parent.Position + new Vector3(newPoint.X, Physics.HeightAtPosition(newPoint), newPoint.Z)))
                         return newPoint;
                 }
                 return Parent.Position;

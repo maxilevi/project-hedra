@@ -54,9 +54,17 @@ namespace Hedra.Engine.Rendering
 
         public static void DrawLine(Vector3[] Points, Vector4[] Colors, float Width)
         {
-            _line.Width = Width;
-            _line.Update(Points, Colors);
-            _line.Draw();
+#if DEBUG
+            Shader.Passthrough.Bind();
+            OpenTK.Graphics.OpenGL.GL.LineWidth(Width);
+            OpenTK.Graphics.OpenGL.GL.Begin(OpenTK.Graphics.OpenGL.PrimitiveType.Lines);
+            OpenTK.Graphics.OpenGL.GL.Vertex3(Points[0]);
+            OpenTK.Graphics.OpenGL.GL.Color4(Colors[1]);
+            OpenTK.Graphics.OpenGL.GL.Vertex3(Points[1]);
+            OpenTK.Graphics.OpenGL.GL.Color4(Colors[1]);
+            OpenTK.Graphics.OpenGL.GL.End();
+            Shader.Passthrough.Unbind();
+#endif
         }
         
         public static void DrawLine(Vector3 Start, Vector3 End, Vector4 Color, float Width = 1)

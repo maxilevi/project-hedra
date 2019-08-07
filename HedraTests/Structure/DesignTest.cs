@@ -102,8 +102,8 @@ namespace HedraTests.Structure
             Executer.Update();
             for (var i = 0; i < WorldEntities.Length; i++)
             {
-                if( (WorldEntities[i].BlockPosition.Xz - structure.Position.Xz).LengthFast > Design.PlateauRadius )
-                    Assert.Fail($"{WorldEntities[i].BlockPosition.Xz} is far from {structure.Position.Xz} by more than {Design.PlateauRadius}");
+                if( (WorldEntities[i].Position.Xz - structure.Position.Xz).LengthFast > Design.PlateauRadius )
+                    Assert.Fail($"{WorldEntities[i].Position.Xz} is far from {structure.Position.Xz} by more than {Design.PlateauRadius}");
             }
 
             var structures = GetStructureObjects(structure);

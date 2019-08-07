@@ -42,7 +42,7 @@ namespace Hedra.AISystem.Humanoid
             _forgetTimer = new Timer(Utils.Rng.NextFloat() * 6 + 8.0f);
             Behaviour = new BanditAIBehaviour(Entity);
             _targetPoint = Behaviour.FindPoint();
-            _originalPosition = Parent.BlockPosition;
+            _originalPosition = Parent.Position;
             _movementTimer.MarkReady();
         }
 

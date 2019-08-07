@@ -10,6 +10,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.EntitySystem;
 using System.Collections.Generic;
 using System.Linq;
+using BulletSharp.SoftBody;
 using Hedra.Core;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.IO;

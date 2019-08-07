@@ -83,7 +83,7 @@ namespace Hedra.Engine.Rendering.UI
             {
                 _classType = ClassDesign.FromString(ClassDesign.AvailableClassNames[classChooser.Index]);
                 var rotation = _human.Model.LocalRotation;
-                var position = _human.Physics.TargetPosition = Scenes.MenuBackground.PlatformPosition;
+                var position = _human.Position = Scenes.MenuBackground.PlatformPosition;
 
                 _human.Model.Dispose();
                 _human.Model = new HumanoidModel(_human, _classType.ModelTemplate)
