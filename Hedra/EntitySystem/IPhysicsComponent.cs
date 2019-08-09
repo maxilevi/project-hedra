@@ -1,7 +1,8 @@
+using BulletSharp;
 using Hedra.Engine.BulletPhysics;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.PhysicsSystem;
-using OpenTK;
+using Vector3 = OpenTK.Vector3;
 
 namespace Hedra.EntitySystem
 {
@@ -41,5 +42,8 @@ namespace Hedra.EntitySystem
         bool CollidesWithEntities { get; set; }
 
         Vector3 RigidbodyPosition { get; }
+        
+        Vector3 LinearVelocity { get; set; }
+        void AddForce(Vector3 Force);
     }
 }

@@ -1,14 +1,14 @@
+using System;
+
 namespace Hedra.Engine.Core
 {
-    public class Pair<T, U>
+    public class Pair<T, U> : Tuple<T, U>
     {
-        public Pair(T One, U Two)
+        public Pair(T One, U Two) : base(One, Two)
         {
-            this.One = One;
-            this.Two = Two;
         }
         
-        public T One { get; set; }
-        public U Two { get; set; }
+        public T One => base.Item1;
+        public U Two => base.Item2;
     }
 }

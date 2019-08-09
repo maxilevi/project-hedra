@@ -28,9 +28,9 @@ namespace Hedra.Engine.Player
         public Vector3 LastOrientation { get; private set; }
         public float RollFacing { get; set; }
         public bool IsJumping { get; private set; }
+        protected Vector3 AccumulatedMovement { get; set; }
         protected readonly IHumanoid Human;
-        private Vector3 _jumpPropulsion;
-        private float _lastHeight;
+        protected Vector3 JumpPropulsion;
 
         public MovementManager(IHumanoid Human)
         {
@@ -85,26 +85,41 @@ namespace Hedra.Engine.Player
             IsJumping = true;
             Human.Physics.ResetFall();
             Human.Physics.GravityDirection = -Vector3.UnitY;
-            _jumpPropulsion = Vector3.UnitY * Propulsion;
+            JumpPropulsion = Vector3.UnitY * Propulsion;
         }
 
         protected virtual void DoUpdate() { }
 
         public void ProcessMovement(float CharacterRotation, Vector3 MoveSpace, bool Orientate = true)
         {
-            Human.Physics.DeltaTranslate(MoveSpace);
-            if (Orientate)
-            {
-                LastOrientation = new Vector3(MoveSpace.X, 0, MoveSpace.Z).NormalizedFast();
-                if (!Human.WasAttacking && !Human.IsAttacking)
-                {
-                    Human.Model.TargetRotation = new Vector3(Human.Model.TargetRotation.X, CharacterRotation,
-                        Human.Model.TargetRotation.Z);
-                    Human.Orientation = LastOrientation;
-                }
-            }
-
+            AccumulatedMovement += MoveSpace;
+            if(Orientate)
+                ProcessOrientation(MoveSpace, CharacterRotation);
             Human.IsSitting = false;
+        }
+        
+        public void ProcessTranslation(float CharacterRotation, Vector3 MoveSpace, bool Orientate)
+        {
+            Human.Physics.DeltaTranslate(MoveSpace);
+            if(Orientate)
+                ProcessOrientation(MoveSpace, CharacterRotation); 
+        }
+
+        private void ProcessOrientation(Vector3 Towards, float CharacterRotation)
+        {
+            LastOrientation = new Vector3(Towards.X, 0, Towards.Z).NormalizedFast();
+            if (!Human.WasAttacking && !Human.IsAttacking)
+            {
+                Human.Model.TargetRotation = new Vector3(Human.Model.TargetRotation.X, CharacterRotation,
+                    Human.Model.TargetRotation.Z);
+                Human.Orientation = LastOrientation;
+            }
+        }
+        
+        public void FlushMovement()
+        {
+            Human.Physics.LinearVelocity = new Vector3(AccumulatedMovement.X, Math.Min(2, Human.Physics.LinearVelocity.Y), AccumulatedMovement.Z);
+            AccumulatedMovement = Vector3.Zero;
         }
         
         public void OrientateTowards(float Facing)
@@ -140,20 +155,19 @@ namespace Hedra.Engine.Player
             Human.IsSwimming = Human.IsMoving && Human.IsUnderwater;
             this.DoUpdate();
             this.ManageMoveOrders();
-            this.HandleJumping();
+            HandleJumping();
         }
-
+        
         private void HandleJumping()
         {
             if (!IsJumping) return;
-            if ((Physics.HeightAtPosition(Human.Position) + .5f > Human.Position.Y || Human.IsGrounded) 
-                && _jumpPropulsion.LengthFast < 30 || Human.IsUnderwater)
+            if (Human.IsGrounded && JumpPropulsion.LengthFast < 30 || Human.IsUnderwater)
             {
                 CancelJump();
             }
 
-            if (!Human.Physics.DeltaTranslate(_jumpPropulsion, true)) CancelJump();
-            _jumpPropulsion *= (float)Math.Pow(.25f, Time.DeltaTime * 3f);
+            if (!Human.Physics.DeltaTranslate(JumpPropulsion, true) || JumpPropulsion.LengthSquared < 16) CancelJump();
+            JumpPropulsion *= (float)Math.Pow(.25f, Time.DeltaTime * 3f);
         }
 
         public void CancelJump()

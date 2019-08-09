@@ -11,6 +11,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 {
     public class ChunkTerrainMeshBuilder
     {
+        private const int CollisionMeshLod = 2;
         private readonly Chunk _parent;
         private readonly WaterEdgePatcher _waterPatcher;
         private readonly MeshStitcher _stitcher;
@@ -45,13 +46,13 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public ChunkMeshBuildOutput CreateTerrainMesh(Block[][][] Blocks, int Lod, RegionCache Cache)
         {
             var output = CreateTerrain(Blocks,
-                (X,Y,Z) => Lod == 1 || (X != 0 && Z != 0 && X != BoundsX-Lod && Z != BoundsZ-Lod), Lod, Lod, Cache);
+                (X,Y,Z) => Lod == 1 || (X != 0 && Z != 0 && X != BoundsX-Lod && Z != BoundsZ-Lod), Lod, Lod, Cache, true, true);
 
             if (Lod != 1)
             {
                 var targetLod = 1;
                 var borders = CreateTerrain(Blocks,
-                    (X, Y, Z) => X < targetLod || Z < targetLod || X > BoundsX-targetLod-1 || Z > BoundsZ-targetLod-1, targetLod, Lod, Cache);
+                    (X, Y, Z) => X < targetLod || Z < targetLod || X > BoundsX-targetLod-1 || Z > BoundsZ-targetLod-1, targetLod, Lod, Cache, true, true);
                 _stitcher.Process(output.StaticData, borders.StaticData,
                     new Vector3(Lod*BlockSize, 0, Lod*BlockSize), new Vector3(Chunk.Width-Lod*BlockSize, 0, Chunk.Width-Lod*BlockSize),
                     new Vector3(targetLod*BlockSize,0, targetLod*BlockSize), new Vector3(Chunk.Width-targetLod*BlockSize, 0, Chunk.Width-targetLod*BlockSize));
@@ -72,7 +73,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return output;
         }
 
-        private ChunkMeshBuildOutput CreateTerrain(Block[][][] Blocks, Func<int, int, int, bool> Filter, int Lod, int ColorLod, RegionCache Cache)
+        public VertexData CreateTerrainCollisionMesh(Block[][][] Blocks, RegionCache Cache)
+        {
+            return CreateTerrain(Blocks, (X,Y,Z) => true, CollisionMeshLod, 1, Cache, false, false).StaticData;
+        }
+
+        private ChunkMeshBuildOutput CreateTerrain(Block[][][] Blocks, Func<int, int, int, bool> Filter, int Lod, int ColorLod, RegionCache Cache, bool ProcessWater, bool ProcessColors)
         {
             var failed = false;
             var next = false;
@@ -107,8 +113,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
                                 !MarchingCubes.Usable(0f, cell)) continue;
                             if (!success && y < BoundsY - 2) failed = true;
 
-                            Vector4 color;
-                            if (Blocks[x][y][z].Type == BlockType.Water && Blocks[x][y + 1][z].Type == BlockType.Air)
+                            Vector4 color = Vector4.Zero;
+                            if (Blocks[x][y][z].Type == BlockType.Water && Blocks[x][y + 1][z].Type == BlockType.Air && ProcessWater)
                             {
                                 var regionPosition =
                                     new Vector3(cell.P[0].X * BlockSize + OffsetX, 0,
@@ -135,19 +141,24 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
                                 if (!MarchingCubes.Usable(0f, cell)) continue;
 
-                                var regionPosition = new Vector3(cell.P[0].X + OffsetX, 0, cell.P[0].Z + OffsetZ);
-                                var region = Cache.GetAverageRegionColor(regionPosition);
-                                color = Helper.GetColor(cell, region, ColorLod);
+                                if (ProcessColors)
+                                {
+                                    var regionPosition = new Vector3(cell.P[0].X + OffsetX, 0, cell.P[0].Z + OffsetZ);
+                                    var region = Cache.GetAverageRegionColor(regionPosition);
+                                    color = Helper.GetColor(cell, region, ColorLod);
+                                }
+
                                 MarchingCubes.Process(0f, cell, color, next, blockData);
                             }
                             else
                             {
-                                var regionPosition =
-                                    new Vector3(cell.P[0].X + OffsetX, 0, cell.P[0].Z + OffsetZ);
-
-                                RegionColor region = Cache.GetAverageRegionColor(regionPosition);
-
-                                color = Helper.GetColor(cell, region, ColorLod);
+                                if (ProcessColors)
+                                {
+                                    var regionPosition =
+                                        new Vector3(cell.P[0].X + OffsetX, 0, cell.P[0].Z + OffsetZ);
+                                    var region = Cache.GetAverageRegionColor(regionPosition);
+                                    color = Helper.GetColor(cell, region, ColorLod);
+                                }
 
                                 MarchingCubes.Process(0f, cell, color, next, blockData);
                             }

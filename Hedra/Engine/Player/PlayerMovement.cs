@@ -142,6 +142,8 @@ namespace Hedra.Engine.Player
                     RollDirection = Human.Physics.MoveFormula(_player.View.Right, false).Xz.ToVector3().NormalizedFast();
                     RollFacing = _characterRotation;
                 }
+
+                FlushMovement();
                 /*
                 if(GameManager.Keyboard[Controls.Climb] && _player.Physics.InFrontOfWall)
                 {
@@ -168,11 +170,11 @@ namespace Hedra.Engine.Player
         
 
             if (!_player.IsUnderwater) return;
-            //this.ClampSwimming(_player);
+            this.ClampSwimming(_player);
             if (GameManager.Keyboard[Controls.Jump]) this.MoveInWater(true);
             if (GameManager.Keyboard[Controls.Descend]) this.MoveInWater(false);
         }
-        
+
         private void RegisterKey(Key Key, Action Action)
         {
             _registeredKeys.Add(Key, Action);
@@ -225,6 +227,10 @@ namespace Hedra.Engine.Player
             this.RegisterKey(Key.F3, delegate
             {
                 GameSettings.DebugView = !GameSettings.DebugView && GameSettings.DebugMode;             
+            });
+            this.RegisterKey(Key.F4, delegate
+            {
+                GameSettings.DebugPhysics = !GameSettings.DebugPhysics && GameSettings.DebugMode;             
             });
         }
 

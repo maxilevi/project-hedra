@@ -85,7 +85,7 @@ namespace Hedra.Engine.Player.BoatSystem
             }
             if (!Enabled && _wasEnabled)
             {
-                _player.Physics.GravityDirection = -Vector3.UnitY;
+                _player.Physics.GravityDirection = _player.IsUnderwater ? Vector3.Zero : -Vector3.UnitY;
                 _player.Movement.CaptureMovement = true;
             }
             _wasEnabled = Enabled;
@@ -109,9 +109,16 @@ namespace Hedra.Engine.Player.BoatSystem
             set
             {
                 if(value && !CanEnable) return;
+                //if (value && !_enabled) ResetSpeed();
                 _enabled = value;
             }
-        }        
+        }
+
+        private void ResetSpeed()
+        {
+            _player.Movement.FlushMovement();
+            _player.Physics.ResetVelocity();
+        }
         
         public Matrix4 Transformation { get; private set; }
 

@@ -41,6 +41,7 @@ namespace Hedra.Game
         public static int Width { get; set; }
         public static int Height { get; set; }
         public static float ScreenRatio { get; set; }
+        public static bool DebugPhysics { get; set; }
         public static bool WatchScriptChanges { get; set; }
         public static bool Paused { get; set; }
         public static float AmbientOcclusionIntensity = 1;

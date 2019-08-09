@@ -112,7 +112,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var buildingLod = this.Lod;
             this.PrepareForBuilding();
             var output = this.CreateTerrainMesh(buildingLod);
-            BulletPhysics.BulletPhysics.AddChunk(Position.Xz, output.StaticData);
+            SetupCollider(buildingLod);
 
             if (output == null) return;
             this.SetChunkStatus(output);
@@ -122,12 +122,32 @@ namespace Hedra.Engine.Generation.ChunkSystem
             this.UploadMesh(output);
             this.FinishUpload(output, buildingLod);
         }
+
+        private void SetupCollider(int BuildingLod)
+        {
+            if (BuildingLod == 1)
+            {
+                BulletPhysics.BulletPhysics.AddChunk(Position.Xz, CreateCollisionTerrainMesh());
+            }
+            else
+            {
+                BulletPhysics.BulletPhysics.RemoveChunk(Position.Xz);
+            }
+        }
         
         private void BuildSparsity()
         {
             /* We should build the sparsity data when all the neighbours exist */
             _terrainBuilder.Sparsity = ChunkSparsity.From(this);
             /* Landscape.Cull(_blocks, _terrainBuilder.Sparsity); */
+        }
+        
+        private VertexData CreateCollisionTerrainMesh()
+        {
+            lock (_blocks)
+            {
+                return _terrainBuilder.CreateTerrainCollisionMesh(_blocks, _regionCache);
+            }
         }
         
         private ChunkMeshBuildOutput CreateTerrainMesh(int LevelOfDetail)

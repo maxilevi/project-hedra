@@ -8,11 +8,17 @@
  */
 
 using System;
+using System.Drawing;
+using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Player;
 using Hedra.EntitySystem;
+using Hedra.Game;
+using Hedra.Sound;
 using OpenTK;
 using Bullet = BulletSharp;
 
@@ -24,38 +30,190 @@ namespace Hedra.Engine.BulletPhysics
     {
         private const float NormalSpeedModifier = 2.25f;
         public event OnMoveEvent OnMove;
-        public bool UsePhysics { get; set; } = true;
         public float FallTime { get; private set; }
         public bool CanBePushed { get; set; } = true;
         public bool HasFallDamage { get; set; } = true;
         public bool UseTimescale { get; set; } = true;
 
-        private PhysicsComponentMotionState _motionState;
-        private float _speedMultiplier;
+        private readonly PhysicsComponentMotionState _motionState;
+        private readonly Bullet.ClosestRayResultCallback _rayCallback;
         private readonly Bullet.RigidBody _body;
-        
+        private readonly Bullet.RigidBody _sensor;
+        private Vector3 _gravityDirection;
+        private float _speedMultiplier;
+        private int _sensorContacts;
+
         public PhysicsComponent(IEntity Parent) : base(Parent)
         {
-            var defaultShape = new Bullet.BoxShape(Vector3.One.Compatible());
+            _gravityDirection = -Vector3.UnitY;
+            _rayCallback = new Bullet.ClosestRayResultCallback();
             _motionState = new PhysicsComponentMotionState();
-            _body = new Bullet.RigidBody(new Bullet.RigidBodyConstructionInfo(1, _motionState, defaultShape));
-            BulletPhysics.Add(_body);
+            var defaultShape = new Bullet.BoxShape(Vector3.One.Compatible());
+            using (var bodyInfo = new Bullet.RigidBodyConstructionInfo(1, _motionState, defaultShape))
+            {
+                _body = new Bullet.RigidBody(bodyInfo);
+                /* FIXME: Ugly */
+                if (Parent is IPlayer)
+                {
+                    _body.CollisionFlags |= Bullet.CollisionFlags.CharacterObject;
+                    _body.ActivationState = Bullet.ActivationState.DisableDeactivation;
+                }
+                BulletPhysics.Add(_body);
+            }
+            using (var bodyInfo = new Bullet.RigidBodyConstructionInfo(1, new Bullet.DefaultMotionState(), defaultShape))
+            {
+                _sensor = new Bullet.RigidBody(bodyInfo);
+                _sensor.CollisionFlags |= Bullet.CollisionFlags.NoContactResponse;
+                BulletPhysics.Add(_sensor);
+            }
+
+            BulletPhysics.OnCollision += OnCollision;
+            BulletPhysics.OnSeparation += OnSeparation;
+        }
+
+        private void OnCollision(Bullet.CollisionObject Object0, Bullet.CollisionObject Object1)
+        {
+             if (Object0 != _sensor && Object1 != _sensor) return;
+            var other = Object0 == _sensor ? Object1 : Object0;
+            if (other != _body)
+            {
+                _sensorContacts++;
+            }
+        }
+        
+        private void OnSeparation(Bullet.CollisionObject Object0, Bullet.CollisionObject Object1)
+        {
+            if (Object0 != _sensor && Object1 != _sensor) return;
+            var other = Object0 == _sensor ? Object1 : Object0;
+            if (other != _body)
+            {
+                _sensorContacts--;
+            }
         }
 
         public void SetHitbox(Box Dimensions)
         {
-            var previous = _body.CollisionShape;
-            _body.CollisionShape = new Bullet.BoxShape(Dimensions.Size.Compatible() * .5f);
-            previous.Dispose();
+            SetShape(_body, GetShapeForBox(Dimensions));
+            var radius = Dimensions.Size.Xz.Length * .5f;
+            SetShape(_sensor, new Bullet.BoxShape(radius, .25f, radius));
         }
 
-        public Vector3 GravityDirection { get; set; } = new Vector3(0, -1f, 0);
+        private static Bullet.CollisionShape GetShapeForBox(Box Dimensions)
+        {
+            var bodyShape = new Bullet.CompoundShape();
+            if (Dimensions.Size.Xz.LengthFast > Dimensions.Size.Y)
+            {
+                var cube = new Bullet.BoxShape(Dimensions.Size.Compatible() * .5f);
+                bodyShape.AddChildShape(
+                    Bullet.Matrix.Translation(Bullet.Vector3.UnitY * -cube.HalfExtentsWithoutMargin.Y),
+                    cube
+                );
+            }
+            else
+            {
+                var capsule = new Bullet.CapsuleShape(Dimensions.Size.Xz.Length * .5f, Dimensions.Size.Y * .25f);
+                bodyShape.AddChildShape(
+                    Bullet.Matrix.Translation(Bullet.Vector3.UnitY * Dimensions.Size.Y * -.5f),
+                    capsule
+                );
+            }
+            return bodyShape;
+        }
 
-        public Vector3 RigidbodyPosition => _body.WorldTransform.Origin.Compatible();
+        private static void SetShape(Bullet.RigidBody Body, Bullet.CollisionShape Shape)
+        {
+            var previous = Body.CollisionShape;
+            try
+            {
+                Body.CollisionShape = Shape;
+            }
+            finally
+            {
+                previous.Dispose();
+            }
+        }
+
+        public Vector3 LinearVelocity
+        {
+            get => _body.LinearVelocity.Compatible();
+            set => _body.LinearVelocity = value.Compatible();
+        }
+
+        public Vector3 GravityDirection
+        {
+            get => _gravityDirection;
+            set
+            {
+                _gravityDirection = value;
+                _body.Gravity = Gravity;
+            }
+        }
+
+        public bool UsePhysics
+        {
+            get => _body.Gravity != Bullet.Vector3.Zero;
+            set => _body.Gravity = (value ? Gravity : Bullet.Vector3.Zero);
+        }
+
+        private Bullet.Vector3 Gravity => (BulletPhysics.Gravity * _gravityDirection).Compatible();
+        public Vector3 RigidbodyPosition { get; private set; }
+
+        public override void Draw()
+        {
+            if (GameSettings.DebugPhysics)
+            {
+                BulletPhysics.DrawObject(_body.WorldTransform, _body.CollisionShape, Color.Red);
+                BulletPhysics.DrawObject(_sensor.WorldTransform, _sensor.CollisionShape, Color.Green);
+            }
+        }
 
         public override void Update()
         {
-            _speedMultiplier = Mathf.Lerp(_speedMultiplier, NormalSpeedModifier * (Parent.IsAttacking ? Parent.AttackingSpeedModifier : 1), Timestep * 2f);
+            var deltaTime = Timestep;
+            RigidbodyPosition = _body.WorldTransform.Origin.Compatible();
+            _speedMultiplier = Mathf.Lerp(_speedMultiplier, NormalSpeedModifier * (Parent.IsAttacking ? Parent.AttackingSpeedModifier : 1), deltaTime * 2f);
+            HandleFallDamage(deltaTime);
+            if (_body.LinearVelocity.Compatible().Xz.LengthSquared > 1f)
+            {
+                OnMove?.Invoke();
+            }
+            _sensor.WorldTransform = _body.WorldTransform * Bullet.Matrix.Translation(Bullet.Vector3.UnitY * -0f);
+            Parent.IsGrounded = _sensorContacts > 0;
+        }
+
+        public void AddForce(Vector3 Force)
+        {
+            _body.ApplyCentralForce(Force.Compatible());
+            _body.Activate(true);
+        }
+
+        private void HandleFallDamage(float DeltaTime)
+        {
+            if (!Parent.IsGrounded)
+            {
+                if (!Parent.IsUnderwater)
+                    FallTime += DeltaTime;
+            }
+            else if(FallTime > 0)
+            {
+                if (FallTime > 2.0f && HasFallDamage)
+                {
+                    if (!Parent.SearchComponent<DamageComponent>()?.Immune ?? true)
+                    {
+                        var fallTime = FallTime;
+                        Executer.ExecuteOnMainThread(delegate
+                        {
+                            Parent.Damage(fallTime * 7.5f, null, out _, true);
+                            Parent.KnockForSeconds(3f);
+                        });
+                    }
+                }
+                else if (FallTime > 1f)
+                {
+                    SoundPlayer.PlaySound(SoundType.HitGround, Parent.Position);
+                }
+                FallTime = 0;
+            }
         }
         
         public void ResetSpeed()
@@ -76,7 +234,7 @@ namespace Hedra.Engine.BulletPhysics
 
         public void ResetVelocity()
         {
-            _body.ClearForces();
+            _body.LinearVelocity = Bullet.Vector3.Zero;
         }
 
         public bool ExecuteTranslate(MoveCommand Command)
@@ -91,6 +249,10 @@ namespace Hedra.Engine.BulletPhysics
 
         public bool DeltaTranslate(Vector3 Delta, bool OnlyY = false)
         {
+            if (Time.DeltaTime > 0 && OnlyY)
+            {
+                int a = 0;
+            }
             return ExecuteTranslate(new MoveCommand(Delta * Time.DeltaTime)
             {
                 OnlyY = OnlyY
@@ -103,7 +265,10 @@ namespace Hedra.Engine.BulletPhysics
             _body.Activate(true);
             var previous = _body.WorldTransform.Origin;
             _body.Translate(Command.Delta.Compatible());
-            return previous != _body.WorldTransform.Origin;
+            var moved = previous != _body.WorldTransform.Origin;
+            if(moved && Command.Delta.Xz != Vector2.Zero)
+                OnMove?.Invoke();
+            return moved;
         }
 
         public bool EntityRaycast(IEntity[] Entities, Vector3 Addition, float Modifier = 1)
@@ -159,7 +324,23 @@ namespace Hedra.Engine.BulletPhysics
 
         public bool Raycast(Vector3 End)
         {
-            return false;
+            return true;//Raycast();
+        }
+        
+        public bool Raycast(Vector3 Source, Vector3 End)
+        {
+            var src = Source.Compatible();
+            var end = End.Compatible();
+            var callback = new Bullet.ClosestRayResultCallback(ref src, ref end);
+            try
+            {
+                BulletPhysics.Raycast(Source.Compatible(), End.Compatible(), callback);
+                return _rayCallback.HasHit;
+            }
+            finally
+            {
+                callback.Dispose();
+            }
         }
         
         private float Timestep => Time.IndependentDeltaTime * (UseTimescale ? Time.TimeScale : 1);
@@ -172,7 +353,12 @@ namespace Hedra.Engine.BulletPhysics
         
         public override void Dispose()
         {
+            _rayCallback.Dispose();
+            _motionState.Dispose();
             BulletPhysics.Remove(_body);
+            BulletPhysics.Remove(_sensor);
+            BulletPhysics.OnCollision -= OnCollision;
+            BulletPhysics.OnSeparation -= OnSeparation;
         }
     }
 }

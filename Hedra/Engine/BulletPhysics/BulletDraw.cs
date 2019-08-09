@@ -16,7 +16,7 @@ namespace Hedra.Engine.BulletPhysics
 
         public override void DrawContactPoint(ref Vector3 pointOnB, ref Vector3 normalOnB, float distance, int lifeTime, Color color)
         {
-            throw new System.NotImplementedException();
+            BasicGeometry.DrawLine(pointOnB.Compatible(), pointOnB.Compatible() + normalOnB.Compatible(), color.ToVector4());
         }
 
         public override void DrawLine(ref Vector3 @from, ref Vector3 to, Color color)
