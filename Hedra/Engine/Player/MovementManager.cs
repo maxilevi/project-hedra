@@ -92,7 +92,7 @@ namespace Hedra.Engine.Player
 
         public void ProcessMovement(float CharacterRotation, Vector3 MoveSpace, bool Orientate = true)
         {
-            AccumulatedMovement += MoveSpace;
+            Human.Physics.MoveTowards(MoveSpace);
             if(Orientate)
                 ProcessOrientation(MoveSpace, CharacterRotation);
             Human.IsSitting = false;
@@ -115,12 +115,7 @@ namespace Hedra.Engine.Player
                 Human.Orientation = LastOrientation;
             }
         }
-        
-        public void FlushMovement()
-        {
-            Human.Physics.LinearVelocity = new Vector3(AccumulatedMovement.X, Math.Min(2, Human.Physics.LinearVelocity.Y), AccumulatedMovement.Z);
-            AccumulatedMovement = Vector3.Zero;
-        }
+
         
         public void OrientateTowards(float Facing)
         {
@@ -166,7 +161,7 @@ namespace Hedra.Engine.Player
                 CancelJump();
             }
 
-            if (!Human.Physics.DeltaTranslate(JumpPropulsion, true) || JumpPropulsion.LengthSquared < 16) CancelJump();
+            if (!Human.Physics.DeltaTranslate(JumpPropulsion, true) || JumpPropulsion.LengthSquared < 1) CancelJump();
             JumpPropulsion *= (float)Math.Pow(.25f, Time.DeltaTime * 3f);
         }
 

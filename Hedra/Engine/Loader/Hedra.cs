@@ -171,7 +171,6 @@ namespace Hedra.Engine.Loader
             else
             {
                 DrawManager.Draw();
-                BulletPhysics.BulletPhysics.Draw();
                 _debugProvider.Draw();
             }
             this.SwapBuffers();

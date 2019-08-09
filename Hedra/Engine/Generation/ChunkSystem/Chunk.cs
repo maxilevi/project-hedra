@@ -125,9 +125,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private void SetupCollider(int BuildingLod)
         {
-            if (BuildingLod == 1)
+            if (BuildingLod == 1 || BuildingLod == 2)
             {
-                BulletPhysics.BulletPhysics.AddChunk(Position.Xz, CreateCollisionTerrainMesh());
+                BulletPhysics.BulletPhysics.AddChunk(Position.Xz, CreateCollisionTerrainMesh(), CollisionShapes);
             }
             else
             {
@@ -425,7 +425,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             this.NeedsRebuilding = true;
         }
 
-        public void AddCollisionShape(params ICollidable[] Data)
+        public void AddCollisionShape(params CollisionShape[] Data)
         {
             if (Mesh == null) throw new ArgumentException($"Failed to add collision shape");
 
@@ -436,16 +436,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
         }
 
-        public void RemoveCollisionShape(params ICollidable[] Data)
-        {
-            if (Mesh == null) throw new ArgumentException($"Failed to remove collision shape");
-
-            lock (Mesh.CollisionBoxes)
-            {
-                for (var i = 0; i < Data.Length; i++)
-                    Mesh.CollisionBoxes.Remove(Data[i]);
-            }
-        }
 
         public bool Initialized => Mesh != null;
 
@@ -479,15 +469,15 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public ReadOnlyCollection<VertexData> StaticElements => Mesh.Elements.AsReadOnly();
 
-        public ReadOnlyCollection<ICollidable> CollisionShapes
+        public CollisionShape[] CollisionShapes
         {
             get
             {
-                if (Disposed || !Initialized) return new List<ICollidable>().AsReadOnly();
+                if (Disposed || !Initialized) return new List<CollisionShape>().ToArray();
 
                 lock (Mesh.CollisionBoxes)
                 {
-                    return Mesh.CollisionBoxes.AsReadOnly();
+                    return Mesh.CollisionBoxes.ToArray();
                 }
             }
         }

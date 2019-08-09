@@ -1,4 +1,4 @@
-using Vector3 = BulletSharp.Vector3;
+using Vector3 = BulletSharp.Math.Vector3;
 
 namespace Hedra.Engine.BulletPhysics
 {

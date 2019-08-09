@@ -8,7 +8,6 @@
  */
 
 using System;
-using System.Drawing;
 using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine.EntitySystem;
@@ -18,6 +17,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using Hedra.Game;
+using Hedra.Rendering;
 using Hedra.Sound;
 using OpenTK;
 using Bullet = BulletSharp;
@@ -36,17 +36,16 @@ namespace Hedra.Engine.BulletPhysics
         public bool UseTimescale { get; set; } = true;
 
         private readonly PhysicsComponentMotionState _motionState;
-        private readonly Bullet.ClosestRayResultCallback _rayCallback;
         private readonly Bullet.RigidBody _body;
         private readonly Bullet.RigidBody _sensor;
         private Vector3 _gravityDirection;
         private float _speedMultiplier;
+        private Vector3 _accumulatedMovement;
         private int _sensorContacts;
 
         public PhysicsComponent(IEntity Parent) : base(Parent)
         {
             _gravityDirection = -Vector3.UnitY;
-            _rayCallback = new Bullet.ClosestRayResultCallback();
             _motionState = new PhysicsComponentMotionState();
             var defaultShape = new Bullet.BoxShape(Vector3.One.Compatible());
             using (var bodyInfo = new Bullet.RigidBodyConstructionInfo(1, _motionState, defaultShape))
@@ -64,18 +63,23 @@ namespace Hedra.Engine.BulletPhysics
             {
                 _sensor = new Bullet.RigidBody(bodyInfo);
                 _sensor.CollisionFlags |= Bullet.CollisionFlags.NoContactResponse;
+                /* FIXME: Ugly */
+                if (Parent is IPlayer)
+                {
+                    _body.ActivationState = Bullet.ActivationState.DisableDeactivation;
+                }
                 BulletPhysics.Add(_sensor);
             }
-
+            _motionState.OnUpdated += UpdateSensor;
             BulletPhysics.OnCollision += OnCollision;
             BulletPhysics.OnSeparation += OnSeparation;
         }
 
         private void OnCollision(Bullet.CollisionObject Object0, Bullet.CollisionObject Object1)
         {
-             if (Object0 != _sensor && Object1 != _sensor) return;
-            var other = Object0 == _sensor ? Object1 : Object0;
-            if (other != _body)
+             if (!ReferenceEquals(Object0, _sensor) && !ReferenceEquals(Object1, _sensor)) return;
+            var other = ReferenceEquals(Object0, _sensor) ? Object1 : Object0;
+            if (!ReferenceEquals(other, _body))
             {
                 _sensorContacts++;
             }
@@ -83,9 +87,9 @@ namespace Hedra.Engine.BulletPhysics
         
         private void OnSeparation(Bullet.CollisionObject Object0, Bullet.CollisionObject Object1)
         {
-            if (Object0 != _sensor && Object1 != _sensor) return;
-            var other = Object0 == _sensor ? Object1 : Object0;
-            if (other != _body)
+            if (!ReferenceEquals(Object0, _sensor) && !ReferenceEquals(Object1, _sensor)) return;
+            var other = ReferenceEquals(Object0, _sensor) ? Object1 : Object0;
+            if (!ReferenceEquals(other, _body))
             {
                 _sensorContacts--;
             }
@@ -105,7 +109,7 @@ namespace Hedra.Engine.BulletPhysics
             {
                 var cube = new Bullet.BoxShape(Dimensions.Size.Compatible() * .5f);
                 bodyShape.AddChildShape(
-                    Bullet.Matrix.Translation(Bullet.Vector3.UnitY * -cube.HalfExtentsWithoutMargin.Y),
+                    Bullet.Math.Matrix.Translation(Bullet.Math.Vector3.UnitY * -cube.HalfExtentsWithoutMargin.Y),
                     cube
                 );
             }
@@ -113,7 +117,7 @@ namespace Hedra.Engine.BulletPhysics
             {
                 var capsule = new Bullet.CapsuleShape(Dimensions.Size.Xz.Length * .5f, Dimensions.Size.Y * .25f);
                 bodyShape.AddChildShape(
-                    Bullet.Matrix.Translation(Bullet.Vector3.UnitY * Dimensions.Size.Y * -.5f),
+                    Bullet.Math.Matrix.Translation(Bullet.Math.Vector3.UnitY * Dimensions.Size.Y * -.5f),
                     capsule
                 );
             }
@@ -133,12 +137,6 @@ namespace Hedra.Engine.BulletPhysics
             }
         }
 
-        public Vector3 LinearVelocity
-        {
-            get => _body.LinearVelocity.Compatible();
-            set => _body.LinearVelocity = value.Compatible();
-        }
-
         public Vector3 GravityDirection
         {
             get => _gravityDirection;
@@ -151,42 +149,51 @@ namespace Hedra.Engine.BulletPhysics
 
         public bool UsePhysics
         {
-            get => _body.Gravity != Bullet.Vector3.Zero;
-            set => _body.Gravity = (value ? Gravity : Bullet.Vector3.Zero);
+            get => _body.Gravity != Bullet.Math.Vector3.Zero;
+            set => _body.Gravity = (value ? Gravity : Bullet.Math.Vector3.Zero);
         }
 
-        private Bullet.Vector3 Gravity => (BulletPhysics.Gravity * _gravityDirection).Compatible();
-        public Vector3 RigidbodyPosition { get; private set; }
+        private Bullet.Math.Vector3 Gravity => (BulletPhysics.Gravity * _gravityDirection).Compatible();
+        public Vector3 RigidbodyPosition => _body.WorldTransform.Origin.Compatible();
 
         public override void Draw()
         {
             if (GameSettings.DebugPhysics)
             {
-                BulletPhysics.DrawObject(_body.WorldTransform, _body.CollisionShape, Color.Red);
-                BulletPhysics.DrawObject(_sensor.WorldTransform, _sensor.CollisionShape, Color.Green);
+                BulletPhysics.DrawObject(_body.WorldTransform, _body.CollisionShape, Colors.Red);
+                BulletPhysics.DrawObject(_sensor.WorldTransform, _sensor.CollisionShape, Colors.GreenYellow);
             }
         }
 
         public override void Update()
         {
             var deltaTime = Timestep;
-            RigidbodyPosition = _body.WorldTransform.Origin.Compatible();
             _speedMultiplier = Mathf.Lerp(_speedMultiplier, NormalSpeedModifier * (Parent.IsAttacking ? Parent.AttackingSpeedModifier : 1), deltaTime * 2f);
             HandleFallDamage(deltaTime);
+            HandleIsMoving();
+            Parent.IsGrounded = _sensorContacts > 0;
+            _body.LinearVelocity = new Bullet.Math.Vector3(_accumulatedMovement.X, Math.Min(2, _body.LinearVelocity.Y), _accumulatedMovement.Z);
+            _accumulatedMovement = Vector3.Zero;
+        }
+
+        private void UpdateSensor()
+        {
+            _sensor.WorldTransform = _motionState.WorldTransform;
+        }
+
+        public void MoveTowards(Vector3 Position)
+        {
+            _accumulatedMovement += Position;
+        }
+
+        private void HandleIsMoving()
+        {
             if (_body.LinearVelocity.Compatible().Xz.LengthSquared > 1f)
             {
                 OnMove?.Invoke();
             }
-            _sensor.WorldTransform = _body.WorldTransform * Bullet.Matrix.Translation(Bullet.Vector3.UnitY * -0f);
-            Parent.IsGrounded = _sensorContacts > 0;
         }
-
-        public void AddForce(Vector3 Force)
-        {
-            _body.ApplyCentralForce(Force.Compatible());
-            _body.Activate(true);
-        }
-
+        
         private void HandleFallDamage(float DeltaTime)
         {
             if (!Parent.IsGrounded)
@@ -229,31 +236,22 @@ namespace Hedra.Engine.BulletPhysics
 
         public void Move(float Scalar = 1)
         {
-            DeltaTranslate(MoveFormula(Parent.Orientation * Scalar));
+            MoveTowards(MoveFormula(Parent.Orientation * Scalar));
         }
 
         public void ResetVelocity()
         {
-            _body.LinearVelocity = Bullet.Vector3.Zero;
-        }
-
-        public bool ExecuteTranslate(MoveCommand Command)
-        {
-            return ProcessCommand(Command);
+            _body.LinearVelocity = Bullet.Math.Vector3.Zero;
         }
 
         public bool Translate(Vector3 Delta)
         {
-            return ExecuteTranslate(new MoveCommand(Delta));
+            return ProcessCommand(new MoveCommand(Delta));
         }
 
         public bool DeltaTranslate(Vector3 Delta, bool OnlyY = false)
         {
-            if (Time.DeltaTime > 0 && OnlyY)
-            {
-                int a = 0;
-            }
-            return ExecuteTranslate(new MoveCommand(Delta * Time.DeltaTime)
+            return ProcessCommand(new MoveCommand(Delta * Time.DeltaTime)
             {
                 OnlyY = OnlyY
             });
@@ -335,7 +333,7 @@ namespace Hedra.Engine.BulletPhysics
             try
             {
                 BulletPhysics.Raycast(Source.Compatible(), End.Compatible(), callback);
-                return _rayCallback.HasHit;
+                return callback.HasHit;
             }
             finally
             {
@@ -353,7 +351,6 @@ namespace Hedra.Engine.BulletPhysics
         
         public override void Dispose()
         {
-            _rayCallback.Dispose();
             _motionState.Dispose();
             BulletPhysics.Remove(_body);
             BulletPhysics.Remove(_sensor);

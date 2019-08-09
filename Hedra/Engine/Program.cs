@@ -1,4 +1,6 @@
 using System;
+using System.Runtime.ExceptionServices;
+using System.Security;
 using Hedra.API;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.ClassSystem;
@@ -26,15 +28,18 @@ namespace Hedra.Engine
         public static bool IsDummy { get; private set; }
         public static IHedra GameWindow { get; set; }
 
+        [HandleProcessCorruptedStateExceptions]
         private static void Main(string[] Args)
         {
-            AppDomain.CurrentDomain.UnhandledException += (S, E)=>
+            
+            void ProcessException(object S, UnhandledExceptionEventArgs E)
             {
                 if (E.IsTerminating)
                 {
                     Log.WriteLine($"UNEXPECTED EXCEPTION :{Environment.NewLine}{Environment.NewLine}----STACK TRACE----{Environment.NewLine}{Environment.NewLine}{E.ExceptionObject.ToString()}");
                 }
             };
+            AppDomain.CurrentDomain.UnhandledException += ProcessException;
             
             var dummyMode = Args.Length == 1 && Args[0] == "--dummy-mode";
             var serverMode = Args.Length == 1 && Args[0] == "--server-mode";
@@ -48,13 +53,23 @@ namespace Hedra.Engine
                     Network.Instance.Connect(ulong.Parse(Args[1]));       
                 });
             }
-            if (serverMode)
+
+            try
             {
-                RunDedicatedServer();
+                if (serverMode)
+                {
+                    RunDedicatedServer();
+                }
+                else
+                {
+                    
+                    RunNormalAndDummyMode(dummyMode);
+                }
             }
-            else
+            catch
             {
-                RunNormalAndDummyMode(dummyMode);
+                Log.WriteLine($"UNHANDLED ERROR:{Environment.NewLine}");
+                //ProcessException(null, new UnhandledExceptionEventArgs(e, true));
             }
 
             Environment.Exit(0);

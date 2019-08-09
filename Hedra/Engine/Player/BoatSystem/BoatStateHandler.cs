@@ -78,7 +78,7 @@ namespace Hedra.Engine.Player.BoatSystem
         
         private void HandleTerrain()
         {
-            if (_player.IsGrounded) Enabled = false;
+            if (_player.IsGrounded && Enabled) Enabled = false;
             if (Enabled)
             {
                 _player.Movement.CaptureMovement = false;
@@ -109,17 +109,10 @@ namespace Hedra.Engine.Player.BoatSystem
             set
             {
                 if(value && !CanEnable) return;
-                //if (value && !_enabled) ResetSpeed();
                 _enabled = value;
             }
         }
 
-        private void ResetSpeed()
-        {
-            _player.Movement.FlushMovement();
-            _player.Physics.ResetVelocity();
-        }
-        
         public Matrix4 Transformation { get; private set; }
 
         public bool OnWaterSurface { get; private set; }

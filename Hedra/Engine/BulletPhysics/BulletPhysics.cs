@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using BulletSharp;
+using BulletSharp.Math;
 using Hedra.Core;
 using Hedra.Engine.Core;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -18,12 +19,12 @@ namespace Hedra.Engine.BulletPhysics
         public static event OnContactEvent OnCollision;
         public static event OnContactEvent OnSeparation;
         private static object _chunkLock;
-        private static Dictionary<Vector2, RigidBody> _chunkBodies;
+        private static Dictionary<Vector2, RigidBody[]> _chunkBodies;
         private static DiscreteDynamicsWorld _dynamicsWorld;
         private static CollisionDispatcher _dispatcher;
         private static HashSet<Pair<CollisionObject, CollisionObject>> _currentPairs;
         private static HashSet<Pair<CollisionObject, CollisionObject>> _pairsLastUpdate;
-        public const float Gravity = 10 * Chunk.BlockSize;
+        public const float Gravity = 10 * Generation.ChunkSystem.Chunk.BlockSize;
         
         public static void Load()
         {
@@ -31,7 +32,7 @@ namespace Hedra.Engine.BulletPhysics
             _pairsLastUpdate = new HashSet<Pair<CollisionObject, CollisionObject>>();
             _chunkLock = new object();
             lock(_chunkLock)
-                _chunkBodies = new Dictionary<Vector2, RigidBody>();
+                _chunkBodies = new Dictionary<Vector2, RigidBody[]>();
             var configuration = new DefaultCollisionConfiguration();
             _dispatcher = new CollisionDispatcher(configuration);
             var broadphase = new DbvtBroadphase();
@@ -58,20 +59,27 @@ namespace Hedra.Engine.BulletPhysics
         {
             if (GameSettings.DebugPhysics)
             {
-                _dynamicsWorld.DebugDrawer.DebugMode = DebugDrawModes.DrawContactPoints;
-                _dynamicsWorld.DebugDrawWorld();
+                _dynamicsWorld.DebugDrawer.DebugMode = DebugDrawModes.DrawWireframe;
+                var offset = World.ToChunkSpace(Engine.Player.LocalPlayer.Instance.Position);
+                if (_chunkBodies.ContainsKey(offset))
+                {
+                    var chunkObjects = _chunkBodies[offset];
+                    if (chunkObjects.Length == 2)
+                        _dynamicsWorld.DebugDrawObject(chunkObjects[1].WorldTransform, chunkObjects[1].CollisionShape, new Vector3(1, 1, 0));
+                }
             }
         }
 
-        public static void DrawObject(Matrix Transform, CollisionShape Object, Color Color)
+        public static void DrawObject(Matrix Transform, CollisionShape Object, OpenTK.Vector4 Color)
         {
             _dynamicsWorld.DebugDrawer.DebugMode = DebugDrawModes.DrawWireframe;
-            _dynamicsWorld.DebugDrawObject(Transform, Object, Color);
+            _dynamicsWorld.DebugDrawObject(Transform, Object, Color.Xyz.Compatible());
         }
 
         public static void Remove(RigidBody Body)
         {
             _dynamicsWorld.RemoveRigidBody(Body);
+            Body.CollisionShape.Dispose();
             Body.Dispose();
         }
 
@@ -80,35 +88,79 @@ namespace Hedra.Engine.BulletPhysics
             _dynamicsWorld.RayTestRef(ref From, ref To, Callback);
         }
         
-        public static void AddChunk(Vector2 Offset, VertexData Mesh)
+        public static void AddChunk(Vector2 Offset, VertexData Mesh, PhysicsSystem.CollisionShape[] Shapes)
         {
-            var indexedMesh = new IndexedMesh();
-            indexedMesh.Allocate(Mesh.Indices.Count / 3, Mesh.Vertices.Count, 3 * sizeof(uint), Vector3.SizeInBytes, PhyScalarType.Int32, PhyScalarType.Single);
-            using (var stream = indexedMesh.LockVerts())
+            var bodies = new List<RigidBody>
             {
-                for (var i = 0; i < Mesh.Vertices.Count; ++i)
-                {
-                    stream.Write(Mesh.Vertices[i]);
-                }
-            }
-            var indicesData = indexedMesh.TriangleIndices;
-            for (var i = 0; i < Mesh.Indices.Count; ++i)
-            {
-                indicesData[i] = (int) Mesh.Indices[i];
-            }
+                CreateTerrainRigidbody(Offset, Mesh),
+            };
+            var shape = CreateShapesRigidbody(Offset, Shapes);
+            if(shape != null)
+                bodies.Add(shape);
 
-            var triangleMesh = new TriangleIndexVertexArray();
-            triangleMesh.AddIndexedMesh(indexedMesh);
-            var shape = new BvhTriangleMeshShape(triangleMesh, true);
-            var body = new RigidBody(new RigidBodyConstructionInfo(0, new DefaultMotionState(), shape));
-            body.Translate(Offset.ToVector3().Compatible());
-            body.CollisionFlags |= CollisionFlags.StaticObject;
-            body.UserObject = $"Terrain ({Offset.X}, {Offset.Y})";
-            body.Friction = 0;
             RemoveChunk(Offset);
             lock (_chunkLock) 
-                _chunkBodies.Add(Offset, body);
-            Add(body);
+                _chunkBodies.Add(Offset, bodies.ToArray());
+            for (var i = 0; i < bodies.Count; ++i)
+            {
+                Add(bodies[i]);
+            }
+        }
+
+        private static RigidBody CreateShapesRigidbody(Vector2 Offset, PhysicsSystem.CollisionShape[] Shapes)
+        {
+            if (Shapes.Length != 0)
+            {
+                var triangleMesh = new TriangleIndexVertexArray();
+                for (var i = 0; i < Shapes.Length; ++i)
+                {
+                    triangleMesh.AddIndexedMesh(CreateIndexedMesh(Shapes[i].Indices, Shapes[i].Vertices));
+                }
+                var body = CreateStaticRigidbody(new BvhTriangleMeshShape(triangleMesh, true));
+                body.UserObject = $"Static Objects on ({Offset.X}, {Offset.Y})";
+                return body;
+            }
+
+            return null;
+        }
+
+        private static RigidBody CreateTerrainRigidbody(Vector2 Offset, VertexData Mesh)
+        {
+            var shape = CreateTriangleShape(Mesh.Indices, Mesh.Vertices);
+            var body = CreateStaticRigidbody(shape);
+            body.Translate(Offset.ToVector3().Compatible());
+            body.UserObject = $"Terrain ({Offset.X}, {Offset.Y})";
+            return body;
+        }
+
+        private static RigidBody CreateStaticRigidbody(CollisionShape Shape)
+        {
+            using (var bodyInfo = new RigidBodyConstructionInfo(0, new DefaultMotionState(), Shape))
+            {
+                var body = new RigidBody(bodyInfo);
+                body.CollisionFlags |= CollisionFlags.StaticObject;
+                body.Friction = 0;
+                return body;
+            }
+        }
+
+        private static BvhTriangleMeshShape CreateTriangleShape(ICollection<uint> Indices, ICollection<OpenTK.Vector3> Vertices)
+        {
+            var triangleMesh = new TriangleIndexVertexArray();
+            var indexedMesh = CreateIndexedMesh(Indices, Vertices);
+            triangleMesh.AddIndexedMesh(indexedMesh);
+            return new BvhTriangleMeshShape(triangleMesh, true);
+        }
+
+        private static IndexedMesh CreateIndexedMesh(ICollection<uint> Indices, ICollection<OpenTK.Vector3> Vertices)
+        {
+            var indexedMesh = new IndexedMesh();
+            indexedMesh.Allocate(Indices.Count / 3, Vertices.Count);
+            indexedMesh.SetData(
+                Indices.Select(I => (int) I).ToList(),
+                Vertices.SelectMany(V => new[] {V.X, V.Y, V.Z}).ToList()
+            );
+            return indexedMesh;
         }
 
         public static void RemoveChunk(Vector2 Offset)
@@ -117,7 +169,11 @@ namespace Hedra.Engine.BulletPhysics
             {
                 if (_chunkBodies.ContainsKey(Offset))
                 {
-                    Remove(_chunkBodies[Offset]);
+                    var bodies = _chunkBodies[Offset];
+                    for (var i = 0; i < bodies.Length; ++i)
+                    {
+                        Remove(bodies[i]);
+                    }
                     _chunkBodies.Remove(Offset);
                 }
             }

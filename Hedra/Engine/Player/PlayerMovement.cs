@@ -142,8 +142,6 @@ namespace Hedra.Engine.Player
                     RollDirection = Human.Physics.MoveFormula(_player.View.Right, false).Xz.ToVector3().NormalizedFast();
                     RollFacing = _characterRotation;
                 }
-
-                FlushMovement();
                 /*
                 if(GameManager.Keyboard[Controls.Climb] && _player.Physics.InFrontOfWall)
                 {

@@ -26,6 +26,7 @@ namespace Hedra.EntitySystem
         void Draw();
         Vector3 GravityDirection { get; set; }
         bool CollidesWithOffset(Vector3 Offset);
+        void MoveTowards(Vector3 Position);
         bool Raycast(Vector3 End);
         bool EntityRaycast(IEntity[] Entities, Vector3 Length, float Modifier = 1);
         /// <summary>   
@@ -42,8 +43,6 @@ namespace Hedra.EntitySystem
         bool CollidesWithEntities { get; set; }
 
         Vector3 RigidbodyPosition { get; }
-        
-        Vector3 LinearVelocity { get; set; }
-        void AddForce(Vector3 Force);
+
     }
 }

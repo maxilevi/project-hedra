@@ -31,9 +31,6 @@ namespace Hedra.Engine.PhysicsSystem
         private CollisionShape(Vector3[] Vertices, uint[] Indices)
         {
             this.Vertices = Optimize(Vertices ?? new Vector3[0]);
-#if !DEBUG
-            Indices = null;
-#endif
             this.Indices = Indices ?? new uint[0];
             this.RecalculateBroadphase();
             this.Height = (SupportPoint(Vector3.UnitY) - SupportPoint(-Vector3.UnitY)).Y;

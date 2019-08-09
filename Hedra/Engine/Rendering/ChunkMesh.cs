@@ -26,7 +26,7 @@ namespace Hedra.Engine.Rendering
         private IMeshBuffer _buffer;
         private readonly List<InstanceData> _instanceElements;
         private readonly List<InstanceData> _lodedInstanceElements;
-        public List<ICollidable> CollisionBoxes = new List<ICollidable>();
+        public List<CollisionShape> CollisionBoxes = new List<CollisionShape>();
         public List<VertexData> Elements = new List<VertexData>();
         public VertexData ModelData { get; set; }
 

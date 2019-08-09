@@ -105,7 +105,7 @@ namespace Hedra.Engine.EntitySystem
             }
         }
 
-        public bool InUpdateRange => (Position.Xz - LocalPlayer.Instance.Model.Position.Xz).LengthSquared <
+        public bool InUpdateRange => (Model.Position.Xz - LocalPlayer.Instance.Model.Position.Xz).LengthSquared <
                                      GeneralSettings.UpdateDistanceSquared;
 
         public bool IsActive { get; set; }

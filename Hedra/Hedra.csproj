@@ -71,9 +71,9 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Reference Include="BulletSharp, Version=2.87.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\references\BulletSharp.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="BulletSharp, Version=0.11.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\BulletSharp.0.11.1\lib\net40-client\BulletSharp.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Facepunch.Steamworks">
       <HintPath>..\references\Facepunch.Steamworks.dll</HintPath>
@@ -1055,7 +1055,6 @@
     <Compile Include="Engine\PhysicsSystem\AnimatedColliderData.cs" />
     <Compile Include="Engine\PhysicsSystem\BoneBox.cs" />
     <Compile Include="Engine\PhysicsSystem\BoneData.cs" />
-    <Compile Include="Engine\PhysicsSystem\ConvexHull.cs" />
     <Compile Include="Engine\PhysicsSystem\ObjectMeshCollider.cs" />
     <Compile Include="Engine\PlantSystem\BerryBushPlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\BushDesign.cs" />
@@ -14566,5 +14565,12 @@
   </PropertyGroup>
   <ProjectExtensions />
   <Target Name="AfterCompile">
+  </Target>
+  <Import Project="..\packages\BulletSharp.0.11.1\build\net40-client\BulletSharp.targets" Condition="Exists('..\packages\BulletSharp.0.11.1\build\net40-client\BulletSharp.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\BulletSharp.0.11.1\build\net40-client\BulletSharp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\BulletSharp.0.11.1\build\net40-client\BulletSharp.targets'))" />
   </Target>
 </Project>
