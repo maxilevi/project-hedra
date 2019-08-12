@@ -67,7 +67,6 @@ namespace Hedra.Engine.Generation
             _entities = new HashSet<IEntity>();
             _worldObjects = new HashSet<IWorldObject>();
             _chunks = new HashSet<Chunk>();
-            _globalColliders = new HashSet<ICollidable>();
             _renderingComparer = new RenderingComparer();
             SearcheableChunks = new Dictionary<Vector2, Chunk>(new FastComparer());
             DrawingChunks = new Dictionary<Vector2, Chunk>();
@@ -774,30 +773,6 @@ namespace Hedra.Engine.Generation
                 }
             }
         }
-
-        private bool _isGlobalCollidersCacheDirty = true;
-        private readonly HashSet<ICollidable> _globalColliders;
-        private ReadOnlyCollection<ICollidable> _globalCollidersCache;
-
-        public ReadOnlyCollection<ICollidable> GlobalColliders
-        {
-            get
-            {
-                if (_isGlobalCollidersCacheDirty)
-                {
-                    lock (_globalColliders)
-                    {
-                        _globalCollidersCache = _globalColliders.ToArray().ToList().AsReadOnly();
-                    }
-                    _isGlobalCollidersCacheDirty = false;
-                }
-                lock (_globalCollidersCache)
-                {
-                    return _globalCollidersCache;
-                }
-            }
-        }
-
         #endregion
     }
 }

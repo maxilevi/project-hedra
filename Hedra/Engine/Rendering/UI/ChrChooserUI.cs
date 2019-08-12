@@ -178,6 +178,7 @@ namespace Hedra.Engine.Rendering.UI
                 _humans[i].Level = _information[i].Level;
                 _humans[i].PlaySpawningAnimation = false;
                 _humans[i].SearchComponent<DamageComponent>().Immune = true;
+                _humans[i].Physics.UsePhysics = false;
                 _humans[i].Position = new Vector3(
                     _humans[i].Position.X,
                     Physics.HeightAtPosition(_humans[i].Position),

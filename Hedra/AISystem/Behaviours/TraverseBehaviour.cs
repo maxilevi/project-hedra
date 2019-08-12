@@ -135,8 +135,8 @@ namespace Hedra.AISystem.Behaviours
                 : 1f;
             
             #region DEBUG
-            if (Parent.Type != "Troll") return;
-            /*
+            /*if (Parent.Type != "Ent") return;
+            
             //Debug
             
             var bmp1 = new Bitmap(CurrentGrid.DimX, CurrentGrid.DimY);

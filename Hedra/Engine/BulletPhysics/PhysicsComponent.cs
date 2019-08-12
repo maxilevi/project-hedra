@@ -70,6 +70,7 @@ namespace Hedra.Engine.BulletPhysics
                 }
                 BulletPhysics.Add(_sensor);
             }
+            
             _motionState.OnUpdated += UpdateSensor;
             BulletPhysics.OnCollision += OnCollision;
             BulletPhysics.OnSeparation += OnSeparation;
@@ -99,7 +100,7 @@ namespace Hedra.Engine.BulletPhysics
         {
             SetShape(_body, GetShapeForBox(Dimensions));
             var radius = Dimensions.Size.Xz.Length * .5f;
-            SetShape(_sensor, new Bullet.BoxShape(radius, .25f, radius));
+            SetShape(_sensor, new Bullet.BoxShape(radius, .5f, radius));
         }
 
         private static Bullet.CollisionShape GetShapeForBox(Box Dimensions)
@@ -115,7 +116,7 @@ namespace Hedra.Engine.BulletPhysics
             }
             else
             {
-                var capsule = new Bullet.CapsuleShape(Dimensions.Size.Xz.Length * .5f, Dimensions.Size.Y * .25f);
+                var capsule = new Bullet.CapsuleShape(Dimensions.Size.Xz.Length * .5f, Dimensions.Size.Y * .33f);
                 bodyShape.AddChildShape(
                     Bullet.Math.Matrix.Translation(Bullet.Math.Vector3.UnitY * Dimensions.Size.Y * -.5f),
                     capsule
@@ -124,7 +125,7 @@ namespace Hedra.Engine.BulletPhysics
             return bodyShape;
         }
 
-        private static void SetShape(Bullet.RigidBody Body, Bullet.CollisionShape Shape)
+        private static void SetShape(Bullet.CollisionObject Body, Bullet.CollisionShape Shape)
         {
             var previous = Body.CollisionShape;
             try
@@ -268,7 +269,10 @@ namespace Hedra.Engine.BulletPhysics
                 OnMove?.Invoke();
             return moved;
         }
-
+        public bool CollidesWithOffset(Vector3 Offset)
+        {
+            return false; //BulletPhysics.Collides(Offset.Compatible(), _sensor);
+        }
         public bool EntityRaycast(IEntity[] Entities, Vector3 Addition, float Modifier = 1)
         {
             var success = false;
@@ -322,33 +326,11 @@ namespace Hedra.Engine.BulletPhysics
 
         public bool Raycast(Vector3 End)
         {
-            return true;//Raycast();
-        }
-        
-        public bool Raycast(Vector3 Source, Vector3 End)
-        {
-            var src = Source.Compatible();
-            var end = End.Compatible();
-            var callback = new Bullet.ClosestRayResultCallback(ref src, ref end);
-            try
-            {
-                BulletPhysics.Raycast(Source.Compatible(), End.Compatible(), callback);
-                return callback.HasHit;
-            }
-            finally
-            {
-                callback.Dispose();
-            }
+            return BulletPhysics.Raycast(RigidbodyPosition.Compatible(), End.Compatible());
         }
         
         private float Timestep => Time.IndependentDeltaTime * (UseTimescale ? Time.TimeScale : 1);
-        
-        public bool CollidesWithOffset(Vector3 Offset)
-        {
 
-            return true;
-        }
-        
         public override void Dispose()
         {
             _motionState.Dispose();

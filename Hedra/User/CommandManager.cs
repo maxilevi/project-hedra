@@ -447,6 +447,11 @@ namespace Hedra.User
                     Interpreter.Reload();
                     return true;
                 }
+
+                if (Parts[0] == "sethitbox")
+                {
+                    LocalPlayer.Instance.Model = LocalPlayer.Instance.Model;
+                }
                 if (Parts[0] == "realm")
                 {
 

@@ -8,6 +8,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.StructureSystem;
 using Hedra.Sound;
 using OpenTK;
+using CollisionShape = BulletSharp.CollisionShape;
 
 namespace Hedra.Engine.Player
 {
@@ -27,6 +28,7 @@ namespace Hedra.Engine.Player
         private readonly Timer _enterTimer;
         private readonly Timer _insideTimer;
         private readonly Timer _updateTimer;
+        private readonly object _key;
 
         public StructureAware(IPlayer Player)
         {
@@ -41,6 +43,7 @@ namespace Hedra.Engine.Player
             };
             _updateTimer = new Timer(.5f);
             _enterTimer.MarkReady();
+            _key = new object();
             NearCollisions = new CollisionGroup[0];
         }
         
@@ -51,7 +54,7 @@ namespace Hedra.Engine.Player
             if (_updateTimer.Tick() && NeedsUpdating(collidableStructures))
             {
                 _currentNearStructures = collidableStructures.ToArray();
-                NearCollisions = collidableStructures.SelectMany(S => S.Colliders).ToArray();               
+                SetNearCollisions(collidableStructures.SelectMany(S => S.Colliders).ToArray());
             }
 
             _enterTimer.Tick();
@@ -127,6 +130,14 @@ namespace Hedra.Engine.Player
             return differences;
         }
 
+        private void SetNearCollisions(CollisionGroup[] New)
+        {
+            NearCollisions = New;
+            //if(BulletPhysics.BulletPhysics.Has(_key))
+            //    BulletPhysics.BulletPhysics.Remove(_key);
+            //BulletPhysics.BulletPhysics.Add(_key, NearCollisions.SelectMany(S => S.Colliders).ToArray());
+        }
+        
         public CollisionGroup[] NearCollisions { get; private set; }
     }
 }

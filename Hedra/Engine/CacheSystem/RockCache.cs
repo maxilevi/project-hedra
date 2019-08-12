@@ -23,7 +23,7 @@ namespace Hedra.Engine.CacheSystem
                 Vector3.One, Vector3.Zero, Vector3.Zero, false);
             var list = new List<CollisionShape>
             {
-                new CollisionShape(shape.Vertices)
+                new CollisionShape(shape.Vertices, shape.Indices)
             };
 
             this.AddShapes(list);

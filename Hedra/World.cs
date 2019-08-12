@@ -54,7 +54,6 @@ namespace Hedra
         public static IWorldObject[] WorldObjects => Provider.WorldObjects;
         public static ReadOnlyCollection<Chunk> Chunks => Provider.Chunks;
         public static ReadOnlyCollection<IEntity> Entities => Provider.Entities;
-        public static ReadOnlyCollection<ICollidable> GlobalColliders => Provider.GlobalColliders;
         public static Dictionary<Vector2, Chunk> DrawingChunks => Provider.DrawingChunks;
         public static Dictionary<Vector2, Chunk> ShadowDrawingChunks => Provider.ShadowDrawingChunks;
         public static int AverageBuildTime => Provider.AverageBuildTime;

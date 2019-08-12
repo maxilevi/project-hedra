@@ -31,7 +31,6 @@ namespace Hedra.Engine.PhysicsSystem
             {
                 LastStructureCollisionPosition = Position.Xz;
                 StructureCollisions.Clear();
-                StructureCollisions.AddRange(World.GlobalColliders);
                 var nearCollisions = GameManager.Player.NearCollisions;
                 for (var i = 0; i < nearCollisions.Length; i++)
                 {

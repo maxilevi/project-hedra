@@ -16,21 +16,31 @@ namespace Hedra.Engine.BulletPhysics
     public delegate void OnContactEvent(CollisionObject Body0, CollisionObject Body1);
     public class BulletPhysics
     {
+        private const bool EnableDebugMode = true;
         public static event OnContactEvent OnCollision;
         public static event OnContactEvent OnSeparation;
         private static object _chunkLock;
+        private static object _bulletLock;
+        private static object _customLock;
+        private static Dictionary<object, RigidBody> _customMap;
         private static Dictionary<Vector2, RigidBody[]> _chunkBodies;
         private static DiscreteDynamicsWorld _dynamicsWorld;
         private static CollisionDispatcher _dispatcher;
+        private static HashSet<RigidBody> _bodies;
         private static HashSet<Pair<CollisionObject, CollisionObject>> _currentPairs;
         private static HashSet<Pair<CollisionObject, CollisionObject>> _pairsLastUpdate;
         public const float Gravity = 10 * Generation.ChunkSystem.Chunk.BlockSize;
         
         public static void Load()
         {
+            _chunkLock = new object();
+            _bulletLock = new object();
+            _customLock = new object();
+            _bodies = new HashSet<RigidBody>();
             _currentPairs = new HashSet<Pair<CollisionObject, CollisionObject>>();
             _pairsLastUpdate = new HashSet<Pair<CollisionObject, CollisionObject>>();
-            _chunkLock = new object();
+            lock(_customLock)
+                _customMap = new Dictionary<object, RigidBody>();
             lock(_chunkLock)
                 _chunkBodies = new Dictionary<Vector2, RigidBody[]>();
             var configuration = new DefaultCollisionConfiguration();
@@ -46,26 +56,27 @@ namespace Hedra.Engine.BulletPhysics
 
         public static void Update()
         {
-            _dynamicsWorld.StepSimulation(Time.DeltaTime);
-            CheckForCollisionEvents();
-        }
-
-        public static void Add(RigidBody Body)
-        {
-            _dynamicsWorld.AddRigidBody(Body);
+            lock (_bulletLock)
+            {
+                _dynamicsWorld.StepSimulation(Time.DeltaTime);
+                CheckForCollisionEvents();
+            }
         }
 
         public static void Draw()
         {
-            if (GameSettings.DebugPhysics)
+            if (!GameSettings.DebugPhysics) return;
+            _dynamicsWorld.DebugDrawer.DebugMode = DebugDrawModes.DrawWireframe;
+            var offset = World.ToChunkSpace(Player.LocalPlayer.Instance.Position);
+            if (_chunkBodies.ContainsKey(offset))
             {
-                _dynamicsWorld.DebugDrawer.DebugMode = DebugDrawModes.DrawWireframe;
-                var offset = World.ToChunkSpace(Engine.Player.LocalPlayer.Instance.Position);
-                if (_chunkBodies.ContainsKey(offset))
+                var chunkObjects = _chunkBodies[offset];
+                _dynamicsWorld.DebugDrawObject(chunkObjects[0].WorldTransform, chunkObjects[0].CollisionShape,
+                        new Vector3(1, 1, 0));
+                if (chunkObjects.Length == 2)
                 {
-                    var chunkObjects = _chunkBodies[offset];
-                    if (chunkObjects.Length == 2)
-                        _dynamicsWorld.DebugDrawObject(chunkObjects[1].WorldTransform, chunkObjects[1].CollisionShape, new Vector3(1, 1, 0));
+                    _dynamicsWorld.DebugDrawObject(chunkObjects[1].WorldTransform, chunkObjects[1].CollisionShape,
+                        new Vector3(1, 1, 0));
                 }
             }
         }
@@ -76,52 +87,124 @@ namespace Hedra.Engine.BulletPhysics
             _dynamicsWorld.DebugDrawObject(Transform, Object, Color.Xyz.Compatible());
         }
 
-        public static void Remove(RigidBody Body)
-        {
-            _dynamicsWorld.RemoveRigidBody(Body);
-            Body.CollisionShape.Dispose();
-            Body.Dispose();
-        }
-
         public static void Raycast(Vector3 From, Vector3 To, RayResultCallback Callback)
         {
-            _dynamicsWorld.RayTestRef(ref From, ref To, Callback);
+            lock (_bulletLock)
+                _dynamicsWorld.RayTestRef(ref From, ref To, Callback);
+        }
+
+        public static void Add(object Key, PhysicsSystem.CollisionShape[] Shapes)
+        {
+            var body = CreateShapesRigidbody(Shapes);
+            lock (_customLock)
+            {
+                _customMap.Add(Key, body);
+            }
+            if(body != null)
+                Add(body);
+        }
+
+        public static void Remove(object Key)
+        {
+            var body = (RigidBody) null;
+            lock (_customLock)
+            {
+                body = _customMap[Key];
+                _customMap.Remove(Key);
+            }
+            if(body != null)
+                Remove(body);
+        }
+
+        public static bool Has(object Key)
+        {
+            lock (_customLock)
+            {
+                return _customMap.ContainsKey(Key);
+            }
+        }
+        
+        public static void Add(RigidBody Body)
+        {
+            lock (_bulletLock)
+            {
+                _dynamicsWorld.AddRigidBody(Body);
+                _bodies.Add(Body);
+            }
+        }
+        
+        public static void Remove(RigidBody Body)
+        {
+            lock (_bulletLock)
+            {
+                _dynamicsWorld.RemoveRigidBody(Body);
+                _bodies.Remove(Body);
+                if (Body.CollisionShape is BvhTriangleMeshShape bvhTriangleMeshShape)
+                {
+                    bvhTriangleMeshShape.MeshInterface.Dispose();
+                }
+
+                Body.CollisionShape.Dispose();
+                Body.Dispose();
+            }
         }
         
         public static void AddChunk(Vector2 Offset, VertexData Mesh, PhysicsSystem.CollisionShape[] Shapes)
         {
-            var bodies = new List<RigidBody>
+            lock (_bulletLock)
             {
-                CreateTerrainRigidbody(Offset, Mesh),
-            };
-            var shape = CreateShapesRigidbody(Offset, Shapes);
-            if(shape != null)
-                bodies.Add(shape);
+                var bodies = new List<RigidBody>
+                {
+                    CreateTerrainRigidbody(Offset, Mesh),
+                };
+                var shape = CreateShapesRigidbody(Shapes);
+                if (shape != null)
+                {
+                    shape.UserObject = $"Static Objects on ({Offset.X}, {Offset.Y})";
+                    bodies.Add(shape);
+                }
 
-            RemoveChunk(Offset);
-            lock (_chunkLock) 
-                _chunkBodies.Add(Offset, bodies.ToArray());
-            for (var i = 0; i < bodies.Count; ++i)
+                RemoveChunk(Offset);
+                lock (_chunkLock)
+                    _chunkBodies.Add(Offset, bodies.ToArray());
+                for (var i = 0; i < bodies.Count; ++i)
+                {
+                    Add(bodies[i]);
+                }
+            }
+        }
+        
+        public static void RemoveChunk(Vector2 Offset)
+        {
+            lock (_bulletLock)
             {
-                Add(bodies[i]);
+                lock (_chunkLock)
+                {
+                    if (!_chunkBodies.ContainsKey(Offset)) return;
+                    var bodies = _chunkBodies[Offset];
+                    for (var i = 0; i < bodies.Length; ++i)
+                    {
+                        Remove(bodies[i]);
+                    }
+
+                    _chunkBodies.Remove(Offset);
+                }
             }
         }
 
-        private static RigidBody CreateShapesRigidbody(Vector2 Offset, PhysicsSystem.CollisionShape[] Shapes)
+        private static RigidBody CreateShapesRigidbody(PhysicsSystem.CollisionShape[] Shapes)
         {
-            if (Shapes.Length != 0)
+            if (Shapes.Length == 0) return null;
+            var triangleMesh = new TriangleIndexVertexArray();
+            for (var i = 0; i < Shapes.Length; ++i)
             {
-                var triangleMesh = new TriangleIndexVertexArray();
-                for (var i = 0; i < Shapes.Length; ++i)
-                {
-                    triangleMesh.AddIndexedMesh(CreateIndexedMesh(Shapes[i].Indices, Shapes[i].Vertices));
-                }
-                var body = CreateStaticRigidbody(new BvhTriangleMeshShape(triangleMesh, true));
-                body.UserObject = $"Static Objects on ({Offset.X}, {Offset.Y})";
-                return body;
+                if (Shapes[i].Indices.Length % 3 != 0 || Shapes[i].Indices.Length == 0)
+                    throw new ArgumentOutOfRangeException();
+                triangleMesh.AddIndexedMesh(CreateIndexedMesh(Shapes[i].Indices, Shapes[i].Vertices));
             }
+            var body = CreateStaticRigidbody(new BvhTriangleMeshShape(triangleMesh, true));
+            return body;
 
-            return null;
         }
 
         private static RigidBody CreateTerrainRigidbody(Vector2 Offset, VertexData Mesh)
@@ -163,22 +246,6 @@ namespace Hedra.Engine.BulletPhysics
             return indexedMesh;
         }
 
-        public static void RemoveChunk(Vector2 Offset)
-        {
-            lock (_chunkLock)
-            {
-                if (_chunkBodies.ContainsKey(Offset))
-                {
-                    var bodies = _chunkBodies[Offset];
-                    for (var i = 0; i < bodies.Length; ++i)
-                    {
-                        Remove(bodies[i]);
-                    }
-                    _chunkBodies.Remove(Offset);
-                }
-            }
-        }
-        
         private static void CheckForCollisionEvents()
         {
             _currentPairs.Clear();
@@ -204,6 +271,44 @@ namespace Hedra.Engine.BulletPhysics
             var temp = _pairsLastUpdate;
             _pairsLastUpdate = _currentPairs;
             _currentPairs = temp;
+        }
+        
+        public static bool Raycast(Vector3 Source, Vector3 End)
+        {
+            lock (_bulletLock)
+            {
+                var src = Source;
+                var end = End;
+                var callback = new ClosestRayResultCallback(ref src, ref end);
+                try
+                {
+                    BulletPhysics.Raycast(Source, End, callback);
+                    return callback.HasHit;
+                }
+                finally
+                {
+                    callback.Dispose();
+                }
+            }
+        }
+
+        public static bool Collides(Vector3 Offset, RigidBody Body)
+        {
+            lock (_bulletLock)
+            {
+                var callback = new ContactTestResultCallback();
+                try
+                {
+                    Body.Translate(Offset);
+                    _dynamicsWorld.ContactTest(Body, callback);
+                    return callback.HasHit;
+                }
+                finally
+                {
+                    Body.Translate(-Offset);
+                    callback.Dispose();
+                }
+            }
         }
     }
 }
