@@ -28,7 +28,7 @@ namespace Hedra.Engine.Player
         private readonly Timer _enterTimer;
         private readonly Timer _insideTimer;
         private readonly Timer _updateTimer;
-        private readonly object _key;
+        private readonly Dictionary<CollisionGroup, object> _keys;
 
         public StructureAware(IPlayer Player)
         {
@@ -43,7 +43,7 @@ namespace Hedra.Engine.Player
             };
             _updateTimer = new Timer(.5f);
             _enterTimer.MarkReady();
-            _key = new object();
+            _keys = new Dictionary<CollisionGroup, object>();
             NearCollisions = new CollisionGroup[0];
         }
         
@@ -132,10 +132,21 @@ namespace Hedra.Engine.Player
 
         private void SetNearCollisions(CollisionGroup[] New)
         {
+            var added = New.Except(NearCollisions).ToArray();
+            var removed = NearCollisions.Except(New).ToArray();
+            
             NearCollisions = New;
-            //if(BulletPhysics.BulletPhysics.Has(_key))
-            //    BulletPhysics.BulletPhysics.Remove(_key);
-            //BulletPhysics.BulletPhysics.Add(_key, NearCollisions.SelectMany(S => S.Colliders).ToArray());
+            
+            for (var i = 0; i < removed.Length; ++i)
+            {
+                BulletPhysics.BulletPhysics.Remove(_keys[removed[i]]);
+            }
+            
+            for (var i = 0; i < added.Length; ++i)
+            {
+                _keys[added[i]] = new object();
+                BulletPhysics.BulletPhysics.Add(_keys[added[i]], added[i].Colliders);
+            }
         }
         
         public CollisionGroup[] NearCollisions { get; private set; }

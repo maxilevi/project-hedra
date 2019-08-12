@@ -57,7 +57,7 @@ namespace Hedra.Engine.BulletPhysics
                     _body.CollisionFlags |= Bullet.CollisionFlags.CharacterObject;
                     _body.ActivationState = Bullet.ActivationState.DisableDeactivation;
                 }
-                BulletPhysics.Add(_body);
+                BulletPhysics.Add(_body, Bullet.CollisionFilterGroups.CharacterFilter, Bullet.CollisionFilterGroups.AllFilter);
             }
             using (var bodyInfo = new Bullet.RigidBodyConstructionInfo(1, new Bullet.DefaultMotionState(), defaultShape))
             {
@@ -68,7 +68,7 @@ namespace Hedra.Engine.BulletPhysics
                 {
                     _body.ActivationState = Bullet.ActivationState.DisableDeactivation;
                 }
-                BulletPhysics.Add(_sensor);
+                BulletPhysics.Add(_sensor, Bullet.CollisionFilterGroups.SensorTrigger, Bullet.CollisionFilterGroups.StaticFilter);
             }
             
             _motionState.OnUpdated += UpdateSensor;

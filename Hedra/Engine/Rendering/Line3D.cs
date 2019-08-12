@@ -16,6 +16,7 @@ namespace Hedra.Engine.Rendering
         private Vector3[] _pointsArray;
         private Vector4[] _colorsArray;
         private bool _enabled;
+        private bool _disposed;
         
         public Line3D()
         {
@@ -41,7 +42,7 @@ namespace Hedra.Engine.Rendering
         
         public void Draw()
         {
-            if(!Enabled || _data == null) return;
+            if(!Enabled || _data == null || _disposed) return;
             LineShader.Bind();
             Renderer.LineWidth(Width);
 
@@ -60,6 +61,7 @@ namespace Hedra.Engine.Rendering
 
         public void Dispose()
         {
+            _disposed = true;
             void Dispose()
             {
                 _data.Dispose();

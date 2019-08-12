@@ -79,6 +79,16 @@ namespace Hedra.Engine.BulletPhysics
                         new Vector3(1, 1, 0));
                 }
             }
+
+            lock (_customLock)
+            {
+                foreach (var custom in _customMap)
+                {
+                    if ((custom.Value.WorldTransform.Origin.Compatible() - Player.LocalPlayer.Instance.Position).Xz.LengthSquared > 64*64) continue;
+                    _dynamicsWorld.DebugDrawObject(custom.Value.WorldTransform, custom.Value.CollisionShape,
+                        new Vector3(1, 1, 0));
+                }
+            }
         }
 
         public static void DrawObject(Matrix Transform, CollisionShape Object, OpenTK.Vector4 Color)
@@ -101,7 +111,7 @@ namespace Hedra.Engine.BulletPhysics
                 _customMap.Add(Key, body);
             }
             if(body != null)
-                Add(body);
+                Add(body, CollisionFilterGroups.StaticFilter, CollisionFilterGroups.AllFilter);
         }
 
         public static void Remove(object Key)
@@ -116,19 +126,11 @@ namespace Hedra.Engine.BulletPhysics
                 Remove(body);
         }
 
-        public static bool Has(object Key)
-        {
-            lock (_customLock)
-            {
-                return _customMap.ContainsKey(Key);
-            }
-        }
-        
-        public static void Add(RigidBody Body)
+        public static void Add(RigidBody Body, CollisionFilterGroups Group, CollisionFilterGroups Mask)
         {
             lock (_bulletLock)
             {
-                _dynamicsWorld.AddRigidBody(Body);
+                _dynamicsWorld.AddRigidBody(Body, Group, Mask);
                 _bodies.Add(Body);
             }
         }
@@ -169,7 +171,7 @@ namespace Hedra.Engine.BulletPhysics
                     _chunkBodies.Add(Offset, bodies.ToArray());
                 for (var i = 0; i < bodies.Count; ++i)
                 {
-                    Add(bodies[i]);
+                    Add(bodies[i], CollisionFilterGroups.StaticFilter, CollisionFilterGroups.AllFilter);
                 }
             }
         }
@@ -195,14 +197,16 @@ namespace Hedra.Engine.BulletPhysics
         private static RigidBody CreateShapesRigidbody(PhysicsSystem.CollisionShape[] Shapes)
         {
             if (Shapes.Length == 0) return null;
+            var offset = (Shapes.Select(S => S.BroadphaseCenter).Aggregate((S1,S2) => S1 + S2) / Shapes.Length).Compatible();
             var triangleMesh = new TriangleIndexVertexArray();
             for (var i = 0; i < Shapes.Length; ++i)
             {
                 if (Shapes[i].Indices.Length % 3 != 0 || Shapes[i].Indices.Length == 0)
                     throw new ArgumentOutOfRangeException();
-                triangleMesh.AddIndexedMesh(CreateIndexedMesh(Shapes[i].Indices, Shapes[i].Vertices));
+                triangleMesh.AddIndexedMesh(CreateIndexedMesh(Shapes[i].Indices, Shapes[i].Vertices.Select(V => V - offset.Compatible()).ToArray()));
             }
             var body = CreateStaticRigidbody(new BvhTriangleMeshShape(triangleMesh, true));
+            body.Translate(offset);
             return body;
 
         }
@@ -309,6 +313,12 @@ namespace Hedra.Engine.BulletPhysics
                     callback.Dispose();
                 }
             }
+        }
+
+        public static void ResetCallback(ClosestRayResultCallback Callback)
+        {
+            Callback.ClosestHitFraction = 1;
+            Callback.CollisionObject = null;
         }
     }
 }

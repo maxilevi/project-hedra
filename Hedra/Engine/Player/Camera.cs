@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BulletSharp;
 using Hedra.Core;
+using Hedra.Engine.BulletPhysics;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
@@ -50,25 +52,21 @@ namespace Hedra.Engine.Player
         public float Yaw { get; set; }
         public float StackedYaw { get; private set; }
 
+        private readonly ClosestRayResultCallback _callback;
         private float _previousAlpha = -1f;
         private Vector3 _interpolatedPosition;
         private Vector3 _lastDelegateValue;
         private Vector3 _interpolatedZoomOut;
         private Vector3 _targetZoomOut;
-        private Vector2 _lastStructureCollisionPosition;
-        private Vector2 _lastChunkCollisionPosition;
         private readonly IPlayer _player;
-        private readonly List<ICollidable> _structureCollisions;
-        private readonly List<ICollidable> _chunkCollisions;
-        private readonly Box _cameraBox;
         private Vector2 _lastMousePosition;
 
         public Camera(IPlayer Player)
         {
             _player = Player;
-            _cameraBox = new Box(-Vector3.One, Vector3.One);
-            _structureCollisions = new List<ICollidable>();
-            _chunkCollisions = new List<ICollidable>();
+            var src = BulletSharp.Math.Vector3.Zero;
+            var dst = BulletSharp.Math.Vector3.Zero;
+            _callback = new ClosestRayResultCallback(ref src, ref dst);
             Reset();
         }
 
@@ -216,32 +214,10 @@ namespace Hedra.Engine.Player
 
         private bool IsColliding(Vector3 Position)
         {
-            Collision.Update(
-                Position,
-                _chunkCollisions,
-                _structureCollisions,
-                ref _lastChunkCollisionPosition,
-                ref _lastStructureCollisionPosition
-            );
-            try
-            {
-                _cameraBox.Translate(Position);
-                for (var i = 0; i < _structureCollisions.Count; i++)
-                {
-                    if (Physics.Collides(_structureCollisions[i], _cameraBox))
-                        return true;
-                }
-                for (var i = 0; i < _chunkCollisions.Count; i++)
-                {
-                    if (Physics.Collides(_chunkCollisions[i], _cameraBox))
-                        return true;
-                }
-                return false;
-            }
-            finally
-            {
-                _cameraBox.Translate(-Position);
-            }
+            _callback.CollisionFilterMask = (int)CollisionFilterGroups.StaticFilter;
+            BulletPhysics.BulletPhysics.ResetCallback(_callback);
+            BulletPhysics.BulletPhysics.Raycast(Position.Compatible(), _player.Position.Compatible() + BulletSharp.Math.Vector3.UnitY, _callback);
+            return _callback.HasHit;
         }
     }
 }
