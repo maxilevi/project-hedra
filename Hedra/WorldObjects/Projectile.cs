@@ -31,7 +31,7 @@ namespace Hedra.WorldObjects
     public delegate void OnProjectileLandEvent(Projectile Sender, LandType Type);
     public delegate void OnProjectileMoveEvent(Projectile Sender);
     
-    public class Projectile : IDisposable, IUpdatable, IWorldObject
+    public class Projectile : IDisposable, IWorldObject
     {
         public event OnDisposedEvent OnDispose;
         public event OnProjectileHitEvent HitEventHandler;
@@ -54,14 +54,12 @@ namespace Hedra.WorldObjects
         public bool PlaySound { get; set; } = true;
         public bool ShowParticlesOnDestroy { get; set; } = true;
         public bool ManuallyDispose { get; set; } = false;
-        public float PropulsionDecay { get; set; } = 1;
-        public Vector3 Delta { get; set; }
-        
+        public Vector3 Delta { get; private set; }
+
         private readonly IEntity _parent;
         private readonly HashSet<IEntity> _alreadyCollidedList;
         private readonly RigidBody _body;
         private bool _firstTime;
-        private Vector3 _accumulatedVelocity;
         private bool _landed;
 
 
@@ -98,19 +96,21 @@ namespace Hedra.WorldObjects
         {
             if(Disposed) return;
 
-            if (_firstTime)
-            {
-                if (UsePhysics) _body.ApplyCentralImpulse(Propulsion.Compatible() * 35f + +Vector3.UnitY.Compatible() * 17.5f);
-                else Direction = Propulsion.NormalizedFast();
-            }
-
             Lifetime -= Time.DeltaTime;
-            if (!UsePhysics)
+            if (!_firstTime)
             {
-                _body.LinearVelocity = Direction.Compatible() * 100f * Speed;
+                if (UsePhysics) _body.ApplyCentralImpulse(Propulsion.Compatible() * 35f + Vector3.UnitY.Compatible() * 17.5f);
+                else Direction = Propulsion.NormalizedFast();
+                _firstTime = true;
             }
             
-            Mesh.Position = _body.WorldTransform.Origin.Compatible();
+            if (!UsePhysics)_body.LinearVelocity = Direction.Compatible() * 150f * Speed;
+            if(_landed) _body.LinearVelocity = BulletSharp.Math.Vector3.Zero;
+
+            var lastPosition = Mesh.Position;
+            if(!_landed)
+                Mesh.Position = _body.WorldTransform.Origin.Compatible();
+            Delta = Mesh.Position - lastPosition;
             Mesh.LocalRotation = Physics.DirectionToEuler(_body.LinearVelocity.Compatible().NormalizedFast());
             HandleMovement();
         }
@@ -135,7 +135,6 @@ namespace Hedra.WorldObjects
 
         private void ProcessWaterCollision()
         {
-            if(_landed) return;
             if (CollideWithWater && Mesh.Position.Y <= Physics.WaterHeight(Mesh.Position))
             {
                 InvokeLand(LandType.Water);

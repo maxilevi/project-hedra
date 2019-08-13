@@ -24,7 +24,7 @@ FISHING_ROD_COOLDOWN = 2
 FISHING_HOOK_SCALE = 0.5
 FISHING_HOOK_SPEED = 1
 FISHING_HOOK_LIFETIME = 4
-REWARD_CHANCE = .33
+REWARD_CHANCE = .66
 ROD_LINE_WIDTH = 2
 PULL_SPEED = 1.0
 
@@ -303,7 +303,7 @@ def has_fish_effect(position):
     World.Particles.Emit()
 
 def create_hook(human, hook_model, state):
-    hook = Projectile(human, human.Model.LeftWeaponPosition, hook_model)
+    hook = Projectile(human, human.Model.LeftWeaponPosition + Vector3.UnitY * Single(2.5), hook_model)
     hook.Mesh.Scale = Vector3.One * Single(FISHING_HOOK_SCALE)
     hook.Lifetime = FISHING_HOOK_LIFETIME
     hook.Propulsion = human.LookingDirection * FISHING_HOOK_SPEED

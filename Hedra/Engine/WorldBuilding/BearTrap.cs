@@ -19,7 +19,7 @@ namespace Hedra.Engine.WorldBuilding
 
         static BearTrap()
         {
-            TrapModel = AssetManager.PLYLoader("Assets/Env/BearTrap.ply", Vector3.One);
+            TrapModel = AssetManager.PLYLoader("Assets/Env/BearTrap.ply", Vector3.One * 2.5f);
         }
         
         public BearTrap(IEntity Parent, Vector3 Position, float Duration, float Damage, bool Stun) : base(Parent)
