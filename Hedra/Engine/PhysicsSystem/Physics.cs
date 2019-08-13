@@ -273,45 +273,6 @@ namespace Hedra.Engine.PhysicsSystem
         private static float GetHighest(float X, float Z)
         {
             return World.GetHighest((int)X, (int)Z);
-        }    
-        
-        public static bool Collides(ICollidable Obj1, ICollidable Obj2)
-        {
-            if (!GJKCollision.IsInsideBroadphase(Obj1, Obj2)) return false;
-            var obj1Box = Obj1.AsBox();
-            var obj2Box = Obj2.AsBox();
-
-            if (obj1Box != null && obj2Box != null)
-                return AABBvsAABB(obj1Box, obj2Box);
-            
-            var obj1Group = Obj1.AsGroup();
-            var obj2Group = Obj2.AsGroup();
-
-            if (obj1Group != null || obj2Group != null)
-            {
-                if(obj1Group != null && obj2Group != null)
-                    throw new NotSupportedException("Collision between 2 collision groups is unsupported.");
-                return GroupVsShape(obj1Group ?? obj2Group, obj1Group == null ? Obj1.AsShape() : Obj2.AsShape());
-            }
-
-            return GJKCollision.Collides(Obj1.AsShape(), Obj2.AsShape());
-        }
-
-        private static bool GroupVsShape(CollisionGroup Group, CollisionShape Shape)
-        {
-            for (var i = 0; i < Group.Colliders.Length; i++)
-            {
-                if (!GJKCollision.IsInsideBroadphase(Group.Colliders[i], Shape)) continue;
-                if (GJKCollision.Collides(Group.Colliders[i].AsShape(), Shape)) return true;
-            }
-            return false;
-        }
-
-        public static bool AABBvsAABB(Box A, Box B)
-        {
-            return A.Min.X  <= B.Max.X && A.Max.X >= B.Min.X &&
-                A.Min.Y  <= B.Max.Y && A.Max.Y >= B.Min.Y &&
-                A.Min.Z  <= B.Max.Z && A.Max.Z  >= B.Min.Z;
         }
     }        
 }

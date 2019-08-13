@@ -13,11 +13,6 @@ namespace Hedra.Engine.Pathfinding
     {
         public static void UpdateGrid(IEntity Parent, Grid Graph)
         {
-            var gridBounds = new Box(
-                ToWorldCoordinates(new Vector2(0, 0), Graph.DimX, Graph.DimY),
-                ToWorldCoordinates(new Vector2(Graph.DimX, Graph.DimY), Graph.DimX, Graph.DimY)
-            );
-            var entities = World.Entities.Where(E => Physics.AABBvsAABB(E.Model.BroadphaseBox, gridBounds)).ToArray();
             for (var x = 0; x < Graph.DimX; ++x)
             {
                 for (var y = 0; y < Graph.DimY; ++y)
@@ -26,8 +21,6 @@ namespace Hedra.Engine.Pathfinding
                     Graph.UnblockCell(position);
                     var realPosition = ToWorldCoordinates(position, Graph.DimX, Graph.DimY);
                     if(Parent.Physics.CollidesWithOffset(realPosition))
-                        Graph.BlockCell(position);
-                    else if(Parent.Physics.EntityRaycast(entities, realPosition, 2.5f))
                         Graph.BlockCell(position);
                 }
             }

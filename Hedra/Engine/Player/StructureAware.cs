@@ -139,13 +139,13 @@ namespace Hedra.Engine.Player
             
             for (var i = 0; i < removed.Length; ++i)
             {
-                BulletPhysics.BulletPhysics.Remove(_keys[removed[i]]);
+                BulletPhysics.BulletPhysics.RemoveCustom(_keys[removed[i]]);
             }
             
             for (var i = 0; i < added.Length; ++i)
             {
                 _keys[added[i]] = new object();
-                BulletPhysics.BulletPhysics.Add(_keys[added[i]], added[i].Colliders);
+                BulletPhysics.BulletPhysics.AddCustom(_keys[added[i]], added[i].Colliders);
             }
         }
         

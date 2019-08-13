@@ -241,6 +241,7 @@
     <Compile Include="Engine\BulletPhysics\BulletInterop.cs" />
     <Compile Include="Engine\BulletPhysics\BulletPhysics.cs" />
     <Compile Include="Engine\BulletPhysics\ContactTestResultCallback.cs" />
+    <Compile Include="Engine\BulletPhysics\PhysicsObjectInformation.cs" />
     <Compile Include="Engine\BulletPhysics\PhysicsComponent.cs" />
     <Compile Include="Engine\BulletPhysics\PhysicsComponentMotionState.cs" />
     <Compile Include="Engine\CacheSystem\DynamicCache.cs" />
@@ -455,7 +456,6 @@
     <Compile Include="Engine\Pathfinding\MovementPatterns.cs" />
     <Compile Include="Engine\Pathfinding\Offset.cs" />
     <Compile Include="Engine\Pathfinding\PathFinder.cs" />
-    <Compile Include="Engine\PhysicsSystem\Collision.cs" />
     <Compile Include="Engine\PlantSystem\BerryBushDesign.cs" />
     <Compile Include="Engine\PlantSystem\CollectiblePlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\CollectiblePlantDesign.cs" />
@@ -1124,11 +1124,7 @@
     <Compile Include="Engine\PhysicsSystem\Physics.cs" />
     <Compile Include="Engine\PhysicsSystem\Box.cs" />
     <Compile Include="Engine\PhysicsSystem\CollisionShape.cs" />
-    <Compile Include="Engine\PhysicsSystem\GJKCollision.cs" />
-    <Compile Include="Engine\PhysicsSystem\ICollidable.cs" />
     <Compile Include="Engine\PhysicsSystem\MoveCommand.cs" />
-    <Compile Include="Engine\PhysicsSystem\Simplex.cs" />
-    <Compile Include="Engine\PhysicsSystem\SimplexVertex.cs" />
     <Compile Include="Engine\Player\MapSystem\MapItem.cs" />
     <Compile Include="Engine\Player\MapSystem\MapStateManager.cs" />
     <Compile Include="Engine\Player\ToolbarSystem\AbilityBagInventoryInterface.cs" />

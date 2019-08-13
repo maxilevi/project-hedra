@@ -6,7 +6,7 @@ using OpenTK;
 
 namespace Hedra.Engine.PhysicsSystem
 {
-    public class CollisionGroup : ICollidable
+    public class CollisionGroup
     {
         public CollisionShape[] Colliders { get; }
         public float BroadphaseRadius { get; private set; }
@@ -79,20 +79,5 @@ namespace Hedra.Engine.PhysicsSystem
             }
             this.BroadphaseRadius = dist;
         }
-
-        public CollisionShape AsShape()
-        {
-            return null;
-        }
-
-        public Box AsBox()
-        {
-            return null;
-        }
-
-        public CollisionGroup AsGroup()
-        {
-            return this;
-        }       
     }
 }

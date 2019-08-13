@@ -20,7 +20,7 @@ namespace Hedra.Engine.PhysicsSystem
     /// <summary>
     /// Description of CollisionShape.
     /// </summary>
-    public class CollisionShape : ICollidable, ICloneable
+    public class CollisionShape : ICloneable
     {
         public Vector3[] Vertices { get; }
         public uint[] Indices { get; }
@@ -116,31 +116,12 @@ namespace Hedra.Engine.PhysicsSystem
             return set.ToArray();
         }
 
-        public CollisionShape AsShape()
-        {
-            return this;
-        }
-        
-        public Box AsBox()
-        {
-            return null;
-        }
-        
-        public CollisionGroup AsGroup()
-        {
-            return null;
-        }
-        
         public object Clone()
         {
             return new CollisionShape(Vertices.ToArray(), this.Indices.ToArray());
         }
 
         public CollisionShape(List<Vector3> Vertices, List<uint> Indices) : this(Vertices.ToArray(), Indices.ToArray())
-        {
-        }
-
-        public CollisionShape(List<Vector3> Vertices) : this(Vertices.ToArray(), null)
         {
         }
 

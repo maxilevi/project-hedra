@@ -7,8 +7,10 @@ using BulletSharp.Math;
 using Hedra.Core;
 using Hedra.Engine.Core;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.PhysicsSystem;
 using Hedra.Game;
 using Hedra.Rendering;
+using CollisionShape = BulletSharp.CollisionShape;
 using Vector2 = OpenTK.Vector2;
 
 namespace Hedra.Engine.BulletPhysics
@@ -103,7 +105,7 @@ namespace Hedra.Engine.BulletPhysics
                 _dynamicsWorld.RayTestRef(ref From, ref To, Callback);
         }
 
-        public static void Add(object Key, PhysicsSystem.CollisionShape[] Shapes)
+        public static void AddCustom(object Key, PhysicsSystem.CollisionShape[] Shapes)
         {
             var body = CreateShapesRigidbody(Shapes);
             lock (_customLock)
@@ -114,7 +116,7 @@ namespace Hedra.Engine.BulletPhysics
                 Add(body, CollisionFilterGroups.StaticFilter, CollisionFilterGroups.AllFilter);
         }
 
-        public static void Remove(object Key)
+        public static void RemoveCustom(object Key)
         {
             var body = (RigidBody) null;
             lock (_customLock)
@@ -145,9 +147,10 @@ namespace Hedra.Engine.BulletPhysics
                 {
                     bvhTriangleMeshShape.MeshInterface.Dispose();
                 }
-
+                Body.MotionState.Dispose();
                 Body.CollisionShape.Dispose();
                 Body.Dispose();
+                Body = null;
             }
         }
         
@@ -319,6 +322,17 @@ namespace Hedra.Engine.BulletPhysics
         {
             Callback.ClosestHitFraction = 1;
             Callback.CollisionObject = null;
+        }
+
+        public static CompoundShape ShapeFrom(Box Dimensions)
+        {
+            var bodyShape = new CompoundShape();
+            var cube = new BoxShape(Dimensions.Size.Compatible() * .5f);
+            bodyShape.AddChildShape(
+                Matrix.Translation(Vector3.UnitY * -cube.HalfExtentsWithoutMargin.Y),
+                cube
+            );
+            return bodyShape;
         }
     }
 }

@@ -28,7 +28,6 @@ namespace Hedra.EntitySystem
         bool CollidesWithOffset(Vector3 Offset);
         void MoveTowards(Vector3 Position);
         bool Raycast(Vector3 End);
-        bool EntityRaycast(IEntity[] Entities, Vector3 Length, float Modifier = 1);
         /// <summary>   
         /// If collides with structures
         /// </summary>
