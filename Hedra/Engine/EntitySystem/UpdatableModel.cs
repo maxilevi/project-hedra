@@ -76,11 +76,7 @@ namespace Hedra.Engine.EntitySystem
         public override bool IsWalking { get; protected set; }
         public override bool IsMoving { get; protected set; }
         public override float Alpha { get; set; } = 1;
-
-        public override CollisionShape[] Colliders => new []{ BroadphaseBox.ToShape() };
-        public override CollisionShape BroadphaseCollider => BroadphaseBox.ToShape();
         public override CollisionShape HorizontalBroadphaseCollider => BaseBroadphaseBox.ToShape();
-        public override Box BroadphaseBox => BaseBroadphaseBox.Cache.Translate(Parent.Position);
         public override Box Dimensions { get; protected set; }
 
         public override Box BaseBroadphaseBox

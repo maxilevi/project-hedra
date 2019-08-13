@@ -57,7 +57,13 @@ namespace Hedra.Engine.BulletPhysics
                     _body.CollisionFlags |= Bullet.CollisionFlags.CharacterObject;
                     _body.ActivationState = Bullet.ActivationState.DisableDeactivation;
                 }
-                BulletPhysics.Add(_body, Bullet.CollisionFilterGroups.CharacterFilter, Bullet.CollisionFilterGroups.AllFilter);
+                BulletPhysics.Add(_body, new PhysicsObjectInformation
+                {
+                    Group = Bullet.CollisionFilterGroups.CharacterFilter,
+                    Mask = Bullet.CollisionFilterGroups.AllFilter,
+                    Entity = Parent,
+                    Name = Parent.Name
+                });
             }
             using (var bodyInfo = new Bullet.RigidBodyConstructionInfo(1, new Bullet.DefaultMotionState(), defaultShape))
             {
@@ -68,7 +74,13 @@ namespace Hedra.Engine.BulletPhysics
                 {
                     _body.ActivationState = Bullet.ActivationState.DisableDeactivation;
                 }
-                BulletPhysics.Add(_sensor, Bullet.CollisionFilterGroups.SensorTrigger, Bullet.CollisionFilterGroups.StaticFilter);
+                BulletPhysics.Add(_sensor, new PhysicsObjectInformation
+                {
+                    Group = Bullet.CollisionFilterGroups.SensorTrigger,
+                    Mask = Bullet.CollisionFilterGroups.StaticFilter,
+                    Entity = Parent,
+                    Name = $"'{Parent.Name}' sensor"
+                });
             }
             
             _motionState.OnUpdated += UpdateSensor;
@@ -169,7 +181,7 @@ namespace Hedra.Engine.BulletPhysics
             _speedMultiplier = Mathf.Lerp(_speedMultiplier, NormalSpeedModifier * (Parent.IsAttacking ? Parent.AttackingSpeedModifier : 1), deltaTime * 2f);
             HandleFallDamage(deltaTime);
             HandleIsMoving();
-            Parent.IsGrounded = _sensorContacts > 0;
+            Parent.IsGrounded = _sensorContacts > 0; 
             _body.LinearVelocity = new Bullet.Math.Vector3(_accumulatedMovement.X, Math.Min(2, _body.LinearVelocity.Y), _accumulatedMovement.Z);
             _accumulatedMovement = Vector3.Zero;
         }

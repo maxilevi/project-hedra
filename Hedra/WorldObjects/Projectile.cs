@@ -60,6 +60,7 @@ namespace Hedra.WorldObjects
         private readonly IEntity _parent;
         private readonly HashSet<IEntity> _alreadyCollidedList;
         private readonly RigidBody _body;
+        private bool _firstTime;
         private Vector3 _accumulatedVelocity;
         private bool _landed;
 
@@ -76,8 +77,14 @@ namespace Hedra.WorldObjects
             {
                 _body = new RigidBody(bodyInfo);
                 _body.CollisionFlags |= CollisionFlags.NoContactResponse;
+                _body.Translate(Mesh.Position.Compatible());
             }
-            BulletPhysics.Add(_body, CollisionFilterGroups.DefaultFilter, CollisionFilterGroups.AllFilter);
+            BulletPhysics.Add(_body, new PhysicsObjectInformation
+            {
+                Group = CollisionFilterGroups.DefaultFilter,
+                Mask = CollisionFilterGroups.AllFilter,
+                Name = $"Projectile from '{_parent.Name}'"
+            });
             BulletPhysics.OnCollision += OnCollision;
             UpdateManager.Add(this);
         }
@@ -91,32 +98,26 @@ namespace Hedra.WorldObjects
         {
             if(Disposed) return;
 
-            if (_accumulatedVelocity == Vector3.Zero && UsePhysics || !UsePhysics && Direction == Vector3.Zero)
+            if (_firstTime)
             {
-                Direction = Propulsion.NormalizedFast();
-                _accumulatedVelocity = Propulsion + Vector3.UnitY * 7f;
+                if (UsePhysics) _body.ApplyCentralImpulse(Propulsion.Compatible() * 35f + +Vector3.UnitY.Compatible() * 17.5f);
+                else Direction = Propulsion.NormalizedFast();
             }
 
             Lifetime -= Time.DeltaTime;
-            Vector3 rotation;
-            if (UsePhysics)
+            if (!UsePhysics)
             {
-                Propulsion *= (float)Math.Pow(.75f, Time.DeltaTime) * PropulsionDecay;
-                _accumulatedVelocity += (Propulsion * 60f - Vector3.UnitY * 20f * Falloff) * Time.DeltaTime;
-                _accumulatedVelocity *= (float)Math.Pow(.8f, Time.DeltaTime);
-                var lastPosition = Mesh.Position;
-                if(!_landed)
-                    Mesh.Position += _accumulatedVelocity * 2.25f * Time.DeltaTime;
-                Delta = Mesh.Position - lastPosition;
-                rotation = Physics.DirectionToEuler(_accumulatedVelocity.NormalizedFast());
+                _body.LinearVelocity = Direction.Compatible() * 100f * Speed;
             }
-            else
-            {
-                Mesh.Position += Direction * 100f * Speed * Time.DeltaTime;
-                rotation = Physics.DirectionToEuler(Direction);
-            }
-            Mesh.LocalRotation = rotation;
-            if(_landed) return;
+            
+            Mesh.Position = _body.WorldTransform.Origin.Compatible();
+            Mesh.LocalRotation = Physics.DirectionToEuler(_body.LinearVelocity.Compatible().NormalizedFast());
+            HandleMovement();
+        }
+
+        private void HandleMovement()
+        {
+            if (_landed) return;
             if (HandleLifecycle)
             {
                 if (Collide)
@@ -129,7 +130,6 @@ namespace Hedra.WorldObjects
                     this.Dispose();
                 }
             }
-
             MoveEventHandler?.Invoke(this);
         }
 
@@ -154,7 +154,7 @@ namespace Hedra.WorldObjects
                     : LandType.Structure;
                 InvokeLand(type);
             }
-            else
+            else if(objectInformation.Entity.Model != null && !objectInformation.Entity.Disposed)
             {
                 var entity = objectInformation.Entity;
                 if(_parent == entity || _alreadyCollidedList.Contains(entity) || IgnoreEntities != null && Array.IndexOf(IgnoreEntities, entity) != -1) return;

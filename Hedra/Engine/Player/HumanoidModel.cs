@@ -49,10 +49,8 @@ namespace Hedra.Engine.Player
         public HumanoidModelTemplate Template { get; private set; }
         public HumanoidModelAnimationState StateHandler { get; private set; }
         public Vector3 RidingOffset { get; set; }
-
-        public override CollisionShape BroadphaseCollider => _collider.Broadphase;
+        
         public override CollisionShape HorizontalBroadphaseCollider => _collider.HorizontalBroadphase;
-        public override CollisionShape[] Colliders => _collider.Shapes;
         public override bool IsWalking => StateHandler.IsWalking;
         public override Vector4 Tint { get; set; }
         public override Vector4 BaseTint { get; set; }

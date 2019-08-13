@@ -113,7 +113,11 @@ namespace Hedra.Engine.BulletPhysics
                 _customMap.Add(Key, body);
             }
             if(body != null)
-                Add(body, CollisionFilterGroups.StaticFilter, CollisionFilterGroups.AllFilter);
+                Add(body, new PhysicsObjectInformation
+                {
+                    Group = CollisionFilterGroups.StaticFilter,
+                    Mask = CollisionFilterGroups.AllFilter
+                });
         }
 
         public static void RemoveCustom(object Key)
@@ -128,11 +132,12 @@ namespace Hedra.Engine.BulletPhysics
                 Remove(body);
         }
 
-        public static void Add(RigidBody Body, CollisionFilterGroups Group, CollisionFilterGroups Mask)
+        public static void Add(RigidBody Body, PhysicsObjectInformation Information)
         {
             lock (_bulletLock)
             {
-                _dynamicsWorld.AddRigidBody(Body, Group, Mask);
+                Body.UserObject = Information;
+                _dynamicsWorld.AddRigidBody(Body, Information.Group, Information.Mask);
                 _bodies.Add(Body);
             }
         }
@@ -158,6 +163,7 @@ namespace Hedra.Engine.BulletPhysics
         {
             lock (_bulletLock)
             {
+                if(Mesh.IsEmpty) return;
                 var bodies = new List<RigidBody>
                 {
                     CreateTerrainRigidbody(Offset, Mesh),
@@ -174,7 +180,12 @@ namespace Hedra.Engine.BulletPhysics
                     _chunkBodies.Add(Offset, bodies.ToArray());
                 for (var i = 0; i < bodies.Count; ++i)
                 {
-                    Add(bodies[i], CollisionFilterGroups.StaticFilter, CollisionFilterGroups.AllFilter);
+                    Add(bodies[i], new PhysicsObjectInformation
+                    {
+                        Group = CollisionFilterGroups.StaticFilter,
+                        Mask = CollisionFilterGroups.AllFilter,
+                        Name = (string) bodies[i].UserObject
+                    });
                 }
             }
         }

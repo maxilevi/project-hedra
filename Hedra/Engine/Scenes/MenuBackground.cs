@@ -49,12 +49,13 @@ namespace Hedra.Engine.Scenes
         {
             RoutineManager.StartRoutine(MakeFire);
             RoutineManager.StartRoutine(MakePlatform);
+            /*
             var plateau = new RoundedPlateau(CampfirePosition.Xz, 24);
             var groundwork = new RoundedGroundwork(CampfirePosition, 24, BlockType.StonePath);
             var structure = new CollidableStructure(null, CampfirePosition, plateau, null);
             structure.AddGroundwork(groundwork);
             structure.AddPlateau(new RoundedPlateau(CreatorPosition.Xz, 16));
-            World.WorldBuilding.SetupStructure(structure);
+            World.WorldBuilding.SetupStructure(structure);*/
         }
         
         private static IEnumerator MakePlatform(){

@@ -48,10 +48,8 @@ namespace Hedra.Engine.EntitySystem
         private readonly float[] _walkAnimationSpeed;
         private readonly float _originalMobSpeed;
         private float _lastMobSpeed;
-
-        public override CollisionShape BroadphaseCollider => Collider.Broadphase;
+        
         public override CollisionShape HorizontalBroadphaseCollider => Collider.HorizontalBroadphase;
-        public override CollisionShape[] Colliders => Collider.Shapes;
         protected override string ModelPath { get; set; }
         private float _attackCooldown;
         private Quaternion _targetTerrainOrientation = Quaternion.Identity;
