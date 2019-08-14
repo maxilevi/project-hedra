@@ -125,7 +125,7 @@ namespace Hedra.Engine.BulletPhysics
             else
             {
                 bodyShape = new Bullet.CompoundShape();
-                var capsule = new Bullet.CapsuleShape(Dimensions.Size.Xz.Length * .5f, Dimensions.Size.Y * .33f);
+                var capsule = new Bullet.CapsuleShape(Dimensions.Size.Xz.Length * .5f, Dimensions.Size.Y * .35f);
                 bodyShape.AddChildShape(
                     Bullet.Math.Matrix.Translation(Bullet.Math.Vector3.UnitY * Dimensions.Size.Y * -.5f),
                     capsule
@@ -164,7 +164,7 @@ namespace Hedra.Engine.BulletPhysics
         }
 
         private Bullet.Math.Vector3 Gravity => (BulletPhysics.Gravity * _gravityDirection).Compatible();
-        public Vector3 RigidbodyPosition => _body.WorldTransform.Origin.Compatible();
+        public Vector3 RigidbodyPosition => Time.Paused ? _body.WorldTransform.Origin.Compatible() : _motionState.Position;
 
         public override void Draw()
         {

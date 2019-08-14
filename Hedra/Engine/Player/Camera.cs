@@ -105,13 +105,13 @@ namespace Hedra.Engine.Player
                 }
 
             }
-            bool ShouldMove()
+            bool ShouldMove(out float NewDistance)
             {
                 var cameraPosition = CameraEyePosition;
-                return IsColliding(cameraPosition) || cameraPosition.Y - 2 < Physics.HeightAtPosition(cameraPosition);
+                return IsColliding(cameraPosition, out NewDistance) || cameraPosition.Y - 2 < Physics.HeightAtPosition(cameraPosition);
             }
 
-            while(ShouldMove() && !GameManager.IsLoading && !GameManager.InStartMenu && TargetDistance > MinDistance)
+            while(!GameManager.IsLoading && !GameManager.InStartMenu && TargetDistance > MinDistance && ShouldMove(out var newDistance))
             {
                 TargetDistance -= Time.IndependentDeltaTime;
                 Distance -= Time.IndependentDeltaTime;
@@ -212,11 +212,16 @@ namespace Hedra.Engine.Player
 
         public Matrix4 ViewMatrix => Matrix4.LookAt(-CameraOrientation, CameraOrientation, Vector3.UnitY);
 
-        private bool IsColliding(Vector3 Position)
+        private bool IsColliding(Vector3 Position, out float NewDistance)
         {
             _callback.CollisionFilterMask = (int)CollisionFilterGroups.StaticFilter;
             BulletPhysics.BulletPhysics.ResetCallback(_callback);
-            BulletPhysics.BulletPhysics.Raycast(Position.Compatible(), _player.Position.Compatible() + BulletSharp.Math.Vector3.UnitY, _callback);
+            var src = Position.Compatible();
+            var dst = _player.Position.Compatible() + BulletSharp.Math.Vector3.UnitY;
+            _callback.RayFromWorld = dst;
+            _callback.RayToWorld = src;
+            BulletPhysics.BulletPhysics.Raycast(ref dst, ref src, _callback);
+            NewDistance = (dst - _callback.HitPointWorld).Compatible().LengthFast;
             return _callback.HasHit;
         }
     }

@@ -1056,7 +1056,6 @@
     <Compile Include="Engine\PhysicsSystem\AnimatedColliderData.cs" />
     <Compile Include="Engine\PhysicsSystem\BoneBox.cs" />
     <Compile Include="Engine\PhysicsSystem\BoneData.cs" />
-    <Compile Include="Engine\PhysicsSystem\ObjectMeshCollider.cs" />
     <Compile Include="Engine\PlantSystem\BerryBushPlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\BushDesign.cs" />
     <Compile Include="Engine\PlantSystem\CloudDesign.cs" />

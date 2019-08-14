@@ -1,5 +1,7 @@
 using System;
+using BulletSharp;
 using Hedra.Core;
+using Hedra.Engine.BulletPhysics;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Localization;
 using Hedra.Engine.PhysicsSystem;
@@ -13,6 +15,7 @@ using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
 using OpenTK;
+using OpenTK.Input;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {
@@ -26,29 +29,47 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         private bool _opened;
         private Vector3 _targetRotation;
         private readonly ObjectMesh _mesh;
-        private readonly ObjectMeshCollider _collider;
         private readonly Vector3 _rotationPoint;
-        private readonly CollisionShape _shape;
-        private readonly CollisionGroup _group;
         private Vector3 _lastRotation;
         private Vector3 _lastPosition;
         private readonly float _invertedRotation;
-        
-        public Door(VertexData Mesh, Vector3 RotationPoint, Vector3 Position, bool InvertedRotation, CollidableStructure Structure) : base(Position)
+        private readonly RigidBody _body;
+        private Vector3 _position;
+
+        public Door(VertexData Mesh, Vector3 RotationPoint, Vector3 Position, bool InvertedRotation,
+            CollidableStructure Structure) : base(Position)
         {
             _mesh = ObjectMesh.FromVertexData(Mesh);
             _mesh.ApplyNoiseTexture = true;
-            _mesh.Position = Position;
             _rotationPoint = RotationPoint;
-            _collider = new ObjectMeshCollider(_mesh, Mesh);
-            _shape = _collider.Shape;
             _invertedRotation = InvertedRotation ? -1 : 1;
-            Structure.AddCollisionGroup(_group = new CollisionGroup(_shape));
+            using (var bodyInfo = new RigidBodyConstructionInfo(0, new DefaultMotionState(), BuildShape(Mesh)))
+            {
+                _body = new RigidBody(bodyInfo);
+                _body.Translate(Position.Compatible());
+                BulletPhysics.BulletPhysics.Add(_body, new PhysicsObjectInformation
+                {
+                    Group = CollisionFilterGroups.StaticFilter,
+                    Mask = CollisionFilterGroups.AllFilter
+                });
+                _body.Gravity = BulletSharp.Math.Vector3.Zero;
+            }
         }
+
         public override void Update()
         {
             if(_mesh != null) _mesh.Position = Position;       
             base.Update();
+        }
+        
+        private BoxShape BuildShape(VertexData Mesh)
+        {
+            var collider = BoneBox.From(new BoneData
+            {
+                Id = 0,
+                Vertices = Mesh.Vertices.ToArray()
+            });
+            return new BoxShape(collider.Size.Compatible() * .5f);
         }
 
         protected override void DoUpdate()
@@ -59,50 +80,26 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                 _mesh.LocalRotation = Mathf.Lerp(_mesh.LocalRotation, _targetRotation, Time.DeltaTime * 4f);
                 _mesh.LocalRotationPoint = _rotationPoint;
             }
-            if (_collider != null)
+        }
+
+        public override Vector3 Position
+        {
+            get => _position;
+            set
             {
-                if (!_opened) UpdateBox();
-                else IgnoreBox();
+                _body?.Translate((-_position + value).Compatible());
+                _position = value;
             }
         }
 
-        private void IgnoreBox()
+        private void EnableBox()
         {
-            if (ShouldUpdate()) return;
-
-            for (var i = 0; i < _shape.Vertices.Length; i++)
-            {
-                _shape.Vertices[i] = Vector3.Zero;
-            }
-
-            UpdateShape();
+            _body.CollisionFlags ^= CollisionFlags.NoContactResponse;
         }
         
-        private void UpdateBox()
+        private void DisableBox()
         {
-            if (ShouldUpdate()) return;
-            
-            var collider = _collider.Collider;
-            for (var i = 0; i < _shape.Vertices.Length; i++)
-            {
-                _shape.Vertices[i] = collider.Corners[i];
-            }
-
-            UpdateShape();
-        }
-
-        private bool ShouldUpdate()
-        {
-            return (_mesh.LocalRotation - _lastRotation).LengthSquared < 0.005f * 0.005f
-                   && (_lastPosition - _mesh.Position).LengthSquared < 0.005f * 0.005f;
-        }
-
-        private void UpdateShape()
-        {
-            _shape.RecalculateBroadphase();
-            _group.Recalculate();
-            _lastRotation = _mesh.LocalRotation;
-            _lastPosition = _mesh.Position;
+            _body.CollisionFlags |= CollisionFlags.NoContactResponse;
         }
 
         protected override void Interact(IHumanoid Humanoid)
@@ -110,6 +107,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             if (_isMoving) return;
             _opened = !_opened;
             _targetRotation = _opened ? Vector3.UnitY * 90 * _invertedRotation : Vector3.Zero;
+            if (_opened) DisableBox();
+            else EnableBox();
             SoundPlayer.PlaySound(SoundType.Door, Position);
         }
 
@@ -124,7 +123,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         {
             base.Dispose();
             _mesh.Dispose();
-            _collider.Dispose();
+            BulletPhysics.BulletPhysics.Remove(_body);
         }
     }
 }

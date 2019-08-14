@@ -51,7 +51,7 @@ namespace Hedra.Engine.Player.BoatSystem
                     if (!OnWaterSurface)
                     {
                         OnWaterSurface = true;
-                        _player.Physics.GravityDirection = Vector3.UnitY;
+                        _player.Physics.GravityDirection = Vector3.UnitY * 40f;
                     }
                     else if(_wasInWater)
                     {

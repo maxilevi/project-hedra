@@ -69,7 +69,7 @@ namespace Hedra.Engine.BulletPhysics
         {
             if (!GameSettings.DebugPhysics) return;
             _dynamicsWorld.DebugDrawer.DebugMode = DebugDrawModes.DrawWireframe;
-            var offset = World.ToChunkSpace(Player.LocalPlayer.Instance.Position);
+            /*var offset = World.ToChunkSpace(Player.LocalPlayer.Instance.Position);
             if (_chunkBodies.ContainsKey(offset))
             {
                 var chunkObjects = _chunkBodies[offset];
@@ -80,14 +80,14 @@ namespace Hedra.Engine.BulletPhysics
                     _dynamicsWorld.DebugDrawObject(chunkObjects[1].WorldTransform, chunkObjects[1].CollisionShape,
                         new Vector3(1, 1, 0));
                 }
-            }
+            }*/
 
-            lock (_customLock)
+            lock (_bulletLock)
             {
-                foreach (var custom in _customMap)
+                foreach (var custom in _bodies)
                 {
-                    if ((custom.Value.WorldTransform.Origin.Compatible() - Player.LocalPlayer.Instance.Position).Xz.LengthSquared > 64*64) continue;
-                    _dynamicsWorld.DebugDrawObject(custom.Value.WorldTransform, custom.Value.CollisionShape,
+                    if ((custom.WorldTransform.Origin.Compatible() - Player.LocalPlayer.Instance.Position).Xz.LengthSquared > 64*64) continue;
+                    _dynamicsWorld.DebugDrawObject(custom.WorldTransform, custom.CollisionShape,
                         new Vector3(1, 1, 0));
                 }
             }
@@ -99,7 +99,7 @@ namespace Hedra.Engine.BulletPhysics
             _dynamicsWorld.DebugDrawObject(Transform, Object, Color.Xyz.Compatible());
         }
 
-        public static void Raycast(Vector3 From, Vector3 To, RayResultCallback Callback)
+        public static void Raycast(ref Vector3 From, ref Vector3 To, RayResultCallback Callback)
         {
             lock (_bulletLock)
                 _dynamicsWorld.RayTestRef(ref From, ref To, Callback);
@@ -300,7 +300,7 @@ namespace Hedra.Engine.BulletPhysics
                 var callback = new ClosestRayResultCallback(ref src, ref end);
                 try
                 {
-                    BulletPhysics.Raycast(Source, End, callback);
+                    BulletPhysics.Raycast(ref Source, ref End, callback);
                     return callback.HasHit;
                 }
                 finally

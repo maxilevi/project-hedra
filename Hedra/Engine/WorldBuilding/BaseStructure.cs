@@ -23,7 +23,7 @@ namespace Hedra.Engine.WorldBuilding
     {
         private readonly List<BaseStructure> _children;
         public BaseStructure[] Children => _children.ToArray();
-        public Vector3 Position { get; set; }
+        public virtual Vector3 Position { get; set; }
         public bool Disposed { get; protected set; }
 
         protected BaseStructure(Vector3 Position)
