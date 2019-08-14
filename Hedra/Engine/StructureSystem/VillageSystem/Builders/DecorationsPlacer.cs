@@ -28,7 +28,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 lampPost.Translate(Position);
                 var shapes = Root.Cache.GrabShapes(template.Path).Select(S => S.Transform(Position)).ToList();
                 Structure.AddCollisionShape(shapes.ToArray());
-                Structure.AddStaticElement(lampPost);
+                Structure.AddStaticElement(lampPost, false);
                 Structure.WorldObject.AddChildren(new WorldLight(Position + template.LightOffset * template.Scale)
                 {
                     Radius = Radius,

@@ -42,6 +42,7 @@ namespace Hedra.Engine.BulletPhysics
         private float _speedMultiplier;
         private Vector3 _accumulatedMovement;
         private int _sensorContacts;
+        private bool _collidesWithStructures;
 
         public PhysicsComponent(IEntity Parent) : base(Parent)
         {
@@ -164,7 +165,7 @@ namespace Hedra.Engine.BulletPhysics
         }
 
         private Bullet.Math.Vector3 Gravity => (BulletPhysics.Gravity * _gravityDirection).Compatible();
-        public Vector3 RigidbodyPosition => Time.Paused ? _body.WorldTransform.Origin.Compatible() : _motionState.Position;
+        public Vector3 RigidbodyPosition => _body.WorldTransform.Origin.Compatible();//Time.Paused ? _body.WorldTransform.Origin.Compatible() : _motionState.Position;
 
         public override void Draw()
         {
@@ -287,11 +288,19 @@ namespace Hedra.Engine.BulletPhysics
         {
             FallTime = 0.01f;
         }
-        
-        /// <summary>
-        /// If collides with structures
-        /// </summary>
-        public bool CollidesWithStructures { get; set; } = true;
+
+        public bool CollidesWithStructures
+        {
+            get => _collidesWithStructures;
+            set
+            {
+                _collidesWithStructures = value;
+                /*if (_collidesWithStructures)
+                    _body.colli;
+                else
+                    _body*/
+            }
+        }
         /// <summary>
         /// If it pushes entities when moving
         /// </summary>

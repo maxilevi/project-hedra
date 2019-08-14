@@ -105,8 +105,7 @@ namespace Hedra.Engine.EntitySystem
             }
         }
 
-        public bool InUpdateRange => (Physics.RigidbodyPosition.Xz - LocalPlayer.Instance.Model.Position.Xz).LengthSquared <
-                                     GeneralSettings.UpdateDistanceSquared;
+        public bool InUpdateRange => (Physics.RigidbodyPosition - LocalPlayer.Instance.Model.Position).Xz.LengthSquared < GeneralSettings.UpdateDistanceSquared;
 
         public bool IsActive { get; set; }
         public bool IsBoss { get; set; }
@@ -530,7 +529,6 @@ namespace Hedra.Engine.EntitySystem
             {
                 beforeComponents[i]?.Update();
             }
-            
 
             if (IsKnocked)
             {

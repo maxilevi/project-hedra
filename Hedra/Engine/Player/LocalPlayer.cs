@@ -120,8 +120,7 @@ namespace Hedra.Engine.Player
             this.AttackPower = 1.0f;
 
             this.SetupHandlers();
-
-            EntityUpdater.Load();
+            
             World.AddEntity(this);
             DrawManager.Add(this);
             UpdateManager.Add(this);
@@ -208,8 +207,7 @@ namespace Hedra.Engine.Player
                 
                 _previousPosition = Model.Human.Position;
             }
-
-            EntityUpdater.Dispatch();
+            
             Companion.Entity?.Update();
             
             Rotation = new Vector3(0, this.Rotation.Y, 0);

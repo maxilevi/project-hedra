@@ -1,4 +1,5 @@
 using BulletSharp;
+using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 
 namespace Hedra.Engine.BulletPhysics
@@ -11,5 +12,7 @@ namespace Hedra.Engine.BulletPhysics
         public bool IsLand => !IsEntity;
         public bool IsEntity => Entity != null;
         public IEntity Entity { get; set; }
+        public bool IsInSimulation { get; set; }
+        public bool IsPlayer  => Entity is IPlayer;
     }
 }

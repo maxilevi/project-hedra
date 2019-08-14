@@ -24,18 +24,19 @@ namespace Hedra.Engine.Rendering.Particles
         public const int MaxParticleCount = 15000;
         private static readonly Shader Shader = Shader.Build("Shaders/Particle.vert","Shaders/Particle.frag");
         private readonly object _lock = new object();
-        public bool Disposed { get; private set; }
-        public int MaxParticles { get; set; } = MaxParticleCount; 
-        private readonly List<Particle3D> _particles = new List<Particle3D>();
+
+        private readonly List<Particle3D> _particles;
         private VBO<Vector4> _particleVbo;
         private ParticleVAO _vao;
+        public bool Disposed { get; private set; }
+        public int MaxParticles { get; set; } = MaxParticleCount;
         public Vector3 Position { get; set; }
         public Vector3 Direction { get; set; }
         public Vector4 Color { get; set; }
-        public float ParticleLifetime;
-        public float GravityEffect;
-        public Vector3 PositionErrorMargin;
-        public Vector3 ScaleErrorMargin;
+        public float ParticleLifetime { get; set; }
+        public float GravityEffect { get; set; }
+        public Vector3 PositionErrorMargin { get; set; }
+        public Vector3 ScaleErrorMargin { get; set; }
         public Vector3 Scale { get; set; }
         public bool RandomRotation { get; set; } = true;
         public ParticleShape Shape { get; set; } = ParticleShape.Square;
@@ -65,13 +66,14 @@ namespace Hedra.Engine.Rendering.Particles
         public ParticleSystem(Vector3 Position)
         {
             this.Position = Position;
+            _particles = new List<Particle3D>();
             ParticleCreator.Load();
             Executer.ExecuteOnMainThread(delegate
             {
                 this.BuildBuffers();
 
                 DrawManager.ParticleRenderer.Add(this);
-                UpdateManager.Add(this);
+                BackgroundUpdater.Add(this);
             });
         }
         
@@ -167,9 +169,26 @@ namespace Hedra.Engine.Rendering.Particles
                         _particles.RemoveAt(i);
                     }
                 }
-
-                UpdateVbo();
+                BuildBufferAndSendToGPU();
             }
+        }
+
+        private void BuildBufferAndSendToGPU()
+        {
+            if (_particles.Count <= 0) return;
+            var count = _particles.Count;
+            var vec4S = new Vector4[count * 5];
+            for (var i = count - 1; i > -1; i--)
+            {
+                var transMatrix = ConstructTransformationMatrix(_particles[i].Position, _particles[i].Rotation,
+                    _particles[i].Scale);
+                vec4S[i * 5 + 0] = _particles[i].Color;
+                vec4S[i * 5 + 1] = transMatrix.Column0;
+                vec4S[i * 5 + 2] = transMatrix.Column1;
+                vec4S[i * 5 + 3] = transMatrix.Column2;
+                vec4S[i * 5 + 4] = transMatrix.Column3;
+            }
+            Executer.ExecuteOnMainThread(() => UpdateVbo(vec4S, count));
         }
         
         public void Draw()
@@ -202,22 +221,10 @@ namespace Hedra.Engine.Rendering.Particles
             _vao = new ParticleVAO(ParticleCreator.VerticesVBO, ParticleCreator.NormalsVBO, _particleVbo);
         }
         
-        private void UpdateVbo()
+        private void UpdateVbo(Vector4[] Vec4S, int Count)
         {
-            if (_particles.Count <= 0) return;
-            var count = _particles.Count;
-            var vec4S = new Vector4[count * 5];
-            for(var i = count-1; i > -1; i--)
-            {
-                var transMatrix = ConstructTransformationMatrix(_particles[i].Position, _particles[i].Rotation, _particles[i].Scale);
-                vec4S[i * 5 + 0] = _particles[i].Color;
-                vec4S[i * 5 + 1] = transMatrix.Column0;
-                vec4S[i * 5 + 2] = transMatrix.Column1;
-                vec4S[i * 5 + 3] = transMatrix.Column2;
-                vec4S[i * 5 + 4] = transMatrix.Column3;
-            }
-            _particleVbo.Update(vec4S, vec4S.Length * Vector4.SizeInBytes);
-            _particlesInMemory = count;
+            _particleVbo.Update(Vec4S, Vec4S.Length * Vector4.SizeInBytes);
+            _particlesInMemory = Count;
         }
         
         private static Matrix4 ConstructTransformationMatrix(Vector3 Position, Vector3 Rotation, Vector3 Scale)
@@ -239,11 +246,11 @@ namespace Hedra.Engine.Rendering.Particles
             {
                 _vao.Dispose();
                 _particleVbo.Dispose();
+                DrawManager.ParticleRenderer.Remove(this);
+                BackgroundUpdater.Remove(this);
             };
             if(_vao == null) Executer.ExecuteOnMainThread(DoDispose);
             else DoDispose();
-            DrawManager.ParticleRenderer.Remove(this);
-            UpdateManager.Remove(this);
         }
     }
 }

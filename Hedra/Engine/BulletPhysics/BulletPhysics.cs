@@ -24,71 +24,87 @@ namespace Hedra.Engine.BulletPhysics
         private static object _chunkLock;
         private static object _bulletLock;
         private static object _customLock;
+        private static object _bodyLock;
         private static Dictionary<object, RigidBody> _customMap;
         private static Dictionary<Vector2, RigidBody[]> _chunkBodies;
         private static DiscreteDynamicsWorld _dynamicsWorld;
         private static CollisionDispatcher _dispatcher;
-        private static HashSet<RigidBody> _bodies;
+        private static DbvtBroadphase _broadphase;
+        private static List<RigidBody> _bodies;
         private static HashSet<Pair<CollisionObject, CollisionObject>> _currentPairs;
         private static HashSet<Pair<CollisionObject, CollisionObject>> _pairsLastUpdate;
         public const float Gravity = 10 * Generation.ChunkSystem.Chunk.BlockSize;
-        
+        public static int ObjectsInSimulation { get; private set; }
+
         public static void Load()
         {
             _chunkLock = new object();
             _bulletLock = new object();
             _customLock = new object();
-            _bodies = new HashSet<RigidBody>();
+            _bodyLock = new object();
             _currentPairs = new HashSet<Pair<CollisionObject, CollisionObject>>();
             _pairsLastUpdate = new HashSet<Pair<CollisionObject, CollisionObject>>();
             lock(_customLock)
                 _customMap = new Dictionary<object, RigidBody>();
             lock(_chunkLock)
                 _chunkBodies = new Dictionary<Vector2, RigidBody[]>();
+            lock(_bodyLock)
+                _bodies = new List<RigidBody>();
             var configuration = new DefaultCollisionConfiguration();
             _dispatcher = new CollisionDispatcher(configuration);
-            var broadphase = new DbvtBroadphase();
+            _broadphase = new DbvtBroadphase();
             var solver = new SequentialImpulseConstraintSolver();
-            _dynamicsWorld = new DiscreteDynamicsWorld(_dispatcher, broadphase, solver, configuration)
+            _dynamicsWorld = new DiscreteDynamicsWorld(_dispatcher, _broadphase, solver, configuration)
             {
-                DebugDrawer = new BulletDraw(),
+                DebugDrawer = new BulletDraw
+                {
+                    DebugMode = DebugDrawModes.DrawWireframe
+                },
                 Gravity = -Vector3.UnitY * Gravity
             };
         }
 
-        public static void Update()
+        public static void Update(float DeltaTime)
         {
             lock (_bulletLock)
             {
-                _dynamicsWorld.StepSimulation(Time.DeltaTime);
+                _dynamicsWorld.StepSimulation(DeltaTime);
                 CheckForCollisionEvents();
             }
+        }
+
+        private static void RemoveFromSimulation(RigidBody Body, PhysicsObjectInformation Information)
+        {
+            Information.IsInSimulation = false;
+            _dynamicsWorld.RemoveRigidBody(Body);
+            ObjectsInSimulation--;
+        }
+
+        private static void AddToSimulation(RigidBody Body, PhysicsObjectInformation Information)
+        {
+            Information.IsInSimulation = true;
+            _dynamicsWorld.AddRigidBody(Body);
+            ObjectsInSimulation++;
         }
 
         public static void Draw()
         {
             if (!GameSettings.DebugPhysics) return;
-            _dynamicsWorld.DebugDrawer.DebugMode = DebugDrawModes.DrawWireframe;
-            /*var offset = World.ToChunkSpace(Player.LocalPlayer.Instance.Position);
-            if (_chunkBodies.ContainsKey(offset))
+            lock (_bodyLock)
             {
-                var chunkObjects = _chunkBodies[offset];
-                _dynamicsWorld.DebugDrawObject(chunkObjects[0].WorldTransform, chunkObjects[0].CollisionShape,
-                        new Vector3(1, 1, 0));
-                if (chunkObjects.Length == 2)
+                for(var i = 0; i < _bodies.Count; ++i)
                 {
-                    _dynamicsWorld.DebugDrawObject(chunkObjects[1].WorldTransform, chunkObjects[1].CollisionShape,
-                        new Vector3(1, 1, 0));
-                }
-            }*/
-
-            lock (_bulletLock)
-            {
-                foreach (var custom in _bodies)
-                {
-                    if ((custom.WorldTransform.Origin.Compatible() - Player.LocalPlayer.Instance.Position).Xz.LengthSquared > 64*64) continue;
-                    _dynamicsWorld.DebugDrawObject(custom.WorldTransform, custom.CollisionShape,
-                        new Vector3(1, 1, 0));
+                    if (GameSettings.DebugObjectsInSimulation)
+                    {
+                        var information = (PhysicsObjectInformation) _bodies[i].UserObject;
+                        if(information.IsInSimulation)
+                            _dynamicsWorld.DebugDrawObject(_bodies[i].WorldTransform, _bodies[i].CollisionShape, new Vector3(1, 1, 0));
+                    }
+                    else
+                    {
+                        if ((_bodies[i].WorldTransform.Origin.Compatible() - Player.LocalPlayer.Instance.Position).Xz.LengthSquared > 64 * 64) continue;
+                        _dynamicsWorld.DebugDrawObject(_bodies[i].WorldTransform, _bodies[i].CollisionShape, new Vector3(1, 1, 0));
+                    }
                 }
             }
         }
@@ -137,8 +153,9 @@ namespace Hedra.Engine.BulletPhysics
             lock (_bulletLock)
             {
                 Body.UserObject = Information;
-                _dynamicsWorld.AddRigidBody(Body, Information.Group, Information.Mask);
-                _bodies.Add(Body);
+                AddToSimulation(Body, Information);
+                lock(_bodyLock)
+                    _bodies.Add(Body);
             }
         }
         
@@ -146,8 +163,11 @@ namespace Hedra.Engine.BulletPhysics
         {
             lock (_bulletLock)
             {
-                _dynamicsWorld.RemoveRigidBody(Body);
-                _bodies.Remove(Body);
+                var information = (PhysicsObjectInformation) Body.UserObject;
+                if(information.IsInSimulation)
+                    _dynamicsWorld.RemoveRigidBody(Body);
+                lock(_bodyLock)
+                    _bodies.Remove(Body);
                 if (Body.CollisionShape is BvhTriangleMeshShape bvhTriangleMeshShape)
                 {
                     bvhTriangleMeshShape.MeshInterface.Dispose();
@@ -344,6 +364,15 @@ namespace Hedra.Engine.BulletPhysics
                 cube
             );
             return bodyShape;
+        }
+
+        public static int RigidbodyCount
+        {
+            get
+            {
+                lock (_bodies)
+                    return _bodies.Count;
+            }
         }
     }
 }

@@ -10,6 +10,7 @@ using Hedra.Core;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using OpenTK;
 
@@ -54,7 +55,7 @@ namespace Hedra.Rendering
                 UseTimeScale = false
             };
             DrawManager.Add(this);
-            UpdateManager.Add(this);
+            BackgroundUpdater.Add(this);
         }
 
         public void Draw()
@@ -212,7 +213,7 @@ namespace Hedra.Rendering
         public void Dispose()
         {
             DrawManager.Remove(this);
-            UpdateManager.Remove(this);
+            BackgroundUpdater.Remove(this);
             _buffer?.Dispose();
         }
     }

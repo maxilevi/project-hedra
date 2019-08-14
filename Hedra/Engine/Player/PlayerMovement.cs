@@ -230,6 +230,12 @@ namespace Hedra.Engine.Player
             {
                 GameSettings.DebugPhysics = !GameSettings.DebugPhysics && GameSettings.DebugMode;             
             });
+            this.RegisterKey(Key.F5, delegate
+            {
+                if(GameSettings.DebugPhysics)
+                    GameSettings.DebugObjectsInSimulation = !GameSettings.DebugObjectsInSimulation;
+                Chat.Log($"ObjectsInSimulation = '{BulletPhysics.BulletPhysics.ObjectsInSimulation}'; RigidbodyCount = '{BulletPhysics.BulletPhysics.RigidbodyCount}'");
+            });
         }
 
         public void OnKeyDown(object Sender, KeyEventArgs EventArgs)

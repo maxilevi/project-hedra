@@ -249,7 +249,7 @@
     <Compile Include="Engine\CacheSystem\FishingPostIconCache.cs" />
     <Compile Include="Engine\Generation\FishingZoneHandler.cs" />
     <Compile Include="Engine\ItemSystem\Item.cs" />
-    <Compile Include="Engine\Player\EntityUpdater.cs" />
+    <Compile Include="Engine\Player\BackgroundUpdater.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryCompanionInfo.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryCompanionRenamePanel.cs" />
     <Compile Include="Engine\QuestSystem\BaseStructureWithChest.cs" />

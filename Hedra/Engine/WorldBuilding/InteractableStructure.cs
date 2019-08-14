@@ -49,7 +49,7 @@ namespace Hedra.Engine.WorldBuilding
         protected InteractableStructure(Vector3 Position) : base(Position)
         {
             EventDispatcher.RegisterKeyDown(this, OnKeyDown, EventPriority.High);
-            UpdateManager.Add(this);
+            BackgroundUpdater.Add(this);
         }
 
         protected virtual void OnKeyDown(object Sender, KeyEventArgs EventArgs)
@@ -124,7 +124,7 @@ namespace Hedra.Engine.WorldBuilding
         public override void Dispose()
         {
             base.Dispose();
-            UpdateManager.Remove(this);
+            BackgroundUpdater.Remove(this);
             EventDispatcher.UnregisterKeyDown(this);
         }
     }
