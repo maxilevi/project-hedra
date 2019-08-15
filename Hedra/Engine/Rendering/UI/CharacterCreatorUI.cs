@@ -162,11 +162,12 @@ namespace Hedra.Engine.Rendering.UI
             {
                 if(_clickTimer.Tick())
                     _openFolder.CanClick = true;
+                _human.Physics.ResetVelocity();
                 _human.Update();
                 _newRot += Time.IndependentDeltaTime * 30f;
                 _human.Model.LocalRotation = Vector3.UnitY * -90 + Vector3.UnitY * _newRot;
                 _human.Model.TargetRotation = Vector3.UnitY * -90 + Vector3.UnitY * _newRot;
-                _human.Position = new Vector3(_human.Position.X, Physics.HeightAtPosition(_human.Position),  _human.Position.Z);
+                _human.Position = new Vector3(_human.Position.X, Physics.HeightAtPosition(_human.Position), _human.Position.Z);
             }
         }
     }
