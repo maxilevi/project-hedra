@@ -90,10 +90,11 @@ namespace Hedra.Engine.Rendering.UI
 
         private void OnSelect(object Sender, MouseButtonEventArgs Args)
         {
-            DisposeHumanoids();
             GameManager.LoadCharacter(DataManager.PlayerFiles[_humans.IndexOf(_selectedHuman)]);
             if(ShouldHost)
                 Network.Instance.Host();
+            DisposeHumanoids();
+            _information = null;
         }
 
         private void StateChanged(object Sender, PanelState State)

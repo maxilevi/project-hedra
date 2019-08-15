@@ -57,6 +57,7 @@ namespace Hedra.Engine.BulletPhysics
                 {
                     _body.CollisionFlags |= Bullet.CollisionFlags.CharacterObject;
                     _body.ActivationState = Bullet.ActivationState.DisableDeactivation;
+                    _body.ContactProcessingThreshold = 0;
                 }
                 BulletPhysics.Add(_body, new PhysicsObjectInformation
                 {
@@ -73,15 +74,16 @@ namespace Hedra.Engine.BulletPhysics
                 /* FIXME: Ugly */
                 if (Parent is IPlayer)
                 {
-                    _body.ActivationState = Bullet.ActivationState.DisableDeactivation;
+                    _sensor.ActivationState = Bullet.ActivationState.DisableDeactivation;
                 }
                 BulletPhysics.Add(_sensor, new PhysicsObjectInformation
                 {
                     Group = Bullet.CollisionFilterGroups.SensorTrigger,
-                    Mask = Bullet.CollisionFilterGroups.StaticFilter,
+                    Mask = (Bullet.CollisionFilterGroups.AllFilter & ~Bullet.CollisionFilterGroups.SensorTrigger),
                     Entity = Parent,
                     Name = $"'{Parent.Name}' sensor"
                 });
+                _sensor.Gravity = BulletSharp.Math.Vector3.Zero;
             }
             
             _motionState.OnUpdated += UpdateSensor;
@@ -91,7 +93,7 @@ namespace Hedra.Engine.BulletPhysics
 
         private void OnCollision(Bullet.CollisionObject Object0, Bullet.CollisionObject Object1)
         {
-             if (!ReferenceEquals(Object0, _sensor) && !ReferenceEquals(Object1, _sensor)) return;
+            if (!ReferenceEquals(Object0, _sensor) && !ReferenceEquals(Object1, _sensor)) return;
             var other = ReferenceEquals(Object0, _sensor) ? Object1 : Object0;
             if (!ReferenceEquals(other, _body))
             {
@@ -182,7 +184,7 @@ namespace Hedra.Engine.BulletPhysics
             _speedMultiplier = Mathf.Lerp(_speedMultiplier, NormalSpeedModifier * (Parent.IsAttacking ? Parent.AttackingSpeedModifier : 1), deltaTime * 2f);
             HandleFallDamage(deltaTime);
             HandleIsMoving();
-            Parent.IsGrounded = _sensorContacts > 0; 
+            Parent.IsGrounded = _sensorContacts > 0;
             _body.LinearVelocity = new Bullet.Math.Vector3(_accumulatedMovement.X, Math.Min(2, _body.LinearVelocity.Y), _accumulatedMovement.Z);
             _accumulatedMovement = Vector3.Zero;
         }
@@ -190,6 +192,7 @@ namespace Hedra.Engine.BulletPhysics
         private void UpdateSensor()
         {
             _sensor.WorldTransform = _motionState.WorldTransform;
+            _sensor.Activate(true);
         }
 
         public void MoveTowards(Vector3 Position)

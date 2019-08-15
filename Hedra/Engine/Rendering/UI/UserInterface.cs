@@ -215,6 +215,7 @@ namespace Hedra.Engine.Rendering.UI
 
             Menu.Enable();
             _optionsMenu.Disable();
+            CharacterSelector.ReloadSaveFile();
             CharacterSelector.Disable();
             _player.HideInterfaces();
             GamePanel.Disable();

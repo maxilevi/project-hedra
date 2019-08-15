@@ -50,6 +50,10 @@ namespace Hedra.AISystem.Behaviours
                     Parent.Orientation = Mathf.Lerp(Parent.Orientation, orientation, Time.DeltaTime * 8f);
                     Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
                 }
+                if (Parent.Type == "Boar" && Time.DeltaTime > 0)
+                {
+                    int a = 0;
+                }
                 Parent.Physics.Move();
                 if ((Target - Parent.Position).Xz.LengthSquared < ErrorMargin * ErrorMargin)
                 {

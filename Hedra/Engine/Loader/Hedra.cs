@@ -130,7 +130,7 @@ namespace Hedra.Engine.Loader
             {
                 var delta = Math.Min(frameTime, Physics.Timestep);
                 Time.Set(delta, false);
-                BulletPhysics.BulletPhysics.Update((float)delta);
+                BulletPhysics.BulletPhysics.Update(Time.DeltaTime);
                 RoutineManager.Update();
                 UpdateManager.Update();
                 BackgroundUpdater.Dispatch();

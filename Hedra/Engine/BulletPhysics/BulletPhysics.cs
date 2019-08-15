@@ -83,7 +83,7 @@ namespace Hedra.Engine.BulletPhysics
         private static void AddToSimulation(RigidBody Body, PhysicsObjectInformation Information)
         {
             Information.IsInSimulation = true;
-            _dynamicsWorld.AddRigidBody(Body);
+            _dynamicsWorld.AddRigidBody(Body, Information.Group, Information.Mask);
             ObjectsInSimulation++;
         }
 
@@ -165,7 +165,7 @@ namespace Hedra.Engine.BulletPhysics
             {
                 var information = (PhysicsObjectInformation) Body.UserObject;
                 if(information.IsInSimulation)
-                    _dynamicsWorld.RemoveRigidBody(Body);
+                    RemoveFromSimulation(Body, information);
                 lock(_bodyLock)
                     _bodies.Remove(Body);
                 if (Body.CollisionShape is BvhTriangleMeshShape bvhTriangleMeshShape)

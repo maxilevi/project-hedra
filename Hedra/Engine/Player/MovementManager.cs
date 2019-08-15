@@ -69,7 +69,7 @@ namespace Hedra.Engine.Player
 
         protected void Jump()
         {
-            var canJump = Human.IsGrounded || Human.Position.Y - Human.Model.Height * .5f < Physics.HeightAtPosition(Human.Position);
+            var canJump = Human.IsGrounded;
             if (IsJumping || Human.IsKnocked || Human.IsCasting || Human.IsRiding ||
                 Human.IsRolling || Human.IsDead || !canJump || !Human.CanInteract ||
                 Math.Abs(Human.Position.Y - Human.Position.Y) > 2.0f || !this.CaptureMovement)

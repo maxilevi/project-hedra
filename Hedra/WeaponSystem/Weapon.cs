@@ -740,7 +740,7 @@ namespace Hedra.WeaponSystem
                 WeaponCoroutineExists = true;
             RoutineManager.StartRoutine(DisableWasAttacking);
             _passedTimeInAttackStance = 0;
-            while (_passedTimeInAttackStance < 5f && _onAttackStance)
+            while (_passedTimeInAttackStance < 5f && _onAttackStance && !Disposed)
             {
                 if (Owner.IsAttacking)
                 {
