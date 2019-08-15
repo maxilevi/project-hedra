@@ -61,7 +61,7 @@ namespace Hedra.Engine.Game
             
             Log.WriteLine("Creating the GUI...");
             Player.UI.ShowMenu();
-            Player.UI.ChrChooser.Disable(); 
+            Player.UI.CharacterSelector.Disable(); 
             Player.UI.Menu.Enable();
             _loadingScreen = new LoadingScreen(Player);
             RoutineManager.StartRoutine(LoadingScreenCoroutine);
@@ -115,7 +115,7 @@ namespace Hedra.Engine.Game
         {
             Player.Reset();
             Player.Loader.Reset();
-            Player.UI.ChrChooser.StopModels();//So as to fix loose ends
+            Player.UI.CharacterSelector.StopModels();//So as to fix loose ends
             Player.Class = Information.Class;
             Player.Level = Information.Level;
             Player.Speed = Player.BaseSpeed;

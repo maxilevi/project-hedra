@@ -238,6 +238,7 @@
     <Compile Include="Crafting\CraftingStation.cs" />
     <Compile Include="Crafting\Templates\IngredientsTemplate.cs" />
     <Compile Include="Engine\BulletPhysics\BulletDraw.cs" />
+    <Compile Include="Engine\BulletPhysics\BulletFrustum.cs" />
     <Compile Include="Engine\BulletPhysics\BulletInterop.cs" />
     <Compile Include="Engine\BulletPhysics\BulletPhysics.cs" />
     <Compile Include="Engine\BulletPhysics\ContactTestResultCallback.cs" />
@@ -1329,8 +1330,8 @@
     <Compile Include="Engine\Rendering\SymetricMatrix.cs" />
     <Compile Include="Engine\Rendering\UI\Bar.cs" />
     <Compile Include="Engine\Rendering\UI\Button.cs" />
-    <Compile Include="Engine\Rendering\UI\ChrChooserUI.cs" />
-    <Compile Include="Engine\Rendering\UI\ChrCreatorUI.cs" />
+    <Compile Include="Engine\Rendering\UI\CharacterSelectorUI.cs" />
+    <Compile Include="Engine\Rendering\UI\CharacterCreatorUI.cs" />
     <Compile Include="Engine\Rendering\UI\ColorPicker.cs" />
     <Compile Include="Engine\Rendering\UI\ControlsUI.cs" />
     <Compile Include="Engine\Rendering\UI\CursorIcon.cs" />

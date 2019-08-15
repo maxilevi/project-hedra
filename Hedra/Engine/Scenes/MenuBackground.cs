@@ -89,7 +89,7 @@ namespace Hedra.Engine.Scenes
             var centerModel = AssetManager.PLYLoader("Assets/Env/Campfire2.ply", Vector3.One * 2.4f);
             centerModel.Translate( FirePosition );
             underChunk.AddStaticElement(centerModel);
-            LocalPlayer.Instance.UI.ChrChooser.ReloadFiles();
+            LocalPlayer.Instance.UI.CharacterSelector.ReloadSaveFile();
             RoutineManager.StartRoutine(MenuUpdate);
         }
         
