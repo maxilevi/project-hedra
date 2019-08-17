@@ -515,11 +515,11 @@ namespace Hedra.Engine.EntitySystem
         public virtual void Update()
         {
             this.Model.Update();
+            this.Physics.Update();
 
             if (IsDead) return;
 
             this.SpawnAnimation();
-            this.Physics.Update();
             this.UpdateEnvironment();
             this._tickSystem.Tick();
             var beforeComponents = default(IComponent<IEntity>[]);

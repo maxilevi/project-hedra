@@ -17,6 +17,7 @@ namespace Hedra.Engine.Rendering
         private Vector4[] _colorsArray;
         private bool _enabled;
         private bool _disposed;
+        private bool _wasEnabled;
         
         public Line3D()
         {
@@ -31,10 +32,9 @@ namespace Hedra.Engine.Rendering
 
         public void Update(Vector3[] Points, Vector4[] Colors)
         {
+            if (_pointsArray != null && Points.SequenceEqual(_pointsArray) && _colorsArray != null && Colors.SequenceEqual(_colorsArray)) return;
             Executer.ExecuteOnMainThread(() =>
             {
-                if (_pointsArray != null && Points.SequenceEqual(_pointsArray) && _colorsArray != null &&
-                    Colors.SequenceEqual(_colorsArray)) return;
                 _vertices.Update(_pointsArray = Points, Points.Length * Vector3.SizeInBytes);
                 _colors.Update(_colorsArray = Colors, Colors.Length * Vector4.SizeInBytes);
             });

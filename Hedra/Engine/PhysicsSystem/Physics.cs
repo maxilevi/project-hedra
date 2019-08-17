@@ -51,6 +51,7 @@ namespace Hedra.Engine.PhysicsSystem
         
         public static Vector3 DirectionToEuler(Vector3 Direction)
         {
+            if(Direction == Vector3.Zero) return Vector3.Zero;
             if(Direction == new Vector3(0, 1, 0)) return Vector3.UnitX * -90;
             if(Direction == new Vector3(0, -1, 0)) return Vector3.UnitX * 90;
             var newForward = Direction.Xz.ToVector3().NormalizedFast();

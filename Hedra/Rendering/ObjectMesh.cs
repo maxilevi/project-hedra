@@ -26,24 +26,27 @@ namespace Hedra.Rendering
         public Vector3 Min => CullingBox?.Min ?? Vector3.Zero;
         public ChunkMesh Mesh { get; }
         private readonly ObjectMeshBuffer _buffer;
+        private readonly Timer _underChunkTimer;
+        private readonly bool _updateInBackground;
         private bool _enabled;
         private Chunk _underChunk;
-        private Timer _underChunkTimer;
         private Vector3 _lastPosition;
-
         public ObjectMesh(VertexData Data)
         {
            _buffer = new ObjectMeshBuffer(Data);
         }
 
-        private ObjectMesh(Vector3 Position, VertexData Data)
+        private ObjectMesh(Vector3 Position, VertexData Data, bool UpdateInBackground)
         {
-            this.Enabled = true;
-            this._buffer = new ObjectMeshBuffer(Data);
-            this.Mesh = new ChunkMesh(Position, _buffer);
-            Mesh.IsGenerated = true;
-            Mesh.IsBuilded = true;
-            Mesh.Enabled = true;
+            Enabled = true;
+            _buffer = new ObjectMeshBuffer(Data);
+            _updateInBackground = UpdateInBackground;
+            Mesh = new ChunkMesh(Position, _buffer)
+            {
+                IsGenerated = true,
+                IsBuilded = true,
+                Enabled = true
+            };
             CullingBox = Physics.BuildBroadphaseBox(Data);
             
             this.Position = Position;
@@ -55,13 +58,16 @@ namespace Hedra.Rendering
                 UseTimeScale = false
             };
             DrawManager.Add(this);
-            BackgroundUpdater.Add(this);
+            if(_updateInBackground)
+                BackgroundUpdater.Add(this);
+            else
+                UpdateManager.Add(this);
         }
 
         public void Draw()
         {
             if (Enabled)
-               Mesh.Draw();
+                Mesh.Draw();
         }
 
         public void Update()
@@ -71,7 +77,7 @@ namespace Hedra.Rendering
                 _lastPosition = Position;
                 _underChunk = World.GetChunkAt(Position);
             }
-            _buffer.LocalRotation = LocalRotation;//Mathf.Lerp(_buffer.LocalRotation, LocalRotation, Time.IndependantDeltaTime * 8f);
+            _buffer.LocalRotation = LocalRotation;
         }
 
         public bool ApplyNoiseTexture
@@ -200,9 +206,9 @@ namespace Hedra.Rendering
             set => _buffer.Scale = value;
         }
 
-        public static ObjectMesh FromVertexData(VertexData Data, bool CullPrematurely = true)
+        public static ObjectMesh FromVertexData(VertexData Data, bool CullPrematurely = true, bool UpdateInBackground = true)
         {
-            var mesh = new ObjectMesh(Vector3.Zero, Data)
+            var mesh = new ObjectMesh(Vector3.Zero, Data, UpdateInBackground)
             {
                 PrematureCulling = CullPrematurely
             };
@@ -213,7 +219,10 @@ namespace Hedra.Rendering
         public void Dispose()
         {
             DrawManager.Remove(this);
-            BackgroundUpdater.Remove(this);
+            if(_updateInBackground)
+                BackgroundUpdater.Remove(this);
+            else
+                UpdateManager.Remove(this);
             _buffer?.Dispose();
         }
     }

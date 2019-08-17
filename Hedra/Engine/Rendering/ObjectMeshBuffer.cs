@@ -142,7 +142,6 @@ namespace Hedra.Engine.Rendering
             Vertex = Vector3.TransformPosition(Vertex, TransformationMatrix);
             
             Vertex += Position + LocalPosition;
-
             return Vertex;
         }
 

@@ -45,6 +45,7 @@ namespace Hedra.Engine.BulletPhysics
         private float _speedMultiplier;
         private Vector3 _accumulatedMovement;
         private int _sensorContacts;
+        private Vector3 _gravity;
 
         public PhysicsComponent(IEntity Parent) : base(Parent)
         {
@@ -167,17 +168,17 @@ namespace Hedra.Engine.BulletPhysics
             set
             {
                 _gravityDirection = value;
-                _body.Gravity = Gravity;
+                _gravity = Gravity;
             }
         }
 
         public bool UsePhysics
         {
-            get => _body.Gravity != Bullet.Math.Vector3.Zero;
-            set => _body.Gravity = (value ? Gravity : Bullet.Math.Vector3.Zero);
+            get => _gravity != Vector3.Zero;
+            set => _gravity = (value ? Gravity : Vector3.Zero);
         }
 
-        private Bullet.Math.Vector3 Gravity => (BulletPhysics.Gravity * _gravityDirection).Compatible();
+        private Vector3 Gravity => (BulletPhysics.Gravity * _gravityDirection);
         public Vector3 RigidbodyPosition => _body.WorldTransform.Origin.Compatible();//Time.Paused ? _body.WorldTransform.Origin.Compatible() : _motionState.Position;
 
         public override void Draw()
@@ -196,8 +197,8 @@ namespace Hedra.Engine.BulletPhysics
             HandleFallDamage(deltaTime);
             HandleIsMoving();
             Parent.IsGrounded = _sensorContacts > 0;
-
-            _body.LinearVelocity = new Bullet.Math.Vector3(_accumulatedMovement.X, Math.Min(2, _body.LinearVelocity.Y), _accumulatedMovement.Z);
+            _body.Gravity = Parent.IsGrounded ? BulletSharp.Math.Vector3.Zero : _gravity.Compatible();
+            _body.LinearVelocity = new Bullet.Math.Vector3(_accumulatedMovement.X, Math.Min(0, _body.LinearVelocity.Y), _accumulatedMovement.Z);
             _body.Activate();
             _accumulatedMovement = Vector3.Zero;
         }

@@ -112,7 +112,8 @@ namespace Hedra.WorldObjects
             if(!_landed)
                 Mesh.Position = _body.WorldTransform.Origin.Compatible();
             Delta = Mesh.Position - lastPosition;
-            Mesh.LocalRotation = Physics.DirectionToEuler(_body.LinearVelocity.Compatible().NormalizedFast());
+            if(_body.LinearVelocity.LengthSquared > 0.05f)
+                Mesh.LocalRotation = Physics.DirectionToEuler(_body.LinearVelocity.Compatible().NormalizedFast());
             HandleMovement();
         }
 
