@@ -30,7 +30,7 @@ namespace Hedra.Engine.Rendering.Particles
         private VBO<Vector4> _colors;
         private VAO<Vector3, Vector4> _data;
         public float Thickness { get; set; } = 1f;
-        public int UpdateRate { get; set; } = 8;
+        public int UpdateRate { get; set; } = 4;
         public Vector4 Color { get; set; }
         public float MaxLifetime { get; set; } = 1f;
         public Vector3 Orientation { get; set; } = Vector3.UnitY;
@@ -141,11 +141,11 @@ namespace Hedra.Engine.Rendering.Particles
                 _colors.Update(colors.ToArray(), colors.Count * Vector4.SizeInBytes);
             });
             if (!Emit) return;
-
+            
             if(_times % UpdateRate == 0)
             {
-
-                _tipPoints.Add( new TrailPoint(Tip(), 0.35f * MaxLifetime * .75f, 0.35f * MaxLifetime, .0f) );
+                var maxLifetime = 0.35f * MaxLifetime;
+                _tipPoints.Add( new TrailPoint(Tip(), maxLifetime * .75f, maxLifetime, .0f) );
                 _times = 0;
             }
             _times++;

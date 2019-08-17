@@ -161,7 +161,7 @@ namespace Hedra.Engine.Player
                 CancelJump();
             }
 
-            if (!Human.Physics.DeltaTranslate(JumpPropulsion, true) || JumpPropulsion.LengthSquared < 1) CancelJump();
+            if (!Human.Physics.DeltaTranslate(JumpPropulsion) || JumpPropulsion.LengthSquared < 1) CancelJump();
             JumpPropulsion *= (float)Math.Pow(.25f, Time.DeltaTime * 3f);
         }
 

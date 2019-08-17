@@ -28,7 +28,6 @@ namespace Hedra.Engine.PhysicsSystem
         public Vector3 BroadphaseCenter { get; set; }
         public float Height { get; private set; }
         private CollisionShape _cache;
-        private StackTrace _trace;
 
         private CollisionShape(Vector3[] Vertices, uint[] Indices)
         {
@@ -36,7 +35,6 @@ namespace Hedra.Engine.PhysicsSystem
             this.Indices = Indices ?? new uint[0];
             this.RecalculateBroadphase();
             this.Height = (SupportPoint(Vector3.UnitY) - SupportPoint(-Vector3.UnitY)).Y;
-            _trace = new StackTrace();
         }
 
         public CollisionShape Transform(Matrix4 TransMatrix)

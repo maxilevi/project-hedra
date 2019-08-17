@@ -58,10 +58,10 @@ namespace Hedra.Engine.Rendering
             Shader.Passthrough.Bind();
             OpenTK.Graphics.OpenGL.GL.LineWidth(Width);
             OpenTK.Graphics.OpenGL.GL.Begin(OpenTK.Graphics.OpenGL.PrimitiveType.Lines);
+            OpenTK.Graphics.OpenGL.GL.Color4(Colors[0]);
             OpenTK.Graphics.OpenGL.GL.Vertex3(Points[0]);
             OpenTK.Graphics.OpenGL.GL.Color4(Colors[1]);
             OpenTK.Graphics.OpenGL.GL.Vertex3(Points[1]);
-            OpenTK.Graphics.OpenGL.GL.Color4(Colors[1]);
             OpenTK.Graphics.OpenGL.GL.End();
             Shader.Passthrough.Unbind();
 #endif

@@ -18,6 +18,7 @@ namespace Hedra.Engine.BulletPhysics
     public delegate void OnContactEvent(CollisionObject Body0, CollisionObject Body1);
     public class BulletPhysics
     {
+        public const int TerrainFilter = 64;
         private const bool EnableDebugMode = true;
         public static event OnContactEvent OnCollision;
         public static event OnContactEvent OnSeparation;
@@ -172,6 +173,13 @@ namespace Hedra.Engine.BulletPhysics
                 {
                     bvhTriangleMeshShape.MeshInterface.Dispose();
                 }
+                else if (Body.CollisionShape is CompoundShape compoundShape)
+                {
+                    for (var i = 0; i < compoundShape.NumChildShapes; ++i)
+                    {
+                        compoundShape.GetChildShape(i).Dispose();
+                    }
+                }
                 Body.MotionState.Dispose();
                 Body.CollisionShape.Dispose();
                 Body.Dispose();
@@ -202,7 +210,7 @@ namespace Hedra.Engine.BulletPhysics
                 {
                     Add(bodies[i], new PhysicsObjectInformation
                     {
-                        Group = CollisionFilterGroups.StaticFilter,
+                        Group = (i == 0 ? CollisionFilterGroups.DebrisFilter : CollisionFilterGroups.StaticFilter),
                         Mask = CollisionFilterGroups.AllFilter,
                         Name = (string) bodies[i].UserObject
                     });
@@ -329,6 +337,14 @@ namespace Hedra.Engine.BulletPhysics
                 }
             }
         }
+        
+        public static void ConvexSweepTest(ConvexShape Shape, ref Matrix From, ref Matrix To, ref ClosestConvexResultCallback Callback)
+        {
+            lock (_bulletLock)
+            {
+                _dynamicsWorld.ConvexSweepTestRef(Shape, ref From, ref To, Callback);
+            }
+        }
 
         public static bool Collides(Vector3 Offset, RigidBody Body)
         {
@@ -353,6 +369,8 @@ namespace Hedra.Engine.BulletPhysics
         {
             Callback.ClosestHitFraction = 1;
             Callback.CollisionObject = null;
+            Callback.CollisionFilterGroup = (int)CollisionFilterGroups.DefaultFilter;
+            Callback.CollisionFilterMask = (int)CollisionFilterGroups.AllFilter;
         }
 
         public static CompoundShape ShapeFrom(Box Dimensions)

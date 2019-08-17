@@ -19,7 +19,7 @@ namespace Hedra.EntitySystem
         void SetHitbox(Box Dimensions);
         void ResetVelocity();
         bool Translate(Vector3 Delta);
-        bool DeltaTranslate(Vector3 Delta, bool OnlyY = false);
+        bool DeltaTranslate(Vector3 Delta);
         void ResetFall();
         void ResetSpeed();
         void Dispose();

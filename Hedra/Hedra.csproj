@@ -1124,7 +1124,6 @@
     <Compile Include="Engine\PhysicsSystem\Physics.cs" />
     <Compile Include="Engine\PhysicsSystem\Box.cs" />
     <Compile Include="Engine\PhysicsSystem\CollisionShape.cs" />
-    <Compile Include="Engine\PhysicsSystem\MoveCommand.cs" />
     <Compile Include="Engine\Player\MapSystem\MapItem.cs" />
     <Compile Include="Engine\Player\MapSystem\MapStateManager.cs" />
     <Compile Include="Engine\Player\ToolbarSystem\AbilityBagInventoryInterface.cs" />

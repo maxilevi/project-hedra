@@ -507,7 +507,7 @@ namespace Hedra.Engine.EntitySystem
             Physics.Draw();
             for (var i = _components.Count - 1; i > -1; --i)
             {
-                if (!_components[i]?.Drawable ?? false)
+                if (!(_components[i] is IRenderable))
                     _components[i].Draw();
             }
         }

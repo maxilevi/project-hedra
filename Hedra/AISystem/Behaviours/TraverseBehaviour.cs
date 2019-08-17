@@ -135,7 +135,7 @@ namespace Hedra.AISystem.Behaviours
                 : 1f;
             
             #region DEBUG
-            /*if (Parent.Type != "Ent") return;
+            /*if (Parent.Type != "Boar") return;
             
             //Debug
             

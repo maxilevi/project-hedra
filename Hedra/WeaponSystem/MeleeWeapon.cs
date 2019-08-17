@@ -97,6 +97,11 @@ namespace Hedra.WeaponSystem
                     () => this.WeaponTip,
                     Vector4.One);
             }
+
+            if (Human is LocalPlayer && !Time.Paused && Owner.IsAttacking)
+            {
+                int a = 0;
+            }
             this.Trail.Emit &= this.Owner?.IsAttacking ?? false;
             this.Trail.Update();
         }

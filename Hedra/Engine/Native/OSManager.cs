@@ -11,7 +11,7 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Native
 {
-    /// <summary>
+    /// <summary>    
     /// Description of OSManager.
     /// </summary>
     public static class OSManager

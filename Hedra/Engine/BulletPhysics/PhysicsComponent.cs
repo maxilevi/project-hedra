@@ -8,6 +8,7 @@
  */
 
 using System;
+using BulletSharp.Math;
 using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine.EntitySystem;
@@ -21,6 +22,7 @@ using Hedra.Rendering;
 using Hedra.Sound;
 using OpenTK;
 using Bullet = BulletSharp;
+using Vector3 = OpenTK.Vector3;
 
 namespace Hedra.Engine.BulletPhysics
 {
@@ -38,18 +40,17 @@ namespace Hedra.Engine.BulletPhysics
         private readonly PhysicsComponentMotionState _motionState;
         private readonly Bullet.RigidBody _body;
         private readonly Bullet.RigidBody _sensor;
+        private readonly Bullet.ClosestRayResultCallback _rayResult;
         private Vector3 _gravityDirection;
         private float _speedMultiplier;
         private Vector3 _accumulatedMovement;
         private int _sensorContacts;
-        private bool _collidesWithStructures;
 
         public PhysicsComponent(IEntity Parent) : base(Parent)
         {
             _gravityDirection = -Vector3.UnitY;
             _motionState = new PhysicsComponentMotionState();
-            var defaultShape = new Bullet.BoxShape(Vector3.One.Compatible());
-            using (var bodyInfo = new Bullet.RigidBodyConstructionInfo(1, _motionState, defaultShape))
+            using (var bodyInfo = new Bullet.RigidBodyConstructionInfo(1, _motionState, new Bullet.BoxShape(Vector3.One.Compatible())))
             {
                 _body = new Bullet.RigidBody(bodyInfo);
                 /* FIXME: Ugly */
@@ -57,8 +58,8 @@ namespace Hedra.Engine.BulletPhysics
                 {
                     _body.CollisionFlags |= Bullet.CollisionFlags.CharacterObject;
                     _body.ActivationState = Bullet.ActivationState.DisableDeactivation;
-                    _body.ContactProcessingThreshold = 0;
                 }
+                _body.Friction = 1;
                 BulletPhysics.Add(_body, new PhysicsObjectInformation
                 {
                     Group = Bullet.CollisionFilterGroups.CharacterFilter,
@@ -67,7 +68,7 @@ namespace Hedra.Engine.BulletPhysics
                     Name = Parent.Name
                 });
             }
-            using (var bodyInfo = new Bullet.RigidBodyConstructionInfo(1, new Bullet.DefaultMotionState(), defaultShape))
+            using (var bodyInfo = new Bullet.RigidBodyConstructionInfo(1, new Bullet.DefaultMotionState(), new Bullet.BoxShape(Vector3.One.Compatible())))
             {
                 _sensor = new Bullet.RigidBody(bodyInfo);
                 _sensor.CollisionFlags |= Bullet.CollisionFlags.NoContactResponse;
@@ -85,7 +86,10 @@ namespace Hedra.Engine.BulletPhysics
                 });
                 _sensor.Gravity = BulletSharp.Math.Vector3.Zero;
             }
-            
+
+            var from = BulletSharp.Math.Vector3.Zero;
+            var to = BulletSharp.Math.Vector3.Zero;
+            _rayResult = new Bullet.ClosestRayResultCallback(ref from, ref to);
             _motionState.OnUpdated += UpdateSensor;
             BulletPhysics.OnCollision += OnCollision;
             BulletPhysics.OnSeparation += OnSeparation;
@@ -115,22 +119,29 @@ namespace Hedra.Engine.BulletPhysics
         {
             SetShape(_body, GetShapeForBox(Dimensions));
             var radius = Dimensions.Size.Xz.Length * .5f;
-            SetShape(_sensor, new Bullet.BoxShape(radius, .5f, radius));
+            SetShape(_sensor, new Bullet.BoxShape(radius * .5f, .5f, radius * .5f));
         }
 
-        private static Bullet.CollisionShape GetShapeForBox(Box Dimensions)
+        private Bullet.CollisionShape GetShapeForBox(Box Dimensions)
         {
             var bodyShape = default(Bullet.CompoundShape);
             if (Dimensions.Size.Xz.LengthFast > Dimensions.Size.Y)
             {
-                bodyShape = BulletPhysics.ShapeFrom(Dimensions);
+                var radius = Dimensions.Size.Xz.Length * .5f * .5f;
+                bodyShape = new Bullet.CompoundShape();
+                var capsule = new Bullet.SphereShape(radius);
+                bodyShape.AddChildShape(
+                    Matrix.Translation(Bullet.Math.Vector3.UnitY * -radius),
+                    capsule
+                );
             }
             else
             {
+                var radius = Dimensions.Size.Xz.Length * .25f;
                 bodyShape = new Bullet.CompoundShape();
-                var capsule = new Bullet.CapsuleShape(Dimensions.Size.Xz.Length * .5f, Dimensions.Size.Y * .35f);
+                var capsule = new Bullet.CapsuleShape(radius, Dimensions.Size.Y * .5f);
                 bodyShape.AddChildShape(
-                    Bullet.Math.Matrix.Translation(Bullet.Math.Vector3.UnitY * Dimensions.Size.Y * -.5f),
+                    Bullet.Math.Matrix.Translation(Bullet.Math.Vector3.UnitY * (-capsule.HalfHeight - radius)),
                     capsule
                 );
             }
@@ -173,8 +184,8 @@ namespace Hedra.Engine.BulletPhysics
         {
             if (GameSettings.DebugPhysics)
             {
-                BulletPhysics.DrawObject(_body.WorldTransform, _body.CollisionShape, Colors.Red);
-                BulletPhysics.DrawObject(_sensor.WorldTransform, _sensor.CollisionShape, Colors.GreenYellow);
+                //BulletPhysics.DrawObject(_body.WorldTransform, _body.CollisionShape, Colors.Red);
+                //BulletPhysics.DrawObject(_sensor.WorldTransform, _sensor.CollisionShape, Colors.GreenYellow);
             }
         }
 
@@ -185,19 +196,22 @@ namespace Hedra.Engine.BulletPhysics
             HandleFallDamage(deltaTime);
             HandleIsMoving();
             Parent.IsGrounded = _sensorContacts > 0;
+
             _body.LinearVelocity = new Bullet.Math.Vector3(_accumulatedMovement.X, Math.Min(2, _body.LinearVelocity.Y), _accumulatedMovement.Z);
+            _body.Activate();
             _accumulatedMovement = Vector3.Zero;
         }
 
         private void UpdateSensor()
         {
             _sensor.WorldTransform = _motionState.WorldTransform;
-            _sensor.Activate(true);
+            _sensor.Activate();
         }
 
         public void MoveTowards(Vector3 Position)
         {
             _accumulatedMovement += Position;
+            _sensor.Activate();
         }
 
         private void HandleIsMoving()
@@ -260,31 +274,35 @@ namespace Hedra.Engine.BulletPhysics
 
         public bool Translate(Vector3 Delta)
         {
-            return ProcessCommand(new MoveCommand(Delta));
+            return ProcessCommand(Delta);
         }
 
-        public bool DeltaTranslate(Vector3 Delta, bool OnlyY = false)
+        public bool DeltaTranslate(Vector3 Delta)
         {
-            return ProcessCommand(new MoveCommand(Delta * Time.DeltaTime)
-            {
-                OnlyY = OnlyY
-            });
+            return ProcessCommand(Delta * Time.DeltaTime);
         }
         
-        private bool ProcessCommand(MoveCommand Command)
+        private bool ProcessCommand(Vector3 Delta)
         {
-            if (Command.Delta == Vector3.Zero) return true;
+            if (Delta == Vector3.Zero) return true;
             _body.Activate(true);
             var previous = _body.WorldTransform.Origin;
-            _body.Translate(Command.Delta.Compatible());
+            _body.Translate(Delta.Compatible());
             var moved = previous != _body.WorldTransform.Origin;
-            if(moved && Command.Delta.Xz != Vector2.Zero)
+            if(moved && Delta.Xz != Vector2.Zero)
                 OnMove?.Invoke();
             return moved;
         }
         public bool CollidesWithOffset(Vector3 Offset)
         {
-            return false; //BulletPhysics.Collides(Offset.Compatible(), _sensor);
+            BulletPhysics.ResetCallback(_rayResult);
+            _rayResult.CollisionFilterMask = (int)Bullet.CollisionFilterGroups.StaticFilter;
+            var from = (RigidbodyPosition + Offset).Compatible() - BulletSharp.Math.Vector3.UnitY * 4;
+            var to = from + BulletSharp.Math.Vector3.UnitY * 4;
+            _rayResult.RayFromWorld = from;
+            _rayResult.RayToWorld = to;
+            BulletPhysics.Raycast(ref from, ref to, _rayResult);
+            return _rayResult.HasHit;
         }
 
         public void ResetFall()
@@ -292,18 +310,8 @@ namespace Hedra.Engine.BulletPhysics
             FallTime = 0.01f;
         }
 
-        public bool CollidesWithStructures
-        {
-            get => _collidesWithStructures;
-            set
-            {
-                _collidesWithStructures = value;
-                /*if (_collidesWithStructures)
-                    _body.colli;
-                else
-                    _body*/
-            }
-        }
+        public bool CollidesWithStructures { get; set; }
+
         /// <summary>
         /// If it pushes entities when moving
         /// </summary>

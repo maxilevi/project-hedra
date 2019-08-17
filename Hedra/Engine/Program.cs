@@ -53,23 +53,15 @@ namespace Hedra.Engine
                     Network.Instance.Connect(ulong.Parse(Args[1]));       
                 });
             }
-
-            try
+            
+            if (serverMode)
             {
-                if (serverMode)
-                {
-                    RunDedicatedServer();
-                }
-                else
-                {
-                    
-                    RunNormalAndDummyMode(dummyMode);
-                }
+                RunDedicatedServer();
             }
-            catch
+            else
             {
-                Log.WriteLine($"UNHANDLED ERROR:{Environment.NewLine}");
-                //ProcessException(null, new UnhandledExceptionEventArgs(e, true));
+
+                RunNormalAndDummyMode(dummyMode);
             }
 
             Environment.Exit(0);

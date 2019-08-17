@@ -76,6 +76,7 @@ namespace Hedra.WorldObjects
                 _body = new RigidBody(bodyInfo);
                 _body.CollisionFlags |= CollisionFlags.NoContactResponse;
                 _body.Translate(Mesh.Position.Compatible());
+                _body.ActivationState = ActivationState.DisableDeactivation;
             }
             BulletPhysics.Add(_body, new PhysicsObjectInformation
             {
@@ -99,12 +100,12 @@ namespace Hedra.WorldObjects
             Lifetime -= Time.DeltaTime;
             if (!_firstTime)
             {
-                if (UsePhysics) _body.ApplyCentralImpulse(Propulsion.Compatible() * 35f + Vector3.UnitY.Compatible() * 17.5f);
-                else Direction = Propulsion.NormalizedFast();
+                if (UsePhysics) _body.ApplyCentralImpulse(Propulsion.Compatible() * 40f + Vector3.UnitY.Compatible() * 20f);
+                else if(Direction == Vector3.Zero) Direction = Propulsion.NormalizedFast();
                 _firstTime = true;
             }
             
-            if (!UsePhysics)_body.LinearVelocity = Direction.Compatible() * 150f * Speed;
+            if (!UsePhysics)_body.LinearVelocity = Direction.Compatible() * 100f * Speed;
             if(_landed) _body.LinearVelocity = BulletSharp.Math.Vector3.Zero;
 
             var lastPosition = Mesh.Position;

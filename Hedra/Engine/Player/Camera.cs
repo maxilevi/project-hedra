@@ -108,7 +108,7 @@ namespace Hedra.Engine.Player
             bool ShouldMove(out float NewDistance)
             {
                 var cameraPosition = CameraEyePosition;
-                return IsColliding(cameraPosition, out NewDistance) || cameraPosition.Y - 2 < Physics.HeightAtPosition(cameraPosition);
+                return IsColliding(cameraPosition, out NewDistance);
             }
 
             while(!GameManager.IsLoading && !GameManager.InStartMenu && TargetDistance > MinDistance && ShouldMove(out var newDistance))
@@ -169,8 +169,7 @@ namespace Hedra.Engine.Player
             if (GameSettings.Paused || !CaptureMovement) return;
 
             var pos = _interpolatedPosition - LookAtPoint * (TargetDistance - E.Delta * WheelSpeed) + CameraHeight;
-            var y = Physics.HeightAtPosition(pos);
-            if (pos.Y <= y + MinDistance) return;
+            if (IsColliding(pos, out _)) return;
 
             TargetDistance -= E.Delta * WheelSpeed;
             TargetDistance = Mathf.Clamp(TargetDistance, 1.5f, MaxDistance);
@@ -214,8 +213,8 @@ namespace Hedra.Engine.Player
 
         private bool IsColliding(Vector3 Position, out float NewDistance)
         {
-            _callback.CollisionFilterMask = (int)CollisionFilterGroups.StaticFilter;
             BulletPhysics.BulletPhysics.ResetCallback(_callback);
+            _callback.CollisionFilterMask = (int)CollisionFilterGroups.StaticFilter;
             var src = Position.Compatible();
             var dst = _player.Position.Compatible() + BulletSharp.Math.Vector3.UnitY;
             _callback.RayFromWorld = dst;

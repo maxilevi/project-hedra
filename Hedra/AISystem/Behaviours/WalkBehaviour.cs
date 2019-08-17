@@ -60,7 +60,8 @@ namespace Hedra.AISystem.Behaviours
                     this.Cancel();
                 }
             }
-            Parent.IsStuck = (!Parent.IsMoving && !_arrived && HasTarget || _lastPosition.Xz == Parent.Position.Xz && HasTarget) && !Parent.IsKnocked;
+
+            Parent.IsStuck = false;//(!Parent.IsMoving && !_arrived && HasTarget || _lastPosition.Xz == Parent.Position.Xz && HasTarget) && !Parent.IsKnocked;
             _lastPosition = Parent.Position;
         }
         
