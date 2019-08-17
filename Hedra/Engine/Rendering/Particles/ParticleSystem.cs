@@ -40,10 +40,10 @@ namespace Hedra.Engine.Rendering.Particles
         public Vector3 Scale { get; set; }
         public bool RandomRotation { get; set; } = true;
         public ParticleShape Shape { get; set; } = ParticleShape.Square;
-        public float ConeAngle;
-        public float ConeSpeed = 1;
-        public bool Grayscale;
-        public bool VariateUniformly;
+        public float ConeAngle { get; set; }
+        public float ConeSpeed { get; set; } = 1;
+        public bool Grayscale { get; set; }
+        public bool VariateUniformly { get; set; }
         public bool HasMultipleOutputs { get; set; }
         public bool Enabled { get; set; } = true;
         public bool Collides { get; set; }
@@ -223,6 +223,7 @@ namespace Hedra.Engine.Rendering.Particles
         
         private void UpdateVbo(Vector4[] Vec4S, int Count)
         {
+            if(Disposed) return;
             _particleVbo.Update(Vec4S, Vec4S.Length * Vector4.SizeInBytes);
             _particlesInMemory = Count;
         }

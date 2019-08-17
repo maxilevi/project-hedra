@@ -27,20 +27,10 @@ namespace Hedra.EntitySystem
         Vector3 GravityDirection { get; set; }
         bool CollidesWithOffset(Vector3 Offset);
         void MoveTowards(Vector3 Position);
+        void ApplyImpulse(Vector3 Impulse);
         bool Raycast(Vector3 End);
-        /// <summary>   
-        /// If collides with structures
-        /// </summary>
         bool CollidesWithStructures { get; set; }
-        /// <summary>
-        /// If it pushes entities when moving
-        /// </summary>
-        bool PushAround { get; set; }
-        /// <summary>
-        /// If collides with other entities
-        /// </summary>
         bool CollidesWithEntities { get; set; }
-
         Vector3 RigidbodyPosition { get; }
 
     }

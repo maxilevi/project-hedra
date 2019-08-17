@@ -44,12 +44,14 @@ namespace Hedra.Engine.BulletPhysics
         private Vector3 _gravityDirection;
         private float _speedMultiplier;
         private Vector3 _accumulatedMovement;
+        private Vector3 _impulse;
         private int _sensorContacts;
         private Vector3 _gravity;
 
         public PhysicsComponent(IEntity Parent) : base(Parent)
         {
             _gravityDirection = -Vector3.UnitY;
+            _gravity = Gravity;
             _motionState = new PhysicsComponentMotionState();
             using (var bodyInfo = new Bullet.RigidBodyConstructionInfo(1, _motionState, new Bullet.BoxShape(Vector3.One.Compatible())))
             {
@@ -198,8 +200,9 @@ namespace Hedra.Engine.BulletPhysics
             HandleIsMoving();
             Parent.IsGrounded = _sensorContacts > 0;
             _body.Gravity = Parent.IsGrounded ? BulletSharp.Math.Vector3.Zero : _gravity.Compatible();
-            _body.LinearVelocity = new Bullet.Math.Vector3(_accumulatedMovement.X, Math.Min(0, _body.LinearVelocity.Y), _accumulatedMovement.Z);
+            _body.LinearVelocity = new Bullet.Math.Vector3(_accumulatedMovement.X, Math.Min(0, _body.LinearVelocity.Y), _accumulatedMovement.Z) + _impulse.Compatible();
             _body.Activate();
+            _impulse *= (float) Math.Pow(0.25f, Time.DeltaTime * 5f);
             _accumulatedMovement = Vector3.Zero;
         }
 
@@ -311,15 +314,13 @@ namespace Hedra.Engine.BulletPhysics
             FallTime = 0.01f;
         }
 
+        public void ApplyImpulse(Vector3 Impulse)
+        {
+            _impulse += Impulse;
+        }
+
         public bool CollidesWithStructures { get; set; }
 
-        /// <summary>
-        /// If it pushes entities when moving
-        /// </summary>
-        public bool PushAround { get; set; } = true;
-        /// <summary>
-        /// If collides with other entities
-        /// </summary>
         public bool CollidesWithEntities { get; set; } = true;
         
         public bool UpdateColliderList { get; set; }

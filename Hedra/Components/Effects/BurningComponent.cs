@@ -25,6 +25,7 @@ namespace Hedra.Components.Effects
         private readonly float _totalTime;
         private readonly float _totalDamage;
         private readonly IEntity _damager;
+        private int _particleCounter;
         private float _time;
         private int _pTime;
 
@@ -67,17 +68,21 @@ namespace Hedra.Components.Effects
                     damager.XP += exp;
             }
 
-            World.Particles.Color = Particle3D.FireColor;
-            World.Particles.VariateUniformly = false;
-            World.Particles.Position = Parent.Position + Vector3.UnitY * Parent.Model.Height * .5f;
-            World.Particles.Scale = Vector3.One * .5f;
-            World.Particles.ScaleErrorMargin = new Vector3(.35f,.35f,.35f);
-            World.Particles.Direction = Vector3.UnitY * .2f;
-            World.Particles.ParticleLifetime = 0.75f;
-            World.Particles.GravityEffect = 0.0f;
-            World.Particles.PositionErrorMargin = Parent.Model.Dimensions.Size * .5f;            
-            World.Particles.Emit();
-                
+            if (_particleCounter % 2 == 0)
+            {
+                World.Particles.Color = Particle3D.FireColor;
+                World.Particles.VariateUniformly = false;
+                World.Particles.Position = Parent.Position + Vector3.UnitY * Parent.Model.Height * .5f;
+                World.Particles.Scale = Vector3.One * .5f;
+                World.Particles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);
+                World.Particles.Direction = Vector3.UnitY * .2f;
+                World.Particles.ParticleLifetime = 0.75f;
+                World.Particles.GravityEffect = 0.0f;
+                World.Particles.PositionErrorMargin = Parent.Model.Dimensions.Size * .5f;
+                World.Particles.Emit();
+            }
+            _particleCounter++;
+
             if(!(_totalTime > _pTime && !Parent.IsDead && !Disposed && !Parent.IsUnderwater))
                 Parent.RemoveComponent(this);
         }

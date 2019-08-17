@@ -4,6 +4,7 @@ using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering.Particles;
+using Hedra.Engine.SkillSystem;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
 using Hedra.Rendering.Particles;
@@ -14,20 +15,16 @@ namespace Hedra.Engine.Player
 {
     public class Firewave : ParticleProjectile
     {
-        private const int DistanceSquared = 32 * 32;
+        private const int Distance = 32;
+        private const int DistanceSquared = Distance * Distance;
         private IEntity[] _ignore;
         private IEntity _owner;
         private float _damage;
         private bool _shouldStop;
         private float _charge;
-        private readonly Timer _pushTimer;
 
         private Firewave(IEntity Parent, Vector3 Origin) : base(Parent, Origin)
         {
-            _pushTimer = new Timer(.35f)
-            {
-                AutoReset = false
-            };
         }
 
         private void Explode()
@@ -40,8 +37,6 @@ namespace Hedra.Engine.Player
             base.Update();
             if (Disposed) return;
             if (_shouldStop && Particles.ParticleCount == 0) Dispose();
-            if(!_pushTimer.Ready) PushEntitiesAway();
-            _pushTimer.Tick();
         }
 
         private void CreateExplosion()
@@ -50,7 +45,11 @@ namespace Hedra.Engine.Player
             DamageEntities();
             SoundPlayer.PlaySound(SoundType.HitGround, Position);
             _shouldStop = true;
-            _pushTimer.Reset();
+            SkillUtils.DoNearby(_owner, Distance, Entity =>
+            {
+                var direction = (Entity.Position - _owner.Position).Xz.ToVector3().NormalizedFast();
+                Entity.Physics.ApplyImpulse(direction * 96 * _charge * 2f);
+            });
         }
         
         private void DamageEntities()
@@ -64,21 +63,6 @@ namespace Hedra.Engine.Player
                     World.Entities[i].Damage(_damage, _owner, out var exp);
                     if (_owner is IHumanoid humanoid)
                         humanoid.XP += exp;
-                }
-            }
-        }
-
-        private void PushEntitiesAway()
-        {
-            var entities = World.Entities;
-            for(var i = 0; i< entities.Count; i++)
-            {
-                if((_owner.Position - entities[i].Position).LengthSquared < DistanceSquared * _charge)
-                {
-                    if(_owner == entities[i] || Array.IndexOf(_ignore, entities[i]) != -1) continue;
-                    
-                    var direction = -(_owner.Position - entities[i].Position).NormalizedFast();
-                    entities[i].Physics.DeltaTranslate(direction * 96 * _charge);
                 }
             }
         }
