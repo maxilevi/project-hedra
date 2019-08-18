@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BulletSharp;
 using Hedra.Core;
-using Hedra.Engine.BulletPhysics;
+using Hedra.Engine.Bullet;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
@@ -213,13 +213,13 @@ namespace Hedra.Engine.Player
 
         private bool IsColliding(Vector3 Position, out float NewDistance)
         {
-            BulletPhysics.BulletPhysics.ResetCallback(_callback);
+            Bullet.BulletPhysics.ResetCallback(_callback);
             _callback.CollisionFilterMask = (int)CollisionFilterGroups.StaticFilter;
             var src = Position.Compatible();
             var dst = _player.Position.Compatible() + BulletSharp.Math.Vector3.UnitY;
             _callback.RayFromWorld = dst;
             _callback.RayToWorld = src;
-            BulletPhysics.BulletPhysics.Raycast(ref dst, ref src, _callback);
+            Bullet.BulletPhysics.Raycast(ref dst, ref src, _callback);
             NewDistance = (dst - _callback.HitPointWorld).Compatible().LengthFast;
             return _callback.HasHit;
         }

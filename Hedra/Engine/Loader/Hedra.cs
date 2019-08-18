@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using Hedra.API;
 using Hedra.Core;
-using Hedra.Engine.BulletPhysics;
+using Hedra.Engine.Bullet;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
@@ -69,7 +69,7 @@ namespace Hedra.Engine.Loader
             CacheManager.Load();
             Translations.Load();
             BackgroundUpdater.Load();
-            BulletPhysics.BulletPhysics.Load();
+            Bullet.BulletPhysics.Load();
             Log.WriteLine("Translations loaded successfully.");
             
             GameLoader.CreateCharacterFolders(GameLoader.AppData, GameLoader.AppPath);
@@ -130,7 +130,7 @@ namespace Hedra.Engine.Loader
             {
                 var delta = Math.Min(frameTime, Physics.Timestep);
                 Time.Set(delta, false);
-                BulletPhysics.BulletPhysics.Update(Time.DeltaTime);
+                Bullet.BulletPhysics.Update(Time.DeltaTime);
                 RoutineManager.Update();
                 UpdateManager.Update();
                 BackgroundUpdater.Dispatch();

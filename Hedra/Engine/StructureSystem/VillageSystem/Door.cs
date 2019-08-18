@@ -1,7 +1,7 @@
 using System;
 using BulletSharp;
 using Hedra.Core;
-using Hedra.Engine.BulletPhysics;
+using Hedra.Engine.Bullet;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Localization;
 using Hedra.Engine.PhysicsSystem;
@@ -47,10 +47,12 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             {
                 _body = new RigidBody(bodyInfo);
                 _body.Translate(Position.Compatible());
-                BulletPhysics.BulletPhysics.Add(_body, new PhysicsObjectInformation
+                Bullet.BulletPhysics.Add(_body, new PhysicsObjectInformation
                 {
                     Group = CollisionFilterGroups.StaticFilter,
-                    Mask = CollisionFilterGroups.AllFilter
+                    Mask = CollisionFilterGroups.AllFilter,
+                    Name = $"Door at {Position}",
+                    StaticOffsets = new []{World.ToChunkSpace(Position)}
                 });
                 _body.Gravity = BulletSharp.Math.Vector3.Zero;
             }
@@ -87,6 +89,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             get => _position;
             set
             {
+                if(_body != null)
+                {
+                    //int a = 0;
+                }
                 _body?.Translate((-_position + value).Compatible());
                 _position = value;
             }
@@ -123,7 +129,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         {
             base.Dispose();
             _mesh.Dispose();
-            BulletPhysics.BulletPhysics.Remove(_body);
+            Bullet.BulletPhysics.RemoveAndDispose(_body);
         }
     }
 }

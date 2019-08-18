@@ -127,11 +127,11 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             if (BuildingLod == 1 || BuildingLod == 2)
             {
-                BulletPhysics.BulletPhysics.AddChunk(Position.Xz, CreateCollisionTerrainMesh(), CollisionShapes);
+                Bullet.BulletPhysics.AddChunk(Position.Xz, CreateCollisionTerrainMesh(), CollisionShapes);
             }
             else
             {
-                BulletPhysics.BulletPhysics.RemoveChunk(Position.Xz);
+                Bullet.BulletPhysics.RemoveChunk(Position.Xz);
             }
         }
         
@@ -492,7 +492,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private void ForceDispose()
         {
             Disposed = true;
-            BulletPhysics.BulletPhysics.RemoveChunk(Position.Xz);
+            Bullet.BulletPhysics.RemoveChunk(Position.Xz);
             _waterDensity?.Clear();
             if (Mesh != null)
             {

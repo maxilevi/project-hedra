@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using BulletSharp;
 using Hedra.Core;
+using Hedra.Engine.Bullet;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
@@ -28,7 +30,7 @@ namespace Hedra.Engine.Player
         private readonly Timer _enterTimer;
         private readonly Timer _insideTimer;
         private readonly Timer _updateTimer;
-        private readonly Dictionary<CollisionGroup, object> _keys;
+        private readonly Dictionary<CollisionGroup, RigidBody> _bodies;
 
         public StructureAware(IPlayer Player)
         {
@@ -43,7 +45,7 @@ namespace Hedra.Engine.Player
             };
             _updateTimer = new Timer(.5f);
             _enterTimer.MarkReady();
-            _keys = new Dictionary<CollisionGroup, object>();
+            _bodies = new Dictionary<CollisionGroup, RigidBody>();
             NearCollisions = new CollisionGroup[0];
         }
         
@@ -139,13 +141,12 @@ namespace Hedra.Engine.Player
             
             for (var i = 0; i < removed.Length; ++i)
             {
-                BulletPhysics.BulletPhysics.RemoveCustom(_keys[removed[i]]);
+                BulletPhysics.RemoveAndDispose(_bodies[removed[i]]);
             }
             
             for (var i = 0; i < added.Length; ++i)
             {
-                _keys[added[i]] = new object();
-                BulletPhysics.BulletPhysics.AddCustom(_keys[added[i]], added[i].Colliders);
+                _bodies[added[i]] = BulletPhysics.AddGroup(added[i]);
             }
         }
         

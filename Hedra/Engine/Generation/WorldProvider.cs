@@ -470,10 +470,7 @@ namespace Hedra.Engine.Generation
 
         public Vector2 ToChunkSpace(Vector3 Vec3)
         {
-            var chunkX = ((int) Vec3.X >> 7) << 7;
-            var chunkZ = ((int) Vec3.Z >> 7) << 7;
-
-            return new Vector2(chunkX, chunkZ);
+            return new Vector2(((int) Vec3.X >> 7) << 7, ((int) Vec3.Z >> 7) << 7);
         }
 
         public Chunk GetChunkAt(Vector3 Coordinates)

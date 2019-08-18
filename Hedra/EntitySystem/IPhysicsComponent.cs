@@ -1,5 +1,5 @@
 using BulletSharp;
-using Hedra.Engine.BulletPhysics;
+using Hedra.Engine.Bullet;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.PhysicsSystem;
 using Vector3 = OpenTK.Vector3;

@@ -25,8 +25,6 @@ namespace Hedra.Engine.BiomeSystem
     /// </summary>
     public class BiomePool : IBiomePool
     {
-        public const int WorldWidth = 4096;
-        public const int WorldHeight = 4096;
         public const int SeaLevel = 16;
         public const int MaxRegionsPerBiome = 8;
 

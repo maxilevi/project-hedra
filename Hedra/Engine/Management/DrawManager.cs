@@ -125,7 +125,7 @@ namespace Hedra.Engine.Management
             {
                 ParticleRenderer[i].Draw();
             }
-            BulletPhysics.BulletPhysics.Draw();
+            Bullet.BulletPhysics.Draw();
             lock (TransparentLock)
             {
                 for (var i = TransparentObjects.Count - 1; i > -1; i--)

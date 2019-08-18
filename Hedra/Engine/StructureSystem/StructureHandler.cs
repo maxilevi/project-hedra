@@ -12,6 +12,8 @@ using OpenTK;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
+using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
@@ -86,8 +88,16 @@ namespace Hedra.Engine.StructureSystem
 
         public void Build(CollidableStructure Struct)
         {
-            Struct.Design.Build(Struct);
-            Struct.Built = true;
+            void DoBuild()
+            {
+                Struct.Design.Build(Struct);
+                Struct.Built = true;
+            }
+
+            if (Loader.Hedra.MainThreadId == Thread.CurrentThread.ManagedThreadId)
+                TaskScheduler.Parallel(DoBuild);
+            else
+                DoBuild();
         }
         
         public void AddStructure(CollidableStructure Structure)

@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using BulletSharp;
 using Hedra.Core;
 using Hedra.Engine;
-using Hedra.Engine.BulletPhysics;
+using Hedra.Engine.Bullet;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
@@ -205,7 +205,7 @@ namespace Hedra.WorldObjects
         {
             Disposed = true;
             Mesh.Dispose();
-            BulletPhysics.Remove(_body);
+            BulletPhysics.RemoveAndDispose(_body);
             UpdateManager.Remove(this);
             OnDispose?.Invoke();
         }

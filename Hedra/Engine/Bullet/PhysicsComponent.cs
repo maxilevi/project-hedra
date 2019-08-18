@@ -188,10 +188,9 @@ namespace Hedra.Engine.Bullet
 
         public override void Draw()
         {
-            if (GameSettings.DebugPhysics)
+            if (GameSettings.DebugPhysics && Parent is LocalPlayer)
             {
-                //BulletPhysics.DrawObject(_body.WorldTransform, _body.CollisionShape, Colors.Red);
-                //BulletPhysics.DrawObject(_sensor.WorldTransform, _sensor.CollisionShape, Colors.GreenYellow);
+                //BulletPhysics.DrawSimulated();
             }
         }
 

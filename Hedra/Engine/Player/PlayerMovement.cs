@@ -232,9 +232,7 @@ namespace Hedra.Engine.Player
             });
             this.RegisterKey(Key.F5, delegate
             {
-                if(GameSettings.DebugPhysics)
-                    GameSettings.DebugObjectsInSimulation = !GameSettings.DebugObjectsInSimulation;
-                Chat.Log($"ObjectsInSimulation = '{BulletPhysics.BulletPhysics.ObjectsInSimulation}'; RigidbodyCount = '{BulletPhysics.BulletPhysics.RigidbodyCount}'");
+                Chat.Log($"ObjectsInSimulation = '{Bullet.BulletPhysics.ObjectsInSimulation}'; RigidbodyCount = '{Bullet.BulletPhysics.RigidbodyCount}'");
             });
         }
 
