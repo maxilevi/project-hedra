@@ -13,7 +13,7 @@ using Hedra.Rendering;
 using CollisionShape = BulletSharp.CollisionShape;
 using Vector2 = OpenTK.Vector2;
 
-namespace Hedra.Engine.BulletPhysics
+namespace Hedra.Engine.Bullet
 {
     public delegate void OnContactEvent(CollisionObject Body0, CollisionObject Body1);
     public class BulletPhysics
@@ -26,12 +26,16 @@ namespace Hedra.Engine.BulletPhysics
         private static object _bulletLock;
         private static object _customLock;
         private static object _bodyLock;
-        private static Dictionary<object, RigidBody> _customMap;
+        private static object _dynamicBodiesLock;
+        private static object _staticBodiesLock;
         private static Dictionary<Vector2, RigidBody[]> _chunkBodies;
         private static DiscreteDynamicsWorld _dynamicsWorld;
         private static CollisionDispatcher _dispatcher;
         private static DbvtBroadphase _broadphase;
         private static List<RigidBody> _bodies;
+        private static HashSet<Vector2> _activeChunks;
+        private static List<RigidBody> _dynamicBodies;
+        private static List<RigidBody> _staticBodies;
         private static HashSet<Pair<CollisionObject, CollisionObject>> _currentPairs;
         private static HashSet<Pair<CollisionObject, CollisionObject>> _pairsLastUpdate;
         public const float Gravity = 10 * Generation.ChunkSystem.Chunk.BlockSize;
@@ -43,14 +47,19 @@ namespace Hedra.Engine.BulletPhysics
             _bulletLock = new object();
             _customLock = new object();
             _bodyLock = new object();
+            _dynamicBodiesLock = new object();
+            _staticBodiesLock = new object();
+            _activeChunks = new HashSet<Vector2>();
             _currentPairs = new HashSet<Pair<CollisionObject, CollisionObject>>();
             _pairsLastUpdate = new HashSet<Pair<CollisionObject, CollisionObject>>();
-            lock(_customLock)
-                _customMap = new Dictionary<object, RigidBody>();
             lock(_chunkLock)
                 _chunkBodies = new Dictionary<Vector2, RigidBody[]>();
             lock(_bodyLock)
                 _bodies = new List<RigidBody>();
+            lock(_dynamicBodiesLock)
+                _dynamicBodies = new List<RigidBody>();
+            lock(_staticBodiesLock)
+                _staticBodies = new List<RigidBody>();
             var configuration = new DefaultCollisionConfiguration();
             _dispatcher = new CollisionDispatcher(configuration);
             _broadphase = new DbvtBroadphase();
@@ -69,8 +78,43 @@ namespace Hedra.Engine.BulletPhysics
         {
             lock (_bulletLock)
             {
+                CalculateActiveOffsets();
+                UpdateActivations();
                 _dynamicsWorld.StepSimulation(DeltaTime);
                 CheckForCollisionEvents();
+            }
+        }
+
+        private static void CalculateActiveOffsets()
+        {
+            _activeChunks.Clear();
+            lock (_dynamicBodiesLock)
+            {
+                for (var i = 0; i < _dynamicBodies.Count; ++i)
+                {
+                    var offset = World.ToChunkSpace(_bodies[i].WorldTransform.Origin.Compatible());
+                    if (!_activeChunks.Contains(offset))
+                        _activeChunks.Add(offset);
+                }
+            }
+        }
+
+        private static void UpdateActivations()
+        {
+            lock (_staticBodiesLock)
+            {
+                for (var i = 0; i < _staticBodies.Count; ++i)
+                {
+                    var information = (PhysicsObjectInformation) _staticBodies[i].UserObject;
+                    var offset = information.StaticOffset;
+                    lock (_bulletLock)
+                    {
+                        if (_activeChunks.Contains(offset) && !information.IsInSimulation)
+                            AddToSimulation(_staticBodies[i], information);
+                        else if (!_activeChunks.Contains(offset) && information.IsInSimulation)
+                            RemoveFromSimulation(_staticBodies[i], information);
+                    }
+                }
             }
         }
 
@@ -93,19 +137,12 @@ namespace Hedra.Engine.BulletPhysics
             if (!GameSettings.DebugPhysics) return;
             lock (_bodyLock)
             {
-                for(var i = 0; i < _bodies.Count; ++i)
+                for (var i = 0; i < _bodies.Count; ++i)
                 {
-                    if (GameSettings.DebugObjectsInSimulation)
-                    {
-                        var information = (PhysicsObjectInformation) _bodies[i].UserObject;
-                        if(information.IsInSimulation)
-                            _dynamicsWorld.DebugDrawObject(_bodies[i].WorldTransform, _bodies[i].CollisionShape, new Vector3(1, 1, 0));
-                    }
-                    else
-                    {
-                        if ((_bodies[i].WorldTransform.Origin.Compatible() - Player.LocalPlayer.Instance.Position).Xz.LengthSquared > 64 * 64) continue;
-                        _dynamicsWorld.DebugDrawObject(_bodies[i].WorldTransform, _bodies[i].CollisionShape, new Vector3(1, 1, 0));
-                    }
+                    if ((_bodies[i].WorldTransform.Origin.Compatible() - Player.LocalPlayer.Instance.Position).Xz
+                        .LengthSquared > 64 * 64) continue;
+                    _dynamicsWorld.DebugDrawObject(_bodies[i].WorldTransform, _bodies[i].CollisionShape,
+                        new Vector3(1, 1, 0));
                 }
             }
         }
@@ -122,31 +159,19 @@ namespace Hedra.Engine.BulletPhysics
                 _dynamicsWorld.RayTestRef(ref From, ref To, Callback);
         }
 
-        public static void AddCustom(object Key, PhysicsSystem.CollisionShape[] Shapes)
+        public static RigidBody AddGroup(CollisionGroup Group)
         {
-            var body = CreateShapesRigidbody(Shapes);
-            lock (_customLock)
+            var body = CreateShapesRigidbody(Group.Colliders);
+            if (body != null)
             {
-                _customMap.Add(Key, body);
-            }
-            if(body != null)
                 Add(body, new PhysicsObjectInformation
                 {
                     Group = CollisionFilterGroups.StaticFilter,
-                    Mask = CollisionFilterGroups.AllFilter
+                    Mask = CollisionFilterGroups.AllFilter,
+                    StaticOffset = Group.Offsets
                 });
-        }
-
-        public static void RemoveCustom(object Key)
-        {
-            var body = (RigidBody) null;
-            lock (_customLock)
-            {
-                body = _customMap[Key];
-                _customMap.Remove(Key);
             }
-            if(body != null)
-                Remove(body);
+            return body;
         }
 
         public static void Add(RigidBody Body, PhysicsObjectInformation Information)
@@ -157,18 +182,48 @@ namespace Hedra.Engine.BulletPhysics
                 AddToSimulation(Body, Information);
                 lock(_bodyLock)
                     _bodies.Add(Body);
+
+                if (Information.IsSensor)
+                {
+                    if (!Body.IsStaticObject)
+                    {
+                        lock (_dynamicBodiesLock)
+                            _dynamicBodies.Add(Body);
+                        Information.IsDynamic = true;
+                    }
+                    else
+                    {
+                        lock (_staticBodiesLock)
+                            _staticBodies.Add(Body);
+                        Information.IsStatic = true;
+                        if (!Information.ValidStaticObject)
+                            throw new ArgumentOutOfRangeException($"Tried to add an incomplete static object.");
+                    }
+                }
             }
         }
         
-        public static void Remove(RigidBody Body)
+        public static void RemoveAndDispose(RigidBody Body)
         {
             lock (_bulletLock)
             {
                 var information = (PhysicsObjectInformation) Body.UserObject;
-                if(information.IsInSimulation)
-                    RemoveFromSimulation(Body, information);
                 lock(_bodyLock)
                     _bodies.Remove(Body);
+                if (information.IsInSimulation)
+                {
+                    RemoveFromSimulation(Body, information);
+                }
+                if (information.IsDynamic)
+                {
+                    lock (_dynamicBodiesLock)
+                        _dynamicBodies.Remove(Body);
+                }
+                if(information.IsStatic)
+                {
+                    lock (_staticBodiesLock)
+                        _staticBodies.Remove(Body);
+                }
                 if (Body.CollisionShape is BvhTriangleMeshShape bvhTriangleMeshShape)
                 {
                     bvhTriangleMeshShape.MeshInterface.Dispose();
@@ -183,7 +238,6 @@ namespace Hedra.Engine.BulletPhysics
                 Body.MotionState.Dispose();
                 Body.CollisionShape.Dispose();
                 Body.Dispose();
-                Body = null;
             }
         }
         
@@ -228,7 +282,7 @@ namespace Hedra.Engine.BulletPhysics
                     var bodies = _chunkBodies[Offset];
                     for (var i = 0; i < bodies.Length; ++i)
                     {
-                        Remove(bodies[i]);
+                        RemoveAndDispose(bodies[i]);
                     }
 
                     _chunkBodies.Remove(Offset);

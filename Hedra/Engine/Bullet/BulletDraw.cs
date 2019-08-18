@@ -6,7 +6,7 @@ using Hedra.Engine.Rendering;
 using OpenTK;
 using Vector3 = BulletSharp.Math.Vector3;
 
-namespace Hedra.Engine.BulletPhysics
+namespace Hedra.Engine.Bullet
 {
     public class BulletDraw : DebugDraw
     {

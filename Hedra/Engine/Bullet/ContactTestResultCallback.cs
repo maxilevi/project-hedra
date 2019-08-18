@@ -1,6 +1,6 @@
 using BulletSharp;
 
-namespace Hedra.Engine.BulletPhysics
+namespace Hedra.Engine.Bullet
 {
     public class ContactTestResultCallback : ContactResultCallback
     {

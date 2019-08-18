@@ -1,7 +1,7 @@
 using BulletSharp;
 using BulletSharp.Math;
 
-namespace Hedra.Engine.BulletPhysics
+namespace Hedra.Engine.Bullet
 {
     public delegate void OnMotionStateUpdated();
     public class PhysicsComponentMotionState : MotionState

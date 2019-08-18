@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using BulletSharp;
 using Hedra.Engine.Management;
 
-namespace Hedra.Engine.BulletPhysics
+namespace Hedra.Engine.Bullet
 {
     public class BulletFrustum
     {
