@@ -214,7 +214,7 @@ namespace Hedra.Engine.Player
         private bool IsColliding(Vector3 Position, out float NewDistance)
         {
             Bullet.BulletPhysics.ResetCallback(_callback);
-            _callback.CollisionFilterMask = (int)CollisionFilterGroups.StaticFilter;
+            _callback.CollisionFilterMask = (int)(CollisionFilterGroups.StaticFilter | BulletPhysics.TerrainFilter);
             var src = Position.Compatible();
             var dst = _player.Position.Compatible() + BulletSharp.Math.Vector3.UnitY;
             _callback.RayFromWorld = dst;

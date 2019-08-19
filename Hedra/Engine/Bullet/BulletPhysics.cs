@@ -18,8 +18,7 @@ namespace Hedra.Engine.Bullet
     public delegate void OnContactEvent(CollisionObject Body0, CollisionObject Body1);
     public class BulletPhysics
     {
-        public const int TerrainFilter = 64;
-        private const bool EnableDebugMode = true;
+        public const CollisionFilterGroups TerrainFilter = CollisionFilterGroups.DebrisFilter;
         public static event OnContactEvent OnCollision;
         public static event OnContactEvent OnSeparation;
         private static Timer _collisionCheckTimer;
@@ -153,15 +152,14 @@ namespace Hedra.Engine.Bullet
 
         private static void AssertIsNotFailingThroughFloor(RigidBody Body)
         {
-#if DEBUG
-            if (Body.WorldTransform.Origin.Y < -100)
+            var position = Body.WorldTransform.Origin;
+            if (position.Y < -100)
             {
                 var information = (PhysicsObjectInformation) Body.UserObject;
-                Debugger.Break();
+                Log.WriteLine($"'{(information.IsEntity ? information.Entity.Name : information.Name)}' fell through the world at '{position}'. Fixing its height...");
                 Body.ClearForces();
-                Body.Translate(Vector3.UnitY * (-Body.WorldTransform.Origin.Y + 500));
+                Body.Translate(Vector3.UnitY * (-position.Y + 1 + Physics.HeightAtPosition(position.Compatible())));
             }
-#endif
         }
 
         private static void UpdateActivations()
@@ -280,10 +278,6 @@ namespace Hedra.Engine.Bullet
                 }
                 lock(_bodyLock)
                     _bodies.Add(Body);
-                
-                /* Static objects are handled in a different way */
-                if(Information.IsDynamic || Information.IsSensor)
-                    AddToSimulation(Body, Information);
             }
         }
 
@@ -397,7 +391,7 @@ namespace Hedra.Engine.Bullet
                 {
                     new Pair<RigidBody, PhysicsObjectInformation>(CreateTerrainRigidbody(Offset, Mesh), new PhysicsObjectInformation
                     {
-                        Group = CollisionFilterGroups.DebrisFilter,
+                        Group = TerrainFilter,
                         Mask = CollisionFilterGroups.AllFilter,
                         Name = $"Terrain ({Offset.X}, {Offset.Y})",
                         StaticOffsets = new []{Offset}

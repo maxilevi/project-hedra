@@ -302,6 +302,7 @@ namespace Hedra.Engine.Bullet
         public bool CollidesWithOffset(Vector3 Offset)
         {
             BulletPhysics.ResetCallback(_rayResult);
+            /* We don't include the terrain in the raycast hit */
             _rayResult.CollisionFilterMask = (int)CollisionFilterGroups.StaticFilter;
             var from = (RigidbodyPosition + Offset).Compatible() - BulletSharp.Math.Vector3.UnitY * 4;
             var to = from + BulletSharp.Math.Vector3.UnitY * 4;
