@@ -164,7 +164,7 @@ namespace Hedra.Engine.Bullet
 #endif
         }
 
-        private static void UpdateActivations()S
+        private static void UpdateActivations()
         {
             lock (_staticBodiesLock)
             {
