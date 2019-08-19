@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Threading;
 
 namespace Hedra.Core
 {
@@ -17,6 +18,7 @@ namespace Hedra.Core
     public class Timer
     {
         private float _timerCount;
+        private Time.TimeProvider _provider;
         public bool AutoReset { get; set; } = true;
         public float AlertTime { get; set; }
         public bool UseTimeScale { get; set; } = true;
@@ -34,7 +36,10 @@ namespace Hedra.Core
         
         public bool Tick()
         {
-            _timerCount += UseTimeScale ? Time.DeltaTime : Time.IndependentDeltaTime;
+            if (_provider == null)
+                _provider = Time.GetProvider(Thread.CurrentThread.ManagedThreadId);
+            
+            _timerCount += UseTimeScale ? _provider.DeltaTime : _provider.IndependentDeltaTime;
 
             if (!Ready) return false;
             if (AutoReset)_timerCount = 0;

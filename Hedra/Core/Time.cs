@@ -18,7 +18,7 @@ namespace Hedra.Core
     /// </summary>
     public static class Time
     {
-        private static Dictionary<int, TimeProvider> Providers = new Dictionary<int, TimeProvider>();
+        private static readonly Dictionary<int, TimeProvider> Providers = new Dictionary<int, TimeProvider>();
         public static float TimeScale { get; private set; } = 1;
         public static bool Paused => TimeScale <= 0.005f;
         public static void IncrementFrame(double Time) => IncrementFrame((float)Time);
@@ -39,7 +39,12 @@ namespace Hedra.Core
             Providers.Add(Thread.CurrentThread.ManagedThreadId, new TimeProvider());
         }
 
-        private class TimeProvider
+        public static TimeProvider GetProvider(int Id)
+        {
+            return Providers[Id];
+        }
+
+        public class TimeProvider
         {
             public int Framerate { get; private set; }
             public float Frametime { get; private set; }

@@ -17,7 +17,7 @@ namespace Hedra.Engine.Management
         public WaitForChunk(Vector3 Position)
         {
             _position = Position;
-            _timer = new Timer(.25f);
+            _timer = new Timer(.05f);
         }
         
         public bool MoveNext()

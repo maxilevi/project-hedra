@@ -94,10 +94,10 @@ namespace Hedra.Engine.StructureSystem
                 Struct.Built = true;
             }
 
-            if (Loader.Hedra.MainThreadId == Thread.CurrentThread.ManagedThreadId)
-                TaskScheduler.Parallel(DoBuild);
-            else
-                DoBuild();
+            //if (Loader.Hedra.MainThreadId == Thread.CurrentThread.ManagedThreadId)
+            //    TaskScheduler.Parallel(DoBuild);
+            //else
+            DoBuild();
         }
         
         public void AddStructure(CollidableStructure Structure)

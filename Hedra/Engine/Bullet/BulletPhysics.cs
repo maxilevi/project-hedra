@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Diagnostics;
 using System.Linq;
 using BulletSharp;
 using BulletSharp.Math;
 using Hedra.Core;
 using Hedra.Engine.Core;
-using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.IO;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Game;
 using Hedra.Rendering;
@@ -22,19 +22,23 @@ namespace Hedra.Engine.Bullet
         private const bool EnableDebugMode = true;
         public static event OnContactEvent OnCollision;
         public static event OnContactEvent OnSeparation;
+        private static Timer _collisionCheckTimer;
         private static object _chunkLock;
         private static object _bulletLock;
         private static object _bodyLock;
         private static object _dynamicBodiesLock;
         private static object _staticBodiesLock;
+        private static object _sensorsLock;
+        private static List<RigidBody> _sensors;
         private static Dictionary<Vector2, RigidBody[]> _chunkBodies;
         private static DiscreteDynamicsWorld _dynamicsWorld;
         private static CollisionDispatcher _dispatcher;
         private static DbvtBroadphase _broadphase;
         private static List<RigidBody> _bodies;
         private static HashSet<Vector2> _activeChunks;
+        private static HashSet<Vector2> _lastActiveChunks;
         private static List<RigidBody> _dynamicBodies;
-        private static List<RigidBody> _staticBodies;
+        private static Dictionary<Vector2, List<RigidBody>> _staticBodies;
         private static HashSet<Pair<CollisionObject, CollisionObject>> _currentPairs;
         private static HashSet<Pair<CollisionObject, CollisionObject>> _pairsLastUpdate;
         public const float Gravity = 10 * Generation.ChunkSystem.Chunk.BlockSize;
@@ -42,6 +46,8 @@ namespace Hedra.Engine.Bullet
 
         public static void Load()
         {
+            _collisionCheckTimer = new Timer(Physics.Timestep);
+            _sensorsLock = new object();
             _chunkLock = new object();
             _bulletLock = new object();
             _bodyLock = new object();
@@ -50,6 +56,7 @@ namespace Hedra.Engine.Bullet
             _activeChunks = new HashSet<Vector2>();
             _currentPairs = new HashSet<Pair<CollisionObject, CollisionObject>>();
             _pairsLastUpdate = new HashSet<Pair<CollisionObject, CollisionObject>>();
+            _lastActiveChunks = new HashSet<Vector2>();
             lock(_chunkLock)
                 _chunkBodies = new Dictionary<Vector2, RigidBody[]>();
             lock(_bodyLock)
@@ -57,7 +64,9 @@ namespace Hedra.Engine.Bullet
             lock(_dynamicBodiesLock)
                 _dynamicBodies = new List<RigidBody>();
             lock(_staticBodiesLock)
-                _staticBodies = new List<RigidBody>();
+                _staticBodies = new Dictionary<Vector2, List<RigidBody>>();
+            lock(_sensorsLock)
+                _sensors = new List<RigidBody>();
             var configuration = new DefaultCollisionConfiguration();
             _dispatcher = new CollisionDispatcher(configuration);
             _broadphase = new DbvtBroadphase();
@@ -68,7 +77,8 @@ namespace Hedra.Engine.Bullet
                 {
                     DebugMode = DebugDrawModes.DrawWireframe
                 },
-                Gravity = -Vector3.UnitY * Gravity
+                Gravity = -Vector3.UnitY * Gravity,
+                ForceUpdateAllAabbs = false
             };
         }
 
@@ -85,53 +95,109 @@ namespace Hedra.Engine.Bullet
 
         private static void CalculateActiveOffsets()
         {
+            /* Switch references */
+            var temp = _lastActiveChunks;
+            _lastActiveChunks = _activeChunks;
+            _activeChunks = temp;
+            
             _activeChunks.Clear();
             lock (_dynamicBodiesLock)
+                AddOffsetsFromDynamicObjects();
+            lock (_sensorsLock)
+                DisableSensorsWhenNecessary();
+        }
+
+        private static void DisableSensorsWhenNecessary()
+        {
+            for (var i = 0; i < _sensors.Count; ++i)
             {
-                for (var i = 0; i < _dynamicBodies.Count; ++i)
+                var offset = World.ToChunkSpace(_sensors[i].WorldTransform.Origin.Compatible());
+                var information = (PhysicsObjectInformation) _sensors[i].UserObject;
+                if (_chunkBodies.ContainsKey(offset))
                 {
-                    var offset = World.ToChunkSpace(_dynamicBodies[i].WorldTransform.Origin.Compatible());
-                    var information = (PhysicsObjectInformation) _dynamicBodies[i].UserObject;
-                    if (_chunkBodies.ContainsKey(offset))
-                    {
-                        if (!_activeChunks.Contains(offset))
-                            _activeChunks.Add(offset);
-                        
-                        if(!information.IsInSimulation)
-                            AddToSimulation(_dynamicBodies[i], information);
-                        #if DEBUG
-                        if (_dynamicBodies[i].WorldTransform.Origin.Y < -100)
-                        {
-                            _dynamicBodies[i].ClearForces();
-                            _dynamicBodies[i].Translate(Vector3.UnitY * (-_dynamicBodies[i].WorldTransform.Origin.Y + 500));
-                        }
-                        #endif
-                    }
-                    else
-                    {
-                        /* Disable physics on objects that are in places where the ground has not loaded yet. */
-                        if(information.IsInSimulation)
-                            RemoveFromSimulation(_dynamicBodies[i], information);
-                    }
+                    if (!information.IsInSimulation)
+                        AddToSimulation(_sensors[i], information);
+                }
+                else
+                {
+                    if (information.IsInSimulation)
+                        RemoveFromSimulation(_sensors[i], information);
+                }
+            }
+        }
+        
+        private static void AddOffsetsFromDynamicObjects()
+        {
+            for (var i = 0; i < _dynamicBodies.Count; ++i)
+            {
+                var offset = World.ToChunkSpace(_dynamicBodies[i].WorldTransform.Origin.Compatible());
+                var information = (PhysicsObjectInformation) _dynamicBodies[i].UserObject;
+                if (_chunkBodies.ContainsKey(offset))
+                {
+                    if (!_activeChunks.Contains(offset))
+                        _activeChunks.Add(offset);
+
+                    if (!information.IsInSimulation)
+                        AddToSimulation(_dynamicBodies[i], information);
+
+                    AssertIsNotFailingThroughFloor(_dynamicBodies[i]);
+                }
+                else
+                {
+                    /* Disable physics on objects that are in places where the ground has not loaded yet. */
+                    if (information.IsInSimulation)
+                        RemoveFromSimulation(_dynamicBodies[i], information);
                 }
             }
         }
 
-        private static void UpdateActivations()
+        private static void AssertIsNotFailingThroughFloor(RigidBody Body)
+        {
+#if DEBUG
+            if (Body.WorldTransform.Origin.Y < -100)
+            {
+                var information = (PhysicsObjectInformation) Body.UserObject;
+                Debugger.Break();
+                Body.ClearForces();
+                Body.Translate(Vector3.UnitY * (-Body.WorldTransform.Origin.Y + 500));
+            }
+#endif
+        }
+
+        private static void UpdateActivations()S
         {
             lock (_staticBodiesLock)
             {
-                for (var i = 0; i < _staticBodies.Count; ++i)
+                foreach (var offset in _lastActiveChunks)
                 {
-                    var information = (PhysicsObjectInformation) _staticBodies[i].UserObject;
-                    var offsets = information.StaticOffsets;
-                    lock (_bulletLock)
+                    if(!_activeChunks.Contains(offset) && _staticBodies.ContainsKey(offset))
+                        UpdateActivationsOfBodies(_staticBodies[offset], false);
+                }
+                foreach (var offset in _activeChunks)
+                {
+                    if(_staticBodies.ContainsKey(offset))
+                        UpdateActivationsOfBodies(_staticBodies[offset], true);
+                }
+            }
+        }
+        
+        private static void UpdateActivationsOfBodies(List<RigidBody> Bodies, bool Add)
+        {
+            for (var i = 0; i < Bodies.Count; ++i)
+            {
+                var information = (PhysicsObjectInformation) Bodies[i].UserObject;
+                lock (_bulletLock)
+                {
+                    if (Add)
                     {
-                        var containsAny = offsets.Any(_activeChunks.Contains);
-                        if (containsAny && !information.IsInSimulation)
-                            AddToSimulation(_staticBodies[i], information);
-                        else if (!containsAny && information.IsInSimulation)
-                            RemoveFromSimulation(_staticBodies[i], information);
+                        if (!information.IsInSimulation)
+                            AddToSimulation(Bodies[i], information);
+                        _dynamicsWorld.UpdateSingleAabb(Bodies[i]);
+                    }
+                    else
+                    {
+                        if (information.IsInSimulation)
+                            RemoveFromSimulation(Bodies[i], information);
                     }
                 }
             }
@@ -156,33 +222,23 @@ namespace Hedra.Engine.Bullet
             if (!GameSettings.DebugPhysics) return;
             lock (_bodyLock)
             {
-                /*for (var i = 0; i < _bodies.Count; ++i)
+                
+                for (var i = 0; i < _bodies.Count; ++i)
                 {
-                    if ((_bodies[i].WorldTransform.Origin.Compatible() - Player.LocalPlayer.Instance.Position).Xz
-                        .LengthSquared > 64 * 64) continue;
-                    _dynamicsWorld.DebugDrawObject(_bodies[i].WorldTransform, _bodies[i].CollisionShape,
+                    if ((_bodies[i].WorldTransform.Origin.Compatible() - Player.LocalPlayer.Instance.Position).Xz.LengthSquared > 64 * 64) continue;
+                    var info = (PhysicsObjectInformation) _bodies[i].UserObject;
+                    if (info.IsInSimulation)
+                        _dynamicsWorld.DebugDrawObject(_bodies[i].WorldTransform, _bodies[i].CollisionShape,
                         new Vector3(1, 1, 0));
-                }*/
-
-                for (var i = 0; i < _staticBodies.Count; ++i)
+                }/*
+                for (var i = 0; i < _bodies.Count; ++i)
                 {
-                    var info = (PhysicsObjectInformation)_staticBodies[i].UserObject;
-                    if (info.IsInSimulation)// && info.Name != null && (info.Name.Contains("Door") || info.Name.Contains("Terrain")))
-                    {
-                        var trans = _staticBodies[i].WorldTransform;
-                        var col = new Vector3(1,0,0);
-                        //_dynamicsWorld.DebugDrawer.DrawSphere(4, ref trans, ref col);
-                        _dynamicsWorld.DebugDrawObject(_staticBodies[i].WorldTransform, _staticBodies[i].CollisionShape, new Vector3(1, 1, 0));
-                    }
-                    //_dynamicsWorld.DebugDrawObject(_staticBodies[i].WorldTransform, _staticBodies[i].CollisionShape, new Vector3(1, 1, 0));
-                }
+                    //if ((_bodies[i].WorldTransform.Origin.Compatible() - Player.LocalPlayer.Instance.Position).Xz.LengthSquared > 64 * 64) continue;
+                    var info = (PhysicsObjectInformation) _bodies[i].UserObject;
+                    if (info.IsInSimulation)
+                        _dynamicsWorld.DebugDrawObject(_bodies[i].WorldTransform, _bodies[i].CollisionShape, new Vector3(1, 1, 0));
+                }*/
             }
-        }
-
-        public static void DrawObject(Matrix Transform, CollisionShape Object, OpenTK.Vector4 Color)
-        {
-            _dynamicsWorld.DebugDrawer.DebugMode = DebugDrawModes.DrawWireframe;
-            _dynamicsWorld.DebugDrawObject(Transform, Object, Color.Xyz.Compatible());
         }
 
         public static void Raycast(ref Vector3 From, ref Vector3 To, RayResultCallback Callback)
@@ -211,28 +267,54 @@ namespace Hedra.Engine.Bullet
             lock (_bulletLock)
             {
                 Body.UserObject = Information;
-                AddToSimulation(Body, Information);
-                lock(_bodyLock)
-                    _bodies.Add(Body);
-
                 if (!Information.IsSensor)
                 {
                     if (!Body.IsStaticObject)
-                    {
-                        lock (_dynamicBodiesLock)
-                            _dynamicBodies.Add(Body);
-                        Information.IsDynamic = true;
-                    }
+                        AddDynamic(Body, Information);
                     else
-                    {
-                        lock (_staticBodiesLock)
-                            _staticBodies.Add(Body);
-                        Information.IsStatic = true;
-                        if (!Information.ValidStaticObject)
-                            throw new ArgumentOutOfRangeException($"Tried to add an incomplete static object.");
-                    }
+                        AddStatic(Body, Information);
+                }
+                else
+                {
+                    AddSensor(Body);
+                }
+                lock(_bodyLock)
+                    _bodies.Add(Body);
+                
+                /* Static objects are handled in a different way */
+                if(Information.IsDynamic || Information.IsSensor)
+                    AddToSimulation(Body, Information);
+            }
+        }
+
+        private static void AddSensor(RigidBody Body)
+        {
+            lock(_sensorsLock)
+                _sensors.Add(Body);
+        }
+
+        private static void AddStatic(RigidBody Body, PhysicsObjectInformation Information)
+        {
+            Information.IsStatic = true;
+            if (!Information.ValidStaticObject)
+                throw new ArgumentOutOfRangeException($"Tried to add an incomplete static object.");
+            lock (_staticBodiesLock)
+            {
+                var offsets = Information.StaticOffsets;
+                for (var i = 0; i < offsets.Length; ++i)
+                {
+                    if (!_staticBodies.ContainsKey(offsets[i]))
+                        _staticBodies.Add(offsets[i], new List<RigidBody>());
+                    _staticBodies[offsets[i]].Add(Body);
                 }
             }
+        }
+
+        private static void AddDynamic(RigidBody Body, PhysicsObjectInformation Information)
+        {
+            lock (_dynamicBodiesLock)
+                _dynamicBodies.Add(Body);
+            Information.IsDynamic = true;
         }
         
         public static void RemoveAndDispose(RigidBody Body)
@@ -242,36 +324,68 @@ namespace Hedra.Engine.Bullet
                 var information = (PhysicsObjectInformation) Body.UserObject;
                 lock(_bodyLock)
                     _bodies.Remove(Body);
+                
                 if (information.IsInSimulation)
-                {
                     RemoveFromSimulation(Body, information);
-                }
+
                 if (information.IsDynamic)
-                {
-                    lock (_dynamicBodiesLock)
-                        _dynamicBodies.Remove(Body);
-                }
+                    DisposeDynamic(Body);
+                
                 if(information.IsStatic)
+                    DisposeStatic(Body, information);
+
+                if (information.IsSensor)
+                    DisposeSensor(Body);
+                
+                DisposeBody(Body);
+            }
+        }
+        
+        private static void DisposeSensor(RigidBody Body)
+        {
+            lock (_sensorsLock)
+                _sensors.Remove(Body);
+        }
+
+        private static void DisposeDynamic(RigidBody Body)
+        {
+            lock (_dynamicBodiesLock)
+                _dynamicBodies.Remove(Body);
+        }
+
+        private static void DisposeStatic(RigidBody Body, PhysicsObjectInformation Information)
+        {
+            lock (_staticBodiesLock)
+            {
+                var offsets = Information.StaticOffsets;
+                for (var i = 0; i < offsets.Length; ++i)
                 {
-                    lock (_staticBodiesLock)
-                        _staticBodies.Remove(Body);
-                    
+                    _staticBodies[offsets[i]].Remove(Body);
+                    if (_staticBodies[offsets[i]].Count == 0)
+                        _staticBodies.Remove(offsets[i]);
                 }
-                if (Body.CollisionShape is BvhTriangleMeshShape bvhTriangleMeshShape)
-                {
+            }
+        }
+        
+        private static void DisposeBody(RigidBody Body)
+        {
+            switch (Body.CollisionShape)
+            {
+                case BvhTriangleMeshShape bvhTriangleMeshShape:
                     bvhTriangleMeshShape.MeshInterface.Dispose();
-                }
-                else if (Body.CollisionShape is CompoundShape compoundShape)
+                    break;
+                case CompoundShape compoundShape:
                 {
                     for (var i = 0; i < compoundShape.NumChildShapes; ++i)
                     {
                         compoundShape.GetChildShape(i).Dispose();
                     }
+                    break;
                 }
-                Body.MotionState.Dispose();
-                Body.CollisionShape.Dispose();
-                Body.Dispose();
             }
+            Body.MotionState.Dispose();
+            Body.CollisionShape.Dispose();
+            Body.Dispose();
         }
         
         public static void AddChunk(Vector2 Offset, VertexData Mesh, PhysicsSystem.CollisionShape[] Shapes)
@@ -329,14 +443,6 @@ namespace Hedra.Engine.Bullet
             }
         }
 
-        public static bool HasChunk(Vector2 Offset)
-        {
-            lock (_chunkLock)
-            {
-                return _chunkBodies.ContainsKey(Offset);
-            }
-        }
-
         private static RigidBody CreateShapesRigidbody(PhysicsSystem.CollisionShape[] Shapes)
         {
             if (Shapes.Length == 0) return null;
@@ -348,7 +454,14 @@ namespace Hedra.Engine.Bullet
                     throw new ArgumentOutOfRangeException();
                 triangleMesh.AddIndexedMesh(CreateIndexedMesh(Shapes[i].Indices, Shapes[i].Vertices.Select(V => V - offset.Compatible()).ToArray()));
             }
-            var body = CreateStaticRigidbody(new BvhTriangleMeshShape(triangleMesh, true));
+            var shape = new BvhTriangleMeshShape(triangleMesh, true);
+#if DEBUG
+            if (float.IsInfinity(shape.LocalAabbMax.LengthSquared))
+            {
+                Debugger.Break();
+            }
+#endif
+            var body = CreateStaticRigidbody(shape);
             body.Translate(offset);
             return body;
 
@@ -394,6 +507,8 @@ namespace Hedra.Engine.Bullet
 
         private static void CheckForCollisionEvents()
         {
+            if(!_collisionCheckTimer.Tick()) return;
+            
             _currentPairs.Clear();
             for (var i = 0; i < _dispatcher.NumManifolds; ++i)
             {
@@ -407,10 +522,10 @@ namespace Hedra.Engine.Bullet
                     OnCollision?.Invoke(pair.One, pair.Two);
                 }
             }
-            var removedPairs = _pairsLastUpdate.Except(_currentPairs).ToArray();
-            for(var i = 0; i < removedPairs.Length; ++i)
+            foreach (var pair in _pairsLastUpdate)
             {
-                OnSeparation?.Invoke(removedPairs[i].One, removedPairs[i].Two);
+                if(!_currentPairs.Contains(pair))
+                    OnSeparation?.Invoke(pair.One, pair.Two);
             }
 
             /* Switch the references to avoid copying data */

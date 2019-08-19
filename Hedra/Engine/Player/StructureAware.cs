@@ -11,6 +11,7 @@ using Hedra.Engine.StructureSystem;
 using Hedra.Sound;
 using OpenTK;
 using CollisionShape = BulletSharp.CollisionShape;
+using TaskScheduler = Hedra.Core.TaskScheduler;
 
 namespace Hedra.Engine.Player
 {
@@ -135,19 +136,21 @@ namespace Hedra.Engine.Player
         private void SetNearCollisions(CollisionGroup[] New)
         {
             var added = New.Except(NearCollisions).ToArray();
-            var removed = NearCollisions.Except(New).ToArray();
-            
+            var removed = NearCollisions .Except(New).ToArray();
             NearCollisions = New;
-            
-            for (var i = 0; i < removed.Length; ++i)
+            TaskScheduler.Parallel(() =>
             {
-                BulletPhysics.RemoveAndDispose(_bodies[removed[i]]);
-            }
-            
-            for (var i = 0; i < added.Length; ++i)
-            {
-                _bodies[added[i]] = BulletPhysics.AddGroup(added[i]);
-            }
+                for (var i = 0; i < removed.Length; ++i)
+                {
+                    BulletPhysics.RemoveAndDispose(_bodies[removed[i]]);
+                    _bodies.Remove(removed[i]);
+                }
+
+                for (var i = 0; i < added.Length; ++i)
+                {
+                    _bodies[added[i]] = BulletPhysics.AddGroup(added[i]);
+                }
+            });
         }
         
         public CollisionGroup[] NearCollisions { get; private set; }
