@@ -84,7 +84,7 @@ namespace Hedra.Engine.EntitySystem
         public int Seed { get; set; }
         public Vector3 Orientation { get; set; } = Vector3.UnitZ;       
         public bool Removable { get; set; } = true;
-        public bool IsStuck { get; set; }
+        public bool IsStuck => Physics.IsStuck;
         public bool PlaySpawningAnimation { get; set; } = true;
         public bool IsAttacking => Model.IsAttacking;
         public float Speed { get; set; } = 1.25f;

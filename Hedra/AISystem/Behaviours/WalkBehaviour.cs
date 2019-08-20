@@ -16,8 +16,7 @@ namespace Hedra.AISystem.Behaviours
         public float ErrorMargin { get; set; } = DefaultErrorMargin;
         private bool _arrived;
         private Action _callback;
-        private Vector3 _lastPosition;
-        
+
         public WalkBehaviour(IEntity Parent) : base(Parent)
         {
         }
@@ -50,19 +49,12 @@ namespace Hedra.AISystem.Behaviours
                     Parent.Orientation = Mathf.Lerp(Parent.Orientation, orientation, Time.DeltaTime * 8f);
                     Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
                 }
-                if (Parent.Type == "Boar" && Time.DeltaTime > 0)
-                {
-                    int a = 0;
-                }
                 Parent.Physics.Move();
                 if ((Target - Parent.Position).Xz.LengthSquared < ErrorMargin * ErrorMargin)
                 {
                     this.Cancel();
                 }
             }
-
-            Parent.IsStuck = false;//(!Parent.IsMoving && !_arrived && HasTarget || _lastPosition.Xz == Parent.Position.Xz && HasTarget) && !Parent.IsKnocked;
-            _lastPosition = Parent.Position;
         }
         
         public bool HasTarget { get; private set; }

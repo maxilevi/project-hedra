@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Linq;
 using BulletSharp;
 using BulletSharp.Math;
 using Hedra.Components;
@@ -38,17 +39,20 @@ namespace Hedra.Engine.Bullet
         public bool CanBePushed { get; set; } = true;
         public bool HasFallDamage { get; set; } = true;
         public bool UseTimescale { get; set; } = true;
+        public bool IsStuck => _isStuck;
 
         private readonly PhysicsComponentMotionState _motionState;
         private readonly RigidBody _body;
         private readonly RigidBody _sensor;
-        private readonly ClosestRayResultCallback _rayResult;
+        private readonly AllHitsRayResultCallback _rayResult;
         private Vector3 _gravityDirection;
         private float _speedMultiplier;
         private Vector3 _accumulatedMovement;
         private Vector3 _impulse;
         private int _sensorContacts;
         private Vector3 _gravity;
+        private bool _moved;
+        private bool _isStuck;
 
         public PhysicsComponent(IEntity Parent) : base(Parent)
         {
@@ -95,7 +99,7 @@ namespace Hedra.Engine.Bullet
 
             var from = BulletSharp.Math.Vector3.Zero;
             var to = BulletSharp.Math.Vector3.Zero;
-            _rayResult = new ClosestRayResultCallback(ref from, ref to);
+            _rayResult = new AllHitsRayResultCallback(from, to);
             _motionState.OnUpdated += UpdateSensor;
             BulletPhysics.OnCollision += OnCollision;
             BulletPhysics.OnSeparation += OnSeparation;
@@ -200,12 +204,22 @@ namespace Hedra.Engine.Bullet
             _speedMultiplier = Mathf.Lerp(_speedMultiplier, NormalSpeedModifier * (Parent.IsAttacking ? Parent.AttackingSpeedModifier : 1), deltaTime * 2f);
             HandleFallDamage(deltaTime);
             HandleIsMoving();
+            HandleIsStuck();
             Parent.IsGrounded = _sensorContacts > 0;
             _body.Gravity = Parent.IsGrounded ? BulletSharp.Math.Vector3.Zero : _gravity.Compatible();
             _body.LinearVelocity = new BulletSharp.Math.Vector3(_accumulatedMovement.X, Math.Min(0, _body.LinearVelocity.Y), _accumulatedMovement.Z) + _impulse.Compatible();
             _body.Activate();
             _impulse *= (float) Math.Pow(0.25f, Time.DeltaTime * 5f);
             _accumulatedMovement = Vector3.Zero;
+        }
+
+        private void HandleIsStuck()
+        {
+            if (!(Parent is LocalPlayer))
+            {
+                _isStuck = (_moved && _body.LinearVelocity.Compatible().Xz.LengthSquared < 1f) && !Parent.IsKnocked;
+                _moved = false;
+            }
         }
 
         private void UpdateSensor()
@@ -218,6 +232,7 @@ namespace Hedra.Engine.Bullet
         {
             _accumulatedMovement += Position;
             _sensor.Activate();
+            _moved = true;
         }
 
         private void HandleIsMoving()
@@ -301,15 +316,28 @@ namespace Hedra.Engine.Bullet
         }
         public bool CollidesWithOffset(Vector3 Offset)
         {
-            BulletPhysics.ResetCallback(_rayResult);
-            /* We don't include the terrain in the raycast hit */
-            _rayResult.CollisionFilterMask = (int)CollisionFilterGroups.StaticFilter;
-            var from = (RigidbodyPosition + Offset).Compatible() - BulletSharp.Math.Vector3.UnitY * 4;
-            var to = from + BulletSharp.Math.Vector3.UnitY * 4;
-            _rayResult.RayFromWorld = from;
-            _rayResult.RayToWorld = to;
-            BulletPhysics.Raycast(ref from, ref to, _rayResult);
-            return _rayResult.HasHit;
+            bool DoRaycast(Vector3 From)
+            {
+                BulletPhysics.ResetCallback(_rayResult);
+                /* We don't include the terrain in the raycast hit */
+                _rayResult.CollisionFilterMask = (int)(CollisionFilterGroups.StaticFilter | CollisionFilterGroups.CharacterFilter);
+                var from = From.Compatible() - BulletSharp.Math.Vector3.UnitY * 4;
+                var to = from + BulletSharp.Math.Vector3.UnitY * 4;
+                _rayResult.RayFromWorld = from;
+                _rayResult.RayToWorld = to;
+                BulletPhysics.Raycast(ref from, ref to, _rayResult);
+                return _rayResult.HasHit;
+                //_rayResult.CollisionObjects.Count(C => !ReferenceEquals(C, _sensor) && !ReferenceEquals(C, _body)) > 0;
+            }
+            
+            _body.CollisionShape.GetAabb(Matrix.Identity, out var aabbMin, out var aabbMax);
+            var position = Offset + RigidbodyPosition;
+            var aabbMinXz = aabbMin.Compatible().Xz.ToVector3();
+            var aabbMaxXz = aabbMax.Compatible().Xz.ToVector3();
+            return DoRaycast(aabbMinXz + position) 
+                   || DoRaycast(new Vector3(aabbMinXz.X, 0, aabbMaxXz.Z) + position) 
+                   || DoRaycast(new Vector3(aabbMaxXz.X, 0, aabbMinXz.Z) + position) 
+                   || DoRaycast(aabbMaxXz + position);
         }
 
         public void ResetFall()

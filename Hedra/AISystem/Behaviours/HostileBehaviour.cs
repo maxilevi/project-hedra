@@ -2,7 +2,9 @@ using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
+using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
+using OpenTK;
 
 namespace Hedra.AISystem.Behaviours
 {
@@ -33,6 +35,11 @@ namespace Hedra.AISystem.Behaviours
                     Attack.SetTarget(target);
                 }
             }
+        }
+
+        public void Draw()
+        {
+            Attack.Draw();
         }
         
         public override void Update()

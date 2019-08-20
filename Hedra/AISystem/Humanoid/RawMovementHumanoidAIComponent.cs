@@ -38,8 +38,7 @@ namespace Hedra.AISystem.Humanoid
                 if (Math.Abs(TargetPoint.Y - Parent.Position.Y) > 1)
                     Parent.Movement.MoveInWater(TargetPoint.Y > Parent.Position.Y);
             }
-            Parent.IsStuck = !Parent.IsMoving && IsMoving;
-            if(Parent.IsStuck)
+            if(!Parent.IsMoving && IsMoving)
             {
                 OnMovementStuck();
             }

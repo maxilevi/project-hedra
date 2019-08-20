@@ -452,6 +452,11 @@ namespace Hedra.User
                 {
                     LocalPlayer.Instance.Model = LocalPlayer.Instance.Model;
                 }
+
+                if (Parts[0] == "debai")
+                {
+                    GameSettings.DebugAI = !GameSettings.DebugAI;
+                }
                 if (Parts[0] == "realm")
                 {
 

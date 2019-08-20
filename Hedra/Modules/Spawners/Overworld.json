@@ -2,7 +2,7 @@
   "MiniBosses": [
     {
       "Type": "Ent",
-      "Chance": 25.0
+      "Chance": 20.0
     },
     {
       "Type": "Gorilla",
@@ -10,7 +10,7 @@
     },
     {
       "Type": "Explorers",
-      "Chance": 60.0,
+      "Chance": 65.0,
       "IsCustom": true
     }
   ],

@@ -78,7 +78,7 @@ namespace Hedra.EntitySystem
         
         bool IsAttacking { get; }
 
-        bool IsStuck { get; set; }
+        bool IsStuck { get; }
 
         bool Disposed { get; }
         

@@ -32,6 +32,7 @@ namespace Hedra.EntitySystem
         bool CollidesWithStructures { get; set; }
         bool CollidesWithEntities { get; set; }
         Vector3 RigidbodyPosition { get; }
+        bool IsStuck { get; }
 
     }
 }

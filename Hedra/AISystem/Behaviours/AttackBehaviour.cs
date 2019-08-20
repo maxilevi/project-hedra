@@ -3,7 +3,9 @@ using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
+using OpenTK;
 
 namespace Hedra.AISystem.Behaviours
 {
@@ -40,6 +42,13 @@ namespace Hedra.AISystem.Behaviours
                 FollowTimer.Reset();
                 this.Attack(2.0f);
             }
+        }
+
+        public void Draw()
+        {
+            if(Target == null) return;
+            BasicGeometry.DrawLine(Parent.Position, Target.Position, Vector4.One, 2);
+            BasicGeometry.DrawPoint(Target.Position, Vector4.One);
         }
 
         protected void HandleFollowing()

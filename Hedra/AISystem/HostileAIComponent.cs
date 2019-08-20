@@ -41,7 +41,7 @@ namespace Hedra.AISystem
         
         public override void Draw()
         {
-            if (GameSettings.DebugPhysics)
+            if (GameSettings.DebugAI)
             {
                 var grid = TraverseStorage.Instance[Parent];
                 for (var x = -grid.DimX / 2; x < grid.DimX / 2; x++)
@@ -53,6 +53,11 @@ namespace Hedra.AISystem
                             BasicGeometry.DrawLine(offset - Vector3.UnitY * 4, offset + Vector3.UnitY * 2, Vector4.One);
                     } 
                 }
+
+                if (Retaliate.Enabled)
+                    Retaliate.Draw();
+                else if(Hostile.Enabled)
+                    Hostile.Draw();
             }
         }
 

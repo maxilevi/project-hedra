@@ -574,12 +574,26 @@ namespace Hedra.Engine.Bullet
             }
         }
 
-        public static void ResetCallback(ClosestRayResultCallback Callback)
+        private static void BaseResetCallback(RayResultCallback Callback)
         {
             Callback.ClosestHitFraction = 1;
             Callback.CollisionObject = null;
             Callback.CollisionFilterGroup = (int)CollisionFilterGroups.DefaultFilter;
             Callback.CollisionFilterMask = (int)CollisionFilterGroups.AllFilter;
+        }
+
+        public static void ResetCallback(ClosestRayResultCallback Callback)
+        {
+            BaseResetCallback(Callback);
+        }
+
+        public static void ResetCallback(AllHitsRayResultCallback Callback)
+        {
+            BaseResetCallback(Callback);
+            Callback.CollisionObjects.Clear();
+            Callback.HitFractions.Clear();
+            Callback.HitNormalWorld.Clear();
+            Callback.HitPointWorld.Clear();
         }
 
         public static CompoundShape ShapeFrom(Box Dimensions)
