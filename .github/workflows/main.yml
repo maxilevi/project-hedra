@@ -3,9 +3,12 @@ name: Hedra CI
 on: [push, pull_request]
 
 jobs:
-  build:
-
-    runs-on: windows-latest
+  test:
+  name: Test on ${{ matrix.os }}
+  runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-2016, windows-2019]
     
     steps:
     - uses: actions/checkout@v1
