@@ -19,7 +19,7 @@ jobs:
             run: nuget restore Hedra/Hedra.csproj -PackagesDirectory packages
             - name: Restore HedraTests packages
             run: nuget restore HedraTests/HedraTests.csproj -PackagesDirectory packages
-            - name: Restore AssetBuilder packages
+            - name: Restore AssetBuilder packages 
             run: nuget restore AssetBuilder/AssetBuilder.csproj -PackagesDirectory packages
             - name: Build Solution
             run: dotnet msbuild
