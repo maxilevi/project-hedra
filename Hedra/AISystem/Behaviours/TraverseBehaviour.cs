@@ -9,6 +9,7 @@ using Hedra.EntitySystem;
 using System.Drawing;
 using Hedra.Components.Effects;
 using Hedra.Engine.Game;
+using System.Linq;
 using OpenTK;
 
 namespace Hedra.AISystem.Behaviours
@@ -46,20 +47,7 @@ namespace Hedra.AISystem.Behaviours
             {
                 if (!Walk.HasTarget || Parent.IsStuck)
                 {
-                    TraverseStorage.Instance.RebuildIfNecessary(Parent);
-                    RebuildPathIfNecessary();
-                    if (_currentIndex < _currentPath.Length)
-                    {
-                        Walk.SetTarget(
-                            (_currentPath[_currentIndex] - new Vector2((int) (CurrentGrid.DimX / 2f),
-                                 (int) (CurrentGrid.DimY / 2f))).ToVector3() * Chunk.BlockSize + _origin,
-                            () =>
-                            {
-                                _currentIndex++;
-                                if (_currentIndex > _currentPath.Length - 1) Cancel();
-                            }
-                        );
-                    }
+                    RebuildAndResetPathIfNecessary();
                 }
             }
             else
@@ -77,10 +65,28 @@ namespace Hedra.AISystem.Behaviours
                 {
                     _canReach = true;
                 }
-                if(Walk.HasTarget)
-                    Parent.IsStuck = true;
+                //if(Walk.HasTarget)
+                //    Parent.IsStuck = true;
             }    
             /* UpdateSpeedBonus(); */
+        }
+
+        private void RebuildAndResetPathIfNecessary()
+        {
+            TraverseStorage.Instance.RebuildIfNecessary(Parent);
+            RebuildPathIfNecessary();
+            if (_currentIndex < _currentPath.Length)
+            {
+                Walk.SetTarget(
+                    (_currentPath[_currentIndex] - new Vector2((int) (CurrentGrid.DimX / 2f),
+                         (int) (CurrentGrid.DimY / 2f))).ToVector3() * Chunk.BlockSize + _origin,
+                    () =>
+                    {
+                        _currentIndex++;
+                        if (_currentIndex > _currentPath.Length - 1) Cancel();
+                    }
+                );
+            }
         }
 
         private void OnGridUpdated(Grid UpdatedGrid)
@@ -135,8 +141,8 @@ namespace Hedra.AISystem.Behaviours
                 : 1f;
             
             #region DEBUG
-            if (Parent.Type != "Troll") return;
-            /*
+            if (Parent.Type != "Boar" || true) return;
+            
             //Debug
             
             var bmp1 = new Bitmap(CurrentGrid.DimX, CurrentGrid.DimY);
@@ -155,7 +161,7 @@ namespace Hedra.AISystem.Behaviours
             bmp1.SetPixel((int)clampedEnd.X, (int)clampedEnd.Y, Color.Black);
             bmp1.SetPixel((int)unblockedCenter.X, (int)unblockedCenter.Y, Color.White);
             bmp1.SetPixel((int)center.X, (int)center.Y, Color.Violet);
-            bmp1.Save(GameLoader.AppPath + "/test1.png");*/
+            bmp1.Save(GameLoader.AppPath + $"/test{Parent.MobId}.png");
             #endregion
         }
 
@@ -174,6 +180,11 @@ namespace Hedra.AISystem.Behaviours
         {
             _reached = true;
             _callback?.Invoke();
+        }
+
+        public void CancelWalk()
+        {
+            Walk.Cancel();
         }
 
         private Grid CurrentGrid => TraverseStorage.Instance[Parent];

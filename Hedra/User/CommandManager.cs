@@ -54,19 +54,19 @@ namespace Hedra.User
 
                         if (Parts[1] == "spawn")
                         {
-                            Caster.BlockPosition = World.SpawnPoint;
+                            Caster.Position = World.SpawnPoint;
                             
                         }
 
                         if (Parts[1] == "spawnvillage")
                         {
-                            Caster.BlockPosition = World.SpawnVillagePoint;
+                            Caster.Position = World.SpawnVillagePoint;
                         }
                         if (float.TryParse(Parts[1], out var x))
                         {
                             float.TryParse(Parts[2], out var y);
                             float.TryParse(Parts[3], out var z);
-                            Caster.BlockPosition = new Vector3(x,y,z);
+                            Caster.Position = new Vector3(x,y,z);
                         }
                         return true;
                     }
@@ -446,6 +446,16 @@ namespace Hedra.User
                 {
                     Interpreter.Reload();
                     return true;
+                }
+
+                if (Parts[0] == "sethitbox")
+                {
+                    LocalPlayer.Instance.Model = LocalPlayer.Instance.Model;
+                }
+
+                if (Parts[0] == "debai")
+                {
+                    GameSettings.DebugAI = !GameSettings.DebugAI;
                 }
                 if (Parts[0] == "realm")
                 {

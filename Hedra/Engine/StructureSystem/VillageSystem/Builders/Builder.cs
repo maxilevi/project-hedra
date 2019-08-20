@@ -187,7 +187,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             VillageObject.AddHumanoid(vill);
             return vill;
         }
-        
+
         protected IEntity SpawnMob(MobType Mob, Vector3 Position)
         {
             var mob = World.SpawnMob(Mob, Position, Utils.Rng);

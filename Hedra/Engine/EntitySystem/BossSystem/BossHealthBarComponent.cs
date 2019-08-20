@@ -139,10 +139,6 @@ namespace Hedra.Engine.EntitySystem.BossSystem
         }
         
         private bool CanShow => GameManager.Player.UI.GamePanel.Enabled && (Parent.Position - GameManager.Player.Position).LengthSquared < 14400;
-        
-        public override void Draw()
-        {
-        }
 
         public override void Dispose()
         {

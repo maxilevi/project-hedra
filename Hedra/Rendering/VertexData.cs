@@ -15,6 +15,7 @@ using Hedra.Engine;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Geometry;
 using MeshOptimizer;
 using OpenTK;
 
@@ -296,6 +297,11 @@ namespace Hedra.Rendering
             Colors = newColors;
             Extradata = newExtradata;
             Normals = newNormals;
+        }
+
+        public VertexData[] Ungroup()
+        {
+            return MeshAnalyzer.GetConnectedComponents(this);
         }
 
         public VertexData RotateX(float EulerAngle)

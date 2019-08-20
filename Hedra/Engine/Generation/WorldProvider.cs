@@ -67,7 +67,6 @@ namespace Hedra.Engine.Generation
             _entities = new HashSet<IEntity>();
             _worldObjects = new HashSet<IWorldObject>();
             _chunks = new HashSet<Chunk>();
-            _globalColliders = new HashSet<ICollidable>();
             _renderingComparer = new RenderingComparer();
             SearcheableChunks = new Dictionary<Vector2, Chunk>(new FastComparer());
             DrawingChunks = new Dictionary<Vector2, Chunk>();
@@ -410,10 +409,10 @@ namespace Hedra.Engine.Generation
                     continue;
                 }
 
-                if (Entities[i].BlockPosition.X < Chunk.OffsetX + Chunk.Width &&
-                    Entities[i].BlockPosition.X > Chunk.OffsetX &&
-                    Entities[i].BlockPosition.Z < Chunk.OffsetZ + Chunk.Width &&
-                    Entities[i].BlockPosition.Z > Chunk.OffsetZ)
+                if (Entities[i].Position.X < Chunk.OffsetX + Chunk.Width &&
+                    Entities[i].Position.X > Chunk.OffsetX &&
+                    Entities[i].Position.Z < Chunk.OffsetZ + Chunk.Width &&
+                    Entities[i].Position.Z > Chunk.OffsetZ)
                     if (Entities[i].Removable && !(Entities[i] is IPlayer))
                         Entities[i].Dispose();
             }
@@ -471,10 +470,7 @@ namespace Hedra.Engine.Generation
 
         public Vector2 ToChunkSpace(Vector3 Vec3)
         {
-            var chunkX = ((int) Vec3.X >> 7) << 7;
-            var chunkZ = ((int) Vec3.Z >> 7) << 7;
-
-            return new Vector2(chunkX, chunkZ);
+            return new Vector2(((int) Vec3.X >> 7) << 7, ((int) Vec3.Z >> 7) << 7);
         }
 
         public Chunk GetChunkAt(Vector3 Coordinates)
@@ -601,7 +597,7 @@ namespace Hedra.Engine.Generation
             mob.MobId = ++_previousId;
             mob.Seed = MobSeed;
             mob.Model.TargetRotation = new Vector3(0, (new Random(MobSeed)).NextFloat() * 360f, 0);
-            mob.Physics.TargetPosition = placeablePosition;
+            mob.Position = placeablePosition;
             mob.Model.Position = placeablePosition;
             MobFactory.Polish(mob);
             
@@ -631,16 +627,15 @@ namespace Hedra.Engine.Generation
 
         public Vector3 FindPlaceablePosition(IEntity Mob, Vector3 DesiredPosition)
         {
-            var originalPosition = Mob.Physics.TargetPosition;
+            var originalPosition = Mob.Position;
             var collidesOnSurface = true;
-            Mob.Physics.TargetPosition = DesiredPosition;
+            Mob.Position = DesiredPosition;
             while (!Mob.Physics.Translate(Vector3.One * .1f))
             {
                 DesiredPosition += new Vector3(Utils.Rng.NextFloat() * 32f - 16f, 0, Utils.Rng.NextFloat() * 32f - 16f);
-                Mob.Physics.TargetPosition = DesiredPosition;
-                Mob.Physics.UpdateColliders();
+                Mob.Position = DesiredPosition;
             }
-            Mob.Physics.TargetPosition = originalPosition;
+            Mob.Position = originalPosition;
             return DesiredPosition;
         }
 
@@ -775,30 +770,6 @@ namespace Hedra.Engine.Generation
                 }
             }
         }
-
-        private bool _isGlobalCollidersCacheDirty = true;
-        private readonly HashSet<ICollidable> _globalColliders;
-        private ReadOnlyCollection<ICollidable> _globalCollidersCache;
-
-        public ReadOnlyCollection<ICollidable> GlobalColliders
-        {
-            get
-            {
-                if (_isGlobalCollidersCacheDirty)
-                {
-                    lock (_globalColliders)
-                    {
-                        _globalCollidersCache = _globalColliders.ToArray().ToList().AsReadOnly();
-                    }
-                    _isGlobalCollidersCacheDirty = false;
-                }
-                lock (_globalCollidersCache)
-                {
-                    return _globalCollidersCache;
-                }
-            }
-        }
-
         #endregion
     }
 }

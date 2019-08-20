@@ -11,7 +11,7 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Native
 {
-    /// <summary>
+    /// <summary>    
     /// Description of OSManager.
     /// </summary>
     public static class OSManager
@@ -64,8 +64,8 @@ namespace Hedra.Engine.Native
             
             Log.WriteLine("OS = " + Environment.OSVersion + Environment.NewLine +
                           "CPU = " + Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER") + Environment.NewLine +
-                          "Graphics Card = " + OSManager.GraphicsCard + Environment.NewLine +
-                          "RAM = " + RamCount + "MB");
+                          "Graphics Card = " + OSManager.GraphicsCard + Environment.NewLine
+                          );
             
         }
 /*

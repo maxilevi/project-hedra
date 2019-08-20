@@ -37,6 +37,7 @@ namespace Hedra.Items
         Tomato,
         Bait,
         FishingRodRecipe,
+        FishingRod,
         MaxEnums
     }
 }

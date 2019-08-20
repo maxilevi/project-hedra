@@ -55,14 +55,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private static readonly Block[][] _dummyBlocks;
         private Dictionary<CoordinateHash3D, Half> _waterDensity;
         private readonly object _waterLock = new object();
-        private readonly VertexData _nearestVertexData;
         private readonly ChunkTerrainMeshBuilder _terrainBuilder;
         private readonly ChunkStructuresMeshBuilder _structuresBuilder;
-        private readonly object _terrainVerticesLock;
         private readonly object _blocksLock;
         private readonly RegionCache _regionCache;
-        private GridCell _nearestVertexCell;
-        private Vector3[] _terrainVertices;
 
         static Chunk()
         {
@@ -81,11 +77,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (World.GetChunkByOffset(this.OffsetX, this.OffsetZ) != null)
                 throw new ArgumentNullException($"A chunk with the coodinates ({OffsetX}, {OffsetZ}) already exists.");
             _blocks = new Block[(int) (Width / BlockSize)][][];
-            _nearestVertexData = new VertexData();
             _terrainBuilder = new ChunkTerrainMeshBuilder(this);
             _structuresBuilder = new ChunkStructuresMeshBuilder(this);
-            _terrainVertices = new Vector3[0];
-            _terrainVerticesLock = new object();
             _blocksLock = new object();
             _regionCache = new RegionCache(Position, Position + new Vector3(Chunk.Width, 0, Chunk.Width));
 
@@ -119,6 +112,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var buildingLod = this.Lod;
             this.PrepareForBuilding();
             var output = this.CreateTerrainMesh(buildingLod);
+            SetupCollider(buildingLod);
 
             if (output == null) return;
             this.SetChunkStatus(output);
@@ -128,12 +122,32 @@ namespace Hedra.Engine.Generation.ChunkSystem
             this.UploadMesh(output);
             this.FinishUpload(output, buildingLod);
         }
+
+        private void SetupCollider(int BuildingLod)
+        {
+            if (BuildingLod == 1 || BuildingLod == 2)
+            {
+                Bullet.BulletPhysics.AddChunk(Position.Xz, CreateCollisionTerrainMesh(), CollisionShapes);
+            }
+            else
+            {
+                Bullet.BulletPhysics.RemoveChunk(Position.Xz);
+            }
+        }
         
         private void BuildSparsity()
         {
             /* We should build the sparsity data when all the neighbours exist */
             _terrainBuilder.Sparsity = ChunkSparsity.From(this);
             /* Landscape.Cull(_blocks, _terrainBuilder.Sparsity); */
+        }
+        
+        private VertexData CreateCollisionTerrainMesh()
+        {
+            lock (_blocks)
+            {
+                return _terrainBuilder.CreateTerrainCollisionMesh(_blocks, _regionCache);
+            }
         }
         
         private ChunkMeshBuildOutput CreateTerrainMesh(int LevelOfDetail)
@@ -411,7 +425,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             this.NeedsRebuilding = true;
         }
 
-        public void AddCollisionShape(params ICollidable[] Data)
+        public void AddCollisionShape(params CollisionShape[] Data)
         {
             if (Mesh == null) throw new ArgumentException($"Failed to add collision shape");
 
@@ -422,16 +436,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
         }
 
-        public void RemoveCollisionShape(params ICollidable[] Data)
-        {
-            if (Mesh == null) throw new ArgumentException($"Failed to remove collision shape");
-
-            lock (Mesh.CollisionBoxes)
-            {
-                for (var i = 0; i < Data.Length; i++)
-                    Mesh.CollisionBoxes.Remove(Data[i]);
-            }
-        }
 
         public bool Initialized => Mesh != null;
 
@@ -465,15 +469,15 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public ReadOnlyCollection<VertexData> StaticElements => Mesh.Elements.AsReadOnly();
 
-        public ReadOnlyCollection<ICollidable> CollisionShapes
+        public CollisionShape[] CollisionShapes
         {
             get
             {
-                if (Disposed || !Initialized) return new List<ICollidable>().AsReadOnly();
+                if (Disposed || !Initialized) return new List<CollisionShape>().ToArray();
 
                 lock (Mesh.CollisionBoxes)
                 {
-                    return Mesh.CollisionBoxes.AsReadOnly();
+                    return Mesh.CollisionBoxes.ToArray();
                 }
             }
         }
@@ -485,11 +489,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
             ? _dummyBlocks
             : _blocks[Index];
 
-        public Vector3[] TerrainVertices => _terrainVertices;
-
         private void ForceDispose()
         {
             Disposed = true;
+            Bullet.BulletPhysics.RemoveChunk(Position.Xz);
             _waterDensity?.Clear();
             if (Mesh != null)
             {

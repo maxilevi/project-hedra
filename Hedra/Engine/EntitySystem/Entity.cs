@@ -11,6 +11,7 @@ using Hedra.AISystem.Humanoid;
 using Hedra.Components;
 using Hedra.Components.Effects;
 using Hedra.Core;
+using Hedra.Engine.Bullet;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem.BossSystem;
 using Hedra.Engine.Game;
@@ -60,6 +61,7 @@ namespace Hedra.Engine.EntitySystem
         private bool _isUnderwater;
         private Timer _splashTimer;
         private readonly TickSystem _tickSystem;
+        private BaseUpdatableModel _model;
         public IPhysicsComponent Physics { get; }
 
         private readonly List<IComponent<IEntity>> _components = new List<IComponent<IEntity>>();
@@ -82,8 +84,7 @@ namespace Hedra.Engine.EntitySystem
         public int Seed { get; set; }
         public Vector3 Orientation { get; set; } = Vector3.UnitZ;       
         public bool Removable { get; set; } = true;
-        public Vector3 BlockPosition { get; set; }
-        public bool IsStuck { get; set; }
+        public bool IsStuck => Physics.IsStuck;
         public bool PlaySpawningAnimation { get; set; } = true;
         public bool IsAttacking => Model.IsAttacking;
         public float Speed { get; set; } = 1.25f;
@@ -104,8 +105,7 @@ namespace Hedra.Engine.EntitySystem
             }
         }
 
-        public bool InUpdateRange => (BlockPosition.Xz - LocalPlayer.Instance.Model.Position.Xz).LengthSquared <
-                                     GeneralSettings.UpdateDistanceSquared;
+        public bool InUpdateRange => (Physics.RigidbodyPosition - LocalPlayer.Instance.Model.Position).Xz.LengthSquared < GeneralSettings.UpdateDistanceSquared;
 
         public bool IsActive { get; set; }
         public bool IsBoss { get; set; }
@@ -165,7 +165,15 @@ namespace Hedra.Engine.EntitySystem
 
         public Vector3 Size => Model.Dimensions.Size;
 
-        public BaseUpdatableModel Model { get; set; }
+        public BaseUpdatableModel Model
+        {
+            get => _model;
+            set
+            {
+                _model = value;
+                Physics.SetHitbox(_model.Dimensions);
+            }
+        }
 
         public string Name
         {
@@ -191,8 +199,8 @@ namespace Hedra.Engine.EntitySystem
 
         public Vector3 Position
         {
-            get => Model.Position;
-            set => BlockPosition = value;
+            get => Physics.RigidbodyPosition;
+            set => Physics.Translate(-Position + value);
         }
 
         public Vector3 Rotation
@@ -202,8 +210,8 @@ namespace Hedra.Engine.EntitySystem
         }
 
         public string Type { get; set; } = MobType.None.ToString();
-        
-        public Entity()
+
+        protected Entity()
         {
             _tickSystem = new TickSystem();
             Attributes = new EntityAttributes();
@@ -444,7 +452,7 @@ namespace Hedra.Engine.EntitySystem
             {
                 PlaySpawningAnimation = false;
                 if(Model.Enabled)
-                    SoundPlayer.PlaySound(SoundType.GlassBreakInverted, BlockPosition, false, 1f, .8f);
+                    SoundPlayer.PlaySound(SoundType.GlassBreakInverted, Position, false, 1f, .8f);
 
                 if (Model is IDisposeAnimation animable)
                 {
@@ -499,7 +507,7 @@ namespace Hedra.Engine.EntitySystem
             Physics.Draw();
             for (var i = _components.Count - 1; i > -1; --i)
             {
-                if (!_components[i]?.Drawable ?? false)
+                if (!(_components[i] is IRenderable))
                     _components[i].Draw();
             }
         }
@@ -507,11 +515,11 @@ namespace Hedra.Engine.EntitySystem
         public virtual void Update()
         {
             this.Model.Update();
+            this.Physics.Update();
 
             if (IsDead) return;
 
             this.SpawnAnimation();
-            this.Physics.Update();
             this.UpdateEnvironment();
             this._tickSystem.Tick();
             var beforeComponents = default(IComponent<IEntity>[]);
@@ -521,7 +529,6 @@ namespace Hedra.Engine.EntitySystem
             {
                 beforeComponents[i]?.Update();
             }
-            
 
             if (IsKnocked)
             {

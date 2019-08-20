@@ -58,6 +58,8 @@ namespace Hedra.Engine.CacheSystem
         Carrot,
         Peas,
         Tomato,
+        FishingPostIcon,
+        FishingPost,
         MaxEnums
     }
 }

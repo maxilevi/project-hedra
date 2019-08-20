@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using Hedra.Engine.Events;
 using Hedra.Engine.Scripting;
+using Hedra.Game;
 
 namespace Hedra.Engine.Player
 {
@@ -39,9 +40,19 @@ namespace Hedra.Engine.Player
             _script.Get("clear").Invoke(_state);
         }
 
+        public void Write(string Message)
+        {
+            _script.Get("add_line").Invoke(_state, Message);
+        }
+
         public void Dispose()
         {
             EventDispatcher.UnregisterKeyDown(this);
+        }
+
+        public static void Log(string Message)
+        {
+            GameManager.Player.Chat.Write(Message);
         }
     }
 }

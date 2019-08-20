@@ -8,6 +8,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using OpenTK;
 using Hedra.Engine.Rendering;
@@ -19,7 +20,7 @@ namespace Hedra.Engine.PhysicsSystem
     /// <summary>
     /// Description of CollisionShape.
     /// </summary>
-    public class CollisionShape : ICollidable, ICloneable
+    public class CollisionShape : ICloneable
     {
         public Vector3[] Vertices { get; }
         public uint[] Indices { get; }
@@ -27,16 +28,15 @@ namespace Hedra.Engine.PhysicsSystem
         public Vector3 BroadphaseCenter { get; set; }
         public float Height { get; private set; }
         private CollisionShape _cache;
+        private StackTrace _trace;
 
         private CollisionShape(Vector3[] Vertices, uint[] Indices)
         {
             this.Vertices = Optimize(Vertices ?? new Vector3[0]);
-#if !DEBUG
-            Indices = null;
-#endif
             this.Indices = Indices ?? new uint[0];
             this.RecalculateBroadphase();
             this.Height = (SupportPoint(Vector3.UnitY) - SupportPoint(-Vector3.UnitY)).Y;
+            _trace = new StackTrace();
         }
 
         public CollisionShape Transform(Matrix4 TransMatrix)
@@ -116,31 +116,12 @@ namespace Hedra.Engine.PhysicsSystem
             return set.ToArray();
         }
 
-        public CollisionShape AsShape()
-        {
-            return this;
-        }
-        
-        public Box AsBox()
-        {
-            return null;
-        }
-        
-        public CollisionGroup AsGroup()
-        {
-            return null;
-        }
-        
         public object Clone()
         {
             return new CollisionShape(Vertices.ToArray(), this.Indices.ToArray());
         }
 
         public CollisionShape(List<Vector3> Vertices, List<uint> Indices) : this(Vertices.ToArray(), Indices.ToArray())
-        {
-        }
-
-        public CollisionShape(List<Vector3> Vertices) : this(Vertices.ToArray(), null)
         {
         }
 

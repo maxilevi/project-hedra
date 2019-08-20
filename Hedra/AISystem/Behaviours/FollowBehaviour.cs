@@ -21,6 +21,12 @@ namespace Hedra.AISystem.Behaviours
             Traverse.Update();
         }
 
+        public void Cancel()
+        {
+            Target = null;
+            Traverse.CancelWalk();
+        }
+
         protected virtual void SetPosition()
         {
             Traverse.SetTarget(Target.Position);

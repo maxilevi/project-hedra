@@ -142,7 +142,7 @@ namespace Hedra.Engine.Player
                     RollDirection = Human.Physics.MoveFormula(_player.View.Right, false).Xz.ToVector3().NormalizedFast();
                     RollFacing = _characterRotation;
                 }
-                
+                /*
                 if(GameManager.Keyboard[Controls.Climb] && _player.Physics.InFrontOfWall)
                 {
                     if(_player.Stamina > 5)
@@ -163,7 +163,7 @@ namespace Hedra.Engine.Player
                 {
                     if(_player.IsClimbing)
                         _player.IsClimbing = false;
-                }
+                }*/
             }
         
 
@@ -172,7 +172,7 @@ namespace Hedra.Engine.Player
             if (GameManager.Keyboard[Controls.Jump]) this.MoveInWater(true);
             if (GameManager.Keyboard[Controls.Descend]) this.MoveInWater(false);
         }
-        
+
         private void RegisterKey(Key Key, Action Action)
         {
             _registeredKeys.Add(Key, Action);
@@ -225,6 +225,14 @@ namespace Hedra.Engine.Player
             this.RegisterKey(Key.F3, delegate
             {
                 GameSettings.DebugView = !GameSettings.DebugView && GameSettings.DebugMode;             
+            });
+            this.RegisterKey(Key.F4, delegate
+            {
+                GameSettings.DebugPhysics = !GameSettings.DebugPhysics && GameSettings.DebugMode;             
+            });
+            this.RegisterKey(Key.F5, delegate
+            {
+                Chat.Log($"ObjectsInSimulation = '{Bullet.BulletPhysics.ObjectsInSimulation}'; RigidbodyCount = '{Bullet.BulletPhysics.RigidbodyCount}'");
             });
         }
 
@@ -302,7 +310,7 @@ namespace Hedra.Engine.Player
 
             if (EventArgs.Key == Key.Keypad0 && _player.CanInteract)
             {
-                _player.Physics.TargetPosition += Vector3.UnitY * 25f;
+                _player.Physics.Translate(Vector3.UnitY * 25f);
             }
             if (EventArgs.Key == Key.Insert && _player.CanInteract)
             {

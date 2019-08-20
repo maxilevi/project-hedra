@@ -28,7 +28,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 lampPost.Translate(Position);
                 var shapes = Root.Cache.GrabShapes(template.Path).Select(S => S.Transform(Position)).ToList();
                 Structure.AddCollisionShape(shapes.ToArray());
-                Structure.AddStaticElement(lampPost);
+                Structure.AddStaticElement(lampPost, false);
                 Structure.WorldObject.AddChildren(new WorldLight(Position + template.LightOffset * template.Scale)
                 {
                     Radius = Radius,
@@ -41,17 +41,17 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         public static void PlaceBench(Vector3 TargetPosition, bool IsInIntersection, 
             Vector3 Orientation, CollidableStructure Structure, VillageRoot Root, Random Rng)
         {
+            var template = SelectTemplate(Root.Template.Decorations.Benches.ToArray(), Rng);
+            var bench = Root.Cache.GrabModel(template.Path);
+            var shapes = Root.Cache.GrabShapes(template.Path);
             void Place(Vector3 Position)
             {
                 var rotation = Vector3.UnitY * (IsInIntersection ? 90 : 0);
                 var rotationMatrix = Matrix4.CreateRotationY(rotation.Y * Mathf.Radian);
                 var offset = Orientation * VillageDesign.PathWidth * .75f;
-                var template = SelectTemplate(Root.Template.Decorations.Benches.ToArray(), Rng);
                 var transMatrix = rotationMatrix * Matrix4.CreateTranslation(Position + offset);
-                var bench = Root.Cache.GrabModel(template.Path).Transform(transMatrix);
-                var shapes = Root.Cache.GrabShapes(template.Path).Select(S => S.Transform(transMatrix)).ToList();
-                Structure.AddCollisionShape(shapes.ToArray());
-                Structure.AddStaticElement(bench);
+                Structure.AddCollisionShape(shapes.Select(S => S.Transform(transMatrix)).ToArray());
+                Structure.AddStaticElement(bench.Transform(transMatrix), false);
                 Structure.WorldObject.AddChildren(
                     new Bench(
                         Vector3.TransformPosition(Vector3.Zero, transMatrix),

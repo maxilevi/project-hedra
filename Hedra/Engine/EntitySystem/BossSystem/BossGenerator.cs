@@ -34,7 +34,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
         {
             var type = PossibleTypes[Rng.Next(0, PossibleTypes.Length)];
             var boss = World.SpawnMob(type, Vector3.Zero, Rng);
-            boss.Physics.TargetPosition = Position;
+            boss.Position = Position;
             MakeBoss(boss, Position, Rng);
             return boss;
         }

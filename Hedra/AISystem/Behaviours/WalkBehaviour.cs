@@ -16,8 +16,7 @@ namespace Hedra.AISystem.Behaviours
         public float ErrorMargin { get; set; } = DefaultErrorMargin;
         private bool _arrived;
         private Action _callback;
-        private Vector3 _lastPosition;
-        
+
         public WalkBehaviour(IEntity Parent) : base(Parent)
         {
         }
@@ -56,8 +55,6 @@ namespace Hedra.AISystem.Behaviours
                     this.Cancel();
                 }
             }
-            Parent.IsStuck = (!Parent.IsMoving && !_arrived && HasTarget || _lastPosition.Xz == Parent.Position.Xz && HasTarget) && !Parent.IsKnocked;
-            _lastPosition = Parent.Position;
         }
         
         public bool HasTarget { get; private set; }

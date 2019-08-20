@@ -56,7 +56,6 @@ namespace Hedra.AISystem.Behaviours
                 if (Parent.IsStuck)
                 {
                     Parent.KnockForSeconds(5f);
-                    Parent.IsStuck = false;
                     Walk.Cancel();
                 }
 

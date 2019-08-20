@@ -41,7 +41,7 @@ namespace Hedra.WeaponSystem
         {
             var fireball = Fireball.Create(
                 Owner,
-                Owner.Position + Vector3.UnitY * 4f,
+                Owner.Position + Vector3.UnitY * 6f,
                 Direction,
                 Owner.DamageEquation * Options.DamageModifier,
                 ToIgnore.Concat(Options.IgnoreEntities).ToArray()

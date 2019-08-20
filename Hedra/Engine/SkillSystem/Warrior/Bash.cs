@@ -68,7 +68,7 @@ namespace Hedra.Engine.SkillSystem.Warrior
                     if (Utils.Rng.Next(0, 5) == 1)
                     {
                         Entity.KnockForSeconds(1.5f);
-                        Entity.Physics.Translate(-Entity.Orientation);
+                        Entity.Physics.ApplyImpulse(-Entity.Orientation);
                     }
                     Entity.Damage(Damage * dot * 1.25f, User, out var exp);
                     User.XP += exp;

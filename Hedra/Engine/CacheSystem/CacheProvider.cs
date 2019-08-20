@@ -31,6 +31,7 @@ namespace Hedra.Engine.CacheSystem
         public Dictionary<string, List<CompressedValue<Vector4>>> CachedColors { get; private set; }
         private readonly Dictionary<string, CacheType> _caches = new Dictionary<string, CacheType>();
         private readonly object _colorLock = new object();
+        private readonly object _hashLock = new object();
         private readonly object _extradataLock = new object();
         private MD5 _hasher;
         private object _asd;
@@ -152,7 +153,9 @@ namespace Hedra.Engine.CacheSystem
 
         private string MakeHash(byte[] Bytes)
         {
-            var hash = _hasher.ComputeHash(Bytes);
+            var hash = (byte[]) null;
+            lock (_hashLock)
+                hash = _hasher.ComputeHash(Bytes);
             var sb = new StringBuilder();
             for (var i = 0; i < hash.Length; i++)
             {

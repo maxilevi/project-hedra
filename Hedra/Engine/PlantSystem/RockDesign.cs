@@ -57,7 +57,7 @@ namespace Hedra.Engine.PlantSystem
 
         public override void AddShapes(Chunk UnderChunk, Matrix4 TransMatrix)
         {
-            List<CollisionShape> newShapes = CacheManager.GetShape(Model);
+            var newShapes = CacheManager.GetShape(Model).DeepClone();
             newShapes.ForEach(Shape => Shape.Transform(TransMatrix));
 
             UnderChunk.AddCollisionShape(newShapes.ToArray());

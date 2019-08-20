@@ -62,6 +62,7 @@ namespace Hedra.Engine.Rendering.Core
         public static void Update<T>(T[] Data, int SizeInBytes, VertexAttribPointerType PointerType, BufferTarget BufferTarget, BufferUsageHint Hint, ref uint Id) where T : struct
         {
             var originalId = Id;
+            if(Id == 0) throw new ArgumentOutOfRangeException($"VBO is invalid (disposed)");
             if (_referenceCounter[originalId] == 1)
             {
                 var previousHash = _uncachedVBOs.Contains(originalId) ? null : HashFromId(originalId);

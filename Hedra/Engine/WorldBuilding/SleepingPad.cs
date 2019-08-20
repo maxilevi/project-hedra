@@ -60,7 +60,7 @@ namespace Hedra.Engine.WorldBuilding
                 Sleeper.IsSleeping = false;
                 Sleeper.CanInteract = true;
                 Sleeper.ShowIcon(null);
-                Sleeper.Physics.TargetPosition += Vector3.UnitY;
+                Sleeper.Position += Vector3.UnitY;
                 var dmgComponent = Sleeper.SearchComponent<DamageComponent>();
                 if (dmgComponent != null)
                 {
@@ -73,7 +73,7 @@ namespace Hedra.Engine.WorldBuilding
                 Human.IsSleeping = true;
                 Human.IsRiding = false;
                 Human.CanInteract = false;
-                Human.Physics.TargetPosition = Position;
+                Human.Position = Position;
                 Human.Rotation = TargetRotation;
                 var dmgComponent = Human.SearchComponent<DamageComponent>();
                 if (dmgComponent != null)

@@ -67,7 +67,7 @@ namespace Hedra.WeaponSystem
                 Matrix4.CreateRotationX(-90 * Mathf.Radian) * Matrix4.CreateRotationZ(0 * Mathf.Radian));
             MainMesh.LocalRotation = new Vector3(90, 0, 0);
 
-            if (_previousPosition != Owner.BlockPosition && Owner.IsGrounded)
+            if (_previousPosition != Owner.Position && Owner.IsGrounded)
             {
                 Chunk underChunk = World.GetChunkAt(Owner.Position);
                 World.Particles.VariateUniformly = true;
@@ -85,7 +85,7 @@ namespace Hedra.WeaponSystem
 
                 World.Particles.Emit();
             }
-            _previousPosition = Owner.BlockPosition;
+            _previousPosition = Owner.Position;
         }
 
         public override void Update(IHumanoid Human)
@@ -96,6 +96,11 @@ namespace Hedra.WeaponSystem
                 this.Trail = new TrailRenderer(
                     () => this.WeaponTip,
                     Vector4.One);
+            }
+
+            if (Human is LocalPlayer && !Time.Paused && Owner.IsAttacking)
+            {
+                int a = 0;
             }
             this.Trail.Emit &= this.Owner?.IsAttacking ?? false;
             this.Trail.Update();

@@ -99,7 +99,7 @@ namespace Hedra.Engine.EnvironmentSystem
 
         public static void Update()
         {
-            var underChunk = World.GetChunkAt(LocalPlayer.Instance.BlockPosition);
+            var underChunk = World.GetChunkAt(LocalPlayer.Instance.Position);
             if(underChunk == null) return;
             Weather.Update(underChunk);
             _currentRegion = underChunk.Biome;

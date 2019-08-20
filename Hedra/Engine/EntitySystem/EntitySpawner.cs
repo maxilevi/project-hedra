@@ -209,7 +209,7 @@ namespace Hedra.Engine.EntitySystem
                 {
                     if (World.Entities[i] == _player || World.Entities[i].IsStatic) continue;
 
-                    if ((World.Entities[i].BlockPosition.Xz - Position.Xz).LengthSquared <
+                    if ((World.Entities[i].Position.Xz - Position.Xz).LengthSquared <
                         80f * Chunk.BlockSize * 80f * Chunk.BlockSize) return true;
                 }
             }

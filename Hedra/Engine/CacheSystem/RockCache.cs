@@ -18,12 +18,11 @@ namespace Hedra.Engine.CacheSystem
              */
 
             this.AddModel(AssetManager.PLYLoader("Assets/Env/Rock1.ply", Vector3.One));
-
-            VertexData shape = AssetManager.PLYLoader("Assets/Env/Colliders/Rock0_Collider0.ply",
-                Vector3.One, Vector3.Zero, Vector3.Zero, false);
+            var shape = AssetManager.PLYLoader("Assets/Env/Colliders/Rock0_Collider0.ply", Vector3.One, Vector3.Zero, Vector3.Zero, false);
+            
             var list = new List<CollisionShape>
             {
-                new CollisionShape(shape.Vertices)
+                new CollisionShape(shape.Vertices, shape.Indices)
             };
 
             this.AddShapes(list);

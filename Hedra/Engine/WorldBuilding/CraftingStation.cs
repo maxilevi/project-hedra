@@ -3,6 +3,7 @@ using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
+using Hedra.Engine.Player;
 using Hedra.Game;
 using Hedra.Localization;
 using OpenTK;
@@ -23,7 +24,7 @@ namespace Hedra.Engine.WorldBuilding
 
         protected CraftingStation(Vector3 Position) : base(Position)
         {
-            UpdateManager.Add(this);
+            BackgroundUpdater.Add(this);
         }
 
         public virtual void Update()
@@ -48,7 +49,7 @@ namespace Hedra.Engine.WorldBuilding
         public override void Dispose()
         {
             base.Dispose();
-            UpdateManager.Remove(this);
+            BackgroundUpdater.Remove(this);
         }
     }
 }

@@ -11,6 +11,7 @@ using Hedra.Engine.PlantSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.WorldBuilding;
+using Hedra.Rendering;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
@@ -128,6 +129,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                     var k = j;
                     var o = i;
                     void PolishCallback() => Builders[k].Polish(Parameters[o], _root, _rng);
+                    //finalOutput.Models
                     RoutineManager.StartRoutine(PlaceCoroutine, Parameters[i].Position, finalOutput.Compress(),
                         Structure, (Action) PolishCallback);
                 }

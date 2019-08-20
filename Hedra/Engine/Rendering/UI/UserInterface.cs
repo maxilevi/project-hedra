@@ -36,8 +36,8 @@ namespace Hedra.Engine.Rendering.UI
         public Panel Menu { get; }
         private readonly OptionsUI _optionsMenu;
         public GameUI GamePanel { get; }
-        public ChrChooserUI ChrChooser { get; }
-        public ChrCreatorUI ChrCreator { get; }
+        public CharacterSelectorUI CharacterSelector { get; }
+        public CharacterCreatorUI CharacterCreator { get; }
         private readonly NetworkUI ConnectPanel;
         private readonly BackgroundTexture _title;
         private readonly Button _newRun;
@@ -52,9 +52,9 @@ namespace Hedra.Engine.Rendering.UI
             Menu = new Panel();
             _optionsMenu = new OptionsUI();
             GamePanel = new GameUI(Player);
-            ChrChooser = new ChrChooserUI(Player);
+            CharacterSelector = new CharacterSelectorUI();
             ConnectPanel = new NetworkUI();
-            ChrCreator = new ChrCreatorUI(Player);
+            CharacterCreator = new CharacterCreatorUI(Player);
 
             var bandPosition = new Vector2(0, -.8f);
             const int fontSize = 16;
@@ -70,11 +70,11 @@ namespace Hedra.Engine.Rendering.UI
             _newRun.Click += delegate
             {
                 GameSettings.NewWorld = true;
-                ChrChooser.ShouldHost = false;
+                CharacterSelector.ShouldHost = false;
                 if(GameManager.InStartMenu)
                 {
                     Menu.Disable();
-                    ChrChooser.Enable();
+                    CharacterSelector.Enable();
                 }
                 else
                 {
@@ -92,9 +92,9 @@ namespace Hedra.Engine.Rendering.UI
                     AutosaveManager.Save();
                     GameManager.LoadMenu();
                 }
-                ChrChooser.ShouldHost = false;
+                CharacterSelector.ShouldHost = false;
                 Menu.Disable();
-                ChrChooser.Enable();
+                CharacterSelector.Enable();
             };
             
             var inviteFriends = new Button(new Vector2(.3f, bandPosition.Y), Vector2.Zero,
@@ -116,8 +116,8 @@ namespace Hedra.Engine.Rendering.UI
                 if (GameManager.InStartMenu)
                 {
                     Menu.Disable();
-                    ChrChooser.Enable();
-                    ChrChooser.ShouldHost = true;
+                    CharacterSelector.Enable();
+                    CharacterSelector.ShouldHost = true;
                 }
                 else
                 {
@@ -215,10 +215,11 @@ namespace Hedra.Engine.Rendering.UI
 
             Menu.Enable();
             _optionsMenu.Disable();
-            ChrChooser.Disable();
+            CharacterSelector.ReloadSaveFile();
+            CharacterSelector.Disable();
             _player.HideInterfaces();
             GamePanel.Disable();
-            ChrCreator.Disable();
+            CharacterCreator.Disable();
             ConnectPanel.Disable();
             if(!Network.Instance.IsAlive)
             {
@@ -244,8 +245,8 @@ namespace Hedra.Engine.Rendering.UI
             Menu.Disable();
             _optionsMenu.Disable();
             GamePanel.Enable();
-            ChrChooser.Disable();
-            ChrCreator.Disable();
+            CharacterSelector.Disable();
+            CharacterCreator.Disable();
             ConnectPanel.Disable();
             Cursor.Show = false;
             Cursor.Center();

@@ -28,9 +28,9 @@ namespace Hedra.Engine.Player
         public Vector3 LastOrientation { get; private set; }
         public float RollFacing { get; set; }
         public bool IsJumping { get; private set; }
+        protected Vector3 AccumulatedMovement { get; set; }
         protected readonly IHumanoid Human;
-        private Vector3 _jumpPropulsion;
-        private float _lastHeight;
+        protected Vector3 JumpPropulsion;
 
         public MovementManager(IHumanoid Human)
         {
@@ -43,10 +43,10 @@ namespace Hedra.Engine.Player
             var minHeight = Physics.HeightAtPosition(Player.Position);
             if (Player.Position.Y < minHeight)
             {
-                Human.Physics.TargetPosition = new Vector3(
-                    Human.Physics.TargetPosition.X,
+                Human.Position = new Vector3(
+                    Human.Position.X,
                     minHeight,
-                    Human.Physics.TargetPosition.Z
+                    Human.Position.Z
                 );
             }
         }
@@ -54,25 +54,25 @@ namespace Hedra.Engine.Player
         public void MoveInWater(bool Up)
         {
             if(Human.IsRolling || Human.IsDead || !Human.CanInteract || !Human.IsUnderwater) return;
-            if(Human.Position.Y + Human.Model.Height + 1 > Physics.WaterHeight(Human.Physics.TargetPosition) && Up) return;
+            if(Human.Position.Y + Human.Model.Height + 1 > Physics.WaterHeight(Human.Position) && Up) return;
             Human.IsGrounded = false;
-            Human.Physics.Velocity = Vector3.Zero;
+            Human.Physics.ResetVelocity();
             Human.Model.LocalRotation = new Vector3(0, Human.Model.LocalRotation.Y, 0);
-            if(Up) Human.Physics.TargetPosition += Vector3.UnitY * 12.5f * (float) Time.DeltaTime;
-            else Human.Physics.TargetPosition -= Vector3.UnitY * 12.5f * (float) Time.DeltaTime;
+            if(Up) Human.Position += Vector3.UnitY * 12.5f * (float) Time.DeltaTime;
+            else Human.Position -= Vector3.UnitY * 12.5f * (float) Time.DeltaTime;
 
-            Human.Physics.TargetPosition = new Vector3(
-                Human.Physics.TargetPosition.X,
-                Math.Max(Physics.HeightAtPosition(Human.Physics.TargetPosition)+2, Human.Physics.TargetPosition.Y),
-                Human.Physics.TargetPosition.Z);
+            Human.Position = new Vector3(
+                Human.Position.X,
+                Math.Max(Physics.HeightAtPosition(Human.Position)+2, Human.Position.Y),
+                Human.Position.Z);
         }
 
         protected void Jump()
         {
-            var canJump = Human.IsGrounded || Human.Position.Y - Human.Model.Height * .5f < Physics.HeightAtPosition(Human.Position);
+            var canJump = Human.IsGrounded;
             if (IsJumping || Human.IsKnocked || Human.IsCasting || Human.IsRiding ||
                 Human.IsRolling || Human.IsDead || !canJump || !Human.CanInteract ||
-                Math.Abs(Human.Physics.TargetPosition.Y - Human.Position.Y) > 2.0f || !this.CaptureMovement)
+                Math.Abs(Human.Position.Y - Human.Position.Y) > 2.0f || !this.CaptureMovement)
                 return;
 
             ForceJump();
@@ -85,27 +85,37 @@ namespace Hedra.Engine.Player
             IsJumping = true;
             Human.Physics.ResetFall();
             Human.Physics.GravityDirection = -Vector3.UnitY;
-            _jumpPropulsion = Vector3.UnitY * Propulsion;
+            JumpPropulsion = Vector3.UnitY * Propulsion;
         }
 
         protected virtual void DoUpdate() { }
 
         public void ProcessMovement(float CharacterRotation, Vector3 MoveSpace, bool Orientate = true)
         {
-            Human.Physics.DeltaTranslate(MoveSpace);
-            if (Orientate)
-            {
-                LastOrientation = new Vector3(MoveSpace.X, 0, MoveSpace.Z).NormalizedFast();
-                if (!Human.WasAttacking && !Human.IsAttacking)
-                {
-                    Human.Model.TargetRotation = new Vector3(Human.Model.TargetRotation.X, CharacterRotation,
-                        Human.Model.TargetRotation.Z);
-                    Human.Orientation = LastOrientation;
-                }
-            }
-
+            Human.Physics.MoveTowards(MoveSpace);
+            if(Orientate)
+                ProcessOrientation(MoveSpace, CharacterRotation);
             Human.IsSitting = false;
         }
+        
+        public void ProcessTranslation(float CharacterRotation, Vector3 MoveSpace, bool Orientate)
+        {
+            Human.Physics.DeltaTranslate(MoveSpace);
+            if(Orientate)
+                ProcessOrientation(MoveSpace, CharacterRotation); 
+        }
+
+        private void ProcessOrientation(Vector3 Towards, float CharacterRotation)
+        {
+            LastOrientation = new Vector3(Towards.X, 0, Towards.Z).NormalizedFast();
+            if (!Human.WasAttacking && !Human.IsAttacking)
+            {
+                Human.Model.TargetRotation = new Vector3(Human.Model.TargetRotation.X, CharacterRotation,
+                    Human.Model.TargetRotation.Z);
+                Human.Orientation = LastOrientation;
+            }
+        }
+
         
         public void OrientateTowards(float Facing)
         {
@@ -140,20 +150,19 @@ namespace Hedra.Engine.Player
             Human.IsSwimming = Human.IsMoving && Human.IsUnderwater;
             this.DoUpdate();
             this.ManageMoveOrders();
-            this.HandleJumping();
+            HandleJumping();
         }
-
+        
         private void HandleJumping()
         {
             if (!IsJumping) return;
-            if ((Physics.HeightAtPosition(Human.Position) + .5f > Human.Position.Y || Human.IsGrounded) 
-                && _jumpPropulsion.LengthFast < 30 || Human.IsUnderwater)
+            if (Human.IsGrounded && JumpPropulsion.LengthFast < 30 || Human.IsUnderwater)
             {
                 CancelJump();
             }
 
-            if (!Human.Physics.DeltaTranslate(_jumpPropulsion, true)) CancelJump();
-            _jumpPropulsion *= (float)Math.Pow(.25f, Time.DeltaTime * 3f);
+            if (!Human.Physics.DeltaTranslate(JumpPropulsion) || JumpPropulsion.LengthSquared < 1) CancelJump();
+            JumpPropulsion *= (float)Math.Pow(.25f, Time.DeltaTime * 3f);
         }
 
         public void CancelJump()

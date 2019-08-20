@@ -13,6 +13,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Engine.Rendering.UI;
 using OpenTK;
 using Hedra.Engine.WorldBuilding;
@@ -124,9 +125,18 @@ namespace Hedra.Engine.Generation
                 _colliders.Add(Group);
             }
         }
-        
 
-        public void AddStaticElement(params VertexData[] Models)
+        public void AddStaticElement(VertexData[] Models, bool Ungroup = true)
+        {
+            AddStaticElement(Ungroup ? Models.SelectMany(M => M.Ungroup()).ToArray() : Models.ToArray());
+        }
+        
+        public void AddStaticElement(VertexData Model, bool Ungroup = true)
+        {
+            AddStaticElement(Ungroup ? Model.Ungroup() : new []{Model});
+        }
+
+        private void AddStaticElement(VertexData[] Models)
         {
             lock (_lock)
             {

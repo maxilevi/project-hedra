@@ -47,29 +47,32 @@ namespace Hedra.Engine.Rendering
             _line = new Line3D();
         }
 
-        public static void DrawBox(Vector3 Start, Vector3 End)
+        public static void DrawPoint(Vector3 Point, Vector4 Color)
         {
-            //TODO: 
+#if DEBUG
+            Shader.Passthrough.Bind();
+            OpenTK.Graphics.OpenGL.GL.PointSize(4);
+            OpenTK.Graphics.OpenGL.GL.Begin(OpenTK.Graphics.OpenGL.PrimitiveType.Points);
+            OpenTK.Graphics.OpenGL.GL.Vertex3(Point);
+            OpenTK.Graphics.OpenGL.GL.Color4(Color);
+            OpenTK.Graphics.OpenGL.GL.End();
+            Shader.Passthrough.Unbind();
+#endif
         }
 
-        public static void DrawLine(Vector3[] Points, Vector4[] Colors, float Width)
-        {
-            _line.Width = Width;
-            _line.Update(Points, Colors);
-            _line.Draw();
-        }
-        
         public static void DrawLine(Vector3 Start, Vector3 End, Vector4 Color, float Width = 1)
         {
-            DrawLine(new []
-            {
-                Start,
-                End
-            }, new []
-            {
-                Color,
-                Color
-            }, Width);
+#if DEBUG
+            Shader.Passthrough.Bind();
+            OpenTK.Graphics.OpenGL.GL.LineWidth(Width);
+            OpenTK.Graphics.OpenGL.GL.Begin(OpenTK.Graphics.OpenGL.PrimitiveType.Lines);
+            OpenTK.Graphics.OpenGL.GL.Color4(Color);
+            OpenTK.Graphics.OpenGL.GL.Vertex3(Start);
+            OpenTK.Graphics.OpenGL.GL.Color4(Color);
+            OpenTK.Graphics.OpenGL.GL.Vertex3(End);
+            OpenTK.Graphics.OpenGL.GL.End();
+            Shader.Passthrough.Unbind();
+#endif
         }
 
         public static void DrawShapes(CollisionShape[] Shapes, Vector4 DrawColor)

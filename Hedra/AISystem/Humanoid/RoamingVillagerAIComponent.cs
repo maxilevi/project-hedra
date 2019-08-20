@@ -114,8 +114,8 @@ namespace Hedra.AISystem.Humanoid
 
         private void ManageInteractions()
         {
-            if ((Parent.BlockPosition.Xz - _lastPosition).LengthSquared < Chunk.BlockSize*Chunk.BlockSize) return;
-            _lastPosition = Parent.BlockPosition.Xz;
+            if ((Parent.Position.Xz - _lastPosition).LengthSquared < Chunk.BlockSize*Chunk.BlockSize) return;
+            _lastPosition = Parent.Position.Xz;
             if (ShouldSit && CanSit(out var bench))
                 Sit(bench);
             if (ShouldTalk && CanTalk(out var human))

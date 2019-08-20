@@ -26,7 +26,7 @@ namespace Hedra.AISystem.Humanoid
             return Leader == Parent
                 ? Vector3.TransformPosition(Vector3.UnitZ * 32, Matrix4.CreateRotationY(_angle * Mathf.Radian)) +
                   Parent.Position
-                : _crew[Array.IndexOf(_crew, Parent) - 1].BlockPosition;
+                : _crew[Array.IndexOf(_crew, Parent) - 1].Position;
         }
 
         public override IEntity FindMobTarget(float SearchRadius)

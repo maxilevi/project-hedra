@@ -9,8 +9,10 @@
 
 using System;
 using System.Collections.Generic;
+using BulletSharp;
 using Hedra.Core;
 using Hedra.Engine;
+using Hedra.Engine.Bullet;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
@@ -29,7 +31,7 @@ namespace Hedra.WorldObjects
     public delegate void OnProjectileLandEvent(Projectile Sender, LandType Type);
     public delegate void OnProjectileMoveEvent(Projectile Sender);
     
-    public class Projectile : IDisposable, IUpdatable, IWorldObject
+    public class Projectile : IDisposable, IWorldObject
     {
         public event OnDisposedEvent OnDispose;
         public event OnProjectileHitEvent HitEventHandler;
@@ -52,31 +54,37 @@ namespace Hedra.WorldObjects
         public bool PlaySound { get; set; } = true;
         public bool ShowParticlesOnDestroy { get; set; } = true;
         public bool ManuallyDispose { get; set; } = false;
-        public float PropulsionDecay { get; set; } = 1;
-        public Vector3 Delta { get; set; }
+        public Vector3 Delta { get; private set; }
 
-        private readonly HashSet<IEntity> _collidedList;
         private readonly IEntity _parent;
-        private readonly List<ICollidable> _chunkCollisions;
-        private readonly List<ICollidable> _structureCollisions;
-        private readonly Box _collisionBox;
-        private Vector2 _lastChunkCollisionPosition;
-        private Vector2 _lastStructureCollisionPosition;
-        private Vector3 _accumulatedVelocity;
+        private readonly HashSet<IEntity> _alreadyCollidedList;
+        private readonly RigidBody _body;
+        private bool _firstTime;
         private bool _landed;
 
 
         public Projectile(IEntity Parent, Vector3 Origin, VertexData MeshData)
         {
-            _parent = Parent;
-            _collidedList = new HashSet<IEntity>();
-            _chunkCollisions = new List<ICollidable>();
-            _structureCollisions = new List<ICollidable>();
-            _collisionBox = GetCollisionBox(MeshData);
             Mesh = ObjectMesh.FromVertexData(MeshData);
-            Propulsion = Propulsion;
             Mesh.Position = Origin;
-            //Mesh.LocalRotation = Physics.DirectionToEuler(Parent.Orientation);
+            _parent = Parent;
+            _alreadyCollidedList = new HashSet<IEntity>();
+
+            var dimensions = GetCollisionBox(MeshData);
+            using (var bodyInfo = new RigidBodyConstructionInfo(1, new DefaultMotionState(), BulletPhysics.ShapeFrom(dimensions)))
+            {
+                _body = new RigidBody(bodyInfo);
+                _body.CollisionFlags |= CollisionFlags.NoContactResponse;
+                _body.Translate(Mesh.Position.Compatible());
+                _body.ActivationState = ActivationState.DisableDeactivation;
+            }
+            BulletPhysics.Add(_body, new PhysicsObjectInformation
+            {
+                Group = CollisionFilterGroups.DefaultFilter,
+                Mask = CollisionFilterGroups.AllFilter,
+                Name = $"Projectile from '{_parent.Name}'"
+            });
+            BulletPhysics.OnCollision += OnCollision;
             UpdateManager.Add(this);
         }
 
@@ -89,60 +97,34 @@ namespace Hedra.WorldObjects
         {
             if(Disposed) return;
 
-            if (_accumulatedVelocity == Vector3.Zero && UsePhysics || !UsePhysics && Direction == Vector3.Zero)
-            {
-                Direction = Propulsion.NormalizedFast();
-                _accumulatedVelocity = Propulsion + Vector3.UnitY * 7f;
-            }
-
             Lifetime -= Time.DeltaTime;
-            Vector3 rotation;
-            if (UsePhysics)
+            if (!_firstTime)
             {
-                Propulsion *= (float)Math.Pow(.75f, Time.DeltaTime) * PropulsionDecay;
-                _accumulatedVelocity += (Propulsion * 60f - Vector3.UnitY * 20f * Falloff) * Time.DeltaTime;
-                _accumulatedVelocity *= (float)Math.Pow(.8f, Time.DeltaTime);
-                var lastPosition = Mesh.Position;
-                if(!_landed)
-                    Mesh.Position += _accumulatedVelocity * 2.25f * Time.DeltaTime;
-                Delta = Mesh.Position - lastPosition;
-                rotation = Physics.DirectionToEuler(_accumulatedVelocity.NormalizedFast());
+                if (UsePhysics) _body.ApplyCentralImpulse(Propulsion.Compatible() * 40f + Vector3.UnitY.Compatible() * 20f);
+                else if(Direction == Vector3.Zero) Direction = Propulsion.NormalizedFast();
+                _firstTime = true;
             }
-            else
-            {
-                Mesh.Position += Direction * 100f * Speed * Time.DeltaTime;
-                rotation = Physics.DirectionToEuler(Direction);
-            }
-            Mesh.LocalRotation = rotation;
-            if(_landed) return;
+            
+            if (!UsePhysics)_body.LinearVelocity = Direction.Compatible() * 100f * Speed;
+            if(_landed) _body.LinearVelocity = BulletSharp.Math.Vector3.Zero;
+
+            var lastPosition = Mesh.Position;
+            if(!_landed)
+                Mesh.Position = _body.WorldTransform.Origin.Compatible();
+            Delta = Mesh.Position - lastPosition;
+            if(_body.LinearVelocity.LengthSquared > 0.05f)
+                Mesh.LocalRotation = Physics.DirectionToEuler(_body.LinearVelocity.Compatible().NormalizedFast());
+            HandleMovement();
+        }
+
+        private void HandleMovement()
+        {
+            if (_landed) return;
             if (HandleLifecycle)
             {
                 if (Collide)
                 {
-                    ProcessCollision();
-                }
-
-                try
-                {
-                    _collisionBox.Translate(Mesh.Position);
-                    var entities = World.Entities;
-                    for (var i = 0; i < entities.Count; i++)
-                    {
-                        if (_parent == entities[i]
-                            || _collidedList.Contains(World.Entities[i])
-                            || !Physics.Collides(_collisionBox, entities[i].Model.BroadphaseBox)
-                            || IgnoreEntities != null && Array.IndexOf(IgnoreEntities, entities[i]) != -1) continue;
-
-                        HitEventHandler?.Invoke(this, World.Entities[i]);
-                        _collidedList.Add(World.Entities[i]);
-                        if(DisposeOnHit)
-                            Dispose();
-                        break;
-                    }
-                }
-                finally
-                {
-                    _collisionBox.Translate(-Mesh.Position);
+                    ProcessWaterCollision();
                 }
 
                 if (Lifetime < 0 && !ManuallyDispose)
@@ -150,79 +132,61 @@ namespace Hedra.WorldObjects
                     this.Dispose();
                 }
             }
-
             MoveEventHandler?.Invoke(this);
         }
 
-        private void ProcessCollision()
+        private void ProcessWaterCollision()
         {
-            if(_landed) return;
-
-            Collision.Update(
-                Position,
-                _chunkCollisions,
-                _structureCollisions,
-                ref _lastChunkCollisionPosition,
-                ref _lastStructureCollisionPosition
-            );
-            var type = LandType.Structure;
-            var isColliding = false;
-            try
-            {
-                _collisionBox.Translate(Mesh.Position);
-                for (var i = 0; i < _structureCollisions.Count && !isColliding; i++)
-                {
-                    if (Physics.Collides(_structureCollisions[i], _collisionBox))
-                        isColliding = true;
-                }
-                for (var i = 0; i < _chunkCollisions.Count && !isColliding; i++)
-                {
-                    if (Physics.Collides(_chunkCollisions[i], _collisionBox))
-                        isColliding = true;
-                }
-            }
-            finally
-            {
-                _collisionBox.Translate(-Mesh.Position);
-            }
-
-            if (Mesh.Position.Y <= Physics.HeightAtPosition(Mesh.Position))
-            {
-                isColliding = true;
-                type = LandType.Ground;
-            }
-
             if (CollideWithWater && Mesh.Position.Y <= Physics.WaterHeight(Mesh.Position))
             {
-                isColliding = true;
-                type = LandType.Water;
+                InvokeLand(LandType.Water);
             }
+        }
 
-            if (isColliding)
+        private void OnCollision(CollisionObject Object0, CollisionObject Object1)
+        {
+            if (_landed || !Collide || !ReferenceEquals(Object0, _body) && !ReferenceEquals(Object1, _body)) return;
+            var other = ReferenceEquals(Object0, _body) ? Object1 : Object0;
+            var objectInformation = (PhysicsObjectInformation)other.UserObject;
+            if (!objectInformation.IsEntity)
             {
-                if(PlaySound) 
-                    SoundPlayer.PlaySound(SoundType.HitGround, Mesh.Position);
-                if (ShowParticlesOnDestroy)
-                {
-                    World.Particles.Color = new Vector4(1, 1, 1, 1);
-                    World.Particles.ParticleLifetime = 0.75f;
-                    World.Particles.GravityEffect = .0f;
-                    World.Particles.Scale = new Vector3(.75f, .75f, .75f);
-                    World.Particles.Position = Mesh.Position;
-                    World.Particles.PositionErrorMargin = Vector3.One * 1.5f;
-                    for (var i = 0; i < 10; i++)
-                    {
-                        World.Particles.Direction =
-                            new Vector3(Utils.Rng.NextFloat(), Utils.Rng.NextFloat(), Utils.Rng.NextFloat()) * .15f;
-                        World.Particles.Emit();
-                    }
-                }
-
-                LandEventHandler?.Invoke(this, type);
-
-                _landed = true;
-                if(!ManuallyDispose) this.Dispose();
+                var type = objectInformation.IsLand
+                    ? LandType.Ground
+                    : LandType.Structure;
+                InvokeLand(type);
             }
+            else if(objectInformation.Entity.Model != null && !objectInformation.Entity.Disposed)
+            {
+                var entity = objectInformation.Entity;
+                if(_parent == entity || _alreadyCollidedList.Contains(entity) || IgnoreEntities != null && Array.IndexOf(IgnoreEntities, entity) != -1) return;
+                HitEventHandler?.Invoke(this, entity);
+                _alreadyCollidedList.Add(entity);
+                if(DisposeOnHit) Dispose();
+            }
+        }
+
+        private void InvokeLand(LandType Type)
+        {
+            if(PlaySound) SoundPlayer.PlaySound(SoundType.HitGround, Mesh.Position);
+            if (ShowParticlesOnDestroy)
+            {
+                World.Particles.Color = new Vector4(1, 1, 1, 1);
+                World.Particles.ParticleLifetime = 0.75f;
+                World.Particles.GravityEffect = .0f;
+                World.Particles.Scale = new Vector3(.75f, .75f, .75f);
+                World.Particles.Position = Mesh.Position;
+                World.Particles.PositionErrorMargin = Vector3.One * 1.5f;
+                for (var i = 0; i < 10; i++)
+                {
+                    World.Particles.Direction = new Vector3(Utils.Rng.NextFloat(), Utils.Rng.NextFloat(), Utils.Rng.NextFloat()) * .15f;
+                    World.Particles.Emit();
+                }
+            }
+
+            LandEventHandler?.Invoke(this, Type);
+
+            _landed = true;
+            if(!ManuallyDispose) this.Dispose();
         }
 
         public Vector3 Rotation
@@ -239,9 +203,10 @@ namespace Hedra.WorldObjects
 
         public virtual void Dispose()
         {
-            UpdateManager.Remove(this);
-            Mesh.Dispose();
             Disposed = true;
+            Mesh.Dispose();
+            BulletPhysics.RemoveAndDispose(_body);
+            UpdateManager.Remove(this);
             OnDispose?.Invoke();
         }
     }

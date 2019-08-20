@@ -29,6 +29,5 @@ namespace Hedra.Structures
             return ChunkOffset == World.ToChunkSpace(World.SpawnVillagePoint) && !Spawned;
         }
         public string DisplayName => Translations.Get("quest_village");
-        public bool IsCompletable => false;
     }
 }

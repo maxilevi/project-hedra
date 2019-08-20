@@ -14,10 +14,8 @@ namespace Hedra.Engine.PhysicsSystem
     /// <summary>
     /// Description of Box.
     /// </summary>
-    public class Box : ICollidable
+    public class Box
     {
-        private Vector3 _min;
-        private Vector3 _max;
         private Box _cache;
         private Vector3 _shapeCenter;
         private CollisionShape _shape;
@@ -62,13 +60,6 @@ namespace Hedra.Engine.PhysicsSystem
             return Box1;
         }
 
-        public Box Add(Vector3 NewMin, Vector3 NewMax)
-        {
-            this.Min += NewMin;
-            this.Max += NewMax;
-            return this;
-        }
-
         public Box Translate(Vector3 Position)
         {
             this.Max += Position;
@@ -97,58 +88,22 @@ namespace Hedra.Engine.PhysicsSystem
         }
 #endregion
 
-        public CollisionShape AsShape()
-        {
-            return ToShape();
-        }
-
-        public Box AsBox()
-        {
-            return this;
-        }
-
-        public CollisionGroup AsGroup()
-        {
-            return null;
-        }
-
         public Box Cache
         {
             get
             {
-                if (!(_cache is ICollidable collidable)) // Cheap trick so there is no stackoverflow
-                    _cache = new Box(Vector3.Zero, Vector3.Zero);
-
-                this._cache.Min = this.Min;
-                this._cache.Max = this.Max;
-
+                _cache = new Box(Vector3.Zero, Vector3.Zero)
+                {
+                    Min = Min,
+                    Max = Max
+                };
                 return _cache;
-            }
-        }
-        
-        /* Use for debugging */
-        public Vector3[] Vertices
-        {
-            get
-            {
-                if(_verticesCache == null) _verticesCache = new Vector3[8];
-
-                _verticesCache[0] = new Vector3(Min.X, Min.Y, Min.Z);
-                _verticesCache[1] = new Vector3(Max.X, Min.Y, Min.Z);
-                _verticesCache[2] = new Vector3(Min.X, Min.Y, Max.Z);
-                _verticesCache[3] = new Vector3(Max.X, Min.Y, Max.Z);
-
-                _verticesCache[4] = new Vector3(Min.X, Max.Y, Min.Z);
-                _verticesCache[5] = new Vector3(Max.X, Max.Y, Min.Z);
-                _verticesCache[6] = new Vector3(Min.X, Max.Y, Max.Z);
-                _verticesCache[7] = new Vector3(Max.X, Max.Y, Max.Z);
-                return _verticesCache;
             }
         }
 
         public Vector3 Size => Max - Min;
 
-        public Vector3 Average => (Min + Max) / 2;
+        private Vector3 Average => (Min + Max) / 2;
 
         public CollisionShape ToShape()
         {
@@ -179,37 +134,7 @@ namespace Hedra.Engine.PhysicsSystem
             return _shape;
         }
         
-        
-        public float BroadphaseRadius { get; private set; }
-        
-        public Vector3 BroadphaseCenter { get; private set; }
-
-        private void Recalculate()
-        {
-            BroadphaseRadius = Math.Max(Size.X, Size.Z) * .5f;
-            BroadphaseCenter = Average;
-        }
-        
-        public Vector3 Min
-        {
-            get => _min;
-            set
-            {
-                if(_min == value) return;
-                _min = value;
-                Recalculate();
-            }
-        }
-
-        public Vector3 Max
-        {
-            get => _max;
-            set
-            {
-                if(_max == value) return;
-                _max = value;
-                Recalculate();
-            }
-        }
+        public Vector3 Min { get; set; }
+        public Vector3 Max { get; set; }
     }
 }

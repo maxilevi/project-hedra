@@ -6,15 +6,13 @@ using Hedra.EntitySystem;
 namespace Hedra.Engine.EntitySystem
 {
     public abstract class Component<T> : IUpdatable, IComponent<T> where T : IEntity
-    {    
-        public bool Drawable { get; }
+    {
         protected bool Disposed { get; private set; }
         protected T Parent { get; }
 
         protected Component(T Entity)
         {
             Parent = Entity;
-            Drawable = GetType().GetMethod("Draw")?.DeclaringType != base.GetType().BaseType;
             EnsureSingleBehaviour();
         }
 

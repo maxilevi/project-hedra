@@ -104,7 +104,7 @@ namespace Hedra.Engine.Loader
                 var chunkBound = Chunk.Width / Chunk.BlockSize;
                 var defaultVoxelCount = chunkBound * Chunk.Height * chunkBound;
                 var lineBreak = $"{Environment.NewLine}{Environment.NewLine}";
-                var text = $"X = {(int)player.BlockPosition.X} Y = {(int)(player.BlockPosition.Y)} Z={(int)player.BlockPosition.Z} Routines={RoutineManager.Count} Watchers={player.Loader.WatcherCount}";
+                var text = $"X = {(int)player.Position.X} Y = {(int)(player.Position.Y)} Z={(int)player.Position.Z} Routines={RoutineManager.Count} Watchers={player.Loader.WatcherCount} Grounded={player.IsGrounded}";
                 text += 
                     $"{lineBreak}Chunks={World.Chunks.Count} ChunkX={underChunk?.OffsetX ?? 0} ChunkZ={underChunk?.OffsetZ ?? 0}";
                 text +=
@@ -174,9 +174,9 @@ namespace Hedra.Engine.Loader
 
         public void Draw()
         {
+            var player = GameManager.Player;
             if (GameSettings.DebugView && _extraDebugView)
             {
-                var player = GameManager.Player;
                 var underChunk = World.GetChunkAt(player.Position);
 
                 if (underChunk != null)
@@ -191,122 +191,6 @@ namespace Hedra.Engine.Loader
                             var normal = Physics.NormalAtPosition(basePosition);
 
                             BasicGeometry.DrawLine(basePosition, basePosition + normal * 2, Colors.Yellow);
-                        }
-                    }*/
-                }
-                var collisions = new List<ICollidable>();
-                if (player.NearCollisions != null)
-                    collisions.AddRange(player.NearCollisions);
-
-                for (int i = 0; i < collisions.Count; i++)
-                {
-                    if (!(collisions[i] is CollisionShape shape)) return;
-
-                    var pshape = player.Model.BroadphaseCollider;
-
-                    float radiiSum = shape.BroadphaseRadius + pshape.BroadphaseRadius;
-
-                    BasicGeometry.DrawShape(shape,
-                        (pshape.BroadphaseCenter - shape.BroadphaseCenter).LengthSquared < radiiSum * radiiSum
-                            ? Colors.White
-                            : Colors.Red);
-                }
-
-                if (false)
-                {
-                    
-                    BasicGeometry.DrawLine(player.Position + Vector3.UnitZ * 2f, player.Position + Vector3.UnitZ * 4f,
-                        Colors.Blue);
-
-                    BasicGeometry.DrawLine(player.Position - Vector3.UnitZ * 2f, player.Position - Vector3.UnitZ * 4f,
-                        Colors.BlueViolet);
-
-                    BasicGeometry.DrawLine(player.Position + Vector3.UnitX * 2f, player.Position + Vector3.UnitX * 4f,
-                        Colors.Red);
-
-                    BasicGeometry.DrawLine(player.Position - Vector3.UnitX * 2f, player.Position - Vector3.UnitX * 4f,
-                        Colors.OrangeRed);
-
-                    BasicGeometry.DrawLine(player.Position + player.Orientation * 2f, player.Position + player.Orientation * 4f,
-                        Colors.Yellow);
-
-                    World.Entities.ToList().ForEach(delegate(IEntity E)
-                    {
-                        if (E != null)
-                        {
-                            Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-                            //BasicGeometry.DrawBox(E.Model.BroadphaseBox.Min, E.Model.BroadphaseBox.Max - E.Model.BroadphaseBox.Min);
-                            Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
-                        }
-                    });
-                    Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-                    //BasicGeometry.DrawBox(GameManager.Player.Model.BaseBroadphaseBox.Min, GameManager.Player.Model.BaseBroadphaseBox.Max - GameManager.Player.Model.BaseBroadphaseBox.Min);
-                    Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
-
-                    if (GameManager.Player.LeftWeapon != null &&
-                        GameManager.Player.LeftWeapon is MeleeWeapon melee)
-                    {
-                        Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-                        Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
-                    }
-                    World.Entities.ToList().ForEach(delegate(IEntity E)
-                    {
-                        if (E == null || !E.InUpdateRange) return;
-                        var colliders = E.Model.Colliders;
-                        for (var i = 0; i < colliders.Length; i++)
-                        {
-                            Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-                            //BasicGeometry.DrawShape(colliders[i], Color.GreenYellow);
-                            Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
-                        }
-                        Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
-                        BasicGeometry.DrawShape(E.Model.BroadphaseCollider, Colors.GreenYellow);
-                        Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
-                    });
-
-                    //var Player = Game.LPlayer;
-                    /*var Collisions = new List<ICollidable>();
-                    var Collisions2 = new List<ICollidable>();
-
-                    //Chunk UnderChunk = World.GetChunkAt(Player.BlockPosition);
-                    Chunk UnderChunkR = World.GetChunkAt(Player.Position + new Vector3(Chunk.Width, 0, 0));
-                    Chunk UnderChunkL = World.GetChunkAt(Player.Position - new Vector3(Chunk.Width, 0, 0));
-                    Chunk UnderChunkF = World.GetChunkAt(Player.Position + new Vector3(0, 0, Chunk.Width));
-                    Chunk UnderChunkB = World.GetChunkAt(Player.Position - new Vector3(0, 0, Chunk.Width));
-
-                    Collisions.AddRange(World.GlobalColliders);
-                    if (Player.NearCollisions != null)
-                        Collisions.AddRange(Player.NearCollisions);
-                    if (UnderChunk != null)
-                        Collisions.AddRange(UnderChunk.CollisionShapes);
-                    if (UnderChunkL != null)
-                        Collisions2.AddRange(UnderChunkL.CollisionShapes);
-                    if (UnderChunkR != null)
-                        Collisions2.AddRange(UnderChunkR.CollisionShapes);
-                    if (UnderChunkF != null)
-                        Collisions2.AddRange(UnderChunkF.CollisionShapes);
-                    if (UnderChunkB != null)
-                        Collisions2.AddRange(UnderChunkB.CollisionShapes);
-
-                    for (int i = 0; i < Collisions.Count; i++)
-                    {
-                        if (!(Collisions[i] is CollisionShape shape)) return;
-
-                        var pshape = Player.Model.BroadphaseCollider;
-
-                        float radiiSum = shape.BroadphaseRadius + pshape.BroadphaseRadius;
-
-                        BasicGeometry.DrawShape(shape,
-                            (pshape.BroadphaseCenter - shape.BroadphaseCenter).LengthSquared < radiiSum * radiiSum
-                                ? Colors.White
-                                : Colors.Red);
-                    }
-
-                    for (int i = 0; i < Collisions2.Count; i++)
-                    {
-                        /*var shape = Collisions2[i] as CollisionShape;
-                        if( shape != null){
-                            BasicGeometry.DrawShape(shape, Color.Yellow);
                         }
                     }*/
                 }

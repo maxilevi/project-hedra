@@ -49,10 +49,8 @@ namespace Hedra.Engine.Player
         public HumanoidModelTemplate Template { get; private set; }
         public HumanoidModelAnimationState StateHandler { get; private set; }
         public Vector3 RidingOffset { get; set; }
-
-        public override CollisionShape BroadphaseCollider => _collider.Broadphase;
+        
         public override CollisionShape HorizontalBroadphaseCollider => _collider.HorizontalBroadphase;
-        public override CollisionShape[] Colliders => _collider.Shapes;
         public override bool IsWalking => StateHandler.IsWalking;
         public override Vector4 Tint { get; set; }
         public override Vector4 BaseTint { get; set; }
@@ -266,7 +264,7 @@ namespace Hedra.Engine.Player
         
         private void HandleRollEffects()
         {
-            if((_previousPosition - Human.BlockPosition).LengthFast > 1 && Human.IsGrounded)
+            if((_previousPosition - Human.Position).LengthFast > 1 && Human.IsGrounded)
             {
                 World.Particles.VariateUniformly = true;
                 World.Particles.Color = Vector4.One;
@@ -282,7 +280,7 @@ namespace Hedra.Engine.Player
                     World.Particles.Emit();
                 }
             }
-            _previousPosition = Human.BlockPosition;
+            _previousPosition = Human.Position;
         }
         
         public override void Update()
@@ -307,11 +305,11 @@ namespace Hedra.Engine.Player
             Human.HandLamp.Update();
             if (!Disposed)
             {
-                _modelSound.Type = Human.IsSleeping 
+                _modelSound.Type = SoundType.HumanRun;/*Human.IsSleeping 
                     ? SoundType.HumanSleep
                     : Human.Physics.IsOverAShape
                         ? SoundType.HumanRunWood
-                        : SoundType.HumanRun;
+                        : SoundType.HumanRun;*/
                 _modelSound.Position = Position;
                 _modelSound.Update(IsWalking && !Human.IsJumping && !Human.IsSwimming && Human.IsGrounded || Human.IsSleeping);
             }

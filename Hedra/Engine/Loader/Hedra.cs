@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using Hedra.API;
 using Hedra.Core;
+using Hedra.Engine.Bullet;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
@@ -41,7 +42,7 @@ namespace Hedra.Engine.Loader
     
     public class Hedra : HedraWindow, IHedra
     {
-        public string GameVersion => "\u03B1 0.55";
+        public string GameVersion => "\u03B1 0.6";
         public event OnFrameChanged FrameChanged;
         private DebugInfoProvider _debugProvider;
         private SplashScreen _splashScreen;
@@ -67,6 +68,8 @@ namespace Hedra.Engine.Loader
             NameGenerator.Load();
             CacheManager.Load();
             Translations.Load();
+            BackgroundUpdater.Load();
+            Bullet.BulletPhysics.Load();
             Log.WriteLine("Translations loaded successfully.");
             
             GameLoader.CreateCharacterFolders(GameLoader.AppData, GameLoader.AppPath);
@@ -127,8 +130,10 @@ namespace Hedra.Engine.Loader
             {
                 var delta = Math.Min(frameTime, Physics.Timestep);
                 Time.Set(delta, false);
+                Bullet.BulletPhysics.Update(Time.DeltaTime);
                 RoutineManager.Update();
                 UpdateManager.Update();
+                BackgroundUpdater.Dispatch();
                 World.Update();
                 SoundPlayer.Update(LocalPlayer.Instance.Position);
                 SoundtrackManager.Update();

@@ -46,7 +46,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                             HumanType.Blacksmith,
                             P
                         );
-                        human.Physics.TargetPosition = P;
+                        human.Position = P;
                     },
                 () => Structure.Disposed);
             }

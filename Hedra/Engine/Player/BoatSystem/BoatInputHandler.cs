@@ -49,7 +49,8 @@ namespace Hedra.Engine.Player.BoatSystem
             }
             if (_accumulatedDirection.LengthFast > .005f)
             {
-                _player.Movement.ProcessMovement(_characterRotation, _accumulatedDirection * Speed, _accumulatedDirection.LengthFast > 5f);
+                /* Manually translate the boat, avoid using the physics engine*/
+                _player.Movement.ProcessTranslation(_characterRotation, _accumulatedDirection * Speed, _accumulatedDirection.LengthFast > 5f);
             }
             if (any)
             {

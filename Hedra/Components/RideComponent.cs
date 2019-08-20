@@ -52,9 +52,9 @@ namespace Hedra.Components
         public override void Update()
         {
             var player = GameManager.Player;
-            if (!_hasRider && (player.BlockPosition - Parent.BlockPosition).LengthSquared < 12 * 12 && !player.IsRiding &&
+            if (!_hasRider && (player.Position - Parent.Position).LengthSquared < 12 * 12 && !player.IsRiding &&
                 !player.IsCasting
-                && Vector3.Dot((Parent.BlockPosition - player.BlockPosition).NormalizedFast(), player.View.LookingDirection) >
+                && Vector3.Dot((Parent.Position - player.Position).NormalizedFast(), player.View.LookingDirection) >
                 .6f)
             {
                 if (Parent.Model is IMountable model && model.IsMountable && !Parent.IsUnderwater && !Parent.IsKnocked)

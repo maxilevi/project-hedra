@@ -43,29 +43,6 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             var transMatrix = Matrix4.CreateScale(4f) * Matrix4.CreateTranslation(originalPosition);
             for (var i = 0; i < marketCount; i++)
             {
-                switch (i)
-                {
-                    case 0:
-                        SpawnHumanoid(HumanType.Merchant, originalPosition - Vector3.UnitZ * 40f);
-                        break;
-                    case 1:
-                        SpawnHumanoid(HumanType.Merchant, originalPosition + Vector3.UnitZ * 40f);
-                        break;
-                    case 2:
-                        SpawnVillager(originalPosition - Vector3.UnitX * 40f, Rng);
-                        break;
-                    case 3:
-                        SpawnVillager(originalPosition + Vector3.UnitX * 40f, Rng);
-                        break;
-                }
-
-/*
-                if(base.IntersectsWithAnyPath(
-                    Vector3.TransformPosition(
-                         Vector3.UnitZ * marketDist * Chunk.BlockSize, Matrix4.CreateRotationY(360 / marketCount * i * Mathf.Radian) * transMatrix
-                    ).Xz,
-                    16
-                )) continue;*/
                 
                 VertexData market0 = VillageCache.Market.Market0_Clone.ToVertexData().Clone();
                 bool extraShelf = Rng.Next(0, 4) != 0;
@@ -148,6 +125,30 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 Shapes = marketShapes,
                 BuildAsInstance = false
             };
+        }
+
+        public override void Polish(MarketParameters Parameters, VillageRoot Root, Random Rng)
+        {
+            base.Polish(Parameters, Root, Rng);
+            var originalPosition = Parameters.Position + Physics.HeightAtPosition(Parameters.Position) * Vector3.UnitY;
+            for (var i = 0; i < 4; ++i)
+            {
+                switch (i)
+                {
+                    case 0:
+                        SpawnHumanoid(HumanType.Merchant, originalPosition - Vector3.UnitZ * 40f);
+                        break;
+                    case 1:
+                        SpawnHumanoid(HumanType.Merchant, originalPosition + Vector3.UnitZ * 40f);
+                        break;
+                    case 2:
+                        SpawnVillager(originalPosition - Vector3.UnitX * 40f, Rng);
+                        break;
+                    case 3:
+                        SpawnVillager(originalPosition + Vector3.UnitX * 40f, Rng);
+                        break;
+                }
+            }
         }
 
         private static Vector4 MarketColor(Random Rng)

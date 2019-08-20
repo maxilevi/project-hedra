@@ -101,7 +101,7 @@ namespace Hedra.WeaponSystem
             {
                 var baseMesh = MeshData.Clone();
                 baseMesh.Scale(Vector3.One * 1.75f);
-                MainMesh = ObjectMesh.FromVertexData(baseMesh);
+                MainMesh = ObjectMesh.FromVertexData(baseMesh, CullPrematurely: true, UpdateInBackground: false);
                 this.MeshData = baseMesh;
             }
             else
@@ -740,7 +740,7 @@ namespace Hedra.WeaponSystem
                 WeaponCoroutineExists = true;
             RoutineManager.StartRoutine(DisableWasAttacking);
             _passedTimeInAttackStance = 0;
-            while (_passedTimeInAttackStance < 5f && _onAttackStance)
+            while (_passedTimeInAttackStance < 5f && _onAttackStance && !Disposed)
             {
                 if (Owner.IsAttacking)
                 {

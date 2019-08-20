@@ -81,7 +81,7 @@ namespace Hedra.Engine.Networking
         {
             if (_peers.ContainsKey(Packet.Id))
             {
-                _peers[Packet.Id].Humanoid.Physics.TargetPosition = Packet.Position;
+                _peers[Packet.Id].Humanoid.Position = Packet.Position;
                 _peers[Packet.Id].Humanoid.Rotation = Packet.Rotation;
             }
             else
@@ -93,7 +93,7 @@ namespace Hedra.Engine.Networking
         private static IHumanoid BuildHumanoid(Vector3 Position)
         {
             var human = new Humanoid();
-            human.Physics.TargetPosition = Position;
+            human.Position = Position;
             human.Physics.CollidesWithStructures = false;
             human.Physics.CollidesWithEntities = true;
             human.Model = new NetworkHumanoidModel(human);

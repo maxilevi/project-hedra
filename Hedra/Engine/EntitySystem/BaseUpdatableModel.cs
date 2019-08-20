@@ -6,10 +6,7 @@ namespace Hedra.Engine.EntitySystem
 {
     public abstract class BaseUpdatableModel
     {
-        public abstract CollisionShape[] Colliders { get; }
-        public abstract CollisionShape BroadphaseCollider { get; }
         public abstract CollisionShape HorizontalBroadphaseCollider { get; }
-        public abstract Box BroadphaseBox { get; }
         public abstract Box BaseBroadphaseBox { get; protected set; }
         public abstract Box Dimensions { get; protected set; }
         public abstract bool IsAttacking { get; protected set; }

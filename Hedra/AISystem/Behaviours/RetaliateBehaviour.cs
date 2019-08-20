@@ -24,6 +24,11 @@ namespace Hedra.AISystem.Behaviours
             }
         }
 
+        public void Draw()
+        {
+            Attack.Draw();
+        }
+        
         public override void Update()
         {
             Attack.Update();

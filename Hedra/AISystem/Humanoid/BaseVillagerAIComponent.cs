@@ -68,7 +68,6 @@ namespace Hedra.AISystem.Humanoid
         protected virtual float WaitTime => 8.0f;
 
         protected virtual Vector3 NewPoint =>
-            new Vector3(Utils.Rng.NextFloat() * 18 - 9f, 0, Utils.Rng.NextFloat() * 18 - 9f) * Chunk.BlockSize +
-            Parent.Physics.TargetPosition;
+            new Vector3(Utils.Rng.NextFloat() * 18 - 9f, 0, Utils.Rng.NextFloat() * 18 - 9f) * Chunk.BlockSize + Parent.Position;
     }
 }

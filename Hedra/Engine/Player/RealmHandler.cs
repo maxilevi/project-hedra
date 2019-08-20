@@ -102,7 +102,7 @@ namespace Hedra.Engine.Player
                 World.Recreate(Seed, Type);
                 SkyManager.DayTime = Daytime;
                 SkyManager.LoadTime = true;
-                GameManager.Player.Physics.TargetPosition = Position;
+                GameManager.Player.Position = Position;
                 GameManager.Player.Minimap.UnMark();
                 GameManager.Player.Questing.Trigger();
                 if (MarkedDirection != Vector3.Zero)
@@ -114,7 +114,7 @@ namespace Hedra.Engine.Player
             public void Update()
             {
                 Daytime = SkyManager.DayTime;
-                Position = GameManager.Player.Physics.TargetPosition;
+                Position = GameManager.Player.Position;
                 MarkedDirection = GameManager.Player.Minimap.MarkedDirection;
                 _handler.Update();
             }

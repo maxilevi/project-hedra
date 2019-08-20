@@ -41,7 +41,7 @@ namespace Hedra.Engine.EntitySystem
             if (!Parent.IsDead || Dropped) return;
             var chance = Utils.Rng.NextFloat() * 100f;
             var item = RandomDrop ? ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon)) : ItemDrop;
-            chance /= (item != null && item.IsFood ? Killer.Attributes.FoodDropChanceModifier : 1);
+            chance /= (item != null && item.IsFood && Killer != null ? Killer.Attributes.FoodDropChanceModifier : 1);
             if (chance < DropChance)
             {
                 if (item != null)

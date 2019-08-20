@@ -25,7 +25,11 @@ namespace Hedra.Engine.Loader
             {
                 _watch = new Stopwatch();
                 _spinner = new SpinWait();
+#if DEBUG
+                _glContext = new GraphicsContext(Mode, WindowInfo, 2, 1, GraphicsContextFlags.Debug);
+#else
                 _glContext = new GraphicsContext(Mode, WindowInfo, Major, Minor, Flags);
+#endif
                 _glContext.MakeCurrent(WindowInfo);
                 _glContext.LoadAll();
             }

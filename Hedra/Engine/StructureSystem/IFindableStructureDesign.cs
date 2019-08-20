@@ -7,6 +7,5 @@ namespace Hedra.Engine.StructureSystem
         string DisplayName { get; }
         VertexData Icon { get; }
         int PlateauRadius { get; }
-        bool IsCompletable { get; }
     }
 }

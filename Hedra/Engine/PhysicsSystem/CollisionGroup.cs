@@ -6,7 +6,7 @@ using OpenTK;
 
 namespace Hedra.Engine.PhysicsSystem
 {
-    public class CollisionGroup : ICollidable
+    public class CollisionGroup
     {
         public CollisionShape[] Colliders { get; }
         public float BroadphaseRadius { get; private set; }
@@ -33,27 +33,7 @@ namespace Hedra.Engine.PhysicsSystem
         
         private void CalculateAffectedOffsets()
         {
-            var minPoint = new Vector3(
-                Colliders.Min(C => C.SupportPoint(-Vector3.UnitX).X),
-                Colliders.Min(C => C.SupportPoint(-Vector3.UnitY).Y),
-                Colliders.Min(C => C.SupportPoint(-Vector3.UnitZ).Z)
-            );
-            var maxPoint = new Vector3(
-                Colliders.Max(C => C.SupportPoint(Vector3.UnitX).X),
-                Colliders.Max(C => C.SupportPoint(Vector3.UnitY).Y),
-                Colliders.Max(C => C.SupportPoint(Vector3.UnitZ).Z)
-            );
-
-            _offsets = _offsets ?? (_offsets = new HashSet<Vector2>());
-            _offsets.Clear();
-            for (var x = (int) Math.Floor(minPoint.X) - Chunk.Width; x <= Math.Ceiling(maxPoint.X) + Chunk.Width; x+=Chunk.Width)
-            {
-                for (var z = (int) Math.Floor(minPoint.Z) - Chunk.Width; z <= (int) Math.Ceiling(maxPoint.Z) + Chunk.Width; z+=Chunk.Width)
-                {
-                    var offset = World.ToChunkSpace(new Vector2(x, z));
-                    _offsets.Add(offset);
-                }
-            }
+            _offsets = new HashSet<Vector2>(Colliders.SelectMany(C => C.Vertices).Select(World.ToChunkSpace));
         }
         
         private void CalculateBroadphase()
@@ -80,19 +60,6 @@ namespace Hedra.Engine.PhysicsSystem
             this.BroadphaseRadius = dist;
         }
 
-        public CollisionShape AsShape()
-        {
-            return null;
-        }
-
-        public Box AsBox()
-        {
-            return null;
-        }
-
-        public CollisionGroup AsGroup()
-        {
-            return this;
-        }       
+        public Vector2[] Offsets => _offsets.ToArray();
     }
 }

@@ -149,11 +149,11 @@ namespace Hedra.Components
             if (Damager != null && Damager != Parent && PushBack 
                 && Parent.Size.LengthFast < Damager.Size.LengthFast)
             {
-                var direction = -(Damager.Position - Parent.Position).Normalized();
+                var direction = (Damager.Position - Parent.Position).Normalized();
                 var factor = 0.5f;
                 var averageSize = (Parent.Size.X + Parent.Size.Z) * .5f;
                 if (Parent is LocalPlayer) factor = 0.0f;
-                Parent.Physics.Translate(direction * factor * averageSize);
+                Parent.Physics.ApplyImpulse(-direction * factor * averageSize);
             }
 
             if (Parent.Health <= 0 && !Parent.IsDead)

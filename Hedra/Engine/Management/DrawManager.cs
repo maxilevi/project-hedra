@@ -114,7 +114,7 @@ namespace Hedra.Engine.Management
                     }
                 }
             }
-
+        
             Renderer.Enable(EnableCap.DepthTest);
             World.Draw(WorldRenderType.Water);
             for (var i = TrailRenderer.Count - 1; i > -1; i--)
@@ -125,7 +125,7 @@ namespace Hedra.Engine.Management
             {
                 ParticleRenderer[i].Draw();
             }
-
+            Bullet.BulletPhysics.Draw();
             lock (TransparentLock)
             {
                 for (var i = TransparentObjects.Count - 1; i > -1; i--)

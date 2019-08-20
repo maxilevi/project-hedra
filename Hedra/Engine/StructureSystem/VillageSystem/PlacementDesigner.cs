@@ -46,11 +46,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             MayorPlacer = new GenericPlacer(Root.Template.Mayor.Designs, Rng, 1, null);    
             MasonryPlacer = new GenericPlacer(Root.Template.Masonry.Designs, Rng, 1, new GenericNPCSettings
             {
-                Type = HumanType.Mason,
+                Type = HumanType.Mason
             });
             ClothierPlacer = new GenericPlacer(Root.Template.Clothier.Designs, Rng, 1, new GenericNPCSettings
             {
-                Type = HumanType.Clothier,
+                Type = HumanType.Clothier
             });
             ShopPlacer = new GenericPlacer(Root.Template.Shop.Designs, Rng, 1, new GenericNPCSettings
             {

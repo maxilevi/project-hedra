@@ -17,7 +17,7 @@ namespace Hedra.Engine.EntitySystem
 
         public override void Update()
         {
-            if (!_disposed && !GameManager.NearAnyPlayer(Parent.Physics.TargetPosition, _maxRadius))
+            if (!_disposed && !GameManager.NearAnyPlayer(Parent.Position, _maxRadius))
                 Kill();
         }
 

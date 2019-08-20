@@ -33,7 +33,7 @@ namespace Hedra.Engine.WorldBuilding
         
         public WorldLight(Vector3 Position) : base(Position)
         {
-            UpdateManager.Add(this);
+            BackgroundUpdater.Add(this);
         }
         
         public void Update()
@@ -77,7 +77,7 @@ namespace Hedra.Engine.WorldBuilding
                 LightObject.Position = Vector3.Zero;
                 ShaderManager.UpdateLight(LightObject);
             }
-            UpdateManager.Remove(this);
+            BackgroundUpdater.Remove(this);
         }
     }
 }

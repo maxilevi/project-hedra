@@ -62,7 +62,7 @@ using Hedra.Localization;
         private Humanoid SpawnHumanoid(string Type, int Level, Vector3 DesiredPosition, HumanoidConfiguration Configuration)
         {
             var human = HumanoidFactory.BuildHumanoid(Type, Level, Configuration);
-            human.Physics.TargetPosition = World.FindPlaceablePosition(human, new Vector3(DesiredPosition.X, Physics.HeightAtPosition(DesiredPosition.X, DesiredPosition.Z), DesiredPosition.Z));
+            human.Position = World.FindPlaceablePosition(human, new Vector3(DesiredPosition.X, Physics.HeightAtPosition(DesiredPosition.X, DesiredPosition.Z), DesiredPosition.Z));
             human.Rotation = new Vector3(0, Utils.Rng.NextFloat(), 0) * 360f * Mathf.Radian;
             ApplySeasonHats(human, Type);
             return human;

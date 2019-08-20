@@ -97,8 +97,8 @@ namespace Hedra.Engine.StructureSystem
         {
             SoundPlayer.PlaySound(SoundType.TeleportSound, Position);
             GameManager.Player.Realms.GoTo(_realm);
-            var tpPosition = _useLastPositionForSpawnPoint ? GameManager.Player.Physics.TargetPosition : _defaultSpawn;
-            GameManager.Player.Physics.TargetPosition =
+            var tpPosition = _useLastPositionForSpawnPoint ? GameManager.Player.Position : _defaultSpawn;
+            GameManager.Player.Position =
                 World.FindPlaceablePosition(
                     GameManager.Player,
                     tpPosition + new Vector3(Chunk.Width, 0, Chunk.Width) * (Utils.Rng.NextFloat() * 2 - 1)

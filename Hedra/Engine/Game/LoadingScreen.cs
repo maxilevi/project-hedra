@@ -69,7 +69,7 @@ namespace Hedra.Engine.Game
         
         private bool IsLoaded()
         {
-            var chunkOffset = World.ToChunkSpace(_player.BlockPosition);
+            var chunkOffset = World.ToChunkSpace(_player.Position);
             var minRange = -1;
             var maxRange = 2;
 #if DEBUG

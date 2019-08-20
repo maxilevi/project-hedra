@@ -96,7 +96,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
 
         private static void AddBigMountainsHeight(float X, float Z, ref double Height, ref BlockType Type, Dictionary<Vector2, float[]> HeightCache)
         {
-            var rawMountainHeight = Math.Pow(Math.Min(Math.Max(0f, OpenSimplexNoise.Evaluate(X * 0.000175, Z * 0.000175)), 1), 1);
+            var rawMountainHeight = Math.Pow(Math.Min(Math.Max(-1f, OpenSimplexNoise.Evaluate(X * 0.000075, Z * 0.000075) + .25f), 1), 1);
             var moutainHeight = rawMountainHeight * 384.0;
             if (moutainHeight > 0)
             {

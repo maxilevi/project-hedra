@@ -44,7 +44,6 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
         private void Place()
         {
             var trap = new BearTrap(User, (User.Model.RightWeaponPosition + User.Model.LeftWeaponPosition) * .5f, Duration, Damage, Stun);
-            World.AddWorldObject(trap);
         }
         
         private float Duration => 80 + Level * 5;

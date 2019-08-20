@@ -33,8 +33,8 @@ namespace Hedra.Engine.SkillSystem.Mage
             base.OnDisable();
             User.RemoveComponent(_component);
             _component = null;
-            User.Physics.TargetPosition += User.View.LookingDirection * Distance;
-            User.Physics.TargetPosition = World.FindPlaceablePosition(User, User.Physics.TargetPosition);
+            User.Position += User.View.LookingDirection * Distance;
+            User.Position = World.FindPlaceablePosition(User, User.Position);
         }
 
         private class TeleportComponent : Component<IHumanoid>
