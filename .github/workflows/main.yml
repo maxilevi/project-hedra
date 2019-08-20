@@ -1,4 +1,4 @@
-name: CI
+name: Hedra CI
 
 on: [push]
 
