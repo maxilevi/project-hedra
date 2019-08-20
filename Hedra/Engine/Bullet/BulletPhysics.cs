@@ -21,7 +21,6 @@ namespace Hedra.Engine.Bullet
         public const CollisionFilterGroups TerrainFilter = CollisionFilterGroups.DebrisFilter;
         public static event OnContactEvent OnCollision;
         public static event OnContactEvent OnSeparation;
-        private static Timer _collisionCheckTimer;
         private static object _chunkLock;
         private static object _bulletLock;
         private static object _bodyLock;
@@ -45,7 +44,6 @@ namespace Hedra.Engine.Bullet
 
         public static void Load()
         {
-            _collisionCheckTimer = new Timer(Physics.Timestep);
             _sensorsLock = new object();
             _chunkLock = new object();
             _bulletLock = new object();
@@ -501,8 +499,6 @@ namespace Hedra.Engine.Bullet
 
         private static void CheckForCollisionEvents()
         {
-            if(!_collisionCheckTimer.Tick()) return;
-            
             _currentPairs.Clear();
             for (var i = 0; i < _dispatcher.NumManifolds; ++i)
             {
