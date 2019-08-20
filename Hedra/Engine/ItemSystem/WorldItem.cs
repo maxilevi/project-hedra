@@ -39,7 +39,6 @@ namespace Hedra.Engine.ItemSystem
         public ushort ItemId { get; }
         public Item ItemSpecification { get; }
         public event OnItemCollect OnPickup;
-        private readonly DropShadow _shadow;
         private readonly bool _initialized;
         private readonly float _height;
         private bool _isColliding;
@@ -64,15 +63,6 @@ namespace Hedra.Engine.ItemSystem
             {
                 if (_canPickup && Controls.Interact == EventArgs.Key) _shouldPickup = true;
             });
-            _shadow = new DropShadow
-            {
-                Position = Position - Vector3.UnitY * 1.5f,
-                DepthTest = true,
-                Rotation = new Matrix3(Mathf.RotationAlign(Vector3.UnitY, Physics.NormalAtPosition(Position))),
-                IsCosmeticShadow = true,
-                Opacity = .5f
-            };
-            DrawManager.DropShadows.Add(_shadow);
             _initialized = true;
         }
         
@@ -136,7 +126,6 @@ namespace Hedra.Engine.ItemSystem
         {
             _disposed = true;
             base.Dispose();
-            DrawManager.DropShadows.Remove(_shadow);
             EventDispatcher.UnregisterKeyDown(this);
         }
     }

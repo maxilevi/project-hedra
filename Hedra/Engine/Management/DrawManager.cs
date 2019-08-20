@@ -35,7 +35,6 @@ namespace Hedra.Engine.Management
         public static List<IRenderable> ParticleRenderer { get; }
         public static List<IRenderable> TrailRenderer { get; }
         public static GUIRenderer UIRenderer { get; }
-        public static DropShadowRenderer DropShadows { get; }
         public static int CullableObjectsCount { get; private set; }
         public static int CulledObjectsCount { get; private set; }
         public static int DrawCalls { get; private set; }
@@ -50,7 +49,6 @@ namespace Hedra.Engine.Management
             TrailRenderer = new List<IRenderable>();
             TransparentObjects = new List<IRenderable>();
             UIRenderer = new GUIRenderer();
-            DropShadows = new DropShadowRenderer();
         }
 
         public static void Add(IRenderable Renderable)
@@ -90,7 +88,6 @@ namespace Hedra.Engine.Management
             World.CullTest();
             World.Draw(WorldRenderType.StaticAndInstance);
             World.OccludeTest();
-            DropShadows.Draw();
 
             var drawedObjects = 0;
             var drawedCullableObjects = 0;
@@ -146,9 +143,8 @@ namespace Hedra.Engine.Management
             }
 
             var worldCalls = 3;//Water + Static + Shadows
-            int dropShadowCalls = DropShadows.Count;//Ideally
             CulledObjectsCount = CullableObjectsCount - drawedCullableObjects;
-            DrawCalls = drawedObjects + UIRenderer.DrawCount + worldCalls + dropShadowCalls;
+            DrawCalls = drawedObjects + UIRenderer.DrawCount + worldCalls;
         }
         
         public static void Draw()
