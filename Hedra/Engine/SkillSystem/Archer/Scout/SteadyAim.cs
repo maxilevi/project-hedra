@@ -24,7 +24,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
         public override string Description => Translations.Get("steady_aim_desc");
         public override string DisplayName => Translations.Get("steady_aim");
         protected override int MaxLevel => 15;
-        private float ChargeTime => 8.0f - Level / 4f;
+        private float ChargeTime => 7.0f - Level / 3f;
         private float PrecisionBonus => Math.Max(0, 1 - Level / 8f);
         
         private class SteadyAimComponent : ChargeableComponent
@@ -59,7 +59,6 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
                 Proj.Mesh.Scale *= 1.15f;
                 Proj.Speed *= 1.25f;
                 Proj.Falloff = _precisionBonus;
-                Proj.UsePhysics = false;
             }
 
             private void AfterAttack(AttackOptions Options)
