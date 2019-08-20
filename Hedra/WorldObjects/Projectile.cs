@@ -100,7 +100,7 @@ namespace Hedra.WorldObjects
             Lifetime -= Time.DeltaTime;
             if (!_firstTime)
             {
-                if (UsePhysics) _body.ApplyCentralImpulse(Propulsion.Compatible() * 40f + Vector3.UnitY.Compatible() * 20f);
+                if (UsePhysics) _body.ApplyCentralImpulse(Propulsion.Compatible() * 50f + Vector3.UnitY.Compatible() * (12.5f + (Utils.Rng.NextFloat() * 8f - 4f) * Falloff));
                 else if(Direction == Vector3.Zero) Direction = Propulsion.NormalizedFast();
                 _firstTime = true;
             }

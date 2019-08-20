@@ -503,16 +503,6 @@ namespace Hedra.Engine.Rendering.Geometry
             }
             return Data;
         }
-          
-          public static MarchingData SmoothNormals(MarchingData Data, Dictionary<GridCell, MarchingData> Cache){
-            return null;
-        }
-          
-          private static Random Rng = new Random();
-          public static Vector3 Round(this Vector3 Vertex){
-              return Vertex;//new Vector3( (Vertex.X + Vertex.X % 2 * 2f), Vertex.Y, (Vertex.Z + (float) (Vertex.Z % Math.PI * 3f) ));
-          }
-        
     }
     
     public struct GridCell
@@ -545,15 +535,5 @@ namespace Hedra.Engine.Rendering.Geometry
     public struct Triangle
     {
         public Vector3[] P;
-        
-        public bool Contains(Vector3 Vertex)
-        {
-            for(int i = 0; i < P.Length; i++)
-            {
-                if(P[i] == Vertex)
-                    return true;
-            }
-            return false;
-        }
     }
 }

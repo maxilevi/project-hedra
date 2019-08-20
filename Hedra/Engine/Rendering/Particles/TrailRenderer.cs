@@ -137,6 +137,7 @@ namespace Hedra.Engine.Rendering.Particles
             }
             Executer.ExecuteOnMainThread(() =>
             {
+                if(_disposed) return;
                 _points.Update(points.Select(p => p.Point).ToArray(), points.Count * Vector3.SizeInBytes);
                 _colors.Update(colors.ToArray(), colors.Count * Vector4.SizeInBytes);
             });
