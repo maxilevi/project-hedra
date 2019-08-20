@@ -11,6 +11,7 @@ jobs:
     - uses: actions/checkout@v1
       with:
         submodules: true
+        token: 81243778ca75b3d878a3aaca38c7c9d1fb8bee4b
     - name: Setup Dotnet for use with actions
       uses: actions/setup-dotnet@v1.0.0
     - name: Setup Nuget.exe
