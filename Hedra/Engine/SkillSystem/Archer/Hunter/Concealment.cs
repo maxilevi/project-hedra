@@ -58,8 +58,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
             Proj.Mesh.Outline = true;
             Proj.Mesh.OutlineColor = Colors.Violet;
             Proj.Mesh.Scale *= 1.15f;
-            Proj.Speed *= 1.25f;
-            Proj.Falloff = 0f;
+            Proj.Speed *= 2.25f;
             Proj.UsePhysics = false;
         }
         
