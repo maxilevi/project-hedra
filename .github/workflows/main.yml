@@ -1,0 +1,25 @@
+name: Hedra CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: Checkout submodules
+      uses: textbook/git-checkout-submodule-action@2.0.0
+    - name: Setup Dotnet for use with actions
+      uses: actions/setup-dotnet@v1.0.0
+    - name: Setup Nuget.exe
+      uses: warrenbuckley/Setup-Nuget@v1
+    - name: Restore Hedra packages
+      run: nuget restore Hedra/Hedra.csproj -PackagesDirectory packages
+    - name: Restore HedraTests packages
+      run: nuget restore HedraTests/HedraTests.csproj -PackagesDirectory packages
+    - name: Restore AssetBuilder packages 
+      run: nuget restore AssetBuilder/AssetBuilder.csproj -PackagesDirectory packages
+    - name: Build Solution
+      run: dotnet msbuild
