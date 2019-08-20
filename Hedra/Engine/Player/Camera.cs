@@ -32,6 +32,7 @@ namespace Hedra.Engine.Player
         public const float DefaultMinDistance = 2.0f;
         public const float DefaultMaxPitch = 1.5f;
         public const float DefaultMinPitch = -2f;
+        private const float DistanceBuffer = 1.75f;
 
         public float TargetPitch { get; set; }
         public float TargetYaw { get; set; }
@@ -107,14 +108,15 @@ namespace Hedra.Engine.Player
             }
             bool ShouldMove(out float NewDistance)
             {
-                var cameraPosition = CameraEyePosition;
-                return IsColliding(cameraPosition, out NewDistance);
+                return IsColliding(GetCameraEyePosition(), out NewDistance) || IsColliding(GetCameraEyePosition(Distance + DistanceBuffer), out NewDistance);
             }
 
+            var entered = false;
             while(!GameManager.IsLoading && !GameManager.InStartMenu && TargetDistance > MinDistance && ShouldMove(out var newDistance))
             {
                 TargetDistance -= Time.IndependentDeltaTime;
                 Distance -= Time.IndependentDeltaTime;
+                entered = true;
             }
 
             BuildCameraMatrix();
@@ -168,8 +170,8 @@ namespace Hedra.Engine.Player
         {
             if (GameSettings.Paused || !CaptureMovement) return;
 
-            var pos = _interpolatedPosition - LookAtPoint * (TargetDistance - E.Delta * WheelSpeed) + CameraHeight;
-            if (IsColliding(pos, out _)) return;
+            var newDistance = TargetDistance - E.Delta * WheelSpeed;
+            if (IsColliding(GetCameraEyePosition(newDistance), out _) || IsColliding(GetCameraEyePosition(newDistance + DistanceBuffer), out _)) return;
 
             TargetDistance -= E.Delta * WheelSpeed;
             TargetDistance = Mathf.Clamp(TargetDistance, 1.5f, MaxDistance);
@@ -191,11 +193,19 @@ namespace Hedra.Engine.Player
 
         public Vector3 CameraHeight { get; set; }
 
-        public Vector3 CameraEyePosition => _interpolatedPosition - CameraOrientation + CameraHeight;
+        public Vector3 CameraEyePosition => GetCameraEyePosition();
 
         private Vector3 CameraLookAtPosition => _interpolatedPosition + CameraOrientation + CameraHeight;
         
-        private Vector3 CameraOrientation => LookAtPoint * Distance;
+        private Vector3 CameraOrientation => GetCameraOrientation();
+        
+        private Vector3 GetCameraOrientation(float CameraDistance) => CameraDistance * LookAtPoint;
+        
+        private Vector3 GetCameraOrientation() => GetCameraOrientation(Distance);
+
+        private Vector3 GetCameraEyePosition(float CameraDistance) => _interpolatedPosition - GetCameraOrientation(CameraDistance) + CameraHeight;
+
+        private Vector3 GetCameraEyePosition() => _interpolatedPosition - GetCameraOrientation() + CameraHeight;
 
         public Vector3 CrossDirection
         {
@@ -209,11 +219,9 @@ namespace Hedra.Engine.Player
             }
         }
 
-        public Matrix4 ViewMatrix => Matrix4.LookAt(-CameraOrientation, CameraOrientation, Vector3.UnitY);
-
         private bool IsColliding(Vector3 Position, out float NewDistance)
         {
-            Bullet.BulletPhysics.ResetCallback(_callback);
+            BulletPhysics.ResetCallback(_callback);
             _callback.CollisionFilterMask = (int)(CollisionFilterGroups.StaticFilter | BulletPhysics.TerrainFilter);
             var src = Position.Compatible();
             var dst = _player.Position.Compatible() + BulletSharp.Math.Vector3.UnitY;
