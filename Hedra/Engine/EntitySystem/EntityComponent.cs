@@ -15,7 +15,7 @@ namespace Hedra.Engine.EntitySystem
     /// <summary>
     /// Description of EntityComponent.
     /// </summary>
-    public abstract class EntityComponent : Component<IEntity>, IUpdatable
+    public abstract class EntityComponent : Component<IEntity>
     {
         protected EntityComponent(IEntity Entity) : base(Entity)
         {

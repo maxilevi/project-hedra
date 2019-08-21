@@ -21,7 +21,6 @@ namespace Hedra.Engine.Management
     {
         private static readonly HashSet<IUpdatable> UpdateFunctions;
         private static readonly List<IUpdatable> UpdateFunctionsList;
-        private static readonly TickSystem Ticker;
         private static readonly object Lock = new object();
         private static readonly List<IUpdatable> ToRemove;
 
@@ -30,18 +29,12 @@ namespace Hedra.Engine.Management
             UpdateFunctions = new HashSet<IUpdatable>();
             UpdateFunctionsList = new List<IUpdatable>();
             ToRemove = new List<IUpdatable>();
-            Ticker = new TickSystem();
         }
 
         public static void Add(IUpdatable Updatable)
         {
             lock (Lock)
             {
-                if (Updatable is ITickable tickable)
-                {
-                    Ticker.Add(tickable);
-                    return;
-                }
                 UpdateFunctions.Add(Updatable);
                 UpdateFunctionsList.Add(Updatable);
             }
@@ -59,11 +52,6 @@ namespace Hedra.Engine.Management
         {
             lock (Lock)
             {
-                if (Updatable is ITickable tickable)
-                {
-                    Ticker.Remove(tickable);
-                    return;
-                }
                 UpdateFunctions.Remove(Updatable);
                 UpdateFunctionsList.Remove(Updatable);
             }
@@ -85,7 +73,6 @@ namespace Hedra.Engine.Management
 
                     UpdateFunctionsList[i].Update();
                 }
-                Ticker.Tick();
                 SkyManager.Update();
                 InventoryItemRenderer.Update();
                 EntityRenderer.Update();

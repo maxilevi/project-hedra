@@ -58,10 +58,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             }
         }
 
-        public override void Update()
+        public override void Update(float DeltaTime)
         {
             if(_mesh != null) _mesh.Position = Position;       
-            base.Update();
+            base.Update(DeltaTime);
         }
         
         private BoxShape BuildShape(VertexData Mesh)
@@ -74,12 +74,12 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             return new BoxShape(collider.Size.Compatible() * .5f);
         }
 
-        protected override void DoUpdate()
+        protected override void DoUpdate(float DeltaTime)
         {
-            base.DoUpdate();
+            base.DoUpdate(DeltaTime);
             if (_mesh != null)
             {
-                _mesh.LocalRotation = Mathf.Lerp(_mesh.LocalRotation, _targetRotation, Time.DeltaTime * 4f);
+                _mesh.LocalRotation = Mathf.Lerp(_mesh.LocalRotation, _targetRotation, DeltaTime * 4f);
                 _mesh.LocalRotationPoint = _rotationPoint;
             }
         }

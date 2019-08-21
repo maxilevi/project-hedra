@@ -73,15 +73,15 @@ namespace Hedra.Engine.WorldBuilding
             this.ItemSpecification = ItemSpecification;
         }
 
-        public override void Update()
+        public override void Update(float DeltaTime)
         {
             if (_model != null) _model.Position = Position;
-            base.Update();
+            base.Update(DeltaTime);
         }
 
-        protected override void DoUpdate()
+        protected override void DoUpdate(float DeltaTime)
         {
-            base.DoUpdate();
+            base.DoUpdate(DeltaTime);
             if (_model != null)
             {
                 _model.Update();
@@ -143,7 +143,6 @@ namespace Hedra.Engine.WorldBuilding
         public override void Dispose()
         {
             base.Dispose();
-            UpdateManager.Remove(this);
             this._model.Dispose();
         }
     }
