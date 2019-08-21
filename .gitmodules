@@ -4,8 +4,8 @@
 
 [submodule "hedra-tools"]
 	path = hedra-tools
-	url = git@github.com:maxilevi/hedra-tools.git
+	url = https://github.com/maxilevi/hedra-tools.git
 
 [submodule "hedra-obfuscator"]
 	path = hedra-obfuscator
-	url = git@github.com:maxilevi/hedra-obfuscator.git
+	url = https://github.com/maxilevi/hedra-obfuscator.git
