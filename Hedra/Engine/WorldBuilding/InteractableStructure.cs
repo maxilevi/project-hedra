@@ -30,8 +30,9 @@ namespace Hedra.Engine.WorldBuilding
     
     public delegate void OnInteraction(IEntity Interactee);    
     
-    public abstract class InteractableStructure : BaseStructure, IUpdatable
+    public abstract class InteractableStructure : BaseStructure, ITickable
     {
+        public int UpdatesPerSecond => 30;
         protected virtual float InteractionAngle => .75f;
         protected virtual bool SingleUse => true;
         protected virtual bool DisposeAfterUse => true;
@@ -61,13 +62,13 @@ namespace Hedra.Engine.WorldBuilding
             }
         }
         
-        public virtual void Update()
+        public virtual void Update(float DeltaTime)
         {
             if ((Position - GameManager.Player.Position).LengthSquared < 128 * 128)
-                DoUpdate();
+                DoUpdate(DeltaTime);
         }
 
-        protected virtual void DoUpdate()
+        protected virtual void DoUpdate(float DeltaTime)
         {
             var player = GameManager.Player;
 

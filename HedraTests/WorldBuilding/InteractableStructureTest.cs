@@ -177,7 +177,12 @@ namespace HedraTests.WorldBuilding
 
         public void DoUpdate()
         {
-            base.DoUpdate();
+            base.DoUpdate(Time.DeltaTime);
+        }
+
+        public void Update()
+        {
+            base.Update(Time.DeltaTime);
         }
 
         protected override void Interact(IHumanoid Humanoid)

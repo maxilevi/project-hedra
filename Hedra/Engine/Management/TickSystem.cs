@@ -1,52 +1,85 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Hedra.Core;
 
 namespace Hedra.Engine.Management
 {
     public class TickSystem
     {
-        public int UpdatesPerSecond { get; set; } = 5;
-        private readonly List<ITickable> _tickables;
-        private float _counter;
+        private readonly object _lock;
+        private readonly Dictionary<ITickable, TickInformation> _tickables;
+        private readonly List<ITickable> _toRemove;
 
         public TickSystem()
         {
-            _tickables = new List<ITickable>();
+            _lock = new object();
+            _tickables = new Dictionary<ITickable, TickInformation>();
+            _toRemove = new List<ITickable>();
         }
 
         public void Add(ITickable Tickable)
         {
-            if(!(Tickable is IUpdatable)) throw new ArgumentException("ITickable also needs to be IUpdatable");
-
-            lock (_tickables)
-                _tickables.Add(Tickable);
+            lock (_lock)
+            {
+                _tickables.Add(Tickable, new TickInformation
+                {
+                    AlertTime = Tickable.UpdatesPerSecond
+                });
+            }
         }
 
         public void Remove(ITickable Tickable)
         {
-            if (!(Tickable is IUpdatable)) throw new ArgumentException("ITickable also needs to be IUpdatable");
-
-            lock (_tickables)
-                _tickables.Remove(Tickable);
+            lock (_lock)
+            {
+                _toRemove.Add(Tickable);
+            }
         }
 
         public void Tick()
         {
-            if (_counter > 1.0 / UpdatesPerSecond)
+            lock (_lock)
             {
-                lock (_tickables)
+                RemovePending();
+                foreach (var pair in _tickables)
                 {
-                    for (int i = _tickables.Count - 1; i >= 0; i--)
-                    {
-                        (_tickables[i] as IUpdatable)?.Update();
-                    }
+                    var tickable = pair.Key;
+                    var information = pair.Value;
+                    if(information.Tick())
+                        tickable.Update(information.AlertTime);
                 }
-                _counter = 0;
             }
-            _counter += Time.IndependentDeltaTime;
+        }
+
+        private void RemovePending()
+        {
+            for (var i = 0; i < _toRemove.Count; ++i)
+            {
+                _tickables.Remove(_toRemove[i]);
+            }
+            _toRemove.Clear();
+        }
+        
+        private class TickInformation
+        {
+            private float _alertTime;
+            public float AlertTime
+            {
+                get => _alertTime;
+                set => _alertTime = 1f / value;
+            }
+            private float _counter;
+
+            public bool Tick()
+            {
+                _counter += Time.IndependentDeltaTime;
+                if (_counter >= _alertTime)
+                {
+                    _counter = 0;
+                    return true;
+                }
+
+                return false;
+            }
         }
     }
 }

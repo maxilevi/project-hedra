@@ -19,8 +19,9 @@ using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;
 
 namespace Hedra.Engine.WorldBuilding
 {
-    public class SleepingPad : InteractableStructure, ITickable
+    public class SleepingPad : InteractableStructure
     {
+        public int UpdatesPerSecond => 8;
         public bool IsOccupied => Sleeper != null;
         public IHumanoid Sleeper { get; private set; }
         public Vector3 TargetRotation { get; set; }
@@ -37,9 +38,9 @@ namespace Hedra.Engine.WorldBuilding
 
         public override int InteractDistance => 12;
 
-        public override void Update()
+        public override void Update(float DeltaTime)
         {
-            base.Update();
+            base.Update(DeltaTime);
             if(IsOccupied && (!SkyManager.IsSleepTime || Sleeper.IsDead))
                 SetSleeper(null);
         }

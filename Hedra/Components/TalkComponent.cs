@@ -38,7 +38,7 @@ namespace Hedra.Components
 {
     public delegate void OnTalkEventHandler(IEntity Talker);
 
-    public class TalkComponent : Component<IHumanoid>, ITickable
+    public class TalkComponent : Component<IHumanoid>
     {
         public event OnTalkEventHandler OnTalkingEnded;
         public event OnTalkEventHandler OnTalkingStarted;

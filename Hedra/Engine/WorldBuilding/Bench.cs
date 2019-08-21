@@ -22,9 +22,9 @@ namespace Hedra.Engine.WorldBuilding
             _sitRotation = SitRotation;
         }
 
-        public override void Update()
+        public override void Update(float DeltaTime)
         {
-            base.Update();
+            base.Update(DeltaTime);
             if(IsOccupied && !_currentHost.IsSitting)
                 SetHost(null);
         }

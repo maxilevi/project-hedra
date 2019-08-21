@@ -20,7 +20,6 @@ namespace Hedra.Engine.Rendering.Particles
         public static Vector4 BloodColor { get; } = new Vector4(.8f, .0f, 0, 1f);
         public static Vector4 IceColor { get; } = new Vector4(0.2f, 0.514f, 0.714f, 1f) * new Vector4(1, 1, 2, 1) * .7f;
         public static Vector4 PoisonColor { get; } = new Vector4(0.282f, 0.725f, 0.373f, 1f) * new Vector4(1, 3, 1, 1);
-        public static bool UseTimeScale {get; set;}
         public Vector3 Position;
         public Vector3 Rotation;
         public Vector3 Scale;
@@ -51,14 +50,14 @@ namespace Hedra.Engine.Rendering.Particles
             
         }
         
-        public bool Update()
+        public bool Update(float DeltaTime)
         {
-            Color = new Vector4(Color.Xyz, OriginalAlpha * 1);//(Lifetime / MaxLifetime) );
+            Color = new Vector4(Color.Xyz, OriginalAlpha * 1);
             Scale = OriginalScale * (Lifetime / MaxLifetime);    
             
-            Position += Velocity * (UseTimeScale ? (float) Time.DeltaTime : Time.IndependentDeltaTime);
-            Velocity.Y += 60 * Physics.Gravity * GravityEffect * (UseTimeScale ? (float) Time.DeltaTime : Time.IndependentDeltaTime);
-            Lifetime -= UseTimeScale ? (float) Time.DeltaTime : Time.IndependentDeltaTime;
+            Position += Velocity * DeltaTime;
+            Velocity.Y += 60 * Physics.Gravity * GravityEffect * DeltaTime;
+            Lifetime -= DeltaTime;
             
             if(Collides && Position.Y < HeightAtY + .5f)
             {
