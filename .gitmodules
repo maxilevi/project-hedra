@@ -1,6 +1,6 @@
 [submodule "project-hedra-assets"]
 	path = project-hedra-assets
-	url = git@github.com:maxilevi/project-hedra-assets.git
+	url = https://github.com/maxilevi/project-hedra-assets.git
 
 [submodule "hedra-tools"]
 	path = hedra-tools
