@@ -57,7 +57,11 @@ namespace Hedra.Engine.Management
             {
                 DrawFunctionsSet.Add(Renderable);
                 DrawFunctions.Add(Renderable);
-                CullableObjectsCount = DrawFunctions.Sum(D => D is ICullable ? 1 : 0);
+                if (Renderable is ICullable cullable)
+                {
+                    Culling.Add(cullable);
+                    CullableObjectsCount++;
+                }
             }
         }
         
@@ -67,6 +71,11 @@ namespace Hedra.Engine.Management
             {
                 DrawFunctionsSet.Remove(Renderable);
                 DrawFunctions.Remove(Renderable);
+                if (Renderable is ICullable cullable)
+                {
+                    Culling.Remove(cullable);
+                    CullableObjectsCount--;
+                }
             }
         }
 
@@ -85,9 +94,11 @@ namespace Hedra.Engine.Management
         private static void BulkDraw()
         {
             SkyManager.Draw();
+            Culling.Update();
             World.CullTest();
             World.Draw(WorldRenderType.StaticAndInstance);
             World.OccludeTest();
+            Culling.Draw();
 
             var drawedObjects = 0;
             var drawedCullableObjects = 0;

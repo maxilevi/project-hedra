@@ -241,6 +241,7 @@
     <Compile Include="Engine\Bullet\BulletInterop.cs" />
     <Compile Include="Engine\Bullet\BulletPhysics.cs" />
     <Compile Include="Engine\Bullet\ContactTestResultCallback.cs" />
+    <Compile Include="Engine\Bullet\FrustumContactTestCallback.cs" />
     <Compile Include="Engine\Bullet\PhysicsObjectInformation.cs" />
     <Compile Include="Engine\Bullet\PhysicsComponent.cs" />
     <Compile Include="Engine\Bullet\PhysicsComponentMotionState.cs" />
@@ -263,6 +264,8 @@
     <Compile Include="Engine\QuestSystem\QuestTemplate.cs" />
     <Compile Include="Engine\QuestSystem\QuestThoughtsComponent.cs" />
     <Compile Include="Engine\Rendering\Core\VBOCache.cs" />
+    <Compile Include="Engine\Rendering\Frustum\FrustumShape.cs" />
+    <Compile Include="Engine\Rendering\Frustum\Plane.cs" />
     <Compile Include="Engine\Rendering\Geometry\MeshAnalyzer.cs" />
     <Compile Include="Engine\Rendering\UI\CompanionProfileUIElement.cs" />
     <Compile Include="Engine\Rendering\UI\ProfileUIElement.cs" />
@@ -542,12 +545,9 @@
     <Compile Include="Engine\Rendering\Core\VBO.cs" />
     <Compile Include="Engine\Rendering\Core\VertexAttributeHandler.cs" />
     <Compile Include="Engine\Rendering\Core\BufferHandler.cs" />
-    <Compile Include="Engine\Rendering\Frustum\BoundingFrustum.cs" />
     <Compile Include="Engine\Rendering\Frustum\Culling.cs" />
     <Compile Include="Engine\Rendering\Frustum\Occludable.cs" />
     <Compile Include="Engine\Rendering\Frustum\OcclusionState.cs" />
-    <Compile Include="Engine\Rendering\Frustum\Plane.cs" />
-    <Compile Include="Engine\Rendering\Frustum\PlaneIntersectionType.cs" />
     <Compile Include="Engine\Rendering\IModelData.cs" />
     <Compile Include="Engine\Rendering\Line3D.cs" />
     <Compile Include="Engine\Rendering\Particles\ParticleVAO.cs" />

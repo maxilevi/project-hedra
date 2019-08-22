@@ -166,7 +166,7 @@ namespace Hedra.Engine.Player.MapSystem
                 GameSettings.OcclusionCulling = false;
                 GameSettings.GlobalShadows = false;
                 GameSettings.Quality = false;
-                World.CullTest();
+                Culling.Update();
                 WorldRenderer.Render(World.DrawingChunks, World.ShadowDrawingChunks, WorldRenderType.Static);
                 WorldRenderer.Render(World.DrawingChunks, World.ShadowDrawingChunks, WorldRenderType.Water);
                 GameSettings.Quality = oldFancy;

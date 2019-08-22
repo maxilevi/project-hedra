@@ -32,7 +32,7 @@ namespace Hedra.Engine.Rendering
         public static Shader Shader { get; set; }
         public static FBO ShadowFbo { get; set; }
         public static Matrix4 DepthProj { get; set; }
-        public static Matrix4 DepthView { get; set; }
+        public static Matrix4 ShadowView { get; set; }
         public static Matrix4 ShadowMvp { get; set; }
         private static float _shadowDistance;
         private static uint _prevFbo;
@@ -71,8 +71,8 @@ namespace Hedra.Engine.Rendering
             NormalizedLight = Vector3.TransformNormal(new Vector3(NormalizedLight.X, NormalizedLight.Y, NormalizedLight.Z),
                 Matrix4.CreateRotationY( SkyManager.DayTime / 24000 * 360f * Mathf.Radian));
 
-            var newModel = Matrix4.Identity;
-            ShadowMvp = newModel * Matrix4.LookAt( NormalizedLight + Position, Position, Vector3.UnitY) * DepthProj;
+            ShadowView = Matrix4.LookAt(NormalizedLight + Position, Position, Vector3.UnitY);
+            ShadowMvp = ShadowView * DepthProj;
 
             Shader.Bind();
             Shader["Time"] = Time.AccumulatedFrameTime;

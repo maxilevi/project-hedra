@@ -82,13 +82,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _blocksLock = new object();
             _regionCache = new RegionCache(Position, Position + new Vector3(Chunk.Width, 0, Chunk.Width));
 
+            Mesh = new ChunkMesh(Position, null);
             Biome = World.BiomePool.GetPredominantBiome(this);
             Landscape = World.BiomePool.GetGenerator(this);
-        }
-
-        public void Initialize()
-        {
-            Mesh = new ChunkMesh(Position, null);
         }
 
         public void Generate()
@@ -214,8 +210,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
             );
 
             Mesh.SetBounds(
-                new Vector3(staticMin.X, staticMin.Y, staticMin.Z),
-                new Vector3(staticMax.X, Math.Max(staticMax.Y, Input.WaterData.SupportPoint(Vector3.UnitY).Y), staticMax.Z)
+                new Vector3(staticMin.X, staticMin.Y, staticMin.Z) - Mesh.Position,
+                new Vector3(staticMax.X, Math.Max(staticMax.Y, Input.WaterData.SupportPoint(Vector3.UnitY).Y), staticMax.Z) - Mesh.Position
             );
             Input.StaticData.Optimize();
             Input.InstanceData.Optimize();

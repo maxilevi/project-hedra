@@ -58,7 +58,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Kill();
                 return false;
             }
-            if (!_object.Initialized) _object.Initialize();
             if (!_object.IsGenerated || !_object.Landscape.StructuresPlaced || _object.Landscape.HasToGenerateMoreData)
             {
                 World.AddChunkToQueue(_object, false);

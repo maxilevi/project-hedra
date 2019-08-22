@@ -1,4 +1,5 @@
 using Hedra.Core;
+using Hedra.Engine.Bullet;
 using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
@@ -14,61 +15,68 @@ namespace Hedra.Engine.Rendering.Frustum
         private const float ZFar = 4096.0f;
         public static Matrix4 ProjectionMatrix;
         public static Matrix4 ModelViewMatrix = Matrix4.Identity;
-        
-        public static BoundingFrustum Frustum { get; } = new BoundingFrustum();
+
+        private static BulletFrustum Frustum { get; } = new BulletFrustum();
 
         public static bool IsInside(ICullable CullableObject)
         {
             CullableObject.WasCulled = true;
-            if (!CullableObject.Enabled) return false;
-            if (CullableObject.PrematureCulling)
-            {
-                if ((CullableObject.Position - GameManager.Player.Position).LengthSquared 
-                    > GeneralSettings.DrawDistanceSquared) 
-                    return false;
-            }
-            var min = CullableObject.Min + CullableObject.Position;
-            var max = CullableObject.Max + CullableObject.Position;
-            var isContained = Frustum.Contains(ref min, ref max);
+            var isContained = Frustum.Contains(CullableObject);
             CullableObject.WasCulled = !isContained;
             return isContained;
         }
-        
-        public static bool IsInside(Vector3 Point)
+
+        public static void Update()
         {
-            return Frustum.Contains(ref Point);
-        }
-        
-        public static void SetViewport()
-        {
-            SetViewport(GameSettings.Width, GameSettings.Height);
+            Frustum.Update();
         }
 
-        public static void SetViewport(int Width, int Height)
+        public static void Draw()
         {
-            Renderer.Viewport(0, 0, Width, Height);
+            Frustum.Draw();
+        }
+
+        public static void Add(ICullable Cullable)
+        {
+            Frustum.Add(Cullable);
+        }
+
+        public static void Remove(ICullable Cullable)
+        {
+            Frustum.Remove(Cullable);
+        }
+
+        public static void UpdateFrustumMatrices(Matrix4 ModelView, Matrix4 Projection)
+        {
+            Frustum.UpdateMatrices(ModelView, Projection);
+        }
+
+        public static void SetViewport()
+        {
+            Renderer.Viewport(0, 0, GameSettings.Width, GameSettings.Height);
         }
 
         public static void BuildFrustum(Matrix4 Proj, Matrix4 View)
         {
-            BuildFrustum(View);
+            BuildFrustum(View, ShouldUpdateFrustum: false);
             ProjectionMatrix = Proj;
             UpdateFrustum();
         }
         
-        public static void BuildFrustum(Matrix4 View)
+        public static void BuildFrustum(Matrix4 View, bool ShouldUpdateFrustum = true)
         {
             var aspect = GameSettings.Width / (float)GameSettings.Height;
             ModelViewMatrix = View;
             ProjectionMatrix = Matrix4.CreatePerspectiveFieldOfView(GameSettings.Fov * Mathf.Radian, aspect, ZNear, ZFar);
-            UpdateFrustum();
+            if(ShouldUpdateFrustum)
+                UpdateFrustum();
         }
 
         private static void UpdateFrustum()
         {
             Renderer.LoadModelView(ModelViewMatrix);
             Renderer.LoadProjection(ProjectionMatrix);
-            if (!GameSettings.LockFrustum) Frustum.Matrix = ModelViewMatrix * ProjectionMatrix;
+            if (!GameSettings.LockFrustum) Frustum.UpdateMatrices(ModelViewMatrix, ProjectionMatrix);
         }
     }
 }

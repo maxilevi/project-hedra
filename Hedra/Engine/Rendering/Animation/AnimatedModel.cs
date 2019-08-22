@@ -160,24 +160,9 @@ namespace Hedra.Engine.Rendering.Animation
 
         public void Dispose()
         {
-            if (!BuffersCreated)
+            if(_disposed) return;
+            void DoDispose()
             {
-                Executer.ExecuteOnMainThread(delegate
-                {
-                    _disposed = true;
-                    Data.Dispose();
-                    _jointIds.Dispose();
-                    _indices.Dispose();
-                    _normals.Dispose();
-                    _colors.Dispose();
-                    _vertices.Dispose();
-                    _vertexWeights.Dispose();
-                    DrawManager.Remove(this);
-                });
-            }
-            else
-            {
-                _disposed = true;
                 Data.Dispose();
                 _jointIds.Dispose();
                 _indices.Dispose();
@@ -185,7 +170,16 @@ namespace Hedra.Engine.Rendering.Animation
                 _colors.Dispose();
                 _vertices.Dispose();
                 _vertexWeights.Dispose();
-                DrawManager.Remove(this);
+            }
+            _disposed = true;
+            DrawManager.Remove(this);
+            if (!BuffersCreated)
+            {
+                Executer.ExecuteOnMainThread(DoDispose);
+            }
+            else
+            {
+                DoDispose();
             }
         }
 

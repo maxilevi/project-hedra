@@ -1,126 +1,20 @@
-// MIT License - Copyright (C) The Mono.Xna Team
-// This file is subject to the terms and conditions defined in
-// file 'LICENSE.txt', which is part of this source code package.
-
-using System;
-using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.WorldBuilding;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering.Frustum
 {
-    /// <summary>
-    /// Defines a viewing frustum for intersection operations.
-    /// </summary>
-    public class BoundingFrustum
+    public class FrustumShape
     {
-        private Matrix4 _matrix;
+        private const int CornerCount = 8;
+        private const int PlaneCount = 6;
         private readonly Vector3[] _corners = new Vector3[CornerCount];
         private readonly Plane[] _planes = new Plane[PlaneCount];
+        private Matrix4 _matrix;
 
-        /// <summary>
-        /// The number of planes in the frustum.
-        /// </summary>
-        public const int PlaneCount = 6;
-
-        /// <summary>
-        /// The number of corner points in the frustum.
-        /// </summary>
-        public const int CornerCount = 8;
-
-        
         public Vector3[] Corners => _corners;
-
-        public bool Contains(ref Vector3 Min, ref  Vector3 Max)
-        {
-            var intersects = false;
-            for (var i = 0; i < PlaneCount; ++i)
-            {
-                var planeIntersectionType = Intersects(ref Min, ref Max, ref _planes[i]);
-                switch (planeIntersectionType)
-                {
-                    case PlaneIntersectionType.Front:
-                        return false;
-                    case PlaneIntersectionType.Intersecting:
-                        return true;
-                }
-            }
-            return true;
-        }
         
-        private PlaneIntersectionType Intersects(ref Vector3 Min, ref  Vector3 Max, ref Plane Plane)
-        {
-            Vector3 positiveVertex;
-            Vector3 negativeVertex;
-
-            if (Plane.Normal.X >= 0)
-            {
-                positiveVertex.X = Max.X;
-                negativeVertex.X = Min.X;
-            }
-            else
-            {
-                positiveVertex.X = Min.X;
-                negativeVertex.X = Max.X;
-            }
-
-            if (Plane.Normal.Y >= 0)
-            {
-                positiveVertex.Y = Max.Y;
-                negativeVertex.Y = Min.Y;
-            }
-            else
-            {
-                positiveVertex.Y = Min.Y;
-                negativeVertex.Y = Max.Y;
-            }
-
-            if (Plane.Normal.Z >= 0)
-            {
-                positiveVertex.Z = Max.Z;
-                negativeVertex.Z = Min.Z;
-            }
-            else
-            {
-                positiveVertex.Z = Min.Z;
-                negativeVertex.Z = Max.Z;
-            }
-
-            // Inline Vector3.Dot(plane.Normal, negativeVertex) + plane.D;
-            var distance = Plane.Normal.X * negativeVertex.X + Plane.Normal.Y * negativeVertex.Y + Plane.Normal.Z * negativeVertex.Z + Plane.D;
-            if (distance > 0)
-            {
-                return PlaneIntersectionType.Front;
-            }
-
-            // Inline Vector3.Dot(plane.Normal, positiveVertex) + plane.D;
-            distance = Plane.Normal.X * positiveVertex.X + Plane.Normal.Y * positiveVertex.Y + Plane.Normal.Z * positiveVertex.Z + Plane.D;
-            if (distance < 0)
-            {
-                return PlaneIntersectionType.Back;
-            }
-
-            return PlaneIntersectionType.Intersecting;
-        }
-        
-        public bool Contains(ref Vector3 Point)
-        {
-            for (var i = 0; i < PlaneCount; ++i)
-            {
-                if (PlaneHelper.ClassifyPoint(ref Point, ref _planes[i]) > 0)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-        
-        /// <summary>
-        /// Gets or sets the <see cref="Matrix"/> of the frustum.
-        /// </summary>
         public Matrix4 Matrix
         {
-            get { return _matrix; }
+            get => _matrix;
             set
             {
                 _matrix = value;
@@ -128,23 +22,7 @@ namespace Hedra.Engine.Rendering.Frustum
                 CreateCorners();   // is updated, so this should help performance. I hope ;)
             }
         }
-
-        /// <summary>
-        /// Returns a <see cref="String"/> representation of this <see cref="BoundingFrustum"/> in the format:
-        /// {Near:[nearPlane] Far:[farPlane] Left:[leftPlane] Right:[rightPlane] Top:[topPlane] Bottom:[bottomPlane]}
-        /// </summary>
-        /// <returns><see cref="String"/> representation of this <see cref="BoundingFrustum"/>.</returns>
-        public override string ToString()
-        {
-            return "{Near: " + _planes[0] +
-                   " Far:" + _planes[1] +
-                   " Left:" + _planes[2] +
-                   " Right:" + _planes[3] +
-                   " Top:" + _planes[4] +
-                   " Bottom:" + _planes[5] +
-                   "}";
-        }
-
+        
         private void CreateCorners()
         {
             IntersectionPoint(ref _planes[0], ref _planes[2], ref _planes[4], out _corners[0]);

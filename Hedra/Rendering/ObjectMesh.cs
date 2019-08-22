@@ -31,6 +31,8 @@ namespace Hedra.Rendering
         private bool _enabled;
         private Chunk _underChunk;
         private Vector3 _lastPosition;
+        private bool _disposed;
+        
         public ObjectMesh(VertexData Data)
         {
            _buffer = new ObjectMeshBuffer(Data);
@@ -218,12 +220,14 @@ namespace Hedra.Rendering
 
         public void Dispose()
         {
+            if(_disposed) return;
             DrawManager.Remove(this);
             if(_updateInBackground)
                 BackgroundUpdater.Remove(this);
             else
                 UpdateManager.Remove(this);
             _buffer?.Dispose();
+            _disposed = true;
         }
     }
 }

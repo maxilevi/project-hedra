@@ -387,6 +387,7 @@ namespace Hedra.Engine.Generation
                     lock (_chunks)
                     {
                         _chunks.Add(Chunk);
+                        Culling.Add(Chunk.Mesh);
                     }
                     SearcheableChunks.Add(new Vector2(Chunk.OffsetX, Chunk.OffsetZ), Chunk);
                 }
@@ -436,6 +437,7 @@ namespace Hedra.Engine.Generation
             lock (_chunks)
             {
                 _chunks.Remove(Chunk);
+                Culling.Remove(Chunk.Mesh);
             }
             lock (SearcheableChunks)
             {

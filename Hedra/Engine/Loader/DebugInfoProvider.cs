@@ -37,15 +37,11 @@ namespace Hedra.Engine.Loader
         private readonly BackgroundTexture _waterPool;
         private readonly BackgroundTexture _instancePool;
         private readonly BackgroundTexture _depthTexture;
-        private readonly VBO<Vector3> _frustumPoints;
-        private readonly VAO<Vector3> _frustumVAO;
         private float _passedTime;
         private bool _depthMode;
         private bool _extraDebugView;
         private bool _fpsOnTitle;
         private string _originalTitle;
-        private int _voxelCount;
-        private int _chunkCount = 1;
 
         public DebugInfoProvider()
         {
@@ -62,9 +58,6 @@ namespace Hedra.Engine.Loader
             _debugPanel.AddElement(_debugText);
             _debugPanel.Disable();
             _originalTitle = Program.GameWindow.Title;
-            var points = Culling.Frustum.Corners;
-            _frustumPoints = new VBO<Vector3>(points, points.Length, VertexAttribPointerType.Float);
-            _frustumVAO = new VAO<Vector3>(_frustumPoints);
             Log.WriteLine("Created debug elements.");
             
 #if DEBUG
@@ -142,10 +135,6 @@ namespace Hedra.Engine.Loader
                         Bitmap = WorldRenderer.InstanceBuffer.Visualize(),
                         Path = "Debug:InstanceGeometryPool"
                     });
-                    var borderWidth = (chunkBound-1) * Chunk.Height * 8;
-                    _voxelCount = (int) World.Chunks.Select(
-                        C => (defaultVoxelCount - borderWidth) / C.Landscape.GeneratedLod + borderWidth).Sum();
-                    _chunkCount = Math.Max(World.Chunks.Count, 1);
                 }
             }
             else
