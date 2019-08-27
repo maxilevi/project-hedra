@@ -221,7 +221,8 @@ namespace Hedra.Rendering
         public void Dispose()
         {
             if(_disposed) return;
-            DrawManager.Remove(this);
+            if(DrawManager.Contains(this))
+                DrawManager.Remove(this);
             if(_updateInBackground)
                 BackgroundUpdater.Remove(this);
             else

@@ -436,8 +436,8 @@ namespace Hedra.Engine.Generation
             Chunk.Dispose();
             lock (_chunks)
             {
-                _chunks.Remove(Chunk);
                 Culling.Remove(Chunk.Mesh);
+                _chunks.Remove(Chunk);
             }
             lock (SearcheableChunks)
             {

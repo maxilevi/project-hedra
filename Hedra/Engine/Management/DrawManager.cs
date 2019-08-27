@@ -64,6 +64,14 @@ namespace Hedra.Engine.Management
                 }
             }
         }
+
+        public static bool Contains(IRenderable Renderable)
+        {
+            lock (Lock)
+            {
+                return DrawFunctionsSet.Contains(Renderable);
+            }
+        }
         
         public static void Remove(IRenderable Renderable)
         {

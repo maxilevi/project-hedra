@@ -54,6 +54,7 @@ namespace Hedra.Engine.Bullet
                     DebugMode = DebugDrawModes.DrawAabb
                 }
             };
+            _world.Gravity = BulletSharp.Math.Vector3.Zero;
             _frustum = CreateFrustumRigidbody();
             _world.AddRigidBody(_frustum);
         }
@@ -96,6 +97,8 @@ namespace Hedra.Engine.Bullet
         {
             UpdateShape(_frustum, CreateFrustumShape(ModelView, Projection));
             _frustum.WorldTransform = ModelView.Inverted().Compatible();
+            lock(_bulletLock)
+                _world.UpdateSingleAabb(_frustum);
         }
 
         public void Update()
@@ -108,8 +111,6 @@ namespace Hedra.Engine.Bullet
             lock (_bulletLock)
             {
                 _frustum.CollisionFlags |= CollisionFlags.CustomMaterialCallback;
-                _world.PerformDiscreteCollisionDetection();
-                _world.UpdateAabbs();
                 _world.ContactTest(_frustum, _callback);
             }
             _insideSet = _callback.Objects;
@@ -117,7 +118,7 @@ namespace Hedra.Engine.Bullet
 
         public void Draw()
         {
-            lock (_bulletLock)
+            //lock (_bulletLock)
             {
                 for (var i = 0; i < _points.Length; ++i)
                 {
@@ -125,7 +126,7 @@ namespace Hedra.Engine.Bullet
                 }
 
                 //_world.DebugDrawObject(_frustum.WorldTransform, _frustum.CollisionShape, BulletSharp.Math.Vector3.One);
-                _world.DebugDrawWorld();
+                //_world.DebugDrawWorld();
             }
         }
 
@@ -157,13 +158,10 @@ namespace Hedra.Engine.Bullet
 
                 if (information.IsInSimulation && information.NeedsUpdate(cullable))
                 {
-                    if (cullable is ChunkMesh)
-                    {
-                        int a = 0;
-                    }
                     var size = cullable.Max - cullable.Min;
                     UpdateShape(body, new BoxShape(size.Compatible() * .5f));
                     body.WorldTransform = Matrix.Translation(cullable.Position.Compatible() + size.Compatible() * .5f);
+                    _world.UpdateSingleAabb(body);
                     
                     information.Max = cullable.Max;
                     information.Min = cullable.Min;
