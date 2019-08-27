@@ -115,18 +115,15 @@ namespace Hedra.Engine.Generation
 
             model = Design.Paint(model, woodColor, leafColor);
             model.GraduateColor(Vector3.UnitY);
-
-            if (underChunk.Initialized)
+            
+            var shapes = Design.GetShapes(originalModel);
+            foreach (var originalShape in shapes)
             {
-                List<CollisionShape> shapes = Design.GetShapes(originalModel);
-                foreach (CollisionShape originalShape in shapes)
-                {
-                    var shape = (CollisionShape) originalShape.Clone();
-                    shape.Transform(transMatrix);
-                    underChunk.AddCollisionShape(shape);
-                }
-                underChunk.StaticBuffer.AddInstance(model.ToInstanceData(transMatrix));
+                var shape = (CollisionShape) originalShape.Clone();
+                shape.Transform(transMatrix);
+                underChunk.AddCollisionShape(shape);
             }
+            underChunk.StaticBuffer.AddInstance(model.ToInstanceData(transMatrix));
         }
 
         public float SpaceNoise(float X, float Z)
