@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Hedra.BiomeSystem;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Rendering;
@@ -45,12 +46,15 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public ChunkMeshBuildOutput CreateTerrainMesh(Block[][][] Blocks, int Lod, RegionCache Cache)
         {
-            var output = CreateTerrain(Blocks,
-                (X,Y,Z) => Lod == 1 || (X != 0 && Z != 0 && X != BoundsX-Lod && Z != BoundsZ-Lod), Lod, Lod, Cache, true, true);
-
-            if (Lod != 1)
+            var output = default(ChunkMeshBuildOutput);
+            if (Lod == 1)
             {
-                var targetLod = 1;
+                output = CreateTerrain(Blocks, (X, Y, Z) => true, Lod, Lod, Cache, true, true);
+            }
+            else
+            {
+                output = CreateTerrain(Blocks, (X,Y,Z) => X != 0 && Z != 0 && X != BoundsX-Lod && Z != BoundsZ-Lod, Lod, Lod, Cache, true, true);
+                const int targetLod = 1;
                 var borders = CreateTerrain(Blocks,
                     (X, Y, Z) => X < targetLod || Z < targetLod || X > BoundsX-targetLod-1 || Z > BoundsZ-targetLod-1, targetLod, Lod, Cache, true, true);
                 _stitcher.Process(output.StaticData, borders.StaticData,
@@ -71,6 +75,27 @@ namespace Hedra.Engine.Generation.ChunkSystem
             output.StaticData.Translate(new Vector3(OffsetX, 0, OffsetZ));
             output.WaterData.Translate(new Vector3(OffsetX, 0, OffsetZ));
             return output;
+        }
+
+        private static ChunkMeshBuildOutput Merge(params ChunkMeshBuildOutput[] Outputs)
+        {
+            var staticData = new VertexData();
+            var waterData = new VertexData();
+            var instanceData = new VertexData();
+            var failed = false;
+            var hasNoise = false;
+            var hasWater = false;
+            for (var i = 0; i < Outputs.Length; ++i)
+            {
+                if(Outputs[i] == null) continue;
+                staticData += Outputs[i].StaticData;
+                waterData += Outputs[i].WaterData;
+                instanceData += Outputs[i].InstanceData;
+                failed |= Outputs[i].Failed;
+                hasNoise |= Outputs[i].HasNoise3D;
+                hasWater |= Outputs[i].HasWater;
+            }
+            return new ChunkMeshBuildOutput(staticData, waterData, instanceData, failed, hasNoise, hasWater);
         }
 
         public VertexData CreateTerrainCollisionMesh(Block[][][] Blocks, RegionCache Cache)

@@ -40,7 +40,8 @@ namespace Hedra.Engine.Bullet
         public bool HasFallDamage { get; set; } = true;
         public bool UseTimescale { get; set; } = true;
         public bool IsStuck => _isStuck;
-
+        public Vector3 Impulse { get; private set; }
+        
         private readonly PhysicsComponentMotionState _motionState;
         private readonly RigidBody _body;
         private readonly RigidBody _sensor;
@@ -48,7 +49,6 @@ namespace Hedra.Engine.Bullet
         private Vector3 _gravityDirection;
         private float _speedMultiplier;
         private Vector3 _accumulatedMovement;
-        private Vector3 _impulse;
         private int _sensorContacts;
         private Vector3 _gravity;
         private bool _moved;
@@ -207,9 +207,9 @@ namespace Hedra.Engine.Bullet
             HandleIsStuck();
             Parent.IsGrounded = _sensorContacts > 0;
             _body.Gravity = Parent.IsGrounded ? BulletSharp.Math.Vector3.Zero : _gravity.Compatible();
-            _body.LinearVelocity = new BulletSharp.Math.Vector3(_accumulatedMovement.X, Math.Min(0, _body.LinearVelocity.Y), _accumulatedMovement.Z) + _impulse.Compatible();
+            _body.LinearVelocity = new BulletSharp.Math.Vector3(_accumulatedMovement.X, Math.Min(0, _body.LinearVelocity.Y), _accumulatedMovement.Z) + Impulse.Compatible() * Time.TimeScale;
             _body.Activate();
-            _impulse *= (float) Math.Pow(0.25f, Time.DeltaTime * 5f);
+            Impulse *= (float) Math.Pow(0.25f, Time.DeltaTime * 5f);
             _accumulatedMovement = Vector3.Zero;
         }
 
@@ -347,7 +347,7 @@ namespace Hedra.Engine.Bullet
 
         public void ApplyImpulse(Vector3 Impulse)
         {
-            _impulse += Impulse;
+            this.Impulse += Impulse;
         }
 
         public bool CollidesWithStructures { get; set; }

@@ -31,6 +31,7 @@ namespace Hedra.Engine.Player
         protected Vector3 AccumulatedMovement { get; set; }
         protected readonly IHumanoid Human;
         protected Vector3 JumpPropulsion;
+        private bool _appliedDownwardImpulse;
 
         public MovementManager(IHumanoid Human)
         {
@@ -78,14 +79,15 @@ namespace Hedra.Engine.Player
             ForceJump();
         }
 
-        public void ForceJump(float Propulsion = 60)
+        public void ForceJump(float Propulsion = 70)
         {
             Human.IsSitting = false;
             Human.IsGrounded = false;
             IsJumping = true;
+            _appliedDownwardImpulse = false;
             Human.Physics.ResetFall();
             Human.Physics.GravityDirection = -Vector3.UnitY;
-            JumpPropulsion = Vector3.UnitY * Propulsion;
+            Human.Physics.ApplyImpulse(Vector3.UnitY * Propulsion);
         }
 
         protected virtual void DoUpdate() { }
@@ -156,13 +158,16 @@ namespace Hedra.Engine.Player
         private void HandleJumping()
         {
             if (!IsJumping) return;
-            if (Human.IsGrounded && JumpPropulsion.LengthFast < 30 || Human.IsUnderwater)
+            if (Human.IsGrounded && Human.Physics.Impulse.LengthSquared < 30 || Human.IsUnderwater)
             {
                 CancelJump();
             }
 
-            if (!Human.Physics.DeltaTranslate(JumpPropulsion) || JumpPropulsion.LengthSquared < 1) CancelJump();
-            JumpPropulsion *= (float)Math.Pow(.25f, Time.DeltaTime * 3f);
+            if (Human.Physics.Impulse.LengthSquared < 10f && !_appliedDownwardImpulse)
+            {
+                Human.Physics.ApplyImpulse(Vector3.UnitY * -3f);
+                _appliedDownwardImpulse = true;
+            }
         }
 
         public void CancelJump()

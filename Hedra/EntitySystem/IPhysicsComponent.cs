@@ -28,6 +28,7 @@ namespace Hedra.EntitySystem
         bool CollidesWithOffset(Vector3 Offset);
         void MoveTowards(Vector3 Position);
         void ApplyImpulse(Vector3 Impulse);
+        Vector3 Impulse { get; }
         bool Raycast(Vector3 End);
         bool CollidesWithStructures { get; set; }
         bool CollidesWithEntities { get; set; }
