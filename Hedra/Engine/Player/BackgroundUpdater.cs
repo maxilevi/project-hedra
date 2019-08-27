@@ -19,9 +19,11 @@ namespace Hedra.Engine.Player
         private static Stopwatch _watch;
         private static object _updateLock;
         private static List<IUpdatable> _updateList;
+        private static TickSystem _tickSystem;
         
         public static void Load()
         {
+            _tickSystem = new TickSystem();
             _updateThread = new Thread(Update);
             _watch = new Stopwatch();
             _updateList = new List<IUpdatable>();
@@ -96,6 +98,7 @@ namespace Hedra.Engine.Player
                     _updateList[i].Update();
                 }
             }
+            _tickSystem.Tick();
         }
 
         public static void Add(IUpdatable Update)
@@ -111,6 +114,22 @@ namespace Hedra.Engine.Player
             lock (_updateLock)
             {
                 _updateList.Remove(Update);
+            }
+        }
+        
+        public static void Add(ITickable Tickable)
+        {
+            lock (_updateLock)
+            {
+                _tickSystem.Add(Tickable);
+            }
+        }
+
+        public static void Remove(ITickable Tickable)
+        {
+            lock (_updateLock)
+            {
+                _tickSystem.Remove(Tickable);
             }
         }
     }

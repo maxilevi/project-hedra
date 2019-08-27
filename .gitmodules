@@ -1,11 +1,11 @@
 [submodule "project-hedra-assets"]
 	path = project-hedra-assets
-	url = git@github.com:maxilevi/project-hedra-assets.git
+	url = https://github.com/maxilevi/project-hedra-assets.git
 
 [submodule "hedra-tools"]
 	path = hedra-tools
-	url = git@github.com:maxilevi/hedra-tools.git
+	url = https://github.com/maxilevi/hedra-tools.git
 
 [submodule "hedra-obfuscator"]
 	path = hedra-obfuscator
-	url = git@github.com:maxilevi/hedra-obfuscator.git
+	url = https://github.com/maxilevi/hedra-obfuscator.git

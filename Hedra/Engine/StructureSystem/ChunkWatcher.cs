@@ -43,7 +43,7 @@ namespace Hedra.Engine.StructureSystem
         {
             lock (_lock)
             {
-                if (!Object.Disposed && Object.Initialized && (!_added.ContainsKey(Value) || _added[Value] != Object))
+                if (!Object.Disposed && (!_added.ContainsKey(Value) || _added[Value] != Object))
                 {
                     Add(Object, Value);
                     if (_added.ContainsKey(Value))

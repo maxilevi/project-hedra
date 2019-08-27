@@ -26,7 +26,7 @@ namespace Hedra.Components
     /// <summary>
     /// Description of RideComponent.
     /// </summary>
-    public class RideComponent : EntityComponent, ITickable
+    public class RideComponent : EntityComponent
     {
         public const float SpeedMultiplier = 1.75f;
         private IHumanoid _rider;

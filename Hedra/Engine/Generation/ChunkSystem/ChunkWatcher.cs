@@ -58,7 +58,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Kill();
                 return false;
             }
-            if (!_object.Initialized) _object.Initialize();
             if (!_object.IsGenerated || !_object.Landscape.StructuresPlaced || _object.Landscape.HasToGenerateMoreData)
             {
                 World.AddChunkToQueue(_object, false);
@@ -88,7 +87,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private static bool WasChunkGenerated(Chunk Chunk)
         {
-            return Chunk != null && Chunk.Initialized && Chunk.IsGenerated && Chunk.Landscape.StructuresPlaced;
+            return Chunk != null && Chunk.IsGenerated && Chunk.Landscape.StructuresPlaced;
         }
 
         private static bool ShouldWeRebuildChunk(Chunk Chunk)
@@ -99,8 +98,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public void Kill()
         {
             var toDelete = _object;
-            Executer.ExecuteOnMainThread(() => World.RemoveChunk(toDelete));
-            Dispose();
+            Executer.ExecuteOnMainThread(() =>
+            {
+                if(!toDelete.Disposed)
+                    World.RemoveChunk(toDelete);
+                Dispose();
+            });
         }
 
         public void Dispose()

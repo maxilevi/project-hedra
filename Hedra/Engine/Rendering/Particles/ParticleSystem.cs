@@ -19,7 +19,7 @@ using Hedra.Rendering.Particles;
 
 namespace Hedra.Engine.Rendering.Particles
 {
-    public class ParticleSystem : IRenderable, IUpdatable, IDisposable
+    public class ParticleSystem : IRenderable, IDisposable, ITickable
     {
         public const int MaxParticleCount = 15000;
         private static readonly Shader Shader = Shader.Build("Shaders/Particle.vert","Shaders/Particle.frag");
@@ -28,6 +28,7 @@ namespace Hedra.Engine.Rendering.Particles
         private readonly List<Particle3D> _particles;
         private VBO<Vector4> _particleVbo;
         private ParticleVAO _vao;
+        public int UpdatesPerSecond => 60;
         public bool Disposed { get; private set; }
         public int MaxParticles { get; set; } = MaxParticleCount;
         public Vector3 Position { get; set; }
@@ -47,6 +48,7 @@ namespace Hedra.Engine.Rendering.Particles
         public bool HasMultipleOutputs { get; set; }
         public bool Enabled { get; set; } = true;
         public bool Collides { get; set; }
+        public bool UseTimeScale { get; set; }
 
         public int ParticleCount
         {
@@ -81,7 +83,7 @@ namespace Hedra.Engine.Rendering.Particles
         {
             if((this.Position - LocalPlayer.Instance.Position).LengthSquared > GeneralSettings.DrawDistanceSquared) return;
             
-            if(ParticleCount == MaxParticles || !Enabled || (GameSettings.Paused && Particle3D.UseTimeScale)) return;
+            if(ParticleCount == MaxParticles || !Enabled || (Time.Paused && UseTimeScale)) return;
             
             var localPositionX = PositionErrorMargin.X * Utils.Rng.NextFloat() * 2f - PositionErrorMargin.X;
             var localPositionY = PositionErrorMargin.Y * Utils.Rng.NextFloat() * 2f - PositionErrorMargin.Y;
@@ -154,7 +156,7 @@ namespace Hedra.Engine.Rendering.Particles
         }
         
         
-        public void Update()
+        public void Update(float DeltaTime)
         {
             if(!HasMultipleOutputs && (this.Position - LocalPlayer.Instance.Position).LengthSquared > GeneralSettings.DrawDistanceSquared) return;
 
@@ -162,9 +164,9 @@ namespace Hedra.Engine.Rendering.Particles
             {
                 for (var i = 0; i < _particles.Count; i++)
                 {
-                    if (this.RandomRotation)
+                    if (RandomRotation)
                         _particles[i].Rotation += Mathf.RandomVector3(Utils.Rng) * 150 * (float) Time.DeltaTime;
-                    if (!_particles[i].Update())
+                    if (!_particles[i].Update(DeltaTime))
                     {
                         _particles.RemoveAt(i);
                     }

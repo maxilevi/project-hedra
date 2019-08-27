@@ -139,7 +139,7 @@ namespace Hedra.Engine.Scenes
                 World.Particles.ParticleLifetime = 1.15f;
                 World.Particles.GravityEffect = -0.01f;
                 World.Particles.PositionErrorMargin = new Vector3(0.75f, 0.0f, 0.75f);
-                Particle3D.UseTimeScale = false;
+                World.Particles.UseTimeScale = false;
                 
                 for(int i = 0; i < 1; i++)
                     World.Particles.Emit();
@@ -163,7 +163,7 @@ namespace Hedra.Engine.Scenes
                 _sound.Locked = false;
                 _sound = null;
             }
-            Particle3D.UseTimeScale = true;
+            World.Particles.UseTimeScale = true;
         }
         
         private static Vector3 Position = DefaultPosition;

@@ -72,8 +72,7 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Reference Include="BulletSharp, Version=0.11.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\packages\BulletSharp.0.11.1\lib\net40-client\BulletSharp.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\references\BulletSharp.dll</HintPath>
     </Reference>
     <Reference Include="Facepunch.Steamworks">
       <HintPath>..\references\Facepunch.Steamworks.dll</HintPath>
@@ -882,7 +881,6 @@
     <Compile Include="Engine\Core\RegistryFactory.cs" />
     <Compile Include="Engine\Core\ICountable.cs" />
     <Compile Include="Engine\Core\IPositionable.cs" />
-    <Compile Include="Engine\EntitySystem\BossSystem\SpawnComponent.cs" />
     <Compile Include="Engine\EntitySystem\Component.cs" />
     <Compile Include="Engine\EntitySystem\EffectFactory.cs" />
     <Compile Include="Engine\Game\GameLoader.cs" />
@@ -1038,7 +1036,6 @@
     <Compile Include="Engine\ModuleSystem\IEnemyFactory.cs" />
     <Compile Include="Engine\ModuleSystem\MobLoader.cs" />
     <Compile Include="Engine\ModuleSystem\SpawnerLoader.cs" />
-    <Compile Include="Engine\EntitySystem\CollectibleComponent.cs" />
     <Compile Include="Engine\EntitySystem\IMountable.cs" />
     <Compile Include="Engine\ModuleSystem\MobFactory.cs" />
     <Compile Include="Engine\EntitySystem\DropComponent.cs" />
@@ -14472,6 +14469,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Translations\Español.po" />
+    <Content Include="x64\libbulletc.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="x64\meshoptimizer32.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -14482,6 +14482,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="x64\wrap_oal.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x86\libbulletc.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="x86\meshoptimizer32.dll">

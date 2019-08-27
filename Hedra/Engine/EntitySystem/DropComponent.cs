@@ -21,7 +21,7 @@ namespace Hedra.Engine.EntitySystem
     /// <summary>
     /// Description of DropComponent.
     /// </summary>
-    public class DropComponent : EntityComponent, ITickable
+    public class DropComponent : EntityComponent
     {
         public bool Dropped { get; private set; }
         public bool RandomDrop { get; set; } = true;

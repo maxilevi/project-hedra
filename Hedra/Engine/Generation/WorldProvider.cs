@@ -209,8 +209,6 @@ namespace Hedra.Engine.Generation
                 
                 if (WorldRenderer.EnableCulling)
                 {
-                    if(!chunk.Initialized) continue;
-                    
                     if (Culling.IsInside(chunk.Mesh))
                     {
                         if(!chunk.Mesh.Occluded)

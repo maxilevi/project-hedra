@@ -42,7 +42,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public bool IsGenerated { get; private set; }
         public BiomeGenerator Landscape { get; private set; }
         public int Lod { get; set; } = 1;
-        public ChunkMesh Mesh { get; private set; }
+        public ChunkMesh Mesh { get; }
         public bool NeedsRebuilding { get; private set; }
         public bool NeverBuilded { get; private set; } = true;
         public int OffsetX { get; }
@@ -74,6 +74,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             this.OffsetX = OffsetX;
             this.OffsetZ = OffsetZ;
             this.Position = new Vector3(OffsetX, 0, OffsetZ);
+            Mesh = new ChunkMesh(Position, null);
             if (World.GetChunkByOffset(this.OffsetX, this.OffsetZ) != null)
                 throw new ArgumentNullException($"A chunk with the coodinates ({OffsetX}, {OffsetZ}) already exists.");
             _blocks = new Block[(int) (Width / BlockSize)][][];
@@ -86,15 +87,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
             Landscape = World.BiomePool.GetGenerator(this);
         }
 
-        public void Initialize()
-        {
-            Mesh = new ChunkMesh(Position, null);
-        }
-
         public void Generate()
         {
             if (Disposed) throw new ArgumentException($"Cannot build a disposed chunk.");
-            if (!Initialized) throw new ArgumentException($"Chunk hasnt been initialized yet.");
             lock (_blocksLock)
             {
                 IsGenerating = true;
@@ -172,7 +167,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private void SetChunkStatus(ChunkMeshBuildOutput Input)
         {
-            if (!Initialized) throw new ArgumentException($"Chunk hasnt been initialized yet.");
             this.BuildedCompletely = !Input.Failed;
             this.Position = new Vector3(OffsetX, 0, OffsetZ);
             this.Mesh.IsGenerated = true;
@@ -436,9 +430,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
         }
 
-
-        public bool Initialized => Mesh != null;
-
         public bool NeighboursExist
         {
             get
@@ -473,7 +464,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             get
             {
-                if (Disposed || !Initialized) return new List<CollisionShape>().ToArray();
+                if (Disposed) return new List<CollisionShape>().ToArray();
 
                 lock (Mesh.CollisionBoxes)
                 {
@@ -488,22 +479,13 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public Block[][] this[int Index] => Disposed || !Landscape.StructuresPlaced || !Landscape.BlocksSetted
             ? _dummyBlocks
             : _blocks[Index];
-
+        
         private void ForceDispose()
         {
-            Disposed = true;
             Bullet.BulletPhysics.RemoveChunk(Position.Xz);
             _waterDensity?.Clear();
-            if (Mesh != null)
-            {
-                Mesh.Dispose();
-                Mesh = null;
-            }
-            if (Landscape != null)
-            {
-                Landscape.Dispose();
-                Landscape = null;
-            }
+            Mesh?.Dispose();
+            Landscape?.Dispose();
             _blocks = null;
         }
 
@@ -520,6 +502,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void Dispose()
         {
+            if(Disposed) return;
+            Disposed = true;
             RoutineManager.StartRoutine(this.DisposeCoroutine);
         }
     }
