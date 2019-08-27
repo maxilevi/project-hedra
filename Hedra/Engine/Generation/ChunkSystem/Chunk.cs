@@ -42,7 +42,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public bool IsGenerated { get; private set; }
         public BiomeGenerator Landscape { get; private set; }
         public int Lod { get; set; } = 1;
-        public ChunkMesh Mesh { get; private set; }
+        public ChunkMesh Mesh { get; }
         public bool NeedsRebuilding { get; private set; }
         public bool NeverBuilded { get; private set; } = true;
         public int OffsetX { get; }
@@ -488,22 +488,13 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public Block[][] this[int Index] => Disposed || !Landscape.StructuresPlaced || !Landscape.BlocksSetted
             ? _dummyBlocks
             : _blocks[Index];
-
+        
         private void ForceDispose()
         {
-            Disposed = true;
             Bullet.BulletPhysics.RemoveChunk(Position.Xz);
             _waterDensity?.Clear();
-            if (Mesh != null)
-            {
-                Mesh.Dispose();
-                Mesh = null;
-            }
-            if (Landscape != null)
-            {
-                Landscape.Dispose();
-                Landscape = null;
-            }
+            Mesh?.Dispose();
+            Landscape?.Dispose();
             _blocks = null;
         }
 
@@ -520,6 +511,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void Dispose()
         {
+            if(Disposed) return;
+            Disposed = true;
             RoutineManager.StartRoutine(this.DisposeCoroutine);
         }
     }
