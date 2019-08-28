@@ -78,7 +78,7 @@ namespace Hedra.Engine.Management
 
         public static void RemoveTransparent(IRenderable Renderable)
         {
-            lock (TransparentLock)
+            lock (TransparentLock)    
                 TransparentObjects.Remove(Renderable);
         }
 
@@ -122,6 +122,8 @@ namespace Hedra.Engine.Management
             {
                 ParticleRenderer[i].Draw();
             }
+
+            Culling.Draw();
             Bullet.BulletPhysics.Draw();
             lock (TransparentLock)
             {

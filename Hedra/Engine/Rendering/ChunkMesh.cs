@@ -26,9 +26,8 @@ namespace Hedra.Engine.Rendering
         private IMeshBuffer _buffer;
         private readonly List<InstanceData> _instanceElements;
         private readonly List<InstanceData> _lodedInstanceElements;
-        public List<CollisionShape> CollisionBoxes = new List<CollisionShape>();
-        public List<VertexData> Elements = new List<VertexData>();
-        public VertexData ModelData { get; set; }
+        public readonly List<CollisionShape> CollisionBoxes = new List<CollisionShape>();
+        public readonly List<VertexData> Elements = new List<VertexData>();
 
         public bool IsBuilded;
         public bool IsGenerated;
@@ -38,7 +37,7 @@ namespace Hedra.Engine.Rendering
         public bool BuildedOnce { get; set; }
         public Vector3 Max { get; private set; }
         public Vector3 Min { get; private set; }
-        public Vector3 Position { get; }
+        public Vector3 Position { get; private set; }
         protected override Vector3 OcclusionMin => Min + Position;
         protected override Vector3 OcclusionMax => Max + Position;
 
@@ -52,8 +51,9 @@ namespace Hedra.Engine.Rendering
 
         public void SetBounds(Vector3 Min, Vector3 Max)
         {
-            this.Max = Max;
-            this.Min = Min;
+            this.Max = Max - Min.Y * Vector3.UnitY;
+            this.Min = Min - Min.Y * Vector3.UnitY;
+            Position = new Vector3(Position.X, Min.Y, Position.Z);
         }
 
         public void Draw()

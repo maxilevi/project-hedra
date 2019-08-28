@@ -62,9 +62,6 @@ namespace Hedra.Engine.Loader
             _debugPanel.AddElement(_debugText);
             _debugPanel.Disable();
             _originalTitle = Program.GameWindow.Title;
-            var points = Culling.Frustum.Corners;
-            _frustumPoints = new VBO<Vector3>(points, points.Length, VertexAttribPointerType.Float);
-            _frustumVAO = new VAO<Vector3>(_frustumPoints);
             Log.WriteLine("Created debug elements.");
             
 #if DEBUG
@@ -106,7 +103,7 @@ namespace Hedra.Engine.Loader
                 var lineBreak = $"{Environment.NewLine}{Environment.NewLine}";
                 var text = $"X = {(int)player.Position.X} Y = {(int)(player.Position.Y)} Z={(int)player.Position.Z} Routines={RoutineManager.Count} Watchers={player.Loader.WatcherCount} Grounded={player.IsGrounded}";
                 text += 
-                    $"{lineBreak}Chunks={World.Chunks.Count} ChunkX={underChunk?.OffsetX ?? 0} ChunkZ={underChunk?.OffsetZ ?? 0}";
+                    $"{lineBreak}DrawCalls={DrawManager.DrawCalls}Chunks={World.Chunks.Count} ChunkX={underChunk?.OffsetX ?? 0} ChunkZ={underChunk?.OffsetZ ?? 0}";
                 text +=
                     $"{lineBreak}Textures ={TextureRegistry.Count} Fonts={FontCache.Count} Texts={TextCache.Count} VAO={VAO.Alive} VBO={VBOCache.CachedVBOs}/{VBO.Alive} FBO={FBO.Alive}";
                 text += 

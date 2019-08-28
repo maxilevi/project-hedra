@@ -47,6 +47,7 @@ namespace Hedra.Game
         public static float AmbientOcclusionIntensity = 1;
         public static bool BlurFilter { get; set; } = false;
         public static bool DebugAI { get; set; }
+        public static bool DebugFrustum { get; set; }
         public static bool NewWorld { get; set; }
         public static bool DarkEffect = false;
         public static bool DistortEffect = false;

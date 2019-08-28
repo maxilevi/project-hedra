@@ -267,20 +267,7 @@ namespace Hedra.Engine
         {
             return new Vector3(Vec2.X, 0, Vec2.Y);
         }
-        
-        public static Vector3 Half(this Vector3 Vec3)
-        {
-            return new Vector3(Vec3.X*.5f, Vec3.Y*.5f, Vec3.Z*.5f);
-        }
-        
-        public static Matrix3 ToMatrix3(this Matrix4 Mat4){
-            return new Matrix3(Mat4);
-        }
-        
-        public static float Sum(this Vector2 Vec2)
-        {
-            return Vec2.X + Vec2.Y;
-        }
+
         
         public static float Average(this Vector3 Vec3)
         {
@@ -289,85 +276,21 @@ namespace Hedra.Engine
         
         public static float Dot(this Vector3 Vec3, Vector3 _Vec3)
         {
-            return Vector3.Dot(Vec3, _Vec3);
+            return Vec3.X * _Vec3.X + Vec3.Y * _Vec3.Y + Vec3.Z * _Vec3.Z;
         }
         
-        public static Vector3 Cross(this Vector3 Vec3, Vector3 _Vec3)
+        public static Vector3 Cross(this Vector3 Left, Vector3 Right)
         {
-            return Vector3.Cross(Vec3, _Vec3);
+            return new Vector3
+            {
+                X = Left.Y * Right.Z - Left.Z * Right.Y,
+                Y = Left.Z * Right.X - Left.X * Right.Z,
+                Z = Left.X * Right.Y - Left.Y * Right.X
+            };
         }
-        
-        public static Vector3 GetSmallest( this Vector3[] Vec3s)
+
+        public static List<T> Clone<T>(this List<T> ArrayB)
         {
-            Vector3 Smallest = Vector3.Zero;
-            for(int i = 0; i < Vec3s.Length; i++){
-                if(Vec3s[i].LengthSquared < Smallest.LengthSquared)
-                    Smallest = Vec3s[i];
-            }
-            return Smallest;
-        }
-        
-        public static Vector3 GetSmallest( this List<Vector3> Vec3s)
-        {
-            Vector3 Smallest = Vector3.Zero;
-            for(int i = 0; i < Vec3s.Count; i++){
-                if(Vec3s[i].LengthSquared < Smallest.LengthSquared)
-                    Smallest = Vec3s[i];
-            }
-            return Smallest;
-        }
-        
-        public static Vector3 GetBiggest( this Vector3[] Vec3s)
-        {
-            Vector3 Biggest = Vector3.Zero;
-            for(int i = 0; i < Vec3s.Length; i++){
-                if(Vec3s[i].LengthSquared > Biggest.LengthSquared)
-                    Biggest = Vec3s[i];
-            }
-            return Biggest;
-        }
-        
-        public static Vector3 GetBiggest( this List<Vector3> Vec3s)
-        {
-            Vector3 Biggest = Vector3.Zero;
-            for(int i = 0; i < Vec3s.Count; i++){
-                if(Vec3s[i].LengthSquared > Biggest.LengthSquared)
-                    Biggest = Vec3s[i];
-            }
-            return Biggest;
-        }
-        
-        public static Vector3 Average(this Vector3[] Vec3)
-        {
-            Vector3 Avg = Vector3.Zero;
-            for(int i = 0; i < Vec3.Length; i++){
-                Avg += Vec3[i];
-            }
-            Avg /= Vec3.Length;  
-            return Avg;
-        }
-        
-        public static float Distance(this PointF P1, PointF P2){
-            PointF P3 = new PointF(P1.X - P2.X, P1.Y - P2.Y);
-            return (float) (Math.Sqrt(P3.X * P3.X) + Math.Sqrt(P3.Y * P3.Y));
-        }
-        
-        public static byte[] ToByteArray(this int intValue){
-            byte[] intBytes = BitConverter.GetBytes(intValue);
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(intBytes);
-            byte[] result = intBytes;
-            
-            return result;
-        }
-        
-        public static int ToInt32(this byte[] ArrayB){
-            if (BitConverter.IsLittleEndian)
-                Array.Reverse(ArrayB);
-            return BitConverter.ToInt32(ArrayB,0);
-        }
-        
-        public static List<T> Clone<T>(this List<T> ArrayB){
             return new List<T>(ArrayB);
         }
         
@@ -388,7 +311,8 @@ namespace Hedra.Engine
             BW.Write(Color.W);
         }
         
-        public static Vector4 ReadVector4(this BinaryReader BR){
+        public static Vector4 ReadVector4(this BinaryReader BR)
+        {
             return new Vector4(BR.ReadSingle(), BR.ReadSingle(), BR.ReadSingle(), BR.ReadSingle());
         }
 

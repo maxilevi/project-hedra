@@ -89,7 +89,7 @@ namespace Hedra.Engine.Rendering
         
         public static void PrepareShadowMatrix()
         {
-            Culling.Frustum.Matrix = ShadowRenderer.ShadowMvp;
+            Culling.Frustum.SetMatrices(ShadowRenderer.DepthProj, ShadowRenderer.DepthView);
         }
 
         public static void Render(Dictionary<Vector2, Chunk> ToDraw, Dictionary<Vector2, Chunk> ToDrawShadow, WorldRenderType Type)

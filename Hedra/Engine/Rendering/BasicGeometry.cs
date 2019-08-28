@@ -2,11 +2,13 @@
 using System;
 using System.Drawing;
 using System.Linq;
+using BulletSharp;
+using Hedra.Engine.Bullet;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
-using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Rendering;
+using CollisionShape = Hedra.Engine.PhysicsSystem.CollisionShape;
 
 namespace Hedra.Engine.Rendering
 {
@@ -23,7 +25,8 @@ namespace Hedra.Engine.Rendering
         private static VBO<Vector3> CubeVerticesVBO { get; }
         public static VBO<ushort> CubeIndicesVBO { get; }
         public static VAO<Vector3> CubeVAO { get; }
-
+        private static BulletDraw _debugDraw;
+        
         static BasicGeometry()
         {
             var data = new CubeData();
@@ -45,13 +48,47 @@ namespace Hedra.Engine.Rendering
             _drawIndices = new VBO<uint>(new uint[5], 5 * sizeof(uint), VertexAttribPointerType.UnsignedInt, BufferTarget.ElementArrayBuffer);
             _drawVao = new VAO<Vector3>(_drawVerts);
             _line = new Line3D();
+            _debugDraw = new BulletDraw();
+        }
+        
+        public static void DrawPlane(Vector3 Normal, float PlaneConst, Vector3 Position, Vector4 Color)
+        {
+            /*var mat = Transform.Compatible();
+            var color = Color.Xyz.Compatible();
+            var normal = Normal.Compatible();
+            _debugDraw.DrawPlane(ref normal, PlaneConst, ref mat, ref color);*/
         }
 
-        public static void DrawPoint(Vector3 Point, Vector4 Color)
+        public static void DrawBox(Vector3 Min, Vector3 Max, Vector4 Color)
+        {
+            var p2 = new Vector3(Max.X, Min.Y, Min.Z);
+            var p3 = new Vector3(Max.X, Max.Y, Min.Z);
+            var p4 = new Vector3(Min.X, Max.Y, Min.Z);
+            var p5 = new Vector3(Min.X, Min.Y, Max.Z);
+            var p6 = new Vector3(Max.X, Min.Y, Max.Z);
+            var p8 = new Vector3(Min.X, Max.Y, Max.Z);
+
+            DrawLine(Min, p2, Color);
+            DrawLine(p2, p3, Color);
+            DrawLine(p3, p4, Color);
+            DrawLine(p4, Min, Color);
+
+            DrawLine(Min, p5, Color);
+            DrawLine(p2, p6, Color);
+            DrawLine(p3, Max, Color);
+            DrawLine(p4, p8, Color);
+
+            DrawLine(p5, p6, Color);
+            DrawLine(p6, Max, Color);
+            DrawLine(Max, p8, Color);
+            DrawLine(p8, p5, Color);
+        }
+
+        public static void DrawPoint(Vector3 Point, Vector4 Color, float Width = 4)
         {
 #if DEBUG
             Shader.Passthrough.Bind();
-            OpenTK.Graphics.OpenGL.GL.PointSize(4);
+            OpenTK.Graphics.OpenGL.GL.PointSize(Width);
             OpenTK.Graphics.OpenGL.GL.Begin(OpenTK.Graphics.OpenGL.PrimitiveType.Points);
             OpenTK.Graphics.OpenGL.GL.Vertex3(Point);
             OpenTK.Graphics.OpenGL.GL.Color4(Color);

@@ -71,8 +71,8 @@ namespace Hedra.Engine.Rendering
             NormalizedLight = Vector3.TransformNormal(new Vector3(NormalizedLight.X, NormalizedLight.Y, NormalizedLight.Z),
                 Matrix4.CreateRotationY( SkyManager.DayTime / 24000 * 360f * Mathf.Radian));
 
-            var newModel = Matrix4.Identity;
-            ShadowMvp = newModel * Matrix4.LookAt( NormalizedLight + Position, Position, Vector3.UnitY) * DepthProj;
+            DepthView = Matrix4.LookAt(NormalizedLight + Position, Position, Vector3.UnitY);
+            ShadowMvp = DepthView * DepthProj;
 
             Shader.Bind();
             Shader["Time"] = Time.AccumulatedFrameTime;

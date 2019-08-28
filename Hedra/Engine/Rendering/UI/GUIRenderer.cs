@@ -145,7 +145,9 @@ namespace Hedra.Engine.Rendering.UI
                 for(var i = 0; i < _renderableUIList.Count; i++)
                 {
                     if (_renderableUIList[i].Order == DrawOrder.Before)
+                    {
                         _renderableUIList[i].Renderable.Draw();
+                    }
                 }
             }
             SetDraw();
@@ -157,7 +159,6 @@ namespace Hedra.Engine.Rendering.UI
                     var id = texture.Id;
                     if (IsValidId(id))
                     {
-                        DrawCount++;
                         this.BaseDraw(texture, id);
                     }
                 }
@@ -168,7 +169,9 @@ namespace Hedra.Engine.Rendering.UI
                 for (var i = 0; i < _renderableUIList.Count; i++)
                 {
                     if (_renderableUIList[i].Order == DrawOrder.After)
+                    {
                         _renderableUIList[i].Renderable.Draw();
+                    }
                 }
             }
         }
@@ -202,6 +205,7 @@ namespace Hedra.Engine.Rendering.UI
             Shader["UseMask"] = Texture.UseMask ? 1 : 0;
 
             DrawQuad();
+            DrawCount++;
         }
 
         public static void SetDraw(Shader CustomProgram = null)

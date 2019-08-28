@@ -457,6 +457,11 @@ namespace Hedra.User
                 {
                     GameSettings.DebugAI = !GameSettings.DebugAI;
                 }
+
+                if (Parts[0] == "frustum")
+                {
+                    GameSettings.DebugFrustum = !GameSettings.DebugFrustum;
+                }
                 if (Parts[0] == "realm")
                 {
 

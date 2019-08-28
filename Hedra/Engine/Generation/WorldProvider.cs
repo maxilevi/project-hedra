@@ -231,6 +231,17 @@ namespace Hedra.Engine.Generation
 
         public void Draw(WorldRenderType Type)
         {
+            if ((Type & WorldRenderType.StaticAndInstance) == WorldRenderType.StaticAndInstance)
+            {
+                /*
+                var chunks = Chunks;
+                for (var i = 0; i < chunks.Count; ++i)
+                {
+                    BasicGeometry.DrawBox(chunks[i].Mesh.Min + chunks[i].Mesh.Position,
+                        chunks[i].Mesh.Max + chunks[i].Mesh.Position, Vector4.One);
+                }*/
+            }
+
             if (GameSettings.Wireframe) Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 
             WorldRenderer.PrepareCameraMatrix();
