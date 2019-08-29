@@ -1,18 +1,7 @@
-// MIT License - Copyright (C) The Mono.Xna Team
-// This file is subject to the terms and conditions defined in
-// file 'LICENSE.txt', which is part of this source code package.
-
-using System;
-using System.Linq;
-using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.WorldBuilding;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering.Frustum
 {
-    /// <summary>
-    /// Defines a viewing frustum for intersection operations.
-    /// </summary>
     public class BoundingFrustum
     {
         private static readonly Vector4[] UnitCube = new Vector4[8]

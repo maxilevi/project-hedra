@@ -23,6 +23,7 @@ namespace Hedra.Localization
         public static void Load()
         {
             _translations.Clear();
+            TranslationsFolder = Directory.Exists(EditorTranslationsFolder) ? EditorTranslationsFolder : DefaultTranslationsFolder;
             var files = Directory.GetFiles(TranslationsFolder);
             for (var i = 0; i < files.Length; i++)
             {
@@ -127,6 +128,8 @@ namespace Hedra.Localization
 #endif
         }
 
-        private static string TranslationsFolder => GameSettings.DebugMode && !GameSettings.TestingMode ? $"../../Translations/" : $"{GameLoader.AppPath}/Translations/";
+        private static string TranslationsFolder { get; set; }
+        private static string EditorTranslationsFolder => GameSettings.DebugMode && !GameSettings.TestingMode ? $"../../Translations/" : DefaultTranslationsFolder;
+        private static string DefaultTranslationsFolder => $"{GameLoader.AppPath}/Translations/";
     }
 }

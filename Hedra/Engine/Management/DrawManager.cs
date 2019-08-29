@@ -4,6 +4,8 @@
  * Time: 05:35 p.m.
  *
  */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.EnvironmentSystem;
@@ -14,7 +16,9 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Effects;
 using Hedra.Engine.Rendering.Frustum;
+using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Rendering;
 using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Management
@@ -26,9 +30,11 @@ namespace Hedra.Engine.Management
     {
         private static readonly object Lock = new object();
         private static readonly object TransparentLock = new object();
+        private static readonly object ObjectMeshLock = new object();
         private static readonly HashSet<IRenderable> DrawFunctionsSet;
         private static readonly List<IRenderable> DrawFunctions;
         private static readonly List<IRenderable> TransparentObjects;
+        private static readonly List<ObjectMesh> ObjectMeshes;
         private static bool _initialized;
         private static CursorIcon _mouseCursorIcon;
         
@@ -48,11 +54,16 @@ namespace Hedra.Engine.Management
             ParticleRenderer = new List<IRenderable>();
             TrailRenderer = new List<IRenderable>();
             TransparentObjects = new List<IRenderable>();
+            ObjectMeshes = new List<ObjectMesh>();
             UIRenderer = new GUIRenderer();
         }
 
         public static void Add(IRenderable Renderable)
         {
+#if DEBUG
+            if(Renderable is ObjectMesh || Renderable is TrailRenderer || Renderable is ParticleSystem) 
+                throw new ArgumentOutOfRangeException($"This type of renderable ('{nameof(Renderable)}') is not supported");
+#endif
             lock (Lock)
             {
                 DrawFunctionsSet.Add(Renderable);
@@ -63,6 +74,10 @@ namespace Hedra.Engine.Management
         
         public static void Remove(IRenderable Renderable)
         {
+#if DEBUG
+            if(Renderable is ObjectMesh || Renderable is TrailRenderer || Renderable is ParticleSystem) 
+                throw new ArgumentOutOfRangeException($"This type of renderable ('{nameof(Renderable)}') is not supported");
+#endif
             lock (Lock)
             {
                 DrawFunctionsSet.Remove(Renderable);
@@ -80,6 +95,18 @@ namespace Hedra.Engine.Management
         {
             lock (TransparentLock)    
                 TransparentObjects.Remove(Renderable);
+        }
+
+        public static void AddObjectMesh(ObjectMesh Mesh)
+        {
+            lock(ObjectMeshLock)
+                ObjectMeshes.Add(Mesh);
+        }
+
+        public static void RemoveObjectMesh(ObjectMesh Mesh)
+        {
+            lock(ObjectMeshLock)
+                ObjectMeshes.Remove(Mesh);
         }
 
         private static void BulkDraw()
@@ -111,6 +138,8 @@ namespace Hedra.Engine.Management
                     }
                 }
             }
+            lock(ObjectMeshLock)
+                ObjectMeshBuffer.DrawBatched(ObjectMeshes);
         
             Renderer.Enable(EnableCap.DepthTest);
             World.Draw(WorldRenderType.Water);

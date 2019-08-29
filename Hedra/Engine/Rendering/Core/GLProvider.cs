@@ -482,7 +482,6 @@ namespace Hedra.Engine.Rendering.Core
 
         public void MultiDrawElements(PrimitiveType Primitive, int[] Counts, DrawElementsType Type, IntPtr[] Offsets, int Count)
         {
-            var error = GL.GetError();
             GL.MultiDrawElements(Primitive, Counts, Type, Offsets, Count);
             EnsureNoErrors();
         }
@@ -631,6 +630,18 @@ namespace Hedra.Engine.Rendering.Core
         public void Viewport(int V0, int V1, int V2, int V3)
         {
             GL.Viewport(V0, V1, V2, V3);
+            EnsureNoErrors();
+        }
+
+        public void GetProgram(int ShaderId, GetProgramParameterName ParameterName, out int Value)
+        {
+            GL.GetProgram(ShaderId, ParameterName, out Value);
+            EnsureNoErrors();
+        }
+
+        public void GetProgramInfoLog(int ShaderId, out string Log)
+        {
+            GL.GetProgramInfoLog(ShaderId, out Log);
             EnsureNoErrors();
         }
 

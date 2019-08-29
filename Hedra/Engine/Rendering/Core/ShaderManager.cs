@@ -10,6 +10,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Management;
 using Hedra.Rendering;
 using OpenTK;
@@ -18,10 +20,16 @@ namespace Hedra.Engine.Rendering.Core
 {    
     public static class ShaderManager
     {
+        private const string FogUniform = "FogSettings";
+        private const string LightsUniform = "LightSettings";
+        private const string MatricesUniform = "Matrices";
+        private const string HighlightUniform = "HighlightSettings";
         public const string ModelViewMatrixName = "_modelViewMatrix";
         public const string ModelViewProjectionName = "_modelViewProjectionMatrix";
         public const int LightDistance = 384;
         public const int MaxLights = 32;
+        public static UBO<FogData> FogUBO { get; private set; }
+        public static UBO<LightSettings> LightsUBO { get; private set; }
         private static Vector3 _lightPosition;
         private static Vector3 _lightColor;
         private static float _clipPlaneY;
@@ -33,7 +41,9 @@ namespace Hedra.Engine.Rendering.Core
         {
             _shaders = new List<Shader>();
             PointLights = new List<PointLight>(MaxLights);
-            _lightPosition = new Vector3(0, 1000, 0);
+            _lightPosition = new Vector3(-500f, 800f, 0f);
+            FogUBO = new UBO<FogData>(FogUniform);
+            LightsUBO = new UBO<LightSettings>(LightsUniform);
         }
 
         public static Shader GetById(uint Id)
@@ -54,58 +64,31 @@ namespace Hedra.Engine.Rendering.Core
         public static void RegisterShader(Shader Entry)
         {
             _shaders.Add(Entry);
-            Entry.LightCountLocation = Renderer.GetUniformLocation(Entry.ShaderId, "LightCount");
-            Entry.LightColorLocation = Renderer.GetUniformLocation(Entry.ShaderId, "LightColor");
-            Entry.LightPositionLocation = Renderer.GetUniformLocation(Entry.ShaderId, "LightPosition");
-            Entry.PointLightsColorUniform = new int[MaxLights];
-            Entry.PointLightsPositionUniform = new int[MaxLights];
-            Entry.PointLightsRadiusUniform = new int[MaxLights];
-            
-            for(var i = 0; i < Entry.PointLightsColorUniform.Length; i++)
-            {
-                Entry.PointLightsColorUniform[i] = Renderer.GetUniformLocation(Entry.ShaderId, "Lights["+i+"].Color");
-            }
-            for(var i = 0; i < Entry.PointLightsPositionUniform.Length; i++)
-            {
-                Entry.PointLightsPositionUniform[i] = Renderer.GetUniformLocation(Entry.ShaderId, "Lights["+i+"].Position");
-            }
-            for(var i = 0; i < Entry.PointLightsRadiusUniform.Length; i++)
-            {
-                Entry.PointLightsRadiusUniform[i] = Renderer.GetUniformLocation(Entry.ShaderId, "Lights["+i+"].Radius");
-            }
+            FogUBO.RegisterShader(Entry);
+            LightsUBO.RegisterShader(Entry);
         }
 
         public static void UnregisterShader(Shader Entry)
         {
             _shaders.Remove(Entry);
         }
-        
-        private static void Do(Func<Shader, bool> Condition, Action<Shader> Action, bool InSameThread = false)
+
+        private static void UpdateLights()
         {
-            var previousProgram = Renderer.ShaderBound;
-            Renderer.BindShader(previousProgram);
-            for (var i = 0; i < _shaders.Count; i++)
+            void DoUpdate()
             {
-                int k = i;
-                if (Condition(_shaders[k]))
+                var lights = new AlignedPointLight[MaxLights];
+                var actualLights = Lights;
+                for (var i = 0; i < actualLights.Length; ++i)
                 {
-                    void Do()
-                    {
-                        _shaders[k].Bind();
-                        Action(_shaders[k]);
-                    }
-
-                    if (InSameThread) Do();
-                    else Executer.ExecuteOnMainThread(Do);
+                    lights[i] = new AlignedPointLight(actualLights[i]);
                 }
+                LightsUBO.Update(new LightSettings(lights, _lightColor, _lightPosition, UsedLights));
             }
-
-            void Cleanup()
-            {
-                Renderer.BindShader(previousProgram);
-            }
-            if (InSameThread) Cleanup();
-            else Executer.ExecuteOnMainThread(Cleanup);
+            if(Thread.CurrentThread.ManagedThreadId == Loader.Hedra.MainThreadId)
+                DoUpdate();
+            else
+                Executer.ExecuteOnMainThread(DoUpdate);
         }
 
         public static PointLight GetAvailableLight()
@@ -127,28 +110,8 @@ namespace Hedra.Engine.Rendering.Core
             if (!Light.Locked)
             {
                 PointLights.Remove(Light);
-                Do(S => S.LightCountLocation != -1, delegate(Shader Shader)
-                {
-                    for (var i = 0; i < PointLights.Count; i++)
-                    {
-                        Renderer.Uniform3(Shader.PointLightsColorUniform[i], PointLights[i].Color);
-                        Renderer.Uniform3(Shader.PointLightsPositionUniform[i], PointLights[i].Position);
-                        Renderer.Uniform1(Shader.PointLightsRadiusUniform[i], PointLights[i].Radius);
-                        Renderer.Uniform1(Shader.LightCountLocation, PointLights.Count);
-                    }
-                });
             }
-            else
-            {
-                var lightIndex = PointLights.IndexOf(Light);
-                Do(S => S.PointLightsColorUniform[lightIndex] != -1, delegate(Shader Shader)
-                {
-                    Renderer.Uniform3(Shader.PointLightsColorUniform[lightIndex], Light.Color);
-                    Renderer.Uniform3(Shader.PointLightsPositionUniform[lightIndex], Light.Position);
-                    Renderer.Uniform1(Shader.PointLightsRadiusUniform[lightIndex], Light.Radius);
-                    Renderer.Uniform1(Shader.LightCountLocation, PointLights.Count);
-                });
-            }
+            UpdateLights();
         }
         
         public static Vector3 LightColor
@@ -157,35 +120,14 @@ namespace Hedra.Engine.Rendering.Core
             set
             {
                 _lightColor = value;
-                Do(S => S.LightColorLocation != -1, delegate (Shader Shader)
-                {
-                    Shader["LightColor"] = _lightColor;
-                });
+                UpdateLights();
             }
         }
 
         public static void SetLightColorInTheSameThread(Vector3 Color)
         {
             _lightColor = Color;
-            ShaderManager.Do(S => S.LightColorLocation != -1, delegate (Shader Shader)
-            {
-                Shader["LightColor"] = _lightColor;
-            }, true);
-        }
-
-        public static Vector3 LightPosition
-        {
-            get => _lightPosition;
-            set
-            {
-                if(_lightPosition == value) return;
-                
-                _lightPosition = value;
-                ShaderManager.Do(S => S.LightPositionLocation != -1, delegate(Shader Shader)
-                {
-                    Shader["LightPosition"] = _lightPosition;
-                });
-            }
+            UpdateLights();
         }
 
         public static int UsedLights => PointLights.Count;

@@ -106,6 +106,7 @@ namespace Hedra.Engine.Scenes
                     {
                         _light.Color = new Vector3(1f, 0.4f, 0.4f);
                         _light.Position = FirePosition;
+                        ShaderManager.UpdateLight(_light);
                     }
                 }
 
@@ -143,17 +144,14 @@ namespace Hedra.Engine.Scenes
                 
                 for(int i = 0; i < 1; i++)
                     World.Particles.Emit();
-
-                if (_light != null)
-                    ShaderManager.UpdateLight(_light);
             }
 
             if (_light != null)
             {
                 _light.Color = Vector3.Zero;
                 _light.Position = Vector3.Zero;
-                ShaderManager.UpdateLight(_light);
                 _light.Locked = false;
+                ShaderManager.UpdateLight(_light);
                 _light = null;
             }
 

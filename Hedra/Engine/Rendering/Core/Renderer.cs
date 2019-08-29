@@ -111,6 +111,16 @@ namespace Hedra.Engine.Rendering.Core
         {
             CapHandler.Disable(Cap);
         }
+        
+        public static void GetProgram(int ShaderId, GetProgramParameterName ParameterName, out int Value)
+        {
+            Provider.GetProgram(ShaderId, ParameterName, out Value);
+        }
+
+        public static void GetProgramInfoLog(int ShaderId, out string Log)
+        {
+            Provider.GetProgramInfoLog(ShaderId, out Log);
+        }
 
         public static void EnableVertexAttribArray(uint Index)
         {

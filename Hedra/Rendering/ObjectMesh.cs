@@ -57,7 +57,7 @@ namespace Hedra.Rendering
             {
                 UseTimeScale = false
             };
-            DrawManager.Add(this);
+            DrawManager.AddObjectMesh(this);
             if(_updateInBackground)
                 BackgroundUpdater.Add(this);
             else
@@ -218,7 +218,7 @@ namespace Hedra.Rendering
 
         public void Dispose()
         {
-            DrawManager.Remove(this);
+            DrawManager.RemoveObjectMesh(this);
             if(_updateInBackground)
                 BackgroundUpdater.Remove(this);
             else

@@ -77,11 +77,6 @@ namespace Hedra.Engine
             return float.IsNaN(Value) || float.IsInfinity(Value) || Value > int.MaxValue || Value < int.MinValue;
         }
 
-        public static Vector2 ScaleUI(this Vector2 Vector, Vector2 Resolution)
-        {
-            return Mathf.ScaleGui(Resolution, Vector);
-        }
-        
         public static Vector3 ToEuler(this Quaternion Quaternion)
         {
             return QuaternionMath.ToEuler(Quaternion);
@@ -164,6 +159,18 @@ namespace Hedra.Engine
             Quat.W *= n;
             Quat.Xyz *= n;
             return Quat;
+        }
+
+        public static Matrix4 Transposed(this Matrix4 Matrix)
+        {
+            Matrix.Transpose();
+            return Matrix;
+        }
+        
+        public static Matrix3 Transposed(this Matrix3 Matrix)
+        {
+            Matrix.Transpose();
+            return Matrix;
         }
         
         ///<sumary>

@@ -16,7 +16,6 @@ out float pass_height;
 out vec4 pass_botColor;
 out vec4 pass_topColor;
 out vec4 Coords;
-out vec3 LightDir;
 out float DitherVisibility;
 out vec3 base_vertex_position;
 out float use_shadows;
@@ -39,7 +38,6 @@ uniform vec3 BakedOffset;
 uniform mat4 TransformationMatrix;
 uniform float MinDitherDistance;
 uniform float MaxDitherDistance;
-uniform vec3 LightPosition = vec3(-500.0, 800.0, 0.0);
 const float ShadowTransition = 10.0;
 const float NoShadowsFlag = -1.0;
 const float NoHighlightFlag = -2.0;
@@ -78,7 +76,6 @@ void main()
 {
     vec4 linear_color = srgb_to_linear(InColor); 
 	Config = InColor.a;
-	vec3 unitToLight = normalize(LightPosition);
 	vec4 Vertex = vec4((InVertex + BakedOffset) * Scale + Offset, 1.0);
 	base_vertex_position = Vertex.xyz;
 	
@@ -109,7 +106,6 @@ void main()
 	ShadowDist /= ShadowTransition;
 	Coords = use_shadows * ShadowMVP * vec4(InVertex,1.0);
 	Coords.w = use_shadows * clamp(1.0 - ShadowDist, 0.0, 1.0);
-	LightDir = use_shadows * unitToLight;
 	
 	InPos = Vertex;
 	InNorm = vec4(InNormal, 1.0);

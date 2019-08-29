@@ -5,13 +5,16 @@
  *
  */
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using Hedra.Core;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
+using Hedra.Engine.Rendering.Frustum;
 using Hedra.Game;
 using Hedra.Rendering;
 using OpenTK;
@@ -29,7 +32,8 @@ namespace Hedra.Engine.Rendering
         public VBO<uint> Indices { get; private set; }
         public VBO<Vector3> Normals { get; private set; }
         public VAO<Vector3, Vector4, Vector3> Data { get; private set; }
-        public static Shader Shader { get; }
+        private static Shader Shader { get; }
+        private static UBO<ObjectMeshBufferData> UBO { get; }
         public bool ApplyFog { get; set; } = true;
         public float Alpha { get; set; } = 1;
         public bool UseNoiseTexture { get; set; }
@@ -58,7 +62,9 @@ namespace Hedra.Engine.Rendering
 
         static ObjectMeshBuffer()
         {
+            UBO = new UBO<ObjectMeshBufferData>("ObjectAttributes");
             Shader = Shader.Build("Shaders/ObjectMesh.vert", "Shaders/ObjectMesh.frag");
+            UBO.RegisterShader(Shader);
             var noiseValues = new float[16, 16, 16];
             for (var x = 0; x < noiseValues.GetLength(0); x++)
             {
@@ -89,21 +95,31 @@ namespace Hedra.Engine.Rendering
 
         public void Draw()
         {
+            Bind();
+
+            DoDraw();
+
+            Unbind();
+        }
+
+        public void DoDraw()
+        {
             if (Indices == null || Data == null) return;
             if (_disposed) throw new AccessViolationException($"Cannot draw a disposed object");
-
-            this.Bind();
+            
             Renderer.Disable(EnableCap.Blend);
             
-            if(Alpha < 0.9) Renderer.Enable(EnableCap.Blend);
+            if(Alpha < 0.9)
+                Renderer.Enable(EnableCap.Blend);
+            else
+                Renderer.Disable(EnableCap.Blend);
             Renderer.Enable(EnableCap.DepthTest);
+            UpdateUniforms();
             
             Data.Bind();
-
             Indices.Bind();
             Renderer.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
-            Indices.Unbind();
-            
+
             if (Outline)
             {
                 Renderer.Enable(EnableCap.Blend);
@@ -114,16 +130,8 @@ namespace Hedra.Engine.Rendering
                 Indices.Bind();
                 Renderer.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
                 Renderer.Enable(EnableCap.DepthTest);
-                Indices.Unbind();
             }
             Shader["Outline"] = 0;
-
-            Renderer.Disable(EnableCap.Blend);
-            Data.Unbind();
-            Unbind();
-            
-            if(Alpha < 1)
-                Renderer.Disable(EnableCap.Blend);
         }
         
         public Vector3 TransformPoint(Vector3 Vertex)
@@ -183,25 +191,32 @@ namespace Hedra.Engine.Rendering
                     * Matrix3.CreateRotationZ(value.Z * Mathf.Radian);
             }
         }
+        
+        public static void DrawBatched(List<ObjectMesh> Meshes)
+        {
+            BindDrawBatched();
+            
+            for (var i = 0; i < Meshes.Count; ++i)
+            {
+                if(Meshes[i].Enabled && Culling.IsInside(Meshes[i]))
+                    Meshes[i].Mesh.Buffer.DoDraw();
+            }
 
-        private void Bind()
+            var isBound = true;
+            for (var i = 0; i < Meshes.Count && isBound; ++i)
+            {
+                if (Meshes[i].Mesh.Buffer.Data != null)
+                {
+                    Meshes[i].Mesh.Buffer.Unbind();
+                    isBound = false;
+                }
+            }
+        }
+
+        private static void BindDrawBatched()
         {
             Shader.Bind();
-
-            Shader["Alpha"] = Alpha;
-            Shader["Scale"] = Scale;
-            Shader["Position"] = Position + LocalPosition;
-            Shader["LocalRotationMatrix"] = LocalRotationMatrix;
-            Shader["TransformationMatrix"] = TransformationMatrix;
-            Shader["RotationPoint"] = RotationPoint;
-            Shader["RotationMatrix"] = _rotationMatrix;
-            Shader["LocalRotationPoint"] = LocalRotationPoint;
-            Shader["BeforeRotation"] = BeforeRotation;
-            Shader["Tint"] = Tint;
-            Shader["BaseTint"] = BaseTint;
-            Shader["PlayerPosition"] = GameManager.Player.Position;
-            Shader["IgnoreSSAO"] = ApplySSAO ? 0 : 1;
-
+            
             Renderer.ActiveTexture(TextureUnit.Texture1);
             Renderer.BindTexture(TextureTarget.Texture3D, NoiseTexture.Id);
             Shader["noiseTexture"] = 1;
@@ -214,18 +229,46 @@ namespace Hedra.Engine.Rendering
                 Shader["ShadowTex"] = 0;
                 Shader["ShadowDistance"] = ShadowRenderer.ShadowDistance;
             }
-            Shader["DitherFogTextureShadows"] = new Vector4(Dither ? 1 : 0, ApplyFog ? 1 : 0, UseNoiseTexture ? 1 : 0, GameSettings.Shadows ? 1 : 0);
         }
 
-        private static void Unbind()
+
+        private void UpdateUniforms()
         {
-            
+            UBO.Update(new ObjectMeshBufferData
+            {
+                Alpha = Alpha,
+                Scale = Scale,
+                Position = Position + LocalPosition,
+                LocalRotationMatrix = new Matrix4(LocalRotationMatrix),
+                TransformationMatrix = TransformationMatrix,
+                RotationPoint = RotationPoint,
+                RotationMatrix = new Matrix4(_rotationMatrix),
+                LocalRotationPoint = LocalRotationPoint,
+                BeforeRotation = BeforeRotation,
+                Tint = Tint,
+                BaseTint = BaseTint,
+                PlayerPosition = GameManager.Player.Position,
+                IgnoreSSAO = ApplySSAO ? 0 : 1,
+                DitherFogTextureShadows = new Vector4(Dither ? 1 : 0, ApplyFog ? 1 : 0, UseNoiseTexture ? 1 : 0, GameSettings.Shadows ? 1 : 0)
+            });
+        }
+
+        private void Bind()
+        {
+            BindDrawBatched();
+        }
+
+        private void Unbind()
+        {
+            Data.Unbind();
+            Indices.Unbind();
             Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, 0);
             Renderer.ActiveTexture(TextureUnit.Texture1);
             Renderer.BindTexture(TextureTarget.Texture3D, 0);
-            Shader.Unbind();
             Renderer.Enable(EnableCap.CullFace);
+            Renderer.Disable(EnableCap.Blend);
+            Shader.Unbind();
         }
 
         public void Dispose()
@@ -244,6 +287,49 @@ namespace Hedra.Engine.Rendering
                 Executer.ExecuteOnMainThread(DoDispose);
             else
                 DoDispose();
+        }
+    }
+
+    [StructLayout(LayoutKind.Explicit)]
+    public struct ObjectMeshBufferData
+    {
+        [FieldOffset(0)]
+        public Matrix4 RotationMatrix;
+        [FieldOffset(64)]
+        public Matrix4 LocalRotationMatrix;
+        [FieldOffset(128)]
+        public Matrix4 TransformationMatrix;
+        [FieldOffset(192)]
+        public float Alpha;
+        [FieldOffset(208)]
+        public Vector3 Scale;
+        [FieldOffset(224)]
+        public Vector3 Position;
+        [FieldOffset(240)]
+        public Vector3 RotationPoint;
+        [FieldOffset(256)]
+        public Vector3 LocalRotationPoint;
+        [FieldOffset(272)]
+        public Vector3 BeforeRotation;
+        [FieldOffset(288)]
+        public Vector4 Tint;
+        [FieldOffset(304)]
+        public Vector4 BaseTint;
+        [FieldOffset(320)]
+        public Vector3 PlayerPosition;
+        [FieldOffset(332)]
+        public int IgnoreSSAO;
+        [FieldOffset(336)]
+        public Vector4 DitherFogTextureShadows;
+
+        public override bool Equals(object obj)
+        {
+            if(obj is ObjectMeshBufferData other)
+                return Alpha.Equals(other.Alpha) && Scale.Equals(other.Scale) && Position.Equals(other.Position) && LocalRotationMatrix.Equals(other.LocalRotationMatrix) &&
+                       TransformationMatrix.Equals(other.TransformationMatrix) && RotationPoint.Equals(other.RotationPoint) && RotationMatrix.Equals(other.RotationMatrix) &&
+                       LocalRotationPoint.Equals(other.LocalRotationPoint) && BeforeRotation.Equals(other.BeforeRotation) && Tint.Equals(other.Tint) && BaseTint.Equals(other.BaseTint) &&
+                       PlayerPosition.Equals(other.PlayerPosition) && IgnoreSSAO.Equals(other.IgnoreSSAO) && DitherFogTextureShadows.Equals(other.DitherFogTextureShadows);
+            return false;
         }
     }
 }

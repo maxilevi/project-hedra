@@ -1,8 +1,8 @@
 #version 330 core
 layout(location = 0)in vec2 position;
  
-varying vec2 v_texCoord;
-varying vec2 v_blurTexCoords[14];
+out vec2 v_texCoord;
+out vec2 v_blurTexCoords[14];
  
 uniform mat4 TransMatrix; 
 uniform bool Flipped = false;

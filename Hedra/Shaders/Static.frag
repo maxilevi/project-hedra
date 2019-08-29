@@ -3,6 +3,7 @@
 !include<"Includes/Lighting.shader">
 !include<"Includes/GammaCorrection.shader">
 !include<"Includes/Sky.shader">
+!include<"Includes/Highlights.shader">
 
 in float Config;
 in vec4 raw_color;
@@ -10,7 +11,6 @@ in vec4 InPos;
 in vec4 InNorm;
 in float Visibility;
 in vec4 Coords;
-in vec3 LightDir;
 in float DitherVisibility;
 in vec3 base_vertex_position;
 in float use_shadows;
@@ -102,6 +102,7 @@ vec3 CalculateColor(float ShadowVisibility, float Tex) {
 
 float CalculateShadows()
 {
+	vec3 LightDir = use_shadows * normalize(LightPosition);
 	float bias = max(0.001 * (1.0 - dot(InNorm.xyz, LightDir)), 0.0) + 0.001;
 	vec4 ShadowCoords = Coords * vec4(.5,.5,.5,1.0) + vec4(.5,.5,.5, 0.0);		
 	float shadow = 0.0;

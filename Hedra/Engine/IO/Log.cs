@@ -133,6 +133,13 @@ namespace Hedra.Engine.IO
             Console.ForegroundColor = ConsoleColor.Gray;
         }
 
+        public static void WriteWarning(string Text)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Log.WriteLine($"[WARNING] {Text}");
+            Console.ForegroundColor = ConsoleColor.Gray;
+        }
+
         public static void Switch(LogType Type)
         {
             lock (_lock)

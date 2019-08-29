@@ -70,7 +70,7 @@ namespace Hedra.Engine.Player.Inventory
             var mesh = ObjectMesh.FromVertexData(model);
             //mesh.BaseTint = EffectDescriber.EffectColorFromItem(Item);
             mesh.ApplyFog = false;
-            DrawManager.Remove(mesh);
+            DrawManager.RemoveObjectMesh(mesh);
             return mesh;
         }
 

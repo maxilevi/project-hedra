@@ -401,5 +401,15 @@ namespace Hedra.Engine.Rendering.Core
         public virtual void Viewport(int V0, int V1, int V2, int V3)
         {
         }
+
+        public void GetProgram(int ShaderId, GetProgramParameterName ParameterName, out int Value)
+        {
+            Value = 0;
+        }
+
+        public void GetProgramInfoLog(int ShaderId, out string Log)
+        {
+            Log = string.Empty;
+        }
     }
 }

@@ -261,6 +261,8 @@
     <Compile Include="Engine\QuestSystem\QuestInventory.cs" />
     <Compile Include="Engine\QuestSystem\QuestTemplate.cs" />
     <Compile Include="Engine\QuestSystem\QuestThoughtsComponent.cs" />
+    <Compile Include="Engine\Rendering\Core\LightSettings.cs" />
+    <Compile Include="Engine\Rendering\Core\UBO.cs" />
     <Compile Include="Engine\Rendering\Core\VBOCache.cs" />
     <Compile Include="Engine\Rendering\Frustum\FrustumGJK.cs" />
     <Compile Include="Engine\Rendering\Frustum\Simplex.cs" />
@@ -14439,6 +14441,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Shaders\Includes\Blur.shader">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shaders\Includes\Highlights.shader">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Shaders\Includes\Shadows.shader">

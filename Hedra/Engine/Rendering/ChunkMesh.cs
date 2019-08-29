@@ -23,7 +23,7 @@ namespace Hedra.Engine.Rendering
 {
     public class ChunkMesh : Occludable, ICullable, IDisposable
     {
-        private IMeshBuffer _buffer;
+        private ObjectMeshBuffer _buffer;
         private readonly List<InstanceData> _instanceElements;
         private readonly List<InstanceData> _lodedInstanceElements;
         public readonly List<CollisionShape> CollisionBoxes = new List<CollisionShape>();
@@ -41,7 +41,7 @@ namespace Hedra.Engine.Rendering
         protected override Vector3 OcclusionMin => Min + Position;
         protected override Vector3 OcclusionMax => Max + Position;
 
-        public ChunkMesh(Vector3 Position, IMeshBuffer Buffer)
+        public ChunkMesh(Vector3 Position, ObjectMeshBuffer Buffer)
         {
             this.Position = Position;
             _instanceElements = new List<InstanceData>();
@@ -63,12 +63,17 @@ namespace Hedra.Engine.Rendering
             if (GameSettings.Wireframe) Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
         }
 
-        private void DrawMesh(IMeshBuffer MeshBuffer)
+        private void DrawMesh(ObjectMeshBuffer MeshBuffer)
         {
             if (IsBuilded && IsGenerated && Enabled && MeshBuffer.Data != null)
             {
                 MeshBuffer.Draw();
             }
+        }
+
+        public void DoDraw()
+        {
+            _buffer.DoDraw();
         }
 
         public void AddInstance(InstanceData Data, bool AffectedByLod = false)
@@ -88,6 +93,8 @@ namespace Hedra.Engine.Rendering
         public InstanceData[] InstanceElements => _instanceElements.ToArray();
 
         public InstanceData[] LodAffectedInstanceElements => _lodedInstanceElements.ToArray();
+
+        public ObjectMeshBuffer Buffer => _buffer;
         
         public override void Dispose()
         {

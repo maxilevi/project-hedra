@@ -100,5 +100,7 @@ namespace Hedra.Engine.Rendering.Core
         void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag, int Bytes, IntPtr Ptr);
         void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag, int Bytes, int V2);
         void Viewport(int V0, int V1, int V2, int V3);
+        void GetProgram(int ShaderId, GetProgramParameterName ParameterName, out int Value);
+        void GetProgramInfoLog(int ShaderId, out string Log);
     }
 }

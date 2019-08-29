@@ -140,7 +140,7 @@ namespace Hedra.Engine.Rendering.Core
             if(!DisableAttributes) return;
             Renderer.DisableVertexAttribArray(2);
         }
-        
+
         public override Type[] Types => base.Types.Concat(new[] { typeof(T3) }).ToArray();
     }
     

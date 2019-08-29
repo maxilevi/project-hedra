@@ -25,6 +25,7 @@ namespace Hedra.Engine.Rendering.Core
     {
         public static event ShaderChangeEvent ShaderChanged;
         public static Shader Passthrough { get; }
+        public event ShaderChangeEvent ShaderReloaded;
         private readonly Dictionary<string, bool> _knownMappings;
         private readonly Dictionary<string, UniformMapping> _mappings;
         private readonly Dictionary<string, UniformArray> _arrayMappings;
@@ -38,13 +39,6 @@ namespace Hedra.Engine.Rendering.Core
         protected int ShaderGid { get; private set; }
         public string Name { get; }
         public int ShaderId { get; private set; }
-        public int ClipPlaneLocation { get; set; }
-        public int LightCountLocation { get; set; }
-        public int LightColorLocation { get; set; }
-        public int LightPositionLocation { get; set; }
-        public int[] PointLightsColorUniform { get; set; }
-        public int[] PointLightsPositionUniform { get; set; }
-        public int[] PointLightsRadiusUniform { get; set; }
         public ShaderInput[] Inputs => _inputs.ToArray();
         public ShaderOutput[] Outputs => _outputs.ToArray();
 
@@ -133,6 +127,7 @@ namespace Hedra.Engine.Rendering.Core
                 _outputs.Clear();
                 _inputs.Clear();
                 this.CompileShaders(_vertexShader, _geometryShader, _fragmentShader);
+                ShaderReloaded?.Invoke();
             }
         }
 
@@ -198,7 +193,7 @@ namespace Hedra.Engine.Rendering.Core
             if (ShaderGid > 0) Renderer.AttachShader(ShaderId, ShaderGid);
             if (ShaderFid > 0) Renderer.AttachShader(ShaderId, ShaderFid);
 
-            Renderer.LinkProgram(ShaderId);
+            this.LinkProgram();
             
             if (ShaderVid > 0) Renderer.DetachShader(ShaderId, ShaderVid);                       
             if (ShaderGid > 0) Renderer.DetachShader(ShaderId, ShaderGid);                       
@@ -227,6 +222,23 @@ namespace Hedra.Engine.Rendering.Core
             }
 
             ShaderManager.RegisterShader(this);
+        }
+
+        private void LinkProgram()
+        {
+            Renderer.LinkProgram(ShaderId);
+            Renderer.GetProgram(ShaderId, GetProgramParameterName.LinkStatus, out var isLinked);
+            Renderer.GetProgramInfoLog(ShaderId, out var log);
+            if (isLinked == 0)
+            {
+                Log.WriteResult(false, $"Shader '{Name}' linking failed |  {log}  | ");
+            }
+            else
+            {
+                if(log != string.Empty)
+                    Log.WriteWarning($"Shader '{Name}' warnings:{Environment.NewLine}{log}");
+                Log.WriteLine($"Shader '{Name}' linked successfully", LogType.System);
+            }
         }
 
         public bool HasUniform(string Key)

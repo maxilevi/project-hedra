@@ -140,7 +140,7 @@ namespace Hedra.Engine.Player.MapSystem
                 var previousFBO = Renderer.FBOBound;
                 var previousBound = Renderer.ShaderBound;
                 _mapFbo.Bind();
-                Renderer.ClearColor(SkyManager.FogManager.FogValues.U_BotColor);
+                Renderer.ClearColor(SkyManager.FogManager.BottomColor);
                 Renderer.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit);
 
                 var oldDistance = _player.View.Distance;

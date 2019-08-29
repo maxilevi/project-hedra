@@ -35,6 +35,7 @@ namespace Hedra.Engine.Scripting
 
         static Interpreter()
         {
+            SearchPath = Directory.Exists(EditorSearchPath) ? EditorSearchPath : DefaultSearchPath;
             var watch = new Stopwatch();
             watch.Start();
             Log.WriteLine("Loading Python engine...");
@@ -88,7 +89,9 @@ namespace Hedra.Engine.Scripting
             _runner.Reload();
         }
 
-        public static string SearchPath
+        public static string SearchPath { get; }
+
+        private static string EditorSearchPath
         {
 
             get
@@ -98,5 +101,7 @@ namespace Hedra.Engine.Scripting
                 return $"{AssetManager.AppPath}/Scripts/";
             }
         }
+        
+        private static string DefaultSearchPath => $"{AssetManager.AppPath}/Scripts/";
     }
 }
