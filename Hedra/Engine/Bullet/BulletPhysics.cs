@@ -440,13 +440,17 @@ namespace Hedra.Engine.Bullet
             if (Shapes.Length == 0) return null;
             var offset = (Shapes.Select(S => S.BroadphaseCenter).Aggregate((S1,S2) => S1 + S2) / Shapes.Length).Compatible();
             var triangleMesh = new TriangleIndexVertexArray();
+            var vertCount = 0;
             for (var i = 0; i < Shapes.Length; ++i)
             {
                 if (Shapes[i].Indices.Length % 3 != 0 || Shapes[i].Indices.Length == 0)
                     throw new ArgumentOutOfRangeException();
                 triangleMesh.AddIndexedMesh(CreateIndexedMesh(Shapes[i].Indices, Shapes[i].Vertices.Select(V => V - offset.Compatible()).ToArray()));
+                vertCount += Shapes[i].Vertices.Length;
             }
-            var shape = new BvhTriangleMeshShape(triangleMesh, true);
+
+            var useQuantizedAabbCompression = true;//vertCount <= 1024;
+            var shape = new BvhTriangleMeshShape(triangleMesh, useQuantizedAabbCompression);
 #if DEBUG
             if (float.IsInfinity(shape.LocalAabbMax.LengthSquared))
             {

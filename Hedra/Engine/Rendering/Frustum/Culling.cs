@@ -94,40 +94,7 @@ namespace Hedra.Engine.Rendering.Frustum
 
         public static void Draw()
         {
-            if (GameSettings.DebugFrustum)
-            {
-                var invProjection = (Matrix4.CreatePerspectiveFieldOfView(50 * Mathf.Radian, 1.33f, ZNear, 64)).Inverted();
-                var position = Vector3.Zero;
-                var newCorners = UnitCube.Select(V => Vector4.Transform(V, invProjection)).Select(P => (P.Xyz / P.W) + position).Select(P => Vector3.TransformPosition(P, _matrix4)).ToArray();
-                for (var i = 0; i < newCorners.Length; ++i)
-                {
-                    BasicGeometry.DrawPoint(newCorners[i], Vector4.One, 10);
-                }
-                /*
-                var topPlanePosition = (newCorners[5] + newCorners[6] + newCorners[7]) / 3;
-                var topPlane = new Plane(newCorners[5], newCorners[6], newCorners[7]);
-                BasicGeometry.DrawLine(topPlanePosition, topPlanePosition + topPlane.Normal * 8, Vector4.One, 5);
-                
-                var rightPlanePosition = (newCorners[3] + newCorners[4] + newCorners[7]) / 3;
-                var rightPlane = new Plane(newCorners[3], newCorners[4], newCorners[7]);
-                BasicGeometry.DrawLine(rightPlanePosition, rightPlanePosition + rightPlane.Normal * 8, Vector4.One, 5);
-                
-                var leftPlanePosition = (newCorners[0] + newCorners[1] + newCorners[5]) / 3;
-                var leftPlane = new Plane(newCorners[0], newCorners[1], newCorners[5]);
-                BasicGeometry.DrawLine(leftPlanePosition, leftPlanePosition + leftPlane.Normal * 8, Vector4.One, 5);
-                
-                var backPlanePosition = (newCorners[0] + newCorners[2] + newCorners[3]) / 3;
-                var backPlane = new Plane(-newCorners[0], newCorners[3], newCorners[2]);
-                BasicGeometry.DrawLine(backPlanePosition, backPlanePosition + backPlane.Normal * 8, Vector4.One, 5);
-                
-                var frontPlanePosition = (newCorners[1] + newCorners[4] + newCorners[7]) / 3;
-                var frontPlane = new Plane(newCorners[1], newCorners[7], newCorners[4]);
-                BasicGeometry.DrawLine(frontPlanePosition, frontPlanePosition + frontPlane.Normal * 8, Vector4.One, 5);
-                
-                var bottomPlanePosition = (newCorners[1] + newCorners[4] + newCorners[6]) / 3;
-                var bottomPlane = new Plane(newCorners[1], newCorners[4], newCorners[6]);
-                BasicGeometry.DrawLine(bottomPlanePosition, bottomPlanePosition + bottomPlane.Normal * 8, Vector4.One, 5);*/
-            }
+            Frustum.Draw(_matrix4);
         }
     }
 }

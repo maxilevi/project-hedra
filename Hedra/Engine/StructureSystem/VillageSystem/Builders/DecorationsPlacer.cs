@@ -32,7 +32,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 Structure.WorldObject.AddChildren(new WorldLight(Position + template.LightOffset * template.Scale)
                 {
                     Radius = Radius,
-                    LightColor = HandLamp.LightColor
+                    LightColor = WorldLight.DefaultColor
                 });
             }
             PlaceWhenWorldReady(TargetPosition, Place, () => Structure.Disposed);

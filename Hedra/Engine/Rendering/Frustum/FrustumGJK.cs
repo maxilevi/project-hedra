@@ -62,7 +62,7 @@ namespace Hedra.Engine.Rendering.Frustum
             simplex.Type = SimplexType.Point;
             _direction = -_direction;
          
-            for (var i = 0; i < 20; ++i)
+            for (var i = 0; i < 10; ++i)
             {
                 var newSimplexVertex = new SimplexVertex();
                 SupportPoint(_direction, Points1, Points2, newSimplexVertex);

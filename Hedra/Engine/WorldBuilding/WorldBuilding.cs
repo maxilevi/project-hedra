@@ -284,7 +284,7 @@ using Hedra.Localization;
                 PlateauDo(plateaus[i]);
             
             var groundworks = Structure.Groundworks;
-            for (var i = 0; i < groundworks.Length; i++)
+            for (var i = groundworks.Length-1; i > -1; --i)
                 GroundworkDo(groundworks[i]);
         }
         

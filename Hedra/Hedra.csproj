@@ -246,6 +246,7 @@
     <Compile Include="Engine\CacheSystem\DynamicCache.cs" />
     <Compile Include="Engine\CacheSystem\FishingPostCache.cs" />
     <Compile Include="Engine\CacheSystem\FishingPostIconCache.cs" />
+    <Compile Include="Engine\EntitySystem\DummyModel.cs" />
     <Compile Include="Engine\Generation\FishingZoneHandler.cs" />
     <Compile Include="Engine\ItemSystem\Item.cs" />
     <Compile Include="Engine\Player\BackgroundUpdater.cs" />
@@ -265,12 +266,20 @@
     <Compile Include="Engine\Rendering\Core\UBO.cs" />
     <Compile Include="Engine\Rendering\Core\VBOCache.cs" />
     <Compile Include="Engine\Rendering\Frustum\FrustumGJK.cs" />
+    <Compile Include="Engine\Rendering\Frustum\Octree.cs" />
+    <Compile Include="Engine\Rendering\Frustum\OctreeNode.cs" />
+    <Compile Include="Engine\Rendering\Frustum\Plane.cs" />
     <Compile Include="Engine\Rendering\Frustum\Simplex.cs" />
     <Compile Include="Engine\Rendering\Geometry\MeshAnalyzer.cs" />
     <Compile Include="Engine\Rendering\UI\CompanionProfileUIElement.cs" />
+    <Compile Include="Engine\Rendering\UI\MenuBackground.cs" />
     <Compile Include="Engine\Rendering\UI\ProfileUIElement.cs" />
+    <Compile Include="Engine\Scenes\SceneExtensions.cs" />
+    <Compile Include="Engine\Scenes\SceneLoader.cs" />
+    <Compile Include="Engine\Scenes\SceneSettings.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\FishingPost.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\FishingPostDesign.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\PunchingBag.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\SpawnCampfire.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\SpawnCampfireDesign.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\GenericBuilderWithNPC.cs" />
@@ -1335,7 +1344,6 @@
     <Compile Include="Engine\Rendering\UI\UserInterface.cs" />
     <Compile Include="Engine\Rendering\WorldBuffer.cs" />
     <Compile Include="Engine\Rendering\WorldRenderer.cs" />
-    <Compile Include="Engine\Scenes\MenuBackground.cs" />
     <Compile Include="Engine\Sound\AreaSound.cs" />
     <Compile Include="Engine\Sound\IAudible.cs" />
     <Compile Include="Engine\Sound\SoundBuffer.cs" />
@@ -8865,12 +8873,24 @@
       <Link>Sounds\Teleport.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Structures\FishingDock0\Caravan0-Colliders.ply">
+      <Link>Assets\Env\Structures\FishingSettlement\Caravan0-Colliders.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Structures\FishingDock0\Caravan0.ply">
       <Link>Assets\Env\Structures\FishingSettlement\Caravan0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Structures\FishingDock0\Crates0-Colliders.ply">
+      <Link>Assets\Env\Structures\FishingSettlement\Crates0-Colliders.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Structures\FishingDock0\Crates0.ply">
       <Link>Assets\Env\Structures\FishingSettlement\Crates0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\FishingDock0\FishingDock0-Colliders.ply">
+      <Link>Assets\Env\Structures\FishingSettlement\FishingDock0-Colliders.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Structures\FishingDock0\FishingDock0-Icon.ply">
@@ -8881,8 +8901,20 @@
       <Link>Assets\Env\Structures\FishingSettlement\FishingDock0-Mesh.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Structures\FishingDock0\FishingDock0-Scene.ply">
+      <Link>Assets\Env\Structures\FishingSettlement\FishingDock0-Scene.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Structures\FishingDock0\Fountain0.ply">
       <Link>Assets\Env\Structures\FishingSettlement\Fountain0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\FishingDock0\PunchingBag0-Colliders.ply">
+      <Link>Assets\Env\Structures\FishingSettlement\PunchingBag0-Colliders.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\FishingDock0\PunchingBag0-Scene.ply">
+      <Link>Assets\Env\Structures\FishingSettlement\PunchingBag0-Scene.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Structures\FishingDock0\PunchingBag0.ply">

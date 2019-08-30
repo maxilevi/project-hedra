@@ -104,8 +104,11 @@ namespace Hedra.Rendering
             {
                 for (var i = Vertices.Count-1; i > -1; i--)
                 {
-                    if(Colors[i] != Color && !all) continue;
-                        
+                    if (HasColors)
+                    {
+                        if (Colors[i] != Color && !all) continue;
+                    }
+
                     var v = Vertices[i];
                     var dot = Vector3.Dot(Direction, v);
 

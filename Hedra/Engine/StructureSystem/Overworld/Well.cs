@@ -19,7 +19,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             _light = new WorldLight(Position)
             {
                 Radius = Radius,
-                LightColor = HandLamp.LightColor
+                LightColor = WorldLight.DefaultColor
             };
         }
         

@@ -628,4 +628,5 @@ attack_damage_label = AD
 rename_btn = RENAME
 rename_pet_title = RENAME COMPANION
 apply_rename_btn = APPLY
+punching_bag_name = Punching Bag
 

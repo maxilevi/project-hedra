@@ -184,7 +184,7 @@ namespace Hedra.Components
             if(Parent.Model == null || _barSize < 0.05f) return;
             
             var eyeSpace = Vector4.Transform(
-                new Vector4(Parent.Position + Parent.Model.Height * (1.5f) * Vector3.UnitY, 1),
+                new Vector4(Parent.Position + (Height ?? Parent.Model.Height * (1.5f)) * Vector3.UnitY, 1),
                 Culling.ModelViewMatrix
             );
             var homogeneousSpace = Vector4.Transform(eyeSpace, Culling.ProjectionMatrix);
@@ -225,6 +225,8 @@ namespace Hedra.Components
         }
         
         public bool Hide { get; set; }
+        
+        public float? Height { get; set; }
         
         public string Name
         {

@@ -41,6 +41,7 @@ namespace Hedra.Components
         public bool Immune { get; set; }
         public bool Delete { get; set; } = true;
         public bool PlayDeleteAnimation { get; set; } = true;
+        public bool PushOnHit { get; set; } = true;
         public float MissChance { get; set; } = DefaultMissChance;
         private readonly List<BaseBillboard> _damageLabels;
         private readonly List<Predicate<IEntity>> _ignoreList;
@@ -152,8 +153,8 @@ namespace Hedra.Components
                 var direction = (Damager.Position - Parent.Position).Normalized();
                 var factor = 0.5f;
                 var averageSize = (Parent.Size.X + Parent.Size.Z) * .5f;
-                if (Parent is LocalPlayer) factor = 0.0f;
-                Parent.Physics.ApplyImpulse(-direction * factor * averageSize);
+                if(PushOnHit)
+                    Parent.Physics.ApplyImpulse(-direction * factor * averageSize);
             }
 
             if (Parent.Health <= 0 && !Parent.IsDead)

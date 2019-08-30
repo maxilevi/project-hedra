@@ -122,6 +122,11 @@ namespace Hedra.Engine.Rendering.Core
             Provider.GetProgramInfoLog(ShaderId, out Log);
         }
 
+        public static void UniformBlockBinding(int ShaderId, int Index, int BindingPoint)
+        {
+            Provider.UniformBlockBinding(ShaderId, Index, BindingPoint);
+        }
+
         public static void EnableVertexAttribArray(uint Index)
         {
             VertexAttributeHandler.Enable(Index);

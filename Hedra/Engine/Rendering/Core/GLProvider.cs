@@ -645,6 +645,12 @@ namespace Hedra.Engine.Rendering.Core
             EnsureNoErrors();
         }
 
+        public void UniformBlockBinding(int ShaderId, int Index, int BindingPoint)
+        {
+            GL.UniformBlockBinding(ShaderId, Index, BindingPoint);
+            EnsureNoErrors();
+        }
+
         private void EnsureNoErrors()
         {
 #if DEBUG

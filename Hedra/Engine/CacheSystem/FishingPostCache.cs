@@ -12,9 +12,9 @@ namespace Hedra.Engine.CacheSystem
         public FishingPostCache()
         {
             AddModel(AssetManager.PLYLoader("Assets/Env/Structures/FishingSettlement/FishingDock0-Mesh.ply", Scale));
-            AddShapes(new List<CollisionShape>());
+            AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Structures/FishingSettlement/FishingDock0.ply", Scale));
         }
         
-        private static Vector3 Scale => Vector3.One * 12f;
+        public static Vector3 Scale => Vector3.One * 11f;
     }
 }

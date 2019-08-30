@@ -211,7 +211,7 @@ namespace Hedra.Engine.EntitySystem
 
         public string Type { get; set; } = MobType.None.ToString();
 
-        protected Entity()
+        public Entity()
         {
             _tickSystem = new TickSystem();
             Attributes = new EntityAttributes();

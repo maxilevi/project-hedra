@@ -26,7 +26,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             var rng = BuildRng(Structure);
             var rotation = rng.NextFloat() * 360.0f * Vector3.UnitY;
-            BuildBaseCampfire(Structure, rotation, rng, out var transformationMatrix);
+            BuildBaseCampfire(Structure.Position, rotation, Structure, rng, out var transformationMatrix);
 
             ((Campfire) Structure.WorldObject).Bandit =
                     World.WorldBuilding.SpawnBandit(
@@ -47,7 +47,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             }
         }
         
-        protected static void BuildBaseCampfire(CollidableStructure Structure, Vector3 Rotation, Random Rng, out Matrix4 TransformationMatrix)
+        public static void BuildBaseCampfire(Vector3 Position, Vector3 Rotation, CollidableStructure Structure, Random Rng, out Matrix4 TransformationMatrix)
         {
             var originalCampfire = CacheManager.GetModel(CacheItem.Campfire);
             var model = originalCampfire.ShallowClone();
@@ -55,7 +55,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             TransformationMatrix = Matrix4.CreateScale(3 + Rng.NextFloat() * 1.5f);
             var rotMat = Matrix4.CreateRotationY(Rotation.Y * Mathf.Radian);
             TransformationMatrix *= rotMat;
-            TransformationMatrix *= Matrix4.CreateTranslation(Structure.Position);
+            TransformationMatrix *= Matrix4.CreateTranslation(Position);
             model.Transform(TransformationMatrix);
             model.Color(AssetManager.ColorCode1, Utils.VariateColor(TentColor(Rng), 15, Rng));
 
@@ -69,7 +69,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             Structure.AddCollisionShape(shapes.ToArray());
         }
 
-        protected static void SpawnMat(Vector3 Position, Vector3 CampfireRotation, Matrix4 TransformationMatrix,
+        public static void SpawnMat(Vector3 Position, Vector3 CampfireRotation, Matrix4 TransformationMatrix,
             CollidableStructure Structure)
         {
             var padOffset = Position + Vector3.UnitZ * -1f;

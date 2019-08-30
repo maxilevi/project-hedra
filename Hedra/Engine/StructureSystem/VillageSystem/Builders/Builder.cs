@@ -111,7 +111,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             AddStructure(Parameters, Lights, Transformation, Output, (P, T) => new WorldLight(P)
             {
                 Radius = T.Radius,
-                LightColor = HandLamp.LightColor
+                LightColor = WorldLight.DefaultColor
             });
         }
 

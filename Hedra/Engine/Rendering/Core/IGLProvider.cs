@@ -102,5 +102,6 @@ namespace Hedra.Engine.Rendering.Core
         void Viewport(int V0, int V1, int V2, int V3);
         void GetProgram(int ShaderId, GetProgramParameterName ParameterName, out int Value);
         void GetProgramInfoLog(int ShaderId, out string Log);
+        void UniformBlockBinding(int ShaderId, int Index, int BindingPoint);
     }
 }

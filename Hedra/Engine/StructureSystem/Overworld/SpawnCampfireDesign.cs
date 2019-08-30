@@ -21,7 +21,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public override void Build(CollidableStructure Structure)
         {
             var rng = BuildRng(Structure);
-            BuildBaseCampfire(Structure, Vector3.Zero, rng, out var transformationMatrix);
+            BuildBaseCampfire(Structure.Position, Vector3.Zero, Structure, rng, out var transformationMatrix);
             ((SpawnCampfire) Structure.WorldObject).Villager = CreateVillager(Structure, rng);
             SpawnMat(
                 Vector3.UnitX * -16f,

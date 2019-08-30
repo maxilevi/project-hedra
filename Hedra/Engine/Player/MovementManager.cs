@@ -165,7 +165,7 @@ namespace Hedra.Engine.Player
 
             if (Human.Physics.Impulse.LengthSquared < 10f && !_appliedDownwardImpulse)
             {
-                Human.Physics.ApplyImpulse(Vector3.UnitY * -3f);
+                Human.Physics.ApplyImpulse(Vector3.UnitY * -4f);
                 _appliedDownwardImpulse = true;
             }
         }

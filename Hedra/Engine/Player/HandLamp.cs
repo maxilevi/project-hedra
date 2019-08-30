@@ -20,7 +20,6 @@ namespace Hedra.Engine.Player
     /// </summary>
     public class HandLamp
     {
-        public static readonly Vector3 LightColor = new Vector3(1, .6f, .5f);
         private IHumanoid Humanoid { get; }
         private readonly WorldLight _lamp;
         private bool _enabled;
@@ -30,7 +29,7 @@ namespace Hedra.Engine.Player
             this.Humanoid = Humanoid;
             _lamp = new WorldLight(Vector3.Zero)
             {
-                LightColor = LightColor,
+                LightColor = WorldLight.DefaultColor,
                 DisableAtNight = false,
                 Enabled = false
             };

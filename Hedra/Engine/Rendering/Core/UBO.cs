@@ -35,7 +35,7 @@ namespace Hedra.Engine.Rendering.Core
             {
                 var index = Renderer.GetUniformBlockIndex(Entry.ShaderId, _uniformName);
                 if(index != -1)
-                    GL.UniformBlockBinding(Entry.ShaderId, index, _bindingPoint);
+                    Renderer.UniformBlockBinding(Entry.ShaderId, index, _bindingPoint);
             }
             BindToShader();
             Entry.ShaderReloaded += BindToShader;

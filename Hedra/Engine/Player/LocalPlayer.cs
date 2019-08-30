@@ -148,6 +148,7 @@ namespace Hedra.Engine.Player
             };
             
             _damageHandler = SearchComponent<DamageComponent>();
+            _damageHandler.PushOnHit = false;
             _damageHandler.Delete = false;
         }
 

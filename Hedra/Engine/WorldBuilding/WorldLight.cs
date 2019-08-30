@@ -24,6 +24,7 @@ namespace Hedra.Engine.WorldBuilding
     /// </summary>
     public class WorldLight : BaseStructure, IUpdatable
     {
+        public static readonly Vector3 DefaultColor = new Vector3(1, .6f, .5f);
         public PointLight LightObject { get; private set; }
         public Vector3 LightColor { get; set; } = Vector3.One;
         public float Radius { get; set; } = PointLight.DefaultRadius;

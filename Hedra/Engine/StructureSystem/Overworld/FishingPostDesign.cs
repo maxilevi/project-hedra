@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Hedra.BiomeSystem;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
@@ -11,9 +12,11 @@ using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
+using Hedra.Engine.Scenes;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Items;
 using Hedra.Rendering;
+using Microsoft.Scripting.Utils;
 using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.Overworld
@@ -24,6 +27,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public override VertexData Icon => CacheManager.GetModel(CacheItem.FishingPostIcon);
         protected override int StructureChance => 4;//StructureGrid.FishingPostChance;
         protected override CacheItem? Cache => null;
+        private const int RealPlateauRadius = 256 + 64;
         protected override FishingPost Create(Vector3 Position, float Size)
         {
             return new FishingPost(Position);
@@ -35,7 +39,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             SearchForShore(offset, World.BiomePool.GetRegion(offset.ToVector3()), out var targetPosition);
             var direction = (offset - targetPosition.Xz).ToVector3().NormalizedFast();
             var structure = base.Setup(targetPosition, Rng, Create(targetPosition, EffectivePlateauRadius));
-            structure.Mountain.Radius = 256;
+            structure.Mountain.Radius = RealPlateauRadius;
             structure.Parameters.Set("DockDirection", direction);
             structure.Parameters.Set("DockPosition", targetPosition + structure.Mountain.Radius * .65f * direction);
             structure.AddGroundwork(new RoundedGroundwork(structure.Position, 64, PathType)
@@ -43,7 +47,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 NoPlants = NoPlantsZone,
                 BonusHeight = -.0f
             });
-            structure.AddGroundwork(new LineGroundwork(structure.Position.Xz, structure.Parameters.Get<Vector3>("DockPosition").Xz + direction.Xz * Chunk.BlockSize)
+            structure.AddGroundwork(new LineGroundwork(structure.Position.Xz, structure.Parameters.Get<Vector3>("DockPosition").Xz + direction.Xz * Chunk.BlockSize * 4f)
             {
                 Width = 16,
                 Type = BlockType.StonePath,
@@ -56,7 +60,31 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             base.DoBuild(Structure, Rotation, Translation, Rng);
             AddDockModel(Structure);
-            AddModel(Structure, "Assets/Env/Structures/FishingSettlement/Fountain0.ply", Vector3.One * 12f, Structure.Position + Vector3.UnitY * Structure.Groundworks[0].BonusHeight);
+            AddDecorations(Structure, Rng);
+            AddCampfires(Structure, Rng);
+        }
+
+        private void AddCampfires(CollidableStructure Structure, Random Rng)
+        {
+            var pointCount = Rng.Next(3, 8);
+            var count = 0;
+            for (var i = 0; i < pointCount; ++i)
+            {
+                var point = Structure.Position + new Vector3(Rng.NextFloat() * RealPlateauRadius - RealPlateauRadius * .5f, 0, Rng.NextFloat() * RealPlateauRadius - RealPlateauRadius  * .5f);
+                if(Structure.Groundworks.Any(G => G.Affects(point.Xz))) continue;
+                CampfireDesign.BuildBaseCampfire(point, Vector3.Zero, Structure, Rng, out var transformationMatrix);
+                if(Rng.Next(0, 3) == 1)
+                    CampfireDesign.SpawnMat(point, Vector3.Zero, transformationMatrix, Structure);
+                Structure.AddGroundwork(new RoundedGroundwork(transformationMatrix.ExtractTranslation(), 32, BlockType.Path));
+                count++;
+            }
+        }
+
+        private void AddDecorations(CollidableStructure Structure, Random Rng)
+        {
+            var fountainTransformation =
+                Matrix4.CreateTranslation(Structure.Position + Vector3.UnitY * Structure.Groundworks[0].BonusHeight);
+            //AddModel(Structure, "Assets/Env/Structures/FishingSettlement/Fountain0.ply", Vector3.One * 12f, fountainTransformation);
             var decorations = new string[]
             {
                 "Assets/Env/Structures/FishingSettlement/Crates0.ply",
@@ -72,10 +100,22 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 var k = Mathf.Modulo(i, decorations.Length);
                 var distance = 100 + 28 * Rng.NextFloat();
                 var dir = new Vector3((float) Math.Cos(angle), 0, (float) Math.Sin(angle));
-                if(Vector3.Dot(dir, Structure.Parameters.Get<Vector3>("DockDirection")) < 0.85f)
-                    AddModel(Structure, decorations[k], Vector3.One * 12f, Structure.Position + dir * distance);
+                if (!IsInDockPath(dir, Structure))
+                {
+                    var transformation = Matrix4.CreateRotationY((Physics.DirectionToEuler(dir).Y - 90) * Mathf.Radian) * Matrix4.CreateTranslation(Structure.Position + dir * distance);
+                    var scale = FishingPostCache.Scale - Vector3.One;
+                    AddModel(Structure, decorations[k], scale, transformation);
+                    SceneLoader.LoadIfExists(Structure, decorations[k], scale, transformation);
+                    Structure.AddGroundwork(new RoundedGroundwork(transformation.ExtractTranslation(), 64, BlockType.Path));
+                }
+
                 angle += circle / count;
             }
+        }
+
+        private static bool IsInDockPath(Vector3 DirectionToCenter, CollidableStructure Structure)
+        {
+            return Vector3.Dot(DirectionToCenter, Structure.Parameters.Get<Vector3>("DockDirection")) > 0.85f;
         }
 
         private void AddFisherman(CollidableStructure Structure)
@@ -89,11 +129,12 @@ namespace Hedra.Engine.StructureSystem.Overworld
             ((FishingPost) Structure.WorldObject).Fisherman = fisherman;
         }
 
-        private static void AddModel(CollidableStructure Structure, string Path, Vector3 Scale, Vector3 Position)
+        private static void AddModel(CollidableStructure Structure, string Path, Vector3 Scale, Matrix4 Transformation)
         {
             var model = DynamicCache.Get(Path, Scale);
-            model.Transform(Matrix4.CreateTranslation(Position));
-            Structure.AddStaticElement(model);
+            var shapes = DynamicCache.GetShapes(Path, Scale);
+            Structure.AddStaticElement(model.Transform(Transformation));
+            Structure.AddCollisionShape(shapes.Select(S => S.Transform(Transformation)).ToArray());
         }
 
         private void AddDockModel(CollidableStructure Structure)
@@ -110,7 +151,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
             {
                 shapes[i].Transform(transformationMatrix);
             }
-
+            
+            SceneLoader.Load(Structure, DynamicCache.Get("Assets/Env/Structures/FishingDock0-Scene.ply", FishingPostCache.Scale).Transform(transformationMatrix));
             Structure.AddStaticElement(model);
             Structure.AddCollisionShape(shapes.ToArray());
         }

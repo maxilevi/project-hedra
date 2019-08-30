@@ -181,6 +181,18 @@ namespace Hedra.Engine.Bullet
             }
         }
 
+        public bool ContactResponse
+        {
+            get => (_body.CollisionFlags & CollisionFlags.NoContactResponse) == 0;
+            set
+            {
+                if (value)
+                    _body.CollisionFlags |= CollisionFlags.NoContactResponse;
+                else
+                    _body.CollisionFlags ^= CollisionFlags.NoContactResponse;
+            }
+        }
+
         public bool UsePhysics
         {
             get => _gravity != Vector3.Zero;
@@ -207,7 +219,9 @@ namespace Hedra.Engine.Bullet
             HandleIsStuck();
             Parent.IsGrounded = _sensorContacts > 0;
             _body.Gravity = Parent.IsGrounded ? BulletSharp.Math.Vector3.Zero : _gravity.Compatible();
-            _body.LinearVelocity = new BulletSharp.Math.Vector3(_accumulatedMovement.X, Math.Min(0, _body.LinearVelocity.Y), _accumulatedMovement.Z) + Impulse.Compatible() * Time.TimeScale;
+            _body.LinearVelocity = UsePhysics 
+                ? new BulletSharp.Math.Vector3(_accumulatedMovement.X, Math.Min(0, _body.LinearVelocity.Y), _accumulatedMovement.Z) + Impulse.Compatible() * Time.TimeScale
+                : BulletSharp.Math.Vector3.Zero;
             _body.Activate();
             Impulse *= (float) Math.Pow(0.25f, Time.DeltaTime * 5f);
             _accumulatedMovement = Vector3.Zero;
@@ -245,6 +259,7 @@ namespace Hedra.Engine.Bullet
         
         private void HandleFallDamage(float DeltaTime)
         {
+            if (!ContactResponse) return;
             if (!Parent.IsGrounded)
             {
                 if (!Parent.IsUnderwater)

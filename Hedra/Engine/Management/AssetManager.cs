@@ -137,6 +137,11 @@ namespace Hedra.Engine.Management
             return model; 
         }
 
+        public static bool ModelExists(string Path)
+        {
+            return ReadBinary(Path, AssetsResource) != null;
+        }
+
         public static void Dispose()
         {
             Provider.Dispose();

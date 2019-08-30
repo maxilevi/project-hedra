@@ -254,7 +254,7 @@ namespace Hedra.Engine.Management
                 return new Icon(ms);
             }
         }
-        
+
         public List<CollisionShape> LoadCollisionShapes(string Filename, int Count, Vector3 Scale)
         {
             var shapes = new List<CollisionShape>();
@@ -274,27 +274,51 @@ namespace Hedra.Engine.Management
         public List<CollisionShape> LoadCollisionShapes(string Filename, Vector3 Scale)
         {
             var shapes = new List<CollisionShape>();
-            string name = Path.GetFileNameWithoutExtension(Filename);
+            if (!LoadCollisionShapesNew(Filename, Scale, shapes))
+            {
+                LoadCollisionsShapesLegacy(Filename, Scale, shapes);
+            }
+            return shapes;
+        }
+
+        private bool LoadCollisionShapesNew(string Filename, Vector3 Scale, List<CollisionShape> Shapes)
+        {
+            var name = Path.GetFileNameWithoutExtension(Filename);
+            var dir = Path.GetDirectoryName(Filename);
+            var bin = ReadBinary($"{dir}/{name}-Colliders.ply", AssetsResource);
+            if (bin == null) return false;
+            AddShape(bin, Scale, Shapes);
+            return true;
+        }
+
+        private void LoadCollisionsShapesLegacy(string Filename, Vector3 Scale, List<CollisionShape> Shapes)
+        {
+            var name = Path.GetFileNameWithoutExtension(Filename);
             var iterator = 0;
             while(true)
             {
                 var path = $"Assets/Env/Colliders/{name}_Collider{iterator}.ply";
                 var data = ReadBinary(path, AssetsResource);
-                if(data == null) return shapes;
-                var vertexInformation = PLYLoader(data, Scale, Vector3.Zero, Vector3.Zero, false);
-                AssertCorrectShapeFormat(vertexInformation);
-                var newShape = new CollisionShape(vertexInformation.Vertices, vertexInformation.Indices);
-                shapes.Add(newShape);
-                vertexInformation.Dispose();
+                if(data == null) return;
+                AddShape(data, Scale, Shapes);
                 iterator++;
             }
         }
 
+        private void AddShape(byte[] Binary, Vector3 Scale, List<CollisionShape> Shapes)
+        {
+            var vertexInformation = PLYLoader(Binary, Scale, Vector3.Zero, Vector3.Zero, false);
+            AssertCorrectShapeFormat(vertexInformation);
+            var newShape = new CollisionShape(vertexInformation.Vertices, vertexInformation.Indices);
+            Shapes.Add(newShape);
+            vertexInformation.Dispose();
+        }
+
         private static void AssertCorrectShapeFormat(VertexData VertexInformation)
         {
-            const int limit = 256;
+            /*const int limit = 256;
             if(VertexInformation.Vertices.Count > limit)
-                throw new ArgumentOutOfRangeException($"CollisionShape has {VertexInformation.Vertices.Count} vertices but limit is '{limit}'");
+                throw new ArgumentOutOfRangeException($"CollisionShape has {VertexInformation.Vertices.Count} vertices but limit is '{limit}'");*/
         }
         
         private VertexData LoadModelVertexData(string ModelFile)

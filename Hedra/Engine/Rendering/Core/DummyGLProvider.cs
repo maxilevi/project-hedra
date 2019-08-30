@@ -411,5 +411,9 @@ namespace Hedra.Engine.Rendering.Core
         {
             Log = string.Empty;
         }
+
+        public void UniformBlockBinding(int ShaderId, int Index, int BindingPoint)
+        {
+        }
     }
 }
