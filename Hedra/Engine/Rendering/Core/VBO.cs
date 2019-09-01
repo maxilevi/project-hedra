@@ -19,6 +19,7 @@ namespace Hedra.Engine.Rendering.Core
     /// </summary>
     public abstract class VBO : GLObject<VBO>
     {
+        public static uint VBOUpdatesInLastFrame { get; set; }
         public OnIdChanged IdChanged;
         public abstract int Count { get; protected set; }
         public abstract int Stride { get; }
@@ -33,7 +34,6 @@ namespace Hedra.Engine.Rendering.Core
     {
         private bool _disposed;
         private uint _id;
-
         /// <summary>
         /// The ID of this VBO.
         /// </summary>
@@ -104,6 +104,7 @@ namespace Hedra.Engine.Rendering.Core
             {
                 IdChanged?.Invoke();
             }
+            VBOUpdatesInLastFrame++;
         }
 
         public void Update(T[] Data, int Offset, int Bytes)

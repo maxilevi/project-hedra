@@ -24,6 +24,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             bag.PlaySpawningAnimation = false;
             bag.MaxHealth = 1000;
             bag.Health = bag.MaxHealth;
+            bag.Physics.GravityDirection = Vector3.Zero;
             bag.Physics.UsePhysics = false;
             bag.Physics.ContactResponse = false;
             bag.Position = Position - Vector3.UnitY * bag.Model.Dimensions.Size.Y * .5f;
@@ -53,7 +54,12 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         public void Update()
         {
-            
+            if (_bag.Position.Y < Position.Y - 8)
+            {
+                var physx = _bag.Physics;
+                int z = 0;
+            }
+            int a = 0;
         }
 
         public override void Dispose()

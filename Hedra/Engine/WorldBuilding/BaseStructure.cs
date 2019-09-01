@@ -41,7 +41,7 @@ namespace Hedra.Engine.WorldBuilding
             {
                 if(Children[i] == null)
                     throw new ArgumentNullException($"Cannot add a null children");
-                _children.AddRange(Children);
+                _children.Add(Children[i]);
             }
         }
 

@@ -103,7 +103,7 @@ namespace Hedra.Engine.Loader
                 var lineBreak = $"{Environment.NewLine}{Environment.NewLine}";
                 var text = $"X = {(int)player.Position.X} Y = {(int)(player.Position.Y)} Z={(int)player.Position.Z} Routines={RoutineManager.Count} Watchers={player.Loader.WatcherCount} Grounded={player.IsGrounded}";
                 text += 
-                    $"{lineBreak}DrawCalls={DrawManager.DrawCalls}Chunks={World.Chunks.Count} ChunkX={underChunk?.OffsetX ?? 0} ChunkZ={underChunk?.OffsetZ ?? 0}";
+                    $"{lineBreak}DrawCalls={DrawManager.DrawCalls} VBOUpdates={VBO.VBOUpdatesInLastFrame} Chunks={World.Chunks.Count} ChunkX={underChunk?.OffsetX ?? 0} ChunkZ={underChunk?.OffsetZ ?? 0}";
                 text +=
                     $"{lineBreak}Textures ={TextureRegistry.Count} Fonts={FontCache.Count} Texts={TextCache.Count} VAO={VAO.Alive} VBO={VBOCache.CachedVBOs}/{VBO.Alive} FBO={FBO.Alive}";
                 text += 
@@ -116,7 +116,7 @@ namespace Hedra.Engine.Loader
                     $"{lineBreak}Updates={UpdateManager.UpdateCount} Seed={World.Seed} FPS={Time.Framerate} MS={Time.Frametime}";
                 text +=
                     $"{lineBreak}SkippedBinds={Renderer.TextureHandler.Skipped} SkippedUses={Renderer.ShaderHandler.Skipped} CulledObjects = {DrawManager.CulledObjectsCount}/{DrawManager.CullableObjectsCount}  Cache={CacheManager.CachedColors.Count}|{CacheManager.CachedExtradata.Count} Pitch={player.View.TargetPitch}";
-
+                VBO.VBOUpdatesInLastFrame = 0;
                 Renderer.TextureHandler.ResetStats();
                 Renderer.ShaderHandler.ResetStats();
                 _debugText.Text = text;

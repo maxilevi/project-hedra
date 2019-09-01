@@ -107,7 +107,7 @@ namespace Hedra.Engine.Scenes
         {
             IHumanoid Transform(Vector3 Position)
             {
-                var boatMerchant = World.WorldBuilding.SpawnHumanoid(HumanType.TravellingMerchant, Position);
+                var boatMerchant = World.WorldBuilding.SpawnHumanoid(HumanType.Fisherman, Position);
                 boatMerchant.AddComponent(new BoatMerchantComponent(boatMerchant));
                 return boatMerchant;
             }

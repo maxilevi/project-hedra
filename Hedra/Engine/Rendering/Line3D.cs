@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
@@ -40,13 +42,35 @@ namespace Hedra.Engine.Rendering
 
         public void Update(Vector3[] Points, Vector4[] Colors)
         {
-            if (_pointsArray != null && Points.SequenceEqual(_pointsArray) && _colorsArray != null && Colors.SequenceEqual(_colorsArray)) return;
+            if (PositionSequenceEqual(Points, _pointsArray) && ColorSequenceEqual(Colors, _colorsArray)) return;
             Executer.ExecuteOnMainThread(() =>
             {
                 if(_disposed) return;
-                _vertices.Update(_pointsArray = Points, Points.Length * Vector3.SizeInBytes);
-                _colors.Update(_colorsArray = Colors, Colors.Length * Vector4.SizeInBytes);
+                _vertices.Update(Points, Points.Length * Vector3.SizeInBytes);
+                _colors.Update(Colors, Colors.Length * Vector4.SizeInBytes);
             });
+            _pointsArray = Points;
+            _colorsArray = Colors;
+        }
+
+        private static bool ColorSequenceEqual(IList<Vector4> A, IList<Vector4> B)
+        {
+            if (A == null || B == null || A.Count != B.Count) return false;
+            for (var i = 0; i < A.Count; ++i)
+            {
+                for (var k = 0; k < 3; ++k)
+                {
+                    if (Math.Abs(A[i][k] - B[i][k]) > 0.05f)
+                        return false;
+                }
+            }
+            return true;
+        }
+
+        private static bool PositionSequenceEqual(ICollection<Vector3> A, ICollection<Vector3> B)
+        {
+            if (A == null || B == null || A.Count != B.Count) return false;
+            return ColorSequenceEqual(A.Select(V => new Vector4(V, 1)).ToArray(), B.Select(V => new Vector4(V, 1)).ToArray());
         }
         
         public void Draw()

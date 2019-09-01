@@ -53,9 +53,9 @@ def build_merchant_inventory(item_dict, inventory_size, rng):
 def build_travelling_merchant_inventory(item_dict, inventory_size, rng):
     build_merchant_inventory(item_dict, inventory_size, rng)
     special_items = [
-        (0, ItemPool.Grab(ItemPool.Grab(ItemTier.Common, COMPANION_EQUIPMENT_TYPE))),
-        (1, ItemPool.Grab(ItemPool.Grab(ItemTier.Common, COMPANION_EQUIPMENT_TYPE))),
-        (2, ItemPool.Grab(ItemPool.Grab(ItemTier.Common, COMPANION_EQUIPMENT_TYPE))),
+        (0, ItemPool.Grab(ItemTier.Common, COMPANION_EQUIPMENT_TYPE)),
+        (1, ItemPool.Grab(ItemTier.Common, COMPANION_EQUIPMENT_TYPE)),
+        (2, ItemPool.Grab(ItemTier.Common, COMPANION_EQUIPMENT_TYPE)),
         (3, ItemPool.Grab(BOAT))
     ]
     add_items(special_items, item_dict)
