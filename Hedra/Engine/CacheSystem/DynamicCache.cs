@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.Management;
@@ -25,6 +26,7 @@ namespace Hedra.Engine.CacheSystem
 
         public static List<CollisionShape> GetShapes(string Path, Vector3 Scale)
         {
+            if(Path.Contains("Colliders.ply")) throw new ArgumentException("Provided path should be the mesh path.");
             if (!_shapeCache.ContainsKey(Path))
             {
                 _shapeCache.Add(Path, AssetManager.LoadCollisionShapes(Path, Vector3.One));

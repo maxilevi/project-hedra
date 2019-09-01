@@ -13,7 +13,7 @@ using Color = System.Drawing.Color;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
-    public class PunchingBag : BaseStructure
+    public class PunchingBag : BaseStructure, IUpdatable
     {
         private readonly IEntity _bag;
         
@@ -43,11 +43,17 @@ namespace Hedra.Engine.StructureSystem.Overworld
             bag.AddComponent(healthBarComponent);
             
             World.AddEntity(_bag = bag);
+            BackgroundUpdater.Add(this);
         }
 
         private void OnDamage(DamageEventArgs Args)
         {
             _bag.Health = _bag.MaxHealth;
+        }
+
+        public void Update()
+        {
+            
         }
 
         public override void Dispose()

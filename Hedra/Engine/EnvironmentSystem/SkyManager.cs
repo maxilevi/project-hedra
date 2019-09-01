@@ -202,7 +202,7 @@ namespace Hedra.Engine.EnvironmentSystem
             var interpolatedLightColor = Mathf.Lerp(ShaderManager.LightColor, _targetLightColor, Time.IndependentDeltaTime * 12f);
             if ((previousLightColor - interpolatedLightColor).Length > 0.005f)
             {
-                ShaderManager.LightColor = interpolatedLightColor * Math.Max(dayFactor, 0.10f);
+                ShaderManager.LightColor = interpolatedLightColor;
             }
             LoadTime = false;
         }

@@ -15,8 +15,9 @@ namespace Hedra.Engine.Scenes
     public static class SceneLoader
     {
         private static readonly Vector3 LightColorCode = new Vector3(1, 0, 1);
-        private static readonly Vector3 PunchingBagCode = new Vector3(0, 1, 0);
+        private static readonly Vector3 TrainingDummyColorCode = new Vector3(0, 1, 0);
         private static readonly Vector3 WellColorCode = new Vector3(0, 0, 1);
+        private static readonly Vector3 NPCPositionColorCode = new Vector3(0, 0, 0);
 
         public static void Load(CollidableStructure Structure, VertexData Scene)
         {
@@ -45,8 +46,9 @@ namespace Hedra.Engine.Scenes
             var map = new Dictionary<Vector3, List<VertexData>>
             {
                 {LightColorCode, new List<VertexData>()},
-                {PunchingBagCode, new List<VertexData>()},
-                {WellColorCode, new List<VertexData>()}
+                {TrainingDummyColorCode, new List<VertexData>()},
+                {WellColorCode, new List<VertexData>()},
+                {NPCPositionColorCode, new List<VertexData>()}
             };
             for (var i = 0; i < parts.Length; ++i)
             {
@@ -60,7 +62,7 @@ namespace Hedra.Engine.Scenes
             );
             Structure.WorldObject.AddChildren(lights);
             var punchingBags = LoadPunchingBags(
-                map[PunchingBagCode].Select(V => V.Vertices.ToArray()).ToArray()
+                map[TrainingDummyColorCode].Select(V => V.Vertices.ToArray()).ToArray()
             );
             Structure.WorldObject.AddChildren(punchingBags);
             var wells = LoadWells(
