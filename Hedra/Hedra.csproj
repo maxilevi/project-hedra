@@ -225,6 +225,7 @@
     <Compile Include="BiomeSystem\BiomeSkyDesign.cs" />
     <Compile Include="BiomeSystem\BiomeStructureDesign.cs" />
     <Compile Include="BiomeSystem\BiomeTreeDesign.cs" />
+    <Compile Include="Components\BoatMerchantComponent.cs" />
     <Compile Include="Components\ClothierComponent.cs" />
     <Compile Include="Components\DamageComponent.cs" />
     <Compile Include="Components\HealthBarComponent.cs" />

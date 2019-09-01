@@ -17,7 +17,15 @@ COMPANION_EQUIPMENT_TYPE = 'Pet'
 def build_innkeeper_inventory(item_dict, inventory_size, rng):
     items = []
     add_items(items, item_dict)
-
+    
+def build_boat_merchant_inventory(item_dict, inventory_size, rng):
+    items = [
+        (inventory_size - 1, ItemPool.Grab(BOAT)),
+        (1, ItemPool.Grab(FISHING_ROD)),
+        (0, get_infinity_item(BAIT))
+    ]
+    add_items(items, item_dict)
+    
 def build_merchant_inventory(item_dict, inventory_size, rng):
 
     recipes = [

@@ -12,6 +12,7 @@ using System.Linq;
 using Hedra.Engine.Core;
 using OpenTK;
 using Hedra.Engine.Management;
+using Hedra.EntitySystem;
 
 namespace Hedra.Engine.WorldBuilding
 {
@@ -22,6 +23,7 @@ namespace Hedra.Engine.WorldBuilding
     public abstract class BaseStructure : IDisposable, IStructure, ISearchable
     {
         private readonly List<BaseStructure> _children;
+        private readonly List<IHumanoid> _npcs;
         public BaseStructure[] Children => _children.ToArray();
         public virtual Vector3 Position { get; set; }
         public bool Disposed { get; protected set; }
@@ -29,6 +31,7 @@ namespace Hedra.Engine.WorldBuilding
         protected BaseStructure(Vector3 Position)
         {
             this.Position = Position;
+            _npcs = new List<IHumanoid>();
             _children = new List<BaseStructure>();
         }
         
@@ -41,6 +44,16 @@ namespace Hedra.Engine.WorldBuilding
                 _children.AddRange(Children);
             }
         }
+
+        public void AddNPCs(params IHumanoid[] NPCs)
+        {
+            for (var i = 0; i < NPCs.Length; ++i)
+            {
+                if(NPCs[i] == null)
+                    throw new ArgumentNullException("Cannot add a null NPC");
+                _npcs.Add(NPCs[i]);
+            }
+        }
         
         public virtual void Dispose()
         {
@@ -50,6 +63,11 @@ namespace Hedra.Engine.WorldBuilding
                 _children[i].Dispose();
             }
             _children.Clear();
+            for (var i = 0; i < _npcs.Count; i++)
+            {
+                _npcs[i].Dispose();
+            }
+            _npcs.Clear();
         }
     }
 }

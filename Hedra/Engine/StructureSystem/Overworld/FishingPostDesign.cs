@@ -88,10 +88,10 @@ namespace Hedra.Engine.StructureSystem.Overworld
         private static Vector2 FindSmallDockPosition(CollidableStructure Structure, Random Rng, Vector2 MainDockPosition, Vector2 MainDockDirection, out bool IsValid)
         {
             IsValid = true;
-            var positions = new Vector2[]
+            var positions = new []
             {
-                MainDockPosition + MainDockDirection.PerpendicularLeft * (160f + Rng.NextFloat() * 256f),
-                MainDockPosition + MainDockDirection.PerpendicularRight * (160f + Rng.NextFloat() * 256f)
+                MainDockPosition + MainDockDirection.PerpendicularLeft * (180f + Rng.NextFloat() * 256f),
+                MainDockPosition + MainDockDirection.PerpendicularRight * (180f + Rng.NextFloat() * 256f)
             }.Where(P => IsWater(P.ToVector3(), World.BiomePool.GetRegion(P.ToVector3()))).ToArray();
             if (positions.Length == 0)
                 IsValid = false;
@@ -124,7 +124,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var fisherman = World.WorldBuilding.SpawnHumanoid(HumanType.Fisherman, Position);
             fisherman.Rotation = new Vector3(0, Utils.Rng.NextFloat() * 360, 0);
             fisherman.AddComponent(new FishermanAIComponent(fisherman, Position.Xz, Vector2.One * 128f));
-            ((FishingPost)Structure.WorldObject).Fishermans.Add(fisherman);
+            Structure.WorldObject.AddNPCs(fisherman);
         }
 
         private void AddCampfires(CollidableStructure Structure, Random Rng)
@@ -211,7 +211,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             );
             fisherman.SetWeapon(ItemPool.Grab(ItemType.FishingRod).Weapon);
             fisherman.LeftWeapon.Attack1(fisherman);
-            ((FishingPost) Structure.WorldObject).Fishermans.Add(fisherman);
+            Structure.WorldObject.AddNPCs(fisherman);
         }
 
         private static void AddModel(CollidableStructure Structure, string Path, Vector3 Scale, Matrix4 Transformation, SceneSettings Settings = null)

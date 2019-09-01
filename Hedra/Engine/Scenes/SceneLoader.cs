@@ -2,11 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Hedra.Components;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Player;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.WorldBuilding;
+using Hedra.EntitySystem;
+using Hedra.Items;
 using Hedra.Rendering;
 using OpenTK;
 
@@ -17,7 +21,8 @@ namespace Hedra.Engine.Scenes
         private static readonly Vector3 LightColorCode = new Vector3(1, 0, 1);
         private static readonly Vector3 TrainingDummyColorCode = new Vector3(0, 1, 0);
         private static readonly Vector3 WellColorCode = new Vector3(0, 0, 1);
-        private static readonly Vector3 NPCPositionColorCode = new Vector3(0, 0, 0);
+        private static readonly Vector3 BoatMerchantColorCode = new Vector3(0, 0, 0);
+        private static readonly Vector3 FishermanColorCode = new Vector3(0.1f, 0.1f, 0.1f);
 
         public static void Load(CollidableStructure Structure, VertexData Scene)
         {
@@ -48,7 +53,8 @@ namespace Hedra.Engine.Scenes
                 {LightColorCode, new List<VertexData>()},
                 {TrainingDummyColorCode, new List<VertexData>()},
                 {WellColorCode, new List<VertexData>()},
-                {NPCPositionColorCode, new List<VertexData>()}
+                {BoatMerchantColorCode, new List<VertexData>()},
+                {FishermanColorCode, new List<VertexData>()}
             };
             for (var i = 0; i < parts.Length; ++i)
             {
@@ -56,19 +62,56 @@ namespace Hedra.Engine.Scenes
                 var averageColor = parts[i].Colors.Select(V => V.Xyz).Aggregate((V1, V2) => V1 + V2) / parts[i].Colors.Count;
                 map[averageColor].Add(parts[i]);
             }
+            /* Add Lights */
             var lights = LoadLights(
                 map[LightColorCode].Select(V => V.AverageVertices()).ToArray(),
                 Settings
             );
             Structure.WorldObject.AddChildren(lights);
+            
+            /* Add punching bags */
             var punchingBags = LoadPunchingBags(
                 map[TrainingDummyColorCode].Select(V => V.Vertices.ToArray()).ToArray()
             );
             Structure.WorldObject.AddChildren(punchingBags);
+            
+            /* Add Wells */
             var wells = LoadWells(
                 map[WellColorCode].Select(V => V.Vertices.ToArray()).ToArray()
             );
-            Structure.WorldObject.AddChildren(punchingBags);
+            Structure.WorldObject.AddChildren(wells);
+            
+            /* Add Boat Merchants */
+            var boatMerchants = LoadBoatMerchants(
+                map[BoatMerchantColorCode].Select(V => V.AverageVertices()).ToArray()
+            );
+            Structure.WorldObject.AddNPCs(boatMerchants);
+
+            /* Add Fisherman */
+            var fishermans = LoadFishermans(
+                map[FishermanColorCode].Select(V => V.AverageVertices()).ToArray()
+            );
+            Structure.WorldObject.AddNPCs(fishermans);
+        }
+
+        private static IHumanoid[] LoadFishermans(Vector3[] Positions)
+        {
+            IHumanoid Transform(Vector3 Position)
+            {
+                return null;
+            }
+            return Positions.Select(Transform).ToArray();
+        }
+
+        private static IHumanoid[] LoadBoatMerchants(Vector3[] Positions)
+        {
+            IHumanoid Transform(Vector3 Position)
+            {
+                var boatMerchant = World.WorldBuilding.SpawnHumanoid(HumanType.TravellingMerchant, Position);
+                boatMerchant.AddComponent(new BoatMerchantComponent(boatMerchant));
+                return boatMerchant;
+            }
+            return Positions.Select(Transform).ToArray();
         }
 
         private static BaseStructure[] LoadWells(Vector3[][] VertexGroups)
