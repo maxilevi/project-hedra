@@ -245,7 +245,6 @@
     <Compile Include="Engine\Bullet\PhysicsComponent.cs" />
     <Compile Include="Engine\Bullet\PhysicsComponentMotionState.cs" />
     <Compile Include="Engine\CacheSystem\DynamicCache.cs" />
-    <Compile Include="Engine\CacheSystem\FishingPostCache.cs" />
     <Compile Include="Engine\CacheSystem\FishingPostIconCache.cs" />
     <Compile Include="Engine\EntitySystem\DummyModel.cs" />
     <Compile Include="Engine\Generation\FishingZoneHandler.cs" />
@@ -8908,6 +8907,24 @@
       <Link>Assets\Env\Structures\FishingSettlement\FishingDock0-Scene.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Structures\FishingDock0\FishingDock1-Colliders.ply">
+      <Link>Assets\Env\Structures\FishingSettlement\FishingDock1-Colliders.ply</Link>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\FishingDock0\FishingDock1-Mesh.ply">
+      <Link>Assets\Env\Structures\FishingSettlement\FishingDock1-Mesh.ply</Link>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\FishingDock0\FishingDock1-Scene.ply">
+      <Link>Assets\Env\Structures\FishingSettlement\FishingDock1-Scene.ply</Link>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\FishingDock0\FishingDock2-Colliders.ply">
+      <Link>Assets\Env\Structures\FishingSettlement\FishingDock2-Colliders.ply</Link>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\FishingDock0\FishingDock2-Mesh.ply">
+      <Link>Assets\Env\Structures\FishingSettlement\FishingDock2-Mesh.ply</Link>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\FishingDock0\FishingDock2-Scene.ply">
+      <Link>Assets\Env\Structures\FishingSettlement\FishingDock2-Scene.ply</Link>
+    </Content>
     <Content Include="..\project-hedra-assets\Structures\FishingDock0\Fountain0-Colliders.ply">
       <Link>Assets\Env\Structures\FishingSettlement\Fountain0-Colliders.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -8931,6 +8948,15 @@
     <Content Include="..\project-hedra-assets\Structures\FishingDock0\PunchingBag0.ply">
       <Link>Assets\Env\Structures\FishingSettlement\PunchingBag0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\FishingDock0\SmallDock0-Colliders.ply">
+      <Link>Assets\Env\Structures\FishingSettlement\SmallDock0-Colliders.ply</Link>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\FishingDock0\SmallDock0-Scene.ply">
+      <Link>Assets\Env\Structures\FishingSettlement\SmallDock0-Scene.ply</Link>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\FishingDock0\SmallDock0.ply">
+      <Link>Assets\Env\Structures\FishingSettlement\SmallDock0.ply</Link>
     </Content>
     <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0-Icon.ply">
       <Link>Assets\Env\Structures\Gazebo0-Icon.ply</Link>

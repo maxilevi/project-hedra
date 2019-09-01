@@ -85,7 +85,12 @@ namespace Hedra.Engine.Player.BoatSystem
         
         private void HandleTerrain()
         {
-            if (_humanoid.IsGrounded && Enabled) Enabled = false;
+            if (_humanoid.IsGrounded && Enabled)
+            {
+                _humanoid.Damage(15, null, out _);
+                _humanoid.KnockForSeconds(3);
+                Enabled = false;
+            }
             if (Enabled)
             {
                 _humanoid.Movement.CaptureMovement = false;
