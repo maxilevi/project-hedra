@@ -11,5 +11,7 @@ namespace Hedra.Engine.Player
         bool CanEnable { get; }
         
         bool Enabled { get; }
+
+        void Dispose();
     }
 }

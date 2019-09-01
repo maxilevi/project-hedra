@@ -30,7 +30,7 @@ namespace Hedra.Engine.Player
             _lamp = new WorldLight(Vector3.Zero)
             {
                 LightColor = WorldLight.DefaultColor,
-                DisableAtNight = false,
+                IsNightLight = false,
                 Enabled = false
             };
             UpdateManager.Remove(_lamp);

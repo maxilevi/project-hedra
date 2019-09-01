@@ -6,6 +6,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Particles;
+using Hedra.EntitySystem;
 using Hedra.Rendering;
 using Hedra.Rendering.Particles;
 using OpenTK;
@@ -15,13 +16,13 @@ namespace Hedra.Engine.Player.BoatSystem
     public class BoatModelHandler : UpdatableObjectMeshModel
     {
         private readonly BoatStateHandler _stateHandler;
-        private readonly IPlayer _player;
+        private readonly IHumanoid _humanoid;
         private bool _wasInWater;
 
-        public BoatModelHandler(IPlayer Player, BoatStateHandler StateHandler) : base(null)
+        public BoatModelHandler(IHumanoid Humanoid, BoatStateHandler StateHandler) : base(null)
         {
             _stateHandler = StateHandler;
-            _player = Player;
+            _humanoid = Humanoid;
             Build();
         }
 
@@ -36,13 +37,13 @@ namespace Hedra.Engine.Player.BoatSystem
 
         public void Update()
         {
-            if (Model.Enabled && _player.CanInteract)
+            if (Model.Enabled && _humanoid.CanInteract)
             {
-                _player.Model.TransformationMatrix *= _stateHandler.Transformation;
+                _humanoid.Model.TransformationMatrix *= _stateHandler.Transformation;
             }
-            Model.TransformationMatrix = _player.Model.TransformationMatrix;
-            Model.LocalRotation = _player.Model.LocalRotation;
-            Model.Position = _player.Model.ModelPosition;
+            Model.TransformationMatrix = _humanoid.Model.TransformationMatrix;
+            Model.LocalRotation = _humanoid.Model.LocalRotation;
+            Model.Position = _humanoid.Model.ModelPosition;
             Model.Enabled = _stateHandler.Enabled;
             if (_stateHandler.Velocity.LengthFast > 5 && _stateHandler.Enabled && _stateHandler.InWater)
             {
@@ -53,12 +54,12 @@ namespace Hedra.Engine.Player.BoatSystem
 
         private void MovingParticles(Vector3 BoatTip)
         {
-            var underChunk = World.GetChunkAt(_player.Position);
+            var underChunk = World.GetChunkAt(_humanoid.Position);
             World.Particles.VariateUniformly = true;
             World.Particles.Color = new Vector4((underChunk?.Biome.Colors.WaterColor ?? Colors.DeepSkyBlue).Xyz * .75f, .5f);
             World.Particles.Scale = Vector3.One * .2f * (Math.Min(_stateHandler.Velocity.LengthFast, 15) / 15);
             World.Particles.ScaleErrorMargin = new Vector3(.15f, .15f, .15f);
-            World.Particles.Direction = -_player.Orientation * .1f;
+            World.Particles.Direction = -_humanoid.Orientation * .1f;
             World.Particles.ParticleLifetime = 1f;
             World.Particles.GravityEffect = .1f;
             World.Particles.ConeAngle = 180;

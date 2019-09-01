@@ -1,7 +1,8 @@
 #version 330 core
 
 !include<"Includes/GammaCorrection.shader">
-
+!include<"Includes/Lighting.shader">
+!include<"Includes/Highlights.shader">
 
 layout(location = 0)in vec3 InVertex;
 layout(location = 1)in vec4 InColor;
@@ -20,6 +21,8 @@ out float DitherVisibility;
 out vec3 base_vertex_position;
 out float use_shadows;
 out float shadow_quality;
+out vec3 completeColor;
+out vec3 unitToLight;
 
 layout(std140) uniform FogSettings {
 	vec4 U_BotColor;
@@ -42,6 +45,7 @@ const float ShadowTransition = 10.0;
 const float NoShadowsFlag = -1.0;
 const float NoHighlightFlag = -2.0;
 const float FlagEpsilon = 0.1;
+vec3 CalculateColor();
 
 float when_neq(float x, float y)
 {
@@ -110,4 +114,28 @@ void main()
 	InPos = Vertex;
 	InNorm = vec4(InNormal, 1.0);
     raw_color = linear_color;
+	unitToLight = normalize(LightPosition);
+	completeColor = CalculateColor();
+}
+
+vec3 CalculateColor()
+{
+	//Lighting
+	vec3 unitNormal = normalize(InNorm.xyz);
+	vec3 unitToCamera = normalize((inverse(_modelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - InPos.xyz);
+
+	vec3 FLightColor = calculate_lights(LightColor, InPos.xyz);
+	vec4 InputColor = vec4(raw_color.xyz, 1.0);
+	if(Config - NoHighlightFlag > FlagEpsilon)
+	{
+		InputColor = apply_highlights(InputColor, InPos.xyz);
+	}
+
+	Ambient += Config - NoShadowsFlag < FlagEpsilon ? 0.25 : 0.0;
+	vec4 Rim = rim(InputColor.rgb, LightColor, unitToCamera, unitNormal);
+	vec4 Diffuse = diffuse(unitToLight, unitNormal, LightColor);
+	vec4 realColor = Rim + Diffuse * InputColor;
+
+	vec3 point_light_color = diffuse(unitToLight, unitNormal, FLightColor).rgb;
+	return (realColor.xyz + point_light_color * raw_color.xyz);
 }

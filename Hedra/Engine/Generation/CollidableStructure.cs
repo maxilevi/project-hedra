@@ -45,6 +45,7 @@ namespace Hedra.Engine.Generation
         public AttributeArray Parameters { get; }
         public bool Built { get; set; }
         public bool Disposed { get; private set; }
+        private bool _structureSetup;
 
         public CollidableStructure(StructureDesign Design, Vector3 Position, RoundedPlateau Mountain, BaseStructure WorldObject)
         {
@@ -63,6 +64,7 @@ namespace Hedra.Engine.Generation
         public void Setup()
         {
             World.WorldBuilding.SetupStructure(this);
+            _structureSetup = true;
         }
 
         public CollisionGroup[] Colliders
@@ -165,6 +167,7 @@ namespace Hedra.Engine.Generation
         
         public void AddGroundwork(params IGroundwork[] Groundworks)
         {
+            if(_structureSetup) throw new ArgumentOutOfRangeException("Cannot add groundworks after the structure has been setup.");
             lock (_lock)
             {
                 for (var i = 0; i < Groundworks.Length; i++)
@@ -176,6 +179,7 @@ namespace Hedra.Engine.Generation
         
         public void AddPlateau(params BasePlateau[] RoundedPlateaux)
         {
+            if(_structureSetup) throw new ArgumentOutOfRangeException("Cannot add plateaus after the structure has been setup.");
             lock (_lock)
             {
                 for (var i = 0; i < RoundedPlateaux.Length; i++)

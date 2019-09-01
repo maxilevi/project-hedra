@@ -60,7 +60,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
 
         public override float MinLight(int Seed)
         {
-            return 0.05f;
+            return 0.005f;
         }
 
         public override float MaxLight(int Seed)

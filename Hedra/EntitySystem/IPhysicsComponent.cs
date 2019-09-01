@@ -35,6 +35,7 @@ namespace Hedra.EntitySystem
         Vector3 RigidbodyPosition { get; }
         bool IsStuck { get; }
         bool ContactResponse { get; set; }
+        Vector3 LinearVelocity { get; }
 
     }
 }

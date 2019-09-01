@@ -192,7 +192,7 @@ namespace Hedra.Engine.EnvironmentSystem
                 FogManager.UpdateFogSettings(FogManager.MinDistance, FogManager.MaxDistance);
                 LastDayFactor = dayFactor;
             }
-            var avgSkyColor = (Sky.TopColor * .5f + Sky.BotColor * .5f).Xyz * .5f * 1.0f + Vector3.One * 0.5f * _intensity;
+            var avgSkyColor = (Sky.TopColor * .5f + Sky.BotColor * .5f).Xyz * .5f + Vector3.One * 0.5f * _intensity;
             Vector3 newLightColor = Weather.IsRaining
                 ? avgSkyColor * Mathf.Clamp(dayFactor * 0.7f, _minLight, _maxLight)
                 : avgSkyColor * Mathf.Clamp(dayFactor * 1.0f, _minLight, _maxLight);
@@ -202,7 +202,7 @@ namespace Hedra.Engine.EnvironmentSystem
             var interpolatedLightColor = Mathf.Lerp(ShaderManager.LightColor, _targetLightColor, Time.IndependentDeltaTime * 12f);
             if ((previousLightColor - interpolatedLightColor).Length > 0.005f)
             {
-                ShaderManager.LightColor = interpolatedLightColor;
+                ShaderManager.LightColor = interpolatedLightColor * Math.Max(dayFactor, 0.10f);
             }
             LoadTime = false;
         }

@@ -48,14 +48,18 @@ namespace Hedra.AISystem.Humanoid
                         0,
                         Utils.Rng.NextFloat() * _farmSize.Y - _farmSize.Y * .5f
                     ) + _farmPosition.ToVector3();
-                    if (World.GetHighestBlockAt(newPoint.X, newPoint.Z).Type == BlockType.FarmDirt)
+                    if (IsSuitableSpot(newPoint))
                         return newPoint;
                 }
                 return Parent.Position;
             }
         }
-            
+
+        protected virtual bool IsSuitableSpot(Vector3 Point)
+        {
+            return World.GetHighestBlockAt(Point.X, Point.Z).Type == BlockType.FarmDirt;
+        }
         
-        protected override float WaitTime => 16.0f;
+        protected override float WaitTime => 10.0f + Utils.Rng.NextFloat() * 8f;
     }
 }

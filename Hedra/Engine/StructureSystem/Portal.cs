@@ -63,13 +63,13 @@ namespace Hedra.Engine.StructureSystem
             {
                 LightColor = Colors.LightBlue.Xyz * 1f,
                 Radius = 80,
-                DisableAtNight = false
+                IsNightLight = false
             };
             _portalLight = new WorldLight(Position)
             {
                 LightColor = Colors.LightBlue.Xyz * 10f,
                 Radius = 16,
-                DisableAtNight = false
+                IsNightLight = false
             };
         }
 

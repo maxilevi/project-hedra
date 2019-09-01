@@ -35,7 +35,7 @@ void main()
 
 	const float Near = 2.0;
 	const float Far = 4096.0;
-	float ObjectDepth = texture(DepthMap, TexCoords).a;
+	float ObjectDepth = clamp(texture(DepthMap, TexCoords).a, 0.0, 1.0);
 	float FloorDistance = 2.0 * Near * Far / (Far + Near - (2.0 * ObjectDepth - 1.0) * (Far - Near));
 
 	float Depth = gl_FragCoord.z;
@@ -43,7 +43,11 @@ void main()
 	float WaterDepth = FloorDistance - WaterDistance;
 	vec4 NewColor = mix(sky_color(), InputColor, Visibility);
 	OutColor = NewColor;
-	OutColor.a = OutColor.a * (ObjectDepth < 1.0 ? clamp((WaterDepth / 6.0 / Smoothness) * .25, 0.0, 1.0) : 1.0);
+	OutColor.a = OutColor.a * (
+		ObjectDepth > 0.05 
+			? clamp((WaterDepth / 6.0 / Smoothness) * .15, 0.0, 1.0)
+			: 1.0
+	);
 	
 	OutPosition = vec4(0.0, 0.0, 0.0, 0.0);
 	OutNormal = vec4(0.0, 0.0, 0.0, 0.0);

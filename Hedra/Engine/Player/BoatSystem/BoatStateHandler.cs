@@ -2,6 +2,7 @@ using System;
 using Hedra.Core;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
+using Hedra.EntitySystem;
 using OpenTK;
 
 namespace Hedra.Engine.Player.BoatSystem
@@ -9,7 +10,7 @@ namespace Hedra.Engine.Player.BoatSystem
     public class BoatStateHandler
     {
         private readonly BoatInputHandler _inputHandler;
-        private readonly IPlayer _player;
+        private readonly IHumanoid _humanoid;
         private bool _wasEnabled;
         private bool _enabled;
         private bool _wasInWater;
@@ -17,15 +18,18 @@ namespace Hedra.Engine.Player.BoatSystem
         private Quaternion _terrainOrientation;
 
 
-        public BoatStateHandler(IPlayer Player)
+        public BoatStateHandler(IHumanoid Humanoid)
         {
-            _player = Player;
-            _inputHandler = new BoatInputHandler(_player, this);
+            _humanoid = Humanoid;
+            if(_humanoid is IPlayer player)
+                _inputHandler = new BoatPlayerInputHandler(player, this);
+            else
+                _inputHandler = new BoatHumanoidInputHandler(_humanoid, this);
         }
 
         public void Update()
         {
-            if (Enabled && _player.CanInteract)
+            if (Enabled && _humanoid.CanInteract)
             {
                 HandleDirection();
                 _inputHandler.Update();
@@ -38,29 +42,32 @@ namespace Hedra.Engine.Player.BoatSystem
         {
             if (Enabled)
             {
-                var waterHeight = Physics.WaterHeight(_player.Position);
-                var waterNormal = Physics.WaterNormalAtPosition(_player.Position);
-                var boatY = _player.Position.Y;
+                var waterHeight = Physics.WaterHeight(_humanoid.Position);
+                var waterNormal = Physics.WaterNormalAtPosition(_humanoid.Position);
+                var boatY = _humanoid.Position.Y;
                 OnWaterSurface = Math.Abs(boatY - waterHeight) < 0.25f;
                 InWater = OnWaterSurface || boatY < waterHeight;
                 if (InWater)
                 {
-                    _player.Physics.ResetFall();
+                    _humanoid.Physics.ResetFall();
 
                     /* Boat is under the surface */
                     if (!OnWaterSurface)
                     {
                         OnWaterSurface = true;
-                        _player.Physics.GravityDirection = Vector3.UnitY * 40f;
+                        _humanoid.Physics.GravityDirection = Vector3.UnitY * 40f;
                     }
                     else if(_wasInWater)
                     {
-                        _player.Physics.ResetVelocity();
+                        _humanoid.Physics.ResetVelocity();
                     }
                 }
                 else
                 {
-                    _player.Physics.GravityDirection = -Vector3.UnitY;
+                    if(boatY > waterHeight+4)
+                        _humanoid.Physics.GravityDirection = -Vector3.UnitY;
+                    else
+                        _humanoid.Physics.GravityDirection = Vector3.Zero;
                 }
             }
             _wasInWater = InWater;
@@ -68,7 +75,7 @@ namespace Hedra.Engine.Player.BoatSystem
 
         private void HandleDirection()
         {
-            var waterNormal = OnWaterSurface || _player.IsUnderwater ? Physics.WaterNormalAtPosition(_player.Model.ModelPosition) : Vector3.UnitY;
+            var waterNormal = OnWaterSurface || _humanoid.IsUnderwater ? Physics.WaterNormalAtPosition(_humanoid.Model.ModelPosition) : Vector3.UnitY;
             _targetTerrainOrientation =
                 new Matrix3(Mathf.RotationAlign(Vector3.UnitY, waterNormal)).ExtractRotation();
             _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation,
@@ -78,15 +85,15 @@ namespace Hedra.Engine.Player.BoatSystem
         
         private void HandleTerrain()
         {
-            if (_player.IsGrounded && Enabled) Enabled = false;
+            if (_humanoid.IsGrounded && Enabled) Enabled = false;
             if (Enabled)
             {
-                _player.Movement.CaptureMovement = false;
+                _humanoid.Movement.CaptureMovement = false;
             }
             if (!Enabled && _wasEnabled)
             {
-                _player.Physics.GravityDirection = _player.IsUnderwater ? Vector3.Zero : -Vector3.UnitY;
-                _player.Movement.CaptureMovement = true;
+                _humanoid.Physics.GravityDirection = _humanoid.IsUnderwater ? Vector3.Zero : -Vector3.UnitY;
+                _humanoid.Movement.CaptureMovement = true;
             }
             _wasEnabled = Enabled;
         }
@@ -101,7 +108,7 @@ namespace Hedra.Engine.Player.BoatSystem
             
         }
 
-        public bool CanEnable => !_player.IsGrounded && !_player.IsRiding;
+        public bool CanEnable => !_humanoid.IsGrounded && !_humanoid.IsRiding;
         
         public bool Enabled
         {

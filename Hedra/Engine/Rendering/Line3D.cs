@@ -9,7 +9,7 @@ namespace Hedra.Engine.Rendering
 {
     public class Line3D : IRenderable
     {
-        private static readonly Shader LineShader = Shader.Build("Shaders/Lines3D.vert", "Shaders/Lines3D.frag");
+        private static Shader LineShader;
         private VAO<Vector3, Vector4> _data;
         private VBO<Vector3> _vertices;
         private VBO<Vector4> _colors;
@@ -18,6 +18,14 @@ namespace Hedra.Engine.Rendering
         private bool _enabled;
         private bool _disposed;
         private bool _wasEnabled;
+
+        static Line3D()
+        {
+            Executer.ExecuteOnMainThread(() =>
+            {
+                LineShader = Shader.Build("Shaders/Lines3D.vert", "Shaders/Lines3D.frag");
+            });
+        }
         
         public Line3D()
         {
@@ -35,6 +43,7 @@ namespace Hedra.Engine.Rendering
             if (_pointsArray != null && Points.SequenceEqual(_pointsArray) && _colorsArray != null && Colors.SequenceEqual(_colorsArray)) return;
             Executer.ExecuteOnMainThread(() =>
             {
+                if(_disposed) return;
                 _vertices.Update(_pointsArray = Points, Points.Length * Vector3.SizeInBytes);
                 _colors.Update(_colorsArray = Colors, Colors.Length * Vector4.SizeInBytes);
             });

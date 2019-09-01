@@ -163,6 +163,7 @@
     <Compile Include="AISystem\GoatAIComponent.cs" />
     <Compile Include="AISystem\GorillaWarriorAIComponent.cs" />
     <Compile Include="AISystem\HostileAIComponent.cs" />
+    <Compile Include="AISystem\Humanoid\FishermanAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\NPCAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\RangedAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\BaseHumanoidAIComponent.cs" />
@@ -250,6 +251,8 @@
     <Compile Include="Engine\Generation\FishingZoneHandler.cs" />
     <Compile Include="Engine\ItemSystem\Item.cs" />
     <Compile Include="Engine\Player\BackgroundUpdater.cs" />
+    <Compile Include="Engine\Player\BoatSystem\BoatHumanoidInputHandler.cs" />
+    <Compile Include="Engine\Player\BoatSystem\BoatInputHandler.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryCompanionInfo.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryCompanionRenamePanel.cs" />
     <Compile Include="Engine\QuestSystem\BaseStructureWithChest.cs" />
@@ -955,7 +958,7 @@
     <Compile Include="Engine\Player\AmbientEffectHandler.cs" />
     <Compile Include="Engine\Player\BoatSystem\Boat.cs" />
     <Compile Include="Engine\Player\BoatSystem\BoatAudioHandler.cs" />
-    <Compile Include="Engine\Player\BoatSystem\BoatInputHandler.cs" />
+    <Compile Include="Engine\Player\BoatSystem\BoatPlayerInputHandler.cs" />
     <Compile Include="Engine\Player\BoatSystem\BoatModelHandler.cs" />
     <Compile Include="Engine\Player\BoatSystem\BoatStateHandler.cs" />
     <Compile Include="Engine\Player\BoatSystem\IBoat.cs" />
@@ -8905,6 +8908,14 @@
       <Link>Assets\Env\Structures\FishingSettlement\FishingDock0-Scene.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Structures\FishingDock0\Fountain0-Colliders.ply">
+      <Link>Assets\Env\Structures\FishingSettlement\Fountain0-Colliders.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\FishingDock0\Fountain0-Scene.ply">
+      <Link>Assets\Env\Structures\FishingSettlement\Fountain0-Scene.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Structures\FishingDock0\Fountain0.ply">
       <Link>Assets\Env\Structures\FishingSettlement\Fountain0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -14349,6 +14360,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\NPCs\Farmer.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\NPCs\Fisherman.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\NPCs\GreenVillager.json">

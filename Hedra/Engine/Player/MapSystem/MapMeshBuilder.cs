@@ -89,7 +89,7 @@ namespace Hedra.Engine.Player.MapSystem
             var baseMesh = ObjectMesh.FromVertexData(mapData);
             baseMesh.ApplyNoiseTexture = true;
             baseMesh.Dither = true;
-            DrawManager.Remove(baseMesh);
+            DrawManager.RemoveObjectMesh(baseMesh);
             item.Mesh = baseMesh;
             item.WasBuilt = true;   
             return item;

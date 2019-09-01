@@ -29,7 +29,7 @@ namespace Hedra.Engine.WorldBuilding
         public Vector3 LightColor { get; set; } = Vector3.One;
         public float Radius { get; set; } = PointLight.DefaultRadius;
         public bool Enabled { get; set; } = true;
-        public bool DisableAtNight { get; set; } = true;
+        public bool IsNightLight { get; set; } = true;
         
         
         public WorldLight(Vector3 Position) : base(Position)
@@ -40,7 +40,7 @@ namespace Hedra.Engine.WorldBuilding
         public void Update()
         {
             var inRadius = (GameManager.Player.Position - Position).Xz.LengthSquared < ShaderManager.LightDistance * ShaderManager.LightDistance;
-            var isOn = inRadius && (SkyManager.IsNight || !DisableAtNight) && Enabled;
+            var isOn = inRadius && (SkyManager.IsNight || !IsNightLight) && Enabled;
 
             if(LightObject == null && isOn)
             {

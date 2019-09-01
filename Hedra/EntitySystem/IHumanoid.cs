@@ -4,6 +4,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ItemSystem.ArmorSystem;
 using Hedra.Engine.Player;
+using Hedra.Engine.Player.BoatSystem;
 using Hedra.Engine.SkillSystem;
 using Hedra.Items;
 using Hedra.WeaponSystem;
@@ -16,6 +17,7 @@ namespace Hedra.EntitySystem
         event OnAttackEventHandler BeforeAttack;
         event OnAttackEventHandler AfterAttack;
         event OnHitLandedEventHandler OnHitLanded;
+        IVehicle Boat { get; }
         IMessageDispatcher MessageDispatcher { get; set; }
         IPlayerInventory Inventory { get; }
         int ConsecutiveHits { get; }

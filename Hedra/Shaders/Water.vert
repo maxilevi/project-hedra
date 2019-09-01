@@ -87,11 +87,10 @@ void main()
 	vec3 unitToCamera = normalize((inverse(_modelViewMatrix) * vec4(0.0,0.0,0.0,1.0) ).xyz - v.xyz);
 
 	v = TransformationMatrix * v;
-	Ambient = 0.0;
-	Color = diffuse(unitToLight, unitNormal, max(LightColor, vec3(.4))) * InColor;
+	Color = diffuse(unitToLight, unitNormal, max(LightColor, vec3(.1))) * InColor;
     Color = apply_highlights(Color, v.xyz);
  	Color.a = Transparency;
- 	Color += vec4(diffuse(unitToLight, unitNormal, calculate_lights(LightColor, v.xyz)).xyz * InColor.xyz, 0.0);
+ 	Color += vec4(diffuse(unitToLight, unitNormal, calculate_lights(LightColor, v.xyz, 2.25)).xyz * InColor.xyz, 0.0);
  	
  	gl_Position = _modelViewProjectionMatrix * v;
 

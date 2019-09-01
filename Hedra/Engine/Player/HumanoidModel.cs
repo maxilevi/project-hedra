@@ -520,6 +520,7 @@ namespace Hedra.Engine.Player
         Innkeeper,
         Clothier,
         Mason,
+        Fisherman,
         GreenVillager
     }
 }

@@ -70,7 +70,7 @@ namespace Hedra.Engine.ModuleSystem
             {
                 var weapon = template.Weapons[Utils.Rng.Next(0, template.Weapons.Length)];
                 human.Ring = ItemPool.Grab( new ItemPoolSettings(ItemTier.Common, "Ring"));
-                human.MainWeapon = ItemPool.Grab( new ItemPoolSettings(weapon.Tier, weapon.Type) );
+                human.MainWeapon = weapon.Name != null ?  ItemPool.Grab(weapon.Name) : ItemPool.Grab( new ItemPoolSettings(weapon.Tier, weapon.Type));
 
                 var drop = new DropComponent(human)
                 {

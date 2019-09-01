@@ -1,9 +1,7 @@
 #version 330 core
 
-!include<"Includes/Lighting.shader">
 !include<"Includes/GammaCorrection.shader">
 !include<"Includes/Sky.shader">
-!include<"Includes/Highlights.shader">
 
 in float Config;
 in vec4 raw_color;
@@ -15,6 +13,8 @@ in float DitherVisibility;
 in vec3 base_vertex_position;
 in float use_shadows;
 in float shadow_quality;
+in vec3 completeColor;
+in vec3 unitToLight;
 
 layout(location = 0)out vec4 OutColor; 
 layout(location = 1)out vec4 OutPosition;
@@ -42,7 +42,6 @@ const float NoHighlightFlag = -2.0;
 const float FlagEpsilon = 0.1;
 
 float CalculateShadows();
-vec3 CalculateColor(float ShadowVisibility, float Tex);
 
 void main()
 {
@@ -56,11 +55,8 @@ void main()
 	}
     float ShadowVisibility = use_shadows > 0.0 ? CalculateShadows() : 1.0;
     float tex = texture(noiseTexture, base_vertex_position).r;
-    vec3 completeColor = CalculateColor(ShadowVisibility, tex);
-
-	vec3 final_color = linear_to_srbg(completeColor);
-	vec4 NewColor = 
-	    mix(sky_color(), vec4(final_color, raw_color.w), Visibility);
+	vec3 final_color = linear_to_srbg(completeColor * (tex + 1.0) * ShadowVisibility);
+	vec4 NewColor = mix(sky_color(), vec4(final_color, raw_color.w), Visibility);
 
 	if(Visibility < 0.005)
 	{
@@ -77,33 +73,9 @@ void main()
 	}
 }
 
-vec3 CalculateColor(float ShadowVisibility, float Tex) {
-		
-	//Lighting
-	vec3 unitToLight = normalize(LightPosition);
-	vec3 unitNormal = normalize(InNorm.xyz);
-	vec3 unitToCamera = normalize((inverse(_modelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - InPos.xyz);
-
-	vec3 FLightColor = calculate_lights(LightColor, InPos.xyz);
-	vec4 InputColor = vec4(raw_color.xyz, 1.0);
-    if(Config - NoHighlightFlag > FlagEpsilon)
-    {
-        InputColor = apply_highlights(InputColor, InPos.xyz);
-    }
-
-	Ambient += Config - NoShadowsFlag < FlagEpsilon ? 0.25 : 0.0;
-	vec4 Rim = rim(InputColor.rgb, LightColor, unitToCamera, unitNormal);
-	vec4 Diffuse = diffuse(unitToLight, unitNormal, LightColor);
-	vec4 realColor = Rim + Diffuse * InputColor;
-
-	vec3 point_light_color = diffuse(unitToLight, unitNormal, FLightColor).rgb;		
-	return (realColor.xyz + point_light_color * raw_color.xyz) * (Tex + 1.0) * ShadowVisibility;
-}
-
 float CalculateShadows()
 {
-	vec3 LightDir = use_shadows * normalize(LightPosition);
-	float bias = max(0.001 * (1.0 - dot(InNorm.xyz, LightDir)), 0.0) + 0.001;
+	float bias = max(0.001 * (1.0 - dot(InNorm.xyz, unitToLight)), 0.0) + 0.001;
 	vec4 ShadowCoords = Coords * vec4(.5,.5,.5,1.0) + vec4(.5,.5,.5, 0.0);		
 	float shadow = 0.0;
 	vec2 texelSize = 1.0 / textureSize(ShadowTex, 0);

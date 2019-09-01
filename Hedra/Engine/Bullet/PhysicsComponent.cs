@@ -219,7 +219,7 @@ namespace Hedra.Engine.Bullet
             HandleIsStuck();
             Parent.IsGrounded = _sensorContacts > 0;
             _body.Gravity = Parent.IsGrounded ? BulletSharp.Math.Vector3.Zero : _gravity.Compatible();
-            _body.LinearVelocity = UsePhysics 
+            _body.LinearVelocity = ContactResponse 
                 ? new BulletSharp.Math.Vector3(_accumulatedMovement.X, Math.Min(0, _body.LinearVelocity.Y), _accumulatedMovement.Z) + Impulse.Compatible() * Time.TimeScale
                 : BulletSharp.Math.Vector3.Zero;
             _body.Activate();
@@ -370,6 +370,8 @@ namespace Hedra.Engine.Bullet
         public bool CollidesWithEntities { get; set; } = true;
         
         public bool UpdateColliderList { get; set; }
+
+        public Vector3 LinearVelocity => _body.LinearVelocity.Compatible();
 
         public bool Raycast(Vector3 End)
         {

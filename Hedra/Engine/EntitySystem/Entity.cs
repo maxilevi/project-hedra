@@ -357,7 +357,6 @@ namespace Hedra.Engine.EntitySystem
 
         private void UpdateEnvironment()
         {
-            if (!(this is LocalPlayer)) return;
             var underChunk = World.GetChunkAt(Position);
             var waterHeight = PhysicsSystem.Physics.WaterHeight(Position);
             if (Position.Y + Model.Height < waterHeight /* && PhysicsSystem.Physics.WaterLevelAtPosition(Position) > Model.Height*/)

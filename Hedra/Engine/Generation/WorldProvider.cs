@@ -639,7 +639,7 @@ namespace Hedra.Engine.Generation
             var originalPosition = Mob.Position;
             var collidesOnSurface = true;
             Mob.Position = DesiredPosition;
-            while (!Mob.Physics.Translate(Vector3.One * .1f))
+            while (Mob.Physics.CollidesWithOffset(Vector3.Zero))
             {
                 DesiredPosition += new Vector3(Utils.Rng.NextFloat() * 32f - 16f, 0, Utils.Rng.NextFloat() * 32f - 16f);
                 Mob.Position = DesiredPosition;

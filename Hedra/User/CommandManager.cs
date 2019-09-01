@@ -12,6 +12,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using Hedra.AISystem;
 using Hedra.AISystem.Humanoid;
 using Hedra.Components;
 using Hedra.Components.Effects;
@@ -456,6 +457,13 @@ namespace Hedra.User
                 if (Parts[0] == "debai")
                 {
                     GameSettings.DebugAI = !GameSettings.DebugAI;
+                }
+
+                if (Parts[0] == "fisherman")
+                {
+                    var fisherman = World.WorldBuilding.SpawnHumanoid(HumanType.Fisherman, Caster.Position + Caster.Orientation * 32);
+                    //fisherman.RemoveComponent(fisherman.SearchComponent<BasicAIComponent>());
+                    fisherman.AddComponent(new FishermanAIComponent(fisherman, (Caster.Position + Caster.Orientation * 32).Xz, Vector2.One * 64f));
                 }
 
                 if (Parts[0] == "frustum")

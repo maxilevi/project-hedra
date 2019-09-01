@@ -37,6 +37,8 @@ namespace Hedra.AISystem.Humanoid
             _move = Move;
             IsSitting = true;
             MovementTimer = new Timer(WaitTime);
+            if (Utils.Rng.NextBool())
+                MovementTimer.MarkReady();
         }
 
         public override void Update()
@@ -61,7 +63,9 @@ namespace Hedra.AISystem.Humanoid
                     }
                 }
 
-                if (IsSitting) Sit();    
+                if (IsSitting) Sit();
+                if(Parent.IsUnderwater)
+                    Parent.Movement.MoveInWater(true);
             }
         }
         

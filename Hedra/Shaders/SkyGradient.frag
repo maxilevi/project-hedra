@@ -8,6 +8,6 @@ layout(location = 2)out vec4 OutNormal;
 void main()
 {   
     OutColor = sky_color();
-	OutPosition = vec4(0.0, 0.0, 0.0, 0.0);
+	OutPosition = vec4(0.0, 0.0, 0.0, 10.0);
 	OutNormal = vec4(0.0, 0.0, 0.0, 0.0);
 }

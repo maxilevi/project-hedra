@@ -60,7 +60,6 @@ namespace Hedra.Engine.Player
         public ICamera View { get; }
         public ChunkLoader Loader { get; }
         public UserInterface UI { get; set; }
-        public IVehicle Boat { get; }
         public IVehicle Glider { get; }
         public RealmHandler Realms { get; }
         private PlayerInventoryInterface InventoryInterface { get; }
@@ -113,7 +112,6 @@ namespace Hedra.Engine.Player
             this.Trade = new TradeInventory(this);
             this.Movement = new PlayerMovement(this);
             this.MessageDispatcher = new VisualMessageDispatcher(this);
-            this.Boat = new Boat(this);
             this.AmbientEffects = new AmbientEffectHandler(this);
             this.Realms = new RealmHandler();
             this.Physics.CollidesWithStructures = true;

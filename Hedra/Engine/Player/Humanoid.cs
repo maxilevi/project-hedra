@@ -18,6 +18,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ItemSystem.ArmorSystem;
+using Hedra.Engine.Player.BoatSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.UI;
@@ -57,6 +58,7 @@ namespace Hedra.Engine.Player
             }
         }
 
+        public IVehicle Boat { get; }
         public IPlayerInventory Inventory { get; protected set; }
         public IMessageDispatcher MessageDispatcher { get; set; }
         public int ConsecutiveHits { get; private set; }
@@ -151,6 +153,7 @@ namespace Hedra.Engine.Player
             HandLamp = new HandLamp(this);
             Movement = new MovementManager(this);
             Equipment = new EquipmentHandler(this);
+            Boat = new Boat(this);
             Class = new WarriorDesign();
             RandomFactor = NewRandomFactor();
             Physics.CollidesWithStructures = true;
@@ -537,6 +540,7 @@ namespace Hedra.Engine.Player
         public override void Dispose()
         {
             base.Dispose();
+            Boat.Dispose();
             Equipment.Dispose();
             this.HandLamp.Dispose();
         }
