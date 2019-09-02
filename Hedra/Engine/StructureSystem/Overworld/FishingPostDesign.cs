@@ -75,7 +75,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 var transformation = Matrix4.CreateRotationY(euler.Y * Mathf.Radian) *
                                      Matrix4.CreateTranslation(position);
                 AddModel(Structure, "Assets/Env/Structures/FishingSettlement/SmallDock0.ply", FishingPostScale, transformation);
-                Structure.AddGroundwork(new LineGroundwork(Structure.Position.Xz, transformation.ExtractTranslation().Xz + toDock.Xz * Chunk.BlockSize * 4f)
+                Structure.AddGroundwork(new LineGroundwork(Structure.Position.Xz, transformation.ExtractTranslation().Xz + toDock.Xz * Chunk.BlockSize * 8f)
                 {
                     Width = 12,
                     Type = BlockType.Path,

@@ -7,7 +7,9 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
+using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Engine.StructureSystem.Overworld;
+using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Items;
@@ -68,33 +70,46 @@ namespace Hedra.Engine.Scenes
                 Settings
             );
             Structure.WorldObject.AddChildren(lights);
-            
-            /* Add punching bags */
-            var punchingBags = LoadPunchingBags(
-                map[TrainingDummyColorCode].Select(V => V.Vertices.ToArray()).ToArray()
-            );
-            Structure.WorldObject.AddChildren(punchingBags);
-            
+
             /* Add Wells */
             var wells = LoadWells(
                 map[WellColorCode].Select(V => V.Vertices.ToArray()).ToArray()
             );
             Structure.WorldObject.AddChildren(wells);
+
+            /* Add punching bags */
+            var bags = LoadPunchingBags(
+                map[TrainingDummyColorCode].Select(V => V.Vertices.ToArray()).ToArray()
+            );
+            Structure.WorldObject.AddChildren(bags);
             
             /* Add Boat Merchants */
-            var boatMerchants = LoadBoatMerchants(
-                map[BoatMerchantColorCode].Select(V => V.AverageVertices()).ToArray()
-            );
-            Structure.WorldObject.AddNPCs(boatMerchants);
-
+            PlaceNPCsWhenWorldReady(map[BoatMerchantColorCode], P => LoadBoatMerchants(P), Structure);
+            
             /* Add Fisherman */
-            var fishermans = LoadFishermans(
-                map[FishermanColorCode].Select(V => V.AverageVertices()).ToArray()
-            );
-            Structure.WorldObject.AddNPCs(fishermans);
+            PlaceNPCsWhenWorldReady(map[FishermanColorCode], P => LoadFishermans(P), Structure);
         }
 
-        private static IHumanoid[] LoadFishermans(Vector3[] Positions)
+        private static void PlaceNPCsWhenWorldReady(IEnumerable<VertexData> ScenePositions, Func<Vector3, IHumanoid[]> Load, CollidableStructure Structure)
+        {
+            var positions = ScenePositions.Select(V => V.AverageVertices()).ToArray();
+            DoWhenWorldReady(positions, P => P, P =>
+            {
+                Structure.WorldObject.AddNPCs(Load(P));
+            }, Structure);
+        }
+        
+        private static void DoWhenWorldReady<T>(T[] Values, Func<T, Vector3> GetPosition, Action<T> Do, CollidableStructure Structure)
+        {
+            /* Add punching bags */
+            for (var i = 0; i < Values.Length; ++i)
+            {
+                var k = i;
+                DecorationsPlacer.PlaceWhenWorldReady(GetPosition(Values[i]), P => Do(Values[k]), () => Structure.Disposed);
+            }
+        }
+        
+        private static IHumanoid[] LoadFishermans(params Vector3[] Positions)
         {
             IHumanoid Transform(Vector3 Position)
             {
@@ -103,7 +118,7 @@ namespace Hedra.Engine.Scenes
             return Positions.Select(Transform).ToArray();
         }
 
-        private static IHumanoid[] LoadBoatMerchants(Vector3[] Positions)
+        private static IHumanoid[] LoadBoatMerchants(params Vector3[] Positions)
         {
             IHumanoid Transform(Vector3 Position)
             {
@@ -114,7 +129,7 @@ namespace Hedra.Engine.Scenes
             return Positions.Select(Transform).ToArray();
         }
 
-        private static BaseStructure[] LoadWells(Vector3[][] VertexGroups)
+        private static BaseStructure[] LoadWells(params Vector3[][] VertexGroups)
         {
             var list = new List<BaseStructure>();
             for (var i = 0; i < VertexGroups.Length; ++i)
@@ -126,7 +141,7 @@ namespace Hedra.Engine.Scenes
             return list.ToArray();
         }
 
-        private static BaseStructure[] LoadPunchingBags(Vector3[][] VertexGroups)
+        private static BaseStructure[] LoadPunchingBags(params Vector3[][] VertexGroups)
         {
             var list = new List<BaseStructure>();
             for (var i = 0; i < VertexGroups.Length; ++i)

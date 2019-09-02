@@ -72,7 +72,7 @@ namespace Hedra.Game
         
         public static bool Shadows => ShadowQuality != 0 && GlobalShadows;
         
-        [Setting] public static bool OcclusionCulling { get; set; } = true;
+        [Setting] public static bool OcclusionCulling { get; set; } = false;
         
         [Setting] public static bool Quality { get; set; } = true;
         

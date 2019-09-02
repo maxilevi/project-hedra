@@ -53,9 +53,11 @@ namespace Hedra.Engine.Bullet
         private Vector3 _gravity;
         private bool _moved;
         private bool _isStuck;
+        private bool _usePhysics;
 
         public PhysicsComponent(IEntity Parent) : base(Parent)
         {
+            _usePhysics = true;
             _gravityDirection = -Vector3.UnitY;
             _gravity = Gravity;
             _motionState = new PhysicsComponentMotionState();
@@ -101,8 +103,15 @@ namespace Hedra.Engine.Bullet
             var to = BulletSharp.Math.Vector3.Zero;
             _rayResult = new AllHitsRayResultCallback(from, to);
             _motionState.OnUpdated += UpdateSensor;
+            BulletPhysics.OnRigidbodyReAdded += OnRigidbodyReAdded;
             BulletPhysics.OnCollision += OnCollision;
             BulletPhysics.OnSeparation += OnSeparation;
+        }
+
+        private void OnRigidbodyReAdded(RigidBody Body)
+        {
+            if(ReferenceEquals(Body, _body))
+                UpdateGravity();
         }
 
         private void OnCollision(CollisionObject Object0, CollisionObject Object1)
@@ -178,6 +187,7 @@ namespace Hedra.Engine.Bullet
             {
                 _gravityDirection = value;
                 _gravity = Gravity;
+                UpdateGravity();
             }
         }
 
@@ -195,11 +205,16 @@ namespace Hedra.Engine.Bullet
 
         public bool UsePhysics
         {
-            get => _gravity != Vector3.Zero;
-            set => _gravity = (value ? Gravity : Vector3.Zero);
+            get => _usePhysics;
+            set
+            {
+                _usePhysics = value;
+                _gravity = Gravity;
+                UpdateGravity();
+            }
         }
 
-        private Vector3 Gravity => (BulletPhysics.Gravity * _gravityDirection);
+        private Vector3 Gravity => (BulletPhysics.Gravity * _gravityDirection) * (_usePhysics ? 1 : 0);
         public Vector3 RigidbodyPosition => _body.WorldTransform.Origin.Compatible();//Time.Paused ? _body.WorldTransform.Origin.Compatible() : _motionState.Position;
 
         public override void Draw()
@@ -218,13 +233,18 @@ namespace Hedra.Engine.Bullet
             HandleIsMoving();
             HandleIsStuck();
             Parent.IsGrounded = _sensorContacts > 0;
-            _body.Gravity = Parent.IsGrounded ? BulletSharp.Math.Vector3.Zero : _gravity.Compatible();
+            UpdateGravity();
             _body.LinearVelocity = ContactResponse 
                 ? new BulletSharp.Math.Vector3(_accumulatedMovement.X, Math.Min(0, _body.LinearVelocity.Y), _accumulatedMovement.Z) + Impulse.Compatible() * Time.TimeScale
                 : BulletSharp.Math.Vector3.Zero;
             _body.Activate();
             Impulse *= (float) Math.Pow(0.25f, Time.DeltaTime * 5f);
             _accumulatedMovement = Vector3.Zero;
+        }
+
+        private void UpdateGravity()
+        {
+            _body.Gravity = Parent.IsGrounded ? BulletSharp.Math.Vector3.Zero : _gravity.Compatible();
         }
 
         private void HandleIsStuck()

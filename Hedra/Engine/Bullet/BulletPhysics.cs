@@ -16,9 +16,12 @@ using Vector2 = OpenTK.Vector2;
 namespace Hedra.Engine.Bullet
 {
     public delegate void OnContactEvent(CollisionObject Body0, CollisionObject Body1);
+
+    public delegate void OnRigidbodyEvent(RigidBody Body);
     public class BulletPhysics
     {
         public const CollisionFilterGroups TerrainFilter = CollisionFilterGroups.DebrisFilter;
+        public static event OnRigidbodyEvent OnRigidbodyReAdded;
         public static event OnContactEvent OnCollision;
         public static event OnContactEvent OnSeparation;
         private static object _chunkLock;
@@ -210,6 +213,7 @@ namespace Hedra.Engine.Bullet
         {
             Information.IsInSimulation = true;
             _dynamicsWorld.AddRigidBody(Body, Information.Group, Information.Mask);
+            OnRigidbodyReAdded?.Invoke(Body);
             ObjectsInSimulation++;
         }
 
