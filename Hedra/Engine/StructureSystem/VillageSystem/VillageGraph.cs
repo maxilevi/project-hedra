@@ -17,6 +17,12 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             _edges = new List<GraphEdge>();
         }
 
+        public void AddSymmetricEdge(Vector2 Start, Vector2 End)
+        {
+            AddEdge(Start, End);
+            AddEdge(End, Start);
+        }
+
         public void AddEdge(Vector2 Start, Vector2 End)
         {
             if (_edges.All(E => _vertices[E.StartIndex] != Start || _vertices[E.EndIndex] != End))

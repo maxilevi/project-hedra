@@ -10,9 +10,6 @@ using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
-using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Management;
-using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Scenes;
@@ -234,7 +231,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             DecorationsPlacer.PlaceWhenWorldReady(Position, P =>
             {
-                
+                var human = World.WorldBuilding.SpawnHumanoid(HumanType.Merchant, Position);
+                Structure.WorldObject.AddNPCs(human);
             }, () => Structure.Disposed);
         }
 

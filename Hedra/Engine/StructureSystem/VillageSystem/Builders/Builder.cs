@@ -25,7 +25,19 @@ using OpenTK;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
-    public abstract class Builder<T> where T : IBuildingParameters
+    public abstract class Builder
+    {
+        public static void SpawnVillager(Vector3 Position, Random Rng, VillageGraph Graph, out IHumanoid Humanoid)
+        {
+            Humanoid = World.WorldBuilding.SpawnVillager(Position, Rng);
+            Humanoid.SearchComponent<DamageComponent>().Immune = true;
+            Humanoid.AddComponent(new TalkComponent(Humanoid));
+            Humanoid.AddComponent(new RoamingVillagerAIComponent(Humanoid, Graph));
+            Humanoid.AddComponent(new VillagerThoughtsComponent(Humanoid));
+        }
+    }
+    
+    public abstract class Builder<T> : Builder where T : IBuildingParameters
     {
         protected virtual bool LookAtCenter => true;
         protected virtual bool GraduateColor => false;
@@ -179,13 +191,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
         protected IHumanoid SpawnVillager(Vector3 Position, Random Rng)
         {
-            var vill = World.WorldBuilding.SpawnVillager(Position, Rng);
-            vill.SearchComponent<DamageComponent>().Immune = true;
-            vill.AddComponent(new TalkComponent(vill));
-            vill.AddComponent(new RoamingVillagerAIComponent(vill, VillageObject.Graph));
-            vill.AddComponent(new VillagerThoughtsComponent(vill));
-            VillageObject.AddHumanoid(vill);
-            return vill;
+            SpawnVillager(Position, Rng, VillageObject.Graph, out var humanoid);
+            VillageObject.AddHumanoid(humanoid);
+            return humanoid;
         }
 
         protected IEntity SpawnMob(MobType Mob, Vector3 Position)
