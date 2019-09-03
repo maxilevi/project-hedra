@@ -16,7 +16,7 @@ namespace Hedra.AISystem.Humanoid
         public override void Update()
         {
             base.Update();
-            if (!Parent.Boat.Enabled)
+            if (!Parent.Boat.Enabled && !Parent.IsKnocked)
                 Parent.Boat.Enable();
             Parent.Boat.Update();
         }
