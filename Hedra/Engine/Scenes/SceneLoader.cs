@@ -7,12 +7,14 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
+using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Items;
+using Hedra.Mission;
 using Hedra.Rendering;
 using OpenTK;
 
@@ -24,7 +26,7 @@ namespace Hedra.Engine.Scenes
         private static readonly Vector3 TrainingDummyColorCode = new Vector3(0, 1, 0);
         private static readonly Vector3 WellColorCode = new Vector3(0, 0, 1);
         private static readonly Vector3 BoatMerchantColorCode = new Vector3(0, 0, 0);
-        private static readonly Vector3 FishermanColorCode = new Vector3(0.1f, 0.1f, 0.1f);
+        private static readonly Vector3 FishermanColorCode = new Vector3(1, 1, 0);
 
         public static void Load(CollidableStructure Structure, VertexData Scene)
         {
@@ -113,7 +115,12 @@ namespace Hedra.Engine.Scenes
         {
             IHumanoid Transform(Vector3 Position)
             {
-                return null;
+                var fisherman = World.WorldBuilding.SpawnHumanoid(HumanType.Fisherman, Position);
+                fisherman.AddComponent(new QuestGiverComponent(fisherman, MissionPool.Random(Position, QuestTier.Medium)));
+                fisherman.Physics.CollidesWithEntities = false;
+                fisherman.IsSitting = true;
+                fisherman.SearchComponent<DamageComponent>().Immune = true;
+                return fisherman;
             }
             return Positions.Select(Transform).ToArray();
         }
@@ -123,6 +130,7 @@ namespace Hedra.Engine.Scenes
             IHumanoid Transform(Vector3 Position)
             {
                 var boatMerchant = World.WorldBuilding.SpawnHumanoid(HumanType.Fisherman, Position);
+                boatMerchant.SearchComponent<DamageComponent>().Immune = true;
                 boatMerchant.AddComponent(new BoatMerchantComponent(boatMerchant));
                 return boatMerchant;
             }
