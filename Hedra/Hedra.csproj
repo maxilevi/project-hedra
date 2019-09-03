@@ -8932,6 +8932,18 @@
       <Link>Assets\Env\Structures\FishingSettlement\FishingDock2-Scene.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Structures\FishingDock0\FishingStand0-Colliders.ply">
+      <Link>Assets\Env\Structures\FishingSettlement\FishingStand0-Colliders.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\FishingDock0\FishingStand0-Scene.ply">
+      <Link>Assets\Env\Structures\FishingSettlement\FishingStand0-Scene.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\FishingDock0\FishingStand0.ply">
+      <Link>Assets\Env\Structures\FishingSettlement\FishingStand0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Structures\FishingDock0\Fountain0-Colliders.ply">
       <Link>Assets\Env\Structures\FishingSettlement\Fountain0-Colliders.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
