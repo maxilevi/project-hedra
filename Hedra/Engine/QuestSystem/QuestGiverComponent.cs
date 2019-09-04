@@ -11,11 +11,11 @@ namespace Hedra.Engine.QuestSystem
     public class QuestGiverComponent : QuestComponent
     {
         private readonly TalkComponent _talk;
-        private readonly MissionDesign _questArchetype;
+        private readonly IMissionDesign _questArchetype;
         private MissionObject _quest;
         private bool _canGiveQuest = true;
         
-        public QuestGiverComponent(IHumanoid Parent, MissionDesign QuestArchetype) : base(Parent)
+        public QuestGiverComponent(IHumanoid Parent, IMissionDesign QuestArchetype) : base(Parent)
         {
             if(Parent.SearchComponent<TalkComponent>() != null)
                 throw new ArgumentException("There can only be 1 talk component");

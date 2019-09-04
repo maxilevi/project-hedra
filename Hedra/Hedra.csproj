@@ -302,6 +302,7 @@
     <Compile Include="Mission\Blocks\MissionBlock.cs" />
     <Compile Include="Mission\Blocks\TalkMission.cs" />
     <Compile Include="Mission\DialogObject.cs" />
+    <Compile Include="Mission\IMissionDesign.cs" />
     <Compile Include="Mission\ItemCollect.cs" />
     <Compile Include="Mission\MissionDesign.cs" />
     <Compile Include="Mission\MissionObject.cs" />

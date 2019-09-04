@@ -112,6 +112,9 @@ namespace Hedra.Rendering.UI
         public override void Dispose()
         {
             base.Dispose();
+            EventDispatcher.UnregisterKeyDown(this);
+            EventDispatcher.UnregisterKeyPress(this);
+            DrawManager.UIRenderer.Remove(_caret);
             UpdateManager.Remove(this);
             _textBar?.Dispose();
             _caret?.Dispose();

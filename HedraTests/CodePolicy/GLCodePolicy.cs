@@ -16,6 +16,7 @@ namespace HedraTests.CodePolicy
         private string _documentation;
         private const float MaxVersion = 3.3f;
         private string _glClassName;
+        private string _debugDrawerClassName;
         /* These functions have multiple versions on the spec, to avoid issues we add them as exceptions. */
         private readonly string[] _exceptions =
         {
@@ -40,6 +41,7 @@ namespace HedraTests.CodePolicy
         {
             _documentation = File.ReadAllText($"{base.SolutionDirectory}/references/OpenTK.xml");
             _glClassName = typeof(GLProvider).Name;
+            _debugDrawerClassName = typeof(BasicGeometry).Name;
         }
 
         [Test]
@@ -50,7 +52,7 @@ namespace HedraTests.CodePolicy
             foreach (var pair in filesAndCalls)
             {
                 var name = Path.GetFileNameWithoutExtension(pair.Key);
-                if(name != _glClassName)
+                if(name != _glClassName && name != _debugDrawerClassName)
                     fails.Add($"GL calls in '{name}.cs' should be in {_glClassName}.cs");
             }
             if(fails.Count > 0) Assert.Fail(string.Join(Environment.NewLine, fails.ToArray()));
@@ -83,7 +85,7 @@ namespace HedraTests.CodePolicy
             var files = Directory.GetFiles($"{SolutionDirectory}/Hedra/", "*.cs", SearchOption.AllDirectories);
             for (var i = 0; i < files.Length; i++)
             {
-                var matches = Regex.Matches(File.ReadAllText(files[i]), @"GL\..*?\(");
+                var matches = Regex.Matches(File.ReadAllText(files[i]), @"GL\.[a-zA-Z0-9]+\(");
                 if (matches.Count > 0)
                 {
                     var matchList = new List<string>();

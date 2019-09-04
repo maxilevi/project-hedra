@@ -170,5 +170,11 @@ namespace Hedra.Engine.Rendering.UI
                 _human.Position = new Vector3(_human.Position.X, Physics.HeightAtPosition(_human.Position), _human.Position.Z);
             }
         }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            UpdateManager.Remove(this);
+        }
     }
 }

@@ -24,7 +24,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 {
     public class FishingPostDesign : SimpleStructureDesign<FishingPost>
     {
-        public override int PlateauRadius => 48;
+        public override int PlateauRadius => RealPlateauRadius;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.FishingPostIcon);
         protected override int StructureChance => 4;//StructureGrid.FishingPostChance;
         protected override CacheItem? Cache => null;

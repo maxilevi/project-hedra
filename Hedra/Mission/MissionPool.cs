@@ -11,11 +11,11 @@ namespace Hedra.Mission
     {
         private const string IsQuestName = "IS_QUEST";
 
-        private static readonly List<MissionDesign> MissionScripts;
+        private static readonly List<IMissionDesign> MissionScripts;
 
         static MissionPool()
         {
-            MissionScripts = new List<MissionDesign>();
+            MissionScripts = new List<IMissionDesign>();
         }
 
         public static void Load()
@@ -29,22 +29,39 @@ namespace Hedra.Mission
             }
         }
 
-        public static MissionDesign Grab(string Name)
+        public static void Load(IMissionDesign[] Designs)
+        {
+            MissionScripts.AddRange(Designs);
+        }
+
+        public static IMissionDesign Grab(string Name)
         {
             return MissionScripts.First(M => M.Name == Name);
         }
 
-        public static MissionDesign Grab(Quests Name)
+        public static IMissionDesign Grab(Quests Name)
         {
             return Grab(Name.ToString());
         }
 
-        public static MissionDesign Random(Vector3 Position, QuestTier Tier = QuestTier.Any)
+        public static IMissionDesign Random(Vector3 Position, QuestTier Tier = QuestTier.Any)
         {
-            var possibilities = MissionScripts.Where(M => M.CanGive(Position) && (Tier == QuestTier.Any || M.Tier <= Tier)).ToArray();
+            var possibilities = MissionScripts.Where(M => M.CanGive(Position)).ToArray();
+            var map = new Dictionary<QuestTier, List<IMissionDesign>>();
+            for (var i = 0; i < possibilities.Length; ++i)
+            {
+                var tier = possibilities[i].Tier;
+                if(!map.ContainsKey(tier))
+                    map[tier] = new List<IMissionDesign>();
+                map[tier].Add(possibilities[i]);
+            }
             if(possibilities.Length == 0)
                 throw new ArgumentOutOfRangeException($"Failed to find quests that meet the given criteria");
-            return possibilities[Utils.Rng.Next(0, possibilities.Length)];
+
+            while (!map.ContainsKey(Tier)) Tier--;
+            return Tier == QuestTier.Any 
+                ? possibilities[Utils.Rng.Next(0, possibilities.Length)] 
+                : map[Tier][Utils.Rng.Next(0, map[Tier].Count)];
         }
 
         public static bool Exists(string Name)
@@ -57,7 +74,7 @@ namespace Hedra.Mission
             return Mission.HasMember(IsQuestName);
         }
 
-        public static MissionDesign[] Designs => MissionScripts.ToArray();
+        public static IMissionDesign[] Designs => MissionScripts.ToArray();
     }
 
     public enum Quests
@@ -69,6 +86,7 @@ namespace Hedra.Mission
     {
         Any,
         Easy,
-        Medium
+        Medium,
+        Hard
     }
 }

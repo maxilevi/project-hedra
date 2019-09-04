@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace HedraTests.QuestSystem
 {
     [TestFixture]
-    public class QuestDesignTest
+    public class MissionDesignTest
     {
         [Test]
         public void TestNamesDoNotConflict()

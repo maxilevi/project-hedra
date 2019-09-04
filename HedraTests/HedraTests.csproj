@@ -142,7 +142,8 @@
     <Compile Include="Player\Skills\Warrior\LearnHammerTest.cs" />
     <Compile Include="Player\Skills\Warrior\ResistanceTest.cs" />
     <Compile Include="Player\Skills\WeaponAttackTest.cs" />
-    <Compile Include="QuestSystem\QuestDesignTest.cs" />
+    <Compile Include="QuestSystem\MissionDesignTest.cs" />
+    <Compile Include="QuestSystem\MissionPoolTest.cs" />
     <Compile Include="Rendering\AnimatorTest.cs" />
     <Compile Include="Rendering\BillboardTest.cs" />
     <Compile Include="Rendering\ChunkMeshBorderDetectorTest.cs" />

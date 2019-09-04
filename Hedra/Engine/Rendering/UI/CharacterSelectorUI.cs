@@ -392,5 +392,11 @@ namespace Hedra.Engine.Rendering.UI
                 _previousHuman.Model.TargetRotation = _previousHuman.Model.LocalRotation;
             }
         }
+        
+        public override void Dispose()
+        {
+            base.Dispose();
+            UpdateManager.Remove(this);
+        }
     }
 }

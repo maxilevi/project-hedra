@@ -6,7 +6,7 @@ using OpenTK;
 
 namespace Hedra.Mission
 {
-    public class MissionDesign
+    public class MissionDesign : IMissionDesign
     {
         private readonly Script _design;
         
