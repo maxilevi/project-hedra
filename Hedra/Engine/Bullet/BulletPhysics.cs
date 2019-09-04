@@ -125,6 +125,19 @@ namespace Hedra.Engine.Bullet
                 }
             }
         }
+
+        public static void ApplyMaskChanges(RigidBody Body)
+        {
+            var information = (PhysicsObjectInformation) Body.UserObject;
+            if (information.IsInSimulation)
+            {
+                lock (_bulletLock)
+                {
+                    RemoveFromSimulation(Body, information);
+                    AddToSimulation(Body, information);
+                }
+            }
+        }
         
         private static void AddOffsetsFromDynamicObjects()
         {

@@ -46,6 +46,8 @@ namespace Hedra.Engine.Bullet
         private readonly RigidBody _body;
         private readonly RigidBody _sensor;
         private readonly AllHitsRayResultCallback _rayResult;
+        private readonly PhysicsObjectInformation _mainInformation;
+        private readonly PhysicsObjectInformation _sensorInformation;
         private Vector3 _gravityDirection;
         private float _speedMultiplier;
         private Vector3 _accumulatedMovement;
@@ -71,7 +73,7 @@ namespace Hedra.Engine.Bullet
                     _body.ActivationState = ActivationState.DisableDeactivation;
                 }
                 _body.Friction = 1;
-                BulletPhysics.Add(_body, new PhysicsObjectInformation
+                BulletPhysics.Add(_body, _mainInformation = new PhysicsObjectInformation
                 {
                     Group = CollisionFilterGroups.CharacterFilter,
                     Mask = CollisionFilterGroups.AllFilter,
@@ -88,7 +90,7 @@ namespace Hedra.Engine.Bullet
                 {
                     _sensor.ActivationState = ActivationState.DisableDeactivation;
                 }
-                BulletPhysics.Add(_sensor, new PhysicsObjectInformation
+                BulletPhysics.Add(_sensor, _sensorInformation = new PhysicsObjectInformation
                 {
                     Group = CollisionFilterGroups.SensorTrigger,
                     Mask = (CollisionFilterGroups.AllFilter & ~CollisionFilterGroups.SensorTrigger),
@@ -197,11 +199,32 @@ namespace Hedra.Engine.Bullet
             set
             {
                 if (value)
-                    _body.CollisionFlags |= CollisionFlags.NoContactResponse;
+                    _body.CollisionFlags &= ~CollisionFlags.NoContactResponse;
                 else
-                    _body.CollisionFlags ^= CollisionFlags.NoContactResponse;
+                    _body.CollisionFlags |= CollisionFlags.NoContactResponse;
             }
         }
+
+        public bool CollidesWithEntities
+        {
+            get => (_mainInformation.Mask & CollisionFilterGroups.CharacterFilter) == CollisionFilterGroups.CharacterFilter;
+            set
+            {
+                if (value)
+                {
+                    _mainInformation.Mask |= CollisionFilterGroups.CharacterFilter;
+                    _sensorInformation.Mask |= CollisionFilterGroups.CharacterFilter;
+                }
+                else
+                {
+                    _mainInformation.Mask &= ~CollisionFilterGroups.CharacterFilter;
+                    _sensorInformation.Mask &= ~CollisionFilterGroups.CharacterFilter;
+                }
+
+                BulletPhysics.ApplyMaskChanges(_body);
+                BulletPhysics.ApplyMaskChanges(_sensor);
+            }
+    }
 
         public bool UsePhysics
         {
@@ -387,8 +410,6 @@ namespace Hedra.Engine.Bullet
 
         public bool CollidesWithStructures { get; set; }
 
-        public bool CollidesWithEntities { get; set; } = true;
-        
         public bool UpdateColliderList { get; set; }
 
         public Vector3 LinearVelocity => _body.LinearVelocity.Compatible();

@@ -42,6 +42,7 @@ namespace Hedra.Engine.Rendering
             LightPosition = new Vector3(-500, 700, 0);
             Shader = Shader.Build("Shaders/Shadows.vert", "Shaders/Shadows.frag");
             ShadowDistance = 1400;
+            SetQuality(GameSettings.ShadowQuality);
         }
 
         public static float ShadowDistance
@@ -60,7 +61,6 @@ namespace Hedra.Engine.Rendering
         public static void Bind()
         {
             _prevFbo = Renderer.FBOBound;
-            if (ShadowFbo == null) ShadowRenderer.SetQuality(GameSettings.ShadowQuality);
             ShadowFbo.Bind();
 
             //ShaderManager.LightPosition = Vector3.TransformNormal(LightPosition.NormalizedFast(), Matrix4.CreateRotationY(SkyManager.SkyModifier * 360 * Mathf.RADIAN));
@@ -94,7 +94,7 @@ namespace Hedra.Engine.Rendering
         {
             Log.WriteLine($"Setting shadow quality to {Quality}");
             ShadowFbo?.Dispose();
-            var size = Vector2.Zero;
+            Vector2 size;
             switch (Quality)
             {
                 case 1:

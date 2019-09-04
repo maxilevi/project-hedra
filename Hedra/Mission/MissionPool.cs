@@ -57,8 +57,8 @@ namespace Hedra.Mission
             }
             if(possibilities.Length == 0)
                 throw new ArgumentOutOfRangeException($"Failed to find quests that meet the given criteria");
-
-            while (!map.ContainsKey(Tier)) Tier--;
+            
+            while (!map.ContainsKey(Tier) && Tier != QuestTier.Any) Tier--;
             return Tier == QuestTier.Any 
                 ? possibilities[Utils.Rng.Next(0, possibilities.Length)] 
                 : map[Tier][Utils.Rng.Next(0, map[Tier].Count)];

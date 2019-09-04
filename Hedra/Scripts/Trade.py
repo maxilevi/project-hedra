@@ -42,8 +42,8 @@ def build_merchant_inventory(item_dict, inventory_size, rng):
         (inventory_size - 5, recipes[rng.Next(0, len(recipes))]),
     ]
     fishing_items = [
-        (3, ItemPool.Grab(FISHING_ROD)),
-        (4, get_infinity_item(BAIT))
+        (4, ItemPool.Grab(FISHING_ROD)),
+        (5, get_infinity_item(BAIT))
     ]
     if rng.Next(0, 2) == 1:
         items += fishing_items
