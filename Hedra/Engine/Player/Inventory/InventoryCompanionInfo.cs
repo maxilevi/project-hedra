@@ -1,3 +1,4 @@
+using System;
 using System.Drawing;
 using System.Text;
 using Hedra.Engine.Events;
@@ -14,7 +15,7 @@ using OpenTK.Input;
 
 namespace Hedra.Engine.Player.Inventory
 {
-    public sealed class InventoryCompanionInfo : InventoryInterfaceItemInfo
+    public sealed class InventoryCompanionInfo : InventoryInterfaceItemInfo, IDisposable
     {
         private static readonly Script Script = Interpreter.GetScript("Companion.py");
         private GUIText Level { get; }
@@ -170,5 +171,10 @@ namespace Hedra.Engine.Player.Inventory
             }
         }
         public Item ShowingCompanion => CurrentItem;
+
+        public void Dispose()
+        {
+            EventDispatcher.UnregisterKeyDown(this);
+        }
     }
 }

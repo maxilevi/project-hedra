@@ -33,18 +33,18 @@ const float bias = 0.005;
 
 void main()
 {
-	if(pass_ditherFogTextureShadows.y == 1 && Visibility < 0.005)
+	if(pass_ditherFogTextureShadows.y == int(1.0) && Visibility < 0.005)
 	{
 		discard;
 	}
 	
-	if(pass_ditherFogTextureShadows.x == 1)
+	if(pass_ditherFogTextureShadows.x == int(1.0))
 	{
 		float d = dot( gl_FragCoord.xy, vec2(.5,.5));
 		if( d-floor(d) < 0.5) discard;
 	}
 
-	float ShadowVisibility = pass_ditherFogTextureShadows.w == 1 && pass_ditherFogTextureShadows.y == 1
+	float ShadowVisibility = pass_ditherFogTextureShadows.w == int(1.0) && pass_ditherFogTextureShadows.y == int(1.0)
 	    ? simple_apply_shadows(Coords, bias)
 	    : 1.0;
     float tex = texture(noiseTexture, base_vertex_position).r * int(pass_ditherFogTextureShadows.z);
@@ -55,7 +55,7 @@ void main()
         inputColor += vec4(Color.xyz, -1.0) * .5;
     }
 
-	if(pass_ditherFogTextureShadows.y == 1)
+	if(pass_ditherFogTextureShadows.y == int(1.0))
 	{
 		vec4 NewColor = mix(sky_color(), inputColor, Visibility);
 		
@@ -77,7 +77,7 @@ void main()
 	}
 	else
 	{
-	    if (pass_ignoreSSAO == 1)
+	    if (pass_ignoreSSAO == int(1.0))
 	    {
 	        OutPosition = vec4(0.0, 0.0, 0.0, 0.0);
         	OutNormal = vec4(0.0, 0.0, 0.0, 0.0);

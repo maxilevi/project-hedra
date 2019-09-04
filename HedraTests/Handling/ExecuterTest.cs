@@ -10,6 +10,7 @@ namespace HedraTests.Handling
         [Test]
         public void TestFILO()
         {
+            Executer.Flush();
             var resultList = new List<object>();
             var object1 = new object();
             var object2 = new object();

@@ -20,17 +20,19 @@ namespace Hedra.Mission
 
         public static void Load()
         {
-            MissionScripts.Clear();
             var scripts = Interpreter.GetScripts("/Missions/");
+            var missions = new List<IMissionDesign>();
             for (var i = 0; i < scripts.Length; ++i)
             {
                 if(IsMission(scripts[i]))
-                    MissionScripts.Add(new MissionDesign(scripts[i]));
+                    missions.Add(new MissionDesign(scripts[i]));
             }
+            Load(missions.ToArray());
         }
 
         public static void Load(IMissionDesign[] Designs)
         {
+            MissionScripts.Clear();
             MissionScripts.AddRange(Designs);
         }
 

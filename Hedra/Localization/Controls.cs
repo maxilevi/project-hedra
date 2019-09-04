@@ -31,7 +31,8 @@ namespace Hedra.Localization
             {"special_item_key", Key.G},
             {"crafting_key", Key.C},
             {"quest_log_key", Key.T},
-            {"open_chat_key", Key.Enter}
+            {"open_chat_key", Key.Enter},
+            {"sprint_key", Key.ShiftLeft}
         };
 
         private static Dictionary<string, Key> Mappings = DefaultMappings;
@@ -54,6 +55,7 @@ namespace Hedra.Localization
         public static Key Crafting => Mappings["crafting_key"];
         public static Key QuestLog => Mappings["quest_log_key"];
         public static Key OpenChat => Mappings["open_chat_key"];
+        public static Key Sprint => Mappings["sprint_key"];
 
         public static void UpdateMapping(string Key, Key New)
         {

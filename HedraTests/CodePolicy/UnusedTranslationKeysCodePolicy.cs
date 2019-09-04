@@ -8,6 +8,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
+using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Game;
 using NUnit.Framework;
 
@@ -30,7 +31,7 @@ namespace HedraTests.CodePolicy
         {
             GameSettings.TestingMode = true;
             AbilityTreeLoader.LoadModules(GameLoader.AppPath);
-            var mobNames = MobLoader.LoadModules(GameLoader.AppPath).Select(K => K.Name.ToLowerInvariant()).ToArray();
+            var mobNames = MobLoader.LoadModules(GameLoader.AppPath).Select(K => (K.DisplayName ?? K.Name).ToLowerInvariant()).ToArray();
             var skillTreesNames = AbilityTreeLoader.Instance.Names.Select(S => S.ToLowerInvariant()).ToArray();
             Keys = IniParser.Parse(File.ReadAllText($"{GameLoader.AppPath}/Translations/English.po"))
                 .Select(P => P.Key)

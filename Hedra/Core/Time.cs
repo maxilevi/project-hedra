@@ -36,7 +36,8 @@ namespace Hedra.Core
 
         public static void RegisterThread()
         {
-            Providers.Add(Thread.CurrentThread.ManagedThreadId, new TimeProvider());
+            if(!Providers.ContainsKey(Thread.CurrentThread.ManagedThreadId))
+                Providers.Add(Thread.CurrentThread.ManagedThreadId, new TimeProvider());
         }
 
         public static TimeProvider GetProvider(int Id)

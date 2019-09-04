@@ -67,6 +67,7 @@ namespace Hedra.Engine.Player
         public bool IsCasting { get; set; }
         public bool IsSwimming { get; set; }
         public bool IsRolling { get; set; }
+        public bool IsSprinting { get; set; }
         public bool IsRiding { get; set; }
         public bool IsTied { get; set; }
         public bool IsClimbing { get; set; }

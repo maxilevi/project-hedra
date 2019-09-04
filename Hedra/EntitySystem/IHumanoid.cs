@@ -22,6 +22,7 @@ namespace Hedra.EntitySystem
         IPlayerInventory Inventory { get; }
         int ConsecutiveHits { get; }
         bool IsAttacking { get; set; }
+        bool IsSprinting { get; }
         bool IsEating { get; set; }
         bool IsCasting { get; set; }
         bool IsSwimming { get; set; }

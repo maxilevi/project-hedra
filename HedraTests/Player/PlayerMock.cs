@@ -32,7 +32,6 @@ namespace HedraTests.Player
 {
     public class PlayerMock : IPlayer
     {
-        private bool _canCastSkill;
         public event OnHitLandedEventHandler OnHitLanded;
         public SimpleMessageDispatcherMock MessageMock => MessageDispatcher as SimpleMessageDispatcherMock;
         public SimpleCameraMock CameraMock => View as SimpleCameraMock;
@@ -221,11 +220,6 @@ namespace HedraTests.Player
         public float MaxMana { get; set; } = 100;
         public float Health { get; set; }
         public float Mana { get; set; } = 100;
-        public bool CanCastSkill()
-        {
-            throw new NotImplementedException();
-        }
-
         public bool InUpdateRange { get; }
         public bool IsActive { get; set; }
         public bool IsBoss { get; set; }
@@ -272,6 +266,7 @@ namespace HedraTests.Player
         public int ConsecutiveHits { get; }
         public bool IsAttacking { get; set; }
         public bool IsStuck { get; set; }
+        public bool IsSprinting { get; }
         public bool IsEating { get; set; }
         public bool IsCasting { get; set; }
         public bool IsSwimming { get; set; }
@@ -473,7 +468,7 @@ namespace HedraTests.Player
             throw new NotImplementedException();
         }
 
-        bool ISkillUser.CanCastSkill => _canCastSkill;
+        public bool CanCastSkill => true;
         public void SetSkillPoints(Type Skill, int Points)
         {
             AbilityTree.SetPoints(Skill, Points);

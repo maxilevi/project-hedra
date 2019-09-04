@@ -116,7 +116,7 @@ void main()
 	InNorm = SurfaceNormal;
 	raw_color = linear_color;
 	
-	if(DitherFogTextureShadows.w == 1)
+	if(DitherFogTextureShadows.w == int(1.0))
 	{
 		float ShadowDist = DistanceToCamera - (ShadowDistance - ShadowTransition);
 		ShadowDist /= ShadowTransition;

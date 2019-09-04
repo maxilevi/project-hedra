@@ -315,22 +315,26 @@ namespace Hedra.Engine.Events
                 UnregisterKeyUp(keyUpHandlers[i]);
             }
 
-            foreach (var key in KeyPressedHandlers.Keys)
+            var keyPressed = KeyPressedHandlers.Keys.ToArray();
+            foreach (var key in keyPressed)
             {
                 UnregisterKeyPress(key);
             }
-            
-            foreach (var key in MouseMoveHandlers.Keys)
+
+            var mouseMoved = MouseMoveHandlers.Keys.ToArray();
+            foreach (var key in mouseMoved)
             {
                 UnregisterMouseMove(key);
             }
-            
-            foreach (var key in MouseButtonDownHandlers.Keys)
+
+            var mouseButtonDown = MouseButtonDownHandlers.Keys.ToArray();
+            foreach (var key in mouseButtonDown)
             {
                 UnregisterMouseDown(key);
             }
-            
-            foreach (var key in MouseButtonUpHandlers.Keys)
+
+            var mouseButtonUp = MouseButtonUpHandlers.Keys.ToArray();
+            foreach (var key in mouseButtonUp)
             {
                 UnregisterMouseUp(key);
             }

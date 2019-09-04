@@ -34,6 +34,7 @@ namespace HedraTests.EntitySystem
         public override void Setup()
         {
             base.Setup();
+            _damageComponent = null;
             _maxHealth = 100;
             var modelMock = new Mock<BaseUpdatableModel>();
             modelMock.SetupProperty(M => M.Tint);
@@ -87,8 +88,9 @@ namespace HedraTests.EntitySystem
         public void TestIgnorePredicates()
         {
             var originalHealth = _entity.Health;
-            _damageComponent.Ignore(E => E == null);
-            _damageComponent.Damage(10, null, out var xp, false, false);
+            var dummy = new Entity();
+            _damageComponent.Ignore(E => E == dummy);
+            _damageComponent.Damage(10, dummy, out var xp, false, false);
             Assert.AreEqual(originalHealth, _entity.Health);
             Assert.False(_damageComponent.HasBeenAttacked);
         }
@@ -213,7 +215,7 @@ namespace HedraTests.EntitySystem
             _entity.Health = 5;
             _damageComponent.XpToGive = 10;
             _damageComponent.Damage(10, null, out var xp, false, false);
-            Assert.AreEqual(10, xp);
+            Assert.AreEqual(10 * Balancer.XPObtainedMultiplier, xp);
         }
         
         [Test]

@@ -13,8 +13,6 @@ namespace HedraTests.CodePolicy
     {
         private readonly string[] _exceptions =
         {
-            "Hedra.Engine.EntitySystem.BossSystem",
-            "Hedra.Engine.EntitySystem"
         };
         
         [Test]
@@ -56,7 +54,7 @@ namespace HedraTests.CodePolicy
             var k = 0;
             exceptionUsed.ToList().ForEach(B =>
             {
-                if(!B) Assert.Fail($"Exception {_exceptions[k]} is not used anymore.");
+                if(!B) Assert.Fail($"Exception {_exceptions[k]} is not needed anymore.");
                 k++;
             });
         }

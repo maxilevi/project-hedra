@@ -22,11 +22,17 @@ namespace Hedra.Engine.Management
         /// <summary>
         /// Executes the give method on the main thread after a frame has passed.
         /// </summary>
-         public static void ExecuteOnMainThread(Action Func)
-         {
-             lock (Lock)
+        public static void ExecuteOnMainThread(Action Func)
+        {
+            lock (Lock)
                 StandBy.Add(new InvokerCall(Func));
-         }
+        }
+
+        public static void Flush()
+        {
+            lock (Lock)
+                StandBy.Clear();
+        }
 
         public static void Update()
         {

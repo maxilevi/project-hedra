@@ -3,13 +3,16 @@ using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Hedra;
+using Hedra.Core;
 using Hedra.Engine;
+using Hedra.Engine.Bullet;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
+using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Engine.Rendering.Core;
@@ -43,6 +46,7 @@ namespace HedraTests
         protected static void MockEngine()
         {
             GameSettings.TestingMode = true;
+            Time.RegisterThread();
             World.Provider = new SimpleWorldProviderMock();
             AssetManager.Provider = new DummyAssetProvider();
             Graphics2D.Provider = new SimpleTexture2DProviderMock();
@@ -58,6 +62,8 @@ namespace HedraTests
             _translationsLoaded = true;
             GameSettings.Width = 1920;
             GameSettings.Height = 1080;
+            BulletPhysics.Load();
+            BackgroundUpdater.Load();
         }
 
         [TearDown]

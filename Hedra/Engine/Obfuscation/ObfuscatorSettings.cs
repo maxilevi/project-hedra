@@ -10,7 +10,6 @@
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.ItemSystem.Templates'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.StructureSystem.VillageSystem.Templates'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.ClassSystem.Templates'):-rename")]
-[assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Engine.Obfuscation'):-rename")]
 [assembly: Obfuscation(Exclude = false, Feature = "namespace('Hedra.Crafting.Templates'):-rename")]
 
 /* API namespaces */

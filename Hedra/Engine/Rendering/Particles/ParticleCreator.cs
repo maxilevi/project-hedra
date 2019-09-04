@@ -21,7 +21,8 @@ namespace Hedra.Engine.Rendering.Particles
         public static VBO<ushort> IndicesVBO { get; private set; }
         public static VBO<Vector3> NormalsVBO { get; private set; }
         
-        public static void Load(){
+        public static void Load()
+        {
             if(VerticesVBO == null && IndicesVBO == null && NormalsVBO == null){
                 VertexData Data = AssetManager.PLYLoader("Assets/Env/Particle.ply", Vector3.One,Vector3.Zero, Vector3.Zero, true);
                 ushort[] NewIndices = new ushort[Data.Indices.Count];
