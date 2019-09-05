@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Game;
 using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Rendering.Core
@@ -27,7 +28,7 @@ namespace Hedra.Engine.Rendering.Core
         public uint Create()
         {
             var id = Renderer.Provider.GenTexture();
-            if (!Program.IsDummy)
+            if (!Program.IsDummy && !GameSettings.TestingMode)
             {
                 TextureRegistry.Register(id);
             }
@@ -37,7 +38,7 @@ namespace Hedra.Engine.Rendering.Core
         public void Bind(TextureTarget Target, uint Id)
         {
 #if DEBUG
-            if (!Program.IsDummy && Target == TextureTarget.Texture2D && !TextCache.Exists(Id) && !TextureRegistry.IsKnown(Id))
+            if (!Program.IsDummy && !GameSettings.TestingMode && Target == TextureTarget.Texture2D && !TextCache.Exists(Id) && !TextureRegistry.IsKnown(Id))
             {
             //    var a = TextureRegistry.IsKnown(Id);
                 //throw new ArgumentOutOfRangeException($"Found an unregistered texture '{Id}' that is being used.");

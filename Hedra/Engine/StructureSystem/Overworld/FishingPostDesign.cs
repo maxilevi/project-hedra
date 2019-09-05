@@ -334,7 +334,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 if (IsWater(edge, Biome)) continue;
                 for (var j = 0; j < Chunk.Width; j += (int) Chunk.BlockSize)
                 {
-                    if (IsWater(Offset.ToVector3() + j * directions[i], Biome)) continue;
+                    if (!IsShore(Offset.ToVector3() + j * directions[i], Biome)) continue;
                     Position = Offset.ToVector3() + directions[i] * j;
                     return true;
                 }
@@ -342,10 +342,15 @@ namespace Hedra.Engine.StructureSystem.Overworld
             Position = Vector3.Zero;
             return false;
         }
+
+        private static bool IsShore(Vector3 TargetPosition, Region Biome)
+        {
+            return (Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _) >= BiomePool.SeaLevel - 1f);
+        }
         
         private static bool IsWater(Vector3 TargetPosition, Region Biome)
         {
-            return (Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _) < BiomePool.SeaLevel-1/* || Math.Abs(LandscapeGenerator.River(TargetPosition.Xz)) > 0.005f*/);
+            return (Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _) < BiomePool.SeaLevel - 2f/* || Math.Abs(LandscapeGenerator.River(TargetPosition.Xz)) > 0.005f*/);
         }
         
         private static Vector3 FishingPostScale => Vector3.One * 11f;

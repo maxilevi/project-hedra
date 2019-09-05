@@ -77,8 +77,13 @@ namespace Hedra.Crafting
 
         public static Item GetOutputFromRecipe(Item Recipe)
         {
+            return GetOutputFromRecipe(Recipe, Unique.RandomSeed());
+        }
+        
+        public static Item GetOutputFromRecipe(Item Recipe, int Seed)
+        {
             var output = Recipe.RawAttribute("Output");
-            if (output is string name) return ItemPool.Grab(name, Unique.RandomSeed());
+            if (output is string name) return ItemPool.Grab(name, Seed);
             var asJObject = Recipe.GetAttribute<JObject>("Output");
             var item = ItemPool.Grab((string)asJObject["Name"]);
             var amount = (int)asJObject["Amount"];
@@ -128,7 +133,7 @@ namespace Hedra.Crafting
         private void UpdateRecipes()
         {
             _recipes = _recipeNames.Select(R => ItemPool.Grab(R)).ToArray(); 
-            _recipeOutputs = _recipes.Select(GetOutputFromRecipe).ToArray();
+            _recipeOutputs = _recipes.Select(R => GetOutputFromRecipe(R)).ToArray();
         }
         
         public string[] RecipeNames => _recipeNames.ToArray();

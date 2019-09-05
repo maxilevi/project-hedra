@@ -23,12 +23,13 @@ namespace HedraTests.Game
             AssertComplies(Item);
         }
 
-        public void TestItemPriceWhenInfinite(Item Item)
+        [Test]
+        public void TestItemPriceWhenInfinite()
         {
             var berry = ItemPool.Grab(ItemType.Berry);
             var price = _trader.ItemPrice(berry);
             berry.SetAttribute(CommonAttributes.Amount, int.MaxValue);
-            Assert.Equals(price, _trader.ItemPrice(berry));
+            Assert.AreEqual(price, _trader.ItemPrice(berry));
         }
 
         private void AssertComplies(Item Item)
@@ -81,7 +82,7 @@ namespace HedraTests.Game
 
                 if (Item.IsRecipe)
                 {
-                    return CalculatePrice(CraftingInventory.GetOutputFromRecipe(Item));
+                    return CalculatePrice(CraftingInventory.GetOutputFromRecipe(Item, 1));
                 }
                 price *= (int) (Item.Tier+1);
             }

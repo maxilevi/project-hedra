@@ -25,30 +25,27 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var rng = new Random( (int)(position.X / 11 * (position.Z / 13)) );
             var originalModel = CacheManager.GetModel(CacheItem.Obelisk);
             var model = originalModel.ShallowClone();
-            model.Scale(scale);
-
-            var collisionBox = new Box(new Vector3(0, 0, 0), new Vector3(2.4f, 8, 2.4f) * scale);
-            collisionBox += new Box(position, position);
-            collisionBox += new Box(new Vector3(0, collisionBox.Max.Y - collisionBox.Min.Y, 0) * .5f, new Vector3(0, collisionBox.Max.Y - collisionBox.Min.Y, 0) * .5f);
-
-            var Base = new Vector3(collisionBox.Max.X - collisionBox.Min.X, collisionBox.Max.Y - collisionBox.Min.Y, collisionBox.Max.Z - collisionBox.Min.Z) * .5f;
-            collisionBox -= new Box(Base, Base);
-            obelisk.Type = (ObeliskType) Utils.Rng.Next(0, (int)ObeliskType.MaxItems);
-
-            //data.VariateColors(0.05f, rng);
+            var shapes = CacheManager.GetShape(originalModel).DeepClone().ToArray();
+            
             var typeColor = Utils.VariateColor(Obelisk.GetObeliskColor(obelisk.Type), 15, rng);
-
             var darkColor = Obelisk.GetObeliskStoneColor(rng);
 
+            model.Scale(scale);
             model.Color(new Vector4(.2f, .2f, .2f, 1f), darkColor);
-            //data.Color(new Vector4(.4f, .4f, .4f, 1f), typeColor);
             model.Color(new Vector4(.6f, .6f, .6f, 1f), Obelisk.GetObeliskStoneColor(rng));
-
             model.Translate(position);
             model.Extradata.Clear();
             model.FillExtraData(WorldRenderer.NoHighlightFlag);
 
-            Structure.AddCollisionShape(collisionBox.ToShape());
+            for (var i = 0; i < shapes.Length; ++i)
+            {
+                shapes[i].Transform(Matrix4.CreateScale(scale));
+                shapes[i].Transform(Matrix4.CreateTranslation(position));
+            }
+            
+            obelisk.Type = (ObeliskType) Utils.Rng.Next(0, (int)ObeliskType.MaxItems);
+
+            Structure.AddCollisionShape(shapes);
             Structure.AddStaticElement(model);
         }
 

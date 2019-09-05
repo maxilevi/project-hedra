@@ -23,6 +23,7 @@ namespace HedraTests.Rendering
         public void TestGeometryShadersAreDisabledIfFailure()
         {
             var glMock = new Mock<IGLProvider>();
+            glMock.Setup(M => M.CreateProgram()).Returns(1);
             glMock.Setup(M => M.UseProgram(It.IsAny<uint>())).Throws(new RenderException("Test Exception"));
             Renderer.Provider = glMock.Object;
             
@@ -65,6 +66,8 @@ namespace HedraTests.Rendering
             var timesCalled = 0;
             glMock.Setup(M => M.MultiDrawElements(It.IsAny<PrimitiveType>(), It.IsAny<int[]>(),
                     It.IsAny<DrawElementsType>(), It.IsAny<IntPtr[]>(), It.IsAny<int>())).Callback( () => ++timesCalled);
+
+            glMock.Setup(M => M.GetInteger(It.IsAny<GetPName>())).Returns(Shader.Passthrough.ShaderId);
             
             Renderer.Provider = glMock.Object;
             CompatibilityManager.Load();

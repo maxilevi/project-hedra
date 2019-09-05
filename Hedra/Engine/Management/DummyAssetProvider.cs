@@ -76,25 +76,18 @@ namespace Hedra.Engine.Management
 
         public VertexData LoadPLYWithLODs(string Filename, Vector3 Scale)
         {
-            return new VertexData()
-            {
-                Vertices = new List<Vector3>(new[] {new Vector3()}),
-                Colors = new List<Vector4>(new[] {new Vector4()}),
-                Normals = new List<Vector3>(new[] {new Vector3()}),
-                Indices = new List<uint>(new[] {(uint) 0}),
-                Extradata = new List<float>(new[] {1f}),
-            };
+            return PLYLoader(Filename, Scale, Vector3.Zero, Vector3.Zero);
         }
 
         public VertexData PLYLoader(string File, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true)
         {
             return new VertexData()
             {
-                Vertices = new List<Vector3>(new[] {new Vector3()}),
-                Colors = new List<Vector4>(new[] {new Vector4()}),
-                Normals = new List<Vector3>(new[] {new Vector3()}),
-                Indices = new List<uint>(new[] {(uint) 0}),
-                Extradata = new List<float>(new[] {1f}),
+                Vertices = new List<Vector3>(new[] {new Vector3(), new Vector3(), new Vector3()}),
+                Colors = new List<Vector4>(new[] {new Vector4(), new Vector4(), new Vector4()}),
+                Normals = new List<Vector3>(new[] {new Vector3(), new Vector3(), new Vector3()}),
+                Indices = new List<uint>(new[] {(uint) 0, (uint)1, (uint)2}),
+                Extradata = new List<float>(new[] {1f, 1f, 1f}),
             };
         }
 

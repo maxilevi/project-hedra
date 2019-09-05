@@ -7,6 +7,7 @@ namespace HedraTests.Player
 {
     public class SimpleCameraMock : ICamera
     {
+        public bool AllowClipping { get; set; }
         public float TargetPitch { get; set; }
         public float TargetYaw { get; set; }
         public float MaxDistance { get; set; }

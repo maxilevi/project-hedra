@@ -45,6 +45,7 @@ namespace Hedra.Engine.Player
         public bool CaptureMovement { get; set; }
         public float AddedDistance { get; set; }
         public bool LockMouse { get; set; }
+        public bool AllowClipping { get; set; }
         public Matrix4 ModelViewMatrix { get; private set; }
         public Func<Vector3> PositionDelegate { get; set; }
         private float _xDelta;
@@ -221,6 +222,8 @@ namespace Hedra.Engine.Player
 
         private bool IsColliding(Vector3 Position, out float NewDistance)
         {
+            NewDistance = 0;
+            if (AllowClipping) return false;
             BulletPhysics.ResetCallback(_callback);
             _callback.CollisionFilterMask = (int)(CollisionFilterGroups.StaticFilter | BulletPhysics.TerrainFilter);
             var src = Position.Compatible();

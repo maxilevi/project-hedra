@@ -45,7 +45,7 @@ void main()
 	OutColor = NewColor;
 	OutColor.a = OutColor.a * (
 		ObjectDepth > 0.05 
-			? clamp((WaterDepth / 6.0 / Smoothness) * .15, 0.0, 1.0)
+			? clamp((WaterDepth / 6.0 / Smoothness) * .25, 0.0, 1.0)
 			: 1.0
 	);
 	

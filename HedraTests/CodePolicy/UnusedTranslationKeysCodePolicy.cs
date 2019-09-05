@@ -25,6 +25,11 @@ namespace HedraTests.CodePolicy
             ".+companion_desc",
             ".+companion_name",
             ".+companion_skill",
+            "quest_craft_take_item",
+            "quest_pickup_item_short",
+            "quest_pickup_default_item_description",
+            "quest_pickup_chest_description",
+            "quest_pickup_get_item_description"
         };
 
         private void LoadKeys(out string[] Keys, out string[] SourceFiles)

@@ -1,5 +1,10 @@
-﻿using Hedra.Engine.Game;
+﻿using System;
+using System.Collections.Generic;
+using Hedra.Core;
+using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
+using Hedra.Engine.ItemSystem.Templates;
+using Hedra.Engine.Management;
 using Hedra.Items;
 using NUnit.Framework;
 
@@ -8,15 +13,18 @@ namespace HedraTests.ItemSystem
     [TestFixture]
     public class ItemTest : BaseTest
     {
+        private Random _rng;
         public ItemTest()
         {
-            ItemLoader.LoadModules(GameLoader.AppPath);
+            _rng = new Random();
         }
-       
-        [Test]
-        public void TestItemSerializationIsEqual()
+        
+        [TestCaseSource(nameof(All))]
+        public void TestItemSerializationIsEqual(ItemTemplate Template)
         {
-            var item = ItemPool.Grab(new ItemPoolSettings(ItemTier.Divine));
+            var item = ItemPool.Grab(Template.Name, Unique.RandomSeed());
+            if(item.HasAttribute(CommonAttributes.Amount))
+                item.SetAttribute(CommonAttributes.Amount, _rng.Next(0, int.MaxValue));
             var newItem = Item.FromArray(item.ToArray());
             
             AssertAreSame(item, newItem);
@@ -40,5 +48,16 @@ namespace HedraTests.ItemSystem
                     $"Expected '{attributesA[i].Name}' to have {attributesA[i].Value} but was {attributesB[i].Value}");
             }
         }
+        
+        private static IEnumerable<ItemTemplate> All()
+        {
+            AssetManager.Provider = new DummyAssetProvider();
+            ItemLoader.LoadModules(GameLoader.AppPath);
+            var templates = ItemLoader.Templater.Templates;
+            for (var i = 0; i < templates.Length; i++)
+            {
+                yield return templates[i];
+            }
+        } 
     }
 }

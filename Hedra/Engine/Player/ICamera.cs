@@ -7,6 +7,7 @@ namespace Hedra.Engine.Player
 {
     public interface ICamera
     {
+        bool AllowClipping { get; set; }
         float TargetPitch { get; set; }
         float TargetYaw { get; set; }
         float MaxDistance { get; set; }

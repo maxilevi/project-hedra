@@ -381,6 +381,7 @@ namespace Hedra.Engine.Player.MapSystem
                     this._player.View.MaxPitch = -0.2f;
                     this._player.View.MinPitch = -1.4f;
                     this._player.View.WheelSpeed = 5f;
+                    this._player.View.AllowClipping = true;
                     this._targetHeight = _player.Position.Y + 1024f;
                     this._height = _targetHeight;
                     this._targetTime = 12000;
@@ -395,6 +396,7 @@ namespace Hedra.Engine.Player.MapSystem
                     this._player.Minimap.Show = true;
                     this._targetSize = 0f;
                     this._targetHeight = 0;
+                    this._player.View.AllowClipping = false;
                     this._targetTime = SkyManager.PeekTime();
                     TaskScheduler.When(() => _height < Camera.DefaultDelegate().Y, delegate
                     {

@@ -7,7 +7,7 @@ namespace Hedra.Items
 {
     public static class Trader
     {
-        public static float Price(Item Item)
+        public static float SingleItemPrice(Item Item)
         {
             if (Item == null) return 0;
             var price = 1f;
@@ -46,7 +46,10 @@ namespace Hedra.Items
                 }
 
                 if (Item.IsRecipe)
-                    return Price(CraftingInventory.GetOutputFromRecipe(Item));
+                {
+                    var output = CraftingInventory.GetOutputFromRecipe(Item, 1);
+                    return SingleItemPrice(output) * (output.HasAttribute(CommonAttributes.Amount) ? output.GetAttribute<int>(CommonAttributes.Amount) : 1);
+                }
 
                 price *= (int) (Item.Tier + 1);
             }

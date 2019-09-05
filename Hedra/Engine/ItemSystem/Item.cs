@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using Hedra.Core;
 using Hedra.Engine.ItemSystem.ArmorSystem;
 using Hedra.Engine.ItemSystem.Templates;
 using Hedra.Items;
@@ -145,52 +146,24 @@ namespace Hedra.Engine.ItemSystem
         {
             var savedTemplate = ItemTemplate.FromJson(Encoding.ASCII.GetString(Array));
             if (savedTemplate == null || !ItemPool.Exists(savedTemplate.Name)) return null;
-            var defaultTemplate = ItemLoader.Templater[savedTemplate.Name];
-            savedTemplate.Model = defaultTemplate.Model;
-            savedTemplate.Description = defaultTemplate.Description;
-            savedTemplate.DisplayName = defaultTemplate.DisplayName;
-            savedTemplate.Tier = defaultTemplate.Tier;
-            var item = FromTemplate(savedTemplate);
-            var newItem = ItemPool.Grab(savedTemplate.Name);
-            if (item.HasAttribute(CommonAttributes.Amount)) return UpdateAttributes(item, newItem);
-            if (HasInformation(item)) return PersistAttributes(item, newItem);
-            
-            if (!item.HasAttribute(CommonAttributes.Seed)) item.SetAttribute(CommonAttributes.Seed, Utils.Rng.Next(int.MinValue, int.MaxValue), true);
-
-            newItem.SetAttribute(CommonAttributes.Seed, item.GetAttribute<int>(CommonAttributes.Seed), true);
-            return ItemPool.Randomize(newItem, new Random(newItem.GetAttribute<int>(CommonAttributes.Seed)));           
+            var savedItem = FromTemplate(savedTemplate);
+            var item = ItemPool.Grab(savedItem.Name);
+            CopyAttributes(savedItem, item);
+            if (!item.HasAttribute(CommonAttributes.Seed)) 
+                item.SetAttribute(CommonAttributes.Seed, Unique.RandomSeed(), true);
+            return ItemPool.Randomize(item, new Random(item.GetAttribute<int>(CommonAttributes.Seed)));
         }
 
-        private static Item PersistAttributes(Item Item, Item NewItem)
+        private static Item CopyAttributes(Item SavedItem, Item NewItem)
         {
-            var newItem = ItemPool.Grab(Item.Name);
-            var attributes = Item.GetAttributes();
+            var attributes = SavedItem.GetAttributes();
             for (var i = 0; i < attributes.Length; ++i)
             {
-                if (attributes[i].Persist)
-                    newItem.SetAttribute(attributes[i].Name, attributes[i].Value, attributes[i].Hidden, attributes[i].Display, attributes[i].Persist);
+                NewItem.SetAttribute(attributes[i].Name, attributes[i].Value, attributes[i].Hidden, attributes[i].Display, attributes[i].Persist);
             }
-            return newItem;
-        }
-        
-        private static bool HasInformation(Item Item)
-        {
-            var attributes = Item.GetAttributes();
-            for (var i = 0; i < attributes.Length; ++i)
-            {
-                if (attributes[i].Persist)
-                    return true;
-            }
-            return false;
+            return NewItem;
         }
 
-        private static Item UpdateAttributes(Item Item, Item NewItem)
-        {
-            var amount = Item.GetAttribute<int>(CommonAttributes.Amount);
-            var newItem = ItemPool.Grab(Item.Name);
-            newItem.SetAttribute(CommonAttributes.Amount, amount);
-            return newItem;
-        }
 
         public byte[] ToArray()
         {

@@ -9,6 +9,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Hedra.Core;
 using Hedra.Engine.Management;
+using Hedra.Game;
 using IronPython.Runtime;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
@@ -35,6 +36,7 @@ namespace Hedra.Engine.Rendering.Core
         public static bool Exists<T>(T[] Data, int SizeInBytes, VertexAttribPointerType PointerType, BufferTarget BufferTarget, BufferUsageHint Hint, out uint Id)
         {
             Id = 0;
+            if (GameSettings.TestingMode) return true;
             var hash = Hash(Data, SizeInBytes, PointerType, BufferTarget, Hint);
             if (_hashedReferences.ContainsKey(hash))
             {

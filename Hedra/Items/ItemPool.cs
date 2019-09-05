@@ -171,7 +171,7 @@ namespace Hedra.Items
         public static Item Grab(string Name, int Seed)
         {
             var item = Item.FromTemplate(ItemLoader.Templater[Name]);
-            item.SetAttribute(CommonAttributes.Seed, Seed, true);
+            item.SetAttribute(CommonAttributes.Seed.ToString(), Seed, true, null, true);
             return ItemPool.Randomize(item, new Random(Seed));
         }
 

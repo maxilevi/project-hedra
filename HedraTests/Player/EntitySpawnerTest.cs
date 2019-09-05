@@ -64,9 +64,18 @@ namespace HedraTests.Player
             worldMock.Setup(W => W.Entities).Returns( () => new ReadOnlyCollection<IEntity>(entities));
             worldMock.Setup(W => W.GetHighestY(It.IsAny<int>(), It.IsAny<int>())).Returns( () => _currentHeight);
             worldMock.Setup(W => W.GetHighestBlockAt(It.IsAny<int>(), It.IsAny<int>())).Returns( () => _spawningBlock);
-            var defaultRegion = new Region();
-            defaultRegion.Colors = new RegionColor(1, new NormalBiomeColors());
-            defaultRegion.Generation = new RegionGeneration(1, new SimpleGenerationDesignMock(() => 50));
+            var defaultRegion = new Region
+            {
+                Mob = new RegionMob(1, new NormalBiomeMobDesign
+                {
+                    Settings =
+                    {
+                        MiniBosses = new MiniBossTemplate[0]
+                    }
+                }),
+                Colors = new RegionColor(1, new NormalBiomeColors()),
+                Generation = new RegionGeneration(1, new SimpleGenerationDesignMock(() => 50))
+            };
             var biomePoolMock = new Mock<IBiomePool>();
             biomePoolMock.Setup(B => B.GetRegion(It.IsAny<Vector3>())).Returns(defaultRegion);
             worldMock.Setup(W => W.BiomePool).Returns(biomePoolMock.Object);

@@ -18,6 +18,7 @@ namespace HedraTests.PhysicsSystem
         }
         
         [Test]
+        [Ignore("We aren't sure of what we should test.'")]
         public void TestOffsetsAreCalculatedCorrectly()
         {
             var width = Chunk.Width;

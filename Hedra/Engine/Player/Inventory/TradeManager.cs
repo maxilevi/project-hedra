@@ -40,7 +40,7 @@ namespace Hedra.Engine.Player.Inventory
             var amount = Item.HasAttribute(CommonAttributes.Amount) ? Item.GetAttribute<int>(CommonAttributes.Amount) : 1;
             if(amount != int.MaxValue)
                 price *= amount;*/
-            return (int) (Trader.Price(Item) * GetPriceMultiplier(Item));
+            return (int) (Trader.SingleItemPrice(Item) * GetPriceMultiplier(Item));
         }
 
         protected virtual float GetPriceMultiplier(Item Item)

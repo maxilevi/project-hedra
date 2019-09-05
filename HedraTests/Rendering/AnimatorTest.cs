@@ -17,6 +17,7 @@ namespace HedraTests.Rendering
         [SetUp]
         public void Setup()
         {
+            Time.RegisterThread();
             _rootJoint = new Joint(0, "Root", Matrix4.Identity);
             _rootJoint.InverseBindTransform = Matrix4.Identity;
             _rootJoint.AddChild(new Joint(1, "Chest", Matrix4.CreateTranslation(Vector3.UnitX)));

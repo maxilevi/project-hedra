@@ -219,7 +219,7 @@ namespace Hedra.Engine.Rendering.Core
 
         public virtual uint GenTexture()
         {
-            return 1;
+            return 0;
         }
 
         public virtual void GenVertexArrays(int N, out uint V1)
