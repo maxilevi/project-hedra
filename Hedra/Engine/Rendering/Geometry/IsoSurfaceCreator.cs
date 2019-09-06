@@ -164,28 +164,9 @@ namespace Hedra.Engine.Rendering.Geometry
             return (output.X * precision) + output.Y;
         }
         
-        private static bool ShouldMove(Vector3 Vertex, Vector3 V0, Vector3 V1, Vector3 V2, Vector3 V3, GridCell Cell){
-            return true;
-            
-            if(Vertex == V3)
-                return Cell.Type[1] == BlockType.Water && Cell.Type[3] == BlockType.Water && Cell.Type[2] == BlockType.Water;
-            if(Vertex == V1)
-                return Cell.Type[5] == BlockType.Water && Cell.Type[1] == BlockType.Water && Cell.Type[7] == BlockType.Water;
-            if(Vertex == V2)
-                return Cell.Type[3] == BlockType.Water && Cell.Type[4] == BlockType.Water && Cell.Type[0] == BlockType.Water;
-            if(Vertex == V0)
-                return Cell.Type[4] == BlockType.Water && Cell.Type[5] == BlockType.Water && Cell.Type[6] == BlockType.Water; 
-            
+        private static bool ShouldMove(Vector3 Vertex, Vector3 V0, Vector3 V1, Vector3 V2, Vector3 V3, GridCell Cell)
+        {
             return true;
         }
-        
-        private static Vector4 CodeColor(Vector4 Color){
-            return new Vector4(Color.X, Color.Y, Color.Z, .7f);
-        }
-        
-        private static Vector4 OffsetColor(Vector4 Color, float Offset){
-            return new Vector4(Color.X + Offset, Color.Y + Offset, Color.Z + Offset, Color.W);
-        }
-        
     }
 }
