@@ -42,6 +42,7 @@ namespace Hedra.Engine.Player
         public const int MaxLevel = 99;
         public const int MaxConsecutiveHits = 45;
         public const float DefaultDodgeCost = 25;
+        public const float SprintingSpeed = 0.5f;
         
         public event OnAttackEventHandler AfterAttack;
         public event OnAttackEventHandler BeforeAttack;
@@ -97,6 +98,7 @@ namespace Hedra.Engine.Player
         private readonly Timer _consecutiveHitsTimer;
         private DamageComponent _damageHandler;
         private bool _ignoreHitCombo;
+        private bool _wasSprinting;
 
         #region Propierties ( MaxMana, MaxHealth, MaxXp)
 
@@ -183,6 +185,13 @@ namespace Hedra.Engine.Player
                     Health += HealthRegen * Time.IndependentDeltaTime;
                 Mana += ManaRegen * Time.IndependentDeltaTime;
             }
+            if (IsSprinting)
+            {
+                if(!_wasSprinting)
+                    AddBonusSpeedWhile(SprintingSpeed, () => IsSprinting);
+                Stamina -= Time.DeltaTime * 20f;
+            }
+            _wasSprinting = IsSprinting;
         }
 
         public void ResetEquipment()

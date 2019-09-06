@@ -69,6 +69,8 @@ namespace Hedra.Engine.Player
 
             }
 
+            HandleSprinting();
+
             if (!_player.IsGliding)
             {
                 _characterRotation = Human.FacingDirection;
@@ -173,6 +175,19 @@ namespace Hedra.Engine.Player
             if (GameManager.Keyboard[Controls.Descend]) this.MoveInWater(false);
         }
 
+        private void HandleSprinting()
+        {
+            if (GameManager.Keyboard[Controls.Sprint] && _player.Stamina > 10 && _player.IsGrounded)
+            {
+                _player.IsSprinting = true;
+            }
+            else
+            {
+                if(_player.IsSprinting)
+                    _player.IsSprinting = false;
+            }
+        }
+
         private void RegisterKey(Key Key, Action Action)
         {
             _registeredKeys.Add(Key, Action);
@@ -216,12 +231,7 @@ namespace Hedra.Engine.Player
                     }
                 }
             });
-
-            this.RegisterKey(Controls.Jump, delegate
-            {
-                if (!_player.IsUnderwater) this.Jump();
-            });
-
+            
             this.RegisterKey(Key.F3, delegate
             {
                 GameSettings.DebugView = !GameSettings.DebugView && GameSettings.DebugMode;             
@@ -239,6 +249,11 @@ namespace Hedra.Engine.Player
         public void OnKeyDown(object Sender, KeyEventArgs EventArgs)
         {
             if (_registeredKeys.ContainsKey(EventArgs.Key)) _registeredKeys[EventArgs.Key]();
+
+            if (Controls.Jump == EventArgs.Key)
+            {
+                if (!_player.IsUnderwater) this.Jump();
+            }
 
             if (EventArgs.Key == Key.Escape && !_player.UI.GamePanel.Enabled && !_player.UI.Hide)
                 SoundPlayer.PlayUISound(SoundType.ButtonClick);
