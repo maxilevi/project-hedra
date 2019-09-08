@@ -247,8 +247,13 @@
     <Compile Include="Engine\Bullet\PhysicsComponentMotionState.cs" />
     <Compile Include="Engine\CacheSystem\DynamicCache.cs" />
     <Compile Include="Engine\CacheSystem\FishingPostIconCache.cs" />
+    <Compile Include="Engine\DataStructures\AABB.cs" />
+    <Compile Include="Engine\DataStructures\Octree.cs" />
+    <Compile Include="Engine\DataStructures\OctreeNode.cs" />
     <Compile Include="Engine\EntitySystem\DummyModel.cs" />
+    <Compile Include="Engine\Generation\FastNoise.cs" />
     <Compile Include="Engine\Generation\FishingZoneHandler.cs" />
+    <Compile Include="Engine\Generation\Simplex.cs" />
     <Compile Include="Engine\ItemSystem\Item.cs" />
     <Compile Include="Engine\Player\BackgroundUpdater.cs" />
     <Compile Include="Engine\Player\BoatSystem\BoatHumanoidInputHandler.cs" />
@@ -269,8 +274,6 @@
     <Compile Include="Engine\Rendering\Core\UBO.cs" />
     <Compile Include="Engine\Rendering\Core\VBOCache.cs" />
     <Compile Include="Engine\Rendering\Frustum\FrustumGJK.cs" />
-    <Compile Include="Engine\Rendering\Frustum\Octree.cs" />
-    <Compile Include="Engine\Rendering\Frustum\OctreeNode.cs" />
     <Compile Include="Engine\Rendering\Frustum\Plane.cs" />
     <Compile Include="Engine\Rendering\Frustum\Simplex.cs" />
     <Compile Include="Engine\Rendering\Geometry\MeshAnalyzer.cs" />
@@ -1092,7 +1095,6 @@
     <Compile Include="Engine\Generation\HeightmapData.cs" />
     <Compile Include="Engine\Generation\EnvironmentGenerator.cs" />
     <Compile Include="Engine\Generation\Perlin.cs" />
-    <Compile Include="Engine\Generation\Simplex.cs" />
     <Compile Include="Engine\Generation\CollidableStructure.cs" />
     <Compile Include="Engine\IO\Log.cs" />
     <Compile Include="Engine\Management\AnalyticsManager.cs" />

@@ -56,6 +56,7 @@ namespace Hedra.Engine.Generation
         private Vector3 _spawningVillagePoint;
         private Vector3 _spawningPoint;
         private WorldType _type;
+        private FastNoise _noise;
         private int _previousId;
     
         public WorldProvider()
@@ -72,6 +73,7 @@ namespace Hedra.Engine.Generation
             DrawingChunks = new Dictionary<Vector2, Chunk>();
             ShadowDrawingChunks = new Dictionary<Vector2, Chunk>();
             _unculledChunks = new Dictionary<Vector2, Chunk>();
+            _noise = new FastNoise(1);
         }
 
         public event ModulesReloadEvent ModulesReload;
@@ -249,6 +251,16 @@ namespace Hedra.Engine.Generation
 
             if (GameSettings.Wireframe) Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
         }
+        
+        public float GetNoise(float X, float Y)
+        {
+            return (float)OpenSimplexNoise.Evaluate(X, Y); //_noise.GetSimplex(X, Y);
+        }
+        
+        public float GetNoise(float X, float Y, float Z)
+        {
+            return (float) OpenSimplexNoise.Evaluate(X, Y, Z); //_noise.GetSimplex(X, Y, Z);
+        }
 
         public void Update()
         {
@@ -266,7 +278,8 @@ namespace Hedra.Engine.Generation
             _type = Type;
             BiomePool = new BiomePool(_type);
             WorldBuilding = new WorldBuilding.WorldBuilding();
-            OpenSimplexNoise.Load(NewSeed == MenuSeed ? 23123123 : NewSeed); //Not really the menu seed.
+            _noise.SetSeed(NewSeed);
+            OpenSimplexNoise.Load(NewSeed);
             _meshBuilder.Discard();
             _chunkBuilder.Discard();
             _spawningPoint = FindSpawningPoint(GeneralSettings.SpawnPoint);

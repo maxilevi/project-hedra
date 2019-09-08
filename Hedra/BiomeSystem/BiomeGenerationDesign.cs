@@ -10,7 +10,7 @@ namespace Hedra.BiomeSystem
         public abstract bool HasPaths { get; set; }
         public abstract bool HasDirt { get; set; }
 
-        public abstract float GetDensity(float X, float Y, float Z, Dictionary<Vector2, float[]> HeightCache);
+        public abstract float GetDensity(float X, float Y, float Z, ref BlockType Type);
 
         public abstract BlockType GetHeightSubtype(float X, float Y, float Z, float CurrentHeight, BlockType Type,
             Dictionary<Vector2, float[]> HeightCache);

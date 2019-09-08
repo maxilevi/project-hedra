@@ -203,6 +203,16 @@ namespace HedraTests
             return 0;
         }
 
+        public float GetNoise(float X, float Y)
+        {
+            return 0;
+        }
+
+        public float GetNoise(float X, float Y, float Z)
+        {
+            return 0;
+        }
+
         public float NearestWaterBlock(Vector3 Position, float SearchRange)
         {
             return default(float);

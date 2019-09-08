@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Hedra.BiomeSystem;
+using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Geometry;
@@ -111,86 +112,98 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var hasWater = false;
             var blockData = new VertexData();
             var waterData = new VertexData();
+            var vertexBuffer = MarchingCubes.NewVertexBuffer();
+            var triangleBuffer = MarchingCubes.NewTriangleBuffer();
             var cell = new GridCell
             {
                 P = new Vector3[8],
                 Type = new BlockType[8],
                 Density = new double[8]
             };
-                for (var x = 0; x < BoundsX && !failed; x += Lod)
+            for (var x = 0; x < BoundsX && !failed; x += Lod)
+            {
+                next = !next;
+                for (var y = 0; y < BoundsY && !failed; y += 1)
                 {
-                    next = !next;
-                    for (var y = 0; y < BoundsY && !failed; y += 1)
+                    for (var z = 0; z < BoundsZ && !failed; z += Lod)
                     {
-                        for (var z = 0; z < BoundsZ && !failed; z += Lod)
+                        next = !next;
+
+                        if (y < Sparsity.MinimumHeight || y > Sparsity.MaximumHeight) continue;
+                        if (!Filter(x, y, z)) continue;
+                        if (Blocks[x] == null || Blocks[x][y] == null || y == BoundsY - 1 || y == 0) continue;
+
+                        var isWaterCell = Blocks[x][y][z].Type == BlockType.Water &&
+                                          Blocks[x][y + 1][z].Type == BlockType.Air;
+                        Helper.CreateCell(ref cell, ref x, ref y, ref z, ref isWaterCell, ref Lod, out var success);
+
+                        if (!(Blocks[x][y][z].Type == BlockType.Water &&
+                              Blocks[x][y + 1][z].Type == BlockType.Air) &&
+                            !MarchingCubes.Usable(0f, cell)) continue;
+                        if (!success && y < BoundsY - 2) failed = true;
+
+                        if (Blocks[x][y][z].Type == BlockType.Water && Blocks[x][y + 1][z].Type == BlockType.Air &&
+                            ProcessWater)
                         {
-                            next = !next;
+                            var regionPosition =
+                                new Vector3(cell.P[0].X * BlockSize + OffsetX, 0,
+                                    cell.P[0].Z * BlockSize + OffsetZ);
 
-                            if (y < Sparsity.MinimumHeight || y > Sparsity.MaximumHeight) continue;
-                            if (!Filter(x, y, z)) continue;
-                            if (Blocks[x] == null || Blocks[x][y] == null || y == BoundsY - 1 || y == 0) continue;
+                            var region = Cache.GetAverageRegionColor(regionPosition);
 
-                            var isWaterCell = Blocks[x][y][z].Type == BlockType.Water && Blocks[x][y + 1][z].Type == BlockType.Air;
-                            Helper.CreateCell(ref cell, ref x, ref y, ref z, ref isWaterCell, ref Lod, out var success);
+                            IsoSurfaceCreator.CreateWaterQuad(BlockSize, cell, next,
+                                new Vector3(BlockSize, 1, BlockSize), Lod, region.WaterColor, waterData);
+                            hasWater = true;
+                        }
 
-                            if (!(Blocks[x][y][z].Type == BlockType.Water &&
-                                  Blocks[x][y + 1][z].Type == BlockType.Air) &&
-                                !MarchingCubes.Usable(0f, cell)) continue;
+                        if (Blocks[x][y][z].Type == BlockType.Water)
+                        {
+                            if (Blocks[x][y][z].Type == BlockType.Water &&
+                                Blocks[x][y + 1][z].Type == BlockType.Air)
+                            {
+                                var waterCell = false;
+                                Helper.CreateCell(ref cell, ref x, ref y, ref z, ref waterCell, ref Lod, out success);
+                            }
+
                             if (!success && y < BoundsY - 2) failed = true;
 
-                            Vector4 color = Vector4.Zero;
-                            if (Blocks[x][y][z].Type == BlockType.Water && Blocks[x][y + 1][z].Type == BlockType.Air && ProcessWater)
-                            {
-                                var regionPosition =
-                                    new Vector3(cell.P[0].X * BlockSize + OffsetX, 0,
-                                        cell.P[0].Z * BlockSize + OffsetZ);
+                            if (!MarchingCubes.Usable(0f, cell)) continue;
 
-                                RegionColor region = Cache.GetAverageRegionColor(regionPosition);
-
-                                color = region.WaterColor;
-                                IsoSurfaceCreator.CreateWaterQuad(BlockSize, cell, next,
-                                    new Vector3(BlockSize, 1, BlockSize), Lod, color, waterData);
-                                hasWater = true;
-                            }
-
-                            if (Blocks[x][y][z].Type == BlockType.Water)
-                            {
-                                if (Blocks[x][y][z].Type == BlockType.Water &&
-                                    Blocks[x][y + 1][z].Type == BlockType.Air)
-                                {
-                                    var waterCell = false;
-                                    Helper.CreateCell(ref cell, ref x, ref y, ref z, ref waterCell, ref Lod, out success);
-                                }
-
-                                if (!success && y < BoundsY - 2) failed = true;
-
-                                if (!MarchingCubes.Usable(0f, cell)) continue;
-
-                                if (ProcessColors)
-                                {
-                                    var regionPosition = new Vector3(cell.P[0].X + OffsetX, 0, cell.P[0].Z + OffsetZ);
-                                    var region = Cache.GetAverageRegionColor(regionPosition);
-                                    color = Helper.GetColor(cell, region, ColorLod);
-                                }
-
-                                MarchingCubes.Process(0f, cell, color, next, blockData);
-                            }
-                            else
-                            {
-                                if (ProcessColors)
-                                {
-                                    var regionPosition =
-                                        new Vector3(cell.P[0].X + OffsetX, 0, cell.P[0].Z + OffsetZ);
-                                    var region = Cache.GetAverageRegionColor(regionPosition);
-                                    color = Helper.GetColor(cell, region, ColorLod);
-                                }
-
-                                MarchingCubes.Process(0f, cell, color, next, blockData);
-                            }
+                            PolygoniseCell(ref cell, ref ProcessColors, ref next, ref blockData, ref ColorLod, ref vertexBuffer, ref triangleBuffer, ref Cache);
+                        }
+                        else
+                        {
+                            PolygoniseCell(ref cell, ref ProcessColors, ref next, ref blockData, ref ColorLod, ref vertexBuffer, ref triangleBuffer, ref Cache);
                         }
                     }
                 }
+            }
+
             return new ChunkMeshBuildOutput(blockData, waterData, new VertexData(), failed, hasNoise3D, hasWater);
+        }
+
+        private void PolygoniseCell(ref GridCell Cell, ref bool ProcessColors, ref bool Next, ref VertexData BlockData,
+            ref int ColorLod, ref Vector3[] VertexBuffer, ref Triangle[] TriangleBuffer, ref RegionCache Cache)
+        {
+            MarchingCubes.Polygonise(ref Cell, 0, ref VertexBuffer, ref TriangleBuffer, out var triangleCount);
+            var color = Vector4.Zero;
+            if (ProcessColors)
+            {
+                var normal = CalculateAverageNormal(ref TriangleBuffer, ref triangleCount);
+                var regionPosition = new Vector3(Cell.P[0].X + OffsetX, 0, Cell.P[0].Z + OffsetZ);
+                var region = Cache.GetAverageRegionColor(regionPosition);
+                color = Helper.GetColor(ref Cell, region, ColorLod, ref normal);
+            }
+            MarchingCubes.Build(ref BlockData, ref color, ref TriangleBuffer, ref triangleCount, ref Next);
+        }
+
+        private static Vector3 CalculateAverageNormal(ref Triangle[] TriangleBuffer, ref int TriangleCount)
+        {
+            if(TriangleCount == 0) return Vector3.One;
+            var averageNormal = Vector3.Zero;
+            for (var i = 0; i < TriangleCount; ++i)
+                averageNormal += Vector3.Cross(TriangleBuffer[i].P[1] - TriangleBuffer[i].P[0], TriangleBuffer[i].P[2] - TriangleBuffer[i].P[0]).NormalizedFast();
+            return averageNormal / TriangleCount;
         }
     }
 }

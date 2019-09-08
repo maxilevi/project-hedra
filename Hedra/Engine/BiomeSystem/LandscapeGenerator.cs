@@ -10,15 +10,16 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Messaging;
+using BulletSharp;
 using Hedra.BiomeSystem;
 using Hedra.Core;
 using Hedra.Engine.Generation;
-using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PlantSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.Overworld;
 using OpenTK;
+using Chunk = Hedra.Engine.Generation.ChunkSystem.Chunk;
 
 namespace Hedra.Engine.BiomeSystem
 {
@@ -34,6 +35,9 @@ namespace Hedra.Engine.BiomeSystem
         private const float RiverDepth = 8;
         private const float RiverMult = 165f;
         private const float PathDepth = 2.25f;
+        const int noise2DScaleWidth = 1;
+        const int noise3DScaleWidth = 2;
+        const int noise3DScaleHeight = 8;
         
         public LandscapeGenerator(Chunk Chunk) : base(Chunk)
         {
@@ -42,23 +46,23 @@ namespace Hedra.Engine.BiomeSystem
         protected override void DefineBlocks(Block[][][] Blocks, RegionCache Cache, int Lod, Func<int, int, bool> Filter)
         {
             var rng = new Random(World.Seed + 1234123);
-
-            var heightCache = new Dictionary<Vector2, float[]>();
-
+            
             const int noiseScale = 1;
             var width = (int) (Chunk.Width / Chunk.BlockSize);
             var depth = (int) (Chunk.Width / Chunk.BlockSize);
 
-            var noise3D = new float[Chunk.Height];
+            var noise3D = FillNoise(width, Chunk.Height);
+            var heights = FillHeight(width, out var types);
 
             var plateaus = World.WorldBuilding.GetPlateausFor(new Vector2(OffsetX, OffsetZ));
             var groundworks = World.WorldBuilding.GetGroundworksFor(new Vector2(OffsetX, OffsetZ)).ToList();
 
             var structs = World.StructureHandler.StructureItems;
+            var heightCache = new Dictionary<Vector2, float[]>();
 
             var biomeGen = Chunk.Biome.Generation;
-            var hasRiver = biomeGen.HasRivers ? 1f : 0f;
-            var hasPath = biomeGen.HasPaths ? 1f : 0f;
+            var hasRiver = 0;//biomeGen.HasRivers ? 1f : 0f;
+            var hasPath = 0;//biomeGen.HasPaths ? 1f : 0f;
             
             for (var x = 0; x < width; x+=Lod)
             {
@@ -67,74 +71,148 @@ namespace Hedra.Engine.BiomeSystem
                 {
                     if(!Filter(x,z)) continue;
                     var position = new Vector2(x * Chunk.BlockSize + OffsetX, z * Chunk.BlockSize + OffsetZ);
-                    var height = Chunk.Biome.Generation.GetHeight(position.X, position.Y, heightCache, out var type);
-                    this.HandleStructures(x, z, position, groundworks, plateaus, structs, heightCache, noise3D, biomeGen,
+                    var height = CalculateHeight(x, z, heights, types, out var type);
+
+                    this.HandleStructures(x, z, position, groundworks, plateaus, structs, heightCache, biomeGen,
                         hasPath, hasRiver, noiseScale, ref height, out var town, out var makeDirt,
                         out var pathClamped, out var river, out var path, out var riverBorders,
                         out var blockGroundworks, out var isMount, out var mountHeight);
 
-                    var hasSubType = biomeGen.HasHeightSubtype(position.X, position.Y, heightCache);
-                    FillNoise(x, z, noise3D);
-                    
-                    for (var y = 0; y < Chunk.Height - 1; y++)
+                    for (var y = Chunk.Height-1 -1; y > -1; --y)
                     {
-                        //if(height+ Chunk.BlockSize*Chunk.BlockSize < y) continue;
-                        type = hasSubType 
-                            ? biomeGen.GetHeightSubtype(position.X, y, position.Y, height, type, heightCache) 
-                            : type;
+                        var density = CalculateDensity(x,y,z, noise3D);
                         
-                        this.GenerateBlock(Blocks, noise3D, type, x, y, z, height, river, makeDirt, riverBorders,
+                        this.GenerateBlock(Blocks, density, type, x, y, z, height, river, makeDirt, riverBorders,
                             rng, isMount, mountHeight);
                                     
                         this.HandleGroundworks(Blocks, x, y, z, path, PathDepth, pathClamped, town,
                             blockGroundworks, ref height);
                     }
+                    GrassBlockPass(Blocks, x, z, makeDirt);
                 }
             }
         }
 
-        private void FillNoise(int x, int z, float[] noise3D)
+        private static void GrassBlockPass(Block[][][] Blocks, int x, int z, bool makeDirt)
         {
-            const int noiseScale = 4;
-            for (var i = 0; i < noise3D.Length; i+=noiseScale)
+            var foundBlock = false;
+            var counter = 0;
+            for (var y = Chunk.Height - 2; y > -1; --y)
             {
-                noise3D[i] = Chunk.Biome.Generation.GetDensity(x * Chunk.BlockSize + Chunk.OffsetX, i, z * Chunk.BlockSize + Chunk.OffsetZ, null);
-            }
+                if (Blocks[x][y][z].Type != BlockType.Air && Blocks[x][y+1][z].Type == BlockType.Air && !foundBlock)
+                {
+                    foundBlock = true;
+                    counter = 2;
+                }
 
-            for (var i = 0; i < noise3D.Length; ++i)
+                if (counter > 0 && Blocks[x][y][z].Type == BlockType.Stone)
+                {
+                    Blocks[x][y][z].Type = BlockType.Grass;
+                    counter--;
+                }
+            }
+            for (var y = Chunk.Height - 1; y > -1; --y)
             {
-                var next = (i / noiseScale + 1) * noiseScale;
-                var prev = (i / noiseScale) * noiseScale;
-                var index = i % noiseScale;
-                if (index != 0 && next < noise3D.Length)
-                    noise3D[i] = Mathf.CosineInterpolate(noise3D[prev], noise3D[next], index / (float)noiseScale);
+                if (makeDirt && Blocks[x][y][z].Type == BlockType.Grass)
+                {
+                    Blocks[x][y][z].Type = BlockType.Dirt;
+                }
             }
         }
+
+
+        private float[][] FillHeight(int width, out BlockType[][] types)
+        {
+            var noiseValuesWidth = width / noise2DScaleWidth + 1;
+            var heights = new float[noiseValuesWidth][];
+            types = new BlockType[noiseValuesWidth][];
+            for (var x = 0; x < noiseValuesWidth; ++x)
+            {
+                heights[x] = new float[noiseValuesWidth];
+                types[x] = new BlockType[noiseValuesWidth];
+                for (var z = 0; z < noiseValuesWidth; ++z)
+                {
+                    heights[x][z] = 
+                        Chunk.Biome.Generation.GetHeight(
+                            x * Chunk.BlockSize * noise2DScaleWidth + OffsetX,
+                            z * Chunk.BlockSize * noise2DScaleWidth + OffsetZ,
+                            null,
+                            out var type
+                        );
+                    types[x][z] = type;
+                }
+            }
+            return heights;
+        }
         
-        private void GenerateBlock(Block[][][] Blocks, float[] noise3D, BlockType Type, int x, int y, int z, float height, float river,
+        private float[][][] FillNoise(int width, int height)
+        {
+            var noiseValuesMapWidth = (width / noise3DScaleWidth) + 1;
+            var noiseValuesMapHeight = (height / noise3DScaleHeight) + 1;
+            var noise3D = new float[noiseValuesMapWidth][][];
+            var type = BlockType.Air;
+            for (var x = 0; x < noiseValuesMapWidth; x++)
+            {
+                noise3D[x] = new float[noiseValuesMapHeight][];
+                for (var y = 0; y < noiseValuesMapHeight; y++)
+                {
+                    noise3D[x][y] = new float[noiseValuesMapWidth];
+                    for (var z = 0; z < noiseValuesMapWidth; z++)
+                    {
+                        noise3D[x][y][z] = 
+                            Chunk.Biome.Generation.GetDensity(
+                                x * Chunk.BlockSize * noise3DScaleWidth + Chunk.OffsetX,
+                                y * Chunk.BlockSize * noise3DScaleHeight,
+                                z * Chunk.BlockSize * noise3DScaleWidth + Chunk.OffsetZ,
+                                ref type
+                            );
+                    }
+                }
+            }
+            return noise3D;
+        }
+
+        private static float CalculateDensity(int x, int y, int z, float[][][] noise3D)
+        {
+            int x2 = (x / noise3DScaleWidth);
+            int y2 = (y / noise3DScaleHeight);
+            int z2 = (z / noise3DScaleWidth);
+            return Mathf.LinearInterpolate3D(noise3D[x2][y2][z2], noise3D[x2 + 1][y2][z2],
+                noise3D[x2][y2 + 1][z2], noise3D[x2 + 1][y2 + 1][z2],
+                noise3D[x2][y2][z2 + 1], noise3D[x2 + 1][y2][z2 + 1],
+                noise3D[x2][y2 + 1][z2 + 1], noise3D[x2 + 1][y2 + 1][z2 + 1],
+                (x % noise3DScaleWidth) / (float) noise3DScaleWidth,
+                (y % noise3DScaleHeight) / (float) noise3DScaleHeight,
+                (z % noise3DScaleWidth) / (float) noise3DScaleWidth
+            );
+        }
+
+        private static float CalculateHeight(int x, int z, float[][] heights, BlockType[][] types, out BlockType Type)
+        {
+            int x2 = (x / noise2DScaleWidth);
+            int z2 = (z / noise2DScaleWidth);
+            Type = types[x2][z2];
+            return Mathf.LinearInterpolate2D(
+                heights[x2][z2], heights[x2 + 1][z2], heights[x2][z2 + 1], heights[x2 + 1][z2 + 1],
+                (x % noise2DScaleWidth) / (float) noise2DScaleWidth,
+                (z % noise2DScaleWidth) / (float) noise2DScaleWidth
+            );
+        }
+        
+        private void GenerateBlock(Block[][][] Blocks, float density, BlockType Type, int x, int y, int z, float height, float river,
             bool makeDirt, float riverBorders, Random rng, bool isMount, float mountHeight)
         {
             var currentBlock = Blocks[x][y][z];
-            var noise = noise3D[y];
-
             var blockType = BlockType.Air;
-            //type = BlockType.Air;
-    
-            currentBlock.Density = new Half(1 - (y - height) + noise);
-    
+            var blockDensity = 1 - (y - height) + density;
+
             if (y < 2)
-                currentBlock.Density = new Half(0.95f + rng.NextFloat() * 0.75f);
+                blockDensity = new Half(0.95f + rng.NextFloat() * 0.75f);
     
-            if (currentBlock.Density > 0)
+            if (blockDensity > 0)
             {
-    
-                blockType = Type;
-    
-                if (height - y > 18.0f)
-                {
-                    blockType = BlockType.Stone;
-                }
-    
+                blockType = BlockType.Stone;
+
                 if (y < 2)
                     blockType = BlockType.Seafloor;
 
@@ -144,10 +222,11 @@ namespace Hedra.Engine.BiomeSystem
                 }
             }
 
-            if (blockType == BlockType.Grass)
+            /*
+            if (blockType == BlockType.Stone)
             {
                 if (makeDirt) blockType = BlockType.Dirt;
-            }
+            }*/
 
             var riverHeight = height + river + 1.5f;
             if (y < riverHeight)
@@ -191,11 +270,12 @@ namespace Hedra.Engine.BiomeSystem
             }
 
             currentBlock.Type = blockType;
+            currentBlock.Density = new Half(blockDensity);
             Blocks[x][y][z] = currentBlock;
         }
 
         private void HandleStructures(int x, int z, Vector2 position, List<IGroundwork> groundworks, BasePlateau[] RoundedPlateaux,
-            CollidableStructure[] structs, Dictionary<Vector2, float[]> heightCache, float[] noise3D, RegionGeneration biomeGen,
+            CollidableStructure[] structs, Dictionary<Vector2, float[]> heightCache, RegionGeneration biomeGen,
             float hasPath, float hasRiver, float noiseScale, ref float height, out bool town, out bool makeDirt, out bool pathClamped, out float river,
             out float path, out float riverBorders, out IGroundwork[] blockGroundworks, out bool isMount, out float mountHeight)
         {
@@ -252,15 +332,9 @@ namespace Hedra.Engine.BiomeSystem
                 ref river, ref riverBorders, ref path, ref pathClamped);
 
             height = Math.Max(0, height);
-            
+            /*
             for (var i = 0; i < noise3D.Length; i++)
             {
-                if (World.MenuSeed != World.Seed)
-                {
-                    noise3D[i] = biomeGen.GetDensity(OffsetX + x * Chunk.BlockSize,
-                        i * noiseScale * Chunk.BlockSize,
-                        OffsetZ + z * Chunk.BlockSize, heightCache);
-                }
 
                 /*
                 if (inPlateau)
@@ -273,7 +347,7 @@ namespace Hedra.Engine.BiomeSystem
                         float plateauFinal = Math.Max(1 - plateauDist / plateau.Radius, 0);
                         noise3D[i] = Mathf.Lerp(0, noise3D[i], 1 - Math.Min(1, plateauFinal * 3f));
                     }
-                }*/
+                }
 
                 if (nearGiantTree == null)
                 {
@@ -282,9 +356,9 @@ namespace Hedra.Engine.BiomeSystem
 
                     /*noise3D[i] = Mathf.Clamp(
                         Mathf.Lerp(noise3D[i], 0f, path),
-                        0, noise3D[i]);*/
+                        0, noise3D[i]);
                 }
-            }
+            }*/
 
             var pathGroundwork = blockGroundworks.FirstOrDefault(P => P.IsPath);
             var groundworkDensity = pathGroundwork?.Density(position) ?? 0;
@@ -305,7 +379,7 @@ namespace Hedra.Engine.BiomeSystem
             }
             height -= river;
             height -= Mathf.Lerp(path, 0, riverLerp);
-            var dirtNoise = OpenSimplexNoise.Evaluate((x * Chunk.BlockSize + OffsetX) * 0.0175f,
+            var dirtNoise = World.GetNoise((x * Chunk.BlockSize + OffsetX) * 0.0175f,
                                 (z * Chunk.BlockSize + OffsetZ) * 0.0175f) > .35f;
             makeDirt = biomeGen.HasDirt && dirtNoise;                    
         }
@@ -382,7 +456,7 @@ namespace Hedra.Engine.BiomeSystem
         {
             return (float) Math.Max(0,
                        0.5 - Math.Abs(
-                           OpenSimplexNoise.Evaluate(Position.X * 0.0011f,
+                           World.GetNoise(Position.X * 0.0011f,
                                Position.Y * 0.0011f) - 0.2) - Narrow +
                        Border) * Scale;
         }
@@ -394,6 +468,7 @@ namespace Hedra.Engine.BiomeSystem
 
         protected override void PlaceEnvironment(RegionCache Cache, Predicate<PlacementDesign> Filter)
         {
+            return;
             var structs = World.StructureHandler.StructureItems;
             var groundworks = World.WorldBuilding.Groundworks.Where(P => P.NoPlants).ToArray();
             for (var x = 0; x < this.Chunk.BoundsX; x++)
@@ -454,7 +529,7 @@ namespace Hedra.Engine.BiomeSystem
                     var samplingPosition = new Vector3(Chunk.OffsetX + x * Chunk.BlockSize, y-1, Chunk.OffsetZ + z * Chunk.BlockSize);
                     
                     var region = Cache.GetRegion(realPosition);
-                    var noise = (float) OpenSimplexNoise.Evaluate(realPosition.X * 0.005f, realPosition.Z * 0.005f);
+                    var noise = (float) World.GetNoise(realPosition.X * 0.005f, realPosition.Z * 0.005f);
                     var placementObject = World.TreeGenerator.CanGenerateTree(samplingPosition, region, Lod);
                     if (!placementObject.Placed) continue;
                     placementObject.Position += -samplingPosition.Xz.ToVector3() + realPosition.Xz.ToVector3();
@@ -519,6 +594,7 @@ namespace Hedra.Engine.BiomeSystem
             NoGrassZone = false;
             NoTreesZone = false;
             InMerchant = false;
+            return;
             foreach (CollidableStructure structPosition in Structs)
             {
                 var possiblePosition = new Vector3(Chunk.OffsetX + X * Chunk.BlockSize, 0,

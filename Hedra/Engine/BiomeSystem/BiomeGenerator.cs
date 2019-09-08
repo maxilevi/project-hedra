@@ -60,7 +60,7 @@ namespace Hedra.Engine.BiomeSystem
                 this.BlocksSetted = true;
             }
 
-            var lod = Chunk.Lod;
+            var lod = 1;//Chunk.Lod;
             if (_firstGeneration || lod < GeneratedLod)
             {
                 bool BorderFilter(int X, int Z) => X < 2 || Z < 2 || X > Chunk.BoundsX - 3 || Z > Chunk.BoundsZ - 3;
@@ -100,7 +100,7 @@ namespace Hedra.Engine.BiomeSystem
 
         private void CheckForNearbyStructures()
         {
-            StructureHandler.CheckStructures( new Vector2(Chunk.OffsetX, Chunk.OffsetZ) );
+            //StructureHandler.CheckStructures( new Vector2(Chunk.OffsetX, Chunk.OffsetZ) );
         }
         
         public void BuildArray(Block[][][] Blocks)
@@ -118,12 +118,12 @@ namespace Hedra.Engine.BiomeSystem
         
         public static float PathFormula(float X, float Z)
         {
-            return (float) Math.Max(0, (0.5 - Math.Abs(OpenSimplexNoise.Evaluate(X * 0.0009f, Z *  0.0009f) - 0.2)) - 0.425f) * 1f;
+            return (float) Math.Max(0, (0.5 - Math.Abs(World.GetNoise(X * 0.0009f, Z *  0.0009f) - 0.2)) - 0.425f) * 1f;
         }
         
         public static float SmallFrequency(float X, float Z)
         {
-            return (float) (OpenSimplexNoise.Evaluate(X * 0.2, Z * 0.2) * -0.15f * OpenSimplexNoise.Evaluate(X * 0.035, Z * 0.035) * 2.0f);
+            return (float) (World.GetNoise(X * 0.2f, Z * 0.2f) * -0.15f * World.GetNoise(X * 0.035f, Z * 0.035f) * 2.0f);
         }
         
         public static Random GenerateRng(Vector2 Offset)

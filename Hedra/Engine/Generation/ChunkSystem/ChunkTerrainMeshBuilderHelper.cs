@@ -34,49 +34,29 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _coefficient =  1 / _blockSize;
         }
 
-        public Vector4 GetColor(GridCell Cell, RegionColor RegionColor, int Lod)
+        public Vector4 GetColor(ref GridCell Cell, RegionColor RegionColor, int Lod, ref Vector3 AverageNormal)
         {
-            Vector3 position = Cell.P[0] / _blockSize;
-            Vector4 color = Vector4.Zero;
-            var colorCount = 0;
+            var position = Cell.P[0] / _blockSize;
             int x = (int) position.X, y = (int) position.Y, z = (int) position.Z;
-
-            float noise =
-                (float) OpenSimplexNoise.Evaluate((Cell.P[0].X + _offsetX) * .00075f, (Cell.P[0].Z + _offsetZ) * .00075f);
-            RegionColor regionColor = RegionColor;
+            var color = Vector4.Zero;
+            var colorCount = 0;
+            var canBeGrass = Vector3.Dot(AverageNormal, Vector3.UnitY) > 0.7f;
+            var noise = (float) World.GetNoise((Cell.P[0].X + _offsetX) * .00075f, (Cell.P[0].Z + _offsetZ) * .00075f);
+            var regionColor = RegionColor;
 
             for (var _x = -Lod * 1; _x < 1 * Lod + 1; _x += Lod)
             for (var _z = -Lod * 1; _z < 1 * Lod + 1; _z += Lod)
             for (var _y = -1; _y < 1 + 1; _y++)
             {
-                Block y0 = this.GetNeighbourBlock(x + _x, (int) Mathf.Clamp(y + _y, 0, this._height - 1), z + _z);
-
-                if (y0.Type != BlockType.Water && y0.Type != BlockType.Air && y0.Type != BlockType.Temporal)
+                var y0 = this.GetNeighbourBlock(x + _x, (int) Mathf.Clamp(y + _y, 0, this._height - 1), z + _z);
+                var type = y0.Type;
+                if (type != BlockType.Water && type != BlockType.Air && type != BlockType.Temporal)
                 {
-                    Vector4 blockColor = Block.GetColor(y0.Type, regionColor);
-                    if (Block.GetColor(BlockType.Grass, regionColor) == blockColor)
-                    {
-                        float clampNoise = (noise + 1) * .5f;
-                        float levelSize = 1.0f / regionColor.GrassColors.Length;
-                        var nextIndex = (int) Math.Ceiling(clampNoise / levelSize);
-                        if (nextIndex == regionColor.GrassColors.Length) nextIndex = 0;
-
-                        Vector4 A = regionColor.GrassColors[(int) Math.Floor(clampNoise / levelSize)],
-                            B = regionColor.GrassColors[nextIndex];
-
-                        float delta = clampNoise / levelSize - (float) Math.Floor(clampNoise / levelSize);
-
-                        blockColor = Mathf.Lerp(A, B, delta);
-                    } else if (y0.Type == BlockType.StonePath)
-                    {
-                        var shade = (Utils.Rng.NextFloat() * 2 - 1f) * .2f;
-                        blockColor += new Vector4(shade, shade, shade, 0); 
-                    } else if (y0.Type == BlockType.FarmDirt)
-                    {
-                        if((x+1) % 2 == 0)
-                            blockColor -= new Vector4(.1f, .1f, .1f, 0);
-                    }
-                    color += new Vector4(blockColor.X, blockColor.Y, blockColor.Z, blockColor.W);
+                    var blockColor = DoGetColor(ref regionColor, ref x, type, ref noise);
+                    if (!canBeGrass && y0.Type == BlockType.Grass)
+                        blockColor = DoGetColor(ref regionColor, ref x, BlockType.Stone, ref noise);
+                        
+                    color += blockColor;
                     colorCount++;
                 }
             }
@@ -90,6 +70,37 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var c = new Vector4(rng.NextFloat(), rng.NextFloat(), rng.NextFloat(), 1.0f);
             return isPoint ? new Vector4(0, 0, 0, 1.0f) : c;*/
             return new Vector4(colorCount == 0 ? regionColor.DirtColor.Xyz : color.Xyz / colorCount, 1.0f);
+        }
+
+        private static Vector4 DoGetColor(ref RegionColor RegionColor, ref int x, BlockType Type, ref float Noise)
+        {
+            var blockColor = Block.GetColor(Type, RegionColor);
+            if (Type == BlockType.Grass)
+            {
+                var clampNoise = (Noise + 1) * .5f;
+                var levelSize = 1.0f / RegionColor.GrassColors.Length;
+                var nextIndex = (int) Math.Ceiling(clampNoise / levelSize);
+                if (nextIndex == RegionColor.GrassColors.Length) nextIndex = 0;
+
+                Vector4 A = RegionColor.GrassColors[(int) Math.Floor(clampNoise / levelSize)],
+                    B = RegionColor.GrassColors[nextIndex];
+
+                float delta = clampNoise / levelSize - (float) Math.Floor(clampNoise / levelSize);
+
+                blockColor = Mathf.Lerp(A, B, delta);
+            }
+            else if (Type == BlockType.StonePath || Type == BlockType.Stone)
+            {
+                var shade = (Utils.Rng.NextFloat() * 2 - 1f) * .2f * (Type == BlockType.Stone ? .65f : 1f);
+                blockColor += new Vector4(shade, shade, shade, 0); 
+            }
+            else if (Type == BlockType.FarmDirt)
+            {
+                if((x+1) % 2 == 0)
+                    blockColor -= new Vector4(.1f, .1f, .1f, 0);
+            }
+
+            return blockColor;
         }
 
         public void CreateCell(ref GridCell Cell, ref int X, ref int Y, ref int Z, ref bool WaterCell, ref int Lod, out bool Success)

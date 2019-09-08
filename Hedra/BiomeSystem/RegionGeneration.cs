@@ -19,9 +19,9 @@ namespace Hedra.BiomeSystem
         public bool HasRivers => _design.HasRivers;
         public bool HasPaths => _design.HasPaths;
 
-        public float GetDensity(float X, float Y, float Z, Dictionary<Vector2, float[]> HeightCache)
+        public float GetDensity(float X, float Y, float Z, ref BlockType Type)
         {
-            return _design.GetDensity(X, Y, Z, HeightCache);
+            return _design.GetDensity(X, Y, Z, ref Type);
         }
 
         public BlockType GetHeightSubtype(float X, float Y, float Z, float CurrentHeight, BlockType Type,

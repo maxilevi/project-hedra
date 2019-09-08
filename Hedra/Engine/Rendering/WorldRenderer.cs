@@ -49,6 +49,7 @@ namespace Hedra.Engine.Rendering
             WaterShader = Shader.Build("Shaders/Water.vert", "Shaders/Water.frag");
             StaticShader = Shader.Build("Shaders/Static.vert", "Shaders/Static.frag");
 
+            OpenSimplexNoise.Load(123);
             var noiseValues = new float[16, 16, 16];
             for (var x = 0; x < noiseValues.GetLength(0); x++)
             {
@@ -56,7 +57,7 @@ namespace Hedra.Engine.Rendering
                 {
                     for (var z = 0; z < noiseValues.GetLength(2); z++)
                     {
-                        noiseValues[x,y,z] = (float) OpenSimplexNoise.Evaluate(x * 0.6f,y * 0.6f,z * 0.6f) * .5f + .5f;
+                        noiseValues[x,y,z] = (float)OpenSimplexNoise.Evaluate(x * 0.6f,y * 0.6f,z * 0.6f) * .5f + .5f;
                     }
                 }
             }
