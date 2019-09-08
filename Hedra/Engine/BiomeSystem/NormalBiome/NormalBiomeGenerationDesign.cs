@@ -19,10 +19,10 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             var bigMountainHeight = BigMountainsHeight(X, Y);
             var density = 0f;
             
-            var lakes = 0;//_noise.GetSimplexFractal(X, Y, Z).Clamp01() * -24.0f * bigMountainHeight * Chunk.BlockSize;
-            var overhangs = _noise.GetSimplexFractalWithFrequency(X, Y, Z, 0.00075f).Clamp01()
-                            * bigMountainHeight
-                            * 64.0f 
+            var lakes = _noise.GetSimplexFractalWithFrequency(X, Y, Z, 0.005f) * 0.25f * Chunk.BlockSize;
+            var overhangs = 1//_noise.GetSimplexFractalWithFrequency(X, Y, Z, 0.0005f).Clamp01()
+                            * _noise.GetSimplexFractalWithFrequency(X, Y, Z, 0.00075f).Clamp01()
+                            * 48.0f 
                             * Chunk.BlockSize;
                             
                             
@@ -68,7 +68,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
 
             AddBaseHeight(X, Z, ref height, ref Blocktype, out var baseHeight);
             //AddMountainHeight(X, Z, ref height, ref Blocktype);
-            AddBigMountainsHeight(X, Z,ref height, ref Blocktype, HeightCache);
+            //AddBigMountainsHeight(X, Z,ref height, ref Blocktype, HeightCache);
             //AddLakes(X, Z, ref height);
             //AddStones(X, Z, ref height, ref Blocktype, HeightCache);
             /* This one should be last */
@@ -154,7 +154,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
         protected static void AddBaseHeight(float X, float Z, ref double Height, ref BlockType Type, out double BaseHeight)
         {
             var baseHeight = /*World.GetNoise(X * 0.00005f, Z * 0.00005f) * 48.0f +*/ BiomePool.SeaLevel;
-            var grassHeight = (_noise.GetSimplex(X * 0.05f, Z * 0.05f)) * 3.0f;
+            var grassHeight = (_noise.GetSimplexWithFrequency(X, Z, 0.0001f)) * 16.0f;
             Type = BlockType.Grass;
             Height += baseHeight + grassHeight;
             BaseHeight = baseHeight;

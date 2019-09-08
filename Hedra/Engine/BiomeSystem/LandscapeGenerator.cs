@@ -88,7 +88,7 @@ namespace Hedra.Engine.BiomeSystem
                         this.HandleGroundworks(Blocks, x, y, z, path, PathDepth, pathClamped, town,
                             blockGroundworks, ref height);
                     }
-                    GrassBlockPass(Blocks, x, z, makeDirt);
+                    //GrassBlockPass(Blocks, x, z, makeDirt);
                 }
             }
         }
@@ -102,7 +102,7 @@ namespace Hedra.Engine.BiomeSystem
                 if (Blocks[x][y][z].Type != BlockType.Air && Blocks[x][y+1][z].Type == BlockType.Air && !foundBlock)
                 {
                     foundBlock = true;
-                    counter = 2;
+                    counter = 4;
                 }
 
                 if (counter > 0 && Blocks[x][y][z].Type == BlockType.Stone)
@@ -211,8 +211,13 @@ namespace Hedra.Engine.BiomeSystem
     
             if (blockDensity > 0)
             {
-                blockType = BlockType.Stone;
-
+                blockType = BlockType.Dirt;
+/*
+                if (height - y < 18f)
+                {
+                    blockType = BlockType.Grass;
+                }*/
+                
                 if (y < 2)
                     blockType = BlockType.Seafloor;
 
@@ -221,12 +226,11 @@ namespace Hedra.Engine.BiomeSystem
                     blockType = BlockType.Grass;
                 }
             }
-
-            /*
-            if (blockType == BlockType.Stone)
+            
+            if (blockType == BlockType.Grass)
             {
                 if (makeDirt) blockType = BlockType.Dirt;
-            }*/
+            }
 
             var riverHeight = height + river + 1.5f;
             if (y < riverHeight)

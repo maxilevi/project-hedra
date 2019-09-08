@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Hedra.Rendering;
 using OpenTK;
@@ -41,7 +42,8 @@ namespace Hedra.Engine.Rendering.Geometry
             for (var i = 0; i < Border.Length; i++)
             {
                 var nearestBase = FindNearest(Base, Border[i]);
-                BorderObject.Vertices[BorderObject.Vertices.IndexOf(Border[i])] = nearestBase;
+                if(nearestBase != Vector3.Zero)
+                    BorderObject.Vertices[BorderObject.Vertices.IndexOf(Border[i])] = nearestBase;
             }
         }
 

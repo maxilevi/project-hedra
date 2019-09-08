@@ -40,7 +40,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
             int x = (int) position.X, y = (int) position.Y, z = (int) position.Z;
             var color = Vector4.Zero;
             var colorCount = 0;
-            var canBeGrass = Vector3.Dot(AverageNormal, Vector3.UnitY) > 0.7f;
+            var dot = Vector3.Dot(AverageNormal, Vector3.UnitY);
+            const float dotThreshold = 0.7f;
+            var canBeGrass = dot > 0.7f;
             var noise = (float) World.GetNoise((Cell.P[0].X + _offsetX) * .00075f, (Cell.P[0].Z + _offsetZ) * .00075f);
             var regionColor = RegionColor;
 
@@ -53,9 +55,11 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 if (type != BlockType.Water && type != BlockType.Air && type != BlockType.Temporal)
                 {
                     var blockColor = DoGetColor(ref regionColor, ref x, type, ref noise);
-                    if (!canBeGrass && y0.Type == BlockType.Grass)
-                        blockColor = DoGetColor(ref regionColor, ref x, BlockType.Stone, ref noise);
-                        
+                    /*if (!canBeGrass && y0.Type == BlockType.Grass)
+                    {
+                        blockColor = Mathf.Lerp(DoGetColor(ref regionColor, ref x, BlockType.Stone, ref noise), blockColor, (dot).Clamp01());
+                    }*/
+
                     color += blockColor;
                     colorCount++;
                 }
