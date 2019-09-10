@@ -89,6 +89,9 @@
       <HintPath>..\packages\IronPython.2.7.5\lib\Net40\IronPython.Modules.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MeshDecimator, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\MeshDecimator.dll</HintPath>
+    </Reference>
     <Reference Include="MeshOptimizer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\references\MeshOptimizer.dll</HintPath>
     </Reference>
@@ -277,6 +280,23 @@
     <Compile Include="Engine\Rendering\Frustum\Plane.cs" />
     <Compile Include="Engine\Rendering\Frustum\Simplex.cs" />
     <Compile Include="Engine\Rendering\Geometry\MeshAnalyzer.cs" />
+    <Compile Include="Engine\Rendering\Isosurface\Cache.cs" />
+    <Compile Include="Engine\Rendering\Isosurface\IsoSurfaceCreator.cs" />
+    <Compile Include="Engine\Rendering\Isosurface\MarchingCubes.cs" />
+    <Compile Include="Engine\Rendering\Isosurface\MarchingTetrahedra.cs" />
+    <Compile Include="Engine\Rendering\Isosurface\MathHelper.cs" />
+    <Compile Include="Engine\Rendering\Isosurface\Matrix3X3.cs" />
+    <Compile Include="Engine\Rendering\Isosurface\FastMeshSimplifier.cs" />
+    <Compile Include="Engine\Rendering\Isosurface\ResizableArray.cs" />
+    <Compile Include="Engine\Rendering\Isosurface\SymmetricMatrix.cs" />
+    <Compile Include="Engine\Rendering\Isosurface\Tables.cs" />
+    <Compile Include="Engine\Rendering\Isosurface\Transvoxel.cs" />
+    <Compile Include="Engine\Rendering\Isosurface\Vector3d.cs" />
+    <Compile Include="Engine\Rendering\Isosurface\Vector3i.cs" />
+    <Compile Include="Engine\Rendering\Isosurface\VolumeData.cs" />
+    <Compile Include="Engine\Rendering\MeshOptimizer\MeshOptimizer.cs" />
+    <Compile Include="Engine\Rendering\MeshOptimizer\Pointer.cs" />
+    <Compile Include="Engine\Rendering\TriangulatedMesh.cs" />
     <Compile Include="Engine\Rendering\UI\CompanionProfileUIElement.cs" />
     <Compile Include="Engine\Rendering\UI\MenuBackground.cs" />
     <Compile Include="Engine\Rendering\UI\ProfileUIElement.cs" />
@@ -991,8 +1011,6 @@
     <Compile Include="Engine\Rendering\CompressedVertexDataExtensions.cs" />
     <Compile Include="Engine\Rendering\Geometry\ChunkMeshBorderDetector.cs" />
     <Compile Include="Engine\Rendering\Geometry\Geometry.cs" />
-    <Compile Include="Engine\Rendering\Geometry\IsoSurfaceCreator.cs" />
-    <Compile Include="Engine\Rendering\Geometry\MarchingCubes.cs" />
     <Compile Include="Engine\Rendering\Geometry\MeshStitcher.cs" />
     <Compile Include="Engine\Rendering\Geometry\WaterEdgePatcher.cs" />
     <Compile Include="Engine\Rendering\Geometry\WaterMeshStitcher.cs" />

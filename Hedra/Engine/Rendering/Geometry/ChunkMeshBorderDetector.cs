@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Hedra.Rendering;
+using IronPython.Modules;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering.Geometry
@@ -58,6 +60,20 @@ namespace Hedra.Engine.Rendering.Geometry
                 FrontLeftCorner = frontLeftCorner.ToArray()
             };
         }
+        
+        public Vector3[] ProcessEntireBorder(Vector3[] TerrainMesh, Vector3 Start, Vector3 End)
+        {
+            const float epsilon = 1.5f;
+            var all = new List<Vector3>();
+            for (var i = 0; i < TerrainMesh.Length; i++)
+            {
+                var vertex = TerrainMesh[i];
+                if(Math.Abs(vertex.Z - Start.Z) < epsilon || Math.Abs(vertex.Z - End.Z) < epsilon || Math.Abs(vertex.X - Start.X) < epsilon || Math.Abs(vertex.X - End.X) < epsilon)
+                    all.Add(vertex);
+            }
+
+            return all.ToArray();
+        }
     }
 
     public class MeshBorderOutput
@@ -71,6 +87,9 @@ namespace Hedra.Engine.Rendering.Geometry
         public Vector3[] FrontLeftCorner { get; set; }
         public Vector3[] BackRightCorner { get; set; }
         public Vector3[] BackLeftCorner { get; set; }
+
+        public Vector3[] All => FrontBorder.Concat(LeftBorder).Concat(RightBorder).Concat(BackBorder)
+            .Concat(FrontRightCorner).Concat(FrontLeftCorner).Concat(BackRightCorner).Concat(BackLeftCorner).ToArray();
 
         public override bool Equals(object Obj)
         {

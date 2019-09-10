@@ -32,6 +32,11 @@ namespace Hedra.Core
             return u.f * Z;
         }
 
+        public static int RoundToInt(float Value)
+        {
+            return (int) Math.Round(Value);
+        }
+
         public static float LinearInterpolate3D(float xm_ym_zm, float xp_ym_zm, float xm_yp_zm, float xp_yp_zm,
             float xm_ym_zp, float xp_ym_zp, float xm_yp_zp, float xp_yp_zp,
             float x, float y, float z)

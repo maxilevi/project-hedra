@@ -301,6 +301,44 @@ namespace Hedra.Rendering
             Extradata = newExtradata;
             Normals = newNormals;
         }
+        
+        public void Flat()
+        {
+            if (!HasColors) return;
+            var newVertices = new List<Vector3>();
+            var newNormals = new List<Vector3>();
+            var newColors = new List<Vector4>();
+            var newExtradata = new List<float>();
+            var newIndices = new List<uint>();
+            for (var i = 0; i < Indices.Count; i+=3)
+            {
+                var i0 = (int)Indices[i];
+                var i1 = (int)Indices[i+1];
+                var i2 = (int)Indices[i+2];
+                
+                newColors.Add(Colors[i0]);
+                newColors.Add(Colors[i1]);
+                newColors.Add(Colors[i2]);
+                
+                newVertices.Add(Vertices[i0]);
+                newVertices.Add(Vertices[i1]);
+                newVertices.Add(Vertices[i2]);
+                
+                var normal = Vector3.Cross(Vertices[i1] - Vertices[i0], Vertices[i2] - Vertices[i0]).Normalized();
+                newNormals.Add(normal);
+                newNormals.Add(normal);
+                newNormals.Add(normal);
+                
+                newIndices.Add((uint)newIndices.Count);
+                newIndices.Add((uint)newIndices.Count);
+                newIndices.Add((uint)newIndices.Count);
+            }
+            Vertices = newVertices;
+            Colors = newColors;
+            Extradata = newExtradata;
+            Normals = newNormals;
+            Indices = newIndices;
+        }
 
         public VertexData[] Ungroup()
         {

@@ -1,13 +1,21 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Hedra.BiomeSystem;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
+using Hedra.Engine.IO;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Geometry;
+using Hedra.Engine.Rendering.Isosurface;
 using Hedra.Rendering;
+using MeshDecimator;
+using MeshDecimator.Algorithms;
 using OpenTK;
+using UnityMeshSimplifier;
+using Vector3d = MeshDecimator.Math.Vector3d;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
@@ -45,38 +53,79 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private int BoundsZ => _parent.BoundsZ;
         private static float BlockSize => Chunk.BlockSize;
 
+        public ChunkMeshBuildOutput CreateTerrainMesh2(Block[][][] Blocks, int Lod, RegionCache Cache)
+        {
+            var output = CreateTerrain(Blocks, (X,Y,Z) => X != 0 && Z != 0 && X != BoundsX-1 && Z != BoundsZ-1, 1, Lod, Cache, true, true);
+            Simplify(output.StaticData, Lod);
+            const int targetLod = 1;
+            var borders = CreateTerrain(Blocks,
+                (X, Y, Z) => X < targetLod || Z < targetLod || X > BoundsX-targetLod-1 || Z > BoundsZ-targetLod-1, targetLod, Lod, Cache, true, true);
+            /*
+            _stitcher.Process(output.StaticData, borders.StaticData,
+                new Vector3(Lod*BlockSize, 0, Lod*BlockSize), new Vector3(Chunk.Width-Lod*BlockSize, 0, Chunk.Width-Lod*BlockSize),
+                new Vector3(targetLod*BlockSize,0, targetLod*BlockSize), new Vector3(Chunk.Width-targetLod*BlockSize, 0, Chunk.Width-targetLod*BlockSize));*/
+            /*_waterStitcher.Process(output.WaterData, borders.WaterData,
+                new Vector3(Lod * BlockSize, 0, Lod * BlockSize), new Vector3(Chunk.Width - Lod * BlockSize, 0, Chunk.Width - Lod * BlockSize),
+                new Vector3(targetLod * BlockSize, 0, targetLod * BlockSize), new Vector3(Chunk.Width - targetLod * BlockSize, 0, Chunk.Width - targetLod * BlockSize));*/
+            output.StaticData += borders.StaticData;
+            output.WaterData += borders.WaterData;
+            output.Failed |= borders.Failed;
+            output.HasNoise3D |= borders.HasNoise3D;
+            output.HasWater |= borders.HasWater;
+            for (var k = 0; k < output.StaticData.Vertices.Count; k++) output.StaticData.Extradata.Add(0);
+
+            output.StaticData.Translate(new Vector3(OffsetX, 0, OffsetZ));
+            output.WaterData.Translate(new Vector3(OffsetX, 0, OffsetZ));
+            return output;
+        }
+        
         public ChunkMeshBuildOutput CreateTerrainMesh(Block[][][] Blocks, int Lod, RegionCache Cache)
         {
-            var output = default(ChunkMeshBuildOutput);
-            if (Lod == 1)
-            {
-                output = CreateTerrain(Blocks, (X, Y, Z) => true, Lod, Lod, Cache, true, true);
-            }
-            else
-            {
-                output = CreateTerrain(Blocks, (X,Y,Z) => X != 0 && Z != 0 && X != BoundsX-Lod && Z != BoundsZ-Lod, Lod, Lod, Cache, true, true);
-                const int targetLod = 1;
-                var borders = CreateTerrain(Blocks,
-                    (X, Y, Z) => X < targetLod || Z < targetLod || X > BoundsX-targetLod-1 || Z > BoundsZ-targetLod-1, targetLod, Lod, Cache, true, true);
-                _stitcher.Process(output.StaticData, borders.StaticData,
-                    new Vector3(Lod*BlockSize, 0, Lod*BlockSize), new Vector3(Chunk.Width-Lod*BlockSize, 0, Chunk.Width-Lod*BlockSize),
-                    new Vector3(targetLod*BlockSize,0, targetLod*BlockSize), new Vector3(Chunk.Width-targetLod*BlockSize, 0, Chunk.Width-targetLod*BlockSize));
-                _waterStitcher.Process(output.WaterData, borders.WaterData,
-                    new Vector3(Lod * BlockSize, 0, Lod * BlockSize), new Vector3(Chunk.Width - Lod * BlockSize, 0, Chunk.Width - Lod * BlockSize),
-                    new Vector3(targetLod * BlockSize, 0, targetLod * BlockSize), new Vector3(Chunk.Width - targetLod * BlockSize, 0, Chunk.Width - targetLod * BlockSize));
-                output.StaticData += borders.StaticData;
-                output.WaterData += borders.WaterData;
-                output.Failed |= borders.Failed;
-                output.HasNoise3D |= borders.HasNoise3D;
-                output.HasWater |= borders.HasWater;
-            }
+            var output = CreateTerrain(Blocks, (X, Y, Z) => true, 1, Lod, Cache, true, true);
             for (var k = 0; k < output.StaticData.Vertices.Count; k++) output.StaticData.Extradata.Add(0);
-            //output.WaterData = _waterPatcher.Process(output.WaterData, Lod);
+
+            Simplify(output.StaticData, Lod);
             
             output.StaticData.Translate(new Vector3(OffsetX, 0, OffsetZ));
             output.WaterData.Translate(new Vector3(OffsetX, 0, OffsetZ));
             return output;
         }
+
+        private void Simplify(VertexData Data, int Lod)
+        {
+            var lods = new Dictionary<int, float>
+            {
+                {1, 0.5f},
+                {2, 0.2f},
+                {4, 0.1f},
+                {8, 0.05f}
+            };
+            Data.Smooth();
+            var detector = new ChunkMeshBorderDetector();
+            var border = detector.ProcessEntireBorder(Data.Vertices.ToArray(), Vector3.Zero, new Vector3(Chunk.Width - Lod, 0, Chunk.Width));
+            Rendering.MeshOptimizer.MeshOptimizer.Simplify(Data, border.Select(V => (uint)Data.Vertices.IndexOf(V)).ToArray(), lods[Lod]);
+            Data.Flat();
+        }
+        
+        /*                                var algorithm = (FastQuadricMeshSimplification) MeshDecimation.CreateAlgorithm(Algorithm.Default);
+                algorithm.PreserveFoldovers = true;
+                algorithm.PreserveSeams = true;
+                algorithm.PreserveBorders = true;
+                algorithm.EnableSmartLink = false;
+                algorithm.VertexLinkDistanceSqr = 0.0025f;
+                var targetTriangleCount = (int)(((int)(data.Indices.Count / 3)) * lods[Lod]);
+                var sourceMesh = new Mesh(data.Vertices.Select(V => new Vector3d(V.X, V.Y, V.Z)).ToArray(), data.Indices.Select(I => (int)I).ToArray());
+                sourceMesh.Normals = data.Normals.Select(V => new MeshDecimator.Math.Vector3(1, 1, 1)).ToArray();
+                sourceMesh.Colors = data.Colors.Select(V => new MeshDecimator.Math.Vector4(V.X, V.Y, V.Z, V.W)).ToArray();
+                var mesh = MeshDecimation.DecimateMesh(algorithm, sourceMesh, targetTriangleCount);
+                output.StaticData = new VertexData()
+                {
+                    Indices = mesh.Indices.Select(I => (uint) I).ToList(),
+                    Vertices = mesh.Vertices.Select(V => new Vector3((float)V.x, (float)V.y, (float)V.z)).ToList(),
+                    Normals = mesh.Normals.Select(V => new Vector3(V.x, V.y, V.z)).ToList(),
+                    Colors = mesh.Colors.Select(V => new Vector4(V.x, V.y, V.z, V.w)).ToList()
+                };
+                output.StaticData.Flat();*/
 
         private static ChunkMeshBuildOutput Merge(params ChunkMeshBuildOutput[] Outputs)
         {
@@ -104,6 +153,32 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return CreateTerrain(Blocks, (X,Y,Z) => true, CollisionMeshLod, 1, Cache, false, false).StaticData;
         }
 
+        private ChunkMeshBuildOutput CreateTerrainTransvoxel(Block[][][] Blocks, Func<int, int, int, bool> Filter, int Lod, int ColorLod, RegionCache Cache, bool ProcessWater, bool ProcessColors)
+        {
+            var verts = new List<Vertex>();
+            var indices = new List<int>();
+            var cache = new RegularCellCache();
+            var volume = new VolumeData(Blocks);
+            for (var x = 2; x < BoundsX-2; x += 1)
+            {
+                for (var y = 2; y < BoundsY-2; y += 1)
+                {
+                    for (var z = 2; z < BoundsZ-2; z += 1)
+                    {
+                        Transvoxel.PolygonizeRegularCell(Vector3i.Zero, new Vector3(x, y, z), new Vector3i(x, y, z), volume, 0, 4, ref verts, ref indices, ref cache);
+                    }
+                }
+            }
+
+            return new ChunkMeshBuildOutput(new VertexData
+            {
+                Vertices = verts.Select(V => V.Primary).ToList(),
+                Indices = indices.Select(I => (uint)I).ToList(),
+                Normals = verts.Select(V => V.Normal).ToList(),
+                Colors = Enumerable.Repeat(new Vector4(0, .75f, 0, 1), verts.Count).ToList()
+            }, VertexData.Empty, new VertexData(), false, true, false);
+        }
+        
         private ChunkMeshBuildOutput CreateTerrain(Block[][][] Blocks, Func<int, int, int, bool> Filter, int Lod, int ColorLod, RegionCache Cache, bool ProcessWater, bool ProcessColors)
         {
             var failed = false;
@@ -202,7 +277,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if(TriangleCount == 0) return Vector3.One;
             var averageNormal = Vector3.Zero;
             for (var i = 0; i < TriangleCount; ++i)
-                averageNormal += Vector3.Cross(TriangleBuffer[i].P[1] - TriangleBuffer[i].P[0], TriangleBuffer[i].P[2] - TriangleBuffer[i].P[0]).NormalizedFast();
+                averageNormal += Vector3.Cross(TriangleBuffer[i].Vertices[1] - TriangleBuffer[i].Vertices[0], TriangleBuffer[i].Vertices[2] - TriangleBuffer[i].Vertices[0]).NormalizedFast();
             return averageNormal / TriangleCount;
         }
     }

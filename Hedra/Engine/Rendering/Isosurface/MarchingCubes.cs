@@ -363,15 +363,15 @@ namespace Hedra.Engine.Rendering.Geometry
 
         public static Triangle[] NewTriangleBuffer() => new Triangle[]
         {
-            new Triangle {P = new Vector3[3]},
-            new Triangle {P = new Vector3[3]},
-            new Triangle {P = new Vector3[3]},
-            new Triangle {P = new Vector3[3]},
-            new Triangle {P = new Vector3[3]},
-            new Triangle {P = new Vector3[3]},
-            new Triangle {P = new Vector3[3]},
-            new Triangle {P = new Vector3[3]},
-            new Triangle {P = new Vector3[3]}
+            new Triangle {Vertices = new Vector3[3]},
+            new Triangle {Vertices = new Vector3[3]},
+            new Triangle {Vertices = new Vector3[3]},
+            new Triangle {Vertices = new Vector3[3]},
+            new Triangle {Vertices = new Vector3[3]},
+            new Triangle {Vertices = new Vector3[3]},
+            new Triangle {Vertices = new Vector3[3]},
+            new Triangle {Vertices = new Vector3[3]},
+            new Triangle {Vertices = new Vector3[3]}
         };
         public static Vector3[] NewVertexBuffer() => new Vector3[12];
         
@@ -433,9 +433,9 @@ namespace Hedra.Engine.Rendering.Geometry
             /* Create the triangle */
             for (var i = 0; TriTable[cubeIndex, i] != -1; i += 3)
             {
-                TriangleBuffer[TriangleCount].P[0] = VertexBuffer[TriTable[cubeIndex, i + 0]];
-                TriangleBuffer[TriangleCount].P[1] = VertexBuffer[TriTable[cubeIndex, i + 1]];
-                TriangleBuffer[TriangleCount].P[2] = VertexBuffer[TriTable[cubeIndex, i + 2]];
+                TriangleBuffer[TriangleCount].Vertices[0] = VertexBuffer[TriTable[cubeIndex, i + 0]];
+                TriangleBuffer[TriangleCount].Vertices[1] = VertexBuffer[TriTable[cubeIndex, i + 1]];
+                TriangleBuffer[TriangleCount].Vertices[2] = VertexBuffer[TriTable[cubeIndex, i + 2]];
                 TriangleCount++;
             }
         }
@@ -465,19 +465,19 @@ namespace Hedra.Engine.Rendering.Geometry
             if (TriangleCount == 2)
             {
                 if (Orientation && 
-                    Math.Abs((TriangleBuffer[0].P[1].Xz - TriangleBuffer[1].P[1].Xz).LengthSquared) < 0.0005f && 
-                    Math.Abs((TriangleBuffer[1].P[0].Xz - TriangleBuffer[0].P[2].Xz).LengthSquared) < 0.0005f)
+                    Math.Abs((TriangleBuffer[0].Vertices[1].Xz - TriangleBuffer[1].Vertices[1].Xz).LengthSquared) < 0.0005f && 
+                    Math.Abs((TriangleBuffer[1].Vertices[0].Xz - TriangleBuffer[0].Vertices[2].Xz).LengthSquared) < 0.0005f)
                 {
-                    var vertex2 = TriangleBuffer[1].P[0];
-                    var vertex3 = TriangleBuffer[0].P[0];
+                    var vertex2 = TriangleBuffer[1].Vertices[0];
+                    var vertex3 = TriangleBuffer[0].Vertices[0];
 
-                    TriangleBuffer[0].P[0] = TriangleBuffer[1].P[2];
-                    TriangleBuffer[0].P[1] = vertex3;
-                    TriangleBuffer[0].P[2] = TriangleBuffer[1].P[1];
+                    TriangleBuffer[0].Vertices[0] = TriangleBuffer[1].Vertices[2];
+                    TriangleBuffer[0].Vertices[1] = vertex3;
+                    TriangleBuffer[0].Vertices[2] = TriangleBuffer[1].Vertices[1];
 
-                    TriangleBuffer[1].P[0] = vertex3;
-                    TriangleBuffer[1].P[1] = TriangleBuffer[1].P[2];
-                    TriangleBuffer[1].P[2] = vertex2;
+                    TriangleBuffer[1].Vertices[0] = vertex3;
+                    TriangleBuffer[1].Vertices[1] = TriangleBuffer[1].Vertices[2];
+                    TriangleBuffer[1].Vertices[2] = vertex2;
 
                 }
             }
@@ -488,11 +488,11 @@ namespace Hedra.Engine.Rendering.Geometry
                 Data.Indices.Add((uint) Data.Vertices.Count + 1);
                 Data.Indices.Add((uint) Data.Vertices.Count + 2);
 
-                Data.Vertices.Add(TriangleBuffer[i].P[0]);
-                Data.Vertices.Add(TriangleBuffer[i].P[1]);
-                Data.Vertices.Add(TriangleBuffer[i].P[2]);
+                Data.Vertices.Add(TriangleBuffer[i].Vertices[0]);
+                Data.Vertices.Add(TriangleBuffer[i].Vertices[1]);
+                Data.Vertices.Add(TriangleBuffer[i].Vertices[2]);
 
-                var normal = Vector3.Cross(TriangleBuffer[i].P[1] - TriangleBuffer[i].P[0], TriangleBuffer[i].P[2] - TriangleBuffer[i].P[0]).Normalized();
+                var normal = Vector3.Cross(TriangleBuffer[i].Vertices[1] - TriangleBuffer[i].Vertices[0], TriangleBuffer[i].Vertices[2] - TriangleBuffer[i].Vertices[0]).Normalized();
                 Data.Normals.Add(normal);
                 Data.Normals.Add(normal);
                 Data.Normals.Add(normal);
@@ -512,6 +512,6 @@ namespace Hedra.Engine.Rendering.Geometry
     }
     public struct Triangle
     {
-        public Vector3[] P;
+        public Vector3[] Vertices;
     }
 }
