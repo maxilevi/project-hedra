@@ -78,8 +78,9 @@ namespace Hedra.Engine.Rendering.Geometry
             return null;
         }
         
-        public static void CreateWaterQuad(float BlockSize, GridCell Cell, bool Flipped, Vector3 Offset, int LOD, Vector4 TemplateColor, VertexData Data){
-            
+        public static void CreateWaterQuad(float BlockSize, GridCell Cell, bool Flipped, Vector4 TemplateColor, VertexData Data)
+        {
+            const int LOD = 1;
             var densities = new []
             {
                 (float) Cell.Density[0],

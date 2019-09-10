@@ -8,13 +8,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Hedra.Core;
 using Hedra.Engine.Generation;
 using Hedra.Rendering;
-using IronPython.Runtime;
 using OpenTK;
 
-namespace Hedra.Engine.Rendering.Geometry
+namespace Hedra.Engine.Rendering
 {
     /// <summary>
     /// Description of MarchingCubes.
