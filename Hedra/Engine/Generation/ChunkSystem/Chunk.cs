@@ -139,7 +139,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         
         private VertexData CreateCollisionTerrainMesh()
         {
-            lock (_blocks)
+            lock (_blocksLock)
             {
                 return _terrainBuilder.CreateTerrainCollisionMesh(_blocks, _regionCache);
             }
@@ -147,7 +147,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         
         private ChunkMeshBuildOutput CreateTerrainMesh(int LevelOfDetail)
         {
-            lock (_blocks)
+            lock (_blocksLock)
             {
                 return _terrainBuilder.CreateTerrainMesh(_blocks, LevelOfDetail, _regionCache);
             }
