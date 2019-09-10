@@ -276,24 +276,34 @@ namespace Hedra.Rendering
         public void Smooth()
         {
             if (!HasColors) return;
-
-            var decoupledVertices = Indices.Select(I => Vertices[(int)I]).ToList();
+            
             var newIndices = new List<uint>();
-            var newVertices = decoupledVertices.Distinct().ToList();
-            for (var i = 0; i < decoupledVertices.Count; i++)
-            {
-                newIndices.Add((uint) newVertices.IndexOf(decoupledVertices[i]));
-            }
+            var vertexMap = new Dictionary<Vector3, int>();
+            var newVertices = new List<Vector3>();
             var newNormals = new List<Vector3>();
             var newColors = new List<Vector4>();
             var newExtradata = new List<float>();
-            for (var i = 0; i < newVertices.Count; i++)
+            for (var i = 0; i < Indices.Count; i++)
             {
-                var index = Vertices.IndexOf(newVertices[i]);
-                newColors.Add(Colors[index]);
-                newNormals.Add(Normals[index]);
-                if(Extradata != null && newExtradata.Count > 0)
-                    newExtradata.Add(Extradata[index]);
+                var curr = (int) Indices[i];
+                var vertex = Vertices[curr];
+                var index = 0;
+                if (vertexMap.ContainsKey(vertex))
+                {
+                    index = vertexMap[vertex];
+                }
+                else
+                {
+                    index = newVertices.Count;
+                    newVertices.Add(vertex);
+                    vertexMap.Add(vertex, index);
+                    
+                    newColors.Add(Colors[curr]);
+                    newNormals.Add(Normals[curr]);
+                    if(Extradata != null && newExtradata.Count > 0)
+                        newExtradata.Add(Extradata[curr]);
+                }
+                newIndices.Add((uint)index);
             }
             Indices = newIndices;
             Vertices = newVertices;
