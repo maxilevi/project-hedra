@@ -24,8 +24,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
                             * _noise.GetSimplexFractalWithFrequency(X, Y, Z, 0.00075f).Clamp01()
                             * 48.0f 
                             * Chunk.BlockSize;
-                            
-                            
+   
             if (Math.Abs(overhangs) > 0)
             {
                 Type = BlockType.Stone;
@@ -80,7 +79,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             var lerp = Mathf.Clamp((float) (height - cutoff) / buffer, 0f, 1f);
             height = Mathf.Lerp((float)height, maxHeight, lerp);
 
-            return (float) height + BiomeGenerator.SmallFrequency(X, Z) * 1.5f;
+            return (float) height;// + BiomeGenerator.SmallFrequency(X, Z) * 1.5f;
         }
 
         private static void AddLakes(float X, float Z, ref double Height)

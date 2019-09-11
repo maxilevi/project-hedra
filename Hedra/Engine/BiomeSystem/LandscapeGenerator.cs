@@ -88,7 +88,7 @@ namespace Hedra.Engine.BiomeSystem
                         this.HandleGroundworks(Blocks, x, y, z, path, PathDepth, pathClamped, town,
                             blockGroundworks, ref height);
                     }
-                    //GrassBlockPass(Blocks, x, z, makeDirt);
+                    GrassBlockPass(Blocks, x, z, makeDirt);
                 }
             }
         }
@@ -97,18 +97,24 @@ namespace Hedra.Engine.BiomeSystem
         {
             var foundBlock = false;
             var counter = 0;
-            for (var y = Chunk.Height - 2; y > -1; --y)
+            for (var y = Chunk.Height - 2; y > 0; --y)
             {
-                if (Blocks[x][y][z].Type != BlockType.Air && Blocks[x][y+1][z].Type == BlockType.Air && !foundBlock)
+                var type = Blocks[x][y][z].Type;
+                if (type != BlockType.Air && Blocks[x][y+1][z].Type == BlockType.Air && !foundBlock)
                 {
                     foundBlock = true;
                     counter = 4;
                 }
 
-                if (counter > 0 && Blocks[x][y][z].Type == BlockType.Stone)
+                if (counter > 0 && type == BlockType.Stone)
                 {
                     Blocks[x][y][z].Type = BlockType.Grass;
                     counter--;
+                }
+
+                if (type == BlockType.Stone && (Blocks[x][y - 1][z].Type == BlockType.Air) && Blocks[x][y][z].Density < 1f)
+                {
+                    Blocks[x][y][z].Density = new Half(Math.Min(Blocks[x][y][z].Density + Utils.Rng.NextFloat() * 2f, 0.5f));
                 }
             }
             for (var y = Chunk.Height - 1; y > -1; --y)
@@ -211,7 +217,7 @@ namespace Hedra.Engine.BiomeSystem
     
             if (blockDensity > 0)
             {
-                blockType = BlockType.Dirt;
+                blockType = BlockType.Stone;
 /*
                 if (height - y < 18f)
                 {
@@ -472,7 +478,6 @@ namespace Hedra.Engine.BiomeSystem
 
         protected override void PlaceEnvironment(RegionCache Cache, Predicate<PlacementDesign> Filter)
         {
-            return;
             var structs = World.StructureHandler.StructureItems;
             var groundworks = World.WorldBuilding.Groundworks.Where(P => P.NoPlants).ToArray();
             for (var x = 0; x < this.Chunk.BoundsX; x++)

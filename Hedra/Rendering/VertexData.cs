@@ -326,10 +326,11 @@ namespace Hedra.Rendering
                 var i0 = (int)Indices[i];
                 var i1 = (int)Indices[i+1];
                 var i2 = (int)Indices[i+2];
-                
-                newColors.Add(Colors[i0]);
-                newColors.Add(Colors[i1]);
-                newColors.Add(Colors[i2]);
+
+                var triangleColor = (Colors[i0] + Colors[i1] + Colors[i2]) * .33f;
+                newColors.Add(triangleColor);
+                newColors.Add(triangleColor);
+                newColors.Add(triangleColor);
                 
                 newVertices.Add(Vertices[i0]);
                 newVertices.Add(Vertices[i1]);
