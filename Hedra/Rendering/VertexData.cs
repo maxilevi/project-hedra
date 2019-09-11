@@ -14,10 +14,11 @@ using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Management;
+using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Geometry;
-using MeshOptimizer;
 using OpenTK;
+using InstanceData = Hedra.Engine.Rendering.InstanceData;
 
 namespace Hedra.Rendering
 {
@@ -264,7 +265,7 @@ namespace Hedra.Rendering
                 };
                 if(HasExtradata) vertices[i].Extradata = Extradata[i];
             }
-            var result = MeshOperations.Optimize(vertices, Indices.ToArray(), MeshOptimizerVertex.SizeInBytes);
+            var result = MeshOptimizer.Optimize(vertices, Indices.ToArray(), MeshOptimizerVertex.SizeInBytes);
             Indices = new List<uint>(result.Item2);
             Normals = new List<Vector3>(result.Item1.Select(V => V.Normal));
             Colors = new List<Vector4>(result.Item1.Select(V => V.Color));

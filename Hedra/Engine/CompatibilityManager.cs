@@ -1,15 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using Hedra.Engine.IO;
-using Hedra.Engine.Rendering;
+using Hedra.Engine.Native;
 using Hedra.Engine.Rendering.Animation;
-using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Engine.Rendering.Core;
-using Hedra.Engine.Rendering.Geometry;
-using MeshOptimizer;
 using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
@@ -38,12 +33,18 @@ namespace Hedra.Engine
             SupportsMeshOptimizer = true;
             try
             {
-                MeshOperations.OptimizeCache(new uint[0], 0);
+                MeshOptimizer.OptimizeCache(new uint[0], 0);
             }
             catch (DllNotFoundException e)
             {
-                Log.WriteLine($"Failed to load meshoptimizer with the following error: {e}");
+                Log.WriteLine($"Failed to load MeshOptimizer with the following error: {e}");
                 SupportsMeshOptimizer = false;
+            }
+
+            if (!SupportsMeshOptimizer)
+            {
+                Log.WriteLine("Failed to load required libraries (core.dll). Please contact me with the game log.");
+                Environment.Exit(1);
             }
         }
         
