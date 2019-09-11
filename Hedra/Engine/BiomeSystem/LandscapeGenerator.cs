@@ -598,7 +598,6 @@ namespace Hedra.Engine.BiomeSystem
             NoGrassZone = false;
             NoTreesZone = false;
             InMerchant = false;
-            return;
             foreach (CollidableStructure structPosition in Structs)
             {
                 var possiblePosition = new Vector3(Chunk.OffsetX + X * Chunk.BlockSize, 0,
