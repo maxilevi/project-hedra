@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
+using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Geometry;
 using Hedra.Rendering;
@@ -55,12 +56,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             Data.Smooth();
             var detector = new ChunkMeshBorderDetector();
             var border = detector.ProcessEntireBorder(Data, Vector3.Zero, new Vector3(Chunk.Width, 0, Chunk.Width));
-            for (var i = 0; i < border.Length; ++i)
-            {
-                var index = (int) border[i];
-                Data.Colors[index] = new Vector4(1,0,0,1);
-            }
-            Rendering.MeshOptimizer.MeshOptimizer.Simplify(Data, border, _lodMap[Lod]);
+            MeshOptimizer.Simplify(Data, border, _lodMap[Lod]);
             Data.Flat();
         }
 
@@ -70,7 +66,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var waterData = new VertexData();
             var instanceData = new VertexData();
             var failed = false;
-            var hasNoise = false;
             var hasWater = false;
             for (var i = 0; i < Outputs.Length; ++i)
             {
@@ -79,10 +74,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 waterData += Outputs[i].WaterData;
                 instanceData += Outputs[i].InstanceData;
                 failed |= Outputs[i].Failed;
-                hasNoise |= Outputs[i].HasNoise3D;
                 hasWater |= Outputs[i].HasWater;
             }
-            return new ChunkMeshBuildOutput(staticData, waterData, instanceData, failed, hasNoise, hasWater);
+            return new ChunkMeshBuildOutput(staticData, waterData, instanceData, failed, hasWater);
         }
 
         public VertexData CreateTerrainCollisionMesh(Block[][][] Blocks, RegionCache Cache)
@@ -166,7 +160,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 }
             }
 
-            return new ChunkMeshBuildOutput(blockData, waterData, new VertexData(), failed, hasNoise3D, hasWater);
+            return new ChunkMeshBuildOutput(blockData, waterData, new VertexData(), failed, hasWater);
         }
 
         private void PolygoniseCell(ref GridCell Cell, ref bool ProcessColors, ref bool Next, ref VertexData BlockData,

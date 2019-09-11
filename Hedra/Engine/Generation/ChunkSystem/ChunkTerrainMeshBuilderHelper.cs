@@ -40,7 +40,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private void SetSampleSize(int Lod)
         {
             _sampleWidth = Lod;
-            _sampleHeight = Lod; // * 2
+            _sampleHeight = Lod * 2;
         }
 
         public Vector4 GetColor(ref GridCell Cell, RegionColor RegionColor, int Lod, ref Vector3 AverageNormal)
