@@ -60,7 +60,7 @@ namespace Hedra.Engine.BiomeSystem
                 this.BlocksSetted = true;
             }
 
-            var lod = 1;//Chunk.Lod;
+            var lod = Chunk.Lod;
             if (_firstGeneration || lod < GeneratedLod)
             {
                 bool BorderFilter(int X, int Z) => X < 2 || Z < 2 || X > Chunk.BoundsX - 3 || Z > Chunk.BoundsZ - 3;
@@ -100,7 +100,7 @@ namespace Hedra.Engine.BiomeSystem
 
         private void CheckForNearbyStructures()
         {
-            //StructureHandler.CheckStructures( new Vector2(Chunk.OffsetX, Chunk.OffsetZ) );
+            StructureHandler.CheckStructures( new Vector2(Chunk.OffsetX, Chunk.OffsetZ) );
         }
         
         public void BuildArray(Block[][][] Blocks)

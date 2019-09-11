@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Hedra.Rendering;
+using IronPython.Modules;
 using OpenTK;
 
 namespace Hedra.Engine.Rendering.Geometry
 {
     public class ChunkMeshBorderDetector
     {
-        private const double Epsilon = 0.0005;
+        private const double Epsilon = 0.005f;
 
         public MeshBorderOutput Process(VertexData TerrainMesh,Vector3 Start, Vector3 End)
         {
@@ -58,6 +60,21 @@ namespace Hedra.Engine.Rendering.Geometry
                 FrontLeftCorner = frontLeftCorner.ToArray()
             };
         }
+        
+        public uint[] ProcessEntireBorder(VertexData Mesh, Vector3 Start, Vector3 End)
+        {
+            const float epsilon = 0.5f;
+            var all = new List<uint>();
+            for (var i = 0; i < Mesh.Indices.Count; i++)
+            {
+                var index = (int) Mesh.Indices[i];
+                var vertex = Mesh.Vertices[index];
+                if(Math.Abs(vertex.Z - Start.Z) < epsilon || Math.Abs(vertex.Z - End.Z) < epsilon || Math.Abs(vertex.X - Start.X) < epsilon || Math.Abs(vertex.X - End.X) < epsilon)
+                    all.Add((uint)index);
+            }
+
+            return all.ToArray();
+        }
     }
 
     public class MeshBorderOutput
@@ -71,6 +88,9 @@ namespace Hedra.Engine.Rendering.Geometry
         public Vector3[] FrontLeftCorner { get; set; }
         public Vector3[] BackRightCorner { get; set; }
         public Vector3[] BackLeftCorner { get; set; }
+
+        public Vector3[] All => FrontBorder.Concat(LeftBorder).Concat(RightBorder).Concat(BackBorder)
+            .Concat(FrontRightCorner).Concat(FrontLeftCorner).Concat(BackRightCorner).Concat(BackLeftCorner).ToArray();
 
         public override bool Equals(object Obj)
         {

@@ -14,10 +14,11 @@ using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Management;
+using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Geometry;
-using MeshOptimizer;
 using OpenTK;
+using InstanceData = Hedra.Engine.Rendering.InstanceData;
 
 namespace Hedra.Rendering
 {
@@ -264,7 +265,7 @@ namespace Hedra.Rendering
                 };
                 if(HasExtradata) vertices[i].Extradata = Extradata[i];
             }
-            var result = MeshOperations.Optimize(vertices, Indices.ToArray(), MeshOptimizerVertex.SizeInBytes);
+            var result = MeshOptimizer.Optimize(vertices, Indices.ToArray(), MeshOptimizerVertex.SizeInBytes);
             Indices = new List<uint>(result.Item2);
             Normals = new List<Vector3>(result.Item1.Select(V => V.Normal));
             Colors = new List<Vector4>(result.Item1.Select(V => V.Color));
@@ -276,30 +277,79 @@ namespace Hedra.Rendering
         public void Smooth()
         {
             if (!HasColors) return;
-
-            var decoupledVertices = Indices.Select(I => Vertices[(int)I]).ToList();
+            
             var newIndices = new List<uint>();
-            var newVertices = decoupledVertices.Distinct().ToList();
-            for (var i = 0; i < decoupledVertices.Count; i++)
-            {
-                newIndices.Add((uint) newVertices.IndexOf(decoupledVertices[i]));
-            }
+            var vertexMap = new Dictionary<Vector3, int>();
+            var newVertices = new List<Vector3>();
             var newNormals = new List<Vector3>();
             var newColors = new List<Vector4>();
             var newExtradata = new List<float>();
-            for (var i = 0; i < newVertices.Count; i++)
+            for (var i = 0; i < Indices.Count; i++)
             {
-                var index = Vertices.IndexOf(newVertices[i]);
-                newColors.Add(Colors[index]);
-                newNormals.Add(Normals[index]);
-                if(Extradata != null && newExtradata.Count > 0)
-                    newExtradata.Add(Extradata[index]);
+                var curr = (int) Indices[i];
+                var vertex = Vertices[curr];
+                var index = 0;
+                if (vertexMap.ContainsKey(vertex))
+                {
+                    index = vertexMap[vertex];
+                }
+                else
+                {
+                    index = newVertices.Count;
+                    newVertices.Add(vertex);
+                    vertexMap.Add(vertex, index);
+                    
+                    newColors.Add(Colors[curr]);
+                    newNormals.Add(Normals[curr]);
+                    if(Extradata != null && newExtradata.Count > 0)
+                        newExtradata.Add(Extradata[curr]);
+                }
+                newIndices.Add((uint)index);
             }
             Indices = newIndices;
             Vertices = newVertices;
             Colors = newColors;
             Extradata = newExtradata;
             Normals = newNormals;
+        }
+        
+        public void Flat()
+        {
+            if (!HasColors) return;
+            var newVertices = new List<Vector3>();
+            var newNormals = new List<Vector3>();
+            var newColors = new List<Vector4>();
+            var newExtradata = new List<float>();
+            var newIndices = new List<uint>();
+            for (var i = 0; i < Indices.Count; i+=3)
+            {
+                var i0 = (int)Indices[i];
+                var i1 = (int)Indices[i+1];
+                var i2 = (int)Indices[i+2];
+
+                var triangleColor = (Colors[i0] + Colors[i1] + Colors[i2]) * .33f;
+                newColors.Add(triangleColor);
+                newColors.Add(triangleColor);
+                newColors.Add(triangleColor);
+                
+                newVertices.Add(Vertices[i0]);
+                newVertices.Add(Vertices[i1]);
+                newVertices.Add(Vertices[i2]);
+                
+                var normal = Vector3.Cross(Vertices[i1] - Vertices[i0], Vertices[i2] - Vertices[i0]).Normalized();
+                newNormals.Add(normal);
+                newNormals.Add(normal);
+                newNormals.Add(normal);
+                
+                newIndices.Add((uint)newIndices.Count);
+                newIndices.Add((uint)newIndices.Count);
+                newIndices.Add((uint)newIndices.Count);
+            }
+            Vertices = newVertices;
+            Colors = newColors;
+            Extradata = newExtradata;
+            Normals = newNormals;
+            Indices = newIndices;
         }
 
         public VertexData[] Ungroup()
