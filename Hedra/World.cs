@@ -75,6 +75,16 @@ namespace Hedra
             SearcheableChunksReference = Provider.SearcheableChunks;
         }
 
+        public static float GetNoise(float X, float Y)
+        {
+            return Provider.GetNoise(X, Y);
+        }
+        
+        public static float GetNoise(float X, float Y, float Z)
+        {
+            return Provider.GetNoise(X, Y, Z);
+        }
+        
         public static void ReloadModules()
         {
             Provider.ReloadModules();

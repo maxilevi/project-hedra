@@ -55,6 +55,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         public void Update()
         {
+            if(_bag.Disposed) return;
             if (_bag.Position.Y < _positi.Y)
             {
                 var physx = _bag.Physics;

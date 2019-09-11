@@ -89,9 +89,6 @@
       <HintPath>..\packages\IronPython.2.7.5\lib\Net40\IronPython.Modules.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MeshOptimizer, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\references\MeshOptimizer.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Dynamic, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1">
       <HintPath>..\packages\IronPython.2.7.5\lib\Net40\Microsoft.Dynamic.dll</HintPath>
     </Reference>
@@ -247,9 +244,17 @@
     <Compile Include="Engine\Bullet\PhysicsComponentMotionState.cs" />
     <Compile Include="Engine\CacheSystem\DynamicCache.cs" />
     <Compile Include="Engine\CacheSystem\FishingPostIconCache.cs" />
+    <Compile Include="Engine\DataStructures\AABB.cs" />
+    <Compile Include="Engine\DataStructures\Octree.cs" />
+    <Compile Include="Engine\DataStructures\OctreeNode.cs" />
     <Compile Include="Engine\EntitySystem\DummyModel.cs" />
+    <Compile Include="Engine\Generation\FastNoise.cs" />
     <Compile Include="Engine\Generation\FishingZoneHandler.cs" />
+    <Compile Include="Engine\Generation\Simplex.cs" />
     <Compile Include="Engine\ItemSystem\Item.cs" />
+    <Compile Include="Engine\Native\HedraCoreNative.cs" />
+    <Compile Include="Engine\Native\MeshOptimizer.cs" />
+    <Compile Include="Engine\Native\Pointer.cs" />
     <Compile Include="Engine\Player\BackgroundUpdater.cs" />
     <Compile Include="Engine\Player\BoatSystem\BoatHumanoidInputHandler.cs" />
     <Compile Include="Engine\Player\BoatSystem\BoatInputHandler.cs" />
@@ -269,10 +274,10 @@
     <Compile Include="Engine\Rendering\Core\UBO.cs" />
     <Compile Include="Engine\Rendering\Core\VBOCache.cs" />
     <Compile Include="Engine\Rendering\Frustum\FrustumGJK.cs" />
-    <Compile Include="Engine\Rendering\Frustum\Octree.cs" />
-    <Compile Include="Engine\Rendering\Frustum\OctreeNode.cs" />
     <Compile Include="Engine\Rendering\Frustum\Plane.cs" />
     <Compile Include="Engine\Rendering\Frustum\Simplex.cs" />
+    <Compile Include="Engine\Rendering\Geometry\IsoSurfaceCreator.cs" />
+    <Compile Include="Engine\Rendering\Geometry\MarchingCubes.cs" />
     <Compile Include="Engine\Rendering\Geometry\MeshAnalyzer.cs" />
     <Compile Include="Engine\Rendering\UI\CompanionProfileUIElement.cs" />
     <Compile Include="Engine\Rendering\UI\MenuBackground.cs" />
@@ -988,11 +993,7 @@
     <Compile Include="Engine\Rendering\CompressedVertexDataExtensions.cs" />
     <Compile Include="Engine\Rendering\Geometry\ChunkMeshBorderDetector.cs" />
     <Compile Include="Engine\Rendering\Geometry\Geometry.cs" />
-    <Compile Include="Engine\Rendering\Geometry\IsoSurfaceCreator.cs" />
-    <Compile Include="Engine\Rendering\Geometry\MarchingCubes.cs" />
-    <Compile Include="Engine\Rendering\Geometry\MeshStitcher.cs" />
     <Compile Include="Engine\Rendering\Geometry\WaterEdgePatcher.cs" />
-    <Compile Include="Engine\Rendering\Geometry\WaterMeshStitcher.cs" />
     <Compile Include="Engine\Rendering\ITexture2DProvider.cs" />
     <Compile Include="Engine\Rendering\IVertexData.cs" />
     <Compile Include="Engine\Rendering\Texture2DProvider.cs" />
@@ -1092,7 +1093,6 @@
     <Compile Include="Engine\Generation\HeightmapData.cs" />
     <Compile Include="Engine\Generation\EnvironmentGenerator.cs" />
     <Compile Include="Engine\Generation\Perlin.cs" />
-    <Compile Include="Engine\Generation\Simplex.cs" />
     <Compile Include="Engine\Generation\CollidableStructure.cs" />
     <Compile Include="Engine\IO\Log.cs" />
     <Compile Include="Engine\Management\AnalyticsManager.cs" />
@@ -8276,6 +8276,8 @@
     <Folder Include="Assets\Items\Boots\" />
     <Folder Include="Assets\Items\Gems\" />
     <Folder Include="Assets\Items\Pants\" />
+    <Folder Include="Engine\Rendering\Isosurface" />
+    <Folder Include="Engine\Rendering\MeshOptimizer" />
     <Folder Include="Modules\Items\Boots\" />
     <Folder Include="Modules\Items\Gems\" />
     <Folder Include="Modules\Items\Pants\" />
@@ -14572,10 +14574,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Translations\Español.po" />
-    <Content Include="x64\libbulletc.dll">
+    <Content Include="x64\hedracore.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="x64\meshoptimizer32.dll">
+    <Content Include="x64\libbulletc.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="x64\openal32.dll">
@@ -14587,10 +14589,10 @@
     <Content Include="x64\wrap_oal.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="x86\libbulletc.dll">
+    <Content Include="x86\hedracore.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="x86\meshoptimizer32.dll">
+    <Content Include="x86\libbulletc.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="x86\openal32.dll">

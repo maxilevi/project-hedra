@@ -148,5 +148,9 @@ namespace Hedra.Engine.Generation
         float NearestWaterBlockOnChunk(Chunk Chunk, Vector3 Position, out Vector3 WaterPosition);
         
         float NearestWaterBlockOnChunk(Vector3 Position, out Vector3 WaterPosition);
+
+        float GetNoise(float X, float Y);
+
+        float GetNoise(float X, float Y, float Z);
     }
 }

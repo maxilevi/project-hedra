@@ -128,12 +128,12 @@ namespace Hedra.Engine.Generation
 
         public float SpaceNoise(float X, float Z)
         {
-            return (float) OpenSimplexNoise.Evaluate(X * .004f, (Z + 100) * .004f) * 40f;
+            return (float) World.GetNoise(X * .004f, (Z + 100) * .004f) * 40f;
         }
 
         private static float PlacementNoise(Vector3 Position)
         {
-            return (float) OpenSimplexNoise.Evaluate((Position.X + 743) * .01f, (Position.Z + 14352300) * .01f);
+            return (float) World.GetNoise((Position.X + 743) * .01f, (Position.Z + 14352300) * .01f);
         }
     }
 

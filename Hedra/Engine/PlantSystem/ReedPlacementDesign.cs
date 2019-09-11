@@ -29,7 +29,7 @@ namespace Hedra.Engine.PlantSystem
             return World.GetHighestBlockAt(Position.X, Position.Z).Type == BlockType.Seafloor
                    && (diff = BiomePool.SeaLevel - World.GetHighestY((int) Position.X, (int) Position.Z)) < 2.5
                    && diff > .5
-                   && OpenSimplexNoise.Evaluate(Position.X * 0.004f, Position.Z * 0.004f) > .2f
+                   && World.GetNoise(Position.X * 0.004f, Position.Z * 0.004f) > .2f
                    && Vector3.Dot(Physics.NormalAtPosition(Position), Vector3.UnitY) > .75
                    && UnderChunk.Landscape.RandomGen.Next(0, 5) == 1;
         }

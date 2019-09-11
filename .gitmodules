@@ -9,3 +9,6 @@
 [submodule "hedra-obfuscator"]
 	path = hedra-obfuscator
 	url = https://github.com/maxilevi/hedra-obfuscator.git
+[submodule "hedra-core"]
+	path = hedra-core
+	url = https://github.com/maxilevi/hedra-core.git
