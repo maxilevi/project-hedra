@@ -38,6 +38,16 @@ namespace Hedra.Engine
             return Mathf.Clamp(Value, 0, 1);
         }
         
+        public static float Clamp0(this float Value)
+        {
+            return Math.Max(Value, 0);
+        }
+        
+        public static int Clamp0(this int Value)
+        {
+            return Math.Max(Value, 0);
+        }
+        
         public static void Shuffle<T>(this IList<T> List, Random Rng)
         {
             int n = List.Count;

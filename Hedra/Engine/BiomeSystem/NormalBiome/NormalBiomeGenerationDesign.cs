@@ -33,6 +33,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
 
             density += overhangs;
             density += lakes;
+            density += (World.GetNoise(X * 0.2f, Y * 0.2f, Z * 0.2f) * -0.15f * World.GetNoise(X * 0.035f, Y * 0.2f, Z * 0.035f) * 2.0f) * 7.5f;
             /*
             _noise.SetCellularReturnType(FastNoise.CellularReturnType.CellValue);
             var cell = _noise.GetCellular(X, Y, Z);

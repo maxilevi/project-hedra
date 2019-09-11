@@ -100,7 +100,7 @@ namespace Hedra.Engine.BiomeSystem
 
         private void CheckForNearbyStructures()
         {
-            StructureHandler.CheckStructures( new Vector2(Chunk.OffsetX, Chunk.OffsetZ) );
+            //StructureHandler.CheckStructures( new Vector2(Chunk.OffsetX, Chunk.OffsetZ) );
         }
         
         public void BuildArray(Block[][][] Blocks)

@@ -88,7 +88,7 @@ namespace Hedra.Engine.BiomeSystem
                         this.HandleGroundworks(Blocks, x, y, z, path, PathDepth, pathClamped, town,
                             blockGroundworks, ref height);
                     }
-                    GrassBlockPass(Blocks, x, z, makeDirt);
+                    //GrassBlockPass(Blocks, x, z, makeDirt);
                 }
             }
         }
@@ -103,7 +103,7 @@ namespace Hedra.Engine.BiomeSystem
                 if (type != BlockType.Air && Blocks[x][y+1][z].Type == BlockType.Air && !foundBlock)
                 {
                     foundBlock = true;
-                    counter = 4;
+                    counter = 8;
                 }
 
                 if (counter > 0 && type == BlockType.Stone)
@@ -114,7 +114,7 @@ namespace Hedra.Engine.BiomeSystem
 
                 if (type == BlockType.Stone && (Blocks[x][y - 1][z].Type == BlockType.Air) && Blocks[x][y][z].Density < 1f)
                 {
-                    Blocks[x][y][z].Density = new Half(Math.Min(Blocks[x][y][z].Density + Utils.Rng.NextFloat() * 2f, 0.5f));
+                //    Blocks[x][y][z].Density = new Half(Math.Min(Blocks[x][y][z].Density + Utils.Rng.NextFloat() * 2f, 0.5f));
                 }
             }
             for (var y = Chunk.Height - 1; y > -1; --y)
@@ -478,6 +478,7 @@ namespace Hedra.Engine.BiomeSystem
 
         protected override void PlaceEnvironment(RegionCache Cache, Predicate<PlacementDesign> Filter)
         {
+            return;
             var structs = World.StructureHandler.StructureItems;
             var groundworks = World.WorldBuilding.Groundworks.Where(P => P.NoPlants).ToArray();
             for (var x = 0; x < this.Chunk.BoundsX; x++)
@@ -503,6 +504,7 @@ namespace Hedra.Engine.BiomeSystem
             var structs = World.StructureHandler.StructureItems;
             var plateaus = World.WorldBuilding.Plateaux.Where(P => P.NoTrees).ToArray();
             var groundworks = World.WorldBuilding.Groundworks.Where(P => P.NoTrees).ToArray();
+            return;
             for (var _x = 0; _x < this.Chunk.BoundsX; _x++)
             {
                 for (var _z = 0; _z < this.Chunk.BoundsZ; _z++)

@@ -275,20 +275,6 @@ namespace Hedra.Engine.Player
 
                 //_player.Chat.AddLine("Modules reloaded.");
             }
-            if (GameSettings.DebugView && EventArgs.Key == Key.F6)
-            {
-                World.Discard();
-                lock (World.Chunks)
-                {
-                    var count = World.Chunks.Count;
-                    for (int i = count-1; i > -1; i--)
-                    {
-                        World.RemoveChunk(World.Chunks[i]);
-                    }
-                }
-                World.StructureHandler.Discard();
-                //_player.Chat.AddLine("Chunks discarded.");
-            }
 #if DEBUG
             if (EventArgs.Key == Key.F10)
             {

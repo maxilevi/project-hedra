@@ -479,6 +479,32 @@ namespace Hedra.User
                         Caster.Realms.GoTo(int.Parse(Parts[1]));
 
                 }
+
+                if (Parts[0] == "discard")
+                {
+                    World.Discard();
+                    lock (World.Chunks)
+                    {
+                        var count = World.Chunks.Count;
+                        for (int i = count-1; i > -1; i--)
+                        {
+                            World.RemoveChunk(World.Chunks[i]);
+                        }
+                    }
+                    World.StructureHandler.Discard();
+                }
+                
+                if (Parts[0] == "rebuild")
+                {
+                    lock (World.Chunks)
+                    {
+                        var count = World.Chunks.Count;
+                        for (var i = count-1; i > -1; i--)
+                        {
+                            World.AddChunkToQueue(World.Chunks[i], true);
+                        }
+                    }
+                }
                 Result = "Unknown command.";
                 Log.WriteLine("Unknown command.");
             }

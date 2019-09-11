@@ -43,7 +43,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _sampleHeight = Lod * 2;
         }
 
-        public Vector4 GetColor(ref GridCell Cell, RegionColor RegionColor, int Lod, ref Vector3 AverageNormal)
+        public Vector4 GetColor(SampledBlock[][][] Grid, ref GridCell Cell, RegionColor RegionColor, ref Vector3 AverageNormal)
         {
             var position = Cell.P[0] / _blockSize;
             int x = (int) position.X, y = (int) position.Y, z = (int) position.Z;
@@ -55,12 +55,11 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var noise = (float) World.GetNoise((Cell.P[0].X + _offsetX) * .00075f, (Cell.P[0].Z + _offsetZ) * .00075f);
             var regionColor = RegionColor;
 
-            for (var _x = -Lod * 1; _x < 1 * Lod + 1; _x += Lod)
-            for (var _z = -Lod * 1; _z < 1 * Lod + 1; _z += Lod)
-            for (var _y = -1; _y < 1 + 1; _y++)
+            for (var _x = -_sampleWidth; _x < 1 + _sampleWidth; _x+=_sampleWidth)
+            for (var _z = -_sampleWidth; _z < 1 + _sampleWidth; _z+=_sampleWidth)
+            for (var _y = -_sampleHeight; _y < 1 + _sampleHeight; _y+=_sampleHeight)
             {
-                var y0 = this.GetNeighbourBlock(x + _x, (int) Mathf.Clamp(y + _y, 0, this._height - 1), z + _z);
-                var type = y0.Type;
+                var density = GetSampleOrNeighbour(Grid, x + _x, (y + _y).Clamp0(), z + _z, out var type);
                 if (type != BlockType.Water && type != BlockType.Air && type != BlockType.Temporal)
                 {
                     var blockColor = DoGetColor(ref regionColor, ref x, type, ref noise);
@@ -82,7 +81,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var isPoint = chunkCoords == new Vector2(_offsetX, _offsetZ);
             var c = new Vector4(rng.NextFloat(), rng.NextFloat(), rng.NextFloat(), 1.0f);
             return isPoint ? new Vector4(0, 0, 0, 1.0f) : c;*/
-            return new Vector4(colorCount == 0 ? regionColor.DirtColor.Xyz : color.Xyz / colorCount, 1.0f);
+            return new Vector4(colorCount == 0 ? RegionColor.StoneColor.Xyz : color.Xyz / colorCount, 1.0f);
         }
 
         private static Vector4 DoGetColor(ref RegionColor RegionColor, ref int x, BlockType Type, ref float Noise)
@@ -104,7 +103,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
             else if (Type == BlockType.StonePath || Type == BlockType.Stone)
             {
-                var shade = (Utils.Rng.NextFloat() * 2 - 1f) * .2f * (Type == BlockType.Stone ? 1.5f : 1f);
+                var shade = (Utils.Rng.NextFloat() * 2 - 1f) * .2f * (Type == BlockType.Stone ? .5f : 1);
                 blockColor += new Vector4(shade, shade, shade, 0); 
             }
             else if (Type == BlockType.FarmDirt)
@@ -112,7 +111,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 if((x+1) % 2 == 0)
                     blockColor -= new Vector4(.1f, .1f, .1f, 0);
             }
-
             return blockColor;
         }
         
@@ -142,7 +140,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return densities;
         }
 
-        public void CreateCell(ref SampledBlock[][][] Grid, ref GridCell Cell, ref int X, ref int Y, ref int Z, ref bool WaterCell, out bool Success)
+        public void CreateCell(SampledBlock[][][] Grid, ref GridCell Cell, ref int X, ref int Y, ref int Z, ref bool WaterCell, out bool Success)
         {
             Success = true;
             this.BuildCell(ref Cell, X, Y, Z, WaterCell);
@@ -155,7 +153,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     var posY = (int) (Cell.P[i].Y * _coefficient);
                     var posZ = (int) (Cell.P[i].Z * _coefficient);
                     
-                    Cell.Density[i] = GetSampleOrNeighbour(ref Grid, ref posX, ref posY, ref posZ, out Cell.Type[i]);
+                    Cell.Density[i] = GetSampleOrNeighbour(Grid, posX, posY, posZ, out Cell.Type[i]);
                 }
             }
             else
@@ -232,10 +230,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 }
             }
         }
-
-        private float GetSampleOrNeighbour(ref SampledBlock[][][] Grid, ref int x, ref int y, ref int z, out BlockType Type)
+        
+        private float GetSampleOrNeighbour(SampledBlock[][][] Grid, int x, int y, int z, out BlockType Type)
         {
-            if (x == 0 || z == 0 || x >= _boundsX - 1 || z >= _boundsZ - 1)
+            if (x <= 0 || z <= 0 || x >= _boundsX - 1 || z >= _boundsZ - 1)
             {
                 var b = GetNeighbourBlock(x, y, z);
                 Type = b.Type;
@@ -243,15 +241,15 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
             else
             {
-                return GetSample(ref Grid, ref x, ref y, ref z, out Type);
+                return GetSample(Grid, x, y, z, out Type);
             }
         }
 
-        private float GetSample(ref SampledBlock[][][] Grid, ref int x, ref int y, ref int z, out BlockType Type)
+        private float GetSample(SampledBlock[][][] Grid, int x, int y, int z, out BlockType Type)
         {
-            int x2 = (x / _sampleWidth);
-            int y2 = (y / _sampleHeight);
-            int z2 = (z / _sampleWidth);
+            var x2 = (x / _sampleWidth);
+            var y2 = (y / _sampleHeight);
+            var z2 = (z / _sampleWidth);
             Type = Grid[x2][y2][z2].Type;
             return Mathf.LinearInterpolate3D(
                 Grid[x2][y2][z2].Density, Grid[x2 + 1][y2][z2].Density,
