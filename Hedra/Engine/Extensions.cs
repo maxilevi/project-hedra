@@ -32,6 +32,11 @@ namespace Hedra.Engine
         {
             
         }
+
+        public static float Clamp01(this float Value)
+        {
+            return Mathf.Clamp(Value, 0, 1);
+        }
         
         public static void Shuffle<T>(this IList<T> List, Random Rng)
         {

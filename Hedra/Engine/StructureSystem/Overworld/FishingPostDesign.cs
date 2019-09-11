@@ -24,11 +24,11 @@ namespace Hedra.Engine.StructureSystem.Overworld
 {
     public class FishingPostDesign : SimpleStructureDesign<FishingPost>
     {
-        public override int PlateauRadius => RealPlateauRadius;
+        public override int PlateauRadius => 192;
+        protected override float EffectivePlateauRadius => 256;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.FishingPostIcon);
         protected override int StructureChance => 4;//StructureGrid.FishingPostChance;
         protected override CacheItem? Cache => null;
-        private const int RealPlateauRadius = 256 + 64;
         protected override BlockType PathType => BlockType.Path;
         private const int CenterRadius = 64;
 
@@ -42,7 +42,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var offset = World.ToChunkSpace(TargetPosition);
             SearchForShore(offset, World.BiomePool.GetRegion(offset.ToVector3()), out var targetPosition);
             var structure = base.Setup(targetPosition, Rng, Create(targetPosition, EffectivePlateauRadius));
-            structure.Mountain.Radius = RealPlateauRadius;
+            structure.Mountain.Radius = EffectivePlateauRadius;
             structure.AddGroundwork(new RoundedGroundwork(structure.Position, CenterRadius, PathType)
             {
                 NoPlants = NoPlantsZone,
@@ -147,7 +147,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             while(count < pointCount && iterations < maxIterations)
             {
                 iterations++;
-                var point = Structure.Position + new Vector3(Rng.NextFloat() * RealPlateauRadius - RealPlateauRadius * .5f, 0, Rng.NextFloat() * RealPlateauRadius - RealPlateauRadius  * .5f);
+                var point = Structure.Position + new Vector3(Rng.NextFloat() * EffectivePlateauRadius - EffectivePlateauRadius * .5f, 0, Rng.NextFloat() * EffectivePlateauRadius - EffectivePlateauRadius  * .5f);
                 if(Structure.Groundworks.Any(G => G.Affects(point.Xz))) continue;
                 var euler = Physics.DirectionToEuler((Structure.Position - point).NormalizedFast()) + Vector3.UnitY * 90;
                 CampfireDesign.BuildBaseCampfire(point, euler, Structure, Rng, out var transformationMatrix);
@@ -334,7 +334,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 if (IsWater(edge, Biome)) continue;
                 for (var j = 0; j < Chunk.Width; j += (int) Chunk.BlockSize)
                 {
-                    if (!IsShore(Offset.ToVector3() + j * directions[i], Biome)) continue;
+                    if (IsWater(Offset.ToVector3() + j * directions[i], Biome)) continue;
                     Position = Offset.ToVector3() + directions[i] * j;
                     return true;
                 }
@@ -343,14 +343,9 @@ namespace Hedra.Engine.StructureSystem.Overworld
             return false;
         }
 
-        private static bool IsShore(Vector3 TargetPosition, Region Biome)
-        {
-            return (Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _) >= BiomePool.SeaLevel - 1f);
-        }
-        
         private static bool IsWater(Vector3 TargetPosition, Region Biome)
         {
-            return (Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _) < BiomePool.SeaLevel - 2f/* || Math.Abs(LandscapeGenerator.River(TargetPosition.Xz)) > 0.005f*/);
+            return (Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _) < BiomePool.SeaLevel - 1f);
         }
         
         private static Vector3 FishingPostScale => Vector3.One * 11f;

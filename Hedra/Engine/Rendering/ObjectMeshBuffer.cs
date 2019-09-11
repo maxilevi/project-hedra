@@ -72,7 +72,7 @@ namespace Hedra.Engine.Rendering
                 {
                     for (var z = 0; z < noiseValues.GetLength(2); z++)
                     {
-                        noiseValues[x, y, z] = (float)OpenSimplexNoise.Evaluate(x * 0.6f, y * 0.6f, z * 0.6f) * .5f + .5f;
+                        noiseValues[x, y, z] = (float)World.GetNoise(x * 0.6f, y * 0.6f, z * 0.6f) * .5f + .5f;
                     }
                 }
             }

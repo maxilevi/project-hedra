@@ -32,6 +32,24 @@ namespace Hedra.Core
             return u.f * Z;
         }
 
+        public static int RoundToInt(float Value)
+        {
+            return (int) Math.Round(Value);
+        }
+
+        public static float LinearInterpolate3D(float xm_ym_zm, float xp_ym_zm, float xm_yp_zm, float xp_yp_zm,
+            float xm_ym_zp, float xp_ym_zp, float xm_yp_zp, float xp_yp_zp,
+            float x, float y, float z)
+        {
+            return (xm_ym_zm * (1 - x) * (1 - y) * (1 - z)) + (xp_ym_zm * x * (1 - y) * (1 - z)) + (xm_yp_zm * (1 - x) * y * (1 - z)) + (xp_yp_zm * x * y * (1 - z)) +
+                   (xm_ym_zp * (1 - x) * (1 - y) * z) + (xp_ym_zp * x * (1 - y) * z) + (xm_yp_zp * (1 - x) * y * z) + (xp_yp_zp * x * y * z);
+        }
+
+        public static float LinearInterpolate2D(float D, float DX, float DZ, float DXZ, float X, float Z)
+        {
+            return Lerp(Lerp(D, DX, X), Lerp(DZ, DXZ, X), Z);
+        }
+
         public static float CosineInterpolate(float Y1, float Y2, float Mu)
         {
             float mu2 = (float) (1 - Math.Cos(Mu * Math.PI)) / 2;

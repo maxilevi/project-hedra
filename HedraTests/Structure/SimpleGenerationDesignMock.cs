@@ -26,10 +26,10 @@ namespace HedraTests.Structure
         public override bool HasPaths { get; set; }
         
         public override bool HasDirt { get; set; }
-        
-        public override float GetDensity(float X, float Y, float Z, Dictionary<Vector2, float[]> HeightCache)
+
+        public override float GetDensity(float X, float Y, float Z, ref BlockType Type)
         {
-            return _returnValue();
+            throw new NotImplementedException();
         }
 
         public override BlockType GetHeightSubtype(float X, float Y, float Z, float CurrentHeight, BlockType Type, Dictionary<Vector2, float[]> HeightCache)
