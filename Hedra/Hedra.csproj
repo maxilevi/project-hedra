@@ -8256,8 +8256,8 @@
     <Folder Include="Assets\Items\Boots\" />
     <Folder Include="Assets\Items\Gems\" />
     <Folder Include="Assets\Items\Pants\" />
-    <Folder Include="Engine\Rendering\Isosurface" />
-    <Folder Include="Engine\Rendering\MeshOptimizer" />
+    <Folder Include="Engine\Rendering\Isosurface\" />
+    <Folder Include="Engine\Rendering\MeshOptimizer\" />
     <Folder Include="Modules\Items\Boots\" />
     <Folder Include="Modules\Items\Gems\" />
     <Folder Include="Modules\Items\Pants\" />
