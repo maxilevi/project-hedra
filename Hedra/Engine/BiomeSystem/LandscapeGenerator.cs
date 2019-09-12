@@ -154,14 +154,14 @@ namespace Hedra.Engine.BiomeSystem
         private static float CalculateDensity(int x, int y, int z, float[][][] noise3D)
         {
             int x2 = (x / noise3DScaleWidth);
-            int y2 = (y / noise3DScaleHeight);
+            int y2 = (y / noise3DScaleWidth);
             int z2 = (z / noise3DScaleWidth);
             return Mathf.LinearInterpolate3D(noise3D[x2][y2][z2], noise3D[x2 + 1][y2][z2],
                 noise3D[x2][y2 + 1][z2], noise3D[x2 + 1][y2 + 1][z2],
                 noise3D[x2][y2][z2 + 1], noise3D[x2 + 1][y2][z2 + 1],
                 noise3D[x2][y2 + 1][z2 + 1], noise3D[x2 + 1][y2 + 1][z2 + 1],
                 (x % noise3DScaleWidth) / (float) noise3DScaleWidth,
-                (y % noise3DScaleHeight) / (float) noise3DScaleHeight,
+                (y % noise3DScaleWidth) / (float) noise3DScaleWidth,
                 (z % noise3DScaleWidth) / (float) noise3DScaleWidth
             );
         }

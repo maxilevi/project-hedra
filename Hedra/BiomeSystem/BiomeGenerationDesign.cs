@@ -28,16 +28,34 @@ namespace Hedra.BiomeSystem
                 }
             }
         }
-        
+
+        public void AddFunction(float[][] Map1, Func<int, int, float> Function)
+        {
+            for (var i = 0; i < Map1.Length; ++i)
+            {
+                for (var k = 0; k < Map1[i].Length; ++k)
+                {
+                    Map1[i][k] += Function(i, k);
+
+                }
+            }
+        }
+
+        public void AddConstant(float[][] Map1, float Constant)
+        {
+            AddFunction(Map1, (X,Z) => Constant);
+        }
+
         public static void AddSet(float[][][] Map1, float[] Map2, Func<float, float> Transform)
         {
+            var index = 0;
             for (var i = 0; i < Map1.Length; ++i)
             {
                 for (var j = 0; j < Map1[i].Length; ++j)
                 {
                     for (var k = 0; k < Map1[i][j].Length; ++k)
                     {
-                        Map1[i][j][k] += Transform(Map2[(i * Map1.Length * Map1[i].Length) + (j * Map1[i].Length) + k]);
+                        Map1[i][j][k] += Transform(Map2[index++]);
                     }
                 }
             }
@@ -45,11 +63,12 @@ namespace Hedra.BiomeSystem
         
         public static void AddSet(float[][] Map1, float[] Map2, Func<float, float> Transform)
         {
+            var index = 0;
             for (var i = 0; i < Map1.Length; ++i)
             {
                 for (var j = 0; j < Map1[i].Length; ++j)
                 {
-                    Map1[i][j] += Transform(Map2[i * Map1.Length + j]);
+                    Map1[i][j] += Transform(Map2[index++]);
                 }
             }
         }

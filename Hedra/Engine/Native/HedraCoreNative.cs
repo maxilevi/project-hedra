@@ -38,18 +38,18 @@ namespace Hedra.Engine.Native
         public static extern void fastnoise_deleteObject(IntPtr Pointer);
 
         [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void fastnoise_freeNoise(float[] NoiseSet);
-
-        [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern float[] fastnoise_getSimplexFractalSet(IntPtr Object, int xStart, int yStart, int zStart, int xSize, int ySize, int zSize, float scaleModifier);
+        public static extern void fastnoise_freeNoise(IntPtr NoiseSet);
         
         [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern float[] fastnoise_getSimplexSet(IntPtr Object, int xStart, int yStart, int zStart, int xSize, int ySize, int zSize, float scaleModifier);
+        public static extern IntPtr fastnoise_getSimplexFractalSet(IntPtr Object, float xOffset, float yOffset, float zOffset, int xSize, int ySize, int zSize, float xScale, float yScale, float zScale);
         
         [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern float[] fastnoise_setFrequency(IntPtr Object, float Frequency);
+        public static extern IntPtr fastnoise_getSimplexSet(IntPtr Object, float xOffset, float yOffset, float zOffset, int xSize, int ySize, int zSize, float xScale, float yScale, float zScale);
         
         [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern float[] fastnoise_setSeed(IntPtr Object, int Seed);
+        public static extern IntPtr fastnoise_setFrequency(IntPtr Object, float Frequency);
+        
+        [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr fastnoise_setSeed(IntPtr Object, int Seed);
     }
 }

@@ -7,13 +7,11 @@ namespace Hedra.Engine.Generation
 {
     public class FastNoiseSIMD : IDisposable
     {
-        private readonly HashSet<float[]> _sets;
         private readonly IntPtr _native;
         private bool _disposed;
 
         public FastNoiseSIMD(int Seed)
         {
-            _sets = new HashSet<float[]>();
             _native = HedraCoreNative.fastnoise_createObject(Seed);
         }
 
@@ -27,42 +25,44 @@ namespace Hedra.Engine.Generation
             set => HedraCoreNative.fastnoise_setFrequency(_native, value);
         }
 
-        public float[] GetSimplexFractalSetWithFrequency(Vector3 Offset, Vector3 Size, float frequency, float scaleModifier)
+        public float[] GetSimplexFractalSetWithFrequency(Vector3 Offset, Vector3 Size, Vector3 Scale, float frequency)
         {
-            //Frequency = frequency;
-            var set = HedraCoreNative.fastnoise_getSimplexFractalSet(_native, (int)Offset.X, (int)Offset.Y, (int)Offset.Z, (int)Size.X, (int)Size.Y, (int)Size.Z, frequency * scaleModifier);
-            AddSet(set);
-            return set;
+            Frequency = frequency;
+            var pointer = HedraCoreNative.fastnoise_getSimplexFractalSet(_native, Offset.X, Offset.Y, Offset.Z, (int)Size.X, (int)Size.Y, (int)Size.Z, Scale.X, Scale.Y, Scale.Z);
+            return PointerToSet(pointer, (uint)(Size.X * Size.Y * Size.Z));
         }
         
-        public float[] GetSimplexSetWithFrequency(Vector3 Offset, Vector3 Size, float frequency, float scaleModifier)
+        public float[] GetSimplexSetWithFrequency(Vector3 Offset, Vector3 Size, Vector3 Scale, float frequency)
         {
-            //Frequency = frequency;
-            var set = HedraCoreNative.fastnoise_getSimplexSet(_native, (int)Offset.X, (int)Offset.Y, (int)Offset.Z, (int)Size.X, (int)Size.Y, (int)Size.Z, frequency * scaleModifier);
-            AddSet(set);
-            return set;
+            Frequency = frequency;
+            var pointer = HedraCoreNative.fastnoise_getSimplexSet(_native, Offset.X, Offset.Y, Offset.Z, (int)Size.X, (int)Size.Y, (int)Size.Z, Scale.X, Scale.Y, Scale.Z);
+            return PointerToSet(pointer, (uint)(Size.X * Size.Y * Size.Z));
         }
 
-        public float[] GetSimplexSetWithFrequency(Vector2 Offset, Vector2 Size, float frequency, float ScaleModifier)
+        public float[] GetSimplexSetWithFrequency(Vector2 Offset, Vector2 Size, Vector2 Scale, float frequency)
         {
-            return GetSimplexSetWithFrequency(new Vector3(Offset.X, 0, Offset.Y), new Vector3(Size.X, 1, Size.Y), frequency, ScaleModifier);
+            return GetSimplexSetWithFrequency(new Vector3(Offset.X, 0, Offset.Y), new Vector3(Size.X, 1, Size.Y), new Vector3(Scale.X, 1, Scale.Y), frequency);
         }
 
-        private void AddSet(float[] Set)
+        private float[] PointerToSet(IntPtr Address, uint Size)
         {
-            _sets.Add(Set);
-        }
+            var buffer = new float[Size];
+            unsafe
+            {
+                var pointer = (float*) Address.ToPointer();
+                var index = 0;
+                for (var i = 0; i < Size; i++)
+                {
+                    buffer[index++] = pointer[i];
+                }
+            }
 
-        public void FreeSet(float[] Set)
-        {
-            _sets.Remove(Set);
-            HedraCoreNative.fastnoise_freeNoise(Set);
+            HedraCoreNative.fastnoise_freeNoise(Address);
+            return buffer;
         }
-
+        
         public void Dispose()
         {
-            if(_sets.Count > 0)
-                throw new ArgumentOutOfRangeException("Not all noise sets have been free'd");
             _disposed = true;
             HedraCoreNative.fastnoise_deleteObject(_native);
         }

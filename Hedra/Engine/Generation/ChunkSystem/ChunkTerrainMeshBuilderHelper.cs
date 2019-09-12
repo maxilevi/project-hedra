@@ -103,7 +103,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
             else if (Type == BlockType.StonePath || Type == BlockType.Stone)
             {
-                var shade = (Utils.Rng.NextFloat() * 2 - 1f) * .2f * (Type == BlockType.Stone ? .75f : 1);
+                var shade = (Utils.Rng.NextFloat() * 2 - 1f) * .2f * (Type == BlockType.Stone ? 1f : 1);
                 blockColor += new Vector4(shade, shade, shade, 0); 
             }
             else if (Type == BlockType.FarmDirt)
@@ -233,6 +233,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         
         private float GetSampleOrNeighbour(SampledBlock[][][] Grid, int x, int y, int z, out BlockType Type)
         {
+            y = Math.Min(y, _boundsY - _sampleHeight - 1);
             if (x <= 0 || z <= 0 || x >= _boundsX - 1 || z >= _boundsZ - 1)
             {
                 var b = GetNeighbourBlock(x, y, z);
