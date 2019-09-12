@@ -111,11 +111,6 @@ namespace Hedra.Engine.BiomeSystem
                     Blocks[x][y][z].Type = BlockType.Grass;
                     counter--;
                 }
-
-                if (type == BlockType.Stone && (Blocks[x][y - 1][z].Type == BlockType.Air) && Blocks[x][y][z].Density < 1f)
-                {
-                //    Blocks[x][y][z].Density = new Half(Math.Min(Blocks[x][y][z].Density + Utils.Rng.NextFloat() * 2f, 0.5f));
-                }
             }
             for (var y = Chunk.Height - 1; y > -1; --y)
             {
@@ -130,52 +125,30 @@ namespace Hedra.Engine.BiomeSystem
         private float[][] FillHeight(int width, out BlockType[][] types)
         {
             var noiseValuesWidth = width / noise2DScaleWidth + 1;
-            var heights = new float[noiseValuesWidth][];
-            types = new BlockType[noiseValuesWidth][];
-            for (var x = 0; x < noiseValuesWidth; ++x)
-            {
-                heights[x] = new float[noiseValuesWidth];
-                types[x] = new BlockType[noiseValuesWidth];
-                for (var z = 0; z < noiseValuesWidth; ++z)
-                {
-                    heights[x][z] = 
-                        Chunk.Biome.Generation.GetHeight(
-                            x * Chunk.BlockSize * noise2DScaleWidth + OffsetX,
-                            z * Chunk.BlockSize * noise2DScaleWidth + OffsetZ,
-                            null,
-                            out var type
-                        );
-                    types[x][z] = type;
-                }
-            }
+            Chunk.Biome.Generation.BuildHeightMap(
+                noiseValuesWidth,
+                Chunk.BlockSize * noise2DScaleWidth,
+                new Vector2(Chunk.OffsetX, Chunk.OffsetZ),
+                out var heights,
+                out types
+            );
             return heights;
         }
         
         private float[][][] FillNoise(int width, int height)
         {
+            /* We need to use the same scale for the noises because of FastNoiseSIMD*/
             var noiseValuesMapWidth = (width / noise3DScaleWidth) + 1;
-            var noiseValuesMapHeight = (height / noise3DScaleHeight) + 1;
-            var noise3D = new float[noiseValuesMapWidth][][];
-            var type = BlockType.Air;
-            for (var x = 0; x < noiseValuesMapWidth; x++)
-            {
-                noise3D[x] = new float[noiseValuesMapHeight][];
-                for (var y = 0; y < noiseValuesMapHeight; y++)
-                {
-                    noise3D[x][y] = new float[noiseValuesMapWidth];
-                    for (var z = 0; z < noiseValuesMapWidth; z++)
-                    {
-                        noise3D[x][y][z] = 
-                            Chunk.Biome.Generation.GetDensity(
-                                x * Chunk.BlockSize * noise3DScaleWidth + Chunk.OffsetX,
-                                y * Chunk.BlockSize * noise3DScaleHeight,
-                                z * Chunk.BlockSize * noise3DScaleWidth + Chunk.OffsetZ,
-                                ref type
-                            );
-                    }
-                }
-            }
-            return noise3D;
+            var noiseValuesMapHeight = (height / noise3DScaleWidth) + 1;
+            Chunk.Biome.Generation.BuildDensityMap(
+                noiseValuesMapWidth,
+                noiseValuesMapHeight,
+                Chunk.BlockSize * noise3DScaleWidth,
+                new Vector3(Chunk.OffsetX, 0, Chunk.OffsetZ),
+                out var densityMap,
+                out var typeMap
+            );
+            return densityMap;
         }
 
         private static float CalculateDensity(int x, int y, int z, float[][][] noise3D)

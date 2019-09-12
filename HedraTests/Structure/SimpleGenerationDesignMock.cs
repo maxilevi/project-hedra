@@ -15,32 +15,22 @@ namespace HedraTests.Structure
         {
             _returnValue = ReturnValue;
         }
-        
-        public override bool HasHeightSubtype(float X, float Z, Dictionary<Vector2, float[]> HeightCache)
-        {
-            throw new NotImplementedException();
-        }
-        
-        public override bool HasRivers { get; set; }
-        
-        public override bool HasPaths { get; set; }
-        
-        public override bool HasDirt { get; set; }
 
-        public override float GetDensity(float X, float Y, float Z, ref BlockType Type)
+        public override bool HasRivers { get; }
+        
+        public override bool HasPaths { get; }
+        
+        public override bool HasDirt { get; }
+
+        public override void BuildDensityMap(float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float Scale, Vector3 Offset)
         {
             throw new NotImplementedException();
         }
 
-        public override BlockType GetHeightSubtype(float X, float Y, float Z, float CurrentHeight, BlockType Type, Dictionary<Vector2, float[]> HeightCache)
+        public override void BuildHeightMap(float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public override float GetHeight(float X, float Z, Dictionary<Vector2, float[]> HeightCache, out BlockType Blocktype)
-        {
-            Blocktype = BlockType.Grass;
-            return _returnValue();
+            TypeMap[0][0] = BlockType.Grass;
+            HeightMap[0][0] = _returnValue();
         }
     }
 }

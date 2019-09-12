@@ -7,40 +7,71 @@ namespace Hedra.BiomeSystem
     public class RegionGeneration
     {
         private readonly BiomeGenerationDesign _design;
-        private readonly int _seed;
+        private readonly object _tempMapLock;
+        private readonly float[][] _tempDensityMap;
+        private readonly BlockType[][] _tempTypeMap;
 
         public RegionGeneration(int Seed, BiomeGenerationDesign Design)
         {
-            this._seed = Seed;
-            this._design = Design;
+            _tempMapLock = new object();
+            _tempDensityMap = CreateMap<float>(1);
+            _tempTypeMap = CreateMap<BlockType>(1);
+            _design = Design;
         }
 
         public bool HasDirt => _design.HasDirt;
         public bool HasRivers => _design.HasRivers;
         public bool HasPaths => _design.HasPaths;
 
-        public float GetDensity(float X, float Y, float Z, ref BlockType Type)
+        public float GetHeight(float X, float Y, out BlockType Type)
         {
-            return _design.GetDensity(X, Y, Z, ref Type);
-        }
-
-        public BlockType GetHeightSubtype(float X, float Y, float Z, float CurrentHeight, BlockType Type,
-            Dictionary<Vector2, float[]> HeightCache)
-        {
-            return _design.GetHeightSubtype(X, Y, Z, CurrentHeight, Type, HeightCache);
+            lock (_tempMapLock)
+            {
+                _design.BuildHeightMap(_tempDensityMap, _tempTypeMap, 1, 1, new Vector2(X, Y));
+                Type = _tempTypeMap[0][0];
+                return _tempDensityMap[0][0];
+            }
         }
         
-        public bool HasHeightSubtype(float X, float Z, Dictionary<Vector2, float[]> HeightCache)
+        public void BuildDensityMap(int Width, int Height, float Scale, Vector3 Offset, out float[][][] DensityMap, out BlockType[][][] TypeMap)
         {
-            return _design.HasHeightSubtype(X, Z, HeightCache);
+            DensityMap = CreateMap<float>(Width, Height);
+            TypeMap = CreateMap<BlockType>(Width, Height);
+            _design.BuildDensityMap(DensityMap, TypeMap, Width, Height, Scale, Offset);
         }
 
-        public float GetHeight(float X, float Z, Dictionary<Vector2, float[]> HeightCache,
-            out BlockType Blocktype)
+        public void BuildHeightMap(int Width, float Scale, Vector2 Offset, out float[][] HeightMap, out BlockType[][] TypeMap)
         {
-            return _design.GetHeight(X, Z, HeightCache, out Blocktype);
+            HeightMap = CreateMap<float>(Width);
+            TypeMap = CreateMap<BlockType>(Width);
+            _design.BuildHeightMap(HeightMap, TypeMap, Width, Scale, Offset);
         }
 
+        private T[][][] CreateMap<T>(int Width, int Height)
+        {
+            var arr = new T[Width][][];
+            for (var x = 0; x < Width; ++x)
+            {
+                arr[x] = new T[Height][];
+                for (var y = 0; y < Height; ++y)
+                {
+                    arr[x][y] = new T[Width];
+                }
+            }
+
+            return arr;
+        }
+
+        private T[][] CreateMap<T>(int Width)
+        {
+            var arr = new T[Width][];
+            for (var x = 0; x < Width; ++x)
+            {
+                arr[x] = new T[Width];
+            }
+            return arr;
+        }
+        
         public static RegionGeneration Interpolate(params RegionGeneration[] RegionsGenerations)
         {
             //TODO Implement a good interpolation

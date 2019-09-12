@@ -68,7 +68,7 @@ namespace Hedra.Engine.StructureSystem
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
             return Rng.Next(0, StructureChance) == 1 &&
-                   Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _) > BiomePool.SeaLevel &&
+                   Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, out _) > BiomePool.SeaLevel &&
                    Math.Abs(LandscapeGenerator.River(TargetPosition.Xz)) < 0.005f;
         }
 

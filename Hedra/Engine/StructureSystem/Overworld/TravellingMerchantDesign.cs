@@ -46,7 +46,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
-            var height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _);
+            var height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, out _);
 
             return Math.Abs(ChunkOffset.X - World.SpawnPoint.X) < 10000 && Math.Abs(ChunkOffset.Y - World.SpawnPoint.Y) < 10000 &&
                    Rng.Next(0, StructureGrid.TravellingMerchantChance) == 1 && BiomeGenerator.PathFormula(TargetPosition.X, TargetPosition.Y) > 0 && height > BiomePool.SeaLevel && !Spawned

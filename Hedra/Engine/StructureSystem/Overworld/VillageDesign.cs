@@ -61,7 +61,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             return /*BiomeGenerator.PathFormula(ChunkOffset.X, ChunkOffset.Y) > 0
                    && */Rng.Next(0, StructureGrid.VillageChance) == 1
-                   && Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _) > BiomePool.SeaLevel
+                   && Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, out _) > BiomePool.SeaLevel
                    && (TargetPosition - World.SpawnPoint).LengthFast > (World.SpawnVillagePoint - World.SpawnPoint).LengthFast *  2;
         }
 

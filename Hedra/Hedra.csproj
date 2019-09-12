@@ -235,6 +235,7 @@
     <Compile Include="Crafting\CraftingInventory.cs" />
     <Compile Include="Crafting\CraftingStation.cs" />
     <Compile Include="Crafting\Templates\IngredientsTemplate.cs" />
+    <Compile Include="Engine\BiomeSystem\LegacyBiomeGenerator.cs" />
     <Compile Include="Engine\Bullet\BulletDraw.cs" />
     <Compile Include="Engine\Bullet\BulletInterop.cs" />
     <Compile Include="Engine\Bullet\BulletPhysics.cs" />
@@ -248,7 +249,7 @@
     <Compile Include="Engine\DataStructures\Octree.cs" />
     <Compile Include="Engine\DataStructures\OctreeNode.cs" />
     <Compile Include="Engine\EntitySystem\DummyModel.cs" />
-    <Compile Include="Engine\Generation\FastNoise.cs" />
+    <Compile Include="Engine\Generation\FastNoiseSIMD.cs" />
     <Compile Include="Engine\Generation\FishingZoneHandler.cs" />
     <Compile Include="Engine\Generation\Simplex.cs" />
     <Compile Include="Engine\ItemSystem\Item.cs" />

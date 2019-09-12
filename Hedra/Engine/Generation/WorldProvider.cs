@@ -56,7 +56,6 @@ namespace Hedra.Engine.Generation
         private Vector3 _spawningVillagePoint;
         private Vector3 _spawningPoint;
         private WorldType _type;
-        private FastNoise _noise;
         private int _previousId;
     
         public WorldProvider()
@@ -73,7 +72,6 @@ namespace Hedra.Engine.Generation
             DrawingChunks = new Dictionary<Vector2, Chunk>();
             ShadowDrawingChunks = new Dictionary<Vector2, Chunk>();
             _unculledChunks = new Dictionary<Vector2, Chunk>();
-            _noise = new FastNoise(1);
         }
 
         public event ModulesReloadEvent ModulesReload;
@@ -278,7 +276,6 @@ namespace Hedra.Engine.Generation
             _type = Type;
             BiomePool = new BiomePool(_type);
             WorldBuilding = new WorldBuilding.WorldBuilding();
-            _noise.SetSeed(NewSeed);
             OpenSimplexNoise.Load(NewSeed);
             _meshBuilder.Discard();
             _chunkBuilder.Discard();
@@ -635,7 +632,7 @@ namespace Hedra.Engine.Generation
             bool IsWater(Vector3 Point)
             {
                 var region = BiomePool.GetRegion(Point);
-                return region.Generation.GetHeight(Point.X, Point.Z, null, out _) < Engine.BiomeSystem.BiomePool.SeaLevel
+                return region.Generation.GetHeight(Point.X, Point.Z, out _) < Engine.BiomeSystem.BiomePool.SeaLevel
                     || LandscapeGenerator.River(point.Xz) > 0;
             }
             while (IsWater(point))

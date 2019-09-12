@@ -101,7 +101,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         {
             return World.WorldBuilding.ApplyMultiple(
                    Position.Xz,
-                   World.BiomePool.GetRegion(Position).Generation.GetHeight(Position.X, Position.Z, null, out _),
+                   World.BiomePool.GetRegion(Position).Generation.GetHeight(Position.X, Position.Z, out _),
                    Plateaus
             ) < BiomePool.SeaLevel-1;
         }

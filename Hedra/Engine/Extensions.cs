@@ -28,10 +28,6 @@ namespace Hedra.Engine
     /// </summary>
     public static class Extensions
     {
-        public static void Add(this string[] Array, bool If)
-        {
-            
-        }
 
         public static float Clamp01(this float Value)
         {

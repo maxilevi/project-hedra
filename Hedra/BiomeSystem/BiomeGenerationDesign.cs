@@ -1,23 +1,62 @@
+using System;
 using System.Collections.Generic;
 using Hedra.Engine.Generation;
 using OpenTK;
 
 namespace Hedra.BiomeSystem
 {
-    public abstract class BiomeGenerationDesign
+    public abstract class BiomeGenerationDesign : IDisposable
     {
-        public abstract bool HasRivers { get; set; }
-        public abstract bool HasPaths { get; set; }
-        public abstract bool HasDirt { get; set; }
+        public abstract bool HasRivers { get;}
+        public abstract bool HasPaths { get; }
+        public abstract bool HasDirt { get; }
 
-        public abstract float GetDensity(float X, float Y, float Z, ref BlockType Type);
+        public abstract void BuildDensityMap(float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float Scale, Vector3 Offset);
 
-        public abstract BlockType GetHeightSubtype(float X, float Y, float Z, float CurrentHeight, BlockType Type,
-            Dictionary<Vector2, float[]> HeightCache);
+        public abstract void BuildHeightMap(float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset);
+
+        public void AddFunction(float[][][] Map1, Func<int, int, int, float> Function)
+        {
+            for (var i = 0; i < Map1.Length; ++i)
+            {
+                for (var j = 0; j < Map1[i].Length; ++j)
+                {
+                    for (var k = 0; k < Map1[i][j].Length; ++k)
+                    {
+                        Map1[i][j][k] += Function(i, j, k);
+                    }
+                }
+            }
+        }
         
-        public abstract bool HasHeightSubtype(float X, float Z, Dictionary<Vector2, float[]> HeightCache);
+        public static void AddSet(float[][][] Map1, float[] Map2, Func<float, float> Transform)
+        {
+            for (var i = 0; i < Map1.Length; ++i)
+            {
+                for (var j = 0; j < Map1[i].Length; ++j)
+                {
+                    for (var k = 0; k < Map1[i][j].Length; ++k)
+                    {
+                        Map1[i][j][k] += Transform(Map2[(i * Map1.Length * Map1[i].Length) + (j * Map1[i].Length) + k]);
+                    }
+                }
+            }
+        }
+        
+        public static void AddSet(float[][] Map1, float[] Map2, Func<float, float> Transform)
+        {
+            for (var i = 0; i < Map1.Length; ++i)
+            {
+                for (var j = 0; j < Map1[i].Length; ++j)
+                {
+                    Map1[i][j] += Transform(Map2[i * Map1.Length + j]);
+                }
+            }
+        }
 
-        public abstract float GetHeight(float X, float Z, Dictionary<Vector2, float[]> HeightCache,
-            out BlockType Blocktype);
+        public virtual void Dispose()
+        {
+            
+        }
     }
 }
