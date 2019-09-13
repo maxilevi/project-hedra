@@ -40,7 +40,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private void SetSampleSize(int Lod)
         {
             _sampleWidth = Lod;
-            _sampleHeight = Lod * 2;
+            _sampleHeight = Lod;
         }
 
         public Vector4 GetColor(SampledBlock[][][] Grid, ref GridCell Cell, RegionColor RegionColor, ref Vector3 AverageNormal)
@@ -49,27 +49,23 @@ namespace Hedra.Engine.Generation.ChunkSystem
             int x = (int) position.X, y = (int) position.Y, z = (int) position.Z;
             var color = Vector4.Zero;
             var colorCount = 0;
-            var dot = Vector3.Dot(AverageNormal, Vector3.UnitY);
-            const float dotThreshold = 0.7f;
-            var canBeGrass = dot > 0.7f;
             var noise = (float) World.GetNoise((Cell.P[0].X + _offsetX) * .00075f, (Cell.P[0].Z + _offsetZ) * .00075f);
             var regionColor = RegionColor;
 
-            for (var _x = -_sampleWidth; _x < 1 + _sampleWidth; _x+=_sampleWidth)
-            for (var _z = -_sampleWidth; _z < 1 + _sampleWidth; _z+=_sampleWidth)
-            for (var _y = -_sampleHeight; _y < 1 + _sampleHeight; _y+=_sampleHeight)
+            for (var _x = -1; _x < 1 + 1; _x+=1)
+            for (var _z = -1; _z < 1 + 1; _z+=1)
+            for (var _y = -2; _y < 1 + 2; _y+=2)
             {
-                var density = GetSampleOrNeighbour(Grid, x + _x, (y + _y).Clamp0(), z + _z, out var type);
-                if (type != BlockType.Water && type != BlockType.Air && type != BlockType.Temporal)
+                AddColorIfNecessary(Grid, x + _x, _y + y, z + _z, ref regionColor, ref noise, ref color, ref colorCount);
+            }
+            /* Try with a broader search */
+            if (colorCount == 0)
+            {
+                for (var _x = -_sampleWidth; _x < 1 + _sampleWidth; _x+=_sampleWidth)
+                for (var _z = -_sampleWidth; _z < 1 + _sampleWidth; _z+=_sampleWidth)
+                for (var _y = -_sampleHeight; _y < 1 + _sampleHeight; _y+=_sampleHeight)
                 {
-                    var blockColor = DoGetColor(ref regionColor, ref x, type, ref noise);
-                    /*if (!canBeGrass && y0.Type == BlockType.Grass)
-                    {
-                        blockColor = Mathf.Lerp(DoGetColor(ref regionColor, ref x, BlockType.Stone, ref noise), blockColor, (dot).Clamp01());
-                    }*/
-
-                    color += blockColor;
-                    colorCount++;
+                    AddColorIfNecessary(Grid, x + _x, _y + y, z + _z, ref regionColor, ref noise, ref color, ref colorCount);
                 }
             }
             /*float wSeed = World.Seed * 0.0001f;
@@ -81,10 +77,24 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var isPoint = chunkCoords == new Vector2(_offsetX, _offsetZ);
             var c = new Vector4(rng.NextFloat(), rng.NextFloat(), rng.NextFloat(), 1.0f);
             return isPoint ? new Vector4(0, 0, 0, 1.0f) : c;*/
-            return new Vector4(colorCount == 0 ? RegionColor.StoneColor.Xyz : color.Xyz / colorCount, 1.0f);
+            return new Vector4(colorCount == 0 ? Vector3.Zero : color.Xyz / colorCount, 1.0f);
         }
 
-        private static Vector4 DoGetColor(ref RegionColor RegionColor, ref int x, BlockType Type, ref float Noise)
+        private void AddColorIfNecessary(SampledBlock[][][] Grid, int X, int Y, int Z, ref RegionColor RegionColor, ref float Noise, ref Vector4 Color, ref int ColorCount)
+        {
+            GetSampleOrNeighbour(Grid, X, Y.Clamp0(), Z, out var type);
+            if (type != BlockType.Water && type != BlockType.Air && type != BlockType.Temporal)
+            {
+                var blockColor = DoGetColor(ref RegionColor, ref X, ref Z, type, ref Noise);
+                for (var i = 0; i < 32; ++i)
+                {
+                    Color += blockColor;
+                    ColorCount++;
+                }
+            }
+        }
+
+        private static Vector4 DoGetColor(ref RegionColor RegionColor, ref int x, ref int z, BlockType Type, ref float Noise)
         {
             var blockColor = Block.GetColor(Type, RegionColor);
             if (Type == BlockType.Grass)

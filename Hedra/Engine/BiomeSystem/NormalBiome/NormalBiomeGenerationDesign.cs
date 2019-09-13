@@ -31,14 +31,9 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
 
             var smallSet = MultiplySets(
                 _noise.GetSimplexSetWithFrequency(offset, size, scale, 0.2f),
-                _noise.GetSimplexSetWithFrequency(offset, size, scale, 0.035f)
+                _noise.GetSimplexSetWithFrequency(offset, size, scale, 0.075f)
             );
-            AddSet(DensityMap, smallSet, F => F * -.5f);
-        }
-
-        private static float SmallFrequency3DNoise(int X, int Y, int Z)
-        {
-            return 0; //(World.GetNoise(X * 0.2f, Y * 0.2f, Z * 0.2f) * -0.15f * World.GetNoise(X * 0.035f, Y * 0.2f, Z * 0.035f) * 2.0f) * 7.5f;
+            AddSet(DensityMap, smallSet, F => F * -1.0f);
         }
 
         public override void BuildHeightMap(float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset)
