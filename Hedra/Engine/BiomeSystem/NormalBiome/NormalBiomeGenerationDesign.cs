@@ -21,27 +21,24 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             _noise = new FastNoiseSIMD(214121);
         }
         
-        public override void BuildDensityMap(float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float Scale, Vector3 Offset)
+        public override void BuildDensityMap(float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset)
         {
-            var set = _noise.GetSimplexFractalSetWithFrequency(Offset, new Vector3(Width, Height, Width), new Vector3(Scale, Scale, Scale), 0.00075f);
-            AddSet(DensityMap, set, F =>
-            {
-                if (F > 1)
-                {
-                    int a = 0;
-                }
-                return F.Clamp01() * 48.0f * Chunk.BlockSize;
-            });
+            var offset = Offset;
+            var size = new Vector3(Width, Height, Width);
+            var scale = new Vector3(HorizontalScale, VerticalScale, HorizontalScale);
+            var set = _noise.GetSimplexFractalSetWithFrequency(offset, size, scale, 0.00075f);
+            AddSet(DensityMap, set, F => F.Clamp01() * 48.0f * Chunk.BlockSize);
 
-            AddFunction(
-                DensityMap,
-                SmallFrequency3DNoise
+            var smallSet = MultiplySets(
+                _noise.GetSimplexSetWithFrequency(offset, size, scale, 0.2f),
+                _noise.GetSimplexSetWithFrequency(offset, size, scale, 0.035f)
             );
+            AddSet(DensityMap, smallSet, F => F * -.5f);
         }
 
         private static float SmallFrequency3DNoise(int X, int Y, int Z)
         {
-            return 0;//(World.GetNoise(X * 0.2f, Y * 0.2f, Z * 0.2f) * -0.15f * World.GetNoise(X * 0.035f, Y * 0.2f, Z * 0.035f) * 2.0f) * 7.5f;
+            return 0; //(World.GetNoise(X * 0.2f, Y * 0.2f, Z * 0.2f) * -0.15f * World.GetNoise(X * 0.035f, Y * 0.2f, Z * 0.035f) * 2.0f) * 7.5f;
         }
 
         public override void BuildHeightMap(float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset)

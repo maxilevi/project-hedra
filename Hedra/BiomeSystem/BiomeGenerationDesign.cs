@@ -11,7 +11,7 @@ namespace Hedra.BiomeSystem
         public abstract bool HasPaths { get; }
         public abstract bool HasDirt { get; }
 
-        public abstract void BuildDensityMap(float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float Scale, Vector3 Offset);
+        public abstract void BuildDensityMap(float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset);
 
         public abstract void BuildHeightMap(float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset);
 
@@ -59,6 +59,16 @@ namespace Hedra.BiomeSystem
                     }
                 }
             }
+        }
+        
+        public static float[] MultiplySets(float[] Set1, float[] Set2)
+        {
+            var index = 0;
+            for (var i = 0; i < Set1.Length; ++i)
+            {
+                Set1[i] *= Set2[i];
+            }
+            return Set1;
         }
         
         public static void AddSet(float[][] Map1, float[] Map2, Func<float, float> Transform)

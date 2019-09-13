@@ -22,7 +22,7 @@ namespace HedraTests.Structure
         
         public override bool HasDirt { get; }
 
-        public override void BuildDensityMap(float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float Scale, Vector3 Offset)
+        public override void BuildDensityMap(float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset)
         {
             throw new NotImplementedException();
         }

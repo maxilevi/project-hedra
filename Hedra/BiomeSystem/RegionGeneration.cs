@@ -33,11 +33,11 @@ namespace Hedra.BiomeSystem
             }
         }
         
-        public void BuildDensityMap(int Width, int Height, float Scale, Vector3 Offset, out float[][][] DensityMap, out BlockType[][][] TypeMap)
+        public void BuildDensityMap(int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset, out float[][][] DensityMap, out BlockType[][][] TypeMap)
         {
             DensityMap = CreateMap<float>(Width, Height);
             TypeMap = CreateMap<BlockType>(Width, Height);
-            _design.BuildDensityMap(DensityMap, TypeMap, Width, Height, Scale, Offset);
+            _design.BuildDensityMap(DensityMap, TypeMap, Width, Height, HorizontalScale, VerticalScale, Offset);
         }
 
         public void BuildHeightMap(int Width, float Scale, Vector2 Offset, out float[][] HeightMap, out BlockType[][] TypeMap)
