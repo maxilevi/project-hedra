@@ -10,6 +10,12 @@ namespace Hedra.BiomeSystem
         public abstract bool HasRivers { get;}
         public abstract bool HasPaths { get; }
         public abstract bool HasDirt { get; }
+        protected readonly FastNoiseSIMD Noise;
+
+        protected BiomeGenerationDesign()
+        {
+            Noise = new FastNoiseSIMD(1);
+        }
 
         public abstract void BuildDensityMap(float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset);
 
@@ -63,12 +69,38 @@ namespace Hedra.BiomeSystem
         
         public static float[] MultiplySets(float[] Set1, float[] Set2)
         {
+            return OperateSets(Set1, Set2, (F1, F2) => F1 * F2);
+        }
+        
+        public static float[] OperateSets(float[] Set1, float[] Set2, Func<float, float, float> Operation)
+        {
             var index = 0;
             for (var i = 0; i < Set1.Length; ++i)
             {
-                Set1[i] *= Set2[i];
+                Set1[i] = Operation(Set1[i], Set2[i]);
             }
             return Set1;
+        }
+        
+        public static float[] SubtractSets(float[] Set1, float[] Set2)
+        {
+            return OperateSets(Set1, Set2, (F1, F2) => F1 - F2);
+        }
+        
+        public static float[] AddSets(float[] Set1, float[] Set2)
+        {
+            return OperateSets(Set1, Set2, (F1, F2) => F1 + F2);
+        }
+
+        public static float[] TransformSet(float[] Set, Func<float, float> Transform)
+        {
+            var index = 0;
+            for (var i = 0; i < Set.Length; ++i)
+            {
+                Set[i] = Transform(Set[i]);
+            }
+
+            return Set;
         }
         
         public static void AddSet(float[][] Map1, float[] Map2, Func<float, float> Transform)
@@ -83,9 +115,14 @@ namespace Hedra.BiomeSystem
             }
         }
 
+        public int Seed
+        {
+            set => Noise.Seed = value;
+        }
+
         public virtual void Dispose()
         {
-            
+            Noise.Dispose();
         }
     }
 }

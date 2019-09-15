@@ -249,6 +249,7 @@
     <Compile Include="Engine\DataStructures\Octree.cs" />
     <Compile Include="Engine\DataStructures\OctreeNode.cs" />
     <Compile Include="Engine\EntitySystem\DummyModel.cs" />
+    <Compile Include="Engine\Generation\ChunkSystem\SampledBlock.cs" />
     <Compile Include="Engine\Generation\FastNoiseSIMD.cs" />
     <Compile Include="Engine\Generation\FishingZoneHandler.cs" />
     <Compile Include="Engine\Generation\Simplex.cs" />

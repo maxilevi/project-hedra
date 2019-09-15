@@ -355,7 +355,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             for (int y = MaximumHeight; y > MinimumHeight; y--)
             {
                 var B = _blocks[X][y][Z];
-                if (B.Type != BlockType.Air && B.Type != BlockType.Water)
+                if (B.Type != BlockType.Air && B.Type != BlockType.Water && B.Density > 0)
                     return B;
             }
 

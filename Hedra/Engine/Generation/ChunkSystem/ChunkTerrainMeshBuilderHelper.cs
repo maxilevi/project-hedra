@@ -86,11 +86,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (type != BlockType.Water && type != BlockType.Air && type != BlockType.Temporal)
             {
                 var blockColor = DoGetColor(ref RegionColor, ref X, ref Z, type, ref Noise);
-                for (var i = 0; i < 32; ++i)
-                {
-                    Color += blockColor;
-                    ColorCount++;
-                }
+                Color += blockColor * 32;
+                ColorCount += 32;
             }
         }
 
@@ -345,12 +342,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private static int Modulo(ref int Index)
         {
             return (Index % Bounds + Bounds) % Bounds;
-        }
-
-        public struct SampledBlock
-        {
-            public float Density;
-            public BlockType Type;
         }
     }
 }

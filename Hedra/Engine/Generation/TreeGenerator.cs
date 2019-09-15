@@ -32,8 +32,8 @@ namespace Hedra.Engine.Generation
             if (underChunk == null) return default(PlacementObject);
             var rng = new Random(Unique.GenerateSeed(Position.Xz));
 
-            var height = Physics.HeightAtPosition(Position, Lod);
-            var normal = Physics.NormalAtPosition(Position, Lod);
+            var height = Physics.HeightAtPosition(Position);
+            var normal = Physics.NormalAtPosition(Position);
             
             if (Vector3.Dot(normal, Vector3.UnitY) <= .2f) return default(PlacementObject);
             

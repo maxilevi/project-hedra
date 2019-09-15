@@ -11,6 +11,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
             Object?.Generate();
         }
 
-        protected override int SleepTime => 15;
+        protected override int SleepTime => 5;
     }
 }

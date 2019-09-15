@@ -42,7 +42,7 @@ namespace Hedra.Engine.Player
         public const int MaxLevel = 99;
         public const int MaxConsecutiveHits = 45;
         public const float DefaultDodgeCost = 25;
-        public const float SprintingSpeed = 0.5f;
+        public const float SprintingSpeed = 0.75f;
         
         public event OnAttackEventHandler AfterAttack;
         public event OnAttackEventHandler BeforeAttack;

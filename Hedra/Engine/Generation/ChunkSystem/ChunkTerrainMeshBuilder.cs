@@ -97,7 +97,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return new ChunkMeshBuildOutput(blockData, waterData, new VertexData(), failed, hasWater);
         }
 
-        private void IterateAndBuild(ChunkTerrainMeshBuilderHelper.SampledBlock[][][] densityGrid, Block[][][] Blocks, ref bool failed,
+        private void IterateAndBuild(SampledBlock[][][] densityGrid, Block[][][] Blocks, ref bool failed,
             ref bool hasWater, bool ProcessWater, bool ProcessColors, RegionCache Cache, VertexData blockData, VertexData waterData)
         {
             var next = false;
@@ -166,7 +166,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
         }
 
-        private void PolygoniseCell(ChunkTerrainMeshBuilderHelper.SampledBlock[][][] Grid, ref GridCell Cell, ref bool ProcessColors, ref bool Next, ref VertexData BlockData, ref Vector3[] VertexBuffer, ref Triangle[] TriangleBuffer, ref RegionCache Cache)
+        private void PolygoniseCell(SampledBlock[][][] Grid, ref GridCell Cell, ref bool ProcessColors, ref bool Next, ref VertexData BlockData, ref Vector3[] VertexBuffer, ref Triangle[] TriangleBuffer, ref RegionCache Cache)
         {
             MarchingCubes.Polygonise(ref Cell, 0, ref VertexBuffer, ref TriangleBuffer, out var triangleCount);
             var color = Vector4.Zero;

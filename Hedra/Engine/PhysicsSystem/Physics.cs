@@ -92,9 +92,9 @@ namespace Hedra.Engine.PhysicsSystem
             return output;
         }
         
-        public static float HeightAtPosition(float X, float Z, int Lod = -1)
+        public static float HeightAtPosition(float X, float Z)
         {
-             return HeightAtPosition(new Vector3(X,0,Z), Lod);
+             return HeightAtPosition(new Vector3(X,0,Z));
         }
 
         public static Vector3 ClampToNearestLod(Vector3 Position)
@@ -111,31 +111,11 @@ namespace Hedra.Engine.PhysicsSystem
                 Chunk.BlockSize + chunkOffset.ToVector3();
         }
         
-        public static float HeightAtPosition(Vector3 BlockPosition, int Lod = -1)
+        public static float HeightAtPosition(Vector3 BlockPosition)
         {
-            
-            if(Block.Noise3D)
-            {
-                return HeightAtBlock( new Vector3(BlockPosition.X, World.GetHighestY( (int) BlockPosition.X, (int) BlockPosition.Z), BlockPosition.Z) );
-            }
-
-            if (Lod == -1)
-            {
-                var underChunk = World.GetChunkAt(BlockPosition);
-                if (underChunk != null && underChunk.Landscape.GeneratedLod > 1)
-                {
-                    Lod = underChunk.Landscape.GeneratedLod;
-                    BlockPosition = ClampToNearestLod(BlockPosition, underChunk);
-                }
-                else
-                {
-                    Lod = 1;
-                }
-            }        
-            
-            var yx = GetHighest( (int) BlockPosition.X + (int) Chunk.BlockSize * Lod, (int) BlockPosition.Z);
-            var yz = GetHighest( (int) BlockPosition.X, (int) BlockPosition.Z + (int) Chunk.BlockSize* Lod);
-            var yxz = GetHighest( (int) BlockPosition.X + (int) Chunk.BlockSize * Lod, (int) BlockPosition.Z + (int) Chunk.BlockSize);
+            var yx = GetHighest( (int) BlockPosition.X + (int) Chunk.BlockSize, (int) BlockPosition.Z);
+            var yz = GetHighest( (int) BlockPosition.X, (int) BlockPosition.Z + (int) Chunk.BlockSize);
+            var yxz = GetHighest( (int) BlockPosition.X + (int) Chunk.BlockSize, (int) BlockPosition.Z + (int) Chunk.BlockSize);
             var yh = GetHighest( (int) BlockPosition.X, (int) BlockPosition.Z);
                 
             var blockSpace = World.ToBlockSpace(BlockPosition);

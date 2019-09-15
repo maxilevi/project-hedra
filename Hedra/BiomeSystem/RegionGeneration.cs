@@ -17,6 +17,7 @@ namespace Hedra.BiomeSystem
             _tempDensityMap = CreateMap<float>(1);
             _tempTypeMap = CreateMap<BlockType>(1);
             _design = Design;
+            _design.Seed = Seed;
         }
 
         public bool HasDirt => _design.HasDirt;

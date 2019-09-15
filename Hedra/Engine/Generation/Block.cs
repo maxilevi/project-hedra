@@ -15,16 +15,16 @@ namespace Hedra.Engine.Generation
     {
         private ushort _bits;
 
-        public Block(BlockType Type, Half Density = default(Half))
+        public Block(BlockType Type, float Density = default(float))
         {
             _bits = 0;
             this.Type = Type;
             this.Density = Density;
         }
 
-        public Half Density
+        public float Density
         {
-            get => new Half((((_bits >> 11) & 1) * 2 - 1) * ((_bits & 0x7FF) * 0.01f));
+            get => (float) ((((_bits >> 11) & 1) * 2 - 1) * ((_bits & 0x7FF) * 0.01f));
             set
             {
                 var sign = value < 0 ? 0 : 1;
