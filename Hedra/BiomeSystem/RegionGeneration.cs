@@ -28,6 +28,7 @@ namespace Hedra.BiomeSystem
         {
             lock (_tempMapLock)
             {
+                _design.Seed = World.Seed;
                 _design.BuildHeightMap(_tempDensityMap, _tempTypeMap, 1, 1, new Vector2(X, Y));
                 Type = _tempTypeMap[0][0];
                 return _tempDensityMap[0][0];
@@ -36,6 +37,7 @@ namespace Hedra.BiomeSystem
         
         public void BuildDensityMap(int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset, out float[][][] DensityMap, out BlockType[][][] TypeMap)
         {
+            _design.Seed = World.Seed;
             DensityMap = CreateMap<float>(Width, Height);
             TypeMap = CreateMap<BlockType>(Width, Height);
             _design.BuildDensityMap(DensityMap, TypeMap, Width, Height, HorizontalScale, VerticalScale, Offset);
@@ -43,6 +45,7 @@ namespace Hedra.BiomeSystem
 
         public void BuildHeightMap(int Width, float Scale, Vector2 Offset, out float[][] HeightMap, out BlockType[][] TypeMap)
         {
+            _design.Seed = World.Seed;
             HeightMap = CreateMap<float>(Width);
             TypeMap = CreateMap<BlockType>(Width);
             _design.BuildHeightMap(HeightMap, TypeMap, Width, Scale, Offset);

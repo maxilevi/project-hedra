@@ -67,9 +67,33 @@ namespace Hedra.BiomeSystem
             }
         }
         
+        public static float[] MultiplySetsDimensional(float[] Set3D, float[] Set2D, Vector3 Size)
+        {
+            return OperateSetsDimensional(Set3D, Set2D, Size, (F1, F2) => F1 * F2);
+        }
+        
         public static float[] MultiplySets(float[] Set1, float[] Set2)
         {
             return OperateSets(Set1, Set2, (F1, F2) => F1 * F2);
+        }
+        
+        public static float[] OperateSetsDimensional(float[] Set3D, float[] Set2D, Vector3 Size, Func<float, float, float> Operation)
+        {
+            var index = 0;
+            for (var x = 0; x < Size.X; ++x)
+            {
+                for (var y = 0; y < Size.Y; ++y)
+                {
+                    for (var z = 0; z < Size.Z; ++z)
+                    {
+                        Set3D[x * (int)Size.Y * (int)Size.Z + y * (int)Size.Z + z] = Operation(
+                            Set3D[x * (int)Size.Y * (int)Size.Z + y * (int)Size.Z + z],
+                            Set2D[x * (int)Size.Z + z]
+                        );
+                    }
+                }   
+            }
+            return Set3D;
         }
         
         public static float[] OperateSets(float[] Set1, float[] Set2, Func<float, float, float> Operation)

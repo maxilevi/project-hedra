@@ -85,7 +85,8 @@ namespace Hedra.Engine.BiomeSystem
                         out var pathClamped, out var river, out var path, out var riverBorders,
                         out var blockGroundworks, out var isMount, out var mountHeight);
 
-                    for (var y = Chunk.Height-1 -1; y > -1; --y)
+                    /* Water is built from the buttom up so we should not change this */
+                    for (var y = 0; y < Chunk.Height-1; ++y)
                     {
                         var density = CalculateDensity(x,y,z, noise3D);
                         
@@ -172,10 +173,11 @@ namespace Hedra.Engine.BiomeSystem
             for (var y = Chunk.Height - 2; y > 0; --y)
             {
                 var type = Blocks[x][y][z].Type;
-                if (type != BlockType.Air && Blocks[x][y+1][z].Type == BlockType.Air && !foundBlock && CanSetGrass(Density, HeightMap, x, y, z, width, depth))
+                if (type != BlockType.Air && Blocks[x][y+1][z].Type == BlockType.Air && !foundBlock)
                 {
                     foundBlock = true;
-                    counter = 8;
+                    if(CanSetGrass(Density, HeightMap, x, y, z, width, depth))
+                        counter = 8;
                 }
 
                 if (counter > 0 && type == BlockType.Stone)
@@ -348,10 +350,12 @@ namespace Hedra.Engine.BiomeSystem
 
         private void HandleOceanBlocks(SampledBlock[][][] Blocks, ref int x, ref int y, ref int z, ref BlockType blockType)
         {
-            if (y <= BiomePool.SeaLevel && blockType == BlockType.Air && y >= 1 &&
-                Blocks[x][y - 1][z].Type != BlockType.Seafloor && Blocks[x][y - 1][z].Type != BlockType.Air &&
-                Blocks[x][y - 1][z].Type != BlockType.Water)
+            
+            if (y <= BiomePool.SeaLevel && blockType != BlockType.Air && y >= 1)
             {
+                var underBlock = Blocks[x][y - 1][z];
+                if (underBlock.Type == BlockType.Air || underBlock.Type == BlockType.Water)
+                    return;
                 if (y < BiomePool.SeaLevel)
                 {
                     blockType = BlockType.Seafloor;
@@ -361,16 +365,20 @@ namespace Hedra.Engine.BiomeSystem
                     }
                 }
             }
-    
-            var isOcean = y > 0 && y <= BiomePool.SeaLevel &&
-                          (Blocks[x][y - 1][z].Type == BlockType.Seafloor ||
-                           Blocks[x][y - 1][z].Type == BlockType.Water) &&
-                          blockType == BlockType.Air &&
-                          Blocks[x][y + 1][z].Type == BlockType.Air;
-            if (isOcean)
-            {
-                blockType = BlockType.Water;
-                Chunk.AddWaterDensity(new Vector3(x, y, z), (Half) BiomePool.SeaLevel);
+            
+            var inOceanRange = y > 0 && y <= BiomePool.SeaLevel;
+            if (inOceanRange)
+            {            
+                var underBlock = Blocks[x][y - 1][z];
+                var upperBlock = Blocks[x][y +1][z];
+                var hasSolidOrWaterUnder = (underBlock.Type == BlockType.Seafloor || underBlock.Type == BlockType.Water);
+
+                var hasAirAbove = blockType == BlockType.Air && upperBlock.Type == BlockType.Air;
+                if (hasSolidOrWaterUnder && hasAirAbove)
+                {
+                    blockType = BlockType.Water;
+                    Chunk.AddWaterDensity(new Vector3(x, y, z), (Half) BiomePool.SeaLevel);
+                }
             }
         }
 

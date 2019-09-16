@@ -44,8 +44,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             for (var k = 0; k < output.StaticData.Vertices.Count; k++) output.StaticData.Extradata.Add(0);
 
             Simplify(output.StaticData, Lod);
-            Simplify(output.WaterData, Lod);
-            
+
             output.StaticData.Translate(new Vector3(OffsetX, 0, OffsetZ));
             output.WaterData.Translate(new Vector3(OffsetX, 0, OffsetZ));
             return output;

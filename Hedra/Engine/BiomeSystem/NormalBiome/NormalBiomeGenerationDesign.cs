@@ -19,20 +19,27 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             var offset = Offset;
             var size = new Vector3(Width, Height, Width);
             var scale = new Vector3(HorizontalScale, VerticalScale, HorizontalScale);
-            /* Set 1, generates small mountains with some overhangs */
+
+            /* Medium hangs and mountains, sparse. */
+            var set1 = Noise.GetPerlinSetWithFrequency(offset, size, scale, 0.0025f);
+            set1 = MultiplySets(
+                set1,
+                TransformSet(Noise.GetSimplexSetWithFrequency(Offset, size, scale, 0.00075f), F => F)
+            );
+            set1 = MultiplySetsDimensional(
+                set1,
+                TransformSet(Noise.GetSimplexSetWithFrequency(Offset.Xz, size.Xz, scale.Xz, 0.001f), F => (F - 0.25f).Clamp01() * 2),
+                size
+            );
+            //AddSet(DensityMap, set1, F => ((F - 0.015f) * 2.5f).Clamp01() * 32.0f * Chunk.BlockSize);
             
-            var set1 = Noise.GetSimplexFractalSetWithFrequency(offset, size, scale, 0.0005f);
-            set1 = MultiplySets(set1, Noise.GetSimplexFractalSetWithFrequency(offset, size, scale, 0.001f));
-            AddSet(DensityMap, set1, F => F.Clamp01() * 48.0f * Chunk.BlockSize);
-            
-            
-            var set = Noise.GetSimplexFractalSetWithFrequency(offset, size, scale, 0.00075f);
+            var set = Noise.GetPerlinFractalSetWithFrequency(offset, size, scale, 0.0005f);
             set = MultiplySets(
                 set,
-                Noise.GetSimplexFractalSetWithFrequency(offset + new Vector3(1000, 1000, 1000), size, scale, 0.00075f)
+                TransformSet(Noise.GetPerlinSetWithFrequency(offset, size, scale, 0.0015f), F => (F))
             );
-            AddSet(DensityMap, set, F => (F).Clamp01() * 96.0f * Chunk.BlockSize);
-            
+            AddSet(DensityMap, set, F => F.Clamp01() * 256.0f * Chunk.BlockSize);
+
             /* Small set, generate high frequency noise to avoid making the terrain soft */
             var smallSet = MultiplySets(
                 Noise.GetSimplexSetWithFrequency(offset, size, scale, 0.2f),
@@ -43,8 +50,8 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
 
         public override void BuildHeightMap(float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset)
         {
-            var set = Noise.GetSimplexSetWithFrequency(Offset, new Vector2(Width, Width), new Vector2(Scale, Scale), 0.0001f);
-            AddSet(HeightMap, set, F => F * 16.0f);
+            var set = Noise.GetPerlinSetWithFrequency(Offset, new Vector2(Width, Width), new Vector2(Scale, Scale), 0.000025f);
+            AddSet(HeightMap, set, F => F * 32.0f);
             AddConstant(HeightMap, BiomePool.SeaLevel);
         }
 
