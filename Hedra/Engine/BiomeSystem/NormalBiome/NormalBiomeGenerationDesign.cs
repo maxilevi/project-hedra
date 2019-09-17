@@ -40,7 +40,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             );
             set = MultiplySetsDimensional(
                 set,
-                TransformSet(Noise.GetSimplexSetWithFrequency(Offset.Xz, size.Xz, scale.Xz, 0.0005f), F => F.Clamp01() * 2),
+                TransformSet(Noise.GetSimplexSetWithFrequency(Offset.Xz, size.Xz, scale.Xz, 0.0008f), F => F.Clamp01() * 3f),
                 size
             );
             AddSet(DensityMap, set, F => F.Clamp01() * 256.0f * Chunk.BlockSize);
@@ -64,8 +64,8 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             var smallMountainsSet = Noise.GetPerlinSetWithFrequency(Offset, new Vector2(Width, Width), new Vector2(Scale, Scale), 0.002f);
             //AddSet(HeightMap, smallMountainsSet, F => F * 8.0f);
             
-            var lakeSet = Noise.GetPerlinSetWithFrequency(Offset, new Vector2(Width, Width), new Vector2(Scale, Scale), 0.001f);
-            //AddSet(HeightMap, lakeSet, F => F.Clamp01() * -48.0f);
+            var lakeSet = Noise.GetPerlinSetWithFrequency(Offset, new Vector2(Width, Width), new Vector2(Scale, Scale), 0.00055f);
+            AddSet(HeightMap, lakeSet, F => (F-0.2f).Clamp01() * -80.0f);
             
             AddConstant(HeightMap, BiomePool.SeaLevel);
         }
