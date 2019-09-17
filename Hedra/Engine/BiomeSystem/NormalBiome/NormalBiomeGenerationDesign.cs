@@ -31,12 +31,17 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
                 TransformSet(Noise.GetSimplexSetWithFrequency(Offset.Xz, size.Xz, scale.Xz, 0.001f), F => (F - 0.25f).Clamp01() * 2),
                 size
             );
-            //AddSet(DensityMap, set1, F => ((F - 0.015f) * 2.5f).Clamp01() * 32.0f * Chunk.BlockSize);
+            AddSet(DensityMap, set1, F => ((F - 0.015f) * 2.5f).Clamp01() * 32.0f * Chunk.BlockSize);
             
-            var set = Noise.GetPerlinFractalSetWithFrequency(offset, size, scale, 0.0005f);
+            var set = Noise.GetPerlinFractalSetWithFrequency(offset, size, scale, 0.00025f);
             set = MultiplySets(
                 set,
-                TransformSet(Noise.GetPerlinSetWithFrequency(offset, size, scale, 0.0015f), F => (F))
+                TransformSet(Noise.GetPerlinSetWithFrequency(offset, size, scale, 0.00175f), F => (F))
+            );
+            set = MultiplySetsDimensional(
+                set,
+                TransformSet(Noise.GetSimplexSetWithFrequency(Offset.Xz, size.Xz, scale.Xz, 0.0005f), F => F.Clamp01() * 2),
+                size
             );
             AddSet(DensityMap, set, F => F.Clamp01() * 256.0f * Chunk.BlockSize);
 
@@ -50,8 +55,18 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
 
         public override void BuildHeightMap(float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset)
         {
-            var set = Noise.GetPerlinSetWithFrequency(Offset, new Vector2(Width, Width), new Vector2(Scale, Scale), 0.000025f);
-            AddSet(HeightMap, set, F => F * 32.0f);
+            var baseSet = Noise.GetPerlinSetWithFrequency(Offset, new Vector2(Width, Width), new Vector2(Scale, Scale), 0.000025f);
+            AddSet(HeightMap, baseSet, F => (F + 0.25f).Clamp01() * 32.0f);
+            
+            var bigMountain = Noise.GetPerlinSetWithFrequency(Offset, new Vector2(Width, Width), new Vector2(Scale, Scale), 0.0005f);
+            AddSet(HeightMap, bigMountain, F => F.Clamp01() * 128.0f);
+            
+            var smallMountainsSet = Noise.GetPerlinSetWithFrequency(Offset, new Vector2(Width, Width), new Vector2(Scale, Scale), 0.002f);
+            //AddSet(HeightMap, smallMountainsSet, F => F * 8.0f);
+            
+            var lakeSet = Noise.GetPerlinSetWithFrequency(Offset, new Vector2(Width, Width), new Vector2(Scale, Scale), 0.001f);
+            //AddSet(HeightMap, lakeSet, F => F.Clamp01() * -48.0f);
+            
             AddConstant(HeightMap, BiomePool.SeaLevel);
         }
 
