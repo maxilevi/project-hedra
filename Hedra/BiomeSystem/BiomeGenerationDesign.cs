@@ -61,7 +61,7 @@ namespace Hedra.BiomeSystem
                 {
                     for (var k = 0; k < Map1[i][j].Length; ++k)
                     {
-                        Map1[i][j][k] += Transform(Map2[index++]);
+                        Map1[i][j][k] += Transform(Map2[i * Map1[i].Length * Map1[i][j].Length + j * Map1[i][j].Length + k]);
                     }
                 }
             }

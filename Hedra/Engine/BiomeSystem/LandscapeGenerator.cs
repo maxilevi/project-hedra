@@ -86,7 +86,7 @@ namespace Hedra.Engine.BiomeSystem
                         out var blockGroundworks, out var isMount, out var mountHeight);
 
                     /* Water is built from the buttom up so we should not change this */
-                    for (var y = 0; y < Chunk.Height-1; ++y)
+                    for (var y = 0; y < Chunk.Height; ++y)
                     {
                         var density = CalculateDensity(x,y,z, noise3D);
                         
@@ -251,7 +251,21 @@ namespace Hedra.Engine.BiomeSystem
                 out var densityMap,
                 out var typeMap
             );
+            TrimTop(densityMap, noiseValuesMapWidth, noiseValuesMapHeight);
             return densityMap;
+        }
+
+        private static void TrimTop(float[][][] Density, int width, int height)
+        {
+            for (var x = 0; x < width; ++x)
+            {
+                for (var z = 0; z < width; ++z)
+                {
+                    Density[x][height - 1][z] = 0;
+                    Density[x][height - 2][z] = 0;
+                    Density[x][height - 3][z] = 0;
+                }  
+            }
         }
 
         private static float CalculateDensity(int x, int y, int z, float[][][] noise3D)
@@ -309,7 +323,7 @@ namespace Hedra.Engine.BiomeSystem
         {
             if (y < 2)
                 blockDensity = 0.95f + rng.NextFloat() * 0.75f;
-    
+
             if (blockDensity > 0)
             {
                 blockType = BlockType.Stone;
@@ -573,7 +587,6 @@ namespace Hedra.Engine.BiomeSystem
 
         protected override void PlaceEnvironment(RegionCache Cache, Predicate<PlacementDesign> Filter)
         {
-            return;
             var structs = World.StructureHandler.StructureItems;
             var groundworks = World.WorldBuilding.Groundworks.Where(P => P.NoPlants).ToArray();
             for (var x = 0; x < this.Chunk.BoundsX; x++)
@@ -599,7 +612,6 @@ namespace Hedra.Engine.BiomeSystem
             var structs = World.StructureHandler.StructureItems;
             var plateaus = World.WorldBuilding.Plateaux.Where(P => P.NoTrees).ToArray();
             var groundworks = World.WorldBuilding.Groundworks.Where(P => P.NoTrees).ToArray();
-            return;
             for (var _x = 0; _x < this.Chunk.BoundsX; _x++)
             {
                 for (var _z = 0; _z < this.Chunk.BoundsZ; _z++)
