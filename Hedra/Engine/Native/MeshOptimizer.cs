@@ -12,7 +12,7 @@ namespace Hedra.Engine.Native
         {
             var indices = Mesh.Indices.ToArray();
             var vertices = Mesh.Vertices.ToArray();
-            var targetIndexCount = Math.Max(384, (uint)(indices.Length * Threshold));
+            var targetIndexCount = (uint) (indices.Length * Threshold);//Math.Max(384, (uint)(indices.Length * Threshold));
             var outIndices = new uint[indices.Length];
             var verticesPointer = Pointer.Create(vertices);
             var length = HedraCoreNative.meshopt_simplify(

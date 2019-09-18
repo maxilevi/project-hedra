@@ -43,7 +43,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _sampleHeight = Lod;
         }
 
-        public Vector4 GetColor(SampledBlock[][][] Grid, ref GridCell Cell, RegionColor RegionColor, ref Vector3 AverageNormal)
+        public Vector4 GetColor(SampledBlock[][][] Grid, ref GridCell Cell, RegionColor RegionColor)
         {
             var position = Cell.P[0] / _blockSize;
             int x = (int) position.X, y = (int) position.Y, z = (int) position.Z;
@@ -147,85 +147,18 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return densities;
         }
 
-        public void CreateCell(SampledBlock[][][] Grid, ref GridCell Cell, ref int X, ref int Y, ref int Z, ref bool WaterCell, out bool Success)
+        public void CreateCell(SampledBlock[][][] Grid, ref GridCell Cell, ref int X, ref int Y, ref int Z, out bool Success)
         {
             Success = true;
-            this.BuildCell(ref Cell, X, Y, Z, WaterCell);
+            this.BuildCell(ref Cell, X, Y, Z);
 
-            if (!WaterCell)
+            for (var i = 0; i < Cell.Type.Length; i++)
             {
-                for (var i = 0; i < Cell.Type.Length; i++)
-                {
-                    var posX = (int) (Cell.P[i].X * _coefficient);
-                    var posY = (int) (Cell.P[i].Y * _coefficient);
-                    var posZ = (int) (Cell.P[i].Z * _coefficient);
+                var posX = (int) (Cell.P[i].X * _coefficient);
+                var posY = (int) (Cell.P[i].Y * _coefficient);
+                var posZ = (int) (Cell.P[i].Z * _coefficient);
                     
-                    Cell.Density[i] = GetSampleOrNeighbour(Grid, posX, posY, posZ, out Cell.Type[i]);
-                }
-            }
-            else
-            {
-                #region WaterCells
-
-                const int Lod = 1;
-                var cz = new GridCell
-                {
-                    P = new Vector3[4]
-                };
-                cz.P[0] = new Vector3(X * _blockSize, Y * _blockSize, Z * _blockSize);
-                cz.P[1] = new Vector3(_blockSize * Lod + cz.P[0].X, cz.P[0].Y, cz.P[0].Z);
-                cz.P[2] = new Vector3(_blockSize * Lod + cz.P[0].X, cz.P[0].Y, _blockSize * Lod + cz.P[0].Z);
-                cz.P[3] = new Vector3(cz.P[0].X, cz.P[0].Y, _blockSize * Lod + cz.P[0].Z);
-
-                for (var i = 0; i < 4; i++)
-                {
-                    var pos = new Vector3(cz.P[i].X * _coefficient, cz.P[i].Y * _coefficient,
-                        cz.P[i].Z * _coefficient); // LOD is 1
-                    Block waterBlock = GetBlock(ref pos.X, ref pos.Y, ref pos.Z);
-
-                    if (waterBlock.Type != BlockType.Water)
-                    {
-                        for (var k = pos.Y - 3; k < _boundsY; k++)
-                        {
-                            waterBlock = GetBlock(ref pos.X, ref k, ref pos.Z);
-                            if (waterBlock.Type == BlockType.Water) goto WATER_BREAK;
-                        }
-
-                        for (var k = pos.Y - 3; k < _boundsY; k++)
-                        for (var kx = -2; kx < 3; kx++)
-                        for (var kz = -2; kz < 3; kz++)
-                        {
-                            var waterX = pos.X + kx;
-                            var waterZ = pos.Z + kz;
-                            waterBlock = GetBlock(ref waterX, ref k, ref waterZ);
-
-
-                            if (waterBlock.Type == BlockType.Water) goto WATER_BREAK;
-                        }
-                    }
-                    WATER_BREAK:
- 
-                    var neighbourChunk = GetNeighbourChunk(ref pos.X, ref pos.Z, ref _offsetX, ref _offsetZ);
-                    var x = (int) (pos.X % _boundsX);
-                    var z = (int) (pos.Z % _boundsZ);
-
-                    var newHeight = neighbourChunk?.GetWaterDensity(new Vector3(x, Y, z)) ?? default(Half);
-                    for (int k = Math.Min(Y + 8, Chunk.Height - 1); k > -1 && Math.Abs(newHeight) < 0.005f; k--)
-                    {
-                        newHeight = neighbourChunk?.GetWaterDensity(new Vector3(x, k, z)) ?? default(Half);
-                    }
-                    for (int k = Math.Min(Y + 8, Chunk.Height - 1); k > -1; k--)
-                    {
-                        var block = neighbourChunk[x][k]?[z] ?? new Block();
-                        if (block.Type == BlockType.Seafloor)
-                        {
-                            Cell.Density[i] = 0;
-                            Cell.P[i] = new Vector3(Cell.P[i].X, newHeight, Cell.P[i].Z);
-                            break;
-                        }
-                    }
-                }
-                #endregion
+                Cell.Density[i] = GetSampleOrNeighbour(Grid, posX, posY, posZ, out Cell.Type[i]);
             }
 
             for (var i = 0; i < Cell.Type.Length; i++)
@@ -270,43 +203,20 @@ namespace Hedra.Engine.Generation.ChunkSystem
             );
         }
         
-        private void BuildCell(ref GridCell Cell, int X, int Y, int Z, bool WaterCell)
+        private void BuildCell(ref GridCell Cell, int X, int Y, int Z)
         {
             const int lod = 1;
-            float blockSizeLod = _blockSize * lod;
-            if (WaterCell)
-            {
-                Cell.P[0] = new Vector3(X, Y, Z);
-                Cell.P[1] = new Vector3(X + blockSizeLod, Y, Z);
-                Cell.P[2] = new Vector3(X + blockSizeLod, Y, Z + blockSizeLod);
-                Cell.P[3] = new Vector3(X, Y, Z + blockSizeLod);  
-                Cell.P[4] = new Vector3(X, Y + _blockSize, Z); 
-                Cell.P[5] = new Vector3(X + blockSizeLod, Y + _blockSize, Z);
-                Cell.P[6] = new Vector3(X + blockSizeLod, Y + _blockSize, Z + blockSizeLod); 
-                Cell.P[7] = new Vector3(X, Y + _blockSize, Z + blockSizeLod);
-            }
-            else
-            {
-                Cell.P[0] = new Vector3(X * _blockSize, Y * _blockSize, Z * _blockSize);
-                Cell.P[1] = new Vector3(blockSizeLod + Cell.P[0].X, Cell.P[0].Y, Cell.P[0].Z);
-                Cell.P[2] = new Vector3(blockSizeLod + Cell.P[0].X, Cell.P[0].Y, blockSizeLod + Cell.P[0].Z);
-                Cell.P[3] = new Vector3(Cell.P[0].X, Cell.P[0].Y, blockSizeLod + Cell.P[0].Z);
-                Cell.P[4] = new Vector3(Cell.P[0].X, _blockSize + Cell.P[0].Y, Cell.P[0].Z);
-                Cell.P[5] = new Vector3(blockSizeLod + Cell.P[0].X, _blockSize + Cell.P[0].Y, Cell.P[0].Z);
-                Cell.P[6] = new Vector3(blockSizeLod + Cell.P[0].X, _blockSize + Cell.P[0].Y, blockSizeLod + Cell.P[0].Z);
-                Cell.P[7] = new Vector3(Cell.P[0].X, _blockSize + Cell.P[0].Y, blockSizeLod + Cell.P[0].Z);
-            }
+            var blockSizeLod = _blockSize * lod;
+            Cell.P[0] = new Vector3(X * _blockSize, Y * _blockSize, Z * _blockSize);
+            Cell.P[1] = new Vector3(blockSizeLod + Cell.P[0].X, Cell.P[0].Y, Cell.P[0].Z);
+            Cell.P[2] = new Vector3(blockSizeLod + Cell.P[0].X, Cell.P[0].Y, blockSizeLod + Cell.P[0].Z);
+            Cell.P[3] = new Vector3(Cell.P[0].X, Cell.P[0].Y, blockSizeLod + Cell.P[0].Z);
+            Cell.P[4] = new Vector3(Cell.P[0].X, _blockSize + Cell.P[0].Y, Cell.P[0].Z);
+            Cell.P[5] = new Vector3(blockSizeLod + Cell.P[0].X, _blockSize + Cell.P[0].Y, Cell.P[0].Z);
+            Cell.P[6] = new Vector3(blockSizeLod + Cell.P[0].X, _blockSize + Cell.P[0].Y, blockSizeLod + Cell.P[0].Z);
+            Cell.P[7] = new Vector3(Cell.P[0].X, _blockSize + Cell.P[0].Y, blockSizeLod + Cell.P[0].Z);
         }
 
-        private Block GetBlock(ref float X, ref float Y, ref float Z)
-        {
-            var intX = (int) X;
-            var intY = (int) Y;
-            var intZ = (int) Z;
-            if (X > 0 && X < _boundsX && Z > 0 && Z < _boundsZ) return _parent[intX][intY][intZ];
-            return GetNeighbourBlock(ref intX, ref intY, ref intZ, ref _offsetX, ref _offsetZ);
-        }
-        
         //Use ref to avoid copying the structs since this function has a very high call rate.
         [MethodImpl(256)]
         private static Chunk GetNeighbourChunk(ref float X, ref float Z, ref int _offsetX, ref int _offsetZ)

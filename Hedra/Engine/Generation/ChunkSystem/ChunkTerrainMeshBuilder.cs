@@ -119,47 +119,23 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
                         if (y < Sparsity.MinimumHeight || y > Sparsity.MaximumHeight) continue;
                         if (Blocks[x] == null || Blocks[x][y] == null || y == BoundsY - 1 || y == 0) continue;
+                        
+                        Helper.CreateCell(densityGrid, ref cell, ref x, ref y, ref z, out var success);
 
-                        var isWaterCell = Blocks[x][y][z].Type == BlockType.Water &&
-                                          Blocks[x][y + 1][z].Type == BlockType.Air;
-                        Helper.CreateCell(densityGrid, ref cell, ref x, ref y, ref z, ref isWaterCell, out var success);
-
-                        if (!(Blocks[x][y][z].Type == BlockType.Water &&
-                              Blocks[x][y + 1][z].Type == BlockType.Air) &&
-                            !MarchingCubes.Usable(0f, cell)) continue;
+                        if (!MarchingCubes.Usable(0f, cell)) continue;
                         if (!success && y < BoundsY - 2) failed = true;
 
-                        if (Blocks[x][y][z].Type == BlockType.Water && Blocks[x][y + 1][z].Type == BlockType.Air && ProcessWater)
+                        /*
+                        if (Blocks[x][y][z].Type == BlockType.Water/* && Blocks[x][y + 1][z].Type == BlockType.Air && ProcessWater)
                         {
-                            var regionPosition =
-                                new Vector3(cell.P[0].X * BlockSize + OffsetX, 0,
-                                    cell.P[0].Z * BlockSize + OffsetZ);
-
+                            var regionPosition = new Vector3(cell.P[0].X * BlockSize + OffsetX, 0, cell.P[0].Z * BlockSize + OffsetZ);
                             var region = Cache.GetAverageRegionColor(regionPosition);
-
-                            IsoSurfaceCreator.CreateWaterQuad(BlockSize, cell, next, region.WaterColor, waterData);
+                            var cube = Geometry.Cube();
+                            waterData.ad
                             hasWater = true;
-                        }
+                        }*/
 
-                        if (Blocks[x][y][z].Type == BlockType.Water)
-                        {
-                            if (Blocks[x][y][z].Type == BlockType.Water &&
-                                Blocks[x][y + 1][z].Type == BlockType.Air)
-                            {
-                                var waterCell = false;
-                                Helper.CreateCell(densityGrid, ref cell, ref x, ref y, ref z, ref waterCell, out success);
-                            }
-
-                            if (!success && y < BoundsY - 2) failed = true;
-
-                            if (!MarchingCubes.Usable(0f, cell)) continue;
-
-                            PolygoniseCell(densityGrid, ref cell, ref ProcessColors, ref next, ref blockData, ref vertexBuffer, ref triangleBuffer, ref Cache);
-                        }
-                        else
-                        {
-                            PolygoniseCell(densityGrid, ref cell, ref ProcessColors, ref next, ref blockData, ref vertexBuffer, ref triangleBuffer, ref Cache);
-                        }
+                        PolygoniseCell(densityGrid, ref cell, ref ProcessColors, ref next, ref blockData, ref vertexBuffer, ref triangleBuffer, ref Cache);
                     }
                 }
             }
@@ -171,21 +147,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var color = Vector4.Zero;
             if (ProcessColors)
             {
-                var normal = CalculateAverageNormal(ref TriangleBuffer, ref triangleCount);
                 var regionPosition = new Vector3(Cell.P[0].X + OffsetX, 0, Cell.P[0].Z + OffsetZ);
                 var region = Cache.GetAverageRegionColor(regionPosition);
-                color = Helper.GetColor(Grid, ref Cell, region, ref normal);
+                color = Helper.GetColor(Grid, ref Cell, region);
             }
             MarchingCubes.Build(ref BlockData, ref color, ref TriangleBuffer, ref triangleCount, ref Next);
         }
 
-        private static Vector3 CalculateAverageNormal(ref Triangle[] TriangleBuffer, ref int TriangleCount)
-        {
-            if(TriangleCount == 0) return Vector3.One;
-            var averageNormal = Vector3.Zero;
-            for (var i = 0; i < TriangleCount; ++i)
-                averageNormal += Vector3.Cross(TriangleBuffer[i].Vertices[1] - TriangleBuffer[i].Vertices[0], TriangleBuffer[i].Vertices[2] - TriangleBuffer[i].Vertices[0]).NormalizedFast();
-            return averageNormal / TriangleCount;
-        }
     }
 }

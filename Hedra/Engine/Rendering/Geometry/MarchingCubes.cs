@@ -316,33 +316,7 @@ namespace Hedra.Engine.Rendering
         #endregion
 
         #region AXULIARIES        
-        public static List<BlockType> AffectingTypes(double IsoLevel, GridCell Cell)
-        {
-            List<BlockType> Types = new List<BlockType>();
-            if (Cell.Density[1] > IsoLevel) Types.Add(Cell.Type[1]);
-            if (Cell.Density[2] > IsoLevel) Types.Add(Cell.Type[2]);
-            if (Cell.Density[3] > IsoLevel) Types.Add(Cell.Type[3]);
-            if (Cell.Density[4] > IsoLevel) Types.Add(Cell.Type[4]);
-            if (Cell.Density[5] > IsoLevel) Types.Add(Cell.Type[5]);
-            if (Cell.Density[6] > IsoLevel) Types.Add(Cell.Type[6]);
-            if (Cell.Density[7] > IsoLevel) Types.Add(Cell.Type[7]);
-            
-            return Types;
-        }
-        
-        public static BlockType AffectingType(double IsoLevel, GridCell Cell)
-        {
-            if (Cell.Density[1] > IsoLevel) return Cell.Type[1];
-            if (Cell.Density[2] > IsoLevel) return Cell.Type[2];
-            if (Cell.Density[3] > IsoLevel) return Cell.Type[3];
-            if (Cell.Density[4] > IsoLevel) return Cell.Type[4];
-            if (Cell.Density[5] > IsoLevel) return Cell.Type[5];
-            if (Cell.Density[6] > IsoLevel) return Cell.Type[6];
-            if (Cell.Density[7] > IsoLevel) return Cell.Type[7];
-            
-            return BlockType.Air;
-        }
-        
+
         public static bool Usable(double IsoLevel, GridCell Cell)
         {
             byte CubeIndex = 0;
@@ -355,7 +329,7 @@ namespace Hedra.Engine.Rendering
             if (Cell.Density[6] > IsoLevel) CubeIndex |= 64;
             if (Cell.Density[7] > IsoLevel) CubeIndex |= 128;
 
-            return !(EdgeTable[CubeIndex] == 0);
+            return EdgeTable[CubeIndex] != 0;
         }
         #endregion
 
@@ -440,8 +414,8 @@ namespace Hedra.Engine.Rendering
 
         private static Vector3 VertexInterp(double IsoLevel, Vector3 P1, Vector3 P2, double valp1, double valp2)
         {
-            Vector4 p1 = new Vector4(P1, (float) valp1);
-            Vector4 p2 = new Vector4(P2, (float) valp2);
+            var p1 = new Vector4(P1, (float) valp1);
+            var p2 = new Vector4(P2, (float) valp2);
 
             if (p2.Length < p1.Length)
             {

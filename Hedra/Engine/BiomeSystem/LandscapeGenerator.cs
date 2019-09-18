@@ -62,11 +62,7 @@ namespace Hedra.Engine.BiomeSystem
 
             var plateaus = World.WorldBuilding.GetPlateausFor(new Vector2(OffsetX, OffsetZ));
             var groundworks = World.WorldBuilding.GetGroundworksFor(new Vector2(OffsetX, OffsetZ)).ToList();
-
-            var structs = World.StructureHandler.StructureItems;
-            var heightCache = new Dictionary<Vector2, float[]>();
-
-            var biomeGen = Chunk.Biome.Generation;
+            
             var hasRiver = 0;//biomeGen.HasRivers ? 1f : 0f;
             var hasPath = 0;//biomeGen.HasPaths ? 1f : 0f;
 
@@ -80,27 +76,54 @@ namespace Hedra.Engine.BiomeSystem
                     var position = new Vector2(x * Chunk.BlockSize + OffsetX, z * Chunk.BlockSize + OffsetZ);
                     var height = CalculateHeight(x, z, heights, types, out var type);
 
-                    this.HandleStructures(x, z, position, groundworks, plateaus, structs, heightCache, biomeGen,
-                        hasPath, hasRiver, noiseScale, ref height, out var town,
-                        out var pathClamped, out var river, out var path, out var riverBorders,
-                        out var blockGroundworks, out var isMount, out var mountHeight);
+                    var densityClampHeight = Chunk.Height - 3f;
+                    HandleStructures(position, groundworks, out var blockGroundworks, ref height);
+                    HandlePlateaus(x, z, position, plateaus, ref densityClampHeight);
 
                     /* Water is built from the buttom up so we should not change this */
                     for (var y = 0; y < Chunk.Height; ++y)
                     {
                         var density = CalculateDensity(x,y,z, noise3D);
+                        if (y >= densityClampHeight) density = 0;
                         
-                        this.GenerateBlock(sampledBlocks, density, type, x, y, z, height, river, makeDirt, riverBorders,
-                            rng, isMount, mountHeight);
+                        this.GenerateBlock(sampledBlocks, density, type, x, y, z, height, makeDirt, rng);
                                     
-                        this.HandleGroundworks(sampledBlocks, x, y, z, path, PathDepth, pathClamped, town,
-                            blockGroundworks, ref height);
+                        this.HandleGroundworks(sampledBlocks, x, y, z, blockGroundworks);
                     }
                     GrassBlockPass(sampledBlocks, noise3D, heights, x, z, makeDirt, width, depth);
                 }
             }
 
             CopyBlocks(sampledBlocks, Blocks);
+        }
+        
+        private void HandlePlateaus(int X, int Z, Vector2 Position, BasePlateau[] Plateaux, ref float densityClampHeight)
+        {
+            var smallFrequency = SmallFrequency(Position.X, Position.Y);
+            for (var i = 0; i < Plateaux.Length; i++)
+            {
+                var point = new Vector2(OffsetX + X * Chunk.BlockSize, OffsetZ + Z * Chunk.BlockSize);
+                densityClampHeight = Plateaux[i].Apply(point, densityClampHeight, out var final, smallFrequency);
+            }
+        }
+        
+        private void HandleStructures(Vector2 position, List<IGroundwork> groundworks, out IGroundwork[] blockGroundworks, ref float height)
+        {
+            blockGroundworks = groundworks.Where(G => G.Affects(position)).ToArray();
+
+            var pathGroundwork = blockGroundworks.FirstOrDefault(P => P.IsPath);
+            var groundworkDensity = pathGroundwork?.Density(position) ?? 0;
+
+            if (blockGroundworks.Length > 0)
+            {
+                var groundwork = blockGroundworks[blockGroundworks.Length - 1];
+                var bonusHeight =
+                    Math.Min(
+                        groundwork.BonusHeight,
+                        groundwork.BonusHeight * groundwork.Density(position) * groundwork.DensityMultiplier
+                    );
+                height += bonusHeight;
+            }
         }
 
         private static void CopyBlocks(SampledBlock[][][] SampledBlocks, Block[][][] Blocks)
@@ -264,7 +287,7 @@ namespace Hedra.Engine.BiomeSystem
                     Density[x][height - 1][z] = 0;
                     Density[x][height - 2][z] = 0;
                     Density[x][height - 3][z] = 0;
-                }  
+                }
             }
         }
 
@@ -303,15 +326,15 @@ namespace Hedra.Engine.BiomeSystem
             );
         }
         
-        private void GenerateBlock(SampledBlock[][][] Blocks, float density, BlockType Type, int x, int y, int z, float height, float river,
-            bool makeDirt, float riverBorders, Random rng, bool isMount, float mountHeight)
+        private void GenerateBlock(SampledBlock[][][] Blocks, float density, BlockType Type, int x, int y, int z, float height,
+            bool makeDirt, Random rng)
         {
             var currentBlock = Blocks[x][y][z];
             var blockType = BlockType.Air;
             var blockDensity = CalculateDensityForBlock(height, density, y);
 
-            HandleNormalBlocks(Blocks, ref x, ref y, ref z, ref blockDensity, ref blockType, ref makeDirt, ref isMount, ref mountHeight, ref rng);
-            HandleRiverBlocks(Blocks, ref x, ref y, ref z, ref blockType, ref river, ref riverBorders, ref height);
+            HandleNormalBlocks(Blocks, ref x, ref y, ref z, ref blockDensity, ref blockType, ref makeDirt, ref rng);
+            //HandleRiverBlocks(Blocks, ref x, ref y, ref z, ref blockType, ref river, ref height);
             HandleOceanBlocks(Blocks, ref x, ref y, ref z, ref blockType);
 
             currentBlock.Type = blockType;
@@ -319,7 +342,7 @@ namespace Hedra.Engine.BiomeSystem
             Blocks[x][y][z] = currentBlock;
         }
 
-        private void HandleNormalBlocks(SampledBlock[][][] Blocks, ref int x, ref int y, ref int z, ref float blockDensity, ref BlockType blockType, ref bool makeDirt, ref bool isMount, ref float mountHeight, ref Random rng)
+        private void HandleNormalBlocks(SampledBlock[][][] Blocks, ref int x, ref int y, ref int z, ref float blockDensity, ref BlockType blockType, ref bool makeDirt, ref Random rng)
         {
             if (y < 2)
                 blockDensity = 0.95f + rng.NextFloat() * 0.75f;
@@ -330,11 +353,6 @@ namespace Hedra.Engine.BiomeSystem
                 
                 if (y < 2)
                     blockType = BlockType.Seafloor;
-
-                if (isMount && y >= mountHeight)
-                {
-                    blockType = BlockType.Grass;
-                }
             }
             
             if (blockType == BlockType.Grass)
@@ -396,178 +414,23 @@ namespace Hedra.Engine.BiomeSystem
             }
         }
 
-        private void HandleStructures(int x, int z, Vector2 position, List<IGroundwork> groundworks, BasePlateau[] RoundedPlateaux,
-            CollidableStructure[] structs, Dictionary<Vector2, float[]> heightCache, RegionGeneration biomeGen,
-            float hasPath, float hasRiver, float noiseScale, ref float height, out bool town, out bool pathClamped, out float river,
-            out float path, out float riverBorders, out IGroundwork[] blockGroundworks, out bool isMount, out float mountHeight)
+        private void HandleGroundworks(SampledBlock[][][] Blocks, int X, int Y, int Z, IGroundwork[] BlockGroundworks)
         {
-            town = false;
-            CollidableStructure nearCollidableStructure = null;
-            float townHeight = 0;
-
-            for(var i = 0; i < structs.Length; i++)
-            {
-                var item = structs[i];
-                if (!(item.Design is VillageDesign)) continue;
-
-                float villageRadius = item.Mountain.Radius;
-                if (!((position - item.Position.Xz).LengthSquared < villageRadius * villageRadius)) continue;
-
-                town = true;
-                nearCollidableStructure = item;
-                break;
-            }
-            var smallFrequency = SmallFrequency(position.X, position.Y);
-            var nearGiantTree = FindNearestGiantTree(position, structs);
+            if (BlockGroundworks.Length <= 0) return;
+            if (!this.IsBlockChangeable(Blocks[X][Y][Z].Type)) return;
             
-            blockGroundworks = groundworks.Where(G => G.Affects(position)).ToArray();
-
-            pathClamped = false;
-            path = hasPath * PathFormula(Chunk.BlockSize * x + Chunk.OffsetX, Chunk.BlockSize * z + Chunk.OffsetZ);
-            path = Mathf.Clamp(path * 100f, 0, PathDepth);
-
-            river = hasRiver * River(position);
-            riverBorders = hasRiver * River(position, Border);
-            var amplifiedRiverBorders = Mathf.Clamp(riverBorders * RiverMult, 0, RiverDepth);
-
-            river = Mathf.Clamp(river * RiverMult, 0, RiverDepth);
-
-            float riverLerp = amplifiedRiverBorders / RiverDepth;
-            if (riverLerp > 0 || path > 0)
+            if (BlockGroundworks.Length > 0)
             {
-                if (heightCache.ContainsKey(position))
+                var groundwork = BlockGroundworks.LastOrDefault(G => G.Type != BlockType.None);
+                if (groundwork != null)
                 {
-                    var cache = heightCache[position][0];
-                    height -= Mathf.Lerp(0, cache, Math.Min(1, Math.Min(path * 0.5f, 1) + riverLerp));
+                    Blocks[X][Y][Z].Type = groundwork.Type;
                 }
             }
 
-            isMount = false;
-            mountHeight = 0;
-            if (heightCache.ContainsKey(position) && heightCache[position].Length == 2)
+            if (Blocks[X][Y][Z].Type == BlockType.FarmDirt)
             {
-                isMount = true;
-                mountHeight = heightCache[position][1];
-            }
-            
-            HandlePlateaus(x, z, smallFrequency, ref height, RoundedPlateaux, nearGiantTree, nearCollidableStructure,
-                ref river, ref riverBorders, ref path, ref pathClamped);
-
-            height = Math.Max(0, height);
-            /*
-            for (var i = 0; i < noise3D.Length; i++)
-            {
-
-                /*
-                if (inPlateau)
-                {
-                    foreach (Plateau plateau in plateauPositions)
-                    {
-                        float plateauDist =
-                        (plateau.Position.Xz -
-                         new Vector2(OffsetX + x * Chunk.BlockSize, OffsetZ + z * Chunk.BlockSize)).LengthFast;
-                        float plateauFinal = Math.Max(1 - plateauDist / plateau.Radius, 0);
-                        noise3D[i] = Mathf.Lerp(0, noise3D[i], 1 - Math.Min(1, plateauFinal * 3f));
-                    }
-                }
-
-                if (nearGiantTree == null)
-                {
-                    const int lerpFactor = 80;
-                    noise3D[i] = Mathf.Lerp(noise3D[i], 0f, (float)Mathf.Clamp(riverBorders * lerpFactor, 0, 1));
-
-                    /*noise3D[i] = Mathf.Clamp(
-                        Mathf.Lerp(noise3D[i], 0f, path),
-                        0, noise3D[i]);
-                }
-            }*/
-
-            var pathGroundwork = blockGroundworks.FirstOrDefault(P => P.IsPath);
-            var groundworkDensity = pathGroundwork?.Density(position) ?? 0;
-
-            if (blockGroundworks.Length > 0)
-            {
-                var groundwork = blockGroundworks[blockGroundworks.Length - 1];
-                var bonusHeight =
-                    Math.Min(
-                        groundwork.BonusHeight,
-                        groundwork.BonusHeight * groundwork.Density(position) * groundwork.DensityMultiplier
-                    );
-                height += bonusHeight;// * blockGroundworksModifier;
-            }
-            if (pathGroundwork != null)
-            {
-                river = Mathf.Lerp(river, 0, groundworkDensity);
-            }
-            height -= river;
-            height -= Mathf.Lerp(path, 0, riverLerp);
-        }
-
-        private void HandlePlateaus(int X, int Z, float smallFrequency, ref float height, BasePlateau[] Plateaux, CollidableStructure nearGiantTree,
-            CollidableStructure nearCollidableStructure, ref float river, ref float riverBorders, ref float path, ref bool pathClamped)
-        {
-            for (var i = 0; i < Plateaux.Length; i++)
-            {
-                var point = new Vector2(OffsetX + X * Chunk.BlockSize, OffsetZ + Z * Chunk.BlockSize);
-                height = Plateaux[i].Apply(point, height, out var final, smallFrequency);
-                
-                if (nearGiantTree == null)
-                {
-                    river = Mathf.Clamp(Mathf.Lerp(0, river, 1 - Math.Min(1, final * 3f)), 0, river);
-                    riverBorders = Mathf.Clamp(Mathf.Lerp(0, riverBorders, 1 - Math.Min(1, final * 3f)), 0,
-                        riverBorders);
-                }
-
-                if (path > 0 && nearCollidableStructure != null && Plateaux[i] == nearCollidableStructure.Mountain)
-                    pathClamped = true;
-                
-                path = Mathf.Clamp(Mathf.Lerp(0, path, 1 - Math.Min(1, final * 3f)), 0, path);
-            }
-        }
-
-        private static CollidableStructure FindNearestGiantTree(Vector2 position, CollidableStructure[] structs)
-        {
-            for(var i = 0; i < structs.Length; i++)
-            {
-                float radius = structs[i].Mountain?.Radius ?? float.MaxValue;
-                if ((position - structs[i].Position.Xz).LengthSquared < radius * radius && structs[i].Design is GiantTreeDesign) return structs[i];
-            }
-            return null;
-        }
-        
-        private void HandleGroundworks(SampledBlock[][][] Blocks, int X, int Y, int Z, float path, float pathDepth,
-            bool pathClamped, bool town, IGroundwork[] BlockGroundworks, ref float Height)
-        {
-            if (BlockGroundworks.Length > 0 || path == pathDepth || town)
-            {
-                if (this.IsBlockChangeable(Blocks[X][Y][Z].Type))
-                {
-                    if (path > 0 && !town || pathClamped && !town)
-                    {
-                        Blocks[X][Y][Z].Type = BlockType.Path;
-                    }
-
-                    if (BlockGroundworks.Length > 0)
-                    {
-                        var groundwork = BlockGroundworks.LastOrDefault(G => G.Type != BlockType.None);
-                        if (groundwork != null)
-                        {
-                            Blocks[X][Y][Z].Type = groundwork.Type;
-                        }
-                    }
-
-                    if (Blocks[X][Y][Z].Type == BlockType.FarmDirt)
-                    {
-                        if ((X + OffsetX) % 2 == 0) Blocks[X][Y][Z].Density += new Half(.25f);
-                    }
-                    if (town)
-                    {
-                        if (Blocks[X][Y][Z].Type == BlockType.Stone)
-                        {
-                            Blocks[X][Y][Z].Type = BlockType.Grass;
-                        }
-                    }
-                }
+                if ((X + OffsetX) % 2 == 0) Blocks[X][Y][Z].Density += new Half(.25f);
             }
         }
         
