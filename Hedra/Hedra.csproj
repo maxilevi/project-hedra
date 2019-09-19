@@ -275,6 +275,8 @@
     <Compile Include="Engine\Rendering\Core\LightSettings.cs" />
     <Compile Include="Engine\Rendering\Core\UBO.cs" />
     <Compile Include="Engine\Rendering\Core\VBOCache.cs" />
+    <Compile Include="Engine\Rendering\Effects\SSRFilter.cs" />
+    <Compile Include="Engine\Rendering\Effects\WaterRenderer.cs" />
     <Compile Include="Engine\Rendering\Frustum\FrustumGJK.cs" />
     <Compile Include="Engine\Rendering\Frustum\Plane.cs" />
     <Compile Include="Engine\Rendering\Frustum\Simplex.cs" />
@@ -1253,7 +1255,6 @@
     <Compile Include="Engine\Rendering\Effects\BlurFilter.cs" />
     <Compile Include="Engine\Rendering\Effects\MainFBO.cs" />
     <Compile Include="Engine\Rendering\Effects\DistortionFilter.cs" />
-    <Compile Include="Engine\Rendering\Effects\Filters.cs" />
     <Compile Include="Engine\Rendering\Effects\DeferredRendering.cs" />
     <Compile Include="Engine\Rendering\Effects\IEffect.cs" />
     <Compile Include="Engine\Rendering\Effects\Filter.cs" />
@@ -7546,9 +7547,6 @@
     <None Include="Assets\DoubleKnife.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\DuDvMap.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Assets\Env\SimpleIcosphere.ply">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -8257,8 +8255,6 @@
     <Folder Include="Assets\Items\Boots\" />
     <Folder Include="Assets\Items\Gems\" />
     <Folder Include="Assets\Items\Pants\" />
-    <Folder Include="Engine\Rendering\Isosurface\" />
-    <Folder Include="Engine\Rendering\MeshOptimizer\" />
     <Folder Include="Modules\Items\Boots\" />
     <Folder Include="Modules\Items\Gems\" />
     <Folder Include="Modules\Items\Pants\" />
@@ -8686,6 +8682,14 @@
     </Content>
     <Content Include="..\project-hedra-assets\Environment\Misc\WoodenStick0_Lod8.ply">
       <Link>Assets\Env\Plants\WoodenStick0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\FX\waterDuDvMap.png">
+      <Link>Assets\FX\waterDuDvMap.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\FX\waterNormalMap.png">
+      <Link>Assets\FX\waterNormalMap.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Mobs\CookedFish.ply">
@@ -14531,6 +14535,7 @@
     <Content Include="Shaders\Includes\Shadows.shader">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Shaders\Includes\SSR.frag" />
     <Content Include="Shaders\Lines3D.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

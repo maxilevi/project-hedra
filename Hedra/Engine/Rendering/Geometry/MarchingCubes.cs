@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Rendering.Geometry;
 using Hedra.Rendering;
 using OpenTK;
 
@@ -463,15 +464,16 @@ namespace Hedra.Engine.Rendering
                 Data.Vertices.Add(TriangleBuffer[i].Vertices[0]);
                 Data.Vertices.Add(TriangleBuffer[i].Vertices[1]);
                 Data.Vertices.Add(TriangleBuffer[i].Vertices[2]);
-
+                
                 var normal = Vector3.Cross(TriangleBuffer[i].Vertices[1] - TriangleBuffer[i].Vertices[0], TriangleBuffer[i].Vertices[2] - TriangleBuffer[i].Vertices[0]).Normalized();
                 Data.Normals.Add(normal);
                 Data.Normals.Add(normal);
                 Data.Normals.Add(normal);
-                    
+                
                 Data.Colors.Add(TemplateColor);
                 Data.Colors.Add(TemplateColor);
                 Data.Colors.Add(TemplateColor);
+                
             }
         }
     }

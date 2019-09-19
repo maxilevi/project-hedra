@@ -214,7 +214,7 @@ namespace Hedra.Engine.Rendering.Effects
                 DrawFXAAQuad(FinalFbo.TextureId[0], GameSettings.Bloom ? AdditiveFbo.TextureId[0] : 0);
             else
                 DrawQuad(FinalFbo.TextureId[0], GameSettings.Bloom ? AdditiveFbo.TextureId[0] : 0);
-            //DrawQuad(DrawManager.MainBuffer.Ssao.FirstPass.TextureId[1], 0);
+            //DrawQuad(DrawManager.MainBuffer.Ssao.FirstPass.TextureId[2], 0);
 
             Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, 0);

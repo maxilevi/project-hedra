@@ -140,7 +140,7 @@ namespace Hedra.Engine.Management
             }
             lock(ObjectMeshLock)
                 ObjectMeshBuffer.DrawBatched(ObjectMeshes);
-        
+            
             Renderer.Enable(EnableCap.DepthTest);
             World.Draw(WorldRenderType.Water);
             for (var i = TrailRenderer.Count - 1; i > -1; i--)

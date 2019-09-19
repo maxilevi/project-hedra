@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Core;
+using Hedra.Engine.Management;
 
 namespace Hedra.Engine.Rendering.Core
 {
@@ -56,6 +57,17 @@ namespace Hedra.Engine.Rendering.Core
             {
                 Elements.Remove(this as T);
                 Indexed.Remove(Id);
+            }
+        }
+
+        ~GLObject()
+        {
+            if (!_disposed)
+            {
+                if(Program.GameWindow.IsExiting)
+                    Dispose();
+                else
+                    Executer.ExecuteOnMainThread(Dispose);
             }
         }
     }

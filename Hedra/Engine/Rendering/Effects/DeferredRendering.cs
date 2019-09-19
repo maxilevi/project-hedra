@@ -25,6 +25,7 @@ namespace Hedra.Engine.Rendering.Effects
         public FBO FirstPass;
         public FBO SecondPass;
         public FBO ThirdPass; 
+        public FBO WaterPass;
         public Shader FirstPassShader;
         public Shader SecondPassShader;
         public Shader ThirdPassShader;
@@ -58,6 +59,7 @@ namespace Hedra.Engine.Rendering.Effects
             FirstPass = new FBO(new Size(GameSettings.Width, GameSettings.Height), attachments, formats, false, false, 0, true);
             ThirdPass = new FBO(GameSettings.Width / 2, GameSettings.Height / 2);
             SecondPass = new FBO(GameSettings.Width / 2, GameSettings.Height / 2);
+            WaterPass = new FBO(GameSettings.Width / 4, GameSettings.Height / 4);
 
             #region SETUP UNIFORMS & TEXTURES
             SamplesUniform = Renderer.GetUniformLocation(FirstPassShader.ShaderId, "samples");

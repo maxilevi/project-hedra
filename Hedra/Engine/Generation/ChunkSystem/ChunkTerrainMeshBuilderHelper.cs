@@ -147,18 +147,26 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return densities;
         }
 
-        public void CreateCell(SampledBlock[][][] Grid, ref GridCell Cell, ref int X, ref int Y, ref int Z, out bool Success)
+        public void CreateCell(SampledBlock[][][] Grid, ref GridCell Cell, ref int X, ref int Y, ref int Z, bool isWaterCell, out bool Success)
         {
             Success = true;
-            this.BuildCell(ref Cell, X, Y, Z);
+            this.BuildCell(ref Cell, X, Y, Z, isWaterCell);
 
             for (var i = 0; i < Cell.Type.Length; i++)
             {
                 var posX = (int) (Cell.P[i].X * _coefficient);
                 var posY = (int) (Cell.P[i].Y * _coefficient);
                 var posZ = (int) (Cell.P[i].Z * _coefficient);
-                    
-                Cell.Density[i] = GetSampleOrNeighbour(Grid, posX, posY, posZ, out Cell.Type[i]);
+                
+                if (isWaterCell)
+                {
+                    Cell.Type[i] = GetNeighbourBlock(posX, posY, posZ).Type;
+                    Cell.Density[i] = Cell.Type[i] == BlockType.Water ? 1 : 0;
+                }
+                else
+                {
+                    Cell.Density[i] = GetSampleOrNeighbour(Grid, posX, posY, posZ, out Cell.Type[i]);
+                }
             }
 
             for (var i = 0; i < Cell.Type.Length; i++)
@@ -170,7 +178,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 }
             }
         }
-        
+
         private float GetSampleOrNeighbour(SampledBlock[][][] Grid, int x, int y, int z, out BlockType Type)
         {
             y = Math.Min(y, _boundsY - _sampleHeight - 1);
@@ -203,9 +211,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
             );
         }
         
-        private void BuildCell(ref GridCell Cell, int X, int Y, int Z)
+        private void BuildCell(ref GridCell Cell, int X, int Y, int Z, bool isWaterCell)
         {
-            const int lod = 1;
+            var lod = isWaterCell ? 2 : 1;
             var blockSizeLod = _blockSize * lod;
             Cell.P[0] = new Vector3(X * _blockSize, Y * _blockSize, Z * _blockSize);
             Cell.P[1] = new Vector3(blockSizeLod + Cell.P[0].X, Cell.P[0].Y, Cell.P[0].Z);

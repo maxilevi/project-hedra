@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.BiomeSystem;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Geometry;
 using Hedra.Rendering;
+using Microsoft.Scripting.Utils;
 using OpenTK;
 
 namespace Hedra.Engine.Generation.ChunkSystem
@@ -99,7 +101,16 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private void IterateAndBuild(SampledBlock[][][] densityGrid, Block[][][] Blocks, ref bool failed,
             ref bool hasWater, bool ProcessWater, bool ProcessColors, RegionCache Cache, VertexData blockData, VertexData waterData)
         {
-            var next = false;
+
+            Loop(densityGrid, Blocks, 1, ProcessColors, false, ref blockData, ref failed, ref Cache);
+            if(ProcessWater)
+                Loop(densityGrid, Blocks, 2, ProcessColors, true, ref blockData, ref failed, ref Cache);
+            
+            hasWater = waterData.Vertices.Count > 0;
+        }
+
+        private void Loop(SampledBlock[][][] densityGrid, Block[][][] Blocks, int Lod, bool ProcessColors, bool isWater, ref VertexData blockData, ref bool failed, ref RegionCache Cache)
+        {
             var vertexBuffer = MarchingCubes.NewVertexBuffer();
             var triangleBuffer = MarchingCubes.NewTriangleBuffer();
             var cell = new GridCell
@@ -108,51 +119,60 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Type = new BlockType[8],
                 Density = new double[8]
             };
-            for (var x = 0; x < BoundsX && !failed; x ++)
+            var next = false;
+            for (var x = 0; x < BoundsX && !failed; x+=Lod)
             {
                 next = !next;
-                for (var y = 0; y < BoundsY && !failed; y ++)
+                for (var y = 0; y < BoundsY && !failed; y+=Lod)
                 {
-                    for (var z = 0; z < BoundsZ && !failed; z ++)
+                    for (var z = 0; z < BoundsZ && !failed; z+=Lod)
                     {
                         next = !next;
 
                         if (y < Sparsity.MinimumHeight || y > Sparsity.MaximumHeight) continue;
                         if (Blocks[x] == null || Blocks[x][y] == null || y == BoundsY - 1 || y == 0) continue;
                         
-                        Helper.CreateCell(densityGrid, ref cell, ref x, ref y, ref z, out var success);
-
+                        Helper.CreateCell(densityGrid, ref cell, ref x, ref y, ref z, false, out var success);
                         if (!MarchingCubes.Usable(0f, cell)) continue;
                         if (!success && y < BoundsY - 2) failed = true;
 
-                        /*
-                        if (Blocks[x][y][z].Type == BlockType.Water/* && Blocks[x][y + 1][z].Type == BlockType.Air && ProcessWater)
+                        var color = Vector4.Zero;
+                        if (isWater)
                         {
-                            var regionPosition = new Vector3(cell.P[0].X * BlockSize + OffsetX, 0, cell.P[0].Z * BlockSize + OffsetZ);
+                            var regionPosition = new Vector3(cell.P[0].X + OffsetX, 0, cell.P[0].Z + OffsetZ);
                             var region = Cache.GetAverageRegionColor(regionPosition);
-                            var cube = Geometry.Cube();
-                            waterData.ad
-                            hasWater = true;
-                        }*/
+                            color = new Vector4(region.WaterColor.Xyz, 1);
+                        }
+                        else
+                        {
+                            color = GetCellColor(densityGrid, ref cell, ref ProcessColors, ref Cache, false);
+                        }
 
-                        PolygoniseCell(densityGrid, ref cell, ref ProcessColors, ref next, ref blockData, ref vertexBuffer, ref triangleBuffer, ref Cache);
+                        PolygoniseCell(ref cell, ref next, ref blockData, ref vertexBuffer, ref triangleBuffer, color, false);
                     }
                 }
             }
         }
 
-        private void PolygoniseCell(SampledBlock[][][] Grid, ref GridCell Cell, ref bool ProcessColors, ref bool Next, ref VertexData BlockData, ref Vector3[] VertexBuffer, ref Triangle[] TriangleBuffer, ref RegionCache Cache)
+        private static void PolygoniseCell(ref GridCell Cell, ref bool Next, ref VertexData BlockData, ref Vector3[] VertexBuffer, ref Triangle[] TriangleBuffer, Vector4 Color, bool IsWater)
         {
             MarchingCubes.Polygonise(ref Cell, 0, ref VertexBuffer, ref TriangleBuffer, out var triangleCount);
+            MarchingCubes.Build(ref BlockData, ref Color, ref TriangleBuffer, ref triangleCount, ref Next);
+        }
+
+        private Vector4 GetCellColor(SampledBlock[][][] Grid, ref GridCell Cell, ref bool ProcessColors, ref RegionCache Cache, bool isWaterCell)
+        {
             var color = Vector4.Zero;
             if (ProcessColors)
             {
                 var regionPosition = new Vector3(Cell.P[0].X + OffsetX, 0, Cell.P[0].Z + OffsetZ);
                 var region = Cache.GetAverageRegionColor(regionPosition);
-                color = Helper.GetColor(Grid, ref Cell, region);
+                color = !isWaterCell 
+                    ? Helper.GetColor(Grid, ref Cell, region) 
+                    : Cache.GetAverageRegionColor(Cell.P[0]).WaterColor;
             }
-            MarchingCubes.Build(ref BlockData, ref color, ref TriangleBuffer, ref triangleCount, ref Next);
-        }
 
+            return color;
+        }
     }
 }
