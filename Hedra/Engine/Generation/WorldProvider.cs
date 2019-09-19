@@ -53,6 +53,7 @@ namespace Hedra.Engine.Generation
         private readonly RenderingComparer _renderingComparer;
         private readonly SharedWorkerPool _meshWorkerPool;
         private readonly SharedWorkerPool _genWorkerPool;
+        private Dictionary<Vector2, Chunk> _waterDrawingChunk;
         private Vector3 _spawningVillagePoint;
         private Vector3 _spawningPoint;
         private WorldType _type;
@@ -69,6 +70,7 @@ namespace Hedra.Engine.Generation
             _chunks = new HashSet<Chunk>();
             _renderingComparer = new RenderingComparer();
             SearcheableChunks = new Dictionary<Vector2, Chunk>(new FastComparer());
+            _waterDrawingChunk = new Dictionary<Vector2, Chunk>();
             DrawingChunks = new Dictionary<Vector2, Chunk>();
             ShadowDrawingChunks = new Dictionary<Vector2, Chunk>();
             _unculledChunks = new Dictionary<Vector2, Chunk>();
@@ -173,9 +175,12 @@ namespace Hedra.Engine.Generation
         {
             DrawingChunks.Clear();
             ShadowDrawingChunks.Clear();
+            _waterDrawingChunk.Clear();
             _unculledChunks.Clear();
             var toDrawArray = Chunks;
             DoCullTest(toDrawArray, DrawingChunks, _unculledChunks);
+            if(GameSettings.WaterRefraction)
+                DoCullTest(toDrawArray, _waterDrawingChunk, null, true);
 
             if (GameSettings.Shadows && !GameSettings.LockFrustum)
             {
@@ -195,11 +200,12 @@ namespace Hedra.Engine.Generation
                 throw new ArgumentException($"Found duplicate chunk at index {Chunks.IndexOf(Chunks.First(C => Chunks.Count(K => C.Position == K.Position) > 1))}");
         }
 
-        private static void DoCullTest(ReadOnlyCollection<Chunk> ToDrawArray, Dictionary<Vector2, Chunk> Output, Dictionary<Vector2, Chunk> OutputIfFrustumCulled)
+        private static void DoCullTest(ReadOnlyCollection<Chunk> ToDrawArray, Dictionary<Vector2, Chunk> Output, Dictionary<Vector2, Chunk> OutputIfFrustumCulled, bool IsRefractionPass = false)
         {
             for (var i = 0; i < ToDrawArray.Count; i++)
             {
                 var chunk = ToDrawArray[i];
+                if(IsRefractionPass && !chunk.HasWater) continue;
                 if (chunk == null || chunk.Disposed)
                 {
                     World.RemoveChunk(chunk);
@@ -242,10 +248,15 @@ namespace Hedra.Engine.Generation
                 }*/
             }
 
+            var isWaterRefraction = (Type & WorldRenderType.WaterRefraction) == WorldRenderType.WaterRefraction;
+            var drawingChunks = isWaterRefraction ? _waterDrawingChunk : DrawingChunks;
+            var shadowDrawingChunks = isWaterRefraction ? null : ShadowDrawingChunks;
+            var type = isWaterRefraction ? WorldRenderType.StaticAndInstance : Type;
+            
             if (GameSettings.Wireframe) Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 
             WorldRenderer.PrepareCameraMatrix();
-            WorldRenderer.Render(DrawingChunks, ShadowDrawingChunks, Type);
+            WorldRenderer.Render(drawingChunks, shadowDrawingChunks, type);
 
             if (GameSettings.Wireframe) Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
         }

@@ -64,10 +64,8 @@ namespace Hedra.Engine.Rendering.Core
         {
             if (!_disposed)
             {
-                if(Program.GameWindow.IsExiting)
-                    Dispose();
-                else
-                    Executer.ExecuteOnMainThread(Dispose);
+                if(!Program.GameWindow.IsExiting)
+                   Executer.ExecuteOnMainThread(Dispose);
             }
         }
     }

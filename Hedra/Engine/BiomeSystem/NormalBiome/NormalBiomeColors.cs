@@ -44,7 +44,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
                     throw new ArgumentException("Region color does not exist");
             }
 
-            return waterColor * new Vector4(1f, 1f, 1f, .7f);
+            return waterColor * new Vector4(1.25f, 1.25f, 1.25f, .7f);
         }
 
         public override Vector4 StoneColor(int Seed)

@@ -15,7 +15,6 @@ layout(location = 2)out vec4 OutNormal;
 
 uniform sampler2D depthMap;
 uniform sampler2D refractionMap;
-uniform sampler2D normalMap;
 uniform sampler2D dudvMap;
 
 uniform bool Dither;
@@ -24,6 +23,8 @@ uniform float Smoothness;
 
 const float waveStrength = 0.01;
 const float speed = 0.05;
+const float shineDamper = 20.0;
+const float reflectivity = 0.6;
 
 void main()
 {
@@ -32,24 +33,20 @@ void main()
 	if(Dither)
 	{
 		float d = dot( gl_FragCoord.xy, vec2(.5,.5));
-		//if(d - floor(d) < 0.5) discard;
+		if(d - floor(d) < 0.5) discard;
 	}
 	vec2 projectiveCoords = (ClipSpace.xy / ClipSpace.w) / 2.0 + 0.5;
+	vec2 invertedProjectiveCoords =	vec2(projectiveCoords.x, 1.0 - projectiveCoords.y);
 
 	vec2 distortedTexCoords = texture(dudvMap, vec2(textureCoords.x + WaveMovement * speed, textureCoords.y)).rg * 0.1;
 	distortedTexCoords = textureCoords + vec2(distortedTexCoords.x, distortedTexCoords.y + WaveMovement * speed);
 	vec2 totalDistortion = (texture(dudvMap, distortedTexCoords).rg * 2.0 - 1.0) * waveStrength;
-/*
-	vec3 reflectedLight = reflect(normalize(fromLightVector), normal);
-	float specular = max(dot(reflectedLight, viewVector), 0.0);
-	specular = pow(specular, shineDamper);
-	vec3 specularHighlights = lightColour * specular * reflectivity;
-*/
+
 	vec4 refractionColor = texture(refractionMap, projectiveCoords + totalDistortion);
-	vec4 textureColor = vec4((refractionColor * 0.001 + Color * 1.0).xyz, 1.0);
+	vec4 textureColor = vec4(Color.xyz + specularHighlights, 1.0);
 	
-	OutColor += textureColor;
-	/*
+	OutColor = textureColor;
+	
 	const float Near = 2.0;
 	const float Far = 4096.0;
 	float ObjectDepth = clamp(texture(depthMap, projectiveCoords).a, 0.0, 1.0);
@@ -64,7 +61,7 @@ void main()
 		ObjectDepth > 0.05 
 			? clamp((WaterDepth / 6.0 / Smoothness) * .25, 0.0, 1.0)
 			: 1.0
-	) + 1.0;*/
+	);
 	
 	OutPosition = vec4(0.0, 0.0, 0.0, 0.0);
 	OutNormal = vec4(0.0, 0.0, 0.0, 0.0);

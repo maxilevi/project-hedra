@@ -18,6 +18,7 @@ using Hedra.Engine.Rendering.Effects;
 using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Game;
 using Hedra.Rendering;
 using OpenTK.Graphics.OpenGL4;
 
@@ -109,10 +110,24 @@ namespace Hedra.Engine.Management
                 ObjectMeshes.Remove(Mesh);
         }
 
+        private static void SetupDrawing()
+        {
+            World.CullTest();
+        }
+
+        private static void RefractionDraw()
+        {
+            var previous = GameSettings.GlobalShadows;
+            GameSettings.GlobalShadows = false;
+            World.Draw(WorldRenderType.WaterRefraction);
+            lock(ObjectMeshLock)
+                ObjectMeshBuffer.DrawBatched(ObjectMeshes.Where(O => O.IsInWater).ToList());
+            GameSettings.GlobalShadows = true;
+        }
+
         private static void BulkDraw()
         {
             SkyManager.Draw();
-            World.CullTest();
             World.Draw(WorldRenderType.StaticAndInstance);
             World.OccludeTest();
 
@@ -181,13 +196,20 @@ namespace Hedra.Engine.Management
         public static void Draw()
         {    
              VertsCount = 0;
-             if(MainBuffer.Enabled)
-             {        
+            if(MainBuffer.Enabled)
+            {
+                SetupDrawing();
+                if (GameSettings.WaterRefraction)
+                {
+                    MainBuffer.WaterFbo.Bind();
+                    RefractionDraw();
+                    MainBuffer.WaterFbo.Unbind();
+                }
                 MainBuffer.CaptureData();
                 BulkDraw();
                 MainBuffer.UnCaptureData();
-             }
-             MainBuffer.Draw();
+            }
+            MainBuffer.Draw();
             
             UIRenderer.Draw();
             

@@ -56,8 +56,8 @@ void main()
  	Color += vec4(diffuse(unitToLight, InNormal, calculate_lights(LightColor, v.xyz, 2.25)).xyz * InColor.xyz, 0.0);
 	
  	gl_Position = _modelViewProjectionMatrix * v;
-	textureCoords = v.xz * 0.005;
-
+	textureCoords = v.xz * 0.01;
+	
 	InPos = v;
 	ClipSpace = gl_Position;
 	InNorm = vec4(InNormal, 1.0);

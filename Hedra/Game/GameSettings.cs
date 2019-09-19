@@ -43,6 +43,7 @@ namespace Hedra.Game
         public static float ScreenRatio { get; set; }
         public static bool DebugPhysics { get; set; }
         public static bool WatchScriptChanges { get; set; }
+        public static bool WaterRefraction { get; set; } = false;
         public static bool Paused { get; set; }
         public static float AmbientOcclusionIntensity = 1;
         public static bool BlurFilter { get; set; } = false;

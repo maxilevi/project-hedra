@@ -104,7 +104,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
             Loop(densityGrid, Blocks, 1, ProcessColors, false, ref blockData, ref failed, ref Cache);
             if(ProcessWater)
-                Loop(densityGrid, Blocks, 2, ProcessColors, true, ref blockData, ref failed, ref Cache);
+                Loop(densityGrid, Blocks, 2, ProcessColors, true, ref waterData, ref failed, ref Cache);
             
             hasWater = waterData.Vertices.Count > 0;
         }
@@ -132,7 +132,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                         if (y < Sparsity.MinimumHeight || y > Sparsity.MaximumHeight) continue;
                         if (Blocks[x] == null || Blocks[x][y] == null || y == BoundsY - 1 || y == 0) continue;
                         
-                        Helper.CreateCell(densityGrid, ref cell, ref x, ref y, ref z, false, out var success);
+                        Helper.CreateCell(densityGrid, ref cell, ref x, ref y, ref z, isWater, out var success);
                         if (!MarchingCubes.Usable(0f, cell)) continue;
                         if (!success && y < BoundsY - 2) failed = true;
 

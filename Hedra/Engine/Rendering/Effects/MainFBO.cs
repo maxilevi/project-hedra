@@ -32,6 +32,7 @@ namespace Hedra.Engine.Rendering.Effects
         public FBO Default;
         public FBO FinalFbo;
         public FBO AdditiveFbo;
+        public FBO WaterFbo;
         public UnderWaterFilter UnderWater;
         public DistortionFilter Distortion;
         public BloomFilter Bloom;
@@ -50,6 +51,7 @@ namespace Hedra.Engine.Rendering.Effects
             Default = new FBO(GameSettings.Width, GameSettings.Height, false, 0, FramebufferAttachment.ColorAttachment0, PixelInternalFormat.Rgba32f);
             FinalFbo = new FBO(GameSettings.Width, GameSettings.Height);
             AdditiveFbo = new FBO(GameSettings.Width, GameSettings.Height);
+            WaterFbo = GameSettings.WaterRefraction ? new FBO(GameSettings.Width, GameSettings.Height) : null;
 
             Bloom = new BloomFilter();
             UnderWater = new UnderWaterFilter();
@@ -90,7 +92,7 @@ namespace Hedra.Engine.Rendering.Effects
             if(GameSettings.SSAO)
             {
 
-                FBO DrawFBO = (GameSettings.UnderWaterEffect || GameSettings.BlurFilter || GameSettings.DarkEffect) ? Default : FinalFbo;
+                var DrawFBO = (GameSettings.UnderWaterEffect || GameSettings.BlurFilter || GameSettings.DarkEffect) ? Default : FinalFbo;
 
                 Ssao.SecondPass.Bind();
                 
@@ -137,9 +139,9 @@ namespace Hedra.Engine.Rendering.Effects
                 //Color texture
                 Renderer.ActiveTexture(TextureUnit.Texture1);
                 Renderer.BindTexture(TextureTarget.Texture2D, Ssao.FirstPass.TextureId[0]);
-                
-                Renderer.Uniform1( Ssao.AOSampler, 0);
-                Renderer.Uniform1( Ssao.ColorSampler, 1);
+
+                Renderer.Uniform1(Ssao.AOSampler, 0);
+                Renderer.Uniform1(Ssao.ColorSampler, 1);
 
                 DrawManager.UIRenderer.DrawQuad();
 
@@ -152,7 +154,8 @@ namespace Hedra.Engine.Rendering.Effects
             #endregion
             
             #region Bloom
-            if(GameSettings.Bloom){
+            if(GameSettings.Bloom)
+            {
                 Bloom.Pass(FinalFbo, AdditiveFbo);
             }
             #endregion
@@ -214,7 +217,7 @@ namespace Hedra.Engine.Rendering.Effects
                 DrawFXAAQuad(FinalFbo.TextureId[0], GameSettings.Bloom ? AdditiveFbo.TextureId[0] : 0);
             else
                 DrawQuad(FinalFbo.TextureId[0], GameSettings.Bloom ? AdditiveFbo.TextureId[0] : 0);
-            //DrawQuad(DrawManager.MainBuffer.Ssao.FirstPass.TextureId[2], 0);
+            //DrawQuad(WaterFbo.TextureId[0], 0);
 
             Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, 0);
