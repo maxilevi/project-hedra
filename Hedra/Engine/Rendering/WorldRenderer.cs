@@ -244,19 +244,19 @@ namespace Hedra.Engine.Rendering
             WaterShader["depthMap"] = 0;
             Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, GameSettings.SSAO && GameSettings.Quality ? DrawManager.MainBuffer.Ssao.FirstPass.TextureId[1] : 0);
-/*
+
             WaterShader["refractionMap"] = 1;
             Renderer.ActiveTexture(TextureUnit.Texture1);
-            Renderer.BindTexture(TextureTarget.Texture2D, DrawManager.MainBuffer.WaterFbo.TextureId[0]);*/
+            Renderer.BindTexture(TextureTarget.Texture2D, DrawManager.MainBuffer.RefractionWaterFbo.TextureId[0]);
             
-            WaterShader["dudvMap"] = 2;
+            WaterShader["reflectionMap"] = 2;
             Renderer.ActiveTexture(TextureUnit.Texture2);
-            Renderer.BindTexture(TextureTarget.Texture2D, DuDvMap.Id);
+            Renderer.BindTexture(TextureTarget.Texture2D, DrawManager.MainBuffer.ReflectionWaterFbo.TextureId[0]);
             
-            WaterShader["normalMap"] = 3;
+            WaterShader["dudvMap"] = 3;
             Renderer.ActiveTexture(TextureUnit.Texture3);
-            Renderer.BindTexture(TextureTarget.Texture2D, NormalMap.Id);
-            
+            Renderer.BindTexture(TextureTarget.Texture2D, DuDvMap.Id);
+
             WaterShader["TransformationMatrix"] = TransformationMatrix;
             WaterShader["BakedOffset"] = BakedOffset;
             WaterShader["Scale"] = Scale;
@@ -265,7 +265,7 @@ namespace Hedra.Engine.Rendering
             WaterShader["AreaPositions"] = World.Highlighter.AreaPositions;
             WaterShader["AreaColors"] = World.Highlighter.AreaColors;        
             WaterShader["WaveMovement"] = WaveMovement;
-            WaterShader["Smoothness"] = WaterSmoothness;
+            //WaterShader["Smoothness"] = WaterSmoothness;
 
             if (ShowWaterBackfaces) Renderer.Disable(EnableCap.CullFace);
         }

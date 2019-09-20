@@ -32,7 +32,8 @@ namespace Hedra.Engine.Rendering.Effects
         public FBO Default;
         public FBO FinalFbo;
         public FBO AdditiveFbo;
-        public FBO WaterFbo;
+        public FBO ReflectionWaterFbo;
+        public FBO RefractionWaterFbo;
         public UnderWaterFilter UnderWater;
         public DistortionFilter Distortion;
         public BloomFilter Bloom;
@@ -51,7 +52,8 @@ namespace Hedra.Engine.Rendering.Effects
             Default = new FBO(GameSettings.Width, GameSettings.Height, false, 0, FramebufferAttachment.ColorAttachment0, PixelInternalFormat.Rgba32f);
             FinalFbo = new FBO(GameSettings.Width, GameSettings.Height);
             AdditiveFbo = new FBO(GameSettings.Width, GameSettings.Height);
-            WaterFbo = GameSettings.WaterRefraction ? new FBO(GameSettings.Width, GameSettings.Height) : null;
+            RefractionWaterFbo = new FBO(GameSettings.Width, GameSettings.Height);
+            ReflectionWaterFbo = new FBO(GameSettings.Width / 4, GameSettings.Height / 4);
 
             Bloom = new BloomFilter();
             UnderWater = new UnderWaterFilter();

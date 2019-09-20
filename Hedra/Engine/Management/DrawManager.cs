@@ -20,6 +20,7 @@ using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Game;
 using Hedra.Rendering;
+using OpenTK;
 using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Management
@@ -115,6 +116,26 @@ namespace Hedra.Engine.Management
             World.CullTest();
         }
 
+        private static void ReflectionDraw()
+        {
+            var previous = GameSettings.GlobalShadows;
+            GameSettings.GlobalShadows = false;
+            SkyManager.Draw();
+            var oldPitch = GameManager.Player.View.Pitch;
+            GameManager.Player.View.Pitch = -oldPitch;
+            var oldHeight = GameManager.Player.View.CameraHeight;
+            GameManager.Player.View.CameraHeight = oldHeight - Vector3.UnitY * 2 * (GameManager.Player.View.CameraEyePosition.Y - 16 * 4);
+            GameManager.Player.View.BuildCameraMatrix();
+            Culling.BuildFrustum(GameManager.Player.View.ModelViewMatrix);
+            World.CullTest();
+            World.Draw(WorldRenderType.Static);
+            GameSettings.GlobalShadows = previous;
+            GameManager.Player.View.CameraHeight = oldHeight;
+            GameManager.Player.View.Pitch = oldPitch;
+            GameManager.Player.View.BuildCameraMatrix();
+            Culling.BuildFrustum(GameManager.Player.View.ModelViewMatrix);
+        }
+
         private static void RefractionDraw()
         {
             var previous = GameSettings.GlobalShadows;
@@ -122,7 +143,7 @@ namespace Hedra.Engine.Management
             World.Draw(WorldRenderType.WaterRefraction);
             lock(ObjectMeshLock)
                 ObjectMeshBuffer.DrawBatched(ObjectMeshes.Where(O => O.IsInWater).ToList());
-            GameSettings.GlobalShadows = true;
+            GameSettings.GlobalShadows = previous;
         }
 
         private static void BulkDraw()
@@ -198,12 +219,19 @@ namespace Hedra.Engine.Management
              VertsCount = 0;
             if(MainBuffer.Enabled)
             {
+                if (GameSettings.WaterRefraction)
+                {
+                    MainBuffer.ReflectionWaterFbo.Bind();
+                    ReflectionDraw();
+                    MainBuffer.ReflectionWaterFbo.Unbind();
+                }
+
                 SetupDrawing();
                 if (GameSettings.WaterRefraction)
                 {
-                    MainBuffer.WaterFbo.Bind();
+                    MainBuffer.RefractionWaterFbo.Bind();
                     RefractionDraw();
-                    MainBuffer.WaterFbo.Unbind();
+                    MainBuffer.RefractionWaterFbo.Unbind();
                 }
                 MainBuffer.CaptureData();
                 BulkDraw();
