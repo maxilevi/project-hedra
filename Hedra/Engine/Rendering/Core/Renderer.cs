@@ -25,6 +25,7 @@ namespace Hedra.Engine.Rendering.Core
         public static uint VBOBound => BufferHandler.Id;
         public static Matrix4 ModelViewProjectionMatrix { get; private set; }
         public static Matrix4 ModelViewMatrix { get; private set; }
+        public static Matrix4 ViewMatrix { get; private set; }
         public static Matrix4 ProjectionMatrix { get; private set; }
         public static CapHandler CapHandler { get; }
         public static TextureHandler TextureHandler { get; }
@@ -156,6 +157,7 @@ namespace Hedra.Engine.Rendering.Core
         public static void LoadModelView(Matrix4 ModelView)
         {
             ModelViewMatrix = ModelView;
+            ViewMatrix = Hedra.Game.GameManager.Player.View.ModelViewMatrix;//ModelView.ClearTranslation();
             RebuildMVP();
         }
 

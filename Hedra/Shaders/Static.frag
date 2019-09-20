@@ -69,7 +69,7 @@ void main()
 		mat3 NormalMat = mat3(transpose(inverse(_modelViewMatrix)));
 		OutColor = NewColor;
         OutPosition = vec4( (_modelViewMatrix * vec4(InPos.xyz, 1.0)).xyz, gl_FragCoord.z) * (Dither ? DitherVisibility : 1.0);
-		OutNormal = vec4(NormalMat * InNorm.xyz, 1.0) * (Dither ? DitherVisibility : 1.0);
+		OutNormal = vec4(NormalMat * InNorm.xyz, 0.0) * (Dither ? DitherVisibility : 1.0);
 	}
 }
 

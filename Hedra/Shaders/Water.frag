@@ -4,11 +4,13 @@
 
 in vec3 pass_color;
 in vec3 pass_normal;
+in vec3 pass_vertex;
 in float pass_visibility;
 in vec4 pass_clipSpace;
 in vec2 textureCoords;
 in vec3 toCamera;
-in vec3 pass_specular;
+in vec3 pass_fromLightVector;
+in vec3 pass_lightColour;
 in vec3 pass_diffuse;
 in vec3 pass_highlights;
 
@@ -17,27 +19,18 @@ layout(location = 1)out vec4 OutPosition;
 layout(location = 2)out vec4 OutNormal;
 
 uniform sampler2D depthMap;
-uniform sampler2D refractionMap;
-uniform sampler2D reflectionMap;
 uniform sampler2D dudvMap;
+uniform sampler2D normalMap;
 
 uniform float WaveMovement;
 uniform float Smoothness;
 
-const vec3 waterColor = vec3(0.604, 0.867, 0.851);
-const float waveStrength = 0.0075;
+const float waveStrength = 0.01;
 const float speed = 0.02;
-const float fresnelReflective = 0.05;
-const float edgeSoftness = 4.0;
-const float minBlueness = 0.1;
-const float maxBlueness = 0.4;
-const float murkyDepth = 128;
-
-vec3 applyMurkiness(vec3 refractColor, float waterDepth) {
-	float murkyFactor = smoothstep(0, murkyDepth, waterDepth);
-	float murkiness =  minBlueness + murkyFactor * (maxBlueness - minBlueness);
-	return mix(refractColor, waterColor, murkiness);
-}
+const float fresnelReflective = 0.4;
+const float edgeSoftness = 24.0;
+const float specularReflectivity = 0.8;
+const float shineDamper = 10.0;
 
 float toLinearDepth(float zDepth){
 	const float near = 2.0;
@@ -73,25 +66,30 @@ void main()
 	
 	vec2 projectiveCoords = clipSpaceToTexCoords(pass_clipSpace);
 	vec2 invertedProjectiveCoords =	vec2(projectiveCoords.x, 1.0 - projectiveCoords.y);
-
+	
+	if(toLinearDepth(texture(depthMap, projectiveCoords).a) < toLinearDepth(gl_FragCoord.z)) discard;
+	
 	vec2 distortedTexCoords = texture(dudvMap, vec2(textureCoords.x + WaveMovement * speed, textureCoords.y)).rg * 0.1;
 	distortedTexCoords = textureCoords + vec2(distortedTexCoords.x, distortedTexCoords.y + WaveMovement * speed);
 	vec2 totalDistortion = (texture(dudvMap, distortedTexCoords).rg * 2.0 - 1.0) * waveStrength;
 
-	vec3 refractColour = texture(refractionMap, projectiveCoords + totalDistortion).rgb;
-	vec3 reflectColour = texture(reflectionMap, invertedProjectiveCoords + totalDistortion).rgb;
+	vec4 normalSample = texture(normalMap, distortedTexCoords);
+	vec3 normal = vec3(normalSample.x * 2.0 - 1.0, normalSample.y * 2.0 - 1.0, normalSample.z * 2.0 - 1.0) * 0.001 + pass_normal * 1.0;
 
-	float waterDepth = calculateWaterDepth(projectiveCoords);
-
-	//apply some blueness
-	refractColour = applyMurkiness(refractColour, waterDepth);
-	reflectColour = mix(reflectColour, pass_color, minBlueness);
-
-	vec3 finalColour = mix(reflectColour, refractColour, calculateFresnel());
-	finalColour = finalColour * pass_diffuse * pass_highlights + pass_specular;
-	float alpha = clamp(waterDepth / edgeSoftness, 0.0, 1.0);
+	vec3 reflectedLight = reflect(normalize(pass_fromLightVector), normal);
+	float specular = max(dot(reflectedLight, normalize(toCamera)), 0.0);
+	specular = pow(specular, shineDamper);
+	vec3 specularHighlights = pass_lightColour * specular * specularReflectivity;
 	
-	OutColor = mix(sky_color(), vec4(finalColour, alpha), pass_visibility);
-	OutPosition = vec4(0.0, 0.0, 0.0, 0.0);
-	OutNormal = vec4(0.0, 0.0, 0.0, 0.0);
+	float waterDepth = calculateWaterDepth(projectiveCoords);
+	float fresnel = calculateFresnel();
+	vec3 finalColour = pass_color * pass_highlights + specularHighlights;
+	float alpha = clamp(waterDepth / edgeSoftness / Smoothness, 0.0, 1.0) * (1.0 - fresnel * 0.0001);
+	
+	OutColor = mix(sky_color(), vec4(finalColour, alpha - 0.1), pass_visibility);
+	vec3 out_position = (_modelViewMatrix * vec4(pass_vertex, 1.0)).xyz;
+	OutPosition = vec4(out_position, gl_FragCoord.z);
+	vec3 out_normal = mat3(transpose(inverse(_modelViewMatrix))) * normal;
+	/* 1.0 means SSR affects this fragment and SSAO doesn't */
+	OutNormal = vec4(out_normal, 1.0);
 }

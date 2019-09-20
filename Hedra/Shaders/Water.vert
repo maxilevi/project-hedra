@@ -10,6 +10,7 @@ layout(location = 0)in vec3 InVertex;
 layout(location = 1)in vec4 InColor;
 layout(location = 2)in vec3 InNormal;
 
+out vec3 pass_vertex;
 out vec3 pass_normal;
 out vec3 pass_color;
 out vec3 pass_highlights;
@@ -20,6 +21,9 @@ out vec4 pass_topColor;
 out vec4 pass_clipSpace;
 out vec2 textureCoords;
 out vec3 toCamera;
+
+out vec3 pass_fromLightVector;
+out vec3 pass_lightColour;
 
 out vec3 pass_diffuse;
 out vec3 pass_specular;
@@ -38,25 +42,6 @@ uniform vec3 Offset;
 uniform vec3 BakedOffset;
 uniform mat4 TransformationMatrix;
 
-const float specularReflectivity = 0.4;
-const float shineDamper = 20.0;
-const vec3 lightBias = vec3(1.0);
-
-vec3 calcSpecularLighting(vec3 toCamVector, vec3 toLightVector, vec3 normal)
-{
-	vec3 reflectedLightDirection = reflect(-toLightVector, normal);
-	float specularFactor = dot(reflectedLightDirection , toCamVector);
-	specularFactor = max(specularFactor,0.0);
-	specularFactor = pow(specularFactor, shineDamper);
-	return specularFactor * specularReflectivity * LightColor;
-}
-
-vec3 calculateDiffuseLighting(vec3 toLightVector, vec3 normal)
-{
-	float brightness = max(dot(toLightVector, normal), 0.0);
-	return (LightColor * lightBias.x) + (brightness * LightColor * lightBias.y);
-}
-
 void main()
 {
     vec4 vertex = TransformationMatrix * (vec4((InVertex + BakedOffset) * Scale + Offset, 1.0));
@@ -73,10 +58,13 @@ void main()
 
  	gl_Position = _modelViewProjectionMatrix * vertex;
 
-	textureCoords = vertex.xz * 0.005;
+	pass_fromLightVector = -toLightVector;
+	pass_lightColour = LightColor;
+	textureCoords = vertex.xz * 0.0075;
+	pass_color = InColor.rgb;
 	pass_highlights = apply_highlights(vec4(1.0), vertex.xyz).xyz;
 	pass_clipSpace = gl_Position;
 	pass_normal = InNormal;
-	pass_specular = calcSpecularLighting(toCamera, toLightVector, pass_normal);
-	pass_diffuse = calculateDiffuseLighting(toLightVector, pass_normal) + calculate_lights(LightColor, vertex.xyz, 2.25);
+	pass_vertex = vertex.xyz;
+	pass_diffuse = diffuse(toLightVector, InNormal, max(LightColor, vec3(.1))).xyz + diffuse(toLightVector, InNormal, calculate_lights(LightColor, vertex.xyz, 2.25)).xyz;
 }

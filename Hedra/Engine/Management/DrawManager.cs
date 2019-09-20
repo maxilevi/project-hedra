@@ -116,36 +116,6 @@ namespace Hedra.Engine.Management
             World.CullTest();
         }
 
-        private static void ReflectionDraw()
-        {
-            var previous = GameSettings.GlobalShadows;
-            GameSettings.GlobalShadows = false;
-            SkyManager.Draw();
-            var oldPitch = GameManager.Player.View.Pitch;
-            GameManager.Player.View.Pitch = -oldPitch;
-            var oldHeight = GameManager.Player.View.CameraHeight;
-            GameManager.Player.View.CameraHeight = oldHeight - Vector3.UnitY * 2 * (GameManager.Player.View.CameraEyePosition.Y - 16 * 4);
-            GameManager.Player.View.BuildCameraMatrix();
-            Culling.BuildFrustum(GameManager.Player.View.ModelViewMatrix);
-            World.CullTest();
-            World.Draw(WorldRenderType.Static);
-            GameSettings.GlobalShadows = previous;
-            GameManager.Player.View.CameraHeight = oldHeight;
-            GameManager.Player.View.Pitch = oldPitch;
-            GameManager.Player.View.BuildCameraMatrix();
-            Culling.BuildFrustum(GameManager.Player.View.ModelViewMatrix);
-        }
-
-        private static void RefractionDraw()
-        {
-            var previous = GameSettings.GlobalShadows;
-            GameSettings.GlobalShadows = false;
-            World.Draw(WorldRenderType.WaterRefraction);
-            lock(ObjectMeshLock)
-                ObjectMeshBuffer.DrawBatched(ObjectMeshes.Where(O => O.IsInWater).ToList());
-            GameSettings.GlobalShadows = previous;
-        }
-
         private static void BulkDraw()
         {
             SkyManager.Draw();
@@ -178,7 +148,6 @@ namespace Hedra.Engine.Management
                 ObjectMeshBuffer.DrawBatched(ObjectMeshes);
             
             Renderer.Enable(EnableCap.DepthTest);
-            World.Draw(WorldRenderType.Water);
             for (var i = TrailRenderer.Count - 1; i > -1; i--)
             {
                 TrailRenderer[i].Draw();
@@ -219,20 +188,7 @@ namespace Hedra.Engine.Management
              VertsCount = 0;
             if(MainBuffer.Enabled)
             {
-                if (GameSettings.WaterRefraction)
-                {
-                    MainBuffer.ReflectionWaterFbo.Bind();
-                    ReflectionDraw();
-                    MainBuffer.ReflectionWaterFbo.Unbind();
-                }
-
                 SetupDrawing();
-                if (GameSettings.WaterRefraction)
-                {
-                    MainBuffer.RefractionWaterFbo.Bind();
-                    RefractionDraw();
-                    MainBuffer.RefractionWaterFbo.Unbind();
-                }
                 MainBuffer.CaptureData();
                 BulkDraw();
                 MainBuffer.UnCaptureData();

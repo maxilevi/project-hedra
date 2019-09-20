@@ -53,7 +53,6 @@ namespace Hedra.Engine.Generation
         private readonly RenderingComparer _renderingComparer;
         private readonly SharedWorkerPool _meshWorkerPool;
         private readonly SharedWorkerPool _genWorkerPool;
-        private Dictionary<Vector2, Chunk> _waterDrawingChunk;
         private Vector3 _spawningVillagePoint;
         private Vector3 _spawningPoint;
         private WorldType _type;
@@ -70,7 +69,6 @@ namespace Hedra.Engine.Generation
             _chunks = new HashSet<Chunk>();
             _renderingComparer = new RenderingComparer();
             SearcheableChunks = new Dictionary<Vector2, Chunk>(new FastComparer());
-            _waterDrawingChunk = new Dictionary<Vector2, Chunk>();
             DrawingChunks = new Dictionary<Vector2, Chunk>();
             ShadowDrawingChunks = new Dictionary<Vector2, Chunk>();
             _unculledChunks = new Dictionary<Vector2, Chunk>();
@@ -175,12 +173,9 @@ namespace Hedra.Engine.Generation
         {
             DrawingChunks.Clear();
             ShadowDrawingChunks.Clear();
-            _waterDrawingChunk.Clear();
             _unculledChunks.Clear();
             var toDrawArray = Chunks;
             DoCullTest(toDrawArray, DrawingChunks, _unculledChunks);
-            if(GameSettings.WaterRefraction)
-                DoCullTest(toDrawArray, _waterDrawingChunk, null, true);
 
             if (GameSettings.Shadows && !GameSettings.LockFrustum)
             {
@@ -247,11 +242,10 @@ namespace Hedra.Engine.Generation
                         chunks[i].Mesh.Max + chunks[i].Mesh.Position, Vector4.One);
                 }*/
             }
-
-            var isWaterRefraction = (Type & WorldRenderType.WaterRefraction) == WorldRenderType.WaterRefraction;
-            var drawingChunks = isWaterRefraction ? _waterDrawingChunk : DrawingChunks;
-            var shadowDrawingChunks = isWaterRefraction ? null : ShadowDrawingChunks;
-            var type = isWaterRefraction ? WorldRenderType.StaticAndInstance : Type;
+            
+            var drawingChunks = DrawingChunks;
+            var shadowDrawingChunks = ShadowDrawingChunks;
+            var type = Type;
             
             if (GameSettings.Wireframe) Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
 

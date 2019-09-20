@@ -146,6 +146,7 @@ namespace Hedra.Engine.PhysicsSystem
         }
         public static int WaterBlock(Chunk UnderChunk, Vector3 Position)
         {
+            if (UnderChunk == null || !UnderChunk.IsGenerated) return 0;
             int nearestWaterBlockY = 0;
             var blockSpace = World.ToBlockSpace(Position);
             for (var y = UnderChunk.MaximumHeight; y > UnderChunk.MinimumHeight; y--)
@@ -163,12 +164,13 @@ namespace Hedra.Engine.PhysicsSystem
 
         public static float WaterHeight(Vector3 Position)
         {
-            return (WaterDensityAndHeight(Position)-1) * Chunk.BlockSize;
+            var underChunk = World.GetChunkAt(Position);
+            return (WaterBlock(underChunk, Position)+1) * Chunk.BlockSize;
         }
 
         public static bool IsWaterBlock(Vector3 Position)
         {
-            return Math.Abs(WaterDensityAndHeight(Position)) > 0.005f;
+            return World.GetBlockAt(Position).Type == BlockType.Water;
         }
 
         public static float WaterDensityAndHeight(Vector3 Position)

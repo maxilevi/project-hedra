@@ -32,13 +32,14 @@ namespace Hedra.Engine.Rendering.Effects
         public FBO Default;
         public FBO FinalFbo;
         public FBO AdditiveFbo;
-        public FBO ReflectionWaterFbo;
-        public FBO RefractionWaterFbo;
+        public FBO WaterFbo;
+        public SSRFilter SSR;
         public UnderWaterFilter UnderWater;
         public DistortionFilter Distortion;
         public BloomFilter Bloom;
         public BlurFilter Blur;    
         public DeferedRenderer Ssao;
+        public FBO SSRFBO;
 
         static MainFBO()
         {
@@ -52,13 +53,14 @@ namespace Hedra.Engine.Rendering.Effects
             Default = new FBO(GameSettings.Width, GameSettings.Height, false, 0, FramebufferAttachment.ColorAttachment0, PixelInternalFormat.Rgba32f);
             FinalFbo = new FBO(GameSettings.Width, GameSettings.Height);
             AdditiveFbo = new FBO(GameSettings.Width, GameSettings.Height);
-            RefractionWaterFbo = new FBO(GameSettings.Width, GameSettings.Height);
-            ReflectionWaterFbo = new FBO(GameSettings.Width / 4, GameSettings.Height / 4);
+            SSRFBO = new FBO(GameSettings.Width, GameSettings.Height);
+            WaterFbo = new FBO(GameSettings.Width, GameSettings.Height);
 
             Bloom = new BloomFilter();
             UnderWater = new UnderWaterFilter();
             Distortion = new DistortionFilter();
             Blur = new BlurFilter();
+            SSR = new SSRFilter();
         }
 
         public void Draw()
@@ -205,21 +207,35 @@ namespace Hedra.Engine.Rendering.Effects
                 DrawQuad(Default.TextureId[0], 0, false);
                 DefaultShader.Unbind();
                 FinalFbo.Unbind();
-                
-                //Clear it
-                Default.Bind();
-                Renderer.ClearColor(Colors.Transparent);
-                Default.Unbind();
             }
             #endregion
 
-            //DrawQuad(DrawManager.MainBuffer.Ssao.FirstPass.TextureId[1], 0);
-            
+            if (GameSettings.WaterReflections)
+            {
+                
+                Ssao.FirstPass.Bind(false);
+                World.Draw(WorldRenderType.Water);
+                Ssao.FirstPass.Unbind();
+                
+                SSR.Pass(WaterFbo, SSRFBO);
+                Default.Bind();
+                DefaultShader.Bind();
+                DrawQuad(FinalFbo.TextureId[0], SSRFBO.TextureId[0]);
+                DefaultShader.Unbind();
+                Default.Unbind();
+                
+                FinalFbo.Bind();
+                DefaultShader.Bind();
+                DrawQuad(Default.TextureId[0], 0);
+                DefaultShader.Unbind();
+                FinalFbo.Unbind();
+            }
+
             if (GameSettings.FXAA)
                 DrawFXAAQuad(FinalFbo.TextureId[0], GameSettings.Bloom ? AdditiveFbo.TextureId[0] : 0);
             else
                 DrawQuad(FinalFbo.TextureId[0], GameSettings.Bloom ? AdditiveFbo.TextureId[0] : 0);
-            //DrawQuad(WaterFbo.TextureId[0], 0);
+            //DrawQuad(Ssao.FirstPass.TextureId[0], 0);
 
             Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, 0);

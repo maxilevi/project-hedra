@@ -39,26 +39,19 @@ namespace Hedra.Engine.Player
 
         private void HandleSwimmingEffects()
         {
-            var underBlock0 = World.GetBlockAt(_player.View.CameraEyePosition * new Vector3(1, 1f / Chunk.BlockSize, 1) + Vector3.UnitY * (0 + IsoSurfaceCreator.WaterQuadOffset));
-            var underBlock1 = World.GetBlockAt(_player.View.CameraEyePosition * new Vector3(1, 1f / Chunk.BlockSize, 1) + Vector3.UnitY * (1 + IsoSurfaceCreator.WaterQuadOffset));
-            var underBlock2 = World.GetBlockAt(_player.View.CameraEyePosition * new Vector3(1, 1f / Chunk.BlockSize, 1) + Vector3.UnitY * (2 + IsoSurfaceCreator.WaterQuadOffset));
-            var underBlock3 = World.GetBlockAt(_player.View.CameraEyePosition * new Vector3(1, 1f / Chunk.BlockSize, 1) + Vector3.UnitY * (3 + IsoSurfaceCreator.WaterQuadOffset));
-            var lowestY = World.GetLowestY( (int) _player.View.CameraEyePosition.X, (int) _player.View.CameraEyePosition.Z);
-            
-            if(underBlock0.Type != BlockType.Water 
-               && _player.View.CameraEyePosition.Y / Chunk.BlockSize >= lowestY + 2 &&  underBlock1.Type != BlockType.Water && underBlock2.Type != BlockType.Water && underBlock3.Type != BlockType.Water)
-            {
-                GameSettings.DistortEffect = false;
-                GameSettings.UnderWaterEffect = false;
-                WorldRenderer.ShowWaterBackfaces = false;
-            }
+            var underBlock0 = World.GetBlockAt(_player.View.CameraEyePosition * new Vector3(1, 1f / Chunk.BlockSize, 1));
 
-            if(underBlock0.Type == BlockType.Water 
-               || _player.View.CameraEyePosition.Y / Chunk.BlockSize <= lowestY + 2 && (underBlock1.Type == BlockType.Water || underBlock2.Type == BlockType.Water || underBlock3.Type == BlockType.Water))
+            if(underBlock0.Type == BlockType.Water || underBlock0.Type == BlockType.Seafloor)
             {
                 GameSettings.UnderWaterEffect = true;
                 GameSettings.DistortEffect = true;
                 WorldRenderer.ShowWaterBackfaces = true;
+            }
+            else
+            {
+                GameSettings.DistortEffect = false;
+                GameSettings.UnderWaterEffect = false;
+                WorldRenderer.ShowWaterBackfaces = false;
             }
         }
         

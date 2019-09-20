@@ -43,7 +43,6 @@ namespace Hedra.Engine.Player.BoatSystem
             if (Enabled)
             {
                 var waterHeight = Physics.WaterHeight(_humanoid.Position);
-                var waterNormal = Physics.WaterNormalAtPosition(_humanoid.Position);
                 var boatY = _humanoid.Position.Y;
                 OnWaterSurface = Math.Abs(boatY - waterHeight) < 0.25f;
                 InWater = OnWaterSurface || boatY < waterHeight;

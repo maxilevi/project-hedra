@@ -14535,7 +14535,6 @@
     <Content Include="Shaders\Includes\Shadows.shader">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Shaders\Includes\SSR.frag" />
     <Content Include="Shaders\Lines3D.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -14557,6 +14556,12 @@
     </Content>
     <Content Include="..\project-hedra-assets\Sounds\Soundtrack\GraveyardChampion.ogg">
       <Link>Sounds\Soundtrack\GraveyardChampion.ogg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shaders\SSR.frag">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Shaders\SSR.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Translations\Español.po" />

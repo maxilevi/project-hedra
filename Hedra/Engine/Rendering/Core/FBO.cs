@@ -245,7 +245,7 @@ namespace Hedra.Engine.Rendering.Core
             Renderer.Viewport(0, 0, Size.Width, Size.Height);
 
             // configurably clear the buffer and color bits
-            if (true)
+            if (Clear)
             {
                 if (Attachments.Length == 1 && Attachments[0] == FramebufferAttachment.DepthAttachment)
                     Renderer.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);

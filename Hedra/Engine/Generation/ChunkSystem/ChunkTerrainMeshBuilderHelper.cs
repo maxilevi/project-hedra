@@ -147,10 +147,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return densities;
         }
 
-        public void CreateCell(SampledBlock[][][] Grid, ref GridCell Cell, ref int X, ref int Y, ref int Z, bool isWaterCell, out bool Success)
+        public void CreateCell(SampledBlock[][][] Grid, ref GridCell Cell, ref int X, ref int Y, ref int Z, bool isWaterCell, int lod, out bool Success)
         {
             Success = true;
-            this.BuildCell(ref Cell, X, Y, Z, isWaterCell);
+            this.BuildCell(ref Cell, X, Y, Z, lod);
 
             for (var i = 0; i < Cell.Type.Length; i++)
             {
@@ -182,7 +182,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private float GetSampleOrNeighbour(SampledBlock[][][] Grid, int x, int y, int z, out BlockType Type)
         {
             y = Math.Min(y, _boundsY - _sampleHeight - 1);
-            if (x <= 0 || z <= 0 || x >= _boundsX - 1 || z >= _boundsZ - 1)
+            if (x <= 0 || z <= 0 || x >= _boundsX - 1 || z >= _boundsZ - 1 || _sampleWidth == 1 && _sampleHeight == 1)
             {
                 var b = GetNeighbourBlock(x, y, z);
                 Type = b.Type;
@@ -211,9 +211,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
             );
         }
         
-        private void BuildCell(ref GridCell Cell, int X, int Y, int Z, bool isWaterCell)
+        private void BuildCell(ref GridCell Cell, int X, int Y, int Z, int lod)
         {
-            var lod = isWaterCell ? 2 : 1;
             var blockSizeLod = _blockSize * lod;
             Cell.P[0] = new Vector3(X * _blockSize, Y * _blockSize, Z * _blockSize);
             Cell.P[1] = new Vector3(blockSizeLod + Cell.P[0].X, Cell.P[0].Y, Cell.P[0].Z);

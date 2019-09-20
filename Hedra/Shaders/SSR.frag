@@ -4,16 +4,15 @@ uniform sampler2D gFinalImage;
 uniform sampler2D gPosition;
 uniform sampler2D gNormal;
 uniform sampler2D gExtraComponents;
-uniform sampler2D ColorBuffer;
+uniform sampler2D gColor;
 
-uniform mat4 invView;
-uniform mat4 projection;
 uniform mat4 invprojection;
+uniform mat4 projection;
 uniform mat4 view;
 
 noperspective in vec2 TexCoords;
 
-out vec4 outColor;
+layout(location = 0) out vec4 outColor;
 
 const float step = 0.1;
 const float minRayStep = 0.1;
@@ -34,25 +33,25 @@ vec4 RayCast(vec3 dir, inout vec3 hitCoord, out float dDepth);
 
 vec3 fresnelSchlick(float cosTheta, vec3 F0);
 
+vec4 RayMarch(vec3 dir, inout vec3 hitCoord, out float dDepth);
+
 vec3 hash(vec3 a);
 
 void main()
 {
+    vec4 normalSample = texture2D(gNormal, TexCoords);
+    if(normalSample.w < 0.01) discard;
+    Metallic = 0.55;
+    
+    vec4 positionSample = textureLod(gPosition, TexCoords, 2);
+    
+    vec3 viewNormal = vec3(normalSample);
+    vec3 viewPos = positionSample.xyz;
+    vec3 albedo = texture(gFinalImage, vec2(TexCoords.x, 1.0 - TexCoords.y)).rgb;
 
-    vec2 MetallicEmmissive = texture2D(gExtraComponents, TexCoords).rg;
-    Metallic = MetallicEmmissive.r;
+    float spec = 0.5;//texture(ColorBuffer, TexCoords).w;
 
-    if(Metallic < 0.01)
-    discard;
-
-    vec3 viewNormal = vec3(texture2D(gNormal, TexCoords) * invView);
-    vec3 viewPos = textureLod(gPosition, TexCoords, 2).xyz;
-    vec3 albedo = texture(gFinalImage, TexCoords).rgb;
-
-    float spec = texture(ColorBuffer, TexCoords).w;
-
-    vec3 F0 = vec3(0.04);
-    F0      = mix(F0, albedo, Metallic);
+    vec3 F0 = mix(vec3(0.04), albedo, Metallic);
     vec3 Fresnel = fresnelSchlick(max(dot(normalize(viewNormal), normalize(viewPos)), 0.0), F0);
 
     // Reflection vector
@@ -62,7 +61,7 @@ void main()
     vec3 hitPos = viewPos;
     float dDepth;
 
-    vec3 wp = vec3(vec4(viewPos, 1.0) * invView);
+    vec3 wp = vec3(vec4(viewPos, 1.0) * inverse(view));
     vec3 jitt = mix(vec3(0.0), vec3(hash(wp)), spec);
     vec4 coords = RayMarch((vec3(jitt) + reflected * max(minRayStep, -viewPos.z)), hitPos, dDepth);
 
@@ -77,9 +76,12 @@ void main()
     -reflected.z;
 
     // Get color
-    vec3 SSR = textureLod(gFinalImage, coords.xy, 0).rgb * clamp(ReflectionMultiplier, 0.0, 0.9) * Fresnel;
+    vec2 invCoords = vec2(coords.x, 1.0 - coords.y);
+    vec3 SSR = textureLod(gFinalImage, invCoords, 0).rgb * clamp(ReflectionMultiplier, 0.0, 0.9) * Fresnel;
 
-    outColor = vec4(SSR, Metallic);
+    float realFresnel = clamp(dot(normalize(viewNormal), normalize(viewPos)), 0.3, 1.0);
+    vec4 waterColor = textureLod(gColor, TexCoords, 0);
+    outColor = mix(vec4(SSR, 1.0) * 1.0, vec4(waterColor.xyz * waterColor.a, 1.0), realFresnel);
 }
 
 vec3 PositionFromDepth(float depth) {
