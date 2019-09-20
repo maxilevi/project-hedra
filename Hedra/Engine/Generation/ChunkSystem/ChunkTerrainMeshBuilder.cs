@@ -61,31 +61,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
             Data.Flat();
         }
 
-        private static ChunkMeshBuildOutput Merge(params ChunkMeshBuildOutput[] Outputs)
-        {
-            var staticData = new VertexData();
-            var waterData = new VertexData();
-            var instanceData = new VertexData();
-            var failed = false;
-            var hasWater = false;
-            for (var i = 0; i < Outputs.Length; ++i)
-            {
-                if(Outputs[i] == null) continue;
-                staticData += Outputs[i].StaticData;
-                waterData += Outputs[i].WaterData;
-                instanceData += Outputs[i].InstanceData;
-                failed |= Outputs[i].Failed;
-                hasWater |= Outputs[i].HasWater;
-            }
-            return new ChunkMeshBuildOutput(staticData, waterData, instanceData, failed, hasWater);
-        }
-
         public VertexData CreateTerrainCollisionMesh(Block[][][] Blocks, RegionCache Cache)
         {
-            return CreateTerrain(Blocks, 1, Cache, false, false, CollisionMeshLod).StaticData;
+            return CreateTerrain(Blocks, 1, Cache, false, false, CollisionMeshLod, 1).StaticData;
         }
         
-        private ChunkMeshBuildOutput CreateTerrain(Block[][][] Blocks, int Lod, RegionCache Cache, bool ProcessWater, bool ProcessColors, int SkipEvery = 1)
+        private ChunkMeshBuildOutput CreateTerrain(Block[][][] Blocks, int Lod, RegionCache Cache, bool ProcessWater, bool ProcessColors, int VerticalIncrement = 1, int HorizontalIncrement = 1)
         {
             var failed = false;
             var hasWater = false;
@@ -102,14 +83,14 @@ namespace Hedra.Engine.Generation.ChunkSystem
             ref bool hasWater, bool ProcessWater, bool ProcessColors, RegionCache Cache, VertexData blockData, VertexData waterData, int SkipEvery)
         {
 
-            Loop(densityGrid, Blocks, SkipEvery, ProcessColors, false, ref blockData, ref failed, ref Cache);
+            Loop(densityGrid, Blocks, SkipEvery, 1, ProcessColors, false, ref blockData, ref failed, ref Cache);
             if(ProcessWater)
-                Loop(densityGrid, Blocks, 2, ProcessColors, true, ref waterData, ref failed, ref Cache);
+                Loop(densityGrid, Blocks, 2, 2, ProcessColors, true, ref waterData, ref failed, ref Cache);
             
             hasWater = waterData.Vertices.Count > 0;
         }
 
-        private void Loop(SampledBlock[][][] densityGrid, Block[][][] Blocks, int Lod, bool ProcessColors, bool isWater, ref VertexData blockData, ref bool failed, ref RegionCache Cache)
+        private void Loop(SampledBlock[][][] densityGrid, Block[][][] Blocks, int HorizontalSkip, int VerticalSkip, bool ProcessColors, bool isWater, ref VertexData blockData, ref bool failed, ref RegionCache Cache)
         {
             var vertexBuffer = MarchingCubes.NewVertexBuffer();
             var triangleBuffer = MarchingCubes.NewTriangleBuffer();
@@ -120,19 +101,19 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Density = new double[8]
             };
             var next = false;
-            for (var x = 0; x < BoundsX && !failed; x+=Lod)
+            for (var x = 0; x < BoundsX && !failed; x+=HorizontalSkip)
             {
                 next = !next;
-                for (var y = 0; y < BoundsY && !failed; y+=(isWater ? Lod : 1))
+                for (var y = 0; y < BoundsY && !failed; y+=VerticalSkip)
                 {
-                    for (var z = 0; z < BoundsZ && !failed; z+=Lod)
+                    for (var z = 0; z < BoundsZ && !failed; z+=HorizontalSkip)
                     {
                         next = !next;
 
                         if (y < Sparsity.MinimumHeight || y > Sparsity.MaximumHeight) continue;
                         if (Blocks[x] == null || Blocks[x][y] == null || y == BoundsY - 1 || y == 0) continue;
                         
-                        Helper.CreateCell(densityGrid, ref cell, ref x, ref y, ref z, isWater, Lod, out var success);
+                        Helper.CreateCell(densityGrid, ref cell, ref x, ref y, ref z, isWater, HorizontalSkip, out var success);
                         if (!MarchingCubes.Usable(0f, cell)) continue;
                         if (!success && y < BoundsY - 2) failed = true;
 
