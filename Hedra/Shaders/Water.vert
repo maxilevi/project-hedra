@@ -60,7 +60,7 @@ void main()
 
 	pass_fromLightVector = -toLightVector;
 	pass_lightColour = LightColor;
-	textureCoords = vertex.xz * 0.0075;
+	textureCoords = vertex.xz * 0.0025;
 	pass_color = InColor.rgb;
 	pass_highlights = apply_highlights(vec4(1.0), vertex.xyz).xyz;
 	pass_clipSpace = gl_Position;

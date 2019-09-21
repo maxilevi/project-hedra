@@ -210,7 +210,7 @@ namespace Hedra.Engine.Rendering.Effects
             }
             #endregion
 
-            if (GameSettings.WaterReflections)
+            if (GameSettings.UseSSR)
             {
                 
                 Ssao.FirstPass.Bind(false);

@@ -12,7 +12,7 @@ namespace Hedra.Engine.Rendering
 
         public Texture(string Path, bool Repeat)
         {
-            Id = Graphics2D.LoadFromAssets(Path, TextureMinFilter.Nearest, TextureMagFilter.Nearest, Repeat ? TextureWrapMode.Repeat : TextureWrapMode.ClampToBorder);
+            Id = Graphics2D.LoadFromAssets(Path, TextureMinFilter.Linear, TextureMagFilter.Linear, Repeat ? TextureWrapMode.Repeat : TextureWrapMode.ClampToBorder);
         }
         
         public void Dispose()

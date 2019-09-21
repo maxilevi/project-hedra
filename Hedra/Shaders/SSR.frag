@@ -41,7 +41,7 @@ void main()
 {
     vec4 normalSample = texture2D(gNormal, TexCoords);
     if(normalSample.w < 0.01) discard;
-    Metallic = 0.55;
+    Metallic = 1.0;
     
     vec4 positionSample = textureLod(gPosition, TexCoords, 2);
     
@@ -49,10 +49,9 @@ void main()
     vec3 viewPos = positionSample.xyz;
     vec3 albedo = texture(gFinalImage, vec2(TexCoords.x, 1.0 - TexCoords.y)).rgb;
 
-    float spec = 0.5;//texture(ColorBuffer, TexCoords).w;
+    float spec = 0.1;//texture(ColorBuffer, TexCoords).w;
 
     vec3 F0 = mix(vec3(0.04), albedo, Metallic);
-    vec3 Fresnel = fresnelSchlick(max(dot(normalize(viewNormal), normalize(viewPos)), 0.0), F0);
 
     // Reflection vector
     vec3 reflected = normalize(reflect(normalize(viewPos), normalize(viewNormal)));
@@ -77,11 +76,11 @@ void main()
 
     // Get color
     vec2 invCoords = vec2(coords.x, 1.0 - coords.y);
-    vec3 SSR = textureLod(gFinalImage, invCoords, 0).rgb * clamp(ReflectionMultiplier, 0.0, 0.9) * Fresnel;
+    vec3 SSR = textureLod(gFinalImage, invCoords, 0).rgb * clamp(ReflectionMultiplier, 0.0, 0.9);
 
-    float realFresnel = clamp(dot(normalize(viewNormal), normalize(viewPos)), 0.3, 1.0);
+    float realFresnel = clamp(dot(normalize(viewNormal), normalize(viewPos)) + 0.5, 0.0, 1.0);
     vec4 waterColor = textureLod(gColor, TexCoords, 0);
-    outColor = mix(vec4(SSR, 1.0) * 1.0, vec4(waterColor.xyz * waterColor.a, 1.0), realFresnel);
+    outColor = mix(vec4(SSR, 1.0) * 1.0, vec4(waterColor.xyz * waterColor.a, 1.0), 1.0 - realFresnel);
 }
 
 vec3 PositionFromDepth(float depth) {

@@ -26,13 +26,13 @@ uniform float WaveMovement;
 uniform float Smoothness;
 
 const float waveStrength = 0.01;
-const float speed = 0.02;
+const float speed = 0.04;
 const float fresnelReflective = 0.4;
 const float edgeSoftness = 24.0;
 const float specularReflectivity = 0.8;
 const float shineDamper = 10.0;
 
-float toLinearDepth(float zDepth){
+float toLinearDepth(float zDepth) {
 	const float near = 2.0;
 	const float far = 4096.0;
 	return 2.0 * near * far / (far + near - (2.0 * zDepth - 1.0) * (far - near));
@@ -46,9 +46,8 @@ float calculateWaterDepth(vec2 texCoords){
 	return floorDistance - waterDistance;
 }
 
-float calculateFresnel(){
+float calculateFresnel(vec3 normal){
 	vec3 viewVector = normalize(toCamera);
-	vec3 normal = normalize(pass_normal);
 	float refractiveFactor = dot(viewVector, normal);
 	refractiveFactor = pow(refractiveFactor, fresnelReflective);
 	return clamp(refractiveFactor, 0.0, 1.0);
@@ -74,7 +73,7 @@ void main()
 	vec2 totalDistortion = (texture(dudvMap, distortedTexCoords).rg * 2.0 - 1.0) * waveStrength;
 
 	vec4 normalSample = texture(normalMap, distortedTexCoords);
-	vec3 normal = vec3(normalSample.x * 2.0 - 1.0, normalSample.y * 2.0 - 1.0, normalSample.z * 2.0 - 1.0) * 0.001 + pass_normal * 1.0;
+	vec3 normal = normalize((normalSample.xyz * 2.0 - vec3(1.0)) * 0.1 + pass_normal * 0.9);
 
 	vec3 reflectedLight = reflect(normalize(pass_fromLightVector), normal);
 	float specular = max(dot(reflectedLight, normalize(toCamera)), 0.0);
@@ -82,11 +81,11 @@ void main()
 	vec3 specularHighlights = pass_lightColour * specular * specularReflectivity;
 	
 	float waterDepth = calculateWaterDepth(projectiveCoords);
-	float fresnel = calculateFresnel();
+	float fresnel = calculateFresnel(normal);
 	vec3 finalColour = pass_color * pass_highlights + specularHighlights;
-	float alpha = clamp(waterDepth / edgeSoftness / Smoothness, 0.0, 1.0) * (1.0 - fresnel * 0.0001);
+	float alpha = clamp(waterDepth / edgeSoftness / Smoothness, 0.0, 1.0) * (1.0 - fresnel * 0.71);
 	
-	OutColor = mix(sky_color(), vec4(finalColour, alpha - 0.1), pass_visibility);
+	OutColor = mix(sky_color(), vec4(finalColour, alpha), pass_visibility);
 	vec3 out_position = (_modelViewMatrix * vec4(pass_vertex, 1.0)).xyz;
 	OutPosition = vec4(out_position, gl_FragCoord.z);
 	vec3 out_normal = mat3(transpose(inverse(_modelViewMatrix))) * normal;
