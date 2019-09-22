@@ -53,7 +53,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private Block[][][] _blocks;
         private static readonly Block[][] _dummyBlocks;
-        private Dictionary<CoordinateHash3D, Half> _waterDensity;
         private readonly object _waterLock = new object();
         private readonly ChunkTerrainMeshBuilder _terrainBuilder;
         private readonly ChunkStructuresMeshBuilder _structuresBuilder;
@@ -87,19 +86,30 @@ namespace Hedra.Engine.Generation.ChunkSystem
             Landscape = World.BiomePool.GetGenerator(this);
         }
 
-        public void Generate()
+        public void GenerateBlocks()
         {
             if (Disposed) throw new ArgumentException($"Cannot build a disposed chunk.");
             lock (_blocksLock)
             {
                 IsGenerating = true;
-                Landscape.Generate(_blocks, _regionCache);
+                Landscape.GenerateBlocks(_blocks);
+                IsGenerating = false;
+            }
+        }
+
+        public void GenerateStructures()
+        {
+            if (Disposed) throw new ArgumentException($"Cannot build a disposed chunk.");
+            lock (_blocksLock)
+            {
+                IsGenerating = true;
+                Landscape.GenerateEnvironment(_blocks, _regionCache);
                 IsGenerating = false;
             }
             CalculateBounds();
             IsGenerated = true;
         }
-
+        
         public void BuildMesh()
         {
             if (Disposed || !IsGenerated || !Landscape.BlocksSetted || !Landscape.StructuresPlaced) return;
@@ -248,33 +258,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
 
             return new Block();
-        }
-
-        public void AddWaterDensity(Vector3 WaterPosition, Half Density)
-        {
-            lock (_waterLock)
-            {
-                if (_waterDensity == null) _waterDensity = new Dictionary<CoordinateHash3D, Half>();
-                var hash = new CoordinateHash3D(WaterPosition);
-                if (!_waterDensity.ContainsKey(hash)) _waterDensity.Add(hash, Density);
-            }
-        }
-
-        public CoordinateHash3D[] GetWaterPositions()
-        {
-            lock (_waterLock)
-            {
-                return _waterDensity.Keys.ToArray();
-            }
-        }
-
-        public Half GetWaterDensity(Vector3 WaterPosition)
-        {
-            lock (_waterLock)
-            {
-                var hash = new CoordinateHash3D(WaterPosition);
-                return _waterDensity?.ContainsKey(hash) ?? false ? _waterDensity[hash] : default(Half);
-            }
         }
 
         public int GetHighestY(int X, int Z)
@@ -483,7 +466,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private void ForceDispose()
         {
             Bullet.BulletPhysics.RemoveChunk(Position.Xz);
-            _waterDensity?.Clear();
             Mesh?.Dispose();
             Landscape?.Dispose();
             _blocks = null;

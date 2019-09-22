@@ -8,7 +8,18 @@ namespace Hedra.Engine.Native
 {
     public static class MeshOptimizer
     {
+        
+        public static void Simplify(VertexData Mesh, float Threshold)
+        {
+            Simplify(Mesh, new uint[0], Threshold);
+        }
+
         public static void Simplify(VertexData Mesh, uint[] BlacklistedIndices, float Threshold)
+        {
+            Simplify(Mesh, BlacklistedIndices, Threshold, 0.05f);
+        }
+        
+        public static void Simplify(VertexData Mesh, uint[] BlacklistedIndices, float Threshold, float ErrorMargin)
         {
             var indices = Mesh.Indices.ToArray();
             var vertices = Mesh.Vertices.ToArray();

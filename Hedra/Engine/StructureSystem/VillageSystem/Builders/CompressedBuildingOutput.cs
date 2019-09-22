@@ -39,9 +39,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                     if (waiter.Disposed) yield break;
                     yield return null;
                 }
-
-                var clampedPosition = Physics.ClampToNearestLod(position);
-                var block = World.GetHighestBlockAt(clampedPosition.X, clampedPosition.Z);
+                
+                var block = World.GetHighestBlockAt(position.X, position.Z);
                 if (Instances[i].PlaceCondition == null || Instances[i].PlaceCondition(block.Type))
                 {
                     var instanceHeight = Physics.HeightAtPosition(position);

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Hedra.BiomeSystem;
 using Hedra.Core;
@@ -22,7 +23,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private readonly int _height;
         private readonly float _blockSize;
         private int _sampleWidth;
-        private int _sampleHeight; 
+        private int _sampleHeight;
+        private Dictionary<Vector2, Chunk> _neighbours;
 
         public ChunkTerrainMeshBuilderHelper(Chunk Parent)
         {
@@ -224,20 +226,31 @@ namespace Hedra.Engine.Generation.ChunkSystem
             Cell.P[7] = new Vector3(Cell.P[0].X, _blockSize + Cell.P[0].Y, blockSizeLod + Cell.P[0].Z);
         }
 
-        //Use ref to avoid copying the structs since this function has a very high call rate.
-        [MethodImpl(256)]
-        private static Chunk GetNeighbourChunk(ref float X, ref float Z, ref int _offsetX, ref int _offsetZ)
+        public void BuildNeighbours()
         {
-            World.SearcheableChunksReference.TryGetValue(new Vector2(((int) (_offsetX + X * Chunk.BlockSize) >> 7) << 7, ((int) (_offsetZ + Z * Chunk.BlockSize) >> 7) << 7), out var ch);
-            return ch;
+            _neighbours = new Dictionary<Vector2, Chunk>();
+            void Add(float X, float Y)
+            {
+                var offset = new Vector2(X,Y);
+                _neighbours.Add(offset, World.GetChunkByOffset(offset));
+            }
+            Add(_offsetX + Chunk.Width, _offsetZ);
+            Add(_offsetX, _offsetZ + Chunk.Width);
+            Add(_offsetX + Chunk.Width, _offsetZ + Chunk.Width);
+            Add(_offsetX - Chunk.Width, _offsetZ);
+            Add(_offsetX, _offsetZ - Chunk.Width);
+            Add(_offsetX - Chunk.Width, _offsetZ - Chunk.Width);
+            Add(_offsetX + Chunk.Width, _offsetZ - Chunk.Width);
+            Add(_offsetX - Chunk.Width, _offsetZ + Chunk.Width);
         }
         
-        //Use ref to avoid copying the structs since this function has a very high call rate.
         [MethodImpl(256)]
-        private static Chunk GetNeighbourChunk(ref int X, ref int Z, ref int _offsetX, ref int _offsetZ)
+        private Chunk GetNeighbourChunk(ref int X, ref int Z, ref int _offsetX, ref int _offsetZ)
         {
-            World.SearcheableChunksReference.TryGetValue(new Vector2(((int) (_offsetX + X * Chunk.BlockSize) >> 7) << 7, ((int) (_offsetZ + Z * Chunk.BlockSize) >> 7) << 7), out var ch);
-            return ch;
+            var offset = new Vector2(((int) (_offsetX + X * Chunk.BlockSize) >> 7) << 7, ((int) (_offsetZ + Z * Chunk.BlockSize) >> 7) << 7);
+            if ((int)offset.X == this._offsetX && (int)offset.Y == this._offsetZ) return _parent;
+            _neighbours.TryGetValue(offset, out var chunk);
+            return chunk;
         }
 
         [MethodImpl(256)]
@@ -247,7 +260,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         }
 
         [MethodImpl(256)]
-        private static Block GetNeighbourBlock(ref int X, ref int Y, ref int Z, ref int _offsetX, ref int _offsetZ)
+        private Block GetNeighbourBlock(ref int X, ref int Y, ref int Z, ref int _offsetX, ref int _offsetZ)
         {
             var chunk = GetNeighbourChunk(ref X, ref Z, ref _offsetX, ref _offsetZ);
             if (!chunk?.Landscape.BlocksSetted ?? true) return new Block(BlockType.Temporal);

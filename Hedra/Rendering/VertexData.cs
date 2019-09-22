@@ -301,7 +301,7 @@ namespace Hedra.Rendering
                     
                     newColors.Add(Colors[curr]);
                     newNormals.Add(Normals[curr]);
-                    if(Extradata != null && newExtradata.Count > 0)
+                    if(HasExtradata)
                         newExtradata.Add(Extradata[curr]);
                 }
                 newIndices.Add((uint)index);
@@ -344,6 +344,13 @@ namespace Hedra.Rendering
                 newIndices.Add((uint)newIndices.Count);
                 newIndices.Add((uint)newIndices.Count);
                 newIndices.Add((uint)newIndices.Count);
+
+                if (HasExtradata)
+                {
+                    newExtradata.Add(Extradata[i0]);
+                    newExtradata.Add(Extradata[i1]);
+                    newExtradata.Add(Extradata[i2]);
+                }
             }
             Vertices = newVertices;
             Colors = newColors;

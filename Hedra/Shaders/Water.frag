@@ -64,7 +64,6 @@ void main()
 	if(pass_visibility < 0.0005) discard;
 	
 	vec2 projectiveCoords = clipSpaceToTexCoords(pass_clipSpace);
-	vec2 invertedProjectiveCoords =	vec2(projectiveCoords.x, 1.0 - projectiveCoords.y);
 	
 	if(toLinearDepth(texture(depthMap, projectiveCoords).a) < toLinearDepth(gl_FragCoord.z)) discard;
 	
@@ -83,7 +82,7 @@ void main()
 	float waterDepth = calculateWaterDepth(projectiveCoords);
 	float fresnel = calculateFresnel(normal);
 	vec3 finalColour = pass_color * pass_highlights + specularHighlights;
-	float alpha = clamp(waterDepth / edgeSoftness / Smoothness, 0.0, 1.0) * (1.0 - fresnel * 0.71);
+	float alpha = clamp(waterDepth / edgeSoftness / Smoothness, 0.0, 1.0) * (1.0 - fresnel * 0.7);
 	
 	OutColor = mix(sky_color(), vec4(finalColour, alpha), pass_visibility);
 	vec3 out_position = (_modelViewMatrix * vec4(pass_vertex, 1.0)).xyz;

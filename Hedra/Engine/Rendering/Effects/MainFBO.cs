@@ -212,7 +212,6 @@ namespace Hedra.Engine.Rendering.Effects
 
             if (GameSettings.UseSSR)
             {
-                
                 Ssao.FirstPass.Bind(false);
                 World.Draw(WorldRenderType.Water);
                 Ssao.FirstPass.Unbind();

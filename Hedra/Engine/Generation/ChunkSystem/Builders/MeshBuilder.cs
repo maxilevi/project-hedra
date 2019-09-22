@@ -4,7 +4,7 @@
  * Time: 05:11 p.m.
  *
  */
-namespace Hedra.Engine.Generation.ChunkSystem
+namespace Hedra.Engine.Generation.ChunkSystem.Builders
 {
     public class MeshBuilder : AbstractBuilder
     {

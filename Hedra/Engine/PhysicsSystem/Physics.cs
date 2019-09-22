@@ -97,20 +97,6 @@ namespace Hedra.Engine.PhysicsSystem
              return HeightAtPosition(new Vector3(X,0,Z));
         }
 
-        public static Vector3 ClampToNearestLod(Vector3 Position)
-        {
-            return ClampToNearestLod(Position, World.GetChunkAt(Position));
-        }
-
-        private static Vector3 ClampToNearestLod(Vector3 Position, Chunk UnderChunk)
-        {
-            var lod = UnderChunk.Landscape.GeneratedLod;
-            var chunkOffset = World.ToChunkSpace(Position);
-            var bSpace = World.ToBlockSpace(Position);
-            return new Vector3(lod * (float) Math.Round(bSpace.X / lod), 0, lod * (float) Math.Round(bSpace.Z / lod)) *
-                Chunk.BlockSize + chunkOffset.ToVector3();
-        }
-        
         public static float HeightAtPosition(Vector3 BlockPosition)
         {
             var yx = GetHighest( (int) BlockPosition.X + (int) Chunk.BlockSize, (int) BlockPosition.Z);
@@ -173,20 +159,12 @@ namespace Hedra.Engine.PhysicsSystem
             return World.GetBlockAt(Position).Type == BlockType.Water;
         }
 
-        public static float WaterDensityAndHeight(Vector3 Position)
-        {
-            var chunk = World.GetChunkAt(Position);
-            var blockSpace = World.ToBlockSpace(Position);
-            if (chunk == null) return 0;
-            return chunk.GetWaterDensity(new Vector3(blockSpace.X, WaterBlock(chunk, Position), blockSpace.Z));
-        }
-
         public static Vector3 WaterNormalAtPosition(Vector3 Position)
         {
-            var heightX = WaterDensityAndHeight(Position + Vector3.UnitX * Chunk.BlockSize);
-            var heightZ = WaterDensityAndHeight(Position + Vector3.UnitZ * Chunk.BlockSize);
-            var heightXz = WaterDensityAndHeight(Position + Vector3.UnitX * Chunk.BlockSize +  Vector3.UnitZ * Chunk.BlockSize);
-            var height = WaterDensityAndHeight(Position);
+            var heightX = WaterHeight(Position + Vector3.UnitX * Chunk.BlockSize);
+            var heightZ = WaterHeight(Position + Vector3.UnitZ * Chunk.BlockSize);
+            var heightXz = WaterHeight(Position + Vector3.UnitX * Chunk.BlockSize +  Vector3.UnitZ * Chunk.BlockSize);
+            var height = WaterHeight(Position);
             
             
             var blockSpace = World.ToBlockSpace(Position);

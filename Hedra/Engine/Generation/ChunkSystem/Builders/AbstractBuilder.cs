@@ -9,12 +9,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Hedra.Engine.Core;
-using Hedra.Engine.Game;
 using Hedra.Engine.IO;
 using Hedra.Game;
 using OpenTK;
 
-namespace Hedra.Engine.Generation.ChunkSystem
+namespace Hedra.Engine.Generation.ChunkSystem.Builders
 {
     public abstract class AbstractBuilder : ICountable, IDisposable
     {
@@ -125,6 +124,11 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public void Discard()
         {
             _discard = true;
+            ResetProfile();
+        }
+
+        public void ResetProfile()
+        {
             _accumTime = 0;
             _workItems = 0;
         }

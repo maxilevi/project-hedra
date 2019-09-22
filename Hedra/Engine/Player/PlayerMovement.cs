@@ -7,6 +7,7 @@ using Hedra.Core;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
@@ -293,7 +294,7 @@ namespace Hedra.Engine.Player
 
             if (EventArgs.Key == Key.J)
             {
-                World.AddChunkToQueue(World.GetChunkByOffset(World.ToChunkSpace(_player.Position)), true);
+                World.AddChunkToQueue(World.GetChunkByOffset(World.ToChunkSpace(_player.Position)), ChunkQueueType.Mesh);
             }
 
             if (EventArgs.Key == Key.K)

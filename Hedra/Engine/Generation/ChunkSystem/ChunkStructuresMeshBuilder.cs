@@ -8,8 +8,10 @@ using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Core;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
+using Hedra.Engine.Native;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Game;
 using Hedra.Rendering;
 using OpenTK;
 
@@ -61,19 +63,20 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 ProcessInstanceData(instanceElements[i], Input.StaticData, i, Lod, distribution);
             }
 
-            if (Lod == 1)
+            var addGrass = GameSettings.Quality && Lod <= 2 || Lod == 1 && !GameSettings.Quality;
+            if (addGrass)
             {
                 var lodedInstanceElements = Mesh.LodAffectedInstanceElements;
                 for (var i = 0; i < lodedInstanceElements.Length; i++)
                 {
-                    ProcessInstanceData(lodedInstanceElements[i], Input.InstanceData, i, Lod, distribution);
+                    ProcessInstanceData(lodedInstanceElements[i], Input.InstanceData, i, Lod, distribution, 1f / Lod - 0.2f);
                 }
             }
 
             return new ChunkMeshBuildOutput(Input.StaticData, Input.WaterData, Input.InstanceData, Input.Failed, Input.HasWater);
         }
 
-        private void ProcessInstanceData(InstanceData Instance, VertexData Model, int Index, int Lod, RandomDistribution Distribution)
+        private void ProcessInstanceData(InstanceData Instance, VertexData Model, int Index, int Lod, RandomDistribution Distribution, float SimplificationThreshold = -1)
         {
             var element = Instance.Get(Lod);
             var model = element.OriginalMesh.Clone();
@@ -81,6 +84,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
             
             SetColor(model, element, Index);
             SetExtraData(model, element, Distribution);
+            if (SimplificationThreshold > 0 && SimplificationThreshold <= 1f)
+            {
+                model.Smooth();
+                MeshOptimizer.SimplifySloppy(model, SimplificationThreshold);
+                model.Flat();
+            }
             AssertValidModel(model);
             PackAndAddModel(model, Model);
         }
@@ -108,6 +117,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             if(Model.Colors.Count != Model.Extradata.Count)
                 throw new ArgumentOutOfRangeException($"Extradata '{Model.Extradata.Count}' or color '{Model.Colors.Count}' mismatch");
+            
+            if(Model.Colors.Count != Model.Vertices.Count)
+                throw new ArgumentOutOfRangeException($"Vertex '{Model.Extradata.Count}' and color '{Model.Colors.Count}' mismatch");
         }
         
         private void SetColor(VertexData Model, InstanceData Element, int Index)

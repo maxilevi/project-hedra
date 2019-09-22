@@ -33,7 +33,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if(!result) return;
             if (WasChunkGenerated(_object) && ShouldWeRebuildChunk(_object))
             {
-                World.AddChunkToQueue(_object, true);
+                World.AddChunkToQueue(_object, ChunkQueueType.Mesh);
             }
             if (!_wasBuilt && _object.BuildedWithStructures)
             {
@@ -58,9 +58,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Kill();
                 return false;
             }
-            if (!_object.IsGenerated || !_object.Landscape.StructuresPlaced || _object.Landscape.HasToGenerateMoreData)
+            if (!_object.IsGenerated || !_object.Landscape.StructuresPlaced)
             {
-                World.AddChunkToQueue(_object, false);
+                World.AddChunkToQueue(_object, ChunkQueueType.Generation);
                 return false;
             }
             return true;

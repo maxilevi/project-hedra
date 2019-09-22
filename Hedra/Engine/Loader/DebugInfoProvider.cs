@@ -106,15 +106,15 @@ namespace Hedra.Engine.Loader
                 text += 
                     $"{lineBreak}DrawCalls={DrawManager.DrawCalls} VBOUpdates={VBO.VBOUpdatesInLastFrame} Chunks={World.Chunks.Count} ChunkX={underChunk?.OffsetX ?? 0} ChunkZ={underChunk?.OffsetZ ?? 0}";
                 text +=
-                    $"{lineBreak}Textures ={TextureRegistry.Count} Fonts={FontCache.Count} Texts={TextCache.Count} VAO={VAO.Alive} VBO={VBOCache.CachedVBOs}/{VBO.Alive} FBO={FBO.Alive}";
+                    $"{lineBreak}Textures ={TextureRegistry.Count} Fonts={FontCache.Count} Texts={TextCache.Count} VAO={VAO.Alive} VBO={VBOCache.CachedVBOs}/{VBO.Alive} FBO={FBO.Alive} Lights={ShaderManager.UsedLights}/{ShaderManager.MaxLights}";
                 text += 
-                    $"{lineBreak}AvgBuildTime={World.AverageBuildTime} MS AvgGenTime={World.AverageGenerationTime} MS Lights={ShaderManager.UsedLights}/{ShaderManager.MaxLights} Pitch={player.View.Pitch:0.00}";
+                    $"{lineBreak}MESH={World.Builder.AverageBuildTime}MS BLOCK={World.Builder.AverageBlockTime}MS STRUCT= {World.Builder.AverageStructureTime}MS ";
                 text += 
-                    $"{lineBreak}MQueue = {World.MeshQueueCount} GQueue ={World.ChunkQueueCount} Time={(int)(SkyManager.DayTime/1000)}:{((int) ( ( SkyManager.DayTime/1000f - (int)(SkyManager.DayTime/1000) ) * 60)):00} H={World.Entities.Count(M => M.IsHumanoid)} Items={World.WorldObjects.Length} M&H={World.Entities.Count}";
+                    $"{lineBreak}QUEUES = {World.Builder.MeshQueueCount} / {World.Builder.BlockQueueCount} / {World.Builder.StructureQueueCount} Time={(int)(SkyManager.DayTime/1000)}:{((int) ( ( SkyManager.DayTime/1000f - (int)(SkyManager.DayTime/1000) ) * 60)):00} H={World.Entities.Count(M => M.IsHumanoid)} Items={World.WorldObjects.Length} M&H={World.Entities.Count}";
                 text += 
                     $"{lineBreak}Watchers={World.StructureHandler.Watchers.Length} Structs={World.StructureHandler.Structures.Length}->{World.StructureHandler.Structures.Sum(S => S.Children.Length)} Plateaus={World.WorldBuilding.Plateaux.Length} Groundworks={World.WorldBuilding.Groundworks.Length} BType={block.Type}";
                 text +=
-                    $"{lineBreak}Updates={UpdateManager.UpdateCount} Seed={World.Seed} FPS={Time.Framerate} MS={Time.Frametime} BDensity={block.Density}";
+                    $"{lineBreak}Updates={UpdateManager.UpdateCount} Seed={World.Seed} FPS={Time.Framerate} MS={Time.Frametime} BDensity={block.Density} Pitch={player.View.Pitch:0.00}";
                 text +=
                     $"{lineBreak}SkippedBinds={Renderer.TextureHandler.Skipped} SkippedUses={Renderer.ShaderHandler.Skipped} CulledObjects = {DrawManager.CulledObjectsCount}/{DrawManager.CullableObjectsCount}  Cache={CacheManager.CachedColors.Count}|{CacheManager.CachedExtradata.Count} Pitch={player.View.TargetPitch}";
                 VBO.VBOUpdatesInLastFrame = 0;
@@ -129,20 +129,19 @@ namespace Hedra.Engine.Loader
                     {
                         Bitmap = WorldRenderer.StaticBuffer.Visualize(),
                         Path = "Debug:GeometryPool"
-                    });
+                    }, false);
                     _waterPool.TextureElement.TextureId = Graphics2D.LoadTexture(new BitmapObject
                     {
                         Bitmap = WorldRenderer.WaterBuffer.Visualize(),
                         Path = "Debug:WaterGeometryPool"
-                    });
+                    }, false);
                     _instancePool.TextureElement.TextureId = Graphics2D.LoadTexture(new BitmapObject
                     {
                         Bitmap = WorldRenderer.InstanceBuffer.Visualize(),
                         Path = "Debug:InstanceGeometryPool"
-                    });
+                    }, false);
                     var borderWidth = (chunkBound-1) * Chunk.Height * 8;
-                    _voxelCount = (int) World.Chunks.Select(
-                        C => (defaultVoxelCount - borderWidth) / C.Landscape.GeneratedLod + borderWidth).Sum();
+                    _voxelCount = (int) 0;
                     _chunkCount = Math.Max(World.Chunks.Count, 1);
                 }
             }

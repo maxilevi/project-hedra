@@ -10,6 +10,7 @@
 using System;
 using OpenTK;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using Hedra.Engine.Rendering;
@@ -27,20 +28,16 @@ namespace Hedra.Engine.CacheSystem
     /// </summary>
     public class CacheProvider : ICacheProvider
     {
-        public Dictionary<string, List<CompressedValue<float>>> CachedExtradata { get; private set; }
-        public Dictionary<string, List<CompressedValue<Vector4>>> CachedColors { get; private set; }
+        public Dictionary<object, List<CompressedValue<float>>> CachedExtradata { get; private set; }
+        public Dictionary<object, List<CompressedValue<Vector4>>> CachedColors { get; private set; }
         private readonly Dictionary<string, CacheType> _caches = new Dictionary<string, CacheType>();
         private readonly object _colorLock = new object();
-        private readonly object _hashLock = new object();
         private readonly object _extradataLock = new object();
-        private MD5 _hasher;
-        private object _asd;
 
         public void Load()
         {
-            CachedExtradata = new Dictionary<string, List<CompressedValue<float>>>(StringComparer.OrdinalIgnoreCase);
-            CachedColors =  new Dictionary<string, List<CompressedValue<Vector4>>>(StringComparer.OrdinalIgnoreCase);
-            _hasher = MD5.Create();
+            CachedExtradata = new Dictionary<object, List<CompressedValue<float>>>();
+            CachedColors =  new Dictionary<object, List<CompressedValue<Vector4>>>();
             var foundTypes = new HashSet<CacheItem>();
             var typeList = Assembly.GetExecutingAssembly().GetLoadableTypes(this.GetType().Namespace).ToArray();
             foreach (var type in typeList)
@@ -59,6 +56,7 @@ namespace Hedra.Engine.CacheSystem
                 if (!foundTypes.Contains(item))
                     throw new ArgumentException($"No valid cache type found for {item}");        
             }
+            
             Log.WriteLine("Finished building cache.");
         }
 
@@ -133,35 +131,24 @@ namespace Hedra.Engine.CacheSystem
             }
         }
 
-        public string MakeHash(List<Vector4> Colors)
+        public object MakeHash(List<Vector4> Colors)
         {
-            var floatArray = Colors.SelectMany(C => new []
+            var sum = default(Vector4);
+            for (var i = 0; i < Colors.Count; ++i)
             {
-                C.X, C.Y, C.Z, C.W
-            }).ToArray();
-            var byteArray = new byte[floatArray.Length * sizeof(float)];
-            Buffer.BlockCopy(floatArray, 0, byteArray, 0, byteArray.Length);
-            return MakeHash(byteArray);
-        }
-
-        public string MakeHash(List<float> Extradata)
-        {
-            var byteArray = new byte[Extradata.Count * sizeof(float)];
-            Buffer.BlockCopy(Extradata.ToArray(), 0, byteArray, 0, byteArray.Length);
-            return MakeHash(byteArray);
-        }
-
-        private string MakeHash(byte[] Bytes)
-        {
-            var hash = (byte[]) null;
-            lock (_hashLock)
-                hash = _hasher.ComputeHash(Bytes);
-            var sb = new StringBuilder();
-            for (var i = 0; i < hash.Length; i++)
-            {
-                sb.Append(hash[i].ToString("x2"));
+                sum += Colors[i];
             }
-            return sb.ToString();
+            return sum * Colors.Count;
+        }
+
+        public object MakeHash(List<float> Extradata)
+        {
+            var sum = default(float);
+            for (var i = 0; i < Extradata.Count; ++i)
+            {
+                sum += Extradata[i];
+            }
+            return sum * Extradata.Count;
         }
     }
 }

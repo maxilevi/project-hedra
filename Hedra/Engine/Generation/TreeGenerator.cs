@@ -26,7 +26,7 @@ namespace Hedra.Engine.Generation
     {
         private readonly Vector3[] _previousTrees = new Vector3[8];
 
-        public PlacementObject CanGenerateTree(Vector3 Position, Region BiomeRegion, int Lod)
+        public PlacementObject CanGenerateTree(Vector3 Position, Region BiomeRegion)
         {
             var underChunk = World.GetChunkAt(Position);
             if (underChunk == null) return default(PlacementObject);

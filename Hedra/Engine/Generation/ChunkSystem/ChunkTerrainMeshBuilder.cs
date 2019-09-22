@@ -66,24 +66,25 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return CreateTerrain(Blocks, 1, Cache, false, false, CollisionMeshLod, 1).StaticData;
         }
         
-        private ChunkMeshBuildOutput CreateTerrain(Block[][][] Blocks, int Lod, RegionCache Cache, bool ProcessWater, bool ProcessColors, int VerticalIncrement = 1, int HorizontalIncrement = 1)
+        private ChunkMeshBuildOutput CreateTerrain(Block[][][] Blocks, int Lod, RegionCache Cache, bool ProcessWater, bool ProcessColors, int HorizontalIncrement = 1, int VerticalIncrement = 1)
         {
+            Helper.BuildNeighbours();
             var failed = false;
             var hasWater = false;
             var blockData = new VertexData();
             var waterData = new VertexData();
             var densityGrid = Helper.BuildDensityGrid(Lod);
 
-            IterateAndBuild(densityGrid, Blocks, ref failed, ref hasWater, ProcessWater, ProcessColors, Cache, blockData, waterData, SkipEvery);
+            IterateAndBuild(densityGrid, Blocks, ref failed, ref hasWater, ProcessWater, ProcessColors, Cache, blockData, waterData, HorizontalIncrement, VerticalIncrement);
 
             return new ChunkMeshBuildOutput(blockData, waterData, new VertexData(), failed, hasWater);
         }
 
         private void IterateAndBuild(SampledBlock[][][] densityGrid, Block[][][] Blocks, ref bool failed,
-            ref bool hasWater, bool ProcessWater, bool ProcessColors, RegionCache Cache, VertexData blockData, VertexData waterData, int SkipEvery)
+            ref bool hasWater, bool ProcessWater, bool ProcessColors, RegionCache Cache, VertexData blockData, VertexData waterData, int HorizontalIncrement, int VerticalIncrement)
         {
 
-            Loop(densityGrid, Blocks, SkipEvery, 1, ProcessColors, false, ref blockData, ref failed, ref Cache);
+            Loop(densityGrid, Blocks, HorizontalIncrement, VerticalIncrement, ProcessColors, false, ref blockData, ref failed, ref Cache);
             if(ProcessWater)
                 Loop(densityGrid, Blocks, 2, 2, ProcessColors, true, ref waterData, ref failed, ref Cache);
             

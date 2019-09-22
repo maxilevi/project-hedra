@@ -30,16 +30,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _loads.Remove(User);
         }
 
-        private int Update(ICountable Index)
-        {
-            var total = Math.Max(_users.Sum(P => P.Count), 1);
-            foreach (var user in _users)
-            {
-                _loads[user] = (float) user.Count / total;
-            }
-            return this.GetLoad(Index);
-        }
-
         private int GetLoad(ICountable Index)
         {
             return (int) Math.Ceiling(_loads[Index] * Capacity);
@@ -50,6 +40,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return _users.Contains(Index);
         }
 
-        public int this[ICountable Index] => this.Update(Index);
+        public int this[ICountable Index] => (int)Math.Ceiling(Capacity / (float)_users.Count);
     }
 }
