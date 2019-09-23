@@ -31,6 +31,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             ManageLod();
             var result = ManageState();
             if(!result) return;
+            _object.AnalyzeCompression();
             if (WasChunkGenerated(_object) && ShouldWeRebuildChunk(_object))
             {
                 World.AddChunkToQueue(_object, ChunkQueueType.Mesh);

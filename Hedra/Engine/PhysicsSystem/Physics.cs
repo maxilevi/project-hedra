@@ -126,13 +126,8 @@ namespace Hedra.Engine.PhysicsSystem
             return (height0 + height1) * .5f * Chunk.BlockSize;
         }
 
-        public static float WaterLevelAtPosition(Vector3 Position)
-        {
-            return WaterHeight(Position) - HeightAtPosition(Position);
-        }
         public static int WaterBlock(Chunk UnderChunk, Vector3 Position)
         {
-            return 0;
             if (UnderChunk == null || !UnderChunk.IsGenerated) return 0;
             int nearestWaterBlockY = 0;
             var blockSpace = World.ToBlockSpace(Position);

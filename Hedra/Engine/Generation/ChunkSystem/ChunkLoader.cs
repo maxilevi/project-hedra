@@ -96,6 +96,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private void UpdateLoop()
         {
+            Time.RegisterThread();
             while (GameManager.Exists)
             {
                 if(!_shouldUpdate) Thread.Sleep(1);

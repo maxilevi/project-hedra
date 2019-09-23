@@ -46,7 +46,7 @@ namespace Hedra.Engine.BiomeSystem
         {
         }
 
-        protected override void DefineBlocks(Block[][][] Blocks)
+        protected override void DefineBlocks(Block[] Blocks)
         {
             var rng = new Random(World.Seed + 1234123);
             
@@ -57,7 +57,7 @@ namespace Hedra.Engine.BiomeSystem
             var heights = FillHeight(width, out var types);
             var dirtArray = FillDirt(width, Chunk.Biome.Generation);
             var riverMap = FillRiver(width, Chunk.Biome.Generation, out var riverBorderMap);
-            var sampledBlocks = CreateSampledBlocks(Blocks);
+            var sampledBlocks = CreateSampledBlocks(width, Chunk.Height);
 
             var plateaus = World.WorldBuilding.GetPlateausFor(new Vector2(OffsetX, OffsetZ));
             var groundworks = World.WorldBuilding.GetGroundworksFor(new Vector2(OffsetX, OffsetZ)).ToList();
@@ -124,30 +124,33 @@ namespace Hedra.Engine.BiomeSystem
             }
         }
 
-        private static void CopyBlocks(SampledBlock[][][] SampledBlocks, Block[][][] Blocks)
+        private static void CopyBlocks(SampledBlock[][][] SampledBlocks, Block[] Blocks)
         {
+            var width = SampledBlocks.Length;
             for (var x = 0; x < SampledBlocks.Length; ++x)
             {
+                var height = SampledBlocks[x].Length;
                 for (var y = 0; y < SampledBlocks[x].Length; ++y)
                 {
+                    var depth = SampledBlocks[x][y].Length;
                     for (var z = 0; z < SampledBlocks[x][y].Length; ++z)
                     {
-                        Blocks[x][y][z].Type = SampledBlocks[x][y][z].Type;
-                        Blocks[x][y][z].Density = SampledBlocks[x][y][z].Density;
+                        Blocks[x * width * height + y * depth + z].Type = SampledBlocks[x][y][z].Type;
+                        Blocks[x * width * height + y * depth + z].Density = SampledBlocks[x][y][z].Density;
                     }
                 }
             }
         }
 
-        private static SampledBlock[][][] CreateSampledBlocks(Block[][][] Blocks)
+        private static SampledBlock[][][] CreateSampledBlocks(int Width, int Height)
         {
-            var sampled = new SampledBlock[Blocks.Length][][];
+            var sampled = new SampledBlock[Width][][];
             for (var x = 0; x < sampled.Length; ++x)
             {
-                sampled[x] = new SampledBlock[Blocks[x].Length][];
+                sampled[x] = new SampledBlock[Height][];
                 for (var y = 0; y < sampled[x].Length; ++y)
                 {
-                    sampled[x][y] = new SampledBlock[Blocks[x][y].Length];
+                    sampled[x][y] = new SampledBlock[Width];
                 }
             }
             return sampled;
@@ -448,9 +451,9 @@ namespace Hedra.Engine.BiomeSystem
         {
             var structs = World.StructureHandler.StructureItems;
             var groundworks = World.WorldBuilding.Groundworks.Where(P => P.NoPlants).ToArray();
-            for (var x = 0; x < this.Chunk.BoundsX; x++)
+            for (var x = 0; x < Chunk.BoundsX; x++)
             {
-                for (var z = 0; z < this.Chunk.BoundsZ; z++)
+                for (var z = 0; z < Chunk.BoundsZ; z++)
                 {
                     this.LoopGroundworks(x, z, groundworks, out var noPlantsGroundwork);
                     if(noPlantsGroundwork) continue;
@@ -466,19 +469,19 @@ namespace Hedra.Engine.BiomeSystem
             }
         }
 
-        protected override void DoTreeAndStructurePlacements(Block[][][] Blocks, RegionCache Cache)
+        protected override void DoTreeAndStructurePlacements(RegionCache Cache)
         {
             var structs = World.StructureHandler.StructureItems;
             var plateaus = World.WorldBuilding.Plateaux.Where(P => P.NoTrees).ToArray();
             var groundworks = World.WorldBuilding.Groundworks.Where(P => P.NoTrees).ToArray();
-            for (var _x = 0; _x < this.Chunk.BoundsX; _x++)
+            for (var _x = 0; _x < Chunk.BoundsX; _x++)
             {
-                for (var _z = 0; _z < this.Chunk.BoundsZ; _z++)
+                for (var _z = 0; _z < Chunk.BoundsZ; _z++)
                 {
                     var x = (int) _x;
                     var z = (int) _z;
                     var y = Chunk.GetHighestY(x, z);
-                    var block = Blocks[x][y][z];
+                    var block = Chunk.GetBlockAt(x,y,z);
 
                     if(block.Type != BlockType.Grass) continue;
                     this.LoopStructures(_x, _z, structs, out _, out var noTreesZone, out _);

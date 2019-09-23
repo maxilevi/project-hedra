@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -31,10 +32,11 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public const float BlockSize = 4.0f;
         public const int Height = 256;
         public const int Width = 128;
+        public const int BoundsX = (int)(Width / BlockSize);
+        public const int BoundsY = Height;
+        public const int BoundsZ = (int)(Width / BlockSize);
+        private static readonly Block _defaultBlock;
         public Region Biome { get; }
-        public int BoundsX { get; private set; }
-        public int BoundsY { get; private set; }
-        public int BoundsZ { get; private set; }
         public bool BuildedCompletely { get; set; }
         public int BuildedLod { get; private set; }
         public bool BuildedWithStructures { get; private set; }
@@ -51,25 +53,17 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private bool IsBuilding { get; set; }
         private bool IsGenerating { get; set; }
         public Vector3 Position { get; private set; }
+        private Timer _activityTimer;
 
-        private Block[][][] _blocks;
-        private byte[][] _heightCache;
-        private static readonly Block[][] _dummyBlocks;
+        private byte[] _rleBlocks;
+        private Block[] _blocks;
+        private byte[] _heightCache;
         private readonly object _waterLock = new object();
         private readonly ChunkTerrainMeshBuilder _terrainBuilder;
         private readonly ChunkStructuresMeshBuilder _structuresBuilder;
         private readonly object _blocksLock;
         private readonly RegionCache _regionCache;
         private readonly object _heightCacheLock = new object();
-
-        static Chunk()
-        {
-            _dummyBlocks = new Block[Height][];
-            for (var i = 0; i < _dummyBlocks.Length; i++)
-            {
-                _dummyBlocks[i] = new Block[(int) (Chunk.Width / Chunk.BlockSize)];
-            }
-        }
 
         public Chunk(int OffsetX, int OffsetZ)
         {
@@ -79,12 +73,15 @@ namespace Hedra.Engine.Generation.ChunkSystem
             Mesh = new ChunkMesh(Position, null);
             if (World.GetChunkByOffset(this.OffsetX, this.OffsetZ) != null)
                 throw new ArgumentNullException($"A chunk with the coodinates ({OffsetX}, {OffsetZ}) already exists.");
-            _blocks = new Block[(int) (Width / BlockSize)][][];
             _terrainBuilder = new ChunkTerrainMeshBuilder(this);
             _structuresBuilder = new ChunkStructuresMeshBuilder(this);
             _blocksLock = new object();
+            _blocks = new Block[BoundsX * BoundsY * BoundsZ];
+            _activityTimer = new Timer(3)
+            {
+                UseTimeScale = false
+            };
             _regionCache = new RegionCache(Position, Position + new Vector3(Chunk.Width, 0, Chunk.Width));
-
             Biome = World.BiomePool.GetPredominantBiome(this);
             Landscape = World.BiomePool.GetGenerator(this);
         }
@@ -96,19 +93,18 @@ namespace Hedra.Engine.Generation.ChunkSystem
             {
                 IsGenerating = true;
                 Landscape.GenerateBlocks(_blocks);
-                CalculateBounds();
-                FillHeightCache();
+                FillHeightCache(_blocks);
                 IsGenerating = false;
             }
         }
 
-        private void FillHeightCache()
+        private void FillHeightCache(Block[] Blocks)
         {
             int GetHighestY(int X, int Z)
             {
                 for (var y = MaximumHeight; y > MinimumHeight; y--)
                 {
-                    var type = _blocks[X][y][Z].Type;
+                    var type = Blocks[X * BoundsZ * BoundsY + y * BoundsZ + Z].Type;
                     if (type != BlockType.Air && type != BlockType.Water)
                         return y;
                 }
@@ -118,13 +114,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
             lock (_heightCacheLock)
             {
-                _heightCache = new byte[BoundsX][];
+                _heightCache = new byte[BoundsX * BoundsZ];
                 for (var x = 0; x < BoundsX; x++)
                 {
-                    _heightCache[x] = new byte[BoundsZ];
                     for (var z = 0; z < BoundsZ; z++)
                     {
-                        _heightCache[x][z] = (byte) GetHighestY(x, z);
+                        _heightCache[x * BoundsZ + z] = (byte) GetHighestY(x, z);
                     }
                 }
             }
@@ -136,7 +131,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             lock (_blocksLock)
             {
                 IsGenerating = true;
-                Landscape.GenerateEnvironment(_blocks, _regionCache);
+                Landscape.GenerateEnvironment(_regionCache);
                 IsGenerating = false;
             }
 
@@ -149,8 +144,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (_terrainBuilder.Sparsity == null) BuildSparsity();
             var buildingLod = this.Lod;
             this.PrepareForBuilding();
-            var output = this.CreateTerrainMesh(buildingLod);
-            SetupCollider(buildingLod);
+            var blocks = _blocks ?? DecompressRLE(_rleBlocks);
+            var output = this.CreateTerrainMesh(blocks, buildingLod);
+            SetupCollider(blocks, buildingLod);
 
             if (output == null) return;
             this.SetChunkStatus(output);
@@ -161,11 +157,11 @@ namespace Hedra.Engine.Generation.ChunkSystem
             this.FinishUpload(output, buildingLod);
         }
 
-        private void SetupCollider(int BuildingLod)
+        private void SetupCollider(Block[] Blocks, int BuildingLod)
         {
             if (BuildingLod == 1 || BuildingLod == 2)
             {
-                Bullet.BulletPhysics.AddChunk(Position.Xz, CreateCollisionTerrainMesh(), CollisionShapes);
+                Bullet.BulletPhysics.AddChunk(Position.Xz, CreateCollisionTerrainMesh(Blocks), CollisionShapes);
             }
             else
             {
@@ -177,35 +173,27 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             /* We should build the sparsity data when all the neighbours exist */
             _terrainBuilder.Sparsity = ChunkSparsity.From(this);
-            /* Landscape.Cull(_blocks, _terrainBuilder.Sparsity); */
         }
 
-        private VertexData CreateCollisionTerrainMesh()
+        private VertexData CreateCollisionTerrainMesh(Block[] Blocks)
         {
             lock (_blocksLock)
             {
-                return _terrainBuilder.CreateTerrainCollisionMesh(_blocks, _regionCache);
+                return _terrainBuilder.CreateTerrainCollisionMesh(Blocks, _regionCache);
             }
         }
 
-        private ChunkMeshBuildOutput CreateTerrainMesh(int LevelOfDetail)
+        private ChunkMeshBuildOutput CreateTerrainMesh(Block[] Blocks, int LevelOfDetail)
         {
             lock (_blocksLock)
             {
-                return _terrainBuilder.CreateTerrainMesh(_blocks, LevelOfDetail, _regionCache);
+                return _terrainBuilder.CreateTerrainMesh(Blocks, LevelOfDetail, _regionCache);
             }
         }
 
         private ChunkMeshBuildOutput AddStructuresMeshes(ChunkMeshBuildOutput Input, int LevelOfDetail)
         {
             return _structuresBuilder.AddStructuresMeshes(Input, LevelOfDetail);
-        }
-
-        public void CalculateBounds()
-        {
-            BoundsX = _blocks.Length;
-            BoundsY = _blocks[0].Length;
-            BoundsZ = _blocks[0][0].Length;
         }
 
         private void SetChunkStatus(ChunkMeshBuildOutput Input)
@@ -281,14 +269,14 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public Block GetBlockAt(int X, int Y, int Z)
         {
-            if (Disposed || !Landscape.BlocksSetted || Y >= BoundsY) return new Block();
-            return this[X][Y][Z];
+            if (Disposed || !Landscape.BlocksSetted || Y >= BoundsY) return _defaultBlock;
+            return this[X * BoundsZ * BoundsY + Y * BoundsZ + Z];
         }
 
         public int GetHighestY(int X, int Z)
         {
             lock (_heightCacheLock)
-                return _heightCache?[X][Z] ?? 0;
+                return _heightCache?[X * BoundsX + Z] ?? 0;
         }
 
         public float GetHighest(int X, int Z)
@@ -403,10 +391,30 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public int MaximumHeight => _terrainBuilder.Sparsity?.MaximumHeight ?? BoundsY - 1;
         public int MinimumHeight => _terrainBuilder.Sparsity?.MinimumHeight ?? 0;
 
-        public Block[][] this[int Index] =>
-            Disposed || !Landscape.BlocksSetted
-                ? _dummyBlocks
-                : _blocks[Index];
+        public Block this[int Index]
+        {
+            get
+            {
+                if (_rleBlocks == null && _blocks == null) return _defaultBlock;
+                if (_blocks == null)
+                {
+                    _blocks = DecompressRLE(_rleBlocks);
+                    _rleBlocks = null;
+                }
+                _activityTimer.Reset();
+
+                return _blocks[Index];
+            }
+        }
+
+        public void AnalyzeCompression()
+        {
+            if (_activityTimer.Tick() && !IsCompressed && BuildedCompletely)
+            {
+                _rleBlocks = CompressRLE(_blocks);
+                _blocks = null;
+            }
+        }
 
         private void ForceDispose()
         {
@@ -415,54 +423,89 @@ namespace Hedra.Engine.Generation.ChunkSystem
             Landscape?.Dispose();
             _blocks = null;
         }
+        
+        public int MemoryUsed => IsCompressed ? _rleBlocks.Length * sizeof(byte) : (_blocks?.Length ?? BoundsX*BoundsZ*BoundsY) * sizeof(ushort);
+
+        public bool IsCompressed => _blocks == null && _rleBlocks != null;
+
+        private static byte[] CompressRLE(Block[] Blocks)
+        {
+            ushort lastBits = 0;
+            ushort count = 0;
+            void Add(BinaryWriter Writer)
+            {
+                Writer.Write(lastBits);
+                Writer.Write(count > 1);
+                if (count > 1)
+                    Writer.Write(count);
+            }
+            
+            using (var ms = new MemoryStream())
+            {
+                using (var bw = new BinaryWriter(ms))
+                {
+                    for (var x = 0; x < BoundsX; ++x)
+                    for (var y = 0; y < BoundsY; ++y)
+                    for (var z = 0; z < BoundsZ; ++z)
+                    {
+                        var block = Blocks[x * BoundsY * BoundsZ + y * BoundsZ + z];
+                        if (lastBits == block._bits)
+                        {
+                            count++;
+                        }
+                        else if (count != 0)
+                        {
+                            Add(bw);
+                            lastBits = block._bits;
+                            count = 1;
+                        }
+                        else
+                        {
+                            lastBits = block._bits;
+                            count = 1;
+                        }
+                    }
+                    Add(bw);
+                }
+                return ms.ToArray();
+            }
+        }
+
+        private static Block[] DecompressRLE(byte[] RLE)
+        {
+            var blocks = new Block[BoundsX * BoundsZ * BoundsY];
+            var index = 0;
+            using (var ms = new MemoryStream(RLE))
+            {
+                using (var br = new BinaryReader(ms))
+                {
+                    while (ms.Position < ms.Length)
+                    {
+                        var bits = br.ReadUInt16();
+                        var isMoreThanOne = br.ReadBoolean();
+                        var count = 1;
+                        if (isMoreThanOne)
+                            count = br.ReadUInt16();
+
+                        for (var i = 0; i < count; ++i)
+                        {
+                            blocks[index++]._bits = bits;
+                        }
+                    }
+                }
+            }
+
+            return blocks;
+        }
 
         public void Test()
         {
+            if(_blocks == null) return;
             var sw = new System.Diagnostics.Stopwatch();
             sw.Start();
-            using (var ms = new System.IO.MemoryStream())
-            {
-                using (var bw = new System.IO.BinaryWriter(ms))
-                {
-                    ushort lastBits = 0;
-                    ushort count = 0;
-                    for (var x = 0; x < BoundsX; ++x)
-                    {
-                        for (var y = 0; y < BoundsY; ++y)
-                        {
-                            for (var z = 0; z < BoundsZ; ++z)
-                            {
-                                var b = this[x][y][z];
-                                if (lastBits == b._bits)
-                                {
-                                    count++;
-                                }
-                                else if (count != 0)
-                                {
-                                    bw.Write(lastBits);
-                                    bw.Write(count > 1);
-                                    if(count > 1)
-                                        bw.Write(count);
-                                    lastBits = b._bits;
-                                    count = 1;
-                                }
-                                else
-                                {
-                                    lastBits = b._bits;
-                                    count = 1;
-                                }
-                            }
-                        }
-                    }
-                    bw.Write(lastBits);
-                    bw.Write(count > 1);
-                    if(count > 1)
-                        bw.Write(count);
-                    sw.Stop();
-                    Engine.Player.Chat.Log($"RLE took '{sw.ElapsedMilliseconds}' MS and compressed 512KB into '{ms.Length / 1024}'KB");
-                    //System.IO.File.WriteAllBytes("./chunk.txt", ms.ToArray());
-                }
-            }
+            var bytes = CompressRLE(_blocks);
+            sw.Stop();
+            Engine.Player.Chat.Log($"RLE took '{sw.ElapsedMilliseconds}' MS and compressed 512KB into '{bytes.Length / 1024}'KB");
         }
 
         private IEnumerator DisposeCoroutine()

@@ -11,7 +11,7 @@ namespace Hedra.Engine.Generation
 
         public WorldBuilder()
         {
-            var pool = new SharedWorkerPool(5);
+            var pool = new SharedWorkerPool(3);
             _meshBuilder = new MeshBuilder(pool);
             _blockBuilder = new BlockBuilder(pool);
             _structuresBuilder = new StructuresBuilder(pool);

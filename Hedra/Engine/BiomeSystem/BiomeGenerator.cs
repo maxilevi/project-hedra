@@ -45,24 +45,23 @@ namespace Hedra.Engine.BiomeSystem
 
         protected abstract void PlaceEnvironment(RegionCache Cache);
 
-        protected abstract void DoTreeAndStructurePlacements(Block[][][] Blocks, RegionCache Cache);
+        protected abstract void DoTreeAndStructurePlacements(RegionCache Cache);
         
-        protected abstract void DefineBlocks(Block[][][] Blocks);
+        protected abstract void DefineBlocks(Block[] Blocks);
         
-        public void GenerateBlocks(Block[][][] Blocks)
+        public void GenerateBlocks(Block[] Blocks)
         {
             if (BlocksDefined) throw new ArgumentException($"Cannot generate a chunk multiple times");
             CheckForNearbyStructures();
-            BuildArray(Blocks);
             BlocksSetted = true;
             DefineBlocks(Blocks);
             BlocksDefined = true;
         }
 
-        public void GenerateEnvironment(Block[][][] Blocks, RegionCache Cache)
+        public void GenerateEnvironment(RegionCache Cache)
         {
             if (StructuresPlaced) throw new ArgumentException($"Cannot generate a chunk multiple times");
-            this.DoTreeAndStructurePlacements(Blocks, Cache);
+            this.DoTreeAndStructurePlacements(Cache);
             this.PlaceEnvironment(Cache);
             StructuresPlaced = true;
         }
@@ -71,20 +70,7 @@ namespace Hedra.Engine.BiomeSystem
         {
             //StructureHandler.CheckStructures( new Vector2(Chunk.OffsetX, Chunk.OffsetZ) );
         }
-        
-        public void BuildArray(Block[][][] Blocks)
-        {
-            for(var x = 0; x < (int) (Chunk.Width / Chunk.BlockSize); x++)
-            {
-                Blocks[x] = new Block[Chunk.Height][];
-                for(var y = 0; y <  Chunk.Height; y++)
-                {
-                    Blocks[x][y] = new Block[(int) (Chunk.Width / Chunk.BlockSize)];
-                }
-            }
-            this.Chunk.CalculateBounds();
-        }
-        
+
         public static float PathFormula(float X, float Z)
         {
             return (float) Math.Max(0, (0.5 - Math.Abs(World.GetNoise(X * 0.0009f, Z *  0.0009f) - 0.2)) - 0.425f) * 1f;
