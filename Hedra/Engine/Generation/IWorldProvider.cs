@@ -113,14 +113,6 @@ namespace Hedra.Engine.Generation
 
         int GetHighestY(int X, int Z);
 
-        Block GetNearestBlockAt(int X, int Y, int Z);
-
-        int GetNearestY(int X, int Y, int Z);
-
-        int GetLowestY(int X, int Z);
-
-        Block GetLowestBlock(int X, int Z);
-
         HighlightedAreaWrapper HighlightArea(Vector3 Position, Vector4 Color, float Radius, float Seconds);
 
         WorldItem DropItem(Item ItemSpec, Vector3 Position);

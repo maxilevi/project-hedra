@@ -494,7 +494,11 @@ namespace Hedra.User
                     }
                     World.StructureHandler.Discard();
                 }
-                
+
+                if (Parts[0] == "printch")
+                {
+                    World.GetChunkAt(Caster.Position).Test();
+                }
                 if (Parts[0] == "rebuild")
                 {
                     lock (World.Chunks)

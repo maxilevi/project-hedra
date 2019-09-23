@@ -24,6 +24,7 @@ uniform sampler2D normalMap;
 
 uniform float WaveMovement;
 uniform float Smoothness;
+uniform float useSSR;
 
 const float waveStrength = 0.01;
 const float speed = 0.04;
@@ -86,8 +87,8 @@ void main()
 	
 	OutColor = mix(sky_color(), vec4(finalColour, alpha), pass_visibility);
 	vec3 out_position = (_modelViewMatrix * vec4(pass_vertex, 1.0)).xyz;
-	OutPosition = vec4(out_position, gl_FragCoord.z);
+	OutPosition = vec4(out_position, gl_FragCoord.z) * useSSR;
 	vec3 out_normal = mat3(transpose(inverse(_modelViewMatrix))) * normal;
 	/* 1.0 means SSR affects this fragment and SSAO doesn't */
-	OutNormal = vec4(out_normal, 1.0);
+	OutNormal = vec4(out_normal, 1.0) * useSSR;
 }

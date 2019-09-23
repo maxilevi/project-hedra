@@ -263,6 +263,7 @@ namespace Hedra.Engine.Rendering
             WaterShader["AreaColors"] = World.Highlighter.AreaColors;        
             WaterShader["WaveMovement"] = WaveMovement;
             WaterShader["Smoothness"] = WaterSmoothness;
+            WaterShader["useSSR"] = GameSettings.UseSSR ? 1f : 0f;
 
             if (ShowWaterBackfaces) Renderer.Disable(EnableCap.CullFace);
         }

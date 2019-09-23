@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Core;
@@ -52,12 +53,14 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public Vector3 Position { get; private set; }
 
         private Block[][][] _blocks;
+        private byte[][] _heightCache;
         private static readonly Block[][] _dummyBlocks;
         private readonly object _waterLock = new object();
         private readonly ChunkTerrainMeshBuilder _terrainBuilder;
         private readonly ChunkStructuresMeshBuilder _structuresBuilder;
         private readonly object _blocksLock;
         private readonly RegionCache _regionCache;
+        private readonly object _heightCacheLock = new object();
 
         static Chunk()
         {
@@ -67,7 +70,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 _dummyBlocks[i] = new Block[(int) (Chunk.Width / Chunk.BlockSize)];
             }
         }
-        
+
         public Chunk(int OffsetX, int OffsetZ)
         {
             this.OffsetX = OffsetX;
@@ -93,7 +96,37 @@ namespace Hedra.Engine.Generation.ChunkSystem
             {
                 IsGenerating = true;
                 Landscape.GenerateBlocks(_blocks);
+                CalculateBounds();
+                FillHeightCache();
                 IsGenerating = false;
+            }
+        }
+
+        private void FillHeightCache()
+        {
+            int GetHighestY(int X, int Z)
+            {
+                for (var y = MaximumHeight; y > MinimumHeight; y--)
+                {
+                    var type = _blocks[X][y][Z].Type;
+                    if (type != BlockType.Air && type != BlockType.Water)
+                        return y;
+                }
+
+                return 0;
+            }
+
+            lock (_heightCacheLock)
+            {
+                _heightCache = new byte[BoundsX][];
+                for (var x = 0; x < BoundsX; x++)
+                {
+                    _heightCache[x] = new byte[BoundsZ];
+                    for (var z = 0; z < BoundsZ; z++)
+                    {
+                        _heightCache[x][z] = (byte) GetHighestY(x, z);
+                    }
+                }
             }
         }
 
@@ -106,10 +139,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Landscape.GenerateEnvironment(_blocks, _regionCache);
                 IsGenerating = false;
             }
-            CalculateBounds();
+
             IsGenerated = true;
         }
-        
+
         public void BuildMesh()
         {
             if (Disposed || !IsGenerated || !Landscape.BlocksSetted || !Landscape.StructuresPlaced) return;
@@ -139,14 +172,14 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Bullet.BulletPhysics.RemoveChunk(Position.Xz);
             }
         }
-        
+
         private void BuildSparsity()
         {
             /* We should build the sparsity data when all the neighbours exist */
             _terrainBuilder.Sparsity = ChunkSparsity.From(this);
             /* Landscape.Cull(_blocks, _terrainBuilder.Sparsity); */
         }
-        
+
         private VertexData CreateCollisionTerrainMesh()
         {
             lock (_blocksLock)
@@ -154,7 +187,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 return _terrainBuilder.CreateTerrainCollisionMesh(_blocks, _regionCache);
             }
         }
-        
+
         private ChunkMeshBuildOutput CreateTerrainMesh(int LevelOfDetail)
         {
             lock (_blocksLock)
@@ -219,7 +252,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
             Mesh.SetBounds(
                 new Vector3(staticMin.X, staticMin.Y, staticMin.Z),
-                new Vector3(staticMax.X, Math.Max(staticMax.Y, Input.WaterData.SupportPoint(Vector3.UnitY).Y), staticMax.Z)
+                new Vector3(staticMax.X, Math.Max(staticMax.Y, Input.WaterData.SupportPoint(Vector3.UnitY).Y),
+                    staticMax.Z)
             );
             Input.StaticData.Optimize();
             Input.InstanceData.Optimize();
@@ -247,117 +281,27 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public Block GetBlockAt(int X, int Y, int Z)
         {
-            if (Disposed) return new Block();
-
-            if (Landscape != null && Landscape.BlocksSetted)
-            {
-                if (X >= 0 && Y >= 0 && Z >= 0 && X <= BoundsX - 1 && Y <= BoundsY - 1 && Z <= BoundsZ - 1)
-                    return _blocks[X][Y][Z];
-
-                return new Block();
-            }
-
-            return new Block();
+            if (Disposed || !Landscape.BlocksSetted || Y >= BoundsY) return new Block();
+            return this[X][Y][Z];
         }
 
         public int GetHighestY(int X, int Z)
         {
-            if (Disposed) return 0;
-            if (Landscape == null || !Landscape.BlocksSetted) return 0;
-            for (var y = MaximumHeight; y > MinimumHeight; y--)
-            {
-                var type = _blocks[X][y][Z].Type;
-                if (type != BlockType.Air && type != BlockType.Water)
-                    return y;
-            }
-
-            return 0;
+            lock (_heightCacheLock)
+                return _heightCache?[X][Z] ?? 0;
         }
 
         public float GetHighest(int X, int Z)
         {
-            if (Disposed) return 0;
-            if (Landscape == null || !Landscape.BlocksSetted) return 0;
-            for (var y = MaximumHeight; y > MinimumHeight; y--)
-            {
-                var type = _blocks[X][y][Z].Type;
-                if (type != BlockType.Air && type != BlockType.Water)
-                    return _blocks[X][y][Z].Density + y;
-            }
-
-            return 0;
-        }
-
-        public int GetLowestY(int X, int Z)
-        {
-            if (Disposed || X < 0 || Z < 0 || Landscape == null || !Landscape.BlocksSetted) return 0;
-            for (var y = MinimumHeight; y < MaximumHeight; y++)
-            {
-                var block = _blocks[X][y][Z];
-                if (block.Type == BlockType.Air || block.Type == BlockType.Water)
-                    return y - 1;
-            }
-
-            return 0;
-        }
-
-        public int GetNearestY(int X, int Y, int Z)
-        {
-            if (Disposed) return 0;
-            Y = Math.Max(0, Y);
-
-            if (Landscape != null && Landscape.BlocksSetted)
-            {
-                for (int y = Y; y < MaximumHeight; y++)
-                {
-                    var block = _blocks[X][y][Z];
-                    if (block.Type != BlockType.Air && block.Type != BlockType.Water &&
-                        _blocks[X][y + 1][Z].Type == BlockType.Air)
-                        return y;
-                }
-            }
-
-            return Y;
-        }
-
-        public Block GetNearestBlockAt(int X, int Y, int Z)
-        {
-            if (Disposed || Landscape == null || !Landscape.BlocksSetted) return new Block();
-
-            var block = this.GetBlockAt(X, Y, Z);
-            if (block.Type == BlockType.Water)
-                return new Block();
-
-            return block;
+            if (Disposed || !Landscape.BlocksSetted) return 0;
+            var y = GetHighestY(X, Z);
+            return y + GetBlockAt(X,y,Z).Density;
         }
 
         public Block GetHighestBlockAt(int X, int Z)
         {
-            if (Disposed || X > BoundsX - 1 || Z > BoundsZ - 1 || X < 0 || Z < 0) return new Block();
-            if (Landscape == null || !Landscape.BlocksSetted) return new Block();
-            for (int y = MaximumHeight; y > MinimumHeight; y--)
-            {
-                var B = _blocks[X][y][Z];
-                if (B.Type != BlockType.Air && B.Type != BlockType.Water && B.Density > 0)
-                    return B;
-            }
-
-            return new Block();
-        }
-
-        public Block GetLowestBlockAt(int X, int Z)
-        {
-            if (Disposed || X > BoundsX - 1 || Z > BoundsZ - 1 || X < 0 || Z < 0) return new Block();
-            if (Landscape == null || !Landscape.BlocksSetted) return new Block();
-
-            for (var y = MinimumHeight; y < MaximumHeight; y++)
-            {
-                var block = _blocks[X][y][Z];
-                if (block.Type == BlockType.Air && block.Type == BlockType.Water)
-                    return _blocks[X][y - 1][Z];
-            }
-
-            return new Block();
+            if (Disposed || !Landscape.BlocksSetted) return new Block();
+            return GetBlockAt(X,GetHighestY(X, Z),Z);
         }
 
         public void AddStaticElement(params VertexData[] Data)
@@ -393,7 +337,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             StaticBuffer.AddInstance(Data, AffectedByLod);
             this.NeedsRebuilding = true;
         }
-        
+
         public void RemoveInstance(InstanceData Data)
         {
             if (Mesh == null) throw new ArgumentException($"Failed to remove instance data ");
@@ -459,16 +403,66 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public int MaximumHeight => _terrainBuilder.Sparsity?.MaximumHeight ?? BoundsY - 1;
         public int MinimumHeight => _terrainBuilder.Sparsity?.MinimumHeight ?? 0;
 
-        public Block[][] this[int Index] => Disposed || !Landscape.StructuresPlaced || !Landscape.BlocksSetted
-            ? _dummyBlocks
-            : _blocks[Index];
-        
+        public Block[][] this[int Index] =>
+            Disposed || !Landscape.BlocksSetted
+                ? _dummyBlocks
+                : _blocks[Index];
+
         private void ForceDispose()
         {
             Bullet.BulletPhysics.RemoveChunk(Position.Xz);
             Mesh?.Dispose();
             Landscape?.Dispose();
             _blocks = null;
+        }
+
+        public void Test()
+        {
+            var sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
+            using (var ms = new System.IO.MemoryStream())
+            {
+                using (var bw = new System.IO.BinaryWriter(ms))
+                {
+                    ushort lastBits = 0;
+                    ushort count = 0;
+                    for (var x = 0; x < BoundsX; ++x)
+                    {
+                        for (var y = 0; y < BoundsY; ++y)
+                        {
+                            for (var z = 0; z < BoundsZ; ++z)
+                            {
+                                var b = this[x][y][z];
+                                if (lastBits == b._bits)
+                                {
+                                    count++;
+                                }
+                                else if (count != 0)
+                                {
+                                    bw.Write(lastBits);
+                                    bw.Write(count > 1);
+                                    if(count > 1)
+                                        bw.Write(count);
+                                    lastBits = b._bits;
+                                    count = 1;
+                                }
+                                else
+                                {
+                                    lastBits = b._bits;
+                                    count = 1;
+                                }
+                            }
+                        }
+                    }
+                    bw.Write(lastBits);
+                    bw.Write(count > 1);
+                    if(count > 1)
+                        bw.Write(count);
+                    sw.Stop();
+                    Engine.Player.Chat.Log($"RLE took '{sw.ElapsedMilliseconds}' MS and compressed 512KB into '{ms.Length / 1024}'KB");
+                    //System.IO.File.WriteAllBytes("./chunk.txt", ms.ToArray());
+                }
+            }
         }
 
         private IEnumerator DisposeCoroutine()

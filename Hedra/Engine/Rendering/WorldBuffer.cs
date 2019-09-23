@@ -150,7 +150,7 @@ namespace Hedra.Engine.Rendering
                                 throw new OutOfMemoryException("Geometry pool ran out of space");
 
                         }
-                        ChunkRenderCommand Command = new ChunkRenderCommand();
+                        var Command = new ChunkRenderCommand();
                         Command.VertexCount = Data.Vertices.Count;
                         Command.DrawCount = Data.Indices.Count;
                         Command.Entries = Entries;

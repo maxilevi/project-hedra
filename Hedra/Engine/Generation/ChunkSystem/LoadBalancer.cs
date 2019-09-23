@@ -40,6 +40,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return _users.Contains(Index);
         }
 
-        public int this[ICountable Index] => (int)Math.Ceiling(Capacity / (float)_users.Count);
+        public int this[ICountable Index] => (int)Capacity;
     }
 }

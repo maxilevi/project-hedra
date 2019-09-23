@@ -7,13 +7,14 @@
 
 using System;
 using Hedra.BiomeSystem;
+using Hedra.Core;
 using OpenTK;
 
 namespace Hedra.Engine.Generation
 {
     public struct Block
     {
-        private ushort _bits;
+        public ushort _bits;
 
         public Block(BlockType Type, float Density = default(float))
         {

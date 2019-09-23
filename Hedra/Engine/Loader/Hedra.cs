@@ -69,7 +69,7 @@ namespace Hedra.Engine.Loader
             CacheManager.Load();
             Translations.Load();
             BackgroundUpdater.Load();
-            Bullet.BulletPhysics.Load();
+            BulletPhysics.Load();
             Log.WriteLine("Translations loaded successfully.");
             
             GameLoader.CreateCharacterFolders(GameLoader.AppData, GameLoader.AppPath);

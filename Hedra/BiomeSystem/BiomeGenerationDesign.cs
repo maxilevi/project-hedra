@@ -21,6 +21,11 @@ namespace Hedra.BiomeSystem
 
         public abstract void BuildHeightMap(float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset);
 
+        public virtual void BuildRiverMap(float[][] RiverMap, int Width, float Scale, Vector2 Offset)
+        {
+            
+        }
+        
         public void AddFunction(float[][][] Map1, Func<int, int, int, float> Function)
         {
             for (var i = 0; i < Map1.Length; ++i)

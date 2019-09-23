@@ -212,21 +212,6 @@ namespace Hedra
             return Provider.GetHighestY(X, Z);
         }
 
-        public static Block GetNearestBlockAt(int X, int Y, int Z)
-        {
-            return Provider.GetNearestBlockAt(X, Y, Z);
-        }
-
-        public static int GetNearestY(int X, int Y, int Z)
-        {
-            return Provider.GetNearestY(X, Y, Z);
-        }
-
-        public static int GetLowestY(int X, int Z)
-        {
-            return Provider.GetLowestY(X, Z);
-        }
-
         public static HighlightedAreaWrapper HighlightArea(Vector3 Position, Vector4 Color, float Radius, float Seconds)
         {
             return Provider.HighlightArea(Position, Color, Radius, Seconds);

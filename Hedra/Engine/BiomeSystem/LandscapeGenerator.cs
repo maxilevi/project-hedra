@@ -502,13 +502,11 @@ namespace Hedra.Engine.BiomeSystem
                     if(noTreesZone || noTreesPlateau || noTreesGroundwork) continue;
 
                     var realPosition = new Vector3(Chunk.OffsetX + _x * Chunk.BlockSize, y-1, Chunk.OffsetZ + _z * Chunk.BlockSize);
-                    var samplingPosition = new Vector3(Chunk.OffsetX + x * Chunk.BlockSize, y-1, Chunk.OffsetZ + z * Chunk.BlockSize);
-                    
+
                     var region = Cache.GetRegion(realPosition);
                     var noise = (float) World.GetNoise(realPosition.X * 0.005f, realPosition.Z * 0.005f);
-                    var placementObject = World.TreeGenerator.CanGenerateTree(samplingPosition, region);
+                    var placementObject = World.TreeGenerator.CanGenerateTree(realPosition, region);
                     if (!placementObject.Placed) continue;
-                    placementObject.Position += -samplingPosition.Xz.ToVector3() + realPosition.Xz.ToVector3();
                     World.TreeGenerator.GenerateTree(placementObject, region, region.Trees.GetDesign( (int) (noise * 10000) ));
                 }
             }

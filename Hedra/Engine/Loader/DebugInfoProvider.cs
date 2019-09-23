@@ -99,16 +99,20 @@ namespace Hedra.Engine.Loader
                 _debugPanel.Enable();
                 var underChunk = World.GetChunkByOffset(chunkSpace);
                 var chunkBound = Chunk.Width / Chunk.BlockSize;
-                var block = World.GetBlockAt(player.Position);
-                var defaultVoxelCount = chunkBound * Chunk.Height * chunkBound;
+                var chunkCount = World.Chunks.Count;
+                var maxMemory = chunkCount * Chunk.Width * Chunk.Width * Chunk.Height * 2 / 1024 / 1024;
+                var blockMemory = 0;//World.Chunks.Sum(C => C.MemoryUsed); 
+                var compressedChunks = 0;//World.Chunks.Sum(C => C.IsCompressed ? 1 : 0);
+                var uncompressedChunks = World.Chunks.Count - compressedChunks;
+                var block = World.GetBlockAt(player.Position * new Vector3(1, 1f/Chunk.BlockSize, 1));
                 var lineBreak = $"{Environment.NewLine}{Environment.NewLine}";
                 var text = $"X = {(int)player.Position.X} Y = {(int)(player.Position.Y)} Z={(int)player.Position.Z} Routines={RoutineManager.Count} Watchers={player.Loader.WatcherCount} Grounded={player.IsGrounded}";
                 text += 
-                    $"{lineBreak}DrawCalls={DrawManager.DrawCalls} VBOUpdates={VBO.VBOUpdatesInLastFrame} Chunks={World.Chunks.Count} ChunkX={underChunk?.OffsetX ?? 0} ChunkZ={underChunk?.OffsetZ ?? 0}";
+                    $"{lineBreak}DrawCalls={DrawManager.DrawCalls} VBOUpdates={VBO.VBOUpdatesInLastFrame} Chunks={chunkCount} ChunkX={underChunk?.OffsetX ?? 0} ChunkZ={underChunk?.OffsetZ ?? 0}";
                 text +=
                     $"{lineBreak}Textures ={TextureRegistry.Count} Fonts={FontCache.Count} Texts={TextCache.Count} VAO={VAO.Alive} VBO={VBOCache.CachedVBOs}/{VBO.Alive} FBO={FBO.Alive} Lights={ShaderManager.UsedLights}/{ShaderManager.MaxLights}";
                 text += 
-                    $"{lineBreak}MESH={World.Builder.AverageBuildTime}MS BLOCK={World.Builder.AverageBlockTime}MS STRUCT= {World.Builder.AverageStructureTime}MS ";
+                    $"{lineBreak}MESH={World.Builder.AverageBuildTime}MS BLOCK={World.Builder.AverageBlockTime}MS STRUCT= {World.Builder.AverageStructureTime}MS C/U={compressedChunks}/{uncompressedChunks} MEM={blockMemory}MB / {(blockMemory / maxMemory) * 100}%";
                 text += 
                     $"{lineBreak}QUEUES = {World.Builder.MeshQueueCount} / {World.Builder.BlockQueueCount} / {World.Builder.StructureQueueCount} Time={(int)(SkyManager.DayTime/1000)}:{((int) ( ( SkyManager.DayTime/1000f - (int)(SkyManager.DayTime/1000) ) * 60)):00} H={World.Entities.Count(M => M.IsHumanoid)} Items={World.WorldObjects.Length} M&H={World.Entities.Count}";
                 text += 
@@ -193,7 +197,7 @@ namespace Hedra.Engine.Loader
                 }
             }
         }
-
+        
         public void Dispose()
         {
             EventDispatcher.UnregisterKeyDown(this);

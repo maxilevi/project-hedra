@@ -511,33 +511,6 @@ namespace Hedra.Engine.Generation
             return blockChunk?.GetHighestY((int) blockSpace.X, (int) blockSpace.Z) ?? 0;
         }
 
-        public Block GetNearestBlockAt(int X, int Y, int Z)
-        {
-            var chunkSpace = this.ToChunkSpace(X, Z);
-            var blockSpace = this.ToBlockSpace(X, Z);
-
-            var blockChunk = GetChunkByOffset((int) chunkSpace.X, (int) chunkSpace.Y);
-            return blockChunk?.GetNearestBlockAt((int) blockSpace.X, Y, (int) blockSpace.Z) ?? new Block();
-        }
-
-        public int GetNearestY(int X, int Y, int Z)
-        {
-            var chunkSpace = this.ToChunkSpace(X, Z);
-            var blockSpace = this.ToBlockSpace(X, Z);
-
-            var blockChunk = GetChunkByOffset((int) chunkSpace.X, (int) chunkSpace.Y);
-            return blockChunk?.GetNearestY((int) blockSpace.X, Y, (int) blockSpace.Z) ?? 0;
-        }
-
-        public int GetLowestY(int X, int Z)
-        {
-            var chunkSpace = this.ToChunkSpace(X, Z);
-            var blockSpace = this.ToBlockSpace(X, Z);
-
-            var blockChunk = GetChunkByOffset((int) chunkSpace.X, (int) chunkSpace.Y);
-            return blockChunk?.GetLowestY((int) blockSpace.X, (int) blockSpace.Z) ?? 0;
-        }
-
         public float GetHighest(int X, int Z)
         {
             var chunkSpace = this.ToChunkSpace(X, Z);
@@ -545,15 +518,6 @@ namespace Hedra.Engine.Generation
 
             var blockChunk = GetChunkByOffset((int) chunkSpace.X, (int) chunkSpace.Y);
             return blockChunk?.GetHighest((int) blockSpace.X, (int) blockSpace.Z) ?? 0;
-        }
-
-        public Block GetLowestBlock(int X, int Z)
-        {
-            var chunkSpace = this.ToChunkSpace(X, Z);
-            var blockSpace = this.ToBlockSpace(X, Z);
-
-            var blockChunk = GetChunkByOffset((int) chunkSpace.X, (int) chunkSpace.Y);
-            return blockChunk?.GetLowestBlockAt((int) blockSpace.X, (int) blockSpace.Z) ?? new Block();
         }
 
         public HighlightedAreaWrapper HighlightArea(Vector3 Position, Vector4 Color, float Radius, float Seconds)
@@ -689,16 +653,25 @@ namespace Hedra.Engine.Generation
         
         public float NearestWaterBlockOnChunk(Chunk Chunk, Vector3 Position, out Vector3 WaterPosition)
         {
-            var nearest = float.MaxValue;
-            /*WaterPosition = Vector3.Zero;
-            var positions = Chunk.GetWaterPositions();
-            for (var i = 0; i < positions.Length; i++)
-            {
-                //WaterPosition = positions[i].ToVector3() * Chunk.BlockSize + Chunk.Position;
-                var dist = (WaterPosition - Position).Xz.LengthSquared;
-                if (dist < nearest) nearest = dist;
-            }*/
             WaterPosition = Vector3.Zero;
+            var nearest = float.MaxValue;
+            if (!Chunk.HasWater) return nearest;
+            
+            for (var x = 0; x < Chunk.BoundsX; ++x)
+            {
+                for (var y = Chunk.MinimumHeight; y < Chunk.MaximumHeight; ++y)
+                {
+                    for (var z = 0; z < Chunk.BoundsX; ++z)
+                    {
+                        if (Chunk.GetBlockAt(x,y,z).Type == BlockType.Water)
+                        {
+                            WaterPosition = new Vector3(x * Chunk.BlockSize + Chunk.OffsetX, y * Chunk.BlockSize, z * Chunk.BlockSize + Chunk.OffsetZ); 
+                            var dist = (WaterPosition - Position).Xz.LengthSquared;
+                            if (dist < nearest) nearest = dist;
+                        }
+                    }
+                }  
+            }
             return nearest;
         }
         

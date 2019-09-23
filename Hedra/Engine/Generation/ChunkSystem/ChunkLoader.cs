@@ -60,8 +60,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void UpdateFog(bool Force = false)
         {
-            MaxFog = (float)Math.Max(1, Chunk.Width / Chunk.BlockSize * (Math.Sqrt(_activeChunks)) * 2f);
-            MinFog = (float)Math.Max(0, MaxFog - 16f);
+            MaxFog = (float)Math.Max(1, Chunk.Width / Chunk.BlockSize * (Math.Sqrt(_activeChunks) - 2) * 2f);
+            MinFog = (float)Math.Max(0, Chunk.Width / Chunk.BlockSize * (Math.Sqrt(_activeChunks) - 4) * 2f);
 
             if (Math.Abs(_activeChunks - _targetActivechunks) > .05f || Force)
             {
