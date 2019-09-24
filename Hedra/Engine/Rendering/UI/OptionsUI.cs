@@ -269,6 +269,14 @@ namespace Hedra.Engine.Rendering.UI
                 GameSettings.SSAO = !GameSettings.SSAO;
             };
             
+            var ssr = new Button(new Vector2(-dist, -vDist * 3), Vector2.Zero, BuildOnOff("water_reflections", () => GameSettings.EnableReflections), fontColor, _normalFont);
+            
+            ssr.Click += delegate
+            {
+                GameSettings.EnableReflections = !GameSettings.EnableReflections;
+            };
+            
+            
             var fullscreen = new Button(new Vector2(-dist, -vDist),
                 new Vector2(0.15f,0.075f), BuildOnOff("fullscreen", () => GameSettings.Fullscreen), fontColor, _normalFont);
             
@@ -430,6 +438,7 @@ namespace Hedra.Engine.Rendering.UI
             _graphicsButtons.Add(bloom);
             _graphicsButtons.Add(fullscreen);
             _graphicsButtons.Add(occlusionCulling);
+            _graphicsButtons.Add(ssr);
             _inputButtons.Add(invertMouse);
             _inputButtons.Add(mouseSensitivity);
             _inputButtons.Add(autosave);

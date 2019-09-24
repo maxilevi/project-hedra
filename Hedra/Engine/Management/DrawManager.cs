@@ -144,10 +144,11 @@ namespace Hedra.Engine.Management
                     }
                 }
             }
-            lock(ObjectMeshLock)
+
+            lock (ObjectMeshLock)
                 ObjectMeshBuffer.DrawBatched(ObjectMeshes);
-            
             Renderer.Enable(EnableCap.DepthTest);
+            if (!GameSettings.UseSSR) World.Draw(WorldRenderType.Water);
             for (var i = TrailRenderer.Count - 1; i > -1; i--)
             {
                 TrailRenderer[i].Draw();

@@ -73,5 +73,14 @@ namespace Hedra.Engine.Native
         
         [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr fastnoise_setSeed(IntPtr Object, int Seed);
+        /*
+        [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr meshing_initialize();
+        
+        [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr meshing_destroy(IntPtr Object);
+        
+        [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr meshing_getGridCell();*/
     }
 }

@@ -48,22 +48,16 @@ namespace Hedra.Engine.Generation
 {
     public class WorldProvider : IWorldProvider
     {
-        private readonly ChunkBuilder _chunkBuilder;
-        private readonly MeshBuilder _meshBuilder;
         private readonly RenderingComparer _renderingComparer;
-        private readonly SharedWorkerPool _meshWorkerPool;
-        private readonly SharedWorkerPool _genWorkerPool;
         private Vector3 _spawningVillagePoint;
         private Vector3 _spawningPoint;
         private WorldType _type;
         private int _previousId;
+        private WorldBuilder _builder;
     
         public WorldProvider()
         {
-            _meshWorkerPool = new SharedWorkerPool(2);
-            _genWorkerPool = new SharedWorkerPool(1);
-            _meshBuilder = new MeshBuilder(_meshWorkerPool);
-            _chunkBuilder = new ChunkBuilder(_genWorkerPool);
+            _builder = new WorldBuilder();
             _entities = new HashSet<IEntity>();
             _worldObjects = new HashSet<IWorldObject>();
             _chunks = new HashSet<Chunk>();
@@ -88,10 +82,7 @@ namespace Hedra.Engine.Generation
         public StructureHandler StructureHandler { get; private set; }
         public int Seed { get; private set; }
         public bool IsGenerated { get; private set; }
-        public int MeshQueueCount => _meshBuilder.Count;
-        public int ChunkQueueCount => _chunkBuilder.Count;
-        public int AverageBuildTime => _meshBuilder.AverageWorkTime;     
-        public int AverageGenerationTime => _chunkBuilder.AverageWorkTime;
+        public WorldBuilder Builder => _builder;
         public Vector3 SpawnPoint => _spawningPoint;
         public Vector3 SpawnVillagePoint => _spawningVillagePoint;
         public Dictionary<Vector2, Chunk> DrawingChunks { get; }
@@ -267,8 +258,7 @@ namespace Hedra.Engine.Generation
 
         public void Update()
         {
-            _meshBuilder.Update();
-            _chunkBuilder.Update();
+            _builder.Update();
         }
 
         public void Recreate(int NewSeed, WorldType Type)
@@ -282,8 +272,7 @@ namespace Hedra.Engine.Generation
             BiomePool = new BiomePool(_type);
             WorldBuilding = new WorldBuilding.WorldBuilding();
             OpenSimplexNoise.Load(NewSeed);
-            _meshBuilder.Discard();
-            _chunkBuilder.Discard();
+            _builder.Discard();
             _spawningPoint = FindSpawningPoint(GeneralSettings.SpawnPoint);
             var rng = new Random(Seed);
             _spawningVillagePoint = FindSpawningPoint(
@@ -347,8 +336,7 @@ namespace Hedra.Engine.Generation
 
         public void Discard()
         {
-            _meshBuilder.Discard();
-            _chunkBuilder.Discard();
+            _builder.Discard();
         }
 
         public T[] InRadius<T>(Vector3 Position, float Radius) where T : ISearchable
@@ -364,11 +352,9 @@ namespace Hedra.Engine.Generation
             return results.ToArray();
         }
 
-        public void AddChunkToQueue(Chunk Chunk, bool DoMesh)
+        public void AddChunkToQueue(Chunk Chunk, ChunkQueueType Type)
         {
-            if (Chunk == null || Chunk.Disposed) return;
-            if (!DoMesh) _chunkBuilder.Add(Chunk);
-            else _meshBuilder.Add(Chunk);
+            _builder.Process(Chunk, Type);
         }
 
         public void AddEntity(IEntity Entity)
@@ -454,8 +440,7 @@ namespace Hedra.Engine.Generation
                     items[i].Position.Z < Chunk.OffsetZ + Chunk.Width && items[i].Position.Z > Chunk.OffsetZ)
                     items[i].Dispose();
             }
-            _meshBuilder.Remove(Chunk);
-            _chunkBuilder.Remove(Chunk);
+            _builder.Remove(Chunk);
             Chunk.Dispose();
             lock (_chunks)
             {
@@ -526,33 +511,6 @@ namespace Hedra.Engine.Generation
             return blockChunk?.GetHighestY((int) blockSpace.X, (int) blockSpace.Z) ?? 0;
         }
 
-        public Block GetNearestBlockAt(int X, int Y, int Z)
-        {
-            var chunkSpace = this.ToChunkSpace(X, Z);
-            var blockSpace = this.ToBlockSpace(X, Z);
-
-            var blockChunk = GetChunkByOffset((int) chunkSpace.X, (int) chunkSpace.Y);
-            return blockChunk?.GetNearestBlockAt((int) blockSpace.X, Y, (int) blockSpace.Z) ?? new Block();
-        }
-
-        public int GetNearestY(int X, int Y, int Z)
-        {
-            var chunkSpace = this.ToChunkSpace(X, Z);
-            var blockSpace = this.ToBlockSpace(X, Z);
-
-            var blockChunk = GetChunkByOffset((int) chunkSpace.X, (int) chunkSpace.Y);
-            return blockChunk?.GetNearestY((int) blockSpace.X, Y, (int) blockSpace.Z) ?? 0;
-        }
-
-        public int GetLowestY(int X, int Z)
-        {
-            var chunkSpace = this.ToChunkSpace(X, Z);
-            var blockSpace = this.ToBlockSpace(X, Z);
-
-            var blockChunk = GetChunkByOffset((int) chunkSpace.X, (int) chunkSpace.Y);
-            return blockChunk?.GetLowestY((int) blockSpace.X, (int) blockSpace.Z) ?? 0;
-        }
-
         public float GetHighest(int X, int Z)
         {
             var chunkSpace = this.ToChunkSpace(X, Z);
@@ -560,15 +518,6 @@ namespace Hedra.Engine.Generation
 
             var blockChunk = GetChunkByOffset((int) chunkSpace.X, (int) chunkSpace.Y);
             return blockChunk?.GetHighest((int) blockSpace.X, (int) blockSpace.Z) ?? 0;
-        }
-
-        public Block GetLowestBlock(int X, int Z)
-        {
-            var chunkSpace = this.ToChunkSpace(X, Z);
-            var blockSpace = this.ToBlockSpace(X, Z);
-
-            var blockChunk = GetChunkByOffset((int) chunkSpace.X, (int) chunkSpace.Y);
-            return blockChunk?.GetLowestBlockAt((int) blockSpace.X, (int) blockSpace.Z) ?? new Block();
         }
 
         public HighlightedAreaWrapper HighlightArea(Vector3 Position, Vector4 Color, float Radius, float Seconds)
@@ -701,20 +650,31 @@ namespace Hedra.Engine.Generation
             }
             return (float) Math.Sqrt(nearest);
         }
-
+        
         public float NearestWaterBlockOnChunk(Chunk Chunk, Vector3 Position, out Vector3 WaterPosition)
         {
-            var nearest = float.MaxValue;
             WaterPosition = Vector3.Zero;
-            var positions = Chunk.GetWaterPositions();
-            for (var i = 0; i < positions.Length; i++)
+            var nearest = float.MaxValue;
+            if (!Chunk.HasWater) return nearest;
+            
+            for (var x = 0; x < Chunk.BoundsX; ++x)
             {
-                WaterPosition = positions[i].ToVector3() * Chunk.BlockSize + Chunk.Position;
-                var dist = (WaterPosition - Position).Xz.LengthSquared;
-                if (dist < nearest) nearest = dist;
+                for (var y = Chunk.MinimumHeight; y < Chunk.MaximumHeight; ++y)
+                {
+                    for (var z = 0; z < Chunk.BoundsX; ++z)
+                    {
+                        if (Chunk.GetBlockAt(x,y,z).Type == BlockType.Water)
+                        {
+                            WaterPosition = new Vector3(x * Chunk.BlockSize + Chunk.OffsetX, y * Chunk.BlockSize, z * Chunk.BlockSize + Chunk.OffsetZ); 
+                            var dist = (WaterPosition - Position).Xz.LengthSquared;
+                            if (dist < nearest) nearest = dist;
+                        }
+                    }
+                }  
             }
             return nearest;
         }
+        
         public float NearestWaterBlockOnChunk(Vector3 Position, out Vector3 WaterPosition)
         {
             var nearest = float.MaxValue;

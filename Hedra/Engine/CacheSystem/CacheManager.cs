@@ -10,9 +10,9 @@ namespace Hedra.Engine.CacheSystem
     {
         public static ICacheProvider Provider { get; set; } = new CacheProvider();
 
-        public static Dictionary<string, List<CompressedValue<float>>> CachedExtradata => Provider.CachedExtradata;
+        public static Dictionary<object, List<float>> CachedExtradata => Provider.CachedExtradata;
         
-        public static Dictionary<string, List<CompressedValue<Vector4>>> CachedColors => Provider.CachedColors;
+        public static Dictionary<object, List<Vector4>> CachedColors => Provider.CachedColors;
         
         public static void Load()
         {

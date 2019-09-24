@@ -28,12 +28,9 @@ namespace Hedra.Engine.BiomeSystem
         protected int Seed { get; }
         public Random RandomGen { get; set; }
         public bool BlocksSetted { get; protected set; }
+        public bool BlocksDefined { get; protected set; }
         public bool StructuresPlaced { get; protected set; }
-        public bool FullyGenerated { get; protected set; }
-        public int GeneratedLod { get; set; } = -1;
-        public bool HasToGenerateMoreData => Chunk.Lod < GeneratedLod && !FullyGenerated;
-        private bool _firstGeneration = true;
-        private bool _environmentPlaced;
+        public bool FullyGenerated => StructuresPlaced && BlocksDefined;
         protected readonly FastNoiseSIMD Noise;
 
         protected BiomeGenerator(Chunk RefChunk)
@@ -46,58 +43,34 @@ namespace Hedra.Engine.BiomeSystem
             this.Noise = new FastNoiseSIMD(Seed);
         }
 
-        protected abstract void PlaceEnvironment(RegionCache Cache, Predicate<PlacementDesign> Filter);
+        protected abstract void PlaceEnvironment(RegionCache Cache);
 
-        protected abstract void DoTreeAndStructurePlacements(Block[][][] Blocks, RegionCache Cache, int Lod);
+        protected abstract void DoTreeAndStructurePlacements(RegionCache Cache);
         
-        protected abstract void DefineBlocks(Block[][][] Blocks, RegionCache Cache, int Lod, Func<int, int, bool> Filter);
+        protected abstract void DefineBlocks(Block[] Blocks);
         
-        public void Generate(Block[][][] Blocks, RegionCache Cache)
+        public void GenerateBlocks(Block[] Blocks)
         {
-            if (FullyGenerated) throw new ArgumentException($"Cannot generate a chunk multiple times");
-            if (_firstGeneration)
-            {
-                this.CheckForNearbyStructures();
-                this.BuildArray(Blocks);
-                this.BlocksSetted = true;
-            }
+            if (BlocksDefined) throw new ArgumentException($"Cannot generate a chunk multiple times");
+            CheckForNearbyStructures();
+            BlocksSetted = true;
+            DefineBlocks(Blocks);
+            BlocksDefined = true;
+        }
 
-            var lod = 1;
-            this.DefineBlocks(Blocks, Cache, 1, (X,Z) => true);
-            GeneratedLod = lod;
-            if (_firstGeneration)
-            {
-                this.DoTreeAndStructurePlacements(Blocks, Cache, lod);
-                this.PlaceEnvironment(Cache, D => D.CanBePlacedInPartialGeneration);
-            }
-            if (lod == 1 && !_environmentPlaced)
-            {
-                this.PlaceEnvironment(Cache, D => !D.CanBePlacedInPartialGeneration);
-                _environmentPlaced = true;
-            }
-            this.StructuresPlaced = true;
-            this._firstGeneration = false;
-            this.FullyGenerated = lod == 1;
+        public void GenerateEnvironment(RegionCache Cache)
+        {
+            if (StructuresPlaced) throw new ArgumentException($"Cannot generate a chunk multiple times");
+            this.DoTreeAndStructurePlacements(Cache);
+            this.PlaceEnvironment(Cache);
+            StructuresPlaced = true;
         }
 
         private void CheckForNearbyStructures()
         {
             //StructureHandler.CheckStructures( new Vector2(Chunk.OffsetX, Chunk.OffsetZ) );
         }
-        
-        public void BuildArray(Block[][][] Blocks)
-        {
-            for(var x = 0; x < (int) (Chunk.Width / Chunk.BlockSize); x++)
-            {
-                Blocks[x] = new Block[Chunk.Height][];
-                for(var y = 0; y <  Chunk.Height; y++)
-                {
-                    Blocks[x][y] = new Block[(int) (Chunk.Width / Chunk.BlockSize)];
-                }
-            }
-            this.Chunk.CalculateBounds();
-        }
-        
+
         public static float PathFormula(float X, float Z)
         {
             return (float) Math.Max(0, (0.5 - Math.Abs(World.GetNoise(X * 0.0009f, Z *  0.0009f) - 0.2)) - 0.425f) * 1f;

@@ -49,21 +49,18 @@ namespace Hedra
         public static IWorldBuilding WorldBuilding => Provider.WorldBuilding;
         public static StructureHandler StructureHandler => Provider.StructureHandler;
         public static bool IsGenerated => Provider.IsGenerated;
-        public static int MeshQueueCount => Provider.MeshQueueCount;
-        public static int ChunkQueueCount => Provider.ChunkQueueCount;
         public static IWorldObject[] WorldObjects => Provider.WorldObjects;
         public static ReadOnlyCollection<Chunk> Chunks => Provider.Chunks;
         public static ReadOnlyCollection<IEntity> Entities => Provider.Entities;
         public static Dictionary<Vector2, Chunk> DrawingChunks => Provider.DrawingChunks;
         public static Dictionary<Vector2, Chunk> ShadowDrawingChunks => Provider.ShadowDrawingChunks;
-        public static int AverageBuildTime => Provider.AverageBuildTime;
-        public static int AverageGenerationTime => Provider.AverageGenerationTime;
         public static FishingZoneHandler FishingZoneHandler => Provider.FishingZoneHandler;
         public static Vector3 SpawnPoint => Provider.SpawnPoint;
         public static Vector3 SpawnVillagePoint => Provider.SpawnVillagePoint;
         public static int Seed => Provider.Seed;
         public static int MenuSeed => Provider.MenuSeed;
         public static int RandomSeed => Provider.RandomSeed;
+        public static WorldBuilder Builder => Provider.Builder;
 
         public static IWorldProvider Provider { get; set; }        
 
@@ -125,9 +122,9 @@ namespace Hedra
             return Provider.InRadius<T>(Position, Radius);
         }
 
-        public static void AddChunkToQueue(Chunk Chunk, bool DoMesh)
+        public static void AddChunkToQueue(Chunk Chunk, ChunkQueueType Type)
         {
-            Provider.AddChunkToQueue(Chunk, DoMesh);
+            Provider.AddChunkToQueue(Chunk, Type);
         }
 
         public static Chunk GetChunkByOffset(Vector2 vec2)
@@ -213,21 +210,6 @@ namespace Hedra
         public static int GetHighestY(int X, int Z)
         {
             return Provider.GetHighestY(X, Z);
-        }
-
-        public static Block GetNearestBlockAt(int X, int Y, int Z)
-        {
-            return Provider.GetNearestBlockAt(X, Y, Z);
-        }
-
-        public static int GetNearestY(int X, int Y, int Z)
-        {
-            return Provider.GetNearestY(X, Y, Z);
-        }
-
-        public static int GetLowestY(int X, int Z)
-        {
-            return Provider.GetLowestY(X, Z);
         }
 
         public static HighlightedAreaWrapper HighlightArea(Vector3 Position, Vector4 Color, float Radius, float Seconds)

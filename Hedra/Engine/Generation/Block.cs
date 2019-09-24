@@ -7,13 +7,14 @@
 
 using System;
 using Hedra.BiomeSystem;
+using Hedra.Core;
 using OpenTK;
 
 namespace Hedra.Engine.Generation
 {
     public struct Block
     {
-        private ushort _bits;
+        public ushort _bits;
 
         public Block(BlockType Type, float Density = default(float))
         {
@@ -27,8 +28,9 @@ namespace Hedra.Engine.Generation
             get => (float) ((((_bits >> 11) & 1) * 2 - 1) * ((_bits & 0x7FF) * 0.01f));
             set
             {
-                var sign = value < 0 ? 0 : 1;
-                var significant = Math.Min((int) Math.Abs(value * 100), 2047);
+                var val = Mathf.Clamp(value, -8f, 8f);
+                var sign = val < 0 ? 0 : 1;
+                var significant = Math.Min((int) Math.Abs(val * 100), 2047);
 #if DEBUG
                 if(significant >= 2048) throw new ArgumentOutOfRangeException($"Significant should be less than 2048 but its '{significant}'");
                 if(sign != 0 && sign != 1) throw new ArgumentOutOfRangeException($"Sign should be either 1 or 0 but its '{sign}'");

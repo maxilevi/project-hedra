@@ -45,11 +45,16 @@ namespace Hedra.Engine.Rendering.Frustum
             return support;
         }
        
-        private static void SupportPoint(Vector3 Direction, Vector3[] Points1, Vector3[] Points2, SimplexVertex Vertex)
+        private static SimplexVertex SupportPoint(Vector3 Direction, Vector3[] Points1, Vector3[] Points2)
         {
-            Vertex.SupportA = SupportPoint(Points1, Direction);
-            Vertex.SupportB = SupportPoint(Points2, -Direction);
-            Vertex.SupportPoint = Vertex.SupportA - Vertex.SupportB;
+            var a = SupportPoint(Points1, Direction);
+            var b = SupportPoint(Points2, -Direction);
+            return new SimplexVertex
+            {
+                SupportA = a,
+                SupportB = b,
+                SupportPoint = a - b
+            };
         }
 
         public static bool Collides(Vector3[] Points1, Vector3[] Points2)
@@ -58,14 +63,13 @@ namespace Hedra.Engine.Rendering.Frustum
             simplex.Lock();
             
             _direction = Vector3.One;
-            SupportPoint(_direction, Points1, Points2, simplex.A);
+            simplex.A = SupportPoint(_direction, Points1, Points2);
             simplex.Type = SimplexType.Point;
             _direction = -_direction;
          
             for (var i = 0; i < 10; ++i)
             {
-                var newSimplexVertex = new SimplexVertex();
-                SupportPoint(_direction, Points1, Points2, newSimplexVertex);
+                var newSimplexVertex = SupportPoint(_direction, Points1, Points2);
 
                 if (newSimplexVertex.SupportPoint.Dot(_direction) <= 0)
                 {

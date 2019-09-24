@@ -20,6 +20,7 @@ using Hedra.Core;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Networking;
@@ -493,15 +494,20 @@ namespace Hedra.User
                     }
                     World.StructureHandler.Discard();
                 }
-                
+
+                if (Parts[0] == "printch")
+                {
+                    World.GetChunkAt(Caster.Position).Test();
+                }
                 if (Parts[0] == "rebuild")
                 {
                     lock (World.Chunks)
                     {
+                        World.Builder.ResetMeshProfile();
                         var count = World.Chunks.Count;
                         for (var i = count-1; i > -1; i--)
                         {
-                            World.AddChunkToQueue(World.Chunks[i], true);
+                            World.AddChunkToQueue(World.Chunks[i], ChunkQueueType.Mesh);
                         }
                     }
                 }

@@ -33,6 +33,7 @@ on = ON
 off = OFF
 fullscreen = Fullscreen
 ambient_occlusion = Ambient Occlusion
+water_reflections = Water Reflections
 show_chat = Show Chat
 show_minimap = Show Minimap
 show_console = Show Console

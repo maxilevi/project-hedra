@@ -31,17 +31,31 @@ namespace Hedra.Engine.Generation
             set => HedraCoreNative.fastnoise_setFrequency(_native, value);
         }
 
-        public float[] GetSimplexFractalSetWithFrequency(Vector3 Offset, Vector3 Size, Vector3 Scale, float frequency)
-        {
-            Frequency = frequency;
-            var pointer = HedraCoreNative.fastnoise_getSimplexFractalSet(_native, Offset.X, Offset.Y, Offset.Z, (int)Size.X, (int)Size.Y, (int)Size.Z, Scale.X, Scale.Y, Scale.Z);
-            return PointerToSet(pointer, (uint)(Size.X * Size.Y * Size.Z));
-        }
-        
         public float[] GetSimplexSetWithFrequency(Vector3 Offset, Vector3 Size, Vector3 Scale, float frequency)
         {
             Frequency = frequency;
             var pointer = HedraCoreNative.fastnoise_getSimplexSet(_native, Offset.X, Offset.Y, Offset.Z, (int)Size.X, (int)Size.Y, (int)Size.Z, Scale.X, Scale.Y, Scale.Z);
+            return PointerToSet(pointer, (uint)(Size.X * Size.Y * Size.Z));
+        }
+
+        public float[] GetPerlinFractalSetWithFrequency(Vector3 Offset, Vector3 Size, Vector3 Scale, float frequency)
+        {
+            Frequency = frequency;
+            var pointer = HedraCoreNative.fastnoise_getPerlinFractalSet(_native, Offset.X, Offset.Y, Offset.Z, (int)Size.X, (int)Size.Y, (int)Size.Z, Scale.X, Scale.Y, Scale.Z);
+            return PointerToSet(pointer, (uint)(Size.X * Size.Y * Size.Z));
+        }
+        
+        public float[] GetPerlinSetWithFrequency(Vector3 Offset, Vector3 Size, Vector3 Scale, float frequency)
+        {
+            Frequency = frequency;
+            var pointer = HedraCoreNative.fastnoise_getPerlinSet(_native, Offset.X, Offset.Y, Offset.Z, (int)Size.X, (int)Size.Y, (int)Size.Z, Scale.X, Scale.Y, Scale.Z);
+            return PointerToSet(pointer, (uint)(Size.X * Size.Y * Size.Z));
+        }
+        /*
+        public float[] GetSimplexFractalSetWithFrequency(Vector3 Offset, Vector3 Size, Vector3 Scale, float frequency)
+        {
+            Frequency = frequency;
+            var pointer = HedraCoreNative.fastnoise_getSimplexFractalSet(_native, Offset.X, Offset.Y, Offset.Z, (int)Size.X, (int)Size.Y, (int)Size.Z, Scale.X, Scale.Y, Scale.Z);
             return PointerToSet(pointer, (uint)(Size.X * Size.Y * Size.Z));
         }
         
@@ -56,20 +70,6 @@ namespace Hedra.Engine.Generation
         {
             Frequency = frequency;
             var pointer = HedraCoreNative.fastnoise_getCubicSet(_native, Offset.X, Offset.Y, Offset.Z, (int)Size.X, (int)Size.Y, (int)Size.Z, Scale.X, Scale.Y, Scale.Z);
-            return PointerToSet(pointer, (uint)(Size.X * Size.Y * Size.Z));
-        }
-        
-        public float[] GetPerlinFractalSetWithFrequency(Vector3 Offset, Vector3 Size, Vector3 Scale, float frequency)
-        {
-            Frequency = frequency;
-            var pointer = HedraCoreNative.fastnoise_getPerlinFractalSet(_native, Offset.X, Offset.Y, Offset.Z, (int)Size.X, (int)Size.Y, (int)Size.Z, Scale.X, Scale.Y, Scale.Z);
-            return PointerToSet(pointer, (uint)(Size.X * Size.Y * Size.Z));
-        }
-        
-        public float[] GetPerlinSetWithFrequency(Vector3 Offset, Vector3 Size, Vector3 Scale, float frequency)
-        {
-            Frequency = frequency;
-            var pointer = HedraCoreNative.fastnoise_getPerlinSet(_native, Offset.X, Offset.Y, Offset.Z, (int)Size.X, (int)Size.Y, (int)Size.Z, Scale.X, Scale.Y, Scale.Z);
             return PointerToSet(pointer, (uint)(Size.X * Size.Y * Size.Z));
         }
         
@@ -93,6 +93,7 @@ namespace Hedra.Engine.Generation
             var pointer = HedraCoreNative.fastnoise_getCellularSet(_native, Offset.X, Offset.Y, Offset.Z, (int)Size.X, (int)Size.Y, (int)Size.Z, Scale.X, Scale.Y, Scale.Z);
             return PointerToSet(pointer, (uint)(Size.X * Size.Y * Size.Z));
         }
+        */
 
         public float[] GetSimplexSetWithFrequency(Vector2 Offset, Vector2 Size, Vector2 Scale, float frequency)
         {

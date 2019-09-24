@@ -25,6 +25,7 @@ namespace HedraTests
     public class SimpleWorldProviderMock : IWorldProvider
     {
         public virtual event ModulesReloadEvent ModulesReload;
+        public WorldBuilder Builder { get; }
         public virtual Dictionary<Vector2, Chunk> SearcheableChunks => null;
         public virtual AreaHighlighter Highlighter => null;
         public virtual ParticleSystem Particles => null;
@@ -35,6 +36,16 @@ namespace HedraTests
         public virtual IWorldBuilding WorldBuilding => null;
         public virtual StructureHandler StructureHandler => null;
         public FishingZoneHandler FishingZoneHandler => null;
+        public void ResetGenerationProfile()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ResetMeshProfile()
+        {
+            throw new NotImplementedException();
+        }
+
         public int AverageBuildTime => 0;
         public int AverageGenerationTime => 0;
         public virtual int Seed => 0;
@@ -94,6 +105,11 @@ namespace HedraTests
         public virtual T[] InRadius<T>(Vector3 Position, float Radius) where T : ISearchable
         {
             return default(T[]);
+        }
+
+        public void AddChunkToQueue(Chunk Chunk, ChunkQueueType Type)
+        {
+            throw new NotImplementedException();
         }
 
         public virtual void AddChunkToQueue(Chunk Chunk, bool DoMesh)

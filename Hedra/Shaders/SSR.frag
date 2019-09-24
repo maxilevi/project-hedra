@@ -49,7 +49,7 @@ void main()
     vec3 viewPos = positionSample.xyz;
     vec3 albedo = texture(gFinalImage, vec2(TexCoords.x, 1.0 - TexCoords.y)).rgb;
 
-    float spec = 0.1;//texture(ColorBuffer, TexCoords).w;
+    float spec = 0.5;//texture(ColorBuffer, TexCoords).w;
 
     vec3 F0 = mix(vec3(0.04), albedo, Metallic);
 

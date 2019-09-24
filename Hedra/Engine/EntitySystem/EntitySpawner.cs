@@ -50,7 +50,10 @@ namespace Hedra.Engine.EntitySystem
                     this.Update();
                     Thread.Sleep(15);
                 }
-            });
+            }){
+                IsBackground = true,
+                Priority = ThreadPriority.Lowest
+            };
             spawnThread.Start();
         }
         

@@ -104,7 +104,7 @@ namespace Hedra.Engine.WorldBuilding
         private void HandleColliders()
         {
             var underChunk = World.GetChunkAt(this.Position);
-            if (underChunk != null && underChunk.BuildedWithStructures && underChunk.Landscape.GeneratedLod == 1 && _underChunk != underChunk)
+            if (underChunk != null && underChunk.BuildedWithStructures && _underChunk != underChunk)
             {
                 _underChunk = underChunk;
                 Position = new Vector3(Position.X, Physics.HeightAtPosition(Position) + .5f, Position.Z);

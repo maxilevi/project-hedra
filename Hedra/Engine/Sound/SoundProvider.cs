@@ -157,7 +157,6 @@ namespace Hedra.Engine.Sound
 
         private short[] LoadOgg(string File, out int Channels, out int Bits, out int Rate, out int BytesPerSecond, out int Count, int Offset, int Length)
         {
-            
             var bytes = AssetManager.ReadPath(File, false);
             Stream stream = new MemoryStream(bytes);
             

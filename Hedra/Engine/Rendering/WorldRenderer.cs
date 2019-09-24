@@ -75,12 +75,11 @@ namespace Hedra.Engine.Rendering
         {
             StaticBuffer = new BufferBalancer(
                 new WorldBuffer(PoolSize.Small),
-                new WorldBuffer(PoolSize.Small),
-                new WorldBuffer(PoolSize.Small),
                 new WorldBuffer(PoolSize.Small)
             );
             InstanceBuffer = new BufferBalancer(
-                new WorldBuffer(PoolSize.VerySmall)
+                new WorldBuffer(PoolSize.Small),
+                new WorldBuffer(PoolSize.Small)
             );
             WaterBuffer = new BufferBalancer(
                 new WorldBuffer(PoolSize.Tiny)
@@ -117,8 +116,8 @@ namespace Hedra.Engine.Rendering
         private static void InstanceDraw(Dictionary<Vector2, Chunk> ToDraw)
         {
             StaticShader["Dither"] = GameSettings.SmoothLod ? 1 : 0;
-            StaticShader["MaxDitherDistance"] = GeneralSettings.MaxLodDitherDistance;
-            StaticShader["MinDitherDistance"] = GeneralSettings.MinLodDitherDistance;
+            StaticShader["MaxDitherDistance"] = GameSettings.Quality ? GeneralSettings.MaxLod2DitherDistance : GeneralSettings.MaxLod1DitherDistance;
+            StaticShader["MinDitherDistance"] = GameSettings.Quality ? GeneralSettings.MinLod2DitherDistance : GeneralSettings.MinLod1DitherDistance;
             
             InstanceBuffer.Draw(ToDraw);
         }
@@ -236,7 +235,8 @@ namespace Hedra.Engine.Rendering
         {
             Renderer.BlendEquation(BlendEquationMode.FuncAdd);
             Renderer.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-            //Renderer.Enable(EnableCap.Blend);
+            if(!GameSettings.UseSSR)
+                Renderer.Enable(EnableCap.Blend);
 
             WaterShader.Bind();
             WaterShader["PlayerPosition"] = GameManager.Player.Position;
@@ -262,6 +262,7 @@ namespace Hedra.Engine.Rendering
             WaterShader["AreaColors"] = World.Highlighter.AreaColors;        
             WaterShader["WaveMovement"] = WaveMovement;
             WaterShader["Smoothness"] = WaterSmoothness;
+            WaterShader["useSSR"] = GameSettings.UseSSR ? 1f : 0f;
 
             if (ShowWaterBackfaces) Renderer.Disable(EnableCap.CullFace);
         }
