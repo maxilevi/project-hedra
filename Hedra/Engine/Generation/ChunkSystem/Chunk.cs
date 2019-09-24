@@ -55,7 +55,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public Vector3 Position { get; private set; }
         private Timer _activityTimer;
 
-        private byte[] _rleBlocks;
+        //private byte[] _rleBlocks;
         private Block[] _blocks;
         private byte[] _heightCache;
         private readonly object _waterLock = new object();
@@ -144,7 +144,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (_terrainBuilder.Sparsity == null) BuildSparsity();
             var buildingLod = this.Lod;
             this.PrepareForBuilding();
-            var blocks = _blocks ?? DecompressRLE(_rleBlocks);
+            var blocks = _blocks;
             var output = this.CreateTerrainMesh(blocks, buildingLod);
             SetupCollider(blocks, buildingLod);
 
@@ -179,7 +179,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             lock (_blocksLock)
             {
-                return _terrainBuilder.CreateTerrainCollisionMesh(Blocks, _regionCache);
+                return _terrainBuilder.CreateTerrainCollisionMesh(_regionCache);
             }
         }
 
@@ -187,7 +187,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             lock (_blocksLock)
             {
-                return _terrainBuilder.CreateTerrainMesh(Blocks, LevelOfDetail, _regionCache);
+                return _terrainBuilder.CreateTerrainMesh(LevelOfDetail, _regionCache);
             }
         }
 
@@ -395,6 +395,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             get
             {
+                /*
                 if (_rleBlocks == null && _blocks == null) return _defaultBlock;
                 if (_blocks == null)
                 {
@@ -402,18 +403,19 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     _rleBlocks = null;
                 }
                 _activityTimer.Reset();
-
+*/
                 return _blocks[Index];
             }
         }
 
         public void AnalyzeCompression()
         {
+            /*
             if (_activityTimer.Tick() && !IsCompressed && BuildedCompletely)
             {
                 _rleBlocks = CompressRLE(_blocks);
                 _blocks = null;
-            }
+            }*/
         }
 
         private void ForceDispose()
@@ -424,9 +426,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _blocks = null;
         }
         
-        public int MemoryUsed => IsCompressed ? _rleBlocks.Length * sizeof(byte) : (_blocks?.Length ?? BoundsX*BoundsZ*BoundsY) * sizeof(ushort);
+        public int MemoryUsed => IsCompressed ? 0/*_rleBlocks.Length * sizeof(byte)*/ : (_blocks?.Length ?? BoundsX*BoundsZ*BoundsY) * sizeof(ushort);
 
-        public bool IsCompressed => _blocks == null && _rleBlocks != null;
+        public bool IsCompressed => _blocks == null /*&& _rleBlocks != null*/;
 
         private static byte[] CompressRLE(Block[] Blocks)
         {

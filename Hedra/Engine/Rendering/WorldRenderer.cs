@@ -79,7 +79,6 @@ namespace Hedra.Engine.Rendering
             );
             InstanceBuffer = new BufferBalancer(
                 new WorldBuffer(PoolSize.Small),
-                new WorldBuffer(PoolSize.Small),
                 new WorldBuffer(PoolSize.Small)
             );
             WaterBuffer = new BufferBalancer(

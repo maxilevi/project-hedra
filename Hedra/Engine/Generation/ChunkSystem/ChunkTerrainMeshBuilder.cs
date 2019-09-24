@@ -40,9 +40,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private static int BoundsZ => Chunk.BoundsZ;
         private static float BlockSize => Chunk.BlockSize;
 
-        public ChunkMeshBuildOutput CreateTerrainMesh(Block[] Blocks, int Lod, RegionCache Cache)
+        public ChunkMeshBuildOutput CreateTerrainMesh(int Lod, RegionCache Cache)
         {
-            var output = CreateTerrain(Blocks, Lod, Cache, true, true);
+            var output = CreateTerrain(Lod, Cache, true, true);
             for (var k = 0; k < output.StaticData.Vertices.Count; k++) output.StaticData.Extradata.Add(0);
 
             Simplify(output.StaticData, Lod);
@@ -61,26 +61,25 @@ namespace Hedra.Engine.Generation.ChunkSystem
             Data.Flat();
         }
 
-        public VertexData CreateTerrainCollisionMesh(Block[] Blocks, RegionCache Cache)
+        public VertexData CreateTerrainCollisionMesh(RegionCache Cache)
         {
-            return CreateTerrain(Blocks, 1, Cache, false, false, CollisionMeshLod, 1).StaticData;
+            return CreateTerrain(1, Cache, false, false, CollisionMeshLod, 1).StaticData;
         }
         
-        private ChunkMeshBuildOutput CreateTerrain(Block[] Blocks, int Lod, RegionCache Cache, bool ProcessWater, bool ProcessColors, int HorizontalIncrement = 1, int VerticalIncrement = 1)
+        private ChunkMeshBuildOutput CreateTerrain(int Lod, RegionCache Cache, bool ProcessWater, bool ProcessColors, int HorizontalIncrement = 1, int VerticalIncrement = 1)
         {
-            Helper.BuildNeighbours();
             var failed = false;
             var hasWater = false;
             var blockData = new VertexData();
             var waterData = new VertexData();
             var densityGrid = Helper.BuildDensityGrid(Lod);
 
-            IterateAndBuild(densityGrid, Blocks, ref failed, ref hasWater, ProcessWater, ProcessColors, Cache, blockData, waterData, HorizontalIncrement, VerticalIncrement);
+            IterateAndBuild(densityGrid, ref failed, ref hasWater, ProcessWater, ProcessColors, Cache, blockData, waterData, HorizontalIncrement, VerticalIncrement);
 
             return new ChunkMeshBuildOutput(blockData, waterData, new VertexData(), failed, hasWater);
         }
 
-        private void IterateAndBuild(SampledBlock[] densityGrid, Block[] Blocks, ref bool failed,
+        private void IterateAndBuild(SampledBlock[] densityGrid, ref bool failed,
             ref bool hasWater, bool ProcessWater, bool ProcessColors, RegionCache Cache, VertexData blockData, VertexData waterData, int HorizontalIncrement, int VerticalIncrement)
         {
 

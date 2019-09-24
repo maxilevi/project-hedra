@@ -114,7 +114,7 @@ namespace Hedra.Engine.Loader
                 text += 
                     $"{lineBreak}MESH={World.Builder.AverageBuildTime}MS BLOCK={World.Builder.AverageBlockTime}MS STRUCT= {World.Builder.AverageStructureTime}MS C/U={compressedChunks}/{uncompressedChunks} MEM={blockMemory}MB / {(blockMemory / (float)maxMemory) * 100}%";
                 text += 
-                    $"{lineBreak}QUEUES = {World.Builder.MeshQueueCount} / {World.Builder.BlockQueueCount} / {World.Builder.StructureQueueCount} Time={(int)(SkyManager.DayTime/1000)}:{((int) ( ( SkyManager.DayTime/1000f - (int)(SkyManager.DayTime/1000) ) * 60)):00} H={World.Entities.Count(M => M.IsHumanoid)} Items={World.WorldObjects.Length} M&H={World.Entities.Count}";
+                    $"{lineBreak}QUEUES = {World.Builder.MeshQueueCount} / {World.Builder.BlockQueueCount} / {World.Builder.StructureQueueCount} THREADS = {World.Builder.MeshThreads} / {World.Builder.BlockThreads} / {World.Builder.StructureThreads} Time={(int)(SkyManager.DayTime/1000)}:{((int) ( ( SkyManager.DayTime/1000f - (int)(SkyManager.DayTime/1000) ) * 60)):00} H={World.Entities.Count(M => M.IsHumanoid)} Items={World.WorldObjects.Length} M&H={World.Entities.Count}";
                 text += 
                     $"{lineBreak}Watchers={World.StructureHandler.Watchers.Length} Structs={World.StructureHandler.Structures.Length}->{World.StructureHandler.Structures.Sum(S => S.Children.Length)} Plateaus={World.WorldBuilding.Plateaux.Length} Groundworks={World.WorldBuilding.Groundworks.Length} BType={block.Type}";
                 text +=

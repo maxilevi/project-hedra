@@ -28,16 +28,16 @@ namespace Hedra.Engine.CacheSystem
     /// </summary>
     public class CacheProvider : ICacheProvider
     {
-        public Dictionary<object, List<CompressedValue<float>>> CachedExtradata { get; private set; }
-        public Dictionary<object, List<CompressedValue<Vector4>>> CachedColors { get; private set; }
+        public Dictionary<object, List<float>> CachedExtradata { get; private set; }
+        public Dictionary<object, List<Vector4>> CachedColors { get; private set; }
         private readonly Dictionary<string, CacheType> _caches = new Dictionary<string, CacheType>();
         private readonly object _colorLock = new object();
         private readonly object _extradataLock = new object();
 
         public void Load()
         {
-            CachedExtradata = new Dictionary<object, List<CompressedValue<float>>>();
-            CachedColors =  new Dictionary<object, List<CompressedValue<Vector4>>>();
+            CachedExtradata = new Dictionary<object, List<float>>();
+            CachedColors =  new Dictionary<object, List<Vector4>>();
             var foundTypes = new HashSet<CacheItem>();
             var typeList = Assembly.GetExecutingAssembly().GetLoadableTypes(this.GetType().Namespace).ToArray();
             foreach (var type in typeList)
@@ -102,10 +102,8 @@ namespace Hedra.Engine.CacheSystem
                 {
                     goto COLOR_EXISTS;
                 }
-
-                var cache = new List<CompressedValue<Vector4>>();
-                Data.Colors.Compress(cache);
-                CachedColors.Add(cHash, cache);
+                
+                CachedColors.Add(cHash, Data.Colors);
 
                 COLOR_EXISTS:
                 Data.ColorCache = cHash;
@@ -120,9 +118,7 @@ namespace Hedra.Engine.CacheSystem
                     {
                         goto EXTRADATA_EXISTS;
                     }
-                    var cache = new List<CompressedValue<float>>();
-                    Data.ExtraData.Compress(cache);
-                    CachedExtradata.Add(eHash, cache);
+                    CachedExtradata.Add(eHash, Data.ExtraData);
 
                     EXTRADATA_EXISTS:
                     Data.ExtraDataCache = eHash;

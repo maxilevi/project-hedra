@@ -125,7 +125,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private void SetColor(VertexData Model, InstanceData Element, int Index)
         {
             Model.Colors = Element.ColorCache != null && CacheManager.CachedColors.ContainsKey(Element.ColorCache)
-                ? CacheManager.CachedColors[Element.ColorCache].Decompress()
+                ? CacheManager.CachedColors[Element.ColorCache].Clone()
                 : Element.Colors;
 
             if (Element.VariateColor)
@@ -154,7 +154,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private static void SetExtraData(VertexData Model, InstanceData Element, RandomDistribution Distribution)
         {
             Model.Extradata = Element.ExtraDataCache != null &&  CacheManager.CachedExtradata.ContainsKey(Element.ExtraDataCache) 
-                ? CacheManager.CachedExtradata[Element.ExtraDataCache].Decompress() 
+                ? CacheManager.CachedExtradata[Element.ExtraDataCache].Clone()
                 : Element.ExtraData;
 
             if (!Element.HasExtraData)

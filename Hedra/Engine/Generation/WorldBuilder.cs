@@ -1,3 +1,5 @@
+using System;
+using System.Threading;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Generation.ChunkSystem.Builders;
 
@@ -8,15 +10,49 @@ namespace Hedra.Engine.Generation
         private readonly StructuresBuilder _structuresBuilder;
         private readonly BlockBuilder _blockBuilder;
         private readonly MeshBuilder _meshBuilder;
+        private readonly SharedWorkerPool _pool;
 
         public WorldBuilder()
         {
-            var pool = new SharedWorkerPool(3);
-            _meshBuilder = new MeshBuilder(pool);
-            _blockBuilder = new BlockBuilder(pool);
-            _structuresBuilder = new StructuresBuilder(pool);
+            _pool = new SharedWorkerPool(Environment.ProcessorCount * 2);
+            _meshBuilder = new MeshBuilder(_pool);
+            _blockBuilder = new BlockBuilder(_pool);
+            _structuresBuilder = new StructuresBuilder(_pool);
         }
 
+        private void HandleMaxWorkers()
+        {
+            var minMesh = Environment.ProcessorCount;
+            var workerCount = Environment.ProcessorCount * 2;
+            if (_meshBuilder.Count > 0)
+            {
+                workerCount -= minMesh;
+                _pool.SetMaxWorkers(QueueType.Meshing, minMesh);
+            }
+            else
+            {
+                _pool.SetMaxWorkers(QueueType.Meshing, 0);
+            }
+
+            if (_blockBuilder.Count == 0)
+            {
+                _pool.SetMaxWorkers(QueueType.Structures, workerCount);
+            }
+            else if(_structuresBuilder.Count == 0)
+            {
+                _pool.SetMaxWorkers(QueueType.Blocks, workerCount); 
+            }
+            else
+            {
+                _pool.SetMaxWorkers(QueueType.Blocks, Math.Max(1, workerCount / 2)); 
+                _pool.SetMaxWorkers(QueueType.Structures, Math.Max(1, workerCount / 2)); 
+            }
+        }
+
+        public int MeshThreads => _pool.GetMaxWorkers(QueueType.Meshing);
+        public int BlockThreads => _pool.GetMaxWorkers(QueueType.Blocks);
+        public int StructureThreads => _pool.GetMaxWorkers(QueueType.Structures);
+        
         public void Process(Chunk Chunk, ChunkQueueType Type)
         {
             if (Type == ChunkQueueType.Mesh)
@@ -41,6 +77,7 @@ namespace Hedra.Engine.Generation
         
         public void Update()
         {
+            HandleMaxWorkers();
             _meshBuilder.Update();
             _blockBuilder.Update();
             _structuresBuilder.Update();

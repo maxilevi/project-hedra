@@ -37,11 +37,6 @@ namespace Hedra.Engine.Rendering
         public Func<BlockType, bool> PlaceCondition { get; set; }
         public VertexData OriginalMesh { get; set; }
 
-
-        public InstanceData()
-        {
-        }
-
         public void Apply(Matrix4 Transformation)
         {
             TransMatrix *= Transformation;

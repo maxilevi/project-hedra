@@ -26,7 +26,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private int _sampleHeight;
         private int noiseValuesMapWidth;
         private int noiseValuesMapHeight;
-        private Dictionary<Vector2, Chunk> _neighbours;
 
         public ChunkTerrainMeshBuilderHelper(Chunk Parent)
         {
@@ -44,7 +43,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private void SetSampleSize(int Lod)
         {
             _sampleWidth = Lod;
-            _sampleHeight = Lod;
+            _sampleHeight = Lod;//Lod > 1 ? Lod * 2 : Lod;
             noiseValuesMapWidth = (_boundsX / _sampleWidth) + 1;
             noiseValuesMapHeight = (_boundsY / _sampleHeight);
         }
@@ -212,6 +211,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 return GetSample(Grid, x, y, z, out Type);
             }
         }
+        
+        [MethodImpl(256)]
+        private SampledBlock Get(SampledBlock[] Grid, int _x, int _y, int _z)
+        {
+            return Grid[_x * noiseValuesMapWidth * noiseValuesMapHeight + _y * noiseValuesMapWidth + _z];
+        }
 
         private float GetSample(SampledBlock[] Grid, int x, int y, int z, out BlockType Type)
         {
@@ -219,17 +224,20 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var y2 = (y / _sampleHeight);
             var z2 = (z / _sampleWidth);
 
-            SampledBlock Get(int _x, int _y, int _z)
-            {
-                return Grid[_x * noiseValuesMapWidth * noiseValuesMapHeight + _y * noiseValuesMapWidth + _z];
-            }
-            
-            Type = Get(x2, y2, z2).Type;
+            var b0 = Get(Grid, x2,y2,z2);
+            var b1 = Get(Grid, x2 + 1, y2, z2);
+            var b2 = Get(Grid, x2, y2 + 1, z2);
+            var b3 = Get(Grid, x2 + 1, y2 + 1, z2);
+            var b4 = Get(Grid, x2, y2, z2 + 1);
+            var b5 = Get(Grid, x2 + 1, y2, z2 + 1);
+            var b6 = Get(Grid, x2, y2 + 1, z2 + 1);
+            var b7 = Get(Grid, x2 + 1, y2 + 1, z2 + 1);
+            Type = b0.Type;
             return Mathf.LinearInterpolate3D(
-                Get(x2,y2,z2).Density, Get(x2 + 1,y2,z2).Density,
-                Get(x2,y2 + 1,z2).Density, Get(x2 + 1,y2 + 1,z2).Density,
-                Get(x2,y2,z2 + 1).Density, Get(x2 + 1,y2,z2 + 1).Density,
-                Get(x2,y2 + 1,z2 + 1).Density, Get(x2 + 1,y2 + 1,z2 + 1).Density,
+                b0.Density, b1.Density,
+                b2.Density, b3.Density,
+                b4.Density, b5.Density,
+                b6.Density, b7.Density,
                 (x % _sampleWidth) / (float) _sampleWidth,
                 (y % _sampleHeight) / (float) _sampleHeight,
                 (z % _sampleWidth) / (float) _sampleWidth
@@ -249,30 +257,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
             Cell.P[7] = new Vector3(Cell.P[0].X, _blockSize + Cell.P[0].Y, blockSizeLod + Cell.P[0].Z);
         }
 
-        public void BuildNeighbours()
-        {
-            _neighbours = new Dictionary<Vector2, Chunk>();
-            void Add(float X, float Y)
-            {
-                var offset = new Vector2(X,Y);
-                _neighbours.Add(offset, World.GetChunkByOffset(offset));
-            }
-            Add(_offsetX + Chunk.Width, _offsetZ);
-            Add(_offsetX, _offsetZ + Chunk.Width);
-            Add(_offsetX + Chunk.Width, _offsetZ + Chunk.Width);
-            Add(_offsetX - Chunk.Width, _offsetZ);
-            Add(_offsetX, _offsetZ - Chunk.Width);
-            Add(_offsetX - Chunk.Width, _offsetZ - Chunk.Width);
-            Add(_offsetX + Chunk.Width, _offsetZ - Chunk.Width);
-            Add(_offsetX - Chunk.Width, _offsetZ + Chunk.Width);
-        }
-        
         [MethodImpl(256)]
         private Chunk GetNeighbourChunk(ref int X, ref int Z, ref int _offsetX, ref int _offsetZ)
         {
             var offset = new Vector2(((int) (_offsetX + X * Chunk.BlockSize) >> 7) << 7, ((int) (_offsetZ + Z * Chunk.BlockSize) >> 7) << 7);
             if ((int)offset.X == this._offsetX && (int)offset.Y == this._offsetZ) return _parent;
-            _neighbours.TryGetValue(offset, out var chunk);
+            World.SearcheableChunksReference.TryGetValue(offset, out var chunk);
             return chunk;
         }
 

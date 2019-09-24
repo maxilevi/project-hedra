@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using Hedra.Engine.Core;
 using Hedra.Engine.IO;
 using Hedra.Game;
@@ -38,7 +39,6 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
             _hashQueue = new HashSet<Chunk>();
             _closest = new ChunkComparer();
             _watch = new Stopwatch();
-            _pool.Register(this);
         }
 
         public void Update()
@@ -67,10 +67,13 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
                         _hashQueue.Remove(chunk);
                         return;
                     }
-                    var result = _pool.Work(this, delegate
+                    var result = _pool.Work(this, Type, delegate
                     {
+                        var previous = Thread.CurrentThread.Priority;
+                        Thread.CurrentThread.Priority = ThreadPriority.Lowest;
                         try
                         {
+                            if(chunk?.Disposed ?? true) return;
                             this.StartProfile();
                             this.Work(chunk);
                             this.EndProfile();
@@ -84,6 +87,10 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
                                 _hashQueue.Remove(chunk);
                             }
                         }
+                        finally
+                        {
+                            Thread.CurrentThread.Priority = previous;
+                        }
                         lock (_lock)
                             _hashQueue.Remove(chunk);
                     }, SleepTime);
@@ -95,6 +102,7 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
             }
         }
 
+        protected abstract QueueType Type { get; }
         protected abstract void Work(Chunk Object);
 
         protected abstract int SleepTime { get; }
@@ -147,7 +155,7 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
 
         public void Dispose()
         {
-            _pool.Unregister(this);
+
         }
     }
 }
