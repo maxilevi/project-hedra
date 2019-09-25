@@ -290,7 +290,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var y = GetHighestY(X, Z);
             var b1 = GetBlockAt(X, y, Z);
             var b2 = GetBlockAt(X, y + 1, Z);
-            return y + b1.Density;
+            return y + Mathf.Clamp(b1.Density, -0.0f, 0.7f);
         }
 
         public Block GetHighestBlockAt(int X, int Z)
