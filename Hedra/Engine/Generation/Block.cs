@@ -28,7 +28,7 @@ namespace Hedra.Engine.Generation
             get => (float) ((((_bits >> 11) & 1) * 2 - 1) * ((_bits & 0x7FF) * 0.01f));
             set
             {
-                var val = Mathf.Clamp(value, -8f, 8f);
+                var val = value;//Mathf.Clamp(value, -8f, 8f);
                 var sign = val < 0 ? 0 : 1;
                 var significant = Math.Min((int) Math.Abs(val * 100), 2047);
 #if DEBUG

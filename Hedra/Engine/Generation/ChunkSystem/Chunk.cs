@@ -273,6 +273,11 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return this[X * BoundsZ * BoundsY + Y * BoundsZ + Z];
         }
 
+        public void SetBlockAt(int X, int Y, int Z, BlockType Type)
+        {
+            _blocks[X * BoundsZ * BoundsY + Y * BoundsZ + Z] = new Block(Type, _blocks[X * BoundsZ * BoundsY + Y * BoundsZ + Z].Density);
+        }
+        
         public int GetHighestY(int X, int Z)
         {
             lock (_heightCacheLock)
@@ -283,7 +288,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             if (Disposed || !Landscape.BlocksSetted) return 0;
             var y = GetHighestY(X, Z);
-            return y + GetBlockAt(X,y,Z).Density;
+            var b1 = GetBlockAt(X, y, Z);
+            var b2 = GetBlockAt(X, y + 1, Z);
+            return y + b1.Density;
         }
 
         public Block GetHighestBlockAt(int X, int Z)
@@ -425,6 +432,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             Landscape?.Dispose();
             _blocks = null;
         }
+        
         
         public int MemoryUsed => IsCompressed ? 0/*_rleBlocks.Length * sizeof(byte)*/ : (_blocks?.Length ?? BoundsX*BoundsZ*BoundsY) * sizeof(ushort);
 

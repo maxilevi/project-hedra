@@ -22,12 +22,12 @@ namespace HedraTests.Structure
         
         public override bool HasDirt { get; }
 
-        public override void BuildDensityMap(float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset)
+        public override void DoBuildDensityMap(float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset)
         {
             throw new NotImplementedException();
         }
 
-        public override void BuildHeightMap(float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset)
+        public override void DoBuildHeightMap(float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset)
         {
             TypeMap[0][0] = BlockType.Grass;
             HeightMap[0][0] = _returnValue();

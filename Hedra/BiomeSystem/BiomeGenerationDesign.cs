@@ -10,16 +10,30 @@ namespace Hedra.BiomeSystem
         public abstract bool HasRivers { get;}
         public abstract bool HasPaths { get; }
         public abstract bool HasDirt { get; }
+
         protected readonly FastNoiseSIMD Noise;
+        private readonly object noiseLock = new object();
 
         protected BiomeGenerationDesign()
         {
             Noise = new FastNoiseSIMD(1);
         }
 
-        public abstract void BuildDensityMap(float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset);
+        public void BuildDensityMap(float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset)
+        {
+            lock(noiseLock)
+                DoBuildDensityMap(DensityMap, TypeMap, Width, Height, HorizontalScale, VerticalScale, Offset);
+        }
 
-        public abstract void BuildHeightMap(float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset);
+        public void BuildHeightMap(float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset)
+        {
+            lock(noiseLock)
+                DoBuildHeightMap(HeightMap, TypeMap, Width, Scale, Offset);
+        }
+        
+        public abstract void DoBuildDensityMap(float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset);
+
+        public abstract void DoBuildHeightMap(float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset);
 
         public virtual void BuildRiverMap(float[][] RiverMap, int Width, float Scale, Vector2 Offset)
         {
@@ -146,12 +160,17 @@ namespace Hedra.BiomeSystem
 
         public int Seed
         {
-            set => Noise.Seed = value;
+            set
+            {
+                lock(noiseLock)
+                    Noise.Seed = value;
+            }
         }
 
         public virtual void Dispose()
         {
-            Noise.Dispose();
+            lock(noiseLock)
+                Noise.Dispose();
         }
     }
 }

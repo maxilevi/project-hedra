@@ -16,8 +16,8 @@ layout(location = 0) out vec4 outColor;
 
 const float step = 0.1;
 const float minRayStep = 0.1;
-const float maxSteps = 30;
-const int numBinarySearchSteps = 5;
+const float maxSteps = int(30.0);
+const int numBinarySearchSteps = int(5.0);
 const float reflectionSpecularFalloffExponent = 3.0;
 
 float Metallic;
@@ -43,7 +43,7 @@ void main()
     if(normalSample.w < 0.01) discard;
     Metallic = 1.0;
     
-    vec4 positionSample = textureLod(gPosition, TexCoords, 2);
+    vec4 positionSample = textureLod(gPosition, TexCoords, int(2.0));
     
     vec3 viewNormal = vec3(normalSample);
     vec3 viewPos = positionSample.xyz;
@@ -76,7 +76,7 @@ void main()
 
     // Get color
     vec2 invCoords = vec2(coords.x, 1.0 - coords.y);
-    vec3 SSR = textureLod(gFinalImage, invCoords, 0).rgb * clamp(ReflectionMultiplier, 0.0, 0.9);
+    vec3 SSR = textureLod(gFinalImage, invCoords, int(0.0)).rgb * clamp(ReflectionMultiplier, 0.0, 0.9);
 
     float realFresnel = clamp(dot(normalize(viewNormal), normalize(viewPos)) + 0.5, 0.0, 1.0);
     vec4 waterColor = textureLod(gColor, TexCoords, 0);
@@ -108,7 +108,7 @@ vec3 BinarySearch(inout vec3 dir, inout vec3 hitCoord, inout float dDepth)
         projectedCoord.xy /= projectedCoord.w;
         projectedCoord.xy = projectedCoord.xy * 0.5 + 0.5;
 
-        depth = textureLod(gPosition, projectedCoord.xy, 2).z;
+        depth = textureLod(gPosition, projectedCoord.xy, int(2.0)).z;
 
 
         dDepth = hitCoord.z - depth;
@@ -146,7 +146,7 @@ vec4 RayMarch(vec3 dir, inout vec3 hitCoord, out float dDepth)
         projectedCoord.xy /= projectedCoord.w;
         projectedCoord.xy = projectedCoord.xy * 0.5 + 0.5;
 
-        depth = textureLod(gPosition, projectedCoord.xy, 2).z;
+        depth = textureLod(gPosition, projectedCoord.xy, int(2.0)).z;
         if(depth > 1000.0)
         continue;
 

@@ -14,7 +14,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
         public override bool HasPaths => true;
         public override bool HasDirt => true;
         
-        public override void BuildDensityMap(float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset)
+        public override void DoBuildDensityMap(float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset)
         {
             var offset = Offset;
             var size = new Vector3(Width, Height, Width);
@@ -53,7 +53,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             AddSet(DensityMap, smallSet, F => F * -1.0f);
         }
 
-        public override void BuildHeightMap(float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset)
+        public override void DoBuildHeightMap(float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset)
         {
             var baseSet = Noise.GetPerlinSetWithFrequency(Offset, new Vector2(Width, Width), new Vector2(Scale, Scale), 0.000025f);
             AddSet(HeightMap, baseSet, F => (F + 0.25f).Clamp01() * 32.0f);
@@ -61,16 +61,13 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             var bigMountain = Noise.GetPerlinSetWithFrequency(Offset, new Vector2(Width, Width), new Vector2(Scale, Scale), 0.0005f);
             AddSet(HeightMap, bigMountain, F => F.Clamp01() * 128.0f);
             
-            var smallMountainsSet = Noise.GetPerlinSetWithFrequency(Offset, new Vector2(Width, Width), new Vector2(Scale, Scale), 0.002f);
-            //AddSet(HeightMap, smallMountainsSet, F => F * 8.0f);
-            
             var lakeSet = Noise.GetPerlinSetWithFrequency(Offset, new Vector2(Width, Width), new Vector2(Scale, Scale), 0.00055f);
             AddSet(HeightMap, lakeSet, F => (F-0.2f).Clamp01() * -80.0f);
             
             AddConstant(HeightMap, BiomePool.SeaLevel);
         }
 
-        public void BuildRiverMap(float[][] Map, Vector2 Offset, int Width, float Scale, float Narrow, float Border, float RiverScale)
+        public void DoBuildRiverMap(float[][] Map, Vector2 Offset, int Width, float Scale, float Narrow, float Border, float RiverScale)
         {
             var set = Noise.GetSimplexSetWithFrequency(Offset, new Vector2(Width, Width), new Vector2(Scale, Scale), 0.001f);
             set = TransformSet(set, F => (float) Math.Max(0, 0.5 - Math.Abs(F - 0.2) - Narrow + Border) * Scale);

@@ -6,11 +6,11 @@ namespace Hedra.Engine.BiomeSystem
 {
     public abstract class LegacyBiomeGenerator : BiomeGenerationDesign
     {
-        public override void BuildDensityMap(float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset)
+        public override void DoBuildDensityMap(float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset)
         {
         }
 
-        public override void BuildHeightMap(float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset)
+        public override void DoBuildHeightMap(float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset)
         {
             for (var x = 0; x < Width; x++)
             {

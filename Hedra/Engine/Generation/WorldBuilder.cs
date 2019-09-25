@@ -33,8 +33,14 @@ namespace Hedra.Engine.Generation
             {
                 _pool.SetMaxWorkers(QueueType.Meshing, 0);
             }
-
-            if (_blockBuilder.Count == 0)
+            
+            if (_blockBuilder.Count == 0 && _structuresBuilder.Count == 0)
+            {
+                _pool.SetMaxWorkers(QueueType.Meshing, minMesh * 2);
+                _pool.SetMaxWorkers(QueueType.Blocks, 0);
+                _pool.SetMaxWorkers(QueueType.Structures, 0);
+            } 
+            else if (_blockBuilder.Count == 0)
             {
                 _pool.SetMaxWorkers(QueueType.Structures, workerCount);
             }

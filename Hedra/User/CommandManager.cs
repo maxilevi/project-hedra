@@ -20,6 +20,7 @@ using Hedra.Core;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
+using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
@@ -495,6 +496,20 @@ namespace Hedra.User
                     World.StructureHandler.Discard();
                 }
 
+                if (Parts[0] == "place")
+                {
+                    if (Parts[1] == "water")
+                    {
+                        var chunk = World.GetChunkAt(Caster.Position);
+                        var blockspace = World.ToBlockSpace(Caster.Position);
+                        chunk?.SetBlockAt((int) blockspace.X, (int) blockspace.Y, (int) blockspace.Z,
+                            BlockType.Water);
+                    }
+                }
+                if (Parts[0] == "regenerate")
+                {
+                    World.RemoveChunk(World.GetChunkAt(Caster.Position));
+                }
                 if (Parts[0] == "printch")
                 {
                     World.GetChunkAt(Caster.Position).Test();
