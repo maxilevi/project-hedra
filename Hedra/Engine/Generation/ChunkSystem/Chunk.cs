@@ -53,6 +53,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private bool IsBuilding { get; set; }
         private bool IsGenerating { get; set; }
         public Vector3 Position { get; private set; }
+        public ChunkAutomatons Automatons { get; }
         private Timer _activityTimer;
 
         //private byte[] _rleBlocks;
@@ -84,6 +85,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _regionCache = new RegionCache(Position, Position + new Vector3(Chunk.Width, 0, Chunk.Width));
             Biome = World.BiomePool.GetPredominantBiome(this);
             Landscape = World.BiomePool.GetGenerator(this);
+            Automatons = new ChunkAutomatons(this);
         }
 
         public void GenerateBlocks()
@@ -92,7 +94,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
             lock (_blocksLock)
             {
                 IsGenerating = true;
-                Landscape.GenerateBlocks(_blocks);
+                var details = Landscape.GenerateBlocks(_blocks);
+                HasWater = details.HasWater;
                 FillHeightCache(_blocks);
                 IsGenerating = false;
             }
@@ -216,7 +219,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
             this.BuildedWithStructures = true;
             this.NeedsRebuilding = false;
             this.IsBuilding = false;
-            this.HasWater = Input.HasWater;
         }
 
         private void UploadMesh(ChunkMeshBuildOutput Input)
@@ -290,7 +292,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var y = GetHighestY(X, Z);
             var b1 = GetBlockAt(X, y, Z);
             var b2 = GetBlockAt(X, y + 1, Z);
-            return y + Mathf.Clamp(b1.Density, -0.0f, 0.7f);
+            return y + Mathf.Clamp(b1.Density, -0.0f, 0.65f);
         }
 
         public Block GetHighestBlockAt(int X, int Z)

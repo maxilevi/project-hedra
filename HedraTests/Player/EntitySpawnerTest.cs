@@ -82,6 +82,12 @@ namespace HedraTests.Player
             World.Provider = worldMock.Object;
             _currentHeight = 1;
         }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _spawner.Dispose();
+        }
         
         //TODO: Test EntitySpawner::SelectTemplate()
 

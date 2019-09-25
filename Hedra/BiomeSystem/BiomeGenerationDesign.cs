@@ -31,13 +31,16 @@ namespace Hedra.BiomeSystem
                 DoBuildHeightMap(HeightMap, TypeMap, Width, Scale, Offset);
         }
         
-        public abstract void DoBuildDensityMap(float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset);
+        protected abstract void DoBuildDensityMap(float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset);
 
-        public abstract void DoBuildHeightMap(float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset);
+        protected abstract void DoBuildHeightMap(float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset);
 
-        public virtual void BuildRiverMap(float[][] RiverMap, int Width, float Scale, Vector2 Offset)
+        protected abstract void DoBuildRiverMap(float[][] RiverMap, int Width, float Scale, Vector2 Offset);
+        
+        public void BuildRiverMap(float[][] RiverMap, int Width, float Scale, Vector2 Offset)
         {
-            
+            lock (noiseLock)
+                DoBuildRiverMap(RiverMap, Width, Scale, Offset);
         }
         
         public void AddFunction(float[][][] Map1, Func<int, int, int, float> Function)

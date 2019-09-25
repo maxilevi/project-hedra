@@ -84,9 +84,8 @@ void main()
 	    }
 	    else
 	    {
-            // Ignore the gl_FragCoord.z since it causes issues with the water
             mat3 NormalMat = mat3(transpose(inverse(_modelViewMatrix)));
-            OutPosition = vec4((_modelViewMatrix * vec4(InPos, 1.0)).xyz * pass_alpha, 1.0);
+            OutPosition = vec4((_modelViewMatrix * vec4(InPos, 1.0)).xyz, gl_FragCoord.z) * pass_alpha;
             OutNormal = vec4(NormalMat * InNorm.xyz, 0.0) * pass_alpha;
 		}
 	}

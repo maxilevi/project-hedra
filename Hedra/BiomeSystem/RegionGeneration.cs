@@ -51,6 +51,13 @@ namespace Hedra.BiomeSystem
             _design.BuildHeightMap(HeightMap, TypeMap, Width, Scale, Offset);
         }
 
+        public void BuildRiverMap(int Width, float Scale, Vector2 Offset, out float[][] RiverMap)
+        {
+            _design.Seed = World.Seed;
+            RiverMap = CreateMap<float>(Width);
+            _design.BuildRiverMap(RiverMap, Width, Scale, Offset);
+        }
+
         private T[][][] CreateMap<T>(int Width, int Height)
         {
             var arr = new T[Width][][];

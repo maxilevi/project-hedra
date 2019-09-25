@@ -15,11 +15,11 @@ namespace Hedra.Engine.Player
     public class BackgroundUpdater
     {
         private static Thread _updateThread;
-        private static bool _isWaiting;
         private static Stopwatch _watch;
         private static object _updateLock;
         private static List<IUpdatable> _updateList;
         private static TickSystem _tickSystem;
+        private static AutoResetEvent _resetEvent;
         
         public static void Load()
         {
@@ -28,13 +28,14 @@ namespace Hedra.Engine.Player
             _watch = new Stopwatch();
             _updateList = new List<IUpdatable>();
             _updateLock = new object();
+            _resetEvent = new AutoResetEvent(false);
         }
         
         public static void Dispatch()
         {
             if(_updateThread.ThreadState == ThreadState.Unstarted)
                 _updateThread.Start();
-            _isWaiting = false;
+            _resetEvent.Set();
         }
 
         private static void Update()
@@ -46,7 +47,7 @@ namespace Hedra.Engine.Player
             var frames = 0;
             while (Program.GameWindow.Exists)
             {
-                if(_isWaiting) Thread.Sleep(1);
+                _resetEvent.WaitOne();
                 var totalSeconds = _watch.Elapsed.TotalSeconds;
                 var delta = Math.Min(1.0, totalSeconds - lastTick);
                 lastTick = totalSeconds;
@@ -61,7 +62,6 @@ namespace Hedra.Engine.Player
                 }
                 Time.Set(delta);
                 Time.IncrementFrame(delta);
-                _isWaiting = true;
             }
         }
 

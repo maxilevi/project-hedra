@@ -514,6 +514,13 @@ namespace Hedra.User
                 {
                     World.GetChunkAt(Caster.Position).Test();
                 }
+
+                if (Parts[0] == "automata")
+                {
+                    var chunk = World.GetChunkAt(Caster.Position);
+                    chunk.Automatons.Update();
+                    World.AddChunkToQueue(chunk, ChunkQueueType.Mesh);
+                }
                 if (Parts[0] == "rebuild")
                 {
                     lock (World.Chunks)

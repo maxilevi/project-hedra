@@ -37,24 +37,34 @@ namespace Hedra.Engine.EntitySystem
         public int MaxSpawn { get; set; }= 3;
         private readonly IPlayer _player;
         private readonly Random _rng;
+        private readonly AutoResetEvent _waitHandle;
         public bool Enabled { get; set; }
         
         public EntitySpawner(IPlayer Player)
         {
             this._player = Player;
             _rng = new Random();
-            var spawnThread = new Thread(delegate()
+            _waitHandle = new AutoResetEvent(false);
+            var spawnThread = new Thread(Loop)
             {
-                while (GameManager.Exists)
-                {
-                    this.Update();
-                    Thread.Sleep(15);
-                }
-            }){
                 IsBackground = true,
                 Priority = ThreadPriority.Lowest
             };
             spawnThread.Start();
+        }
+
+        private void Loop()
+        {
+            while (GameManager.Exists)
+            {
+                _waitHandle.WaitOne();
+                this.Update();
+            }
+        }
+
+        public void Dispatch()
+        {
+            _waitHandle.Set();
         }
         
         public virtual void Update()
@@ -231,6 +241,11 @@ namespace Hedra.Engine.EntitySystem
                     0,
                     Utils.Rng.NextFloat() * GameSettings.ChunkLoaderRadius * Chunk.Width - GameSettings.ChunkLoaderRadius * Chunk.Width * .5f)
                 + _player.Position.Xz.ToVector3();
+        }
+
+        public void Dispose()
+        {
+            _waitHandle.Dispose();
         }
     }
 

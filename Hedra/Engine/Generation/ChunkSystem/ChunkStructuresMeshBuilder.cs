@@ -73,7 +73,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 }
             }
 
-            return new ChunkMeshBuildOutput(Input.StaticData, Input.WaterData, Input.InstanceData, Input.Failed, Input.HasWater);
+            return new ChunkMeshBuildOutput(Input.StaticData, Input.WaterData, Input.InstanceData, Input.Failed);
         }
 
         private void ProcessInstanceData(InstanceData Instance, VertexData Model, int Index, int Lod, RandomDistribution Distribution, float SimplificationThreshold = -1)

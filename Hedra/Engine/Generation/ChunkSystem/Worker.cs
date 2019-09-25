@@ -9,6 +9,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
     public class Worker
     {
         private Thread _workerThread;
+        private readonly AutoResetEvent _resetEvent;
         private object _owner;
         private Action _action;
 
@@ -20,14 +21,14 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Priority = ThreadPriority.Lowest
             };
             _workerThread.Start();
+            _resetEvent = new AutoResetEvent(false);
         }
 
         public void Update()
         {
             while (GameManager.Exists && !GameSettings.TestingMode)
             {
-                Thread.Sleep(SleepTime);
-                if (!IsWorking) continue;
+                _resetEvent.WaitOne();
                 try
                 {
                     _action.Invoke();
@@ -45,9 +46,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             _action = Job;
             _owner = Owner;
+            _resetEvent.Set();
         }
 
-        public int SleepTime { get; set; } = 5;
         public bool IsWorking => _action != null;
         public object Owner => _owner;
     }

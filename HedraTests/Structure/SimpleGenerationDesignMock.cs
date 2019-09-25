@@ -7,7 +7,7 @@ using OpenTK;
 
 namespace HedraTests.Structure
 {
-    public class SimpleGenerationDesignMock : BiomeGenerationDesign
+    public class SimpleGenerationDesignMock : BaseBiomeGenerationDesign
     {
         private readonly Func<float> _returnValue;
         
@@ -22,12 +22,12 @@ namespace HedraTests.Structure
         
         public override bool HasDirt { get; }
 
-        public override void DoBuildDensityMap(float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset)
+        protected override void DoBuildDensityMap(float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset)
         {
             throw new NotImplementedException();
         }
 
-        public override void DoBuildHeightMap(float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset)
+        protected override void DoBuildHeightMap(float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset)
         {
             TypeMap[0][0] = BlockType.Grass;
             HeightMap[0][0] = _returnValue();

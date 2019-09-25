@@ -11,6 +11,6 @@ uniform vec4 color_multiplier;
 void main()
 {
 	out_color = texture(map, pass_uv) * color_multiplier;
-    out_position = vec4(0.0, 0.0, 0.0, gl_FragCoord.z);
+    out_position = vec4(0.0, 0.0, 0.0, -1.0);
 	out_normal = vec4(0.0, 0.0, 0.0, 0.0);
 } 

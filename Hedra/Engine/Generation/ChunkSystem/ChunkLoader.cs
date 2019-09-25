@@ -36,13 +36,13 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private readonly List<ChunkWatcher> _chunkWatchers;
         private readonly List<Vector3> _candidates;
         private readonly ClosestComparer _closest;
+        private readonly AutoResetEvent _resetEvent;
         private readonly Thread _mainThread;
         private readonly IPlayer _player;
         private float _targetMin = 1;
         private float _targetMax = 1;
         private float _activeChunks;
         private float _targetActivechunks;
-        private bool _shouldUpdate;
 
         public ChunkLoader(IPlayer Player)
         {
@@ -52,6 +52,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _chunkWatchers = new List<ChunkWatcher>();
             _candidates = new List<Vector3>();
             _closest = new ClosestComparer();
+            _resetEvent = new AutoResetEvent(false);
             _mainThread.Start();
             RoutineManager.StartRoutine(this.CreateChunksCoroutine);
             RoutineManager.StartRoutine(this.UpdateChunkCoroutine);
@@ -91,7 +92,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private void Dispatch()
         {
-            _shouldUpdate = true;
+            _resetEvent.Set();
         }
 
         private void UpdateLoop()
@@ -99,7 +100,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             Time.RegisterThread();
             while (GameManager.Exists)
             {
-                if(!_shouldUpdate) Thread.Sleep(1);
+                _resetEvent.WaitOne();
                 try
                 {
                     var watchers = Watchers;
@@ -116,7 +117,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 {
                     Log.WriteLine($"Failed to update chunk watchers{Environment.NewLine}{e}");
                 }
-                _shouldUpdate = false;
             }
         }
 

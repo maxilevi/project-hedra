@@ -24,7 +24,7 @@ namespace Hedra.Engine.BiomeSystem
     {
         protected int OffsetX { get; }
         protected int OffsetZ { get; }
-        protected Chunk Chunk { get; }
+        protected Chunk Parent { get; }
         protected int Seed { get; }
         public Random RandomGen { get; set; }
         public bool BlocksSetted { get; protected set; }
@@ -33,12 +33,12 @@ namespace Hedra.Engine.BiomeSystem
         public bool FullyGenerated => StructuresPlaced && BlocksDefined;
         protected readonly FastNoiseSIMD Noise;
 
-        protected BiomeGenerator(Chunk RefChunk)
+        protected BiomeGenerator(Chunk RefParent)
         {
-            this.RandomGen = BiomeGenerator.GenerateRng(new Vector2(RefChunk.OffsetX, RefChunk.OffsetZ));
-            this.OffsetX = RefChunk.OffsetX;
-            this.OffsetZ = RefChunk.OffsetZ;
-            this.Chunk = RefChunk;
+            this.RandomGen = BiomeGenerator.GenerateRng(new Vector2(RefParent.OffsetX, RefParent.OffsetZ));
+            this.OffsetX = RefParent.OffsetX;
+            this.OffsetZ = RefParent.OffsetZ;
+            this.Parent = RefParent;
             this.Seed = World.Seed;
             this.Noise = new FastNoiseSIMD(Seed);
         }
@@ -47,15 +47,16 @@ namespace Hedra.Engine.BiomeSystem
 
         protected abstract void DoTreeAndStructurePlacements(RegionCache Cache);
         
-        protected abstract void DefineBlocks(Block[] Blocks);
+        protected abstract ChunkDetails DefineBlocks(Block[] Blocks);
         
-        public void GenerateBlocks(Block[] Blocks)
+        public ChunkDetails GenerateBlocks(Block[] Blocks)
         {
             if (BlocksDefined) throw new ArgumentException($"Cannot generate a chunk multiple times");
             CheckForNearbyStructures();
             BlocksSetted = true;
-            DefineBlocks(Blocks);
+            var details = DefineBlocks(Blocks);
             BlocksDefined = true;
+            return details;
         }
 
         public void GenerateEnvironment(RegionCache Cache)

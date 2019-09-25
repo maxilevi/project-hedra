@@ -93,7 +93,7 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
                         }
                         lock (_lock)
                             _hashQueue.Remove(chunk);
-                    }, SleepTime);
+                    });
                     if (result)
                     {
                         _queue.Remove(chunk);
@@ -104,8 +104,6 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
 
         protected abstract QueueType Type { get; }
         protected abstract void Work(Chunk Object);
-
-        protected abstract int SleepTime { get; }
 
         public int AverageWorkTime => (int) (_accumTime / (float) Math.Max(_workItems, 1));
 

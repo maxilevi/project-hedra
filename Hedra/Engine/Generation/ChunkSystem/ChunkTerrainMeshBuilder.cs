@@ -25,11 +25,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
             {8, 0.075f}
         };
         public ChunkSparsity Sparsity { get; set; }
-        public ChunkTerrainMeshBuilderHelper Helper { get; }
 
         public ChunkTerrainMeshBuilder(Chunk Parent)
         {
-            Helper = new ChunkTerrainMeshBuilderHelper(Parent);
             _parent = Parent;
         }
 
@@ -63,34 +61,30 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public VertexData CreateTerrainCollisionMesh(RegionCache Cache)
         {
-            return CreateTerrain(1, Cache, false, false, CollisionMeshLod, 1).StaticData;
+            return CreateTerrain(1, Cache, false, false, CollisionMeshLod, CollisionMeshLod).StaticData;
         }
         
         private ChunkMeshBuildOutput CreateTerrain(int Lod, RegionCache Cache, bool ProcessWater, bool ProcessColors, int HorizontalIncrement = 1, int VerticalIncrement = 1)
         {
             var failed = false;
-            var hasWater = false;
             var blockData = new VertexData();
             var waterData = new VertexData();
-            var densityGrid = Helper.BuildDensityGrid(Lod);
+            var helper = new ChunkTerrainMeshBuilderHelper(_parent, Lod);
 
-            IterateAndBuild(densityGrid, ref failed, ref hasWater, ProcessWater, ProcessColors, Cache, blockData, waterData, HorizontalIncrement, VerticalIncrement);
+            IterateAndBuild(helper, ref failed, ProcessWater, ProcessColors, Cache, blockData, waterData, HorizontalIncrement, VerticalIncrement);
 
-            return new ChunkMeshBuildOutput(blockData, waterData, new VertexData(), failed, hasWater);
+            return new ChunkMeshBuildOutput(blockData, waterData, new VertexData(), failed);
         }
 
-        private void IterateAndBuild(SampledBlock[] densityGrid, ref bool failed,
-            ref bool hasWater, bool ProcessWater, bool ProcessColors, RegionCache Cache, VertexData blockData, VertexData waterData, int HorizontalIncrement, int VerticalIncrement)
+        private void IterateAndBuild(ChunkTerrainMeshBuilderHelper Helper, ref bool failed, bool ProcessWater, bool ProcessColors, RegionCache Cache, VertexData blockData, VertexData waterData, int HorizontalIncrement, int VerticalIncrement)
         {
 
-            Loop(densityGrid, HorizontalIncrement, VerticalIncrement, ProcessColors, false, ref blockData, ref failed, ref Cache);
-            if(ProcessWater)
-                Loop(densityGrid, 2, 2, ProcessColors, true, ref waterData, ref failed, ref Cache);
-            
-            hasWater = waterData.Vertices.Count > 0;
+            Loop(Helper, HorizontalIncrement, VerticalIncrement, ProcessColors, false, ref blockData, ref failed, ref Cache);
+            if(ProcessWater && _parent.HasWater)
+                Loop(Helper, 1, 1, ProcessColors, true, ref waterData, ref failed, ref Cache);
         }
 
-        private void Loop(SampledBlock[] densityGrid, int HorizontalSkip, int VerticalSkip, bool ProcessColors, bool isWater, ref VertexData blockData, ref bool failed, ref RegionCache Cache)
+        private void Loop(ChunkTerrainMeshBuilderHelper Helper, int HorizontalSkip, int VerticalSkip, bool ProcessColors, bool isWater, ref VertexData blockData, ref bool failed, ref RegionCache Cache)
         {
             var vertexBuffer = MarchingCubes.NewVertexBuffer();
             var triangleBuffer = MarchingCubes.NewTriangleBuffer();
@@ -113,7 +107,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                         if (y < Sparsity.MinimumHeight || y > Sparsity.MaximumHeight) continue;
                         if (y == BoundsY - 1 || y == 0) continue;
                         
-                        Helper.CreateCell(densityGrid, ref cell, ref x, ref y, ref z, isWater, HorizontalSkip, out var success);
+                        Helper.CreateCell(ref cell, ref x, ref y, ref z, isWater, HorizontalSkip, VerticalSkip, out var success);
                         if (!MarchingCubes.Usable(0f, cell)) continue;
                         if (!success && y < BoundsY - 2) failed = true;
 
@@ -126,7 +120,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                         }
                         else
                         {
-                            color = GetCellColor(densityGrid, ref cell, ref ProcessColors, ref Cache, false);
+                            color = GetCellColor(Helper, ref cell, ref ProcessColors, ref Cache, false);
                         }
 
                         PolygoniseCell(ref cell, ref next, ref blockData, ref vertexBuffer, ref triangleBuffer, color, false);
@@ -141,7 +135,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             MarchingCubes.Build(ref BlockData, ref Color, ref TriangleBuffer, ref triangleCount, ref Next);
         }
 
-        private Vector4 GetCellColor(SampledBlock[] Grid, ref GridCell Cell, ref bool ProcessColors, ref RegionCache Cache, bool isWaterCell)
+        private Vector4 GetCellColor(ChunkTerrainMeshBuilderHelper Helper, ref GridCell Cell, ref bool ProcessColors, ref RegionCache Cache, bool isWaterCell)
         {
             var color = Vector4.Zero;
             if (ProcessColors)
@@ -149,7 +143,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 var regionPosition = new Vector3(Cell.P[0].X + OffsetX, 0, Cell.P[0].Z + OffsetZ);
                 var region = Cache.GetAverageRegionColor(regionPosition);
                 color = !isWaterCell 
-                    ? Helper.GetColor(Grid, ref Cell, region) 
+                    ? Helper.GetColor(ref Cell, region) 
                     : Cache.GetAverageRegionColor(Cell.P[0]).WaterColor;
             }
 

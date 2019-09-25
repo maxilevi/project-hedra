@@ -34,12 +34,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return count;
         }
 
-        public bool Work(ICountable User, QueueType Type, Action Do, int SleepTime)
+        public bool Work(ICountable User, QueueType Type, Action Do)
         {
             var maxWorkers = _maxWorkers[Type];
             var currentWorkers = this.GetCurrentWorkers(User);
             if (currentWorkers >= maxWorkers) return false;
-            return base.Work(Do, User, SleepTime);       
+            return base.Work(Do, User);       
         }
     }
 }

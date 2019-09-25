@@ -656,7 +656,7 @@ namespace Hedra.Engine.Generation
             WaterPosition = Vector3.Zero;
             var nearest = float.MaxValue;
             if (!Chunk.HasWater) return nearest;
-            
+            /*
             for (var x = 0; x < Chunk.BoundsX; ++x)
             {
                 for (var y = Chunk.MinimumHeight; y < Chunk.MaximumHeight; ++y)
@@ -671,7 +671,7 @@ namespace Hedra.Engine.Generation
                         }
                     }
                 }  
-            }
+            }*/
             return nearest;
         }
         

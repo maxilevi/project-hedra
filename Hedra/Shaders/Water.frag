@@ -41,6 +41,7 @@ float toLinearDepth(float zDepth) {
 
 float calculateWaterDepth(vec2 texCoords){
 	float depth = texture(depthMap, texCoords).a;
+	if(depth < 0.0) return 10.0; /* The sky gives negativ depths */
 	float floorDistance = toLinearDepth(depth);
 	depth = gl_FragCoord.z;
 	float waterDistance = toLinearDepth(depth);
@@ -66,7 +67,7 @@ void main()
 	
 	vec2 projectiveCoords = clipSpaceToTexCoords(pass_clipSpace);
 	
-	if(toLinearDepth(texture(depthMap, projectiveCoords).a) < toLinearDepth(gl_FragCoord.z)) discard;
+	//if(toLinearDepth(texture(depthMap, projectiveCoords).a) >= toLinearDepth(gl_FragCoord.z)) discard;
 	
 	vec2 distortedTexCoords = texture(dudvMap, vec2(textureCoords.x + WaveMovement * speed, textureCoords.y)).rg * 0.1;
 	distortedTexCoords = textureCoords + vec2(distortedTexCoords.x, distortedTexCoords.y + WaveMovement * speed);
@@ -91,4 +92,5 @@ void main()
 	vec3 out_normal = mat3(transpose(inverse(_modelViewMatrix))) * normal;
 	/* 1.0 means SSR affects this fragment and SSAO doesn't */
 	OutNormal = vec4(out_normal, 1.0) * useSSR;
+	//OutColor = mix(OutColor, vec4(1.0), pass_visibility);
 }
