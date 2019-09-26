@@ -178,7 +178,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 if (isWaterCell)
                 {
                     Cell.Type[i] = GetNeighbourBlock(posX, posY, posZ).Type;
-                    Cell.Density[i] = Cell.Type[i] == BlockType.Water ? 1 : 0;
+                    Cell.Density[i] = Cell.Type[i] == BlockType.Water ? 1 : -1;
                 }
                 else
                 {

@@ -28,6 +28,11 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 changed |= WaterNeighbourCheck(Types, X, Y, Z+1);
                 changed |= WaterNeighbourCheck(Types, X-1, Y, Z);
                 changed |= WaterNeighbourCheck(Types, X, Y, Z-1);
+                
+                changed |= WaterNeighbourCheck(Types, X+1, Y, Z+1);
+                changed |= WaterNeighbourCheck(Types, X-1, Y, Z+1);
+                changed |= WaterNeighbourCheck(Types, X+1, Y, Z-1);
+                changed |= WaterNeighbourCheck(Types, X-1, Y, Z-1);
             }
             return changed;
         }
