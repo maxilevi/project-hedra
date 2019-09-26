@@ -104,7 +104,7 @@ namespace Hedra.Engine.Loader
                 var blockMemory = World.Chunks.Sum(C => C.MemoryUsed) / 1024 / 1024; 
                 var compressedChunks = World.Chunks.Sum(C => C.IsCompressed ? 1 : 0);
                 var uncompressedChunks = World.Chunks.Count - compressedChunks;
-                var block = World.GetBlockAt(player.Position * new Vector3(1, 1f/Chunk.BlockSize, 1));
+                var block = World.GetBlockAt(player.Position);
                 var lineBreak = $"{Environment.NewLine}{Environment.NewLine}";
                 var text = $"X = {(int)player.Position.X} Y = {(int)(player.Position.Y)} Z={(int)player.Position.Z} Routines={RoutineManager.Count} Watchers={player.Loader.WatcherCount} Grounded={player.IsGrounded}";
                 text += 

@@ -171,7 +171,6 @@ namespace Hedra.Engine.Player
         
 
             if (!_player.IsUnderwater) return;
-            this.ClampSwimming(_player);
             if (GameManager.Keyboard[Controls.Jump]) this.MoveInWater(true);
             if (GameManager.Keyboard[Controls.Descend]) this.MoveInWater(false);
         }

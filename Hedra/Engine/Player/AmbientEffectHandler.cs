@@ -39,7 +39,7 @@ namespace Hedra.Engine.Player
 
         private void HandleSwimmingEffects()
         {
-            var underBlock0 = World.GetBlockAt(_player.View.CameraEyePosition * new Vector3(1, 1f / Chunk.BlockSize, 1));
+            var underBlock0 = World.GetBlockAt(_player.View.CameraEyePosition);
 
             if(underBlock0.Type == BlockType.Water || underBlock0.Type == BlockType.Seafloor)
             {

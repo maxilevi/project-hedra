@@ -358,10 +358,11 @@ namespace Hedra.Engine.EntitySystem
         private void UpdateEnvironment()
         {
             var underChunk = World.GetChunkAt(Position);
-            var waterHeight = PhysicsSystem.Physics.WaterHeight(Position);
-            if (Position.Y + Model.Height < waterHeight /* && PhysicsSystem.Physics.WaterLevelAtPosition(Position) > Model.Height*/)
+            var currentBlock = World.GetBlockAt(Position + Vector3.UnitY * Model.Height);
+            var downBlock = World.GetBlockAt(Position + Vector3.UnitY * Model.Height * .6f);
+            if (currentBlock.Type == BlockType.Water)
             {
-                if (!Splashed && Math.Abs(waterHeight - Position.Y - Model.Height) > 4)
+                if (!Splashed && _splashTimer.Tick())
                 {
                     SplashEffect(underChunk);
                     _splashTimer.Reset();
@@ -369,13 +370,12 @@ namespace Hedra.Engine.EntitySystem
                 }
                 IsUnderwater = true;
             }
-            else if(Position.Y + Model.Height > waterHeight + Chunk.BlockSize)
+            else if(downBlock.Type != BlockType.Water)
             {
                 IsUnderwater = false;
                 Splashed = false;
             }
-            this._splashTimer.Tick();
-            this.HandleOxygen(waterHeight);
+            this.HandleOxygen(currentBlock.Type);
         }
 
         public bool IsUnderwater
@@ -401,11 +401,11 @@ namespace Hedra.Engine.EntitySystem
             
         }
         
-        private void HandleOxygen(float WaterHeight)
+        private void HandleOxygen(BlockType Type)
         {
             // If the character is not moving and it's on the surface, then we shouldnt reduce the oxygen levels.
-            if (IsUnderwater && (this.Position.Y + Model.Height + 1 < WaterHeight || IsMoving)) Oxygen -= Time.DeltaTime * 2f;
-            else Oxygen += Time.DeltaTime * 4f;
+            if (Type == BlockType.Water) Oxygen -= Time.DeltaTime * 2f;
+            else if(Type == BlockType.Air) Oxygen += Time.DeltaTime * 4f;
 
             if (!(Oxygen <= 0) || !(Time.DeltaTime > 0)) return;
             Damage(Time.DeltaTime * 5f, null, out _, _drowningSoundTimer == 128);

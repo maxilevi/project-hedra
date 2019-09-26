@@ -435,6 +435,7 @@ namespace Hedra.Engine.Rendering
 
         public static void Build(ref VertexData Data, ref Vector4 TemplateColor, ref Triangle[] TriangleBuffer, ref int TriangleCount, ref bool Orientation)
         {
+            /*
             if (TriangleCount == 2)
             {
                 if (Orientation && 
@@ -453,7 +454,7 @@ namespace Hedra.Engine.Rendering
                     TriangleBuffer[1].Vertices[2] = vertex2;
 
                 }
-            }
+            }*/
             
             for (uint i = 0; i < TriangleCount; i++)
             {

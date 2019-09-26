@@ -266,7 +266,7 @@ namespace Hedra.Engine.Rendering
             WaterShader["Smoothness"] = WaterSmoothness;
             WaterShader["useSSR"] = GameSettings.UseSSR ? 1f : 0f;
 
-            if (ShowWaterBackfaces) Renderer.Disable(EnableCap.CullFace);
+            //if (ShowWaterBackfaces) Renderer.Disable(EnableCap.CullFace);
         }
         
         private static void WaterUnBind()

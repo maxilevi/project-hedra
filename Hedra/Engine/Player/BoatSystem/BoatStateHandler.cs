@@ -1,5 +1,6 @@
 using System;
 using Hedra.Core;
+using Hedra.Engine.Generation;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
@@ -42,31 +43,28 @@ namespace Hedra.Engine.Player.BoatSystem
         {
             if (Enabled)
             {
-                var waterHeight = Physics.WaterHeight(_humanoid.Position);
-                var boatY = _humanoid.Position.Y;
-                OnWaterSurface = Math.Abs(boatY - waterHeight) < 0.25f;
-                InWater = OnWaterSurface || boatY < waterHeight;
+                var block = World.GetBlockAt(_humanoid.Position + _humanoid.Model.Height * Vector3.UnitY * .25f);
+                var surfaceBlock = World.GetBlockAt(_humanoid.Position);
+                OnWaterSurface = surfaceBlock.Type == BlockType.Water && block.Type == BlockType.Air;
+                InWater = OnWaterSurface || BlockType.Water == block.Type;
                 if (InWater)
                 {
                     _humanoid.Physics.ResetFall();
 
                     /* Boat is under the surface */
-                    if (!OnWaterSurface)
+                    if (OnWaterSurface)
                     {
-                        OnWaterSurface = true;
-                        _humanoid.Physics.GravityDirection = Vector3.UnitY * 40f;
-                    }
-                    else if(_wasInWater)
-                    {
+                        _humanoid.Physics.GravityDirection = Vector3.Zero;
                         _humanoid.Physics.ResetVelocity();
                     }
-                }
-                else
-                {
-                    if(boatY > waterHeight+4)
-                        _humanoid.Physics.GravityDirection = -Vector3.UnitY;
                     else
-                        _humanoid.Physics.GravityDirection = Vector3.Zero;
+                    {
+                        _humanoid.Physics.GravityDirection = Vector3.UnitY * 40f;
+                    }
+                }
+                if(block.Type == BlockType.Air && surfaceBlock.Type == BlockType.Air)
+                {
+                    _humanoid.Physics.GravityDirection = -Vector3.UnitY;
                 }
             }
             _wasInWater = InWater;

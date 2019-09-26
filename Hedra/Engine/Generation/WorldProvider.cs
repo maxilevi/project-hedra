@@ -628,7 +628,7 @@ namespace Hedra.Engine.Generation
             var blockSpace = this.ToBlockSpace(Vec3);
 
             var blockChunk = GetChunkByOffset((int) chunkSpace.X, (int) chunkSpace.Y);
-            return blockChunk?.GetBlockAt((int) blockSpace.X, (int) Vec3.Y, (int) blockSpace.Z) ?? new Block();
+            return blockChunk?.GetBlockAt((int) blockSpace.X, (int) (Vec3.Y / Chunk.BlockSize), (int) blockSpace.Z) ?? new Block();
         }
         
         public float NearestWaterBlock(Vector3 Position, float SearchRange, out Vector3 WaterPosition)

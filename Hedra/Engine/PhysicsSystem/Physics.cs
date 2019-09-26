@@ -152,7 +152,7 @@ namespace Hedra.Engine.PhysicsSystem
 
         public static bool IsWaterBlock(Vector3 Position)
         {
-            return World.GetBlockAt(Position * new Vector3(1, 1f / Chunk.BlockSize, 1)).Type == BlockType.Water;
+            return World.GetBlockAt(Position).Type == BlockType.Water;
         }
 
         public static Vector3 WaterNormalAtPosition(Vector3 Position)
