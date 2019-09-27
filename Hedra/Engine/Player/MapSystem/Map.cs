@@ -121,13 +121,13 @@ namespace Hedra.Engine.Player.MapSystem
             for (var i = 0; i < _icons.Count; i++)
             { 
                 _icons[i].Mesh.LocalRotation = new Vector3(_icons[i].Mesh.LocalRotation.X, _icons[i].Mesh.LocalRotation.Y + (float) Time.DeltaTime * 0f, _icons[i].Mesh.LocalRotation.Z);
-                _icons[i].Mesh.Position = new Vector3(mapPosition.X, _targetHeight + 10f, mapPosition.Z);
+                _icons[i].Mesh.Position = new Vector3(mapPosition.X, _targetHeight, mapPosition.Z);
             }          
             for (var i = 0; i < _baseItems.Count; i++)
             {
                 if (_baseItems[i].Mesh != null)
                 {
-                    _baseItems[i].Mesh.Position = new Vector3(mapPosition.X, _targetHeight - ChunkSize * 2f + 25f, mapPosition.Z);
+                    _baseItems[i].Mesh.Position = new Vector3(mapPosition.X, _targetHeight, mapPosition.Z);
                 }
             }
             _markers.ForEach(M => M.Enabled = _show);
@@ -150,13 +150,14 @@ namespace Hedra.Engine.Player.MapSystem
                             ToMapCoordinates(_player.Minimap.MarkedQuestPosition.Xz)
                         ).ToVector3();
                 }
-
-                _cursor.Position = mapPosition + Vector3.UnitY * (_targetHeight + 45f);
+                
+                _cursor.Position = mapPosition + Vector3.UnitY * (_targetHeight + 45);
                 _cursor.LocalRotation = _player.Model.LocalRotation;
                 WorldRenderer.Scale = Mathf.Lerp(Vector3.One,
                     Vector3.One * (ChunkSize / (float)Chunk.Width), 1f) + Vector3.One * 0.002f;
-                WorldRenderer.BakedOffset = -(mapPosition + Vector3.UnitY * _targetHeight);
-                WorldRenderer.Offset = mapPosition + Vector3.UnitY * (_targetHeight + 35);
+                var worldOffset = Vector3.UnitY * (_targetHeight + Chunk.Height / 2);
+                WorldRenderer.BakedOffset = -(mapPosition + worldOffset);
+                WorldRenderer.Offset = mapPosition + worldOffset;
                 WorldRenderer.WaterSmoothness = ChunkSize / (float)Chunk.Width;
                 this.UpdateChunks();
             }
@@ -382,10 +383,11 @@ namespace Hedra.Engine.Player.MapSystem
                     this._player.View.MinPitch = -1.4f;
                     this._player.View.WheelSpeed = 5f;
                     this._player.View.AllowClipping = true;
-                    this._targetHeight = _player.Position.Y + 1024f;
+                    this._targetHeight = 4096;
                     this._height = _targetHeight;
                     this._targetTime = 12000;
                     this._player.Toolbar.Listen = false;
+                    _cursor.Enabled = true;
                     _panel.Enable();
                     SkyManager.PushTime();                   
                 }
@@ -397,6 +399,7 @@ namespace Hedra.Engine.Player.MapSystem
                     this._targetSize = 0f;
                     this._targetHeight = 0;
                     this._player.View.AllowClipping = false;
+                    _cursor.Enabled = false;
                     this._targetTime = SkyManager.PeekTime();
                     TaskScheduler.When(() => _height < Camera.DefaultDelegate().Y, delegate
                     {

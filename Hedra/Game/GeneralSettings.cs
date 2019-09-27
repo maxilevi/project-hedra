@@ -26,6 +26,7 @@ namespace Hedra.Game
         public const float MinLod1DitherDistance = 200;
         public const float MaxLod2DitherDistance = 480;
         public const float MinLod2DitherDistance = 448;
+        public const int MaxJoints = 40;
         public const int MaxWeights = 3;
         public const int MaxLoadingRadius = 32;
         public const int MinLoadingRadius = 8;

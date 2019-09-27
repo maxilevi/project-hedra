@@ -74,17 +74,18 @@ namespace Hedra.Engine.Rendering
         public static void Allocate()
         {
             StaticBuffer = new BufferBalancer(
-                new WorldBuffer(PoolSize.Small),
-                new WorldBuffer(PoolSize.Small)
+                new WorldBuffer(PoolSize.VerySmall),
+                new WorldBuffer(PoolSize.VerySmall),
+                new WorldBuffer(PoolSize.VerySmall)
             );
             InstanceBuffer = new BufferBalancer(
-                new WorldBuffer(PoolSize.Small),
-                new WorldBuffer(PoolSize.Small),
+                new WorldBuffer(PoolSize.VerySmall),
+                new WorldBuffer(PoolSize.VerySmall),
+                new WorldBuffer(PoolSize.VerySmall),
                 new WorldBuffer(PoolSize.VerySmall)
             );
             WaterBuffer = new BufferBalancer(
-                new WorldBuffer(PoolSize.VerySmall),
-                new WorldBuffer(PoolSize.VerySmall)
+                new WorldBuffer(PoolSize.Small)
             );
             _shadowOffsets = new IntPtr[GeneralSettings.MaxChunks];
             _shadowCounts = new int[GeneralSettings.MaxChunks];
@@ -242,11 +243,11 @@ namespace Hedra.Engine.Rendering
 
             WaterShader.Bind();
             WaterShader["PlayerPosition"] = GameManager.Player.Position;
-
+/*
             WaterShader["depthMap"] = 0;
             Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, GameSettings.SSAO && GameSettings.Quality ? DrawManager.MainBuffer.Ssao.FirstPass.TextureId[1] : 0);
-                
+  */              
             WaterShader["dudvMap"] = 1;
             Renderer.ActiveTexture(TextureUnit.Texture1);
             Renderer.BindTexture(TextureTarget.Texture2D, DuDvMap.Id);
@@ -263,10 +264,10 @@ namespace Hedra.Engine.Rendering
             WaterShader["AreaPositions"] = World.Highlighter.AreaPositions;
             WaterShader["AreaColors"] = World.Highlighter.AreaColors;        
             WaterShader["WaveMovement"] = WaveMovement;
-            WaterShader["Smoothness"] = WaterSmoothness;
+            //WaterShader["Smoothness"] = WaterSmoothness;
             WaterShader["useSSR"] = GameSettings.UseSSR ? 1f : 0f;
 
-            //if (ShowWaterBackfaces) Renderer.Disable(EnableCap.CullFace);
+            if (ShowWaterBackfaces) Renderer.Disable(EnableCap.CullFace);
         }
         
         private static void WaterUnBind()

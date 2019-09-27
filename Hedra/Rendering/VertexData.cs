@@ -273,8 +273,8 @@ namespace Hedra.Rendering
             Vertices = new List<Vector3>(result.Item1.Select(V => V.Position));
             /* Log.WriteLine($"Vertex Change % = {(1f - Vertices.Count / (float)originalVertices) * 100}, {Vertices.Count}/{originalVertices}"); */
         }
-        
-        public void Smooth()
+
+        public void UniqueVertices()
         {
             if (!HasColors) return;
             

@@ -45,8 +45,7 @@ uniform float WaveMovement;
 
 void main()
 {
-	vec3 offset = vec3(sin(WaveMovement * InVertex.x * 0.00015), 0.0, cos(WaveMovement * InVertex.z * 0.00015)) * 2.0;
-    vec4 vertex = TransformationMatrix * (vec4((InVertex + BakedOffset + offset) * Scale + Offset, 1.0));
+    vec4 vertex = TransformationMatrix * (vec4((InVertex + BakedOffset) * Scale + Offset, 1.0));
 
     pass_height = U_Height;
 	pass_botColor = U_BotColor;

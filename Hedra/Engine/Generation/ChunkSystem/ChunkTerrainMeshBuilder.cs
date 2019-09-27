@@ -52,7 +52,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private void Simplify(VertexData Data, int Lod)
         {
-            Data.Smooth();
+            Data.UniqueVertices();
             var detector = new ChunkMeshBorderDetector();
             var border = detector.ProcessEntireBorder(Data, Vector3.Zero, new Vector3(Chunk.Width, 0, Chunk.Width));
             MeshOptimizer.Simplify(Data, border, _lodMap[Lod]);
@@ -80,8 +80,16 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
 
             Loop(Helper, HorizontalIncrement, VerticalIncrement, ProcessColors, false, ref blockData, ref failed, ref Cache);
-            if(ProcessWater && _parent.HasWater)
+            if (ProcessWater && _parent.HasWater)
+            {
                 Loop(Helper, 1, 1, ProcessColors, true, ref waterData, ref failed, ref Cache);
+                waterData.UniqueVertices();
+                var detector = new ChunkMeshBorderDetector();
+                var set = new HashSet<uint>(detector.ProcessEntireBorder(waterData, Vector3.Zero, new Vector3(Chunk.Width, 0, Chunk.Width)));
+                for(var i = 0; i < 4; ++i)
+                    MeshAnalyzer.ApplySmoothing(waterData, set);
+                waterData.Flat();
+            }
         }
 
         private void Loop(ChunkTerrainMeshBuilderHelper Helper, int HorizontalSkip, int VerticalSkip, bool ProcessColors, bool isWater, ref VertexData blockData, ref bool failed, ref RegionCache Cache)
@@ -123,7 +131,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                             color = GetCellColor(Helper, ref cell, ref ProcessColors, ref Cache, false);
                         }
 
-                        PolygoniseCell(ref cell, ref next, ref blockData, ref vertexBuffer, ref triangleBuffer, color, false);
+                        PolygoniseCell(ref cell, ref next, ref blockData, ref vertexBuffer, ref triangleBuffer, color, isWater);
                     }
                 }
             }
@@ -132,7 +140,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private static void PolygoniseCell(ref GridCell Cell, ref bool Next, ref VertexData BlockData, ref Vector3[] VertexBuffer, ref Triangle[] TriangleBuffer, Vector4 Color, bool IsWater)
         {
             MarchingCubes.Polygonise(ref Cell, 0, ref VertexBuffer, ref TriangleBuffer, out var triangleCount);
-            MarchingCubes.Build(ref BlockData, ref Color, ref TriangleBuffer, ref triangleCount, ref Next);
+            MarchingCubes.Build(ref BlockData, ref Color, ref TriangleBuffer, ref triangleCount, ref Next, ref IsWater);
         }
 
         private Vector4 GetCellColor(ChunkTerrainMeshBuilderHelper Helper, ref GridCell Cell, ref bool ProcessColors, ref RegionCache Cache, bool isWaterCell)

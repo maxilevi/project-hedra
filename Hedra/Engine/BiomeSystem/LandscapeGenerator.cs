@@ -72,7 +72,7 @@ namespace Hedra.Engine.BiomeSystem
                 {
                     var makeDirt = dirtArray[x][z];
                     var position = new Vector2(x * Chunk.BlockSize + OffsetX, z * Chunk.BlockSize + OffsetZ);
-                    var riverHeight = riverMap[x][z];
+                    var riverHeight = 0f;//riverMap[x][z];
                     var height = CalculateHeight(x, z, heights, types, out var type) - riverHeight;
 
                     var densityClampHeight = Chunk.Height - 3f;

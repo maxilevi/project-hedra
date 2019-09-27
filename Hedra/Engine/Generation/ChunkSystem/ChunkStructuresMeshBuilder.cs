@@ -86,7 +86,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             SetExtraData(model, element, Distribution);
             if (SimplificationThreshold > 0 && SimplificationThreshold <= 1f)
             {
-                model.Smooth();
+                model.UniqueVertices();
                 MeshOptimizer.SimplifySloppy(model, SimplificationThreshold);
                 model.Flat();
             }

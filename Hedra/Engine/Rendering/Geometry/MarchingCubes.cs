@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering.Geometry;
 using Hedra.Rendering;
@@ -433,7 +434,7 @@ namespace Hedra.Engine.Rendering
             return p;
         }
 
-        public static void Build(ref VertexData Data, ref Vector4 TemplateColor, ref Triangle[] TriangleBuffer, ref int TriangleCount, ref bool Orientation)
+        public static void Build(ref VertexData Data, ref Vector4 TemplateColor, ref Triangle[] TriangleBuffer, ref int TriangleCount, ref bool Orientation, ref bool IsWater)
         {
             /*
             if (TriangleCount == 2)
@@ -458,6 +459,7 @@ namespace Hedra.Engine.Rendering
             
             for (uint i = 0; i < TriangleCount; i++)
             {
+                if(IsWater && ShouldClip(ref TriangleBuffer[i])) continue;
                 Data.Indices.Add((uint) Data.Vertices.Count + 0);
                 Data.Indices.Add((uint) Data.Vertices.Count + 1);
                 Data.Indices.Add((uint) Data.Vertices.Count + 2);
@@ -476,6 +478,12 @@ namespace Hedra.Engine.Rendering
                 Data.Colors.Add(TemplateColor);
                 
             }
+        }
+
+        private static bool ShouldClip(ref Triangle Triangle)
+        {
+            var clipDistance = (BiomePool.SeaLevel-1) * Generation.ChunkSystem.Chunk.BlockSize;
+            return Triangle.Vertices[0].Y < clipDistance || Triangle.Vertices[1].Y < clipDistance || Triangle.Vertices[2].Y < clipDistance;
         }
     }
     
