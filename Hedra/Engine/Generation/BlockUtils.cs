@@ -65,11 +65,10 @@ namespace Hedra.Engine.Generation
         Dirt = 3,
         Water = 4,
         Path = 7,
-        Temporal = 8,
-        Seafloor = 9,
-        StonePath = 10,
-        FarmDirt = 11,
-        None = 12,
+        Seafloor = 8,
+        StonePath = 9,
+        FarmDirt = 10,
+        None = 11,
         MaxNums
     }
 }

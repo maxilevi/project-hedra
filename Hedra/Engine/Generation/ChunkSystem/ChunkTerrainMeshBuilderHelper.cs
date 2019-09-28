@@ -87,7 +87,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private void AddColorIfNecessary(int X, int Y, int Z, ref RegionColor RegionColor, ref float Noise, ref Vector4 Color, ref int ColorCount)
         {
             GetSampleOrNeighbour(X, Y.Clamp0(), Z, out var type);
-            if (type != BlockType.Water && type != BlockType.Air && type != BlockType.Temporal)
+            if (type != BlockType.Water && type != BlockType.Air && type != BlockType.None)
             {
                 var blockColor = DoGetColor(ref RegionColor, ref X, ref Z, type, ref Noise);
                 Color += blockColor * 32;
@@ -183,12 +183,13 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 else
                 {
                     Cell.Density[i] = GetSampleOrNeighbour(posX, posY, posZ, out Cell.Type[i]);
+                    Cell.Density[i] = Cell.Type[i] != BlockType.Water && Cell.Type[i] != BlockType.Air ? 1 : -1;
                 }
             }
 
             for (var i = 0; i < Cell.Type.Length; i++)
             {
-                if (Cell.Type[i] == BlockType.Temporal && Y < this._height - 2)
+                if (Cell.Type[i] == BlockType.None && Y < this._height - 2)
                 {
                     Success = false;
                     Cell.Type[i] = BlockType.Air;
@@ -199,7 +200,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private float GetSampleOrNeighbour(int x, int y, int z, out BlockType Type)
         {
             y = Math.Min(y, _boundsY - _sampleHeight - 1);
-            if (x <= 0 || z <= 0 || x >= _boundsX - 1 || z >= _boundsZ - 1 || _sampleWidth == 1 && _sampleHeight == 1)
+            if (x <= 0 || z <= 0 || y <= 1 || x >= _boundsX - 1 || z >= _boundsZ - 1 || _sampleWidth == 1 && _sampleHeight == 1)
             {
                 var b = GetNeighbourBlock(x, y, z);
                 Type = b.Type;
@@ -276,7 +277,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private Block GetNeighbourBlock(ref int X, ref int Y, ref int Z)
         {
             var chunk = GetNeighbourChunk(ref X, ref Z);
-            if (!chunk?.Landscape.BlocksSetted ?? true) return new Block(BlockType.Temporal);
+            if (!chunk?.Landscape.BlocksSetted ?? true) return new Block(BlockType.None);
             return chunk[Modulo(ref X) * _boundsY * _boundsZ + Y * _boundsZ + Modulo(ref Z)];
         }
         

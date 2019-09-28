@@ -11,10 +11,12 @@ namespace Hedra.Engine.Generation
         private readonly BlockBuilder _blockBuilder;
         private readonly MeshBuilder _meshBuilder;
         private readonly SharedWorkerPool _pool;
+        private readonly int _maxThreads;
 
         public WorldBuilder()
         {
-            _pool = new SharedWorkerPool(Environment.ProcessorCount * 2);
+            _maxThreads = Environment.ProcessorCount * 2;
+            _pool = new SharedWorkerPool(_maxThreads);
             _meshBuilder = new MeshBuilder(_pool);
             _blockBuilder = new BlockBuilder(_pool);
             _structuresBuilder = new StructuresBuilder(_pool);
@@ -22,8 +24,8 @@ namespace Hedra.Engine.Generation
 
         private void HandleMaxWorkers()
         {
-            var minMesh = Environment.ProcessorCount;
-            var workerCount = Environment.ProcessorCount * 2;
+            var minMesh = _maxThreads / 2;
+            var workerCount = _maxThreads;
             if (_meshBuilder.Count > 0)
             {
                 workerCount -= minMesh;
@@ -36,17 +38,19 @@ namespace Hedra.Engine.Generation
             
             if (_blockBuilder.Count == 0 && _structuresBuilder.Count == 0)
             {
-                _pool.SetMaxWorkers(QueueType.Meshing, minMesh * 2);
+                _pool.SetMaxWorkers(QueueType.Meshing, _maxThreads);
                 _pool.SetMaxWorkers(QueueType.Blocks, 0);
                 _pool.SetMaxWorkers(QueueType.Structures, 0);
             } 
             else if (_blockBuilder.Count == 0)
             {
                 _pool.SetMaxWorkers(QueueType.Structures, workerCount);
+                _pool.SetMaxWorkers(QueueType.Blocks, 0);
             }
             else if(_structuresBuilder.Count == 0)
             {
                 _pool.SetMaxWorkers(QueueType.Blocks, workerCount); 
+                _pool.SetMaxWorkers(QueueType.Structures, 0);
             }
             else
             {

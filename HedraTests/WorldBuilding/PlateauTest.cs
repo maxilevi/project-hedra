@@ -21,6 +21,7 @@ namespace HedraTests.WorldBuilding
         {
             var designMock = new Mock<BiomeGenerationDesign>();
             designMock.Setup(B => B.BuildHeightMap(
+                It.IsAny<FastNoiseSIMD>(),
                 It.IsAny<float[][]>(),
                 It.IsAny<BlockType[][]>(),
                 It.IsAny<int>(),

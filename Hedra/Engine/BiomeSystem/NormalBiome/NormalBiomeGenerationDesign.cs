@@ -14,7 +14,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
         public override bool HasPaths => true;
         public override bool HasDirt => true;
         
-        protected override void DoBuildDensityMap(float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset)
+        protected override void DoBuildDensityMap(FastNoiseSIMD Noise, float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset)
         {
             var offset = Offset;
             var size = new Vector3(Width, Height, Width);
@@ -53,7 +53,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             AddSet(DensityMap, smallSet, F => F * -1.0f);
         }
 
-        protected override void DoBuildHeightMap(float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset)
+        protected override void DoBuildHeightMap(FastNoiseSIMD Noise, float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset)
         {
             var baseSet = Noise.GetPerlinSetWithFrequency(Offset, new Vector2(Width, Width), new Vector2(Scale, Scale), 0.000025f);
             AddSet(HeightMap, baseSet, F => (F + 0.25f).Clamp01() * 32.0f);

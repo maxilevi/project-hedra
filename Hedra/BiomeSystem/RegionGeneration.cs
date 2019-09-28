@@ -1,23 +1,25 @@
+using System;
 using System.Collections.Generic;
 using Hedra.Engine.Generation;
 using OpenTK;
 
 namespace Hedra.BiomeSystem
 {
-    public class RegionGeneration
+    public class RegionGeneration : IDisposable
     {
         private readonly BiomeGenerationDesign _design;
         private readonly object _tempMapLock;
         private readonly float[][] _tempDensityMap;
         private readonly BlockType[][] _tempTypeMap;
+        private readonly FastNoiseSIMD _noise;
 
         public RegionGeneration(int Seed, BiomeGenerationDesign Design)
         {
+            _noise = new FastNoiseSIMD(Seed);
             _tempMapLock = new object();
             _tempDensityMap = CreateMap<float>(1);
             _tempTypeMap = CreateMap<BlockType>(1);
             _design = Design;
-            _design.Seed = Seed;
         }
 
         public bool HasDirt => _design.HasDirt;
@@ -28,34 +30,31 @@ namespace Hedra.BiomeSystem
         {
             lock (_tempMapLock)
             {
-                _design.Seed = World.Seed;
-                _design.BuildHeightMap(_tempDensityMap, _tempTypeMap, 1, 1, new Vector2(X, Y));
+                _noise.Seed = World.Seed;
+                _design.BuildHeightMap(_noise, _tempDensityMap, _tempTypeMap, 1, 1, new Vector2(X, Y));
                 Type = _tempTypeMap[0][0];
                 return _tempDensityMap[0][0];
             }
         }
         
-        public void BuildDensityMap(int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset, out float[][][] DensityMap, out BlockType[][][] TypeMap)
+        public void BuildDensityMap(FastNoiseSIMD Noise, int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset, out float[][][] DensityMap, out BlockType[][][] TypeMap)
         {
-            _design.Seed = World.Seed;
             DensityMap = CreateMap<float>(Width, Height);
             TypeMap = CreateMap<BlockType>(Width, Height);
-            _design.BuildDensityMap(DensityMap, TypeMap, Width, Height, HorizontalScale, VerticalScale, Offset);
+            _design.BuildDensityMap(Noise, DensityMap, TypeMap, Width, Height, HorizontalScale, VerticalScale, Offset);
         }
 
-        public void BuildHeightMap(int Width, float Scale, Vector2 Offset, out float[][] HeightMap, out BlockType[][] TypeMap)
+        public void BuildHeightMap(FastNoiseSIMD Noise, int Width, float Scale, Vector2 Offset, out float[][] HeightMap, out BlockType[][] TypeMap)
         {
-            _design.Seed = World.Seed;
             HeightMap = CreateMap<float>(Width);
             TypeMap = CreateMap<BlockType>(Width);
-            _design.BuildHeightMap(HeightMap, TypeMap, Width, Scale, Offset);
+            _design.BuildHeightMap(Noise, HeightMap, TypeMap, Width, Scale, Offset);
         }
 
-        public void BuildRiverMap(int Width, float Scale, Vector2 Offset, out float[][] RiverMap)
+        public void BuildRiverMap(FastNoiseSIMD Noise, int Width, float Scale, Vector2 Offset, out float[][] RiverMap)
         {
-            _design.Seed = World.Seed;
             RiverMap = CreateMap<float>(Width);
-            _design.BuildRiverMap(RiverMap, Width, Scale, Offset);
+            _design.BuildRiverMap(Noise, RiverMap, Width, Scale, Offset);
         }
 
         private T[][][] CreateMap<T>(int Width, int Height)
@@ -87,6 +86,11 @@ namespace Hedra.BiomeSystem
         {
             //TODO Implement a good interpolation
             return RegionsGenerations[0];
+        }
+
+        public void Dispose()
+        {
+            _noise.Dispose();
         }
     }
 }

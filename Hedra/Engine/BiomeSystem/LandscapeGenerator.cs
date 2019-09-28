@@ -90,7 +90,7 @@ namespace Hedra.Engine.BiomeSystem
                         this.HandleGroundworks(sampledBlocks, x, y, z, blockGroundworks);
                     }
                     GrassBlockPass(sampledBlocks, noise3D, heights, x, z, makeDirt, width, depth);
-                    hasWater |= WaterBlockPass(sampledBlocks, x, z);
+                    hasWater |= WaterfallPass(sampledBlocks, x, z, rng);
                 }
             }
 
@@ -164,7 +164,7 @@ namespace Hedra.Engine.BiomeSystem
 
         private float[][] FillRiver(int Width, RegionGeneration Biome, out float[][] RiverBorderMap)
         {
-            Biome.BuildRiverMap(Width, Chunk.BlockSize, new Vector2(OffsetX, OffsetZ), out var riverMap);
+            Biome.BuildRiverMap(Noise, Width, Chunk.BlockSize, new Vector2(OffsetX, OffsetZ), out var riverMap);
             RiverBorderMap = riverMap;
             return riverMap;
         }
@@ -221,26 +221,33 @@ namespace Hedra.Engine.BiomeSystem
             }
         }
         
-        private static bool WaterBlockPass(SampledBlock[][][] Blocks, int x, int z)
+        private static bool WaterfallPass(SampledBlock[][][] Blocks, int x, int z, Random Rng)
         {
-            var foundWater = false;
+            var isOverhang = false;
+            var foundGround = false;
             var addedWater = false;
             for (var y = 0; y < Chunk.Height-1; ++y)
             {
                 var type = Blocks[x][y][z].Type;
-                if (type == BlockType.Water && Blocks[x][y+1][z].Type == BlockType.Air && !foundWater)
+                var upperType = Blocks[x][y + 1][z].Type;
+                if (foundGround && type != BlockType.Air && upperType == BlockType.Air)
                 {
-                    foundWater = true;
+                    isOverhang = true;
                 }
-
-                if (foundWater && type == BlockType.Grass && Blocks[x][y+1][z].Type == BlockType.Air)
+                if (!foundGround && type != BlockType.Air && upperType == BlockType.Air)
+                {
+                    foundGround = true;
+                }
+                if (isOverhang && type == BlockType.Grass && upperType == BlockType.Air && Rng.Next(0, 200) == 1)
                 {
                     Blocks[x][y+1][z].Type = BlockType.Water;
                     for (var i = y; i > y - 4 && i > 0; i--)
                     {
                         Blocks[x][i][z].Type = BlockType.Seafloor;
                     }
+
                     addedWater = true;
+                    break;
                 }
             }
             return addedWater;
@@ -277,6 +284,7 @@ namespace Hedra.Engine.BiomeSystem
         {
             var noiseValuesWidth = (width / noise2DScaleWidth + 1) + OutOfChunkBorderSize;
             Parent.Biome.Generation.BuildHeightMap(
+                Noise,
                 noiseValuesWidth,
                 Chunk.BlockSize * noise2DScaleWidth,
                 new Vector2(Parent.OffsetX - Chunk.BlockSize * noise2DScaleWidth, Parent.OffsetZ - Chunk.BlockSize * noise2DScaleWidth),
@@ -292,6 +300,7 @@ namespace Hedra.Engine.BiomeSystem
             var noiseValuesMapWidth = (width / noise3DScaleWidth + 1) + OutOfChunkBorderSize;
             var noiseValuesMapHeight = (height / noise3DScaleHeight + 1);
             Parent.Biome.Generation.BuildDensityMap(
+                Noise,
                 noiseValuesMapWidth,
                 noiseValuesMapHeight,
                 Chunk.BlockSize * noise3DScaleWidth,

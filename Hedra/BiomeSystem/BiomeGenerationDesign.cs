@@ -5,42 +5,31 @@ using OpenTK;
 
 namespace Hedra.BiomeSystem
 {
-    public abstract class BiomeGenerationDesign : IDisposable
+    public abstract class BiomeGenerationDesign
     {
         public abstract bool HasRivers { get;}
         public abstract bool HasPaths { get; }
         public abstract bool HasDirt { get; }
 
-        protected readonly FastNoiseSIMD Noise;
-        private readonly object noiseLock = new object();
-
-        protected BiomeGenerationDesign()
+        public void BuildDensityMap(FastNoiseSIMD Noise, float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset)
         {
-            Noise = new FastNoiseSIMD(1);
+            DoBuildDensityMap(Noise, DensityMap, TypeMap, Width, Height, HorizontalScale, VerticalScale, Offset);
         }
 
-        public void BuildDensityMap(float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset)
+        public void BuildHeightMap(FastNoiseSIMD Noise, float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset)
         {
-            lock(noiseLock)
-                DoBuildDensityMap(DensityMap, TypeMap, Width, Height, HorizontalScale, VerticalScale, Offset);
-        }
-
-        public void BuildHeightMap(float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset)
-        {
-            lock(noiseLock)
-                DoBuildHeightMap(HeightMap, TypeMap, Width, Scale, Offset);
+            DoBuildHeightMap(Noise, HeightMap, TypeMap, Width, Scale, Offset);
         }
         
-        protected abstract void DoBuildDensityMap(float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset);
+        protected abstract void DoBuildDensityMap(FastNoiseSIMD Noise, float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset);
 
-        protected abstract void DoBuildHeightMap(float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset);
+        protected abstract void DoBuildHeightMap(FastNoiseSIMD Noise, float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset);
 
-        protected abstract void DoBuildRiverMap(float[][] RiverMap, int Width, float Scale, Vector2 Offset);
+        protected abstract void DoBuildRiverMap(FastNoiseSIMD Noise, float[][] RiverMap, int Width, float Scale, Vector2 Offset);
         
-        public void BuildRiverMap(float[][] RiverMap, int Width, float Scale, Vector2 Offset)
+        public void BuildRiverMap(FastNoiseSIMD Noise, float[][] RiverMap, int Width, float Scale, Vector2 Offset)
         {
-            lock (noiseLock)
-                DoBuildRiverMap(RiverMap, Width, Scale, Offset);
+            DoBuildRiverMap(Noise, RiverMap, Width, Scale, Offset);
         }
         
         public void AddFunction(float[][][] Map1, Func<int, int, int, float> Function)
@@ -159,21 +148,6 @@ namespace Hedra.BiomeSystem
                     Map1[i][j] += Transform(Map2[index++]);
                 }
             }
-        }
-
-        public int Seed
-        {
-            set
-            {
-                lock(noiseLock)
-                    Noise.Seed = value;
-            }
-        }
-
-        public virtual void Dispose()
-        {
-            lock(noiseLock)
-                Noise.Dispose();
         }
     }
 }
