@@ -271,7 +271,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public Block GetBlockAt(int X, int Y, int Z)
         {
-            if (Disposed || !Landscape.BlocksSetted || Y >= BoundsY) return _defaultBlock;
+            if (Disposed || !Landscape.BlocksSetted || Y >= BoundsY || Y < 0) return _defaultBlock;
             return this[X * BoundsZ * BoundsY + Y * BoundsZ + Z];
         }
 

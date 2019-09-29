@@ -67,9 +67,11 @@ namespace Hedra.Engine.Native
         [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr fastnoise_getCellularSet(IntPtr Object, float xOffset, float yOffset, float zOffset, int xSize, int ySize, int zSize, float xScale, float yScale, float zScale);
 
-        
         [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr fastnoise_setFrequency(IntPtr Object, float Frequency);
+        
+        [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr fastnoise_setCellularReturnType(IntPtr Object, CellularReturnType returnType);
         
         [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr fastnoise_setSeed(IntPtr Object, int Seed);
@@ -83,4 +85,6 @@ namespace Hedra.Engine.Native
         [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr meshing_getGridCell();*/
     }
+    
+    public enum CellularReturnType { CellValue, Distance, Distance2, Distance2Add, Distance2Sub, Distance2Mul, Distance2Div, NoiseLookup, Distance2Cave };
 }

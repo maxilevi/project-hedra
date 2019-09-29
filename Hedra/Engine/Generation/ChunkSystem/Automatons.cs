@@ -2,66 +2,79 @@ namespace Hedra.Engine.Generation.ChunkSystem
 {
     public static class Automatons
     {
-        private static bool WaterNeighbourCheck(BlockType[][][] Types, int X, int Y, int Z)
+        private static bool WaterNeighbourCheck(AutomatonCell[][][] Automatons, int X, int Y, int Z)
         {
-            if (Types[X][Y][Z] == BlockType.Air && !IsSolid(Types[X][Y-1][Z]))
+            if (Automatons[X][Y][Z].Type == BlockType.Air && !IsSolid(Automatons[X][Y-1][Z]))
             {
-                Types[X][Y][Z] = BlockType.Water;
+                Automatons[X][Y][Z].Type = BlockType.Water;
+                Automatons[X][Y][Z].Occupancy = 1f;
                 return true;
             }
             return false;
         }
         
-        private static bool WaterHorizontalCheck(BlockType[][][] Types, int X, int Y, int Z)
+        private static bool WaterHorizontalCheck(AutomatonCell[][][] Automatons, int X, int Y, int Z, float Occupancy)
         {
-            if (Types[X][Y][Z] == BlockType.Air && IsSolid(Types[X][Y-1][Z]))
+            if (Automatons[X][Y][Z].Type == BlockType.Air && IsSolid(Automatons[X][Y-1][Z]))
             {
-                Types[X][Y][Z] = BlockType.Water;
+                Automatons[X][Y][Z].Type = BlockType.Water;
+                Automatons[X][Y][Z].Occupancy = Occupancy - 0.25f;
                 return true;
             }
             return false;
         }
         
-        public static bool Water(BlockType[][][] Types, int X, int Y, int Z)
+        public static bool Water(AutomatonCell[][][] Automatons, int X, int Y, int Z)
         {
             var changed = false;
-            if (Y <= 2 || X == 0 || Z == 0 || X == Types.Length-1 || Z == Types[0][0].Length-1) return false;
+            if (Y <= 2 || X == 0 || Z == 0 || X == Automatons.Length-1 || Z == Automatons[0][0].Length-1) return false;
 
-            if (Types[X][Y-1][Z] == BlockType.Air)
+            if (Automatons[X][Y-1][Z].Type == BlockType.Air)
             {
-                Types[X][Y-1][Z] = BlockType.Water;
+                Automatons[X][Y-1][Z].Type = BlockType.Water;
                 changed = true;
             }
-            else if (IsSolid(Types[X][Y-1][Z]))
+            else if (IsSolid(Automatons[X][Y-1][Z]))
             {
                 for (var i = 0; i < 2; ++i)
                 {
-                    changed |= WaterNeighbourCheck(Types, X + 1, Y - i, Z);
-                    changed |= WaterNeighbourCheck(Types, X, Y - i, Z + 1);
-                    changed |= WaterNeighbourCheck(Types, X - 1, Y - i, Z);
-                    changed |= WaterNeighbourCheck(Types, X, Y - i, Z - 1);
+                    changed |= WaterNeighbourCheck(Automatons, X + 1, Y - i, Z);
+                    changed |= WaterNeighbourCheck(Automatons, X, Y - i, Z + 1);
+                    changed |= WaterNeighbourCheck(Automatons, X - 1, Y - i, Z);
+                    changed |= WaterNeighbourCheck(Automatons, X, Y - i, Z - 1);
 
-                    changed |= WaterNeighbourCheck(Types, X + 1, Y - i, Z + 1);
-                    changed |= WaterNeighbourCheck(Types, X - 1, Y - i, Z + 1);
-                    changed |= WaterNeighbourCheck(Types, X + 1, Y - i, Z - 1);
-                    changed |= WaterNeighbourCheck(Types, X - 1, Y - i, Z - 1);
+                    changed |= WaterNeighbourCheck(Automatons, X + 1, Y - i, Z + 1);
+                    changed |= WaterNeighbourCheck(Automatons, X - 1, Y - i, Z + 1);
+                    changed |= WaterNeighbourCheck(Automatons, X + 1, Y - i, Z - 1);
+                    changed |= WaterNeighbourCheck(Automatons, X - 1, Y - i, Z - 1);
                 }
-                changed |= WaterHorizontalCheck(Types, X + 1, Y, Z);
-                changed |= WaterHorizontalCheck(Types, X, Y, Z + 1);
-                changed |= WaterHorizontalCheck(Types, X - 1, Y, Z);
-                changed |= WaterHorizontalCheck(Types, X, Y, Z - 1);
 
-                changed |= WaterHorizontalCheck(Types, X + 1, Y, Z + 1);
-                changed |= WaterHorizontalCheck(Types, X - 1, Y, Z + 1);
-                changed |= WaterHorizontalCheck(Types, X + 1, Y, Z - 1);
-                changed |= WaterHorizontalCheck(Types, X - 1, Y, Z - 1);
+                var occupancy = Automatons[X][Y][Z].Occupancy;
+                if (occupancy > 0)
+                {
+                    changed |= WaterHorizontalCheck(Automatons, X + 1, Y, Z, occupancy);
+                    changed |= WaterHorizontalCheck(Automatons, X, Y, Z + 1, occupancy);
+                    changed |= WaterHorizontalCheck(Automatons, X - 1, Y, Z, occupancy);
+                    changed |= WaterHorizontalCheck(Automatons, X, Y, Z - 1, occupancy);
+
+                    changed |= WaterHorizontalCheck(Automatons, X + 1, Y, Z + 1, occupancy);
+                    changed |= WaterHorizontalCheck(Automatons, X - 1, Y, Z + 1, occupancy);
+                    changed |= WaterHorizontalCheck(Automatons, X + 1, Y, Z - 1, occupancy);
+                    changed |= WaterHorizontalCheck(Automatons, X - 1, Y, Z - 1, occupancy);
+                }
             }
             return changed;
         }
 
-        private static bool IsSolid(BlockType Type)
+        private static bool IsSolid(AutomatonCell Cellular)
         {
-            return Type != BlockType.Water && Type != BlockType.Air;
+            return Cellular.Type != BlockType.Water && Cellular.Type != BlockType.Air;
         }
+    }
+    
+    public struct AutomatonCell
+    {
+        public BlockType Type;
+        public float Occupancy;
     }
 }

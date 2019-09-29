@@ -86,8 +86,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 waterData.UniqueVertices();
                 var detector = new ChunkMeshBorderDetector();
                 var set = new HashSet<uint>(detector.ProcessEntireBorder(waterData, Vector3.Zero, new Vector3(Chunk.Width, 0, Chunk.Width)));
-                //for(var i = 0; i < 2; ++i)
-                //    MeshAnalyzer.ApplySmoothing(waterData, set);
+                for(var i = 0; i < 2; ++i)
+                    MeshAnalyzer.ApplySmoothing(waterData, set);
                 waterData.Flat();
             }
         }

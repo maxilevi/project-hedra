@@ -30,6 +30,11 @@ namespace Hedra.Engine.Generation
         {
             set => HedraCoreNative.fastnoise_setFrequency(_native, value);
         }
+        
+        public CellularReturnType CellularReturnType
+        {
+            set => HedraCoreNative.fastnoise_setCellularReturnType(_native, value);
+        }
 
         public float[] GetSimplexSetWithFrequency(Vector3 Offset, Vector3 Size, Vector3 Scale, float frequency)
         {
@@ -51,7 +56,7 @@ namespace Hedra.Engine.Generation
             var pointer = HedraCoreNative.fastnoise_getPerlinSet(_native, Offset.X, Offset.Y, Offset.Z, (int)Size.X, (int)Size.Y, (int)Size.Z, Scale.X, Scale.Y, Scale.Z);
             return PointerToSet(pointer, (uint)(Size.X * Size.Y * Size.Z));
         }
-        /*
+        
         public float[] GetSimplexFractalSetWithFrequency(Vector3 Offset, Vector3 Size, Vector3 Scale, float frequency)
         {
             Frequency = frequency;
@@ -93,7 +98,22 @@ namespace Hedra.Engine.Generation
             var pointer = HedraCoreNative.fastnoise_getCellularSet(_native, Offset.X, Offset.Y, Offset.Z, (int)Size.X, (int)Size.Y, (int)Size.Z, Scale.X, Scale.Y, Scale.Z);
             return PointerToSet(pointer, (uint)(Size.X * Size.Y * Size.Z));
         }
-        */
+        
+        public float[] GetCellularSetWithFrequency(Vector2 Offset, Vector2 Size, Vector2 Scale, float frequency)
+        {
+            return GetCellularSetWithFrequency(new Vector3(Offset.X, 0, Offset.Y), new Vector3(Size.X, 1, Size.Y),
+                new Vector3(Scale.X, 1, Scale.Y), frequency);
+        }
+        
+        public float[] GetPerlinFractalSetWithFrequency(Vector2 Offset, Vector2 Size, Vector2 Scale, float frequency)
+        {
+            return GetPerlinFractalSetWithFrequency(new Vector3(Offset.X, 0, Offset.Y), new Vector3(Size.X, 1, Size.Y), new Vector3(Scale.X, 1, Scale.Y), frequency);
+        }
+        
+        public float[] GetSimplexFractalSetWithFrequency(Vector2 Offset, Vector2 Size, Vector2 Scale, float frequency)
+        {
+            return GetSimplexFractalSetWithFrequency(new Vector3(Offset.X, 0, Offset.Y), new Vector3(Size.X, 1, Size.Y), new Vector3(Scale.X, 1, Scale.Y), frequency);
+        }
 
         public float[] GetSimplexSetWithFrequency(Vector2 Offset, Vector2 Size, Vector2 Scale, float frequency)
         {

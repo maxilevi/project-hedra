@@ -27,7 +27,14 @@ namespace Hedra.BiomeSystem
 
         protected abstract void DoBuildRiverMap(FastNoiseSIMD Noise, float[][] RiverMap, int Width, float Scale, Vector2 Offset);
         
+        protected abstract void DoBuildRiverBorderMap(FastNoiseSIMD Noise, float[][] RiverMap, int Width, float Scale, Vector2 Offset);
+        
         public void BuildRiverMap(FastNoiseSIMD Noise, float[][] RiverMap, int Width, float Scale, Vector2 Offset)
+        {
+            DoBuildRiverMap(Noise, RiverMap, Width, Scale, Offset);
+        }
+        
+        public void BuildRiverBorderMap(FastNoiseSIMD Noise, float[][] RiverMap, int Width, float Scale, Vector2 Offset)
         {
             DoBuildRiverMap(Noise, RiverMap, Width, Scale, Offset);
         }

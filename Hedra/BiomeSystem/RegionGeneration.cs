@@ -51,10 +51,12 @@ namespace Hedra.BiomeSystem
             _design.BuildHeightMap(Noise, HeightMap, TypeMap, Width, Scale, Offset);
         }
 
-        public void BuildRiverMap(FastNoiseSIMD Noise, int Width, float Scale, Vector2 Offset, out float[][] RiverMap)
+        public void BuildRiverMap(FastNoiseSIMD Noise, int Width, float Scale, Vector2 Offset, out float[][] RiverMap, out float[][] RiverBorderMap)
         {
             RiverMap = CreateMap<float>(Width);
             _design.BuildRiverMap(Noise, RiverMap, Width, Scale, Offset);
+            RiverBorderMap = CreateMap<float>(Width);
+            _design.BuildRiverBorderMap(Noise, RiverMap, Width, Scale, Offset);
         }
 
         private T[][][] CreateMap<T>(int Width, int Height)

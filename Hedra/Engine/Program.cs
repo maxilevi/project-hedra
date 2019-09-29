@@ -1,18 +1,15 @@
 using System;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Runtime.ExceptionServices;
-using System.Security;
-using Hedra.API;
-using Hedra.Engine.BiomeSystem;
-using Hedra.Engine.ClassSystem;
+using Hedra.Engine.BiomeSystem.NormalBiome;
 using Hedra.Engine.Steamworks;
 using Hedra.Engine.Game;
+using Hedra.Engine.Generation;
 using Hedra.Engine.IO;
 using Hedra.Engine.Loader;
 using Hedra.Engine.Management;
-using Hedra.Engine.Native;
 using Hedra.Engine.Networking;
-using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Game;
 using OpenTK;
@@ -31,7 +28,33 @@ namespace Hedra.Engine
         [HandleProcessCorruptedStateExceptions]
         private static void Main(string[] Args)
         {
-            
+            /*var gen = new NormalBiomeGenerationDesign();
+            var noise = new FastNoiseSIMD(1);
+            var s = 1024;
+            var map = CreateMap<float>(s);
+            gen.BuildRiverMap(noise, map, s, 1, Vector2.Zero);
+            var bmp = new Bitmap(s, s);
+            var data = bmp.LockBits(new Rectangle(0,0,bmp.Width,bmp.Height), ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            unsafe
+            {
+                var dataPtr = (byte*)data.Scan0;
+                var stride = data.Stride;
+                if(dataPtr == null) throw new ArgumentNullException("dataPrt cannot be null");
+                for (var y = 0; y < bmp.Height; y++)
+                {
+                    for (var x = 0; x < bmp.Width; x++)
+                    {
+                        var shade = (byte) Math.Min(255, map[x][y] * 255);
+                        dataPtr[x * 4 + y * stride] = shade;
+                        dataPtr[x * 4 + y * stride + 1] = shade;
+                        dataPtr[x * 4 + y * stride + 2] = shade;
+                        dataPtr[x * 4 + y * stride + 3] = 255;
+                    }
+                }
+            }
+            bmp.UnlockBits(data);
+            bmp.Save("./rivers.png");
+            return;*/
             void ProcessException(object S, UnhandledExceptionEventArgs E)
             {
                 if (E.IsTerminating)
@@ -65,6 +88,17 @@ namespace Hedra.Engine
             }
 
             Environment.Exit(0);
+        }
+        
+        
+        private static T[][] CreateMap<T>(int Width)
+        {
+            var arr = new T[Width][];
+            for (var x = 0; x < Width; ++x)
+            {
+                arr[x] = new T[Width];
+            }
+            return arr;
         }
 
         private static void RunDedicatedServer()

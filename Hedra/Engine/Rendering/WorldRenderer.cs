@@ -85,7 +85,7 @@ namespace Hedra.Engine.Rendering
                 new WorldBuffer(PoolSize.VerySmall)
             );
             WaterBuffer = new BufferBalancer(
-                new WorldBuffer(PoolSize.Small)
+                new WorldBuffer(PoolSize.Normal)
             );
             _shadowOffsets = new IntPtr[GeneralSettings.MaxChunks];
             _shadowCounts = new int[GeneralSettings.MaxChunks];

@@ -183,7 +183,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 else
                 {
                     Cell.Density[i] = GetSampleOrNeighbour(posX, posY, posZ, out Cell.Type[i]);
-                    Cell.Density[i] = Cell.Type[i] != BlockType.Water && Cell.Type[i] != BlockType.Air ? 1 : -1;
+                    //Cell.Density[i] = Cell.Type[i] != BlockType.Air && Cell.Type[i] != BlockType.Water ? 1 : -1;
                 }
             }
 
@@ -200,7 +200,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private float GetSampleOrNeighbour(int x, int y, int z, out BlockType Type)
         {
             y = Math.Min(y, _boundsY - _sampleHeight - 1);
-            if (x <= 0 || z <= 0 || y <= 1 || x >= _boundsX - 1 || z >= _boundsZ - 1 || _sampleWidth == 1 && _sampleHeight == 1)
+            if (x <= 0 || z <= 0 || y <= 4 || x >= _boundsX - 1 || z >= _boundsZ - 1 || _sampleWidth == 1 && _sampleHeight == 1)
             {
                 var b = GetNeighbourBlock(x, y, z);
                 Type = b.Type;

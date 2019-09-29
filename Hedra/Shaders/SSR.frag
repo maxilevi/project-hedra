@@ -79,7 +79,7 @@ void main()
     vec3 SSR = textureLod(gFinalImage, invCoords, int(0.0)).rgb * clamp(ReflectionMultiplier, 0.0, 0.9);
 
     float realFresnel = clamp(dot(normalize(viewNormal), normalize(viewPos)) + 0.5, 0.0, 1.0);
-    vec4 waterColor = textureLod(gColor, TexCoords, 0);
+    vec4 waterColor = textureLod(gColor, TexCoords, int(0.0));
     outColor = mix(vec4(SSR, 1.0) * 1.0, vec4(waterColor.xyz * waterColor.a, 1.0), 1.0 - realFresnel);
 }
 

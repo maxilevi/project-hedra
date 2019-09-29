@@ -17,18 +17,23 @@ namespace Hedra.Engine.Generation
             _parent = Parent;
         }
         
-        private BlockType[][][] CreateTypeArray()
+        private AutomatonCell[][][] CreateTypeArray()
         {
-            var types = new BlockType[Width][][];
+            var types = new AutomatonCell[Width][][];
             for (var x = 0; x < Width; ++x)
             {
-                types[x] = new BlockType[Height][];
+                types[x] = new AutomatonCell[Height][];
                 for (var y = 0; y < Height; ++y)
                 {
-                    types[x][y] = new BlockType[Width];
+                    types[x][y] = new AutomatonCell[Width];
                     for (var z = 0; z < Width; ++z)
                     {
-                        types[x][y][z] = GetBlockAt(x - offset, y, z - offset);
+                        var type = GetBlockAt(x - offset, y, z - offset);
+                        types[x][y][z] = new AutomatonCell
+                        {
+                            Type = type,
+                            Occupancy = type == BlockType.Water ? 1 : 0
+                        };
                     }
                 }
             }
@@ -38,24 +43,26 @@ namespace Hedra.Engine.Generation
 
         public void Update()
         {
+            return;
             Populated = true;
-            if (!_parent.HasWater) return;
+            //if (!_parent.HasWater) return;
             var types = CreateTypeArray();
             while (UpdateAutomatons(types)) {}
             SetTypes(types);
         }
 
-        private void SetTypes(BlockType[][][] Types)
+        private void SetTypes(AutomatonCell[][][] Types)
         {
             for (var x = 0; x < Width; ++x)
             for (var y = 0; y < Height; ++y)
             for (var z = 0; z < Width; ++z)
             {
-                SetBlockAt(x-offset, y, z-offset, Types[x][y][z]);
+                if(Types[x][y][z].Type == BlockType.Water)
+                    SetBlockAt(x-offset, y, z-offset, Types[x][y][z].Type);
             }
         }
 
-        private bool UpdateAutomatons(BlockType[][][] Types)
+        private bool UpdateAutomatons(AutomatonCell[][][] Automata)
         {
             var changed = false;
             for (var x = 0; x < Width; x++)
@@ -64,8 +71,8 @@ namespace Hedra.Engine.Generation
                 {
                     for (var y = 0; y < Height; ++y)
                     {
-                        if (Types[x][y][z] == BlockType.Water)
-                            changed |= Automatons.Water(Types, x, y, z);
+                        if (Automata[x][y][z].Type == BlockType.Water)
+                            changed |= Automatons.Water(Automata, x, y, z);
                     }
                 }
             }
@@ -74,7 +81,7 @@ namespace Hedra.Engine.Generation
 
         private void SetBlockAt(int x, int y, int z, BlockType Type)
         {
-            GetNeighbourChunk(x,z).SetBlockAt(Modulo(x), y, Modulo(z), Type);
+            GetNeighbourChunk(x, z).SetBlockAt(Modulo(x), y, Modulo(z), Type);
         }
 
         private Chunk GetNeighbourChunk(int x, int z)

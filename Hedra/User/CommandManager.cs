@@ -517,9 +517,23 @@ namespace Hedra.User
 
                 if (Parts[0] == "automata")
                 {
-                    var chunk = World.GetChunkAt(Caster.Position);
-                    chunk.Automatons.Update();
-                    World.AddChunkToQueue(chunk, ChunkQueueType.Mesh);
+                    if (Parts.Length == 2 && Parts[1] == "all")
+                    {
+                        var chunks = World.Chunks;
+                        var count = World.Chunks.Count;
+                        for (var i = count-1; i > -1; i--)
+                        {
+                            if(chunks[i].NeighboursExist)
+                                chunks[i].Automatons.Update();
+                            //World.AddChunkToQueue(chunks[i], ChunkQueueType.Mesh);
+                        }
+                    }
+                    else
+                    {
+                        var chunk = World.GetChunkAt(Caster.Position);
+                        chunk.Automatons.Update();
+                        World.AddChunkToQueue(chunk, ChunkQueueType.Mesh);
+                    }
                 }
                 if (Parts[0] == "rebuild")
                 {
