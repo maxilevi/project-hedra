@@ -26,7 +26,11 @@ namespace Hedra.Engine.BiomeSystem
     public class BiomePool : IBiomePool
     {
         public const int SeaLevel = 16;
-        public const int RiverLevel = 32;
+        public const int RiverMaxHeight = RiverWaterLevel - 2;
+        public const int RiverMinHeight = RiverFloorLevel - 2;
+        public const int RiverSeaFloorMax = RiverWaterLevel + 2;
+        public const int RiverWaterLevel = 25;
+        public const int RiverFloorLevel = RiverWaterLevel - BaseBiomeGenerationDesign.RiverDepth;
         public const int MaxRegionsPerBiome = 8;
 
         private readonly WorldType _type;

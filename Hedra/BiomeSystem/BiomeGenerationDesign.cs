@@ -36,7 +36,7 @@ namespace Hedra.BiomeSystem
         
         public void BuildRiverBorderMap(FastNoiseSIMD Noise, float[][] RiverMap, int Width, float Scale, Vector2 Offset)
         {
-            DoBuildRiverMap(Noise, RiverMap, Width, Scale, Offset);
+            DoBuildRiverBorderMap(Noise, RiverMap, Width, Scale, Offset);
         }
         
         public void AddFunction(float[][][] Map1, Func<int, int, int, float> Function)

@@ -74,7 +74,8 @@ namespace Hedra.Engine.BiomeSystem
                     var position = new Vector2(x * Chunk.BlockSize + OffsetX, z * Chunk.BlockSize + OffsetZ);
                     var riverHeight = riverMap[x][z];
                     var riverBorderHeight = riverBorderMap[x][z];
-                    var height = CalculateHeight(x, z, heights, types, out var type) - riverMap[x][z];
+                    var height = CalculateHeight(x, z, heights, types, out var type);
+                    var smallFrequency = SmallFrequency(position.X, position.Y);
 
                     var densityClampHeight = Chunk.Height - 3f;
                     HandleStructures(position, groundworks, out var blockGroundworks, ref height);
@@ -83,10 +84,13 @@ namespace Hedra.Engine.BiomeSystem
                     /* Water is built from the buttom up so we should not change this */
                     for (var y = 0; y < Chunk.Height; ++y)
                     {
-                        var density = CalculateDensity(x,y,z, noise3D);
+                        var riverDensity = riverHeight > 0 ? CalculateRiverDensity(riverHeight, y, ref smallFrequency) : 0;
+                        var riverBorderDensity = riverBorderHeight;
+                        
+                        var density = CalculateDensity(x,y,z, noise3D) - riverDensity;
                         if (y >= densityClampHeight) density = 0;
                         
-                        this.GenerateBlock(sampledBlocks, ref density, ref type, ref x, ref y, ref z, ref height, ref makeDirt, ref rng, ref riverHeight, ref riverBorderHeight, ref hasWater);
+                        this.GenerateBlock(sampledBlocks, ref density, ref type, ref x, ref y, ref z, ref height, ref makeDirt, ref rng, ref riverDensity, ref riverBorderDensity, ref hasWater);
                                     
                         this.HandleGroundworks(sampledBlocks, x, y, z, blockGroundworks);
                     }
@@ -100,6 +104,17 @@ namespace Hedra.Engine.BiomeSystem
             {
                 HasWater = hasWater
             };
+        }
+
+        private float CalculateRiverDensity(float river, float y, ref float smallFrequency)
+        {
+            var falloff = river / BaseBiomeGenerationDesign.RiverDepth;
+            var density = 16f + smallFrequency * 16f;
+            var lerpValue = Mathf.Clamp((y - BiomePool.RiverMaxHeight) / 8f, 0f, 1f);
+            density = Mathf.Lerp(density, 0, lerpValue * lerpValue);
+            var bottomLerpValue = Mathf.Clamp((y - BiomePool.RiverMinHeight) / 5f, 0f, 1f);
+            density = Mathf.Lerp(0, density, bottomLerpValue * bottomLerpValue);
+            return (density) * falloff;
         }
 
         private void HandlePlateaus(int X, int Z, Vector2 Position, BasePlateau[] Plateaux, ref float densityClampHeight)
@@ -370,8 +385,8 @@ namespace Hedra.Engine.BiomeSystem
             var blockDensity = CalculateDensityForBlock(height, density, y);
 
             HandleNormalBlocks(Blocks, ref x, ref y, ref z, ref blockDensity, ref blockType, ref makeDirt, ref rng);
-            hasWater |= HandleRiverBlocks(Blocks, ref x, ref y, ref z, ref blockType, ref riverHeight, ref riverBorderHeight, ref height);
             hasWater |= HandleOceanBlocks(Blocks, ref x, ref y, ref z, ref blockType);
+            hasWater |= HandleRiverBlocks(Blocks, ref x, ref y, ref z, ref blockType, ref riverHeight, ref riverBorderHeight, ref height);
 
             currentBlock.Type = blockType;
             currentBlock.Density = blockDensity;
@@ -400,22 +415,22 @@ namespace Hedra.Engine.BiomeSystem
         private static bool HandleRiverBlocks(SampledBlock[][][] Blocks, ref int x, ref int y, ref int z, ref BlockType blockType, ref float river, ref float riverBorder, ref float height)
         {
             var hasWater = false;
-            if (riverBorder > 0 || river > 0)
+            var originalHeight = height;
+            if (river > 0 && y < BiomePool.RiverWaterLevel)
             {
-                var originalHeight = height + river;
-                if (river > 0 && y < originalHeight)
+                if (blockType == BlockType.Air && y > 0)
                 {
-                    if (blockType == BlockType.Air && y > 0)
+                    var underType = Blocks[x][y - 1][z].Type;
+                    if (underType == BlockType.Water || underType == BlockType.Seafloor)
                     {
-                        var underType = Blocks[x][y - 1][z].Type;
-                        if (underType == BlockType.Water || underType == BlockType.Seafloor)
-                        {
-                            blockType = BlockType.Water;
-                            hasWater = true;
-                        }
+                        blockType = BlockType.Water;
+                        hasWater = true;
                     }
                 }
-                if (riverBorder > 0 && blockType != BlockType.Air && blockType != BlockType.Water)
+            }
+            if (riverBorder > 0 && y < BiomePool.RiverSeaFloorMax && blockType != BlockType.Air && blockType != BlockType.Water)
+            {
+                if (Blocks[x][y + 1][z].Type == BlockType.Air)
                 {
                     blockType = BlockType.Seafloor;
                 }

@@ -56,7 +56,7 @@ namespace Hedra.BiomeSystem
             RiverMap = CreateMap<float>(Width);
             _design.BuildRiverMap(Noise, RiverMap, Width, Scale, Offset);
             RiverBorderMap = CreateMap<float>(Width);
-            _design.BuildRiverBorderMap(Noise, RiverMap, Width, Scale, Offset);
+            _design.BuildRiverBorderMap(Noise, RiverBorderMap, Width, Scale, Offset);
         }
 
         private T[][][] CreateMap<T>(int Width, int Height)

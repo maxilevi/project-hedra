@@ -10,16 +10,16 @@ namespace Hedra.Engine.BiomeSystem
     {
         private const float Narrow = 0.42f;
         private const float Border = 0.02f;
-        private const float Depth = 8;
+        public const int RiverDepth = 6;
 
         protected override void DoBuildRiverMap(FastNoiseSIMD Noise, float[][] RiverMap, int Width, float Scale, Vector2 Offset)
         {
-            BaseRiver(Noise, RiverMap, Width, Scale, Offset, 128f);
+            BaseRiver(Noise, RiverMap, Width, Scale, Offset, 48f);
         }
 
         protected override void DoBuildRiverBorderMap(FastNoiseSIMD Noise, float[][] RiverMap, int Width, float Scale, Vector2 Offset)
         {
-            BaseRiver(Noise, RiverMap, Width, Scale, Offset, 96);
+            BaseRiver(Noise, RiverMap, Width, Scale, Offset, 42f);
         }
         
         private void BaseRiver(FastNoiseSIMD Noise, float[][] RiverMap, int Width, float Scale, Vector2 Offset, float Border)
@@ -31,7 +31,7 @@ namespace Hedra.Engine.BiomeSystem
             set2 = TransformSet(set2, F => Math.Min(1f, Math.Max(0f, F)));
             //set1 = MultiplySets(set1, set2);
             
-            AddSet(RiverMap, set1, F => Math.Min(Depth, Math.Max(0, F) * 8f));
+            AddSet(RiverMap, set1, F => Math.Min(RiverDepth, Math.Max(0, F) * 8f));
         }
     }
 }
