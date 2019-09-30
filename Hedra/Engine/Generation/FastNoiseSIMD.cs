@@ -26,6 +26,41 @@ namespace Hedra.Engine.Generation
             }
         }
 
+        public float PerturbAmp
+        {
+            set => HedraCoreNative.fastnoise_setPerturbAmp(_native, value);
+        }
+        
+        public float PerturbFrequency
+        {
+            set => HedraCoreNative.fastnoise_setPerturbFrequency(_native, value);
+        }
+        
+        public PerturbType PerturbType
+        {
+            set => HedraCoreNative.fastnoise_setPerturbType(_native, value);
+        }
+
+        public float FractalLacunarity
+        {
+            set => HedraCoreNative.fastnoise_setFractalLacunarity(_native, value);
+        }
+        
+        public float FractalGain
+        {
+            set => HedraCoreNative.fastnoise_setFractalGain(_native, value);
+        }
+        
+        public int FractalOctaves
+        {
+            set => HedraCoreNative.fastnoise_setFractalOctaves(_native, value);
+        }
+        
+        public FractalType FractalType
+        {
+            set => HedraCoreNative.fastnoise_setFractalType(_native, value);
+        }
+        
         public float Frequency
         {
             set => HedraCoreNative.fastnoise_setFrequency(_native, value);

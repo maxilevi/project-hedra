@@ -15,13 +15,13 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public Worker()
         {
+            _resetEvent = new AutoResetEvent(false);
             _workerThread = new Thread(this.Update)
             {
                 IsBackground = true,
                 Priority = ThreadPriority.Lowest
             };
             _workerThread.Start();
-            _resetEvent = new AutoResetEvent(false);
         }
 
         public void Update()

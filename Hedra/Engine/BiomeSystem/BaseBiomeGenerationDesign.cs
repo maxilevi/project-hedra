@@ -24,12 +24,12 @@ namespace Hedra.Engine.BiomeSystem
         
         private void BaseRiver(FastNoiseSIMD Noise, float[][] RiverMap, int Width, float Scale, Vector2 Offset, float Border)
         {
+            Noise.PerturbType = PerturbType.Gradient;
+            Noise.PerturbFrequency = 32f;
+            Noise.PerturbAmp = 0.0075f;
             var set1 = Noise.GetSimplexSetWithFrequency(Offset, new Vector2(Width, Width), new Vector2(Scale, Scale), 0.00015f);
             set1 = TransformSet(set1, F => (float) Math.Min(16f, Math.Max(0, 1.0 - Math.Abs(F) * Border)));
-            
-            var set2 = Noise.GetSimplexSetWithFrequency(Offset, new Vector2(Width, Width), new Vector2(Scale, Scale), 0.001f);
-            set2 = TransformSet(set2, F => Math.Min(1f, Math.Max(0f, F)));
-            //set1 = MultiplySets(set1, set2);
+            Noise.PerturbType = PerturbType.None;
             
             AddSet(RiverMap, set1, F => Math.Min(RiverDepth, Math.Max(0, F) * 8f));
         }

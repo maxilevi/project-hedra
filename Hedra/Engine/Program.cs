@@ -32,7 +32,7 @@ namespace Hedra.Engine
             var noise = new FastNoiseSIMD(1);
             var s = 1024;
             var map = CreateMap<float>(s);
-            gen.BuildRiverMap(noise, map, s, 1, Vector2.Zero);
+            gen.BuildRiverMap(noise, map, s, 4, Vector2.Zero);
             var bmp = new Bitmap(s, s);
             var data = bmp.LockBits(new Rectangle(0,0,bmp.Width,bmp.Height), ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
             unsafe

@@ -510,7 +510,6 @@ namespace Hedra.Engine.BiomeSystem
 
         protected override void PlaceEnvironment(RegionCache Cache)
         {
-            return;
             var structs = World.StructureHandler.StructureItems;
             var groundworks = World.WorldBuilding.Groundworks.Where(P => P.NoPlants).ToArray();
             for (var x = 0; x < Chunk.BoundsX; x++)
@@ -533,7 +532,6 @@ namespace Hedra.Engine.BiomeSystem
 
         protected override void DoTreeAndStructurePlacements(RegionCache Cache)
         {
-            return;
             var structs = World.StructureHandler.StructureItems;
             var plateaus = World.WorldBuilding.Plateaux.Where(P => P.NoTrees).ToArray();
             var groundworks = World.WorldBuilding.Groundworks.Where(P => P.NoTrees).ToArray();

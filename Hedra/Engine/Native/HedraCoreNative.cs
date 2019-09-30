@@ -68,13 +68,35 @@ namespace Hedra.Engine.Native
         public static extern IntPtr fastnoise_getCellularSet(IntPtr Object, float xOffset, float yOffset, float zOffset, int xSize, int ySize, int zSize, float xScale, float yScale, float zScale);
 
         [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr fastnoise_setFrequency(IntPtr Object, float Frequency);
+        public static extern void fastnoise_setFrequency(IntPtr Object, float Frequency);
         
         [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr fastnoise_setCellularReturnType(IntPtr Object, CellularReturnType returnType);
+        public static extern void fastnoise_setCellularReturnType(IntPtr Object, CellularReturnType returnType);
         
         [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr fastnoise_setSeed(IntPtr Object, int Seed);
+        public static extern void fastnoise_setSeed(IntPtr Object, int Seed);
+        
+        [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void fastnoise_setFractalGain(IntPtr pointer, float gain);
+
+        [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void fastnoise_setFractalLacunarity(IntPtr pointer, float lacunarity);
+
+        [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void fastnoise_setFractalOctaves(IntPtr pointer, int octaves);
+
+        [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void fastnoise_setFractalType(IntPtr pointer, FractalType fractalType);
+        
+        [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void fastnoise_setPerturbAmp(IntPtr pointer, float amplitude);
+
+        [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void fastnoise_setPerturbFrequency(IntPtr pointer, float frequency);
+
+        [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void fastnoise_setPerturbType(IntPtr pointer, PerturbType perturbType);
+
         /*
         [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr meshing_initialize();
@@ -87,4 +109,6 @@ namespace Hedra.Engine.Native
     }
     
     public enum CellularReturnType { CellValue, Distance, Distance2, Distance2Add, Distance2Sub, Distance2Mul, Distance2Div, NoiseLookup, Distance2Cave };
+    public enum FractalType { FBM, Billow, RigidMulti };
+    public enum PerturbType { None, Gradient, GradientFractal, Normalise, Gradient_Normalise, GradientFractal_Normalise };
 }
