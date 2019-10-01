@@ -58,6 +58,7 @@ namespace Hedra.Engine.Loader
         public static bool LoadBoilerplate()
         {
             MainThreadId = Thread.CurrentThread.ManagedThreadId;
+            Thread.CurrentThread.Priority = ThreadPriority.Highest;
             Time.RegisterThread();
             OSManager.Load(Assembly.GetExecutingAssembly().Location);
             AssetManager.Load();
@@ -128,9 +129,10 @@ namespace Hedra.Engine.Loader
             var frameTime = Delta;
             while (frameTime > 0f)
             {
+                var isOnMenu = GameManager.InStartMenu;
                 var delta = Math.Min(frameTime, Physics.Timestep);
                 Time.Set(delta, false);
-                BulletPhysics.Update(Time.DeltaTime);
+                BulletPhysics.Update(isOnMenu ? Time.IndependentDeltaTime : Time.DeltaTime);
                 RoutineManager.Update();
                 UpdateManager.Update();
                 BackgroundUpdater.Dispatch();

@@ -90,6 +90,7 @@ namespace Hedra.Engine.Rendering.UI
 
         private void OnSelect(object Sender, MouseButtonEventArgs Args)
         {
+            if (_humans.Count == 0) return;
             GameManager.LoadCharacter(DataManager.PlayerFiles[_humans.IndexOf(_selectedHuman)]);
             if(ShouldHost)
                 Network.Instance.Host();
@@ -159,7 +160,6 @@ namespace Hedra.Engine.Rendering.UI
                 _humans[i].Level = _information[i].Level;
                 _humans[i].PlaySpawningAnimation = false;
                 _humans[i].SearchComponent<DamageComponent>().Immune = true;
-                _humans[i].Physics.UsePhysics = false;
                 foreach (var pair in _information[i].Items)
                 {
                     var item = pair.Value;
@@ -175,8 +175,6 @@ namespace Hedra.Engine.Rendering.UI
             {
                 var human = new Humanoid();
                 human.Physics.UseTimescale = false;
-                human.Physics.UsePhysics = false;
-                human.Physics.GravityDirection = Vector3.Zero;
                 _humans.Add(human);
                 World.RemoveEntity(human);
             }
@@ -312,7 +310,8 @@ namespace Hedra.Engine.Rendering.UI
                 var target = FireDirection(k, 4.8f);
                 _humans[k].Model.LocalRotation = Physics.DirectionToEuler(target.NormalizedFast().Xz.ToVector3()) + Vector3.UnitY * 180f;
                 _humans[k].Model.TargetRotation = _humans[k].Model.LocalRotation;
-                _humans[k].Position = new Vector3(_humans[k].Position.X, Physics.HeightAtPosition(_humans[k].Position),  _humans[k].Position.Z);
+                if(_humans[k].Position.Y <= 4)
+                    _humans[k].Position = new Vector3(_humans[k].Position.X, Physics.HeightAtPosition(_humans[k].Position) + 4,  _humans[k].Position.Z);
             }
 
             if (this.Enabled)
