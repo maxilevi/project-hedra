@@ -98,36 +98,41 @@ namespace Hedra.Engine.CacheSystem
             lock (_colorLock)
             {
                 var cHash = MakeHash(Data.Colors);
-                if (CachedColors.ContainsKey(cHash))
+                lock (_colorLock)
                 {
-                    goto COLOR_EXISTS;
+                    if (CachedColors.ContainsKey(cHash))
+                    {
+                        goto COLOR_EXISTS;
+                    }
+
+                    CachedColors.Add(cHash, Data.Colors);
                 }
-                
-                CachedColors.Add(cHash, Data.Colors);
 
                 COLOR_EXISTS:
                 Data.ColorCache = cHash;
                 Data.Colors = new List<Vector4>();
             }
+
             if (Data.HasExtraData)
             {
+                var eHash = MakeHash(Data.ExtraData);
                 lock (_extradataLock)
                 {
-                    var eHash = MakeHash(Data.ExtraData);
                     if (CachedExtradata.ContainsKey(eHash))
                     {
                         goto EXTRADATA_EXISTS;
                     }
-                    CachedExtradata.Add(eHash, Data.ExtraData);
 
-                    EXTRADATA_EXISTS:
-                    Data.ExtraDataCache = eHash;
-                    Data.ExtraData = new List<float>();
+                    CachedExtradata.Add(eHash, Data.ExtraData);
                 }
+
+                EXTRADATA_EXISTS:
+                Data.ExtraDataCache = eHash;
+                Data.ExtraData = new List<float>();
             }
         }
 
-        public object MakeHash(List<Vector4> Colors)
+        public static object MakeHash(List<Vector4> Colors)
         {
             var sum = default(Vector4);
             for (var i = 0; i < Colors.Count; ++i)
@@ -137,7 +142,7 @@ namespace Hedra.Engine.CacheSystem
             return sum * Colors.Count;
         }
 
-        public object MakeHash(List<float> Extradata)
+        public static object MakeHash(List<float> Extradata)
         {
             var sum = default(float);
             for (var i = 0; i < Extradata.Count; ++i)

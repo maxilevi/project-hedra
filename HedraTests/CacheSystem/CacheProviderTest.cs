@@ -30,8 +30,8 @@ namespace HedraTests.CacheSystem
             var list = new List<float>();
             for(var i = 0; i < 1000; ++i)
                 list.Add(Utils.Rng.NextFloat());
-            var hash1 = Provider.MakeHash(list);
-            var hash2 = Provider.MakeHash(list);
+            var hash1 = CacheProvider.MakeHash(list);
+            var hash2 = CacheProvider.MakeHash(list);
             Assert.AreEqual(hash1, hash2);         
         }
         
@@ -45,8 +45,8 @@ namespace HedraTests.CacheSystem
                 new Vector4(.64323f, 12132.38312f, 23.31232f, 21.213f),
                 new Vector4(.33f, 18762.33812f, 23.332f, 21.21443f)
             });
-            var hash1 = Provider.MakeHash(list);
-            var hash2 = Provider.MakeHash(list);
+            var hash1 = CacheProvider.MakeHash(list);
+            var hash2 = CacheProvider.MakeHash(list);
             Assert.AreEqual(hash1, hash2);         
         }
         
