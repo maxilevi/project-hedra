@@ -33,12 +33,12 @@ namespace Hedra.Engine.BiomeSystem
         public bool FullyGenerated => StructuresPlaced && BlocksDefined;
         protected readonly FastNoiseSIMD Noise;
 
-        protected BiomeGenerator(Chunk RefParent)
+        protected BiomeGenerator(Chunk Parent)
         {
-            this.RandomGen = BiomeGenerator.GenerateRng(new Vector2(RefParent.OffsetX, RefParent.OffsetZ));
-            this.OffsetX = RefParent.OffsetX;
-            this.OffsetZ = RefParent.OffsetZ;
-            this.Parent = RefParent;
+            this.RandomGen = GenerateRng(new Vector2(Parent.OffsetX, Parent.OffsetZ));
+            this.OffsetX = Parent.OffsetX;
+            this.OffsetZ = Parent.OffsetZ;
+            this.Parent = Parent;
             this.Seed = World.Seed;
             this.Noise = new FastNoiseSIMD(Seed);
         }
@@ -69,7 +69,7 @@ namespace Hedra.Engine.BiomeSystem
 
         private void CheckForNearbyStructures()
         {
-            //StructureHandler.CheckStructures( new Vector2(Chunk.OffsetX, Chunk.OffsetZ) );
+            StructureHandler.CheckStructures( new Vector2(Parent.OffsetX, Parent.OffsetZ) );
         }
 
         public static float PathFormula(float X, float Z)

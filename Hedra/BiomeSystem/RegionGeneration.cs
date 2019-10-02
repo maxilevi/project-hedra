@@ -30,7 +30,7 @@ namespace Hedra.BiomeSystem
         {
             lock (_tempMapLock)
             {
-                _noise.Seed = World.Seed;
+                _tempDensityMap[0][0] = 0;
                 _design.BuildHeightMap(_noise, _tempDensityMap, _tempTypeMap, 1, 1, new Vector2(X, Y));
                 Type = _tempTypeMap[0][0];
                 return _tempDensityMap[0][0];
@@ -57,6 +57,12 @@ namespace Hedra.BiomeSystem
             _design.BuildRiverMap(Noise, RiverMap, Width, Scale, Offset);
             RiverBorderMap = CreateMap<float>(Width);
             _design.BuildRiverBorderMap(Noise, RiverBorderMap, Width, Scale, Offset);
+        }
+        
+        public void BuildPathMap(FastNoiseSIMD Noise, int Width, float Scale, Vector2 Offset, out float[][] PathMap)
+        {
+            PathMap = CreateMap<float>(Width);
+            _design.BuildPathMap(Noise, PathMap, Width, Scale, Offset);
         }
 
         private T[][][] CreateMap<T>(int Width, int Height)

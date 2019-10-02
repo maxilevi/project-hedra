@@ -26,6 +26,7 @@ namespace Hedra.Engine.BiomeSystem
     public class BiomePool : IBiomePool
     {
         public const int SeaLevel = 16;
+        public const int PathHeight = RiverWaterLevel;
         public const int RiverMaxHeight = RiverWaterLevel - 2;
         public const int RiverMinHeight = RiverFloorLevel - 2;
         public const int RiverSeaFloorMax = RiverWaterLevel + 2;
