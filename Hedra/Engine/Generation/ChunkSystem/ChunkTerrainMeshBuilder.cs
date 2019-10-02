@@ -64,12 +64,13 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return CreateTerrain(1, Cache, false, false, CollisionMeshLod, CollisionMeshLod).StaticData;
         }
         
-        private ChunkMeshBuildOutput CreateTerrain(int Lod, RegionCache Cache, bool ProcessWater, bool ProcessColors, int HorizontalIncrement = 1, int VerticalIncrement = 1)
+        private unsafe ChunkMeshBuildOutput CreateTerrain(int Lod, RegionCache Cache, bool ProcessWater, bool ProcessColors, int HorizontalIncrement = 1, int VerticalIncrement = 1)
         {
             var failed = false;
             var blockData = new VertexData();
             var waterData = new VertexData();
-            var helper = new ChunkTerrainMeshBuilderHelper(_parent, Lod);
+            var grid = stackalloc SampledBlock[ChunkTerrainMeshBuilderHelper.CalculateGridSize(Lod)];
+            var helper = new ChunkTerrainMeshBuilderHelper(_parent, Lod, grid);
 
             IterateAndBuild(helper, ref failed, ProcessWater, ProcessColors, Cache, blockData, waterData, HorizontalIncrement, VerticalIncrement);
 

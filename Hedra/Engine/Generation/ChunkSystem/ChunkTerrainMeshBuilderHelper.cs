@@ -7,7 +7,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
-    public class ChunkTerrainMeshBuilderHelper
+    public unsafe class ChunkTerrainMeshBuilderHelper
     {
         private static int Bounds = (int) (Chunk.Width / Chunk.BlockSize); 
         private readonly Chunk _parent;
@@ -23,11 +23,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private int _sampleHeight;
         private int noiseValuesMapWidth;
         private int noiseValuesMapHeight;
-        private SampledBlock[] _grid;
+        private SampledBlock* _grid;
 
-        public ChunkTerrainMeshBuilderHelper(Chunk Parent, int Lod)
+        public ChunkTerrainMeshBuilderHelper(Chunk Parent, int Lod, SampledBlock* Grid)
         {
             _parent = Parent;
+            _grid = Grid;
             _offsetX = _parent.OffsetX;
             _offsetZ = _parent.OffsetZ;
             _blockSize = Chunk.BlockSize;
@@ -36,13 +37,21 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _boundsZ = (int) (Chunk.Width / _blockSize);
             _height = Chunk.Height;
             _coefficient =  1 / _blockSize;
+            SetSampleSize(Lod);
             BuildDensityGrid(Lod);
+        }
+        
+        public static int CalculateGridSize(int Lod)
+        {
+            var width = (Chunk.BoundsX / Lod) + 1;
+            var height = (Chunk.BoundsY / Lod);
+            return width * height * width;
         }
 
         private void SetSampleSize(int Lod)
         {
             _sampleWidth = Lod;
-            _sampleHeight = Lod;//Lod > 1 ? Lod * 2 : Lod;
+            _sampleHeight = Lod;
             noiseValuesMapWidth = (_boundsX / _sampleWidth) + 1;
             noiseValuesMapHeight = (_boundsY / _sampleHeight);
         }
@@ -124,11 +133,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
             return blockColor;
         }
-        
-        public void BuildDensityGrid(int Lod)
+
+        private void BuildDensityGrid(int Lod)
         {
-            SetSampleSize(Lod);
-            var densities = new SampledBlock[noiseValuesMapWidth * noiseValuesMapHeight * noiseValuesMapWidth];
             for (var x = 0; x < noiseValuesMapWidth; x++)
             {
                 for (var y = 0; y < noiseValuesMapHeight; y++)
@@ -153,7 +160,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                             density = mainDensity > 0 && density < 0 ? mainDensity : density;
                         }
 
-                        densities[x * noiseValuesMapHeight * noiseValuesMapWidth + y * noiseValuesMapWidth + z] = new SampledBlock
+                        _grid[x * noiseValuesMapHeight * noiseValuesMapWidth + y * noiseValuesMapWidth + z] = new SampledBlock
                         {
                             Density = density,
                             Type = block0.Type
@@ -161,7 +168,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     }
                 }
             }
-            _grid = densities;
         }
 
         public void CreateCell(ref GridCell Cell, ref int X, ref int Y, ref int Z, bool isWaterCell, int HorizontalLod, int VerticalLod, out bool Success)
