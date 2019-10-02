@@ -12,14 +12,15 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private readonly AutoResetEvent _resetEvent;
         private object _owner;
         private Action _action;
+        private const int MB = 1024 * 1024;
 
         public Worker()
         {
             _resetEvent = new AutoResetEvent(false);
-            _workerThread = new Thread(this.Update)
+            _workerThread = new Thread(this.Update, MB * 4)
             {
                 IsBackground = true,
-                Priority = ThreadPriority.Lowest
+                //Priority = ThreadPriority.Lowest
             };
             _workerThread.Start();
         }
