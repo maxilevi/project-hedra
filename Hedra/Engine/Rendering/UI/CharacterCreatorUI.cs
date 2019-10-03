@@ -14,6 +14,7 @@ using System.Drawing;
 using OpenTK;
 using System.Collections;
 using System.Linq;
+using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.Game;
@@ -67,11 +68,12 @@ namespace Hedra.Engine.Rendering.UI
             {
                 LocalRotation = Vector3.UnitY * -90,
                 TargetRotation = Vector3.UnitY * -90,
+                Position = Scenes.MenuBackground.PlatformPosition,
                 ApplyFog = true,
                 Enabled = true
             };
-            _human.Physics.UsePhysics = false;
-            _human.Physics.GravityDirection = Vector3.Zero;
+            _human.SearchComponent<DamageComponent>().Immune = true;
+            _human.Physics.UseTimescale = false;
             World.RemoveEntity(_human);
 
 
@@ -162,12 +164,15 @@ namespace Hedra.Engine.Rendering.UI
             {
                 if(_clickTimer.Tick())
                     _openFolder.CanClick = true;
-                _human.Physics.ResetVelocity();
                 _human.Update();
                 _newRot += Time.IndependentDeltaTime * 30f;
                 _human.Model.LocalRotation = Vector3.UnitY * -90 + Vector3.UnitY * _newRot;
                 _human.Model.TargetRotation = Vector3.UnitY * -90 + Vector3.UnitY * _newRot;
-                _human.Position = new Vector3(_human.Position.X, Physics.HeightAtPosition(_human.Position), _human.Position.Z);
+                _human.Position = new Vector3(Scenes.MenuBackground.PlatformPosition.X, _human.Position.Y, Scenes.MenuBackground.PlatformPosition.Z);
+                if(_human.Position.Y <= Physics.HeightAtPosition(_human.Position)){
+                    _human.Position = new Vector3(_human.Position.X, Physics.HeightAtPosition(_human.Position) + 4, _human.Position.Z);
+                }
+                _human.IsKnocked = false;
             }
         }
 

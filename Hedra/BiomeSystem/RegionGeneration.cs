@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Generation.ChunkSystem;
 using OpenTK;
 
 namespace Hedra.BiomeSystem
@@ -9,16 +11,16 @@ namespace Hedra.BiomeSystem
     {
         private readonly BiomeGenerationDesign _design;
         private readonly object _tempMapLock;
-        private readonly float[][] _tempDensityMap;
-        private readonly BlockType[][] _tempTypeMap;
+        private readonly float[][] _tempHeightMap;
+        private readonly float[][][] _tempDensityMap;
         private readonly FastNoiseSIMD _noise;
 
         public RegionGeneration(int Seed, BiomeGenerationDesign Design)
         {
             _noise = new FastNoiseSIMD(Seed);
             _tempMapLock = new object();
-            _tempDensityMap = CreateMap<float>(1);
-            _tempTypeMap = CreateMap<BlockType>(1);
+            _tempDensityMap = CreateMap<float>(1,Chunk.Height);
+            _tempHeightMap = CreateMap<float>(1);
             _design = Design;
         }
 
@@ -26,14 +28,28 @@ namespace Hedra.BiomeSystem
         public bool HasRivers => _design.HasRivers;
         public bool HasPaths => _design.HasPaths;
 
-        public float GetHeight(float X, float Y, out BlockType Type)
+        public float GetMaxHeight(float X, float Z)
         {
             lock (_tempMapLock)
             {
-                _tempDensityMap[0][0] = 0;
-                _design.BuildHeightMap(_noise, _tempDensityMap, _tempTypeMap, 1, 1, new Vector2(X, Y));
-                Type = _tempTypeMap[0][0];
-                return _tempDensityMap[0][0];
+                _noise.Seed = World.Seed;
+                /* Clear buffers */
+                _tempHeightMap[0][0] = 0;
+                for (var i = 0; i < Chunk.Height; ++i) _tempDensityMap[0][i][0] = 0;
+                
+                _design.BuildDensityMap(_noise, _tempDensityMap, null, 1, Chunk.Height, Chunk.BlockSize, Chunk.BlockSize, new Vector3(X, 0, Z));
+                _design.BuildHeightMap(_noise, _tempHeightMap, null, 1, Chunk.BlockSize, new Vector2(X, Z));
+                
+                for (var i = 0; i < Chunk.Height; ++i) 
+                    _tempDensityMap[0][i][0] = LandscapeGenerator.CalculateDensityForBlock(_tempHeightMap[0][0], _tempDensityMap[0][i][0], i);
+
+                for (var i = Chunk.Height - 1; i > -1; --i)
+                {
+                    if(_tempDensityMap[0][i][0] > 0)
+                        return _tempDensityMap[0][i][0] * 0f + i;
+                }
+
+                return 0;
             }
         }
         

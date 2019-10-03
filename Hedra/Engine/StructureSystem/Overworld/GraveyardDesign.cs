@@ -176,7 +176,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
-            var height = Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, out _);
+            var height = Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z);
             return Rng.Next(0, StructureGrid.GraveyardChance) == 1 && height > BiomePool.SeaLevel;
         }
         

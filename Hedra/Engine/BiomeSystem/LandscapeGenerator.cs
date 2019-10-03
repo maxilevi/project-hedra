@@ -81,7 +81,7 @@ namespace Hedra.Engine.BiomeSystem
                     var heightAtPoint = CalculateHeight(x, z, heights, null, out _);
                     var densityMultiplier = 1.0f;
                     
-                    HandlePlateaus(x, z, position, plateaus, ref heightAtPoint, ref densityMultiplier);
+                    HandlePlateaus(x, z, position, plateaus, ref heightAtPoint, ref heights, ref densityMultiplier);
                     densityMultipliers[(x + border) * realDepth + (z + border)] = densityMultiplier;
                     
                     for (var y = 0; y < Chunk.BoundsY; ++y)
@@ -158,7 +158,7 @@ namespace Hedra.Engine.BiomeSystem
             return (density) * falloff;
         }
 
-        private void HandlePlateaus(int X, int Z, Vector2 Position, BasePlateau[] Plateaux, ref float height, ref float densityMultiplier)
+        private void HandlePlateaus(int X, int Z, Vector2 Position, BasePlateau[] Plateaux, ref float height, ref float[][] k, ref float densityMultiplier)
         {
             var smallFrequency = SmallFrequency(Position.X, Position.Y);
             for (var i = 0; i < Plateaux.Length; i++)
@@ -321,7 +321,7 @@ namespace Hedra.Engine.BiomeSystem
         #endregion
         
         [MethodImpl(256)]
-        private static float CalculateDensityForBlock(float heightAtPoint, float densityAtPoint, int Y)
+        public static float CalculateDensityForBlock(float heightAtPoint, float densityAtPoint, int Y)
         {
             return 1 - (Y - heightAtPoint) + densityAtPoint;
         }

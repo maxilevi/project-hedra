@@ -147,7 +147,6 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
         {
             var rngGen = new Random(Seed + 6432);
             int rng = rngGen.Next(0, 4);
-            if (World.Seed == World.MenuSeed) rng = 1;
             switch (rng)
             {
                 case 0://
@@ -167,7 +166,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
         {
             var rngGen = new Random(Seed + 52234);
             int rng = rngGen.Next(0, 5);
-            if (World.Seed == World.MenuSeed || rngGen.Next(0, 5) == 1)
+            if (rngGen.Next(0, 5) == 1)
                 rng = 0;
 
             switch (rng)

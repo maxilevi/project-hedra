@@ -345,7 +345,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         private static bool IsWater(Vector3 TargetPosition, Region Biome)
         {
-            return (Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, out _) < BiomePool.SeaLevel - 1f);
+            return (Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z) < BiomePool.SeaLevel - 1f);
         }
         
         private static Vector3 FishingPostScale => Vector3.One * 11f;

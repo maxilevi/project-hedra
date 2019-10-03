@@ -55,7 +55,6 @@ namespace Hedra.Game
         public const float Fov = 85.0f;
         public static bool GlobalShadows = true;
         public static bool Hardcore = false;
-        public static bool Lod = true;
         public static bool UnderWaterEffect = false;
         private static bool _fullscreen;
         private static int _shadowQuality = 2;

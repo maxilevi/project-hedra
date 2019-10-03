@@ -10,7 +10,7 @@ namespace Hedra.Engine.WorldBuilding
         protected BasePlateau(Vector2 Position)
         {
             this.Position = Position;
-            this.MaxHeight = World.BiomePool.GetRegion(Position.ToVector3()).Generation.GetHeight(Position.X, Position.Y, out _);
+            this.MaxHeight = World.BiomePool.GetRegion(Position.ToVector3()).Generation.GetMaxHeight(Position.X, Position.Y)-1;
         }
 
         public Vector2 Position { get; }

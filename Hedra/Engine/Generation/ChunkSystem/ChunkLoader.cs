@@ -43,19 +43,21 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private float _targetMax = 1;
         private float _activeChunks;
         private float _targetActivechunks;
+        private int _lastRadius;
 
         public ChunkLoader(IPlayer Player)
         {
             Enabled = true;
             _player = Player;
-            _mainThread = new Thread(UpdateLoop);
+            _mainThread = new Thread(UpdateLoop)
+            {
+                Priority = ThreadPriority.BelowNormal
+            };
             _chunkWatchers = new List<ChunkWatcher>();
             _candidates = new List<Vector3>();
             _closest = new ClosestComparer();
             _resetEvent = new AutoResetEvent(false);
             _mainThread.Start();
-            RoutineManager.StartRoutine(this.CreateChunksCoroutine);
-            RoutineManager.StartRoutine(this.UpdateChunkCoroutine);
             OnChunkReady += World.MarkChunkReady;
         }
 
@@ -76,21 +78,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             this.UpdateFog();
         }
 
-        private IEnumerator UpdateChunkCoroutine()
-        {
-            var updateTimer = new Timer(0.2f)
-            {
-                UseTimeScale = false
-            };
-            while (GameManager.Exists)
-            {
-                if(!updateTimer.Tick()) yield return null;
-                Dispatch();
-                yield return null;
-            }
-        }
-
-        private void Dispatch()
+        public void Dispatch()
         {
             _resetEvent.Set();
         }
@@ -101,64 +89,55 @@ namespace Hedra.Engine.Generation.ChunkSystem
             while (GameManager.Exists)
             {
                 _resetEvent.WaitOne();
-                try
+                UpdateWatchers();
+                CreateIfNecessary();
+            }
+        }
+
+        private void UpdateWatchers()
+        {
+            var watchers = Watchers;
+            for (var i = watchers.Length - 1; i > -1; --i)
+            {
+                watchers[i]?.Update();
+                if (watchers[i]?.Disposed ?? false)
                 {
-                    var watchers = Watchers;
-                    for (var i = watchers.Length - 1; i > -1; --i)
-                    {
-                        watchers[i]?.Update();
-                        if (watchers[i]?.Disposed ?? false)
-                        {
-                            lock (Lock)
-                                _chunkWatchers.Remove(watchers[i]);
-                        }
-                    }
-                } catch (Exception e)
-                {
-                    Log.WriteLine($"Failed to update chunk watchers{Environment.NewLine}{e}");
+                    lock (Lock)
+                        _chunkWatchers.Remove(watchers[i]);
                 }
             }
         }
 
-        private IEnumerator CreateChunksCoroutine()
+        private void CreateIfNecessary()
         {
-            var creationTimer = new Timer(0.1f)
+            Offset = World.ToChunkSpace(_player.Position);
+            if (World.IsGenerated && Enabled)
             {
-                UseTimeScale = false
-            };
-            while (GameManager.Exists)
-            {
-                Offset = World.ToChunkSpace(_player.Position);
-                if (World.IsGenerated && Enabled && creationTimer.Tick())
+                var hadChanges = false;
+                var stopCounting = false;
+                var newTarget = 0;
+                BuildCandidates(_candidates);
+                for (var i = 0; i < _candidates.Count; i++)
                 {
-                    var hadChanges = false;
-                    var stopCounting = false;
-                    var newTarget = 0;
-                    BuildCandidates(_candidates);
-                    for (var i = 0; i < _candidates.Count; i++)
-                    {
-                        var obj = World.GetChunkByOffset(_candidates[i].Xz);
-                        if (obj == null || !obj.BuildedWithStructures || obj.Disposed) stopCounting = true;
-                        if (!stopCounting) newTarget++;
-                        if (obj != null) continue;
-                        var chunk = new Chunk((int) _candidates[i].X, (int) _candidates[i].Z);
-                        World.AddChunk(chunk);
-                        var watcher = new ChunkWatcher(chunk);
-                        watcher.OnChunkReady += O => OnChunkReady?.Invoke(O);
-                        lock (Lock)
-                            _chunkWatchers.Add(watcher);
-                    }
-
-                    _targetActivechunks = newTarget;
+                    var obj = World.GetChunkByOffset(_candidates[i].Xz);
+                    if (obj == null || !obj.BuildedWithStructures || obj.Disposed) stopCounting = true;
+                    if (!stopCounting) newTarget++;
+                    if (obj != null) continue;
+                    var chunk = new Chunk((int) _candidates[i].X, (int) _candidates[i].Z);
+                    World.AddChunk(chunk);
+                    var watcher = new ChunkWatcher(chunk);
+                    watcher.OnChunkReady += O => OnChunkReady?.Invoke(O);
+                    lock (Lock)
+                        _chunkWatchers.Add(watcher);
                 }
 
-                yield return null;
+                _targetActivechunks = newTarget;
             }
         }
 
         private void BuildCandidates(List<Vector3> Candidates)
         {
-            if(World.ToChunkSpace(_closest.Position) == World.ToChunkSpace(_player.Position)) return;
+            if(World.ToChunkSpace(_closest.Position) == World.ToChunkSpace(_player.Position) && _lastRadius == GameSettings.ChunkLoaderRadius) return;
             Candidates.Clear();
             var radius = (int) (GameSettings.ChunkLoaderRadius * .5f);
             for (var x = -radius; x < radius; x++)
@@ -171,6 +150,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     Candidates.Add(chunkPos.ToVector3());
                 }
             }
+            _lastRadius = GameSettings.ChunkLoaderRadius;
             _closest.Position = _player.Position.Xz.ToVector3();
             Candidates.Sort(_closest);
         }

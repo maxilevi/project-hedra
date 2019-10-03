@@ -49,13 +49,13 @@ namespace Hedra.Engine.Scenes
         {
             RoutineManager.StartRoutine(MakeFire);
             RoutineManager.StartRoutine(MakePlatform);
-            /*
+            
             var plateau = new RoundedPlateau(CampfirePosition.Xz, 24);
             var groundwork = new RoundedGroundwork(CampfirePosition, 24, BlockType.StonePath);
             var structure = new CollidableStructure(null, CampfirePosition, plateau, null);
             structure.AddGroundwork(groundwork);
             structure.AddPlateau(new RoundedPlateau(CreatorPosition.Xz, 16));
-            World.WorldBuilding.SetupStructure(structure);*/
+            World.WorldBuilding.SetupStructure(structure);
         }
         
         private static IEnumerator MakePlatform(){
@@ -84,7 +84,7 @@ namespace Hedra.Engine.Scenes
                 }
                 yield return null;
             }
-            FirePosition = CampfirePosition.Xz.ToVector3() + Vector3.UnitX * 4 + Vector3.UnitY * (Physics.HeightAtPosition(CampfirePosition +  Vector3.UnitX * 4));
+            FirePosition = CampfirePosition.Xz.ToVector3() + Vector3.UnitX * 4 + Vector3.UnitY * (Physics.HeightAtPosition(CampfirePosition +  Vector3.UnitX * 4)+1);
             
             var centerModel = AssetManager.PLYLoader("Assets/Env/Campfire2.ply", Vector3.One * 2.4f);
             centerModel.Translate( FirePosition );

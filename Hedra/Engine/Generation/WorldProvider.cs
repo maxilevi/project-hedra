@@ -130,7 +130,7 @@ namespace Hedra.Engine.Generation
             ModificationsLoader.Reload();
         }
 
-        public int MenuSeed => 2124321422;
+        public int MenuSeed { get; } = _menuSeeds[new Random().Next(0, _menuSeeds.Length)];
 
         public int RandomSeed
         {
@@ -586,7 +586,7 @@ namespace Hedra.Engine.Generation
             bool IsWater(Vector3 Point)
             {
                 var region = BiomePool.GetRegion(Point);
-                return region.Generation.GetHeight(Point.X, Point.Z, out _) < Engine.BiomeSystem.BiomePool.SeaLevel
+                return region.Generation.GetMaxHeight(Point.X, Point.Z) < Engine.BiomeSystem.BiomePool.SeaLevel
                     || LandscapeGenerator.River(point.Xz) > 0;
             }
             while (IsWater(point))
@@ -755,5 +755,29 @@ namespace Hedra.Engine.Generation
             }
         }
         #endregion
+        
+        private static int[] _menuSeeds = new int[]
+        {
+            843966896,
+            365367015,
+            -1207602704,
+            -1316611004,
+            1711677118,
+            434316731,
+            -1521453338,
+            930356700,
+            2108869840,
+            247179995,
+            -488844428,
+            -1835204548,
+            -1527889388,
+            1436884727,
+            -705499025,
+            -1122906719,
+            1050378001,
+            -65738522,
+            -1797625079,
+            1590961909
+        };
     }
 }

@@ -143,6 +143,7 @@ namespace Hedra.Engine.Loader
                 Executer.Update();
                 DistributedExecuter.Update();
                 Network.Instance.Update();
+                LocalPlayer.Instance.Loader.Dispatch();
                 frameTime -= delta;
             }
             Time.Set(Delta);

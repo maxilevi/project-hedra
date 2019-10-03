@@ -16,6 +16,7 @@ using Hedra.Engine.Sound;
 using Hedra.Game;
 using Hedra.Localization;
 using Hedra.Sound;
+using Hedra.User;
 using OpenTK;
 using OpenTK.Input;
 using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;
