@@ -16,7 +16,7 @@ namespace Hedra.Engine.BiomeSystem
             {
                 for(var z = 0; z < Width; z++)
                 {
-                    HeightMap[x][z] = GetHeight(x * Scale + Offset.X, z * Scale + Offset.Y, out TypeMap[x][z]);
+                    HeightMap[x][z] = GetHeight(x * Scale + Offset.X, z * Scale + Offset.Y, out _);
                 }
             }
         }
