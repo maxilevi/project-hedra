@@ -117,13 +117,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Vector4 A = RegionColor.GrassColors[(int) Math.Floor(clampNoise / levelSize)],
                     B = RegionColor.GrassColors[nextIndex];
 
-                float delta = clampNoise / levelSize - (float) Math.Floor(clampNoise / levelSize);
-
+                var delta = clampNoise / levelSize - (float) Math.Floor(clampNoise / levelSize);
                 blockColor = Mathf.Lerp(A, B, delta);
             }
-            else if (Type == BlockType.StonePath || Type == BlockType.Stone)
+            else if (Type == BlockType.Stone || Type == BlockType.StonePath)
             {
-                var shade = (Utils.Rng.NextFloat() * 2 - 1f) * .2f * (Type == BlockType.Stone ? 1f : 1);
+                var shade = (Utils.Rng.NextFloat() * 2 - 1f) * .2f * (Type == BlockType.StonePath ? 3f : 1f);
                 blockColor += new Vector4(shade, shade, shade, 0); 
             }
             else if (Type == BlockType.FarmDirt)
