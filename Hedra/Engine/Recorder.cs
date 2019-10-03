@@ -10,6 +10,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Drawing;
 using System.IO;
+using System.Threading;
 using Hedra.Core;
 using Hedra.Engine.Game;
 using OpenTK;
@@ -91,14 +92,10 @@ namespace Hedra.Engine
                     System.Drawing.Imaging.PixelFormat.Format32bppRgb);
                 Marshal.Copy(pixels, 0, data.Scan0, pixels.Length);
                 Bmp.UnlockBits(data);
-
-
                 Bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
-
-                Bmp.Save(Path + DateTime.Now.ToString("dd-MM-yyyy_hh-mm-ss") + ".png",
-                    System.Drawing.Imaging.ImageFormat.Png);
+                Bmp.Save(Path + DateTime.Now.ToString("dd-MM-yyyy_hh-mm-ss") + ".png", System.Drawing.Imaging.ImageFormat.Png);
                 return DateTime.Now.ToString("dd-MM-yyyy_hh-mm-ss") + ".png";
-            }    
+            }
         }
     }
 }
