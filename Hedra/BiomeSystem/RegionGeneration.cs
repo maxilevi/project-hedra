@@ -33,6 +33,17 @@ namespace Hedra.BiomeSystem
             lock (_tempMapLock)
             {
                 _noise.Seed = World.Seed;
+                _tempHeightMap[0][0] = 0;
+                _design.BuildHeightMap(_noise, _tempHeightMap, null, 1, Chunk.BlockSize, new Vector2(X, Z));
+                return _tempHeightMap[0][0];
+            }
+        }
+        
+        public float GetAccuarateMaxHeight(float X, float Z)
+        {
+            lock (_tempMapLock)
+            {
+                _noise.Seed = World.Seed;
                 /* Clear buffers */
                 _tempHeightMap[0][0] = 0;
                 for (var i = 0; i < Chunk.Height; ++i) _tempDensityMap[0][i][0] = 0;
@@ -43,10 +54,10 @@ namespace Hedra.BiomeSystem
                 for (var i = 0; i < Chunk.Height; ++i) 
                     _tempDensityMap[0][i][0] = LandscapeGenerator.CalculateDensityForBlock(_tempHeightMap[0][0], _tempDensityMap[0][i][0], i);
 
-                for (var i = Chunk.Height - 1; i > -1; --i)
+                for (var i = 0; i < Chunk.Height; ++i)
                 {
-                    if(_tempDensityMap[0][i][0] > 0)
-                        return _tempDensityMap[0][i][0] * 0f + i;
+                    if(_tempDensityMap[0][i][0] < 0)
+                        return _tempDensityMap[0][i][0] * 0f + (i-1);
                 }
 
                 return 0;

@@ -24,11 +24,12 @@ uniform sampler2D normalMap;
 
 uniform float WaveMovement;
 uniform float useSSR;
+uniform float Smoothness;
 
 const float waveStrength = 0.01;
 const float speed = 0.04;
 const float fresnelReflective = 0.4;
-const float edgeSoftness = 32.0;
+const float edgeSoftness = 24.0;
 const float specularReflectivity = 0.8;
 const float shineDamper = 10.0;
 
@@ -80,7 +81,7 @@ void main()
 	float fresnel = calculateFresnel(normal);
 	vec3 finalColour = pass_color * pass_highlights + specularHighlights;
 	float waterDepth = calculateWaterDepth(projectiveCoords);
-	float alpha = (1.0 - fresnel * 0.7) * clamp((waterDepth / edgeSoftness), 0.0, 1.0);
+	float alpha = (1.0 - fresnel * 0.7) * clamp((waterDepth / edgeSoftness / Smoothness), 0.0, 1.0);
 
 	OutColor = mix(sky_color(), vec4(finalColour, alpha), pass_visibility);
 	vec3 out_position = (_modelViewMatrix * vec4(pass_vertex, 1.0)).xyz;

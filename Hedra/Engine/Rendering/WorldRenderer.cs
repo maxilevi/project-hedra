@@ -74,9 +74,9 @@ namespace Hedra.Engine.Rendering
         public static void Allocate()
         {
             StaticBuffer = new BufferBalancer(
-                new WorldBuffer(PoolSize.VerySmall),
-                new WorldBuffer(PoolSize.VerySmall),
-                new WorldBuffer(PoolSize.VerySmall)
+                new WorldBuffer(PoolSize.Big),
+                new WorldBuffer(PoolSize.Big),
+                new WorldBuffer(PoolSize.Big)
             );
             InstanceBuffer = new BufferBalancer(
                 new WorldBuffer(PoolSize.VerySmall),
@@ -85,7 +85,7 @@ namespace Hedra.Engine.Rendering
                 new WorldBuffer(PoolSize.VerySmall)
             );
             WaterBuffer = new BufferBalancer(
-                new WorldBuffer(PoolSize.Normal)
+                new WorldBuffer(PoolSize.Small)
             );
             _shadowOffsets = new IntPtr[GeneralSettings.MaxChunks];
             _shadowCounts = new int[GeneralSettings.MaxChunks];
@@ -264,7 +264,7 @@ namespace Hedra.Engine.Rendering
             WaterShader["AreaPositions"] = World.Highlighter.AreaPositions;
             WaterShader["AreaColors"] = World.Highlighter.AreaColors;        
             WaterShader["WaveMovement"] = WaveMovement;
-            //WaterShader["Smoothness"] = WaterSmoothness;
+            WaterShader["Smoothness"] = WaterSmoothness;
             WaterShader["useSSR"] = GameSettings.UseSSR ? 1f : 0f;
 
             //if (ShowWaterBackfaces) Renderer.Disable(EnableCap.CullFace);
