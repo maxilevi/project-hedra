@@ -10,7 +10,7 @@ namespace Hedra.Engine.BiomeSystem
     {
         public const int RiverDepth = 6;
         public const int PathDepth = 2;
-        public const int PathBorder = 48;
+        public const int PathBorder = 64;
 
         protected override void DoBuildRiverMap(FastNoiseSIMD Noise, float[][] RiverMap, int Width, float Scale, Vector2 Offset)
         {
