@@ -243,11 +243,11 @@ namespace Hedra.Engine.Rendering
 
             WaterShader.Bind();
             WaterShader["PlayerPosition"] = GameManager.Player.Position;
-/*
+
             WaterShader["depthMap"] = 0;
             Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, GameSettings.SSAO && GameSettings.Quality ? DrawManager.MainBuffer.Ssao.FirstPass.TextureId[1] : 0);
-  */              
+               
             WaterShader["dudvMap"] = 1;
             Renderer.ActiveTexture(TextureUnit.Texture1);
             Renderer.BindTexture(TextureTarget.Texture2D, DuDvMap.Id);

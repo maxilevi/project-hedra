@@ -18,6 +18,7 @@ layout(location = 0)out vec4 OutColor;
 layout(location = 1)out vec4 OutPosition;
 layout(location = 2)out vec4 OutNormal;
 
+uniform sampler2D depthMap;
 uniform sampler2D dudvMap;
 uniform sampler2D normalMap;
 
@@ -27,7 +28,7 @@ uniform float useSSR;
 const float waveStrength = 0.01;
 const float speed = 0.04;
 const float fresnelReflective = 0.4;
-const float edgeSoftness = 24.0;
+const float edgeSoftness = 32.0;
 const float specularReflectivity = 0.8;
 const float shineDamper = 10.0;
 
@@ -35,6 +36,14 @@ float toLinearDepth(float zDepth) {
 	const float near = 2.0;
 	const float far = 4096.0;
 	return 2.0 * near * far / (far + near - (2.0 * zDepth - 1.0) * (far - near));
+}
+
+float calculateWaterDepth(vec2 texCoords){
+	float depth = texture(depthMap, texCoords).w;
+	float floorDistance = toLinearDepth(depth);
+	depth = gl_FragCoord.z;
+	float waterDistance = toLinearDepth(depth);
+	return floorDistance - waterDistance;
 }
 
 float calculateFresnel(vec3 normal){
@@ -70,7 +79,8 @@ void main()
 	
 	float fresnel = calculateFresnel(normal);
 	vec3 finalColour = pass_color * pass_highlights + specularHighlights;
-	float alpha = (1.0 - fresnel * 0.7);
+	float waterDepth = calculateWaterDepth(projectiveCoords);
+	float alpha = (1.0 - fresnel * 0.7) * clamp((waterDepth / edgeSoftness), 0.0, 1.0);
 
 	OutColor = mix(sky_color(), vec4(finalColour, alpha), pass_visibility);
 	vec3 out_position = (_modelViewMatrix * vec4(pass_vertex, 1.0)).xyz;

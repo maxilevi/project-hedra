@@ -127,7 +127,7 @@ namespace Hedra.Engine.BiomeSystem
                     for (var y = 0; y < Chunk.Height; ++y)
                     {
                         var pathDensity = (pathHeight > 0 ? CalculatePathDensity(pathHeight, y, ref smallFrequency) : 0) * pathMultiplier;
-                        var riverDensity = (riverHeight > 0 ? CalculateRiverDensity(riverHeight, y, ref smallFrequency) : 0) * riverMultiplier;
+                        var riverDensity = (riverHeight > 0 ? CalculateRiverDensity(riverHeight, y, ref smallFrequency, ref riverMultiplier) : 0) * riverMultiplier;
                         var riverBorderDensity = riverBorderHeight * riverMultiplier;
 
                         var storedDensity = sampledDensity[(x+sampledDensityOffset) * sampledDensityWidth * Chunk.Height + y * sampledDensityWidth + (z+sampledDensityOffset)];
@@ -147,13 +147,13 @@ namespace Hedra.Engine.BiomeSystem
             return Mathf.Lerp(path, 0, lerpValue);
         }
         
-        private static float CalculateRiverDensity(float river, float y, ref float smallFrequency)
+        private static float CalculateRiverDensity(float river, float y, ref float smallFrequency, ref float riverMultiplier)
         {
-            var falloff = river / BaseBiomeGenerationDesign.RiverDepth;
+            var falloff = (river / BaseBiomeGenerationDesign.RiverDepth) * riverMultiplier;
             var density = 16f + smallFrequency * 16f;
             var lerpValue = Mathf.Clamp((y - BiomePool.RiverMaxHeight) / 8f, 0f, 1f);
             density = Mathf.Lerp(density, 0, lerpValue * lerpValue);
-            var bottomLerpValue = Mathf.Clamp((y - BiomePool.RiverMinHeight) / 5f, 0f, 1f);
+            var bottomLerpValue = Mathf.Clamp((y - BiomePool.RiverMinHeight) / 7f, 0f, 1f);
             density = Mathf.Lerp(0, density, bottomLerpValue * bottomLerpValue);
             return (density) * falloff;
         }
@@ -471,7 +471,7 @@ namespace Hedra.Engine.BiomeSystem
         private static bool HandleRiverBlocks(SampledBlock[][][] Blocks, ref int x, ref int y, ref int z, ref BlockType blockType, ref float river, ref float riverBorder, ref float riverMultiplier)
         {
             var hasWater = false;
-            if (river > 0 && y < BiomePool.RiverWaterLevel && riverMultiplier >= 1f)
+            if (river > 0 && y < BiomePool.RiverWaterLevel)
             {
                 if (blockType == BlockType.Air && y > 0)
                 {
@@ -483,7 +483,7 @@ namespace Hedra.Engine.BiomeSystem
                     }
                 }
             }
-            if (riverBorder > 0 && y < BiomePool.RiverSeaFloorMax && blockType != BlockType.Air && blockType != BlockType.Water && riverMultiplier >= 1f)
+            if (riverBorder > 0 && y < BiomePool.RiverSeaFloorMax && blockType != BlockType.Air && blockType != BlockType.Water)
             {
                 if (Blocks[x][y + 1][z].Type == BlockType.Air)
                 {
