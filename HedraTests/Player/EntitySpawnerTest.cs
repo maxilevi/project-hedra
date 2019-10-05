@@ -142,6 +142,7 @@ namespace HedraTests.Player
                 pause.Set();
             });
             var spawner = spawnerMock.Object;
+            spawner.Dispatch();
             Assert.True(pause.WaitOne(100), "Failed to dispatch thread when starting the entity spawner.");
         }
         

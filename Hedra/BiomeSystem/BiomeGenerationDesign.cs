@@ -11,12 +11,12 @@ namespace Hedra.BiomeSystem
         public abstract bool HasPaths { get; }
         public abstract bool HasDirt { get; }
 
-        public void BuildDensityMap(FastNoiseSIMD Noise, float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset)
+        public virtual void BuildDensityMap(FastNoiseSIMD Noise, float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset)
         {
             DoBuildDensityMap(Noise, DensityMap, TypeMap, Width, Height, HorizontalScale, VerticalScale, Offset);
         }
 
-        public void BuildHeightMap(FastNoiseSIMD Noise, float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset)
+        public virtual void BuildHeightMap(FastNoiseSIMD Noise, float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset)
         {
             DoBuildHeightMap(Noise, HeightMap, TypeMap, Width, Scale, Offset);
         }
