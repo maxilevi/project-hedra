@@ -41,6 +41,8 @@ namespace Hedra.Engine.Rendering
         public static BufferBalancer WaterBuffer { get; private set; }
         public static bool ShowWaterBackfaces {get; set;}
         public static Texture3D NoiseTexture { get; private set; }
+        public static Texture DuDvMap { get; private set; }
+        public static Texture NormalMap { get; private set; }
         private static IntPtr[] _shadowOffsets;
         private static int[] _shadowCounts;
 
@@ -61,23 +63,29 @@ namespace Hedra.Engine.Rendering
                     }
                 }
             }
-            Log.WriteLine("Creating 3D noise texture ...");
+            Log.WriteLine("Creating 3D noise texture...");
             NoiseTexture = new Texture3D(noiseValues);
+            Log.WriteLine("Loading DuDvMap...");
+            DuDvMap = new Texture("Assets/FX/waterDuDvMap.png", true);
+            Log.WriteLine("Loading water normal map...");
+            NormalMap = new Texture("Assets/FX/waterNormalMap.png", true);
         }
 
         public static void Allocate()
         {
             StaticBuffer = new BufferBalancer(
-                new WorldBuffer(PoolSize.Small),
-                new WorldBuffer(PoolSize.Small),
-                new WorldBuffer(PoolSize.Small),
-                new WorldBuffer(PoolSize.Small)
+                new WorldBuffer(PoolSize.Big),
+                new WorldBuffer(PoolSize.Big),
+                new WorldBuffer(PoolSize.Big)
             );
             InstanceBuffer = new BufferBalancer(
+                new WorldBuffer(PoolSize.VerySmall),
+                new WorldBuffer(PoolSize.VerySmall),
+                new WorldBuffer(PoolSize.VerySmall),
                 new WorldBuffer(PoolSize.VerySmall)
             );
             WaterBuffer = new BufferBalancer(
-                new WorldBuffer(PoolSize.Tiny)
+                new WorldBuffer(PoolSize.Small)
             );
             _shadowOffsets = new IntPtr[GeneralSettings.MaxChunks];
             _shadowCounts = new int[GeneralSettings.MaxChunks];
@@ -111,8 +119,8 @@ namespace Hedra.Engine.Rendering
         private static void InstanceDraw(Dictionary<Vector2, Chunk> ToDraw)
         {
             StaticShader["Dither"] = GameSettings.SmoothLod ? 1 : 0;
-            StaticShader["MaxDitherDistance"] = GeneralSettings.MaxLodDitherDistance;
-            StaticShader["MinDitherDistance"] = GeneralSettings.MinLodDitherDistance;
+            StaticShader["MaxDitherDistance"] = GameSettings.Quality ? GeneralSettings.MaxLod2DitherDistance : GeneralSettings.MaxLod1DitherDistance;
+            StaticShader["MinDitherDistance"] = GameSettings.Quality ? GeneralSettings.MinLod2DitherDistance : GeneralSettings.MinLod1DitherDistance;
             
             InstanceBuffer.Draw(ToDraw);
         }
@@ -132,8 +140,8 @@ namespace Hedra.Engine.Rendering
         private static void WaterDraw(Dictionary<Vector2, Chunk> ToDraw)
         {
             WaveMovement += Time.IndependentDeltaTime * Mathf.Radian * 32;
-            if (WaveMovement >= 5f)
-                WaveMovement = 0;
+            //if (WaveMovement >= 5f)
+            //    WaveMovement = 0;
 
             WaterBind();
 
@@ -230,13 +238,23 @@ namespace Hedra.Engine.Rendering
         {
             Renderer.BlendEquation(BlendEquationMode.FuncAdd);
             Renderer.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-            Renderer.Enable(EnableCap.Blend);
+            if(!GameSettings.UseSSR)
+                Renderer.Enable(EnableCap.Blend);
 
             WaterShader.Bind();
             WaterShader["PlayerPosition"] = GameManager.Player.Position;
-               
-               Renderer.ActiveTexture(TextureUnit.Texture0);
+
+            WaterShader["depthMap"] = 0;
+            Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, GameSettings.SSAO && GameSettings.Quality ? DrawManager.MainBuffer.Ssao.FirstPass.TextureId[1] : 0);
+               
+            WaterShader["dudvMap"] = 1;
+            Renderer.ActiveTexture(TextureUnit.Texture1);
+            Renderer.BindTexture(TextureTarget.Texture2D, DuDvMap.Id);
+            
+            WaterShader["normalMap"] = 2;
+            Renderer.ActiveTexture(TextureUnit.Texture2);
+            Renderer.BindTexture(TextureTarget.Texture2D, NormalMap.Id);
 
             WaterShader["TransformationMatrix"] = TransformationMatrix;
             WaterShader["BakedOffset"] = BakedOffset;
@@ -247,14 +265,22 @@ namespace Hedra.Engine.Rendering
             WaterShader["AreaColors"] = World.Highlighter.AreaColors;        
             WaterShader["WaveMovement"] = WaveMovement;
             WaterShader["Smoothness"] = WaterSmoothness;
+            WaterShader["useSSR"] = GameSettings.UseSSR ? 1f : 0f;
 
-            if (ShowWaterBackfaces) Renderer.Disable(EnableCap.CullFace);
+            //if (ShowWaterBackfaces) Renderer.Disable(EnableCap.CullFace);
         }
         
         private static void WaterUnBind()
         {
             Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, 0);
+            Renderer.ActiveTexture(TextureUnit.Texture1);
+            Renderer.BindTexture(TextureTarget.Texture2D, 0);
+            Renderer.ActiveTexture(TextureUnit.Texture2);
+            Renderer.BindTexture(TextureTarget.Texture2D, 0);
+            Renderer.ActiveTexture(TextureUnit.Texture3);
+            Renderer.BindTexture(TextureTarget.Texture2D, 0);
+            
             Renderer.Disable(EnableCap.Blend);
             Renderer.Enable(EnableCap.CullFace);
             WaterShader.Unbind();

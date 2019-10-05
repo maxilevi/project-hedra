@@ -58,6 +58,7 @@ namespace Hedra.Engine.Loader
         public static bool LoadBoilerplate()
         {
             MainThreadId = Thread.CurrentThread.ManagedThreadId;
+            Thread.CurrentThread.Priority = ThreadPriority.Highest;
             Time.RegisterThread();
             OSManager.Load(Assembly.GetExecutingAssembly().Location);
             AssetManager.Load();
@@ -69,7 +70,7 @@ namespace Hedra.Engine.Loader
             CacheManager.Load();
             Translations.Load();
             BackgroundUpdater.Load();
-            Bullet.BulletPhysics.Load();
+            BulletPhysics.Load();
             Log.WriteLine("Translations loaded successfully.");
             
             GameLoader.CreateCharacterFolders(GameLoader.AppData, GameLoader.AppPath);
@@ -128,9 +129,10 @@ namespace Hedra.Engine.Loader
             var frameTime = Delta;
             while (frameTime > 0f)
             {
+                var isOnMenu = GameManager.InStartMenu;
                 var delta = Math.Min(frameTime, Physics.Timestep);
                 Time.Set(delta, false);
-                Bullet.BulletPhysics.Update(Time.DeltaTime);
+                BulletPhysics.Update(isOnMenu ? Time.IndependentDeltaTime : Time.DeltaTime);
                 RoutineManager.Update();
                 UpdateManager.Update();
                 BackgroundUpdater.Dispatch();
@@ -141,6 +143,7 @@ namespace Hedra.Engine.Loader
                 Executer.Update();
                 DistributedExecuter.Update();
                 Network.Instance.Update();
+                LocalPlayer.Instance.Loader.Dispatch();
                 frameTime -= delta;
             }
             Time.Set(Delta);

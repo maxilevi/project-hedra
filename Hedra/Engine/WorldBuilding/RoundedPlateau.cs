@@ -43,7 +43,7 @@ namespace Hedra.Engine.WorldBuilding
 
         public override BoundingBox ToBoundingBox()
         {
-            return new BoundingBox(Position, Radius * 2f);
+            return new BoundingBox(Position, Radius * 2f * BorderMultiplier);
         }
 
         public override BasePlateau Clone()

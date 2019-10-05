@@ -19,12 +19,11 @@ namespace Hedra.Engine.StructureSystem.Overworld
 {
     public class VillageDesign : StructureDesign
     {
-        public const int MaxVillageSize = 20;
-        public const int PlateauVillageRatio = 64;
-        public const int MaxVillageRadius = 1300;//MaxVillageSize * PlateauVillageRatio;
-        public const int MaxEffectiveRadius = 4096;
+        public const int MaxVillageSize = 18;
+        public const int PlateauVillageRatio = 65;
+        public const int MaxVillageRadius = MaxVillageSize * PlateauVillageRatio;
         public const int PathWidth = 16;
-        public const float Spacing = 114;
+        public const float Spacing = 160;
 
         public override int PlateauRadius { get; } = MaxVillageRadius;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.VillageIcon);
@@ -61,7 +60,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             return /*BiomeGenerator.PathFormula(ChunkOffset.X, ChunkOffset.Y) > 0
                    && */Rng.Next(0, StructureGrid.VillageChance) == 1
-                   && Biome.Generation.GetHeight(TargetPosition.X, TargetPosition.Z, null, out _) > BiomePool.SeaLevel
+                   && Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z) > BiomePool.SeaLevel
                    && (TargetPosition - World.SpawnPoint).LengthFast > (World.SpawnVillagePoint - World.SpawnPoint).LengthFast *  2;
         }
 

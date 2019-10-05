@@ -39,7 +39,7 @@ namespace Hedra.Engine.Rendering
         public WorldBuffer(PoolSize Size)
         {
             const int megabyte = 1048576;
-            var realPoolSize = ((int) Size / 100f) * 8f;
+            var realPoolSize = ((int) Size / 100f) * 3f;
             Indices = new GeometryPool<uint>( (int) (megabyte * 1.25f * realPoolSize), sizeof(uint), VertexAttribPointerType.UnsignedInt, BufferTarget.ElementArrayBuffer, BufferUsageHint.DynamicDraw);
             Vertices = new GeometryPool<Vector3>( (int) (megabyte * 1f * realPoolSize), Vector3.SizeInBytes, VertexAttribPointerType.Float, BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
             Normals = new GeometryPool<Vector3>( (int) (megabyte * 1f * realPoolSize), Vector3.SizeInBytes, VertexAttribPointerType.Float, BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
@@ -150,7 +150,7 @@ namespace Hedra.Engine.Rendering
                                 throw new OutOfMemoryException("Geometry pool ran out of space");
 
                         }
-                        ChunkRenderCommand Command = new ChunkRenderCommand();
+                        var Command = new ChunkRenderCommand();
                         Command.VertexCount = Data.Vertices.Count;
                         Command.DrawCount = Data.Indices.Count;
                         Command.Entries = Entries;

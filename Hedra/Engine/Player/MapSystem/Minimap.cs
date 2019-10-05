@@ -163,12 +163,15 @@ namespace Hedra.Engine.Player.MapSystem
                 var oldShadows = GameSettings.GlobalShadows;
                 var oldFancy = GameSettings.Quality;
                 var oldCulling = GameSettings.OcclusionCulling;
+                var oldSSR = GameSettings.EnableReflections;
                 GameSettings.OcclusionCulling = false;
                 GameSettings.GlobalShadows = false;
                 GameSettings.Quality = false;
+                GameSettings.EnableReflections = false;
                 World.CullTest();
                 WorldRenderer.Render(World.DrawingChunks, World.ShadowDrawingChunks, WorldRenderType.Static);
                 WorldRenderer.Render(World.DrawingChunks, World.ShadowDrawingChunks, WorldRenderType.Water);
+                GameSettings.EnableReflections = oldSSR;
                 GameSettings.Quality = oldFancy;
                 GameSettings.GlobalShadows = oldShadows;
                 GameSettings.OcclusionCulling = oldCulling;

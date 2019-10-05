@@ -9,15 +9,13 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public VertexData WaterData { get; set; }
         public VertexData InstanceData { get; set; }
         public bool Failed { get; set; }
-        public bool HasWater { get; set; }
 
-        public ChunkMeshBuildOutput(VertexData StaticData, VertexData WaterData, VertexData InstanceData, bool Failed, bool HasWater)
+        public ChunkMeshBuildOutput(VertexData StaticData, VertexData WaterData, VertexData InstanceData, bool Failed)
         {
             this.StaticData = StaticData;
             this.WaterData = WaterData;
             this.InstanceData = InstanceData;
             this.Failed = Failed;
-            this.HasWater = HasWater;
         }
 
         public void Dispose()

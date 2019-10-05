@@ -156,7 +156,7 @@ namespace Hedra.Engine.Rendering.Particles
         }
         
         
-        public void Update(float DeltaTime)
+        public unsafe void Update(float DeltaTime)
         {
             if(!HasMultipleOutputs && (this.Position - LocalPlayer.Instance.Position).LengthSquared > GeneralSettings.DrawDistanceSquared) return;
 
@@ -164,9 +164,10 @@ namespace Hedra.Engine.Rendering.Particles
             {
                 for (var i = 0; i < _particles.Count; i++)
                 {
-                    if (RandomRotation)
-                        _particles[i].Rotation += Mathf.RandomVector3(Utils.Rng) * 150 * (float) Time.DeltaTime;
-                    if (!_particles[i].Update(DeltaTime))
+                    var randomRotation = RandomRotation
+                        ? Mathf.RandomVector3(Utils.Rng) * 150 * Time.DeltaTime
+                        : Vector3.Zero;
+                    if (!_particles[i].Update(DeltaTime, randomRotation))
                     {
                         _particles.RemoveAt(i);
                     }
@@ -175,11 +176,12 @@ namespace Hedra.Engine.Rendering.Particles
             }
         }
 
-        private void BuildBufferAndSendToGPU()
+        private unsafe void BuildBufferAndSendToGPU()
         {
             if (_particles.Count <= 0) return;
             var count = _particles.Count;
-            var vec4S = new Vector4[count * 5];
+            var arrayLength = count * 5;
+            var vec4S = new Vector4[arrayLength];
             for (var i = count - 1; i > -1; i--)
             {
                 var transMatrix = ConstructTransformationMatrix(_particles[i].Position, _particles[i].Rotation,
@@ -190,7 +192,10 @@ namespace Hedra.Engine.Rendering.Particles
                 vec4S[i * 5 + 3] = transMatrix.Column2;
                 vec4S[i * 5 + 4] = transMatrix.Column3;
             }
-            Executer.ExecuteOnMainThread(() => UpdateVbo(vec4S, count));
+            Executer.ExecuteOnMainThread(() =>
+            {
+                UpdateVbo(vec4S, count);
+            });
         }
         
         public void Draw()

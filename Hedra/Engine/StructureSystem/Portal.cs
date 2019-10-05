@@ -56,7 +56,7 @@ namespace Hedra.Engine.StructureSystem
             _portalObject.OutlineColor = Colors.LightBlue * 2f;
             _portalObject.ApplySSAO = false;
             _teleportedRecentlyTimer = new Timer(2f);
-            DrawManager.Remove(_portalObject);
+            DrawManager.RemoveObjectMesh(_portalObject);
             DrawManager.AddTransparent(_portalObject);
             UpdateManager.Add(this);
             _ambientLight = new WorldLight(Position)

@@ -34,7 +34,6 @@ namespace Hedra.Engine.Rendering.Animation
         public static readonly Shader DefaultShader =
             Shader.Build("Shaders/AnimatedModel.vert", "Shaders/AnimatedModel.frag");
         public static readonly Shader DeathShader = AnimatedModelShader.GenerateDeathShader();
-
         public Joint RootJoint { get; }
         public int JointCount { get; }
         public Vector3 Position { get; set; }

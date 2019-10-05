@@ -250,7 +250,7 @@ namespace Hedra.Rendering
             return this;
         }
 
-        public void Optimize()
+        public unsafe void Optimize()
         {
             if (!HasColors || !CompatibilityManager.SupportsMeshOptimizer) return;
             /* var originalVertices = Vertices.Count; */
@@ -273,8 +273,8 @@ namespace Hedra.Rendering
             Vertices = new List<Vector3>(result.Item1.Select(V => V.Position));
             /* Log.WriteLine($"Vertex Change % = {(1f - Vertices.Count / (float)originalVertices) * 100}, {Vertices.Count}/{originalVertices}"); */
         }
-        
-        public void Smooth()
+
+        public void UniqueVertices()
         {
             if (!HasColors) return;
             
@@ -301,7 +301,7 @@ namespace Hedra.Rendering
                     
                     newColors.Add(Colors[curr]);
                     newNormals.Add(Normals[curr]);
-                    if(Extradata != null && newExtradata.Count > 0)
+                    if(HasExtradata)
                         newExtradata.Add(Extradata[curr]);
                 }
                 newIndices.Add((uint)index);
@@ -344,6 +344,13 @@ namespace Hedra.Rendering
                 newIndices.Add((uint)newIndices.Count);
                 newIndices.Add((uint)newIndices.Count);
                 newIndices.Add((uint)newIndices.Count);
+
+                if (HasExtradata)
+                {
+                    newExtradata.Add(Extradata[i0]);
+                    newExtradata.Add(Extradata[i1]);
+                    newExtradata.Add(Extradata[i2]);
+                }
             }
             Vertices = newVertices;
             Colors = newColors;

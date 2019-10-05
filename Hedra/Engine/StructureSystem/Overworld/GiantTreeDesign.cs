@@ -60,7 +60,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         private void PlaceBoss(Vector3 Position, Region Region, CollidableStructure Structure, Matrix4 TransMatrix, Random Rng)
         {
-            var underWater = Region.Generation.GetHeight(Position.X, Position.Z, null, out _) < BiomePool.SeaLevel;
+            var underWater = Region.Generation.GetMaxHeight(Position.X, Position.Z) < BiomePool.SeaLevel;
             var chestOffset = Vector3.UnitZ * 10f + Vector3.UnitX * -80f;
             var chestPosition = Vector3.TransformPosition(chestOffset, TransMatrix);
             IEntity treeBoss = null;
@@ -90,7 +90,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
-            var height = Biome.Generation.GetHeight( TargetPosition.X, TargetPosition.Z, null, out _);
+            var height = Biome.Generation.GetMaxHeight( TargetPosition.X, TargetPosition.Z);
             return Rng.Next(0, StructureGrid.GiantTreeChance) == 1 && height > BiomePool.SeaLevel 
                    || Rng.Next(0, StructureGrid.WaterGiantTreeChance) == 1 && height <= BiomePool.SeaLevel;
         }

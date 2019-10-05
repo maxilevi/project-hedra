@@ -28,7 +28,7 @@ namespace Hedra.Engine.Rendering.Effects
         static DistortionFilter()
         {
             WaterEffect = Shader.Build("Shaders/UnderWater.vert", "Shaders/Distortion.frag");
-            DuDvMapId = Graphics2D.LoadFromAssets("Assets/DuDvMap.png");
+            DuDvMapId = Graphics2D.LoadFromAssets("Assets/FX/waterDuDvMap.png");
         }
 
         public DistortionFilter() : base(){

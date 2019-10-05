@@ -19,11 +19,15 @@ namespace HedraTests.WorldBuilding
         [SetUp]
         public void Setup()
         {
-            BlockType blockType;
             var designMock = new Mock<BiomeGenerationDesign>();
-            designMock.Setup(B =>
-                    B.GetHeight(It.IsAny<float>(), It.IsAny<float>(), It.IsAny<Dictionary<Vector2, float[]>>(), out blockType))
-                .Returns(_height);
+            designMock.Setup(B => B.BuildHeightMap(
+                It.IsAny<FastNoiseSIMD>(),
+                It.IsAny<float[][]>(),
+                It.IsAny<BlockType[][]>(),
+                It.IsAny<int>(),
+                It.IsAny<float>(),
+                It.IsAny<Vector2>()
+            )).Callback<FastNoiseSIMD, float[][], BlockType[][], int, float, Vector2>((N, P1, P2, P3, P4, P5) => P1[0][0] = _height);
             var generationMock = new RegionGeneration(0, designMock.Object);
             var regionMock = new Region
             {

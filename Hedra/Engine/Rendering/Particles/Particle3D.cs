@@ -27,14 +27,13 @@ namespace Hedra.Engine.Rendering.Particles
         public Vector4 Color;
         public float GravityEffect;
         public float Lifetime;
-        public bool IsVisible;
-        public bool SpreadOverLifetime = false;
         private float MaxLifetime, OriginalAlpha;
         private Vector3 OriginalScale;
-        private float HeightAtY = 0;
+        private float HeightAtY;
         private bool _collides;
 
-        public Particle3D(Vector3 Position, Vector3 Velocity, Vector3 Rotation, Vector4 Color, Vector3 Scale, float GravityEffect, float Lifetime, bool Collides = false){
+        public Particle3D(Vector3 Position, Vector3 Velocity, Vector3 Rotation, Vector4 Color, Vector3 Scale, float GravityEffect, float Lifetime, bool Collides = false)
+        {
             this.Position = Position;
             this.Rotation = Rotation;
             this.Scale = Scale;
@@ -43,14 +42,15 @@ namespace Hedra.Engine.Rendering.Particles
             this.GravityEffect = GravityEffect;
             this.Lifetime = Lifetime;
             this.MaxLifetime = Lifetime;
-            this.IsVisible = true;
             this.OriginalAlpha = Color.W;
             this.OriginalScale = Scale;
+            this.HeightAtY = 0;
+            this._collides = false;
             this.Collides = Collides;
             
         }
         
-        public bool Update(float DeltaTime)
+        public bool Update(float DeltaTime, Vector3 randomRotation)
         {
             Color = new Vector4(Color.Xyz, OriginalAlpha * 1);
             Scale = OriginalScale * (Lifetime / MaxLifetime);    
@@ -58,6 +58,7 @@ namespace Hedra.Engine.Rendering.Particles
             Position += Velocity * DeltaTime;
             Velocity.Y += 60 * Physics.Gravity * GravityEffect * DeltaTime;
             Lifetime -= DeltaTime;
+            Rotation += randomRotation;
             
             if(Collides && Position.Y < HeightAtY + .5f)
             {
@@ -70,9 +71,12 @@ namespace Hedra.Engine.Rendering.Particles
         public bool Collides
         {
             get => _collides;
-            set{ _collides = value;
-                if(value)
-                    HeightAtY = Physics.HeightAtPosition( new Vector3(Position.X, Position.Y / Chunk.BlockSize + 1, Position.Z) );
+            set
+            {
+                _collides = value;
+                if (value)
+                    HeightAtY = Physics.HeightAtPosition(new Vector3(Position.X, Position.Y / Chunk.BlockSize + 1,
+                        Position.Z));
             }
         }
         

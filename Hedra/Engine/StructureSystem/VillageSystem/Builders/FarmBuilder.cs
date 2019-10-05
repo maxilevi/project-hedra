@@ -229,9 +229,12 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             _width = Parameters.GetSize(Cache);
             var path = new SquaredGroundwork(Parameters.Position, _width, BlockType.FarmDirt)
             {
-                BonusHeight = .35f
+                BonusHeight = .35f,
             };
-            var plateau = new SquaredPlateau(Parameters.Position.Xz, _width);
+            var plateau = new SquaredPlateau(Parameters.Position.Xz, _width)
+            {
+                Hardness = 3.0f,
+            };
             return this.PushGroundwork(new GroundworkItem
             {
                 Groundwork = path,

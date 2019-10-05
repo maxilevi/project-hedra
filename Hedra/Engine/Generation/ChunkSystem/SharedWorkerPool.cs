@@ -1,25 +1,27 @@
 using System;
+using System.Collections.Generic;
 using Hedra.Engine.Core;
+using Hedra.Engine.Generation.ChunkSystem.Builders;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
     public class SharedWorkerPool : WorkerPool
     {
-        private readonly LoadBalancer _balancer;
+        private Dictionary<QueueType, int> _maxWorkers;
 
         public SharedWorkerPool(int WorkerCount = WorkerPool.MaxWorkers) : base(WorkerCount)
         {
-            _balancer = new LoadBalancer(WorkerCount);
+            _maxWorkers = new Dictionary<QueueType, int>();
         }
 
-        public void Register(ICountable User)
+        public void SetMaxWorkers(QueueType Type, int Max)
         {
-            _balancer.Register(User);
+            _maxWorkers[Type] = Max;
         }
 
-        public void Unregister(ICountable User)
+        public int GetMaxWorkers(QueueType Type)
         {
-            _balancer.Unregister(User);
+            return _maxWorkers[Type];
         }
 
         private int GetCurrentWorkers(ICountable User)
@@ -32,14 +34,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return count;
         }
 
-        public bool Work(ICountable User, Action Do, int SleepTime)
+        public bool Work(ICountable User, QueueType Type, Action Do)
         {
-            if (!_balancer.Contains(User))
-                throw new ArgumentOutOfRangeException($"User hasn't been registed in the shared pool.");
-            var maxWorkers = _balancer[User];
+            var maxWorkers = _maxWorkers[Type];
             var currentWorkers = this.GetCurrentWorkers(User);
             if (currentWorkers >= maxWorkers) return false;
-            return base.Work(Do, User, SleepTime);       
+            return base.Work(Do, User);       
         }
     }
 }

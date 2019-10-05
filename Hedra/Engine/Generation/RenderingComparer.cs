@@ -16,7 +16,7 @@ namespace Hedra.Engine.Generation
         /// <param name="A"></param>
         /// <param name="B"></param>
         /// <returns>Return -1 if B is greater than A, 1 is viceversa and 0 if equal</returns>
-        public int Compare(KeyValuePair<Vector2, ChunkRenderCommand> A, KeyValuePair<Vector2, ChunkRenderCommand> B)
+        public virtual int Compare(KeyValuePair<Vector2, ChunkRenderCommand> A, KeyValuePair<Vector2, ChunkRenderCommand> B)
         {
             if (A.Key == B.Key && A.Value == B.Value) return 0;
 

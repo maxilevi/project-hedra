@@ -25,6 +25,7 @@ namespace Hedra.Rendering
         public Vector3 Max => CullingBox?.Max ?? Vector3.Zero;
         public Vector3 Min => CullingBox?.Min ?? Vector3.Zero;
         public ChunkMesh Mesh { get; }
+        public bool IsInWater { get; private set; }
         private readonly ObjectMeshBuffer _buffer;
         private readonly Timer _underChunkTimer;
         private readonly bool _updateInBackground;
@@ -76,6 +77,7 @@ namespace Hedra.Rendering
             {
                 _lastPosition = Position;
                 _underChunk = World.GetChunkAt(Position);
+                IsInWater = _underChunk?.HasWater ?? false;
             }
             _buffer.LocalRotation = LocalRotation;
         }

@@ -38,7 +38,7 @@ namespace Hedra.Engine.Rendering.Core
         public void Bind(TextureTarget Target, uint Id)
         {
 #if DEBUG
-            if (!Program.IsDummy && !GameSettings.TestingMode && Target == TextureTarget.Texture2D && !TextCache.Exists(Id) && !TextureRegistry.IsKnown(Id))
+            //if (!Program.IsDummy && !GameSettings.TestingMode && Target == TextureTarget.Texture2D && !TextCache.Exists(Id) && !TextureRegistry.IsKnown(Id))
             {
             //    var a = TextureRegistry.IsKnown(Id);
                 //throw new ArgumentOutOfRangeException($"Found an unregistered texture '{Id}' that is being used.");

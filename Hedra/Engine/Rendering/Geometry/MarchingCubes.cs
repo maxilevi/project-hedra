@@ -8,7 +8,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Rendering.Geometry;
 using Hedra.Rendering;
 using OpenTK;
 
@@ -316,33 +318,7 @@ namespace Hedra.Engine.Rendering
         #endregion
 
         #region AXULIARIES        
-        public static List<BlockType> AffectingTypes(double IsoLevel, GridCell Cell)
-        {
-            List<BlockType> Types = new List<BlockType>();
-            if (Cell.Density[1] > IsoLevel) Types.Add(Cell.Type[1]);
-            if (Cell.Density[2] > IsoLevel) Types.Add(Cell.Type[2]);
-            if (Cell.Density[3] > IsoLevel) Types.Add(Cell.Type[3]);
-            if (Cell.Density[4] > IsoLevel) Types.Add(Cell.Type[4]);
-            if (Cell.Density[5] > IsoLevel) Types.Add(Cell.Type[5]);
-            if (Cell.Density[6] > IsoLevel) Types.Add(Cell.Type[6]);
-            if (Cell.Density[7] > IsoLevel) Types.Add(Cell.Type[7]);
-            
-            return Types;
-        }
-        
-        public static BlockType AffectingType(double IsoLevel, GridCell Cell)
-        {
-            if (Cell.Density[1] > IsoLevel) return Cell.Type[1];
-            if (Cell.Density[2] > IsoLevel) return Cell.Type[2];
-            if (Cell.Density[3] > IsoLevel) return Cell.Type[3];
-            if (Cell.Density[4] > IsoLevel) return Cell.Type[4];
-            if (Cell.Density[5] > IsoLevel) return Cell.Type[5];
-            if (Cell.Density[6] > IsoLevel) return Cell.Type[6];
-            if (Cell.Density[7] > IsoLevel) return Cell.Type[7];
-            
-            return BlockType.Air;
-        }
-        
+
         public static bool Usable(double IsoLevel, GridCell Cell)
         {
             byte CubeIndex = 0;
@@ -355,7 +331,7 @@ namespace Hedra.Engine.Rendering
             if (Cell.Density[6] > IsoLevel) CubeIndex |= 64;
             if (Cell.Density[7] > IsoLevel) CubeIndex |= 128;
 
-            return !(EdgeTable[CubeIndex] == 0);
+            return EdgeTable[CubeIndex] != 0;
         }
         #endregion
 
@@ -440,8 +416,8 @@ namespace Hedra.Engine.Rendering
 
         private static Vector3 VertexInterp(double IsoLevel, Vector3 P1, Vector3 P2, double valp1, double valp2)
         {
-            Vector4 p1 = new Vector4(P1, (float) valp1);
-            Vector4 p2 = new Vector4(P2, (float) valp2);
+            var p1 = new Vector4(P1, (float) valp1);
+            var p2 = new Vector4(P2, (float) valp2);
 
             if (p2.Length < p1.Length)
             {
@@ -458,8 +434,9 @@ namespace Hedra.Engine.Rendering
             return p;
         }
 
-        public static void Build(ref VertexData Data, ref Vector4 TemplateColor, ref Triangle[] TriangleBuffer, ref int TriangleCount, ref bool Orientation)
+        public static void Build(ref VertexData Data, ref Vector4 TemplateColor, ref Triangle[] TriangleBuffer, ref int TriangleCount, ref bool Orientation, ref bool IsWater)
         {
+            /*
             if (TriangleCount == 2)
             {
                 if (Orientation && 
@@ -478,10 +455,11 @@ namespace Hedra.Engine.Rendering
                     TriangleBuffer[1].Vertices[2] = vertex2;
 
                 }
-            }
+            }*/
             
             for (uint i = 0; i < TriangleCount; i++)
             {
+                if(IsWater && ShouldClip(ref TriangleBuffer[i])) continue;
                 Data.Indices.Add((uint) Data.Vertices.Count + 0);
                 Data.Indices.Add((uint) Data.Vertices.Count + 1);
                 Data.Indices.Add((uint) Data.Vertices.Count + 2);
@@ -489,16 +467,35 @@ namespace Hedra.Engine.Rendering
                 Data.Vertices.Add(TriangleBuffer[i].Vertices[0]);
                 Data.Vertices.Add(TriangleBuffer[i].Vertices[1]);
                 Data.Vertices.Add(TriangleBuffer[i].Vertices[2]);
-
+                
                 var normal = Vector3.Cross(TriangleBuffer[i].Vertices[1] - TriangleBuffer[i].Vertices[0], TriangleBuffer[i].Vertices[2] - TriangleBuffer[i].Vertices[0]).Normalized();
                 Data.Normals.Add(normal);
                 Data.Normals.Add(normal);
                 Data.Normals.Add(normal);
-                    
+                
                 Data.Colors.Add(TemplateColor);
                 Data.Colors.Add(TemplateColor);
                 Data.Colors.Add(TemplateColor);
+                
             }
+        }
+
+        private static bool ShouldClip(ref Triangle Triangle)
+        {
+            const float  oceanClipDistance = (BiomePool.SeaLevel-1) * Generation.ChunkSystem.Chunk.BlockSize;
+            var isBelowOcean = (Triangle.Vertices[0].Y < oceanClipDistance ||
+                                Triangle.Vertices[1].Y < oceanClipDistance ||
+                                Triangle.Vertices[2].Y < oceanClipDistance);
+            
+            const float maxRiverClipDistance = (BiomePool.RiverWaterLevel-2) * Generation.ChunkSystem.Chunk.BlockSize;
+            const float  minRiverClipDistance = (BiomePool.RiverMinHeight) * Generation.ChunkSystem.Chunk.BlockSize;
+            var isBelowRiver = (Triangle.Vertices[0].Y < maxRiverClipDistance ||
+                                Triangle.Vertices[1].Y < maxRiverClipDistance ||
+                                Triangle.Vertices[2].Y < maxRiverClipDistance) &&
+                               (Triangle.Vertices[0].Y > minRiverClipDistance ||
+                                Triangle.Vertices[1].Y > minRiverClipDistance ||
+                                Triangle.Vertices[2].Y > minRiverClipDistance);
+            return isBelowRiver || isBelowOcean;
         }
     }
     

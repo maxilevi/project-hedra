@@ -20,6 +20,8 @@ using Hedra.Core;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
+using Hedra.Engine.Generation;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Networking;
@@ -478,6 +480,72 @@ namespace Hedra.User
                     else
                         Caster.Realms.GoTo(int.Parse(Parts[1]));
 
+                }
+
+                if (Parts[0] == "discard")
+                {
+                    World.Discard();
+                    lock (World.Chunks)
+                    {
+                        var count = World.Chunks.Count;
+                        for (int i = count-1; i > -1; i--)
+                        {
+                            World.RemoveChunk(World.Chunks[i]);
+                        }
+                    }
+                    World.StructureHandler.Discard();
+                }
+
+                if (Parts[0] == "place")
+                {
+                    if (Parts[1] == "water")
+                    {
+                        var chunk = World.GetChunkAt(Caster.Position);
+                        var blockspace = World.ToBlockSpace(Caster.Position);
+                        chunk?.SetBlockAt((int) blockspace.X, (int) blockspace.Y, (int) blockspace.Z,
+                            BlockType.Water);
+                    }
+                }
+                if (Parts[0] == "regenerate")
+                {
+                    World.RemoveChunk(World.GetChunkAt(Caster.Position));
+                }
+                if (Parts[0] == "printch")
+                {
+                    World.GetChunkAt(Caster.Position).Test();
+                }
+
+                if (Parts[0] == "automata")
+                {
+                    if (Parts.Length == 2 && Parts[1] == "all")
+                    {
+                        var chunks = World.Chunks;
+                        var count = World.Chunks.Count;
+                        for (var i = count-1; i > -1; i--)
+                        {
+                            if(chunks[i].NeighboursExist)
+                                chunks[i].Automatons.Update();
+                            //World.AddChunkToQueue(chunks[i], ChunkQueueType.Mesh);
+                        }
+                    }
+                    else
+                    {
+                        var chunk = World.GetChunkAt(Caster.Position);
+                        chunk.Automatons.Update();
+                        World.AddChunkToQueue(chunk, ChunkQueueType.Mesh);
+                    }
+                }
+                if (Parts[0] == "rebuild")
+                {
+                    lock (World.Chunks)
+                    {
+                        World.Builder.ResetMeshProfile();
+                        var count = World.Chunks.Count;
+                        for (var i = count-1; i > -1; i--)
+                        {
+                            World.AddChunkToQueue(World.Chunks[i], ChunkQueueType.Mesh);
+                        }
+                    }
                 }
                 Result = "Unknown command.";
                 Log.WriteLine("Unknown command.");

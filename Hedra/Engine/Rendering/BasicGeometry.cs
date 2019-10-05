@@ -38,7 +38,7 @@ namespace Hedra.Engine.Rendering
                 Normals = data.Normals.ToList(),
                 Colors = Enumerable.Repeat(Vector4.One, data.VerticesArrays.Length).ToList()
             };
-            asVertexData.Smooth();
+            asVertexData.UniqueVertices();
             var indices = asVertexData.Indices.Select(I => (ushort) I).ToArray();
             CubeVerticesVBO = new VBO<Vector3>(asVertexData.Vertices.ToArray(), asVertexData.Vertices.Count * Vector3.SizeInBytes, VertexAttribPointerType.Float);
             CubeIndicesVBO = new VBO<ushort>(indices, indices.Length * sizeof(ushort), VertexAttribPointerType.UnsignedShort, BufferTarget.ElementArrayBuffer);

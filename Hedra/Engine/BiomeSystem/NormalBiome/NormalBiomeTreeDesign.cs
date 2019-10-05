@@ -16,12 +16,6 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
                 new TallDesign(),
                 new PineDesign(),
             };
-            if (World.Seed == World.MenuSeed) {
-                AvailableTypes = new TreeDesign[]
-                {
-                    new AppleDesign(),
-                };
-            }
         }
         public override TreeDesign[] AvailableTypes { get; }
     }

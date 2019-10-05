@@ -129,17 +129,6 @@ namespace Hedra.BiomeSystem
             {
                 GrassColors[i] = GrassColors[i] * 1.25f;
             }
-
-            if (World.MenuSeed == World.Seed)
-            {
-                LeavesColors = new[]
-                {
-                    Colors.FromHtml("#60a023"),
-                    Colors.FromHtml("#9DA666"),
-                    Colors.FromHtml("#4f7942"),
-                    Colors.FromHtml("#5e714b"),
-                };
-            }
         }
         
         public Vector4 LeavesColor => LeavesColors[new Random(_seed + 42).Next(0, LeavesColors.Length)];

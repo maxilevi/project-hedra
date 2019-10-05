@@ -9,5 +9,5 @@ in vec4 Color;
 void main(){
 	OutColor = vec4(Color);
 	OutPosition = vec4(0.0, 0.0, 0.0, gl_FragCoord.z);
-	OutNormal = vec4(0.0, 0.0, 0.0, 1.0);
+	OutNormal = vec4(0.0, 0.0, 0.0, 0.0);
 }

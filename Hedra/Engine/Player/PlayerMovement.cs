@@ -7,6 +7,7 @@ using Hedra.Core;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
@@ -15,6 +16,7 @@ using Hedra.Engine.Sound;
 using Hedra.Game;
 using Hedra.Localization;
 using Hedra.Sound;
+using Hedra.User;
 using OpenTK;
 using OpenTK.Input;
 using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;
@@ -170,7 +172,6 @@ namespace Hedra.Engine.Player
         
 
             if (!_player.IsUnderwater) return;
-            this.ClampSwimming(_player);
             if (GameManager.Keyboard[Controls.Jump]) this.MoveInWater(true);
             if (GameManager.Keyboard[Controls.Descend]) this.MoveInWater(false);
         }
@@ -275,20 +276,6 @@ namespace Hedra.Engine.Player
 
                 //_player.Chat.AddLine("Modules reloaded.");
             }
-            if (GameSettings.DebugView && EventArgs.Key == Key.F6)
-            {
-                World.Discard();
-                lock (World.Chunks)
-                {
-                    var count = World.Chunks.Count;
-                    for (int i = count-1; i > -1; i--)
-                    {
-                        World.RemoveChunk(World.Chunks[i]);
-                    }
-                }
-                World.StructureHandler.Discard();
-                //_player.Chat.AddLine("Chunks discarded.");
-            }
 #if DEBUG
             if (EventArgs.Key == Key.F10)
             {
@@ -307,7 +294,7 @@ namespace Hedra.Engine.Player
 
             if (EventArgs.Key == Key.J)
             {
-                World.AddChunkToQueue(World.GetChunkByOffset(World.ToChunkSpace(_player.Position)), true);
+                World.AddChunkToQueue(World.GetChunkByOffset(World.ToChunkSpace(_player.Position)), ChunkQueueType.Mesh);
             }
 
             if (EventArgs.Key == Key.K)

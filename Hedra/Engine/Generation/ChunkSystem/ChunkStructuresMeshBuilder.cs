@@ -8,8 +8,10 @@ using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Core;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
+using Hedra.Engine.Native;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Game;
 using Hedra.Rendering;
 using OpenTK;
 
@@ -45,35 +47,52 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
             for (var i = 0; i < staticElements.Count; i++)
             {
-                if (staticElements[i].Extradata.Count != staticElements[i].Vertices.Count)
+                var clone = staticElements[i].Clone();
+                if(Lod > 1)
                 {
-                    float extraDataCount = staticElements[i].Vertices.Count - staticElements[i].Extradata.Count;
-                    for (var k = 0; k < extraDataCount; k++) staticElements[i].Extradata.Add(0);
+                    clone.UniqueVertices();
+                    MeshOptimizer.SimplifySloppy(clone, LODMap[Lod]);
+                    clone.Flat();
+                }
+                if (clone.Extradata.Count != clone.Vertices.Count)
+                {
+                    float extraDataCount = clone.Vertices.Count - clone.Extradata.Count;
+                    for (var k = 0; k < extraDataCount; k++) clone.Extradata.Add(0);
                 }
 
-                Input.StaticData += staticElements[i];
+                /* Manually add these vertex data's for maximum performance */
+                for (var k = 0; k < clone.Indices.Count; k++)
+                    clone.Indices[k] += (uint) Input.StaticData.Vertices.Count;
+            
+                Input.StaticData.Vertices.AddRange(clone.Vertices);
+                Input.StaticData.Colors.AddRange(clone.Colors);
+                Input.StaticData.Normals.AddRange(clone.Normals);
+                Input.StaticData.Indices.AddRange(clone.Indices);
+                Input.StaticData.Extradata.AddRange(clone.Extradata);
+                clone.Dispose();
             }
             var distribution = new RandomDistribution(); 
             var instanceElements = Mesh.InstanceElements;
             for (var i = 0; i < instanceElements.Length; i++)
             {
-                if(instanceElements[i].SkipOnLod && Lod != 1) continue; 
-                ProcessInstanceData(instanceElements[i], Input.StaticData, i, Lod, distribution);
+                if(instanceElements[i].SkipOnLod && Lod != 1) continue;
+                ProcessInstanceData(instanceElements[i], Input.StaticData, i, Lod, distribution, instanceElements[i].CanSimplifyProgramatically ? LODMap[Lod] : -1);
             }
 
-            if (Lod == 1)
+            var addGrass = GameSettings.Quality && Lod <= 2 || Lod == 1 && !GameSettings.Quality;
+            if (addGrass)
             {
                 var lodedInstanceElements = Mesh.LodAffectedInstanceElements;
                 for (var i = 0; i < lodedInstanceElements.Length; i++)
                 {
-                    ProcessInstanceData(lodedInstanceElements[i], Input.InstanceData, i, Lod, distribution);
+                    ProcessInstanceData(lodedInstanceElements[i], Input.InstanceData, i, Lod, distribution, 1f / Lod - 0.2f);
                 }
             }
 
-            return new ChunkMeshBuildOutput(Input.StaticData, Input.WaterData, Input.InstanceData, Input.Failed, Input.HasWater);
+            return new ChunkMeshBuildOutput(Input.StaticData, Input.WaterData, Input.InstanceData, Input.Failed);
         }
 
-        private void ProcessInstanceData(InstanceData Instance, VertexData Model, int Index, int Lod, RandomDistribution Distribution)
+        private void ProcessInstanceData(InstanceData Instance, VertexData Model, int Index, int Lod, RandomDistribution Distribution, float SimplificationThreshold = -1)
         {
             var element = Instance.Get(Lod);
             var model = element.OriginalMesh.Clone();
@@ -81,6 +100,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
             
             SetColor(model, element, Index);
             SetExtraData(model, element, Distribution);
+            if (SimplificationThreshold > 0 && SimplificationThreshold < 1f)
+            {
+                model.UniqueVertices();
+                MeshOptimizer.SimplifySloppy(model, SimplificationThreshold);
+                model.Flat();
+            }
             AssertValidModel(model);
             PackAndAddModel(model, Model);
         }
@@ -108,12 +133,15 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             if(Model.Colors.Count != Model.Extradata.Count)
                 throw new ArgumentOutOfRangeException($"Extradata '{Model.Extradata.Count}' or color '{Model.Colors.Count}' mismatch");
+            
+            if(Model.Colors.Count != Model.Vertices.Count)
+                throw new ArgumentOutOfRangeException($"Vertex '{Model.Extradata.Count}' and color '{Model.Colors.Count}' mismatch");
         }
         
         private void SetColor(VertexData Model, InstanceData Element, int Index)
         {
             Model.Colors = Element.ColorCache != null && CacheManager.CachedColors.ContainsKey(Element.ColorCache)
-                ? CacheManager.CachedColors[Element.ColorCache].Decompress()
+                ? CacheManager.CachedColors[Element.ColorCache].Clone()
                 : Element.Colors;
 
             if (Element.VariateColor)
@@ -142,7 +170,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private static void SetExtraData(VertexData Model, InstanceData Element, RandomDistribution Distribution)
         {
             Model.Extradata = Element.ExtraDataCache != null &&  CacheManager.CachedExtradata.ContainsKey(Element.ExtraDataCache) 
-                ? CacheManager.CachedExtradata[Element.ExtraDataCache].Decompress() 
+                ? CacheManager.CachedExtradata[Element.ExtraDataCache].Clone()
                 : Element.ExtraData;
 
             if (!Element.HasExtraData)
@@ -160,5 +188,13 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     Model.Extradata[k] = -1f;
             }
         }
+        
+        private static readonly Dictionary<int, float> LODMap = new Dictionary<int, float>
+        {
+            {1, 1.0f},
+            {2, 0.7f},
+            {4, 0.4f},
+            {8, 0.25f}
+        };
     }
 }

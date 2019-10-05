@@ -82,6 +82,12 @@ namespace HedraTests.Player
             World.Provider = worldMock.Object;
             _currentHeight = 1;
         }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _spawner.Dispose();
+        }
         
         //TODO: Test EntitySpawner::SelectTemplate()
 
@@ -136,6 +142,7 @@ namespace HedraTests.Player
                 pause.Set();
             });
             var spawner = spawnerMock.Object;
+            spawner.Dispatch();
             Assert.True(pause.WaitOne(100), "Failed to dispatch thread when starting the entity spawner.");
         }
         

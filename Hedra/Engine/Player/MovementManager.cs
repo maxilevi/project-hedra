@@ -41,21 +41,12 @@ namespace Hedra.Engine.Player
 
         protected void ClampSwimming(IHumanoid Player)
         {
-            var minHeight = Physics.HeightAtPosition(Player.Position);
-            if (Player.Position.Y < minHeight)
-            {
-                Human.Position = new Vector3(
-                    Human.Position.X,
-                    minHeight,
-                    Human.Position.Z
-                );
-            }
+
         }
 
         public void MoveInWater(bool Up)
         {
             if(Human.IsRolling || Human.IsDead || !Human.CanInteract || !Human.IsUnderwater) return;
-            if(Human.Position.Y + Human.Model.Height + 1 > Physics.WaterHeight(Human.Position) && Up) return;
             Human.IsGrounded = false;
             Human.Physics.ResetVelocity();
             Human.Model.LocalRotation = new Vector3(0, Human.Model.LocalRotation.Y, 0);

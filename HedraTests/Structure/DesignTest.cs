@@ -24,6 +24,7 @@ using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player.MapSystem;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Rendering;
@@ -98,19 +99,21 @@ namespace HedraTests.Structure
         public void TestDesignSpawnsWithinRange()
         {
             var structure = this.CreateStructure();
+            /* Villages can have farms outside the main plateau */
+            var multiplier = structure.Design is VillageDesign ? 1.5f : 1.0f;
             Design.Build(structure);
             Executer.Update();
             for (var i = 0; i < WorldEntities.Length; i++)
             {
-                if( (WorldEntities[i].Position.Xz - structure.Position.Xz).LengthFast > Design.PlateauRadius )
-                    Assert.Fail($"{WorldEntities[i].Position.Xz} is far from {structure.Position.Xz} by more than {Design.PlateauRadius}");
+                if( (WorldEntities[i].Position.Xz - structure.Position.Xz).LengthFast > Design.PlateauRadius * multiplier)
+                    Assert.Fail($"{WorldEntities[i].Position.Xz} is far from {structure.Position.Xz} by more than {(WorldEntities[i].Position.Xz - structure.Position.Xz).LengthFast}");
             }
 
             var structures = GetStructureObjects(structure);
             for (var i = 0; i < structures.Length; i++)
             {
-                if( (structures[i].Position.Xz - structure.Position.Xz).LengthFast > Design.PlateauRadius )
-                    Assert.Fail($"'{structures[i]}': {structures[i].Position.Xz} is far from {structure.Position.Xz} by more than {Design.PlateauRadius}");
+                if( (structures[i].Position.Xz - structure.Position.Xz).LengthFast > Design.PlateauRadius * multiplier)
+                    Assert.Fail($"'{structures[i]}': {structures[i].Position.Xz} is far from {structure.Position.Xz} by more than {(WorldEntities[i].Position.Xz - structure.Position.Xz).LengthFast}");
             }
         }
         

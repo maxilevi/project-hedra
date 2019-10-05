@@ -8,11 +8,22 @@ namespace Hedra.Engine.Native
 {
     public static class MeshOptimizer
     {
+        
+        public static void Simplify(VertexData Mesh, float Threshold)
+        {
+            Simplify(Mesh, new uint[0], Threshold);
+        }
+
         public static void Simplify(VertexData Mesh, uint[] BlacklistedIndices, float Threshold)
+        {
+            Simplify(Mesh, BlacklistedIndices, Threshold, 0.05f);
+        }
+        
+        public static void Simplify(VertexData Mesh, uint[] BlacklistedIndices, float Threshold, float ErrorMargin)
         {
             var indices = Mesh.Indices.ToArray();
             var vertices = Mesh.Vertices.ToArray();
-            var targetIndexCount = (uint)(indices.Length * Threshold);
+            var targetIndexCount = (uint) (indices.Length * Threshold);//Math.Max(384, (uint)(indices.Length * Threshold));
             var outIndices = new uint[indices.Length];
             var verticesPointer = Pointer.Create(vertices);
             var length = HedraCoreNative.meshopt_simplify(
@@ -26,6 +37,26 @@ namespace Hedra.Engine.Native
                 .05f,
                 BlacklistedIndices,
                 (UIntPtr) BlacklistedIndices.Length
+            );
+            verticesPointer.Free();
+            Mesh.Indices = outIndices.Take((int)length).ToList();
+        }
+        
+        public static void SimplifySloppy(VertexData Mesh, float Threshold)
+        {
+            var indices = Mesh.Indices.ToArray();
+            var vertices = Mesh.Vertices.ToArray();
+            var targetIndexCount = (uint)(indices.Length * Threshold);
+            var outIndices = new uint[indices.Length];
+            var verticesPointer = Pointer.Create(vertices);
+            var length = HedraCoreNative.meshopt_simplifySloppy(
+                outIndices,
+                indices,
+                (UIntPtr) indices.Length,
+                verticesPointer.Address,
+                (UIntPtr) vertices.Length,
+                (UIntPtr) (Vector3.SizeInBytes),
+                (UIntPtr) targetIndexCount
             );
             verticesPointer.Free();
             Mesh.Indices = outIndices.Take((int)length).ToList();

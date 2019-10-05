@@ -39,10 +39,17 @@ float when_ge(float x, float y) {
 }
 
 
-void main() {
-
+void main()
+{
+    /* Early assignment to allow early returns*/
+    Color = vec4(0.0, 0.0, 0.0, 1.0);
+    
 	vec3 fragPos = texture(Position1, TexCoords).xyz;
-	vec3 normal = normalize(texture(Normal2, TexCoords).rgb);
+    vec4 normalSample = texture(Normal2, TexCoords);
+    float isWater = normalSample.a;
+    if(isWater > 0.0) return;
+    
+	vec3 normal = normalize(normalSample.rgb);
 	vec3 randomVec = texture(Random3, gl_FragCoord.xy / vec2(4.0, 4.0)).xyz * vec3(2.0, 2.0, 1.0) - vec3(1.0, 1.0, 0.0);
 
 	vec3 tangent = normalize(randomVec - normal * dot(randomVec, normal));

@@ -258,10 +258,10 @@ namespace Hedra.Engine.Bullet
             Parent.IsGrounded = _sensorContacts > 0;
             UpdateGravity();
             _body.LinearVelocity = ContactResponse 
-                ? new BulletSharp.Math.Vector3(_accumulatedMovement.X, Math.Min(0, _body.LinearVelocity.Y), _accumulatedMovement.Z) + Impulse.Compatible() * Time.TimeScale
+                ? new BulletSharp.Math.Vector3(_accumulatedMovement.X, Math.Min(0, _body.LinearVelocity.Y), _accumulatedMovement.Z) + Impulse.Compatible() * (UseTimescale ? Time.TimeScale : 1f)
                 : BulletSharp.Math.Vector3.Zero;
             _body.Activate();
-            Impulse *= (float) Math.Pow(0.25f, Time.DeltaTime * 5f);
+            Impulse *= (float) Math.Pow(0.25f, deltaTime * 5f);
             _accumulatedMovement = Vector3.Zero;
         }
 

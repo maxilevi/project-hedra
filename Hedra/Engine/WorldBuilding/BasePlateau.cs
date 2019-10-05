@@ -7,10 +7,12 @@ namespace Hedra.Engine.WorldBuilding
 {
     public abstract class BasePlateau
     {
+        protected const float BorderMultiplier = 1.5f;
+        
         protected BasePlateau(Vector2 Position)
         {
             this.Position = Position;
-            this.MaxHeight = World.BiomePool.GetRegion(Position.ToVector3()).Generation.GetHeight(Position.X, Position.Y, null, out _);
+            this.MaxHeight = World.BiomePool.GetRegion(Position.ToVector3()).Generation.GetAccuarateMaxHeight(Position.X, Position.Y);
         }
 
         public Vector2 Position { get; }

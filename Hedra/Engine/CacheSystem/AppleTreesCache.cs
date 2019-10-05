@@ -7,13 +7,14 @@ namespace Hedra.Engine.CacheSystem
     {
         public AppleTreesCache()
         {
-            this.AddModel(AssetManager.LoadPLYWithLODs("Assets/Env/Trees/AppleTree0.ply", Vector3.One));
-            this.AddModel(AssetManager.LoadPLYWithLODs("Assets/Env/Trees/AppleTree1.ply", Vector3.One));
-            this.AddModel(AssetManager.LoadPLYWithLODs("Assets/Env/Trees/AppleTree2.ply", Vector3.One));
+            var scale = Vector3.One * 2;
+            this.AddModel(AssetManager.LoadPLYWithLODs("Assets/Env/Trees/AppleTree0.ply", scale));
+            this.AddModel(AssetManager.LoadPLYWithLODs("Assets/Env/Trees/AppleTree1.ply", scale));
+            this.AddModel(AssetManager.LoadPLYWithLODs("Assets/Env/Trees/AppleTree2.ply", scale));
 
-            this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Trees/AppleTree0.ply", 2, Vector3.One));
-            this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Trees/AppleTree1.ply", 2, Vector3.One));
-            this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Trees/AppleTree2.ply", 2, Vector3.One));
+            this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Trees/AppleTree0.ply", 2, scale));
+            this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Trees/AppleTree1.ply", 2, scale));
+            this.AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Trees/AppleTree2.ply", 2, scale));
         }
 
         public override CacheItem Type => CacheItem.AppleTrees;

@@ -24,7 +24,6 @@ namespace Hedra.Engine.PlantSystem
 
             float height = Physics.HeightAtPosition(Position + addon);
             var topBlock = World.GetHighestBlockAt((int)(Position.X + addon.X), (int)(Position.Z + addon.Z));
-            if (Block.Noise3D) return Matrix4.Zero;
 
             for (int x = -1; x < 1; x++)
             {

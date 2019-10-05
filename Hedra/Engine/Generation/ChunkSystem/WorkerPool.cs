@@ -17,12 +17,11 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
         }
 
-        public virtual bool Work(Action Job, object Owner, int SleepTime)
+        public virtual bool Work(Action Job, object Owner)
         {
             var worker = this.GetAvailableWorker();
             if (worker != null)
             {
-                worker.SleepTime = SleepTime;
                 worker.Do(Job, Owner);
                 return true;
             }

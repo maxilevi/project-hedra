@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.BiomeSystem;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
+using Hedra.Engine.Core;
 using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Geometry;
 using Hedra.Rendering;
+using Microsoft.Scripting.Utils;
 using OpenTK;
 
 namespace Hedra.Engine.Generation.ChunkSystem
@@ -15,176 +18,147 @@ namespace Hedra.Engine.Generation.ChunkSystem
     {
         private const int CollisionMeshLod = 2;
         private readonly Chunk _parent;
-        private readonly Dictionary<int, float> _lodMap = new Dictionary<int, float>
+        private static readonly Dictionary<int, float> LODMap = new Dictionary<int, float>
         {
-            {1, 0.75f},
+            {1, 0.5f},
             {2, 0.2f},
-            {4, 0.15f},
+            {4, 0.125f},
             {8, 0.075f}
         };
         public ChunkSparsity Sparsity { get; set; }
-        public ChunkTerrainMeshBuilderHelper Helper { get; }
 
         public ChunkTerrainMeshBuilder(Chunk Parent)
         {
-            Helper = new ChunkTerrainMeshBuilderHelper(Parent);
             _parent = Parent;
         }
 
         private int OffsetX => _parent.OffsetX;
         private int OffsetZ => _parent.OffsetZ;
-        private int BoundsX => _parent.BoundsX;
-        private int BoundsY => _parent.BoundsY;
-        private int BoundsZ => _parent.BoundsZ;
+        private static int BoundsX => Chunk.BoundsX;
+        private static int BoundsY => Chunk.BoundsY;
+        private static int BoundsZ => Chunk.BoundsZ;
         private static float BlockSize => Chunk.BlockSize;
 
-        public ChunkMeshBuildOutput CreateTerrainMesh(Block[][][] Blocks, int Lod, RegionCache Cache)
+        public ChunkMeshBuildOutput CreateTerrainMesh(int Lod, RegionCache Cache)
         {
-            var output = CreateTerrain(Blocks, (X, Y, Z) => true, Lod, Lod, Cache, true, true);
+            var output = CreateTerrain(Lod, Cache, true, true);
             for (var k = 0; k < output.StaticData.Vertices.Count; k++) output.StaticData.Extradata.Add(0);
 
             Simplify(output.StaticData, Lod);
-            Simplify(output.WaterData, Lod);
-            
+
             output.StaticData.Translate(new Vector3(OffsetX, 0, OffsetZ));
             output.WaterData.Translate(new Vector3(OffsetX, 0, OffsetZ));
             return output;
         }
 
-        private void Simplify(VertexData Data, int Lod)
+        private static void Simplify(VertexData Data, int Lod)
         {
-            Data.Smooth();
+            Data.UniqueVertices();
             var detector = new ChunkMeshBorderDetector();
             var border = detector.ProcessEntireBorder(Data, Vector3.Zero, new Vector3(Chunk.Width, 0, Chunk.Width));
-            MeshOptimizer.Simplify(Data, border, _lodMap[Lod]);
+            MeshOptimizer.Simplify(Data, border, LODMap[Lod]);
             Data.Flat();
         }
 
-        private static ChunkMeshBuildOutput Merge(params ChunkMeshBuildOutput[] Outputs)
+        public VertexData CreateTerrainCollisionMesh(RegionCache Cache)
         {
-            var staticData = new VertexData();
-            var waterData = new VertexData();
-            var instanceData = new VertexData();
-            var failed = false;
-            var hasWater = false;
-            for (var i = 0; i < Outputs.Length; ++i)
-            {
-                if(Outputs[i] == null) continue;
-                staticData += Outputs[i].StaticData;
-                waterData += Outputs[i].WaterData;
-                instanceData += Outputs[i].InstanceData;
-                failed |= Outputs[i].Failed;
-                hasWater |= Outputs[i].HasWater;
-            }
-            return new ChunkMeshBuildOutput(staticData, waterData, instanceData, failed, hasWater);
-        }
-
-        public VertexData CreateTerrainCollisionMesh(Block[][][] Blocks, RegionCache Cache)
-        {
-            return CreateTerrain(Blocks, (X,Y,Z) => true, CollisionMeshLod, 1, Cache, false, false).StaticData;
+            return CreateTerrain(1, Cache, false, false, CollisionMeshLod, CollisionMeshLod).StaticData;
         }
         
-        private ChunkMeshBuildOutput CreateTerrain(Block[][][] Blocks, Func<int, int, int, bool> Filter, int Lod, int ColorLod, RegionCache Cache, bool ProcessWater, bool ProcessColors)
+        private unsafe ChunkMeshBuildOutput CreateTerrain(int Lod, RegionCache Cache, bool ProcessWater, bool ProcessColors, int HorizontalIncrement = 1, int VerticalIncrement = 1)
         {
             var failed = false;
-            var next = false;
-            var hasNoise3D = false;
-            var hasWater = false;
+            //var allocator = new HeapAllocator();
             var blockData = new VertexData();
             var waterData = new VertexData();
+            var grid = stackalloc SampledBlock[ChunkTerrainMeshBuilderHelper.CalculateGridSize(Lod)];
+            var helper = new ChunkTerrainMeshBuilderHelper(_parent, Lod, grid);
+
+            IterateAndBuild(helper, ref failed, ProcessWater, ProcessColors, Cache, blockData, waterData, HorizontalIncrement, VerticalIncrement);
+
+            return new ChunkMeshBuildOutput(blockData, waterData, new VertexData(), failed);
+        }
+
+        private void IterateAndBuild(ChunkTerrainMeshBuilderHelper Helper, ref bool failed, bool ProcessWater, bool ProcessColors, RegionCache Cache, VertexData blockData, VertexData waterData, int HorizontalIncrement, int VerticalIncrement)
+        {
+
+            Loop(Helper, HorizontalIncrement, VerticalIncrement, ProcessColors, false, ref blockData, ref failed, ref Cache);
+            if (ProcessWater && _parent.HasWater)
+            {
+                Loop(Helper, 1, 1, ProcessColors, true, ref waterData, ref failed, ref Cache);
+                waterData.UniqueVertices();
+                var detector = new ChunkMeshBorderDetector();
+                var set = new HashSet<uint>(detector.ProcessEntireBorder(waterData, Vector3.Zero, new Vector3(Chunk.Width, 0, Chunk.Width)));
+                for(var i = 0; i < 2; ++i)
+                    MeshAnalyzer.ApplySmoothing(waterData, set);
+                waterData.Flat();
+            }
+        }
+
+        private void Loop(ChunkTerrainMeshBuilderHelper Helper, int HorizontalSkip, int VerticalSkip, bool ProcessColors, bool isWater, ref VertexData blockData, ref bool failed, ref RegionCache Cache)
+        {
             var vertexBuffer = MarchingCubes.NewVertexBuffer();
             var triangleBuffer = MarchingCubes.NewTriangleBuffer();
-            var densityGrid = Helper.BuildDensityGrid(Lod);
             var cell = new GridCell
             {
                 P = new Vector3[8],
                 Type = new BlockType[8],
                 Density = new double[8]
             };
-            
-            for (var x = 0; x < BoundsX && !failed; x ++)
+            var next = false;
+            for (var x = 0; x < BoundsX && !failed; x+=HorizontalSkip)
             {
                 next = !next;
-                for (var y = 0; y < BoundsY && !failed; y ++)
+                for (var y = 0; y < BoundsY && !failed; y+=VerticalSkip)
                 {
-                    for (var z = 0; z < BoundsZ && !failed; z ++)
+                    for (var z = 0; z < BoundsZ && !failed; z+=HorizontalSkip)
                     {
                         next = !next;
 
                         if (y < Sparsity.MinimumHeight || y > Sparsity.MaximumHeight) continue;
-                        if (!Filter(x, y, z)) continue;
-                        if (Blocks[x] == null || Blocks[x][y] == null || y == BoundsY - 1 || y == 0) continue;
-
-                        var isWaterCell = Blocks[x][y][z].Type == BlockType.Water &&
-                                          Blocks[x][y + 1][z].Type == BlockType.Air;
-                        Helper.CreateCell(ref densityGrid, ref cell, ref x, ref y, ref z, ref isWaterCell, out var success);
-
-                        if (!(Blocks[x][y][z].Type == BlockType.Water &&
-                              Blocks[x][y + 1][z].Type == BlockType.Air) &&
-                            !MarchingCubes.Usable(0f, cell)) continue;
+                        if (y == BoundsY - 1 || y == 0) continue;
+                        
+                        Helper.CreateCell(ref cell, ref x, ref y, ref z, isWater, HorizontalSkip, VerticalSkip, out var success);
+                        if (!MarchingCubes.Usable(0f, cell)) continue;
                         if (!success && y < BoundsY - 2) failed = true;
 
-                        if (Blocks[x][y][z].Type == BlockType.Water && Blocks[x][y + 1][z].Type == BlockType.Air &&
-                            ProcessWater)
+                        var color = Vector4.Zero;
+                        if (isWater)
                         {
-                            var regionPosition =
-                                new Vector3(cell.P[0].X * BlockSize + OffsetX, 0,
-                                    cell.P[0].Z * BlockSize + OffsetZ);
-
+                            var regionPosition = new Vector3(cell.P[0].X + OffsetX, 0, cell.P[0].Z + OffsetZ);
                             var region = Cache.GetAverageRegionColor(regionPosition);
-
-                            IsoSurfaceCreator.CreateWaterQuad(BlockSize, cell, next, region.WaterColor, waterData);
-                            hasWater = true;
-                        }
-
-                        if (Blocks[x][y][z].Type == BlockType.Water)
-                        {
-                            if (Blocks[x][y][z].Type == BlockType.Water &&
-                                Blocks[x][y + 1][z].Type == BlockType.Air)
-                            {
-                                var waterCell = false;
-                                Helper.CreateCell(ref densityGrid, ref cell, ref x, ref y, ref z, ref waterCell, out success);
-                            }
-
-                            if (!success && y < BoundsY - 2) failed = true;
-
-                            if (!MarchingCubes.Usable(0f, cell)) continue;
-
-                            PolygoniseCell(ref cell, ref ProcessColors, ref next, ref blockData, ref ColorLod, ref vertexBuffer, ref triangleBuffer, ref Cache);
+                            color = new Vector4(region.WaterColor.Xyz, 1);
                         }
                         else
                         {
-                            PolygoniseCell(ref cell, ref ProcessColors, ref next, ref blockData, ref ColorLod, ref vertexBuffer, ref triangleBuffer, ref Cache);
+                            color = GetCellColor(Helper, ref cell, ref ProcessColors, ref Cache, false);
                         }
+
+                        PolygoniseCell(ref cell, ref next, ref blockData, ref vertexBuffer, ref triangleBuffer, color, isWater);
                     }
                 }
             }
-
-            return new ChunkMeshBuildOutput(blockData, waterData, new VertexData(), failed, hasWater);
         }
 
-        private void PolygoniseCell(ref GridCell Cell, ref bool ProcessColors, ref bool Next, ref VertexData BlockData,
-            ref int ColorLod, ref Vector3[] VertexBuffer, ref Triangle[] TriangleBuffer, ref RegionCache Cache)
+        private static void PolygoniseCell(ref GridCell Cell, ref bool Next, ref VertexData BlockData, ref Vector3[] VertexBuffer, ref Triangle[] TriangleBuffer, Vector4 Color, bool IsWater)
         {
             MarchingCubes.Polygonise(ref Cell, 0, ref VertexBuffer, ref TriangleBuffer, out var triangleCount);
+            MarchingCubes.Build(ref BlockData, ref Color, ref TriangleBuffer, ref triangleCount, ref Next, ref IsWater);
+        }
+
+        private Vector4 GetCellColor(ChunkTerrainMeshBuilderHelper Helper, ref GridCell Cell, ref bool ProcessColors, ref RegionCache Cache, bool isWaterCell)
+        {
             var color = Vector4.Zero;
             if (ProcessColors)
             {
-                var normal = CalculateAverageNormal(ref TriangleBuffer, ref triangleCount);
                 var regionPosition = new Vector3(Cell.P[0].X + OffsetX, 0, Cell.P[0].Z + OffsetZ);
                 var region = Cache.GetAverageRegionColor(regionPosition);
-                color = Helper.GetColor(ref Cell, region, ColorLod, ref normal);
+                color = !isWaterCell 
+                    ? Helper.GetColor(ref Cell, region) 
+                    : Cache.GetAverageRegionColor(Cell.P[0]).WaterColor;
             }
-            MarchingCubes.Build(ref BlockData, ref color, ref TriangleBuffer, ref triangleCount, ref Next);
-        }
 
-        private static Vector3 CalculateAverageNormal(ref Triangle[] TriangleBuffer, ref int TriangleCount)
-        {
-            if(TriangleCount == 0) return Vector3.One;
-            var averageNormal = Vector3.Zero;
-            for (var i = 0; i < TriangleCount; ++i)
-                averageNormal += Vector3.Cross(TriangleBuffer[i].Vertices[1] - TriangleBuffer[i].Vertices[0], TriangleBuffer[i].Vertices[2] - TriangleBuffer[i].Vertices[0]).NormalizedFast();
-            return averageNormal / TriangleCount;
+            return color;
         }
     }
 }

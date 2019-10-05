@@ -43,6 +43,7 @@ namespace Hedra.Game
         public static float ScreenRatio { get; set; }
         public static bool DebugPhysics { get; set; }
         public static bool WatchScriptChanges { get; set; }
+        public static bool UseSSR => SSAO && EnableReflections;
         public static bool Paused { get; set; }
         public static float AmbientOcclusionIntensity = 1;
         public static bool BlurFilter { get; set; } = false;
@@ -54,7 +55,6 @@ namespace Hedra.Game
         public const float Fov = 85.0f;
         public static bool GlobalShadows = true;
         public static bool Hardcore = false;
-        public static bool Lod = true;
         public static bool UnderWaterEffect = false;
         private static bool _fullscreen;
         private static int _shadowQuality = 2;
@@ -93,6 +93,8 @@ namespace Hedra.Game
         [Setting] public static bool ShowMinimap { get; set; } = true;
 
         [Setting] public static bool SSAO { get; set; } = true;
+        
+        [Setting] public static bool EnableReflections { get; set; } = true;
         
         [Setting] public static bool FXAA { get; set; } = true;
         

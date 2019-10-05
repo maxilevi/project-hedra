@@ -6,9 +6,6 @@ using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
-using Hedra.Engine.PhysicsSystem;
-using Hedra.Engine.PlantSystem;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
@@ -101,7 +98,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         {
             return World.WorldBuilding.ApplyMultiple(
                    Position.Xz,
-                   World.BiomePool.GetRegion(Position).Generation.GetHeight(Position.X, Position.Z, null, out _),
+                   World.BiomePool.GetRegion(Position).Generation.GetMaxHeight(Position.X, Position.Z),
                    Plateaus
             ) < BiomePool.SeaLevel-1;
         }

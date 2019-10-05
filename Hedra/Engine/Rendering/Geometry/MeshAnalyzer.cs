@@ -8,6 +8,59 @@ namespace Hedra.Engine.Rendering.Geometry
 {
     public static class MeshAnalyzer
     {
+
+        private struct VertexRemap
+        {
+            public Vector3 Position;
+            public Vector3 Normal;
+            public int Count;
+        }
+        
+        /*
+         * Reference: https://docs.blender.org/manual/en/latest/modeling/modifiers/deform/smooth.html
+         */
+        public static void ApplySmoothing(VertexData Mesh, HashSet<uint> IgnoreList)
+        {
+            var map = IndexVertices(Mesh);
+            var vertexRemap = new Dictionary<Vector3, VertexRemap>();
+
+            void AddWeight(Vector3 Vertex, Vertex Neighbour)
+            {
+                var remap = vertexRemap[Vertex];
+                vertexRemap[Vertex] = new VertexRemap
+                {
+                    Position = remap.Position + Neighbour.Position,
+                    Normal = remap.Normal + Neighbour.Normal,
+                    Count = remap.Count + 1,
+                };
+            }
+            
+            for (var i = 0; i < Mesh.Vertices.Count; ++i)
+            {
+                var vertex = Mesh.Vertices[i];
+                var triangles = map[vertex].ToArray();
+                if (!vertexRemap.ContainsKey(vertex))
+                    vertexRemap[vertex] = new VertexRemap();
+
+                for (var j = 0; j < triangles.Length; ++j)
+                {
+                    var neighbours = triangles[j].GetConnected(vertex);
+                    for (var k = 0; k < neighbours.Length; ++k)
+                    {
+                        AddWeight(vertex, neighbours[k]);
+                    }
+                }
+            }
+
+            for (var i = 0; i < Mesh.Vertices.Count; ++i)
+            {
+                var remap = vertexRemap[Mesh.Vertices[i]];
+                Mesh.Normals[i] = remap.Normal / remap.Count;
+                if(IgnoreList.Contains((uint)i)) continue;
+                Mesh.Vertices[i] = remap.Position / remap.Count;
+            }
+        }
+        
         public static VertexData[] GetConnectedComponents(VertexData Mesh)
         {
             var list = new List<VertexData>();

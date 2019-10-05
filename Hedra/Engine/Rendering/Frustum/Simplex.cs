@@ -46,7 +46,7 @@ namespace Hedra.Engine.Rendering.Frustum
         MaxCount
     }
     
-    public class SimplexVertex
+    public struct SimplexVertex
     {
         public Vector3 SupportA;
         public Vector3 SupportB;

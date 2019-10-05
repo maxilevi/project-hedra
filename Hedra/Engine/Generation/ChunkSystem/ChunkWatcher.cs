@@ -9,12 +9,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
         
     public class ChunkWatcher : IDisposable
     {
-        public static event OnChunkEvent OnChunkLodChanged;
         private Chunk _object;
         private bool _wasBuilt;
         public event OnChunkEvent OnChunkReady;
         public bool Disposed { get; private set; }
         public bool IsHealthy { get; private set; }
+        private bool _wasKilled;
 
         public ChunkWatcher(Chunk Object)
         {
@@ -23,6 +23,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void Update()
         {
+            if (_wasKilled) _object = null;
             if(GameManager.Player == null) return;
             IsHealthy = (_object?.BuildedWithStructures ?? false) && !Disposed;
             if (_object?.Disposed ?? true) this.Dispose();
@@ -33,7 +34,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if(!result) return;
             if (WasChunkGenerated(_object) && ShouldWeRebuildChunk(_object))
             {
-                World.AddChunkToQueue(_object, true);
+                World.AddChunkToQueue(_object, ChunkQueueType.Mesh);
             }
             if (!_wasBuilt && _object.BuildedWithStructures)
             {
@@ -50,7 +51,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Kill();
                 return false;
             }
-
             var offset = World.ToChunkSpace(GameManager.Player.Position);
             var radius = GameSettings.ChunkLoaderRadius * .5f * Chunk.Width;
             if ((_object.Position.Xz - offset).LengthSquared > radius * radius)
@@ -58,9 +58,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Kill();
                 return false;
             }
-            if (!_object.IsGenerated || !_object.Landscape.StructuresPlaced || _object.Landscape.HasToGenerateMoreData)
+            if (!_object.IsGenerated || !_object.Landscape.StructuresPlaced)
             {
-                World.AddChunkToQueue(_object, false);
+                World.AddChunkToQueue(_object, ChunkQueueType.Generation);
                 return false;
             }
             return true;
@@ -68,7 +68,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private void ManageLod()
         {
-            if (!GameSettings.Lod || _object == null) return;
             var cameraDist = (_object.Position.Xz - World.ToChunkSpace(GameManager.Player.Position)).LengthSquared;
             var newLod = -1;
             if (cameraDist <= GeneralSettings.Lod1DistanceSquared)
@@ -81,7 +80,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 newLod = 8;
             else
                 throw new ArgumentOutOfRangeException("Unsupported LOD.");
-            if(_object.Lod != newLod) OnChunkLodChanged?.Invoke(_object);
             _object.Lod = newLod;
         }
 
@@ -108,7 +106,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void Dispose()
         {
-            _object = null;
+            _wasKilled = true;
             Disposed = true;
         }
     }

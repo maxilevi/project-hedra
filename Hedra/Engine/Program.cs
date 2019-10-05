@@ -1,18 +1,15 @@
 using System;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Runtime.ExceptionServices;
-using System.Security;
-using Hedra.API;
-using Hedra.Engine.BiomeSystem;
-using Hedra.Engine.ClassSystem;
+using Hedra.Engine.BiomeSystem.NormalBiome;
 using Hedra.Engine.Steamworks;
 using Hedra.Engine.Game;
+using Hedra.Engine.Generation;
 using Hedra.Engine.IO;
 using Hedra.Engine.Loader;
 using Hedra.Engine.Management;
-using Hedra.Engine.Native;
 using Hedra.Engine.Networking;
-using Hedra.Engine.Player;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Game;
 using OpenTK;
@@ -31,7 +28,6 @@ namespace Hedra.Engine
         [HandleProcessCorruptedStateExceptions]
         private static void Main(string[] Args)
         {
-            
             void ProcessException(object S, UnhandledExceptionEventArgs E)
             {
                 if (E.IsTerminating)

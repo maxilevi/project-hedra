@@ -26,42 +26,24 @@ namespace Hedra.Engine.Generation
     {
         private readonly Vector3[] _previousTrees = new Vector3[8];
 
-        public PlacementObject CanGenerateTree(Vector3 Position, Region BiomeRegion, int Lod)
+        public PlacementObject CanGenerateTree(Vector3 Position, Region BiomeRegion)
         {
             var underChunk = World.GetChunkAt(Position);
             if (underChunk == null) return default(PlacementObject);
-            var rng = new Random(Unique.GenerateSeed(Position.Xz));
 
-            var height = Physics.HeightAtPosition(Position, Lod);
-            var normal = Physics.NormalAtPosition(Position, Lod);
+            var height = Physics.HeightAtPosition(Position);
+            var normal = Physics.NormalAtPosition(Position);
             
             if (Vector3.Dot(normal, Vector3.UnitY) <= .2f) return default(PlacementObject);
             
             const float valueFactor = 1.05f;
-            float spaceBetween;
-            float noiseValue;
-
-            if (World.MenuSeed == World.Seed)
-            {
-                //This old noise doesnt support negative coordinates
-                //And I will leave it here because the menu looks good with it.
-                spaceBetween = Position.X > 0 && Position.Z > 0 
-                    ? Noise.Generate(Position.X * .001f, (Position.Z + 100) * .001f) * 75f
-                    : int.MaxValue;
-                noiseValue = Math.Min(Math.Max(0, Math.Abs(spaceBetween / 75f) * valueFactor)+.3f, 1.0f);
-            }
-            else
-            {
-                spaceBetween = SpaceNoise(Position.X, Position.Z);
-                noiseValue = Math.Min(Math.Max(0, Math.Abs(spaceBetween / 40f) * valueFactor) + .3f, 1.0f);
-            }
+            var spaceBetween = SpaceNoise(Position.X, Position.Z);
+            var noiseValue = Math.Min(Math.Max(0, Math.Abs(spaceBetween / 40f) * valueFactor) + .3f, 1.0f);
+            
             if(spaceBetween < 0) spaceBetween = -spaceBetween * 16f;
             if (PlacementNoise(Position) < 0) return default(PlacementObject);
 
-            if (World.MenuSeed != World.Seed)
-                spaceBetween += BiomeRegion.Trees.PrimaryDesign.Spacing;
-            else
-                spaceBetween = 80f;
+            spaceBetween += BiomeRegion.Trees.PrimaryDesign.Spacing;
 
             for(var i = 0; i < _previousTrees.Length; i++){
                 if( (Position - _previousTrees[i] ).LengthSquared < spaceBetween * spaceBetween)
@@ -123,7 +105,9 @@ namespace Hedra.Engine.Generation
                 shape.Transform(transMatrix);
                 underChunk.AddCollisionShape(shape);
             }
-            underChunk.StaticBuffer.AddInstance(model.ToInstanceData(transMatrix));
+            var instance = model.ToInstanceData(transMatrix);
+            instance.CanSimplifyProgramatically = false;
+            underChunk.StaticBuffer.AddInstance(instance);
         }
 
         public float SpaceNoise(float X, float Z)

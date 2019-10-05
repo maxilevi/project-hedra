@@ -24,6 +24,8 @@ namespace Hedra.Engine.Generation
     {
         event ModulesReloadEvent ModulesReload;
 
+        WorldBuilder Builder { get; }
+        
         Dictionary<Vector2, Chunk> SearcheableChunks { get; }
 
         AreaHighlighter Highlighter { get; }
@@ -42,10 +44,6 @@ namespace Hedra.Engine.Generation
 
         StructureHandler StructureHandler { get; }
         FishingZoneHandler FishingZoneHandler { get; }
-        
-        int AverageBuildTime { get; }
-        
-        int AverageGenerationTime { get; }
 
         int Seed { get; }
         
@@ -54,10 +52,6 @@ namespace Hedra.Engine.Generation
         Vector3 SpawnVillagePoint { get; }
 
         bool IsGenerated { get; }
-
-        int MeshQueueCount { get; }
-
-        int ChunkQueueCount { get; }
 
         IWorldObject[] WorldObjects { get; }
         
@@ -91,7 +85,7 @@ namespace Hedra.Engine.Generation
 
         T[] InRadius<T>(Vector3 Position, float Radius) where T : ISearchable;
 
-        void AddChunkToQueue(Chunk Chunk, bool DoMesh);
+        void AddChunkToQueue(Chunk Chunk, ChunkQueueType Type);
 
         void AddEntity(IEntity Entity);
 
@@ -118,14 +112,6 @@ namespace Hedra.Engine.Generation
         Block GetHighestBlockAt(int X, int Z);
 
         int GetHighestY(int X, int Z);
-
-        Block GetNearestBlockAt(int X, int Y, int Z);
-
-        int GetNearestY(int X, int Y, int Z);
-
-        int GetLowestY(int X, int Z);
-
-        Block GetLowestBlock(int X, int Z);
 
         HighlightedAreaWrapper HighlightArea(Vector3 Position, Vector4 Color, float Radius, float Seconds);
 

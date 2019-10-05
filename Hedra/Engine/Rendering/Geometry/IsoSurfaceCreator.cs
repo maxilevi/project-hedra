@@ -128,19 +128,16 @@ namespace Hedra.Engine.Rendering.Geometry
                 Data.Vertices.Add(V0);
             }
             
-            Data.Normals.Add(CodeNormal(Data.Vertices[VertCount+0], Data.Vertices[VertCount+1],
-                                        Data.Vertices[VertCount+2], ShouldMove(Data.Vertices[VertCount+0], V0, V1, V2, V3, Cell)  ));
-            Data.Normals.Add(CodeNormal(Data.Vertices[VertCount+1], Data.Vertices[VertCount+0],
-                                        Data.Vertices[VertCount+2], ShouldMove(Data.Vertices[VertCount+1], V0, V1, V2, V3, Cell)  ));
-            Data.Normals.Add(CodeNormal(Data.Vertices[VertCount+2], Data.Vertices[VertCount+1],
-                                        Data.Vertices[VertCount+0], ShouldMove(Data.Vertices[VertCount+2], V0, V1, V2, V3, Cell)  ));
+            Data.Normals.Add(CodeNormal(Data.Vertices[VertCount+0], Data.Vertices[VertCount+1], Data.Vertices[VertCount+2]));
+            Data.Normals.Add(CodeNormal(Data.Vertices[VertCount+1], Data.Vertices[VertCount+0], Data.Vertices[VertCount+2]));
+            Data.Normals.Add(CodeNormal(Data.Vertices[VertCount+2], Data.Vertices[VertCount+1], Data.Vertices[VertCount+0]));
             
             Data.Normals.Add(CodeNormal(Data.Vertices[VertCount+3], Data.Vertices[VertCount+4],
-                                        Data.Vertices[VertCount+5], ShouldMove(Data.Vertices[VertCount+3], V0, V1, V2, V3, Cell)  ));
+                                        Data.Vertices[VertCount+5]));
             Data.Normals.Add(CodeNormal(Data.Vertices[VertCount+4], Data.Vertices[VertCount+3],
-                                        Data.Vertices[VertCount+5], ShouldMove(Data.Vertices[VertCount+4], V0, V1, V2, V3, Cell)  ));
+                                        Data.Vertices[VertCount+5]));
             Data.Normals.Add(CodeNormal(Data.Vertices[VertCount+5], Data.Vertices[VertCount+4],
-                                        Data.Vertices[VertCount+3], ShouldMove(Data.Vertices[VertCount+5], V0, V1, V2, V3, Cell)  ));
+                                        Data.Vertices[VertCount+3]));
             
             Data.Colors.Add(TemplateColor);
             Data.Colors.Add(TemplateColor);
@@ -149,11 +146,11 @@ namespace Hedra.Engine.Rendering.Geometry
             Data.Colors.Add(TemplateColor);
             Data.Colors.Add(TemplateColor);
         }
-        private static Vector3 CodeNormal(Vector3 Original, Vector3 V1, Vector3 V2, bool ShouldMove){
-            Vector3 Coded1 = V1 - Original;
-            Vector3 Coded2 = V2 - Original;
-
-            return new Vector3(Pack(Coded1.Xz, 4096), Pack(Coded2.Xz, 4096), ShouldMove ? 1 : 0);
+        public static Vector3 CodeNormal(Vector3 Original, Vector3 V1, Vector3 V2)
+        {
+            var coded1 = V1 - Original;
+            var coded2 = V2 - Original;
+            return new Vector3(Pack(new Vector2(coded1.X, coded2.X), 4096), Pack(new Vector2(coded1.Y, coded2.Y), 4096), Pack(new Vector2(coded1.Z, coded2.Z), 4096));
         }
         
         private static float Pack(Vector2 input, int precision)
