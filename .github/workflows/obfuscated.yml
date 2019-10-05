@@ -1,0 +1,27 @@
+name: Obfuscated Build
+
+on: [push]
+
+jobs:
+  test:
+    name: Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest]
+    
+    steps:
+    - uses: actions/checkout@v1
+      with:
+        token: ${{ secrets.HEDRA_CI }}
+        submodules: true
+    - name: Setup Dotnet for use with actions
+      uses: actions/setup-dotnet@v1.0.0
+    - name: Setup Nuget.exe
+      uses: warrenbuckley/Setup-Nuget@v1
+    - name: Restore Hedra packages
+      run: nuget restore Hedra/Hedra.csproj -PackagesDirectory packages
+    - name: Build Hedra
+      run: dotnet msbuild -p:Configuration=Release
+    - name: Run
+      run: Hedra.exe --dummy-mode
