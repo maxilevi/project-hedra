@@ -4,6 +4,7 @@ using System.Linq;
 using Hedra.BiomeSystem;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
+using Hedra.Engine.Core;
 using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Geometry;
@@ -17,7 +18,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
     {
         private const int CollisionMeshLod = 2;
         private readonly Chunk _parent;
-        private readonly Dictionary<int, float> _lodMap = new Dictionary<int, float>
+        private static readonly Dictionary<int, float> LODMap = new Dictionary<int, float>
         {
             {1, 0.5f},
             {2, 0.2f},
@@ -50,12 +51,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
             return output;
         }
 
-        private void Simplify(VertexData Data, int Lod)
+        private static void Simplify(VertexData Data, int Lod)
         {
             Data.UniqueVertices();
             var detector = new ChunkMeshBorderDetector();
             var border = detector.ProcessEntireBorder(Data, Vector3.Zero, new Vector3(Chunk.Width, 0, Chunk.Width));
-            MeshOptimizer.Simplify(Data, border, _lodMap[Lod]);
+            MeshOptimizer.Simplify(Data, border, LODMap[Lod]);
             Data.Flat();
         }
 
@@ -67,6 +68,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private unsafe ChunkMeshBuildOutput CreateTerrain(int Lod, RegionCache Cache, bool ProcessWater, bool ProcessColors, int HorizontalIncrement = 1, int VerticalIncrement = 1)
         {
             var failed = false;
+            //var allocator = new HeapAllocator();
             var blockData = new VertexData();
             var waterData = new VertexData();
             var grid = stackalloc SampledBlock[ChunkTerrainMeshBuilderHelper.CalculateGridSize(Lod)];

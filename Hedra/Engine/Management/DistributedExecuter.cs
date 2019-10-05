@@ -6,7 +6,7 @@ namespace Hedra.Engine.Management
 {
     public class DistributedExecuter
     {
-        public const int ExecutionsPerFrame = 16;
+        public const int ExecutionsPerFrame = 8;
         private static readonly ConcurrentQueue<Action> _jobs;
 
         static DistributedExecuter()

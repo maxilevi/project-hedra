@@ -8,7 +8,7 @@ namespace Hedra.Engine.WorldBuilding
     public class SquaredPlateau : BasePlateau, IBoundingBox
     {
         private float Width { get; }
-        public float Hardness { get; set; } = 1.0f;
+        public float Hardness { get; set; } = 1f;
         
         public SquaredPlateau(Vector2 Position, float Width) : base(Position)
         {
@@ -16,6 +16,11 @@ namespace Hedra.Engine.WorldBuilding
         }
 
         public override bool Collides(Vector2 Point)
+        {
+            return DoCollides(Point, Width);
+        }
+
+        private bool DoCollides(Vector2 Point, float Width)
         {
             var unCenteredPosition = Position - Width * Vector2.One * .5f;
             return Point.X < unCenteredPosition.X + Width && Point.X > unCenteredPosition.X &&
@@ -25,6 +30,7 @@ namespace Hedra.Engine.WorldBuilding
         public override float Density(Vector2 Point)
         {
             if (Collides(Point)) return 1;
+            if (!DoCollides(Point, Width * BorderMultiplier)) return 0;
             var halfWidth = Width * .5f;
             var nearest = new Vector2(
                 Mathf.Clamp(Point.X, Position.X - halfWidth, Position.X + halfWidth),
@@ -40,7 +46,7 @@ namespace Hedra.Engine.WorldBuilding
 
         public override BoundingBox ToBoundingBox()
         {
-            return new BoundingBox(Position, Width);
+            return new BoundingBox(Position, Width * BorderMultiplier);
         }
 
         public override BasePlateau Clone()

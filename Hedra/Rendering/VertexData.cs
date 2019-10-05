@@ -250,7 +250,7 @@ namespace Hedra.Rendering
             return this;
         }
 
-        public void Optimize()
+        public unsafe void Optimize()
         {
             if (!HasColors || !CompatibilityManager.SupportsMeshOptimizer) return;
             /* var originalVertices = Vertices.Count; */

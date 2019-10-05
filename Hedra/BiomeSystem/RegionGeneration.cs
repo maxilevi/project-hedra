@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -57,7 +58,7 @@ namespace Hedra.BiomeSystem
                 for (var i = 0; i < Chunk.Height; ++i)
                 {
                     if(_tempDensityMap[0][i][0] < 0)
-                        return _tempDensityMap[0][i][0] * 0f + (i-1);
+                        return _tempDensityMap[0][i-1][0] + (i-1);
                 }
 
                 return 0;

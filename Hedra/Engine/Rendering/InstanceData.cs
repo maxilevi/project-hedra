@@ -34,6 +34,7 @@ namespace Hedra.Engine.Rendering
         public bool VariateColor { get; set; } = true;
         public bool GraduateColor { get; set; }
         public bool SkipOnLod { get; set; }
+        public bool CanSimplifyProgramatically { get; set; } = true;
         public Func<BlockType, bool> PlaceCondition { get; set; }
         public VertexData OriginalMesh { get; set; }
 

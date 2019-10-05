@@ -105,7 +105,9 @@ namespace Hedra.Engine.Generation
                 shape.Transform(transMatrix);
                 underChunk.AddCollisionShape(shape);
             }
-            underChunk.StaticBuffer.AddInstance(model.ToInstanceData(transMatrix));
+            var instance = model.ToInstanceData(transMatrix);
+            instance.CanSimplifyProgramatically = false;
+            underChunk.StaticBuffer.AddInstance(instance);
         }
 
         public float SpaceNoise(float X, float Z)

@@ -246,6 +246,12 @@
     <Compile Include="Engine\Bullet\PhysicsComponentMotionState.cs" />
     <Compile Include="Engine\CacheSystem\DynamicCache.cs" />
     <Compile Include="Engine\CacheSystem\FishingPostIconCache.cs" />
+    <Compile Include="Engine\Core\HeapAllocator.cs" />
+    <Compile Include="Engine\Core\IAllocator.cs" />
+    <Compile Include="Engine\Core\NativeArray.cs" />
+    <Compile Include="Engine\Core\NativeList.cs" />
+    <Compile Include="Engine\Core\ObjectPool.cs" />
+    <Compile Include="Engine\Core\StackAllocator.cs" />
     <Compile Include="Engine\DataStructures\AABB.cs" />
     <Compile Include="Engine\DataStructures\Octree.cs" />
     <Compile Include="Engine\DataStructures\OctreeNode.cs" />
@@ -299,6 +305,7 @@
     <Compile Include="Engine\Rendering\Geometry\IsoSurfaceCreator.cs" />
     <Compile Include="Engine\Rendering\Geometry\MarchingCubes.cs" />
     <Compile Include="Engine\Rendering\Geometry\MeshAnalyzer.cs" />
+    <Compile Include="Engine\Rendering\NativeVertexData.cs" />
     <Compile Include="Engine\Rendering\UI\CompanionProfileUIElement.cs" />
     <Compile Include="Engine\Rendering\UI\MenuBackground.cs" />
     <Compile Include="Engine\Rendering\UI\ProfileUIElement.cs" />

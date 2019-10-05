@@ -317,7 +317,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
-            return Rng.Next(1, 2) == 1 && IsWater(ChunkOffset.ToVector3(), Biome) && SearchForShore(ChunkOffset, Biome, out _);
+            return false && Rng.Next(1, 2) == 1 && IsWater(ChunkOffset.ToVector3(), Biome) && SearchForShore(ChunkOffset, Biome, out _);
         }
 
         private static bool SearchForShore(Vector2 Offset, Region Biome, out Vector3 Position)
