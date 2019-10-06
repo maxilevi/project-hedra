@@ -43,21 +43,24 @@ namespace Hedra.Engine.Native
             Mesh.Indices = outIndices.Take((int)length).ToList();
         }
         
-        public static void SimplifySloppy(IAllocator Allocator, NativeList<uint> Indices, NativeList<Vector3> Vertices, float Threshold)
+        public static void SimplifySloppy(VertexData Mesh, float Threshold)
         {
-            var targetIndexCount = (uint)(Indices.Count * Threshold);
-            var outIndices = new NativeArray<uint>(Allocator, Indices.Count);
+            var indices = Mesh.Indices.ToArray();
+            var vertices = Mesh.Vertices.ToArray();
+            var targetIndexCount = (uint)(indices.Length * Threshold);
+            var outIndices = new uint[indices.Length];
+            var verticesPointer = Pointer.Create(vertices);
             var length = HedraCoreNative.meshopt_simplifySloppy(
-                outIndices.Pointer,
-                Indices.Pointer,
-                (UIntPtr) Indices.Count,
-                Vertices.Pointer,
-                (UIntPtr) Vertices.Count,
+                outIndices,
+                indices,
+                (UIntPtr) indices.Length,
+                verticesPointer.Address,
+                (UIntPtr) vertices.Length,
                 (UIntPtr) (Vector3.SizeInBytes),
                 (UIntPtr) targetIndexCount
             );
-            Indices.Clear();
-            Indices.AddRange(outIndices, (int)length);
+            verticesPointer.Free();
+            Mesh.Indices = outIndices.Take((int)length).ToList();
         }
 
         public static Tuple<T[], uint[]> Optimize<T>(T[] Vertices, uint[] Indices, uint VertexSize)

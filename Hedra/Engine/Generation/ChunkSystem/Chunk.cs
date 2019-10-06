@@ -148,7 +148,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var buildingLod = this.Lod;
             this.PrepareForBuilding();
             var blocks = _blocks;
-            using (var allocator = new HeapAllocator(Allocator.Megabyte * 8))
+            using (var allocator = new HeapAllocator(Allocator.Megabyte * 16))
             {
                 var output = this.CreateTerrainMesh(allocator, buildingLod);
                 SetupCollider(allocator, buildingLod);

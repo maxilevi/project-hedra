@@ -18,11 +18,11 @@ namespace Hedra.Engine.Rendering
 
         public NativeVertexData(IAllocator Allocator, ICollection<uint> Indices, ICollection<Vector3> Vertices, ICollection<Vector3> Normals, ICollection<Vector4> Colors, ICollection<float> Extradata)
         {
-            _vertices = new NativeList<Vector3>(Allocator);
-            _colors = new NativeList<Vector4>(Allocator);
-            _normals = new NativeList<Vector3>(Allocator);
-            _indices = new NativeList<uint>(Allocator);
-            _extradata = new NativeList<float>(Allocator);
+            _vertices = new NativeList<Vector3>(Allocator, Vertices);
+            _colors = new NativeList<Vector4>(Allocator, Colors);
+            _normals = new NativeList<Vector3>(Allocator, Normals);
+            _indices = new NativeList<uint>(Allocator, Indices);
+            _extradata = new NativeList<float>(Allocator, Extradata);
         }
         
         public NativeVertexData(IAllocator Allocator)

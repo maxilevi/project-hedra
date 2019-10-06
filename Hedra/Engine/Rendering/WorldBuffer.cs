@@ -42,13 +42,13 @@ namespace Hedra.Engine.Rendering
         {
             const int megabyte = 1048576;
             var realPoolSize = ((int) Size / 100f) * 3f;
-            _allocator = new HeapAllocator(Allocator.Megabyte * 4);
             Indices = new GeometryPool<uint>( (int) (megabyte * 1.25f * realPoolSize), sizeof(uint), VertexAttribPointerType.UnsignedInt, BufferTarget.ElementArrayBuffer, BufferUsageHint.DynamicDraw);
             Vertices = new GeometryPool<Vector3>( (int) (megabyte * 1f * realPoolSize), Vector3.SizeInBytes, VertexAttribPointerType.Float, BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
             Normals = new GeometryPool<Vector3>( (int) (megabyte * 1f * realPoolSize), Vector3.SizeInBytes, VertexAttribPointerType.Float, BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
             Colors = new GeometryPool<Vector4>( (int) (megabyte * 1f * realPoolSize), Vector4.SizeInBytes, VertexAttribPointerType.Float, BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
             Data = new VAO<Vector3, Vector4, Vector3>(Vertices.Buffer, Colors.Buffer, Normals.Buffer);
-                         
+                 
+            _allocator = new HeapAllocator(Allocator.Megabyte * 8);
             _offset = new IntPtr[GeneralSettings.MaxChunks];
             _counts = new int[GeneralSettings.MaxChunks];
             _chunkDict = new Dictionary<Vector2, ChunkRenderCommand>();
@@ -131,73 +131,84 @@ namespace Hedra.Engine.Rendering
                 return _chunkDict.ContainsKey(Offset);
         }
 
-        private bool Add(Vector2 Offset, VertexData Data)
+        private unsafe bool Add(Vector2 Offset, VertexData Data)
         {
-            if (this.Data != null)
+            if (this.Data == null) return false;
+            Data.AssertTriangulated();
+            lock (_lock)
             {
-                Data.AssertTriangulated();
-                lock (_lock)
-                {
-                    if (!_chunkDict.ContainsKey(Offset))
-                    {
-                        MemoryEntry[] entries = new MemoryEntry[4];
-                        entries[1] = Vertices.Allocate(Data.Vertices.ToNativeArray(_allocator), Data.Vertices.Count * Vector3.SizeInBytes);
-                        entries[2] = Normals.Allocate(Data.Normals.ToNativeArray(_allocator), Data.Normals.Count * Vector3.SizeInBytes);
-                        entries[3] = Colors.Allocate(Data.Colors.ToNativeArray(_allocator), Data.Colors.Count * Vector4.SizeInBytes);
+                if (!_chunkDict.ContainsKey(Offset))
+                    AddNew(_allocator, Offset, Data);
+                else
+                    AddExisting(_allocator, Offset, Data);
 
-                        entries[0] = this.ReplaceIndices(Data.Indices.ToNativeArray(_allocator), Data.Indices.Count * sizeof(uint), new MemoryEntry(), entries);
+                if (Comparer == null) throw new ArgumentException("No comparer has been set.");
 
-                        for (int i = 0; i < entries.Length; i++)
-                        {
-                            if (entries[i] == null)
-                                throw new OutOfMemoryException("Geometry pool ran out of space");
-
-                        }
-                        var command = new ChunkRenderCommand();
-                        command.VertexCount = Data.Vertices.Count;
-                        command.DrawCount = Data.Indices.Count;
-                        command.Entries = entries;
-
-                        _chunkDict.Add(Offset, command);
-                    }
-                    else
-                    {
-
-                        MemoryEntry[] PreviousEntries = _chunkDict[Offset].Entries;
-                        MemoryEntry[] Entries = new MemoryEntry[4];
-
-                        //Indices are a whole different thing
-                        Entries[1] = Vertices.Update(Data.Vertices.ToNativeArray(_allocator), Data.Vertices.Count * Vector3.SizeInBytes, PreviousEntries[1]);
-                        Entries[2] = Normals.Update(Data.Normals.ToNativeArray(_allocator), Data.Normals.Count * Vector3.SizeInBytes, PreviousEntries[2]);
-                        Entries[3] = Colors.Update(Data.Colors.ToNativeArray(_allocator), Data.Colors.Count * Vector4.SizeInBytes, PreviousEntries[3]);
-
-                        Entries[0] = this.ReplaceIndices(Data.Indices.ToNativeArray(_allocator), Data.Indices.Count * sizeof(uint), PreviousEntries[0], Entries);
-
-                        for (int i = 0; i < Entries.Length; i++)
-                        {
-                            if (Entries[i] == null)
-                                throw new OutOfMemoryException("Geometry pool ran out of space.");
-                        }
-
-                        var Command = new ChunkRenderCommand
-                        {
-                            VertexCount = Data.Vertices.Count,
-                            DrawCount = Data.Indices.Count,
-                            Entries = Entries
-                        };
-
-                        _chunkDict[Offset] = Command;
-                    }
-
-                    if (Comparer == null) throw new ArgumentException("No comparer has been set.");
-
-                    _chunkPairs = _chunkDict.ToList();
-                    _chunkPairs.Sort(Comparer);
-                    _allocator.Clear();
-                }
-                return true;
+                _chunkPairs = _chunkDict.ToList();
+                _chunkPairs.Sort(Comparer);
             }
-            return false;
+            _allocator.Clear();
+            return true;
+        }
+
+        private void AddNew(IAllocator Allocator, Vector2 Offset, VertexData Data)
+        {
+            var entries = new MemoryEntry[4];
+            entries[1] = Vertices.Allocate(Data.Vertices.ToNativeArray(Allocator),
+                Data.Vertices.Count * Vector3.SizeInBytes);
+            entries[2] = Normals.Allocate(Data.Normals.ToNativeArray(Allocator),
+                Data.Normals.Count * Vector3.SizeInBytes);
+            entries[3] = Colors.Allocate(Data.Colors.ToNativeArray(Allocator),
+                Data.Colors.Count * Vector4.SizeInBytes);
+
+            entries[0] = this.ReplaceIndices(Data.Indices.ToNativeArray(Allocator),
+                Data.Indices.Count * sizeof(uint), new MemoryEntry(), entries);
+
+            for (int i = 0; i < entries.Length; i++)
+            {
+                if (entries[i] == null)
+                    throw new OutOfMemoryException("Geometry pool ran out of space");
+
+            }
+
+            var command = new ChunkRenderCommand();
+            command.VertexCount = Data.Vertices.Count;
+            command.DrawCount = Data.Indices.Count;
+            command.Entries = entries;
+
+            _chunkDict.Add(Offset, command);
+        }
+
+        private void AddExisting(IAllocator Allocator, Vector2 Offset, VertexData Data)
+        {
+            MemoryEntry[] PreviousEntries = _chunkDict[Offset].Entries;
+            MemoryEntry[] Entries = new MemoryEntry[4];
+
+            //Indices are a whole different thing
+            Entries[1] = Vertices.Update(Data.Vertices.ToNativeArray(Allocator),
+                Data.Vertices.Count * Vector3.SizeInBytes, PreviousEntries[1]);
+            Entries[2] = Normals.Update(Data.Normals.ToNativeArray(Allocator),
+                Data.Normals.Count * Vector3.SizeInBytes, PreviousEntries[2]);
+            Entries[3] = Colors.Update(Data.Colors.ToNativeArray(Allocator),
+                Data.Colors.Count * Vector4.SizeInBytes, PreviousEntries[3]);
+
+            Entries[0] = this.ReplaceIndices(Data.Indices.ToNativeArray(Allocator),
+                Data.Indices.Count * sizeof(uint), PreviousEntries[0], Entries);
+
+            for (int i = 0; i < Entries.Length; i++)
+            {
+                if (Entries[i] == null)
+                    throw new OutOfMemoryException("Geometry pool ran out of space.");
+            }
+
+            var Command = new ChunkRenderCommand
+            {
+                VertexCount = Data.Vertices.Count,
+                DrawCount = Data.Indices.Count,
+                Entries = Entries
+            };
+
+            _chunkDict[Offset] = Command;
         }
 
         private MemoryEntry ReplaceIndices(NativeArray<uint> Data, int SizeInBytes, MemoryEntry Entry, MemoryEntry[] Entries)

@@ -65,7 +65,7 @@ namespace Hedra.Engine.Core
         private void Resize(int NewSize)
         {
             var array = new NativeArray<T>(_allocator, NewSize);
-            for (var i = 0; i < _array.Length; ++i)
+            for (var i = 0; i < _count; ++i)
                 array[i] = _array[i];
             _array.Dispose();
             _array = array;
@@ -102,6 +102,14 @@ namespace Hedra.Engine.Core
         public void RemoveAt(int Index)
         {
             throw new NotImplementedException();
+        }
+
+        public bool Remove(T Item)
+        {
+            var index = IndexOf(Item);
+            if(index != -1)
+                RemoveAt(index);
+            return index != -1;
         }
 
         public T this[int I]
@@ -142,8 +150,8 @@ namespace Hedra.Engine.Core
 
         public void Clear()
         {
-            Resize(InitialSize);
             _count = 0;
+            Resize(InitialSize);
         }
 
         public int Count => _count;
@@ -162,16 +170,23 @@ namespace Hedra.Engine.Core
 
         public void CopyTo(T[] Array, int ArrayIndex)
         {
-            for (var i = ArrayIndex; i < Array.Length; ++i)
+            for (var i = 0; i < _count; ++i)
             {
-                Array[i] = this[i];
+                Array[i + ArrayIndex] = this[i];
             }
         }
 
-        public bool Remove(T Item) => throw new NotImplementedException();
-        public IEnumerator<T> GetEnumerator() => new
-        IEnumerator IEnumerable.GetEnumerator() => throw new NotImplementedException();
-        public bool IsReadOnly => throw new NotImplementedException();
+        private IEnumerable<T> Enumerate()
+        {
+            for (var i = 0; i < _count; ++i)
+            {
+                yield return this[i];
+            }
+        }
+        
+        public IEnumerator<T> GetEnumerator() => Enumerate().GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => Enumerate().GetEnumerator();
+        public bool IsReadOnly => false;
 
         public void Dispose()
         {

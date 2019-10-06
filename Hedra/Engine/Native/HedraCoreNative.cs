@@ -11,7 +11,7 @@ namespace Hedra.Engine.Native
         public static extern uint meshopt_simplify(uint[] Destination, uint[] Indices, UIntPtr IndexCount, IntPtr Vertices, UIntPtr VertexCount, UIntPtr VertexPositionsStride, UIntPtr TargetIndexCount, float TargetError, uint[] Blacklisted, UIntPtr BlacklistedIndexCount);
 
         [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
-        public static extern uint meshopt_simplifySloppy(IntPtr Destination, IntPtr Indices, UIntPtr IndexCount, IntPtr Vertices, UIntPtr VertexCount, UIntPtr VertexPositionsStride, UIntPtr TargetIndexCount);
+        public static extern uint meshopt_simplifySloppy(uint[] Destination, uint[] Indices, UIntPtr IndexCount, IntPtr Vertices, UIntPtr VertexCount, UIntPtr VertexPositionsStride, UIntPtr TargetIndexCount);
 
         [DllImport(HedraCoreDLL, CharSet = CharSet.Auto, CallingConvention = CallingConvention.Cdecl)]
         public static extern uint meshopt_generateVertexRemap(uint[] Destination, uint[] Indices, UIntPtr IndexCount, IntPtr Vertices, UIntPtr VertexCount, UIntPtr VertexSize);

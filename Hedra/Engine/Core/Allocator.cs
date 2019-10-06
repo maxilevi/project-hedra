@@ -29,7 +29,7 @@ namespace Hedra.Engine.Core
             var size = SizePerElement<T>() * Count;
             var offset = FindSpot(size);
             if(offset + size >= _maxSize)
-                throw new OutOfMemoryException("Native Heap Allocator has ran out of memory");
+                throw new OutOfMemoryException($"Native Allocator has ran out of memory trying to allocate '{size / 1024}' KB\nusedMemory ='{UsedMemory / 1024}' KB, freeMemory ='{FreeMemory / 1024}' KB, totalMemory ='{TotalMemory / 1024}' KB");
             var k = SizePerElement<T>();
             var ptr = (void*) ((byte*)_buffer + offset);
             _entries.Add(offset, new AllocationEntry(offset, size, ptr));
