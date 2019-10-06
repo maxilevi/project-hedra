@@ -14,6 +14,7 @@ using System.Runtime.Remoting.Messaging;
 using BulletSharp;
 using Hedra.BiomeSystem;
 using Hedra.Core;
+using Hedra.Engine.Core;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PlantSystem;
@@ -663,16 +664,21 @@ namespace Hedra.Engine.BiomeSystem
             }
         }
 
-        private void DoEnvironmentPlacements(Vector3 Position, bool HideEnvironment, Region Biome)
+        private unsafe void DoEnvironmentPlacements(Vector3 Position, bool HideEnvironment, Region Biome)
         {
-            var designs = Biome.Environment.Designs;
-            for (var i = 0; i < designs.Length; i++)
+            const int size = Allocator.Megabyte * 2;
+            var mem = stackalloc byte[size];
+            using (var allocator = new StackAllocator(size, mem))
             {
-                if(designs[i].CanBeHidden && HideEnvironment) continue;
-                if (designs[i].ShouldPlace(Position, this.Parent))
+                var designs = Biome.Environment.Designs;
+                for (var i = 0; i < designs.Length; i++)
                 {
-                    var design = designs[i].GetDesign(Position, Parent, Parent.Landscape.RandomGen);
-                    World.EnvironmentGenerator.GeneratePlant(Position, Biome, design);
+                    if (designs[i].CanBeHidden && HideEnvironment) continue;
+                    if (designs[i].ShouldPlace(Position, this.Parent))
+                    {
+                        var design = designs[i].GetDesign(Position, Parent, Parent.Landscape.RandomGen);
+                        World.EnvironmentGenerator.GeneratePlant(allocator, Position, Biome, design);
+                    }
                 }
             }
         }

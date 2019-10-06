@@ -20,7 +20,7 @@ namespace Hedra.Engine.PlantSystem
 
         public abstract Matrix4 TransMatrix(Vector3 Position, Random Rng);
 
-        public abstract VertexData Paint(VertexData Data, Region Region, Random Rng);
+        public abstract NativeVertexData Paint(NativeVertexData Data, Region Region, Random Rng);
 
         public virtual void AddShapes(Chunk UnderChunk, Matrix4 TransMatrix){}
 
@@ -28,7 +28,7 @@ namespace Hedra.Engine.PlantSystem
         
         public virtual bool AffectedByLod => true;
         
-        public virtual void CustomPlacement(VertexData Data, Matrix4 TransMatrix, Chunk UnderChunk)
+        public virtual void CustomPlacement(NativeVertexData Data, Matrix4 TransMatrix, Chunk UnderChunk)
             => throw new NotImplementedException();
     }
 }

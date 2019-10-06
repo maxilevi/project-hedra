@@ -105,12 +105,12 @@ namespace Hedra.Engine.CacheSystem
                         goto COLOR_EXISTS;
                     }
 
-                    CachedColors.Add(cHash, Data.Colors);
+                    CachedColors.Add(cHash, new List<Vector4>(Data.Colors));
                 }
 
                 COLOR_EXISTS:
                 Data.ColorCache = cHash;
-                Data.Colors = new List<Vector4>();
+                Data.Colors = null;
             }
 
             if (Data.HasExtraData)
@@ -123,16 +123,16 @@ namespace Hedra.Engine.CacheSystem
                         goto EXTRADATA_EXISTS;
                     }
 
-                    CachedExtradata.Add(eHash, Data.ExtraData);
+                    CachedExtradata.Add(eHash, new List<float>(Data.ExtraData));
                 }
 
                 EXTRADATA_EXISTS:
                 Data.ExtraDataCache = eHash;
-                Data.ExtraData = new List<float>();
+                Data.ExtraData = null;
             }
         }
 
-        public static object MakeHash(List<Vector4> Colors)
+        public static object MakeHash(IList<Vector4> Colors)
         {
             var sum = default(Vector4);
             for (var i = 0; i < Colors.Count; ++i)
@@ -142,7 +142,7 @@ namespace Hedra.Engine.CacheSystem
             return sum * Colors.Count;
         }
 
-        public static object MakeHash(List<float> Extradata)
+        public static object MakeHash(IList<float> Extradata)
         {
             var sum = default(float);
             for (var i = 0; i < Extradata.Count; ++i)

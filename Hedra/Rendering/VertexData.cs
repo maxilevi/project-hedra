@@ -57,35 +57,25 @@ namespace Hedra.Rendering
 
         public VertexData AddWindValues(float Scalar = 1)
         {
-            return AddWindValues(-Vector4.One, Scalar);
+            if(!HasExtradata) Extradata = Enumerable.Repeat(0.01f, Vertices.Count).ToList();
+            MeshOperations.AddWindValues(Vertices, Colors, Extradata, Scalar);
+            ApplyRecursively(V => V.AddWindValues(Scalar));
+            return this;
         }
         
         public VertexData AddWindValues(Vector4 ColorFilter, float Scalar = 1)
         {
-            return AddWindValues(
-                ColorFilter,
-                SupportPoint(-Vector3.UnitY, ColorFilter),
-                SupportPoint(Vector3.UnitY, ColorFilter),
-                Scalar
-            );
+            if(!HasExtradata) Extradata = Enumerable.Repeat(0.01f, Vertices.Count).ToList();
+            MeshOperations.AddWindValues(Vertices, Colors, Extradata, ColorFilter, Scalar);
+            ApplyRecursively(V => V.AddWindValues(ColorFilter, Scalar));
+            return this;
         }
 
         private VertexData AddWindValues(Vector4 ColorFilter, Vector3 Lowest, Vector3 Highest, float Scalar)
         {
-            var values = new float[Vertices.Count];
-            var all = ColorFilter == -Vector4.One;
-            if(Extradata.Count == 0) Extradata = Enumerable.Repeat(0.01f, Vertices.Count).ToList();
-            for(var i = 0; i < Extradata.Count; i++)
-            {
-                if(Colors[i] != ColorFilter && !all)
-                {
-                    values[i] = 0;
-                    continue;
-                }             
-                var shade = Vector3.Dot(Vertices[i] - Lowest, Vector3.UnitY) / Vector3.Dot(Highest - Lowest, Vector3.UnitY);
-                Extradata[i] = (shade + (float) Math.Pow(shade, 1.3)) * Scalar;
-            }
-            ApplyRecursively(V => V.AddWindValues(ColorFilter, Scalar));
+            if(!HasExtradata) Extradata = Enumerable.Repeat(0.01f, Vertices.Count).ToList();
+            MeshOperations.AddWindValues(Vertices, Colors, Extradata, ColorFilter, Lowest, Highest, Scalar);
+            ApplyRecursively(V => V.AddWindValues(ColorFilter, Lowest, Highest, Scalar));
             return this;
         }
         
@@ -199,14 +189,10 @@ namespace Hedra.Rendering
             return Transform(Matrix4.CreateScale(Scalar));
         }
         
-        public VertexData Paint(Vector4 Color)
+        public void Paint(Vector4 Color)
         {
-            for(var i = 0; i < Colors.Count; i++)
-            {
-                Colors[i] = Color;
-            }
+            MeshOperations.PaintMesh(Colors, Color);
             ApplyRecursively(V => V.Paint(Color));
-            return this;
         }
 
         public CompressedVertexData AsCompressed()
@@ -261,7 +247,11 @@ namespace Hedra.Rendering
         
         public NativeVertexData NativeClone(IAllocator Allocator)
         {
-            return new NativeVertexData(Allocator, Indices, Vertices, Normals, Colors, Extradata);
+            return new NativeVertexData(Allocator, Indices, Vertices, Normals, Colors, Extradata)
+            {
+                Original = Original ?? this,
+                Name = Name
+            };
         }
 
         public VertexData ShallowClone()
@@ -271,13 +261,7 @@ namespace Hedra.Rendering
 
         public void Color(Vector4 OriginalColor, Vector4 ReplacementColor)
         {
-            for(var i = 0; i < Colors.Count; i++)
-            {
-                if( (Colors[i] - OriginalColor).Length < .01f)
-                {
-                    Colors[i] = ReplacementColor;
-                }
-            }
+            MeshOperations.ColorMesh(Colors, OriginalColor, ReplacementColor);
             ApplyRecursively(V => V.Color(OriginalColor, ReplacementColor));
         }
         

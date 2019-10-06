@@ -7,6 +7,7 @@ using Hedra.BiomeSystem;
 using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine.CacheSystem;
+using Hedra.Engine.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -134,7 +135,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             }
         }
 
-        private void SpawnPlants(FarmParameters Parameters, Random Rng, BuildingOutput Output)
+        private unsafe void SpawnPlants(FarmParameters Parameters, Random Rng, BuildingOutput Output)
         {
             var count = Rng.Next(11, 24);
             PlantDesign design = null;
@@ -162,30 +163,36 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
             if(design == null) return;
             var added = new List<Vector3>();
-            for (var x = 0; x < count * count; x++)
+            var size = Allocator.Megabyte;
+            var mem = stackalloc byte[size];
+            using (var allocator = new StackAllocator(size, mem))
             {
-                var offset = new Vector3((Rng.NextFloat() * 2f - 1f) * _width * .5f, 0,
-                    (Rng.NextFloat() * 2f - 1f) * _width * .5f);
-                var position = Parameters.Position + offset;
-                var minDist = Chunk.BlockSize * minDistModifier;
-                if (added.Any(P => (P - position).LengthSquared < minDist * minDist)) continue;
-                if (Parameters.InsidePaths && offset.LengthFast > _width - VillageDesign.PathWidth * 4) continue;
-                var transMatrix = Matrix4.CreateScale(6.0f + Utils.Rng.NextFloat() * .5f)
-                                  * Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat() * Mathf.Radian * rotModifier)
-                                  * Matrix4.CreateTranslation(position - Vector3.UnitY);
-                added.Add(position);
-                var model = design.Model;
-                var region = World.BiomePool.GetRegion(position);
-                Output.Instances.Add(BuildPlant(model, design, region, transMatrix, Rng));
-                if(type != ItemType.MaxEnums && Rng.Next(0, 8) == 1)
-                    BuildPlantCollectible(type, model, design, region, transMatrix, Rng);
+                for (var x = 0; x < count * count; x++)
+                {
+                    var offset = new Vector3((Rng.NextFloat() * 2f - 1f) * _width * .5f, 0,
+                        (Rng.NextFloat() * 2f - 1f) * _width * .5f);
+                    var position = Parameters.Position + offset;
+                    var minDist = Chunk.BlockSize * minDistModifier;
+                    if (added.Any(P => (P - position).LengthSquared < minDist * minDist)) continue;
+                    if (Parameters.InsidePaths && offset.LengthFast > _width - VillageDesign.PathWidth * 4) continue;
+                    var transMatrix = Matrix4.CreateScale(6.0f + Utils.Rng.NextFloat() * .5f)
+                                      * Matrix4.CreateRotationY(
+                                          360 * Utils.Rng.NextFloat() * Mathf.Radian * rotModifier)
+                                      * Matrix4.CreateTranslation(position - Vector3.UnitY);
+                    added.Add(position);
+                    var model = design.Model;
+                    var region = World.BiomePool.GetRegion(position);
+                    Output.Instances.Add(BuildPlant(allocator, model, design, region, transMatrix, Rng));
+                    if (type != ItemType.MaxEnums && Rng.Next(0, 8) == 1)
+                        BuildPlantCollectible(allocator, type, model, design, region, transMatrix, Rng);
+                }
             }
         }
 
-        private void BuildPlantCollectible(ItemType Type, VertexData Model, PlantDesign Design, Region Biome, Matrix4 Transformation, Random Rng)
+        private void BuildPlantCollectible(IAllocator Allocator, ItemType Type, VertexData Model, PlantDesign Design, Region Biome, Matrix4 Transformation, Random Rng)
         {
             var partModel = CacheManager.GetPart(Design.Type, Model);
-            var data = BuildPlant(partModel, Design, Biome, Transformation, Rng, 1.5f);
+            var data = BuildPlant(Allocator, partModel, Design, Biome, Transformation, Rng, 1.5f);
             DecorationsPlacer.PlaceWhenWorldReady(data.Position, P =>
             {
                 data.TransMatrix *= Matrix4.CreateTranslation(Vector3.UnitY * P.Y);
@@ -197,21 +204,26 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             }, () => Structure.Disposed);
         }
 
-        private static InstanceData BuildPlant(VertexData Model, PlantDesign Design, Region Biome, Matrix4 Transformation, Random Rng, float ColorMultiplier = 1)
+        private static InstanceData BuildPlant(IAllocator Allocator, VertexData Model, PlantDesign Design, Region Biome, Matrix4 Transformation, Random Rng, float ColorMultiplier = 1)
         {
-            var modelClone = Model.Clone();
+            var modelClone = Model.NativeClone(Allocator);
             Design.Paint(modelClone, Biome, Rng);
+            for (var i = 0; i < modelClone.Colors.Count; ++i)
+            {
+                modelClone.Colors[i] *= ColorMultiplier;
+            }
             var data = new InstanceData
             {
                 OriginalMesh = Model,
-                Colors = modelClone.Colors.Select(C => C * ColorMultiplier).ToList(),
-                ExtraData = modelClone.Extradata.Clone(),
+                Colors = modelClone.Colors,
+                ExtraData = modelClone.Extradata,
                 VariateColor = true,
                 GraduateColor = true,
                 SkipOnLod = Rng.Next(0, 3) == 1,
                 TransMatrix = Transformation,
             };
             CacheManager.Check(data);
+            modelClone.Dispose();
             return data;
         }
         

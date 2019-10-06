@@ -62,9 +62,9 @@ namespace Hedra.Game
 
         static GameSettings()
         {
-#if DEBUG
+//#if DEBUG
             DebugMode = true;
-#endif
+//#endif
             WatchScriptChanges = false; // DebugMode;
         }
 

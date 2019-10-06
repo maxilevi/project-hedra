@@ -6,6 +6,7 @@ using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ComplexMath;
+using Hedra.Engine.Core;
 using Hedra.Engine.Generation;
 using Hedra.Engine.PlantSystem;
 using Hedra.Engine.PlantSystem.Harvestables;
@@ -88,9 +89,10 @@ namespace Hedra.Engine.StructureSystem
             );
         }
 
-        protected void AddPlant(Vector3 Position, HarvestableDesign Design, Random Rng)
+        protected void AddPlant(IAllocator Allocator, Vector3 Position, HarvestableDesign Design, Random Rng)
         {
             World.EnvironmentGenerator.GeneratePlant(
+                Allocator,
                 Position,
                 World.GetRegion(Position),
                 Design,

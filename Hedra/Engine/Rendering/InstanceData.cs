@@ -25,8 +25,8 @@ namespace Hedra.Engine.Rendering
         private bool _boundsInitialized;
         private Vector3 _bounds;
 
-        public List<Vector4> Colors { get; set; }
-        public List<float> ExtraData { get; set; }
+        public IList<Vector4> Colors { get; set; }
+        public IList<float> ExtraData { get; set; }
         public Matrix4 TransMatrix { get; set; }
         public object ColorCache { get; set; }
         public object ExtraDataCache { get; set; }

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Hedra.Engine.Core;
 using Microsoft.Scripting.Utils;
 using OpenTK;
@@ -63,6 +65,59 @@ namespace Hedra.Engine.Rendering.Geometry
                 Normals.AddRange(newNormals);
                 Colors.AddRange(newColors);
                 Extradata.AddRange(newExtradata);
+            }
+        }
+        
+        public static void AddWindValues(IList<Vector3> Vertices, IList<Vector4> Colors, IList<float> Extradata, float Scalar = 1)
+        {
+            AddWindValues(Vertices, Colors, Extradata, -Vector4.One, Scalar);
+        }
+        
+        public static void AddWindValues(IList<Vector3> Vertices, IList<Vector4> Colors, IList<float> Extradata, Vector4 ColorFilter, float Scalar = 1)
+        {
+            AddWindValues(
+                Vertices,
+                Colors,
+                Extradata,
+                ColorFilter,
+                SupportPoint(Vertices, Colors, -Vector3.UnitY, ColorFilter),
+                SupportPoint(Vertices, Colors, Vector3.UnitY, ColorFilter),
+                Scalar
+            );
+        }
+
+        public static void AddWindValues(IList<Vector3> Vertices, IList<Vector4> Colors, IList<float> Extradata, Vector4 ColorFilter, Vector3 Lowest, Vector3 Highest, float Scalar)
+        {
+            var values = new float[Vertices.Count];
+            var all = ColorFilter == -Vector4.One;
+            for(var i = 0; i < Extradata.Count; i++)
+            {
+                if(Colors[i] != ColorFilter && !all)
+                {
+                    values[i] = 0;
+                    continue;
+                }             
+                var shade = Vector3.Dot(Vertices[i] - Lowest, Vector3.UnitY) / Vector3.Dot(Highest - Lowest, Vector3.UnitY);
+                Extradata[i] = (shade + (float) Math.Pow(shade, 1.3)) * Scalar;
+            }
+        }
+
+        public static void PaintMesh(IList<Vector4> Colors, Vector4 Color)
+        {
+            for(var i = 0; i < Colors.Count; i++)
+            {
+                Colors[i] = Color;
+            }
+        }
+
+        public static void ColorMesh(IList<Vector4> Colors, Vector4 OriginalColor, Vector4 ReplacementColor)
+        {
+            for(var i = 0; i < Colors.Count; i++)
+            {
+                if( (Colors[i] - OriginalColor).Length < .01f)
+                {
+                    Colors[i] = ReplacementColor;
+                }
             }
         }
         

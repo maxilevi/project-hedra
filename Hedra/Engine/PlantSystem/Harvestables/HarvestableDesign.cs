@@ -48,13 +48,13 @@ namespace Hedra.Engine.PlantSystem.Harvestables
             return transMatrix;
         }
 
-        public override VertexData Paint(VertexData Data, Region Region, Random Rng)
+        public override NativeVertexData Paint(NativeVertexData Data, Region Region, Random Rng)
         {
             Data.Color(AssetManager.ColorCode0, Region.Colors.GrassColor);
             return Data;
         }
 
-        public override void CustomPlacement(VertexData Data, Matrix4 TransMatrix, Chunk UnderChunk)
+        public override void CustomPlacement(NativeVertexData Data, Matrix4 TransMatrix, Chunk UnderChunk)
         {
             var position = Vector3.TransformPosition(Vector3.Zero, TransMatrix);
             World.StructureHandler.AddStructure(

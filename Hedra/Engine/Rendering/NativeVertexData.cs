@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Core;
 using Hedra.Engine.Rendering.Geometry;
 using Hedra.Rendering;
@@ -10,6 +12,9 @@ namespace Hedra.Engine.Rendering
     {
         private const string DefaultName = "NativeVertexData";
         public string Name { get; set; } = DefaultName;
+        public bool IsClone => Original != null;
+        public VertexData Original { get; set; }
+        public bool HasExtradata => _extradata.Count != 0;
         private readonly NativeList<Vector3> _vertices;
         private readonly NativeList<Vector4> _colors;
         private readonly NativeList<Vector3> _normals;
@@ -43,6 +48,34 @@ namespace Hedra.Engine.Rendering
         {
             MeshOperations.UniqueVertices(_indices, _vertices, _normals, _colors, _extradata);
         }
+        
+        public void AddWindValues(float Scalar = 1)
+        {
+            if(!HasExtradata) Extradata.Set(0.01f, Vertices.Count);
+            MeshOperations.AddWindValues(Vertices, Colors, Extradata, Scalar);
+        }
+        
+        public void AddWindValues(Vector4 ColorFilter, float Scalar = 1)
+        {
+            if(!HasExtradata) Extradata.Set(0.01f, Vertices.Count);
+            MeshOperations.AddWindValues(Vertices, Colors, Extradata, ColorFilter, Scalar);
+        }
+
+        private void AddWindValues(Vector4 ColorFilter, Vector3 Lowest, Vector3 Highest, float Scalar)
+        {
+            if(!HasExtradata) Extradata.Set(0.01f, Vertices.Count);
+            MeshOperations.AddWindValues(Vertices, Colors, Extradata, ColorFilter, Lowest, Highest, Scalar);
+        }
+
+        public void Paint(Vector4 Color)
+        {
+            MeshOperations.PaintMesh(Colors, Color);
+        }
+
+        public void Color(Vector4 Original, Vector4 Replacement)
+        {
+            MeshOperations.ColorMesh(Colors, Original, Replacement);
+        }
 
         public void GraduateColor(Vector3 Direction)
         {
@@ -64,6 +97,21 @@ namespace Hedra.Engine.Rendering
             MeshOperations.SupportPoint( _vertices, _colors, Direction);
         }
         
+        public InstanceData ToInstanceData(Matrix4 Transformation)
+        {
+            if (!IsClone)
+                throw new ArgumentOutOfRangeException("VertexData needs to be a clone.");
+            var data = new InstanceData
+            {
+                ExtraData = Extradata,
+                OriginalMesh = Original,
+                Colors = Colors,
+                TransMatrix = Transformation
+            };
+            CacheManager.Check(data);
+            return data;
+        }
+
         public void Dispose()
         {
             _vertices.Dispose();

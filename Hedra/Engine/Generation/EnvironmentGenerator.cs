@@ -11,6 +11,7 @@ using System.Drawing;
 using System.Collections.Generic;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ComplexMath;
+using Hedra.Engine.Core;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
@@ -27,12 +28,12 @@ namespace Hedra.Engine.Generation
     /// </summary>
     public class EnvironmentGenerator
     {
-        public void GeneratePlant(Vector3 Position, Region BiomeRegion, PlantDesign Design)
+        public void GeneratePlant(IAllocator Allocator, Vector3 Position, Region BiomeRegion, PlantDesign Design)
         {
-            GeneratePlant(Position, BiomeRegion, Design, Matrix4.Zero);
+            GeneratePlant(Allocator, Position, BiomeRegion, Design, Matrix4.Zero);
         }
 
-        public void GeneratePlant(Vector3 Position, Region BiomeRegion, PlantDesign Design, Matrix4 CustomTransformationMatrix)
+        public void GeneratePlant(IAllocator Allocator, Vector3 Position, Region BiomeRegion, PlantDesign Design, Matrix4 CustomTransformationMatrix)
         {
             var underChunk = World.GetChunkAt(Position);
             if (underChunk == null) return;
@@ -43,7 +44,7 @@ namespace Hedra.Engine.Generation
             if (transMatrix == Matrix4.Zero) return;
 
             var modelData = Design.Model;
-            var modelDataClone = modelData.ShallowClone();
+            var modelDataClone = modelData.NativeClone(Allocator);
 
             Design.Paint(modelDataClone, BiomeRegion, rng);
             Design.AddShapes(underChunk, transMatrix);         
@@ -52,8 +53,8 @@ namespace Hedra.Engine.Generation
                 var data = new InstanceData
                 {
                     OriginalMesh = modelData,
-                    Colors = modelDataClone.Colors.Clone(),
-                    ExtraData = modelDataClone.Extradata.Clone(),
+                    Colors = modelDataClone.Colors,
+                    ExtraData = modelDataClone.Extradata,
                     TransMatrix = transMatrix
                 };
                 CacheManager.Check(data);
@@ -64,6 +65,7 @@ namespace Hedra.Engine.Generation
             {
                 Design.CustomPlacement(modelDataClone, transMatrix, underChunk);
             }
+            modelDataClone.Dispose();
         }
     }
 }

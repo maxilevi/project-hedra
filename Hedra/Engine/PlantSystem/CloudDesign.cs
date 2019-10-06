@@ -25,7 +25,7 @@ namespace Hedra.Engine.PlantSystem
             return transMatrix;
         }
 
-        public override VertexData Paint(VertexData Data, Region Region, Random Rng)
+        public override NativeVertexData Paint(NativeVertexData Data, Region Region, Random Rng)
         {
             return Data;
         }

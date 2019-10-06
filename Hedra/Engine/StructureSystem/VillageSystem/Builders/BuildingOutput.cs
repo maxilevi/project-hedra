@@ -69,8 +69,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             var model = new InstanceData
             {
                 OriginalMesh = Model.Original,
-                Colors = Model.Colors.Clone(),
-                ExtraData = Model.Extradata.Clone(),
+                Colors = Model.Colors,
+                ExtraData = Model.Extradata,
                 TransMatrix = TransformationMatrix,
                 GraduateColor = GraduateColors
             };

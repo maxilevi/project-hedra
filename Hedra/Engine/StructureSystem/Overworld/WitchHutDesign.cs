@@ -116,26 +116,30 @@ namespace Hedra.Engine.StructureSystem.Overworld
                         new TomatoDesign(),
                     };
 
-                    for (var i = 0; i < designs.Length; ++i)
+                    using (var allocator = new HeapAllocator(Allocator.Megabyte))
                     {
-                        AddPlantLine(
-                            Vector3.TransformPosition(WitchHutCache.PlantRows[i], Rotation * Translation),
-                            rotatedOffset,
-                            designs[i],
-                            WitchHutCache.PlantWidths[i],
-                            Rng
-                        );
+                        for (var i = 0; i < designs.Length; ++i)
+                        {
+                            AddPlantLine(
+                                allocator,
+                                Vector3.TransformPosition(WitchHutCache.PlantRows[i], Rotation * Translation),
+                                rotatedOffset,
+                                designs[i],
+                                WitchHutCache.PlantWidths[i],
+                                Rng
+                            );
+                        }
                     }
                 }, () => Structure.Disposed);
         }
         
-        private void AddPlantLine(Vector3 Position, Vector3 UnitOffset, HarvestableDesign Design, int Count, Random Rng)
+        private void AddPlantLine(IAllocator Allocator, Vector3 Position, Vector3 UnitOffset, HarvestableDesign Design, int Count, Random Rng)
         {
             var offset = UnitOffset;
             for (var i = 0; i < Count; ++i)
             {
                 if(Rng.Next(0, 7) != 1)
-                    AddPlant(Position + offset * (float)Math.Pow(-1, i), Design, Rng);
+                    AddPlant(Allocator, Position + offset * (float)Math.Pow(-1, i), Design, Rng);
                 offset += UnitOffset * 2;
             }
         }
