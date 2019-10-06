@@ -33,7 +33,7 @@ namespace Hedra.Engine
             SupportsMeshOptimizer = true;
             try
             {
-                MeshOptimizer.OptimizeCache(new uint[0],  0);
+                MeshOptimizer.OptimizeCache(new uint[0], 0);
             }
             catch (DllNotFoundException e)
             {

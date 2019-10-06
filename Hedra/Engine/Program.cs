@@ -113,8 +113,8 @@ namespace Hedra.Engine
 #if !DEBUG
             if (OSManager.RunningPlatform == Platform.Windows)
             {
-                Log.WriteLine("Loading Icon...");
-                GameWindow.Icon = AssetManager.LoadIcon("Assets/Icon.ico");
+                //Log.WriteLine("Loading Icon...");
+                //GameWindow.Icon = AssetManager.LoadIcon("Assets/Icon.ico");
             }
 #endif
             GameSettings.SurfaceWidth = GameWindow.Width;

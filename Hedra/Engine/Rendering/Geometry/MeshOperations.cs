@@ -10,9 +10,10 @@ namespace Hedra.Engine.Rendering.Geometry
         public static unsafe void FlatMesh(IList<uint> Indices, IList<Vector3> Vertices, IList<Vector3> Normals, IList<Vector4> Colors, IList<float> Extradata)
         {
             if (Colors.Count == 0) return;
-            const int size = Allocator.Megabyte / 2;
-            var mem = stackalloc byte[size];
-            using (var allocator = new StackAllocator(size, mem))
+            var indexCount = Indices.Count;
+            var size = (int)(Allocator.Megabyte * 3.5f);
+            //var mem = stackalloc byte[size];
+            using (var allocator = new HeapAllocator(size))
             {
                 var newIndices = new NativeList<uint>(allocator);
                 var newVertices = new NativeList<Vector3>(allocator);
@@ -69,7 +70,7 @@ namespace Hedra.Engine.Rendering.Geometry
         {
             if (Colors.Count == 0) return;
             
-            const int size = Allocator.Megabyte / 2;
+            var size = Indices.Count * sizeof(uint) + Vertices.Count * Vector3.SizeInBytes + Normals.Count * Vector3.SizeInBytes + Extradata.Count * sizeof(float) + Colors.Count * Vector4.SizeInBytes + Allocator.Kilobyte * 64;
             var mem = stackalloc byte[size];
             using (var allocator = new StackAllocator(size, mem))
             {

@@ -14643,7 +14643,7 @@
         call "$(ProjectDir)/../ScriptMapper/bin/$(Configuration)/ScriptMapper.exe" "$(ProjectDir)/Scripts/" "$(ProjectDir)/Engine/Obfuscation/ScriptSettings.cs"
     </PreBuildEvent>
     <PostBuildEvent Condition="'$(OS)' == 'Windows_NT' ">
-        call "$(ProjectDir)/../hedra-obfuscator/Confuser.CLI.exe" "$(ProjectDir)/Hedra.crproj"
+        <!-- call "$(ProjectDir)/../hedra-obfuscator/Confuser.CLI.exe" "$(ProjectDir)/Hedra.crproj" -->
         call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" normal text
         call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" normal binary
         call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" normal binary

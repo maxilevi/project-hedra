@@ -74,14 +74,13 @@ namespace Hedra.Engine.Rendering
         public static void Allocate()
         {
             StaticBuffer = new BufferBalancer(
-                new WorldBuffer(PoolSize.Big),
-                new WorldBuffer(PoolSize.Big),
-                new WorldBuffer(PoolSize.Big)
+                new WorldBuffer(PoolSize.Normal),
+                new WorldBuffer(PoolSize.Normal),
+                new WorldBuffer(PoolSize.Normal)
             );
             InstanceBuffer = new BufferBalancer(
-                new WorldBuffer(PoolSize.VerySmall),
-                new WorldBuffer(PoolSize.VerySmall),
-                new WorldBuffer(PoolSize.VerySmall),
+                new WorldBuffer(PoolSize.Normal),
+                new WorldBuffer(PoolSize.Normal),
                 new WorldBuffer(PoolSize.VerySmall)
             );
             WaterBuffer = new BufferBalancer(
