@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -31,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc">
@@ -76,6 +78,7 @@
     <Compile Include="CodePolicy\UnusedTranslationKeysCodePolicy.cs" />
     <Compile Include="Core\GameSettingsTest.cs" />
     <Compile Include="Core\HalfBlockTest.cs" />
+    <Compile Include="Core\AllocatorTest.cs" />
     <Compile Include="EntitySystem\DamageComponentTest.cs" />
     <Compile Include="Game\ArmorBalanceSheet.cs" />
     <Compile Include="Game\ArmorBalanceTest.cs" />
@@ -148,6 +151,7 @@
     <Compile Include="Rendering\ChunkMeshBorderDetectorTest.cs" />
     <Compile Include="Rendering\CompatibilityManagerTest.cs" />
     <Compile Include="Rendering\MeshStitcherTest.cs" />
+    <Compile Include="Rendering\NativeVertexDataTest.cs" />
     <Compile Include="Rendering\SimpleTextProviderMock.cs" />
     <Compile Include="Rendering\TextProviderTest.cs" />
     <Compile Include="Rendering\MeshAnalyzerTest.cs" />

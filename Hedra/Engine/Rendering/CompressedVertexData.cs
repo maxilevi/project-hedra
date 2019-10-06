@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -8,7 +9,7 @@ using OpenTK;
 
 namespace Hedra.Engine.Rendering
 {
-    public class CompressedVertexData  : IVertexData, IDisposable
+    public class CompressedVertexData : IDisposable
     {
         /* It's not worth compression vertices and indices since they will be mostly different. */
         private VertexData _original;

@@ -246,8 +246,12 @@
     <Compile Include="Engine\Bullet\PhysicsComponentMotionState.cs" />
     <Compile Include="Engine\CacheSystem\DynamicCache.cs" />
     <Compile Include="Engine\CacheSystem\FishingPostIconCache.cs" />
+    <Compile Include="Engine\Core\AllocationEntry.cs" />
+    <Compile Include="Engine\Core\Allocator.cs" />
     <Compile Include="Engine\Core\HeapAllocator.cs" />
     <Compile Include="Engine\Core\IAllocator.cs" />
+    <Compile Include="Engine\Core\ISequentialList.cs" />
+    <Compile Include="Engine\Core\SequentialList.cs" />
     <Compile Include="Engine\Core\NativeArray.cs" />
     <Compile Include="Engine\Core\NativeList.cs" />
     <Compile Include="Engine\Core\ObjectPool.cs" />
@@ -294,6 +298,7 @@
     <Compile Include="Engine\QuestSystem\QuestInventory.cs" />
     <Compile Include="Engine\QuestSystem\QuestTemplate.cs" />
     <Compile Include="Engine\QuestSystem\QuestThoughtsComponent.cs" />
+    <Compile Include="Engine\Rendering\BaseVertexData.cs" />
     <Compile Include="Engine\Rendering\Core\LightSettings.cs" />
     <Compile Include="Engine\Rendering\Core\UBO.cs" />
     <Compile Include="Engine\Rendering\Core\VBOCache.cs" />
@@ -305,6 +310,7 @@
     <Compile Include="Engine\Rendering\Geometry\IsoSurfaceCreator.cs" />
     <Compile Include="Engine\Rendering\Geometry\MarchingCubes.cs" />
     <Compile Include="Engine\Rendering\Geometry\MeshAnalyzer.cs" />
+    <Compile Include="Engine\Rendering\Geometry\MeshOperations.cs" />
     <Compile Include="Engine\Rendering\NativeVertexData.cs" />
     <Compile Include="Engine\Rendering\UI\CompanionProfileUIElement.cs" />
     <Compile Include="Engine\Rendering\UI\MenuBackground.cs" />
@@ -14637,7 +14643,7 @@
         call "$(ProjectDir)/../ScriptMapper/bin/$(Configuration)/ScriptMapper.exe" "$(ProjectDir)/Scripts/" "$(ProjectDir)/Engine/Obfuscation/ScriptSettings.cs"
     </PreBuildEvent>
     <PostBuildEvent Condition="'$(OS)' == 'Windows_NT' ">
-    	call "$(ProjectDir)/../hedra-obfuscator/Confuser.CLI.exe" "$(ProjectDir)/Hedra.crproj"
+      <!-- call "$(ProjectDir)/../hedra-obfuscator/Confuser.CLI.exe" "$(ProjectDir)/Hedra.crproj"-->
         call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" normal text
         call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" normal binary
         call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" normal binary

@@ -47,21 +47,21 @@ namespace Hedra.Engine.Rendering.Core
             return false;
         }
 
-        public static void Create<T>(T[] Data, int SizeInBytes, VertexAttribPointerType PointerType, BufferTarget BufferTarget, BufferUsageHint Hint, out uint Id) where T : struct
+        public static void Create<T>(T[] Data, int SizeInBytes, VertexAttribPointerType PointerType, BufferTarget BufferTarget, BufferUsageHint Hint, out uint Id) where T : unmanaged
         {
             var hash = Hash(Data, SizeInBytes, PointerType, BufferTarget, Hint);
             DoCreate(Data, SizeInBytes, PointerType, BufferTarget, Hint, out Id);
             _hashedReferences.Add(hash, Id);
         }
         
-        private static void DoCreate<T>(T[] Data, int SizeInBytes, VertexAttribPointerType PointerType, BufferTarget BufferTarget, BufferUsageHint Hint, out uint Id) where T : struct
+        private static void DoCreate<T>(T[] Data, int SizeInBytes, VertexAttribPointerType PointerType, BufferTarget BufferTarget, BufferUsageHint Hint, out uint Id) where T : unmanaged
         {
             Renderer.GenBuffers(1, out Id);
             DoUpdate(Data, SizeInBytes, BufferTarget, Hint, Id);
             _referenceCounter.Add(Id, 1);
         }
 
-        public static void Update<T>(T[] Data, int SizeInBytes, VertexAttribPointerType PointerType, BufferTarget BufferTarget, BufferUsageHint Hint, ref uint Id) where T : struct
+        public static void Update<T>(T[] Data, int SizeInBytes, VertexAttribPointerType PointerType, BufferTarget BufferTarget, BufferUsageHint Hint, ref uint Id) where T : unmanaged
         {
             var originalId = Id;
             if(Id == 0) throw new ArgumentOutOfRangeException($"VBO is invalid (disposed)");
@@ -83,7 +83,7 @@ namespace Hedra.Engine.Rendering.Core
             }
         }
 
-        private static void DoUpdate<T>(T[] Data, int SizeInBytes, BufferTarget Target, BufferUsageHint Hint, uint Id) where T : struct
+        private static void DoUpdate<T>(T[] Data, int SizeInBytes, BufferTarget Target, BufferUsageHint Hint, uint Id) where T : unmanaged
         {
             Renderer.BindBuffer(Target, Id);
             Renderer.BufferData(Target, (IntPtr) SizeInBytes, IntPtr.Zero, Hint);

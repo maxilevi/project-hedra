@@ -84,7 +84,7 @@ namespace Hedra.Engine.Rendering.Core
             EnsureNoErrors();
         }
 
-        public void BufferData<T>(BufferTarget Target, IntPtr Size, T[] Data, BufferUsageHint Hint) where T : struct
+        public void BufferData<T>(BufferTarget Target, IntPtr Size, T[] Data, BufferUsageHint Hint) where T : unmanaged
         {
             GL.BufferData(Target, Size, Data, Hint);
             EnsureNoErrors();
@@ -96,15 +96,21 @@ namespace Hedra.Engine.Rendering.Core
             EnsureNoErrors();
         }
 
-        public void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, ref T Data) where T : struct
+        public void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, ref T Data) where T : unmanaged
         {
             GL.BufferSubData(Target, Ptr0, Offset, ref Data);
             EnsureNoErrors();
         }
 
-        public void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, T[] Data) where T : struct
+        public void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, T[] Data) where T : unmanaged
         {
             GL.BufferSubData(Target, Ptr0, Offset, Data);
+            EnsureNoErrors();
+        }
+        
+        public unsafe void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, IntPtr Data) where T : unmanaged
+        {
+            GL.BufferSubData(Target, Ptr0, Offset, (IntPtr)Data);
             EnsureNoErrors();
         }
 

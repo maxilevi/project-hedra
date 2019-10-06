@@ -5,6 +5,7 @@
  *
  */
 using System;
+using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;

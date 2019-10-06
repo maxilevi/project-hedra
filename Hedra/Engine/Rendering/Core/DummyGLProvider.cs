@@ -57,7 +57,7 @@ namespace Hedra.Engine.Rendering.Core
         {
         }
 
-        public virtual void BufferData<T>(BufferTarget Target, IntPtr Size, T[] Data, BufferUsageHint Hint) where T : struct
+        public virtual void BufferData<T>(BufferTarget Target, IntPtr Size, T[] Data, BufferUsageHint Hint) where T : unmanaged
         {
         }
 
@@ -65,11 +65,16 @@ namespace Hedra.Engine.Rendering.Core
         {
         }
 
-        public virtual void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, ref T Data) where T : struct
+        public virtual void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, ref T Data) where T : unmanaged
         {
         }
 
-        public virtual void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, T[] Data) where T : struct
+        public unsafe void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, IntPtr Data) where T : unmanaged
+        {
+            throw new NotImplementedException();
+        }
+
+        public virtual void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, T[] Data) where T : unmanaged
         {
         }
 

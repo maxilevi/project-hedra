@@ -206,17 +206,22 @@ namespace Hedra.Engine.Rendering.Core
             Provider.BufferData(Target, Size, Data, Hint);
         }
 
-        public static void BufferData<T>(BufferTarget Target, IntPtr Size, T[] Data, BufferUsageHint Hint) where T : struct
+        public static void BufferData<T>(BufferTarget Target, IntPtr Size, T[] Data, BufferUsageHint Hint) where T : unmanaged
         {
             Provider.BufferData(Target, Size, Data, Hint);
         }
 
-        public static void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, ref T Data) where T : struct
+        public static void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, ref T Data) where T : unmanaged
         {
             Provider.BufferSubData(Target, Ptr0, Offset, ref Data);
         }
 
-        public static void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, T[] Data) where T : struct
+        public static void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, T[] Data) where T : unmanaged
+        {
+            Provider.BufferSubData(Target, Ptr0, Offset, Data);
+        }
+        
+        public static void BufferSubData(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, IntPtr Data)
         {
             Provider.BufferSubData(Target, Ptr0, Offset, Data);
         }

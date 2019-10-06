@@ -12,16 +12,36 @@ namespace Hedra.Engine.Core
         public NativeArray(IAllocator Allocator, int Size)
         {
             _allocator = Allocator;
-            _data = Allocator.Malloc<T>(Size);
+            _data = Allocator.Get<T>(Size);
             _size = Size;
         }
 
         public T this[int I]
         {
-            get => *((T*)_data + I);
+            get
+            {
+#if DEBUG
+                EnsureBounds(I);
+#endif
+                return *((T*) _data + I);
+            }
 
-            set => *((T*)_data + I) = value;
+            set
+            {
+#if DEBUG
+                EnsureBounds(I);
+#endif
+                *((T*) _data + I) = value;
+            }
         }
+
+        private void EnsureBounds(int I)
+        {
+            if(I < 0 || I >= _size)
+                throw new ArgumentOutOfRangeException();
+        }
+
+        public IntPtr Pointer => (IntPtr) _data;
 
         public int Length => _size;
 

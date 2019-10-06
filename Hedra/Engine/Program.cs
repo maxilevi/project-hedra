@@ -9,6 +9,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.IO;
 using Hedra.Engine.Loader;
 using Hedra.Engine.Management;
+using Hedra.Engine.Native;
 using Hedra.Engine.Networking;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Game;

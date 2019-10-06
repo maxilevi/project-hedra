@@ -39,9 +39,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private static int BoundsZ => Chunk.BoundsZ;
         private static float BlockSize => Chunk.BlockSize;
 
-        public ChunkMeshBuildOutput CreateTerrainMesh(int Lod, RegionCache Cache)
+        public ChunkMeshBuildOutput CreateTerrainMesh(IAllocator Allocator, int Lod, RegionCache Cache)
         {
-            var output = CreateTerrain(Lod, Cache, true, true);
+            var output = CreateTerrain(Allocator, Lod, Cache, true, true);
             for (var k = 0; k < output.StaticData.Vertices.Count; k++) output.StaticData.Extradata.Add(0);
 
             Simplify(output.StaticData, Lod);
@@ -60,42 +60,47 @@ namespace Hedra.Engine.Generation.ChunkSystem
             Data.Flat();
         }
 
-        public VertexData CreateTerrainCollisionMesh(RegionCache Cache)
+        public VertexData CreateTerrainCollisionMesh(RegionCache Cache, IAllocator Allocator)
         {
-            return CreateTerrain(1, Cache, false, false, CollisionMeshLod, CollisionMeshLod).StaticData;
+            return CreateTerrain(Allocator, 1, Cache, false, false, CollisionMeshLod, CollisionMeshLod).StaticData;
+        }
+
+        private VertexData PostProcessWater(NativeVertexData waterData)
+        {
+            var waterVertexData = waterData.ToVertexData();
+            waterVertexData.UniqueVertices();
+            var detector = new ChunkMeshBorderDetector();
+            var set = new HashSet<uint>(detector.ProcessEntireBorder(waterVertexData, Vector3.Zero, new Vector3(Chunk.Width, 0, Chunk.Width)));
+            for(var i = 0; i < 2; ++i)
+                MeshAnalyzer.ApplySmoothing(waterVertexData, set);
+            waterVertexData.Flat();
+            return waterVertexData;
         }
         
-        private unsafe ChunkMeshBuildOutput CreateTerrain(int Lod, RegionCache Cache, bool ProcessWater, bool ProcessColors, int HorizontalIncrement = 1, int VerticalIncrement = 1)
+        private unsafe ChunkMeshBuildOutput CreateTerrain(IAllocator Allocator, int Lod, RegionCache Cache, bool ProcessWater, bool ProcessColors, int HorizontalIncrement = 1, int VerticalIncrement = 1)
         {
             var failed = false;
-            //var allocator = new HeapAllocator();
-            var blockData = new VertexData();
-            var waterData = new VertexData();
+            var blockData = new NativeVertexData(Allocator);
+            var waterData = new NativeVertexData(Allocator);
             var grid = stackalloc SampledBlock[ChunkTerrainMeshBuilderHelper.CalculateGridSize(Lod)];
             var helper = new ChunkTerrainMeshBuilderHelper(_parent, Lod, grid);
 
             IterateAndBuild(helper, ref failed, ProcessWater, ProcessColors, Cache, blockData, waterData, HorizontalIncrement, VerticalIncrement);
 
-            return new ChunkMeshBuildOutput(blockData, waterData, new VertexData(), failed);
+            return new ChunkMeshBuildOutput(blockData.ToVertexData(), PostProcessWater(waterData), new VertexData(), failed);
         }
 
-        private void IterateAndBuild(ChunkTerrainMeshBuilderHelper Helper, ref bool failed, bool ProcessWater, bool ProcessColors, RegionCache Cache, VertexData blockData, VertexData waterData, int HorizontalIncrement, int VerticalIncrement)
+        private void IterateAndBuild(ChunkTerrainMeshBuilderHelper Helper, ref bool failed, bool ProcessWater, bool ProcessColors, RegionCache Cache, NativeVertexData blockData, NativeVertexData waterData, int HorizontalIncrement, int VerticalIncrement)
         {
 
             Loop(Helper, HorizontalIncrement, VerticalIncrement, ProcessColors, false, ref blockData, ref failed, ref Cache);
             if (ProcessWater && _parent.HasWater)
             {
                 Loop(Helper, 1, 1, ProcessColors, true, ref waterData, ref failed, ref Cache);
-                waterData.UniqueVertices();
-                var detector = new ChunkMeshBorderDetector();
-                var set = new HashSet<uint>(detector.ProcessEntireBorder(waterData, Vector3.Zero, new Vector3(Chunk.Width, 0, Chunk.Width)));
-                for(var i = 0; i < 2; ++i)
-                    MeshAnalyzer.ApplySmoothing(waterData, set);
-                waterData.Flat();
             }
         }
 
-        private void Loop(ChunkTerrainMeshBuilderHelper Helper, int HorizontalSkip, int VerticalSkip, bool ProcessColors, bool isWater, ref VertexData blockData, ref bool failed, ref RegionCache Cache)
+        private void Loop(ChunkTerrainMeshBuilderHelper Helper, int HorizontalSkip, int VerticalSkip, bool ProcessColors, bool isWater, ref NativeVertexData blockData, ref bool failed, ref RegionCache Cache)
         {
             var vertexBuffer = MarchingCubes.NewVertexBuffer();
             var triangleBuffer = MarchingCubes.NewTriangleBuffer();
@@ -105,15 +110,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Type = new BlockType[8],
                 Density = new double[8]
             };
-            var next = false;
             for (var x = 0; x < BoundsX && !failed; x+=HorizontalSkip)
             {
-                next = !next;
                 for (var y = 0; y < BoundsY && !failed; y+=VerticalSkip)
                 {
                     for (var z = 0; z < BoundsZ && !failed; z+=HorizontalSkip)
                     {
-                        next = !next;
 
                         if (y < Sparsity.MinimumHeight || y > Sparsity.MaximumHeight) continue;
                         if (y == BoundsY - 1 || y == 0) continue;
@@ -134,16 +136,16 @@ namespace Hedra.Engine.Generation.ChunkSystem
                             color = GetCellColor(Helper, ref cell, ref ProcessColors, ref Cache, false);
                         }
 
-                        PolygoniseCell(ref cell, ref next, ref blockData, ref vertexBuffer, ref triangleBuffer, color, isWater);
+                        PolygoniseCell(ref cell, ref blockData, ref vertexBuffer, ref triangleBuffer, color, isWater);
                     }
                 }
             }
         }
 
-        private static void PolygoniseCell(ref GridCell Cell, ref bool Next, ref VertexData BlockData, ref Vector3[] VertexBuffer, ref Triangle[] TriangleBuffer, Vector4 Color, bool IsWater)
+        private static void PolygoniseCell(ref GridCell Cell, ref NativeVertexData BlockData, ref Vector3[] VertexBuffer, ref Triangle[] TriangleBuffer, Vector4 Color, bool IsWater)
         {
             MarchingCubes.Polygonise(ref Cell, 0, ref VertexBuffer, ref TriangleBuffer, out var triangleCount);
-            MarchingCubes.Build(ref BlockData, ref Color, ref TriangleBuffer, ref triangleCount, ref Next, ref IsWater);
+            MarchingCubes.Build(ref BlockData, ref Color, ref TriangleBuffer, ref triangleCount, ref IsWater);
         }
 
         private Vector4 GetCellColor(ChunkTerrainMeshBuilderHelper Helper, ref GridCell Cell, ref bool ProcessColors, ref RegionCache Cache, bool isWaterCell)

@@ -18,6 +18,7 @@ using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using Hedra.Core;
 using Hedra.Engine.ComplexMath;
+using Hedra.Engine.Core;
 using Newtonsoft.Json.Converters;
 using OpenTK;
 
@@ -28,7 +29,11 @@ namespace Hedra.Engine
     /// </summary>
     public static class Extensions
     {
-
+        public static SequentialList<T> ToSequential<T>(List<T> List)
+        {
+            return new SequentialList<T>(List);
+        }
+        
         public static float Clamp01(this float Value)
         {
             return Mathf.Clamp(Value, 0, 1);
@@ -310,6 +315,21 @@ namespace Hedra.Engine
         public static List<T> Clone<T>(this List<T> ArrayB)
         {
             return new List<T>(ArrayB);
+        }
+
+        public static NativeArray<T> ToNativeArray<T>(this List<T> List, IAllocator Allocator) where T : unmanaged
+        {
+            var array = new NativeArray<T>(Allocator, List.Count);
+            for (var i = 0; i < List.Count; ++i)
+            {
+                array[i] = List[i];
+            }
+            return array;
+        }
+        
+        public static NativeList<T> NativeClone<T>(this List<T> List, IAllocator Allocator) where T : unmanaged
+        {
+            return new NativeList<T>(Allocator);
         }
         
         public static void Write(this BinaryWriter BW, Vector3 Position){

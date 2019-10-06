@@ -13,6 +13,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using Hedra.Engine.IO;
 using Hedra.Core;
+using Hedra.Engine.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
 using OpenTK.Graphics.OpenGL4;
@@ -22,7 +23,7 @@ namespace Hedra.Engine.Rendering
     /// <summary>
     /// One huge VBO with reduced fragmentation
     /// </summary>
-    public class GeometryPool<T> : IDisposable where T : struct
+    public class GeometryPool<T> : IDisposable where T : unmanaged
     {
         private readonly int _poolSize;
         public List<MemoryEntry> ObjectMap { get; }
@@ -95,7 +96,7 @@ namespace Hedra.Engine.Rendering
             bmp.Dispose();
         }
 
-        public MemoryEntry Update(T[] Data, int SizeInBytes, MemoryEntry Entry)
+        public MemoryEntry Update(NativeArray<T> Data, int SizeInBytes, MemoryEntry Entry)
         {            
             if(Entry.Length != SizeInBytes)
             {
@@ -136,16 +137,16 @@ namespace Hedra.Engine.Rendering
                 ObjectMap.Add(Entry);
             }
             
-            Buffer.Update(Data, Entry.Offset, SizeInBytes);
+            Buffer.Update(Data.Pointer, Entry.Offset, SizeInBytes);
             return Entry;
         }
 
-        public void UpdateBuffer(T[] Data, int Offset, int SizeInBytes)
+        public void UpdateBuffer(NativeArray<T> Data, int Offset, int SizeInBytes)
         {
-            Buffer.Update(Data, Offset, SizeInBytes);
+            Buffer.Update(Data.Pointer, Offset, SizeInBytes);
         }
         
-        public MemoryEntry Allocate(T[] Data, int SizeInBytes)
+        public MemoryEntry Allocate(NativeArray<T> Data, int SizeInBytes)
         {
             return Update(Data, SizeInBytes, new MemoryEntry());
         }

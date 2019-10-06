@@ -148,23 +148,26 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var buildingLod = this.Lod;
             this.PrepareForBuilding();
             var blocks = _blocks;
-            var output = this.CreateTerrainMesh(blocks, buildingLod);
-            SetupCollider(blocks, buildingLod);
+            using (var allocator = new HeapAllocator(Allocator.Megabyte * 8))
+            {
+                var output = this.CreateTerrainMesh(allocator, buildingLod);
+                SetupCollider(allocator, buildingLod);
 
-            if (output == null) return;
-            this.SetChunkStatus(output);
-            output = this.AddStructuresMeshes(output, buildingLod);
+                if (output == null) return;
+                this.SetChunkStatus(output);
+                output = this.AddStructuresMeshes(output, buildingLod);
 
-            if (output == null) return;
-            this.UploadMesh(output);
-            this.FinishUpload(output, buildingLod);
+                if (output == null) return;
+                this.UploadMesh(output);
+                this.FinishUpload(output, buildingLod);
+            }
         }
 
-        private void SetupCollider(Block[] Blocks, int BuildingLod)
+        private void SetupCollider(IAllocator Allocator, int BuildingLod)
         {
             if (BuildingLod == 1 || BuildingLod == 2)
             {
-                Bullet.BulletPhysics.AddChunk(Position.Xz, CreateCollisionTerrainMesh(Blocks), CollisionShapes);
+                Bullet.BulletPhysics.AddChunk(Position.Xz, CreateCollisionTerrainMesh(Allocator), CollisionShapes);
             }
             else
             {
@@ -178,19 +181,19 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _terrainBuilder.Sparsity = ChunkSparsity.From(this);
         }
 
-        private VertexData CreateCollisionTerrainMesh(Block[] Blocks)
+        private VertexData CreateCollisionTerrainMesh(IAllocator Allocator)
         {
             lock (_blocksLock)
             {
-                return _terrainBuilder.CreateTerrainCollisionMesh(_regionCache);
+                return _terrainBuilder.CreateTerrainCollisionMesh(_regionCache, Allocator);
             }
         }
 
-        private ChunkMeshBuildOutput CreateTerrainMesh(Block[] Blocks, int LevelOfDetail)
+        private ChunkMeshBuildOutput CreateTerrainMesh(IAllocator Allocator, int LevelOfDetail)
         {
             lock (_blocksLock)
             {
-                return _terrainBuilder.CreateTerrainMesh(LevelOfDetail, _regionCache);
+                return _terrainBuilder.CreateTerrainMesh(Allocator, LevelOfDetail, _regionCache);
             }
         }
 
@@ -262,7 +265,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     Mesh.Enabled = true;
                     Mesh.BuildedOnce = true;
                 }
-
                 Input.StaticData?.Dispose();
                 Input.InstanceData?.Dispose();
                 Input.WaterData?.Dispose();

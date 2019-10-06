@@ -434,29 +434,8 @@ namespace Hedra.Engine.Rendering
             return p;
         }
 
-        public static void Build(ref VertexData Data, ref Vector4 TemplateColor, ref Triangle[] TriangleBuffer, ref int TriangleCount, ref bool Orientation, ref bool IsWater)
+        public static unsafe void Build(ref NativeVertexData Data, ref Vector4 TemplateColor, ref Triangle[] TriangleBuffer, ref int TriangleCount, ref bool IsWater)
         {
-            /*
-            if (TriangleCount == 2)
-            {
-                if (Orientation && 
-                    Math.Abs((TriangleBuffer[0].Vertices[1].Xz - TriangleBuffer[1].Vertices[1].Xz).LengthSquared) < 0.0005f && 
-                    Math.Abs((TriangleBuffer[1].Vertices[0].Xz - TriangleBuffer[0].Vertices[2].Xz).LengthSquared) < 0.0005f)
-                {
-                    var vertex2 = TriangleBuffer[1].Vertices[0];
-                    var vertex3 = TriangleBuffer[0].Vertices[0];
-
-                    TriangleBuffer[0].Vertices[0] = TriangleBuffer[1].Vertices[2];
-                    TriangleBuffer[0].Vertices[1] = vertex3;
-                    TriangleBuffer[0].Vertices[2] = TriangleBuffer[1].Vertices[1];
-
-                    TriangleBuffer[1].Vertices[0] = vertex3;
-                    TriangleBuffer[1].Vertices[1] = TriangleBuffer[1].Vertices[2];
-                    TriangleBuffer[1].Vertices[2] = vertex2;
-
-                }
-            }*/
-            
             for (uint i = 0; i < TriangleCount; i++)
             {
                 if(IsWater && ShouldClip(ref TriangleBuffer[i])) continue;
