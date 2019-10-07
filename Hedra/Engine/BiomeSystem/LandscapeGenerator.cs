@@ -666,7 +666,7 @@ namespace Hedra.Engine.BiomeSystem
 
         private unsafe void DoEnvironmentPlacements(Vector3 Position, bool HideEnvironment, Region Biome)
         {
-            const int size = Allocator.Megabyte * 2;
+            const int size = Allocator.Kilobyte * 256;
             var mem = stackalloc byte[size];
             using (var allocator = new StackAllocator(size, mem))
             {

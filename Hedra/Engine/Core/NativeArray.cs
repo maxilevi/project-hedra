@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace Hedra.Engine.Core
@@ -18,6 +19,7 @@ namespace Hedra.Engine.Core
 
         public T this[int I]
         {
+            [MethodImpl(256)]
             get
             {
 #if DEBUG
@@ -25,7 +27,7 @@ namespace Hedra.Engine.Core
 #endif
                 return *((T*) _data + I);
             }
-
+            [MethodImpl(256)]
             set
             {
 #if DEBUG

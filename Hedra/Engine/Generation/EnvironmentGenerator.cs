@@ -59,7 +59,6 @@ namespace Hedra.Engine.Generation
                 };
                 CacheManager.Check(data);
                 underChunk.AddInstance(data, Design.AffectedByLod);
-                modelDataClone.Dispose();
             }
             else
             {

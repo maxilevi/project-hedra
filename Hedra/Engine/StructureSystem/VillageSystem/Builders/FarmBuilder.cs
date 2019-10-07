@@ -163,7 +163,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
             if(design == null) return;
             var added = new List<Vector3>();
-            var size = Allocator.Megabyte;
+            var size = Allocator.Kilobyte * 256;
             var mem = stackalloc byte[size];
             using (var allocator = new StackAllocator(size, mem))
             {

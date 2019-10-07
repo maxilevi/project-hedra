@@ -30,7 +30,7 @@ namespace Hedra.Engine.Rendering
         public Matrix4 TransMatrix { get; set; }
         public object ColorCache { get; set; }
         public object ExtraDataCache { get; set; }
-        public bool HasExtraData => ExtraData.Count != 0 || ExtraDataCache != null;
+        public bool HasExtraData => (ExtraData != null && ExtraData.Count != 0) || ExtraDataCache != null;
         public bool VariateColor { get; set; } = true;
         public bool GraduateColor { get; set; }
         public bool SkipOnLod { get; set; }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Hedra.Engine.Core
 {
@@ -37,6 +38,7 @@ namespace Hedra.Engine.Core
         
         public void AddRange(IEnumerable<T> Array)
         {
+            EnsureCapacity(((ICollection<T>)Array).Count);
             foreach (var element in Array)
             {
                 Add(element);
@@ -45,11 +47,8 @@ namespace Hedra.Engine.Core
 
         private void EnsureCapacity(int Size)
         {
-            if (Size >= _array.Length)
-            {
-                Resize(_array.Length * 2);
-                EnsureCapacity(Size);
-            }
+            if (Size < _array.Length) return;
+            Resize(Size * 2);
         }
 
         public NativeList<T> Clone()
@@ -114,6 +113,7 @@ namespace Hedra.Engine.Core
 
         public T this[int I]
         {
+            [MethodImpl(256)]
             get
             {
 #if DEBUG
@@ -121,6 +121,7 @@ namespace Hedra.Engine.Core
 #endif
                 return _array[I];
             }
+            [MethodImpl(256)]
             set
             {
 #if DEBUG
