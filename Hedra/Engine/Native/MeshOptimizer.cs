@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Hedra.Engine.Core;
+using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.MeshOptimizer;
 using Hedra.Rendering;
 using OpenTK;
@@ -49,18 +50,39 @@ namespace Hedra.Engine.Native
             var vertices = Mesh.Vertices.ToArray();
             var targetIndexCount = (uint)(indices.Length * Threshold);
             var outIndices = new uint[indices.Length];
+            var outIndicesPointer = Pointer.Create(outIndices);
+            var indicesPointer = Pointer.Create(indices);
             var verticesPointer = Pointer.Create(vertices);
             var length = HedraCoreNative.meshopt_simplifySloppy(
-                outIndices,
-                indices,
+                outIndicesPointer.Address,
+                indicesPointer.Address,
                 (UIntPtr) indices.Length,
                 verticesPointer.Address,
                 (UIntPtr) vertices.Length,
                 (UIntPtr) (Vector3.SizeInBytes),
                 (UIntPtr) targetIndexCount
             );
+            outIndicesPointer.Free();
+            indicesPointer.Free();
             verticesPointer.Free();
             Mesh.Indices = outIndices.Take((int)length).ToList();
+        }
+        
+        public static void SimplifySloppy(IAllocator Allocator, NativeVertexData Mesh, float Threshold)
+        {
+            var targetIndexCount = (uint)(Mesh.Indices.Count * Threshold);
+            var outIndices = new NativeArray<uint>(Allocator, Mesh.Indices.Count);
+            var length = HedraCoreNative.meshopt_simplifySloppy(
+                outIndices.Pointer,
+                Mesh.Indices.Pointer,
+                (UIntPtr) Mesh.Indices.Count,
+                Mesh.Vertices.Pointer,
+                (UIntPtr) Mesh.Vertices.Count,
+                (UIntPtr) (Vector3.SizeInBytes),
+                (UIntPtr) targetIndexCount
+            );
+            Mesh.Indices.Clear();
+            Mesh.Indices.AddRange(outIndices, (int)length);
         }
 
         public static Tuple<T[], uint[]> Optimize<T>(T[] Vertices, uint[] Indices, uint VertexSize)

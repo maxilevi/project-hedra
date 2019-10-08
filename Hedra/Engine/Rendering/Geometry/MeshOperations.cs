@@ -9,65 +9,70 @@ namespace Hedra.Engine.Rendering.Geometry
 {
     public class MeshOperations
     {
-        public static unsafe void FlatMesh(IList<uint> Indices, IList<Vector3> Vertices, IList<Vector3> Normals, IList<Vector4> Colors, IList<float> Extradata)
+        public static unsafe void FlatMesh(IList<uint> Indices, IList<Vector3> Vertices, IList<Vector3> Normals,
+            IList<Vector4> Colors, IList<float> Extradata)
         {
-            if (Colors.Count == 0) return;
-            var indexCount = Indices.Count;
             var size = (int)(Allocator.Megabyte * 3.5f);
-            //var mem = stackalloc byte[size];
             using (var allocator = new HeapAllocator(size))
             {
-                var newIndices = new NativeList<uint>(allocator);
-                var newVertices = new NativeList<Vector3>(allocator);
-                var newNormals = new NativeList<Vector3>(allocator);
-                var newColors = new NativeList<Vector4>(allocator);
-                var newExtradata = new NativeList<float>(allocator);
-                for (var i = 0; i < Indices.Count; i += 3)
-                {
-                    var i0 = (int) Indices[i];
-                    var i1 = (int) Indices[i + 1];
-                    var i2 = (int) Indices[i + 2];
-
-                    var triangleColor = (Colors[i0] + Colors[i1] + Colors[i2]) * .33f;
-                    newColors.Add(triangleColor);
-                    newColors.Add(triangleColor);
-                    newColors.Add(triangleColor);
-
-                    newVertices.Add(Vertices[i0]);
-                    newVertices.Add(Vertices[i1]);
-                    newVertices.Add(Vertices[i2]);
-
-                    var normal = Vector3.Cross(Vertices[i1] - Vertices[i0], Vertices[i2] - Vertices[i0]).Normalized();
-                    newNormals.Add(normal);
-                    newNormals.Add(normal);
-                    newNormals.Add(normal);
-
-                    newIndices.Add((uint) newIndices.Count);
-                    newIndices.Add((uint) newIndices.Count);
-                    newIndices.Add((uint) newIndices.Count);
-
-                    if (Extradata.Count != 0)
-                    {
-                        newExtradata.Add(Extradata[i0]);
-                        newExtradata.Add(Extradata[i1]);
-                        newExtradata.Add(Extradata[i2]);
-                    }
-                }
-
-                Indices.Clear();
-                Vertices.Clear();
-                Normals.Clear();
-                Colors.Clear();
-                Extradata.Clear();
-                
-                Indices.AddRange(newIndices);
-                Vertices.AddRange(newVertices);
-                Normals.AddRange(newNormals);
-                Colors.AddRange(newColors);
-                Extradata.AddRange(newExtradata);
+                FlatMesh(allocator, Indices, Vertices, Normals, Colors, Extradata);
             }
         }
-        
+
+        public static unsafe void FlatMesh(IAllocator Allocator, IList<uint> Indices, IList<Vector3> Vertices,
+            IList<Vector3> Normals, IList<Vector4> Colors, IList<float> Extradata)
+        {
+            if (Colors.Count == 0) return;
+            var newIndices = new NativeList<uint>(Allocator);
+            var newVertices = new NativeList<Vector3>(Allocator);
+            var newNormals = new NativeList<Vector3>(Allocator);
+            var newColors = new NativeList<Vector4>(Allocator);
+            var newExtradata = new NativeList<float>(Allocator);
+            for (var i = 0; i < Indices.Count; i += 3)
+            {
+                var i0 = (int) Indices[i];
+                var i1 = (int) Indices[i + 1];
+                var i2 = (int) Indices[i + 2];
+
+                var triangleColor = (Colors[i0] + Colors[i1] + Colors[i2]) * .33f;
+                newColors.Add(triangleColor);
+                newColors.Add(triangleColor);
+                newColors.Add(triangleColor);
+
+                newVertices.Add(Vertices[i0]);
+                newVertices.Add(Vertices[i1]);
+                newVertices.Add(Vertices[i2]);
+
+                var normal = Vector3.Cross(Vertices[i1] - Vertices[i0], Vertices[i2] - Vertices[i0]).Normalized();
+                newNormals.Add(normal);
+                newNormals.Add(normal);
+                newNormals.Add(normal);
+
+                newIndices.Add((uint) newIndices.Count);
+                newIndices.Add((uint) newIndices.Count);
+                newIndices.Add((uint) newIndices.Count);
+
+                if (Extradata.Count != 0)
+                {
+                    newExtradata.Add(Extradata[i0]);
+                    newExtradata.Add(Extradata[i1]);
+                    newExtradata.Add(Extradata[i2]);
+                }
+            }
+
+            Indices.Clear();
+            Vertices.Clear();
+            Normals.Clear();
+            Colors.Clear();
+            Extradata.Clear();
+
+            Indices.AddRange(newIndices);
+            Vertices.AddRange(newVertices);
+            Normals.AddRange(newNormals);
+            Colors.AddRange(newColors);
+            Extradata.AddRange(newExtradata);
+        }
+
         public static void AddWindValues(IList<Vector3> Vertices, IList<Vector4> Colors, IList<float> Extradata, float Scalar = 1)
         {
             AddWindValues(Vertices, Colors, Extradata, -Vector4.One, Scalar);

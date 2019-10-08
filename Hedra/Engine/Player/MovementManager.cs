@@ -52,11 +52,6 @@ namespace Hedra.Engine.Player
             Human.Model.LocalRotation = new Vector3(0, Human.Model.LocalRotation.Y, 0);
             if(Up) Human.Position += Vector3.UnitY * 12.5f * (float) Time.DeltaTime;
             else Human.Position -= Vector3.UnitY * 12.5f * (float) Time.DeltaTime;
-
-            Human.Position = new Vector3(
-                Human.Position.X,
-                Math.Max(Physics.HeightAtPosition(Human.Position)+2, Human.Position.Y),
-                Human.Position.Z);
         }
 
         protected void Jump()

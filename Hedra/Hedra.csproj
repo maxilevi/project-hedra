@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Hedra</RootNamespace>
     <AssemblyName>Hedra</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <NoWin32Manifest>False</NoWin32Manifest>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <NoStdLib>True</NoStdLib>

@@ -117,7 +117,7 @@ namespace Hedra.Engine.Core
             get
             {
 #if DEBUG
-                EnsureBounds(I);
+                //EnsureBounds(I);
 #endif
                 return _array[I];
             }
@@ -125,7 +125,7 @@ namespace Hedra.Engine.Core
             set
             {
 #if DEBUG
-                EnsureBounds(I);
+                //EnsureBounds(I);
 #endif
                 _array[I] = value;
             }

@@ -104,6 +104,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             var vertexBuffer = MarchingCubes.NewVertexBuffer();
             var triangleBuffer = MarchingCubes.NewTriangleBuffer();
+            var isRiverConstant = _parent.IsRiverConstant;
             var cell = new GridCell
             {
                 P = new Vector3[8],
@@ -136,16 +137,16 @@ namespace Hedra.Engine.Generation.ChunkSystem
                             color = GetCellColor(Helper, ref cell, ref ProcessColors, ref Cache, false);
                         }
 
-                        PolygoniseCell(ref cell, ref blockData, ref vertexBuffer, ref triangleBuffer, color, isWater);
+                        PolygoniseCell(ref cell, ref blockData, ref vertexBuffer, ref triangleBuffer, color, ref isWater, ref isRiverConstant);
                     }
                 }
             }
         }
 
-        private static void PolygoniseCell(ref GridCell Cell, ref NativeVertexData BlockData, ref Vector3[] VertexBuffer, ref Triangle[] TriangleBuffer, Vector4 Color, bool IsWater)
+        private static void PolygoniseCell(ref GridCell Cell, ref NativeVertexData BlockData, ref Vector3[] VertexBuffer, ref Triangle[] TriangleBuffer, Vector4 Color, ref bool IsWater, ref bool IsRiverConstant)
         {
             MarchingCubes.Polygonise(ref Cell, 0, ref VertexBuffer, ref TriangleBuffer, out var triangleCount);
-            MarchingCubes.Build(ref BlockData, ref Color, ref TriangleBuffer, ref triangleCount, ref IsWater);
+            MarchingCubes.Build(ref BlockData, ref Color, ref TriangleBuffer, ref triangleCount, ref IsWater, ref IsRiverConstant);
         }
 
         private Vector4 GetCellColor(ChunkTerrainMeshBuilderHelper Helper, ref GridCell Cell, ref bool ProcessColors, ref RegionCache Cache, bool isWaterCell)

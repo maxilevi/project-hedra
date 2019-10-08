@@ -48,6 +48,14 @@ namespace Hedra.Engine
         {
             return Math.Max(Value, 0);
         }
+
+        public static void Set<T>(this List<T> List, T Value, int Times)
+        {
+            List.Clear();
+            List.Capacity = Times;
+            for(var i = 0; i < Times; ++i)
+                List.Add(Value);
+        }
         
         public static void Shuffle<T>(this IList<T> List, Random Rng)
         {

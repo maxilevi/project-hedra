@@ -46,6 +46,11 @@ namespace Hedra.Engine.Rendering
         {
             return MeshOperations.SupportPoint(Vertices, Colors, Direction, Color);
         }
+
+        public void Flat(IAllocator Allocator)
+        {
+            MeshOperations.FlatMesh(Allocator, Indices, Vertices, Normals, Colors, Extradata);
+        }
         
         public void UniqueVertices()
         {

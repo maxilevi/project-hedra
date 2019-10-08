@@ -23,7 +23,7 @@ namespace Hedra.Engine.Core
             get
             {
 #if DEBUG
-                EnsureBounds(I);
+                //EnsureBounds(I);
 #endif
                 return *((T*) _data + I);
             }
@@ -31,7 +31,7 @@ namespace Hedra.Engine.Core
             set
             {
 #if DEBUG
-                EnsureBounds(I);
+                //EnsureBounds(I);
 #endif
                 *((T*) _data + I) = value;
             }

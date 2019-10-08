@@ -39,9 +39,9 @@ namespace Hedra.Engine.Rendering
             _extradata = new NativeList<float>(Allocator);
         }
 
-        public void Flat()
+        public void Flat(IAllocator Allocator)
         {
-            MeshOperations.FlatMesh(_indices, _vertices, _normals, _colors, _extradata);
+            MeshOperations.FlatMesh(Allocator, _indices, _vertices, _normals, _colors, _extradata);
         }
 
         public void UniqueVertices()

@@ -27,8 +27,9 @@ namespace Hedra.Engine.BiomeSystem
     {
         public const int SeaLevel = 16;
         public const int PathHeight = RiverWaterLevel;
-        public const int RiverMaxHeight = RiverWaterLevel - 2;
-        public const int RiverMinHeight = RiverFloorLevel - 2;
+        public const int RiverMaxHeight = RiverWaterLevel - 1;
+        public const int RiverMinHeight = SeaLevel - 4;
+        public const int RiverMinClipDistance = RiverFloorLevel - 2;
         public const int RiverSeaFloorMax = RiverWaterLevel + 2;
         public const int RiverWaterLevel = 25;
         public const int RiverFloorLevel = RiverWaterLevel - BaseBiomeGenerationDesign.RiverDepth;

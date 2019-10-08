@@ -42,6 +42,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public bool BuildedWithStructures { get; private set; }
         public bool Disposed { get; private set; }
         public bool HasWater { get; private set; }
+        public bool IsRiverConstant { get; private set; }
         public bool IsGenerated { get; private set; }
         public BiomeGenerator Landscape { get; private set; }
         public int Lod { get; set; } = 1;
@@ -97,6 +98,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 IsGenerating = true;
                 var details = Landscape.GenerateBlocks(_blocks);
                 HasWater = details.HasWater;
+                IsRiverConstant = details.IsRiverConstant;
                 FillHeightCache(_blocks);
                 IsGenerating = false;
             }
@@ -156,7 +158,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
                 if (output == null) return;
                 this.SetChunkStatus(output);
-                output = this.AddStructuresMeshes(output, buildingLod);
+                output = this.AddStructuresMeshes(allocator, output, buildingLod);
 
                 if (output == null) return;
                 this.UploadMesh(output);
@@ -198,9 +200,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
         }
 
-        private ChunkMeshBuildOutput AddStructuresMeshes(ChunkMeshBuildOutput Input, int LevelOfDetail)
+        private ChunkMeshBuildOutput AddStructuresMeshes(IAllocator Allocator, ChunkMeshBuildOutput Input, int LevelOfDetail)
         {
-            return _structuresBuilder.AddStructuresMeshes(Input, LevelOfDetail);
+            return _structuresBuilder.AddStructuresMeshes(Allocator, Input, LevelOfDetail);
         }
 
         private void SetChunkStatus(ChunkMeshBuildOutput Input)

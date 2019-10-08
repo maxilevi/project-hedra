@@ -84,7 +84,7 @@ namespace Hedra.Engine.Rendering
                 new WorldBuffer(PoolSize.VerySmall)
             );
             WaterBuffer = new BufferBalancer(
-                new WorldBuffer(PoolSize.Small)
+                new WorldBuffer(PoolSize.VerySmall)
             );
             _shadowOffsets = new IntPtr[GeneralSettings.MaxChunks];
             _shadowCounts = new int[GeneralSettings.MaxChunks];
@@ -266,7 +266,7 @@ namespace Hedra.Engine.Rendering
             WaterShader["Smoothness"] = WaterSmoothness;
             WaterShader["useSSR"] = GameSettings.UseSSR ? 1f : 0f;
 
-            //if (ShowWaterBackfaces) Renderer.Disable(EnableCap.CullFace);
+            if (ShowWaterBackfaces) Renderer.Disable(EnableCap.CullFace);
         }
         
         private static void WaterUnBind()

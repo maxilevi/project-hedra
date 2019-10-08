@@ -434,11 +434,11 @@ namespace Hedra.Engine.Rendering
             return p;
         }
 
-        public static unsafe void Build(ref NativeVertexData Data, ref Vector4 TemplateColor, ref Triangle[] TriangleBuffer, ref int TriangleCount, ref bool IsWater)
+        public static unsafe void Build(ref NativeVertexData Data, ref Vector4 TemplateColor, ref Triangle[] TriangleBuffer, ref int TriangleCount, ref bool IsWater, ref bool IsRiverConstant)
         {
             for (uint i = 0; i < TriangleCount; i++)
             {
-                if(IsWater && ShouldClip(ref TriangleBuffer[i])) continue;
+                if(IsWater && ShouldClip(ref TriangleBuffer[i], ref IsRiverConstant)) continue;
                 Data.Indices.Add((uint) Data.Vertices.Count + 0);
                 Data.Indices.Add((uint) Data.Vertices.Count + 1);
                 Data.Indices.Add((uint) Data.Vertices.Count + 2);
@@ -459,7 +459,7 @@ namespace Hedra.Engine.Rendering
             }
         }
 
-        private static bool ShouldClip(ref Triangle Triangle)
+        private static bool ShouldClip(ref Triangle Triangle, ref bool IsRiverConstant)
         {
             const float  oceanClipDistance = (BiomePool.SeaLevel-1) * Generation.ChunkSystem.Chunk.BlockSize;
             var isBelowOcean = (Triangle.Vertices[0].Y < oceanClipDistance ||
@@ -467,14 +467,14 @@ namespace Hedra.Engine.Rendering
                                 Triangle.Vertices[2].Y < oceanClipDistance);
             
             const float maxRiverClipDistance = (BiomePool.RiverWaterLevel-2) * Generation.ChunkSystem.Chunk.BlockSize;
-            const float  minRiverClipDistance = (BiomePool.RiverMinHeight) * Generation.ChunkSystem.Chunk.BlockSize;
-            var isBelowRiver = (Triangle.Vertices[0].Y < maxRiverClipDistance ||
-                                Triangle.Vertices[1].Y < maxRiverClipDistance ||
-                                Triangle.Vertices[2].Y < maxRiverClipDistance) &&
-                               (Triangle.Vertices[0].Y > minRiverClipDistance ||
-                                Triangle.Vertices[1].Y > minRiverClipDistance ||
-                                Triangle.Vertices[2].Y > minRiverClipDistance);
-            return isBelowRiver || isBelowOcean;
+            const float  minRiverClipDistance = (BiomePool.RiverFloorLevel-2) * Generation.ChunkSystem.Chunk.BlockSize;
+            var isInRiverClipZone = (Triangle.Vertices[0].Y > minRiverClipDistance &&
+                                     Triangle.Vertices[1].Y > minRiverClipDistance &&
+                                     Triangle.Vertices[2].Y > minRiverClipDistance);
+            var isWithinRiver = (Triangle.Vertices[0].Y < maxRiverClipDistance &&
+                                Triangle.Vertices[1].Y < maxRiverClipDistance &&
+                                Triangle.Vertices[2].Y < maxRiverClipDistance) && isInRiverClipZone;
+            return (isWithinRiver && IsRiverConstant || isBelowOcean);
         }
     }
     

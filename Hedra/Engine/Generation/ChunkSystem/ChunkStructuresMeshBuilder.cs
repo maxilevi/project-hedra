@@ -34,7 +34,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private bool Disposed => _parent.Disposed;
         private ChunkMesh Mesh => _parent.Mesh;
 
-        public ChunkMeshBuildOutput AddStructuresMeshes(ChunkMeshBuildOutput Input, int Lod)
+        public ChunkMeshBuildOutput AddStructuresMeshes(IAllocator Allocator, ChunkMeshBuildOutput Input, int Lod)
         {
             List<VertexData> staticElements;
             try
@@ -53,7 +53,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 {
                     clone.UniqueVertices();
                     MeshOptimizer.SimplifySloppy(clone, LODMap[Lod]);
-                    clone.Flat();
+                    clone.Flat(Allocator);
                 }
                 if (clone.Extradata.Count != clone.Vertices.Count)
                 {
@@ -77,7 +77,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             for (var i = 0; i < instanceElements.Length; i++)
             {
                 if(instanceElements[i].SkipOnLod && Lod != 1) continue;
-                ProcessInstanceData(instanceElements[i], Input.StaticData, i, Lod, distribution, instanceElements[i].CanSimplifyProgramatically ? LODMap[Lod] : -1);
+                ProcessInstanceData(Allocator, instanceElements[i], Input.StaticData, i, Lod, distribution, instanceElements[i].CanSimplifyProgramatically ? LODMap[Lod] : -1);
             }
 
             var addGrass = GameSettings.Quality && Lod <= 2 || Lod == 1 && !GameSettings.Quality;
@@ -86,14 +86,14 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 var lodedInstanceElements = Mesh.LodAffectedInstanceElements;
                 for (var i = 0; i < lodedInstanceElements.Length; i++)
                 {
-                    ProcessInstanceData(lodedInstanceElements[i], Input.InstanceData, i, Lod, distribution, 1f / Lod - 0.2f);
+                    ProcessInstanceData(Allocator, lodedInstanceElements[i], Input.InstanceData, i, Lod, distribution, 1f / Lod - 0.2f);
                 }
             }
 
             return new ChunkMeshBuildOutput(Input.StaticData, Input.WaterData, Input.InstanceData, Input.Failed);
         }
 
-        private void ProcessInstanceData(InstanceData Instance, VertexData Model, int Index, int Lod, RandomDistribution Distribution, float SimplificationThreshold = -1)
+        private void ProcessInstanceData(IAllocator Allocator, InstanceData Instance, VertexData Model, int Index, int Lod, RandomDistribution Distribution, float SimplificationThreshold = -1)
         {
             var element = Instance.Get(Lod);
             var model = element.OriginalMesh.Clone();
@@ -105,7 +105,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             {
                 model.UniqueVertices();
                 MeshOptimizer.SimplifySloppy(model, SimplificationThreshold);
-                model.Flat();
+                model.Flat(Allocator);
             }
             AssertValidModel(model);
             PackAndAddModel(model, Model);
@@ -181,7 +181,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             Model.Extradata.AddRange(replacement);
             
             if (!Element.HasExtraData)
-                Model.Extradata = Enumerable.Repeat(0f, Model.Vertices.Count).ToList();
+                Model.Extradata.Set(0, Model.Vertices.Count);
             
             /* Pack some randomness to the wind values */
             Distribution.Seed = Unique.GenerateSeed(Element.Position.Xz);

@@ -21,9 +21,11 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private readonly float _blockSize;
         private int _sampleWidth;
         private int _sampleHeight;
+        private float _invSampleWidth;
+        private float _invSampleHeight;
         private int noiseValuesMapWidth;
         private int noiseValuesMapHeight;
-        private SampledBlock* _grid;
+        private readonly SampledBlock* _grid;
 
         public ChunkTerrainMeshBuilderHelper(Chunk Parent, int Lod, SampledBlock* Grid)
         {
@@ -52,6 +54,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             _sampleWidth = Lod;
             _sampleHeight = Lod;
+            _invSampleHeight = 1f / _sampleHeight;
+            _invSampleWidth = 1f / _sampleWidth;
             noiseValuesMapWidth = (_boundsX / _sampleWidth) + 1;
             noiseValuesMapHeight = (_boundsY / _sampleHeight);
         }
@@ -225,9 +229,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private float GetSample(int x, int y, int z, out BlockType Type)
         {
-            var x2 = (x / _sampleWidth);
-            var y2 = (y / _sampleHeight);
-            var z2 = (z / _sampleWidth);
+            var x2 = (int)(x * _invSampleWidth);
+            var y2 = (int)(y * _invSampleHeight);
+            var z2 = (int)(z * _invSampleWidth);
 
             var b0 = Get(x2,y2,z2);
             var b1 = Get(x2 + 1, y2, z2);
@@ -243,9 +247,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 b2.Density, b3.Density,
                 b4.Density, b5.Density,
                 b6.Density, b7.Density,
-                (x % _sampleWidth) / (float) _sampleWidth,
-                (y % _sampleHeight) / (float) _sampleHeight,
-                (z % _sampleWidth) / (float) _sampleWidth
+                (x % _sampleWidth) * _invSampleWidth,
+                (y % _sampleHeight) * _invSampleHeight,
+                (z % _sampleWidth) * _invSampleWidth
             );
         }
 
