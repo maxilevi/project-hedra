@@ -7,7 +7,7 @@ namespace Hedra.Engine.CacheSystem
     {
         public AppleTreesCache()
         {
-            var scale = Vector3.One * 2;
+            var scale = Vector3.One * 1.5f;
             this.AddModel(AssetManager.LoadPLYWithLODs("Assets/Env/Trees/AppleTree0.ply", scale));
             this.AddModel(AssetManager.LoadPLYWithLODs("Assets/Env/Trees/AppleTree1.ply", scale));
             this.AddModel(AssetManager.LoadPLYWithLODs("Assets/Env/Trees/AppleTree2.ply", scale));

@@ -87,13 +87,9 @@ namespace Hedra.Engine.Generation
             model.AddWindValues(AssetManager.ColorCode1);
             model.AddWindValues(AssetManager.ColorCode2);
 
-            Vector4 woodColor = rng.Next(0, 5) != 1
-                ? BiomeRegion.Colors.WoodColors[new Random(World.Seed + 5232).Next(0, BiomeRegion.Colors.WoodColors.Length)] 
-                : BiomeRegion.Colors.WoodColor;
+            Vector4 woodColor = BiomeRegion.Colors.WoodColors[rng.Next(0, BiomeRegion.Colors.WoodColors.Length)];
 
-            Vector4 leafColor = rng.Next(0, 5) != 1 
-                ? BiomeRegion.Colors.LeavesColors[new Random(World.Seed + 42132).Next(0, BiomeRegion.Colors.LeavesColors.Length)] 
-                : BiomeRegion.Colors.LeavesColor;
+            Vector4 leafColor = BiomeRegion.Colors.LeavesColors[rng.Next(0, BiomeRegion.Colors.LeavesColors.Length)];
 
             model = Design.Paint(model, woodColor, leafColor);
             model.GraduateColor(Vector3.UnitY);
