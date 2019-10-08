@@ -10,6 +10,7 @@ using OpenTK;
 using System;
 using System.Collections.Generic;
 using Hedra.Core;
+using Hedra.Engine.Core;
 using Hedra.Engine.Game;
 using Hedra.Game;
 
@@ -18,6 +19,9 @@ namespace Hedra.Engine.Rendering.Animation
     
     public class Animator
     {
+        private ObjectPool<KeyFrame[]> _framePool;
+        private ObjectPool<Dictionary<string, int>> _blendMapPool;
+        private ObjectPool<List<string>> _stringListPool;
         public float AnimationTime { get; private set; }
         public float AnimationSpeed { get; set; } = 1f;
         public bool Stop { get; set; }
@@ -33,6 +37,9 @@ namespace Hedra.Engine.Rendering.Animation
         public Animator(Joint RootJoint)
         {
             _rootJoint = RootJoint;
+            _blendMapPool = new ObjectPool<Dictionary<string, int>>(() => new Dictionary<string, int>());
+            _stringListPool = new ObjectPool<List<string>>(() => new List<string>());
+            _framePool = new ObjectPool<KeyFrame[]>(() => new KeyFrame[2]);
             _currentPose = new Dictionary<string, JointTransform>();
             _currentBlendPose = new Dictionary<string, JointTransform>();
             _pose = new Dictionary<string, JointTransform>();
@@ -136,17 +143,21 @@ namespace Hedra.Engine.Rendering.Animation
          *         for all the joints. The transforms are indexed by the name ID of
          *         the joint that they should be applied to.
          */
-        private Dictionary<string, JointTransform> CalculateCurrentAnimationPose(Dictionary<string, JointTransform> Pose) 
+        private Dictionary<string, JointTransform> CalculateCurrentAnimationPose(Dictionary<string, JointTransform> Pose)
         {
-            var currentFrames = GetPreviousAndNextFrames(_currentAnimation, AnimationTime);
+            var currentFrames = _framePool.GetObject();
+            GetPreviousAndNextFrames(_currentAnimation, AnimationTime, currentFrames);
             var currentProgression = CalculateProgression(currentFrames[0], currentFrames[1], AnimationTime);
             var pose = InterpolateJointPosesFromKeyframes(currentFrames[0], currentFrames[1], currentProgression, ref Pose);
+            _framePool.PutObject(currentFrames);
 
             if (_blendingAnimation != null)
             {
-                var blendingFrames = GetPreviousAndNextFrames(_blendingAnimation, _blendingAnimationTime);
+                var blendingFrames = _framePool.GetObject();
+                GetPreviousAndNextFrames(_blendingAnimation, _blendingAnimationTime, blendingFrames);
                 var blendingProgression = CalculateProgression(blendingFrames[0], blendingFrames[1], _blendingAnimationTime);
                 var blendingPose = InterpolateJointPosesFromKeyframes(blendingFrames[0], blendingFrames[1], blendingProgression, ref _currentBlendPose);
+                _framePool.PutObject(blendingFrames);
                 for (var i = 0; i < _blendJoints.Length; i++)
                 {
                     pose[_blendJoints[i]] = blendingPose[_blendJoints[i]];
@@ -211,7 +222,7 @@ namespace Hedra.Engine.Rendering.Animation
          * @return The previous and next keyframes, in an array which therefore will
          *         always have a length of 2.
          */
-        private KeyFrame[] GetPreviousAndNextFrames(Animation Animation, float Time)
+        private static void GetPreviousAndNextFrames(Animation Animation, float Time, KeyFrame[] CurrentFrames)
         {
             var allFrames = Animation.KeyFrames;
             var previousFrame = allFrames[0];
@@ -224,7 +235,9 @@ namespace Hedra.Engine.Rendering.Animation
                 }
                 previousFrame = allFrames[i];
             }
-            return new [] { previousFrame, nextFrame };
+            ;
+            CurrentFrames[0] = previousFrame;
+            CurrentFrames[1] = nextFrame;
         }
 
         private static float CalculateProgression(KeyFrame PreviousFrame, KeyFrame NextFrame, float Time)
@@ -270,9 +283,9 @@ namespace Hedra.Engine.Rendering.Animation
             return Pose;
         }
         
-        private static string[] CalculateJointsToBlend(Animation Animation)
+        private string[] CalculateJointsToBlend(Animation Animation)
         {
-            var blendedJointsCandidates = new Dictionary<string, int>();
+            var blendedJointsCandidates = _blendMapPool.GetObject();
             for(var i = 0; i < Animation.KeyFrames.Length; i++)
             {
                 foreach(var pair in Animation.KeyFrames[i].Pose)
@@ -290,8 +303,9 @@ namespace Hedra.Engine.Rendering.Animation
                         blendedJointsCandidates.Add(pair.Key, 1);
                     }
                 }
-            }        
-            var blendedJoints = new List<string>();
+            }
+
+            var blendedJoints = _stringListPool.GetObject();
             foreach(var pair in blendedJointsCandidates)
             {
                 if(pair.Value != Animation.KeyFrames.Length)
@@ -299,8 +313,15 @@ namespace Hedra.Engine.Rendering.Animation
                     blendedJoints.Add(pair.Key);
                 }
             }
+
+            var toReturn = blendedJoints.ToArray();
             
-            return blendedJoints.ToArray();
+            blendedJointsCandidates.Clear();
+            _blendMapPool.PutObject(blendedJointsCandidates);
+            blendedJoints.Clear();
+            _stringListPool.PutObject(blendedJoints);
+            
+            return toReturn;
         }
         
         public Animation AnimationPlaying => _currentAnimation;

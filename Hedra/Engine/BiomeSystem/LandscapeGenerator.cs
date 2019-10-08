@@ -213,7 +213,7 @@ namespace Hedra.Engine.BiomeSystem
             }
         }
 
-        private static unsafe void CopyBlocks(SampledBlockWrapper SampledBlocks, Block[] Blocks)
+        private unsafe void CopyBlocks(SampledBlockWrapper SampledBlocks, Block[] Blocks)
         {
             var width = SampledBlocks.Width;
             for (var x = 0; x < SampledBlocks.Width; ++x)
@@ -224,8 +224,11 @@ namespace Hedra.Engine.BiomeSystem
                     var depth = SampledBlocks.Depth;
                     for (var z = 0; z < SampledBlocks.Depth; ++z)
                     {
-                        Blocks[x * width * height + y * depth + z].Type = SampledBlocks[x,y,z]->Type;
-                        Blocks[x * width * height + y * depth + z].Density = SampledBlocks[x,y,z]->Density;
+                        var ptr = SampledBlocks[x, y, z];
+                        Blocks[x * width * height + y * depth + z].Type = ptr->Type;
+                        Blocks[x * width * height + y * depth + z].Density = ptr->Density;
+                        if (ptr->Type == BlockType.Water)
+                            Parent.AddWaterDensity(x,y,z);
                     }
                 }
             }

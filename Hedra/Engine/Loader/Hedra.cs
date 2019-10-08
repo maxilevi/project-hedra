@@ -5,6 +5,7 @@
 using System;
 using System.Globalization;
 using System.Reflection;
+using System.Runtime;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Hedra.API;
@@ -59,6 +60,7 @@ namespace Hedra.Engine.Loader
         {
             MainThreadId = Thread.CurrentThread.ManagedThreadId;
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
+            GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
             Time.RegisterThread();
             OSManager.Load(Assembly.GetExecutingAssembly().Location);
             AssetManager.Load();

@@ -54,6 +54,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private bool IsGenerating { get; set; }
         public Vector3 Position { get; private set; }
         public ChunkAutomatons Automatons { get; }
+        private List<CoordinateHash3D> _waterPositions;
         private Timer _activityTimer;
 
         //private byte[] _rleBlocks;
@@ -510,6 +511,24 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
 
             return blocks;
+        }
+        
+        public void AddWaterDensity(int X, int Y, int Z)
+        {
+            lock (_waterLock)
+            {
+                if (_waterPositions == null) _waterPositions = new List<CoordinateHash3D>();
+                var hash = new CoordinateHash3D(X,Y,Z);
+                _waterPositions.Add(hash);
+            }
+        }
+        
+        public NativeArray<CoordinateHash3D> GetWaterPositions(IAllocator Allocator)
+        {
+            lock (_waterLock)
+            {
+                return _waterPositions.ToNativeArray(Allocator);
+            }
         }
 
         public void Test()

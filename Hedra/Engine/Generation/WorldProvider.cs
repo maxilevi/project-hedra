@@ -650,31 +650,26 @@ namespace Hedra.Engine.Generation
             }
             return (float) Math.Sqrt(nearest);
         }
-        
-        public float NearestWaterBlockOnChunk(Chunk Chunk, Vector3 Position, out Vector3 WaterPosition)
+
+        public unsafe float NearestWaterBlockOnChunk(Chunk Chunk, Vector3 Position, out Vector3 WaterPosition)
         {
-            WaterPosition = Vector3.Zero;
             var nearest = float.MaxValue;
-            if (!Chunk.HasWater) return nearest;
-            /*
-            for (var x = 0; x < Chunk.BoundsX; ++x)
+            WaterPosition = Vector3.Zero;
+            var size = Allocator.Kilobyte * 32;
+            var mem = stackalloc byte[size];
+            using (var allocator = new StackAllocator(size, mem))
             {
-                for (var y = Chunk.MinimumHeight; y < Chunk.MaximumHeight; ++y)
+                var positions = Chunk.GetWaterPositions(allocator);
+                for (var i = 0; i < positions.Length; i++)
                 {
-                    for (var z = 0; z < Chunk.BoundsX; ++z)
-                    {
-                        if (Chunk.GetBlockAt(x,y,z).Type == BlockType.Water)
-                        {
-                            WaterPosition = new Vector3(x * Chunk.BlockSize + Chunk.OffsetX, y * Chunk.BlockSize, z * Chunk.BlockSize + Chunk.OffsetZ); 
-                            var dist = (WaterPosition - Position).Xz.LengthSquared;
-                            if (dist < nearest) nearest = dist;
-                        }
-                    }
-                }  
-            }*/
+                    WaterPosition = positions[i].ToVector3() * Chunk.BlockSize + Chunk.Position;
+                    var dist = (WaterPosition - Position).Xz.LengthSquared;
+                    if (dist < nearest) nearest = dist;
+                }
+            }
+
             return nearest;
         }
-        
         public float NearestWaterBlockOnChunk(Vector3 Position, out Vector3 WaterPosition)
         {
             var nearest = float.MaxValue;

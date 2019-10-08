@@ -2,6 +2,7 @@ using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using Hedra.Engine.Core;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Rendering;
@@ -13,10 +14,14 @@ namespace Hedra.Engine.Rendering
     public class BufferBalancer
     {
         private readonly WorldBuffer[] _buffers;
+        private readonly IAllocator _allocator;
         
         public BufferBalancer(params WorldBuffer[] Buffers)
         {
             _buffers = Buffers;
+            _allocator = new HeapAllocator(Allocator.Megabyte * 8);
+            for (var i = 0; i < _buffers.Length; ++i)
+                _buffers[i].Allocator = _allocator;
         }
         
         public bool Remove(Vector2 Offset)

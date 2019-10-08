@@ -28,7 +28,7 @@ namespace Hedra.Engine.Rendering
         private readonly object _lock = new object();
         private readonly Dictionary<Vector2, ChunkRenderCommand> _chunkDict;
         private List<KeyValuePair<Vector2, ChunkRenderCommand>> _chunkPairs;
-        private readonly IAllocator _allocator;
+        public IAllocator Allocator { get; set; }
         public GeometryPool<uint> Indices { get; }
         public GeometryPool<Vector3> Vertices { get; }
         public GeometryPool<Vector3> Normals { get; }
@@ -47,8 +47,7 @@ namespace Hedra.Engine.Rendering
             Normals = new GeometryPool<Vector3>( (int) (megabyte * 1f * realPoolSize), Vector3.SizeInBytes, VertexAttribPointerType.Float, BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
             Colors = new GeometryPool<Vector4>( (int) (megabyte * 1f * realPoolSize), Vector4.SizeInBytes, VertexAttribPointerType.Float, BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
             Data = new VAO<Vector3, Vector4, Vector3>(Vertices.Buffer, Colors.Buffer, Normals.Buffer);
-                 
-            _allocator = new HeapAllocator(Allocator.Megabyte * 8);
+            
             _offset = new IntPtr[GeneralSettings.MaxChunks];
             _counts = new int[GeneralSettings.MaxChunks];
             _chunkDict = new Dictionary<Vector2, ChunkRenderCommand>();
@@ -138,16 +137,16 @@ namespace Hedra.Engine.Rendering
             lock (_lock)
             {
                 if (!_chunkDict.ContainsKey(Offset))
-                    AddNew(_allocator, Offset, Data);
+                    AddNew(Allocator, Offset, Data);
                 else
-                    AddExisting(_allocator, Offset, Data);
+                    AddExisting(Allocator, Offset, Data);
 
                 if (Comparer == null) throw new ArgumentException("No comparer has been set.");
 
                 _chunkPairs = _chunkDict.ToList();
                 _chunkPairs.Sort(Comparer);
             }
-            _allocator.Clear();
+            Allocator.Clear();
             return true;
         }
 

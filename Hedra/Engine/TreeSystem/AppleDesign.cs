@@ -12,7 +12,7 @@ namespace Hedra.Engine.TreeSystem
 {
     public class AppleDesign : TreeDesign
     {
-        public override float Spacing => 80f;
+        public override float Spacing => 120f;
         public override VertexData Model => CacheManager.GetModel(CacheItem.AppleTrees);
 
         public override VertexData Paint(VertexData Data, Vector4 WoodColor, Vector4 LeafColor)
