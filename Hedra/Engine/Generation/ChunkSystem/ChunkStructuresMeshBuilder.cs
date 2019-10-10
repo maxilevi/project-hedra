@@ -145,6 +145,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 ? CacheManager.CachedColors[Element.ColorCache]
                 : Element.Colors;
 
+            if(replacement == null) return;
             Model.Colors.Clear();
             Model.Colors.AddRange(replacement);
 

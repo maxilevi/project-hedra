@@ -90,7 +90,6 @@ namespace Hedra.Engine.BiomeSystem
                     var smallFrequency = SmallFrequency(position.X, position.Y);
                     var affectedByPlateau = hasPlateaus && IsAffectedByPlateau(position, plateaus);
                     var foundCutoff = false;
-                    var previousDensity = 0f;
 
                     for (var y = 0; y < Chunk.BoundsY; ++y)
                     {
@@ -105,8 +104,11 @@ namespace Hedra.Engine.BiomeSystem
                         if (!foundCutoff && calcDensity < 0)
                         {
                             foundCutoff = true;
-                            if(x >= 0 && z >= 0 && x < depth && z < depth)
-                                cutoffHeights[x * depth + z] = calcDensity + y;
+                            if (x >= 0 && z >= 0 && x < depth && z < depth)
+                            {
+                                cutoffHeights[x * depth + z] = ((int)Math.Round(y / 3f)) * 3;
+                            }
+
                             if (affectedByPlateau)
                             {
                                 var newFakeHeight = calcDensity * 0.35F + y - 2;
@@ -116,8 +118,6 @@ namespace Hedra.Engine.BiomeSystem
                                 y = 0;
                             }
                         }
-
-                        previousDensity = calcDensity;
                     }
                     
                     densityMultipliers[(x + border) * realDepth + (z + border)] = densityMultiplier;

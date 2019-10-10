@@ -47,9 +47,9 @@ namespace Hedra.Engine.BiomeSystem
             
             Noise.PerturbType = PerturbType.None;
             
-            //OperateSets(set1, set2, (F1, F2) => F1 + F2);
-            //OperateSets(set1, set3, (F1, F2) => F1 + F2);
-            //OperateSets(set1, set4, (F1, F2) => F1 + F2);
+            OperateSets(set1, set2, (F1, F2) => F1 + F2);
+            OperateSets(set1, set3, (F1, F2) => F1 + F2);
+            OperateSets(set1, set4, (F1, F2) => F1 + F2);
             AddSet(RiverMap, set1, F => Math.Min(RiverDepth, Math.Max(0, F) * 8f));
         }
         
