@@ -1,4 +1,4 @@
-name: Test
+name: Hedra CI
 
 on: [push]
 
@@ -26,7 +26,9 @@ jobs:
     - name: Restore AssetBuilder packages 
       run: nuget restore AssetBuilder/AssetBuilder.csproj -PackagesDirectory packages
     - name: Build Solution
-      run: dotnet msbuild
+      run: dotnet msbuild -p:Configuration=Release
     - name: Run tests
       run: ./packages/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe HedraTests/bin/Debug/HedraTests.dll
       shell: bash
+    - name: Run dummy mode
+      run: Hedra.exe --dummy-mode
