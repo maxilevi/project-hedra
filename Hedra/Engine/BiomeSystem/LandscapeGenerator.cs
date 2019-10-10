@@ -32,8 +32,6 @@ namespace Hedra.Engine.BiomeSystem
     /// </summary>
     public class LandscapeGenerator : BiomeGenerator
     {
-        private const float Narrow = 0.42f;
-        private const float Border = 0.02f;
         private const float Scale = 1f;
         const int noise2DScaleWidth = 1;
         const int noise3DScaleWidth = 2;
@@ -570,15 +568,6 @@ namespace Hedra.Engine.BiomeSystem
                 if ((X + OffsetX) % 2 == 0) Blocks[X,Y,Z]->Density += new Half(.25f);
             }
         }
-        
-        public static float River(Vector2 Position, float Border = 0)
-        {
-            return (float) Math.Max(0,
-                       0.5 - Math.Abs(
-                           World.GetNoise(Position.X * 0.0011f,
-                               Position.Y * 0.0011f) - 0.2) - Narrow +
-                       Border) * Scale;
-        }
 
         private bool IsBlockChangeable(BlockType Type)
         {
@@ -652,7 +641,7 @@ namespace Hedra.Engine.BiomeSystem
                 }
             }
         }
-
+        
         private void LoopPlateaus(int X, int Z, BasePlateau[] RoundedPlateaux, out bool Result)
         {
             Result = false;
