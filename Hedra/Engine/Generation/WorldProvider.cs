@@ -587,7 +587,7 @@ namespace Hedra.Engine.Generation
             {
                 var region = BiomePool.GetRegion(Point);
                 return region.Generation.GetMaxHeight(Point.X, Point.Z) < Engine.BiomeSystem.BiomePool.SeaLevel
-                    || LandscapeGenerator.River(point.Xz) > 0;
+                    || region.Generation.RiverAtPoint(Point.X, Point.Z) > 0;
             }
             while (IsWater(point))
             {
@@ -655,7 +655,7 @@ namespace Hedra.Engine.Generation
         {
             var nearest = float.MaxValue;
             WaterPosition = Vector3.Zero;
-            var size = Allocator.Kilobyte * 32;
+            var size = Allocator.Kilobyte * 64;
             var mem = stackalloc byte[size];
             using (var allocator = new StackAllocator(size, mem))
             {

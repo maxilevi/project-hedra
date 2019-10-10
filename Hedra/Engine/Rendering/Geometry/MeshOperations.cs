@@ -12,7 +12,7 @@ namespace Hedra.Engine.Rendering.Geometry
         public static unsafe void FlatMesh(IList<uint> Indices, IList<Vector3> Vertices, IList<Vector3> Normals,
             IList<Vector4> Colors, IList<float> Extradata)
         {
-            var size = (int)(Allocator.Megabyte * 3.5f);
+            var size = (int)(Allocator.Megabyte * 8f);
             using (var allocator = new HeapAllocator(size))
             {
                 FlatMesh(allocator, Indices, Vertices, Normals, Colors, Extradata);
@@ -71,6 +71,12 @@ namespace Hedra.Engine.Rendering.Geometry
             Normals.AddRange(newNormals);
             Colors.AddRange(newColors);
             Extradata.AddRange(newExtradata);
+            
+            newIndices.Dispose();
+            newVertices.Dispose();
+            newNormals.Dispose();
+            newColors.Dispose();
+            newExtradata.Dispose();
         }
 
         public static void AddWindValues(IList<Vector3> Vertices, IList<Vector4> Colors, IList<float> Extradata, float Scalar = 1)
@@ -125,57 +131,68 @@ namespace Hedra.Engine.Rendering.Geometry
                 }
             }
         }
-        
-        public static unsafe void UniqueVertices(IList<uint> Indices, IList<Vector3> Vertices, IList<Vector3> Normals, IList<Vector4> Colors, IList<float> Extradata)
+
+        public static unsafe void UniqueVertices(IList<uint> Indices, IList<Vector3> Vertices, IList<Vector3> Normals,
+            IList<Vector4> Colors, IList<float> Extradata)
         {
             if (Colors.Count == 0) return;
-            
-            var size = Indices.Count * sizeof(uint) + Vertices.Count * Vector3.SizeInBytes + Normals.Count * Vector3.SizeInBytes + Extradata.Count * sizeof(float) + Colors.Count * Vector4.SizeInBytes + Allocator.Kilobyte * 64;
-            var mem = stackalloc byte[size];
-            using (var allocator = new StackAllocator(size, mem))
+
+            var size = Indices.Count * sizeof(uint) + Vertices.Count * Vector3.SizeInBytes +
+                       Normals.Count * Vector3.SizeInBytes + Extradata.Count * sizeof(float) +
+                       Colors.Count * Vector4.SizeInBytes + Allocator.Kilobyte * 64;
+            IAllocator allocator;
+            if (size <= Allocator.Megabyte * 3)
             {
-                var newIndices = new NativeList<uint>(allocator);
-                var newVertices = new NativeList<Vector3>(allocator);
-                var newNormals = new NativeList<Vector3>(allocator);
-                var newColors = new NativeList<Vector4>(allocator);
-                var newExtradata = new NativeList<float>(allocator);
-                var vertexMap = new Dictionary<Vector3, int>();
-                for (var i = 0; i < Indices.Count; i++)
+                var mem = stackalloc byte[size];
+                allocator = new StackAllocator(size, mem);
+            }
+            else
+            {
+                allocator = new HeapAllocator(size);
+            }
+            
+            var newIndices = new NativeList<uint>(allocator);
+            var newVertices = new NativeList<Vector3>(allocator);
+            var newNormals = new NativeList<Vector3>(allocator);
+            var newColors = new NativeList<Vector4>(allocator);
+            var newExtradata = new NativeList<float>(allocator);
+            var vertexMap = new Dictionary<Vector3, int>();
+            for (var i = 0; i < Indices.Count; i++)
+            {
+                var curr = (int) Indices[i];
+                var vertex = Vertices[curr];
+                var index = 0;
+                if (vertexMap.ContainsKey(vertex))
                 {
-                    var curr = (int) Indices[i];
-                    var vertex = Vertices[curr];
-                    var index = 0;
-                    if (vertexMap.ContainsKey(vertex))
-                    {
-                        index = vertexMap[vertex];
-                    }
-                    else
-                    {
-                        index = newVertices.Count;
-                        newVertices.Add(vertex);
-                        vertexMap.Add(vertex, index);
+                    index = vertexMap[vertex];
+                }
+                else
+                {
+                    index = newVertices.Count;
+                    newVertices.Add(vertex);
+                    vertexMap.Add(vertex, index);
 
-                        newColors.Add(Colors[curr]);
-                        newNormals.Add(Normals[curr]);
-                        if (Extradata.Count != 0)
-                            newExtradata.Add(Extradata[curr]);
-                    }
-
-                    newIndices.Add((uint) index);
+                    newColors.Add(Colors[curr]);
+                    newNormals.Add(Normals[curr]);
+                    if (Extradata.Count != 0)
+                        newExtradata.Add(Extradata[curr]);
                 }
 
-                Indices.Clear();
-                Vertices.Clear();
-                Normals.Clear();
-                Colors.Clear();
-                Extradata.Clear();
-                
-                Indices.AddRange(newIndices);
-                Vertices.AddRange(newVertices);
-                Normals.AddRange(newNormals);
-                Colors.AddRange(newColors);
-                Extradata.AddRange(newExtradata);
+                newIndices.Add((uint) index);
             }
+
+            Indices.Clear();
+            Vertices.Clear();
+            Normals.Clear();
+            Colors.Clear();
+            Extradata.Clear();
+
+            Indices.AddRange(newIndices);
+            Vertices.AddRange(newVertices);
+            Normals.AddRange(newNormals);
+            Colors.AddRange(newColors);
+            Extradata.AddRange(newExtradata);
+            allocator.Dispose();
         }
 
         public static Vector3 SupportPoint(IList<Vector3> Vertices, IList<Vector4> Colors, Vector3 Direction)

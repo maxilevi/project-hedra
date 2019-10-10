@@ -30,7 +30,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             get
             {
 #if DEBUG
-                //BoundsCheck(X, Y, Z);
+                BoundsCheck(X, Y, Z);
 #endif
                 return &_ptr[X * Depth * Height + Y * Depth + Z];
             }

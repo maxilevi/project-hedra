@@ -474,7 +474,7 @@ namespace Hedra.Engine.Rendering
             var isWithinRiver = (Triangle.Vertices[0].Y < maxRiverClipDistance &&
                                 Triangle.Vertices[1].Y < maxRiverClipDistance &&
                                 Triangle.Vertices[2].Y < maxRiverClipDistance) && isInRiverClipZone;
-            return (isWithinRiver && IsRiverConstant || isBelowOcean);
+            return false && (isWithinRiver && IsRiverConstant || isBelowOcean);
         }
     }
     

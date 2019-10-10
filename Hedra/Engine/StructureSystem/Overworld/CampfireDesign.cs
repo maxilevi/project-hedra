@@ -108,7 +108,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             var height = Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z);
 
-            return Rng.Next(0, StructureGrid.CampfireChance) == 1 && height > BiomePool.SeaLevel && Math.Abs(LandscapeGenerator.River(TargetPosition.Xz)) < 0.005f;
+            return Rng.Next(0, StructureGrid.CampfireChance) == 1 && height > BiomePool.SeaLevel && Math.Abs(Biome.Generation.RiverAtPoint(TargetPosition.X, TargetPosition.Z)) < 0.005f;
         }
 
         public static Vector4 TentColor(Random Rng)

@@ -113,22 +113,8 @@ namespace Hedra.Engine.Core
 
         public T this[int I]
         {
-            [MethodImpl(256)]
-            get
-            {
-#if DEBUG
-                //EnsureBounds(I);
-#endif
-                return _array[I];
-            }
-            [MethodImpl(256)]
-            set
-            {
-#if DEBUG
-                //EnsureBounds(I);
-#endif
-                _array[I] = value;
-            }
+            [MethodImpl(256)] get => _array[I];
+            [MethodImpl(256)] set => _array[I] = value;
         }
 
         public void Set(ICollection<T> Collection)

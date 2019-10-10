@@ -70,7 +70,7 @@ namespace Hedra.Engine.StructureSystem
         {
             return Rng.Next(0, StructureChance) == 1 &&
                    Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z) > BiomePool.SeaLevel &&
-                   Math.Abs(LandscapeGenerator.River(TargetPosition.Xz)) < 0.005f;
+                   Math.Abs(Biome.Generation.RiverAtPoint(TargetPosition.X, TargetPosition.Z)) < 0.005f;
         }
 
         protected void AddDoor(VertexData Model, Vector3 DoorPosition, Matrix4 Transformation, CollidableStructure Structure, bool InvertedRotation, bool InvertedPivot)

@@ -109,6 +109,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
             AssertValidModel(model);
             PackAndAddModel(model, Model);
+            model.Dispose();
         }
 
         private static void PackAndAddModel(VertexData InstanceModel, VertexData Model)
@@ -127,7 +128,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
             Model.Normals.AddRange(InstanceModel.Normals);
             Model.Indices.AddRange(InstanceModel.Indices);
             Model.Extradata.AddRange(InstanceModel.Extradata);
-            InstanceModel.Dispose();
         }
         
         private static void AssertValidModel(VertexData Model)
