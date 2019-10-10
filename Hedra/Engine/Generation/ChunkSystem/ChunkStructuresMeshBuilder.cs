@@ -178,6 +178,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 ? CacheManager.CachedExtradata[Element.ExtraDataCache].Clone()
                 : Element.ExtraData;
 
+            if(replacement == null) return;
             Model.Extradata.Clear();
             Model.Extradata.AddRange(replacement);
             
