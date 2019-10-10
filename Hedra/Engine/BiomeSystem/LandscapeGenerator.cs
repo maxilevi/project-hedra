@@ -85,7 +85,7 @@ namespace Hedra.Engine.BiomeSystem
                 {
                     var position = new Vector2(x * Chunk.BlockSize + OffsetX, z * Chunk.BlockSize + OffsetZ);
                     var pathHeight = x >= 0 && z >= 0 && x < depth && z < depth ? pathMap[x][z] : 0;
-                    var heightAtPoint = CalculateHeight(x, z, heights, null, out _) - pathHeight;
+                    var calculatedHeight = CalculateHeight(x, z, heights, null, out _);
                     var densityMultiplier = 1.0f;
                     var smallFrequency = SmallFrequency(position.X, position.Y);
                     var affectedByPlateau = hasPlateaus && IsAffectedByPlateau(position, plateaus);
@@ -93,8 +93,11 @@ namespace Hedra.Engine.BiomeSystem
 
                     for (var y = 0; y < Chunk.BoundsY; ++y)
                     {
+                        var pathDensity = CalculatePathDensity(pathHeight, y);
+                        var pathDensityModifier = (float) Math.Pow(Mathf.Clamp(1f - pathDensity / BaseBiomeGenerationDesign.PathDepth, 0f, 1f), 2);
+                        var heightAtPoint = calculatedHeight - pathDensity + (pathDensity > 0 ? smallFrequency : 0);
                         /* The density should also take into account rivers and what not, because of this we add the river data in the second pass*/
-                        var densityAtPoint = CalculateDensity(x,y,z, noise3D) * densityMultiplier;
+                        var densityAtPoint = CalculateDensity(x,y,z, noise3D) * densityMultiplier * pathDensityModifier;
                         var calcDensity = CalculateDensityForBlock(heightAtPoint, densityAtPoint, y);
                         sampledDensity[(x + border) * realDepth * Chunk.BoundsY + (y) * realDepth + (z + border)] = calcDensity;
                         /*
@@ -106,14 +109,14 @@ namespace Hedra.Engine.BiomeSystem
                             foundCutoff = true;
                             if (x >= 0 && z >= 0 && x < depth && z < depth)
                             {
-                                cutoffHeights[x * depth + z] = ((int)Math.Round(y / 3f)) * 3;
+                                cutoffHeights[x * depth + z] =((int)Math.Round(y / 3f)) * 3;
                             }
 
                             if (affectedByPlateau)
                             {
-                                var newFakeHeight = calcDensity * 0.35F + y - 2;
-                                heightAtPoint = Mathf.Lerp(heightAtPoint + smallFrequency, newFakeHeight, Mathf.Clamp(Math.Abs(heightAtPoint - y) / 8f, 0f, 1f));
-                                HandlePlateaus(position, plateaus, ref heightAtPoint, ref densityMultiplier, ref smallFrequency);
+                                var newFakeHeight = calcDensity * 0.35F + y - 1;
+                                calculatedHeight = Mathf.Lerp(calculatedHeight + smallFrequency, newFakeHeight, Mathf.Clamp(Math.Abs(calculatedHeight - y) / 8f, 0f, 1f));
+                                HandlePlateaus(position, plateaus, ref calculatedHeight, ref densityMultiplier, ref smallFrequency);
                                 densityMultiplier = 0;
                                 y = 0;
                             }
@@ -147,7 +150,6 @@ namespace Hedra.Engine.BiomeSystem
                     var riverMultiplier = (1f - Math.Min(pathHeight, 1f)) * densityMultiplier;
                     var smallFrequency = SmallFrequency(position.X, position.Y);
                     var bonusDensity = 0f;
-                    var pathDensity = pathHeight * pathMultiplier;
                     var cutoff = cutoffHeights[x * depth + z];
                     
                     HandleStructures(position, groundworks, out var blockGroundworks, ref bonusDensity, ref riverMultiplier);
@@ -155,6 +157,7 @@ namespace Hedra.Engine.BiomeSystem
                     /* Water is built from the bottom up so we should not change this */
                     for (var y = 0; y < Chunk.Height; ++y)
                     {
+                        var pathDensity = CalculatePathDensity(pathHeight * pathMultiplier, y);
                         var riverDensity = (riverHeight > 0 ? CalculateRiverDensity(riverHeight, y, ref smallFrequency, ref riverMultiplier) : 0) * riverMultiplier;
                         var riverBorderDensity = riverBorderHeight * riverMultiplier;
 
@@ -170,6 +173,11 @@ namespace Hedra.Engine.BiomeSystem
             }
         }
 
+        private static float CalculatePathDensity(float path, float y)
+        {
+            return Mathf.Lerp(0, path, Mathf.Clamp((y - BiomePool.SeaLevel) / 2f, 0f, 1f));
+        }
+        
         private static float CalculateRiverDensity(float river, float y, ref float smallFrequency, ref float riverMultiplier)
         {
             var falloff = (river / BaseBiomeGenerationDesign.RiverDepth) * riverMultiplier;
@@ -463,7 +471,7 @@ namespace Hedra.Engine.BiomeSystem
 
         private static void HandlePathBlocks(ref float pathDensity, ref BlockType blockType)
         {
-            if(pathDensity > 0)
+            if(pathDensity / BaseBiomeGenerationDesign.PathDepth > 0.99f)
                 blockType = BlockType.Path;
         }
         

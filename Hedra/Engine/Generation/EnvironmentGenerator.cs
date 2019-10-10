@@ -45,6 +45,8 @@ namespace Hedra.Engine.Generation
 
             var modelData = Design.Model;
             var modelDataClone = modelData.NativeClone(Allocator);
+            /* Only simplify objects that are affected by LOD */
+            var canSimplify = Design.AffectedByLod;
 
             Design.Paint(modelDataClone, BiomeRegion, rng);
             Design.AddShapes(underChunk, transMatrix);         
@@ -55,7 +57,8 @@ namespace Hedra.Engine.Generation
                     OriginalMesh = modelData,
                     Colors = modelDataClone.Colors,
                     ExtraData = modelDataClone.Extradata,
-                    TransMatrix = transMatrix
+                    TransMatrix = transMatrix,
+                    CanSimplifyProgramatically = canSimplify
                 };
                 CacheManager.Check(data);
                 underChunk.AddInstance(data, Design.AffectedByLod);
