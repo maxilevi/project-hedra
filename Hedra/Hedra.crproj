@@ -1,3 +1,0 @@
-<project outputDir="obfuscated" baseDir="../Hedra/bin/Release/" seed="">
-  <module path="Hedra.exe" />
-</project>

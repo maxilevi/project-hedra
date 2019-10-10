@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Hedra</RootNamespace>
     <AssemblyName>Hedra</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <NoWin32Manifest>False</NoWin32Manifest>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <NoStdLib>True</NoStdLib>
@@ -503,8 +503,6 @@
     <Compile Include="Engine\Networking\Packets\PositionAndRotationPacket.cs" />
     <Compile Include="Engine\Networking\Packets\WorldPacket.cs" />
     <Compile Include="Engine\Networking\SteamConnection.cs" />
-    <Compile Include="Engine\Obfuscation\ObfuscatorSettings.cs" />
-    <Compile Include="Engine\Obfuscation\ScriptSettings.cs" />
     <Compile Include="Engine\Pathfinding\Finder.cs" />
     <Compile Include="Engine\Pathfinding\Grid.cs" />
     <Compile Include="Engine\Pathfinding\MinHeap.cs" />
@@ -14618,12 +14616,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ScriptMapper\ScriptMapper.csproj">
-      <Project>{4798438d-3653-4ca7-b695-d4414186c333}</Project>
-      <Name>ScriptMapper</Name>
-    </ProjectReference>
-  </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent Condition="'$(OS)' == 'Windows_NT' ">
         call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" normal text
@@ -14640,14 +14632,15 @@
     <ErrorReport>prompt</ErrorReport>
     <ConsolePause>False</ConsolePause>
     <OutputPath>bin\Release\</OutputPath>
-    <PreBuildEvent Condition="'$(OS)' == 'Windows_NT' ">
-        call "$(ProjectDir)/../ScriptMapper/bin/$(Configuration)/ScriptMapper.exe" "$(ProjectDir)/Scripts/" "$(ProjectDir)/Engine/Obfuscation/ScriptSettings.cs"
-    </PreBuildEvent>
     <PostBuildEvent Condition="'$(OS)' == 'Windows_NT' ">
-      <!-- call "$(ProjectDir)/../hedra-obfuscator/Confuser.CLI.exe" "$(ProjectDir)/Hedra.crproj" -->
         call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" normal text
         call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" normal binary
         call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" normal binary
+    </PostBuildEvent>
+    <PostBuildEvent Condition="'$(OS)' != 'Windows_NT' ">
+        mono "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" normal text
+        mono "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" normal binary
+        mono "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" normal binary
     </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
