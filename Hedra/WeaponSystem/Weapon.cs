@@ -23,7 +23,7 @@ using Hedra.EntitySystem;
 using Hedra.Items;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.WeaponSystem
 {

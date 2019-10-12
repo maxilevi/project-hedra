@@ -8,8 +8,9 @@
 using System;
 using System.Drawing;
 using Hedra.Engine.Management;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Graphics.OpenGL4;
+using OpenToolkit.Graphics.GL30;
 
 namespace Hedra.Engine.Rendering.Core
 {
@@ -79,7 +80,7 @@ namespace Hedra.Engine.Rendering.Core
         /// <param name="PointerType">The VertexAttribPointerType used in this VBO</param>
         /// <param name="Target">The BufferTarget where the VBO should be bind.</param>
         /// <param name="Hint">The BufferUsageHint this VBO should use.</param>
-        public VBO(T[] Data, int SizeInBytes, VertexAttribPointerType PointerType, BufferTarget BufferTarget = BufferTarget.ArrayBuffer, BufferUsageHint Hint = BufferUsageHint.StaticDraw)
+        public VBO(T[] Data, int SizeInBytes, VertexAttribPointerType PointerType, BufferTargetARB BufferTarget = BufferTargetARB.ArrayBuffer, BufferUsageARB Hint = BufferUsageARB.StaticDraw)
         {
             this.Stride = Data is Vector4[] ? 4 : Data is Vector3[] ? 3 : Data is Vector2[] ? 2 : 1;
             this.ElementType = Data.GetType().GetElementType();

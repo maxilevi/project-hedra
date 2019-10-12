@@ -1,7 +1,7 @@
 using System;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.PlantSystem
 {

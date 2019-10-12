@@ -6,7 +6,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
 using Hedra.Items;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Networking.Packets
 {

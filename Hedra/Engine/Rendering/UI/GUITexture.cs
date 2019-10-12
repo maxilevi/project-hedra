@@ -6,7 +6,7 @@
  */
 using System;
 using System.Diagnostics;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Graphics.OpenGL4;
 using System.Drawing;
 using Hedra.Core;

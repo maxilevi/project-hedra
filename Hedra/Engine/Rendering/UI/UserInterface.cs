@@ -17,7 +17,7 @@ using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Input;
 using Hedra.Engine.Localization;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using Hedra.Engine.Management;
 using Hedra.Engine.Networking;
 using Hedra.Engine.Player;

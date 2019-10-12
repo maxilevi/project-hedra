@@ -4,7 +4,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Items;
 using Hedra.Rendering;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.ItemSystem
 {

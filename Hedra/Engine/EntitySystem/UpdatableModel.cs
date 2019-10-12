@@ -9,7 +9,7 @@ using Hedra.Engine.Player.QuestSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.EntitySystem
 {

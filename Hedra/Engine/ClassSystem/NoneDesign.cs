@@ -5,7 +5,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Items;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.ClassSystem
 {

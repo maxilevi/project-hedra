@@ -20,7 +20,7 @@ using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.WorldObjects
 {

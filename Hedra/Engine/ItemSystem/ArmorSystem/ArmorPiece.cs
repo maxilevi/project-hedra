@@ -3,7 +3,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.EntitySystem;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.ItemSystem.ArmorSystem
 {

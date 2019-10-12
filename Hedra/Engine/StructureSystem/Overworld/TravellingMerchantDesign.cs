@@ -8,7 +8,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Localization;
 using Hedra.Rendering;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {

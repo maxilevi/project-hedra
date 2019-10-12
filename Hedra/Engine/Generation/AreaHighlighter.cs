@@ -10,7 +10,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.IO;
 using Hedra.Game;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Generation
 {

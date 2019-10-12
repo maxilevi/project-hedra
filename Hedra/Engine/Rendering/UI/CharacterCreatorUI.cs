@@ -11,7 +11,7 @@ using OpenTK.Graphics.OpenGL4;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using System.Drawing;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using System.Collections;
 using System.Linq;
 using Hedra.Components;

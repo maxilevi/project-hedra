@@ -1,5 +1,5 @@
 using System;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Audio.OpenAL;
 
 namespace Hedra.Engine.Sound

@@ -18,7 +18,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Geometry;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using InstanceData = Hedra.Engine.Rendering.InstanceData;
 
 namespace Hedra.Rendering

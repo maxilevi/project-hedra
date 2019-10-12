@@ -2,7 +2,7 @@ using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.ComplexMath;
 using NUnit.Framework;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace HedraTests.MathExtensions
 {

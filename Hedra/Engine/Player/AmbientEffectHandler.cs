@@ -12,7 +12,7 @@ using Hedra.Engine.Rendering.Geometry;
 using Hedra.Engine.Sound;
 using Hedra.Game;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Player
 {

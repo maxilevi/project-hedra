@@ -9,7 +9,7 @@ using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Items;
 using Hedra.Mission;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {

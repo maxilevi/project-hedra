@@ -4,7 +4,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {

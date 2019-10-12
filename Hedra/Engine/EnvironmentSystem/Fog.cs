@@ -5,7 +5,7 @@
  *
  */
 using System;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using System.Runtime.InteropServices;
 using Hedra.Engine.Game;
 using Hedra.Engine.Rendering;

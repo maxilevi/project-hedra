@@ -1,5 +1,5 @@
 using System.Runtime.InteropServices;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Rendering
 {

@@ -4,7 +4,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.SkillSystem.Archer.Scout;
 using Hedra.Localization;
 using Hedra.Rendering;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.SkillSystem.Warrior
 {

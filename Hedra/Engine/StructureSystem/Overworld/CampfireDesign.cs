@@ -11,7 +11,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {

@@ -1,6 +1,6 @@
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.ItemSystem.ArmorSystem
 {

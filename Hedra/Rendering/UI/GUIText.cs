@@ -13,7 +13,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Game;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Rendering.UI
 {

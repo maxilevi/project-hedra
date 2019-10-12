@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Hedra.Core;
 using Hedra.Engine.Game;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Graphics.OpenGL4;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;

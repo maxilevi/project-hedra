@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Hedra.Engine.Rendering.Particles;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Rendering.Core

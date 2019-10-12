@@ -25,7 +25,7 @@ using Hedra.Game;
 using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Rendering;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Input;
 
 namespace Hedra.Engine.ItemSystem

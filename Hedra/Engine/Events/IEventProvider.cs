@@ -1,17 +1,17 @@
 using System;
-using OpenTK;
-using OpenTK.Input;
+using System.Windows.Forms;
+using OpenToolkit.Windowing.Common;
 
 namespace Hedra.Engine.Events
 {
     public interface IEventProvider
     {
-        event EventHandler<MouseButtonEventArgs> MouseUp;
-        event EventHandler<MouseButtonEventArgs> MouseDown;
-        event EventHandler<MouseWheelEventArgs> MouseWheel;
-        event EventHandler<MouseMoveEventArgs> MouseMove;
-        event EventHandler<KeyboardKeyEventArgs> KeyDown;
-        event EventHandler<KeyboardKeyEventArgs> KeyUp;
-        event EventHandler<KeyPressEventArgs> KeyPress;
+        event Action<MouseButtonEventArgs> MouseUp;
+        event Action<MouseButtonEventArgs> MouseDown;
+        event Action<MouseWheelEventArgs> MouseWheel;
+        event Action<MouseMoveEventArgs> MouseMove;
+        event Action<KeyboardKeyEventArgs> KeyDown;
+        event Action<KeyboardKeyEventArgs> KeyUp;
+        event Action<KeyPressEventArgs> KeyPress;
     }
 }

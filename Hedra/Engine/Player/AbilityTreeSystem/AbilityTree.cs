@@ -23,8 +23,7 @@ using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenTK;
-using OpenTK.Input;
+using OpenToolkit.Mathematics;
 using Cursor = Hedra.Input.Cursor;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem

@@ -5,7 +5,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Game;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {

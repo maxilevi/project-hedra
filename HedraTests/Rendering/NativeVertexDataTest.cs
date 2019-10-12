@@ -6,7 +6,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Rendering;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace HedraTests.Rendering
 {

@@ -9,7 +9,7 @@
 using System.Collections;
 using Hedra.Core;
 using Hedra.Engine.Rendering;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.EntitySystem;

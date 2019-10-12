@@ -30,7 +30,7 @@ using Hedra.Localization;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Player
 {

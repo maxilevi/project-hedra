@@ -15,7 +15,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Engine.Rendering.UI;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem;
 using Hedra.Rendering;

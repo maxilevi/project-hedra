@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using Hedra.Core;
 using Hedra.Engine.Generation;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Management
 {

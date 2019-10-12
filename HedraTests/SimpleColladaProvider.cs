@@ -1,5 +1,5 @@
 using Hedra.Engine.Rendering.Animation.ColladaParser;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace HedraTests
 {

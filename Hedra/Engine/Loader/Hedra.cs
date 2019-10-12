@@ -33,7 +33,7 @@ using Hedra.Localization;
 using Hedra.Mission;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 

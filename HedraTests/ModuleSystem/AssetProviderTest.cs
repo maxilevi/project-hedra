@@ -3,7 +3,7 @@ using System.Text;
 using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using NUnit.Framework;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace HedraTests.ModuleSystem
 {

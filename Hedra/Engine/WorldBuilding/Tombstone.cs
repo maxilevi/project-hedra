@@ -4,7 +4,7 @@ using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Input;
 
 namespace Hedra.Engine.WorldBuilding

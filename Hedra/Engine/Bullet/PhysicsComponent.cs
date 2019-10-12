@@ -22,7 +22,7 @@ using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using Bullet = BulletSharp;
 using CollisionShape = BulletSharp.CollisionShape;
 using Vector3 = OpenTK.Vector3;

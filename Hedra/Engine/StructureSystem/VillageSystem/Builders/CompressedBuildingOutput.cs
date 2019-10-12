@@ -6,7 +6,7 @@ using System;
 using System.Collections;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {

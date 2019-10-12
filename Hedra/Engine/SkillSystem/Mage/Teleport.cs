@@ -11,7 +11,7 @@ using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.SkillSystem.Mage
 {

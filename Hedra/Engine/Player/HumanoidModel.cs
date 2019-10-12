@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Hedra.Core;
 using Hedra.Engine.ComplexMath;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
 using Hedra.Engine.Generation;

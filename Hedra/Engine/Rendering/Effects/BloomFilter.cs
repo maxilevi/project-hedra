@@ -8,7 +8,7 @@
  */
 using System;
 using OpenTK.Graphics.OpenGL4;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;

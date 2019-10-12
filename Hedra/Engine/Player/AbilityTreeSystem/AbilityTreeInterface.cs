@@ -13,7 +13,7 @@ using Hedra.Engine.SkillSystem;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {

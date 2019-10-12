@@ -8,7 +8,7 @@ using Hedra.Engine.SkillSystem;
 using Hedra.Engine.Sound;
 using Hedra.Items;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Player.ToolbarSystem

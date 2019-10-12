@@ -10,7 +10,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
 using Hedra.Localization;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.SkillSystem.Mage.Druid
 {

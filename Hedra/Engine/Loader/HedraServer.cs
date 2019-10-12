@@ -15,7 +15,7 @@ using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Sound;
 using Hedra.Game;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Graphics;
 using OpenTK.Input;
 

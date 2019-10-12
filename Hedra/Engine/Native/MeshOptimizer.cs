@@ -4,7 +4,7 @@ using Hedra.Engine.Core;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.MeshOptimizer;
 using Hedra.Rendering;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Native
 {

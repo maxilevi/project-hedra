@@ -20,7 +20,7 @@ using Hedra.Core;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Core;
 using Newtonsoft.Json.Converters;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine
 {

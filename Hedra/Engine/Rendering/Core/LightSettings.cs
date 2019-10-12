@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 using Hedra.Rendering;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Rendering.Core
 {

@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Rendering.Shaders
 {

@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using Hedra.Core;
 using Hedra.EntitySystem;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.AISystem.Humanoid
 {

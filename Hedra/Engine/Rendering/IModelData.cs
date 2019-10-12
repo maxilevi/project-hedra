@@ -1,7 +1,7 @@
 using System;
 using Hedra.Engine.Game;
 using Hedra.Game;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Rendering
 {

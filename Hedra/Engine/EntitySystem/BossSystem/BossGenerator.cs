@@ -21,7 +21,7 @@ using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Localization;
 using Hedra.Rendering;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.EntitySystem.BossSystem
 {

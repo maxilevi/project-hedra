@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Rendering;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Rendering
 {

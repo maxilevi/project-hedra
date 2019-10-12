@@ -7,7 +7,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Graphics.OpenGL4;
 using System.Collections.Generic;
 using Hedra.Core;

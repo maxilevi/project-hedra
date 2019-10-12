@@ -5,7 +5,7 @@
  *
  */
 using System;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using Hedra.Engine.Generation;
 using Hedra.Engine.EntitySystem;
 using System.Collections.Generic;

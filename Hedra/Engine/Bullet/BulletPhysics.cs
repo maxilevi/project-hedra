@@ -11,7 +11,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Game;
 using Hedra.Rendering;
 using CollisionShape = BulletSharp.CollisionShape;
-using Vector2 = OpenTK.Vector2;
+using Vector2 = OpenToolkit.Mathematics.Vector2;
 
 namespace Hedra.Engine.Bullet
 {

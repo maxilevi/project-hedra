@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Hedra.Core;
 using Hedra.Rendering;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Rendering.Geometry
 {

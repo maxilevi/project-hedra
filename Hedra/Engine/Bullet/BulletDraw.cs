@@ -3,7 +3,7 @@ using BulletSharp;
 using Hedra.Core;
 using Hedra.Engine.IO;
 using Hedra.Engine.Rendering;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using Vector3 = BulletSharp.Math.Vector3;
 
 namespace Hedra.Engine.Bullet

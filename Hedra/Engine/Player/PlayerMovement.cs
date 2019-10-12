@@ -17,7 +17,7 @@ using Hedra.Game;
 using Hedra.Localization;
 using Hedra.Sound;
 using Hedra.User;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Input;
 using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;
 

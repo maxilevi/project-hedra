@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Hedra.Engine.ItemSystem;
 using IronPython.Runtime;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Generation
 {

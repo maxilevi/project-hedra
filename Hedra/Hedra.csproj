@@ -110,8 +110,29 @@
       <HintPath>..\packages\NVorbis.0.8.6\lib\net35\NVorbis.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="OpenTK, Version=3.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4">
-      <HintPath>..\references\OpenTK.dll</HintPath>
+    <Reference Include="OpenGL_Bindings, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\OpenToolkit\OpenGL_Bindings.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenToolkit.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\OpenToolkit\OpenToolkit.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenToolkit.GraphicsLibraryFramework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\OpenToolkit\OpenToolkit.GraphicsLibraryFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenToolkit.Input, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\OpenToolkit\OpenToolkit.Input.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenToolkit.Mathematics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\OpenToolkit\OpenToolkit.Mathematics.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenToolkit.OpenAL, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\OpenToolkit\OpenToolkit.OpenAL.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenToolkit.Windowing.Common, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\OpenToolkit\OpenToolkit.Windowing.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenToolkit.Windowing.Desktop, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\OpenToolkit\OpenToolkit.Windowing.Desktop.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

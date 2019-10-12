@@ -3,7 +3,7 @@ using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.Management;
 using Hedra.Rendering;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.CacheSystem
 {

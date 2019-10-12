@@ -1,9 +1,5 @@
-using System;
-using System.ComponentModel;
 using System.Drawing;
-using OpenTK;
-using OpenTK.Input;
-using OpenTK.Platform;
+using OpenToolkit.Windowing.Common;
 
 namespace Hedra.Engine.Loader
 {

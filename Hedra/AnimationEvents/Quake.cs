@@ -8,7 +8,7 @@ using Hedra.Engine.SkillSystem;
 using Hedra.Engine.Sound;
 using Hedra.Rendering.Particles;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.AnimationEvents
 {

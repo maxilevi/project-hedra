@@ -8,7 +8,7 @@ using Hedra.EntitySystem;
 using Hedra.Rendering;
 using Hedra.Sound;
 using Hedra.WorldObjects;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.WeaponSystem
 {

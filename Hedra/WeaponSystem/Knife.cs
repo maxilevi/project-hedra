@@ -19,7 +19,7 @@ using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
 using Hedra.WeaponSystem;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.WeaponSystem
 {

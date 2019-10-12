@@ -1,6 +1,6 @@
 using System;
 using Hedra.Engine.StructureSystem.VillageSystem.Templates;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {

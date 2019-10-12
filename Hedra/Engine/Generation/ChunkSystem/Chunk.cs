@@ -22,7 +22,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Geometry;
 using Hedra.Rendering;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using Region = Hedra.BiomeSystem.Region;
 
 namespace Hedra.Engine.Generation.ChunkSystem

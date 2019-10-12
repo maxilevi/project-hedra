@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {

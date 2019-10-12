@@ -8,7 +8,7 @@
  */
 
 using System;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Rendering.Core
@@ -83,7 +83,7 @@ namespace Hedra.Engine.Rendering.Core
             Provider.DrawElementsInstanced(Primitive, Count, Type, Indices, InstanceCount);
         }
         
-        public static void BindBuffer(BufferTarget Target, uint V0)
+        public static void BindBuffer(BufferTargetARB Target, uint V0)
         {
             BufferHandler.Bind(Target, V0);
         }

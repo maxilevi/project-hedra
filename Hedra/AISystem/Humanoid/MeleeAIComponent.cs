@@ -13,7 +13,7 @@ using Hedra.Engine;
 using Hedra.Engine.Management;
 using Hedra.EntitySystem;
 using Hedra.WeaponSystem;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.AISystem.Humanoid
 {

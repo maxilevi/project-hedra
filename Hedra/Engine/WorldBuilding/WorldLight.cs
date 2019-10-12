@@ -9,7 +9,7 @@
 using System;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using Hedra.Engine.Player;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;

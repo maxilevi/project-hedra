@@ -41,7 +41,7 @@ using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Items;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Generation

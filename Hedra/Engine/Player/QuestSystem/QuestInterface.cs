@@ -12,7 +12,7 @@ using Hedra.EntitySystem;
 using Hedra.Input;
 using Hedra.Localization;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Input;
 using OpenTK.Platform.MacOS;
 

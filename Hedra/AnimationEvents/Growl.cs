@@ -9,7 +9,7 @@ using Hedra.Engine.SkillSystem;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.AnimationEvents
 {

@@ -19,7 +19,7 @@ using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.WeaponSystem;
 using Hedra.WorldObjects;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.SkillSystem.Archer
 {

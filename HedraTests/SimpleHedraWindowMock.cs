@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Drawing;
 using Hedra.Engine.Events;
 using Hedra.Engine.Loader;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Input;
 using OpenTK.Platform;
 

@@ -19,7 +19,7 @@ using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.UI;
 using Hedra.EntitySystem;
 using Hedra.Rendering.UI;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.SkillSystem

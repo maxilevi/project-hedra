@@ -3,7 +3,7 @@ using System.Drawing;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Rendering;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Management
 {

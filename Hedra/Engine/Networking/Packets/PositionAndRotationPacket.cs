@@ -1,5 +1,5 @@
 using Hedra.EntitySystem;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Networking.Packets
 {

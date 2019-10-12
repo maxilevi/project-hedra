@@ -4,7 +4,7 @@ using Hedra.Engine.SkillSystem.Archer;
 using Hedra.Rendering;
 using Hedra.WeaponSystem;
 using NUnit.Framework;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace HedraTests.Player.Skills.Archer
 {

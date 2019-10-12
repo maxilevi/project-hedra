@@ -16,7 +16,7 @@ using Hedra.Engine.SkillSystem;
 using Hedra.Rendering;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Player
 {

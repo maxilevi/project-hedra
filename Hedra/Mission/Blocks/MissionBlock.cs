@@ -1,7 +1,7 @@
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.QuestSystem.Views;
 using Hedra.EntitySystem;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Mission.Blocks
 {

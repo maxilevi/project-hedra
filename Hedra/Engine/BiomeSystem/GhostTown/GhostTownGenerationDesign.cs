@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Hedra.BiomeSystem;
 using Hedra.Engine.BiomeSystem.NormalBiome;
 using Hedra.Engine.Generation;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.BiomeSystem.GhostTown
 {

@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using Hedra.BiomeSystem;
 using Hedra.Core;
 using Hedra.Engine.Rendering;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {

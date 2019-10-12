@@ -5,7 +5,7 @@ using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.Generation;
 using NUnit.Framework;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace HedraTests.Core
 {

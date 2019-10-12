@@ -6,7 +6,7 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using OpenTK;
+using OpenToolkit.Mathematics;
 using System;
 using System.Linq;
 using System.Collections.Generic;

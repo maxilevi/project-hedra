@@ -13,7 +13,7 @@ using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Player.CraftingSystem
 {

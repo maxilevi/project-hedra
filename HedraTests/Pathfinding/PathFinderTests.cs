@@ -1,6 +1,6 @@
 ﻿using Hedra.Engine.Pathfinding;
 using NUnit.Framework;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace HedraTests.Pathfinding
 {

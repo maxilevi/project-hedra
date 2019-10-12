@@ -19,7 +19,7 @@ using HedraTests.Structure;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Graphics.OpenGL4;
 
 namespace HedraTests.Player

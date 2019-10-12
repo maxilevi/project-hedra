@@ -17,7 +17,7 @@ using Hedra.Mission.Blocks;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Player.QuestSystem
 {

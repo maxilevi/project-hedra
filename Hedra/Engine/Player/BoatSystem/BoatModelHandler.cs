@@ -9,7 +9,7 @@ using Hedra.Engine.Rendering.Particles;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
 using Hedra.Rendering.Particles;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Player.BoatSystem
 {

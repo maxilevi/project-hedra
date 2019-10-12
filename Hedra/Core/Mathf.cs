@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Game;
 using Hedra.Game;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Core
 {

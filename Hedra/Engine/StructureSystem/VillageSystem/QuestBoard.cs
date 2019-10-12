@@ -1,5 +1,5 @@
 using Hedra.Engine.WorldBuilding;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {

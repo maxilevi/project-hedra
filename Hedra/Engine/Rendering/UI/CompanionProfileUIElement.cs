@@ -6,7 +6,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Player.Inventory;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Rendering.UI
 {

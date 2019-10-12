@@ -8,7 +8,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Rendering.UI;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.EntitySystem
 {

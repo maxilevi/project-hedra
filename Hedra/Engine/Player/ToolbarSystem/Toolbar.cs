@@ -20,7 +20,7 @@ using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.SkillSystem;
 using Hedra.Game;
 using Hedra.WeaponSystem;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Input;
 using TaskScheduler = Hedra.Core.TaskScheduler;
 

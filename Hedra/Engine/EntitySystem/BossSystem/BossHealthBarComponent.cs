@@ -19,7 +19,7 @@ using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.EntitySystem.BossSystem

@@ -5,7 +5,7 @@ using Hedra.Engine.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Rendering;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Rendering
 {

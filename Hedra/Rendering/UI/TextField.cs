@@ -19,7 +19,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Scripting;
 using Hedra.Game;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Input;
 
 namespace Hedra.Rendering.UI

@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using BulletSharp;
 using Hedra.Engine.Bullet;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Graphics.OpenGL4;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Rendering;

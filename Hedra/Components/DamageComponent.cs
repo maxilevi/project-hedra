@@ -22,7 +22,7 @@ using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Components
 {

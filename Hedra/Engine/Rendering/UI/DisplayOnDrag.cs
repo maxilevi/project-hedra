@@ -9,7 +9,7 @@
 
 using Hedra.Core;
 using Hedra.Engine.Events;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Rendering.UI

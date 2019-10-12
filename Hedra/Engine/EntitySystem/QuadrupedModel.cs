@@ -18,7 +18,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem.AnimationEvents;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.PhysicsSystem;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.SkillSystem;
 using Hedra.Engine.Sound;

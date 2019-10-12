@@ -8,7 +8,7 @@
  */
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Rendering.Effects

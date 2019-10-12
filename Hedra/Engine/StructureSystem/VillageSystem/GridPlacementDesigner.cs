@@ -11,7 +11,7 @@ using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.StructureSystem.VillageSystem.Placers;
 using Hedra.Engine.WorldBuilding;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {

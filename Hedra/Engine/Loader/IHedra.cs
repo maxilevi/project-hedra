@@ -1,5 +1,5 @@
 using Hedra.Engine.Events;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Platform;
 
 namespace Hedra.Engine.Loader

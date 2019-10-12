@@ -20,7 +20,7 @@ using Hedra.Engine.Rendering.UI;
 using Hedra.EntitySystem;
 using Hedra.Input;
 using Hedra.Localization;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Player.Inventory

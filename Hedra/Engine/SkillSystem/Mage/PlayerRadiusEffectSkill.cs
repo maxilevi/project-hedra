@@ -4,7 +4,7 @@ using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
 using Hedra.Rendering.Particles;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.SkillSystem.Mage
 {

@@ -6,7 +6,7 @@ using Hedra.Engine.Rendering.UI;
 using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem

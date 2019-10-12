@@ -4,7 +4,7 @@ using Hedra.Core;
 using Hedra.Engine.Input;
 using Hedra.Engine.Management;
 using Hedra.Input;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Player.Inventory
 {

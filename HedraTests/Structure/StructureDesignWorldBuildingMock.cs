@@ -10,7 +10,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Items;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace HedraTests.Structure
 {

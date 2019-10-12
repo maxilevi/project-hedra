@@ -4,7 +4,7 @@ using Hedra.Engine.Player.QuestSystem.Views;
 using Hedra.Engine.QuestSystem;
 using Hedra.EntitySystem;
 using Hedra.Localization;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Mission.Blocks
 {

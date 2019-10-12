@@ -10,7 +10,7 @@ using Hedra.Engine.Player.QuestSystem.Views;
 using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using SoundPlayer = Hedra.Sound.SoundPlayer;
 
 namespace Hedra.Mission.Blocks

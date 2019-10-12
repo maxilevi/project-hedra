@@ -7,7 +7,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Sound;
 using NVorbis;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Audio;
 using OpenTK.Audio.OpenAL;
 

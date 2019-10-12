@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using System.Threading;
 using Hedra.Core;
 using Hedra.Engine.Game;

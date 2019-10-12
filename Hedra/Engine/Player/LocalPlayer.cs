@@ -14,7 +14,7 @@ using Hedra.Components;
 using Hedra.Core;
 using Hedra.Crafting;
 using Hedra.Engine.ClassSystem;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using Hedra.Engine.Sound;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.EnvironmentSystem;

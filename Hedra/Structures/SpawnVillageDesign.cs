@@ -5,7 +5,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Localization;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Structures
 {

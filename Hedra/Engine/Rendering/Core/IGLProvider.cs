@@ -1,6 +1,36 @@
 using System;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using OpenToolkit.Graphics.EXT;
+using OpenToolkit.Graphics.GL;
+using OpenToolkit.Mathematics;
+using OpenToolkit.Graphics.GL32;
+using BlendEquationModeEXT = OpenToolkit.Graphics.GL30.BlendEquationModeEXT;
+using BlendingFactor = OpenToolkit.Graphics.GL32.BlendingFactor;
+using BlitFramebufferFilter = OpenToolkit.Graphics.GL32.BlitFramebufferFilter;
+using BufferTargetARB = OpenToolkit.Graphics.GL32.BufferTargetARB;
+using BufferUsageARB = OpenToolkit.Graphics.GL30.BufferUsageARB;
+using ClearBufferMask = OpenToolkit.Graphics.GL32.ClearBufferMask;
+using CullFaceMode = OpenToolkit.Graphics.GL32.CullFaceMode;
+using DrawBufferMode = OpenToolkit.Graphics.GL32.DrawBufferMode;
+using DrawElementsType = OpenToolkit.Graphics.GL32.DrawElementsType;
+using EnableCap = OpenToolkit.Graphics.GL32.EnableCap;
+using ErrorCode = OpenToolkit.Graphics.GL32.ErrorCode;
+using FramebufferAttachment = OpenToolkit.Graphics.GL32.FramebufferAttachment;
+using FramebufferTarget = OpenToolkit.Graphics.GL32.FramebufferTarget;
+using GetPName = OpenToolkit.Graphics.GL32.GetPName;
+using InternalFormat = OpenToolkit.Graphics.EXT.InternalFormat;
+using MaterialFace = OpenToolkit.Graphics.GL32.MaterialFace;
+using PixelFormat = OpenToolkit.Graphics.GL32.PixelFormat;
+using PixelType = OpenToolkit.Graphics.GL32.PixelType;
+using PolygonMode = OpenToolkit.Graphics.GL32.PolygonMode;
+using PrimitiveType = OpenToolkit.Graphics.GL32.PrimitiveType;
+using QueryObjectParameterName = OpenToolkit.Graphics.GL32.QueryObjectParameterName;
+using QueryTarget = OpenToolkit.Graphics.GL32.QueryTarget;
+using ReadBufferMode = OpenToolkit.Graphics.GL32.ReadBufferMode;
+using ShaderType = OpenToolkit.Graphics.GL32.ShaderType;
+using TextureParameterName = OpenToolkit.Graphics.GL32.TextureParameterName;
+using TextureTarget = OpenToolkit.Graphics.GL32.TextureTarget;
+using TextureUnit = OpenToolkit.Graphics.GL32.TextureUnit;
+using VertexAttribPointerType = OpenToolkit.Graphics.GL32.VertexAttribPointerType;
 
 namespace Hedra.Engine.Rendering.Core
 {
@@ -10,20 +40,20 @@ namespace Hedra.Engine.Rendering.Core
         void ActiveTexture(TextureUnit Unit);
         void AttachShader(int S0, int S1);
         void BeginQuery(QueryTarget Target, int V0);
-        void BindBuffer(BufferTarget Target, uint V0);
-        void BindBufferBase(BufferRangeTarget Target, int V0, int V1);
+        void BindBuffer(BufferTargetARB Target, uint V0);
+        void BindBufferBase(BufferTargetARB Target, int V0, int V1);
         void BindFramebuffer(FramebufferTarget Target, uint Id);
         void BindTexture(TextureTarget Target, uint Id);
         void BindVertexArray(uint Id);
-        void BlendEquation(BlendEquationMode Mode);
+        void BlendEquation(BlendEquationModeEXT Mode);
         void BlendFunc(BlendingFactor Src, BlendingFactor Dst);
         void BlitFramebuffer(int SrcX0, int SrcY0, int SrcX1, int SrcY1, int DstX0, int DstY0, int DstX1, int DstY1,
             ClearBufferMask Mask, BlitFramebufferFilter Filter);
-        void BufferData(BufferTarget Target, IntPtr Size, IntPtr Ptr, BufferUsageHint Hint);
-        void BufferData<T>(BufferTarget Target, IntPtr Size, T[] Data, BufferUsageHint Hint) where T : unmanaged;
-        void BufferSubData(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, IntPtr Ptr1);
-        void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, ref T Data) where T : unmanaged;
-        void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, T[] Data) where T : unmanaged;
+        void BufferData(BufferTargetARB Target, IntPtr Size, IntPtr Ptr, BufferUsageARB Hint);
+        void BufferData<T>(BufferTargetARB Target, IntPtr Size, T[] Data, BufferUsageARB Hint) where T : unmanaged;
+        void BufferSubData(BufferTargetARB Target, IntPtr Ptr0, IntPtr Offset, IntPtr Ptr1);
+        void BufferSubData<T>(BufferTargetARB Target, IntPtr Ptr0, IntPtr Offset, ref T Data) where T : unmanaged;
+        void BufferSubData<T>(BufferTargetARB Target, IntPtr Ptr0, IntPtr Offset, T[] Data) where T : unmanaged;
         FramebufferErrorCode CheckFramebufferStatus(FramebufferTarget Target);
         void Clear(ClearBufferMask Mask);
         void ClearColor(Vector4 DrawingColor);
@@ -60,13 +90,12 @@ namespace Hedra.Engine.Rendering.Core
         int GenQuery();
         uint GenTexture();
         void GenVertexArrays(int N, out uint V1);
-        void GenerateMipmap(GenerateMipmapTarget Target);
-        void GetActiveUniformBlock(uint V0, uint V1, ActiveUniformBlockParameter Parameter, out int V3);
+        void GenerateMipmap(TextureTarget Target);
+        void GetActiveUniformBlock(uint V0, uint V1, UniformBlockPName Parameter, out int V3);
         ErrorCode GetError();
         int GetInteger(GetPName PName);
-        void GetInteger(GetPName PName, out int Value);
-        void GetQueryObject(uint Program, GetQueryObjectParam Parameter, out int Value);
-        void GetShader(uint Program, ShaderParameter Parameter, out int Value);
+        void GetQueryObject(uint Program, QueryObjectParameterName Parameter, out int Value);
+        void GetShader(uint Program, ShaderParameterName Parameter, out int Value);
         string GetShaderInfoLog(int Id);
         string GetString(StringName Name);
         int GetUniformBlockIndex(uint V0, string Name);
@@ -79,11 +108,11 @@ namespace Hedra.Engine.Rendering.Core
         void ReadBuffer(ReadBufferMode Mode);
         void ReadPixels(int V0, int V1, int V2, int V3, PixelFormat Format, PixelType Type, int[] Pixels);
         void ShaderSource(int V0, string Source);
-        void TexImage2D(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3,
+        void TexImage2D(TextureTarget Target, int V0, InternalFormat InternalFormat, int V1, int V2, int V3,
             PixelFormat Format, PixelType Type, IntPtr Ptr);
-        void TexImage2DMultisample(TextureTargetMultisample Target, int Samples, PixelInternalFormat InternalFormat,
+        void TexImage2DMultisample(TextureTargetMultisample Target, int Samples, InternalFormat InternalFormat,
             int Width, int Height, bool FixedLocations);
-        void TexImage3D<T>(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3,
+        void TexImage3D<T>(TextureTarget Target, int V0, InternalFormat InternalFormat, int V1, int V2, int V3,
             int V4, PixelFormat Format, PixelType Type, T[,,] Data) where T : struct;
         void TexParameter(TextureTarget Target, TextureParameterName Name, int Value);
         void Uniform1(int Location, int Uniform);

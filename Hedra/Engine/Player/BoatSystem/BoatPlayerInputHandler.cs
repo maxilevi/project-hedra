@@ -3,7 +3,7 @@ using Hedra.Core;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Game;
 using Hedra.Localization;

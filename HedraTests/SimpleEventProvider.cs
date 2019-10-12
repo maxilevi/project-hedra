@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 using Hedra.Engine.Events;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Input;
 
 namespace HedraTests

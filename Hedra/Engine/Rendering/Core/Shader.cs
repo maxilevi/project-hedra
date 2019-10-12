@@ -12,7 +12,7 @@ using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Shaders;
 using Hedra.Game;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Rendering.Core

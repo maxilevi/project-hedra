@@ -1,6 +1,6 @@
 using Hedra.Components;
 using Hedra.Engine.EntitySystem;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.ModuleSystem.Templates
 {

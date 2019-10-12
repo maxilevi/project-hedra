@@ -18,7 +18,7 @@ using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
 using Hedra.Localization;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Game
 {

@@ -12,7 +12,7 @@ using System.Threading;
 using Hedra.Engine.Core;
 using Hedra.Engine.IO;
 using Hedra.Game;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Generation.ChunkSystem.Builders
 {

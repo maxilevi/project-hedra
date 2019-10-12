@@ -3,7 +3,7 @@ using Hedra.Core;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.SkillSystem
 {

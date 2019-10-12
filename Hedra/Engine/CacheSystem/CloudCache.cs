@@ -1,6 +1,6 @@
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.CacheSystem
 {

@@ -6,7 +6,7 @@ using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
 using Hedra.Sound;
 using Hedra.WorldObjects;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.AISystem.Behaviours
 {

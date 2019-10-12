@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using Hedra.Engine.Rendering;
 using Hedra.Rendering;
 

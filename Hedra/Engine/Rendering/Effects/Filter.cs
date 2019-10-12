@@ -10,7 +10,7 @@ using System;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
 using OpenTK.Graphics.OpenGL4;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Rendering.Effects
 {

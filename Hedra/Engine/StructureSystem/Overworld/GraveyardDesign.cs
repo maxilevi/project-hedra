@@ -19,7 +19,7 @@ using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using Region = Hedra.BiomeSystem.Region;
 
 namespace Hedra.Engine.StructureSystem.Overworld

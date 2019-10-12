@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Hedra.Engine.Native;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Generation
 {

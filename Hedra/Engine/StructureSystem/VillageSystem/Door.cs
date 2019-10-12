@@ -14,7 +14,7 @@ using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Input;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem

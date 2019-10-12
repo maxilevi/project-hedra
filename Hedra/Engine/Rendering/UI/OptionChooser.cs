@@ -9,7 +9,7 @@ using System.Drawing;
 using System.Linq;
 using Hedra.Engine.Localization;
 using Hedra.Rendering.UI;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Rendering.UI
 {

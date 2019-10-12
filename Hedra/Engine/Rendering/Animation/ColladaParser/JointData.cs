@@ -8,7 +8,7 @@
  */
 using System;
 using System.Collections.Generic;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Rendering.Animation.ColladaParser
 {

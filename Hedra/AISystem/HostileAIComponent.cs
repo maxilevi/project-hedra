@@ -3,7 +3,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Game;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.AISystem
 {

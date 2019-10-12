@@ -7,10 +7,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using Hedra.Engine.Management;
-using OpenTK;
-using OpenTK.Input;
+using System.Windows.Forms;
+using OpenToolkit.Mathematics;
+using OpenToolkit.Windowing.Common;
+using OpenToolkit.Windowing.Common.Input;
 
 namespace Hedra.Engine.Events
 {
@@ -254,7 +254,7 @@ namespace Hedra.Engine.Events
 
         public static void OnMouseMove(object Sender, MouseMoveEventArgs E)
         {
-            Mouse = new Vector2(E.Mouse.X, E.Mouse.Y);
+            Mouse = new Vector2(E.X, E.Y);
             OnMouseMoveEvent?.Invoke(Sender, E);
             for (var i = 0;i<EventListeners.Count; i++){
                 EventListeners[i].OnMouseMove(Sender, E);
@@ -356,12 +356,11 @@ namespace Hedra.Engine.Events
         }
 
         public Key Key => Event.Key;
-        public uint ScanCode => Event.ScanCode;
+        public int ScanCode => Event.ScanCode;
         public bool Alt => Event.Alt;
         public bool Control => Event.Control;
         public bool Shift => Event.Shift;
         public KeyModifiers Modifiers => Event.Modifiers;
-        public KeyboardState Keyboard => Event.Keyboard;
         public bool IsRepeat => Event.IsRepeat;
     }
 

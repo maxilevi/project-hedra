@@ -9,7 +9,7 @@ using System;
 using Hedra.BiomeSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Rendering;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Generation
 {

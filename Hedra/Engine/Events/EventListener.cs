@@ -6,7 +6,7 @@
  */
 using System;
 using OpenTK.Input;
-using OpenTK;
+using OpenToolkit.Mathematics;
 namespace Hedra.Engine.Events
 {
     public abstract class EventListener : IEventListener

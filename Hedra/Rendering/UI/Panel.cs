@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Hedra.Engine.Events;
 using Hedra.Engine.Rendering.UI;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Input;
 
 namespace Hedra.Rendering.UI

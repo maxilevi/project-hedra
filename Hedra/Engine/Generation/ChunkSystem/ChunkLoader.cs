@@ -16,7 +16,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using Hedra.Engine.IO;
 using Hedra.Game;
 using Timer = Hedra.Core.Timer;

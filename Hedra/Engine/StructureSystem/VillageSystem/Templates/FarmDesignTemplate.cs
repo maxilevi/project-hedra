@@ -1,4 +1,4 @@
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Templates
 {

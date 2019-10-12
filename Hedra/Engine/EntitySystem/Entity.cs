@@ -27,7 +27,7 @@ using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.EntitySystem
 {

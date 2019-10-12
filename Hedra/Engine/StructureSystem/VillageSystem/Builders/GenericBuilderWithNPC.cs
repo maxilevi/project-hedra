@@ -3,7 +3,7 @@ using Hedra.AISystem.Humanoid;
 using Hedra.Core;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {

@@ -1,7 +1,7 @@
 using Hedra.Engine.Game;
 using Hedra.Engine.Player;
 using Hedra.Structures;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.StructureSystem.GhostTown
 {

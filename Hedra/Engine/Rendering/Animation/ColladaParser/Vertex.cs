@@ -7,7 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using System.Collections.Generic;
 
 namespace Hedra.Engine.Rendering.Animation.ColladaParser

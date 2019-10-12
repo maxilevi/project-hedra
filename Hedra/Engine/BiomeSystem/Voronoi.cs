@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using Math = System.Math;
 
 namespace Hedra.Engine.BiomeSystem

@@ -16,7 +16,7 @@ using Hedra.Sound;
 using HedraTests.Player;
 using Moq;
 using NUnit.Framework;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace HedraTests.EntitySystem
 {

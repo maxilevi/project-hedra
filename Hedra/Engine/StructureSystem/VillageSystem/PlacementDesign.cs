@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {

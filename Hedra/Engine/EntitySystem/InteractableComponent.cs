@@ -7,7 +7,7 @@ using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Localization;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Input;
 
 namespace Hedra.Engine.EntitySystem

@@ -6,7 +6,7 @@ using Hedra.Engine.Player.QuestSystem;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.EntitySystem;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Rendering
 {

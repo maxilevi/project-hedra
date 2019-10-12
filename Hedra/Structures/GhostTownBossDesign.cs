@@ -12,7 +12,7 @@ using Hedra.Engine.WorldBuilding;
 using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Rendering;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Structures
 {

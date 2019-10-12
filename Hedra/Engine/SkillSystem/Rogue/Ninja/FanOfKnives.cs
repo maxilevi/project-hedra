@@ -12,7 +12,7 @@ using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
 using Hedra.WorldObjects;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.SkillSystem.Rogue.Ninja
 {

@@ -23,7 +23,7 @@ using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using Hedra.WeaponSystem;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
 

@@ -10,7 +10,7 @@ using System.Drawing;
 using Hedra.Components.Effects;
 using Hedra.Engine.Game;
 using System.Linq;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.AISystem.Behaviours
 {

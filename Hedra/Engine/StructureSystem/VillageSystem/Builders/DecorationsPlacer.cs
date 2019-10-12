@@ -12,7 +12,7 @@ using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Game;
 using Hedra.Rendering;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {

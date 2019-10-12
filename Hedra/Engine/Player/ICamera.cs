@@ -1,6 +1,6 @@
 using System;
 using Hedra.Engine.IO;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Player

@@ -10,8 +10,8 @@
 using System;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using OpenToolkit.Mathematics;
+using OpenToolkit.Graphics.GL30;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Core;

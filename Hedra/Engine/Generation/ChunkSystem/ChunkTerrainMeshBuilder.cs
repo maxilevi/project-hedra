@@ -10,7 +10,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Geometry;
 using Hedra.Rendering;
 using Microsoft.Scripting.Utils;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {

@@ -7,7 +7,7 @@ using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Game;
 using Hedra.Rendering;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Loader
 {

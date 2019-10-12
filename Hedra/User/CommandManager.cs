@@ -33,7 +33,7 @@ using Hedra.Engine.WorldBuilding;
 using Hedra.Game;
 using Hedra.Items;
 using Hedra.Mission;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.User
 {

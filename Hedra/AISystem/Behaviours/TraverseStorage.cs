@@ -3,7 +3,7 @@ using Hedra.Engine;
 using Hedra.Engine.Core;
 using Hedra.Engine.Pathfinding;
 using Hedra.EntitySystem;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.AISystem.Behaviours
 {

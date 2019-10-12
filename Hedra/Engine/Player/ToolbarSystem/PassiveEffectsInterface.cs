@@ -3,7 +3,7 @@ using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.SkillSystem;
 using Hedra.Rendering.UI;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Player.ToolbarSystem
 {

@@ -20,7 +20,7 @@ using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Rendering.UI

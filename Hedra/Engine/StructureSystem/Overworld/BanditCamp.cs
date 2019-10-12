@@ -18,7 +18,7 @@ using Hedra.Game;
 using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Mission;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {

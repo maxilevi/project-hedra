@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Hedra.Core;
 using Hedra.Engine.Generation;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
 using Hedra.Engine.EnvironmentSystem;

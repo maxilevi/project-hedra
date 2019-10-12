@@ -1,7 +1,7 @@
 using Hedra.Core;
 using Hedra.EntitySystem;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.AISystem
 {

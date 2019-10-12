@@ -18,7 +18,7 @@ using Hedra.Engine.StructureSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Items;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace HedraTests
 {

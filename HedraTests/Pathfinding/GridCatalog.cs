@@ -1,5 +1,5 @@
 ﻿using Hedra.Engine.Pathfinding;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace HedraTests.Pathfinding
 {

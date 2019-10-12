@@ -1,6 +1,6 @@
 using Hedra.Engine.PhysicsSystem;
 using NUnit.Framework;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace HedraTests.PhysicsSystem
 {

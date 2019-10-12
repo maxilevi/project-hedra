@@ -4,7 +4,7 @@ using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Core;
 using Hedra.Engine.Rendering.Geometry;
 using Hedra.Rendering;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Rendering
 {

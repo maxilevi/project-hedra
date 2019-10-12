@@ -11,7 +11,7 @@ using Hedra.Rendering;
 using Hedra.WeaponSystem;
 using Moq;
 using NUnit.Framework;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace HedraTests.Player.Skills
 {

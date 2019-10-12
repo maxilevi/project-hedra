@@ -10,7 +10,7 @@ using Hedra.Input;
 using Hedra.Localization;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Player.Inventory

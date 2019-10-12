@@ -4,7 +4,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem.AnimationEvents;
 using Hedra.EntitySystem;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.AISystem.Behaviours
 {

@@ -21,7 +21,7 @@ using Hedra.Engine.PlantSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.Overworld;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using Chunk = Hedra.Engine.Generation.ChunkSystem.Chunk;
 
 namespace Hedra.Engine.BiomeSystem

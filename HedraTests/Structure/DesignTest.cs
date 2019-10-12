@@ -31,7 +31,7 @@ using Hedra.Rendering;
 using Hedra.Structures;
 using HedraTests.Player;
 using Moq;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace HedraTests.Structure
 {

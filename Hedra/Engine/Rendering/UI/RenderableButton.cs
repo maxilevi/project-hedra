@@ -9,7 +9,7 @@
 using System;
 using System.IO;
 using System.Drawing;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Input;
 using OpenTK.Graphics.OpenGL4;
 using Hedra.Engine.Events;

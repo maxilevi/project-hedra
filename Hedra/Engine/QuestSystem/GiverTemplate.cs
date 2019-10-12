@@ -1,6 +1,6 @@
 using Hedra.EntitySystem;
 using Newtonsoft.Json;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.QuestSystem
 {

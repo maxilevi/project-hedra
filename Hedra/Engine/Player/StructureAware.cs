@@ -9,7 +9,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.StructureSystem;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using CollisionShape = BulletSharp.CollisionShape;
 using TaskScheduler = Hedra.Core.TaskScheduler;
 

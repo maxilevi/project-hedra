@@ -12,7 +12,7 @@ using Hedra.Rendering;
 using IronPython.Hosting;
 using IronPython.Runtime.Types;
 using Microsoft.Scripting.Hosting;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Scripting
 {

@@ -2,7 +2,7 @@ using System;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.StructureSystem.GhostTown
 {

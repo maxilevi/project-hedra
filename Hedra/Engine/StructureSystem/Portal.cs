@@ -10,7 +10,7 @@ using Hedra.Engine.WorldBuilding;
 using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.StructureSystem
 {

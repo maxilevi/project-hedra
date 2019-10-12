@@ -18,7 +18,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PlantSystem;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using Region = Hedra.BiomeSystem.Region;
 
 namespace Hedra.Engine.Generation

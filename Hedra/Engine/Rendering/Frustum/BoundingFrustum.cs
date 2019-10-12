@@ -3,7 +3,7 @@ using System.Linq;
 using BulletSharp;
 using Hedra.Core;
 using Hedra.Game;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Rendering.Frustum
 {

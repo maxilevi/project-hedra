@@ -17,7 +17,7 @@ using Hedra.Engine.StructureSystem;
 using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Input;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Input;
 using Cursor = System.Windows.Forms.Cursor;
 

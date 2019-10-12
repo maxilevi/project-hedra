@@ -1,7 +1,7 @@
 using System.Windows.Forms;
 using Hedra.AISystem.Behaviours;
 using Hedra.EntitySystem;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.AISystem
 {

@@ -1,7 +1,7 @@
 using System;
 using System.Drawing;
 using Hedra.Core;
-using OpenTK;
+using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.WorldBuilding
 {

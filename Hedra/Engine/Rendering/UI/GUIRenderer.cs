@@ -6,7 +6,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Rendering;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using OpenTK.Graphics.OpenGL4;
 
 namespace Hedra.Engine.Rendering.UI

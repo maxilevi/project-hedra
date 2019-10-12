@@ -12,7 +12,7 @@ using System.Linq;
 using Hedra.AISystem.Humanoid;
 using Hedra.Components;
 using Hedra.Core;
-using OpenTK;
+using OpenToolkit.Mathematics;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Player;
