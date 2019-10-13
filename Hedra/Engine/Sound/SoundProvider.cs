@@ -8,8 +8,8 @@ using Hedra.Engine.Player;
 using Hedra.Sound;
 using NVorbis;
 using OpenToolkit.Mathematics;
-using OpenTK.Audio;
-using OpenTK.Audio.OpenAL;
+using OpenToolkit.OpenAL;
+
 
 namespace Hedra.Engine.Sound
 {
@@ -268,5 +268,13 @@ namespace Hedra.Engine.Sound
                 default: throw new NotSupportedException("The specified sound format is not supported.");
             }
         }
+    }
+
+    public enum ALFormat
+    {
+        Mono8,
+        Mono16,
+        Stereo8,
+        Stereo16
     }
 }

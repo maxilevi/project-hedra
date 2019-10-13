@@ -25,7 +25,7 @@ using Hedra.Sound;
 using OpenToolkit.Mathematics;
 using Bullet = BulletSharp;
 using CollisionShape = BulletSharp.CollisionShape;
-using Vector3 = OpenTK.Vector3;
+using Vector3 = OpenToolkit.Mathematics.Vector3;
 
 namespace Hedra.Engine.Bullet
 {

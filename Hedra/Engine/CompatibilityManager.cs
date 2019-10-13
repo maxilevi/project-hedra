@@ -17,7 +17,7 @@ namespace Hedra.Engine
     /// </summary>
     public static  class CompatibilityManager
     {
-        public static Action<PrimitiveType, int[], DrawElementsType, IntPtr[], int> MultiDrawElementsMethod { get; private set; }
+        public static Action<PrimitiveType, uint[], DrawElementsType, IntPtr[], int> MultiDrawElementsMethod { get; private set; }
         public static bool SupportsGeometryShaders { get; private set; } = true;
         public static bool SupportsMeshOptimizer { get; private set; } = true;
 
@@ -101,7 +101,7 @@ namespace Hedra.Engine
                 indices.Bind();
                 
                 Renderer.Provider
-                    .MultiDrawElements(PrimitiveType.Triangles, new []{3}, DrawElementsType.UnsignedInt, new []{IntPtr.Zero}, 0);
+                    .MultiDrawElements(PrimitiveType.Triangles, new []{3u}, DrawElementsType.UnsignedInt, new []{IntPtr.Zero}, 0);
                 
                 testVAO.Unbind();
                 Shader.Passthrough.Unbind();
@@ -123,19 +123,19 @@ namespace Hedra.Engine
             if (useCompatibilityFunction)
             {
                 Log.WriteLine("Using compatibility draw...");
-                MultiDrawElementsMethod = delegate(PrimitiveType Type, int[] Counts, DrawElementsType DrawType,
+                MultiDrawElementsMethod = delegate(PrimitiveType Type, uint[] Counts, DrawElementsType DrawType,
                     IntPtr[] Offsets, int Length)
                 {
                     for (var i = 0; i < Length; i++)
                     {
-                        Renderer.Provider.DrawElements(PrimitiveType.Triangles, Counts[i], DrawType, Offsets[i]);
+                        Renderer.Provider.DrawElements(PrimitiveType.Triangles, (int)Counts[i], DrawType, Offsets[i]);
                     }
                 };
             }
             else
             {
                 MultiDrawElementsMethod =
-                    delegate(PrimitiveType Type, int[] Counts, DrawElementsType DrawType, IntPtr[] Offsets, int Length)
+                    delegate(PrimitiveType Type, uint[] Counts, DrawElementsType DrawType, IntPtr[] Offsets, int Length)
                     {
                         Renderer.Provider.MultiDrawElements(PrimitiveType.Triangles, Counts, DrawElementsType.UnsignedInt, Offsets, Length);
                     };

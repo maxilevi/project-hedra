@@ -23,7 +23,7 @@ namespace Hedra.Engine.Rendering
                     ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
                 Renderer.TexImage2D( (TextureTarget) ( (int) TextureTarget.TextureCubeMapPositiveX + i), 0, PixelInternalFormat.Rgba,
-                    data.Width, data.Height, 0, OpenTK.Graphics.OpenGL4.PixelFormat.Bgra, PixelType.UnsignedByte,
+                    data.Width, data.Height, 0, Engine.Core.PixelFormat.Bgra, PixelType.UnsignedByte,
                     data.Scan0);
                 
                 TextureArray[i].UnlockBits(data);

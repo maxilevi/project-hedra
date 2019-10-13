@@ -56,7 +56,7 @@ namespace Hedra.Engine.Rendering
             });
         }
 
-        public void DrawShadows(Dictionary<Vector2, Chunk> ShadowDraw, ref IntPtr[] ShadowOffsets, ref int[] ShadowCounts)
+        public void DrawShadows(Dictionary<Vector2, Chunk> ShadowDraw, ref IntPtr[] ShadowOffsets, ref uint[] ShadowCounts)
         {
             for(var i = 0; i < _buffers.Length; ++i)
             {

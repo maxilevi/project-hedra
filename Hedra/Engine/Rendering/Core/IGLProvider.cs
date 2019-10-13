@@ -9,9 +9,10 @@ using GLDrawBuffersEnum = OpenToolkit.Graphics.GL33.DrawBufferMode;
 
 namespace Hedra.Engine.Rendering.Core
 {
-    interface IGLProvider
+    public interface IGLProvider
     {
-       void ActiveTexture(TextureUnit Unit);
+        ErrorSeverity Severity { get; set; }
+        void ActiveTexture(TextureUnit Unit);
         void AttachShader(int S0, int S1);
         void BeginQuery(QueryTarget Target, int V0);
         void BindBuffer(BufferTarget Target, uint V0);

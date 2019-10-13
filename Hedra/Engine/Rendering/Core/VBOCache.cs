@@ -1,19 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 using System.Text;
-using Hedra.Core;
-using Hedra.Engine.Management;
 using Hedra.Game;
-using IronPython.Runtime;
-using OpenToolkit.Mathematics;
 using Hedra.Engine.Core;
-using OpenToolkit.Graphics.EXT;
 using Buffer = System.Buffer;
 
 namespace Hedra.Engine.Rendering.Core
@@ -34,7 +26,7 @@ namespace Hedra.Engine.Rendering.Core
             _uncachedVBOs = new HashSet<uint>();
         }
         
-        public static bool Exists<T>(T[] Data, int SizeInBytes, VertexAttribPointerType PointerType, BufferTargetARB BufferTarget, BufferUsageARB Hint, out uint Id)
+        public static bool Exists<T>(T[] Data, int SizeInBytes, VertexAttribPointerType PointerType, BufferTarget BufferTarget, BufferUsageHint Hint, out uint Id)
         {
             Id = 0;
             if (GameSettings.TestingMode) return true;
@@ -48,21 +40,21 @@ namespace Hedra.Engine.Rendering.Core
             return false;
         }
 
-        public static void Create<T>(T[] Data, int SizeInBytes, VertexAttribPointerType PointerType, BufferTargetARB BufferTarget, BufferUsageARB Hint, out uint Id) where T : unmanaged
+        public static void Create<T>(T[] Data, int SizeInBytes, VertexAttribPointerType PointerType, BufferTarget BufferTarget, BufferUsageHint Hint, out uint Id) where T : unmanaged
         {
             var hash = Hash(Data, SizeInBytes, PointerType, BufferTarget, Hint);
             DoCreate(Data, SizeInBytes, PointerType, BufferTarget, Hint, out Id);
             _hashedReferences.Add(hash, Id);
         }
         
-        private static void DoCreate<T>(T[] Data, int SizeInBytes, VertexAttribPointerType PointerType, BufferTargetARB BufferTarget, BufferUsageARB Hint, out uint Id) where T : unmanaged
+        private static void DoCreate<T>(T[] Data, int SizeInBytes, VertexAttribPointerType PointerType, BufferTarget BufferTarget, BufferUsageHint Hint, out uint Id) where T : unmanaged
         {
             Renderer.GenBuffers(1, out Id);
             DoUpdate(Data, SizeInBytes, BufferTarget, Hint, Id);
             _referenceCounter.Add(Id, 1);
         }
 
-        public static void Update<T>(T[] Data, int SizeInBytes, VertexAttribPointerType PointerType, BufferTargetARB BufferTarget, BufferUsageARB Hint, ref uint Id) where T : unmanaged
+        public static void Update<T>(T[] Data, int SizeInBytes, VertexAttribPointerType PointerType, BufferTarget BufferTarget, BufferUsageHint Hint, ref uint Id) where T : unmanaged
         {
             var originalId = Id;
             if(Id == 0) throw new ArgumentOutOfRangeException($"VBO is invalid (disposed)");
@@ -84,7 +76,7 @@ namespace Hedra.Engine.Rendering.Core
             }
         }
 
-        private static void DoUpdate<T>(T[] Data, int SizeInBytes, BufferTargetARB Target, BufferUsageARB Hint, uint Id) where T : unmanaged
+        private static void DoUpdate<T>(T[] Data, int SizeInBytes, BufferTarget Target, BufferUsageHint Hint, uint Id) where T : unmanaged
         {
             Renderer.BindBuffer(Target, Id);
             Renderer.BufferData(Target, (IntPtr) SizeInBytes, IntPtr.Zero, Hint);
@@ -113,7 +105,7 @@ namespace Hedra.Engine.Rendering.Core
             Id = 0;
         }
 
-        private static string Hash<T>(T[] Data, int SizeInBytes, VertexAttribPointerType PointerType, BufferTargetARB BufferTarget, BufferUsageARB Hint)
+        private static string Hash<T>(T[] Data, int SizeInBytes, VertexAttribPointerType PointerType, BufferTarget BufferTarget, BufferUsageHint Hint)
         {
             var size = Data.Length != 0 ? Marshal.SizeOf(Data[0]) : 0;
             var byteArray = new byte[size * Data.Length + 4 * sizeof(int)];

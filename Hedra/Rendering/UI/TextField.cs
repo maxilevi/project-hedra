@@ -11,6 +11,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Forms;
 using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.Events;
@@ -20,7 +21,9 @@ using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Scripting;
 using Hedra.Game;
 using OpenToolkit.Mathematics;
-using OpenTK.Input;
+using Button = Hedra.Engine.Rendering.UI.Button;
+using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;
+
 
 namespace Hedra.Rendering.UI
 {

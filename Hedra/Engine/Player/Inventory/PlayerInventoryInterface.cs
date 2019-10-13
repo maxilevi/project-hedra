@@ -11,7 +11,7 @@ using Hedra.Localization;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
 using OpenToolkit.Mathematics;
-using OpenTK.Input;
+
 
 namespace Hedra.Engine.Player.Inventory
 {

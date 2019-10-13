@@ -338,7 +338,7 @@ namespace Hedra.Engine.Rendering.Core
 
         public void Bind()
         {
-            if (ShaderId < 0) throw new GraphicsException($"{this.GetType().Name} is corrupt. {this.ShaderId}");
+            if (ShaderId < 0) throw new AccessViolationException($"{this.GetType().Name} is corrupt. {this.ShaderId}");
 
             Renderer.BindShader((uint)ShaderId);
             this.LoadBuiltinUniforms();

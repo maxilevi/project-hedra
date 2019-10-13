@@ -4,7 +4,7 @@ using System.Drawing;
 using Hedra.Engine.Events;
 using Hedra.Engine.Loader;
 using OpenToolkit.Mathematics;
-using OpenTK.Input;
+
 using OpenTK.Platform;
 
 namespace HedraTests

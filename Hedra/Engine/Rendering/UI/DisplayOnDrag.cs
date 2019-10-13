@@ -10,7 +10,9 @@
 using Hedra.Core;
 using Hedra.Engine.Events;
 using OpenToolkit.Mathematics;
-using OpenTK.Input;
+using OpenToolkit.Windowing.Common;
+using OpenToolkit.Windowing.Common.Input;
+
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -24,13 +26,13 @@ namespace Hedra.Engine.Rendering.UI
         public float Value = -1f;
         public float Increment = 20;
 
-        public override void OnMouseMove(object Sender, MouseMoveEventArgs E){
+        public override void OnMouseMove(object Sender, MouseMoveEventArgs E) {
             
             if(_inFocus){
-                Value += E.XDelta * Increment * Time.IndependentDeltaTime;
+                Value += E.DeltaX * Increment * Time.IndependentDeltaTime;
             }
             
-            Vector2 coords = Mathf.ToNormalizedDeviceCoordinates(E.Mouse.X, E.Mouse.Y);
+            Vector2 coords = Mathf.ToNormalizedDeviceCoordinates(E.X, E.Y);
             
             if(Position.Y + Scale.Y > -coords.Y && Position.Y - Scale.Y < -coords.Y 
                 && Position.X + Scale.X > coords.X && Position.X - Scale.X < coords.X ){

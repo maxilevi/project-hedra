@@ -33,8 +33,6 @@ using Hedra.Localization;
 using Hedra.Mission;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenToolkit.Mathematics;
-using OpenTK.Graphics;
 using Hedra.Engine.Core;
 
 namespace Hedra.Engine.Loader

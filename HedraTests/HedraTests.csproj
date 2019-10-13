@@ -44,8 +44,23 @@
       <HintPath>..\packages\Moq.4.9.0\lib\net45\Moq.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="OpenTK, Version=3.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4">
-      <HintPath>..\references\OpenTK.dll</HintPath>
+    <Reference Include="OpenToolkit.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\OpenToolkit\OpenToolkit.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenToolkit.GraphicsLibraryFramework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\OpenToolkit\OpenToolkit.GraphicsLibraryFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenToolkit.Input, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\OpenToolkit\OpenToolkit.Input.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenToolkit.Mathematics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\OpenToolkit\OpenToolkit.Mathematics.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenToolkit.Windowing.Common, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\OpenToolkit\OpenToolkit.Windowing.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenToolkit.Windowing.Desktop, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\OpenToolkit\OpenToolkit.Windowing.Desktop.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

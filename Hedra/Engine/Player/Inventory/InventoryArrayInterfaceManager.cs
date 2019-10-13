@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Windows.Forms;
 using Hedra.Core;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
@@ -16,7 +17,10 @@ using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
 using OpenToolkit.Mathematics;
-using OpenTK.Input;
+using OpenToolkit.Windowing.Common;
+using OpenToolkit.Windowing.Common.Input;
+using Button = Hedra.Engine.Rendering.UI.Button;
+
 
 namespace Hedra.Engine.Player.Inventory
 {
@@ -73,7 +77,7 @@ namespace Hedra.Engine.Player.Inventory
         private void MouseMove(object Sender, MouseMoveEventArgs EventArgs)
         {
             var newCoords = Mathf.ToNormalizedDeviceCoordinates(
-                new Vector2(EventArgs.Mouse.X, GameSettings.SurfaceHeight - EventArgs.Mouse.Y),
+                new Vector2(EventArgs.X, GameSettings.SurfaceHeight - EventArgs.Y),
                 new Vector2(GameSettings.SurfaceWidth, GameSettings.SurfaceHeight)
                 );
             if (_selectedButton != null)
@@ -84,7 +88,7 @@ namespace Hedra.Engine.Player.Inventory
 
         protected virtual void Interact(object Sender, MouseButtonEventArgs EventArgs)
         {
-            if(EventArgs == null || EventArgs.Button != MouseButton.Left) return;
+            if(EventArgs.Button != MouseButton.Left) return;
             var button = (Button)Sender;
             var itemIndex = this.IndexByButton(button);
             var array = this.ArrayByButton(button);
@@ -119,7 +123,7 @@ namespace Hedra.Engine.Player.Inventory
 
         protected virtual void Use(object Sender, MouseButtonEventArgs EventArgs)
         {
-            if (EventArgs == null || EventArgs.Button != MouseButton.Right) return;
+            if (EventArgs.Button != MouseButton.Right) return;
             var button = (Button)Sender;
             var itemIndex = this.IndexByButton(button);
             var array = this.ArrayByButton(button);

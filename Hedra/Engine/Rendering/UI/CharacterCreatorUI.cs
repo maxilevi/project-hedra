@@ -27,7 +27,8 @@ using Hedra.Game;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using OpenTK.Input;
+using OpenToolkit.Windowing.Common;
+
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -98,7 +99,7 @@ namespace Hedra.Engine.Rendering.UI
                 _human.SetWeapon(_classType.StartingItems.First(P => P.Value.IsWeapon).Value.Weapon);
             }
 
-            SetWeapon(null, null);
+            SetWeapon(null, default);
             
             classChooser.RightArrow.Click += SetWeapon;
             classChooser.LeftArrow.Click += SetWeapon;

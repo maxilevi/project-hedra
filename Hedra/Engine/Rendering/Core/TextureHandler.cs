@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using Hedra.Engine.Core;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Game;
-using OpenToolkit.Graphics.GL30;
 
 namespace Hedra.Engine.Rendering.Core
 {

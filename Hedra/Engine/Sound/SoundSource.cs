@@ -8,7 +8,7 @@
 using System;
 using Hedra.Sound;
 using OpenToolkit.Mathematics;
-using OpenTK.Audio.OpenAL;
+using OpenToolkit.OpenAL;
 
 namespace Hedra.Engine.Sound
 {

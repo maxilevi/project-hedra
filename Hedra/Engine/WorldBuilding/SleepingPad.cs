@@ -14,7 +14,7 @@ using Hedra.Engine.Localization;
 using Hedra.Game;
 using Hedra.Localization;
 using OpenToolkit.Mathematics;
-using OpenTK.Input;
+
 using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;
 
 namespace Hedra.Engine.WorldBuilding

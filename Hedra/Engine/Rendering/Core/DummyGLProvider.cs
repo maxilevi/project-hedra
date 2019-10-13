@@ -1,6 +1,7 @@
 using System;
 using OpenToolkit.Mathematics;
 using Hedra.Engine.Core;
+using OpenToolkit.Graphics.GL;
 
 namespace Hedra.Engine.Rendering.Core
 {
@@ -317,18 +318,6 @@ namespace Hedra.Engine.Rendering.Core
 
 
         public virtual void ShaderSource(int V0, string Source)
-        {
-        }
-
-        public virtual void StencilFunc(StencilFunction Func, int V0, uint Id)
-        {
-        }
-
-        public virtual void StencilMask(uint Mask)
-        {
-        }
-
-        public virtual void StencilOp(StencilOp Fail, StencilOp ZFail, StencilOp ZPass)
         {
         }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Threading;
+using System.Windows.Forms;
 using Hedra.API;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ClassSystem;
@@ -17,7 +18,8 @@ using Hedra.Game;
 using Hedra.Sound;
 using OpenToolkit.Mathematics;
 using OpenTK.Graphics;
-using OpenTK.Input;
+using OpenToolkit.Windowing.Common;
+
 
 namespace Hedra.Engine.Loader
 {

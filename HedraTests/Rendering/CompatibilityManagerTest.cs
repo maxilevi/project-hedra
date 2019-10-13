@@ -43,7 +43,7 @@ namespace HedraTests.Rendering
         {
             var glMock = new Mock<IGLProvider>();
             
-            glMock.Setup(M => M.MultiDrawElements(It.IsAny<PrimitiveType>(), It.IsAny<int[]>(),
+            glMock.Setup(M => M.MultiDrawElements(It.IsAny<PrimitiveType>(), It.IsAny<uint[]>(),
                     It.IsAny<DrawElementsType>(), It.IsAny<IntPtr[]>(), It.IsAny<int>()))
                 .Throws(new RenderException("Test Exception"));
 
@@ -54,7 +54,7 @@ namespace HedraTests.Rendering
             Renderer.Provider = glMock.Object;
             CompatibilityManager.Load();
 
-            CompatibilityManager.MultiDrawElementsMethod(PrimitiveType.Triangles, new int[5], DrawElementsType.UnsignedInt, new IntPtr[5] , 5);            
+            CompatibilityManager.MultiDrawElementsMethod(PrimitiveType.Triangles, new uint[5], DrawElementsType.UnsignedInt, new IntPtr[5] , 5);            
             Assert.AreEqual(5, timesCalled);
         }
         
@@ -64,7 +64,7 @@ namespace HedraTests.Rendering
             var glMock = new Mock<IGLProvider>();
             
             var timesCalled = 0;
-            glMock.Setup(M => M.MultiDrawElements(It.IsAny<PrimitiveType>(), It.IsAny<int[]>(),
+            glMock.Setup(M => M.MultiDrawElements(It.IsAny<PrimitiveType>(), It.IsAny<uint[]>(),
                     It.IsAny<DrawElementsType>(), It.IsAny<IntPtr[]>(), It.IsAny<int>())).Callback( () => ++timesCalled);
 
             glMock.Setup(M => M.GetInteger(It.IsAny<GetPName>())).Returns(Shader.Passthrough.ShaderId);
@@ -73,7 +73,7 @@ namespace HedraTests.Rendering
             CompatibilityManager.Load();
             Assert.AreEqual(1, timesCalled);
             
-            CompatibilityManager.MultiDrawElementsMethod(PrimitiveType.Triangles, new int[5], DrawElementsType.UnsignedInt, new IntPtr[5] , 5);            
+            CompatibilityManager.MultiDrawElementsMethod(PrimitiveType.Triangles, new uint[5], DrawElementsType.UnsignedInt, new IntPtr[5] , 5);            
             Assert.AreEqual(2, timesCalled);
         }
     }

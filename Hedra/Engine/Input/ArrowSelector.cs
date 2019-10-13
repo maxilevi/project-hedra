@@ -1,5 +1,5 @@
 using Hedra.Engine.Events;
-using OpenTK.Input;
+using OpenToolkit.Windowing.Common.Input;
 
 namespace Hedra.Engine.Input
 {

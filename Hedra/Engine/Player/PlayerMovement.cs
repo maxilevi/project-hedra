@@ -18,7 +18,8 @@ using Hedra.Localization;
 using Hedra.Sound;
 using Hedra.User;
 using OpenToolkit.Mathematics;
-using OpenTK.Input;
+using OpenToolkit.Windowing.Common;
+using OpenToolkit.Windowing.Common.Input;
 using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;
 
 namespace Hedra.Engine.Player

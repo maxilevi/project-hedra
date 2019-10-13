@@ -13,8 +13,7 @@ using Hedra.Input;
 using Hedra.Localization;
 using Hedra.Sound;
 using OpenToolkit.Mathematics;
-using OpenTK.Input;
-using OpenTK.Platform.MacOS;
+using OpenToolkit.Windowing.Common.Input;
 
 namespace Hedra.Engine.Player.QuestSystem
 {

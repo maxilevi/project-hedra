@@ -36,7 +36,7 @@ namespace Hedra.Engine.Rendering
         public VAO<Vector3, Vector4, Vector3> Data { get; }
         public IComparer<KeyValuePair<Vector2, ChunkRenderCommand>> Comparer { get; set; }
         private IntPtr[] _offset;
-        private int[] _counts;
+        private uint[] _counts;
         
         public WorldBuffer(PoolSize Size)
         {
@@ -49,7 +49,7 @@ namespace Hedra.Engine.Rendering
             Data = new VAO<Vector3, Vector4, Vector3>(Vertices.Buffer, Colors.Buffer, Normals.Buffer);
             
             _offset = new IntPtr[GeneralSettings.MaxChunks];
-            _counts = new int[GeneralSettings.MaxChunks];
+            _counts = new uint[GeneralSettings.MaxChunks];
             _chunkDict = new Dictionary<Vector2, ChunkRenderCommand>();
         }
 
@@ -268,7 +268,7 @@ namespace Hedra.Engine.Rendering
             return BuildCounts(ToDraw, ref _offset, ref _counts);
         }
 
-        public int BuildCounts(Dictionary<Vector2, Chunk> ToDraw, ref IntPtr[] OffsetsArray, ref int[] CountsArray)
+        public int BuildCounts(Dictionary<Vector2, Chunk> ToDraw, ref IntPtr[] OffsetsArray, ref uint[] CountsArray)
         {
             if (_chunkPairs == null) return 0;
             var index = 0;
@@ -283,7 +283,7 @@ namespace Hedra.Engine.Rendering
                         count = pair.Value.DrawCount;
                         offset = pair.Value.Entries[0].Offset;                    
                     }                
-                    CountsArray[index] = count;
+                    CountsArray[index] = (uint)count;
                     OffsetsArray[index] = (IntPtr) offset;
 
                     index++;
@@ -294,7 +294,7 @@ namespace Hedra.Engine.Rendering
 
         public IntPtr[] Offsets => _offset;
         
-        public int[] Counts => _counts;
+        public uint[] Counts => _counts;
         
         public int AvailableMemory => Indices.AvailableMemory + Vertices.AvailableMemory + Colors.AvailableMemory + Normals.AvailableMemory;
         

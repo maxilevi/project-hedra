@@ -30,7 +30,8 @@ using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
-using OpenTK.Input;
+using OpenToolkit.Windowing.Common;
+
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -244,7 +245,7 @@ namespace Hedra.Engine.Rendering.UI
         }
         
                 
-        public override void OnMouseButtonDown(object Sender, OpenTK.Input.MouseButtonEventArgs E)
+        public override void OnMouseButtonDown(object Sender, MouseButtonEventArgs E)
         {
             if (!this.Enabled) return;
             for(var i = 0; i <_humans.Count; i++)

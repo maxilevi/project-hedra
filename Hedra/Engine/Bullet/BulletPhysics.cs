@@ -499,7 +499,7 @@ namespace Hedra.Engine.Bullet
             }
         }
 
-        private static BvhTriangleMeshShape CreateTriangleShape(ICollection<uint> Indices, ICollection<OpenTK.Vector3> Vertices)
+        private static BvhTriangleMeshShape CreateTriangleShape(ICollection<uint> Indices, ICollection<OpenToolkit.Mathematics.Vector3> Vertices)
         {
             var triangleMesh = new TriangleIndexVertexArray();
             var indexedMesh = CreateIndexedMesh(Indices, Vertices);
@@ -507,7 +507,7 @@ namespace Hedra.Engine.Bullet
             return new BvhTriangleMeshShape(triangleMesh, true);
         }
 
-        private static IndexedMesh CreateIndexedMesh(ICollection<uint> Indices, ICollection<OpenTK.Vector3> Vertices)
+        private static IndexedMesh CreateIndexedMesh(ICollection<uint> Indices, ICollection<OpenToolkit.Mathematics.Vector3> Vertices)
         {
             var indexedMesh = new IndexedMesh();
             indexedMesh.Allocate(Indices.Count / 3, Vertices.Count);

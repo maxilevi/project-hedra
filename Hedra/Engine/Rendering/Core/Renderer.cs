@@ -10,6 +10,8 @@
 using System;
 using OpenToolkit.Mathematics;
 using Hedra.Engine.Core;
+using OpenToolkit.Graphics.GL;
+using GLDrawBuffersEnum = OpenToolkit.Graphics.GL33.DrawBufferMode;
 
 namespace Hedra.Engine.Rendering.Core
 {
@@ -171,7 +173,7 @@ namespace Hedra.Engine.Rendering.Core
             Provider.DrawBuffer(Mode);
         }
 
-        public static void DrawBuffers(int N, DrawBuffersEnum[] Enums)
+        public static void DrawBuffers(int N, GLDrawBuffersEnum[] Enums)
         {
             Provider.DrawBuffers(N, Enums);
         }

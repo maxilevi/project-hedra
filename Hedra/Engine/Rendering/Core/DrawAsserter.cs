@@ -23,7 +23,7 @@ namespace Hedra.Engine.Rendering.Core
             {DrawElementsType.UnsignedShort, typeof(ushort)},
         };
         
-        public static void AssertMultiDrawElement(PrimitiveType Primitive, int[] Counts, DrawElementsType ElementsType, IntPtr[] Offsets, int Length)
+        public static void AssertMultiDrawElement(PrimitiveType Primitive, uint[] Counts, DrawElementsType ElementsType, IntPtr[] Offsets, int Length)
         {
             if(Counts.Length != Offsets.Length)
                 throw new ArgumentException($"Found difference in counts ('{Counts.Length}') and offsets ('{Offsets.Length}') arrays");

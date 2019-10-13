@@ -26,7 +26,6 @@ using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Rendering;
 using OpenToolkit.Mathematics;
-using OpenTK.Input;
 
 namespace Hedra.Engine.ItemSystem
 {

@@ -5,7 +5,8 @@ using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Sound;
 using OpenToolkit.Mathematics;
-using OpenTK.Input;
+using OpenToolkit.Windowing.Common.Input;
+
 
 namespace Hedra.Engine.WorldBuilding
 {

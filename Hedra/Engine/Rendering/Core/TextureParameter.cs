@@ -1,4 +1,4 @@
-using OpenToolkit.Graphics.EXT;
+using Hedra.Engine.Core;
 
 namespace Hedra.Engine.Rendering.Core
 {

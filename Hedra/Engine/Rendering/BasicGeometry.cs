@@ -88,11 +88,11 @@ namespace Hedra.Engine.Rendering
         {
 #if DEBUG
             Shader.Passthrough.Bind();
-            OpenTK.Graphics.OpenGL.GL.PointSize(Width);
-            OpenTK.Graphics.OpenGL.GL.Begin(OpenTK.Graphics.OpenGL.PrimitiveType.Points);
-            OpenTK.Graphics.OpenGL.GL.Vertex3(Point);
-            OpenTK.Graphics.OpenGL.GL.Color4(Color);
-            OpenTK.Graphics.OpenGL.GL.End();
+            OpenToolkit.Graphics.GL10.GL.PointSize(Width);
+            OpenToolkit.Graphics.GL10.GL.Begin(OpenToolkit.Graphics.GL10.PrimitiveType.Points);
+            OpenToolkit.Graphics.GL10.GL.Vertex3(Point.X, Point.Y, Point.Z);
+            OpenToolkit.Graphics.GL10.GL.Color4(Color.X, Color.Y, Color.Z, Color.W);
+            OpenToolkit.Graphics.GL10.GL.End();
             Shader.Passthrough.Unbind();
 #endif
         }
@@ -101,13 +101,13 @@ namespace Hedra.Engine.Rendering
         {
 #if DEBUG
             Shader.Passthrough.Bind();
-            OpenTK.Graphics.OpenGL.GL.LineWidth(Width);
-            OpenTK.Graphics.OpenGL.GL.Begin(OpenTK.Graphics.OpenGL.PrimitiveType.Lines);
-            OpenTK.Graphics.OpenGL.GL.Color4(Color);
-            OpenTK.Graphics.OpenGL.GL.Vertex3(Start);
-            OpenTK.Graphics.OpenGL.GL.Color4(Color);
-            OpenTK.Graphics.OpenGL.GL.Vertex3(End);
-            OpenTK.Graphics.OpenGL.GL.End();
+            OpenToolkit.Graphics.GL33.GL.LineWidth(Width);
+            OpenToolkit.Graphics.GL10.GL.Begin(OpenToolkit.Graphics.GL10.PrimitiveType.Lines);
+            OpenToolkit.Graphics.GL10.GL.Color4(Color.X, Color.Y, Color.Z, Color.W);
+            OpenToolkit.Graphics.GL10.GL.Vertex3(Start.X, Start.Y, Start.Z);
+            OpenToolkit.Graphics.GL10.GL.Color4(Color.X, Color.Y, Color.Z, Color.W);
+            OpenToolkit.Graphics.GL10.GL.Vertex3(End.X, End.Y, End.Z);
+            OpenToolkit.Graphics.GL10.GL.End();
             Shader.Passthrough.Unbind();
 #endif
         }

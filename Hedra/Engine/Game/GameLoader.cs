@@ -11,6 +11,7 @@ using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Sound;
 using Hedra.Sound;
 using Hedra.Engine.Core;
+using OpenToolkit.Graphics.GL;
 
 namespace Hedra.Engine.Game
 {
@@ -56,16 +57,16 @@ namespace Hedra.Engine.Game
         public static void EnableGLDebug()
         {
             Renderer.Enable(EnableCap.DebugOutput);
-            Renderer.DebugMessageCallback(
-                delegate(DebugSource Source, DebugType Type, int Id, DebugSeverity Severity, int Length, IntPtr Message,
-                    IntPtr Param)
-                {
-                    if(Type != DebugType.DebugTypeError) return;
-                    Log.WriteLine(Source);
-                    Log.WriteLine(Marshal.PtrToStringAnsi(Message));
-                    Log.WriteLine(Severity);
-                    Log.WriteLine(Marshal.PtrToStringAnsi(Param));
-                }, IntPtr.Zero);
+            Renderer.DebugMessageCallback(DebugCallback, IntPtr.Zero);
+        }
+        
+        private static void DebugCallback(DebugSource Source, DebugType Type, int Id, DebugSeverity Severity, int Length, IntPtr Message, IntPtr Param)
+        {
+            //if(Type != DebugType.DebugTypeError) return;
+            Log.WriteLine(Source);
+            Log.WriteLine(Marshal.PtrToStringAnsi(Message));
+            Log.WriteLine(Severity);
+            Log.WriteLine(Marshal.PtrToStringAnsi(Param));
         }
 
         public static void LoadSoundEngine()

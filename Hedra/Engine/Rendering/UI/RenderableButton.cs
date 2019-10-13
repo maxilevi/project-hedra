@@ -10,7 +10,7 @@ using System;
 using System.IO;
 using System.Drawing;
 using OpenToolkit.Mathematics;
-using OpenTK.Input;
+
 using Hedra.Engine.Core;
 using Hedra.Engine.Events;
 using Hedra.Engine.Management;

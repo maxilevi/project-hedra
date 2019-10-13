@@ -34,7 +34,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 
         public static void LaunchParticle(ISkilledAnimableEntity Player, IEntity From, IEntity To, Action<IEntity, IEntity> HitLambda)
         {
-            var blood = new BloodProjectile(From, To, From.Position + OpenTK.Vector3.UnitY * 3f)
+            var blood = new BloodProjectile(From, To, From.Position + OpenToolkit.Mathematics.Vector3.UnitY * 3f)
             {
                 UsePhysics = false,
                 UseLight = true,

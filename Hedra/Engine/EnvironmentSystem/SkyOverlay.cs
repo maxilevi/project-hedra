@@ -1,6 +1,5 @@
 using System.Drawing;
 using System.Linq;
-using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Frustum;

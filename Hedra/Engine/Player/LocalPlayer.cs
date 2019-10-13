@@ -49,7 +49,7 @@ using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
-using OpenTK.Input;
+
 using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;
 
 namespace Hedra.Engine.Player

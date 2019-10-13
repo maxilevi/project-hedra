@@ -9,6 +9,7 @@ using System;
 using System.Drawing;
 using Hedra.Engine.IO;
 using Hedra.Engine.Core;
+using GLDrawBuffersEnum = OpenToolkit.Graphics.GL33.DrawBufferMode;
 
 namespace Hedra.Engine.Rendering.Core
 {
@@ -227,13 +228,13 @@ namespace Hedra.Engine.Rendering.Core
             }
             else
             {
-                DrawBuffersEnum[] buffers = new DrawBuffersEnum[Attachments.Length];
+                GLDrawBuffersEnum[] buffers = new GLDrawBuffersEnum[Attachments.Length];
 
                 for (int i = 0; i < Attachments.Length; i++)
                 {
                     //Renderer.BindTexture(TextureTarget.Texture2D, TextureID[i]);
                     //Renderer.FramebufferTexture(FramebufferTarget.Framebuffer, Attachments[i], TextureID[i], 0);
-                    buffers[i] = (DrawBuffersEnum)Attachments[i];
+                    buffers[i] = (GLDrawBuffersEnum)Attachments[i];
                 }
 
                 //Renderer.BindTexture(TextureTarget.Texture2D, DepthID);
