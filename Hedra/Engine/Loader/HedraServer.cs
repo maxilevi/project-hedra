@@ -14,11 +14,11 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Sound;
+using Hedra.Engine.Windowing;
 using Hedra.Game;
 using Hedra.Sound;
 using OpenToolkit.Mathematics;
-using OpenToolkit.Windowing.Common;
-using OpenToolkit.Windowing.Common.Input;
+using Silk.NET.Windowing.Common;
 
 
 namespace Hedra.Engine.Loader
@@ -68,7 +68,6 @@ namespace Hedra.Engine.Loader
         public VSyncMode VSync { get; set; }
         public WindowState WindowState { get; set; }
         public int Height { get; set; }
-        public WindowIcon Icon { get; set; }
         public string Title { get; set; }
         public int Width { get; set; }
         public WindowBorder WindowBorder { get; set; }
@@ -81,8 +80,6 @@ namespace Hedra.Engine.Loader
         }
 
         public Vector2 MousePosition { get; }
-        public Vector2 MouseDelta { get; }
-        public event OnFrameChanged FrameChanged;
         public event Action<MouseButtonEventArgs> MouseUp;
         public event Action<MouseButtonEventArgs> MouseDown;
         public event Action<MouseWheelEventArgs> MouseWheel;

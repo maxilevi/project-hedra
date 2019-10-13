@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Hedra.Engine.Rendering.Particles;
 using OpenToolkit.Mathematics;
 using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
 
 namespace Hedra.Engine.Rendering.Core
 {

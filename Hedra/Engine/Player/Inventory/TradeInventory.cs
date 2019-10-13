@@ -21,7 +21,8 @@ using Hedra.EntitySystem;
 using Hedra.Input;
 using Hedra.Localization;
 using OpenToolkit.Mathematics;
-using OpenToolkit.Windowing.Common.Input;
+
+using Silk.NET.Input.Common;
 
 
 namespace Hedra.Engine.Player.Inventory

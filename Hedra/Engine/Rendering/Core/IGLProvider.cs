@@ -1,10 +1,11 @@
 using System;
 using OpenToolkit.Mathematics;
 using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
 
 #region Typedefs
-using GLDebugProc = OpenToolkit.Graphics.GL.DebugProc;
-using GLDrawBuffersEnum = OpenToolkit.Graphics.GL33.DrawBufferMode;
+using GLDebugProc = Silk.NET.OpenGL.DebugProc;
+using GLDrawBuffersEnum = Silk.NET.OpenGL.GLEnum;
 #endregion
 
 namespace Hedra.Engine.Rendering.Core
@@ -89,7 +90,7 @@ namespace Hedra.Engine.Rendering.Core
         void TexImage2DMultisample(TextureTargetMultisample Target, int Samples, PixelInternalFormat InternalFormat,
             int Width, int Height, bool FixedLocations);
         void TexImage3D<T>(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3,
-            int V4, PixelFormat Format, PixelType Type, T[] Pixels) where T : struct;
+            int V4, PixelFormat Format, PixelType Type, T[] Pixels) where T : unmanaged;
         void TexParameter(TextureTarget Target, TextureParameterName Name, int Value);
         void Uniform1(int Location, int Uniform);
         void Uniform1(int Location, float Uniform);

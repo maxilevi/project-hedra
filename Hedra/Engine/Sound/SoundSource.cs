@@ -8,7 +8,7 @@
 using System;
 using Hedra.Sound;
 using OpenToolkit.Mathematics;
-using OpenToolkit.OpenAL;
+using Silk.NET.OpenAL;
 
 namespace Hedra.Engine.Sound
 {
@@ -25,12 +25,12 @@ namespace Hedra.Engine.Sound
         
         public unsafe SoundSource(Vector3 Position)
         {
-            _al = AL.GetAPI();
+            _al = AL.GetApi();
             var id = 0u;
             _al.GenSources(1, &id);
             _al.SetSourceProperty(Id, SourceFloat.Gain, 1);
             _al.SetSourceProperty(Id, SourceFloat.Pitch,  1);
-            _al.SetSourceProperty(Id, SourceVector3.Position, Position);
+            //_al.SetSourceProperty(Id, SourceVector3.Position, Position);
             Id = id;
         }
 
@@ -42,7 +42,10 @@ namespace Hedra.Engine.Sound
         private void Play(SoundBuffer Buffer)
         {
             var position = SoundPlayer.ListenerPosition;
-            _al.SetListenerProperty(ListenerVector3.Position, position);
+            unsafe
+            {
+                _al.SetListenerProperty(ListenerVector3.Position, position.X, position.Y, position.Z);
+            }
 
             _al.SetSourceProperty(Id, SourceInteger.Buffer, (int) Buffer.Id);
             _al.SourcePlay(Id);
@@ -52,7 +55,10 @@ namespace Hedra.Engine.Sound
         {
             _al.SetSourceProperty(Id, SourceFloat.Pitch, Pitch);
             _al.SetSourceProperty(Id, SourceFloat.Gain, Gain );
-            _al.SetSourceProperty(Id, SourceVector3.Position, Location);
+            unsafe
+            {
+                _al.SetSourceProperty(Id, SourceVector3.Position, (float*)&Location);
+            }
             // TODO _al.SetSourceProperty(Id, SourceBoolean.Looping, Loop ? 1 : 0);
 
             this.Stop();
@@ -75,7 +81,10 @@ namespace Hedra.Engine.Sound
             get => this._position;
             set{
                 if(value == this._position) return;
-                _al.SetSourceProperty(Id, SourceVector3.Position, value);
+                unsafe
+                {
+                    _al.SetSourceProperty(Id, SourceVector3.Position, (float*)&value);
+                }
 
                 this._position = value;
             }

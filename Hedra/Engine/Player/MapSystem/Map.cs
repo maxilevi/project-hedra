@@ -23,6 +23,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
+using Hedra.Engine.Windowing;
 using Hedra.Game;
 using Hedra.Localization;
 using Hedra.Rendering;
@@ -30,8 +31,8 @@ using Hedra.Rendering.UI;
 using Hedra.Sound;
 using Hedra.Structures;
 using OpenToolkit.Mathematics;
-using OpenToolkit.Windowing.Common;
-using OpenToolkit.Windowing.Common.Input;
+using Silk.NET.Input.Common;
+using MouseButton = Silk.NET.Input.Common.MouseButton;
 
 
 namespace Hedra.Engine.Player.MapSystem

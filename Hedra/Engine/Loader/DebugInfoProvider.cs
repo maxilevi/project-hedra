@@ -25,7 +25,8 @@ using Hedra.Rendering.UI;
 using Hedra.WeaponSystem;
 using OpenToolkit.Mathematics;
 using Hedra.Engine.Core;
-using OpenToolkit.Windowing.Common.Input;
+
+using Silk.NET.Input.Common;
 
 
 namespace Hedra.Engine.Loader

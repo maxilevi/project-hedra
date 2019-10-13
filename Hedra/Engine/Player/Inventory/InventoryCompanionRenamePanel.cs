@@ -2,9 +2,10 @@ using System.Drawing;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Engine.Windowing;
 using Hedra.Rendering.UI;
 using OpenToolkit.Mathematics;
-using OpenToolkit.Windowing.Common;
+
 
 
 namespace Hedra.Engine.Player.Inventory

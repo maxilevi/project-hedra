@@ -12,13 +12,12 @@ using Hedra.Core;
 using Hedra.Engine.Events;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
+using Hedra.Engine.Windowing;
 using Hedra.Game;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
 using OpenToolkit.Mathematics;
-using OpenToolkit.Windowing.Common;
-using OpenToolkit.Windowing.Common.Input;
-
+using MouseButton = Silk.NET.Input.Common.MouseButton;
 
 namespace Hedra.Engine.Rendering.UI
 {

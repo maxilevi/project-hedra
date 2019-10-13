@@ -9,6 +9,7 @@
 using Hedra.Engine.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
+using Hedra.Engine.Windowing;
 
 namespace Hedra.Engine.Rendering.Effects
 {

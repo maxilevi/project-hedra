@@ -1,7 +1,7 @@
 import TextDisplay
 from Core import translate
 from System import Array, Single
-from OpenTK import Vector3
+from OpenToolkit.Mathematics import Vector3
 from Hedra.Core import Timer, Time
 from Hedra import World, Utils
 from Hedra.Components import HealthBarComponent, HealthBarType, RideComponent, DamageComponent, CompanionStatsComponent

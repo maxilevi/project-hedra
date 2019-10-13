@@ -7,9 +7,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.Engine.Windowing;
 using OpenToolkit.Mathematics;
-using OpenToolkit.Windowing.Common;
-using OpenToolkit.Windowing.Common.Input;
+using Silk.NET.GLFW;
+using Silk.NET.Input.Common;
 
 namespace Hedra.Engine.Events
 {
@@ -323,12 +324,10 @@ namespace Hedra.Engine.Events
         }
 
         public Key Key => Event.Key;
-        public int ScanCode => Event.ScanCode;
         public bool Alt => Event.Alt;
         public bool Control => Event.Control;
         public bool Shift => Event.Shift;
         public KeyModifiers Modifiers => Event.Modifiers;
-        public bool IsRepeat => Event.IsRepeat;
     }
 
     public enum EventPriority

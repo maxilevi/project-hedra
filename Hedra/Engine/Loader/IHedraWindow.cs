@@ -1,7 +1,7 @@
 using System.Drawing;
 using OpenToolkit.Mathematics;
-using OpenToolkit.Windowing.Common;
-using OpenToolkit.Windowing.Common.Input;
+using Silk.NET.Windowing.Common;
+
 
 namespace Hedra.Engine.Loader
 {
@@ -12,12 +12,10 @@ namespace Hedra.Engine.Loader
         VSyncMode VSync { get; set; }
         WindowState WindowState { get; set; }
         bool Exists { get; }
-        WindowIcon Icon { get; set; }
         string Title { get; set; }
         WindowBorder WindowBorder { get; set; }
-        bool CursorVisible { get; set; }
         void Run();
-        void Dispose();
+        bool CursorVisible { get; set; }
         void Close();
         int Width { get; set; }
         int Height { get; set; }

@@ -10,8 +10,9 @@
 using System;
 using OpenToolkit.Mathematics;
 using Hedra.Engine.Core;
-using OpenToolkit.Graphics.GL;
-using GLDrawBuffersEnum = OpenToolkit.Graphics.GL33.DrawBufferMode;
+using Hedra.Engine.Windowing;
+using Silk.NET.OpenGL;
+using GLDrawBuffersEnum = Silk.NET.OpenGL.GLEnum;
 
 namespace Hedra.Engine.Rendering.Core
 {
@@ -451,7 +452,7 @@ namespace Hedra.Engine.Rendering.Core
         }
 
         public static void TexImage3D<T>(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3,
-            int V4, PixelFormat Format, PixelType Type, T[] Pixels) where T : struct
+            int V4, PixelFormat Format, PixelType Type, T[] Pixels) where T : unmanaged
         {
             Provider.TexImage3D(Target, V0, InternalFormat, V1, V2, V3, V4, Format, Type, Pixels);
         }

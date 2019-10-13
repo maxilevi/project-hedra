@@ -1,6 +1,6 @@
 from Hedra import World
 from Hedra.Structures import MapBuilder
-from OpenTK import Vector2, Vector3
+from OpenToolkit.Mathematics import Vector2, Vector3
 
 CHUNK_WIDTH = 128
 

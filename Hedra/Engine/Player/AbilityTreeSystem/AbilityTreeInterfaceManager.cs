@@ -4,11 +4,12 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Engine.Windowing;
 using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Sound;
 using OpenToolkit.Mathematics;
-using OpenToolkit.Windowing.Common;
+
 using Button = Hedra.Engine.Rendering.UI.Button;
 
 

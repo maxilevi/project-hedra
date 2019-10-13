@@ -1,10 +1,9 @@
 using System;
 using System.Reflection;
 using Hedra.Engine.Events;
+using Hedra.Engine.Windowing;
 using OpenToolkit.Mathematics;
-using OpenToolkit.Windowing.Common;
-using OpenToolkit.Windowing.Common.Input;
-
+using Silk.NET.Input.Common;
 
 namespace HedraTests
 {

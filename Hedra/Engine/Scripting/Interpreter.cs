@@ -12,7 +12,6 @@ using Hedra.Rendering;
 using IronPython.Hosting;
 using IronPython.Runtime.Types;
 using Microsoft.Scripting.Hosting;
-using OpenToolkit.Mathematics;
 
 namespace Hedra.Engine.Scripting
 {
@@ -43,7 +42,8 @@ namespace Hedra.Engine.Scripting
             var searchPaths = Directory.GetDirectories(SearchPath, "*", SearchOption.AllDirectories).Concat<string>(new []{SearchPath}).ToArray();
             _engine.SetSearchPaths(searchPaths);
             _engine.Runtime.LoadAssembly(Assembly.Load(typeof(Interpreter).Assembly.FullName));
-            _engine.Runtime.LoadAssembly(Assembly.Load(typeof(Vector4).Assembly.FullName));
+            _engine.Runtime.LoadAssembly(Assembly.Load(typeof(OpenToolkit.Mathematics.Vector4).Assembly.FullName));
+            _engine.Runtime.LoadAssembly(Assembly.Load(typeof(Silk.NET.Input.Common.Key).Assembly.FullName));
             _runner = new CompiledRunner(_engine);
             Log.WriteLine($"Python engine was successfully loaded in {watch.ElapsedMilliseconds} MS");
 

@@ -3,6 +3,7 @@
 #endif
 
 using System;
+using System.Drawing;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime;
@@ -34,17 +35,18 @@ using Hedra.Mission;
 using Hedra.Rendering;
 using Hedra.Sound;
 using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
+using Hedra.WorldObjects;
 using OpenToolkit.Mathematics;
-using OpenToolkit.Windowing.Common;
-using OpenToolkit.Windowing.Desktop;
+using Silk.NET.Windowing.Common;
 
 namespace Hedra.Engine.Loader
 {
     public delegate void OnFrameChanged();
     
-    public class Hedra : GameWindow, IHedra
+    public class Hedra : HedraWindow, IHedra
     {
-        public string GameVersion => "\u03B1 1.0";
+        public string GameVersion => /*"\u03B1 */"1.0";
         public event OnFrameChanged FrameChanged;
         private DebugInfoProvider _debugProvider;
         private SplashScreen _splashScreen;
@@ -54,23 +56,18 @@ namespace Hedra.Engine.Loader
         private int _passedFrames;
         private double _passedMillis;
 
-        public Hedra(int Width, int Height, string Title, int Major, int Minor, ContextProfile Profile,
-            ContextFlags Flags) :
-            base(new GameWindowSettings {IsMultiThreaded = false}, new NativeWindowSettings
-            {
-                Size = new Vector2i(Width, Height),
-                Title = Title,
-                API = ContextAPI.OpenGL,
-                APIVersion = Version.Parse($"{Major}.{Minor}"),
-                Profile = Profile,
-                Flags = Flags
-            })
+        public Hedra(int Width, int Height, int Major, int Minor, ContextProfile Profile, ContextFlags Flags) : 
+            base(Width, Height, Profile, Flags, new APIVersion(Major, Minor))
+        {
+        }
+
+        protected override void Load()
         {
         }
 
         public void Setup()
         {
-            Title = $"{Title} {GameVersion}";
+            Title = $"Project Hedra {GameVersion}";
             if (!LoadBoilerplate())
             {
                 Close();
@@ -88,9 +85,21 @@ namespace Hedra.Engine.Loader
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
             Time.RegisterThread();
             OSManager.Load(Assembly.GetExecutingAssembly().Location);
+            
+            var glVersion = Renderer.GetString(StringName.Version);
+            var shadingOpenGlVersion = GetShadingVersion(glVersion);
+
+            if( shadingOpenGlVersion < 3.3f)
+            {
+                
+                OSManager.Show($"Minimum OpenGL version is 3.3, yours is {shadingOpenGlVersion}", "OpenGL Version not supported");
+                return false;
+            }
+            Log.WriteLine(glVersion);
+            
             AssetManager.Load();
             CompatibilityManager.Load();
-            GameLoader.LoadSoundEngine();
+            //GameLoader.LoadSoundEngine();
             HedraContent.Register();
             ModificationsLoader.Reload();
             NameGenerator.Load();
@@ -112,18 +121,8 @@ namespace Hedra.Engine.Loader
             
             GameManager.Load();
             Log.WriteLine("Scene loading was Successful.");
- 
-            var glVersion = Renderer.GetString(StringName.Version);
-            var shadingOpenGlVersion = GetShadingVersion(glVersion);
-
-            if( shadingOpenGlVersion < 3.1f)
-            {
-                
-                OSManager.Show($"Minimum OpenGL version is 3.1, yours is {shadingOpenGlVersion}", "OpenGL Version not supported");
-                return false;
-            }
+            
             LoadInterpreter();
-            Log.WriteLine(glVersion);
             return true;
         }
 
@@ -136,10 +135,10 @@ namespace Hedra.Engine.Loader
             MissionPool.Load();
         }
 
-        protected override void OnUpdateFrame(FrameEventArgs Args)
+        protected override void UpdateFrame(double Delta)
         {
             this._splashScreen.Update();
-            var frameTime = Args.Time;
+            var frameTime = Delta;
             while (frameTime > 0f)
             {
                 var isOnMenu = GameManager.InStartMenu;
@@ -159,8 +158,8 @@ namespace Hedra.Engine.Loader
                 LocalPlayer.Instance.Loader.Dispatch();
                 frameTime -= delta;
             }
-            Time.Set(Args.Time);
-            Time.IncrementFrame(Args.Time);
+            Time.Set(Delta);
+            Time.IncrementFrame(Delta);
             
             // Utils.RNG is not thread safe so it might break itself
             // Here is the autofix because thread-safety is for loosers
@@ -176,11 +175,11 @@ namespace Hedra.Engine.Loader
             }
             _debugProvider.Update();
             Steam.Update();
-            AnalyticsManager.PlayTime += (float) Args.Time;
+            AnalyticsManager.PlayTime += (float) Delta;
             FrameChanged?.Invoke();
         }
 
-        protected override void OnRenderFrame(FrameEventArgs Arg)
+        protected override void RenderFrame(double Delta)
         {    
             Renderer.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit | ClearBufferMask.StencilBufferBit);        
             if (!_splashScreen.FinishedLoading)
@@ -192,21 +191,18 @@ namespace Hedra.Engine.Loader
                 DrawManager.Draw();
                 _debugProvider.Draw();
             }
-            this.SwapBuffers();
         }
 
-        protected override void OnResize(ResizeEventArgs e)
+        protected override void Resize(Size NewSize)
         {
-            base.OnResize(e);
-            GameSettings.SurfaceWidth = this.ClientSize.X;
-            GameSettings.SurfaceHeight = this.ClientSize.Y;
+            GameSettings.SurfaceWidth = NewSize.Width;
+            GameSettings.SurfaceHeight = NewSize.Height;
             DrawManager.UIRenderer.Adjust();
         }
 
-        protected override void OnFocusedChanged(FocusedChangedEventArgs e)
+        protected override void FocusChanged(bool IsFocused)
         {
-            base.OnFocusedChanged(e);
-            if(!this.IsFocused && _splashScreen.FinishedLoading)
+            if(!IsFocused && _splashScreen.FinishedLoading)
             {
                 if(!GameManager.InStartMenu && !GameManager.IsLoading && !GameSettings.Paused &&
                     GameManager.Player != null && !GameManager.Player.InterfaceOpened)
@@ -216,7 +212,7 @@ namespace Hedra.Engine.Loader
             }
         }
         
-        protected override void OnUnload()
+        protected override void Unload()
         {
             AssetManager.Dispose();
             GameSettings.Save(AssetManager.AppData + "settings.cfg");
@@ -236,18 +232,6 @@ namespace Hedra.Engine.Loader
         }
         
         public bool FinishedLoadingSplashScreen => _splashScreen?.FinishedLoading ?? true;
-        
-        public int Width
-        {
-            get => Size.X;
-            set => Size = new Vector2i(value, Size.Y);
-        }
-        public int Height
-        {
-            get => Size.Y;
-            set => Size = new Vector2i(Size.X, value);
-        }
-        public double TargetFramerate { get; set; }
     }
 }
 

@@ -14,11 +14,12 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.StructureSystem;
+using Hedra.Engine.Windowing;
 using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Input;
 using OpenToolkit.Mathematics;
-using OpenToolkit.Windowing.Common;
+
 using Cursor = System.Windows.Forms.Cursor;
 
 namespace Hedra.Engine.Player

@@ -4,6 +4,8 @@ using System.Drawing.Imaging;
 using Hedra.Engine.IO;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
+using PixelFormat = Hedra.Engine.Windowing.PixelFormat;
 
 namespace Hedra.Engine.Rendering
 {
@@ -23,7 +25,7 @@ namespace Hedra.Engine.Rendering
                     ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
 
                 Renderer.TexImage2D( (TextureTarget) ( (int) TextureTarget.TextureCubeMapPositiveX + i), 0, PixelInternalFormat.Rgba,
-                    data.Width, data.Height, 0, Engine.Core.PixelFormat.Bgra, PixelType.UnsignedByte,
+                    data.Width, data.Height, 0, PixelFormat.Bgra, PixelType.UnsignedByte,
                     data.Scan0);
                 
                 TextureArray[i].UnlockBits(data);

@@ -5,7 +5,8 @@
  *
  */
 using System.Windows.Forms;
-using OpenToolkit.Windowing.Common;
+using Hedra.Engine.Windowing;
+
 
 namespace Hedra.Engine.Events
 {

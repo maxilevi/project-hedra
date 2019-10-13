@@ -8,7 +8,7 @@ using Hedra.Engine.Player;
 using Hedra.Sound;
 using NVorbis;
 using OpenToolkit.Mathematics;
-using OpenToolkit.OpenAL;
+using Silk.NET.OpenAL;
 
 
 namespace Hedra.Engine.Sound
@@ -48,11 +48,12 @@ namespace Hedra.Engine.Sound
 
         public void MarkAsReady()
         {            
-            _loaded = true;
+            _loaded = true && _audioContext != null;
         }
 
         public void LoadSound(string Name, params string[] Names)
         {
+            if (!_loaded) return;
             var family = new SoundFamily();
             for (var i = 0; i < Names.Length; i++)
             {

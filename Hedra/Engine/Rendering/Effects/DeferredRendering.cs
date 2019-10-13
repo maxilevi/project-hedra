@@ -13,7 +13,9 @@ using System.Collections.Generic;
 using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Rendering.Core;
+using Hedra.Engine.Windowing;
 using Hedra.Game;
+using PixelFormat = Hedra.Engine.Windowing.PixelFormat;
 
 namespace Hedra.Engine.Rendering.Effects
 {
@@ -89,7 +91,7 @@ namespace Hedra.Engine.Rendering.Effects
             var bmpData = bmp.LockBits(new Rectangle(0,0,bmp.Width, bmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
     
             Renderer.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmpData.Width, bmpData.Height, 0,
-                Engine.Core.PixelFormat.Bgra, PixelType.UnsignedByte, bmpData.Scan0);
+                PixelFormat.Bgra, PixelType.UnsignedByte, bmpData.Scan0);
     
             bmp.UnlockBits(bmpData);
             //Bmp.Dispose();

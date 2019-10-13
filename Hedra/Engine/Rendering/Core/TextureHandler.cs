@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Hedra.Engine.Core;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Engine.Windowing;
 using Hedra.Game;
 
 namespace Hedra.Engine.Rendering.Core

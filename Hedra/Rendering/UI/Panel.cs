@@ -11,9 +11,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Hedra.Engine.Events;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Engine.Windowing;
 using OpenToolkit.Mathematics;
-using OpenToolkit.Windowing.Common;
-using OpenToolkit.Windowing.Common.Input;
+using Silk.NET.Input.Common;
+using Button = Hedra.Engine.Rendering.UI.Button;
 
 
 namespace Hedra.Rendering.UI

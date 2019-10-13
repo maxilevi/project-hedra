@@ -5,7 +5,7 @@
  *
  */
 using System;
-using OpenToolkit.OpenAL;
+using Silk.NET.OpenAL;
 
 namespace Hedra.Engine.Sound
 {
@@ -19,6 +19,7 @@ namespace Hedra.Engine.Sound
         
         public unsafe SoundBuffer(short[] Data, BufferFormat Format, int SampleRate)
         {
+            _al = AL.GetApi();
             var id = 0u;
             _al.GenBuffers(1, &id);
             fixed (void* ptr = Data)

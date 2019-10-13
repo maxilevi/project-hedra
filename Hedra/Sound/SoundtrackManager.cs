@@ -12,7 +12,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Scripting;
 using Hedra.Engine.Sound;
 using NVorbis;
-using OpenToolkit.OpenAL;
+using Silk.NET.OpenAL;
 
 namespace Hedra.Sound
 {
@@ -49,7 +49,7 @@ namespace Hedra.Sound
         public static void Load()
         {
             Load(new SoundSource(SoundPlayer.ListenerPosition));
-            _al = AL.GetAPI();
+            _al = AL.GetApi();
         }
 
         public static void Load(SoundSource Source)

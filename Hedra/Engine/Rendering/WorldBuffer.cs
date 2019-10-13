@@ -15,6 +15,7 @@ using Hedra.Engine.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Rendering.Core;
+using Hedra.Engine.Windowing;
 using Hedra.Game;
 using Hedra.Rendering;
 

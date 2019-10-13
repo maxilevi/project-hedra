@@ -19,7 +19,8 @@ using Hedra.Engine.Rendering;
 using Hedra.Localization;
 using Hedra.Sound;
 using OpenToolkit.Mathematics;
-using OpenToolkit.Windowing.Common;
+using Silk.NET.Windowing.Common;
+
 
 namespace Hedra.Game
 {

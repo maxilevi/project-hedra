@@ -2,6 +2,7 @@ using System.Drawing;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Core;
 using System;
+using Hedra.Engine.Windowing;
 
 namespace HedraTests
 {

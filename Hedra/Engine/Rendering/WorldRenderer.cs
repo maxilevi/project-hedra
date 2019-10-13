@@ -19,6 +19,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.IO;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Frustum;
+using Hedra.Engine.Windowing;
 using Hedra.Game;
 using Hedra.Rendering;
 

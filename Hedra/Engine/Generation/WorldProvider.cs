@@ -43,6 +43,7 @@ using Hedra.Items;
 using Hedra.Sound;
 using OpenToolkit.Mathematics;
 using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
 
 namespace Hedra.Engine.Generation
 {

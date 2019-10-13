@@ -20,7 +20,8 @@ using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Localization;
 using OpenToolkit.Mathematics;
-using OpenToolkit.Windowing.Common.Input;
+
+using Silk.NET.Input.Common;
 
 
 namespace Hedra.Engine.WorldBuilding

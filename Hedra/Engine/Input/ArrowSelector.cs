@@ -1,5 +1,6 @@
 using Hedra.Engine.Events;
-using OpenToolkit.Windowing.Common.Input;
+
+using Silk.NET.Input.Common;
 
 namespace Hedra.Engine.Input
 {

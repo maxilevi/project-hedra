@@ -1,7 +1,7 @@
 import Core
 import TextDisplay
-from OpenTK import Vector2
-from OpenTK.Input import Key
+from OpenToolkit.Mathematics import Vector2
+from Silk.NET.Input.Common import Key
 from Hedra.Core import Time
 from Hedra.User import WordFilter, CommandManager
 from Hedra.Game import GameSettings

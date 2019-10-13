@@ -6,6 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Hedra.Game;
 using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
 using Buffer = System.Buffer;
 
 namespace Hedra.Engine.Rendering.Core

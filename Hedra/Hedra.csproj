@@ -123,29 +123,38 @@
       <HintPath>..\packages\NVorbis.0.8.6\lib\net35\NVorbis.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="OpenGL_Bindings, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\references\OpenToolkit\OpenGL_Bindings.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenToolkit.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\references\OpenToolkit\OpenToolkit.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenToolkit.GraphicsLibraryFramework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\references\OpenToolkit\OpenToolkit.GraphicsLibraryFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenToolkit.Input, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\references\OpenToolkit\OpenToolkit.Input.dll</HintPath>
-    </Reference>
     <Reference Include="OpenToolkit.Mathematics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\references\OpenToolkit\OpenToolkit.Mathematics.dll</HintPath>
     </Reference>
-    <Reference Include="OpenToolkit.OpenAL, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\references\OpenToolkit\OpenToolkit.OpenAL.dll</HintPath>
+    <Reference Include="Silk.NET.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\Silk.NET\Silk.NET.Core.dll</HintPath>
     </Reference>
-    <Reference Include="OpenToolkit.Windowing.Common, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\references\OpenToolkit\OpenToolkit.Windowing.Common.dll</HintPath>
+    <Reference Include="Silk.NET.GLFW, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\Silk.NET\Silk.NET.GLFW.dll</HintPath>
     </Reference>
-    <Reference Include="OpenToolkit.Windowing.Desktop, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\references\OpenToolkit\OpenToolkit.Windowing.Desktop.dll</HintPath>
+    <Reference Include="Silk.NET.Input, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\Silk.NET\Silk.NET.Input.dll</HintPath>
+    </Reference>
+    <Reference Include="Silk.NET.Input.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\Silk.NET\Silk.NET.Input.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Silk.NET.Input.Desktop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\Silk.NET\Silk.NET.Input.Desktop.dll</HintPath>
+    </Reference>
+    <Reference Include="Silk.NET.OpenAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\Silk.NET\Silk.NET.OpenAL.dll</HintPath>
+    </Reference>
+    <Reference Include="Silk.NET.OpenGL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\Silk.NET\Silk.NET.OpenGL.dll</HintPath>
+    </Reference>
+    <Reference Include="Silk.NET.Windowing, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\Silk.NET\Silk.NET.Windowing.dll</HintPath>
+    </Reference>
+    <Reference Include="Silk.NET.Windowing.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\Silk.NET\Silk.NET.Windowing.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Silk.NET.Windowing.Desktop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\Silk.NET\Silk.NET.Windowing.Desktop.dll</HintPath>
     </Reference>
     <Reference Include="StrictEmit, Version=2.4.2.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\StrictEmit.2.4.2\lib\net45\StrictEmit.dll</HintPath>
@@ -308,7 +317,6 @@
     <Compile Include="Engine\CacheSystem\FishingPostIconCache.cs" />
     <Compile Include="Engine\Core\AllocationEntry.cs" />
     <Compile Include="Engine\Core\Allocator.cs" />
-    <Compile Include="Engine\Core\GLEnums.cs" />
     <Compile Include="Engine\Core\HeapAllocator.cs" />
     <Compile Include="Engine\Core\IAllocator.cs" />
     <Compile Include="Engine\Core\ISequentialList.cs" />
@@ -387,6 +395,11 @@
     <Compile Include="Engine\StructureSystem\Overworld\SpawnCampfireDesign.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\GenericBuilderWithNPC.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\GenericNPCSettings.cs" />
+    <Compile Include="Engine\Windowing\GLEnums.cs" />
+    <Compile Include="Engine\Windowing\KeyboardKeyEventArgs.cs" />
+    <Compile Include="Engine\Windowing\MouseButtonEventArgs.cs" />
+    <Compile Include="Engine\Windowing\MouseMoveEventArgs.cs" />
+    <Compile Include="Engine\Windowing\MouseWheelEventArgs.cs" />
     <Compile Include="Items\EquipmentType.cs" />
     <Compile Include="Items\ItemTier.cs" />
     <Compile Include="Items\Trader.cs" />
@@ -1392,7 +1405,6 @@
     <Compile Include="Engine\Rendering\UI\CharacterCreatorUI.cs" />
     <Compile Include="Engine\Rendering\UI\ColorPicker.cs" />
     <Compile Include="Engine\Rendering\UI\ControlsUI.cs" />
-    <Compile Include="Engine\Rendering\UI\CursorIcon.cs" />
     <Compile Include="Engine\Rendering\UI\GameUI.cs" />
     <Compile Include="Engine\Rendering\UI\GUIRenderer.cs" />
     <Compile Include="Engine\Rendering\UI\GUITexture.cs" />
@@ -14644,7 +14656,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Translations\Español.po" />
-    <Content Include="x64\glfw3-x64.dll">
+    <Content Include="x64\glfw3.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="x64\hedracore.dll">
@@ -14662,7 +14674,7 @@
     <Content Include="x64\wrap_oal.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="x86\glfw3-x86.dll">
+    <Content Include="x86\glfw3.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="x86\hedracore.dll">

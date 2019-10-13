@@ -6,13 +6,16 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Scripting;
+using Hedra.Engine.Windowing;
 using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using OpenToolkit.Mathematics;
-using OpenToolkit.Windowing.Common;
-using OpenToolkit.Windowing.Common.Input;
+
+
+using Silk.NET.Input.Common;
+using Button = Hedra.Engine.Rendering.UI.Button;
 
 
 namespace Hedra.Engine.Player.Inventory

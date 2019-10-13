@@ -2,7 +2,7 @@ import Core
 import math
 import VisualEffects
 import clr
-from OpenTK import Vector3, Vector4, Matrix4
+from OpenToolkit.Mathematics import Vector3, Vector4, Matrix4
 from System import Array, Single, ArgumentOutOfRangeException
 from Hedra import World
 from Hedra.Core import Time, Timer

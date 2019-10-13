@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.ExceptionServices;
+using System.Windows.Forms;
 using Hedra.Engine.BiomeSystem.NormalBiome;
 using Hedra.Engine.Steamworks;
 using Hedra.Engine.Game;
@@ -14,8 +15,7 @@ using Hedra.Engine.Networking;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Game;
 using OpenToolkit.Mathematics;
-using OpenToolkit.Windowing.Common;
-using OpenToolkit.Windowing.Desktop;
+using Silk.NET.Windowing.Common;
 
 namespace Hedra.Engine
 {
@@ -95,10 +95,10 @@ namespace Hedra.Engine
             if(DummyMode) EnableDummyMode();
             LoadLibraries();
 
-            var bounds = NativeWindowSettings.Default.Size;
+            var bounds = Screen.PrimaryScreen.Bounds;
             Log.WriteLine(bounds.ToString());
-            GameSettings.DeviceWidth = bounds.X;
-            GameSettings.DeviceHeight = bounds.Y;
+            GameSettings.DeviceWidth = bounds.Width;
+            GameSettings.DeviceHeight = bounds.Height;
 
             Log.WriteLine("Creating the window on the Primary Device at " + GameSettings.DeviceWidth + "x" +
                             GameSettings.DeviceHeight);
@@ -112,9 +112,8 @@ namespace Hedra.Engine
             profile = ContextProfile.Compatability;
             flags = ContextFlags.Debug;
 #endif
-            GameWindow = new Loader.Hedra(GameSettings.Width, GameSettings.Height, "Project Hedra", 3, 3, profile, flags);
+            GameWindow = new Loader.Hedra(GameSettings.Width, GameSettings.Height, 3, 3, profile, flags);
             GameWindow.Setup();
-            GameWindow.WindowState = WindowState.Maximized;
 #if !DEBUG
             if (OSManager.RunningPlatform == Platform.Windows)
             {

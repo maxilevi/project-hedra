@@ -1,9 +1,10 @@
 using System;
 using Hedra.Engine.Events;
 using Hedra.Engine.Loader;
+using Hedra.Engine.Windowing;
 using OpenToolkit.Mathematics;
-using OpenToolkit.Windowing.Common;
-using OpenToolkit.Windowing.Common.Input;
+using Silk.NET.Windowing.Common;
+
 
 namespace HedraTests
 {
@@ -15,7 +16,6 @@ namespace HedraTests
         public WindowState WindowState { get; set; }
         public bool Exists { get; }
         public int Height { get; set; }
-        public WindowIcon Icon { get; set; }
         public string Title { get; set; }
         public int Width { get; set; }
         public WindowBorder WindowBorder { get; set; }

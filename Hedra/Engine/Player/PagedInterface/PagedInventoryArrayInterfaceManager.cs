@@ -4,8 +4,9 @@ using Hedra.Engine.Events;
 using Hedra.Engine.Input;
 using Hedra.Engine.Player.CraftingSystem;
 using Hedra.Engine.Player.Inventory;
+using Hedra.Engine.Windowing;
 using Hedra.Sound;
-using OpenToolkit.Windowing.Common;
+
 using Button = Hedra.Engine.Rendering.UI.Button;
 using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;
 

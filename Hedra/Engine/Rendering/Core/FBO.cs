@@ -9,7 +9,8 @@ using System;
 using System.Drawing;
 using Hedra.Engine.IO;
 using Hedra.Engine.Core;
-using GLDrawBuffersEnum = OpenToolkit.Graphics.GL33.DrawBufferMode;
+using Hedra.Engine.Windowing;
+using GLDrawBuffersEnum = Silk.NET.OpenGL.GLEnum;
 
 namespace Hedra.Engine.Rendering.Core
 {

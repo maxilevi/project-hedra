@@ -11,7 +11,8 @@ using Hedra.Localization;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
 using OpenToolkit.Mathematics;
-using OpenToolkit.Windowing.Common.Input;
+
+using Silk.NET.Input.Common;
 
 
 namespace Hedra.Engine.Player.Inventory

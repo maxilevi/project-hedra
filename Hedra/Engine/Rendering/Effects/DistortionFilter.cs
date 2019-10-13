@@ -11,6 +11,7 @@ using Hedra.Engine.Rendering.Core;
 using OpenToolkit.Mathematics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Engine.Windowing;
 using Hedra.Rendering;
 
 namespace Hedra.Engine.Rendering.Effects

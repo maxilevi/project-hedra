@@ -20,6 +20,7 @@ using Hedra.Game;
 using Hedra.Rendering;
 using OpenToolkit.Mathematics;
 using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
 
 namespace Hedra.Engine.Rendering
 {

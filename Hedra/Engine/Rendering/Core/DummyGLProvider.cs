@@ -1,7 +1,7 @@
 using System;
 using OpenToolkit.Mathematics;
-using Hedra.Engine.Core;
-using OpenToolkit.Graphics.GL;
+using Hedra.Engine.Windowing;
+using Silk.NET.OpenGL;
 
 namespace Hedra.Engine.Rendering.Core
 {
@@ -169,7 +169,7 @@ namespace Hedra.Engine.Rendering.Core
         {
         }
 
-        public virtual void DrawBuffers(int N, OpenToolkit.Graphics.GL33.DrawBufferMode[] Enums)
+        public virtual void DrawBuffers(int N, GLEnum[] Enums)
         {
         }
 
@@ -327,7 +327,7 @@ namespace Hedra.Engine.Rendering.Core
         }
 
         public virtual void TexImage3D<T>(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3, int V4,
-            PixelFormat Format, PixelType Type, T[] Pixels) where T : struct
+            PixelFormat Format, PixelType Type, T[] Pixels) where T : unmanaged
         {
         }
 

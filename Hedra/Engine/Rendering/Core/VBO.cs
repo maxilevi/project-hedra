@@ -9,6 +9,7 @@ using System;
 using Hedra.Engine.Management;
 using OpenToolkit.Mathematics;
 using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
 
 namespace Hedra.Engine.Rendering.Core
 {

@@ -14,6 +14,7 @@ using Hedra.Engine.Rendering.Core;
 using Hedra.Game;
 using OpenToolkit.Mathematics;
 using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
 
 namespace Hedra.Engine.Rendering.Frustum
 {
