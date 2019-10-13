@@ -451,9 +451,9 @@ namespace Hedra.Engine.Rendering.Core
         }
 
         public static void TexImage3D<T>(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3,
-            int V4, PixelFormat Format, PixelType Type, T[,,] Data) where T : struct
+            int V4, PixelFormat Format, PixelType Type, T[] Pixels) where T : struct
         {
-            Provider.TexImage3D(Target, V0, InternalFormat, V1, V2, V3, V4, Format, Type, Data);
+            Provider.TexImage3D(Target, V0, InternalFormat, V1, V2, V3, V4, Format, Type, Pixels);
         }
 
         public static void TexParameter(TextureTarget Target, TextureParameterName Name, int Value)
@@ -518,9 +518,9 @@ namespace Hedra.Engine.Rendering.Core
         }
 
         public static void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag,
-            int Bytes, int V2)
+            int Bytes)
         {
-            Provider.VertexAttribPointer(V0, V1, Type, Flag, Bytes, V2);
+            Provider.VertexAttribPointer(V0, V1, Type, Flag, Bytes);
         }
 
         public static void Viewport(int V0, int V1, int V2, int V3)

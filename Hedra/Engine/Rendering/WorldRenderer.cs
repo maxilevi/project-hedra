@@ -42,7 +42,7 @@ namespace Hedra.Engine.Rendering
         public static Texture DuDvMap { get; private set; }
         public static Texture NormalMap { get; private set; }
         private static IntPtr[] _shadowOffsets;
-        private static int[] _shadowCounts;
+        private static uint[] _shadowCounts;
 
         public static void Initialize()
         {
@@ -50,23 +50,34 @@ namespace Hedra.Engine.Rendering
             StaticShader = Shader.Build("Shaders/Static.vert", "Shaders/Static.frag");
 
             OpenSimplexNoise.Load(123);
-            var noiseValues = new float[16, 16, 16];
-            for (var x = 0; x < noiseValues.GetLength(0); x++)
-            {
-                for (var y = 0; y < noiseValues.GetLength(1); y++)
-                {
-                    for (var z = 0; z < noiseValues.GetLength(2); z++)
-                    {
-                        noiseValues[x,y,z] = (float)OpenSimplexNoise.Evaluate(x * 0.6f,y * 0.6f,z * 0.6f) * .5f + .5f;
-                    }
-                }
-            }
+            var noiseValues = CreateNoiseArray(out var width, out var height, out var depth);
             Log.WriteLine("Creating 3D noise texture...");
-            NoiseTexture = new Texture3D(noiseValues);
+            NoiseTexture = new Texture3D(noiseValues, width, height, depth);
             Log.WriteLine("Loading DuDvMap...");
             DuDvMap = new Texture("Assets/FX/waterDuDvMap.png", true);
             Log.WriteLine("Loading water normal map...");
             NormalMap = new Texture("Assets/FX/waterNormalMap.png", true);
+        }
+
+        public static float[] CreateNoiseArray(out int Width, out int Height, out int Depth)
+        {
+            const int width = 16, height = 16, depth = 16;
+            var noiseValues = new float[width * height * depth];
+            for (var x = 0; x < width; x++)
+            {
+                for (var y = 0; y < height; y++)
+                {
+                    for (var z = 0; z < depth; z++)
+                    {
+                        noiseValues[x * depth * height + y * depth + z] = (float)OpenSimplexNoise.Evaluate(x * 0.6f,y * 0.6f,z * 0.6f) * .5f + .5f;
+                    }
+                }
+            }
+
+            Width = width;
+            Height = height;
+            Depth = depth;
+            return noiseValues;
         }
 
         public static void Allocate()
@@ -85,7 +96,7 @@ namespace Hedra.Engine.Rendering
                 new WorldBuffer(PoolSize.Normal)
             );
             _shadowOffsets = new IntPtr[GeneralSettings.MaxChunks];
-            _shadowCounts = new int[GeneralSettings.MaxChunks];
+            _shadowCounts = new uint[GeneralSettings.MaxChunks];
         }
 
         public static void PrepareCameraMatrix()

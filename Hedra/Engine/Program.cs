@@ -14,7 +14,8 @@ using Hedra.Engine.Networking;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Game;
 using OpenToolkit.Mathematics;
-using OpenTK.Graphics;
+using OpenToolkit.Windowing.Common;
+using OpenToolkit.Windowing.Desktop;
 
 namespace Hedra.Engine
 {
@@ -89,15 +90,15 @@ namespace Hedra.Engine
             Steam.Instance.Dispose();
         }
         
-        private static void RunNormalAndDummyMode(bool DummyMode)
+        private static unsafe void RunNormalAndDummyMode(bool DummyMode)
         {
             if(DummyMode) EnableDummyMode();
             LoadLibraries();
-            
-            var device = DisplayDevice.Default;
-            Log.WriteLine(device.Bounds.ToString());
-            GameSettings.DeviceWidth = device.Width;
-            GameSettings.DeviceHeight = device.Height;
+
+            var bounds = NativeWindowSettings.Default.Size;
+            Log.WriteLine(bounds.ToString());
+            GameSettings.DeviceWidth = bounds.X;
+            GameSettings.DeviceHeight = bounds.Y;
 
             Log.WriteLine("Creating the window on the Primary Device at " + GameSettings.DeviceWidth + "x" +
                             GameSettings.DeviceHeight);
@@ -105,8 +106,13 @@ namespace Hedra.Engine
             GameSettings.Width = GameSettings.DeviceWidth;
             GameSettings.Height = GameSettings.DeviceHeight;
             GameSettings.ScreenRatio = GameSettings.Width / (float) GameSettings.Height;
-
-            GameWindow = new Loader.Hedra(GameSettings.Width, GameSettings.Height, GraphicsMode.Default, "Project Hedra", device, 3, 3)
+            var profile = ContextProfile.Core;
+            var flags = ContextFlags.Default;
+#if DEBUG
+            profile = ContextProfile.Compatability;
+            flags = ContextFlags.Debug;
+#endif
+            GameWindow = new Loader.Hedra(GameSettings.Width, GameSettings.Height, "Project Hedra", 3, 3, profile, flags)
             {
                 WindowState = WindowState.Maximized
             };
@@ -127,12 +133,6 @@ namespace Hedra.Engine
             if (!IsDummy || IsDummy && IsServer)
             {
                 GameWindow.Run();
-            }
-            else
-            {
-                GameWindow.RunOnce();
-                Log.WriteLine("Project Hedra loaded successfully. Exiting...");
-                Environment.Exit(0);
             }
 
             DisposeLibraries();

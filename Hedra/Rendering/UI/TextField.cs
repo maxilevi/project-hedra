@@ -7,19 +7,12 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms;
-using Hedra.Core;
-using Hedra.Engine;
 using Hedra.Engine.Events;
 using Hedra.Engine.Management;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Scripting;
-using Hedra.Game;
 using OpenToolkit.Mathematics;
 using Button = Hedra.Engine.Rendering.UI.Button;
 using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;
@@ -55,8 +48,7 @@ namespace Hedra.Rendering.UI
             DrawManager.UIRenderer.Add(_caret, DrawOrder.After);
             
             EventDispatcher.RegisterKeyDown(this, this.OnKeyDown, EventPriority.High);
-            EventDispatcher.RegisterKeyPress(this, this.OnKeyPress);
-            
+
             AddElement(_caret);
             AddElement(_focusButton);
             AddElement(_textBar);
@@ -71,10 +63,6 @@ namespace Hedra.Rendering.UI
         private void OnKeyDown(object Sender, KeyEventArgs EventArgs)
         {
            Script.Execute("on_key_down", EventArgs, _state);
-        }
-        private void OnKeyPress(object Sender, KeyPressEventArgs E)
-        {
-            Script.Execute("on_key_press", E, _state);
         }
 
         public void Focus()
@@ -116,7 +104,6 @@ namespace Hedra.Rendering.UI
         {
             base.Dispose();
             EventDispatcher.UnregisterKeyDown(this);
-            EventDispatcher.UnregisterKeyPress(this);
             DrawManager.UIRenderer.Remove(_caret);
             UpdateManager.Remove(this);
             _textBar?.Dispose();

@@ -57,10 +57,6 @@ def update_caret(state):
 def has_space_left(state):
     return state['last_size'] < state['ui_bar'].Scale.X * .5
 
-def on_key_press(event_args, state):
-    if is_enabled(state) and state['in_focus'] and has_space_left(state):
-        add_character(state, event_args.KeyChar)
-
 def is_enabled(state):
     return state['ui_bar'].Enabled
 
@@ -82,6 +78,9 @@ def on_key_down(event_args, state):
             defocus(state)
     if cancel:
         event_args.Cancel()
+    else:
+        if is_enabled(state) and state['in_focus'] and has_space_left(state):
+            add_character(state, event_args.KeyChar)
     
 
 def delete_character(state):

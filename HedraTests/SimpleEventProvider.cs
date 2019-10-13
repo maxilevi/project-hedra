@@ -10,17 +10,16 @@ namespace HedraTests
 {
     public class SimpleEventProvider : IEventProvider
     {
-        public event EventHandler<MouseButtonEventArgs> MouseUp;
-        public event EventHandler<MouseButtonEventArgs> MouseDown;
-        public event EventHandler<MouseWheelEventArgs> MouseWheel;
-        public event EventHandler<MouseMoveEventArgs> MouseMove;
-        public event EventHandler<KeyboardKeyEventArgs> KeyDown;
-        public event EventHandler<KeyboardKeyEventArgs> KeyUp;
-        public event EventHandler<KeyPressEventArgs> KeyPress;
+        public event Action<MouseButtonEventArgs> MouseUp;
+        public event Action<MouseButtonEventArgs> MouseDown;
+        public event Action<MouseWheelEventArgs> MouseWheel;
+        public event Action<MouseMoveEventArgs> MouseMove;
+        public event Action<KeyboardKeyEventArgs> KeyDown;
+        public event Action<KeyboardKeyEventArgs> KeyUp;
 
         public void SimulateKeyDown(Key Key)
         {
-            KeyDown.Invoke(this, CreateKeyEventArgs(Key));
+            KeyDown.Invoke(CreateKeyEventArgs(Key));
         }
 
         private static KeyboardKeyEventArgs CreateKeyEventArgs(Key Press)

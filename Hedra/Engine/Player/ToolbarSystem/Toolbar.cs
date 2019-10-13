@@ -21,7 +21,8 @@ using Hedra.Engine.SkillSystem;
 using Hedra.Game;
 using Hedra.WeaponSystem;
 using OpenToolkit.Mathematics;
-
+using OpenToolkit.Windowing.Common;
+using OpenToolkit.Windowing.Common.Input;
 using TaskScheduler = Hedra.Core.TaskScheduler;
 
 namespace Hedra.Engine.Player.ToolbarSystem

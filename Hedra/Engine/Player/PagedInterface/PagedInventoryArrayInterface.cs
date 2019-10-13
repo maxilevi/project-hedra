@@ -12,7 +12,6 @@ using Hedra.Items;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using OpenToolkit.Mathematics;
-using OpenTK.Platform.MacOS;
 
 namespace Hedra.Engine.Player.PagedInterface
 {

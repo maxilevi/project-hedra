@@ -11,6 +11,7 @@ using Hedra.Localization;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
 using OpenToolkit.Mathematics;
+using OpenToolkit.Windowing.Common;
 
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
@@ -43,12 +44,12 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             Panel.AddElement(_learnSpecializationText);
 
             _learnSpecializationButton.Click += OnClick;
-            _learnSpecializationButton.HoverEnter += (O,A) =>
+            _learnSpecializationButton.HoverEnter += () =>
             {
                 _learnSpecializationButton.Scale *= 1.05f;
                 _learnSpecializationText.Scale *= 1.05f;
             };
-            _learnSpecializationButton.HoverExit += (O, A) =>
+            _learnSpecializationButton.HoverExit += () =>
             {
                 _learnSpecializationButton.Scale /= 1.05f;
                 _learnSpecializationText.Scale /= 1.05f;

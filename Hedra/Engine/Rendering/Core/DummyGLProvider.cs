@@ -174,7 +174,7 @@ namespace Hedra.Engine.Rendering.Core
         {
         }
 
-        public virtual void DrawBuffers(int N, DrawBuffersEnum[] Enums)
+        public virtual void DrawBuffers(int N, OpenToolkit.Graphics.GL33.DrawBufferMode[] Enums)
         {
         }
 
@@ -292,7 +292,7 @@ namespace Hedra.Engine.Rendering.Core
         {
         }
 
-        public virtual void MultiDrawElements(PrimitiveType Primitive, int[] Counts, DrawElementsType Type, IntPtr[] Offsets, int Count)
+        public virtual void MultiDrawElements(PrimitiveType Primitive, uint[] Counts, DrawElementsType Type, IntPtr[] Offsets, int Count)
         {
         }
 
@@ -332,7 +332,7 @@ namespace Hedra.Engine.Rendering.Core
         }
 
         public virtual void TexImage3D<T>(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3, int V4,
-            PixelFormat Format, PixelType Type, T[,,] Data) where T : struct
+            PixelFormat Format, PixelType Type, T[] Pixels) where T : struct
         {
         }
 
@@ -388,7 +388,7 @@ namespace Hedra.Engine.Rendering.Core
         {
         }
 
-        public virtual void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag, int Bytes, int V2)
+        public virtual void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag, int Bytes)
         {
         }
 

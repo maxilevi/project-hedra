@@ -4,6 +4,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Rendering.UI;
 using OpenToolkit.Mathematics;
+using OpenToolkit.Windowing.Common;
 
 
 namespace Hedra.Engine.Player.Inventory
@@ -24,12 +25,12 @@ namespace Hedra.Engine.Player.Inventory
             _applyButton = new Button(Vector2.Zero, Vector2.Zero, InventoryBackground.DefaultId);
             _applyText = new GUIText(Translation.Create("apply_rename_btn"), Vector2.Zero, Color.White, FontCache.GetBold(11));
             _applyButton.Click += OnApply;
-            _applyButton.HoverEnter += (O,A) =>
+            _applyButton.HoverEnter += () =>
             {
                 _applyButton.Scale *= 1.05f;
                 _applyText.Scale *= 1.05f;
             };
-            _applyButton.HoverExit += (O, A) =>
+            _applyButton.HoverExit += () =>
             {
                 _applyButton.Scale /= 1.05f;
                 _applyText.Scale /= 1.05f;

@@ -1,6 +1,7 @@
 using System;
 using Hedra.Engine.Player;
 using OpenToolkit.Mathematics;
+using OpenToolkit.Windowing.Common;
 
 
 namespace HedraTests.Player
@@ -73,11 +74,6 @@ namespace HedraTests.Player
         }
 
         public void OnKeyUp(object Sender, KeyboardKeyEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnKeyPress(object Sender, KeyPressEventArgs e)
         {
             throw new NotImplementedException();
         }

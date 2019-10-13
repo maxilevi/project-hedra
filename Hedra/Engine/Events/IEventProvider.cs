@@ -12,6 +12,5 @@ namespace Hedra.Engine.Events
         event Action<MouseMoveEventArgs> MouseMove;
         event Action<KeyboardKeyEventArgs> KeyDown;
         event Action<KeyboardKeyEventArgs> KeyUp;
-        event Action<KeyPressEventArgs> KeyPress;
     }
 }

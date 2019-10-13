@@ -5,9 +5,7 @@
  *
  */
 using System;
-using OpenTK.Audio.OpenAL;
-using OpenTK.Audio;
-using Hedra.Engine.Management;
+using OpenToolkit.OpenAL;
 
 namespace Hedra.Engine.Sound
 {
@@ -16,23 +14,25 @@ namespace Hedra.Engine.Sound
     /// </summary>
     public class SoundBuffer : IDisposable
     {
-        public uint ID;
+        public readonly uint Id;
+        private readonly AL _al;
+        
+        public unsafe SoundBuffer(short[] Data, BufferFormat Format, int SampleRate)
+        {
+            var id = 0u;
+            _al.GenBuffers(1, &id);
+            fixed (void* ptr = Data)
+            {
+                _al.BufferData(id, Format, ptr, Data.Length * sizeof(short), SampleRate);
+            }
 
-        public SoundBuffer(byte[] Data, ALFormat Format, int SampleRate)
-        {
-            AL.GenBuffers(1, out ID);
-            AL.BufferData( (int) ID, Format, Data, Data.Length, SampleRate);
+            Id = id;
         }
         
-        public SoundBuffer(short[] Data, ALFormat Format, int SampleRate)
+        public unsafe void Dispose()
         {
-            AL.GenBuffers(1, out ID);
-            AL.BufferData( (int) ID, Format, Data, Data.Length * sizeof(short), SampleRate);
-        }
-        
-        public void Dispose()
-        {
-            AL.DeleteBuffers(1, ref ID);
+            var id = Id;
+            _al.DeleteBuffers(1, &id);
         }
     }
 }

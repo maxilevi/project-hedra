@@ -97,13 +97,13 @@ namespace Hedra.Engine.Rendering.UI
         {
             if(AddClickEvent)
                 Background.Click += (Sender, Args) => OnClick(Background, Args);
-            Background.HoverEnter += (Sender, Args) =>
+            Background.HoverEnter += () =>
             {
                 Text.TextColor = Color.OrangeRed;
                 Text.Scale *= 1.25f;
                 Background.Scale *= 1.25f;
             };
-            Background.HoverExit += (Sender, Args) =>
+            Background.HoverExit += () =>
             {
                 /* Text is recreated when changing the color, so there is no need to edit the scale */
                 Text.TextColor = Color.White;

@@ -1,3 +1,4 @@
+using System;
 using OpenToolkit.Graphics.GL33;
 
 #region Typedefs
@@ -128,6 +129,7 @@ namespace Hedra.Engine.Core
         DynamicDraw = GLEnum.DynamicDraw,
     }
     
+    [Flags]
     public enum ClearBufferMask    
     {
         ColorBufferBit = GLEnum.ColorBufferBit,
@@ -186,7 +188,8 @@ namespace Hedra.Engine.Core
     public enum GetProgramParameterName    
     {
         LinkStatus = GLEnum.LinkStatus,
-        CurrentProgram = GLEnum.CurrentProgram
+        InfoLogLength = GLEnum.InfoLogLength,
+        CurrentProgram = GLEnum.CurrentProgram,
     }
     
     public enum PixelInternalFormat    
@@ -315,14 +318,14 @@ namespace Hedra.Engine.Core
         Extensions = GLEnum.Extensions,
         Vendor =  GLEnum.Vendor,
         Renderer = GLEnum.Renderer,
-        Version = GLEnum.Version
+        Version = GLEnum.Version,
+        ShadingLanguageVersion = GLEnum.ShadingLanguageVersion
     }
     
     public enum ShaderParameter    
     {
         CompileStatus = GLEnum.CompileStatus,
-        LinkStatus = GLEnum.LinkStatus,
-        CurrentProgram = GLEnum.CurrentProgram
+        InfoLogLength = GLEnum.InfoLogLength
     }
     
     public enum GetQueryObjectParam    

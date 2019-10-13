@@ -71,15 +71,15 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 
         }
 
-        protected override void HoverEnter(object Sender, MouseEventArgs EventArgs)
+        protected override void HoverEnter(object Sender)
         {
-            base.HoverEnter(Sender, EventArgs);
+            base.HoverEnter(Sender);
             _interface.SpecializationInfo.ShowSpecialization(null);
         }
 
-        protected override void HoverExit(object Sender, MouseEventArgs EventArgs)
+        protected override void HoverExit(object Sender)
         {
-            base.HoverExit(Sender, EventArgs);
+            base.HoverExit(Sender);
             var blueprint = _player.AbilityTree.Specialization;
             _interface.SpecializationInfo.ShowSpecialization(blueprint.IsSpecialization ? blueprint : null);
         }

@@ -1,5 +1,6 @@
 using System.Drawing;
 using OpenToolkit.Windowing.Common;
+using OpenToolkit.Windowing.Common.Input;
 
 namespace Hedra.Engine.Loader
 {
@@ -10,16 +11,14 @@ namespace Hedra.Engine.Loader
         VSyncMode VSync { get; set; }
         WindowState WindowState { get; set; }
         bool Exists { get; }
-        int Height { get; set; }
-        Icon Icon { get; set; }
+        WindowIcon Icon { get; set; }
         string Title { get; set; }
-        int Width { get; set; }
         WindowBorder WindowBorder { get; set; }
         bool CursorVisible { get; set; }
-        void Exit();
         void Run();
-        void RunOnce();
         void Dispose();
         void Close();
+        int Width { get; set; }
+        int Height { get; set; }
     }
 }

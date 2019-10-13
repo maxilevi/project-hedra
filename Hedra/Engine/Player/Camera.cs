@@ -50,6 +50,7 @@ namespace Hedra.Engine.Player
         public Func<Vector3> PositionDelegate { get; set; }
         private float _xDelta;
         private float _yDelta;
+        private float _wheelDelta;
         public float Pitch { get; set; }
         public float Yaw { get; set; }
         public float StackedYaw { get; private set; }
@@ -171,11 +172,13 @@ namespace Hedra.Engine.Player
         {
             if (GameSettings.Paused || !CaptureMovement) return;
 
-            var newDistance = TargetDistance - E.Delta * WheelSpeed;
+            var delta = E.OffsetY - _wheelDelta;
+            var newDistance = TargetDistance - delta * WheelSpeed;
             if (IsColliding(GetCameraEyePosition(newDistance), out _) || IsColliding(GetCameraEyePosition(newDistance + DistanceBuffer), out _)) return;
 
-            TargetDistance -= E.Delta * WheelSpeed;
+            TargetDistance -= delta * WheelSpeed;
             TargetDistance = Mathf.Clamp(TargetDistance, 1.5f, MaxDistance);
+            _wheelDelta = E.OffsetY;
         }
 
         public float TargetDistance { get; set; } = DefaultDistance;

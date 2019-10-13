@@ -89,7 +89,7 @@ namespace Hedra.Engine.Rendering.Core
         void TexImage2DMultisample(TextureTargetMultisample Target, int Samples, PixelInternalFormat InternalFormat,
             int Width, int Height, bool FixedLocations);
         void TexImage3D<T>(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3,
-            int V4, PixelFormat Format, PixelType Type, T[,,] Data) where T : struct;
+            int V4, PixelFormat Format, PixelType Type, T[] Pixels) where T : struct;
         void TexParameter(TextureTarget Target, TextureParameterName Name, int Value);
         void Uniform1(int Location, int Uniform);
         void Uniform1(int Location, float Uniform);
@@ -103,7 +103,7 @@ namespace Hedra.Engine.Rendering.Core
         void UseProgram(uint Program);
         void VertexAttribDivisor(int V0, int V1);
         void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag, int Bytes, IntPtr Ptr);
-        void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag, int Bytes, int V2);
+        void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag, int Bytes);
         void Viewport(int V0, int V1, int V2, int V3);
         void GetProgram(int ShaderId, GetProgramParameterName ParameterName, out int Value);
         void GetProgramInfoLog(int ShaderId, out string Log);

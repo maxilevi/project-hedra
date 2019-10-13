@@ -1,7 +1,7 @@
 using System;
 using Hedra.Sound;
 using OpenToolkit.Mathematics;
-using OpenTK.Audio.OpenAL;
+using OpenToolkit.OpenAL;
 
 namespace Hedra.Engine.Sound
 {
@@ -15,7 +15,7 @@ namespace Hedra.Engine.Sound
         void PlaySoundWhile(string Sound, Func<bool> Lambda, Func<float> Pitch, Func<float> Gain);
         SoundBuffer GetBuffer(string Type);
         SoundItem GetAvailableSource();
-        ALFormat GetSoundFormat(int Channels, int Bits);
+        BufferFormat GetSoundFormat(int Channels, int Bits);
         void LoadSound(string Name, params string[] Names);
         void MarkAsReady();
     }

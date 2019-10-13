@@ -11,6 +11,7 @@ using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.Sound;
 using OpenToolkit.Mathematics;
+using OpenToolkit.OpenAL;
 
 namespace Hedra.Sound
 {
@@ -74,7 +75,7 @@ namespace Hedra.Sound
             return Provider.GetAvailableSource();
         }
 
-        public static ALFormat GetSoundFormat(int Channels, int Bits)
+        public static BufferFormat GetSoundFormat(int Channels, int Bits)
         {
             return Provider.GetSoundFormat(Channels, Bits);
         }

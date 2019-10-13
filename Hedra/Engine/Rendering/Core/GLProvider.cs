@@ -90,7 +90,7 @@ namespace Hedra.Engine.Rendering.Core
 
         public void BindFramebuffer(FramebufferTarget Target, uint Id)
         {
-            EXT.GL.BindFramebuffer((GLFramebufferTarget)Target, Id);
+            EXT.GL.BindFramebuffer((GLFramebufferTargetEXT)Target, Id);
             EnsureNoErrors();
         }
 
@@ -159,7 +159,7 @@ namespace Hedra.Engine.Rendering.Core
         {
             try
             {
-                return (FramebufferErrorCode)EXT.GL.CheckFramebufferStatusEXT((GLFramebufferTarget)Target);
+                return (FramebufferErrorCode)EXT.GL.CheckFramebufferStatusEXT((GLFramebufferTargetEXT)Target);
             }
             finally
             {
@@ -489,15 +489,13 @@ namespace Hedra.Engine.Rendering.Core
 
         public string GetShaderInfoLog(int Id)
         {
-            try
-            {
-                var str = string.Empty;
-                GL.GetShaderInfoLog((uint)Id, str);
-            }
-            finally
-            {
-                EnsureNoErrors();
-            }
+            GetShader((uint) Id, ShaderParameter.InfoLogLength, out var lengthTmp);
+            var length = (uint) lengthTmp;
+            if (length == 0) return string.Empty;
+            var log = new string((char) 0, (int) length);
+            GL.GetProgramInfoLog((uint) Id, length * 2, ref length, log);
+            EnsureNoErrors();
+            return log;
         }
 
         public unsafe string GetString(StringName Name)
@@ -580,7 +578,7 @@ namespace Hedra.Engine.Rendering.Core
 
         public void ShaderSource(int V0, string Source)
         {
-            GL.ShaderSource(V0, Source);
+            GL.ShaderSource((uint)V0, 1, new string[] { Source }, (IntPtr)Source.Length);
             EnsureNoErrors();
         }
 
@@ -598,10 +596,10 @@ namespace Hedra.Engine.Rendering.Core
             EnsureNoErrors();
         }
 
-        public void TexImage3D<T>(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3, int V4,
-            PixelFormat Format, PixelType Type, T[,,] Data) where T : struct
+        public unsafe void TexImage3D<T>(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3, int V4,
+            PixelFormat Format, PixelType Type, T[] Pixels) where T : struct
         {
-            GL.TexImage3D((GLTextureTarget)Target, V0, (int)InternalFormat, V1, V2, V3, V4, Format, Type, Data);
+            GL.TexImage3D((GLTextureTarget) Target, V0, (int) InternalFormat, (uint) V1, (uint) V2, (uint) V3, V4, (GLPixelFormat) Format, (GLPixelType) Type, Pixels);
             EnsureNoErrors();
         }
 
@@ -683,9 +681,9 @@ namespace Hedra.Engine.Rendering.Core
             EnsureNoErrors();
         }
         
-        public void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag, int Bytes, int V2)
+        public unsafe void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag, int Bytes)
         {
-            GL.VertexAttribPointer((uint)V0, V1, (GLVertexAttribPointerType)Type, Flag, (uint)Bytes, V2);
+            GL.VertexAttribPointer((uint)V0, V1, (GLVertexAttribPointerType)Type, Flag, (uint)Bytes, IntPtr.Zero.ToPointer());
             EnsureNoErrors();
         }
 
@@ -704,7 +702,15 @@ namespace Hedra.Engine.Rendering.Core
 
         public void GetProgramInfoLog(int ShaderId, out string Log)
         {
-            GL.GetProgramInfoLog((uint)ShaderId, out Log);
+            GetProgram(ShaderId, GetProgramParameterName.InfoLogLength, out var lengthTmp);
+            var length = (uint) lengthTmp;
+            if (length == 0)
+            {
+                Log = string.Empty;
+                return;
+            }
+            Log = new string((char)0, (int)length);
+            GL.GetProgramInfoLog((uint)ShaderId, length * 2, ref length, Log);
             EnsureNoErrors();
         }
 

@@ -1,10 +1,13 @@
+using System.Windows.Forms;
 using Hedra.Core;
 using Hedra.Engine.Events;
 using Hedra.Engine.Input;
 using Hedra.Engine.Player.CraftingSystem;
 using Hedra.Engine.Player.Inventory;
-using Hedra.Engine.Rendering.UI;
 using Hedra.Sound;
+using OpenToolkit.Windowing.Common;
+using Button = Hedra.Engine.Rendering.UI.Button;
+using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;
 
 
 namespace Hedra.Engine.Player.PagedInterface
@@ -42,11 +45,11 @@ namespace Hedra.Engine.Player.PagedInterface
         {
         }
 
-        protected override void HoverEnter(object Sender, MouseEventArgs EventArgs)
+        protected override void HoverEnter(object Sender)
         {
         }
 
-        protected override void HoverExit(object Sender, MouseEventArgs EventArgs)
+        protected override void HoverExit(object Sender)
         {
         }
 

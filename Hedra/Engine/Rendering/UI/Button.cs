@@ -7,6 +7,7 @@
 
 using System;
 using System.Drawing;
+using System.Windows.Forms;
 using Hedra.Core;
 using Hedra.Engine.Events;
 using Hedra.Engine.Localization;
@@ -22,12 +23,11 @@ using OpenToolkit.Windowing.Common.Input;
 namespace Hedra.Engine.Rendering.UI
 {
     public delegate void OnButtonClickEventHandler(object Sender, MouseButtonEventArgs E);
+    
 
-    public delegate void OnButtonHoverEventHandler(object Sender, MouseEventArgs E);
+    public delegate void OnButtonHoverEnterEventHandler();
 
-    public delegate void OnButtonHoverEnterEventHandler(object Sender, MouseEventArgs E);
-
-    public delegate void OnButtonHoverExitEventHandler(object Sender, MouseEventArgs E);
+    public delegate void OnButtonHoverExitEventHandler();
 
     public class Button : EventListener, UIElement
     {
@@ -80,7 +80,6 @@ namespace Hedra.Engine.Rendering.UI
         }
 
         public event OnButtonClickEventHandler Click;
-        public event OnButtonHoverEventHandler Hover;
         public event OnButtonHoverEnterEventHandler HoverEnter;
         public event OnButtonHoverExitEventHandler HoverExit;
 
@@ -104,7 +103,7 @@ namespace Hedra.Engine.Rendering.UI
 
         public void ForceClick()
         {
-            this.Click?.Invoke(null, null);
+            this.Click?.Invoke(null, default);
         }
 
         public override void OnMouseButtonDown(object Sender, MouseButtonEventArgs E)
@@ -112,7 +111,7 @@ namespace Hedra.Engine.Rendering.UI
             if (this.Enabled && this.Click != null && (E.Button == MouseButton.Left || E.Button == MouseButton.Right))
             {
                 var coords = Mathf.ToNormalizedDeviceCoordinates(
-                    new Vector2(E.Mouse.X, E.Mouse.Y),
+                    new Vector2(Program.GameWindow.MousePosition.X, Program.GameWindow.MousePosition.Y),
                     new Vector2(GameSettings.SurfaceWidth, GameSettings.SurfaceHeight)
                 );
                 if (this.Position.Y + this.Scale.Y > -coords.Y && this.Position.Y - this.Scale.Y < -coords.Y
@@ -133,16 +132,16 @@ namespace Hedra.Engine.Rendering.UI
             if (this.Enabled && this.CanClick)
             {
                 var coords = Mathf.ToNormalizedDeviceCoordinates(
-                    new Vector2(E.Mouse.X, E.Mouse.Y),
+                    new Vector2(Program.GameWindow.MousePosition.X, Program.GameWindow.MousePosition.Y),
                     new Vector2(GameSettings.SurfaceWidth, GameSettings.SurfaceHeight)
                     );
                 if (this.Position.Y + this.Scale.Y > -coords.Y && this.Position.Y - this.Scale.Y < -coords.Y
                     && this.Position.X + this.Scale.X > coords.X && this.Position.X - this.Scale.X < coords.X)
                 {
-                    Hover?.Invoke(Sender, E);
+                    //Hover?.Invoke(Sender, E);
                     if (!this._hasEntered)
                     {
-                        HoverEnter?.Invoke(Sender, E);
+                        HoverEnter?.Invoke();
                         UpdateTranslation();
                         this._hasEntered = true;
                     }
@@ -151,7 +150,7 @@ namespace Hedra.Engine.Rendering.UI
                 {
                     if (this._hasEntered)
                     {
-                        HoverExit?.Invoke(Sender, E);
+                        HoverExit?.Invoke();
                         UpdateTranslation();
                         this._hasEntered = false;
                     }
@@ -159,7 +158,7 @@ namespace Hedra.Engine.Rendering.UI
             }
         }
 
-        public void OnHoverEnter(object Sender, EventArgs E)
+        public void OnHoverEnter()
         {
             if (this.Text != null)
             {
@@ -174,7 +173,7 @@ namespace Hedra.Engine.Rendering.UI
                     SoundPlayer.PlayUISound(SoundType.ButtonHover, 1f, .3f);
         }
 
-        public void OnHoverExit(object Sender, EventArgs E)
+        public void OnHoverExit()
         {
             if (this.Text != null)
             {

@@ -1,5 +1,6 @@
 using System;
 using OpenToolkit.Mathematics;
+using OpenToolkit.OpenAL;
 
 namespace Hedra.Engine.Sound
 {
@@ -35,9 +36,9 @@ namespace Hedra.Engine.Sound
             return null;
         }
 
-        public ALFormat GetSoundFormat(int Channels, int Bits)
+        public BufferFormat GetSoundFormat(int Channels, int Bits)
         {
-            return default(ALFormat);
+            return default(BufferFormat);
         }
 
         public void LoadSound(string Name, params string[] Names)

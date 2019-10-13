@@ -147,7 +147,7 @@ namespace Hedra.Engine.Rendering.UI
             Button quit = new Button(new Vector2(.9f, bandPosition.Y),
                                      new Vector2(0.15f,0.075f), Translation.Create("exit"), DefaultFontColor, FontCache.GetNormal(fontSize));
             
-            quit.Click += delegate { Program.GameWindow.Exit(); };
+            quit.Click += delegate { Program.GameWindow.Close(); };
             
             if(Program.GameWindow.GameVersion != "Unknown")
             {

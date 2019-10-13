@@ -66,18 +66,8 @@ namespace Hedra.Engine.Rendering
             UBO = new UBO<ObjectMeshBufferData>("ObjectAttributes");
             Shader = Shader.Build("Shaders/ObjectMesh.vert", "Shaders/ObjectMesh.frag");
             UBO.RegisterShader(Shader);
-            var noiseValues = new float[16, 16, 16];
-            for (var x = 0; x < noiseValues.GetLength(0); x++)
-            {
-                for (var y = 0; y < noiseValues.GetLength(1); y++)
-                {
-                    for (var z = 0; z < noiseValues.GetLength(2); z++)
-                    {
-                        noiseValues[x, y, z] = (float)World.GetNoise(x * 0.6f, y * 0.6f, z * 0.6f) * .5f + .5f;
-                    }
-                }
-            }
-            NoiseTexture = new Texture3D(noiseValues);
+            var noiseValues = WorldRenderer.CreateNoiseArray(out var width, out var height, out var depth);
+            NoiseTexture = new Texture3D(noiseValues, width, height, depth);
         }
 
         public ObjectMeshBuffer(VertexData ModelData)

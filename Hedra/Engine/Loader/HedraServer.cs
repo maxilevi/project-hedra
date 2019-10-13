@@ -17,8 +17,8 @@ using Hedra.Engine.Sound;
 using Hedra.Game;
 using Hedra.Sound;
 using OpenToolkit.Mathematics;
-using OpenTK.Graphics;
 using OpenToolkit.Windowing.Common;
+using OpenToolkit.Windowing.Common.Input;
 
 
 namespace Hedra.Engine.Loader
@@ -68,7 +68,7 @@ namespace Hedra.Engine.Loader
         public VSyncMode VSync { get; set; }
         public WindowState WindowState { get; set; }
         public int Height { get; set; }
-        public Icon Icon { get; set; }
+        public WindowIcon Icon { get; set; }
         public string Title { get; set; }
         public int Width { get; set; }
         public WindowBorder WindowBorder { get; set; }
@@ -76,13 +76,15 @@ namespace Hedra.Engine.Loader
         
         public bool FinishedLoadingSplashScreen => true;
         public string GameVersion => "SERVER";
+        public Vector2 MousePosition { get; }
+        public Vector2 MouseDelta { get; }
         public event OnFrameChanged FrameChanged;
-        public event EventHandler<MouseButtonEventArgs> MouseUp;
-        public event EventHandler<MouseButtonEventArgs> MouseDown;
-        public event EventHandler<MouseWheelEventArgs> MouseWheel;
-        public event EventHandler<MouseMoveEventArgs> MouseMove;
-        public event EventHandler<KeyboardKeyEventArgs> KeyDown;
-        public event EventHandler<KeyboardKeyEventArgs> KeyUp;
-        public event EventHandler<KeyPressEventArgs> KeyPress;
+        public event Action<MouseButtonEventArgs> MouseUp;
+        public event Action<MouseButtonEventArgs> MouseDown;
+        public event Action<MouseWheelEventArgs> MouseWheel;
+        public event Action<MouseMoveEventArgs> MouseMove;
+        public event Action<KeyboardKeyEventArgs> KeyDown;
+        public event Action<KeyboardKeyEventArgs> KeyUp;
+        public event Action<KeyPressEventArgs> KeyPress;
     }
 }

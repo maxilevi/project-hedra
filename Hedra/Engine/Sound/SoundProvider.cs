@@ -259,22 +259,14 @@ namespace Hedra.Engine.Sound
             }
         }
 
-        public ALFormat GetSoundFormat(int Channels, int Bits)
+        public BufferFormat GetSoundFormat(int Channels, int Bits)
         {
             switch (Channels)
             {
-                case 1: return Bits == 8 ? ALFormat.Mono8 : ALFormat.Mono16;
-                case 2: return Bits == 8 ? ALFormat.Stereo8 : ALFormat.Stereo16;
+                case 1: return Bits == 8 ? BufferFormat.Mono8 : BufferFormat.Mono16;
+                case 2: return Bits == 8 ? BufferFormat.Stereo8 : BufferFormat.Stereo16;
                 default: throw new NotSupportedException("The specified sound format is not supported.");
             }
         }
-    }
-
-    public enum ALFormat
-    {
-        Mono8,
-        Mono16,
-        Stereo8,
-        Stereo16
     }
 }

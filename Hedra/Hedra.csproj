@@ -72,6 +72,9 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <Reference Include="AdvancedDLSupport, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\OpenToolkit\AdvancedDLSupport.dll</HintPath>
+    </Reference>
     <Reference Include="BulletSharp, Version=0.11.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\references\BulletSharp.dll</HintPath>
     </Reference>
@@ -1355,7 +1358,6 @@
     <Compile Include="Engine\Rendering\UI\ColorPicker.cs" />
     <Compile Include="Engine\Rendering\UI\ControlsUI.cs" />
     <Compile Include="Engine\Rendering\UI\CursorIcon.cs" />
-    <Compile Include="Engine\Rendering\UI\DisplayOnDrag.cs" />
     <Compile Include="Engine\Rendering\UI\GameUI.cs" />
     <Compile Include="Engine\Rendering\UI\GUIRenderer.cs" />
     <Compile Include="Engine\Rendering\UI\GUITexture.cs" />

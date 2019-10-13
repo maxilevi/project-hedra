@@ -52,8 +52,8 @@ namespace Hedra.Engine.Player.Inventory
                     var k = j;
                     buttons[j].Click += (Sender, EventArgs) => this.Interact(buttons[k], EventArgs);
                     buttons[j].Click += (Sender, EventArgs) => this.Use(buttons[k], EventArgs);
-                    buttons[j].HoverEnter += (Sender, EventArgs) => this.HoverEnter(buttons[k], EventArgs);
-                    buttons[j].HoverExit += (Sender, EventArgs) => this.HoverExit(buttons[k], EventArgs);
+                    buttons[j].HoverEnter += () => this.HoverEnter(buttons[k]);
+                    buttons[j].HoverExit += () => this.HoverExit(buttons[k]);
                 }
             }
             _itemInfoInterface = ItemInfoInterface;
@@ -298,7 +298,7 @@ namespace Hedra.Engine.Player.Inventory
             _selectedMesh = null;
         }
 
-        protected virtual void HoverEnter(object Sender, MouseEventArgs EventArgs)
+        protected virtual void HoverEnter(object Sender)
         {
             var button = (Button)Sender;
             var itemIndex = this.IndexByButton(button);
@@ -308,7 +308,7 @@ namespace Hedra.Engine.Player.Inventory
             _itemInfoInterface?.Show(item);
         }
 
-        protected virtual void HoverExit(object Sender, MouseEventArgs EventArgs)
+        protected virtual void HoverExit(object Sender)
         {
             _itemInfoInterface?.Hide();
         }

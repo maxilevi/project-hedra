@@ -1,11 +1,9 @@
 using System;
-using System.ComponentModel;
-using System.Drawing;
 using Hedra.Engine.Events;
 using Hedra.Engine.Loader;
 using OpenToolkit.Mathematics;
-
-using OpenTK.Platform;
+using OpenToolkit.Windowing.Common;
+using OpenToolkit.Windowing.Common.Input;
 
 namespace HedraTests
 {
@@ -17,24 +15,15 @@ namespace HedraTests
         public WindowState WindowState { get; set; }
         public bool Exists { get; }
         public int Height { get; set; }
-        public Icon Icon { get; set; }
+        public WindowIcon Icon { get; set; }
         public string Title { get; set; }
         public int Width { get; set; }
         public WindowBorder WindowBorder { get; set; }
         public bool CursorVisible { get; set; }
-        
-        public void Exit()
-        {
-        }
 
         public void Run()
         {
         }
-
-        public void RunOnce()
-        {
-        }
-
         public void Dispose()
         {
         }
@@ -43,15 +32,15 @@ namespace HedraTests
         {
         }
 
-        public event EventHandler<KeyboardKeyEventArgs> KeyDown;
-        public event EventHandler<KeyPressEventArgs> KeyPress;
-        public event EventHandler<KeyboardKeyEventArgs> KeyUp;
-        public event EventHandler<MouseButtonEventArgs> MouseDown;
-        public event EventHandler<MouseButtonEventArgs> MouseUp;
-        public event EventHandler<MouseMoveEventArgs> MouseMove;
-        public event EventHandler<MouseWheelEventArgs> MouseWheel;
+        public event Action<KeyboardKeyEventArgs> KeyDown;
+        public event Action<KeyboardKeyEventArgs> KeyUp;
+        public event Action<MouseButtonEventArgs> MouseDown;
+        public event Action<MouseButtonEventArgs> MouseUp;
+        public event Action<MouseMoveEventArgs> MouseMove;
+        public event Action<MouseWheelEventArgs> MouseWheel;
         public bool FinishedLoadingSplashScreen => true;
         public string GameVersion { get; }
+        public Vector2 MousePosition { get; }
         public event OnFrameChanged FrameChanged;
     }
 }
