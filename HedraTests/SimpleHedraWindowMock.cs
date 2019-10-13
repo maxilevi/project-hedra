@@ -40,6 +40,10 @@ namespace HedraTests
         public event Action<MouseWheelEventArgs> MouseWheel;
         public bool FinishedLoadingSplashScreen => true;
         public string GameVersion { get; }
+        public void Setup()
+        {
+        }
+
         public Vector2 MousePosition { get; }
         public event OnFrameChanged FrameChanged;
     }

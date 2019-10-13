@@ -1,4 +1,5 @@
 using System.Drawing;
+using OpenToolkit.Mathematics;
 using OpenToolkit.Windowing.Common;
 using OpenToolkit.Windowing.Common.Input;
 
@@ -20,5 +21,6 @@ namespace Hedra.Engine.Loader
         void Close();
         int Width { get; set; }
         int Height { get; set; }
+        Vector2 MousePosition { get; }
     }
 }

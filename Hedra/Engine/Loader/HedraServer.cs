@@ -76,6 +76,10 @@ namespace Hedra.Engine.Loader
         
         public bool FinishedLoadingSplashScreen => true;
         public string GameVersion => "SERVER";
+        public void Setup()
+        {
+        }
+
         public Vector2 MousePosition { get; }
         public Vector2 MouseDelta { get; }
         public event OnFrameChanged FrameChanged;

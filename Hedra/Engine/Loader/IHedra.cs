@@ -6,6 +6,6 @@ namespace Hedra.Engine.Loader
     {
         bool FinishedLoadingSplashScreen { get; }
         string GameVersion { get; }
-        Vector2 MousePosition { get; }
+        void Setup();
     }
 }

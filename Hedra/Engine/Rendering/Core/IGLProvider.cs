@@ -25,10 +25,10 @@ namespace Hedra.Engine.Rendering.Core
         void BlitFramebuffer(int SrcX0, int SrcY0, int SrcX1, int SrcY1, int DstX0, int DstY0, int DstX1, int DstY1,
             ClearBufferMask Mask, BlitFramebufferFilter Filter);
         void BufferData(BufferTarget Target, IntPtr Size, IntPtr Ptr, BufferUsageHint Hint);
-        void BufferData<T>(BufferTarget Target, IntPtr Size, T[] Data, BufferUsageHint Hint) where T : struct;
+        void BufferData<T>(BufferTarget Target, IntPtr Size, T[] Data, BufferUsageHint Hint) where T : unmanaged;
         void BufferSubData(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, IntPtr Ptr1);
-        void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, ref T Data) where T : struct;
-        void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, T[] Data) where T : struct;
+        void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, ref T Data) where T : unmanaged;
+        void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, T[] Data) where T : unmanaged;
         FramebufferErrorCode CheckFramebufferStatus(FramebufferTarget Target);
         void Clear(ClearBufferMask Mask);
         void ClearColor(Vector4 DrawingColor);

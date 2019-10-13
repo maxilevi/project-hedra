@@ -53,15 +53,34 @@ namespace Hedra.Engine.Loader
         private bool _forcingResize;
         private int _passedFrames;
         private double _passedMillis;
-        
-        public Hedra(int Width, int Height, string Title, int Major, int Minor, ContextProfile Profile, ContextFlags Flags) :
-            base(new GameWindowSettings { IsMultiThreaded = false }, new NativeWindowSettings
+
+        public Hedra(int Width, int Height, string Title, int Major, int Minor, ContextProfile Profile,
+            ContextFlags Flags) :
+            base(new GameWindowSettings {IsMultiThreaded = false}, new NativeWindowSettings
             {
+                Size = new Vector2i(Width, Height),
+                Title = Title,
                 API = ContextAPI.OpenGL,
                 APIVersion = Version.Parse($"{Major}.{Minor}"),
                 Profile = Profile,
                 Flags = Flags
-            }){}
+            })
+        {
+        }
+
+        public void Setup()
+        {
+            Title = $"{Title} {GameVersion}";
+            if (!LoadBoilerplate())
+            {
+                Close();
+            }
+            else
+            {
+                _debugProvider = new DebugInfoProvider();
+                _splashScreen = new SplashScreen();
+            }
+        }
 
         public static bool LoadBoilerplate()
         {
@@ -117,20 +136,6 @@ namespace Hedra.Engine.Loader
             MissionPool.Load();
         }
 
-        protected override void OnLoad()
-        {
-            Title = $"{Title} {GameVersion}";
-            if (!LoadBoilerplate())
-            {
-                Close();
-            }
-            else
-            {
-                _debugProvider = new DebugInfoProvider();
-                _splashScreen = new SplashScreen();
-            }
-        }
-        
         protected override void OnUpdateFrame(FrameEventArgs Args)
         {
             this._splashScreen.Update();

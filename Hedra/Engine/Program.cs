@@ -112,10 +112,9 @@ namespace Hedra.Engine
             profile = ContextProfile.Compatability;
             flags = ContextFlags.Debug;
 #endif
-            GameWindow = new Loader.Hedra(GameSettings.Width, GameSettings.Height, "Project Hedra", 3, 3, profile, flags)
-            {
-                WindowState = WindowState.Maximized
-            };
+            GameWindow = new Loader.Hedra(GameSettings.Width, GameSettings.Height, "Project Hedra", 3, 3, profile, flags);
+            GameWindow.Setup();
+            GameWindow.WindowState = WindowState.Maximized;
 #if !DEBUG
             if (OSManager.RunningPlatform == Platform.Windows)
             {

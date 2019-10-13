@@ -70,11 +70,6 @@ namespace Hedra.Engine.Rendering.Core
         {
         }
 
-        public unsafe void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, IntPtr Data) where T : unmanaged
-        {
-            throw new NotImplementedException();
-        }
-
         public virtual void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, T[] Data) where T : unmanaged
         {
         }
