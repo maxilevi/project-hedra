@@ -1,7 +1,7 @@
 using System;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Rendering;
-using OpenTK.Graphics.OpenGL4;
+using Hedra.Engine.Core;
 
 namespace Hedra.Engine.Rendering
 {

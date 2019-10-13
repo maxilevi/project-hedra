@@ -5,7 +5,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
 using Moq;
 using NUnit.Framework;
-using OpenTK.Graphics.OpenGL4;
+using Hedra.Engine.Core;
 
 namespace HedraTests.Rendering
 {

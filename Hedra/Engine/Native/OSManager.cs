@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using Hedra.Engine.IO;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
-using OpenTK.Graphics.OpenGL4;
+using Hedra.Engine.Core;
 
 namespace Hedra.Engine.Native
 {

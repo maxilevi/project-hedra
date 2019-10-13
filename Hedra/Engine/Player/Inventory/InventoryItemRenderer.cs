@@ -13,7 +13,7 @@ using Hedra.Game;
 using Hedra.Items;
 using Hedra.Rendering;
 using OpenToolkit.Mathematics;
-using OpenTK.Graphics.OpenGL4;
+using Hedra.Engine.Core;
 
 namespace Hedra.Engine.Player.Inventory
 {

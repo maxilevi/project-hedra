@@ -1,4 +1,4 @@
-using OpenTK.Graphics.OpenGL4;
+using OpenToolkit.Graphics.EXT;
 
 namespace Hedra.Engine.Rendering.Core
 {

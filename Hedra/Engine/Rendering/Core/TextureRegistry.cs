@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI;
-using OpenTK.Graphics.OpenGL4;
+using Hedra.Engine.Core;
 
 namespace Hedra.Engine.Rendering.Core
 {

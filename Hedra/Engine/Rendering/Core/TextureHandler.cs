@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Game;
-using OpenTK.Graphics.OpenGL4;
+using OpenToolkit.Graphics.GL30;
 
 namespace Hedra.Engine.Rendering.Core
 {
@@ -90,7 +90,7 @@ namespace Hedra.Engine.Rendering.Core
                 _states[stateToModify].States[keyToModify] = uint.MaxValue;
             }
 
-            Renderer.Provider.DeleteTexture(Id);
+            Renderer.Provider.DeleteTextures(1, Id);
         }
 
         private class TextureState

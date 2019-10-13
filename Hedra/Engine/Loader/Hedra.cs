@@ -35,7 +35,7 @@ using Hedra.Rendering;
 using Hedra.Sound;
 using OpenToolkit.Mathematics;
 using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL4;
+using Hedra.Engine.Core;
 
 namespace Hedra.Engine.Loader
 {

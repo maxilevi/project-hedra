@@ -14,7 +14,7 @@ using Hedra.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
 using OpenToolkit.Mathematics;
-using OpenTK.Graphics.OpenGL4;
+using Hedra.Engine.Core;
 
 namespace Hedra.Engine.Rendering.Particles
 {

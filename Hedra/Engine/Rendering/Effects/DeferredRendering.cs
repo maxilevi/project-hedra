@@ -8,7 +8,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using OpenToolkit.Mathematics;
-using OpenTK.Graphics.OpenGL4;
+using Hedra.Engine.Core;
 using System.Collections.Generic;
 using Hedra.Core;
 using Hedra.Engine.Game;

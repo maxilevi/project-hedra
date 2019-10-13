@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using Hedra.Engine.Game;
 using Newtonsoft.Json;
-using OpenTK.Input;
+using OpenToolkit.Windowing.Common.Input;
 
 namespace Hedra.Localization
 {

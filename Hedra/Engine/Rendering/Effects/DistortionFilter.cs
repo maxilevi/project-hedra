@@ -9,7 +9,7 @@
 using System;
 using Hedra.Engine.Rendering.Core;
 using OpenToolkit.Mathematics;
-using OpenTK.Graphics.OpenGL4;
+using Hedra.Engine.Core;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Rendering;
 

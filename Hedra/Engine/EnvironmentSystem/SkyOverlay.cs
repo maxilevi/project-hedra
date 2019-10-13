@@ -7,7 +7,7 @@ using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Rendering.Geometry;
 using Hedra.Rendering;
 using OpenToolkit.Mathematics;
-using OpenTK.Graphics.OpenGL4;
+using Hedra.Engine.Core;
 
 namespace Hedra.Engine.EnvironmentSystem
 {

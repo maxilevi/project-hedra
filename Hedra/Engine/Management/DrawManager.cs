@@ -21,7 +21,7 @@ using Hedra.Engine.Rendering.UI;
 using Hedra.Game;
 using Hedra.Rendering;
 using OpenToolkit.Mathematics;
-using OpenTK.Graphics.OpenGL4;
+using Hedra.Engine.Core;
 
 namespace Hedra.Engine.Management
 {

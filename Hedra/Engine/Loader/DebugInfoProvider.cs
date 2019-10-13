@@ -24,7 +24,7 @@ using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using Hedra.WeaponSystem;
 using OpenToolkit.Mathematics;
-using OpenTK.Graphics.OpenGL4;
+using Hedra.Engine.Core;
 using OpenTK.Input;
 
 namespace Hedra.Engine.Loader

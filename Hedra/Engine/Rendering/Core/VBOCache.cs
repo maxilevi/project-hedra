@@ -12,7 +12,7 @@ using Hedra.Engine.Management;
 using Hedra.Game;
 using IronPython.Runtime;
 using OpenToolkit.Mathematics;
-using OpenTK.Graphics.OpenGL4;
+using Hedra.Engine.Core;
 using OpenToolkit.Graphics.EXT;
 using Buffer = System.Buffer;
 

@@ -1,6 +1,6 @@
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
-using OpenTK.Graphics.OpenGL4;
+using Hedra.Engine.Core;
 
 namespace Hedra.Engine.Rendering.Effects
 {

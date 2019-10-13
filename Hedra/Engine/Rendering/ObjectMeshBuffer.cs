@@ -19,7 +19,7 @@ using Hedra.Engine.Rendering.Frustum;
 using Hedra.Game;
 using Hedra.Rendering;
 using OpenToolkit.Mathematics;
-using OpenTK.Graphics.OpenGL4;
+using Hedra.Engine.Core;
 
 namespace Hedra.Engine.Rendering
 {

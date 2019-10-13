@@ -9,7 +9,7 @@ using System;
 using System.Drawing;
 using Hedra.Engine.Management;
 using OpenToolkit.Mathematics;
-using OpenTK.Graphics.OpenGL4;
+using Hedra.Engine.Core;
 using OpenToolkit.Graphics.GL30;
 
 namespace Hedra.Engine.Rendering.Core

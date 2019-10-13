@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using Hedra.Engine.Rendering.Core;
 using OpenToolkit.Mathematics;
-using OpenTK.Graphics.OpenGL4;
+using Hedra.Engine.Core;
 
 namespace Hedra.Engine.Rendering.Particles
 {

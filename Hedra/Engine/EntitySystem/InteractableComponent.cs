@@ -8,7 +8,7 @@ using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Localization;
 using OpenToolkit.Mathematics;
-using OpenTK.Input;
+using OpenToolkit.Windowing.Common.Input;
 
 namespace Hedra.Engine.EntitySystem
 {

@@ -270,6 +270,7 @@
     <Compile Include="Engine\CacheSystem\FishingPostIconCache.cs" />
     <Compile Include="Engine\Core\AllocationEntry.cs" />
     <Compile Include="Engine\Core\Allocator.cs" />
+    <Compile Include="Engine\Core\GLEnums.cs" />
     <Compile Include="Engine\Core\HeapAllocator.cs" />
     <Compile Include="Engine\Core\IAllocator.cs" />
     <Compile Include="Engine\Core\ISequentialList.cs" />
