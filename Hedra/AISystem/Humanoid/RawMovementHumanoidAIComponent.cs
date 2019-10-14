@@ -3,7 +3,7 @@ using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.EntitySystem;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.AISystem.Humanoid
 {
@@ -19,9 +19,9 @@ namespace Hedra.AISystem.Humanoid
         /// <param name="TargetPoint">Target point to move</param>
         protected virtual void Move(Vector3 TargetPoint, float ErrorMargin = DefaultErrorMargin)
         {
-            if ((TargetPoint.Xz - Parent.Position.Xz).LengthSquared > ErrorMargin * ErrorMargin)
+            if ((TargetPoint.Xz() - Parent.Position.Xz()).LengthSquared() > ErrorMargin * ErrorMargin)
             {
-                Parent.Orientation = (TargetPoint.Xz - Parent.Position.Xz).ToVector3().NormalizedFast();
+                Parent.Orientation = (TargetPoint.Xz() - Parent.Position.Xz()).ToVector3().NormalizedFast();
                 Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
                 Parent.Physics.Move();
                 Parent.IsSitting = false;

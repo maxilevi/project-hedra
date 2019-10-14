@@ -18,7 +18,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem.AnimationEvents;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.PhysicsSystem;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.SkillSystem;
 using Hedra.Engine.Sound;
@@ -253,15 +253,15 @@ namespace Hedra.Engine.EntitySystem
                     ).ExtractRotation() 
                     : Quaternion.Identity;
                 _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation, Time.IndependentDeltaTime * 8f);
-                Model.TransformationMatrix = Matrix4.CreateFromQuaternion(_terrainOrientation);
+                Model.TransformationMatrix = Matrix4x4.CreateFromQuaternion(_terrainOrientation);
                 _quaternionModelRotation = Quaternion.Slerp(_quaternionModelRotation, _quaternionTargetRotation, Time.IndependentDeltaTime * 14f);
                 Model.LocalRotation = _quaternionModelRotation.ToEuler();
                 if (HasRider)
                 {
                     Model.LocalRotation = Rider.Model.LocalRotation;
-                    Model.TransformationMatrix = Matrix4.CreateRotationY(-Model.LocalRotation.Y * Mathf.Radian) 
+                    Model.TransformationMatrix = Matrix4x4.CreateRotationY(-Model.LocalRotation.Y * Mathf.Radian) 
                                                  * Rider.Model.TiltMatrix 
-                                                 * Matrix4.CreateRotationY(Model.LocalRotation.Y * Mathf.Radian);
+                                                 * Matrix4x4.CreateRotationY(Model.LocalRotation.Y * Mathf.Radian);
                 }
                 Model.Position = this.Position;
                 this.LocalRotation = Model.LocalRotation;

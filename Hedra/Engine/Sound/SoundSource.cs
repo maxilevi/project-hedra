@@ -7,7 +7,7 @@
 
 using System;
 using Hedra.Sound;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Silk.NET.OpenAL;
 
 namespace Hedra.Engine.Sound

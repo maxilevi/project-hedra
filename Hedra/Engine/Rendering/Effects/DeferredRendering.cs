@@ -7,7 +7,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Core;
 using System.Collections.Generic;
 using Hedra.Core;
@@ -103,8 +103,7 @@ namespace Hedra.Engine.Rendering.Effects
             
             var vecSamples = new Vector3[16];
             for(var i = 0; i < 16; i++){
-                vecSamples[i] = new Vector3( Utils.Rng.NextFloat() * 2.0f - 1.0f, Utils.Rng.NextFloat() * 2.0f - 1.0f, Utils.Rng.NextFloat() );
-                vecSamples[i].Normalize();
+                vecSamples[i] = new Vector3( Utils.Rng.NextFloat() * 2.0f - 1.0f, Utils.Rng.NextFloat() * 2.0f - 1.0f, Utils.Rng.NextFloat() ).Normalized();
                 vecSamples[i] *= Utils.Rng.NextFloat();
                 var scale = i / 16f;
                 scale = Mathf.Lerp(0.1f, 1.0f, scale * scale);

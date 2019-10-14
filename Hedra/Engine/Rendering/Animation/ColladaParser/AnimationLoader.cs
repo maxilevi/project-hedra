@@ -8,7 +8,7 @@
  */
 using System;
 using System.Globalization;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using System.Xml;
 using System.Collections.Generic;
 using System.Diagnostics.Contracts;
@@ -25,7 +25,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
         private const string LinearInterpolationKeyword = "LINEAR";
         private const string BezierInterpolationKeyword = "BEZIER";
         private const string ArmatureName = "Armature";
-        private static readonly Matrix4 Correction = Matrix4.CreateRotationX( -90f * Mathf.Radian);
+        private static readonly Matrix4x4 Correction = Matrix4x4.CreateRotationX( -90f * Mathf.Radian);
         private readonly XmlNode _animationData;
         private readonly XmlNode _jointHierarchy;
         private readonly string[] _jointIds;
@@ -105,11 +105,11 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
                 {
                     matrixData[j] = float.Parse(rawData[i*16 + j], NumberStyles.Any, CultureInfo.InvariantCulture);
                 }
-                Matrix4 transform = new Matrix4(matrixData[0], matrixData[1], matrixData[2], matrixData[3],
+                Matrix4x4 transform = new Matrix4x4(matrixData[0], matrixData[1], matrixData[2], matrixData[3],
                                                  matrixData[4], matrixData[5], matrixData[6], matrixData[7],
                                                  matrixData[8], matrixData[9], matrixData[10], matrixData[11],
                                                  matrixData[12], matrixData[13], matrixData[14], matrixData[15]);
-                transform.Transpose();
+                transform = transform.Transposed();
                 if(root) transform = transform * Correction;
                 
                 keyFrames[i].AddJointTransform(new JointTransformData(jointName, transform));

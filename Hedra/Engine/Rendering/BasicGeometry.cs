@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Linq;
 using BulletSharp;
 using Hedra.Engine.Bullet;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Windowing;
@@ -41,11 +41,11 @@ namespace Hedra.Engine.Rendering
             };
             asVertexData.UniqueVertices();
             var indices = asVertexData.Indices.Select(I => (ushort) I).ToArray();
-            CubeVerticesVBO = new VBO<Vector3>(asVertexData.Vertices.ToArray(), asVertexData.Vertices.Count * Vector3.SizeInBytes, VertexAttribPointerType.Float);
+            CubeVerticesVBO = new VBO<Vector3>(asVertexData.Vertices.ToArray(), asVertexData.Vertices.Count * HedraSize.Vector3, VertexAttribPointerType.Float);
             CubeIndicesVBO = new VBO<ushort>(indices, indices.Length * sizeof(ushort), VertexAttribPointerType.UnsignedShort, BufferTarget.ElementArrayBuffer);
             CubeVAO = new VAO<Vector3>(CubeVerticesVBO);
             
-            _drawVerts = new VBO<Vector3>(new Vector3[5], 5 * Vector3.SizeInBytes, VertexAttribPointerType.Float);
+            _drawVerts = new VBO<Vector3>(new Vector3[5], 5 * HedraSize.Vector3, VertexAttribPointerType.Float);
             _drawIndices = new VBO<uint>(new uint[5], 5 * sizeof(uint), VertexAttribPointerType.UnsignedInt, BufferTarget.ElementArrayBuffer);
             _drawVao = new VAO<Vector3>(_drawVerts);
             _line = new Line3D();
@@ -55,7 +55,7 @@ namespace Hedra.Engine.Rendering
         public static void DrawPlane(Vector3 Normal, float PlaneConst, Vector3 Position, Vector4 Color)
         {
             /*var mat = Transform.Compatible();
-            var color = Color.Xyz.Compatible();
+            var color = Color.Xyz().Compatible();
             var normal = Normal.Compatible();
             _debugDraw.DrawPlane(ref normal, PlaneConst, ref mat, ref color);*/
         }

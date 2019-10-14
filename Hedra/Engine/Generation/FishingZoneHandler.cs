@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Hedra.Engine.ItemSystem;
 using IronPython.Runtime;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Generation
 {
@@ -57,7 +57,7 @@ namespace Hedra.Engine.Generation
 
         public bool Affects(Vector3 Position)
         {
-            return (Position - _zone).Xz.LengthSquared < _radius * _radius;
+            return (Position - _zone).Xz().LengthSquared() < _radius * _radius;
         }
 
         public void Dispose()

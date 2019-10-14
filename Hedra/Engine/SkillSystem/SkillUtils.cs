@@ -3,7 +3,7 @@ using Hedra.Core;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using Hedra.Sound;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.SkillSystem
 {
@@ -28,7 +28,7 @@ namespace Hedra.Engine.SkillSystem
                     
                 var toEntity = (entities[i].Position - Position).NormalizedFast();
                 var dot = Vector3.Dot(toEntity, Caster.Orientation);
-                if(dot >= Angle && (entities[i].Position - Position).LengthSquared < Radius * Radius)
+                if(dot >= Angle && (entities[i].Position - Position).LengthSquared() < Radius * Radius)
                 {
                     Lambda(entities[i], dot);
                 }
@@ -81,7 +81,7 @@ namespace Hedra.Engine.SkillSystem
                 if(entities[i] == Caster) continue;
                 var toEntity = (entities[i].Position - Caster.Position).NormalizedFast();
                 var dot = Vector3.Dot(toEntity, Direction);
-                if(Lambda(entities[i]) && dot > Angle && dot > highest && (entities[i].Position - Caster.Position).LengthSquared < Radius * Radius)
+                if(Lambda(entities[i]) && dot > Angle && dot > highest && (entities[i].Position - Caster.Position).LengthSquared() < Radius * Radius)
                 {
                     entity = entities[i];
                     highest = dot;

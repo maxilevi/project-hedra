@@ -19,7 +19,7 @@ using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Warrior
 {
@@ -63,7 +63,7 @@ namespace Hedra.Engine.SkillSystem.Warrior
                 if(Entity == User) return;
                     
                 var dot = Vector3.Dot((Entity.Position - User.Position).NormalizedFast(), User.Orientation);
-                if(dot >= Radius && (Entity.Position - User.Position).LengthSquared < Math.Pow(Range, 2))
+                if(dot >= Radius && (Entity.Position - User.Position).LengthSquared() < Math.Pow(Range, 2))
                 {
                     if (Utils.Rng.Next(0, 5) == 1)
                     {

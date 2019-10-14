@@ -5,7 +5,7 @@
  *
  */
 using System;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Management;
 using System.Collections;
 using System.Collections.Generic;
@@ -144,12 +144,12 @@ namespace Hedra.Engine.Player
         private void HandleJumping()
         {
             if (!IsJumping) return;
-            if (Human.IsGrounded && Human.Physics.Impulse.LengthSquared < 30 || Human.IsUnderwater)
+            if (Human.IsGrounded && Human.Physics.Impulse.LengthSquared() < 30 || Human.IsUnderwater)
             {
                 CancelJump();
             }
 
-            if (Human.Physics.Impulse.LengthSquared < 10f && !_appliedDownwardImpulse)
+            if (Human.Physics.Impulse.LengthSquared() < 10f && !_appliedDownwardImpulse)
             {
                 Human.Physics.ApplyImpulse(Vector3.UnitY * -4f);
                 _appliedDownwardImpulse = true;

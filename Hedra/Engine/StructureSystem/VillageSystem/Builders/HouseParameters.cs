@@ -2,7 +2,7 @@ using System;
 using Hedra.Engine.Generation;
 using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using Hedra.Engine.WorldBuilding;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
@@ -26,7 +26,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
         public float GetSize(VillageCache Cache)
         {
-            return Cache.GrabSize(Design.Path).Xz.LengthFast * .5f;
+            return Cache.GrabSize(Design.Path).Xz().LengthFast() * .5f;
         }
     }
 }

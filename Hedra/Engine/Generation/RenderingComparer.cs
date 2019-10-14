@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Hedra.Engine.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Generation
 {
@@ -20,8 +20,8 @@ namespace Hedra.Engine.Generation
         {
             if (A.Key == B.Key && A.Value == B.Value) return 0;
 
-            var distanceA = (A.Key - Position.Xz).LengthSquared;
-            var distanceB = (B.Key - Position.Xz).LengthSquared;
+            var distanceA = (A.Key - Position.Xz()).LengthSquared();
+            var distanceB = (B.Key - Position.Xz()).LengthSquared();
 
             if (distanceA < distanceB) return -1;
             return Math.Abs(distanceA - distanceB) < 0.005f ? 0 : 1;

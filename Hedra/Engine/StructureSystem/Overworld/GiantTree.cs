@@ -5,7 +5,7 @@ using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Mission;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {

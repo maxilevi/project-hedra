@@ -3,7 +3,7 @@ using Hedra.Core;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using Hedra.Rendering.Particles;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 {

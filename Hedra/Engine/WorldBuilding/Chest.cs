@@ -9,7 +9,7 @@
 using System;
 using Hedra.Core;
 using Hedra.Engine.Game;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Generation;
@@ -110,11 +110,11 @@ namespace Hedra.Engine.WorldBuilding
                 Position = new Vector3(Position.X, Physics.HeightAtPosition(Position) + .5f, Position.Z);
 
                 var shape = DefaultShape.Clone() as CollisionShape;
-                shape.Transform(Matrix4.CreateScale(this.Scale));
+                shape.Transform(Matrix4x4.CreateScale(this.Scale));
                 shape.Transform(-Vector3.UnitX * 1.5f);
-                shape.Transform(Matrix4.CreateRotationY(this.Rotation.Y * Mathf.Radian) *
-                                Matrix4.CreateRotationX(this.Rotation.X * Mathf.Radian) *
-                                Matrix4.CreateRotationZ(this.Rotation.Z * Mathf.Radian));
+                shape.Transform(Matrix4x4.CreateRotationY(this.Rotation.Y * Mathf.Radian) *
+                                Matrix4x4.CreateRotationX(this.Rotation.X * Mathf.Radian) *
+                                Matrix4x4.CreateRotationZ(this.Rotation.Z * Mathf.Radian));
 
                 shape.Transform(Position);
                 _underChunk.AddCollisionShape(shape);

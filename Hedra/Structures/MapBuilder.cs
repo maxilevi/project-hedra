@@ -2,7 +2,7 @@ using Hedra.BiomeSystem;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
 using Hedra.Engine.StructureSystem;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Structures
 {

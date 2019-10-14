@@ -18,7 +18,7 @@ using Hedra.Game;
 using Hedra.Localization;
 using Hedra.Sound;
 using Hedra.User;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 
 using Silk.NET.Input.Common;
@@ -128,8 +128,8 @@ namespace Hedra.Engine.Player
                     this.Orientate();
                 }
                 _player.Model.TiltMatrix =
-                    Matrix4.CreateRotationZ(_angles.Z * Mathf.Radian * (_player.IsUnderwater ? 0.0f : 1.0f));
-                _player.Model.TransformationMatrix = Matrix4.Identity;
+                    Matrix4x4.CreateRotationZ(_angles.Z * Mathf.Radian * (_player.IsUnderwater ? 0.0f : 1.0f));
+                _player.Model.TransformationMatrix = Matrix4x4.Identity;
                 if (GameManager.Keyboard[Controls.Backward])
                 {
                     this.ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Backward) * keysPresses);
@@ -139,14 +139,14 @@ namespace Hedra.Engine.Player
                 if (GameManager.Keyboard[Controls.Leftward])
                 {
                     this.ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Left) * keysPresses);
-                    RollDirection = Human.Physics.MoveFormula(_player.View.Left, false).Xz.ToVector3().NormalizedFast();
+                    RollDirection = Human.Physics.MoveFormula(_player.View.Left, false).Xz().ToVector3().NormalizedFast();
                     RollFacing = _characterRotation;
                 }
 
                 if (GameManager.Keyboard[Controls.Rightward])
                 {
                     ProcessMovement(_characterRotation, Human.Physics.MoveFormula(_player.View.Right) * keysPresses);
-                    RollDirection = Human.Physics.MoveFormula(_player.View.Right, false).Xz.ToVector3().NormalizedFast();
+                    RollDirection = Human.Physics.MoveFormula(_player.View.Right, false).Xz().ToVector3().NormalizedFast();
                     RollFacing = _characterRotation;
                 }
                 /*

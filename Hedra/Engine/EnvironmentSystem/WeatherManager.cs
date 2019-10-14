@@ -5,7 +5,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Game;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.EnvironmentSystem
 {
@@ -55,7 +55,7 @@ namespace Hedra.Engine.EnvironmentSystem
             if (GameManager.InMenu || GameManager.Player == null || UnderChunk == null) return;
 
             _rain.Position = GameManager.Player.Position + Vector3.UnitY * 384;
-            _rain.Color = new Vector4(UnderChunk.Biome.Colors.WaterColor.Xyz * .8f, .7f);
+            _rain.Color = new Vector4(UnderChunk.Biome.Colors.WaterColor.Xyz() * .8f, .7f);
             _rain.VariateUniformly = true;
             _rain.Grayscale = false;
             _rain.PositionErrorMargin = Vector3.One * new Vector3(256f, 16, 256f);

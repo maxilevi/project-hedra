@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {

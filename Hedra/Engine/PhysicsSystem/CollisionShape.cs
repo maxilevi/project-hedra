@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Rendering;
 using Hedra.Rendering;
 
@@ -39,11 +39,11 @@ namespace Hedra.Engine.PhysicsSystem
             _trace = new StackTrace();
         }
 
-        public CollisionShape Transform(Matrix4 TransMatrix)
+        public CollisionShape Transform(Matrix4x4 TransMatrix)
         {
             for(var i = 0; i < Vertices.Length; i++)
             {
-                Vertices[i] = Vector3.TransformPosition(Vertices[i], TransMatrix);
+                Vertices[i] = Vector3.Transform(Vertices[i], TransMatrix);
             }
             this.RecalculateBroadphase();
             this.Height = (SupportPoint(Vector3.UnitY) - SupportPoint(-Vector3.UnitY)).Y;
@@ -54,7 +54,7 @@ namespace Hedra.Engine.PhysicsSystem
         {
             for(var i = 0; i < Vertices.Length; i++)
             {
-                Vertices[i] = Vector3.TransformPosition(Vertices[i], Matrix4.CreateTranslation(Position));
+                Vertices[i] = Vector3.Transform(Vertices[i], Matrix4x4.CreateTranslation(Position));
             }
             this.RecalculateBroadphase();
             return this;
@@ -94,7 +94,7 @@ namespace Hedra.Engine.PhysicsSystem
             this.BroadphaseCenter = verticesSum / Vertices.Length;
             for (var i = 0; i < Vertices.Length; i++)
             {
-                float length = (Vertices[i] * Mask - this.BroadphaseCenter).LengthFast;
+                float length = (Vertices[i] * Mask - this.BroadphaseCenter).LengthFast();
 
                 if (length > dist)
                     dist = length;

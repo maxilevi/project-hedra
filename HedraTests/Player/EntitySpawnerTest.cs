@@ -19,7 +19,7 @@ using HedraTests.Structure;
 using Moq;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Core;
 
 namespace HedraTests.Player

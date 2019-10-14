@@ -7,7 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.PhysicsSystem
 {
@@ -126,7 +126,7 @@ namespace Hedra.Engine.PhysicsSystem
             _boxShape.Vertices[7] = Max;
 
             _boxShape.BroadphaseCenter = (this.Min + this.Max) * .5f;
-            _boxShape.BroadphaseRadius = (this.Min - this.Max).LengthFast;
+            _boxShape.BroadphaseRadius = (this.Min - this.Max).LengthFast();
 
             _shape = _boxShape;
             _shapeCenter = avg;

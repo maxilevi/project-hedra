@@ -1,4 +1,4 @@
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Management;
 
 namespace Hedra.Engine.CacheSystem

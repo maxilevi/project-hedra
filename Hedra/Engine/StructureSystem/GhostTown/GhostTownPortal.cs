@@ -3,7 +3,7 @@ using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Mission;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.GhostTown
 {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Math = System.Math;
 
 namespace Hedra.Engine.BiomeSystem
@@ -69,7 +69,7 @@ namespace Hedra.Engine.BiomeSystem
             return num15 + this.Displacement * this.ValueNoise(x2, z2);
         }
 
-        public Vector2d GetGridPoint(double x, double z)
+        public Vector2 GetGridPoint(double x, double z)
         {
             x *= this.Frequency;
             z *= this.Frequency;
@@ -95,7 +95,7 @@ namespace Hedra.Engine.BiomeSystem
                     }
                 }     
             }
-            return new Vector2d(num5, num7);
+            return new Vector2((float)num5, (float)num7);
         }
 
         public int IntValueNoise(int x, int z, int seed)

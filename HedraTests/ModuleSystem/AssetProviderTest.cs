@@ -3,7 +3,7 @@ using System.Text;
 using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using NUnit.Framework;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace HedraTests.ModuleSystem
 {
@@ -57,10 +57,10 @@ namespace HedraTests.ModuleSystem
             };
             for (var i = 0; i < 3; i++)
             {
-                for (var j = 0; j < 4; j++)
-                {
-                    Assert.AreEqual(result.Colors[i][j], expectedColors[i][j], 0.05f);
-                }
+                Assert.AreEqual(result.Colors[i].X, expectedColors[i].X, 0.05f);
+                Assert.AreEqual(result.Colors[i].Y, expectedColors[i].Y, 0.05f);
+                Assert.AreEqual(result.Colors[i].Z, expectedColors[i].Z, 0.05f);
+                Assert.AreEqual(result.Colors[i].W, expectedColors[i].W, 0.05f);
             }
             
             Assert.AreEqual(result.Normals, new []

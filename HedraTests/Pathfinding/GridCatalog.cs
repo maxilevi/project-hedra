@@ -1,5 +1,5 @@
 ﻿using Hedra.Engine.Pathfinding;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace HedraTests.Pathfinding
 {

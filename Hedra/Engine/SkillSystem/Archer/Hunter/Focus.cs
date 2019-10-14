@@ -50,7 +50,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
                 var entities = World.Entities;
                 for (var i = 0; i < entities.Count; ++i)
                 {
-                    if((entities[i].Position - Parent.Position).Xz.LengthSquared > 114 * 114) continue;
+                    if((entities[i].Position - Parent.Position).Xz().LengthSquared() > 114 * 114) continue;
                     if(entities[i].IsFriendly || entities[i] == Parent) continue;
                     return true;
                 }

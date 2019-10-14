@@ -1,6 +1,6 @@
 using System;
 using Hedra.Engine.Generation;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.WorldBuilding
 {
@@ -18,7 +18,7 @@ namespace Hedra.Engine.WorldBuilding
 
         public override bool Affects(Vector2 Sample)
         {
-            var uncenteredPosition = Position.Xz - Width * Vector2.One * .5f;
+            var uncenteredPosition = Position.Xz() - Width * Vector2.One * .5f;
             return Sample.X < uncenteredPosition.X + Width && Sample.X > uncenteredPosition.X &&
                    Sample.Y < uncenteredPosition.Y + Width && Sample.Y > uncenteredPosition.Y;
         }
@@ -30,7 +30,7 @@ namespace Hedra.Engine.WorldBuilding
         
         public override BoundingBox ToBoundingBox()
         {
-            return new BoundingBox(Position.Xz, Width);
+            return new BoundingBox(Position.Xz(), Width);
         }
     }
 }

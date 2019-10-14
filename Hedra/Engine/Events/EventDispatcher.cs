@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.Windowing;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Silk.NET.GLFW;
 using Silk.NET.Input.Common;
 

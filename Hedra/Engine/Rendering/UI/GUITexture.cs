@@ -6,7 +6,7 @@
  */
 using System;
 using System.Diagnostics;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Core;
 using System.Drawing;
 using Hedra.Core;

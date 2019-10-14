@@ -8,7 +8,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Player.MapSystem
 {

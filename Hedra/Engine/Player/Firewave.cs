@@ -9,7 +9,7 @@ using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
 using Hedra.Rendering.Particles;
 using Hedra.Sound;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Player
 {
@@ -47,7 +47,7 @@ namespace Hedra.Engine.Player
             _shouldStop = true;
             SkillUtils.DoNearby(_owner, Distance, Entity =>
             {
-                var direction = (Entity.Position - _owner.Position).Xz.ToVector3().NormalizedFast();
+                var direction = (Entity.Position - _owner.Position).Xz().ToVector3().NormalizedFast();
                 Entity.Physics.ApplyImpulse(direction * 96 * _charge * 2f);
             });
         }
@@ -58,7 +58,7 @@ namespace Hedra.Engine.Player
             for (var i = 0; i < entities.Count; i++)
             {
                 if (entities[i] == _owner || Array.IndexOf(_ignore, entities[i]) != -1) continue;
-                if ((entities[i].Position - _owner.Position).LengthSquared < DistanceSquared)
+                if ((entities[i].Position - _owner.Position).LengthSquared() < DistanceSquared)
                 {
                     World.Entities[i].Damage(_damage, _owner, out var exp);
                     if (_owner is IHumanoid humanoid)

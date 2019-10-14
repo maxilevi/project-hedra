@@ -2,7 +2,7 @@ using System;
 using Hedra.BiomeSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.BiomeSystem.UndeadBiome
 {

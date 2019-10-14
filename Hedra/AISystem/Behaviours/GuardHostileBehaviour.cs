@@ -1,6 +1,6 @@
 using Hedra.Engine.EntitySystem;
 using Hedra.EntitySystem;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.AISystem.Behaviours
 {
@@ -26,7 +26,7 @@ namespace Hedra.AISystem.Behaviours
         protected override IEntity GetTarget()
         {
             var target = base.GetTarget();
-            if ((GuardPosition - Parent.Position).Xz.LengthSquared > Radius * Radius)
+            if ((GuardPosition - Parent.Position).Xz().LengthSquared() > Radius * Radius)
                 Traverse.SetTarget(GuardPosition);
             else
                 return target;

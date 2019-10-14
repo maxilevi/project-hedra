@@ -8,7 +8,7 @@ using Hedra.EntitySystem;
 using Hedra.Rendering;
 using Hedra.Sound;
 using Hedra.WorldObjects;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.WeaponSystem
 {
@@ -58,7 +58,7 @@ namespace Hedra.WeaponSystem
         
         protected override void OnSheathed()
         {
-            this.MainMesh.TransformationMatrix = Owner.Model.ChestMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition - Vector3.UnitY * .25f);
+            this.MainMesh.TransformationMatrix = Owner.Model.ChestMatrix.ClearTranslation() * Matrix4x4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition - Vector3.UnitY * .25f);
             this.MainMesh.Position = Owner.Model.Position;
             this.MainMesh.Rotation = this.SheathedRotation;
             this.MainMesh.BeforeRotation = this.SheathedPosition * this.Scale;
@@ -66,7 +66,7 @@ namespace Hedra.WeaponSystem
 
         protected override void OnAttackStance()
         {
-            var mat4 = Owner.Model.LeftWeaponMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);
+            var mat4 = Owner.Model.LeftWeaponMatrix.ClearTranslation() * Matrix4x4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);
                     
             this.MainMesh.TransformationMatrix = mat4;
             this.MainMesh.Position = Owner.Model.Position;
@@ -77,7 +77,7 @@ namespace Hedra.WeaponSystem
         protected override void OnSecondaryAttack()
         {
             var mat4 = Owner.Model.LeftWeaponMatrix.ClearTranslation() 
-                       * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);   
+                       * Matrix4x4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);   
             MainMesh.TransformationMatrix = mat4;
             MainMesh.Position = Owner.Model.Position;
             MainMesh.LocalRotation = new Vector3(90, 0, 180);

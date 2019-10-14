@@ -6,7 +6,7 @@ using Hedra.EntitySystem;
 using Hedra.Rendering;
 using Hedra.Rendering.Particles;
 using Hedra.WorldObjects;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Player
 {

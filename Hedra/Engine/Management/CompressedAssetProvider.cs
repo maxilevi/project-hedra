@@ -20,7 +20,7 @@ using Hedra.Engine.Rendering.UI;
 using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Silk.NET.GLFW;
 
 namespace Hedra.Engine.Management
@@ -529,16 +529,16 @@ namespace Hedra.Engine.Management
         private VertexData HandlePLYTransforms(List<Vector3> Vertices, List<Vector3> Normals,
             List<Vector4> Colors, List<uint> Indices, Vector3 Scale, Vector3 Position, Vector3 Rotation)
         {
-            var scaleMat = Matrix4.CreateScale(Scale);
-            var positionMat = Matrix4.CreateTranslation(Position);
-            var rotationMat = Matrix4.CreateRotationY(Rotation.Y);
-            rotationMat *= Matrix4.CreateRotationX(Rotation.X);
-            rotationMat *= Matrix4.CreateRotationZ(Rotation.Z);
+            var scaleMat = Matrix4x4.CreateScale(Scale);
+            var positionMat = Matrix4x4.CreateTranslation(Position);
+            var rotationMat = Matrix4x4.CreateRotationY(Rotation.Y);
+            rotationMat *= Matrix4x4.CreateRotationX(Rotation.X);
+            rotationMat *= Matrix4x4.CreateRotationZ(Rotation.Z);
             for(var j = 0; j < Vertices.Count; j++)
             {
-                Vertices[j] = Vector3.TransformPosition(Vertices[j], scaleMat);
-                Vertices[j] = Vector3.TransformPosition(Vertices[j], rotationMat);
-                Vertices[j] = Vector3.TransformPosition(Vertices[j], positionMat);
+                Vertices[j] = Vector3.Transform(Vertices[j], scaleMat);
+                Vertices[j] = Vector3.Transform(Vertices[j], rotationMat);
+                Vertices[j] = Vector3.Transform(Vertices[j], positionMat);
             }
             
             for(var j = 0; j < Normals.Count; j++)

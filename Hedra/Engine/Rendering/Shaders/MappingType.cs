@@ -14,7 +14,7 @@ namespace Hedra.Engine.Rendering.Shaders
         Vector2,
         Vector3,
         Vector4,
-        Matrix4,
+        Matrix4x4,
         Matrix3,
         Matrix2
     }

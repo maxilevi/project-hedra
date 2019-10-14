@@ -5,7 +5,7 @@
  *
  */
 using System;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.EnvironmentSystem;
@@ -119,7 +119,7 @@ namespace Hedra.Engine.Rendering.Effects
                 Renderer.Uniform1(Ssao.RandomSampler, 2);
                 Renderer.Uniform1(Ssao.Intensity, GameSettings.AmbientOcclusionIntensity);
                 
-                Renderer.UniformMatrix4(Ssao.ProjectionUniform, false, ref Culling.ProjectionMatrix);
+                Renderer.UniformMatrix4x4(Ssao.ProjectionUniform, false, ref Culling.ProjectionMatrix);
 
                 DrawManager.UIRenderer.DrawQuad();
 

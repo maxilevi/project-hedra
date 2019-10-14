@@ -5,7 +5,7 @@
  *
  */
 using System;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
@@ -75,7 +75,7 @@ namespace Hedra.Engine.EnvironmentSystem
 
             _starsDome.ColorMultiplier = Vector4.One * (1-SkyManager.LastDayFactor) * 2f;
             _starsDome.Draw();
-            _sunDome.TransformationMatrix = Matrix4.CreateRotationX(Mathf.Radian * (1-SkyManager.StackedDaytimeModifier) * 180f);
+            _sunDome.TransformationMatrix = Matrix4x4.CreateRotationX(Mathf.Radian * (1-SkyManager.StackedDaytimeModifier) * 180f);
             _sunDome.ColorMultiplier = Vector4.One * SkyManager.LastDayFactor * 2f;
             _sunDome.Draw();
 

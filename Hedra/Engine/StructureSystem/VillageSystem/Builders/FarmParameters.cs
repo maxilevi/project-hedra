@@ -1,6 +1,6 @@
 using System;
 using Hedra.Engine.StructureSystem.VillageSystem.Templates;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
@@ -27,7 +27,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             var size = 0f;
             for (var i = 0; i < PropDesigns.Length; i++)
             {
-                size = Math.Max(size, Cache.GrabSize(PropDesigns[i].Path).Xz.LengthFast * .75f);
+                size = Math.Max(size, Cache.GrabSize(PropDesigns[i].Path).Xz().LengthFast() * .75f);
             }
             return size;       
         }

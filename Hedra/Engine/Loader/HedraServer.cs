@@ -17,7 +17,7 @@ using Hedra.Engine.Sound;
 using Hedra.Engine.Windowing;
 using Hedra.Game;
 using Hedra.Sound;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Silk.NET.Windowing.Common;
 using Image = Silk.NET.GLFW.Image;
 

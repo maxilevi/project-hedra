@@ -12,7 +12,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Items;
 using Newtonsoft.Json.Linq;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.ClassSystem
 {
@@ -46,11 +46,11 @@ namespace Hedra.Engine.ClassSystem
         public virtual float MaxStamina => ClassLoader.Instance[Type].MaxStamina;
         public virtual float BaseDamage => ClassLoader.Instance[Type].BaseDamage;
         public virtual float AttackingSpeedModifier => ClassLoader.Instance[Type].AttackingSpeedModifier;
-        public abstract Matrix4 HelmetPlacement { get; }
-        public abstract Matrix4 ChestplatePlacement { get; }
-        public abstract Matrix4 PantsMatrixPlacement { get; }
-        public abstract Matrix4 LeftBootPlacement { get; }
-        public abstract Matrix4 RightBootPlacement { get; }
+        public abstract Matrix4x4 HelmetPlacement { get; }
+        public abstract Matrix4x4 ChestplatePlacement { get; }
+        public abstract Matrix4x4 PantsMatrixPlacement { get; }
+        public abstract Matrix4x4 LeftBootPlacement { get; }
+        public abstract Matrix4x4 RightBootPlacement { get; }
         public abstract Class Type { get; }
 
         private static KeyValuePair<int, Item> ParseStartingItems(StartingItemTemplate Template)

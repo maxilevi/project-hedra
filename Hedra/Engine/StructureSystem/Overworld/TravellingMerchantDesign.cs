@@ -8,7 +8,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Localization;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
@@ -23,8 +23,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var originalModel = CacheManager.GetModel(CacheItem.MerchantCart);
             var model = originalModel.ShallowClone();
 
-            var transMatrix = Matrix4.CreateScale(4.5f);
-            transMatrix *= Matrix4.CreateTranslation(Structure.Position);
+            var transMatrix = Matrix4x4.CreateScale(4.5f);
+            transMatrix *= Matrix4x4.CreateTranslation(Structure.Position);
             model.Transform(transMatrix);
 
             var shapes = CacheManager.GetShape(originalModel).DeepClone();

@@ -19,7 +19,7 @@ using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Localization;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 using Silk.NET.Input.Common;
 
@@ -66,7 +66,7 @@ namespace Hedra.Engine.WorldBuilding
         
         public virtual void Update(float DeltaTime)
         {
-            if ((Position - GameManager.Player.Position).LengthSquared < 128 * 128)
+            if ((Position - GameManager.Player.Position).LengthSquared() < 128 * 128)
                 DoUpdate(DeltaTime);
         }
 
@@ -74,8 +74,8 @@ namespace Hedra.Engine.WorldBuilding
         {
             var player = GameManager.Player;
 
-            bool IsInLookingAngle() => Vector2.Dot((this.Position - player.Position).Xz.NormalizedFast(),
-                player.View.LookingDirection.Xz.NormalizedFast()) > InteractionAngle && (AllowThroughCollider || !player.Physics.Raycast(Position));                
+            bool IsInLookingAngle() => Vector2.Dot((this.Position - player.Position).Xz().NormalizedFast(),
+                player.View.LookingDirection.Xz().NormalizedFast()) > InteractionAngle && (AllowThroughCollider || !player.Physics.Raycast(Position));                
             
             if (IsInRadius() && IsInLookingAngle() && (!Interacted || !SingleUse) && CanInteract && player.CanInteract)
             {
@@ -101,7 +101,7 @@ namespace Hedra.Engine.WorldBuilding
 
         private bool IsInRadius()
         {
-            return (Position - GameManager.Player.Position).LengthSquared < InteractDistance * InteractDistance;
+            return (Position - GameManager.Player.Position).LengthSquared() < InteractDistance * InteractDistance;
         }
 
         public void InvokeInteraction(IHumanoid Humanoid)

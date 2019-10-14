@@ -6,7 +6,7 @@ using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
 using Hedra.Game;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Player
 {

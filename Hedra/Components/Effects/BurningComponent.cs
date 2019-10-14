@@ -13,7 +13,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.EntitySystem;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Components.Effects
 {

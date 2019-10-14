@@ -1,5 +1,5 @@
 ﻿using Hedra.Engine.Management;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.CacheSystem
 {

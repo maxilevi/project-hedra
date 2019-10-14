@@ -8,7 +8,7 @@
  */
 
 using Hedra.Engine.EntitySystem;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Rendering;

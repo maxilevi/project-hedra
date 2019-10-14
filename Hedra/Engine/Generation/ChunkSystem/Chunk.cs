@@ -22,7 +22,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Geometry;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Region = Hedra.BiomeSystem.Region;
 
 namespace Hedra.Engine.Generation.ChunkSystem
@@ -170,11 +170,11 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             if (BuildingLod == 1 || BuildingLod == 2)
             {
-                Bullet.BulletPhysics.AddChunk(Position.Xz, CreateCollisionTerrainMesh(Allocator), CollisionShapes);
+                Bullet.BulletPhysics.AddChunk(Position.Xz(), CreateCollisionTerrainMesh(Allocator), CollisionShapes);
             }
             else
             {
-                Bullet.BulletPhysics.RemoveChunk(Position.Xz);
+                Bullet.BulletPhysics.RemoveChunk(Position.Xz());
             }
         }
 
@@ -434,7 +434,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private void ForceDispose()
         {
-            Bullet.BulletPhysics.RemoveChunk(Position.Xz);
+            Bullet.BulletPhysics.RemoveChunk(Position.Xz());
             Mesh?.Dispose();
             Landscape?.Dispose();
             _blocks = null;

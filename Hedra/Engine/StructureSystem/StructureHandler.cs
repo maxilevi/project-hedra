@@ -8,7 +8,7 @@
  */
 
 using System;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -131,7 +131,7 @@ namespace Hedra.Engine.StructureSystem
         public static CollidableStructure[] GetNearStructures(Vector3 Position)
         {
             return (from item in World.StructureHandler.StructureItems
-                where (item.Position.Xz - Position.Xz).LengthSquared < item.Radius * item.Radius
+                where (item.Position.Xz() - Position.Xz()).LengthSquared() < item.Radius * item.Radius
                 select item).ToArray();
         }
 

@@ -1,5 +1,5 @@
 using System;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Silk.NET.OpenAL;
 
 namespace Hedra.Engine.Sound

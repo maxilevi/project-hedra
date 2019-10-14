@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using Hedra.BiomeSystem;
 using Hedra.Core;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
@@ -192,7 +192,7 @@ namespace Hedra.Engine.EnvironmentSystem
                 FogManager.UpdateFogSettings(FogManager.MinDistance, FogManager.MaxDistance);
                 LastDayFactor = dayFactor;
             }
-            var avgSkyColor = (Sky.TopColor * .5f + Sky.BotColor * .5f).Xyz * .5f + Vector3.One * 0.5f * _intensity;
+            var avgSkyColor = (Sky.TopColor * .5f + Sky.BotColor * .5f).Xyz() * .5f + Vector3.One * 0.5f * _intensity;
             Vector3 newLightColor = Weather.IsRaining
                 ? avgSkyColor * Mathf.Clamp(dayFactor * 0.7f, _minLight, _maxLight)
                 : avgSkyColor * Mathf.Clamp(dayFactor * 1.0f, _minLight, _maxLight);
@@ -200,7 +200,7 @@ namespace Hedra.Engine.EnvironmentSystem
             _targetLightColor = new Vector3(Math.Max(0f, newLightColor.X), Math.Max(0f, newLightColor.Y), Math.Max(0f, newLightColor.Z));
             var previousLightColor = ShaderManager.LightColor;
             var interpolatedLightColor = Mathf.Lerp(ShaderManager.LightColor, _targetLightColor, Time.IndependentDeltaTime * 12f);
-            if ((previousLightColor - interpolatedLightColor).Length > 0.005f)
+            if ((previousLightColor - interpolatedLightColor).Length() > 0.005f)
             {
                 ShaderManager.LightColor = interpolatedLightColor;
             }

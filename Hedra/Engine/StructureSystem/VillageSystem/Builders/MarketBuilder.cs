@@ -10,7 +10,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
@@ -45,16 +45,16 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             var marketModels = new List<VertexData>();
             var marketShapes = new List<CollisionShape>();
             var originalPosition = Position;
-            var transMatrix = Matrix4.CreateScale(4f) * Matrix4.CreateTranslation(originalPosition);
+            var transMatrix = Matrix4x4.CreateScale(4f) * Matrix4x4.CreateTranslation(originalPosition);
             for (var i = 0; i < Count; i++)
             {
                 
                 VertexData market0 = VillageCache.Market.Market0_Clone.ToVertexData().Clone();
                 bool extraShelf = Rng.Next(0, 4) != 0;
                 if (extraShelf) market0 += VillageCache.Market.Market1_Clone.ToVertexData().Clone();
-                market0.Transform(Matrix4.CreateRotationY(90 * Mathf.Radian));
+                market0.Transform(Matrix4x4.CreateRotationY(90 * Mathf.Radian));
                 market0.Translate(Vector3.UnitZ * Distance * Chunk.BlockSize);
-                market0.Transform(Matrix4.CreateRotationY(360 / Count * i * Mathf.Radian));
+                market0.Transform(Matrix4x4.CreateRotationY(360 / Count * i * Mathf.Radian));
                 market0.Color(AssetManager.ColorCode1, MarketColor(Rng));
 
                 List<CollisionShape> shapes = VillageCache.Market.MarketShapes_Clone.DeepClone();
@@ -62,9 +62,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
                 for (int j = 0; j < shapes.Count; j++)
                 {
-                    shapes[j].Transform(Matrix4.CreateRotationY(90 * Mathf.Radian));
-                    shapes[j].Transform(Matrix4.CreateTranslation(Vector3.UnitZ * Distance * Chunk.BlockSize));
-                    shapes[j].Transform(Matrix4.CreateRotationY(360 / Count * i * Mathf.Radian));
+                    shapes[j].Transform(Matrix4x4.CreateRotationY(90 * Mathf.Radian));
+                    shapes[j].Transform(Matrix4x4.CreateTranslation(Vector3.UnitZ * Distance * Chunk.BlockSize));
+                    shapes[j].Transform(Matrix4x4.CreateRotationY(360 / Count * i * Mathf.Radian));
                     shapes[j].Transform(transMatrix);
                 }
 
@@ -76,16 +76,16 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 List<CollisionShape> shelfShapes = VillageCache.Market.ShelfShapes_Clones[basketCount].DeepClone();
                 VertexData shelfModel = VillageCache.Market.ShelfModels_Clones[basketCount].ToVertexData().Clone();
 
-                shelfModel.Transform(Matrix4.CreateRotationY(90 * Mathf.Radian));
+                shelfModel.Transform(Matrix4x4.CreateRotationY(90 * Mathf.Radian));
                 shelfModel.Translate(Vector3.UnitZ * Distance * Chunk.BlockSize);
-                shelfModel.Transform(Matrix4.CreateRotationY(360 / Count * i * Mathf.Radian));
+                shelfModel.Transform(Matrix4x4.CreateRotationY(360 / Count * i * Mathf.Radian));
                 shelfModel.Color(AssetManager.ColorCode1, Colors.BerryColor(Rng));
 
                 for (int j = 0; j < shelfShapes.Count; j++)
                 {
-                    shelfShapes[j].Transform(Matrix4.CreateRotationY(90 * Mathf.Radian));
-                    shelfShapes[j].Transform(Matrix4.CreateTranslation(Vector3.UnitZ * Distance * Chunk.BlockSize));
-                    shelfShapes[j].Transform(Matrix4.CreateRotationY(360 / Count * i * Mathf.Radian));
+                    shelfShapes[j].Transform(Matrix4x4.CreateRotationY(90 * Mathf.Radian));
+                    shelfShapes[j].Transform(Matrix4x4.CreateTranslation(Vector3.UnitZ * Distance * Chunk.BlockSize));
+                    shelfShapes[j].Transform(Matrix4x4.CreateRotationY(360 / Count * i * Mathf.Radian));
                     shelfShapes[j].Transform(transMatrix);
                 }
 
@@ -104,16 +104,16 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                         shelfShapes = VillageCache.Market.ShelfShapes_Clones[basketCount].DeepClone();
                         shelfModel = VillageCache.Market.ShelfModels_Clones[basketCount].ToVertexData().Clone();
 
-                        shelfModel.Transform(Matrix4.CreateRotationY(90 * Mathf.Radian));
+                        shelfModel.Transform(Matrix4x4.CreateRotationY(90 * Mathf.Radian));
                         shelfModel.Translate(Vector3.UnitZ * Distance * Chunk.BlockSize);
-                        shelfModel.Transform(Matrix4.CreateRotationY(360 / Count * i * Mathf.Radian));
+                        shelfModel.Transform(Matrix4x4.CreateRotationY(360 / Count * i * Mathf.Radian));
                         shelfModel.Color(AssetManager.ColorCode1, Colors.BerryColor(Rng));
 
                         for (int j = 0; j < shelfShapes.Count; j++)
                         {
-                            shelfShapes[j].Transform(Matrix4.CreateRotationY(90 * Mathf.Radian));
-                            shelfShapes[j].Transform(Matrix4.CreateTranslation(Vector3.UnitZ * Distance * Chunk.BlockSize));
-                            shelfShapes[j].Transform(Matrix4.CreateRotationY(360 / Count * i * Mathf.Radian));
+                            shelfShapes[j].Transform(Matrix4x4.CreateRotationY(90 * Mathf.Radian));
+                            shelfShapes[j].Transform(Matrix4x4.CreateTranslation(Vector3.UnitZ * Distance * Chunk.BlockSize));
+                            shelfShapes[j].Transform(Matrix4x4.CreateRotationY(360 / Count * i * Mathf.Radian));
                             shelfShapes[j].Transform(transMatrix);
                         }
                     }

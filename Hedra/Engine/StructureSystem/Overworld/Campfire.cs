@@ -23,7 +23,7 @@ using Hedra.Game;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
@@ -53,7 +53,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public override void Update()
         {
             base.Update();
-            var distToPlayer = (FirePosition - GameManager.Player.Position).LengthSquared;
+            var distToPlayer = (FirePosition - GameManager.Player.Position).LengthSquared();
             if (distToPlayer < 256 * 256)
             {
                 if (this._passedTime++ % 2 == 0)
@@ -98,11 +98,11 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 if (!this._sound.Source.IsPlaying)
                     this._sound.Source.Play(SoundPlayer.GetBuffer(SoundType.Fireplace), FirePosition, 1f, 1f, true);
 
-                var gain = Math.Max(0, 1 - (FirePosition - SoundPlayer.ListenerPosition).LengthFast / 32f);
+                var gain = Math.Max(0, 1 - (FirePosition - SoundPlayer.ListenerPosition).LengthFast() / 32f);
                 this._sound.Source.Volume = gain;
             }
 
-            if ( this._light != null && (FirePosition - LocalPlayer.Instance.Position).LengthSquared >
+            if ( this._light != null && (FirePosition - LocalPlayer.Instance.Position).LengthSquared() >
                 ShaderManager.LightDistance * ShaderManager.LightDistance * 2f){
 
                 this._light.Position = Vector3.Zero;
@@ -126,7 +126,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             for (var i = entities.Count - 1; i > -1; i--)
             {
                 if (entities[i] == null) continue;
-                if ((entities[i].Position - FirePosition).LengthSquared < 4 * 4)
+                if ((entities[i].Position - FirePosition).LengthSquared() < 4 * 4)
                 {
                     if (entities[i].SearchComponent<BurningComponent>() == null)
                     {

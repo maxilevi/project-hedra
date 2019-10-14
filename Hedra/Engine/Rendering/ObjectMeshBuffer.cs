@@ -18,7 +18,7 @@ using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Frustum;
 using Hedra.Game;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 
@@ -77,9 +77,9 @@ namespace Hedra.Engine.Rendering
             ModelData.AssertTriangulated();
             Executer.ExecuteOnMainThread(() =>
             {
-                Vertices = new VBO<Vector3>(ModelData.Vertices.ToArray(), ModelData.Vertices.Count * Vector3.SizeInBytes, VertexAttribPointerType.Float);
-                Colors = new VBO<Vector4>(ModelData.Colors.ToArray(), ModelData.Colors.Count * Vector4.SizeInBytes, VertexAttribPointerType.Float);
-                Normals = new VBO<Vector3>(ModelData.Normals.ToArray(), ModelData.Normals.Count * Vector3.SizeInBytes, VertexAttribPointerType.Float);
+                Vertices = new VBO<Vector3>(ModelData.Vertices.ToArray(), ModelData.Vertices.Count * HedraSize.Vector3, VertexAttribPointerType.Float);
+                Colors = new VBO<Vector4>(ModelData.Colors.ToArray(), ModelData.Colors.Count * HedraSize.Vector4, VertexAttribPointerType.Float);
+                Normals = new VBO<Vector3>(ModelData.Normals.ToArray(), ModelData.Normals.Count * HedraSize.Vector3, VertexAttribPointerType.Float);
                 Indices = new VBO<uint>(ModelData.Indices.ToArray(), ModelData.Indices.Count * sizeof(uint), VertexAttribPointerType.UnsignedInt, BufferTarget.ElementArrayBuffer);
                 Data = new VAO<Vector3, Vector4, Vector3>(Vertices, Colors, Normals);
             });
@@ -139,7 +139,7 @@ namespace Hedra.Engine.Rendering
             Vertex = Vector3.Transform(Vertex, _rotationMatrix);
             Vertex -= RotationPoint;
 
-            Vertex = Vector3.TransformPosition(Vertex, TransformationMatrix);
+            Vertex = Vector3.Transform(Vertex, TransformationMatrix);
             
             Vertex += Position + LocalPosition;
             return Vertex;
@@ -170,7 +170,7 @@ namespace Hedra.Engine.Rendering
             }
         }
 
-        public Matrix4 TransformationMatrix { get; set; } = Matrix4.Identity;
+        public Matrix4x4 TransformationMatrix { get; set; } = Matrix4x4.Identity;
 
         public Vector3 Rotation
         {
@@ -231,10 +231,10 @@ namespace Hedra.Engine.Rendering
                 Alpha = Alpha,
                 Scale = Scale,
                 Position = Position + LocalPosition,
-                LocalRotationMatrix = new Matrix4(LocalRotationMatrix),
+                LocalRotationMatrix = new Matrix4x4(LocalRotationMatrix),
                 TransformationMatrix = TransformationMatrix,
                 RotationPoint = RotationPoint,
-                RotationMatrix = new Matrix4(_rotationMatrix),
+                RotationMatrix = new Matrix4x4(_rotationMatrix),
                 LocalRotationPoint = LocalRotationPoint,
                 BeforeRotation = BeforeRotation,
                 Tint = Tint,
@@ -286,11 +286,11 @@ namespace Hedra.Engine.Rendering
     public struct ObjectMeshBufferData
     {
         [FieldOffset(0)]
-        public Matrix4 RotationMatrix;
+        public Matrix4x4 RotationMatrix;
         [FieldOffset(64)]
-        public Matrix4 LocalRotationMatrix;
+        public Matrix4x4 LocalRotationMatrix;
         [FieldOffset(128)]
-        public Matrix4 TransformationMatrix;
+        public Matrix4x4 TransformationMatrix;
         [FieldOffset(192)]
         public float Alpha;
         [FieldOffset(208)]

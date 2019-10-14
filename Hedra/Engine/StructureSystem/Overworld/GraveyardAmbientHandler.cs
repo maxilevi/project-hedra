@@ -5,7 +5,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Game;
 using Hedra.Sound;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
@@ -40,7 +40,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             var wasInCementery = _inCementery;
             
-            _inCementery = (_parent.Position.Xz - GameManager.Player.Position.Xz).LengthSquared <
+            _inCementery = (_parent.Position.Xz() - GameManager.Player.Position.Xz()).LengthSquared() <
                            _parent.Radius * _parent.Radius * .5f * .5f && !_parent.Completed;
             
             if(_inCementery && !wasInCementery)
@@ -82,7 +82,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
             }
 
-            if (!_parent.Completed &&  (_parent.Position - GameManager.Player.Position).Xz.LengthSquared 
+            if (!_parent.Completed &&  (_parent.Position - GameManager.Player.Position).Xz().LengthSquared() 
                 < _parent.Radius * _parent.Radius)
             {
             

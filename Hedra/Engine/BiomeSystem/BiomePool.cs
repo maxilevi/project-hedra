@@ -16,7 +16,7 @@ using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.BiomeSystem
 {
@@ -69,7 +69,7 @@ namespace Hedra.Engine.BiomeSystem
         {
             lock (_regionCache)
             {
-                var voronoiHeight = this.VoronoiFormula(Position.Xz.ToVector3());
+                var voronoiHeight = this.VoronoiFormula(Position.Xz().ToVector3());
 
                 this._regionDistribution.Seed = (int) voronoiHeight;
                 int regionIndex = _regionDistribution.Next(0, MaxRegionsPerBiome);
@@ -77,7 +77,7 @@ namespace Hedra.Engine.BiomeSystem
                 this._biomeDistribution.Seed = (int) voronoiHeight + 421;
                 int biomeIndex = _biomeDistribution.Next(0, _biomeDesigns.Length);
 
-                if ((Position - World.SpawnPoint).Xz.LengthFast < 5000) biomeIndex = 0;
+                if ((Position - World.SpawnPoint).Xz().LengthFast() < 5000) biomeIndex = 0;
 
                 int index = (regionIndex * 100 / 13 + biomeIndex * 100 / 11) * 100;
 

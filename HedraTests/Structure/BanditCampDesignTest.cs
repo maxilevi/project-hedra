@@ -3,7 +3,7 @@ using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.WorldBuilding;
 using NUnit.Framework;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace HedraTests.Structure
 {
@@ -18,7 +18,7 @@ namespace HedraTests.Structure
         protected override CollidableStructure CreateStructure()
         {
             var structure = base.CreateStructure();
-            structure.Parameters.Set("ScaleMatrix", Matrix4.Identity);
+            structure.Parameters.Set("ScaleMatrix", Matrix4x4.Identity);
             structure.Parameters.Set("TentParameters", new BanditCampDesign.TentParameters[0]);
             return structure;
         }

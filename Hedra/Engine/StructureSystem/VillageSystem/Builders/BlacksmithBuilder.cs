@@ -6,7 +6,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using Hedra.Engine.WorldBuilding;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
@@ -37,7 +37,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             var transformation = BuildTransformation(Parameters).ClearTranslation();
             if (Rng.Next(0, 3) != 1 && Parameters.Design.HasBlacksmith)
             {
-                var blacksmithOffset = Vector3.TransformPosition(Parameters.Design.Blacksmith * Parameters.Design.Scale * 1.5f, transformation);
+                var blacksmithOffset = Vector3.Transform(Parameters.Design.Blacksmith * Parameters.Design.Scale * 1.5f, transformation);
                 var newPosition = Parameters.Position + blacksmithOffset;
                 DecorationsPlacer.PlaceWhenWorldReady(newPosition,
                     P =>
@@ -50,16 +50,16 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                     },
                 () => Structure.Disposed);
             }
-            var lampOffset = Vector3.TransformPosition(Parameters.Design.LampPosition * Parameters.Design.Scale, transformation);
+            var lampOffset = Vector3.Transform(Parameters.Design.LampPosition * Parameters.Design.Scale, transformation);
             DecorationsPlacer.PlaceLamp(Parameters.Position + lampOffset, Structure, Root, _width, Rng);
             PlaceAnvilIfNecessary(Parameters, transformation);
             PlaceWorkbenchIfNecessary(Parameters, transformation);
         }
 
-        private void PlaceAnvilIfNecessary(BlacksmithParameters Parameters, Matrix4 Transformation)
+        private void PlaceAnvilIfNecessary(BlacksmithParameters Parameters, Matrix4x4 Transformation)
         {
             if (!Parameters.Design.HasAnvil) return;
-            var position = Parameters.Position + Vector3.TransformPosition(
+            var position = Parameters.Position + Vector3.Transform(
                                     Parameters.Design.AnvilPosition * Parameters.Design.Scale,
                                     Transformation);
             DecorationsPlacer.PlaceWhenWorldReady(position,
@@ -68,10 +68,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             );
         }
 
-        private void PlaceWorkbenchIfNecessary(BlacksmithParameters Parameters, Matrix4 Transformation)
+        private void PlaceWorkbenchIfNecessary(BlacksmithParameters Parameters, Matrix4x4 Transformation)
         {
             if (!Parameters.Design.HasWorkbench) return;
-            var position = Parameters.Position + Vector3.TransformPosition(
+            var position = Parameters.Position + Vector3.Transform(
                                     Parameters.Design.WorkbenchPosition * Parameters.Design.Scale,
                                     Transformation);
             DecorationsPlacer.PlaceWhenWorldReady(position,

@@ -1,7 +1,7 @@
 using System;
 using Hedra.Core;
 using Hedra.EntitySystem;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Player.BoatSystem
 {
@@ -20,17 +20,17 @@ namespace Hedra.Engine.Player.BoatSystem
         
         protected void HandleBoatRotation(float MaxPropulsion)
         {
-            var movingFactor = (_accumulatedDirection.LengthFast - 1) / MaxPropulsion;
+            var movingFactor = (_accumulatedDirection.LengthFast() - 1) / MaxPropulsion;
             _targetAngles.Z = Mathf.Clamp(45f * (Yaw - _yaw) / (float) (Math.PI * .2f) * movingFactor, -45, 45);
             _angles = Mathf.Lerp(_angles, _targetAngles, Time.DeltaTime * 4f);
             _targetAngles = Mathf.Lerp(_targetAngles, Vector3.Zero, Time.DeltaTime * 4f);
             _yaw = Mathf.Lerp(_yaw, Yaw, Time.DeltaTime * 2f);
 
             _humanoid.Model.TransformationMatrix =
-                Matrix4.CreateRotationY(-_humanoid.Model.LocalRotation.Y * Mathf.Radian)
-                * Matrix4.CreateRotationZ(_angles.Z * Mathf.Radian)
-                * Matrix4.CreateRotationX(_angles.X * Mathf.Radian)
-                * Matrix4.CreateRotationY(_humanoid.Model.LocalRotation.Y * Mathf.Radian);
+                Matrix4x4.CreateRotationY(-_humanoid.Model.LocalRotation.Y * Mathf.Radian)
+                * Matrix4x4.CreateRotationZ(_angles.Z * Mathf.Radian)
+                * Matrix4x4.CreateRotationX(_angles.X * Mathf.Radian)
+                * Matrix4x4.CreateRotationY(_humanoid.Model.LocalRotation.Y * Mathf.Radian);
  
         }
 

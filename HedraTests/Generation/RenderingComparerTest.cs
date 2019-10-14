@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering;
 using NUnit.Framework;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace HedraTests.Generation
 {

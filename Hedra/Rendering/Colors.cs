@@ -2,7 +2,7 @@ using System;
 using System.Drawing;
 using System.Globalization;
 using Hedra.Core;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Rendering
 {

@@ -2,7 +2,7 @@ using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Localization;
 using Hedra.Localization;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {

@@ -30,7 +30,7 @@ using Hedra.Localization;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Player
 {
@@ -264,7 +264,7 @@ namespace Hedra.Engine.Player
         {
             var meleeWeapon = LeftWeapon as MeleeWeapon;
             var rangeModifier =  meleeWeapon?.MainWeaponSize.Y / 2.5f + 1f ?? 1.0f;
-            var wideModifier = Math.Max( (meleeWeapon?.MainWeaponSize.Xz.LengthFast ?? 1.0f) - .75f, 1.0f);
+            var wideModifier = Math.Max( (meleeWeapon?.MainWeaponSize.Xz().LengthFast() ?? 1.0f) - .75f, 1.0f);
             var nearEntities = World.InRadius<IEntity>(this.Position, 32f * rangeModifier);
             var possibleTargets = nearEntities.Where(E => !E.IsStatic && E != this).ToArray();
             var atLeastOneHit = false;
@@ -272,7 +272,7 @@ namespace Hedra.Engine.Player
             foreach (var target in possibleTargets)
             {
                 if (IgnoreList != null && Array.IndexOf(IgnoreList, target) != -1) continue;
-                var norm = (target.Position - this.Position).Xz.NormalizedFast().ToVector3();
+                var norm = (target.Position - this.Position).Xz().NormalizedFast().ToVector3();
                 var dot = Vector3.Dot(norm, this.Orientation);
                 if(dot > 0.60f / wideModifier && this.InAttackRange(target, rangeModifier))
                 {

@@ -1,5 +1,5 @@
 using System.Runtime.InteropServices;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Rendering
 {
@@ -13,7 +13,7 @@ namespace Hedra.Rendering
 
         public bool Collides(Vector3 Point)
         {
-            return (Position - Point).LengthFast < Radius;
+            return (Position - Point).LengthFast() < Radius;
         }
     }
 

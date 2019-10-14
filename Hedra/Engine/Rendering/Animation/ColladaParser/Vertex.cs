@@ -7,7 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using System.Collections.Generic;
 
 namespace Hedra.Engine.Rendering.Animation.ColladaParser
@@ -37,21 +37,22 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
             this.Index = index;
             this.WeightsData = weightsData;
             this.Position = Position;
-            this.Length = Position.Length;
+            this.Length = Position.Length();
         }
         
         public void AddTangent(Vector3 tangent){
             Tangents.Add(tangent);
         }
         
-        public void AverageTangents(){
+        public void AverageTangents()
+        {
             if(Tangents.Count == 0){
                 return;
             }
-            for(int i = 0; i < Tangents.Count; i++){
+            for(int i = 0; i < Tangents.Count; i++) {
                 AveragedTangent += Tangents[i];
             }
-            AveragedTangent.Normalize();
+            AveragedTangent = AveragedTangent.Normalized();
         }
 
         public bool IsSet{

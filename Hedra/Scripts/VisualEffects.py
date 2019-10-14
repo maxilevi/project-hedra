@@ -1,5 +1,5 @@
 from Core import *
-from OpenToolkit.Mathematics import Vector4
+from System.Numerics import Vector4
 
 def outline(human, color, seconds):
     quarter = seconds * .25

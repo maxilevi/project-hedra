@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Rendering.Geometry
 {
@@ -90,10 +90,10 @@ namespace Hedra.Engine.Rendering.Geometry
             };
 
             float Size = WaterQuadSize;
-            Vector3 V3 = new Vector3(BlockSize * LOD * Size - (Size-1) * (Cell.P[2].X / Chunk.BlockSize),-Chunk.BlockSize * WaterQuadOffset + (float) (Cell.P[2].Y + densities[2])* Chunk.BlockSize, BlockSize * LOD * Size - (Size-1) * (Cell.P[2].Z / Chunk.BlockSize)) + Cell.P[0].Xz.ToVector3() * new Vector3(BlockSize,BlockSize,BlockSize) * new Vector3(Size,1,Size);
-            Vector3 V1 = new Vector3(BlockSize * LOD * Size - (Size-1) * (Cell.P[1].X / Chunk.BlockSize),-Chunk.BlockSize * WaterQuadOffset + (float) (Cell.P[1].Y + densities[1])* Chunk.BlockSize, - (Size-1) * (Cell.P[1].Z / Chunk.BlockSize)) + Cell.P[0].Xz.ToVector3() * new Vector3(BlockSize,BlockSize,BlockSize) * new Vector3(Size,1,Size);
-            Vector3 V2 = new Vector3(-(Size-1) * (Cell.P[3].X / Chunk.BlockSize) ,-Chunk.BlockSize * WaterQuadOffset + (float) (Cell.P[3].Y + densities[3])* Chunk.BlockSize, BlockSize * LOD * Size - (Size-1) * (Cell.P[3].Z / Chunk.BlockSize)) + Cell.P[0].Xz.ToVector3() * new Vector3(BlockSize,BlockSize,BlockSize) * new Vector3(Size,1,Size);
-            Vector3 V0 = new Vector3(-(Size-1) * (Cell.P[0].X / Chunk.BlockSize), -Chunk.BlockSize * WaterQuadOffset + (float) (Cell.P[0].Y + densities[0])*Chunk.BlockSize, - (Size-1) * (Cell.P[0].Z / Chunk.BlockSize)) + Cell.P[0].Xz.ToVector3() * new Vector3(BlockSize,BlockSize,BlockSize) * new Vector3(Size,1,Size);
+            Vector3 V3 = new Vector3(BlockSize * LOD * Size - (Size-1) * (Cell.P[2].X / Chunk.BlockSize),-Chunk.BlockSize * WaterQuadOffset + (float) (Cell.P[2].Y + densities[2])* Chunk.BlockSize, BlockSize * LOD * Size - (Size-1) * (Cell.P[2].Z / Chunk.BlockSize)) + Cell.P[0].Xz().ToVector3() * new Vector3(BlockSize,BlockSize,BlockSize) * new Vector3(Size,1,Size);
+            Vector3 V1 = new Vector3(BlockSize * LOD * Size - (Size-1) * (Cell.P[1].X / Chunk.BlockSize),-Chunk.BlockSize * WaterQuadOffset + (float) (Cell.P[1].Y + densities[1])* Chunk.BlockSize, - (Size-1) * (Cell.P[1].Z / Chunk.BlockSize)) + Cell.P[0].Xz().ToVector3() * new Vector3(BlockSize,BlockSize,BlockSize) * new Vector3(Size,1,Size);
+            Vector3 V2 = new Vector3(-(Size-1) * (Cell.P[3].X / Chunk.BlockSize) ,-Chunk.BlockSize * WaterQuadOffset + (float) (Cell.P[3].Y + densities[3])* Chunk.BlockSize, BlockSize * LOD * Size - (Size-1) * (Cell.P[3].Z / Chunk.BlockSize)) + Cell.P[0].Xz().ToVector3() * new Vector3(BlockSize,BlockSize,BlockSize) * new Vector3(Size,1,Size);
+            Vector3 V0 = new Vector3(-(Size-1) * (Cell.P[0].X / Chunk.BlockSize), -Chunk.BlockSize * WaterQuadOffset + (float) (Cell.P[0].Y + densities[0])*Chunk.BlockSize, - (Size-1) * (Cell.P[0].Z / Chunk.BlockSize)) + Cell.P[0].Xz().ToVector3() * new Vector3(BlockSize,BlockSize,BlockSize) * new Vector3(Size,1,Size);
 
             int VertCount = Data.Vertices.Count;
             

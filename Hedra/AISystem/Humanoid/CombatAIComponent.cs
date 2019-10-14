@@ -9,7 +9,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.AISystem.Humanoid
 {
@@ -117,7 +117,7 @@ namespace Hedra.AISystem.Humanoid
 
         private bool ShouldReset()
         {
-            var targetLost = IsChasing && (_chasingTarget.IsDead || _chasingTarget.IsInvisible || (_targetPoint.Xz - Parent.Position.Xz).LengthSquared > ForgetRadius * ForgetRadius);
+            var targetLost = IsChasing && (_chasingTarget.IsDead || _chasingTarget.IsInvisible || (_targetPoint.Xz() - Parent.Position.Xz()).LengthSquared() > ForgetRadius * ForgetRadius);
             var shouldWeReset = IsChasing && _forgetTimer.Tick() || targetLost;
             if (shouldWeReset)
             {
@@ -175,7 +175,7 @@ namespace Hedra.AISystem.Humanoid
 
         protected virtual bool InAttackRadius(IEntity Target)
         {
-            return (Target.Position - Parent.Position).LengthSquared < AttackRadius * AttackRadius;
+            return (Target.Position - Parent.Position).LengthSquared() < AttackRadius * AttackRadius;
         }
         
         private void Reset()
@@ -191,7 +191,7 @@ namespace Hedra.AISystem.Humanoid
         protected void RollAndMove2()
         {
             if(Parent != null && Parent.WasAttacking) return;
-            if (_rollTimer.Tick() && Parent != null && (_targetPoint.Xz - Parent.Position.Xz).LengthSquared > AttackRadius * AttackRadius)
+            if (_rollTimer.Tick() && Parent != null && (_targetPoint.Xz() - Parent.Position.Xz()).LengthSquared() > AttackRadius * AttackRadius)
                 Parent.Roll(RollType.Normal);
         }
 

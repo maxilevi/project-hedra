@@ -1,7 +1,7 @@
 using System;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Rendering
 {

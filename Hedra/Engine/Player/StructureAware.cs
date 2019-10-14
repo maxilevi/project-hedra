@@ -9,7 +9,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.StructureSystem;
 using Hedra.Sound;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using CollisionShape = BulletSharp.CollisionShape;
 using TaskScheduler = Hedra.Core.TaskScheduler;
 
@@ -72,7 +72,7 @@ namespace Hedra.Engine.Player
             for (var i = 0; i < _currentNearStructures.Length; i++)
             {
                 var structure = _currentNearStructures[i];
-                if ((structure.Position.Xz - _player.Position.Xz).LengthFast < structure.Radius * .75f)
+                if ((structure.Position.Xz() - _player.Position.Xz()).LengthFast() < structure.Radius * .75f)
                 {
                     if (!_wasPlayingCustom && structure.Design.AmbientSongs.Length > 0)
                     {
@@ -97,7 +97,7 @@ namespace Hedra.Engine.Player
             for (var i = 0; i < _currentNearStructures.Length; i++)
             {
                 var structure = _currentNearStructures[i];
-                if ((structure.Position.Xz - _player.Position.Xz).LengthFast < structure.Radius * .75f)
+                if ((structure.Position.Xz() - _player.Position.Xz()).LengthFast() < structure.Radius * .75f)
                 {
                     isInsideAny = true;
                     if (_insideStructure == null)

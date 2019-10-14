@@ -11,7 +11,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Game;
 using Hedra.Rendering;
 using CollisionShape = BulletSharp.CollisionShape;
-using Vector2 = OpenToolkit.Mathematics.Vector2;
+using Vector2 = System.Numerics.Vector2;
 
 namespace Hedra.Engine.Bullet
 {
@@ -238,7 +238,7 @@ namespace Hedra.Engine.Bullet
                 
                 for (var i = 0; i < _bodies.Count; ++i)
                 {
-                    if ((_bodies[i].WorldTransform.Origin.Compatible() - Player.LocalPlayer.Instance.Position).Xz.LengthSquared > 64 * 64) continue;
+                    if ((_bodies[i].WorldTransform.Origin.Compatible() - Player.LocalPlayer.Instance.Position).Xz().LengthSquared() > 64 * 64) continue;
                     var info = (PhysicsObjectInformation) _bodies[i].UserObject;
                     if (info.IsInSimulation)
                         _dynamicsWorld.DebugDrawObject(_bodies[i].WorldTransform, _bodies[i].CollisionShape,
@@ -246,7 +246,7 @@ namespace Hedra.Engine.Bullet
                 }/*
                 for (var i = 0; i < _bodies.Count; ++i)
                 {
-                    //if ((_bodies[i].WorldTransform.Origin.Compatible() - Player.LocalPlayer.Instance.Position).Xz.LengthSquared > 64 * 64) continue;
+                    //if ((_bodies[i].WorldTransform.Origin.Compatible() - Player.LocalPlayer.Instance.Position).Xz().LengthSquared() > 64 * 64) continue;
                     var info = (PhysicsObjectInformation) _bodies[i].UserObject;
                     if (info.IsInSimulation)
                         _dynamicsWorld.DebugDrawObject(_bodies[i].WorldTransform, _bodies[i].CollisionShape, new Vector3(1, 1, 0));
@@ -499,7 +499,7 @@ namespace Hedra.Engine.Bullet
             }
         }
 
-        private static BvhTriangleMeshShape CreateTriangleShape(ICollection<uint> Indices, ICollection<OpenToolkit.Mathematics.Vector3> Vertices)
+        private static BvhTriangleMeshShape CreateTriangleShape(ICollection<uint> Indices, ICollection<System.Numerics.Vector3> Vertices)
         {
             var triangleMesh = new TriangleIndexVertexArray();
             var indexedMesh = CreateIndexedMesh(Indices, Vertices);
@@ -507,7 +507,7 @@ namespace Hedra.Engine.Bullet
             return new BvhTriangleMeshShape(triangleMesh, true);
         }
 
-        private static IndexedMesh CreateIndexedMesh(ICollection<uint> Indices, ICollection<OpenToolkit.Mathematics.Vector3> Vertices)
+        private static IndexedMesh CreateIndexedMesh(ICollection<uint> Indices, ICollection<System.Numerics.Vector3> Vertices)
         {
             var indexedMesh = new IndexedMesh();
             indexedMesh.Allocate(Indices.Count / 3, Vertices.Count);

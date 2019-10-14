@@ -2,7 +2,7 @@ using System;
 using Hedra.Engine.Events;
 using Hedra.Engine.Loader;
 using Hedra.Engine.Windowing;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Silk.NET.GLFW;
 using Silk.NET.Windowing.Common;
 

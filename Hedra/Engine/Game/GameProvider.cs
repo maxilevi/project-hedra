@@ -22,7 +22,7 @@ using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Game;
 using Hedra.Items;
 using Hedra.Sound;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Game
 {
@@ -100,7 +100,7 @@ namespace Hedra.Engine.Game
 
         public bool NearAnyPlayer(Vector3 Position, float Radius)
         {
-            return _players.Any(P => (P.Position - Position).Xz.LengthSquared < Radius * Radius);
+            return _players.Any(P => (P.Position - Position).Xz().LengthSquared() < Radius * Radius);
         }
 
         public void LoadCharacter(PlayerInformation Information)

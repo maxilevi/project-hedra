@@ -6,7 +6,7 @@ using Hedra.Engine.Player.QuestSystem;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.EntitySystem;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Rendering
 {
@@ -51,7 +51,7 @@ namespace Hedra.Engine.Rendering
             var colorMap = new Dictionary<Vector3, Vector3>();
             for (var i = 0; i < Colors.Length; i++)
             {
-                colorMap.Add(AssetManager.ColorCodes[i].Xyz, Colors[i].Xyz);
+                colorMap.Add(AssetManager.ColorCodes[i].Xyz(), Colors[i].Xyz());
             }
             AnimationModelLoader.Paint(Model, Path, colorMap);
         }

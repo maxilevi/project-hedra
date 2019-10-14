@@ -5,7 +5,7 @@ using Hedra.Engine.IO;
 using Hedra.Engine.Native;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.Core;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 
@@ -58,7 +58,7 @@ namespace Hedra.Engine
                 Renderer.Severity = ErrorSeverity.High;
                 var shader = AnimatedModelShader.GenerateDeathShader();
                 shader.Bind();
-                shader["viewMatrix"] = Matrix4.Identity;
+                shader["viewMatrix"] = Matrix4x4.Identity;
                 shader.Unbind();
             }
             catch (Exception e)
@@ -151,7 +151,7 @@ namespace Hedra.Engine
                 new Vector3(0,1,0), 
                 new Vector3(1,0,0)
             };
-            Buffer = new VBO<Vector3>(verts, verts.Length * Vector3.SizeInBytes, VertexAttribPointerType.Float);
+            Buffer = new VBO<Vector3>(verts, verts.Length * HedraSize.Vector3, VertexAttribPointerType.Float);
             Indices = new VBO<uint>(new uint[] {0, 1, 2}, sizeof(uint) * verts.Length, VertexAttribPointerType.UnsignedInt);
             return new VAO<Vector3>(Buffer);
         }

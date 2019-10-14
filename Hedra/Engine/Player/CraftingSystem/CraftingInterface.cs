@@ -5,7 +5,7 @@ using Hedra.Engine.Rendering.UI;
 using Hedra.Input;
 using Hedra.Localization;
 using Hedra.Sound;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 using Silk.NET.Input.Common;
 

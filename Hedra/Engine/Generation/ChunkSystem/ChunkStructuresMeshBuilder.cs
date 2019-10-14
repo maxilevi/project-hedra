@@ -14,7 +14,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Game;
 using Hedra.Rendering;
 using Microsoft.Scripting.Utils;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
@@ -116,7 +116,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             for (var i = 0; i < InstanceModel.Extradata.Count; i++)
             {
-                InstanceModel.Colors[i] = new Vector4(InstanceModel.Colors[i].Xyz, InstanceModel.Extradata[i]);
+                InstanceModel.Colors[i] = new Vector4(InstanceModel.Colors[i].Xyz(), InstanceModel.Extradata[i]);
             }
 
             /* Manually add these vertex data's for maximum performance */
@@ -186,7 +186,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Model.Extradata.Set(0, Model.Vertices.Count);
             
             /* Pack some randomness to the wind values */
-            Distribution.Seed = Unique.GenerateSeed(Element.Position.Xz);
+            Distribution.Seed = Unique.GenerateSeed(Element.Position.Xz());
             var rng = Distribution.NextFloat();
             for (var k = 0; k < Model.Extradata.Count; k++)
             {

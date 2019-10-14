@@ -18,7 +18,7 @@ using Hedra.Game;
 using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Mission;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
@@ -59,7 +59,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 var allDead = true;
                 for (var i = 0; i < Enemies.Length; i++)
                 {
-                    if (Enemies[i] != null && !Enemies[i].IsDead && (Enemies[i].Position - Position).Xz.LengthSquared
+                    if (Enemies[i] != null && !Enemies[i].IsDead && (Enemies[i].Position - Position).Xz().LengthSquared()
                         < Radius * Radius * .9f * .9f)
                     {
                         allDead = false;
@@ -68,7 +68,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
                 this.Cleared = allDead;
             }
-            _campfire.Position = Position.Xz.ToVector3() + Vector3.UnitY * Physics.HeightAtPosition(this.Position);
+            _campfire.Position = Position.Xz().ToVector3() + Vector3.UnitY * Physics.HeightAtPosition(this.Position);
             this.ManageOldMan();
         }
         
@@ -95,12 +95,12 @@ namespace Hedra.Engine.StructureSystem.Overworld
             Rescuee.IsTied = true;
         }
 
-        private Matrix4 BuildRescueeMatrix()
+        private Matrix4x4 BuildRescueeMatrix()
         {
-            return Matrix4.CreateRotationX(-90f * Mathf.Radian)
-                 * Matrix4.CreateTranslation(-Rescuee.Position) 
-                 * Matrix4.CreateTranslation( Vector3.UnitZ * 3f + Vector3.UnitY * 7f)
-                 * Matrix4.CreateTranslation(Rescuee.Position);
+            return Matrix4x4.CreateRotationX(-90f * Mathf.Radian)
+                 * Matrix4x4.CreateTranslation(-Rescuee.Position) 
+                 * Matrix4x4.CreateTranslation( Vector3.UnitZ * 3f + Vector3.UnitY * 7f)
+                 * Matrix4x4.CreateTranslation(Rescuee.Position);
         }
 
         private void ManageOldMan()
@@ -108,12 +108,12 @@ namespace Hedra.Engine.StructureSystem.Overworld
             if (Completed) return;
 
             Rescuee.Model.TransformationMatrix = this.BuildRescueeMatrix();
-            Rescuee.Position = this.Position.Xz.ToVector3() + Vector3.UnitY * Physics.HeightAtPosition(this.Position);
+            Rescuee.Position = this.Position.Xz().ToVector3() + Vector3.UnitY * Physics.HeightAtPosition(this.Position);
 
             if (!Rescuee.InUpdateRange)
                 Rescuee.Update();
 
-            if (!Cleared || !((GameManager.Player.Position - Position).LengthSquared < 16 * 16))
+            if (!Cleared || !((GameManager.Player.Position - Position).LengthSquared() < 16 * 16))
             {
                 _canRescue = false;
                 return;
@@ -141,7 +141,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 };
                 Rescuee.AddComponent(talkComponent);
             });
-            Rescuee.Model.TransformationMatrix = Matrix4.Identity;
+            Rescuee.Model.TransformationMatrix = Matrix4x4.Identity;
             Rescuee.Physics.UsePhysics = true;
             Rescuee.Physics.CollidesWithEntities = true;
             Rescuee.Physics.CollidesWithStructures = true;

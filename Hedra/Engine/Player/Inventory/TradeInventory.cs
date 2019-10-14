@@ -20,7 +20,7 @@ using Hedra.Engine.Rendering.UI;
 using Hedra.EntitySystem;
 using Hedra.Input;
 using Hedra.Localization;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 using Silk.NET.Input.Common;
 

@@ -15,7 +15,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Engine.Rendering.UI;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem;
 using Hedra.Rendering;
@@ -194,13 +194,13 @@ namespace Hedra.Engine.Generation
             var radius = 0f;
             foreach (var model in _models)
             {
-                var newRadius = (model.Position - this.Position).LengthFast + model.Bounds.Xz.LengthFast * .5f;
+                var newRadius = (model.Position - this.Position).LengthFast() + model.Bounds.Xz().LengthFast() * .5f;
                 if (newRadius > radius)
                     radius = newRadius;
             }
             foreach (var instance in _instances)
             {
-                var newRadius = (instance.Position - this.Position).LengthFast + instance.ApproximateBounds.Xz.LengthFast * .5f;
+                var newRadius = (instance.Position - this.Position).LengthFast() + instance.ApproximateBounds.Xz().LengthFast() * .5f;
                 if (newRadius > radius)
                     radius = newRadius;
             }

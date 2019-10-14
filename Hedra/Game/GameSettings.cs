@@ -18,7 +18,7 @@ using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
 using Hedra.Localization;
 using Hedra.Sound;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Silk.NET.Windowing.Common;
 
 

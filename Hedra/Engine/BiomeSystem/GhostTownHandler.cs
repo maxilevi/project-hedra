@@ -1,7 +1,7 @@
 using Hedra.Engine.Game;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Game;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.BiomeSystem
 {

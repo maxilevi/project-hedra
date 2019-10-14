@@ -7,7 +7,7 @@
 
 using System;
 using Hedra.Engine.Management;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 

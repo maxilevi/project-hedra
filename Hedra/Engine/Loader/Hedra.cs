@@ -37,7 +37,7 @@ using Hedra.Sound;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 using Hedra.WorldObjects;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Silk.NET.Windowing.Common;
 
 namespace Hedra.Engine.Loader

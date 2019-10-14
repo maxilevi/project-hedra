@@ -6,7 +6,7 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using System;
 using System.Collections.Generic;
 using Hedra.Core;
@@ -92,7 +92,7 @@ namespace Hedra.Engine.Rendering.Animation
             _pose = InterpolatePoses(_pose, animationPose, Time.IndependentDeltaTime * 16f, out var interpolated);
             if (interpolated)
             {
-                ApplyPoseToJoints(_pose, _rootJoint, Matrix4.Identity);
+                ApplyPoseToJoints(_pose, _rootJoint, Matrix4x4.Identity);
             }
             IncreaseAnimationTime();
             return interpolated;
@@ -199,7 +199,7 @@ namespace Hedra.Engine.Rendering.Animation
          *            - the desired model-space transform of the parent joint for
          *            the pose.
          */
-        private void ApplyPoseToJoints(Dictionary<String, JointTransform> CurrentPose, Joint Joint, Matrix4 ParentTransform)
+        private void ApplyPoseToJoints(Dictionary<String, JointTransform> CurrentPose, Joint Joint, Matrix4x4 ParentTransform)
         {
             var currentLocalTransform = CurrentPose[Joint.Name];
             var currentTransform = currentLocalTransform.LocalTransform * ParentTransform;

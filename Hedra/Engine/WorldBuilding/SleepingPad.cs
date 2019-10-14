@@ -13,7 +13,7 @@ using Hedra.EntitySystem;
 using Hedra.Engine.Localization;
 using Hedra.Game;
 using Hedra.Localization;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;
 

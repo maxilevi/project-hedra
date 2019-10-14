@@ -2,7 +2,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.WeaponSystem
 {
@@ -46,7 +46,7 @@ namespace Hedra.WeaponSystem
         protected override void OnSheathed()
         {
             var mat4 = Owner.Model.ChestMatrix.ClearTranslation() 
-                       * Matrix4.CreateTranslation(-Owner.Position + Owner.Model.ChestPosition);
+                       * Matrix4x4.CreateTranslation(-Owner.Position + Owner.Model.ChestPosition);
             this.MainMesh.Position = Owner.Position;
             this.MainMesh.TransformationMatrix = mat4;
 
@@ -58,12 +58,12 @@ namespace Hedra.WeaponSystem
         {
 
             var mat4L = Owner.Model.LeftWeaponMatrix.ClearTranslation() 
-                        * Matrix4.CreateTranslation(-Owner.Position + Owner.Model.LeftWeaponPosition);
+                        * Matrix4x4.CreateTranslation(-Owner.Position + Owner.Model.LeftWeaponPosition);
             this.MainMesh.TransformationMatrix = mat4L;
             this.MainMesh.Position = Owner.Position;
 
             var mat4R = Owner.Model.RightWeaponMatrix.ClearTranslation() 
-                        * Matrix4.CreateTranslation(-Owner.Position + Owner.Model.RightWeaponPosition);
+                        * Matrix4x4.CreateTranslation(-Owner.Position + Owner.Model.RightWeaponPosition);
             this.SecondBlade.TransformationMatrix = mat4R;
             this.SecondBlade.Position = Owner.Position;
         }
@@ -72,12 +72,12 @@ namespace Hedra.WeaponSystem
         {
     
             var mat4L = Owner.Model.LeftWeaponMatrix.ClearTranslation() 
-                        * Matrix4.CreateTranslation(-Owner.Position + Owner.Model.LeftWeaponPosition);
+                        * Matrix4x4.CreateTranslation(-Owner.Position + Owner.Model.LeftWeaponPosition);
                 this.MainMesh.TransformationMatrix = mat4L;
             this.MainMesh.Position = Owner.Position;
         
             var mat4R = Owner.Model.RightWeaponMatrix.ClearTranslation() 
-                        * Matrix4.CreateTranslation(-Owner.Position + Owner.Model.RightWeaponPosition);
+                        * Matrix4x4.CreateTranslation(-Owner.Position + Owner.Model.RightWeaponPosition);
                 this.SecondBlade.TransformationMatrix = mat4R;
             this.SecondBlade.Position = Owner.Position;
         }

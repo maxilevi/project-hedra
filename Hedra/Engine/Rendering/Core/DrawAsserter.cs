@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Hedra.Engine.Rendering.Particles;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 

@@ -12,7 +12,7 @@ using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Shaders;
 using Hedra.Game;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 
@@ -311,16 +311,16 @@ namespace Hedra.Engine.Rendering.Core
                 case MappingType.Vector4:
                     Renderer.Uniform4(Mapping.Location, (Vector4)Mapping.Value);
                     break;
-                case MappingType.Matrix4:
-                    var matrix4 = (Matrix4) Mapping.Value;
-                    Renderer.UniformMatrix4(Mapping.Location, false, ref matrix4);
+                case MappingType.Matrix4x4:
+                    var matrix4 = (Matrix4x4) Mapping.Value;
+                    Renderer.UniformMatrix4x4(Mapping.Location, false, ref matrix4);
                     break;
                 case MappingType.Matrix3:
-                    var matrix3X3 = (Matrix3)Mapping.Value;
+                    var matrix3X3 = (Matrix4x4)Mapping.Value;
                     Renderer.UniformMatrix3(Mapping.Location, false, ref matrix3X3);
                     break;
                 case MappingType.Matrix2:
-                    var matrix2 = (Matrix2)Mapping.Value;
+                    var matrix2 = (Matrix4x4)Mapping.Value;
                     Renderer.UniformMatrix2(Mapping.Location, false, ref matrix2);
                     break;
                 default:

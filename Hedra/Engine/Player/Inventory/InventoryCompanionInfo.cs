@@ -11,7 +11,7 @@ using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 
 using Silk.NET.Input.Common;

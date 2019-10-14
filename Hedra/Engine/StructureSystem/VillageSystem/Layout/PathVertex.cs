@@ -1,5 +1,5 @@
 using Hedra.Engine.ItemSystem;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Layout
 {

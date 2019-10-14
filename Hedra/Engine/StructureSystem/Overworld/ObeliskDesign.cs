@@ -8,7 +8,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
@@ -39,8 +39,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
             for (var i = 0; i < shapes.Length; ++i)
             {
-                shapes[i].Transform(Matrix4.CreateScale(scale));
-                shapes[i].Transform(Matrix4.CreateTranslation(position));
+                shapes[i].Transform(Matrix4x4.CreateScale(scale));
+                shapes[i].Transform(Matrix4x4.CreateTranslation(position));
             }
             
             obelisk.Type = (ObeliskType) Utils.Rng.Next(0, (int)ObeliskType.MaxItems);

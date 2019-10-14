@@ -12,7 +12,7 @@ using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Player
 {

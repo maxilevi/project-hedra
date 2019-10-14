@@ -5,7 +5,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using Hedra.Game;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.AISystem.Humanoid
 {
@@ -24,7 +24,7 @@ namespace Hedra.AISystem.Humanoid
         public override IEntity FindPlayerTarget(float SearchRadius)
         {
             var player = GameManager.Player;
-            return !player.IsDead && (player.Position.Xz - Parent.Position.Xz).LengthSquared < SearchRadius * player.Attributes.MobAggroModifier * SearchRadius * player.Attributes.MobAggroModifier
+            return !player.IsDead && (player.Position.Xz() - Parent.Position.Xz()).LengthSquared() < SearchRadius * player.Attributes.MobAggroModifier * SearchRadius * player.Attributes.MobAggroModifier
                 ? player 
                 : null;
         }
@@ -39,7 +39,7 @@ namespace Hedra.AISystem.Humanoid
             var entities = World.Entities.ToArray();
             for (var i = entities.Length - 1; i > -1; i--)
             {
-                if (entities[i] == this.Parent || !((entities[i].Position.Xz - Parent.Position.Xz).LengthSquared < SearchRadius * SearchRadius)) continue;
+                if (entities[i] == this.Parent || !((entities[i].Position.Xz() - Parent.Position.Xz()).LengthSquared() < SearchRadius * SearchRadius)) continue;
                 if (entities[i].IsStatic 
                     || Array.IndexOf(Ignore, entities[i]) != -1
                     || entities[i] is IPlayer                       

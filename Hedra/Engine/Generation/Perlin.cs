@@ -6,7 +6,7 @@
 // Based on the original implementation by Ken Perlin
 // http://mrl.nyu.edu/~perlin/noise/
 //
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using System;
 using Hedra.Core;
 

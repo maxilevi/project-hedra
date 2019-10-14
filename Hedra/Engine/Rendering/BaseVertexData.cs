@@ -3,7 +3,7 @@ using Hedra.Engine.Core;
 using Hedra.Engine.Rendering.Geometry;
 using Hedra.Rendering;
 using Microsoft.Scripting.Utils;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Rendering
 {

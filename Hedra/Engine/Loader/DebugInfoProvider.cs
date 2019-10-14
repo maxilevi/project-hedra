@@ -23,7 +23,7 @@ using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using Hedra.WeaponSystem;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Core;
 
 using Silk.NET.Input.Common;

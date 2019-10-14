@@ -5,7 +5,7 @@ using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Geometry;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
@@ -125,7 +125,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                         {
                             var regionPosition = new Vector3(cell.P[0].X + OffsetX, 0, cell.P[0].Z + OffsetZ);
                             var region = Cache.GetAverageRegionColor(regionPosition);
-                            color = new Vector4(region.WaterColor.Xyz, 1);
+                            color = new Vector4(region.WaterColor.Xyz(), 1);
                         }
                         else
                         {

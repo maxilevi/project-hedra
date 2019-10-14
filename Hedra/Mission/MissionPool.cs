@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Hedra.Engine.Scripting;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Mission
 {

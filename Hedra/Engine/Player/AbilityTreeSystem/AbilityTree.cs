@@ -23,7 +23,7 @@ using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 using Silk.NET.Input.Common;
 using Cursor = Hedra.Input.Cursor;

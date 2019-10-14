@@ -8,7 +8,7 @@
  */
 
 using System;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 using Silk.NET.OpenGL;
@@ -26,10 +26,10 @@ namespace Hedra.Engine.Rendering.Core
         public static uint FBOBound => FramebufferHandler.Id;
         public static uint VAOBound => VertexAttributeHandler.Id;
         public static uint VBOBound => BufferHandler.Id;
-        public static Matrix4 ModelViewProjectionMatrix { get; private set; }
-        public static Matrix4 ModelViewMatrix { get; private set; }
-        public static Matrix4 ViewMatrix { get; private set; }
-        public static Matrix4 ProjectionMatrix { get; private set; }
+        public static Matrix4x4 ModelViewProjectionMatrix { get; private set; }
+        public static Matrix4x4 ModelViewMatrix { get; private set; }
+        public static Matrix4x4 ViewMatrix { get; private set; }
+        public static Matrix4x4 ProjectionMatrix { get; private set; }
         public static CapHandler CapHandler { get; }
         public static TextureHandler TextureHandler { get; }
         public static ShaderHandler ShaderHandler { get; }
@@ -151,13 +151,13 @@ namespace Hedra.Engine.Rendering.Core
             TextureHandler.Active(Unit);
         }
 
-        public static void LoadProjection(Matrix4 Projection)
+        public static void LoadProjection(Matrix4x4 Projection)
         {
             ProjectionMatrix = Projection;
             RebuildMVP();
         }
 
-        public static void LoadModelView(Matrix4 ModelView)
+        public static void LoadModelView(Matrix4x4 ModelView)
         {
             ModelViewMatrix = ModelView;
             ViewMatrix = Hedra.Game.GameManager.Player.View.ModelViewMatrix;//ModelView.ClearTranslation();
@@ -492,19 +492,19 @@ namespace Hedra.Engine.Rendering.Core
             Provider.Uniform4(Location, Uniform);
         }
 
-        public static void UniformMatrix2(int Location, bool Transpose, ref Matrix2 Uniform)
+        public static void UniformMatrix2(int Location, bool Transpose, ref Matrix4x4 Uniform)
         {
             Provider.UniformMatrix2(Location, Transpose, ref Uniform);
         }
 
-        public static void UniformMatrix3(int Location, bool Transpose, ref Matrix3 Uniform)
+        public static void UniformMatrix3(int Location, bool Transpose, ref Matrix4x4 Uniform)
         {
             Provider.UniformMatrix3(Location, Transpose, ref Uniform);
         }
 
-        public static void UniformMatrix4(int Location, bool Transpose, ref Matrix4 Uniform)
+        public static void UniformMatrix4x4(int Location, bool Transpose, ref Matrix4x4 Uniform)
         {
-            Provider.UniformMatrix4(Location, Transpose, ref Uniform);
+            Provider.UniformMatrix4x4(Location, Transpose, ref Uniform);
         }
 
         public static void VertexAttribDivisor(int V0, int V1)

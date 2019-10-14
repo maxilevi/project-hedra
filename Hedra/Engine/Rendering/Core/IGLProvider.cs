@@ -1,5 +1,5 @@
 using System;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 
@@ -98,9 +98,9 @@ namespace Hedra.Engine.Rendering.Core
         void Uniform2(int Location, Vector2 Uniform);
         void Uniform3(int Location, Vector3 Uniform);
         void Uniform4(int Location, Vector4 Uniform);
-        void UniformMatrix2(int Location, bool Transpose, ref Matrix2 Uniform);
-        void UniformMatrix3(int Location, bool Transpose, ref Matrix3 Uniform);
-        void UniformMatrix4(int Location, bool Transpose, ref Matrix4 Uniform);
+        void UniformMatrix2(int Location, bool Transpose, ref Matrix4x4 Uniform);
+        void UniformMatrix3(int Location, bool Transpose, ref Matrix4x4 Uniform);
+        void UniformMatrix4x4(int Location, bool Transpose, ref Matrix4x4 Uniform);
         void UseProgram(uint Program);
         void VertexAttribDivisor(int V0, int V1);
         void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag, int Bytes, IntPtr Ptr);

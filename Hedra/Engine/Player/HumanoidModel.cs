@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Hedra.Core;
 using Hedra.Engine.ComplexMath;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
 using Hedra.Engine.Generation;
@@ -77,7 +77,7 @@ namespace Hedra.Engine.Player
         private AreaSound _modelSound;
         private StaticModel _food;
         private AnimatedCollider _collider;
-        private Matrix4 _transformationMatrix = Matrix4.Identity;
+        private Matrix4x4 _transformationMatrix = Matrix4x4.Identity;
 
 
         public HumanoidModel(IHumanoid Human, HumanoidModelTemplate Template) : base(Human)
@@ -249,7 +249,7 @@ namespace Hedra.Engine.Player
         private void HandleEatingEffects()
         {
             var mat4 = LeftWeaponMatrix.ClearTranslation() * 
-            Matrix4.CreateTranslation(-Position + (LeftWeaponPosition + RightWeaponPosition) / 2f );
+            Matrix4x4.CreateTranslation(-Position + (LeftWeaponPosition + RightWeaponPosition) / 2f );
                 
             _food.TransformationMatrix = mat4;
             _food.Position = Position;
@@ -264,7 +264,7 @@ namespace Hedra.Engine.Player
         
         private void HandleRollEffects()
         {
-            if((_previousPosition - Human.Position).LengthFast > 1 && Human.IsGrounded)
+            if((_previousPosition - Human.Position).LengthFast() > 1 && Human.IsGrounded)
             {
                 World.Particles.VariateUniformly = true;
                 World.Particles.Color = Vector4.One;
@@ -334,14 +334,14 @@ namespace Hedra.Engine.Player
         private void HandleTransformationMatrix()
         {
             
-            var ridingOffsetMatrix = Matrix4.CreateTranslation(RidingOffset);
-            var ridingOffsetMatrixInverted = Matrix4.CreateTranslation(-RidingOffset);
+            var ridingOffsetMatrix = Matrix4x4.CreateTranslation(RidingOffset);
+            var ridingOffsetMatrixInverted = Matrix4x4.CreateTranslation(-RidingOffset);
             var tiltTransformation = 
-                Matrix4.CreateRotationY(-Model.LocalRotation.Y * Mathf.Radian) *
+                Matrix4x4.CreateRotationY(-Model.LocalRotation.Y * Mathf.Radian) *
                 ridingOffsetMatrix *
                 TiltMatrix *
                 ridingOffsetMatrixInverted *
-                Matrix4.CreateRotationY(Model.LocalRotation.Y * Mathf.Radian);
+                Matrix4x4.CreateRotationY(Model.LocalRotation.Y * Mathf.Radian);
             Model.TransformationMatrix = tiltTransformation * _transformationMatrix;
         }
 
@@ -389,17 +389,17 @@ namespace Hedra.Engine.Player
         
         public Animation AnimationBlending => Model.AnimationBlending;
 
-        public Matrix4 HeadMatrix => Model.MatrixFromJoint(HeadJoint);
+        public Matrix4x4 HeadMatrix => Model.MatrixFromJoint(HeadJoint);
         
-        public Matrix4 ChestMatrix => Model.MatrixFromJoint(ChestJoint);
+        public Matrix4x4 ChestMatrix => Model.MatrixFromJoint(ChestJoint);
 
-        public Matrix4 LeftWeaponMatrix => Model.MatrixFromJoint(LeftWeaponJoint);
+        public Matrix4x4 LeftWeaponMatrix => Model.MatrixFromJoint(LeftWeaponJoint);
 
-        public Matrix4 RightWeaponMatrix => Model.MatrixFromJoint(RightWeaponJoint);
+        public Matrix4x4 RightWeaponMatrix => Model.MatrixFromJoint(RightWeaponJoint);
 
-        public Matrix4 LeftFootMatrix => Model.MatrixFromJoint(LeftFootJoint);
+        public Matrix4x4 LeftFootMatrix => Model.MatrixFromJoint(LeftFootJoint);
 
-        public Matrix4 RightFootMatrix => Model.MatrixFromJoint(RightFootJoint);
+        public Matrix4x4 RightFootMatrix => Model.MatrixFromJoint(RightFootJoint);
 
         public Vector3 HeadPosition
         {
@@ -463,13 +463,13 @@ namespace Hedra.Engine.Player
 
         public override Vector3 Position { get; set; }
 
-        public Matrix4 TransformationMatrix
+        public Matrix4x4 TransformationMatrix
         {
             get => _transformationMatrix;
             set => _transformationMatrix = value;
         }
 
-        public Matrix4 TiltMatrix { get; set; } = Matrix4.Identity;
+        public Matrix4x4 TiltMatrix { get; set; } = Matrix4x4.Identity;
         
         public override Vector3 LocalRotation { get; set; }
 

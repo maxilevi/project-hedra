@@ -4,7 +4,7 @@ using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Rogue.Assassin
 {

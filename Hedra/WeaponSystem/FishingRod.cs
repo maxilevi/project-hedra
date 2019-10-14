@@ -4,7 +4,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Scripting;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.WeaponSystem
 {

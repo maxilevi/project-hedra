@@ -11,7 +11,7 @@ using System.Diagnostics;
 using System.Drawing;
 using Hedra.Core;
 using Hedra.Engine.Game;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.UI;

@@ -19,7 +19,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Game;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 
@@ -169,10 +169,10 @@ namespace Hedra.Rendering
                                 LerpValue = (float) ( (float) y / (float) Bmp.Height);
                             
                             if(Type == GradientType.Diagonal)
-                                LerpValue = Mathf.Clamp( (new Vector2(0,0) - new Vector2(x,y)).LengthFast / (Bmp.Width+Bmp.Height), 0, 1);
+                                LerpValue = Mathf.Clamp( (new Vector2(0,0) - new Vector2(x,y)).LengthFast() / (Bmp.Width+Bmp.Height), 0, 1);
                             
                             if(Type == GradientType.Center)
-                                LerpValue = Mathf.Clamp( (new Vector2(Bmp.Width / 2, Bmp.Height / 2) - new Vector2(x,y)).LengthFast / (Bmp.Width+Bmp.Height), 0, 1);
+                                LerpValue = Mathf.Clamp( (new Vector2(Bmp.Width / 2, Bmp.Height / 2) - new Vector2(x,y)).LengthFast() / (Bmp.Width+Bmp.Height), 0, 1);
                             
                             Color NewColor = Mathf.Lerp(Color1, Color2, LerpValue);
                             DataPtr[(x * 4) + y * Stride] = NewColor.B; // Red

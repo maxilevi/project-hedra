@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using Hedra.Core;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Core;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PlantSystem;

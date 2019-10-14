@@ -5,7 +5,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Game;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Rendering.Frustum
 {
@@ -13,8 +13,8 @@ namespace Hedra.Engine.Rendering.Frustum
     {
         private const float ZNear = 2.0f;
         private const float ZFar = 4096.0f;
-        public static Matrix4 ProjectionMatrix;
-        public static Matrix4 ModelViewMatrix = Matrix4.Identity;
+        public static Matrix4x4 ProjectionMatrix;
+        public static Matrix4x4 ModelViewMatrix = Matrix4x4.Identity;
         private static readonly Vector4[] UnitCube = new Vector4[8]
         {
             new Vector4(-1, -1, -1, 1),
@@ -35,7 +35,7 @@ namespace Hedra.Engine.Rendering.Frustum
             if (!CullableObject.Enabled) return false;
             if (CullableObject.PrematureCulling)
             {
-                if ((CullableObject.Position - GameManager.Player.Position).LengthSquared 
+                if ((CullableObject.Position - GameManager.Player.Position).LengthSquared() 
                     > GeneralSettings.DrawDistanceSquared) 
                     return false;
             }
@@ -56,22 +56,22 @@ namespace Hedra.Engine.Rendering.Frustum
             Renderer.Viewport(0, 0, Width, Height);
         }
 
-        public static void BuildFrustum(Matrix4 Proj, Matrix4 View)
+        public static void BuildFrustum(Matrix4x4 Proj, Matrix4x4 View)
         {
             BuildFrustum(View);
             ProjectionMatrix = Proj;
             UpdateFrustum();
         }
         
-        public static void BuildFrustum(Matrix4 View)
+        public static void BuildFrustum(Matrix4x4 View)
         {
             var aspect = GameSettings.Width / (float)GameSettings.Height;
             ModelViewMatrix = View;
-            ProjectionMatrix = Matrix4.CreatePerspectiveFieldOfView(GameSettings.Fov * Mathf.Radian, aspect, ZNear, ZFar);
+            ProjectionMatrix = Matrix4x4.CreatePerspectiveFieldOfView(GameSettings.Fov * Mathf.Radian, aspect, ZNear, ZFar);
             UpdateFrustum();
         }
 
-        private static Matrix4 _matrix4;
+        private static Matrix4x4 _matrix4;
         private static bool _wasLocked;
         private static void UpdateFrustum()
         {

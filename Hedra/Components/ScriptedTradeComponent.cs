@@ -18,7 +18,7 @@ namespace Hedra.Components
         }
         public override Dictionary<int, Item> BuildInventory()
         {
-            var rng = new Random(World.Seed + Unique.GenerateSeed(Parent.Position.Xz));
+            var rng = new Random(World.Seed + Unique.GenerateSeed(Parent.Position.Xz()));
             var dict = new Dictionary<int, Item>();
             Script.Get(BuildInventoryFunctionName).Invoke(dict, TradeInventory.MerchantSpaces, rng);
             return dict;

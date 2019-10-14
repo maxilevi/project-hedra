@@ -1,5 +1,5 @@
 using Hedra.Engine.Player;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.SkillSystem
 {

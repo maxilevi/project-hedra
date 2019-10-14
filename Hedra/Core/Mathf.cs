@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Game;
 using Hedra.Game;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Core
 {
@@ -56,17 +56,17 @@ namespace Hedra.Core
             return Y1 * (1 - mu2) + Y2 * mu2;
         }
         
-        public static Matrix4 RotationAlign( Vector3 D, Vector3 Z )
+        public static Matrix4x4 RotationAlign( Vector3 D, Vector3 Z )
         {
             var v = Vector3.Cross( Z, D );
             var c = Vector3.Dot( Z, D );
             var k = 1.0f/(1.0f+c);
         
-            return new Matrix4( 
-                m00: v.X*v.X*k + c,     m01: v.Y*v.X*k - v.Z,    m02: v.Z*v.X*k + v.Y, m03: 0,
-                m10: v.X*v.Y*k + v.Z,   m11: v.Y*v.Y*k + c,      m12: v.Z*v.Y*k - v.X, m13: 0,
-                m20: v.X*v.Z*k - v.Y,   m21: v.Y*v.Z*k + v.X,    m22: v.Z*v.Z*k + c,   m23: 0,
-                m30: 0,                 m31: 0,                  m32: 0,               m33: 1
+            return new Matrix4x4( 
+                v.X*v.X*k + c,     v.Y*v.X*k - v.Z,    v.Z*v.X*k + v.Y, 0,
+                v.X*v.Y*k + v.Z,   v.Y*v.Y*k + c,      v.Z*v.Y*k - v.X, 0,
+                v.X*v.Z*k - v.Y,   v.Y*v.Z*k + v.X,    v.Z*v.Z*k + c,   0,
+                0,                 0,                  0,               1
             );
         }
         
@@ -131,9 +131,7 @@ namespace Hedra.Core
             Vector3 vector2 = new Vector3(V3.X - V1.X, V3.Y - V1.Y, V3.Z - V1.Z);
               
             Vector3 cross = Vector3.Cross(vector1, vector2);
-              
-            cross.Normalize();
-            return cross;
+            return cross.NormalizedFast();
         }
 
         public static Vector4 ToVector4(this Color C)
@@ -216,12 +214,12 @@ namespace Hedra.Core
 
         public static Vector2 Min(Vector2 A, Vector2 B)
         {
-            return A.LengthFast > B.LengthFast ? B : A;
+            return A.LengthFast() > B.LengthFast() ? B : A;
         }
 
         public static Vector2 Max(Vector2 A, Vector2 B)
         {
-            return A.LengthFast > B.LengthFast ? A : B;
+            return A.LengthFast() > B.LengthFast() ? A : B;
         }
 
         public static Color Lerp(this Color Origin, Color Target, float T)
@@ -232,20 +230,6 @@ namespace Hedra.Core
                                    (byte) Lerp(Origin.B, Target.B, T));
         }
 
-        public static Vector3 NormalizedFast(this Vector3 Point)
-        {
-            var direction = Point;
-            direction.NormalizeFast();
-            return direction;
-        }
-        
-        public static Vector2 NormalizedFast(this Vector2 Point)
-        {
-            var direction = Point;
-            direction.NormalizeFast();
-            return direction;
-        }
-        
         [StructLayout(LayoutKind.Explicit)]
         private struct FloatIntUnion
         {

@@ -3,7 +3,7 @@ using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Rendering.UI;
 using Moq;
 using NUnit.Framework;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace HedraTests.Player.Skills
 {

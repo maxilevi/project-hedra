@@ -1,7 +1,7 @@
 using System;
 using System.Drawing;
 using Hedra.Core;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.WorldBuilding
 {
@@ -36,7 +36,7 @@ namespace Hedra.Engine.WorldBuilding
                 Mathf.Clamp(Point.X, Position.X - halfWidth, Position.X + halfWidth),
                 Mathf.Clamp(Point.Y, Position.Y - halfWidth, Position.Y + halfWidth)
             );
-            return Math.Max(0f, 1.0f - (nearest - Point).LengthFast * .04f * Hardness);
+            return Math.Max(0f, 1.0f - (nearest - Point).LengthFast() * .04f * Hardness);
         }
         
         public Vector2 LeftCorner => Position - new Vector2(Width * .5f, 0);

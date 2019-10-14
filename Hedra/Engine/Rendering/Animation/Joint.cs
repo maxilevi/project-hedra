@@ -8,7 +8,7 @@
  */
 using System;
 using System.Collections.Generic;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Rendering.Animation
 {
@@ -33,8 +33,8 @@ namespace Hedra.Engine.Rendering.Animation
          * @return The transformation matrix of the joint which is used to deform
          *         associated vertices of the skin in the shaders.
          */
-        public Matrix4 AnimatedTransform {get; set;}
-        public Matrix4 TransformationMatrix { get; set; } = Matrix4.Identity;
+        public Matrix4x4 AnimatedTransform {get; set;}
+        public Matrix4x4 TransformationMatrix { get; set; } = Matrix4x4.Identity;
         
         /**
          * This returns the inverted model-space bind transform. The bind transform
@@ -45,9 +45,9 @@ namespace Hedra.Engine.Rendering.Animation
          * 
          * @return The inverse of the joint's bind transform (in model-space).
          */
-        public Matrix4 InverseBindTransform {get; set;}
+        public Matrix4x4 InverseBindTransform {get; set;}
     
-        private readonly Matrix4 LocalBindTransform;
+        private readonly Matrix4x4 LocalBindTransform;
         
         /**
          * @param index
@@ -59,7 +59,7 @@ namespace Hedra.Engine.Rendering.Animation
          * @param bindLocalTransform
          *            - the bone-space transform of the joint in the bind position.
          */
-        public Joint(int Index, string Name, Matrix4 BindLocalTransform) {
+        public Joint(int Index, string Name, Matrix4x4 BindLocalTransform) {
             this.Index = Index;
             this.Name = Name;
             this.LocalBindTransform = BindLocalTransform;
@@ -108,8 +108,8 @@ namespace Hedra.Engine.Rendering.Animation
          * @param parentBindTransform
          *            - the model-space bind transform of the parent joint.
          */
-        public void CalculateInverseBindTransform(Matrix4 ParentBindTransform) {
-            Matrix4 BindTransform = LocalBindTransform * ParentBindTransform;
+        public void CalculateInverseBindTransform(Matrix4x4 ParentBindTransform) {
+            Matrix4x4 BindTransform = LocalBindTransform * ParentBindTransform;
             InverseBindTransform = BindTransform.Inverted();
             
             for(int i = 0; i < Children.Count; i++){

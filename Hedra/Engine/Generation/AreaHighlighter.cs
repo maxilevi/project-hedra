@@ -10,7 +10,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.IO;
 using Hedra.Game;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Generation
 {
@@ -130,7 +130,7 @@ namespace Hedra.Engine.Generation
             
             while (World.Seed == seed && !areaClone.Stop)
             {
-                if ((player.Position.Xz - areaClone.Position.Xz).LengthFast < areaClone.Radius + 256)
+                if ((player.Position.Xz() - areaClone.Position.Xz()).LengthFast() < areaClone.Radius + 256)
                 {
                     if (area == null)
                     {

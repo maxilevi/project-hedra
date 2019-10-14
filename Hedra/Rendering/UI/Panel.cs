@@ -12,7 +12,7 @@ using System.Linq;
 using Hedra.Engine.Events;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Windowing;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Silk.NET.Input.Common;
 using Button = Hedra.Engine.Rendering.UI.Button;
 

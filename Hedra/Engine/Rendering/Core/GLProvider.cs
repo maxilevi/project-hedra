@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Hedra.Engine.IO;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 using Silk.NET.OpenGL;
@@ -655,24 +655,24 @@ namespace Hedra.Engine.Rendering.Core
             EnsureNoErrors();
         }
 
-        public unsafe void UniformMatrix2(int Location, bool Transpose, ref Matrix2 Uniform)
+        public unsafe void UniformMatrix2(int Location, bool Transpose, ref Matrix4x4 Uniform)
         {
-            var matrix = Uniform;
-            GL.UniformMatrix2(Location, 1, Transpose, (float*)&(matrix.Row0));
+            fixed(float* ptr = &Uniform)
+                GL.UniformMatrix2(Location, 1, Transpose, ptr);
             EnsureNoErrors();
         }
 
-        public unsafe void UniformMatrix3(int Location, bool Transpose, ref Matrix3 Uniform)
+        public unsafe void UniformMatrix3(int Location, bool Transpose, ref Matrix4x4 Uniform)
         {
-            var matrix = Uniform;
-            GL.UniformMatrix3(Location, 1, Transpose, (float*)&(matrix.Row0));
+            fixed(float* ptr = &Uniform)
+                GL.UniformMatrix3(Location, 1, Transpose, ptr);
             EnsureNoErrors();
         }
 
-        public unsafe void UniformMatrix4(int Location, bool Transpose, ref Matrix4 Uniform)
+        public unsafe void UniformMatrix4x4(int Location, bool Transpose, ref Matrix4x4 Uniform)
         {
-            var matrix = Uniform;
-            GL.UniformMatrix4(Location, 1, Transpose, (float*)&(matrix.Row0));
+            fixed(float* ptr = &Uniform)
+                GL.UniformMatrix4(Location, 1, Transpose, ptr);
             EnsureNoErrors();
         }
 

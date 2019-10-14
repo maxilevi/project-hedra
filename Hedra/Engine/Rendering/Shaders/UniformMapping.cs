@@ -1,5 +1,5 @@
 using System;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Rendering.Shaders
 {
@@ -19,7 +19,7 @@ namespace Hedra.Engine.Rendering.Shaders
 
         private void DetectType()
         {
-            Type= Value is Matrix4 ? MappingType.Matrix4
+            Type= Value is Matrix4x4 ? MappingType.Matrix4x4
                 : Value is Matrix3 ? MappingType.Matrix3
                 : Value is Matrix2 ? MappingType.Matrix2
                 : Value is Vector4 ? MappingType.Vector4

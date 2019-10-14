@@ -5,7 +5,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {
@@ -32,7 +32,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         public void Update()
         {
             _angle += Time.DeltaTime * 80f;
-            _targetRotation = Quaternion.FromEulerAngles(_rotationAxis * _angle * Mathf.Radian);
+            var yawPitchRoll = _rotationAxis * _angle * Mathf.Radian;
+            _targetRotation = Quaternion.CreateFromYawPitchRoll(yawPitchRoll.X, yawPitchRoll.Y, yawPitchRoll.Z);
             _currentRotation = Quaternion.Slerp(_currentRotation, _targetRotation, Time.DeltaTime * 2f);
             _mesh.LocalRotation = _currentRotation.ToEuler();
             _mesh.Position = Position;

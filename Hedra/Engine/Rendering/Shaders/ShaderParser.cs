@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Rendering.Shaders
 {
@@ -107,7 +107,7 @@ namespace Hedra.Engine.Rendering.Shaders
             switch (Type)
             {
                 case "mat4":
-                    return typeof(Matrix4);
+                    return typeof(Matrix4x4);
                 case "mat3":
                     return typeof(Matrix3);
                 case "mat2":

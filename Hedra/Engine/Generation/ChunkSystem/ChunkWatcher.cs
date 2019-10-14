@@ -53,7 +53,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
             var offset = World.ToChunkSpace(GameManager.Player.Position);
             var radius = GameSettings.ChunkLoaderRadius * .5f * Chunk.Width;
-            if ((_object.Position.Xz - offset).LengthSquared > radius * radius)
+            if ((_object.Position.Xz() - offset).LengthSquared() > radius * radius)
             {
                 Kill();
                 return false;
@@ -68,7 +68,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private void ManageLod()
         {
-            var cameraDist = (_object.Position.Xz - World.ToChunkSpace(GameManager.Player.Position)).LengthSquared;
+            var cameraDist = (_object.Position.Xz() - World.ToChunkSpace(GameManager.Player.Position)).LengthSquared();
             var newLod = -1;
             if (cameraDist <= GeneralSettings.Lod1DistanceSquared)
                 newLod = 1;

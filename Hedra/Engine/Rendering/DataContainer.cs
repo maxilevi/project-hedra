@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Rendering
 {
@@ -31,9 +31,9 @@ namespace Hedra.Engine.Rendering
             }
         }
         
-        public void TransformVerts(Matrix4 m){
+        public void TransformVerts(Matrix4x4 m){
             for(int i=0; i<VerticesArrays.Length;i++){
-                VerticesArrays[i] = Vector3.TransformPosition(VerticesArrays[i], m);
+                VerticesArrays[i] = Vector3.Transform(VerticesArrays[i], m);
             }
         }
         

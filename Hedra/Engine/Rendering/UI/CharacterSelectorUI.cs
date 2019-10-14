@@ -11,7 +11,7 @@ using System.Collections;
 using System.Drawing;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Components;
@@ -155,7 +155,7 @@ namespace Hedra.Engine.Rendering.UI
                 _humans[i].Class = _information[i].Class;
                 _humans[i].Model = new HumanoidModel(_humans[i]);
                 _humans[i].Position = Scenes.MenuBackground.FirePosition + offset;
-                _humans[i].Model.LocalRotation = Physics.DirectionToEuler(-offset.Normalized().Xz.ToVector3());
+                _humans[i].Model.LocalRotation = Physics.DirectionToEuler(-offset.Normalized().Xz().ToVector3());
                 _humans[i].Model.TargetRotation = _humans[i].Model.LocalRotation;
                 _humans[i].Model.Enabled = true;
                 _humans[i].Name = _information[i].Name;
@@ -259,8 +259,8 @@ namespace Hedra.Engine.Rendering.UI
                         if (_previousHuman != _humans[k]) continue;
                         Vector3 fPos = Scenes.MenuBackground.FirePosition + this.FireDirection(k, 8);
                         _previousHuman.Position = new Vector3(fPos.X, _previousHuman.Position.Y, fPos.Z);
-                        _previousHuman.Model.LocalRotation = new Vector3(0, Physics.DirectionToEuler(this.FireDirection(k, 8).NormalizedFast().Xz.ToVector3()).Y+180, 0);
-                        _previousHuman.Model.TargetRotation = new Vector3(0, Physics.DirectionToEuler(this.FireDirection(k, 8).NormalizedFast().Xz.ToVector3()).Y+180, 0);
+                        _previousHuman.Model.LocalRotation = new Vector3(0, Physics.DirectionToEuler(this.FireDirection(k, 8).NormalizedFast().Xz().ToVector3()).Y+180, 0);
+                        _previousHuman.Model.TargetRotation = new Vector3(0, Physics.DirectionToEuler(this.FireDirection(k, 8).NormalizedFast().Xz().ToVector3()).Y+180, 0);
                     }
                 }
                 _previousHuman = _selectedHuman;
@@ -289,7 +289,7 @@ namespace Hedra.Engine.Rendering.UI
                     angle = (I * 45 - 70) * Mathf.Radian;
                     break;
             }
-            return Vector3.TransformPosition(Vector3.UnitX * Mult, Matrix4.CreateRotationY((float)angle));
+            return Vector3.Transform(Vector3.UnitX * Mult, Matrix4x4.CreateRotationY((float)angle));
         }
 
         public void StopModels()
@@ -306,11 +306,11 @@ namespace Hedra.Engine.Rendering.UI
                 if(_humans[k].MainWeapon != null && _humans[k].MainWeapon.Weapon.InAttackStance)
                     _humans[k].Model.BlendAnimation(_humans[k].MainWeapon.Weapon.AttackStanceAnimation);                             
                         
-                _humans[k].Model.Enabled = (_humans[k].Model.ModelPosition.Xz - _humans[k].Position.Xz).LengthFast < 8;
+                _humans[k].Model.Enabled = (_humans[k].Model.ModelPosition.Xz() - _humans[k].Position.Xz()).LengthFast() < 8;
                 _humans[k].Update();
                 
                 var target = FireDirection(k, 4.8f);
-                _humans[k].Model.LocalRotation = Physics.DirectionToEuler(target.NormalizedFast().Xz.ToVector3()) + Vector3.UnitY * 180f;
+                _humans[k].Model.LocalRotation = Physics.DirectionToEuler(target.NormalizedFast().Xz().ToVector3()) + Vector3.UnitY * 180f;
                 _humans[k].Model.TargetRotation = _humans[k].Model.LocalRotation;
                 if(_humans[k].Position.Y <= 4)
                     _humans[k].Position = new Vector3(_humans[k].Position.X, Physics.HeightAtPosition(_humans[k].Position) + 4,  _humans[k].Position.Z);
@@ -350,10 +350,10 @@ namespace Hedra.Engine.Rendering.UI
             {
                 var space = Vector4.Transform(new Vector4(_humans[i].Position + Vector3.UnitY * 6f, 1), Culling.ModelViewMatrix);
                 space = Vector4.Transform(space, Culling.ProjectionMatrix);
-                var ndc = ((space.Xyz / space.W).Xy + new Vector2(1,1)) * .5f;
+                var ndc = ((space.Xyz() / space.W).Xy() + new Vector2(1,1)) * .5f;
                 if (_humans[i].Model.Enabled && Math.Abs(ndc.X - coords.X) < size.X && Math.Abs(1 - ndc.Y - coords.Y) < size.Y)
                 {
-                    if( (_humans[i].Model.Tint.Xyz - new Vector3(2, 2, 2)).LengthFast > 0.05f)
+                    if( (_humans[i].Model.Tint.Xyz() - new Vector3(2, 2, 2)).LengthFast() > 0.05f)
                         SoundPlayer.PlayUISound(SoundType.ButtonClick);
                     _humans[i].Model.Tint = new Vector4(2, 2, 2, 1);
                 }
@@ -372,7 +372,7 @@ namespace Hedra.Engine.Rendering.UI
             if(_selectedHuman.MainWeapon != null)
                 _selectedHuman.MainWeapon.Weapon.InAttackStance = true;
             
-            if((_selectedHuman.Position.Xz - Scenes.MenuBackground.FirePosition.Xz).LengthSquared > 4*4)
+            if((_selectedHuman.Position.Xz() - Scenes.MenuBackground.FirePosition.Xz()).LengthSquared() > 4*4)
             {
                 _selectedHuman.Physics.Translate(-target.NormalizedFast() * 6f * Time.IndependentDeltaTime);
             }
@@ -386,10 +386,10 @@ namespace Hedra.Engine.Rendering.UI
             if (_previousHuman.MainWeapon != null)
                 _previousHuman.MainWeapon.Weapon.InAttackStance = false;
             
-            if ((_previousHuman.Position.Xz - Scenes.MenuBackground.FirePosition.Xz - backTarget.Xz).LengthSquared > 1*1)
+            if ((_previousHuman.Position.Xz() - Scenes.MenuBackground.FirePosition.Xz() - backTarget.Xz()).LengthSquared() > 1*1)
             {
                 _previousHuman.Physics.Translate(backTarget.NormalizedFast() * 6f * Time.IndependentDeltaTime);
-                _previousHuman.Model.LocalRotation = Physics.DirectionToEuler(backTarget.NormalizedFast().Xz.ToVector3());
+                _previousHuman.Model.LocalRotation = Physics.DirectionToEuler(backTarget.NormalizedFast().Xz().ToVector3());
                 _previousHuman.Model.TargetRotation = _previousHuman.Model.LocalRotation;
             }
         }

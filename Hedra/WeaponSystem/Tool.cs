@@ -1,6 +1,6 @@
 using Hedra.EntitySystem;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.WeaponSystem
 {
@@ -18,7 +18,7 @@ namespace Hedra.WeaponSystem
         protected override void OnAttackStance()
         {
             var mat4 = Owner.Model.LeftWeaponMatrix.ClearTranslation()
-                       * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);
+                       * Matrix4x4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);
             this.MainMesh.TransformationMatrix = mat4;
             this.MainMesh.Position = Owner.Model.Position;
             this.MainMesh.LocalRotation = new Vector3(90, 25, 180);

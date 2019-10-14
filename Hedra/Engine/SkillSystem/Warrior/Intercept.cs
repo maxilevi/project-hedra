@@ -10,7 +10,7 @@ using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Warrior
 {
@@ -59,7 +59,7 @@ namespace Hedra.Engine.SkillSystem.Warrior
             {
                 World.Entities.ToList().ForEach(delegate(IEntity Entity)
                 {
-                    if ((Entity.Position - User.Position).LengthSquared < 4 * 4 && !Entity.IsKnocked && User != Entity)
+                    if ((Entity.Position - User.Position).LengthSquared() < 4 * 4 && !Entity.IsKnocked && User != Entity)
                     {
                         Entity.KnockForSeconds(3f);
                         Entity.Damage(Damage, User, out var exp);
@@ -109,7 +109,7 @@ namespace Hedra.Engine.SkillSystem.Warrior
             _timer.AlertTime = Duration;
             _timer.Reset();
             User.Movement.CaptureMovement = false;
-            User.Movement.Move(User.Physics.MoveFormula(User.View.LookingDirection.Xz.ToVector3().NormalizedFast()) * 1.5f, Duration, false);
+            User.Movement.Move(User.Physics.MoveFormula(User.View.LookingDirection.Xz().ToVector3().NormalizedFast()) * 1.5f, Duration, false);
         }
 
         public override string[] Attributes => new[]

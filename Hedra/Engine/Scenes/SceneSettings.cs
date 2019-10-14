@@ -1,6 +1,6 @@
 using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Scenes
 {

@@ -13,7 +13,7 @@ using Hedra.Engine.Events;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Scripting;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Button = Hedra.Engine.Rendering.UI.Button;
 using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;
 
