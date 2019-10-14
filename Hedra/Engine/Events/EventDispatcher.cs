@@ -324,6 +324,7 @@ namespace Hedra.Engine.Events
         }
 
         public Key Key => Event.Key;
+        public char KeyChar => Event.ScanCode;
         public bool Alt => Event.Alt;
         public bool Control => Event.Control;
         public bool Shift => Event.Shift;

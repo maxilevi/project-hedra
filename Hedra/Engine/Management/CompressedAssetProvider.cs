@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Globalization;
 using System.IO;
@@ -20,6 +21,7 @@ using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using OpenToolkit.Mathematics;
+using Silk.NET.GLFW;
 
 namespace Hedra.Engine.Management
 {
@@ -248,11 +250,40 @@ namespace Hedra.Engine.Management
             return Name.Replace("/", slashRegex).Replace(".", "\\.");
         }
         
-        public Icon LoadIcon(string Path)
+        public unsafe byte[] LoadIcon(string Path, out int Width, out int Height)
         {
-            using(var ms = new MemoryStream(AssetManager.ReadBinary(Path, AssetsResource)))
+            using (var ms = new MemoryStream(AssetManager.ReadBinary(Path, AssetsResource)))
             {
-                return new Icon(ms);
+                using (var original = new Bitmap(ms))
+                {
+                    using (var bitmap = new Bitmap(original, 48, 48))
+                    {
+
+                        var data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height),
+                            ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                        Width = data.Width;
+                        Height = data.Height;
+                        var pixels = new byte[data.Width * data.Height * 4];
+                        var ptr = (int*) data.Scan0;
+                        int k = 0;
+                        for (var i = 0; i < pixels.Length; i += 4)
+                        {
+                            var a = (byte)((ptr[k] & 0xFF000000) >> 24);
+                            var r = (byte)((ptr[k] & 0x00FF0000) >> 16);
+                            var g = (byte)((ptr[k] & 0x0000FF00) >> 8);
+                            var b = (byte)((ptr[k] & 0x000000FF));
+                            
+                            pixels[i + 0] = r;
+                            pixels[i + 1] = g;
+                            pixels[i + 2] = b;
+                            pixels[i + 3] = a;
+                            k++;
+                        }
+
+                        bitmap.UnlockBits(data);
+                        return pixels;
+                    }
+                }
             }
         }
 

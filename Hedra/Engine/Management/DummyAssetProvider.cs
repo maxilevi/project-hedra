@@ -4,6 +4,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Rendering;
 using OpenToolkit.Mathematics;
+using Image = Silk.NET.GLFW.Image;
 
 namespace Hedra.Engine.Management
 {
@@ -44,9 +45,9 @@ namespace Hedra.Engine.Management
             return string.Empty;
         }
 
-        public Icon LoadIcon(string path)
+        public byte[] LoadIcon(string Path, out int Width, out int Height)
         {
-            return null;
+            throw new System.NotImplementedException();
         }
 
         public List<CollisionShape> LoadCollisionShapes(string Filename, int Count, Vector3 Scale)

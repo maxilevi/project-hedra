@@ -15,6 +15,7 @@ using Hedra.Engine.Networking;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Game;
 using OpenToolkit.Mathematics;
+using Silk.NET.GLFW;
 using Silk.NET.Windowing.Common;
 
 namespace Hedra.Engine
@@ -114,13 +115,24 @@ namespace Hedra.Engine
 #endif
             GameWindow = new Loader.Hedra(GameSettings.Width, GameSettings.Height, 3, 3, profile, flags);
             GameWindow.Setup();
-#if !DEBUG
+            GameWindow.WindowState = WindowState.Normal;
+            GameWindow.WindowState = WindowState.Maximized;
+//#if !DEBUG
             if (OSManager.RunningPlatform == Platform.Windows)
             {
-                //Log.WriteLine("Loading Icon...");
-                //GameWindow.Icon = AssetManager.LoadIcon("Assets/Icon.ico");
+                Log.WriteLine("Loading Icon...");
+                var pixels = AssetManager.LoadIcon("Assets/Icon.ico", out var width, out var height);
+                fixed (byte* ptr = pixels)
+                {
+                    GameWindow.SetIcon(new Silk.NET.GLFW.Image
+                    {
+                        Width = width,
+                        Height = height,
+                        Pixels = ptr
+                    });
+                }
             }
-#endif
+//#endif
             GameSettings.SurfaceWidth = GameWindow.Width;
             GameSettings.SurfaceHeight = GameWindow.Height;
 

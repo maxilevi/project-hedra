@@ -3,6 +3,7 @@ using Hedra.Engine.Events;
 using Hedra.Engine.Loader;
 using Hedra.Engine.Windowing;
 using OpenToolkit.Mathematics;
+using Silk.NET.GLFW;
 using Silk.NET.Windowing.Common;
 
 
@@ -20,6 +21,7 @@ namespace HedraTests
         public int Width { get; set; }
         public WindowBorder WindowBorder { get; set; }
         public bool CursorVisible { get; set; }
+        public bool Fullscreen { get; set; }
 
         public void Run()
         {
@@ -45,6 +47,10 @@ namespace HedraTests
         }
 
         public Vector2 MousePosition { get; }
+        public void SetIcon(Image Icon)
+        {
+        }
+
         public event OnFrameChanged FrameChanged;
     }
 }

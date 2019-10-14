@@ -19,6 +19,7 @@ using Hedra.Game;
 using Hedra.Sound;
 using OpenToolkit.Mathematics;
 using Silk.NET.Windowing.Common;
+using Image = Silk.NET.GLFW.Image;
 
 
 namespace Hedra.Engine.Loader
@@ -59,6 +60,7 @@ namespace Hedra.Engine.Loader
 
         public void RunOnce() => throw new System.NotImplementedException();
         public void Dispose() => throw new System.NotImplementedException();
+        public bool Fullscreen { get; set; }
         public void Close() => throw new System.NotImplementedException();
         public void Exit() => throw new System.NotImplementedException();
         public bool IsExiting => false;
@@ -80,6 +82,11 @@ namespace Hedra.Engine.Loader
         }
 
         public Vector2 MousePosition { get; }
+        public void SetIcon(Image Icon)
+        {
+            throw new NotImplementedException();
+        }
+
         public event Action<MouseButtonEventArgs> MouseUp;
         public event Action<MouseButtonEventArgs> MouseDown;
         public event Action<MouseWheelEventArgs> MouseWheel;

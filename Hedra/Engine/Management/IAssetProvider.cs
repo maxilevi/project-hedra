@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using System.Drawing;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Rendering;
 using OpenToolkit.Mathematics;
+using Silk.NET.GLFW;
 
 namespace Hedra.Engine.Management
 {
@@ -23,7 +23,7 @@ namespace Hedra.Engine.Management
         byte[] ReadPath(string Path, bool Text);
         byte[] ReadBinary(string Name, string DataFile);
         string ReadShader(string Name);
-        Icon LoadIcon(string path);
+        byte[] LoadIcon(string Path, out int Width, out int Height);
         List<CollisionShape> LoadCollisionShapes(string Filename, int Count, Vector3 Scale);
         List<CollisionShape> LoadCollisionShapes(string Filename, Vector3 Scale);
         Box LoadHitbox(string ModelFile);

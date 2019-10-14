@@ -14,6 +14,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Rendering;
 using OpenToolkit.Mathematics;
+using Image = Silk.NET.GLFW.Image;
 
 
 namespace Hedra.Engine.Management
@@ -79,9 +80,9 @@ namespace Hedra.Engine.Management
             return Provider.ReadShader(Name);
         }
 
-        public static Icon LoadIcon(string Path)
+        public static byte[] LoadIcon(string Path, out int Width, out int Height)
         {
-            return Provider.LoadIcon(Path);
+            return Provider.LoadIcon(Path, out Width, out Height);
         }
 
         public static List<CollisionShape> LoadCollisionShapes(string Filename, int Count, Vector3 Scale)

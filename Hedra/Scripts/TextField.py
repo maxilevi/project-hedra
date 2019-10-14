@@ -63,7 +63,7 @@ def is_enabled(state):
 def on_key_down(event_args, state):
     cancel = False
     if is_enabled(state) and state['in_focus']:
-        if event_args.Key == Key.BackSpace or event_args.Key == Key.BackSlash or event_args.Key == Key.NonUSBackSlash:
+        if event_args.Key == Key.Backspace or event_args.Key == Key.BackSlash:
             delete_character(state)
             cancel = True
         elif event_args.Key == Key.Left:

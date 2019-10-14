@@ -11,10 +11,11 @@ namespace Hedra.Engine.Windowing
         /// </summary>
         /// <param name="key">The key that generated this event.</param>
         /// <param name="modifiers">The key modifiers that were active when this event was generated.</param>
-        public KeyboardKeyEventArgs(Key key, KeyModifiers modifiers)
+        public KeyboardKeyEventArgs(Key key, KeyModifiers modifiers, char ScanCode)
         {
             Key = key;
             Modifiers = modifiers;
+            ScanCode = Key;
         }
 
         /// <summary>
@@ -26,6 +27,8 @@ namespace Hedra.Engine.Windowing
         /// Gets a bitwise combination representing the key modifiers were active when this event was generated.
         /// </summary>
         public KeyModifiers Modifiers { get; }
+        
+        public char ScanCode { get; }
         
         /// <summary>
         /// Gets a value indicating whether <see cref="KeyModifiers.Alt" /> is pressed.

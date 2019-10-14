@@ -173,7 +173,7 @@ namespace Hedra.Engine.Player
         {
             if (GameSettings.Paused || !CaptureMovement) return;
 
-            var delta = E.OffsetY - _wheelDelta;
+            var delta = E.OffsetY;
             var newDistance = TargetDistance - delta * WheelSpeed;
             if (IsColliding(GetCameraEyePosition(newDistance), out _) || IsColliding(GetCameraEyePosition(newDistance + DistanceBuffer), out _)) return;
 
