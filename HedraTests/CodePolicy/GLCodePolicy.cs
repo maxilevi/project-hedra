@@ -39,7 +39,7 @@ namespace HedraTests.CodePolicy
         [SetUp]
         public void Setup()
         {
-            _documentation = File.ReadAllText($"{base.SolutionDirectory}/references/OpenTK.xml");
+            _documentation = File.ReadAllText($"{base.SolutionDirectory}/references/gl.xml");
             _glClassName = typeof(GLProvider).Name;
             _debugDrawerClassName = typeof(BasicGeometry).Name;
         }

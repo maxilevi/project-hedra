@@ -11,7 +11,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
     {
         private static int Bounds = (int) (Chunk.Width / Chunk.BlockSize); 
         private readonly Chunk _parent;
-        private readonly float _coefficient;    
+        private readonly float _coefficient;
         private int _offsetX;
         private int _offsetZ;
         private readonly int _boundsX;
