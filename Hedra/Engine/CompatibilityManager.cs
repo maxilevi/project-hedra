@@ -7,6 +7,7 @@ using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.Core;
 using OpenToolkit.Mathematics;
 using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
 
 
 namespace Hedra.Engine

@@ -48,6 +48,7 @@ namespace Hedra.Rendering.UI
             DrawManager.UIRenderer.Add(_caret, DrawOrder.After);
             
             EventDispatcher.RegisterKeyDown(this, this.OnKeyDown, EventPriority.High);
+            EventDispatcher.RegisterCharWritten(this, OnCharWritten);
 
             AddElement(_caret);
             AddElement(_focusButton);
@@ -63,6 +64,11 @@ namespace Hedra.Rendering.UI
         private void OnKeyDown(object Sender, KeyEventArgs EventArgs)
         {
            Script.Execute("on_key_down", EventArgs, _state);
+        }
+
+        private void OnCharWritten(string Char)
+        {
+            Script.Execute("on_char_written", _state, Char);
         }
 
         public void Focus()

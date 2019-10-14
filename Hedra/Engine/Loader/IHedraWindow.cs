@@ -1,5 +1,3 @@
-using System.Drawing;
-using OpenToolkit.Mathematics;
 using Silk.NET.Windowing.Common;
 using Image = Silk.NET.GLFW.Image;
 
@@ -20,7 +18,6 @@ namespace Hedra.Engine.Loader
         void Close();
         int Width { get; set; }
         int Height { get; set; }
-        Vector2 MousePosition { get; }
         void SetIcon(Image Icon);
     }
 }

@@ -110,7 +110,7 @@ namespace Hedra.Engine.Rendering.UI
             if (this.Enabled && this.Click != null && (E.Button == MouseButton.Left || E.Button == MouseButton.Right))
             {
                 var coords = Mathf.ToNormalizedDeviceCoordinates(
-                    new Vector2(Program.GameWindow.MousePosition.X, Program.GameWindow.MousePosition.Y),
+                    new Vector2(E.Position.X, E.Position.Y),
                     new Vector2(GameSettings.SurfaceWidth, GameSettings.SurfaceHeight)
                 );
                 if (this.Position.Y + this.Scale.Y > -coords.Y && this.Position.Y - this.Scale.Y < -coords.Y
@@ -131,9 +131,9 @@ namespace Hedra.Engine.Rendering.UI
             if (this.Enabled && this.CanClick)
             {
                 var coords = Mathf.ToNormalizedDeviceCoordinates(
-                    new Vector2(Program.GameWindow.MousePosition.X, Program.GameWindow.MousePosition.Y),
+                    new Vector2(E.Position.X, E.Position.Y),
                     new Vector2(GameSettings.SurfaceWidth, GameSettings.SurfaceHeight)
-                    );
+                );
                 if (this.Position.Y + this.Scale.Y > -coords.Y && this.Position.Y - this.Scale.Y < -coords.Y
                     && this.Position.X + this.Scale.X > coords.X && this.Position.X - this.Scale.X < coords.X)
                 {

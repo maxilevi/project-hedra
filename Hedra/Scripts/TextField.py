@@ -78,10 +78,11 @@ def on_key_down(event_args, state):
             defocus(state)
     if cancel:
         event_args.Cancel()
-    else:
-        if is_enabled(state) and state['in_focus'] and has_space_left(state):
-            add_character(state, event_args.KeyChar)
     
+def on_char_written(state, char):
+    if is_enabled(state) and state['in_focus'] and has_space_left(state):
+        add_character(state, char)
+
 
 def delete_character(state):
     if not state['text']: return

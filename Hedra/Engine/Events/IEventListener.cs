@@ -26,6 +26,7 @@ namespace Hedra.Engine.Events
         
         void OnKeyUp(object sender, KeyEventArgs e);
         
-        void OnKeyPress(object sender, KeyPressEventArgs e);
+        void OnCharWritten(string Char);
+        
     }
 }

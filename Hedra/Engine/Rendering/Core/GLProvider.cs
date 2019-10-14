@@ -544,8 +544,13 @@ namespace Hedra.Engine.Rendering.Core
 
         public unsafe void MultiDrawElements(PrimitiveType Primitive, uint[] Counts, DrawElementsType Type, IntPtr[] Offsets, int Count)
         {
-            fixed(uint* ptr1 = Counts) fixed(void* ptr2 = Offsets)
-                GL.MultiDrawElements((GLPrimitiveType)Primitive, ptr1, (GLDrawElementsType)Type, &ptr2, (uint)Count);
+            var stackPtr = stackalloc byte[IntPtr.Size * Offsets.Length];
+            var arr = (void**) stackPtr;
+            for (var i = 0; i < Offsets.Length; ++i)
+                arr[i] = Offsets[i].ToPointer();
+            
+            fixed(uint* ptr1 = Counts)
+                GL.MultiDrawElements((GLPrimitiveType)Primitive, ptr1, (GLDrawElementsType)Type, arr, (uint)Count);
             EnsureNoErrors();
         }
 

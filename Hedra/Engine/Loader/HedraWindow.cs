@@ -7,6 +7,7 @@ using Hedra.Engine.Windowing;
 using OpenToolkit.Mathematics;
 using Silk.NET.GLFW;
 using Silk.NET.Input;
+using Silk.NET.Input.Common;
 using Silk.NET.Windowing;
 using Silk.NET.Windowing.Common;
 using Image = Silk.NET.GLFW.Image;
@@ -20,6 +21,7 @@ namespace Hedra.Engine.Loader
         private bool _fullscreen;
         private readonly Stopwatch _watch;
         private SpinWait _spinner;
+        private Vector2 _mousePosition;
 
         protected HedraWindow(int Width, int Height, ContextProfile Profile, ContextFlags Flags, APIVersion Version) : base()
         {
@@ -44,14 +46,24 @@ namespace Hedra.Engine.Loader
             _window.Open();
 
             var input = _window.GetInput();
+            
             var keyboard = input.Keyboards[0];
-            keyboard.KeyDown += (Keyboard, Key) => KeyDown?.Invoke(new KeyboardKeyEventArgs(Key, default));
-            input.Keyboards[0].KeyUp += (Keyboard, Key) => KeyUp?.Invoke(new KeyboardKeyEventArgs(Key, default));
+            keyboard.KeyDown += ProcessKeyDown;
+            input.Keyboards[0].KeyUp += ProcessKeyUp;
+            
             var mouse = input.Mice[0];
-            mouse.MouseMove += (_, Point) => MouseMove?.Invoke(new MouseMoveEventArgs(new Vector2(Point.X, Point.Y)));
-            mouse.MouseDown += (_, Button) => MouseDown?.Invoke(new MouseButtonEventArgs(Button, InputAction.Press));
-            mouse.MouseUp += (_, Button) => MouseUp?.Invoke(new MouseButtonEventArgs(Button, InputAction.Release));
+            mouse.MouseMove += (_, Point) => MouseMove?.Invoke(new MouseMoveEventArgs(_mousePosition = new Vector2(Point.X, Point.Y)));
+            mouse.MouseDown += (_, Button) => MouseDown?.Invoke(new MouseButtonEventArgs(Button, InputAction.Press, _mousePosition));
+            mouse.MouseUp += (_, Button) => MouseUp?.Invoke(new MouseButtonEventArgs(Button, InputAction.Release, _mousePosition));
             mouse.Scroll += (_, Wheel) => MouseWheel?.Invoke(new MouseWheelEventArgs(Wheel.X, Wheel.Y));
+            
+            unsafe
+            {
+                GlfwProvider.GLFW.Value.SetCharCallback(
+                    (WindowHandle*)_window.Handle,
+                    (_, Codepoint) => CharWritten?.Invoke(char.ConvertFromUtf32((int)Codepoint))
+                );
+            }
         }
 
         protected abstract void RenderFrame(double Delta);
@@ -89,6 +101,16 @@ namespace Hedra.Engine.Loader
             _window.Reset();
         }
 
+        private void ProcessKeyDown(IKeyboard Keyboard, Key Key, int ScanCode, int Mods)
+        {
+            KeyDown?.Invoke(new KeyboardKeyEventArgs(Key, (KeyModifiers) Mods));
+        }
+
+        private void ProcessKeyUp(IKeyboard Keyboard, Key Key, int ScanCode, int Mods)
+        {
+            KeyUp?.Invoke(new KeyboardKeyEventArgs(Key, (KeyModifiers) Mods));
+        }
+
         public int Width
         {
             get => _window.Size.Width;
@@ -99,9 +121,7 @@ namespace Hedra.Engine.Loader
             get => _window.Size.Height;
             set => _window.Size = new Size(_window.Size.Width, value);
         }
-
-        public Vector2 MousePosition => new Vector2(_window.GetInput().Mice[0].Position.X, _window.GetInput().Mice[0].Position.Y);
-
+        
         public double TargetFramerate { get; set; }
 
         public bool IsExiting => _window.Handle == IntPtr.Zero || _window.IsClosing;
@@ -187,5 +207,6 @@ namespace Hedra.Engine.Loader
         public event Action<MouseMoveEventArgs> MouseMove;
         public event Action<KeyboardKeyEventArgs> KeyDown;
         public event Action<KeyboardKeyEventArgs> KeyUp;
+        public event Action<string> CharWritten;
     }
 }

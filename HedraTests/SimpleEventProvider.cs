@@ -15,6 +15,7 @@ namespace HedraTests
         public event Action<MouseMoveEventArgs> MouseMove;
         public event Action<KeyboardKeyEventArgs> KeyDown;
         public event Action<KeyboardKeyEventArgs> KeyUp;
+        public event Action<string> CharWritten;
 
         public void SimulateKeyDown(Key Key)
         {

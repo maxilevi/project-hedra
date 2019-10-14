@@ -40,6 +40,7 @@ namespace HedraTests
         public event Action<MouseButtonEventArgs> MouseUp;
         public event Action<MouseMoveEventArgs> MouseMove;
         public event Action<MouseWheelEventArgs> MouseWheel;
+        public event Action<string> CharWritten;
         public bool FinishedLoadingSplashScreen => true;
         public string GameVersion { get; }
         public void Setup()

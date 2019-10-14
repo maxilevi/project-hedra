@@ -28,6 +28,7 @@ namespace Hedra.Engine.Events
         private static readonly Dictionary<object, EventHandler<MouseButtonEventArgs>> MouseButtonDownHandlers;
         private static readonly Dictionary<object, EventHandler<MouseMoveEventArgs>> MouseMoveHandlers;
         private static readonly Dictionary<object, EventHandler<MouseWheelEventArgs>> MouseWheelHandlers;
+        private static readonly Dictionary<object, Action<string>> CharWrittenHandlers;
 
         private static event EventHandler<KeyEventArgs> HighOnKeyDownEvent;
         private static event EventHandler<KeyEventArgs> NormalOnKeyDownEvent;
@@ -39,6 +40,7 @@ namespace Hedra.Engine.Events
         private static event EventHandler<MouseButtonEventArgs> OnMouseButtonUpEvent;
         private static event EventHandler<MouseButtonEventArgs> OnMouseButtonDownEvent;
         private static event EventHandler<MouseWheelEventArgs> OnMouseWheelEvent;
+        private static event Action<string> OnCharWrittenEvent;
 
         public static Vector2 Mouse { get; set; } = Vector2.Zero;
 
@@ -56,6 +58,7 @@ namespace Hedra.Engine.Events
                     Provider.MouseMove -= OnMouseMove;
                     Provider.KeyDown -= OnKeyDown;
                     Provider.KeyUp -= OnKeyUp;
+                    Provider.CharWritten -= OnCharWritten;
                 }
                 _provider = value;
                 if (Provider != null)
@@ -66,6 +69,7 @@ namespace Hedra.Engine.Events
                     Provider.MouseMove += OnMouseMove;
                     Provider.KeyDown += OnKeyDown;
                     Provider.KeyUp += OnKeyUp;
+                    Provider.CharWritten += OnCharWritten;
                 }
             }
         }
@@ -83,7 +87,14 @@ namespace Hedra.Engine.Events
             MouseWheelHandlers = new Dictionary<object, EventHandler<MouseWheelEventArgs>>();
             MouseButtonUpHandlers = new Dictionary<object, EventHandler<MouseButtonEventArgs>>();
             MouseButtonDownHandlers = new Dictionary<object, EventHandler<MouseButtonEventArgs>>();
+            CharWrittenHandlers = new Dictionary<object, Action<string>>();
             Provider = (IEventProvider) Program.GameWindow;
+        }
+
+        public static void RegisterCharWritten(object Key, Action<string> EventHandler)
+        {
+            CharWrittenHandlers.Add(Key, EventHandler);
+            OnCharWrittenEvent += CharWrittenHandlers[Key];
         }
 
         public static void RegisterMouseMove(object Key, EventHandler<MouseMoveEventArgs> EventHandler)
@@ -211,6 +222,15 @@ namespace Hedra.Engine.Events
             EventListeners.Remove(A);
         }
 
+        public static void OnCharWritten(string Char)
+        {
+            OnCharWrittenEvent?.Invoke(Char);
+            for (var i = 0; i < EventListeners.Count; i++)
+            {
+                EventListeners[i].OnCharWritten(Char);
+            }
+        }
+        
         public static void OnMouseButtonDown(MouseButtonEventArgs E)
         {
             OnMouseButtonDownEvent?.Invoke(null, E);
@@ -324,7 +344,6 @@ namespace Hedra.Engine.Events
         }
 
         public Key Key => Event.Key;
-        public char KeyChar => Event.ScanCode;
         public bool Alt => Event.Alt;
         public bool Control => Event.Control;
         public bool Shift => Event.Shift;

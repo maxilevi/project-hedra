@@ -29,7 +29,7 @@ namespace Hedra.Engine.Events
 
         public virtual void OnKeyUp(object Sender, KeyEventArgs e){}
         
-        public virtual void OnKeyPress(object Sender, KeyPressEventArgs e){}
+        public virtual void OnCharWritten(string Char){}
 
         public virtual void Dispose()
         {

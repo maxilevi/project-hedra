@@ -93,6 +93,7 @@ namespace Hedra.Engine.Loader
         public event Action<MouseMoveEventArgs> MouseMove;
         public event Action<KeyboardKeyEventArgs> KeyDown;
         public event Action<KeyboardKeyEventArgs> KeyUp;
+        public event Action<string> CharWritten;
         public event Action<KeyPressEventArgs> KeyPress;
     }
 }

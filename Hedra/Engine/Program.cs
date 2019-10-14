@@ -117,7 +117,7 @@ namespace Hedra.Engine
             GameWindow.Setup();
             GameWindow.WindowState = WindowState.Normal;
             GameWindow.WindowState = WindowState.Maximized;
-//#if !DEBUG
+
             if (OSManager.RunningPlatform == Platform.Windows)
             {
                 Log.WriteLine("Loading Icon...");
@@ -132,7 +132,7 @@ namespace Hedra.Engine
                     });
                 }
             }
-//#endif
+            
             GameSettings.SurfaceWidth = GameWindow.Width;
             GameSettings.SurfaceHeight = GameWindow.Height;
 
