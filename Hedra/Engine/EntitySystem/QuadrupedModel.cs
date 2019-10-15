@@ -240,8 +240,7 @@ namespace Hedra.Engine.EntitySystem
                     _position = Rider.Model.ModelPosition - Rider.Model.RidingOffset;
                 }
                 _targetTerrainOrientation = AlignWithTerrain
-                    ? new Matrix3(
-                        Mathf.RotationAlign(
+                    ? Mathf.RotationAlign(
                             Vector3.UnitY,
                             (
                                 Physics.NormalAtPosition(this.Position) + 
@@ -249,11 +248,10 @@ namespace Hedra.Engine.EntitySystem
                                 Physics.NormalAtPosition(this.Position + new Vector3(0, 0, Chunk.BlockSize)) +
                                 Physics.NormalAtPosition(this.Position + new Vector3(Chunk.BlockSize, 0, Chunk.BlockSize))
                             ) * .25f
-                        )
                     ).ExtractRotation() 
                     : Quaternion.Identity;
                 _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation, Time.IndependentDeltaTime * 8f);
-                Model.TransformationMatrix = Matrix4x4.CreateFromQuaternion(_terrainOrientation);
+                Model.TransformationMatrix = _terrainOrientation.ToMatrix();
                 _quaternionModelRotation = Quaternion.Slerp(_quaternionModelRotation, _quaternionTargetRotation, Time.IndependentDeltaTime * 14f);
                 Model.LocalRotation = _quaternionModelRotation.ToEuler();
                 if (HasRider)
@@ -275,6 +273,34 @@ namespace Hedra.Engine.EntitySystem
                 _sound.Update(this.IsWalking && Parent.IsGrounded);
             }
             _attackCooldown -= Time.IndependentDeltaTime;
+        }
+
+        private Matrix4x4 CreateRotation(Quaternion Quaternion)
+        {
+            var q = Quaternion;
+            if (Math.Abs(q.W) > 1.0f)
+            {
+                q = q.NormalizedFast();
+            }
+
+            var result = new Vector4
+            {
+                W = 2.0f * (float)Math.Acos(q.W) // angle
+            };
+
+            var den = (float)Math.Sqrt(1.0 - (q.W * q.W));
+            if (den > 0.0001f)
+            {
+                result = new Vector4(result.X / den, result.Y / den, result.Z / den, result.W);
+            }
+            else
+            {
+                // This occurs when the angle is zero.
+                // Not a problem: just set an arbitrary normalized axis.
+                result = new Vector4(1, 0, 0, result.W);
+            }
+
+            return Matrix4x4.CreateFromAxisAngle(result.Xyz(), result.W);
         }
 
         private void UpdateWalkAnimationsSpeed()

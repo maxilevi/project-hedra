@@ -58,9 +58,9 @@ namespace Hedra.Engine.Rendering
         private bool _rotMatrixCached;
         private bool _disposed;
         private Vector3 _localRotation;
-        private Matrix3 _localRotationMatrix;
+        private Matrix4x4 _localRotationMatrix;
         private Vector3 _rotation;
-        private Matrix3 _rotationMatrix = Matrix3.Identity;
+        private Matrix4x4 _rotationMatrix = Matrix4x4.Identity;
 
         static ObjectMeshBuffer()
         {
@@ -145,14 +145,14 @@ namespace Hedra.Engine.Rendering
             return Vertex;
         }
 
-        private Matrix3 LocalRotationMatrix
+        private Matrix4x4 LocalRotationMatrix
         {
             get
             { 
                 if(_rotMatrixCached) return _localRotationMatrix;
-                _localRotationMatrix = Matrix3.CreateRotationY(_localRotation.Y * Mathf.Radian)
-                    * Matrix3.CreateRotationX(_localRotation.X * Mathf.Radian)
-                    * Matrix3.CreateRotationZ(_localRotation.Z * Mathf.Radian);
+                _localRotationMatrix = Matrix4x4.CreateRotationY(_localRotation.Y * Mathf.Radian)
+                    * Matrix4x4.CreateRotationX(_localRotation.X * Mathf.Radian)
+                    * Matrix4x4.CreateRotationZ(_localRotation.Z * Mathf.Radian);
                 _rotMatrixCached = true;
                 return _localRotationMatrix;
                 
@@ -178,9 +178,9 @@ namespace Hedra.Engine.Rendering
             set
             {
                 _rotation = value;
-                _rotationMatrix = Matrix3.CreateRotationX(value.X * Mathf.Radian)
-                    * Matrix3.CreateRotationY(value.Y * Mathf.Radian)
-                    * Matrix3.CreateRotationZ(value.Z * Mathf.Radian);
+                _rotationMatrix = Matrix4x4.CreateRotationX(value.X * Mathf.Radian)
+                    * Matrix4x4.CreateRotationY(value.Y * Mathf.Radian)
+                    * Matrix4x4.CreateRotationZ(value.Z * Mathf.Radian);
             }
         }
         
@@ -231,10 +231,10 @@ namespace Hedra.Engine.Rendering
                 Alpha = Alpha,
                 Scale = Scale,
                 Position = Position + LocalPosition,
-                LocalRotationMatrix = new Matrix4x4(LocalRotationMatrix),
+                LocalRotationMatrix = LocalRotationMatrix,
                 TransformationMatrix = TransformationMatrix,
                 RotationPoint = RotationPoint,
-                RotationMatrix = new Matrix4x4(_rotationMatrix),
+                RotationMatrix = _rotationMatrix,
                 LocalRotationPoint = LocalRotationPoint,
                 BeforeRotation = BeforeRotation,
                 Tint = Tint,

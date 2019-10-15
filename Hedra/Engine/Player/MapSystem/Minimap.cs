@@ -238,7 +238,7 @@ namespace Hedra.Engine.Player.MapSystem
             Shader["Opacity"] = _miniMap.TextureElement.Opacity;
             Shader["Grayscale"] = _miniMap.TextureElement.Grayscale ? 1 : 0;
             Shader["Tint"] = _miniMap.TextureElement.Tint;
-            Shader["Rotation"] = Matrix2.CreateRotation(-_player.Model.LocalRotation.Y * Mathf.Radian);
+            Shader["Rotation"] = Matrix4x4.CreateRotationZ(-_player.Model.LocalRotation.Y * Mathf.Radian);
 
             DrawManager.UIRenderer.DrawQuad();
 

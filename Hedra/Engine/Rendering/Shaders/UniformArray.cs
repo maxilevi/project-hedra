@@ -12,7 +12,7 @@ namespace Hedra.Engine.Rendering.Shaders
         public string Key { get;  }
         public object[] Values => Mappings.Select(M => M.Value).ToArray();
 
-        public UniformArray(Type Type, int ShaderId, string Key, int Size)
+        public UniformArray(Type Type, int ShaderId, string Key, int Size, MappingType MappingType)
         {
             this.Key = Key;
             this.Mappings = new UniformMapping[Size];
@@ -21,7 +21,7 @@ namespace Hedra.Engine.Rendering.Shaders
             {
                 Log.WriteLine($"Retrieving uniform array element '{Key}[{i}]' from ShaderId '{ShaderId}'", LogType.System);
                 var location = Renderer.GetUniformLocation(ShaderId, $"{Key}[{i}]");
-                this.Mappings[i] = new UniformMapping(location, Activator.CreateInstance(Type));
+                this.Mappings[i] = new UniformMapping(location, Activator.CreateInstance(Type), MappingType);
             }
         }
 

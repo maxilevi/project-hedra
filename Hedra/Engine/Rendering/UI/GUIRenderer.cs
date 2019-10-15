@@ -202,7 +202,7 @@ namespace Hedra.Engine.Rendering.UI
             Shader["Opacity"] = Texture.Opacity;
             Shader["Grayscale"] = Texture.Grayscale ? 1 : 0;
             Shader["Tint"] = Texture.Tint;
-            Shader["Rotation"] = Math.Abs(Texture.Angle) < .05f ? Matrix2.Identity : Texture.RotationMatrix;
+            Shader["Rotation"] = Math.Abs(Texture.Angle) < .05f ? Matrix4x4.Identity : Texture.RotationMatrix;
             Shader["UseMask"] = Texture.UseMask ? 1 : 0;
 
             DrawQuad();

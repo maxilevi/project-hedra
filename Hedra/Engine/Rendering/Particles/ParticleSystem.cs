@@ -239,14 +239,11 @@ namespace Hedra.Engine.Rendering.Particles
         private static Matrix4x4 ConstructTransformationMatrix(Vector3 Position, Vector3 Rotation, Vector3 Scale)
         {
             var axis = Rotation / Rotation.Y;
-            var rotationMatrix = Matrix4x4.CreateFromAxisAngle(axis, Rotation.Y * Mathf.Radian);
-            
-            var transMatrix = Matrix4x4.CreateScale(Scale);
-            transMatrix = Matrix4x4.Multiply(transMatrix, rotationMatrix);
-            transMatrix = Matrix4x4.Multiply(transMatrix,  Matrix4x4.CreateTranslation(Position));
+            var rotationMatrix = Matrix4x4.CreateFromAxisAngle(axis.NormalizedFast(), Rotation.Y);
+            var transMatrix = Matrix4x4.CreateScale(Scale) * rotationMatrix * Matrix4x4.CreateTranslation(Position);
             return transMatrix;
         }
-        
+ 
         public void Dispose()
         {
             if(Disposed) return;

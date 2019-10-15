@@ -540,10 +540,11 @@ namespace Hedra.Engine.Management
                 Vertices[j] = Vector3.Transform(Vertices[j], rotationMat);
                 Vertices[j] = Vector3.Transform(Vertices[j], positionMat);
             }
-            
+
+            var invertedMat = rotationMat.Inverted().Transposed();
             for(var j = 0; j < Normals.Count; j++)
             {
-                Normals[j] = Vector3.TransformNormal(Normals[j], rotationMat);
+                Normals[j] = Vector3.TransformNormal(Normals[j], invertedMat);
             }
             
             var data = new VertexData

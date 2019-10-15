@@ -16,7 +16,7 @@ namespace Hedra
         
         public static Vector2 PerpendicularLeft(this Vector2 Vector) => new Vector2(Vector.Y, -Vector.X);
         
-        public static Vector2 PerpendicularRight(this Vector2 Vector) => new Vector2(Vector.Y, -Vector.X);
+        public static Vector2 PerpendicularRight(this Vector2 Vector) => new Vector2(-Vector.Y, Vector.X);
         
         #region Vector3
         public static float Length(this Vector3 Vector) => Vector.Length();
@@ -59,22 +59,15 @@ namespace Hedra
             Matrix.M11, Matrix.M21, Matrix.M31, 0,
             Matrix.M21, Matrix.M22, Matrix.M32, 0,
             Matrix.M31, Matrix.M32, Matrix.M33, 0,
-            Matrix.M41, Matrix.M42, Matrix.M34, 0
+            Matrix.M41, Matrix.M42, Matrix.M34, 1
         );
-        
-        public static Matrix4x4 ClearScale(this Matrix4x4 Matrix) => new Matrix4x4(
-            Matrix.M11, Matrix.M21, Matrix.M31, 0,
-            Matrix.M21, Matrix.M22, Matrix.M32, 0,
-            Matrix.M31, Matrix.M32, Matrix.M33, 0,
-            Matrix.M41, Matrix.M42, Matrix.M34, 0
-        );
-        
-        public static Matrix4x4 ClearRotation(this Matrix4x4 Matrix) => new Matrix4x4(
-            Matrix.M11, 0, 0, Matrix.M41,
-            0, Matrix.M22, 0, Matrix.M42,
-            0, 0, Matrix.M33, Matrix.M43,
-            Matrix.M41, Matrix.M42, Matrix.M34, Matrix.M44
-        );
+
+        public static Matrix4x4 ClearScale(this Matrix4x4 Matrix)
+        {
+            if(!Matrix4x4.Decompose(Matrix, out _, out var quaternion, out var translation))
+                throw new ArgumentException("Failed to decompose matrix");
+            return Matrix4x4.CreateFromQuaternion(quaternion) * Matrix4x4.CreateTranslation(translation);
+        }
 
         public static Vector3 ExtractTranslation(this Matrix4x4 Matrix)
         {
@@ -111,8 +104,8 @@ namespace Hedra
 
         public static Matrix4x4 Inverted(this Matrix4x4 Matrix)
         {
-            if(!Matrix4x4.Invert(Matrix, out var result))
-                throw new ArgumentException("Inverting a singular matrix");
+            if (!Matrix4x4.Invert(Matrix, out var result))
+                return Matrix;
             return result;
         }
     }
