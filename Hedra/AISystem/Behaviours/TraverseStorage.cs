@@ -4,6 +4,7 @@ using Hedra.Engine.Core;
 using Hedra.Engine.Pathfinding;
 using Hedra.EntitySystem;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.AISystem.Behaviours
 {

@@ -3,6 +3,7 @@ using System.Linq;
 using Hedra.Core;
 using Hedra.EntitySystem;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.AISystem.Humanoid
 {

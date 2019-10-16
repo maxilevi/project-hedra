@@ -14,6 +14,7 @@ using System.IO;
 using Hedra.Core;
 using System.Numerics;
 using Hedra.Engine.Rendering;
+using Hedra.Numerics;
 using Hedra.Rendering.UI;
 
 namespace Hedra.Engine.Rendering.UI

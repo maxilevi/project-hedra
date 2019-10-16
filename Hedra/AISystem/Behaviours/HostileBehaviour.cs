@@ -5,6 +5,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.AISystem.Behaviours
 {

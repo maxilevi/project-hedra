@@ -2,7 +2,6 @@ using System;
 using Hedra.BiomeSystem;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
@@ -14,6 +13,7 @@ using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {

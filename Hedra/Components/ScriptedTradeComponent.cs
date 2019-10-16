@@ -6,6 +6,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Scripting;
 using Hedra.EntitySystem;
+using Hedra.Numerics;
 
 namespace Hedra.Components
 {

@@ -5,6 +5,7 @@ using Hedra.Engine.Input;
 using Hedra.Engine.Management;
 using Hedra.Input;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Player.Inventory
 {

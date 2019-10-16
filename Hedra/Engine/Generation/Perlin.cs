@@ -9,6 +9,7 @@
 using System.Numerics;
 using System;
 using Hedra.Core;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Generation{
     

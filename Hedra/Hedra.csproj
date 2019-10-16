@@ -398,7 +398,6 @@
     <Compile Include="Engine\Windowing\MouseButtonEventArgs.cs" />
     <Compile Include="Engine\Windowing\MouseMoveEventArgs.cs" />
     <Compile Include="Engine\Windowing\MouseWheelEventArgs.cs" />
-    <Compile Include="Engine\Windowing\VectorExtensions.cs" />
     <Compile Include="Items\EquipmentType.cs" />
     <Compile Include="Items\ItemTier.cs" />
     <Compile Include="Items\Trader.cs" />
@@ -422,6 +421,11 @@
     <Compile Include="Mission\QuestReward.cs" />
     <Compile Include="ModelHandlers\BeetleHandler.cs" />
     <Compile Include="Mission\MissionBuilder.cs" />
+    <Compile Include="Numerics\IRandom.cs" />
+    <Compile Include="Numerics\Mathf.cs" />
+    <Compile Include="Numerics\QuaternionMath.cs" />
+    <Compile Include="Numerics\RandomDistribution.cs" />
+    <Compile Include="Numerics\VectorExtensions.cs" />
     <Compile Include="Rendering\Graphics2D.cs" />
     <Compile Include="Structures\GhostTownBossDesign.cs" />
     <Compile Include="Structures\GhostTownPortalDesign.cs" />
@@ -463,7 +467,6 @@
     <Compile Include="Components\ThoughtsComponent.cs" />
     <Compile Include="Components\TradeComponent.cs" />
     <Compile Include="Components\VillagerThoughtsComponent.cs" />
-    <Compile Include="Core\Mathf.cs" />
     <Compile Include="Core\TaskScheduler.cs" />
     <Compile Include="Core\Time.cs" />
     <Compile Include="Core\Timer.cs" />
@@ -979,8 +982,6 @@
     <Compile Include="Engine\ClassSystem\RogueDesign.cs" />
     <Compile Include="Engine\ClassSystem\WarriorDesign.cs" />
     <Compile Include="Engine\CompatibilityManager.cs" />
-    <Compile Include="Engine\ComplexMath\IRandom.cs" />
-    <Compile Include="Engine\ComplexMath\RandomDistribution.cs" />
     <Compile Include="Engine\Core\RegistryFactory.cs" />
     <Compile Include="Engine\Core\ICountable.cs" />
     <Compile Include="Engine\Core\IPositionable.cs" />
@@ -1118,7 +1119,6 @@
     <Compile Include="Engine\Management\DistributedExecuter.cs" />
     <Compile Include="Engine\Management\ITickable.cs" />
     <Compile Include="Engine\Management\TickSystem.cs" />
-    <Compile Include="Engine\ComplexMath\QuaternionMath.cs" />
     <Compile Include="Engine\Management\TrackItem.cs" />
     <Compile Include="Engine\ModuleSystem\AnimationEvents\AnimationEventBuilder.cs" />
     <Compile Include="Engine\ModuleSystem\HumanoidFactory.cs" />

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Hedra.Engine.ItemSystem;
 using IronPython.Runtime;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Generation
 {

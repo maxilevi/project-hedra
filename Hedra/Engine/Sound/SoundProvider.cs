@@ -8,6 +8,7 @@ using Hedra.Engine.Player;
 using Hedra.Sound;
 using NVorbis;
 using System.Numerics;
+using Hedra.Numerics;
 using Silk.NET.OpenAL;
 
 

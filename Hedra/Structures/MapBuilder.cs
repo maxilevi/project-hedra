@@ -1,8 +1,8 @@
 using Hedra.BiomeSystem;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
 using Hedra.Engine.StructureSystem;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Structures
 {

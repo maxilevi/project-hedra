@@ -14,7 +14,6 @@ using Hedra.Engine;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.BiomeSystem.NormalBiome;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -32,6 +31,7 @@ using Hedra.Structures;
 using HedraTests.Player;
 using Moq;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace HedraTests.Structure
 {

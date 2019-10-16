@@ -24,6 +24,7 @@ using Hedra.Items;
 using Hedra.Rendering;
 using Hedra.Sound;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.WeaponSystem
 {
@@ -194,9 +195,9 @@ namespace Hedra.WeaponSystem
         protected void SetToChest(ObjectMesh Mesh)
         {
             SetToDefault(Mesh);
-            Mesh.TransformationMatrix = Owner.Model.ChestMatrix.ClearTranslation() *
-                                        Matrix4x4.CreateTranslation(
-                                            -Owner.Position + Owner.Model.ChestPosition + Vector3.UnitY * 1f);
+            var translation =
+                Matrix4x4.CreateTranslation(-Owner.Position + Owner.Model.ChestPosition + Vector3.UnitY * 1f);
+            Mesh.TransformationMatrix = (Owner.Model.ChestMatrix.ClearTranslation() * translation);
             Mesh.Position = Owner.Position;
             Mesh.Rotation = SheathedRotation;
             Mesh.BeforeRotation =

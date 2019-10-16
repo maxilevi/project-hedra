@@ -16,6 +16,7 @@ using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.WeaponSystem
 {

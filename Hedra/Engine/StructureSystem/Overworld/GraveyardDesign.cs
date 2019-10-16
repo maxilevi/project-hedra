@@ -4,7 +4,6 @@ using System.Drawing;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -20,6 +19,7 @@ using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
 using System.Numerics;
+using Hedra.Numerics;
 using Region = Hedra.BiomeSystem.Region;
 
 namespace Hedra.Engine.StructureSystem.Overworld

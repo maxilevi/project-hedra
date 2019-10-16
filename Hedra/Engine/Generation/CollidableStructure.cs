@@ -18,6 +18,7 @@ using Hedra.Engine.Rendering.UI;
 using System.Numerics;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem;
+using Hedra.Numerics;
 using Hedra.Rendering;
 
 namespace Hedra.Engine.Generation

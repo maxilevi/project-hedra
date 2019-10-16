@@ -21,6 +21,7 @@ using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using System.Numerics;
+using Hedra.Numerics;
 using Silk.NET.GLFW;
 
 namespace Hedra.Engine.Management

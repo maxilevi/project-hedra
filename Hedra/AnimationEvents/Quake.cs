@@ -9,6 +9,7 @@ using Hedra.Engine.Sound;
 using Hedra.Rendering.Particles;
 using Hedra.Sound;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.AnimationEvents
 {

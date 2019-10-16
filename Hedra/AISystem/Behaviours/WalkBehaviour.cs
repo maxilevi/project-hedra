@@ -1,11 +1,11 @@
 using System;
 using Hedra.Core;
 using Hedra.Engine;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.EntitySystem;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.AISystem.Behaviours
 {

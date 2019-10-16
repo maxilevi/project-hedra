@@ -14,6 +14,7 @@ using Hedra.Core;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.EntitySystem;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Player
 {

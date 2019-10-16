@@ -4,6 +4,7 @@ using Hedra.BiomeSystem;
 using Hedra.Core;
 using Hedra.Engine.Rendering;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {

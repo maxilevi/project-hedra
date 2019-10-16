@@ -1,6 +1,7 @@
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.BiomeSystem.NormalBiome
 {

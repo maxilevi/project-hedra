@@ -6,6 +6,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.EntitySystem;
+using Hedra.Numerics;
 
 namespace Hedra.AISystem.Behaviours
 {

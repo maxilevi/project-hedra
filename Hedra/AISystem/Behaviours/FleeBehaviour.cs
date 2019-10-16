@@ -4,6 +4,7 @@ using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.EntitySystem;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.AISystem.Behaviours
 {

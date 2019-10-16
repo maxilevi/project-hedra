@@ -22,6 +22,7 @@ using Hedra.Rendering.UI;
 using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.EntitySystem.BossSystem
 {

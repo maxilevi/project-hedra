@@ -13,6 +13,7 @@ using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.AISystem.Humanoid
 {

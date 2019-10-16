@@ -16,6 +16,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.TreeSystem;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Generation
 {

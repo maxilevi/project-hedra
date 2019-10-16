@@ -12,6 +12,7 @@ using System.Numerics;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
+using Hedra.Numerics;
 using Gen = Hedra.Engine.Generation;
 
 namespace Hedra.Engine.EnvironmentSystem

@@ -4,6 +4,7 @@ using BulletSharp;
 using Hedra.Core;
 using Hedra.Game;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Rendering.Frustum
 {

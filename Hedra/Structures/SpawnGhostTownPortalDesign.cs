@@ -1,11 +1,11 @@
 using System;
 using Hedra.BiomeSystem;
 using Hedra.Engine.BiomeSystem.GhostTown;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.GhostTown;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Structures
 {

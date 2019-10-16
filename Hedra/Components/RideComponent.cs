@@ -20,6 +20,7 @@ using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Localization;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Components
 {

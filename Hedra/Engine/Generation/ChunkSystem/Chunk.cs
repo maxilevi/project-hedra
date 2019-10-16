@@ -23,6 +23,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Geometry;
 using Hedra.Rendering;
 using System.Numerics;
+using Hedra.Numerics;
 using Region = Hedra.BiomeSystem.Region;
 
 namespace Hedra.Engine.Generation.ChunkSystem

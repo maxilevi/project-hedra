@@ -16,6 +16,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Core;
 using Hedra.EntitySystem;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.WorldObjects;
 

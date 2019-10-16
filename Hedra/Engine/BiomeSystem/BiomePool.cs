@@ -12,11 +12,11 @@ using Hedra.BiomeSystem;
 using Hedra.Engine.BiomeSystem.GhostTown;
 using Hedra.Engine.BiomeSystem.NormalBiome;
 using Hedra.Engine.BiomeSystem.UndeadBiome;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.BiomeSystem
 {

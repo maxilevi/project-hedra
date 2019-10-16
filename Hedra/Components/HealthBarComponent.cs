@@ -11,6 +11,7 @@ using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Components
 {

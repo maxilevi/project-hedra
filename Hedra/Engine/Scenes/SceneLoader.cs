@@ -17,6 +17,7 @@ using Hedra.Items;
 using Hedra.Mission;
 using Hedra.Rendering;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Scenes
 {

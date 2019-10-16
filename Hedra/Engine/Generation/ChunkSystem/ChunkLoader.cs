@@ -19,6 +19,7 @@ using Hedra.Engine.Player;
 using System.Numerics;
 using Hedra.Engine.IO;
 using Hedra.Game;
+using Hedra.Numerics;
 using Timer = Hedra.Core.Timer;
 
 namespace Hedra.Engine.Generation.ChunkSystem

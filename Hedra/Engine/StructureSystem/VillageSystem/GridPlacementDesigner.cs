@@ -12,6 +12,7 @@ using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.StructureSystem.VillageSystem.Placers;
 using Hedra.Engine.WorldBuilding;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {

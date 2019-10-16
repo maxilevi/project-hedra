@@ -8,6 +8,7 @@ using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
 using Hedra.Sound;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.AISystem.Behaviours
 {

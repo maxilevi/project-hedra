@@ -9,6 +9,7 @@ using Hedra.Engine.Sound;
 using Hedra.Localization;
 using Hedra.Sound;
 using System.Numerics;
+using Hedra.Numerics;
 
 
 namespace Hedra.Engine.Player

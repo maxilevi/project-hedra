@@ -8,6 +8,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using NUnit.Framework;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace HedraTests.CacheSystem
 {

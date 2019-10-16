@@ -7,6 +7,7 @@ using Hedra.Engine.Player;
 using Hedra.Game;
 using Hedra.Localization;
 using System.Numerics;
+using Hedra.Numerics;
 
 
 namespace Hedra.Engine.WorldBuilding

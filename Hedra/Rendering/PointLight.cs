@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Rendering
 {

@@ -9,6 +9,7 @@ using Hedra.Engine.Core;
 using Hedra.Engine.IO;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Game;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using CollisionShape = BulletSharp.CollisionShape;
 using Vector2 = System.Numerics.Vector2;

@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Globalization;
 using Hedra.Core;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Rendering
 {

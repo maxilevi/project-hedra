@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using Hedra.Core;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Rendering.Animation.ColladaParser
 {

@@ -15,6 +15,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Windowing;
 using Hedra.Game;
+using Hedra.Numerics;
 using PixelFormat = Hedra.Engine.Windowing.PixelFormat;
 
 namespace Hedra.Engine.Rendering.Effects

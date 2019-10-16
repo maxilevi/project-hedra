@@ -3,6 +3,7 @@ using Hedra.Engine;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.EntitySystem;
 using Hedra.Game;
+using Hedra.Numerics;
 
 namespace Hedra.AISystem.Behaviours
 {

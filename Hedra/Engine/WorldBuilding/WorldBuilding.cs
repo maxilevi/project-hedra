@@ -27,6 +27,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.EntitySystem;
 using Hedra.Items;
 using Hedra.Localization;
+using Hedra.Numerics;
 
     namespace Hedra.Engine.WorldBuilding
 {

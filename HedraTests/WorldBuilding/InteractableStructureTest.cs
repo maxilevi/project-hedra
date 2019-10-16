@@ -9,6 +9,7 @@ using HedraTests.Player;
 using NUnit.Framework;
 using System.Numerics;
 using Hedra;
+using Hedra.Numerics;
 
 namespace HedraTests.WorldBuilding
 {

@@ -7,13 +7,11 @@
 
 using System;
 using System.Drawing;
-using System.Runtime.InteropServices;
-using Hedra.Engine.ComplexMath;
-using Hedra.Engine.Game;
-using Hedra.Game;
 using System.Numerics;
+using System.Runtime.InteropServices;
+using Hedra.Game;
 
-namespace Hedra.Core
+namespace Hedra.Numerics
 {
     public static class Mathf
     {
@@ -34,7 +32,7 @@ namespace Hedra.Core
 
         public static int RoundToInt(float Value)
         {
-            return (int) Math.Round(Value);
+            return (int) System.Math.Round(Value);
         }
 
         public static float LinearInterpolate3D(float xm_ym_zm, float xp_ym_zm, float xm_yp_zm, float xp_yp_zm,
@@ -52,7 +50,7 @@ namespace Hedra.Core
 
         public static float CosineInterpolate(float Y1, float Y2, float Mu)
         {
-            float mu2 = (float) (1 - Math.Cos(Mu * Math.PI)) / 2;
+            float mu2 = (float) (1 - System.Math.Cos(Mu * System.Math.PI)) / 2;
             return Y1 * (1 - mu2) + Y2 * mu2;
         }
         
@@ -84,21 +82,21 @@ namespace Hedra.Core
             Vector2 outp = new Vector2(0,0);
         
             outp.Y = Inp % Prec;
-            outp.X = (float) Math.Floor(Inp / Prec);
+            outp.X = (float) System.Math.Floor(Inp / Prec);
         
             return outp / (Prec - 1);
         }
         
         public static int FloorToInt(float A)
         {
-            return (int) Math.Floor(A);
+            return (int) System.Math.Floor(A);
         }
         
         public static float Pack(Vector2 Input, int Precision)
         {
             Vector2 output = Input;
-            output.X = (float) Math.Floor(output.X * (Precision - 1));
-            output.Y = (float) Math.Floor(output.Y * (Precision - 1));
+            output.X = (float) System.Math.Floor(output.X * (Precision - 1));
+            output.Y = (float) System.Math.Floor(output.Y * (Precision - 1));
         
             return (output.X * Precision) + output.Y;
         }
@@ -185,12 +183,12 @@ namespace Hedra.Core
 
         public static double Clamp(double Val, double Min, double Max)
         {
-            return Math.Max(Math.Min(Val, Max), Min);
+            return System.Math.Max(System.Math.Min(Val, Max), Min);
         }
 
         public static float Clamp(float Val, float Min, float Max)
         {
-            return Math.Max(Math.Min(Val, Max), Min);
+            return System.Math.Max(System.Math.Min(Val, Max), Min);
         }
 
         public static Vector3 Clamp(Vector3 Value, float Min, float Max){

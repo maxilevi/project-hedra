@@ -12,6 +12,7 @@ using System.Numerics;
 using System.Xml;
 using System.Collections.Generic;
 using Hedra.Core;
+using Hedra.Numerics;
 using Hedra.Rendering;
 
 namespace Hedra.Engine.Rendering.Animation.ColladaParser

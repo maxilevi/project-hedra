@@ -28,6 +28,7 @@ using Hedra.Rendering;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.EntitySystem
 {

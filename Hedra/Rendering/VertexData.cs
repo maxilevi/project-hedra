@@ -19,6 +19,7 @@ using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Geometry;
 using System.Numerics;
+using Hedra.Numerics;
 using InstanceData = Hedra.Engine.Rendering.InstanceData;
 
 namespace Hedra.Rendering

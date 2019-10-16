@@ -10,6 +10,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Rendering.Particles
 {

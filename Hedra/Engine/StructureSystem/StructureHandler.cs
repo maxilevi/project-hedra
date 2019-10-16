@@ -15,14 +15,14 @@ using System.Reflection;
 using System.Threading;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Game;
+using Hedra.Numerics;
 
-namespace Hedra.Engine.StructureSystem
+  namespace Hedra.Engine.StructureSystem
 {
     /// <summary>
     /// Description of StructureGenerator.

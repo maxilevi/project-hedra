@@ -9,6 +9,7 @@ using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.SkillSystem;
 using Hedra.Localization;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {

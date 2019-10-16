@@ -8,6 +8,7 @@ using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Rendering.Particles;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Warrior.Berserker
 {

@@ -3,7 +3,6 @@ using Hedra.BiomeSystem;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EntitySystem.BossSystem;
 using Hedra.Engine.Generation;
@@ -15,6 +14,7 @@ using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Rendering;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {

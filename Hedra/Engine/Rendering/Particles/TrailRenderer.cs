@@ -16,6 +16,7 @@ using Hedra.Engine.Rendering.Core;
 using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Rendering.Particles
 {

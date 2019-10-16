@@ -7,6 +7,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Rendering;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.PlantSystem
 {

@@ -6,6 +6,7 @@ using Hedra.Engine.Rendering.Particles;
 using Hedra.Game;
 using Hedra.Sound;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {

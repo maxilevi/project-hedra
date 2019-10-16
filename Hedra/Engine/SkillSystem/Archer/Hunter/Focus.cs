@@ -6,6 +6,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Localization;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.WeaponSystem;
 

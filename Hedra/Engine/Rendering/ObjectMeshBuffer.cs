@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using Hedra.Core;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
@@ -21,6 +20,7 @@ using Hedra.Rendering;
 using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Rendering
 {
@@ -131,15 +131,15 @@ namespace Hedra.Engine.Rendering
             Vertex *= Scale;
 
             Vertex += LocalRotationPoint;
-            Vertex = Vector3.Transform(Vertex, LocalRotationMatrix);
+            //Vertex = Vector3.Transform(Vertex, LocalRotationMatrix);
             Vertex -= LocalRotationPoint;
 
             Vertex += BeforeRotation;
             Vertex += RotationPoint;
-            Vertex = Vector3.Transform(Vertex, _rotationMatrix);
+            //Vertex = Vector3.Transform(Vertex, _rotationMatrix);
             Vertex -= RotationPoint;
 
-            Vertex = Vector3.Transform(Vertex, TransformationMatrix);
+            //Vertex = Vector3.Transform(Vertex, TransformationMatrix);
             
             Vertex += Position + LocalPosition;
             return Vertex;

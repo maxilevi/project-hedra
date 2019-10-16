@@ -34,6 +34,7 @@ using Hedra.Game;
 using Hedra.Items;
 using Hedra.Mission;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.User
 {

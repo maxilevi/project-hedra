@@ -11,6 +11,7 @@ using Hedra.Components.Effects;
 using Hedra.Engine.Game;
 using System.Linq;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.AISystem.Behaviours
 {

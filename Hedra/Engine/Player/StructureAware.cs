@@ -10,6 +10,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.StructureSystem;
 using Hedra.Sound;
 using System.Numerics;
+using Hedra.Numerics;
 using CollisionShape = BulletSharp.CollisionShape;
 using TaskScheduler = Hedra.Core.TaskScheduler;
 

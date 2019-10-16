@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Hedra.Engine.ComplexMath
+namespace Hedra.Numerics
 {
     public class RandomDistribution : IRandom
     {
@@ -57,7 +57,7 @@ namespace Hedra.Engine.ComplexMath
 
         private void CreateSeedArray(int Value)
         {
-            int num1 = 161803398 - (Value == int.MinValue ? int.MaxValue : Math.Abs(Value));
+            int num1 = 161803398 - (Value == int.MinValue ? int.MaxValue : System.Math.Abs(Value));
             this._seedArray[55] = num1;
             int num2 = 1;
             for (int index1 = 1; index1 < 55; ++index1)

@@ -10,7 +10,6 @@ using System;
 using System.Drawing;
 using System.Collections.Generic;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Core;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;

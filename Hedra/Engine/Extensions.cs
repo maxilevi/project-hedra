@@ -17,10 +17,10 @@ using System.Collections;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using Hedra.Core;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Core;
 using Newtonsoft.Json.Converters;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine
 {
@@ -174,13 +174,6 @@ namespace Hedra.Engine
                 result.Z = blendI * a.Z + blend * b.Z;
             }
             return result.NormalizedFast();
-        }
-
-        public static Quaternion NormalizedFast(this Quaternion Quat)
-        {
-            float x = Quat.X, y = Quat.Y, z = Quat.Z, w = Quat.W;
-            float n = 1f / Mathf.FastSqrt(x * x + y * y + z * z + w * w);
-            return Quat * n;
         }
 
         ///<sumary>

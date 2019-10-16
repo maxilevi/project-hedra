@@ -19,8 +19,7 @@ using Hedra.Localization;
 using Hedra.Sound;
 using Hedra.User;
 using System.Numerics;
-
-
+using Hedra.Numerics;
 using Silk.NET.Input.Common;
 using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;
 

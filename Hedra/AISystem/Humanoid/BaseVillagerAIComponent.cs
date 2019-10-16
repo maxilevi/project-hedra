@@ -18,6 +18,7 @@ using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.EntitySystem;
 using Hedra.Game;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.AISystem.Humanoid
 {

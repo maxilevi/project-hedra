@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Hedra.Rendering;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Scenes
 {

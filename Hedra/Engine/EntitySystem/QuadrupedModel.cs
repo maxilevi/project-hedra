@@ -10,7 +10,6 @@
 using System;
 using System.Linq;
 using Hedra.Core;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.Rendering;
@@ -23,6 +22,7 @@ using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.SkillSystem;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
+using Hedra.Numerics;
 using Hedra.Sound;
 
 namespace Hedra.Engine.EntitySystem
@@ -370,6 +370,10 @@ namespace Hedra.Engine.EntitySystem
                 if (HasRider) value = Rider.Model.TargetRotation;
                 _eulerTargetRotation = value;
                 _quaternionTargetRotation = QuaternionMath.FromEuler(_eulerTargetRotation * Mathf.Radian);
+                if (value.IsInvalid())
+                {
+                    int a = 0;
+                }
             }
         }
         public override Vector3 LocalRotation

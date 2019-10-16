@@ -8,6 +8,7 @@ using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Archer.Scout
 {

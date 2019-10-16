@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using Hedra.Engine.Generation;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.WorldBuilding
 {

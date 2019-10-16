@@ -6,6 +6,7 @@ using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using Hedra.Game;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.AISystem.Humanoid
 {

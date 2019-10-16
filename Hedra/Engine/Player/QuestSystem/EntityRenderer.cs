@@ -8,6 +8,7 @@ using Hedra.Game;
 using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Player.QuestSystem
 {

@@ -16,6 +16,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Windowing;
 using Hedra.Game;
+using Hedra.Numerics;
 using Hedra.Rendering.Particles;
 
 namespace Hedra.Engine.Rendering.Particles

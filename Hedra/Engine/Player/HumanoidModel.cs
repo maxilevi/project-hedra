@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Hedra.Core;
-using Hedra.Engine.ComplexMath;
 using System.Numerics;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
@@ -24,6 +23,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
 using Hedra.Items;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Sound;
 

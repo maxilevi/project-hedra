@@ -7,6 +7,7 @@ using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.EntitySystem;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Rendering
 {

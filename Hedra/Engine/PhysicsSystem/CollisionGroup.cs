@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.Generation.ChunkSystem;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.PhysicsSystem
 {

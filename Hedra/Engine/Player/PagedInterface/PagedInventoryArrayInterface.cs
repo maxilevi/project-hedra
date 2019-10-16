@@ -12,6 +12,7 @@ using Hedra.Items;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Player.PagedInterface
 {

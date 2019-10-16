@@ -12,6 +12,7 @@ using Hedra.Rendering;
 using Hedra.Rendering.Particles;
 using Hedra.WorldObjects;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Mage.Druid
 {

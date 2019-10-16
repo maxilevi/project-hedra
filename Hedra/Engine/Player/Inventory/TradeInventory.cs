@@ -21,7 +21,7 @@ using Hedra.EntitySystem;
 using Hedra.Input;
 using Hedra.Localization;
 using System.Numerics;
-
+using Hedra.Numerics;
 using Silk.NET.Input.Common;
 
 

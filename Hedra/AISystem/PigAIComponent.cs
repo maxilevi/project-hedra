@@ -1,5 +1,6 @@
 using Hedra.Core;
 using Hedra.EntitySystem;
+using Hedra.Numerics;
 using Hedra.Sound;
 
 namespace Hedra.AISystem

@@ -1,6 +1,7 @@
 using Hedra.Core;
 using Hedra.EntitySystem;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Player.BoatSystem
 {

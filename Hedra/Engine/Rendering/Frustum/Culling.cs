@@ -6,6 +6,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Game;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Rendering.Frustum
 {

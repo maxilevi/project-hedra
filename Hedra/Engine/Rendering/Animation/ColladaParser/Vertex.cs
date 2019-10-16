@@ -9,6 +9,7 @@
 using System;
 using System.Numerics;
 using System.Collections.Generic;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Rendering.Animation.ColladaParser
 {

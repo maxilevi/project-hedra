@@ -24,7 +24,7 @@ using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
 using System.Numerics;
-
+using Hedra.Numerics;
 using Silk.NET.Input.Common;
 using Cursor = Hedra.Input.Cursor;
 

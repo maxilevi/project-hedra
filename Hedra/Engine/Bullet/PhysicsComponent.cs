@@ -23,6 +23,7 @@ using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Sound;
 using System.Numerics;
+using Hedra.Numerics;
 using Bullet = BulletSharp;
 using CollisionShape = BulletSharp.CollisionShape;
 using Vector3 = System.Numerics.Vector3;

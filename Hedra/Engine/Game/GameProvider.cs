@@ -23,6 +23,7 @@ using Hedra.Game;
 using Hedra.Items;
 using Hedra.Sound;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Game
 {

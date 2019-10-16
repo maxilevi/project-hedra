@@ -22,6 +22,7 @@ using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
 using System.Numerics;
+using Hedra.Numerics;
 using Silk.NET.Input.Common;
 
 

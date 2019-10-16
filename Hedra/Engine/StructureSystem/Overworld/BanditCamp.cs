@@ -19,6 +19,7 @@ using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Mission;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {

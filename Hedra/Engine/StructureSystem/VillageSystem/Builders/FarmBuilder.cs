@@ -25,6 +25,7 @@ using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Rendering;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {

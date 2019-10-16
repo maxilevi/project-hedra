@@ -19,6 +19,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Localization;
 using Hedra.Sound;
 using System.Numerics;
+using Hedra.Numerics;
 using Silk.NET.Windowing.Common;
 
 

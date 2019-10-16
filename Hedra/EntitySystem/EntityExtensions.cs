@@ -9,6 +9,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Rendering.UI;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.EntitySystem
 {

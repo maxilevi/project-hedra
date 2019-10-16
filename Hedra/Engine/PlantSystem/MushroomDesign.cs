@@ -10,6 +10,7 @@ using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.Items;
 using Hedra.Rendering;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.PlantSystem
 {

@@ -4,6 +4,7 @@ using Hedra.Engine.Game;
 using Hedra.Game;
 using Hedra.Sound;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Sound
 {

@@ -8,6 +8,7 @@ using Hedra.Engine.WorldBuilding;
 using Moq;
 using NUnit.Framework;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace HedraTests.WorldBuilding
 {

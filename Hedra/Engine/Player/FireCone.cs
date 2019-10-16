@@ -7,6 +7,7 @@ using Hedra.Core;
 using Hedra.EntitySystem;
 using Hedra.Rendering.Particles;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Player
 {

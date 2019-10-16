@@ -24,6 +24,7 @@ using Hedra.Rendering;
 using Hedra.Sound;
 using Hedra.WorldObjects;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.WeaponSystem
 {

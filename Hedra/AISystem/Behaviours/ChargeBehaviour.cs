@@ -5,6 +5,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem.AnimationEvents;
 using Hedra.EntitySystem;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.AISystem.Behaviours
 {

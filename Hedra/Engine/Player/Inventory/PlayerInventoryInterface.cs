@@ -11,7 +11,7 @@ using Hedra.Localization;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
 using System.Numerics;
-
+using Hedra.Numerics;
 using Silk.NET.Input.Common;
 
 

@@ -11,6 +11,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.IO;
 using Hedra.Game;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Generation
 {

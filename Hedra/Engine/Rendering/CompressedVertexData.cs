@@ -6,6 +6,7 @@ using System.Net;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Rendering;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Rendering
 {

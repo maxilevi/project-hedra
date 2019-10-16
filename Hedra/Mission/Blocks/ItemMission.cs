@@ -6,6 +6,7 @@ using Hedra.Engine.QuestSystem;
 using Hedra.Items;
 using Hedra.Rendering;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Mission.Blocks
 {

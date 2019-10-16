@@ -4,6 +4,7 @@ using Hedra.Core;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {

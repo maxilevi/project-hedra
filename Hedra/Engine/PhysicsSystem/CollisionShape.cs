@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using Hedra.Engine.Rendering;
+using Hedra.Numerics;
 using Hedra.Rendering;
 
 namespace Hedra.Engine.PhysicsSystem

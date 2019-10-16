@@ -8,6 +8,7 @@
  */
 using System;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.PhysicsSystem
 {

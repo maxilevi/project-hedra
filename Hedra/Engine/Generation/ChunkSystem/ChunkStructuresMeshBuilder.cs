@@ -4,7 +4,6 @@ using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Core;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
@@ -15,6 +14,7 @@ using Hedra.Game;
 using Hedra.Rendering;
 using Microsoft.Scripting.Utils;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {

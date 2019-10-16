@@ -7,6 +7,7 @@ using System.Numerics;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Game;
 using Hedra.Localization;
+using Hedra.Numerics;
 
 
 namespace Hedra.Engine.Player.BoatSystem

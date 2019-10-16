@@ -12,7 +12,9 @@ from Hedra.Rendering import Colors, ObjectMesh
 from Hedra.Rendering.Particles import ParticleShape
 from Hedra.Items import ItemType, ItemPool, InventoryExtensions
 from Hedra.EntitySystem import EntityExtensions
+from Hedra.Numerics import VectorExtensions
 
+clr.ImportExtensions(VectorExtensions)
 clr.ImportExtensions(EntityExtensions)
 clr.ImportExtensions(InventoryExtensions)
 
