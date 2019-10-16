@@ -289,9 +289,10 @@ namespace Hedra.Engine.Player
             StateHandler.Update();
             _modelSound.Pitch = Human.Speed / PitchSpeed;
             Model.Position = Mathf.Lerp(Model.Position, Position + RidingOffset, Time.IndependentDeltaTime * 24f);
-            _rotationQuaternionX = Quaternion.Slerp(_rotationQuaternionX, QuaternionMath.FromEuler(Vector3.UnitX * TargetRotation * Mathf.Radian), Time.IndependentDeltaTime * 8f);
-            _rotationQuaternionY = Quaternion.Slerp(_rotationQuaternionY, QuaternionMath.FromEuler(Vector3.UnitY * TargetRotation * Mathf.Radian), Time.IndependentDeltaTime * 8f);
-            _rotationQuaternionZ = Quaternion.Slerp(_rotationQuaternionZ, QuaternionMath.FromEuler(Vector3.UnitZ * TargetRotation * Mathf.Radian), Time.IndependentDeltaTime * 8f);
+            var rotation = TargetRotation * Mathf.Radian;
+            _rotationQuaternionX = Quaternion.Slerp(_rotationQuaternionX, QuaternionMath.FromEuler(rotation.X, 0, 0), Time.IndependentDeltaTime * 8f);
+            _rotationQuaternionY = Quaternion.Slerp(_rotationQuaternionY, QuaternionMath.FromEuler(0, rotation.Y, 0), Time.IndependentDeltaTime * 8f);
+            _rotationQuaternionZ = Quaternion.Slerp(_rotationQuaternionZ, QuaternionMath.FromEuler(0, 0, rotation.Z), Time.IndependentDeltaTime * 8f);
             Model.LocalRotation = new Vector3(
                 QuaternionMath.ToEuler(_rotationQuaternionX).X,
                 QuaternionMath.ToEuler(_rotationQuaternionY).Y,

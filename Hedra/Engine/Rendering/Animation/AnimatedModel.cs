@@ -422,9 +422,9 @@ namespace Hedra.Engine.Rendering.Animation
             get
             {
                 if (LocalRotation == _cacheRotation) return _rotationCache;
-                _rotationCache = Matrix4x4.CreateRotationX(LocalRotation.X * Mathf.Radian) *
-                                 Matrix4x4.CreateRotationY(LocalRotation.Y * Mathf.Radian) *
-                                 Matrix4x4.CreateRotationZ(LocalRotation.Z * Mathf.Radian);
+                _rotationCache = Matrix4x4.CreateRotationX(LocalRotation.X * Mathf.Radian) * 
+                        Matrix4x4.CreateRotationY(LocalRotation.Y * Mathf.Radian) *
+                        Matrix4x4.CreateRotationZ(LocalRotation.Z * Mathf.Radian);
                 _cacheRotation = LocalRotation;
                 _jointsDirty = true;
                 return _rotationCache;

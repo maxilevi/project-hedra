@@ -1,5 +1,6 @@
 using System;
 using System.Numerics;
+using Hedra.Engine;
 
 namespace Hedra
 {
@@ -56,10 +57,10 @@ namespace Hedra
         #endregion
         
         public static Matrix4x4 ClearTranslation(this Matrix4x4 Matrix) => new Matrix4x4(
-            Matrix.M11, Matrix.M21, Matrix.M31, 0,
-            Matrix.M21, Matrix.M22, Matrix.M32, 0,
+            Matrix.M11, Matrix.M12, Matrix.M13, 0,
+            Matrix.M21, Matrix.M22, Matrix.M23, 0,
             Matrix.M31, Matrix.M32, Matrix.M33, 0,
-            Matrix.M41, Matrix.M42, Matrix.M34, 1
+            Matrix.M41, Matrix.M42, Matrix.M43, 1
         );
 
         public static Matrix4x4 ClearScale(this Matrix4x4 Matrix)
@@ -106,6 +107,31 @@ namespace Hedra
         {
             if (!Matrix4x4.Invert(Matrix, out var result))
                 return Matrix;
+            return result;
+        }
+        
+        public static Vector4 ToAxisAngle(this Quaternion Quaternion)
+        {
+            var q = Quaternion.NormalizedFast();
+            var result = new Vector4
+            {
+                W = 2.0f * (float)Math.Acos(q.W) // angle
+            };
+
+            var den = (float)Math.Sqrt(1.0 - (q.W * q.W));
+            if (den > 0.0001f)
+            {
+                result.X = q.X / den;
+                result.Y = q.Y / den;
+                result.Z = q.Z / den;
+            }
+            else
+            {
+                // This occurs when the angle is zero.
+                // Not a problem: just set an arbitrary normalized axis.
+                result = new Vector4(1, 0, 0, result.W);
+            }
+
             return result;
         }
     }

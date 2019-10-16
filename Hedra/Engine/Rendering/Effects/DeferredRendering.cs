@@ -102,7 +102,8 @@ namespace Hedra.Engine.Rendering.Effects
             Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) TextureWrapMode.Repeat);
             
             var vecSamples = new Vector3[16];
-            for(var i = 0; i < 16; i++){
+            for(var i = 0; i < 16; i++)
+            {
                 vecSamples[i] = new Vector3( Utils.Rng.NextFloat() * 2.0f - 1.0f, Utils.Rng.NextFloat() * 2.0f - 1.0f, Utils.Rng.NextFloat() ).Normalized();
                 vecSamples[i] *= Utils.Rng.NextFloat();
                 var scale = i / 16f;
@@ -110,7 +111,8 @@ namespace Hedra.Engine.Rendering.Effects
                 vecSamples[i] *= scale;
             }
             var fsamples = new List<float>();
-            for(var i = 0; i < vecSamples.Length; i++){
+            for(var i = 0; i < vecSamples.Length; i++)
+            {
                 fsamples.Add(vecSamples[i].X);
                 fsamples.Add(vecSamples[i].Y);
                 fsamples.Add(vecSamples[i].Z);

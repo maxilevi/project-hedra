@@ -681,7 +681,7 @@ namespace Hedra.Engine.Rendering.Core
         public unsafe void UniformMatrix4x4(int Location, bool Transpose, ref Matrix4x4 Uniform)
         {
             fixed(float* ptr = &Uniform.M11)
-                GL.UniformMatrix4(Location, 1, Transpose, ptr);
+                GL.UniformMatrix4(Location, 1, false, ptr);
             EnsureNoErrors();
         }
 

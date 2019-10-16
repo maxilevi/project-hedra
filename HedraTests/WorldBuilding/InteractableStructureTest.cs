@@ -122,7 +122,7 @@ namespace HedraTests.WorldBuilding
             var originalOrientation = (structPosition - playerPosition).NormalizedFast();
             for (var i = 0; i < 360; i += 15)
             {
-                var orientation = Vector3.TransformNormal(originalOrientation, Matrix4x4.CreateRotationY(i * Mathf.Radian));
+                var orientation = Vector3.TransformNormal(originalOrientation, Matrix4x4.CreateRotationY(i * Mathf.Radian).Inverted().Transposed());
                 var inRange = Vector2.Dot((structPosition - playerPosition).Xz().NormalizedFast(),
                                   orientation.Xz().NormalizedFast());
                 Assert.AreEqual(inRange > .9f, CreateInteraction(structPosition, playerPosition, orientation));

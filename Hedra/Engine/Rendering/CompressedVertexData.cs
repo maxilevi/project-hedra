@@ -53,7 +53,7 @@ namespace Hedra.Engine.Rendering
             {
                 Vertices[i] = Vector3.Transform(Vertices[i], Transformation);
             }
-            var normalMat = Transformation.ClearScale().ClearTranslation().Inverted();
+            var normalMat = Transformation.ClearScale().ClearTranslation().Inverted().Transposed();
             for (var i = 0; i < _compressedNormals.Count; i++)
             {
                 _compressedNormals[i] = new CompressedValue<Vector3>()

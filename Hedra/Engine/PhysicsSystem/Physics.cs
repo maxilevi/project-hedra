@@ -57,12 +57,9 @@ namespace Hedra.Engine.PhysicsSystem
             var newForward = Direction.Xz().ToVector3().NormalizedFast();
             var defaultRot = Vector3.UnitX * CalculateNewX(Direction) + Vector3.UnitZ * GetRotation(Vector3.UnitZ, new Vector3(0, Direction.Y, 1).NormalizedFast(), Vector3.UnitY).Z;
             var xRot = GetRotation(Vector3.UnitZ, newForward, Vector3.UnitY);
-            var euler =
-                ((Matrix4x4.CreateRotationZ(defaultRot.Z * Mathf.Radian) *
-                  Matrix4x4.CreateRotationX(defaultRot.X * Mathf.Radian)) *
-                 Matrix4x4.CreateRotationY(xRot.Y * Mathf.Radian))
-                .ExtractRotation().ToEuler();
-            return euler;
+            var axisAngle = ((Matrix4x4.CreateRotationZ(defaultRot.Z * Mathf.Radian) * Matrix4x4.CreateRotationX(defaultRot.X * Mathf.Radian)) * Matrix4x4.CreateRotationY(xRot.Y * Mathf.Radian))
+                .ExtractRotation().ToAxisAngle();
+            return axisAngle.Xyz() * axisAngle.W * Mathf.Degree;
         }
 
         private static Vector3 GetRotation(Vector3 source, Vector3 dest, Vector3 up)

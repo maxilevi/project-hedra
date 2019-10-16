@@ -246,7 +246,7 @@ namespace Hedra.Engine.Rendering.Geometry
             {
                 Vertices[i] = Vector3.Transform(Vertices[i], Matrix);
             }
-            var normalMat = Matrix.ClearScale().ClearTranslation().Inverted();
+            var normalMat = Matrix.ClearScale().ClearTranslation().Inverted().Transposed();
             for (var i = 0; i < Normals.Count; i++)
             {
                 Normals[i] = Vector3.TransformNormal(Normals[i], normalMat);

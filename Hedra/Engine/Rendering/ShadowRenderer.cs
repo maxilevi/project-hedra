@@ -63,16 +63,13 @@ namespace Hedra.Engine.Rendering
         {
             _prevFbo = Renderer.FBOBound;
             ShadowFbo.Bind();
+            
+            var position = GameManager.Player.View.CameraEyePosition.Xz().ToVector3() + Vector3.UnitY * (GameManager.Player.Position.Y + 512);
+            var normalizedLight = (new Vector3(LightPosition.X, LightPosition.Y, LightPosition.Z)).NormalizedFast();
+            var invertedLight = Matrix4x4.CreateRotationY(SkyManager.DayTime / 24000f * 360f * Mathf.Radian).Inverted().Transposed();
+            normalizedLight = Vector3.TransformNormal(new Vector3(normalizedLight.X, normalizedLight.Y, normalizedLight.Z), invertedLight);
 
-            //ShaderManager.LightPosition = Vector3.TransformNormal(LightPosition.NormalizedFast(), Matrix4x4.CreateRotationY(SkyManager.SkyModifier * 360 * Mathf.RADIAN));
-            Vector3 Position = GameManager.Player.View.CameraEyePosition.Xz().ToVector3() + Vector3.UnitY * (GameManager.Player.Position.Y + 512);
-            Vector3 NormalizedLight =
-                (new Vector3(LightPosition.X, LightPosition.Y, LightPosition.Z))
-                .NormalizedFast(); //ShaderManager.LightPosition
-            NormalizedLight = Vector3.TransformNormal(new Vector3(NormalizedLight.X, NormalizedLight.Y, NormalizedLight.Z),
-                Matrix4x4.CreateRotationY( SkyManager.DayTime / 24000 * 360f * Mathf.Radian));
-
-            DepthView = Matrix4x4.CreateLookAt(NormalizedLight + Position, Position, Vector3.UnitY);
+            DepthView = Matrix4x4.CreateLookAt(normalizedLight + position, position, Vector3.UnitY);
             ShadowMvp = DepthView * DepthProj;
 
             Shader.Bind();
