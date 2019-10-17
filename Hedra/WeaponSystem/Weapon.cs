@@ -197,7 +197,8 @@ namespace Hedra.WeaponSystem
             SetToDefault(Mesh);
             var translation =
                 Matrix4x4.CreateTranslation(-Owner.Position + Owner.Model.ChestPosition + Vector3.UnitY * 1f);
-            Mesh.TransformationMatrix = (Owner.Model.ChestMatrix.ClearTranslation() * translation);
+            var chest = Owner.Model.ChestMatrix.ClearTranslation();
+            Mesh.TransformationMatrix = (chest * translation);
             Mesh.Position = Owner.Position;
             Mesh.Rotation = SheathedRotation;
             Mesh.BeforeRotation =

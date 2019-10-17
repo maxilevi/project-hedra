@@ -56,10 +56,10 @@ namespace Hedra.Numerics
         #endregion
         
         public static Matrix4x4 ClearTranslation(this Matrix4x4 Matrix) => new Matrix4x4(
-            Matrix.M11, Matrix.M12, Matrix.M13, 0,
-            Matrix.M21, Matrix.M22, Matrix.M23, 0,
-            Matrix.M31, Matrix.M32, Matrix.M33, 0,
-            Matrix.M41, Matrix.M42, Matrix.M43, 1
+            Matrix.M11, Matrix.M12, Matrix.M13, Matrix.M14,
+            Matrix.M21, Matrix.M22, Matrix.M23, Matrix.M24,
+            Matrix.M31, Matrix.M32, Matrix.M33, Matrix.M34,
+            0, 0, 0, Matrix.M44
         );
 
         public static Matrix4x4 ClearScale(this Matrix4x4 Matrix)
