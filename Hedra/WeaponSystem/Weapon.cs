@@ -207,10 +207,10 @@ namespace Hedra.WeaponSystem
 
         protected void SetToMainHand(ObjectMesh Mesh)
         {
-            Matrix4x4 Mat4 = Owner.Model.LeftWeaponMatrix.ClearTranslation() *
+            var mat4 = Owner.Model.LeftWeaponMatrix.ClearTranslation() *
                            Matrix4x4.CreateTranslation(-Owner.Position + Owner.Model.LeftWeaponPosition);
 
-            Mesh.TransformationMatrix = Mat4;
+            Mesh.TransformationMatrix = mat4;
             Mesh.Position = Owner.Position;
             Mesh.LocalRotationPoint = Vector3.Zero;
             Mesh.LocalRotation = Vector3.Zero;
