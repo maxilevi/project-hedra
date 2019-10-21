@@ -16,7 +16,8 @@ using Hedra.EntitySystem;
 using Hedra.Items;
 using Hedra.Mission;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Scenes
 {
@@ -33,12 +34,12 @@ namespace Hedra.Engine.Scenes
             Load(Structure, Scene, new SceneSettings());
         }
 
-        public static void LoadIfExists(CollidableStructure Structure, string Path, Vector3 Scale, Matrix4 Transformation)
+        public static void LoadIfExists(CollidableStructure Structure, string Path, Vector3 Scale, Matrix4x4 Transformation)
         {
             LoadIfExists(Structure, Path, Scale, Transformation, new SceneSettings());
         }
         
-        public static void LoadIfExists(CollidableStructure Structure, string Filename, Vector3 Scale, Matrix4 Transformation, SceneSettings Settings)
+        public static void LoadIfExists(CollidableStructure Structure, string Filename, Vector3 Scale, Matrix4x4 Transformation, SceneSettings Settings)
         {
             var path = $"{Path.GetDirectoryName(Filename)}/{Path.GetFileNameWithoutExtension(Filename)}-Scene.ply";
             var scene = AssetManager.ModelExists(path) ? AssetManager.PLYLoader(path, Scale) : null;
@@ -63,7 +64,7 @@ namespace Hedra.Engine.Scenes
             for (var i = 0; i < parts.Length; ++i)
             {
                 if(!parts[i].HasColors) throw new ArgumentOutOfRangeException("Scene mesh doesn't have colors");
-                var averageColor = parts[i].Colors.Select(V => V.Xyz).Aggregate((V1, V2) => V1 + V2) / parts[i].Colors.Count;
+                var averageColor = parts[i].Colors.Select(V => V.Xyz()).Aggregate((V1, V2) => V1 + V2) / parts[i].Colors.Count;
                 map[averageColor].Add(parts[i]);
             }
             /* Add Lights */

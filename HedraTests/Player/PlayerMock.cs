@@ -26,7 +26,7 @@ using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Items;
 using Hedra.WeaponSystem;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace HedraTests.Player
 {

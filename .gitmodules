@@ -12,3 +12,6 @@
 [submodule "hedra-core"]
 	path = hedra-core
 	url = https://github.com/maxilevi/hedra-core.git
+[submodule "Silk.NET"]
+	path = Silk.NET
+	url = git@github.com:maxilevi/Silk.NET.git

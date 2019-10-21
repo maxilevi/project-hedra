@@ -12,7 +12,8 @@ using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
 using Hedra.WorldObjects;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Rogue.Ninja
 {
@@ -35,8 +36,8 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
         private void ThrowAll()
         {
             var direction = User.View.LookingDirection;
-            var left = direction.Xz.PerpendicularLeft.ToVector3() + Vector3.UnitY * direction.Y;
-            var right = direction.Xz.PerpendicularRight.ToVector3() + Vector3.UnitY * direction.Y;
+            var left = direction.Xz().PerpendicularLeft().ToVector3() + Vector3.UnitY * direction.Y;
+            var right = direction.Xz().PerpendicularRight().ToVector3() + Vector3.UnitY * direction.Y;
             Throw(left * .25f + direction * .75f);
             TaskScheduler.After(.15f,
                 () => Throw(direction)

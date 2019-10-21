@@ -1,7 +1,6 @@
 using System;
 using Hedra.BiomeSystem;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
 using Hedra.Engine.QuestSystem;
@@ -9,14 +8,15 @@ using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Mission;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
     public class SpawnCampfireDesign : CampfireDesign
     {
         public static bool Spawned { get; set; }
-        private static readonly Vector3 SpawnOffset = new Vector3(Vector3.UnitZ * 16f);
+        private static readonly Vector3 SpawnOffset = Vector3.UnitZ * 16f;
         
         public override void Build(CollidableStructure Structure)
         {

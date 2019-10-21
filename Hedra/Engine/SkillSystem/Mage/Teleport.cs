@@ -11,7 +11,8 @@ using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Mage
 {
@@ -72,19 +73,19 @@ namespace Hedra.Engine.SkillSystem.Mage
             public override void Dispose()
             {
                 base.Dispose();
-                TaskScheduler.While(() => (_meshObject.Scale - Vector3.Zero).LengthFast > .005f, () =>
+                TaskScheduler.While(() => (_meshObject.Scale - Vector3.Zero).LengthFast() > .005f, () =>
                 {
                     _meshObject.Scale = Mathf.Lerp(_meshObject.Scale, Vector3.Zero, Time.DeltaTime * 3f);
                 });
-                TaskScheduler.When(() => (_meshObject.Scale - Vector3.Zero).LengthFast < .005f, () =>
+                TaskScheduler.When(() => (_meshObject.Scale - Vector3.Zero).LengthFast() < .005f, () =>
                 {
                     _meshObject.Dispose();
                 });
-                TaskScheduler.While(() => (Parent.Model.OutlineColor - Vector4.Zero).LengthFast > .005f, () =>
+                TaskScheduler.While(() => (Parent.Model.OutlineColor - Vector4.Zero).LengthFast() > .005f, () =>
                 {
                     Parent.Model.OutlineColor = Mathf.Lerp(Parent.Model.OutlineColor, Vector4.Zero, Time.DeltaTime * 2f);
                 });
-                TaskScheduler.When(() => (Parent.Model.OutlineColor - Vector4.Zero).LengthFast < .005f, () =>
+                TaskScheduler.When(() => (Parent.Model.OutlineColor - Vector4.Zero).LengthFast() < .005f, () =>
                 {
                     Parent.Model.Outline = false;
                 });

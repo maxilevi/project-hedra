@@ -9,12 +9,13 @@
 using System;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Player;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Game;
+using Hedra.Numerics;
 using Hedra.Rendering;
 
 namespace Hedra.Engine.WorldBuilding
@@ -39,7 +40,7 @@ namespace Hedra.Engine.WorldBuilding
         
         public void Update()
         {
-            var inRadius = (GameManager.Player.Position - Position).Xz.LengthSquared < ShaderManager.LightDistance * ShaderManager.LightDistance;
+            var inRadius = (GameManager.Player.Position - Position).Xz().LengthSquared() < ShaderManager.LightDistance * ShaderManager.LightDistance;
             var isOn = inRadius && (SkyManager.IsNight || !IsNightLight) && Enabled;
 
             if(LightObject == null && isOn)
@@ -61,7 +62,7 @@ namespace Hedra.Engine.WorldBuilding
             }
             if (LightObject != null)
             {
-                if ((LightObject.Position - this.Position).LengthFast > 0.05f)
+                if ((LightObject.Position - this.Position).LengthFast() > 0.05f)
                 {
                     LightObject.Position = this.Position;
                     ShaderManager.UpdateLight(LightObject);

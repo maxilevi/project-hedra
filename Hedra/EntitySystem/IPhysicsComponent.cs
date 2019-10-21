@@ -2,7 +2,7 @@ using BulletSharp;
 using Hedra.Engine.Bullet;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.PhysicsSystem;
-using Vector3 = OpenToolkit.Mathematics.Vector3;
+using Vector3 = System.Numerics.Vector3;
 
 namespace Hedra.EntitySystem
 {

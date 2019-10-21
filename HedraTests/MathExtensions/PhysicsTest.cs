@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Hedra.Engine.PhysicsSystem;
 using NUnit.Framework;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace HedraTests.MathExtensions
 {
@@ -30,7 +30,7 @@ namespace HedraTests.MathExtensions
             {
                 var expectedEuler = sample.Value;
                 var euler = Physics.DirectionToEuler(sample.Key);
-                Assert.True((euler - expectedEuler).Length < 0.05f, $"Expected euler: {expectedEuler} should be equal to {euler}");
+                Assert.True((euler - expectedEuler).Length() < 0.05f, $"Expected euler: {expectedEuler} should be equal to {euler}");
             }
         }
     }

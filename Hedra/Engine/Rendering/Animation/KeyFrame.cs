@@ -8,7 +8,7 @@
  */
 using System;
 using System.Collections.Generic;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Rendering.Animation
 {

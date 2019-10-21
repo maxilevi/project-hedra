@@ -1,12 +1,12 @@
 from Hedra import World
 from Hedra.Structures import MapBuilder
-from OpenToolkit.Mathematics import Vector2, Vector3
+from System.Numerics import Vector2, Vector3
 
 CHUNK_WIDTH = 128
 
 def nearby_struct_objects(position, type, max_distance):
     def do_find(struct_object):
-        return isinstance(struct_object.Design, type) and (struct_object.Position - position).Xz.LengthSquared < max_distance * max_distance
+        return isinstance(struct_object.Design, type) and (struct_object.Position - position).Xz().LengthSquared() < max_distance * max_distance
     return World.StructureHandler.Find(do_find)
 
 def nearby_structs_designs(position, type, max_distance):

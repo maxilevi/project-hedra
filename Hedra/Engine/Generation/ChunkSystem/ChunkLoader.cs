@@ -16,9 +16,10 @@ using Hedra.Engine.Game;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.IO;
 using Hedra.Game;
+using Hedra.Numerics;
 using Timer = Hedra.Core.Timer;
 
 namespace Hedra.Engine.Generation.ChunkSystem
@@ -119,7 +120,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 BuildCandidates(_candidates);
                 for (var i = 0; i < _candidates.Count; i++)
                 {
-                    var obj = World.GetChunkByOffset(_candidates[i].Xz);
+                    var obj = World.GetChunkByOffset(_candidates[i].Xz());
                     if (obj == null || !obj.BuildedWithStructures || obj.Disposed) stopCounting = true;
                     if (!stopCounting) newTarget++;
                     if (obj != null) continue;
@@ -145,13 +146,13 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 for (var z = -radius; z < radius; z++)
                 {
                     var radiusOffset = new Vector2(x, z);
-                    if (radiusOffset.LengthSquared > radius * radius) continue;
+                    if (radiusOffset.LengthSquared() > radius * radius) continue;
                     var chunkPos = Offset + radiusOffset * new Vector2(Chunk.Width, Chunk.Width);
                     Candidates.Add(chunkPos.ToVector3());
                 }
             }
             _lastRadius = GameSettings.ChunkLoaderRadius;
-            _closest.Position = _player.Position.Xz.ToVector3();
+            _closest.Position = _player.Position.Xz().ToVector3();
             Candidates.Sort(_closest);
         }
         

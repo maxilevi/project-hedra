@@ -10,7 +10,7 @@ using Hedra.Engine.QuestSystem;
 using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Mission;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.WorldBuilding
 {

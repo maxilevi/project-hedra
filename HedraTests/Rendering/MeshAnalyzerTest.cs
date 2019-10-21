@@ -4,7 +4,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Geometry;
 using Hedra.Game;
 using NUnit.Framework;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace HedraTests.Rendering
 {

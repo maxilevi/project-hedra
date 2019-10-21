@@ -3,7 +3,8 @@ using System.Runtime.CompilerServices;
 using Hedra.BiomeSystem;
 using Hedra.Core;
 using Hedra.Engine.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
@@ -11,7 +12,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
     {
         private static int Bounds = (int) (Chunk.Width / Chunk.BlockSize); 
         private readonly Chunk _parent;
-        private readonly float _coefficient;    
+        private readonly float _coefficient;
         private int _offsetX;
         private int _offsetZ;
         private readonly int _boundsX;
@@ -94,7 +95,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var isPoint = chunkCoords == new Vector2(_offsetX, _offsetZ);
             var c = new Vector4(rng.NextFloat(), rng.NextFloat(), rng.NextFloat(), 1.0f);
             return isPoint ? new Vector4(0, 0, 0, 1.0f) : c;*/
-            return new Vector4(colorCount == 0 ? Vector3.Zero : color.Xyz / colorCount, 1.0f);
+            return new Vector4(colorCount == 0 ? Vector3.Zero : color.Xyz() / colorCount, 1.0f);
         }
 
         private void AddColorIfNecessary(int X, int Y, int Z, ref RegionColor RegionColor, ref float Noise, ref Vector4 Color, ref int ColorCount)

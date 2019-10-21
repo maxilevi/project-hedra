@@ -17,7 +17,8 @@ using Hedra.Mission.Blocks;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Player.QuestSystem
 {

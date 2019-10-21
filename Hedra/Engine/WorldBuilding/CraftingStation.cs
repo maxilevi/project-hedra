@@ -6,7 +6,8 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Game;
 using Hedra.Localization;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 
 namespace Hedra.Engine.WorldBuilding
@@ -31,8 +32,8 @@ namespace Hedra.Engine.WorldBuilding
         {
             if(!CanCraft) return;
             var player = GameManager.Player;
-            bool IsInLookingAngle() => Vector2.Dot((Position - player.Position).Xz.NormalizedFast(),
-                                           player.View.LookingDirection.Xz.NormalizedFast()) > Angle;
+            bool IsInLookingAngle() => Vector2.Dot((Position - player.Position).Xz().NormalizedFast(),
+                                           player.View.LookingDirection.Xz().NormalizedFast()) > Angle;
 
             if (IsInRadius() && IsInLookingAngle() && !player.InterfaceOpened)
             {
@@ -43,7 +44,7 @@ namespace Hedra.Engine.WorldBuilding
         
         private bool IsInRadius()
         {
-            return (Position - GameManager.Player.Position).LengthSquared < Distance * Distance;
+            return (Position - GameManager.Player.Position).LengthSquared() < Distance * Distance;
         }
         
         public override void Dispose()

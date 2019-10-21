@@ -6,7 +6,7 @@ using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using Hedra.Items;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.WorldBuilding
 {

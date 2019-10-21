@@ -7,7 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Rendering.Animation
 {
@@ -19,7 +19,7 @@ namespace Hedra.Engine.Rendering.Animation
         public Vector3 Position { get; }
         public Quaternion Rotation { get; }
         
-        private Matrix4 _lastLocalTransform;
+        private Matrix4x4 _lastLocalTransform;
         private Quaternion _lastRotation;
         private Vector3 _lastPosition;
     
@@ -27,7 +27,7 @@ namespace Hedra.Engine.Rendering.Animation
         {
             this.Position = Position;
             this.Rotation = Rotation;
-            _lastLocalTransform = Matrix4.Identity;
+            _lastLocalTransform = Matrix4x4.Identity;
             _lastRotation = Quaternion.Identity;
             _lastPosition = Vector3.Zero;
         }
@@ -43,14 +43,14 @@ namespace Hedra.Engine.Rendering.Animation
          *         transform as represented by the position and rotation in this
          *         instance, just in matrix form.
          */
-        public Matrix4 LocalTransform
+        public Matrix4x4 LocalTransform
         {
             get
             {
                 if (_lastPosition == Position && _lastRotation == Rotation) return _lastLocalTransform;
                 _lastPosition = Position;
                 _lastRotation = Rotation;
-                var matrix = Matrix4.CreateTranslation(Position);
+                var matrix = Matrix4x4.CreateTranslation(Position);
                 matrix = Rotation.ToMatrix() * matrix;
                 return _lastLocalTransform = matrix;
             }

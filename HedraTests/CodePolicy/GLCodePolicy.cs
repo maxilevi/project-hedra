@@ -28,9 +28,9 @@ namespace HedraTests.CodePolicy
             "UniformMatrix2",
             "UniformMatrix2x3",
             "UniformMatrix3",
-            "UniformMatrix4",
-            "UniformMatrix4x2",
-            "UniformMatrix4x3",
+            "UniformMatrix4x4",
+            "UniformMatrix4x4x2",
+            "UniformMatrix4x4x3",
             "UniformMatrix3x2",
             "UniformMatrix3x4",
             "UniformMatrix2x4",
@@ -39,7 +39,7 @@ namespace HedraTests.CodePolicy
         [SetUp]
         public void Setup()
         {
-            _documentation = File.ReadAllText($"{base.SolutionDirectory}/references/OpenTK.xml");
+            _documentation = File.ReadAllText($"{base.SolutionDirectory}/references/gl.xml");
             _glClassName = typeof(GLProvider).Name;
             _debugDrawerClassName = typeof(BasicGeometry).Name;
         }

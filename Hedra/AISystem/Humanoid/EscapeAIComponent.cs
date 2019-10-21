@@ -6,7 +6,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.EntitySystem;
 using Hedra.Game;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.AISystem.Humanoid
 {

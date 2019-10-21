@@ -20,7 +20,7 @@ using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Game;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 

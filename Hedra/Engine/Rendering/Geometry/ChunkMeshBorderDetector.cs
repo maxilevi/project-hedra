@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Hedra.Rendering;
 using IronPython.Modules;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Rendering.Geometry
 {

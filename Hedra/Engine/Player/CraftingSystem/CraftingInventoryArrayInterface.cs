@@ -3,7 +3,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Player.PagedInterface;
 using Hedra.Items;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Player.CraftingSystem
 {

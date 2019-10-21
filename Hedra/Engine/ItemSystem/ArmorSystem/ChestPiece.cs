@@ -1,7 +1,7 @@
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.ItemSystem.ArmorSystem
 {

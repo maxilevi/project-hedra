@@ -6,7 +6,8 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Microsoft.Scripting;
 
 namespace Hedra.Engine.Rendering.Shaders
 {
@@ -55,11 +56,26 @@ namespace Hedra.Engine.Rendering.Shaders
             {
                 if ((matches[i].Groups.Count - 1) % 3 != 0) throw new ArgumentException($"Expected remainder 0 got {(matches[i].Groups.Count - 1) % 3}");
                 var type = ParseType(matches[i].Groups[1].Value);
+                var mapping = ParseMappingType(matches[i].Groups[1].Value);
                 var key = matches[i].Groups[2].Value;
                 var size = this.ParseArraySize(matches[i].Groups[3].Value);
-                mappings.Add(new UniformArray(type, ShaderId, key, size));
+                mappings.Add(new UniformArray(type, ShaderId, key, size, mapping));
             }
             return mappings.ToArray();
+        }
+        
+        public void AddUniformTypes(Dictionary<string, MappingType> Map)
+        {
+            var matches = Regex.Matches(Source, @"\buniform\s+([a-zA-Z0-9]+)\s+([a-zA-Z0-9_]+)").Cast<Match>().ToArray();
+            for (var i = 0; i < matches.Length; i ++)
+            {
+                if ((matches[i].Groups.Count - 1) % 2 != 0) throw new ArgumentException($"Expected remainder 0 got {(matches[i].Groups.Count - 1) % 3}");
+                var type = ParseMappingType(matches[i].Groups[1].Value);
+                var key = matches[i].Groups[2].Value;
+                if(Map.ContainsKey(key) && Map[key] != type)
+                    throw new ArgumentTypeException($"Different types '{Map[key]}' and '{type}' for the same key '{key}'");
+                Map[key] = type;
+            }
         }
 
         public ShaderInput[] ParseShaderInputs()
@@ -107,11 +123,11 @@ namespace Hedra.Engine.Rendering.Shaders
             switch (Type)
             {
                 case "mat4":
-                    return typeof(Matrix4);
+                    return typeof(Matrix4x4);
                 case "mat3":
-                    return typeof(Matrix3);
+                    return typeof(Matrix4x4);
                 case "mat2":
-                    return typeof(Matrix2);
+                    return typeof(Matrix4x4);
                 case "vec4":
                     return typeof(Vector4);
                 case "vec3":
@@ -130,6 +146,27 @@ namespace Hedra.Engine.Rendering.Shaders
                     if (possibleType != null) return possibleType;
                     throw new ArgumentException($"Type '{Type}' could not be mapped to a valid type");
             }
+        }
+        
+        
+        private MappingType ParseMappingType(string Type)
+        {
+            return Type == "mat4" ? MappingType.Matrix4
+                : Type == "mat3" ? MappingType.Matrix3
+                : Type == "mat2" ? MappingType.Matrix2
+                : Type == "vec4" ? MappingType.Vector4
+                : Type == "vec3" ? MappingType.Vector3
+                : Type == "vec2" ? MappingType.Vector2
+                : Type == "bvec2" ? MappingType.Vector2
+                : Type == "float" ? MappingType.Float
+                : Type == "double" ? MappingType.Double
+                : Type == "int" ? MappingType.Integer
+                : Type == "bool" ? MappingType.Integer
+                : Type == "sampler2D" ? MappingType.Integer
+                : Type == "sampler3D" ? MappingType.Integer
+                : Type == "sampler2DShadow" ? MappingType.Integer
+                : Type == "samplerCube" ? MappingType.Integer
+                : throw new ArgumentOutOfRangeException($"Unknown mapping '{Type}'");
         }
 
         private static Type InferType(string ClassName)

@@ -3,7 +3,7 @@ using System.Drawing;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Image = Silk.NET.GLFW.Image;
 
 namespace Hedra.Engine.Management

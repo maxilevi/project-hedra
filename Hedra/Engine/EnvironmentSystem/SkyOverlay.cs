@@ -5,9 +5,10 @@ using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Rendering.Geometry;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.EnvironmentSystem
 {
@@ -18,7 +19,7 @@ namespace Hedra.Engine.EnvironmentSystem
         private readonly VBO<Vector3> _vertices;
         private readonly VAO<Vector3> _buffer;
         private readonly Cubemap _map;
-        public Matrix4 TransformationMatrix { get; set; } = Matrix4.Identity;
+        public Matrix4x4 TransformationMatrix { get; set; } = Matrix4x4.Identity;
         public Vector4 ColorMultiplier { get; set; } = Vector4.One;
 
         static SkyOverlay()
@@ -34,7 +35,7 @@ namespace Hedra.Engine.EnvironmentSystem
         private SkyOverlay()
         {
             var geometry = Geometry.Cube();
-            _vertices = new VBO<Vector3>(geometry.Vertices, geometry.Vertices.Length * Vector3.SizeInBytes, VertexAttribPointerType.Float);
+            _vertices = new VBO<Vector3>(geometry.Vertices, geometry.Vertices.Length * HedraSize.Vector3, VertexAttribPointerType.Float);
             _buffer = new VAO<Vector3>(_vertices);
         }
 
@@ -48,7 +49,7 @@ namespace Hedra.Engine.EnvironmentSystem
             
             Shader["map"] = 0;
             Shader["mvp"] = Culling.ModelViewMatrix.ClearTranslation() * Culling.ProjectionMatrix;
-            Shader["trans_matrix"] = Matrix4.CreateScale(4) * TransformationMatrix;
+            Shader["trans_matrix"] = Matrix4x4.CreateScale(4) * TransformationMatrix;
             Shader["color_multiplier"] = ColorMultiplier;
 
             Renderer.DrawArrays(PrimitiveType.Triangles, 0, _vertices.Count);

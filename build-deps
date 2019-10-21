@@ -1,0 +1,21 @@
+echo -e "Building hedra-core"
+./hedra-core/build.sh
+
+echo -e "Building Silk.NET"
+dotnet msbuild ./Silk.NET/Silk.NET.sln -p:Configuration=Release
+
+echo -e "Copying files..."
+cp ./hedra-core/cmake-build-x32/Release/hedracore.dll ./Hedra/x32/hedracore.dll
+cp ./hedra-core/cmake-build-x64/Release/hedracore.dll ./Hedra/x64/hedracore.dll
+
+mkdir ./references/Silk.NET/
+cp ./Silk.NET/examples/Triangle/bin/Release/Silk.NET.Core.dll ./references/Silk.NET/Silk.NET.Core.dll
+cp ./Silk.NET/examples/Triangle/bin/Release/Silk.NET.GLFW.dll ./references/Silk.NET/Silk.NET.GLFW.dll
+cp ./Silk.NET/examples/Triangle/bin/Release/Silk.NET.Input.Common.dll ./references/Silk.NET/Silk.NET.Input.Common.dll
+cp ./Silk.NET/examples/Triangle/bin/Release/Silk.NET.Input.Desktop.dll ./references/Silk.NET/Silk.NET.Input.Desktop.dll
+cp ./Silk.NET/examples/Triangle/bin/Release/Silk.NET.Input.dll ./references/Silk.NET/Silk.NET.Input.dll
+cp ./Silk.NET/examples/Triangle/bin/Release/Silk.NET.OpenAL.dll ./references/Silk.NET/Silk.NET.OpenAL.dll
+cp ./Silk.NET/examples/Triangle/bin/Release/Silk.NET.OpenGL.dll ./references/Silk.NET/Silk.NET.OpenGL.dll
+cp ./Silk.NET/examples/Triangle/bin/Release/Silk.NET.Windowing.Common.dll ./references/Silk.NET/Silk.NET.Windowing.Common.dll
+cp ./Silk.NET/examples/Triangle/bin/Release/Silk.NET.Windowing.Desktop.dll ./references/Silk.NET/Silk.NET.Windowing.Desktop.dll
+cp ./Silk.NET/examples/Triangle/bin/Release/Silk.NET.Windowing.dll ./references/Silk.NET/Silk.NET.Windowing.dll

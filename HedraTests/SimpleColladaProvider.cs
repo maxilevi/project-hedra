@@ -1,5 +1,5 @@
 using Hedra.Engine.Rendering.Animation.ColladaParser;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace HedraTests
 {
@@ -9,7 +9,7 @@ namespace HedraTests
         {
             return new AnimatedModelData(
                 new ModelData(new Vector3[0], new Vector3[0], new Vector3[0], new uint[0], new Vector3[0], new Vector3[0]),
-                new JointsData(0, new JointData(1, "Root", Matrix4.Identity))
+                new JointsData(0, new JointData(1, "Root", Matrix4x4.Identity))
                 );
         }
 

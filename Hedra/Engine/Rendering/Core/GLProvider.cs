@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Hedra.Engine.IO;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 using Silk.NET.OpenGL;
@@ -633,7 +633,7 @@ namespace Hedra.Engine.Rendering.Core
         
         public void Uniform1(int Location, double Uniform)
         {
-            GL.Uniform1(Location, (float)Uniform);
+            GL.Uniform1(Location, Uniform);
             EnsureNoErrors();
         }       
 
@@ -655,24 +655,33 @@ namespace Hedra.Engine.Rendering.Core
             EnsureNoErrors();
         }
 
-        public unsafe void UniformMatrix2(int Location, bool Transpose, ref Matrix2 Uniform)
+        public unsafe void UniformMatrix2(int Location, bool Transpose, ref Matrix4x4 Uniform)
         {
-            var matrix = Uniform;
-            GL.UniformMatrix2(Location, 1, Transpose, (float*)&(matrix.Row0));
+            var mem = new Vector4(Uniform.M11, Uniform.M12, Uniform.M21, Uniform.M22);
+            GL.UniformMatrix2(Location, 1, Transpose, &mem.X);
             EnsureNoErrors();
         }
 
-        public unsafe void UniformMatrix3(int Location, bool Transpose, ref Matrix3 Uniform)
+        public unsafe void UniformMatrix3(int Location, bool Transpose, ref Matrix4x4 Uniform)
         {
-            var matrix = Uniform;
-            GL.UniformMatrix3(Location, 1, Transpose, (float*)&(matrix.Row0));
+            var mem = stackalloc float[9];
+            mem[0] = Uniform.M11;
+            mem[1] = Uniform.M12;
+            mem[2] = Uniform.M13;
+            mem[3] = Uniform.M21;
+            mem[4] = Uniform.M22;
+            mem[5] = Uniform.M23;
+            mem[6] = Uniform.M31;
+            mem[7] = Uniform.M32;
+            mem[8] = Uniform.M33;
+            GL.UniformMatrix3(Location, 1, Transpose, mem);
             EnsureNoErrors();
         }
 
-        public unsafe void UniformMatrix4(int Location, bool Transpose, ref Matrix4 Uniform)
+        public unsafe void UniformMatrix4x4(int Location, bool Transpose, ref Matrix4x4 Uniform)
         {
-            var matrix = Uniform;
-            GL.UniformMatrix4(Location, 1, Transpose, (float*)&(matrix.Row0));
+            fixed(float* ptr = &Uniform.M11)
+                GL.UniformMatrix4(Location, 1, false, ptr);
             EnsureNoErrors();
         }
 

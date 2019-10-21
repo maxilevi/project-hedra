@@ -6,7 +6,6 @@ using Hedra.BiomeSystem;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -18,7 +17,8 @@ using Hedra.Engine.WorldBuilding;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
@@ -39,12 +39,12 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var rng = new Random((int)(position.X / 11 * (position.Z / 13)));
             var originalRoaster = CacheManager.GetModel(CacheItem.CampfireRoaster);
             var roasterModel = originalRoaster.ShallowClone();
-            roasterModel.Transform(Matrix4.CreateScale(roasterScale));
+            roasterModel.Transform(Matrix4x4.CreateScale(roasterScale));
             var originalCenterModel = CacheManager.GetModel(CacheItem.CampfireLogs);
             var centerModel = originalCenterModel.ShallowClone();
             var model = new VertexData();
 
-            var scaleMatrix = Structure.Parameters.Get<Matrix4>("ScaleMatrix");
+            var scaleMatrix = Structure.Parameters.Get<Matrix4x4>("ScaleMatrix");
             
             roasterModel.Transform(scaleMatrix);
             centerModel.Transform(scaleMatrix);
@@ -62,7 +62,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             shapes.AddRange(roasterShapes.ToArray());
             for (var i = 0; i < shapes.Count; i++)
             {
-                if (i != 0) shapes[i].Transform(Matrix4.CreateScale(roasterScale));
+                if (i != 0) shapes[i].Transform(Matrix4x4.CreateScale(roasterScale));
                 shapes[i].Transform(scaleMatrix);
             }
 
@@ -73,12 +73,12 @@ namespace Hedra.Engine.StructureSystem.Overworld
             {
                 MakeTent(tents[i], rng, Structure);
                 enemies[i] = World.WorldBuilding.SpawnBandit(
-                    tents[i].WorldPosition + Vector3.TransformPosition(Vector3.UnitZ * 24, tents[i].RotationMatrix), Level);
+                    tents[i].WorldPosition + Vector3.Transform(Vector3.UnitZ * 24, tents[i].RotationMatrix), Level);
             }
 
             DecorationsPlacer.PlaceWhenWorldReady(position, P =>
             {
-                var transform = Matrix4.CreateTranslation(P);
+                var transform = Matrix4x4.CreateTranslation(P);
                 Structure.AddCollisionShape(shapes.Select(S => S.Transform(transform)).ToArray());
                 Structure.AddStaticElement(model.Transform(transform)); 
             }, () => Structure.Disposed);
@@ -89,7 +89,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             for (var i = 0; i < OccupiedSpots.Count; i++)
             {
-                if ((OccupiedSpots[i].WorldPosition - NewSpot).LengthSquared < 16*16) return true;
+                if ((OccupiedSpots[i].WorldPosition - NewSpot).LengthSquared() < 16*16) return true;
             }
             return false;
         }
@@ -130,18 +130,18 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 var originalCampfire = CacheManager.GetModel(CacheItem.CampfireTent);
                 var campfireShapes = CacheManager.GetShape(originalCampfire).DeepClone();
 
-                var positionMatrix = Matrix4.CreateTranslation(parameters.Position);
+                var positionMatrix = Matrix4x4.CreateTranslation(parameters.Position);
 
                 for (var k = 0; k < campfireShapes.Count; k++)
                 {
-                    campfireShapes[k].Transform(Matrix4.CreateTranslation(currentModelOffset));
+                    campfireShapes[k].Transform(Matrix4x4.CreateTranslation(currentModelOffset));
                     campfireShapes[k].Transform(parameters.TransformationMatrix);
                     campfireShapes[k].Transform(parameters.RotationMatrix);
                     campfireShapes[k].Transform(positionMatrix);
                 }
 
                 var campfire = originalCampfire.ShallowClone();
-                campfire.Transform(Matrix4.CreateTranslation(currentModelOffset));
+                campfire.Transform(Matrix4x4.CreateTranslation(currentModelOffset));
                 campfire.Transform(parameters.TransformationMatrix);
                 campfire.Transform(parameters.RotationMatrix);
                 campfire.Transform(positionMatrix);
@@ -155,7 +155,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
         {
             var structure = base.Setup(TargetPosition, Rng, new BanditCamp(TargetPosition, this.PlateauRadius));
-            var scaleMatrix = Matrix4.CreateScale(3 + Rng.NextFloat() * 1.5f);
+            var scaleMatrix = Matrix4x4.CreateScale(3 + Rng.NextFloat() * 1.5f);
             var tents = this.SetupTents(TargetPosition, scaleMatrix, Rng);         
 
             structure.AddGroundwork(new RoundedGroundwork(TargetPosition, 16f, BlockType.Dirt));
@@ -169,7 +169,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             return structure;
         }
 
-        private TentParameters[] SetupTents(Vector3 TargetPosition, Matrix4 ScaleMatrix, Random Rng)
+        private TentParameters[] SetupTents(Vector3 TargetPosition, Matrix4x4 ScaleMatrix, Random Rng)
         {
             var tents = new List<TentParameters>();
 
@@ -177,12 +177,12 @@ namespace Hedra.Engine.StructureSystem.Overworld
             for (var i = 0; i < extraCampfires; i++)
             {
                 float dist = (22 + Rng.NextFloat() * 6f) * Chunk.BlockSize;
-                var rotationMatrix = Matrix4.CreateRotationY(360f / extraCampfires * i * Mathf.Radian);
-                var newPosition = Vector3.TransformPosition(Vector3.UnitX * dist, rotationMatrix) + TargetPosition;
+                var rotationMatrix = Matrix4x4.CreateRotationY(360f / extraCampfires * i * Mathf.Radian);
+                var newPosition = Vector3.Transform(Vector3.UnitX * dist, rotationMatrix) + TargetPosition;
                 var tent = new TentParameters
                 {
                     Position = newPosition,
-                    RotationMatrix = Matrix4.CreateRotationY(360f / extraCampfires * i * Mathf.Radian),
+                    RotationMatrix = Matrix4x4.CreateRotationY(360f / extraCampfires * i * Mathf.Radian),
                     TransformationMatrix = ScaleMatrix,
                     WorldPosition = newPosition
                 };
@@ -192,13 +192,13 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var randomCampfires = 4;
             for (var i = 0; i < randomCampfires; i++)
             {
-                var rotationMatrix = Matrix4.CreateRotationY(360f * Rng.NextFloat()* Mathf.Radian);
+                var rotationMatrix = Matrix4x4.CreateRotationY(360f * Rng.NextFloat()* Mathf.Radian);
                 var spawnRadius = PlateauRadius * .5f;
                 var randomPosition = Vector3.UnitX * (Rng.NextFloat() * spawnRadius * 2f - spawnRadius)
                                      + Vector3.UnitZ * (Rng.NextFloat() * spawnRadius * 2f - spawnRadius);
                 var newPosition = TargetPosition + randomPosition;
 
-                if (this.IntersectsWithOtherCampfires(tents, newPosition) || (TargetPosition - newPosition).LengthFast < 6 * Chunk.BlockSize) continue;
+                if (this.IntersectsWithOtherCampfires(tents, newPosition) || (TargetPosition - newPosition).LengthFast() < 6 * Chunk.BlockSize) continue;
 
                 tents.Add(new TentParameters
                 {
@@ -232,8 +232,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public class TentParameters
         {
             public Vector3 Position { get; set; }
-            public Matrix4 RotationMatrix { get; set; }
-            public Matrix4 TransformationMatrix { get; set; }
+            public Matrix4x4 RotationMatrix { get; set; }
+            public Matrix4x4 TransformationMatrix { get; set; }
             public Vector3 WorldPosition { get; set; }
         }
     }

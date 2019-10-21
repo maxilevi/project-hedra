@@ -18,12 +18,13 @@ using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Windowing;
 using Hedra.Game;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Rendering.Animation
 {
@@ -56,7 +57,7 @@ namespace Hedra.Engine.Rendering.Animation
         public Vector3[] VerticesArray => _baseModelData.Vertices;
         private ModelData _baseModelData;
         private readonly List<ModelData> _addedModels;
-        private readonly Matrix4[] _jointMatrices;
+        private readonly Matrix4x4[] _jointMatrices;
         private readonly Animator _animator;
         private readonly object _syncRoot;
         private Shader _shader = DefaultShader;
@@ -68,12 +69,12 @@ namespace Hedra.Engine.Rendering.Animation
         private bool _disposed;
         private Vector3 _rotation;
         private Vector3 _cacheRotation = -Vector3.One;
-        private Matrix4 _rotationCache;
+        private Matrix4x4 _rotationCache;
         private Vector3 _cacheScale;
-        private Matrix4 _scaleCache;
+        private Matrix4x4 _scaleCache;
         private Vector3 _cachePosition;
-        private Matrix4 _positionCache;
-        private Matrix4 _transformationMatrix = Matrix4.Identity;
+        private Matrix4x4 _positionCache;
+        private Matrix4x4 _transformationMatrix = Matrix4x4.Identity;
         private bool _jointsDirty = true;
 
         public AnimatedModel(ModelData Model, Joint RootJoint, int JointCount)
@@ -83,18 +84,18 @@ namespace Hedra.Engine.Rendering.Animation
             _addedModels = new List<ModelData>();
             Executer.ExecuteOnMainThread(delegate
             {
-                _vertices = new VBO<Vector3>(Model.Vertices, Model.Vertices.Length * Vector3.SizeInBytes,
+                _vertices = new VBO<Vector3>(Model.Vertices, Model.Vertices.Length * HedraSize.Vector3,
                     VertexAttribPointerType.Float);
-                _colors = new VBO<Vector3>(Model.Colors, Model.Colors.Length * Vector3.SizeInBytes,
+                _colors = new VBO<Vector3>(Model.Colors, Model.Colors.Length * HedraSize.Vector3,
                     VertexAttribPointerType.Float);
-                _normals = new VBO<Vector3>(Model.Normals, Model.Normals.Length * Vector3.SizeInBytes,
+                _normals = new VBO<Vector3>(Model.Normals, Model.Normals.Length * HedraSize.Vector3,
                     VertexAttribPointerType.Float);
                 _indices = new VBO<uint>(Model.Indices, Model.Indices.Length * sizeof(uint),
                     VertexAttribPointerType.UnsignedInt, BufferTarget.ElementArrayBuffer);
-                _jointIds = new VBO<Vector3>(Model.JointIds, Model.JointIds.Length * Vector3.SizeInBytes,
+                _jointIds = new VBO<Vector3>(Model.JointIds, Model.JointIds.Length * HedraSize.Vector3,
                     VertexAttribPointerType.Float);
                 _vertexWeights = new VBO<Vector3>(Model.VertexWeights,
-                    Model.VertexWeights.Length * Vector3.SizeInBytes, VertexAttribPointerType.Float);
+                    Model.VertexWeights.Length * HedraSize.Vector3, VertexAttribPointerType.Float);
                 Data = new VAO<Vector3, Vector3, Vector3, Vector3, Vector3>(_vertices, _colors, _normals,
                     _jointIds, _vertexWeights);
             });
@@ -102,13 +103,13 @@ namespace Hedra.Engine.Rendering.Animation
             this.JointCount = JointCount;
             _animator = new Animator(this.RootJoint);
             _syncRoot = new object();
-            this.RootJoint.CalculateInverseBindTransform(Matrix4.Identity);
+            this.RootJoint.CalculateInverseBindTransform(Matrix4x4.Identity);
             Alpha = 1.0f;
             Tint = Vector4.One;
             Scale = Vector3.One * 1.0f;
             ApplyFog = true;
             Enabled = true;
-            _jointMatrices = new Matrix4[JointCount];
+            _jointMatrices = new Matrix4x4[JointCount];
             DrawManager.Add(this);
         }
 
@@ -137,12 +138,12 @@ namespace Hedra.Engine.Rendering.Animation
             Executer.ExecuteOnMainThread(delegate
             {
                 if (_disposed) return;
-                _vertices.Update(model.Vertices, model.Vertices.Length * Vector3.SizeInBytes);
-                _colors.Update(model.Colors, model.Colors.Length * Vector4.SizeInBytes);
-                _normals.Update(model.Normals, model.Normals.Length * Vector3.SizeInBytes);
+                _vertices.Update(model.Vertices, model.Vertices.Length * HedraSize.Vector3);
+                _colors.Update(model.Colors, model.Colors.Length * HedraSize.Vector4);
+                _normals.Update(model.Normals, model.Normals.Length * HedraSize.Vector3);
                 _indices.Update(model.Indices, model.Indices.Length * sizeof(uint));
-                _jointIds.Update(model.JointIds, model.JointIds.Length * Vector3.SizeInBytes);
-                _vertexWeights.Update(model.VertexWeights, model.VertexWeights.Length * Vector3.SizeInBytes);
+                _jointIds.Update(model.JointIds, model.JointIds.Length * HedraSize.Vector3);
+                _vertexWeights.Update(model.VertexWeights, model.VertexWeights.Length * HedraSize.Vector3);
             });
         }
         
@@ -154,7 +155,7 @@ namespace Hedra.Engine.Rendering.Animation
                     throw new ArgumentOutOfRangeException(
                         $"The new colors array can't have more data than the previous one.");
 
-                _colors.Update(ColorArray, ColorArray.Length * Vector3.SizeInBytes);
+                _colors.Update(ColorArray, ColorArray.Length * HedraSize.Vector3);
             });
         }
 
@@ -196,7 +197,7 @@ namespace Hedra.Engine.Rendering.Animation
             DrawModel(projectionViewMat, viewMat);
         }
 
-        public void DrawModel(Matrix4 ProjectionViewMat, Matrix4 ViewMatrix)
+        public void DrawModel(Matrix4x4 ProjectionViewMat, Matrix4x4 ViewMatrix)
         {
             if (!Enabled || _disposed || Data == null) return;
             Renderer.Enable(EnableCap.DepthTest);
@@ -212,7 +213,7 @@ namespace Hedra.Engine.Rendering.Animation
             Renderer.Disable(EnableCap.Blend);
         }
 
-        private void DoDrawModel(Matrix4 ProjectionViewMat, Matrix4 ViewMatrix)
+        private void DoDrawModel(Matrix4x4 ProjectionViewMat, Matrix4x4 ViewMatrix)
         {
             _shader.Bind();
 
@@ -299,7 +300,7 @@ namespace Hedra.Engine.Rendering.Animation
             }
         }
 
-        public Matrix4[] JointTransforms => _jointMatrices;
+        public Matrix4x4[] JointTransforms => _jointMatrices;
 
         private void UpdateJointTransforms(bool Force = false)
         {
@@ -310,7 +311,7 @@ namespace Hedra.Engine.Rendering.Animation
             }
         }
 
-        private void AddJointsToArray(Joint HeadJoint, Matrix4[] JointMatrices)
+        private void AddJointsToArray(Joint HeadJoint, Matrix4x4[] JointMatrices)
         {
             var scaleAndRotation = ScaleMatrix * RotationMatrix;
             var transformationAndPosition = TransformationMatrix * PositionMatrix;
@@ -328,7 +329,7 @@ namespace Hedra.Engine.Rendering.Animation
             }
         }
 
-        public Matrix4 MatrixFromJoint(Joint TargetJoint)
+        public Matrix4x4 MatrixFromJoint(Joint TargetJoint)
         {
             UpdateJointTransforms();
             return JointTransforms[TargetJoint.Index];
@@ -338,7 +339,7 @@ namespace Hedra.Engine.Rendering.Animation
         {
             var totalLocalPos = Vector3.Zero;
             var jointTransform = JointTransforms[TargetJoint.Index];
-            var posePosition = Vector3.TransformPosition(Position, jointTransform);
+            var posePosition = Vector3.Transform(Position, jointTransform);
             totalLocalPos += posePosition * 1f; //WeightsArray[TargetJoint.Index][i];
 
             return totalLocalPos;
@@ -371,7 +372,7 @@ namespace Hedra.Engine.Rendering.Animation
 
         private bool BuffersCreated => Data != null;
 
-        public Matrix4 TransformationMatrix
+        public Matrix4x4 TransformationMatrix
         {
             get => _transformationMatrix;
             set
@@ -417,38 +418,38 @@ namespace Hedra.Engine.Rendering.Animation
             }
         }
 
-        private Matrix4 RotationMatrix
+        private Matrix4x4 RotationMatrix
         {
             get
             {
                 if (LocalRotation == _cacheRotation) return _rotationCache;
-                _rotationCache = Matrix4.CreateRotationX(LocalRotation.X * Mathf.Radian) *
-                                 Matrix4.CreateRotationY(LocalRotation.Y * Mathf.Radian) *
-                                 Matrix4.CreateRotationZ(LocalRotation.Z * Mathf.Radian);
+                _rotationCache = Matrix4x4.CreateRotationX(LocalRotation.X * Mathf.Radian) * 
+                        Matrix4x4.CreateRotationY(LocalRotation.Y * Mathf.Radian) *
+                        Matrix4x4.CreateRotationZ(LocalRotation.Z * Mathf.Radian);
                 _cacheRotation = LocalRotation;
                 _jointsDirty = true;
                 return _rotationCache;
             }
         }
 
-        private Matrix4 ScaleMatrix
+        private Matrix4x4 ScaleMatrix
         {
             get
             {
                 if (Scale == _cacheScale) return _scaleCache;
-                _scaleCache = Matrix4.CreateScale(Scale);
+                _scaleCache = Matrix4x4.CreateScale(Scale);
                 _cacheScale = Scale;
                 _jointsDirty = true;
                 return _scaleCache;
             }
         }
 
-        private Matrix4 PositionMatrix
+        private Matrix4x4 PositionMatrix
         {
             get
             {
                 if (Position == _cachePosition) return _positionCache;
-                _positionCache = Matrix4.CreateTranslation(Position);
+                _positionCache = Matrix4x4.CreateTranslation(Position);
                 _cachePosition = Position;
                 _jointsDirty = true;
                 return _positionCache;

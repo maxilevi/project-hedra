@@ -4,7 +4,7 @@ using Hedra.Engine.Scripting;
 using Hedra.EntitySystem;
 using Hedra.Mission;
 using NUnit.Framework;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace HedraTests.QuestSystem
 {

@@ -7,7 +7,8 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Localization;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Archer.Scout
 {

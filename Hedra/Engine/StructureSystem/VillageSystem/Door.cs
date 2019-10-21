@@ -14,7 +14,8 @@ using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
@@ -122,7 +123,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         {
             var xSize = Vector3.UnitX * (Mesh.SupportPoint(Vector3.UnitX).X - Mesh.SupportPoint(-Vector3.UnitX).X);
             var zSize = Vector3.UnitZ * (Mesh.SupportPoint(Vector3.UnitZ).Z - Mesh.SupportPoint(-Vector3.UnitZ).Z);
-            return (xSize.LengthFast > zSize.LengthFast ? xSize : zSize) * (Inverted ? -.5f : .5f);
+            return (xSize.LengthFast() > zSize.LengthFast() ? xSize : zSize) * (Inverted ? -.5f : .5f);
         }
 
         public override void Dispose()

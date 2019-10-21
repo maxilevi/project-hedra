@@ -123,9 +123,6 @@
       <HintPath>..\packages\NVorbis.0.8.6\lib\net35\NVorbis.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="OpenToolkit.Mathematics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\references\OpenToolkit\OpenToolkit.Mathematics.dll</HintPath>
-    </Reference>
     <Reference Include="Silk.NET.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\references\Silk.NET\Silk.NET.Core.dll</HintPath>
     </Reference>
@@ -172,8 +169,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <HintPath>..\packages\System.Numerics.Vectors.4.4.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    <Reference Include="System.Numerics.Vectors, Version=4.1.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\System.Numerics.Vectors.4.6.0-preview5.19224.8\lib\net46\System.Numerics.Vectors.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -396,6 +393,7 @@
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\GenericBuilderWithNPC.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\GenericNPCSettings.cs" />
     <Compile Include="Engine\Windowing\GLEnums.cs" />
+    <Compile Include="Engine\Windowing\HedraMarshal.cs" />
     <Compile Include="Engine\Windowing\KeyboardKeyEventArgs.cs" />
     <Compile Include="Engine\Windowing\MouseButtonEventArgs.cs" />
     <Compile Include="Engine\Windowing\MouseMoveEventArgs.cs" />
@@ -423,6 +421,11 @@
     <Compile Include="Mission\QuestReward.cs" />
     <Compile Include="ModelHandlers\BeetleHandler.cs" />
     <Compile Include="Mission\MissionBuilder.cs" />
+    <Compile Include="Numerics\IRandom.cs" />
+    <Compile Include="Numerics\Mathf.cs" />
+    <Compile Include="Numerics\QuaternionMath.cs" />
+    <Compile Include="Numerics\RandomDistribution.cs" />
+    <Compile Include="Numerics\VectorExtensions.cs" />
     <Compile Include="Rendering\Graphics2D.cs" />
     <Compile Include="Structures\GhostTownBossDesign.cs" />
     <Compile Include="Structures\GhostTownPortalDesign.cs" />
@@ -464,7 +467,6 @@
     <Compile Include="Components\ThoughtsComponent.cs" />
     <Compile Include="Components\TradeComponent.cs" />
     <Compile Include="Components\VillagerThoughtsComponent.cs" />
-    <Compile Include="Core\Mathf.cs" />
     <Compile Include="Core\TaskScheduler.cs" />
     <Compile Include="Core\Time.cs" />
     <Compile Include="Core\Timer.cs" />
@@ -980,8 +982,6 @@
     <Compile Include="Engine\ClassSystem\RogueDesign.cs" />
     <Compile Include="Engine\ClassSystem\WarriorDesign.cs" />
     <Compile Include="Engine\CompatibilityManager.cs" />
-    <Compile Include="Engine\ComplexMath\IRandom.cs" />
-    <Compile Include="Engine\ComplexMath\RandomDistribution.cs" />
     <Compile Include="Engine\Core\RegistryFactory.cs" />
     <Compile Include="Engine\Core\ICountable.cs" />
     <Compile Include="Engine\Core\IPositionable.cs" />
@@ -1119,7 +1119,6 @@
     <Compile Include="Engine\Management\DistributedExecuter.cs" />
     <Compile Include="Engine\Management\ITickable.cs" />
     <Compile Include="Engine\Management\TickSystem.cs" />
-    <Compile Include="Engine\ComplexMath\QuaternionMath.cs" />
     <Compile Include="Engine\Management\TrackItem.cs" />
     <Compile Include="Engine\ModuleSystem\AnimationEvents\AnimationEventBuilder.cs" />
     <Compile Include="Engine\ModuleSystem\HumanoidFactory.cs" />

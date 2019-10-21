@@ -13,7 +13,7 @@ using Hedra.Engine.Core;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Rendering
 {
@@ -27,7 +27,7 @@ namespace Hedra.Engine.Rendering
 
         public IList<Vector4> Colors { get; set; }
         public IList<float> ExtraData { get; set; }
-        public Matrix4 TransMatrix { get; set; }
+        public Matrix4x4 TransMatrix { get; set; }
         public object ColorCache { get; set; }
         public object ExtraDataCache { get; set; }
         public bool HasExtraData => (ExtraData != null && ExtraData.Count != 0) || ExtraDataCache != null;
@@ -38,7 +38,7 @@ namespace Hedra.Engine.Rendering
         public Func<BlockType, bool> PlaceCondition { get; set; }
         public VertexData OriginalMesh { get; set; }
 
-        public void Apply(Matrix4 Transformation)
+        public void Apply(Matrix4x4 Transformation)
         {
             TransMatrix *= Transformation;
             ApplyRecursively(I => I.Apply(Transformation));
@@ -49,7 +49,7 @@ namespace Hedra.Engine.Rendering
             get
             {
                 if (_boundsInitialized) return _bounds;
-                var diagonal = Vector3.TransformPosition(OriginalMesh.SupportPoint(Vector3.One) - OriginalMesh.SupportPoint(-Vector3.One), TransMatrix);
+                var diagonal = Vector3.Transform(OriginalMesh.SupportPoint(Vector3.One) - OriginalMesh.SupportPoint(-Vector3.One), TransMatrix);
                 _bounds.X = diagonal.X;
                 _bounds.X = diagonal.X;
                 _bounds.X = diagonal.X;
@@ -58,6 +58,6 @@ namespace Hedra.Engine.Rendering
             }
         }
         
-        public Vector3 Position => Vector3.TransformPosition(Vector3.Zero, TransMatrix);
+        public Vector3 Position => Vector3.Transform(Vector3.Zero, TransMatrix);
     }
 }

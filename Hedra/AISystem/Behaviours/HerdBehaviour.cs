@@ -5,7 +5,7 @@ using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.EntitySystem;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.AISystem.Behaviours
 {
@@ -35,7 +35,7 @@ namespace Hedra.AISystem.Behaviours
                             /*if (nearEntities.Count < 4)
                             {
                                 //Check if it is an arrow
-                                if ((Args.Damager.Position - Parent.Position).LengthSquared > CallRadius * CallRadius)
+                                if ((Args.Damager.Position - Parent.Position).LengthSquared() > CallRadius * CallRadius)
                                 {
                                     herd.SetFlee(Parent.Position + (Args.Damager.Position - Parent.Position).NormalizedFast(), CallRadius);
                                 }

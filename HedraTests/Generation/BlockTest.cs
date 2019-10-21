@@ -3,14 +3,15 @@ using Hedra;
 using Hedra.Core;
 using Hedra.Engine.Generation;
 using NUnit.Framework;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
+using Silk.NET.Core.Math;
 
 namespace HedraTests.Generation
 {
     [TestFixture]
     public class BlockTest
     {
-
         [Test]
         public void TestDefaultValues()
         {

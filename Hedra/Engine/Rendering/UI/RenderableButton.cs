@@ -9,7 +9,7 @@
 using System;
 using System.IO;
 using System.Drawing;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 using Hedra.Engine.Core;
 using Hedra.Engine.Events;

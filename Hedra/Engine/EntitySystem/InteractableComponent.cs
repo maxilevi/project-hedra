@@ -7,8 +7,8 @@ using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Localization;
-using OpenToolkit.Mathematics;
-
+using System.Numerics;
+using Hedra.Numerics;
 using Silk.NET.Input.Common;
 
 namespace Hedra.Engine.EntitySystem
@@ -38,9 +38,9 @@ namespace Hedra.Engine.EntitySystem
         {
             var player = GameManager.Player;
 
-            bool IsInLookingAngle() => Vector2.Dot((Parent.Position - player.Position).Xz.NormalizedFast(),
-                                           player.View.LookingDirection.Xz.NormalizedFast()) > .9f;
-            bool IsInRadius() => (Parent.Position - player.Position).LengthSquared < InteractDistance * InteractDistance;
+            bool IsInLookingAngle() => Vector2.Dot((Parent.Position - player.Position).Xz().NormalizedFast(),
+                                           player.View.LookingDirection.Xz().NormalizedFast()) > .9f;
+            bool IsInRadius() => (Parent.Position - player.Position).LengthSquared() < InteractDistance * InteractDistance;
 
             if (IsInLookingAngle() && IsInRadius())
             {

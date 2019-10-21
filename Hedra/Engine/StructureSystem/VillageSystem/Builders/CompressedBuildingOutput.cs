@@ -6,7 +6,7 @@ using System;
 using System.Collections;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
@@ -27,7 +27,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         {
             var height = Physics.HeightAtPosition(Position);
             Structures.ForEach(S => S.Position += Vector3.UnitY * height);
-            var transMatrix = Matrix4.CreateTranslation(Vector3.UnitY * height);
+            var transMatrix = Matrix4x4.CreateTranslation(Vector3.UnitY * height);
             Shapes.ForEach(S => S.Transform(transMatrix));
             Models.ForEach(M => M.Transform(transMatrix));
             for (var i = Instances.Count - 1; i > -1; --i)
@@ -44,7 +44,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 if (Instances[i].PlaceCondition == null || Instances[i].PlaceCondition(block.Type))
                 {
                     var instanceHeight = Physics.HeightAtPosition(position);
-                    Instances[i].Apply(Matrix4.CreateTranslation(Vector3.UnitY * instanceHeight));
+                    Instances[i].Apply(Matrix4x4.CreateTranslation(Vector3.UnitY * instanceHeight));
                 }
                 else
                 {

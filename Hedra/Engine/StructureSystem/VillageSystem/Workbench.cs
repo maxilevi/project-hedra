@@ -1,7 +1,7 @@
 using Hedra.Engine.Localization;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Localization;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {

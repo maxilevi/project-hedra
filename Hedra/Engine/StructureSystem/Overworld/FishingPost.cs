@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {

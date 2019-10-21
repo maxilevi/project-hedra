@@ -9,7 +9,8 @@ using Hedra.Engine.PlantSystem.Harvestables;
 using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.Items;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.PlantSystem
 {

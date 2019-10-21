@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using Hedra.Engine.ItemSystem;
 using Hedra.Items;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Networking.Packets
 {

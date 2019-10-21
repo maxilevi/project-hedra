@@ -4,13 +4,13 @@ using Hedra.BiomeSystem;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Mission;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem
 {
@@ -20,18 +20,18 @@ namespace Hedra.Engine.StructureSystem
         protected abstract float QuestChance { get; }
         protected virtual Vector3 DefaultLookingDirection => Vector3.UnitZ;
         
-        protected override void DoBuild(CollidableStructure Structure, Matrix4 Rotation, Matrix4 Translation, Random Rng)
+        protected override void DoBuild(CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation, Random Rng)
         {
             if (Rng.NextFloat() < QuestChance)
             {
-                DoWhenChunkReady(Vector3.TransformPosition(Vector3.Zero, Rotation * Translation), P =>
+                DoWhenChunkReady(Vector3.Transform(Vector3.Zero, Rotation * Translation), P =>
                 {
-                    var position = Vector3.TransformPosition(Offset, Rotation) + P;
+                    var position = Vector3.Transform(Offset, Rotation) + P;
                     var npc = World.WorldBuilding.SpawnVillager(
                         position,
                         Rng
                     );
-                    npc.Rotation = Physics.DirectionToEuler(npc.Orientation = -Vector3.TransformPosition(DefaultLookingDirection, Rotation));
+                    npc.Rotation = Physics.DirectionToEuler(npc.Orientation = -Vector3.Transform(DefaultLookingDirection, Rotation));
                     npc.Position = position;
                     npc.Physics.UsePhysics = false;
                     npc.AddComponent(new QuestGiverComponent(npc, MissionPool.Random(position)));

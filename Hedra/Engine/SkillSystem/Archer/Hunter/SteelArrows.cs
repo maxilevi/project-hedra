@@ -11,7 +11,8 @@ using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.WeaponSystem;
 using Hedra.WorldObjects;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Archer.Hunter
 {

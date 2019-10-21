@@ -4,7 +4,8 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem.AnimationEvents;
 using Hedra.EntitySystem;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.AISystem.Behaviours
 {
@@ -88,7 +89,7 @@ namespace Hedra.AISystem.Behaviours
         
         private bool IsInChargeRadius()
         {
-            return (_target.Position.Xz - Parent.Position.Xz).LengthSquared > ChargeDistance * ChargeDistance;
+            return (_target.Position.Xz() - Parent.Position.Xz()).LengthSquared() > ChargeDistance * ChargeDistance;
         }
 
         public void SetTarget(IEntity Target)

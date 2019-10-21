@@ -10,7 +10,7 @@ using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Rendering.Particles;
 using Hedra.Sound;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 {

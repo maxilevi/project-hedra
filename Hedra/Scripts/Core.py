@@ -1,4 +1,5 @@
-from Hedra.Core import Mathf, TaskScheduler, Time
+from Hedra.Core import TaskScheduler, Time
+from Hedra.Numerics import Mathf
 from Hedra import Utils
 from Hedra.Game import GameManager, GameSettings
 from Hedra.Localization import Translations

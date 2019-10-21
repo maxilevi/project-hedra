@@ -4,6 +4,7 @@ using Hedra.Engine.Core;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Windowing;
 using Hedra.EntitySystem;
+using Hedra.Numerics;
 using Hedra.Rendering;
 
 

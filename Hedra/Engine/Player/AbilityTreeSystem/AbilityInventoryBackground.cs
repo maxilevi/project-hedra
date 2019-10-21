@@ -3,7 +3,7 @@ using System.Globalization;
 using Hedra.Engine.Player.Inventory;
 using Hedra.EntitySystem;
 using Hedra.Localization;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {

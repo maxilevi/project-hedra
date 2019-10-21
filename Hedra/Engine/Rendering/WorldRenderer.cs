@@ -10,7 +10,7 @@
 using System;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Core;
@@ -21,6 +21,7 @@ using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.Windowing;
 using Hedra.Game;
+using Hedra.Numerics;
 using Hedra.Rendering;
 
 namespace Hedra.Engine.Rendering
@@ -301,7 +302,7 @@ namespace Hedra.Engine.Rendering
         public static Vector3 BakedOffset { get; set; }
         public static Vector3 Scale { get; set; } = Vector3.One;
         public static Vector3 Offset { get; set; }
-        public static Matrix4 TransformationMatrix { get; set; } = Matrix4.Identity;
+        public static Matrix4x4 TransformationMatrix { get; set; } = Matrix4x4.Identity;
     }
 
     [Flags]

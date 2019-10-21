@@ -1,5 +1,6 @@
 using Hedra.Core;
 using Hedra.Engine.EntitySystem;
+using Hedra.Numerics;
 
 namespace Hedra.EntitySystem
 {

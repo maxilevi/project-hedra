@@ -1,7 +1,8 @@
 using System;
 using Hedra.Core;
 using Hedra.Engine.Generation;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.WorldBuilding
 {
@@ -22,26 +23,26 @@ namespace Hedra.Engine.WorldBuilding
 
         public override bool Affects(Vector2 Sample)
         {
-            var lengthSquared = (End - Origin).LengthSquared;
-            if ((Sample - Origin).LengthSquared > lengthSquared && (Sample - End).LengthSquared > lengthSquared)
+            var lengthSquared = (End - Origin).LengthSquared();
+            if ((Sample - Origin).LengthSquared() > lengthSquared && (Sample - End).LengthSquared() > lengthSquared)
                 return false;
             var length = Mathf.FastSqrt(lengthSquared);
             var dir = (End - Origin) * (1f / length);
-            var point = (Sample - Origin).LengthFast;           
-            return point < length && (point * dir + Origin - Sample).LengthFast < Width;
+            var point = (Sample - Origin).LengthFast();           
+            return point < length && (point * dir + Origin - Sample).LengthFast() < Width;
         }
         
         public override float Density(Vector2 Sample)
         {
             var dir = (End - Origin).NormalizedFast();
-            var point = (Sample - Origin).LengthFast;
-            var den = 1 - Math.Min((point * dir + Origin - Sample).LengthFast / Width, 1);
+            var point = (Sample - Origin).LengthFast();
+            var den = 1 - Math.Min((point * dir + Origin - Sample).LengthFast() / Width, 1);
             return Math.Min(den * 2.5f, 1f);
         }
         
         public override BoundingBox ToBoundingBox()
         {
-            return new BoundingBox((Origin + End) * .5f, (End - Origin).LengthFast);
+            return new BoundingBox((Origin + End) * .5f, (End - Origin).LengthFast());
         }
     }
 }

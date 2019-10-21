@@ -19,7 +19,8 @@ using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Localization;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Components
 {
@@ -52,7 +53,7 @@ namespace Hedra.Components
         public override void Update()
         {
             var player = GameManager.Player;
-            if (!_hasRider && (player.Position - Parent.Position).LengthSquared < 12 * 12 && !player.IsRiding &&
+            if (!_hasRider && (player.Position - Parent.Position).LengthSquared() < 12 * 12 && !player.IsRiding &&
                 !player.IsCasting
                 && Vector3.Dot((Parent.Position - player.Position).NormalizedFast(), player.View.LookingDirection) >
                 .6f)

@@ -10,9 +10,10 @@ using Hedra.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Rendering.Particles
 {
@@ -32,8 +33,8 @@ namespace Hedra.Engine.Rendering.Particles
                     NewIndices[i] = (ushort) Data.Indices[i];
                 }
                 
-                NormalsVBO = new VBO<Vector3>(Data.Normals.ToArray(), Data.Normals.Count * Vector3.SizeInBytes, VertexAttribPointerType.Float);
-                VerticesVBO = new VBO<Vector3>(Data.Vertices.ToArray(), Data.Vertices.Count * Vector3.SizeInBytes, VertexAttribPointerType.Float);
+                NormalsVBO = new VBO<Vector3>(Data.Normals.ToArray(), Data.Normals.Count * HedraSize.Vector3, VertexAttribPointerType.Float);
+                VerticesVBO = new VBO<Vector3>(Data.Vertices.ToArray(), Data.Vertices.Count * HedraSize.Vector3, VertexAttribPointerType.Float);
                 IndicesVBO = new VBO<ushort>(NewIndices, Data.Indices.Count * sizeof(ushort), VertexAttribPointerType.UnsignedShort, BufferTarget.ElementArrayBuffer);
             }
         }
@@ -49,15 +50,14 @@ namespace Hedra.Engine.Rendering.Particles
      
             Vector4 direction = new Vector4(x, y, z, 1);
             if (coneDirection.X != 0 || coneDirection.Y != 0 || (coneDirection.Z != 1 && coneDirection.Z != -1)) {
-                Vector3 rotateAxis = Vector3.Cross(coneDirection, new Vector3(0, 0, 1));
-                rotateAxis.Normalize();
+                Vector3 rotateAxis = Vector3.Cross(coneDirection, new Vector3(0, 0, 1)).Normalized();
                 float rotateAngle = (float) Math.Acos(Vector3.Dot(coneDirection, new Vector3(0, 0, 1)));
-                Matrix4 rotationMatrix = Matrix4.CreateFromAxisAngle(rotateAxis, -rotateAngle);
+                Matrix4x4 rotationMatrix = Matrix4x4.CreateFromAxisAngle(rotateAxis, -rotateAngle);
                 direction = Vector4.Transform(direction, rotationMatrix);
             } else if (coneDirection.Z == -1) {
                 direction.Z *= -1;
             }
-            return new Vector3(direction);
+            return direction.Xyz();
         }
     }
 }

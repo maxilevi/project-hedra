@@ -1,6 +1,6 @@
 using Hedra.Engine.Rendering.UI;
 using Hedra.Rendering.UI;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Player.Inventory
 {

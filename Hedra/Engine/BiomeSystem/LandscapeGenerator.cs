@@ -21,7 +21,8 @@ using Hedra.Engine.PlantSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.Overworld;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 using Chunk = Hedra.Engine.Generation.ChunkSystem.Chunk;
 
 namespace Hedra.Engine.BiomeSystem
@@ -573,7 +574,7 @@ namespace Hedra.Engine.BiomeSystem
 
             if (Blocks[X,Y,Z]->Type == BlockType.FarmDirt)
             {
-                if ((X + OffsetX) % 2 == 0) Blocks[X,Y,Z]->Density += new Half(.25f);
+                if ((X + OffsetX) % 2 == 0) Blocks[X,Y,Z]->Density += .25f;
             }
         }
 
@@ -626,15 +627,15 @@ namespace Hedra.Engine.BiomeSystem
                     if (World.Seed == World.MenuSeed)
                     {
                         //Is menu, force a platform
-                        if ((Scenes.MenuBackground.DefaultPosition.Xz - new Vector2(
+                        if ((Scenes.MenuBackground.DefaultPosition.Xz() - new Vector2(
                                  Parent.OffsetX + x * Chunk.BlockSize,
-                                 Parent.OffsetZ + z * Chunk.BlockSize)).LengthSquared < 32 * 32) continue;
-                        if ((Scenes.MenuBackground.CreatorPosition.Xz - new Vector2(
+                                 Parent.OffsetZ + z * Chunk.BlockSize)).LengthSquared() < 32 * 32) continue;
+                        if ((Scenes.MenuBackground.CreatorPosition.Xz() - new Vector2(
                                  Parent.OffsetX + x * Chunk.BlockSize,
-                                 Parent.OffsetZ + z * Chunk.BlockSize)).LengthSquared < 32 * 32) continue;
-                        if ((Scenes.MenuBackground.CampfirePosition.Xz - new Vector2(
+                                 Parent.OffsetZ + z * Chunk.BlockSize)).LengthSquared() < 32 * 32) continue;
+                        if ((Scenes.MenuBackground.CampfirePosition.Xz() - new Vector2(
                                  Parent.OffsetX + x * Chunk.BlockSize,
-                                 Parent.OffsetZ + z * Chunk.BlockSize)).LengthSquared < 48 * 48) continue;
+                                 Parent.OffsetZ + z * Chunk.BlockSize)).LengthSquared() < 48 * 48) continue;
                     }
 
                     if(noTreesZone || noTreesPlateau || noTreesGroundwork) continue;
@@ -709,13 +710,13 @@ namespace Hedra.Engine.BiomeSystem
                 if (structPosition.Design is GiantTreeDesign)
                 {
                     float radius = structPosition.Mountain.Radius;
-                    if ((structPosition.Mountain.Position - possiblePosition.Xz).LengthSquared <
+                    if ((structPosition.Mountain.Position - possiblePosition.Xz()).LengthSquared() <
                         radius * .3f * radius * .3f)
                     {
                         NoGrassZone = true;
                     }
 
-                    if (!NoTreesZone && (structPosition.Mountain.Position - possiblePosition.Xz).LengthSquared <
+                    if (!NoTreesZone && (structPosition.Mountain.Position - possiblePosition.Xz()).LengthSquared() <
                         radius * 0.5f * radius * 0.5f)
                         NoTreesZone = true;
 
@@ -724,7 +725,7 @@ namespace Hedra.Engine.BiomeSystem
                 if (structPosition.Design is TravellingMerchantDesign)
                 {
                     var radius = structPosition.Mountain.Radius;
-                    if ((structPosition.Mountain.Position - possiblePosition.Xz).LengthSquared <
+                    if ((structPosition.Mountain.Position - possiblePosition.Xz()).LengthSquared() <
                         radius * .5f * radius * .5f)
                         InMerchant = true;
                 }

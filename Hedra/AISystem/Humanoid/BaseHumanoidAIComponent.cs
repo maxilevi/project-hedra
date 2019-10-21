@@ -12,7 +12,8 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.AISystem.Humanoid
 {
@@ -42,7 +43,7 @@ namespace Hedra.AISystem.Humanoid
 
         protected void Orientate(Vector3 TargetPoint)
         {
-            Parent.Orientation = (TargetPoint - Parent.Position).Xz.NormalizedFast().ToVector3();
+            Parent.Orientation = (TargetPoint - Parent.Position).Xz().NormalizedFast().ToVector3();
             Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
         }
 

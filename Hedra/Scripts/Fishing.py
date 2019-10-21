@@ -2,7 +2,7 @@ import Core
 import math
 import VisualEffects
 import clr
-from OpenToolkit.Mathematics import Vector3, Vector4, Matrix4
+from System.Numerics import Vector3, Vector4, Matrix4x4
 from System import Array, Single, ArgumentOutOfRangeException
 from Hedra import World
 from Hedra.Core import Time, Timer
@@ -12,7 +12,9 @@ from Hedra.Rendering import Colors, ObjectMesh
 from Hedra.Rendering.Particles import ParticleShape
 from Hedra.Items import ItemType, ItemPool, InventoryExtensions
 from Hedra.EntitySystem import EntityExtensions
+from Hedra.Numerics import VectorExtensions
 
+clr.ImportExtensions(VectorExtensions)
 clr.ImportExtensions(EntityExtensions)
 clr.ImportExtensions(InventoryExtensions)
 
@@ -135,7 +137,7 @@ def start_fishing(human, state, hook_model):
         
     def should_stop_fishing():
         return (not isinstance(human.LeftWeapon, FishingRod) \
-               or (human.Position - state['fishing_position']).LengthFast > FISHING_DISTANCE \
+               or (human.Position - state['fishing_position']).LengthFast() > FISHING_DISTANCE \
                or human.IsMoving) and not state['is_retrieving']
 
     Core.when(should_stop_fishing, lambda: disable_fishing(human, state))
@@ -165,7 +167,7 @@ def calculate_hook_offset(has_fish):
 
 def calculate_line(rod, hook, state):
     interpolation_speed = 3.0
-    target_curvature = Core.lerp(1.0, -1.0, min(hook.Delta.LengthFast, 1.0))
+    target_curvature = Core.lerp(1.0, -1.0, min(hook.Delta.LengthFast(), 1.0))
     if state['has_fish']:
         target_curvature = 0.0
         interpolation_speed = 5.0
@@ -232,11 +234,11 @@ def update_rod(human, rod, rod_line, state):
         rod_line.Width = ROD_LINE_WIDTH
 
 def on_rod_idle(rod):
-    rot_mat = Matrix4.CreateFromQuaternion(rod.MainMesh.TransformationMatrix.ExtractRotation())
+    rot_mat = Matrix4x4.CreateFromQuaternion(rod.MainMesh.TransformationMatrix.ExtractRotation())
     rod_tip_offset = Vector3.UnitZ * Single(0.125) + Vector3.UnitX * Single(-0.125)
     rod_mid_offset = Single(-0.25) * Vector3.UnitX + Vector3.UnitY * 2
     curvature = -0.05
-    offset = Vector3.TransformPosition(Vector3.UnitX if rod.InAttackStance else Vector3.UnitZ, rot_mat)
+    offset = Vector3.Transform(Vector3.UnitX if rod.InAttackStance else Vector3.UnitZ, rot_mat)
     return smooth_curve(rod_tip(rod, rod_tip_offset), rod_position(rod, rod_mid_offset), curvature, offset)
 
 def on_rod_active(human, rod, state):
@@ -291,7 +293,7 @@ def retrieve_fish(human, state):
 
 def has_fish_effect(position):
     World.Particles.VariateUniformly = True
-    World.Particles.Color = Vector4(get_water_color(position).Xyz, .5)
+    World.Particles.Color = Vector4(get_water_color(position).Xyz(), .5)
     World.Particles.Position = position - Vector3.UnitY * 2
     World.Particles.Scale = Vector3.One * Single(.5)
     World.Particles.ScaleErrorMargin = Vector3(.25, .25, .25)

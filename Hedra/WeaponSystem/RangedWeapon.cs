@@ -5,7 +5,8 @@ using Hedra.EntitySystem;
 using Hedra.Rendering;
 using Hedra.Sound;
 using Hedra.WorldObjects;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.WeaponSystem
 {

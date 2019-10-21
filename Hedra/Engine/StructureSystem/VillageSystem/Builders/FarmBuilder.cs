@@ -24,7 +24,8 @@ using Hedra.Engine.WorldBuilding;
 using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
@@ -44,7 +45,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             {
                 Models = new VertexData[0],
                 LodModels = null,
-                TransformationMatrices = new Matrix4[0],
+                TransformationMatrices = new Matrix4x4[0],
                 Shapes = new List<CollisionShape>(),
                 GraduateColors = GraduateColor
             };
@@ -72,7 +73,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return windmill;
         }
 
-        private void AddBlades(FarmParameters Parameters, VillageCache Cache, Matrix4 Transformation, BuildingOutput Output)
+        private void AddBlades(FarmParameters Parameters, VillageCache Cache, Matrix4x4 Transformation, BuildingOutput Output)
         {
             var template = Parameters.WindmillDesign;
             var vertexData = Cache.GetOrCreate(template.BladesPath, Vector3.One * template.Scale);
@@ -82,12 +83,12 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             if(shapes.Count > 1)
                 throw new ArgumentOutOfRangeException($"The number of shapes for the windmill blades must be 1 but it's '{shapes.Count}'");
             shapes.ForEach(S => S.Transform(Transformation));
-            var offset = Vector3.TransformPosition(template.BladesPosition * template.Scale, Transformation);
+            var offset = Vector3.Transform(template.BladesPosition * template.Scale, Transformation);
             Output.Structures.Add(
                 new WindmillBlades(
                     vertexData,
                     shapes.FirstOrDefault(),
-                    Vector3.TransformPosition(Vector3.UnitX, Transformation),
+                    Vector3.Transform(Vector3.UnitX, Transformation),
             Parameters.Position + offset,
                     Structure
                 )
@@ -96,11 +97,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         
         public override void Polish(FarmParameters Parameters, VillageRoot Root, Random Rng)
         {
-            var dir = Vector3.TransformPosition(Vector3.UnitZ, Matrix4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian));
+            var dir = Vector3.Transform(Vector3.UnitZ, Matrix4x4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian));
             if (Rng.Next(0, 3) == 1)
             {
                 var position = Parameters.Position + dir * _width * .5f;
-                SpawnFarmer(position, Parameters.Position.Xz, Rng);
+                SpawnFarmer(position, Parameters.Position.Xz(), Rng);
             }
             else if (Rng.Next(0, 5) == 1)
             {
@@ -173,12 +174,12 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                         (Rng.NextFloat() * 2f - 1f) * _width * .5f);
                     var position = Parameters.Position + offset;
                     var minDist = Chunk.BlockSize * minDistModifier;
-                    if (added.Any(P => (P - position).LengthSquared < minDist * minDist)) continue;
-                    if (Parameters.InsidePaths && offset.LengthFast > _width - VillageDesign.PathWidth * 4) continue;
-                    var transMatrix = Matrix4.CreateScale(6.0f + Utils.Rng.NextFloat() * .5f)
-                                      * Matrix4.CreateRotationY(
+                    if (added.Any(P => (P - position).LengthSquared() < minDist * minDist)) continue;
+                    if (Parameters.InsidePaths && offset.LengthFast() > _width - VillageDesign.PathWidth * 4) continue;
+                    var transMatrix = Matrix4x4.CreateScale(6.0f + Utils.Rng.NextFloat() * .5f)
+                                      * Matrix4x4.CreateRotationY(
                                           360 * Utils.Rng.NextFloat() * Mathf.Radian * rotModifier)
-                                      * Matrix4.CreateTranslation(position - Vector3.UnitY);
+                                      * Matrix4x4.CreateTranslation(position - Vector3.UnitY);
                     added.Add(position);
                     var model = design.Model;
                     var region = World.BiomePool.GetRegion(position);
@@ -189,13 +190,13 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             }
         }
 
-        private void BuildPlantCollectible(IAllocator Allocator, ItemType Type, VertexData Model, PlantDesign Design, Region Biome, Matrix4 Transformation, Random Rng)
+        private void BuildPlantCollectible(IAllocator Allocator, ItemType Type, VertexData Model, PlantDesign Design, Region Biome, Matrix4x4 Transformation, Random Rng)
         {
             var partModel = CacheManager.GetPart(Design.Type, Model);
             var data = BuildPlant(Allocator, partModel, Design, Biome, Transformation, Rng, 1.5f);
             DecorationsPlacer.PlaceWhenWorldReady(data.Position, P =>
             {
-                data.TransMatrix *= Matrix4.CreateTranslation(Vector3.UnitY * P.Y);
+                data.TransMatrix *= Matrix4x4.CreateTranslation(Vector3.UnitY * P.Y);
                 Structure.WorldObject.AddChildren(new CollectiblePlant(
                     data.Position,
                     data,
@@ -204,7 +205,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             }, () => Structure.Disposed);
         }
 
-        private static InstanceData BuildPlant(IAllocator Allocator, VertexData Model, PlantDesign Design, Region Biome, Matrix4 Transformation, Random Rng, float ColorMultiplier = 1)
+        private static InstanceData BuildPlant(IAllocator Allocator, VertexData Model, PlantDesign Design, Region Biome, Matrix4x4 Transformation, Random Rng, float ColorMultiplier = 1)
         {
             var modelClone = Model.NativeClone(Allocator);
             Design.Paint(modelClone, Biome, Rng);
@@ -243,7 +244,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             {
                 BonusHeight = .35f,
             };
-            var plateau = new SquaredPlateau(Parameters.Position.Xz, _width)
+            var plateau = new SquaredPlateau(Parameters.Position.Xz(), _width)
             {
                 Hardness = 3.0f,
             };

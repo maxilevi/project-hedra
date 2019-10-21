@@ -23,7 +23,8 @@ using Hedra.Items;
 using Hedra.Rendering;
 using Hedra.Sound;
 using Hedra.WorldObjects;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.WeaponSystem
 {
@@ -79,8 +80,8 @@ namespace Hedra.WeaponSystem
             if(AttackEventType.Mid != Type) return;
             var player = Owner as IPlayer;
             var direction = player?.View.LookingDirection ?? Owner.Orientation;
-            var left = direction.Xz.PerpendicularLeft.ToVector3() + Vector3.UnitY * direction.Y;
-            var right = direction.Xz.PerpendicularRight.ToVector3() + Vector3.UnitY * direction.Y;
+            var left = direction.Xz().PerpendicularLeft().ToVector3() + Vector3.UnitY * direction.Y;
+            var right = direction.Xz().PerpendicularRight().ToVector3() + Vector3.UnitY * direction.Y;
             Shoot(right * .15f + direction * .85f, Options, player?.Companion?.Entity);
             TaskScheduler.After(.15f,
                 () => Shoot(direction, Options, player?.Companion?.Entity)
@@ -94,7 +95,7 @@ namespace Hedra.WeaponSystem
         {
             MainMesh.TransformationMatrix = 
                 Owner.Model.ChestMatrix.ClearTranslation() 
-                * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition - Vector3.UnitY * .25f);
+                * Matrix4x4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition - Vector3.UnitY * .25f);
             MainMesh.Position = Owner.Model.Position;
             MainMesh.Rotation = this.SheathedRotation;
             MainMesh.BeforeRotation = this.SheathedPosition * this.Scale;
@@ -103,7 +104,7 @@ namespace Hedra.WeaponSystem
         protected override void OnPostAttackStance()
         {
             var mat4 = Owner.Model.LeftWeaponMatrix.ClearTranslation() 
-                           * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);                  
+                           * Matrix4x4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);                  
             MainMesh.TransformationMatrix = mat4;
             MainMesh.Position = Owner.Model.Position;
             MainMesh.LocalRotation = new Vector3(90,25,180);
@@ -139,7 +140,7 @@ namespace Hedra.WeaponSystem
         private void SetQuiverPosition()
         {
             SetToDefault(_quiver);
-            _quiver.TransformationMatrix = Owner.Model.ChestMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition);
+            _quiver.TransformationMatrix = Owner.Model.ChestMatrix.ClearTranslation() * Matrix4x4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition);
             _quiver.Position = Owner.Model.Position;
             _quiver.BeforeRotation = (-Vector3.UnitY * 1.5f - Vector3.UnitZ * 1.8f) * this.Scale;
         }
@@ -148,7 +149,7 @@ namespace Hedra.WeaponSystem
         {
             base.SetToDefault(_arrow);
             var arrowMat4 = Owner.Model.RightWeaponMatrix.ClearTranslation() 
-                            * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.RightWeaponPosition);
+                            * Matrix4x4.CreateTranslation(-Owner.Model.Position + Owner.Model.RightWeaponPosition);
             
             _arrow.TransformationMatrix = arrowMat4;
             _arrow.Position = Owner.Model.Position;
@@ -181,7 +182,7 @@ namespace Hedra.WeaponSystem
         private VertexData RescaleArrow(VertexData Model)
         {
             if (Model == null) return null;
-            var size = (Model.SupportPoint(Vector3.One) - Model.SupportPoint(-Vector3.One)).LengthFast;
+            var size = (Model.SupportPoint(Vector3.One) - Model.SupportPoint(-Vector3.One)).LengthFast();
             return Model.Clone().Scale(Vector3.One * 3f * .75f / size);
         }
         

@@ -2,7 +2,7 @@ using System;
 using System.Reflection;
 using Hedra.Engine.Events;
 using Hedra.Engine.Windowing;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Silk.NET.Input.Common;
 
 namespace HedraTests

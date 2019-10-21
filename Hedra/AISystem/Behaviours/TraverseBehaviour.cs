@@ -10,7 +10,8 @@ using System.Drawing;
 using Hedra.Components.Effects;
 using Hedra.Engine.Game;
 using System.Linq;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.AISystem.Behaviours
 {
@@ -61,7 +62,7 @@ namespace Hedra.AISystem.Behaviours
             }
             else
             {
-                if ((_lastCanNotReachPosition - Target).Xz.LengthSquared > 2 * 2)
+                if ((_lastCanNotReachPosition - Target).Xz().LengthSquared() > 2 * 2)
                 {
                     _canReach = true;
                 }
@@ -115,7 +116,7 @@ namespace Hedra.AISystem.Behaviours
         {
             if (_reached || !_canReach) return;
             _origin = Parent.Position;
-            var target = (Target.Xz - _origin.Xz) * new Vector2(1f / Chunk.BlockSize, 1f / Chunk.BlockSize);
+            var target = (Target.Xz() - _origin.Xz()) * new Vector2(1f / Chunk.BlockSize, 1f / Chunk.BlockSize);
             var center = new Vector2((int)(CurrentGrid.DimX / 2f), (int)(CurrentGrid.DimY / 2f));
             var end = center + new Vector2((int)target.X, (int)target.Y);
             var clampedEnd = new Vector2(Math.Max(Math.Min(end.X, CurrentGrid.DimX - 1), 0), Math.Max(Math.Min(end.Y, CurrentGrid.DimY - 1), 0)); 
@@ -136,7 +137,7 @@ namespace Hedra.AISystem.Behaviours
                 _canReach = false;
             }
 
-            _speedBonus = CurrentGrid.BlockedCellCount < CurrentGrid.TotalCellCount * .25f && HasTarget && (Target - Parent.Position).Xz.LengthSquared > 24*24
+            _speedBonus = CurrentGrid.BlockedCellCount < CurrentGrid.TotalCellCount * .25f && HasTarget && (Target - Parent.Position).Xz().LengthSquared() > 24*24
                 ? 1.15f
                 : 1f;
             
@@ -167,7 +168,7 @@ namespace Hedra.AISystem.Behaviours
 
         public void SetTarget(Vector3 Position, Action Callback = null)
         {
-            if ((Parent.Position - Position).LengthSquared < ErrorMargin * ErrorMargin) return;
+            if ((Parent.Position - Position).LengthSquared() < ErrorMargin * ErrorMargin) return;
             Target = Position;
             _callback = Callback;
             _reached = false;

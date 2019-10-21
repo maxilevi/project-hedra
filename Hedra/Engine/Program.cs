@@ -14,7 +14,7 @@ using Hedra.Engine.Native;
 using Hedra.Engine.Networking;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Game;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Silk.NET.GLFW;
 using Silk.NET.Windowing.Common;
 

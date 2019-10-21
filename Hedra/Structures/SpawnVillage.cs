@@ -1,5 +1,5 @@
 using Hedra.Engine.StructureSystem.Overworld;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Structures
 {

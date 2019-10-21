@@ -1,6 +1,6 @@
 using Hedra.Engine.Core;
 using Hedra.EntitySystem;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Scripting
 {

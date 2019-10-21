@@ -10,7 +10,8 @@ using Hedra.Engine.WorldBuilding;
 using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem
 {
@@ -61,13 +62,13 @@ namespace Hedra.Engine.StructureSystem
             UpdateManager.Add(this);
             _ambientLight = new WorldLight(Position)
             {
-                LightColor = Colors.LightBlue.Xyz * 1f,
+                LightColor = Colors.LightBlue.Xyz() * 1f,
                 Radius = 80,
                 IsNightLight = false
             };
             _portalLight = new WorldLight(Position)
             {
-                LightColor = Colors.LightBlue.Xyz * 10f,
+                LightColor = Colors.LightBlue.Xyz() * 10f,
                 Radius = 16,
                 IsNightLight = false
             };
@@ -86,7 +87,7 @@ namespace Hedra.Engine.StructureSystem
 
         private void CheckTeleport()
         {
-            if (!_isTeleporting && (GameManager.Player.Position - Position).LengthFast < PortalRadius)
+            if (!_isTeleporting && (GameManager.Player.Position - Position).LengthFast() < PortalRadius)
             {
                 _isTeleporting = true;
                 RoutineManager.StartRoutine(TeleportEffect);
@@ -110,7 +111,7 @@ namespace Hedra.Engine.StructureSystem
         private IEnumerator TeleportEffect()
         {
             var timer = new Timer(1);
-            while ((GameManager.Player.Position - Position).LengthFast < PortalRadius && !timer.Tick())
+            while ((GameManager.Player.Position - Position).LengthFast() < PortalRadius && !timer.Tick())
             {
                 GameManager.SpawningEffect = true;
                 yield return null;

@@ -8,21 +8,21 @@
  */
 
 using System;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Game;
+using Hedra.Numerics;
 
-namespace Hedra.Engine.StructureSystem
+  namespace Hedra.Engine.StructureSystem
 {
     /// <summary>
     /// Description of StructureGenerator.
@@ -131,7 +131,7 @@ namespace Hedra.Engine.StructureSystem
         public static CollidableStructure[] GetNearStructures(Vector3 Position)
         {
             return (from item in World.StructureHandler.StructureItems
-                where (item.Position.Xz - Position.Xz).LengthSquared < item.Radius * item.Radius
+                where (item.Position.Xz() - Position.Xz()).LengthSquared() < item.Radius * item.Radius
                 select item).ToArray();
         }
 

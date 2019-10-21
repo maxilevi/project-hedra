@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Threading;
 using Hedra.Engine.Events;
 using Hedra.Engine.Windowing;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Silk.NET.GLFW;
 using Silk.NET.Input;
 using Silk.NET.Input.Common;

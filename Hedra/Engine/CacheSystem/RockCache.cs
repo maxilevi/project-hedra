@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using System.Linq;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Rendering;

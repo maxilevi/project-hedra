@@ -5,7 +5,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.CacheSystem
 {
@@ -33,7 +33,7 @@ namespace Hedra.Engine.CacheSystem
             }
 
             var shapes = _shapeCache[Path].DeepClone();
-            return shapes.Select(S => S.Transform(Matrix4.CreateScale(Scale))).ToList();
+            return shapes.Select(S => S.Transform(Matrix4x4.CreateScale(Scale))).ToList();
         }
     }
 }

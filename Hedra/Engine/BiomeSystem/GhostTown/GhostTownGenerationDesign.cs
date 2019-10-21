@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using Hedra.BiomeSystem;
 using Hedra.Engine.BiomeSystem.NormalBiome;
 using Hedra.Engine.Generation;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.BiomeSystem.GhostTown
 {
@@ -37,7 +38,7 @@ namespace Hedra.Engine.BiomeSystem.GhostTown
 
         private static float HeightMultiplier(Vector2 Position)
         {
-            return 1f - Math.Max(0, Math.Min(1, (Position - World.SpawnPoint.Xz).LengthFast / IslandRadius ));
+            return 1f - Math.Max(0, Math.Min(1, (Position - World.SpawnPoint.Xz()).LengthFast() / IslandRadius ));
         }
         
         private static void AddStones(float X, float Z, ref double Height, ref BlockType Type)

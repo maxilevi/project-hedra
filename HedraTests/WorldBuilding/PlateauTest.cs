@@ -7,7 +7,8 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.WorldBuilding;
 using Moq;
 using NUnit.Framework;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace HedraTests.WorldBuilding
 {

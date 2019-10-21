@@ -1,5 +1,5 @@
 using System;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Windowing;
 using Silk.NET.OpenGL;
 
@@ -359,15 +359,15 @@ namespace Hedra.Engine.Rendering.Core
         {
         }
 
-        public virtual void UniformMatrix2(int Location, bool Transpose, ref Matrix2 Uniform)
+        public virtual void UniformMatrix2(int Location, bool Transpose, ref Matrix4x4 Uniform)
         {
         }
 
-        public virtual void UniformMatrix3(int Location, bool Transpose, ref Matrix3 Uniform)
+        public virtual void UniformMatrix3(int Location, bool Transpose, ref Matrix4x4 Uniform)
         {
         }
 
-        public virtual void UniformMatrix4(int Location, bool Transpose, ref Matrix4 Uniform)
+        public virtual void UniformMatrix4x4(int Location, bool Transpose, ref Matrix4x4 Uniform)
         {
         }
 

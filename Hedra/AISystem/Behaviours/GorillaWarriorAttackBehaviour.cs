@@ -25,8 +25,8 @@ namespace Hedra.AISystem.Behaviours
                 this.Target = null;
                 Follow.Target = this.Target;
             }
-            var canGrowl = Target != null && GrowlTimer.Ready && (Parent.Position - Target.Position).LengthSquared > 16 * 16 &&
-                (Parent.Position - Target.Position).LengthSquared < 48 * 48;
+            var canGrowl = Target != null && GrowlTimer.Ready && (Parent.Position - Target.Position).LengthSquared() > 16 * 16 &&
+                (Parent.Position - Target.Position).LengthSquared() < 48 * 48;
 
             var inAttackRange = Target != null && (InAttackRange(Target) || canGrowl);
             if (!Parent.Model.IsAttacking && Target != null && !inAttackRange)

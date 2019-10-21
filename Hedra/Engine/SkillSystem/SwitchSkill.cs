@@ -1,6 +1,7 @@
 using Hedra.Core;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.Animation;
+using Hedra.Numerics;
 using Hedra.Sound;
 
 namespace Hedra.Engine.SkillSystem

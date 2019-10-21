@@ -1,6 +1,6 @@
 import Core
 import TextDisplay
-from OpenToolkit.Mathematics import Vector2
+from System.Numerics import Vector2
 from Silk.NET.Input.Common import Key
 from Hedra.Core import Time
 from Hedra.User import WordFilter, CommandManager

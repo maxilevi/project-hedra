@@ -5,6 +5,7 @@ using Hedra.Engine.Input;
 using Hedra.Engine.Player.CraftingSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Windowing;
+using Hedra.Numerics;
 using Hedra.Sound;
 
 using Button = Hedra.Engine.Rendering.UI.Button;

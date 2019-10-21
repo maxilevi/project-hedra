@@ -6,7 +6,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 
@@ -47,7 +47,7 @@ namespace Hedra.Engine.Rendering.UI
                     new Vector2(1, -1),
                     new Vector2(1, 1),
                     new Vector2(-1, -1)
-                }, 6 * Vector2.SizeInBytes, VertexAttribPointerType.Float);
+                }, 6 * HedraSize.Vector2, VertexAttribPointerType.Float);
 
             _vao = new VAO<Vector2>(_vbo);
             _lock = new object();
@@ -202,7 +202,7 @@ namespace Hedra.Engine.Rendering.UI
             Shader["Opacity"] = Texture.Opacity;
             Shader["Grayscale"] = Texture.Grayscale ? 1 : 0;
             Shader["Tint"] = Texture.Tint;
-            Shader["Rotation"] = Math.Abs(Texture.Angle) < .05f ? Matrix2.Identity : Texture.RotationMatrix;
+            Shader["Rotation"] = Math.Abs(Texture.Angle) < .05f ? Matrix4x4.Identity : Texture.RotationMatrix;
             Shader["UseMask"] = Texture.UseMask ? 1 : 0;
 
             DrawQuad();

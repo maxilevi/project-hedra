@@ -14,7 +14,8 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Mission;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
@@ -29,8 +30,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         
         public override void Polish(HouseParameters Parameters, VillageRoot Root, Random Rng)
         {
-            var position = Parameters.Position + Vector3.TransformPosition(Vector3.UnitX * Width,
-                               Matrix4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian));
+            var position = Parameters.Position + Vector3.Transform(Vector3.UnitX * Width,
+                               Matrix4x4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian));
             
             if (Rng.Next(0, 2) == 1)
             {

@@ -8,7 +8,8 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.PlantSystem
 {
@@ -16,7 +17,7 @@ namespace Hedra.Engine.PlantSystem
     {
         public override CacheItem Type => CacheItem.Bushes;
         
-        public override Matrix4 TransMatrix(Vector3 Position, Random Rng)
+        public override Matrix4x4 TransMatrix(Vector3 Position, Random Rng)
         {
             var underChunk = World.GetChunkAt(Position);
             var blockPosition = World.ToBlockSpace(Position);
@@ -26,7 +27,7 @@ namespace Hedra.Engine.PlantSystem
 
             float height = Physics.HeightAtPosition(Position + addon);
             var topBlock = World.GetHighestBlockAt((int)(Position.X + addon.X), (int)(Position.Z + addon.Z));
-            if (Block.Noise3D) return Matrix4.Zero;
+            if (Block.Noise3D) return new Matrix4x4();
 
             for (int x = -3; x < 3; x++)
             {
@@ -34,14 +35,14 @@ namespace Hedra.Engine.PlantSystem
                 {
                     float bDens = Physics.HeightAtPosition(new Vector3((blockPosition.X + x) * Chunk.BlockSize + underChunk.OffsetX, 0, (blockPosition.Z + z) * Chunk.BlockSize + underChunk.OffsetZ));
                     float difference = Math.Abs(bDens - height);
-                    if (difference > 5f) return Matrix4.Zero;
+                    if (difference > 5f) return new Matrix4x4();
                 }
             }
 
-            Matrix4 rotationMat4 = Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat() * Mathf.Radian);
-            Matrix4 transMatrix = Matrix4.CreateScale(1.75f + Rng.NextFloat() * .75f);
+            Matrix4x4 rotationMat4 = Matrix4x4.CreateRotationY(360 * Utils.Rng.NextFloat() * Mathf.Radian);
+            Matrix4x4 transMatrix = Matrix4x4.CreateScale(1.75f + Rng.NextFloat() * .75f);
             transMatrix *= rotationMat4;
-            transMatrix *= Matrix4.CreateTranslation(new Vector3(Position.X, height, Position.Z) + addon);
+            transMatrix *= Matrix4x4.CreateTranslation(new Vector3(Position.X, height, Position.Z) + addon);
             return transMatrix;
         }
 

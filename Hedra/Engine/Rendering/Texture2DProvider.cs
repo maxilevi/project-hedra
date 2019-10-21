@@ -2,7 +2,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using Hedra.Engine.IO;
 using Hedra.Engine.Rendering.Core;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 using PixelFormat = Hedra.Engine.Windowing.PixelFormat;

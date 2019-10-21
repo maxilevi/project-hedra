@@ -6,7 +6,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.WorldBuilding
 {
@@ -53,7 +53,7 @@ namespace Hedra.Engine.WorldBuilding
             for (var i = 0; i < entities.Count - 1; ++i)
             {
                 if(entities[i] == Parent) continue;
-                if ((Position - entities[i].Position).LengthSquared < 6 * 6)
+                if ((Position - entities[i].Position).LengthSquared() < 6 * 6)
                 {
                     Activate(entities[i]);
                     break;

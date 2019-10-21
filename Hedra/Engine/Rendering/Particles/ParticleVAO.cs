@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using Hedra.Engine.Rendering.Core;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 
@@ -16,11 +16,11 @@ namespace Hedra.Engine.Rendering.Particles
             {
                 Bind(false);
                 ParticleBuffer.Bind();
-                Renderer.VertexAttribPointer(2, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes * InstanceStride, IntPtr.Zero);            
-                Renderer.VertexAttribPointer(3, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes * InstanceStride, (IntPtr) (Vector4.SizeInBytes * 1));
-                Renderer.VertexAttribPointer(4, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes * InstanceStride, (IntPtr) (Vector4.SizeInBytes * 2));
-                Renderer.VertexAttribPointer(5, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes * InstanceStride, (IntPtr) (Vector4.SizeInBytes * 3));
-                Renderer.VertexAttribPointer(6, 4, VertexAttribPointerType.Float, false, Vector4.SizeInBytes * InstanceStride, (IntPtr) (Vector4.SizeInBytes * 4));
+                Renderer.VertexAttribPointer(2, 4, VertexAttribPointerType.Float, false, HedraSize.Vector4 * InstanceStride, IntPtr.Zero);            
+                Renderer.VertexAttribPointer(3, 4, VertexAttribPointerType.Float, false, HedraSize.Vector4 * InstanceStride, (IntPtr) (HedraSize.Vector4 * 1));
+                Renderer.VertexAttribPointer(4, 4, VertexAttribPointerType.Float, false, HedraSize.Vector4 * InstanceStride, (IntPtr) (HedraSize.Vector4 * 2));
+                Renderer.VertexAttribPointer(5, 4, VertexAttribPointerType.Float, false, HedraSize.Vector4 * InstanceStride, (IntPtr) (HedraSize.Vector4 * 3));
+                Renderer.VertexAttribPointer(6, 4, VertexAttribPointerType.Float, false, HedraSize.Vector4 * InstanceStride, (IntPtr) (HedraSize.Vector4 * 4));
             
                 Renderer.VertexAttribDivisor(2,1);
                 Renderer.VertexAttribDivisor(3,1);

@@ -9,7 +9,7 @@ using Hedra.Engine.Sound;
 using Hedra.Engine.Windowing;
 using Hedra.Items;
 using Hedra.Sound;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 
 namespace Hedra.Engine.Player.ToolbarSystem

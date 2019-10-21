@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Hedra.Engine.ModuleSystem;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.QuestSystem
 {

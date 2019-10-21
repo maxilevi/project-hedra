@@ -7,7 +7,8 @@ using Hedra.Engine.Rendering.Particles;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Rendering.Particles;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Mage.Druid
 {
@@ -53,7 +54,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
             User.Movement.Orientate();
             _particles.Color = Vector4.One * 2f;
             _particles.VariateUniformly = true;
-            _particles.Position = User.Position + Vector3.UnitY * User.Model.Height * .5f - User.LookingDirection.Xz.ToVector3() * 6f;
+            _particles.Position = User.Position + Vector3.UnitY * User.Model.Height * .5f - User.LookingDirection.Xz().ToVector3() * 6f;
             _particles.GravityEffect = 0.0f;
             _particles.Scale = Vector3.One * .75f;
             _particles.ScaleErrorMargin = Vector3.One * .35f;
@@ -71,7 +72,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
         {
             SkillUtils.DoNearby(User, PushDistance, 0, (E, F) =>
             {
-                E.Physics.DeltaTranslate(-(User.Position - E.Position).Xz.NormalizedFast().ToVector3() * 80f);
+                E.Physics.DeltaTranslate(-(User.Position - E.Position).Xz().NormalizedFast().ToVector3() * 80f);
             });
         }
 

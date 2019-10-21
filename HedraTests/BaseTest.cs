@@ -1,7 +1,3 @@
-using System.Drawing;
-using System.IO;
-using System.Reflection;
-using System.Text.RegularExpressions;
 using Hedra;
 using Hedra.Core;
 using Hedra.Engine;
@@ -9,8 +5,7 @@ using Hedra.Engine.Bullet;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
-using Hedra.Engine.Generation;
-using Hedra.Engine.Localization;
+
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;

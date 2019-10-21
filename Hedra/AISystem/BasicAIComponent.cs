@@ -5,7 +5,7 @@ using System.Reflection;
 using Hedra.AISystem.Behaviours;
 using Hedra.Engine.EntitySystem;
 using Hedra.EntitySystem;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.AISystem
 {

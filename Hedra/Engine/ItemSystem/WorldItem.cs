@@ -25,7 +25,8 @@ using Hedra.Game;
 using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.ItemSystem
 {
@@ -78,12 +79,12 @@ namespace Hedra.Engine.ItemSystem
                 Position.Z);
             this.Model.LocalRotation += Vector3.UnitY * 35f * (float) Time.DeltaTime;
             
-            float DotFunc() => Vector2.Dot((this.Position - GameManager.Player.Position).Xz.NormalizedFast(), LocalPlayer.Instance.View.LookingDirection.Xz.NormalizedFast());
+            float DotFunc() => Vector2.Dot((this.Position - GameManager.Player.Position).Xz().NormalizedFast(), LocalPlayer.Instance.View.LookingDirection.Xz().NormalizedFast());
 
-            if(DotFunc() > .9f && (this.Position - LocalPlayer.Instance.Position).LengthSquared < 12f * 12f)
+            if(DotFunc() > .9f && (this.Position - LocalPlayer.Instance.Position).LengthSquared() < 12f * 12f)
             {
                 LocalPlayer.Instance.MessageDispatcher.ShowMessageWhile(Translations.Get("to_pickup", Controls.Interact), 
-                    () => !Disposed && DotFunc() > .9f && (this.Position - LocalPlayer.Instance.Position).LengthSquared < 14f * 14f);
+                    () => !Disposed && DotFunc() > .9f && (this.Position - LocalPlayer.Instance.Position).LengthSquared() < 14f * 14f);
                 _canPickup = true;
 
                 if (LocalPlayer.Instance.Inventory.HasAvailableSpace && _shouldPickup && !PickedUp && !Disposed)
@@ -105,7 +106,7 @@ namespace Hedra.Engine.ItemSystem
             this.Model.Tint = _canPickup ? Vector4.One * 1.5f : Vector4.One;
             this.Model.Outline = true;
 
-            if ((this.Position - GameManager.Player.Position).Xz.LengthSquared < 12 * 12 && ItemSpecification.HasAttribute(CommonAttributes.Amount)
+            if ((this.Position - GameManager.Player.Position).Xz().LengthSquared() < 12 * 12 && ItemSpecification.HasAttribute(CommonAttributes.Amount)
                 && GameManager.Player.Inventory.Search(I => I.Name == ItemSpecification.Name) != null)
             {
                 if (!PickedUp && !Disposed)

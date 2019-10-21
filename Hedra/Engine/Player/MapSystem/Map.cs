@@ -30,7 +30,8 @@ using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
 using Hedra.Structures;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 using Silk.NET.Input.Common;
 using MouseButton = Silk.NET.Input.Common.MouseButton;
 
@@ -103,7 +104,7 @@ namespace Hedra.Engine.Player.MapSystem
                 if(!_show) return;
                 if (Args.Button == MouseButton.Left)
                 {
-                    _player.Minimap.Mark(_player.View.CrossDirection.Xz.ToVector3().NormalizedFast());
+                    _player.Minimap.Mark(_player.View.CrossDirection.Xz().ToVector3().NormalizedFast());
                     _player.Orientation = _player.Minimap.MarkedDirection;
                     _player.Model.TargetRotation = Physics.DirectionToEuler(_player.Minimap.MarkedDirection);
                 }
@@ -120,7 +121,7 @@ namespace Hedra.Engine.Player.MapSystem
             this._height = Mathf.Lerp(_height, _targetHeight, Time.IndependentDeltaTime * 2f);
             this.UpdateFogAndTime();
 
-            var mapPosition = _player.Model.ModelPosition.Xz.ToVector3();
+            var mapPosition = _player.Model.ModelPosition.Xz().ToVector3();
             for (var i = 0; i < _icons.Count; i++)
             { 
                 _icons[i].Mesh.LocalRotation = new Vector3(_icons[i].Mesh.LocalRotation.X, _icons[i].Mesh.LocalRotation.Y + (float) Time.DeltaTime * 0f, _icons[i].Mesh.LocalRotation.Z);
@@ -149,8 +150,8 @@ namespace Hedra.Engine.Player.MapSystem
                 {
                     _questMarker.Position += 
                         Mathf.Min(
-                            Mathf.Max(Vector2.One, (_player.Minimap.MarkedQuestPosition - mapPosition).Xz).NormalizedFast() * FogDistance,
-                            ToMapCoordinates(_player.Minimap.MarkedQuestPosition.Xz)
+                            Mathf.Max(Vector2.One, (_player.Minimap.MarkedQuestPosition - mapPosition).Xz()).NormalizedFast() * FogDistance,
+                            ToMapCoordinates(_player.Minimap.MarkedQuestPosition.Xz())
                         ).ToVector3();
                 }
                 
@@ -177,7 +178,7 @@ namespace Hedra.Engine.Player.MapSystem
                 }
             }
             if (!Show) return;
-            this._player.View.PositionDelegate = () => _player.Model.Position.Xz.ToVector3() + Math.Max(_height, _player.Model.Position.Y) * Vector3.UnitY;
+            this._player.View.PositionDelegate = () => _player.Model.Position.Xz().ToVector3() + Math.Max(_height, _player.Model.Position.Y) * Vector3.UnitY;
             SkyManager.FogManager.UpdateFogSettings(FogDistance * .95f, FogDistance);
             SkyManager.Sky.TopColor = Vector4.One;
             SkyManager.Sky.BotColor = Color.CadetBlue.ToVector4();

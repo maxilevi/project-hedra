@@ -2,7 +2,7 @@ using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Player.QuestSystem.Views
 {

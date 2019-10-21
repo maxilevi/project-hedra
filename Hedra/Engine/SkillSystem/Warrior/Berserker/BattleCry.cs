@@ -9,7 +9,8 @@ using Hedra.Engine.Rendering.Animation;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Warrior.Berserker
 {
@@ -25,7 +26,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Berserker
             SkillUtils.DoNearby(User, Range, -1, (E, F) =>
             {
                 if(E == User || E.IsStatic) return;
-                var range = 1 - Mathf.Clamp((User.Position - E.Position).Xz.LengthFast / Range, 0, 1);
+                var range = 1 - Mathf.Clamp((User.Position - E.Position).Xz().LengthFast() / Range, 0, 1);
                 if (range < 0.005f) return;
                 E.AddComponent(new FearComponent(E, User, Duration, 100 - Slowness * range));
             });

@@ -1,6 +1,7 @@
 using System;
 using Hedra.Core;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Rendering.UI
 {

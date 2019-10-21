@@ -10,7 +10,7 @@
 using System;
 using System.Collections.Generic;
 using Hedra.Engine.Core;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
@@ -34,8 +34,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             if (A == B) return 0;
 
-            var distanceA = (A - Position).LengthSquared;
-            var distanceB = (B - Position).LengthSquared;
+            var distanceA = (A - Position).LengthSquared();
+            var distanceB = (B - Position).LengthSquared();
 
             if (distanceA < distanceB) return -1;
             return Math.Abs(distanceA - distanceB) < 0.0005 ? 0 : 1;

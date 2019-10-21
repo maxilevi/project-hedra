@@ -21,7 +21,7 @@ using Hedra.Engine.SkillSystem;
 using Hedra.Engine.Windowing;
 using Hedra.Game;
 using Hedra.WeaponSystem;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using MouseButton = Silk.NET.Input.Common.MouseButton;
 using TaskScheduler = Hedra.Core.TaskScheduler;
 

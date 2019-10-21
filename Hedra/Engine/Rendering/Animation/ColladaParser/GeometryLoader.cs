@@ -8,10 +8,11 @@
  */
 using System;
 using System.Globalization;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using System.Xml;
 using System.Collections.Generic;
 using Hedra.Core;
+using Hedra.Numerics;
 using Hedra.Rendering;
 
 namespace Hedra.Engine.Rendering.Animation.ColladaParser
@@ -33,7 +34,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
         List<Vector3> Normals = new List<Vector3>();
         List<uint> Indices = new List<uint>();
         
-        private Matrix4 Correction = Matrix4.CreateRotationX(-90f * Mathf.Radian);
+        private Matrix4x4 Correction = Matrix4x4.CreateRotationX(-90f * Mathf.Radian);
         
         public GeometryLoader(XmlNode GeometryNode, List<VertexSkinData> VertexWeights) {
             this.VertexWeights = VertexWeights;
@@ -100,7 +101,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
                 var z = float.Parse( posData[i * 3 + 2], NumberStyles.Any, CultureInfo.InvariantCulture);
                 var position = new Vector4(x, y, z, 1);
                 position = Vector4.Transform(position, Correction);
-                Vertices.Add(new Vertex(Vertices.Count, position.Xyz, VertexWeights[Vertices.Count] ));
+                Vertices.Add(new Vertex(Vertices.Count, position.Xyz(), VertexWeights[Vertices.Count] ));
             }
         }
     
@@ -115,7 +116,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
                 var z = float.Parse(normData[i * 3 + 2], NumberStyles.Any, CultureInfo.InvariantCulture);
                 var norm = new Vector4(x, y, z, 1);
                 norm = Vector4.Transform(norm, Correction);
-                Normals.Add( norm.Xyz );
+                Normals.Add( norm.Xyz() );
             }
         }
     

@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.Generation.ChunkSystem;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.PhysicsSystem
 {
@@ -51,7 +52,7 @@ namespace Hedra.Engine.PhysicsSystem
             {
                 for (var i = 0; i < Colliders[k].Vertices.Length; i++)
                 {
-                    var length = (Colliders[k].Vertices[i] - this.BroadphaseCenter).LengthFast;
+                    var length = (Colliders[k].Vertices[i] - this.BroadphaseCenter).LengthFast();
 
                     if (length > dist)
                         dist = length;

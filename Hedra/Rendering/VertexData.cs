@@ -18,7 +18,8 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Geometry;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 using InstanceData = Hedra.Engine.Rendering.InstanceData;
 
 namespace Hedra.Rendering
@@ -92,7 +93,7 @@ namespace Hedra.Rendering
         
         public VertexData Translate(Vector3 Position)
         {
-            Transform(Matrix4.CreateTranslation(Position));
+            Transform(Matrix4x4.CreateTranslation(Position));
             return this;
         }
         
@@ -110,7 +111,7 @@ namespace Hedra.Rendering
             return this;
         }
         
-        public VertexData Transform(Matrix4 Mat)
+        public VertexData Transform(Matrix4x4 Mat)
         {
             MeshOperations.Transform(Vertices, Normals, Mat);
             ApplyRecursively(V => V.Transform(Mat));
@@ -171,22 +172,22 @@ namespace Hedra.Rendering
 
         public VertexData RotateX(float EulerAngle)
         {
-            return Transform(Matrix4.CreateRotationX(EulerAngle * Mathf.Radian));
+            return Transform(Matrix4x4.CreateRotationX(EulerAngle * Mathf.Radian));
         }
         
         public VertexData RotateY(float EulerAngle)
         {
-            return Transform(Matrix4.CreateRotationY(EulerAngle * Mathf.Radian));
+            return Transform(Matrix4x4.CreateRotationY(EulerAngle * Mathf.Radian));
         }
         
         public VertexData RotateZ(float EulerAngle)
         {
-            return Transform(Matrix4.CreateRotationZ(EulerAngle * Mathf.Radian));
+            return Transform(Matrix4x4.CreateRotationZ(EulerAngle * Mathf.Radian));
         }
         
         public VertexData Scale(Vector3 Scalar)
         {
-            return Transform(Matrix4.CreateScale(Scalar));
+            return Transform(Matrix4x4.CreateScale(Scalar));
         }
         
         public void Paint(Vector4 Color)
@@ -200,7 +201,7 @@ namespace Hedra.Rendering
             return CompressedVertexData.FromVertexData(this);
         }
 
-        public InstanceData ToInstanceData(Matrix4 Transformation)
+        public InstanceData ToInstanceData(Matrix4x4 Transformation)
         {
             if (!IsClone)
                 throw new ArgumentOutOfRangeException("VertexData needs to be a clone.");
@@ -290,9 +291,9 @@ namespace Hedra.Rendering
             && Extradata.Count == 0;
 
         public int SizeInBytes => Indices.Count * sizeof(uint) 
-                                  + Vertices.Count * Vector3.SizeInBytes 
-                                  + Normals.Count * Vector3.SizeInBytes 
-                                  + Colors.Count * Vector4.SizeInBytes 
+                                  + Vertices.Count * HedraSize.Vector3 
+                                  + Normals.Count * HedraSize.Vector3 
+                                  + Colors.Count * HedraSize.Vector4 
                                   + Extradata.Count * sizeof(float);
         public bool IsClone => Original != null;
         uint[] IModelData.Indices => Indices.ToArray();

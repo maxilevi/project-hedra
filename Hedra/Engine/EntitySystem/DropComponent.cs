@@ -10,11 +10,12 @@
 using System;
 using Hedra.Components;
 using Hedra.Core;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.EntitySystem;
 using Hedra.Items;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.EntitySystem
 {

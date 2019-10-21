@@ -12,7 +12,8 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Rendering
 {
@@ -93,7 +94,7 @@ namespace Hedra.Rendering
             return _buffer.TransformPoint(Point);
         }
 
-        public Matrix4 TransformationMatrix
+        public Matrix4x4 TransformationMatrix
         {
             get => _buffer.TransformationMatrix;
             set => _buffer.TransformationMatrix = value;

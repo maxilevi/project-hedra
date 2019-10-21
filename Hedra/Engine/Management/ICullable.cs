@@ -5,7 +5,7 @@
  *
  */
 using Hedra.Engine.PhysicsSystem;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Management
 {

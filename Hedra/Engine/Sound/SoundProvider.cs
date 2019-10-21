@@ -7,7 +7,8 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Sound;
 using NVorbis;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 using Silk.NET.OpenAL;
 
 
@@ -82,7 +83,7 @@ namespace Hedra.Engine.Sound
             if(!_loaded || Sound == SoundType.None.ToString()) return;
             ListenerPosition = LocalPlayer.Instance.Position;
 
-            Gain = Math.Max(Gain * (1-(ListenerPosition - Location).LengthFast / 128f) * Volume, 0);
+            Gain = Math.Max(Gain * (1-(ListenerPosition - Location).LengthFast() / 128f) * Volume, 0);
             if(Gain <= 0 ) return;
 
             var source = GrabSource();

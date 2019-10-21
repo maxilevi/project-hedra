@@ -12,7 +12,8 @@ using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Game;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
@@ -47,14 +48,14 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             void Place(Vector3 Position)
             {
                 var rotation = Vector3.UnitY * (IsInIntersection ? 90 : 0);
-                var rotationMatrix = Matrix4.CreateRotationY(rotation.Y * Mathf.Radian);
+                var rotationMatrix = Matrix4x4.CreateRotationY(rotation.Y * Mathf.Radian);
                 var offset = Orientation * VillageDesign.PathWidth * .75f;
-                var transMatrix = rotationMatrix * Matrix4.CreateTranslation(Position + offset);
+                var transMatrix = rotationMatrix * Matrix4x4.CreateTranslation(Position + offset);
                 Structure.AddCollisionShape(shapes.Select(S => S.Transform(transMatrix)).ToArray());
                 Structure.AddStaticElement(bench.Transform(transMatrix), false);
                 Structure.WorldObject.AddChildren(
                     new Bench(
-                        Vector3.TransformPosition(Vector3.Zero, transMatrix),
+                        Vector3.Transform(Vector3.Zero, transMatrix),
                         Physics.DirectionToEuler(-Orientation),
                         template.SitOffset * template.Scale
                     )

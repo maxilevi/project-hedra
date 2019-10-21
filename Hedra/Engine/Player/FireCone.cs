@@ -6,7 +6,8 @@ using System;
 using Hedra.Core;
 using Hedra.EntitySystem;
 using Hedra.Rendering.Particles;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Player
 {
@@ -60,7 +61,7 @@ namespace Hedra.Engine.Player
                 var toEntity = distanceVector.NormalizedFast();
                 var dot = Vector3.Dot(toEntity, _owner.Orientation);
                 
-                if(dot >= .75f && distanceVector.LengthSquared < ConeDistanceSquared)
+                if(dot >= .75f && distanceVector.LengthSquared() < ConeDistanceSquared)
                 {
                     var k = i;
                     _owner.DoIgnoringHitCombo(() =>

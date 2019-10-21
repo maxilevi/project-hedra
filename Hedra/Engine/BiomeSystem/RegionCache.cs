@@ -1,6 +1,6 @@
 using Hedra.BiomeSystem;
 using Hedra.Engine.Generation;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.BiomeSystem
 {

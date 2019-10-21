@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using System.Threading;
 using Hedra.Core;
 using Hedra.Engine.Game;
@@ -23,6 +23,7 @@ using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Game;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.EntitySystem
 {
@@ -87,7 +88,7 @@ namespace Hedra.Engine.EntitySystem
             var y = World.GetHighestY( (int) desiredPosition.X, (int) desiredPosition.Z);
             if (y <= 0) return;
 
-            if ((_player.Position.Xz - desiredPosition.Xz).LengthSquared <
+            if ((_player.Position.Xz() - desiredPosition.Xz()).LengthSquared() <
                 32f * Chunk.BlockSize * 32f * Chunk.BlockSize)
                 return;
 
@@ -222,7 +223,7 @@ namespace Hedra.Engine.EntitySystem
                 {
                     if (World.Entities[i] == _player || World.Entities[i].IsStatic) continue;
 
-                    if ((World.Entities[i].Position.Xz - Position.Xz).LengthSquared <
+                    if ((World.Entities[i].Position.Xz() - Position.Xz()).LengthSquared() <
                         80f * Chunk.BlockSize * 80f * Chunk.BlockSize) return true;
                 }
             }
@@ -240,7 +241,7 @@ namespace Hedra.Engine.EntitySystem
             return new Vector3(Utils.Rng.NextFloat() * GameSettings.ChunkLoaderRadius * Chunk.Width - GameSettings.ChunkLoaderRadius * Chunk.Width * .5f,
                     0,
                     Utils.Rng.NextFloat() * GameSettings.ChunkLoaderRadius * Chunk.Width - GameSettings.ChunkLoaderRadius * Chunk.Width * .5f)
-                + _player.Position.Xz.ToVector3();
+                + _player.Position.Xz().ToVector3();
         }
 
         public void Dispose()

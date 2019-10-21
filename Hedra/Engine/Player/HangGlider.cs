@@ -8,7 +8,8 @@ using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Sound;
 using Hedra.Localization;
 using Hedra.Sound;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 
 namespace Hedra.Engine.Player
@@ -87,12 +88,12 @@ namespace Hedra.Engine.Player
                 _model.Rotation = new Vector3(_angles.X, _player.Model.LocalRotation.Y, 0);
                 _model.LocalRotation = Vector3.UnitZ * _angles.Z;
                 _player.Model.TransformationMatrix =
-                    Matrix4.CreateRotationY(-_player.Model.LocalRotation.Y * Mathf.Radian)
-                    * Matrix4.CreateTranslation(Vector3.UnitY * -7.5f)
-                    * Matrix4.CreateRotationZ(_angles.Z * Mathf.Radian) *
-                    Matrix4.CreateRotationX(_angles.X * Mathf.Radian)
-                    * Matrix4.CreateRotationY(_player.Model.LocalRotation.Y * Mathf.Radian)
-                    * Matrix4.CreateTranslation(Vector3.UnitY * 10f);
+                    Matrix4x4.CreateRotationY(-_player.Model.LocalRotation.Y * Mathf.Radian)
+                    * Matrix4x4.CreateTranslation(Vector3.UnitY * -7.5f)
+                    * Matrix4x4.CreateRotationZ(_angles.Z * Mathf.Radian) *
+                    Matrix4x4.CreateRotationX(_angles.X * Mathf.Radian)
+                    * Matrix4x4.CreateRotationY(_player.Model.LocalRotation.Y * Mathf.Radian)
+                    * Matrix4x4.CreateTranslation(Vector3.UnitY * 10f);
                 _player.Movement.Orientate();
                 _player.Physics.GravityDirection = -Vector3.UnitY * 1f;
                 /*_player.Physics.VelocityCap = 160f * Math.Max(ClampedPitch, 0) + 1f *
@@ -163,7 +164,7 @@ namespace Hedra.Engine.Player
             _player.View.MaxPitch = Camera.DefaultMaxPitch;
             _player.View.MinPitch = Camera.DefaultMinPitch;
             _player.View.MaxDistance = Camera.DefaultMaxDistance;
-            _player.Model.TransformationMatrix = Matrix4.Identity;
+            _player.Model.TransformationMatrix = Matrix4x4.Identity;
             _player.Model.Pause = false;
             _player.Physics.GravityDirection = -Vector3.UnitY;
             _leftTrail.Emit = false;

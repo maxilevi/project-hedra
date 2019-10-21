@@ -13,6 +13,7 @@ using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Items;
 using Hedra.Localization;
+using Hedra.Numerics;
 
 namespace Hedra.Components
 {
@@ -44,15 +45,15 @@ namespace Hedra.Components
             }
             var player = LocalPlayer.Instance;
 
-            if ((LocalPlayer.Instance.Position - this.Parent.Position).Xz.LengthSquared < TradeRadius * TradeRadius)
+            if ((LocalPlayer.Instance.Position - this.Parent.Position).Xz().LengthSquared() < TradeRadius * TradeRadius)
             {
-                Parent.Orientation = (LocalPlayer.Instance.Position - Parent.Position).Xz.NormalizedFast().ToVector3();
+                Parent.Orientation = (LocalPlayer.Instance.Position - Parent.Position).Xz().NormalizedFast().ToVector3();
                 Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
             }
 
             var canTrade = player.CanInteract && !player.IsDead && !GameSettings.Paused &&
                            !player.InterfaceOpened;
-            bool InRadiusFunc() => (player.Position - Parent.Position).LengthSquared < TradeInventory.TradeRadius * TradeInventory.TradeRadius && !player.Trade.IsTrading;
+            bool InRadiusFunc() => (player.Position - Parent.Position).LengthSquared() < TradeInventory.TradeRadius * TradeInventory.TradeRadius && !player.Trade.IsTrading;
 
             var inRadius = InRadiusFunc();
 

@@ -10,7 +10,7 @@ using Hedra.Engine.Player.QuestSystem.Views;
 using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Sound;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using SoundPlayer = Hedra.Sound.SoundPlayer;
 
 namespace Hedra.Mission.Blocks
@@ -20,7 +20,7 @@ namespace Hedra.Mission.Blocks
         public IEntity Animal { get; set; }
 
         public override bool IsCompleted =>
-            (Animal.Position - Owner.Position).LengthSquared < Chunk.BlockSize * Chunk.BlockSize;
+            (Animal.Position - Owner.Position).LengthSquared() < Chunk.BlockSize * Chunk.BlockSize;
         public override void Setup()
         {
             if(Animal.SearchComponent<BasicAIComponent>() != null)
@@ -60,7 +60,7 @@ namespace Hedra.Mission.Blocks
 
             public override void Update()
             {
-                if (_disposed || !((Parent.Position - _owner.Position).LengthSquared < Chunk.BlockSize * Chunk.BlockSize)) return;
+                if (_disposed || !((Parent.Position - _owner.Position).LengthSquared() < Chunk.BlockSize * Chunk.BlockSize)) return;
                 _owner.Questing.Trigger();
                 SoundPlayer.PlaySound(SoundType.NotificationSound, Parent.Position);
                 Parent.AddComponent(new DisposeComponent(Parent, 0));

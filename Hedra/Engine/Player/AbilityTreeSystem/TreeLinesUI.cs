@@ -3,7 +3,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.UI;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 
@@ -27,8 +27,8 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 
         public void Update(Vector2[] Lines, Vector4[] Colors)
         {
-            _vertices.Update(Lines, Lines.Length * Vector2.SizeInBytes);
-            _colors.Update(Colors, Colors.Length * Vector4.SizeInBytes);
+            _vertices.Update(Lines, Lines.Length * HedraSize.Vector2);
+            _colors.Update(Colors, Colors.Length * HedraSize.Vector4);
         }
         
         public void Draw()

@@ -8,7 +8,7 @@ using Hedra.Engine.Windowing;
 using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Sound;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 using Button = Hedra.Engine.Rendering.UI.Button;
 

@@ -2,7 +2,7 @@ using System;
 using Hedra.Engine.Input;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Engine.Game
 {

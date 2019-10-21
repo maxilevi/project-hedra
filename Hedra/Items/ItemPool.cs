@@ -12,6 +12,7 @@ using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ItemSystem.Templates;
+using Hedra.Numerics;
 
 namespace Hedra.Items
 {

@@ -14,7 +14,8 @@ using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Rendering.Particles;
 using Hedra.Sound;
-using OpenToolkit.Mathematics;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 {
@@ -60,7 +61,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
                 _damagePerSecond = DamagePerSecond;
                 _healPerSecond = HealthPerSecond;
                 Parent.Model.Outline = true;
-                Parent.Model.OutlineColor = new Vector4(Colors.Red.Xyz * .75f, 1);
+                Parent.Model.OutlineColor = new Vector4(Colors.Red.Xyz() * .75f, 1);
             }
 
             public override void Update()

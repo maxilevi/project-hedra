@@ -16,7 +16,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
-using OpenToolkit.Mathematics;
+using System.Numerics;
 
 namespace Hedra.Components
 {
@@ -73,7 +73,7 @@ namespace Hedra.Components
                 }
                 _iconMesh.Position = headOffset;
                 _iconMesh.Enabled =
-                    (LocalPlayer.Instance.Position - Parent.Position).LengthSquared < 128 * 128;
+                    (LocalPlayer.Instance.Position - Parent.Position).LengthSquared() < 128 * 128;
             }
         }
 
