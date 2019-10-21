@@ -99,7 +99,6 @@
     <Compile Include="CodePolicy\BehaviourCodePolicy.cs" />
     <Compile Include="CodePolicy\ControlsCodePolicy.cs" />
     <Compile Include="CodePolicy\GLCodePolicy.cs" />
-    <Compile Include="CodePolicy\ObfuscatedNamespacesPolicy.cs" />
     <Compile Include="CodePolicy\ShaderCodePolicy.cs" />
     <Compile Include="CodePolicy\SolutionTest.cs" />
     <Compile Include="CodePolicy\DanglingReferencesCodePolicy.cs" />
