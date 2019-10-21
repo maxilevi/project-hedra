@@ -1,3 +1,6 @@
+#!/bin/bash
+cd "$(dirname "$0")"
+
 echo -e "Building hedra-core"
 ./hedra-core/build.sh
 
