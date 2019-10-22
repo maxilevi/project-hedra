@@ -183,6 +183,7 @@
     <Compile Include="Rendering\SimpleTextProviderMock.cs" />
     <Compile Include="Rendering\TextProviderTest.cs" />
     <Compile Include="Rendering\MeshAnalyzerTest.cs" />
+    <Compile Include="Scripting\InterpreterTests.cs" />
     <Compile Include="SimpleAnimationProvider.cs" />
     <Compile Include="SimpleColladaProvider.cs" />
     <Compile Include="SimpleEventProvider.cs" />

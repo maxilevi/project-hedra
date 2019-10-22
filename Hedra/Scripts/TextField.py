@@ -1,9 +1,13 @@
+import clr
 from Core import get_player
 from Silk.NET.Input.Common import Key
 from System.Numerics import Vector4, Vector2
 from Hedra.Core import Timer
 from Hedra.Rendering import Graphics2D
 from System import Single
+from Hedra.Numerics import VectorExtensions
+
+clr.ImportExtensions(VectorExtensions)
 
 FOCUS_COLOR = Vector4(0.08, 0.08, 0.08, 1)
 DEFOCUS_COLOR = Vector4(0.152, 0.152, 0.152, 1)

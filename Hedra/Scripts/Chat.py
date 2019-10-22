@@ -1,5 +1,6 @@
 import Core
 import TextDisplay
+import clr
 from System.Numerics import Vector2
 from Silk.NET.Input.Common import Key
 from Hedra.Core import Time
@@ -10,7 +11,9 @@ from Hedra.Sound import SoundPlayer, SoundType
 from Hedra.Rendering import Colors
 from Hedra.Rendering.UI import Panel, GUIText, TextField, FontCache
 from Hedra.Localization import Controls
+from Hedra.Numerics import VectorExtensions
 
+clr.ImportExtensions(VectorExtensions)
 TEXT_BOX_POSITION = Vector2(-0.95, -.65)
 COMMAND_LINE_POSITION = Vector2(-0.825, -0.725)
 COMMAND_LINE_SIZE = Vector2(.225, .02)

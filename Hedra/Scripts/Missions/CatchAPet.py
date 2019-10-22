@@ -1,10 +1,13 @@
 import Companion
+import clr
 from Hedra import World
 from Hedra.Mission import MissionBuilder, QuestTier, QuestReward, DialogObject
 from Hedra.Mission.Blocks import CatchAnimalMission
 from Hedra.Items import ItemPool
 from System import Object, Array
+from Hedra.Numerics import VectorExtensions
 
+clr.ImportExtensions(VectorExtensions)
 IS_QUEST = True
 QUEST_NAME = 'CatchAPet'
 QUEST_TIER = QuestTier.Easy

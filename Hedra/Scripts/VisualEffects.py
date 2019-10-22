@@ -1,6 +1,9 @@
+import clr
 from Core import *
 from System.Numerics import Vector4
+from Hedra.Numerics import VectorExtensions
 
+clr.ImportExtensions(VectorExtensions)
 def outline(human, color, seconds):
     quarter = seconds * .25
     def set(state, color = None):

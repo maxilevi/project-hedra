@@ -1,6 +1,10 @@
+import clr
 from Hedra import World
 from Hedra.Structures import MapBuilder
 from System.Numerics import Vector2, Vector3
+from Hedra.Numerics import VectorExtensions
+
+clr.ImportExtensions(VectorExtensions)
 
 CHUNK_WIDTH = 128
 
