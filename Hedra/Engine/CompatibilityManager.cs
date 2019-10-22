@@ -58,7 +58,7 @@ namespace Hedra.Engine
                 Renderer.Severity = ErrorSeverity.High;
                 var shader = AnimatedModelShader.GenerateDeathShader();
                 shader.Bind();
-                shader["viewMatrix"] = Matrix4x4.Identity;
+                shader[ShaderManager.ModelViewMatrixName] = Matrix4x4.Identity;
                 shader.Unbind();
             }
             catch (Exception e)

@@ -3,7 +3,9 @@ using System.Reflection;
 using Hedra.Engine.Events;
 using Hedra.Engine.Windowing;
 using System.Numerics;
+using Silk.NET.GLFW;
 using Silk.NET.Input.Common;
+using MouseButton = Silk.NET.Input.Common.MouseButton;
 
 namespace HedraTests
 {
@@ -24,10 +26,7 @@ namespace HedraTests
 
         private static KeyboardKeyEventArgs CreateKeyEventArgs(Key Press)
         {
-            var keyEvent = new KeyboardKeyEventArgs();
-            var prop = keyEvent.GetType().GetProperty("Key", BindingFlags.Instance | BindingFlags.Public);
-            if(prop == null) throw new ArgumentException($"Couldn't find property 'Key' of KeyboardKeyEventArgs");
-            prop.SetValue(keyEvent, Press);
+            var keyEvent = new KeyboardKeyEventArgs(Press, default);
             return keyEvent;
         }
 

@@ -5,6 +5,7 @@ using Hedra.Engine.IO;
 using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
+using Hedra.Game;
 using Silk.NET.OpenGL;
 #region Typedefs
 using GLBufferTarget = Silk.NET.OpenGL.GLEnum;
@@ -56,111 +57,111 @@ namespace Hedra.Engine.Rendering.Core
 {
     public class GLProvider : IGLProvider
     {
-        private readonly GL GL;
+        private readonly GL _gl;
         public GLProvider()
         {
-            GL = GL.GetApi();
+            _gl = GL.GetApi();
         }
         
         public ErrorSeverity Severity { get; set; }
 
         public void ActiveTexture(TextureUnit Unit)
         {
-            GL.ActiveTexture((GLTextureUnit)Unit);
+            _gl.ActiveTexture((GLTextureUnit)Unit);
             EnsureNoErrors();
         }
 
         public void AttachShader(int S0, int S1)
         {
-            GL.AttachShader((uint)S0, (uint)S1);
+            _gl.AttachShader((uint)S0, (uint)S1);
             EnsureNoErrors();
         }
 
         public void BeginQuery(QueryTarget Target, int V0)
         {
-            GL.BeginQuery((GLQueryTarget)Target, (uint)V0);
+            _gl.BeginQuery((GLQueryTarget)Target, (uint)V0);
             EnsureNoErrors();
         }
 
         public void BindBuffer(BufferTarget Target, uint V0)
         {
-            GL.BindBuffer((GLBufferTarget)Target, V0);
+            _gl.BindBuffer((GLBufferTarget)Target, V0);
             EnsureNoErrors();
         }
 
         public void BindBufferBase(BufferRangeTarget Target, int V0, int V1)
         {
-            GL.BindBufferBase((GLBufferRangeTarget)Target, (uint)V0, (uint)V1);
+            _gl.BindBufferBase((GLBufferRangeTarget)Target, (uint)V0, (uint)V1);
             EnsureNoErrors();
         }
 
         public void BindFramebuffer(FramebufferTarget Target, uint Id)
         {
-            GL.BindFramebuffer((GLFramebufferTargetEXT)Target, Id);
+            _gl.BindFramebuffer((GLFramebufferTargetEXT)Target, Id);
             EnsureNoErrors();
         }
 
         public void BindTexture(TextureTarget Target, uint Id)
         {
-            GL.BindTexture((GLTextureTarget)Target, Id);
+            _gl.BindTexture((GLTextureTarget)Target, Id);
             EnsureNoErrors();
         }
 
         public void BindVertexArray(uint Id)
         {
-            GL.BindVertexArray(Id);
+            _gl.BindVertexArray(Id);
             EnsureNoErrors();
         }
 
         public void BlendEquation(BlendEquationMode Mode)
         {
-            GL.BlendEquation((GLBlendEquationMode)Mode);
+            _gl.BlendEquation((GLBlendEquationMode)Mode);
             EnsureNoErrors();
         }
 
         public void BlendFunc(BlendingFactor Src, BlendingFactor Dst)
         {
-            GL.BlendFunc((GLBlendingFactor)Src, (GLBlendingFactor)Dst);
+            _gl.BlendFunc((GLBlendingFactor)Src, (GLBlendingFactor)Dst);
             EnsureNoErrors();
         }
 
         public void BlitFramebuffer(int SrcX0, int SrcY0, int SrcX1, int SrcY1, int DstX0, int DstY0, int DstX1, int DstY1,
             ClearBufferMask Mask, BlitFramebufferFilter Filter)
         {
-            GL.BlitFramebuffer(SrcX0, SrcY0, SrcX1, SrcY1, DstX0, DstY0, DstX1, DstY1, (uint)Mask, (GLBlitFramebufferFilter)Filter);
+            _gl.BlitFramebuffer(SrcX0, SrcY0, SrcX1, SrcY1, DstX0, DstY0, DstX1, DstY1, (uint)Mask, (GLBlitFramebufferFilter)Filter);
             EnsureNoErrors();
         }
 
         public unsafe void BufferData(BufferTarget Target, IntPtr Size, IntPtr Offset, BufferUsageHint Hint)
         {
-            GL.BufferData((GLBufferTarget)Target, (UIntPtr)Size.ToPointer(), Offset.ToPointer(), (GLBufferUsageHint)Hint);
+            _gl.BufferData((GLBufferTarget)Target, (UIntPtr)Size.ToPointer(), Offset.ToPointer(), (GLBufferUsageHint)Hint);
             EnsureNoErrors();
         }
 
         public unsafe void BufferData<T>(BufferTarget Target, IntPtr Size, T[] Data, BufferUsageHint Hint) where T : unmanaged
         {
             fixed(void* ptr = Data)
-                GL.BufferData((GLBufferTarget)Target, (UIntPtr)Size.ToPointer(), ptr, (GLBufferUsageHint)Hint);
+                _gl.BufferData((GLBufferTarget)Target, (UIntPtr)Size.ToPointer(), ptr, (GLBufferUsageHint)Hint);
             EnsureNoErrors();
         }
 
         public unsafe void BufferSubData(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, IntPtr Ptr1)
         {
-            GL.BufferSubData((GLBufferTarget)Target, Ptr0, (UIntPtr)Offset.ToPointer(), Ptr1.ToPointer());
+            _gl.BufferSubData((GLBufferTarget)Target, Ptr0, (UIntPtr)Offset.ToPointer(), Ptr1.ToPointer());
             EnsureNoErrors();
         }
 
         public unsafe void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, ref T Data) where T : unmanaged
         {
             fixed(void* ptr = &Data)
-                GL.BufferSubData((GLBufferTarget)Target, Ptr0, (UIntPtr)Offset.ToPointer(), ptr);
+                _gl.BufferSubData((GLBufferTarget)Target, Ptr0, (UIntPtr)Offset.ToPointer(), ptr);
             EnsureNoErrors();
         }
 
         public unsafe void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, T[] Data) where T : unmanaged
         {
             fixed(void* ptr = Data)
-                GL.BufferSubData((GLBufferTarget)Target, Ptr0, (UIntPtr)Offset.ToPointer(), ptr);
+                _gl.BufferSubData((GLBufferTarget)Target, Ptr0, (UIntPtr)Offset.ToPointer(), ptr);
             EnsureNoErrors();
         }
 
@@ -168,7 +169,7 @@ namespace Hedra.Engine.Rendering.Core
         {
             try
             {
-                return (FramebufferErrorCode)GL.CheckFramebufferStatus((GLFramebufferTargetEXT)Target);
+                return (FramebufferErrorCode)_gl.CheckFramebufferStatus((GLFramebufferTargetEXT)Target);
             }
             finally
             {
@@ -178,25 +179,25 @@ namespace Hedra.Engine.Rendering.Core
 
         public void Clear(ClearBufferMask Mask)
         {
-            GL.Clear((uint)Mask);
+            _gl.Clear((uint)Mask);
             EnsureNoErrors();
         }
 
         public void ClearColor(Vector4 DrawingColor)
         {
-            GL.ClearColor(DrawingColor.X, DrawingColor.Y, DrawingColor.Z, DrawingColor.W);
+            _gl.ClearColor(DrawingColor.X, DrawingColor.Y, DrawingColor.Z, DrawingColor.W);
             EnsureNoErrors();
         }
 
         public void ColorMask(bool B0, bool B1, bool B2, bool B3)
         {
-            GL.ColorMask(B0, B1, B2, B3);
+            _gl.ColorMask(B0, B1, B2, B3);
             EnsureNoErrors();
         }
 
         public void CompileShader(uint Program)
         {
-            GL.CompileShader(Program);
+            _gl.CompileShader(Program);
             EnsureNoErrors();
         }
 
@@ -204,7 +205,7 @@ namespace Hedra.Engine.Rendering.Core
         {
             try
             {
-                return (int)GL.CreateProgram();
+                return (int)_gl.CreateProgram();
             }
             finally
             {
@@ -216,7 +217,7 @@ namespace Hedra.Engine.Rendering.Core
         {
             try
             {
-                return (int)GL.CreateShader((GLShaderType)Type);
+                return (int)_gl.CreateShader((GLShaderType)Type);
             }
             finally
             {
@@ -226,165 +227,165 @@ namespace Hedra.Engine.Rendering.Core
 
         public void CullFace(CullFaceMode Mode)
         {
-            GL.CullFace((GLCullFaceMode)Mode);
+            _gl.CullFace((GLCullFaceMode)Mode);
             EnsureNoErrors();
         }
 
         public unsafe void DebugMessageCallback(GLDebugProc Proc, IntPtr Ptr)
         {
-            GL.DebugMessageCallback(Proc, Ptr.ToPointer());
+            _gl.DebugMessageCallback(Proc, Ptr.ToPointer());
             EnsureNoErrors();
         }
 
         public unsafe void DeleteBuffers(int N, ref uint Id)
         {
             fixed(uint* ptr = &Id) 
-                GL.DeleteBuffers((uint)N, ptr);
+                _gl.DeleteBuffers((uint)N, ptr);
             EnsureNoErrors();
         }
 
         public void DeleteFramebuffers(int N, params uint[] Ids)
         {
-            GL.DeleteFramebuffers((uint)N, Ids);
+            _gl.DeleteFramebuffers((uint)N, Ids);
             EnsureNoErrors();
         }
 
         public void DeleteProgram(uint Program)
         {
-            GL.DeleteProgram(Program);
+            _gl.DeleteProgram(Program);
             EnsureNoErrors();
         }
 
         public void DeleteQuery(uint Query)
         {
-            GL.DeleteQueries(1, Query);
+            _gl.DeleteQueries(1, Query);
             EnsureNoErrors();
         }
 
         public void DeleteShader(uint Program)
         {
-            GL.DeleteShader(Program);
+            _gl.DeleteShader(Program);
             EnsureNoErrors();
         }
 
         public void DeleteTexture(uint Texture)
         {
-            GL.DeleteTextures(1, Texture);
+            _gl.DeleteTextures(1, Texture);
             EnsureNoErrors();
         }
 
         public void DeleteTextures(int N, params uint[] Ids)
         {
-            GL.DeleteTextures((uint)N, Ids);
+            _gl.DeleteTextures((uint)N, Ids);
             EnsureNoErrors();
         }
 
         public void DeleteVertexArrays(int N, params uint[] Ids)
         {
-            GL.DeleteVertexArrays((uint)N, Ids);
+            _gl.DeleteVertexArrays((uint)N, Ids);
             EnsureNoErrors();
         }
 
         public void DeleteTextures(int N, ref uint Id)
         {
-            GL.DeleteTextures((uint)N, Id);
+            _gl.DeleteTextures((uint)N, Id);
             EnsureNoErrors();
         }
 
         public void DeleteVertexArrays(int N, ref uint Id)
         {
-            GL.DeleteVertexArrays((uint)N, Id);
+            _gl.DeleteVertexArrays((uint)N, Id);
             EnsureNoErrors();
         }
 
         public void DepthMask(bool Flag)
         {
-            GL.DepthMask(Flag);
+            _gl.DepthMask(Flag);
             EnsureNoErrors();
         }
 
         public void DetachShader(uint V0, uint V1)
         {
-            GL.DetachShader(V0, V1);
+            _gl.DetachShader(V0, V1);
             EnsureNoErrors();
         }
 
         public void Disable(EnableCap Cap)
         {
-            GL.Disable((GLEnableCap)Cap);
+            _gl.Disable((GLEnableCap)Cap);
             EnsureNoErrors();
         }
 
         public void DisableVertexAttribArray(uint N)
         {
-            GL.DisableVertexAttribArray(N);
+            _gl.DisableVertexAttribArray(N);
             EnsureNoErrors();
         }
 
         public void DrawArrays(PrimitiveType Type, int Offset, int Count)
         {
-            GL.DrawArrays((GLPrimitiveType)Type, Offset, (uint)Count);
+            _gl.DrawArrays((GLPrimitiveType)Type, Offset, (uint)Count);
             EnsureNoErrors();
         }
 
         public void DrawBuffer(DrawBufferMode Mode)
         {
-            GL.DrawBuffer((GLDrawBufferMode)Mode);
+            _gl.DrawBuffer((GLDrawBufferMode)Mode);
             EnsureNoErrors();
         }
 
         public unsafe void DrawBuffers(int N, GLDrawBuffersEnum[] Enums)
         {
             fixed(GLDrawBuffersEnum* ptr = Enums)
-                GL.DrawBuffers((uint)N, ptr);
+                _gl.DrawBuffers((uint)N, ptr);
             EnsureNoErrors();
         }
 
         public unsafe void DrawElements(PrimitiveType Primitive, int Count, DrawElementsType Type, IntPtr Indices)
         {
-            GL.DrawElements((GLPrimitiveType)Primitive, (uint)Count, (GLDrawElementsType)Type, Indices.ToPointer());
+            _gl.DrawElements((GLPrimitiveType)Primitive, (uint)Count, (GLDrawElementsType)Type, Indices.ToPointer());
             EnsureNoErrors();
         }
 
         public unsafe void DrawElementsInstanced(PrimitiveType Primitive, int Count, DrawElementsType Type, IntPtr Indices, int Instancecount)
         {
-            GL.DrawElementsInstanced((GLPrimitiveType)Primitive, (uint)Count, (GLDrawElementsType)Type, Indices.ToPointer(), (uint)Instancecount);
+            _gl.DrawElementsInstanced((GLPrimitiveType)Primitive, (uint)Count, (GLDrawElementsType)Type, Indices.ToPointer(), (uint)Instancecount);
             EnsureNoErrors();
         }
 
         public void Enable(EnableCap Cap)
         {
-            GL.Enable((GLEnableCap)Cap);
+            _gl.Enable((GLEnableCap)Cap);
             EnsureNoErrors();
         }
 
         public void EnableVertexAttribArray(uint Id)
         {
-            GL.EnableVertexAttribArray(Id);
+            _gl.EnableVertexAttribArray(Id);
             EnsureNoErrors();
         }
 
         public void EndQuery(QueryTarget Target)
         {
-            GL.EndQuery((GLQueryTarget)Target);
+            _gl.EndQuery((GLQueryTarget)Target);
             EnsureNoErrors();
         }
 
         public void FramebufferTexture(FramebufferTarget Framebuffer, FramebufferAttachment DepthAttachment, uint Id, int V0)
         {
-            GL.FramebufferTexture((GLFramebufferTarget)Framebuffer, (GLFramebufferAttachment)DepthAttachment, Id, V0);
+            _gl.FramebufferTexture((GLFramebufferTarget)Framebuffer, (GLFramebufferAttachment)DepthAttachment, Id, V0);
             EnsureNoErrors();
         }
 
         public void FramebufferTexture2D(FramebufferTarget Target, FramebufferAttachment Attachment, TextureTarget TextureTarget, uint Texture, int Level)
         {
-            GL.FramebufferTexture2D((GLFramebufferTargetEXT)Target, (GLFramebufferAttachmentEXT)Attachment, (GLTextureTargetEXT)TextureTarget, Texture, Level);
+            _gl.FramebufferTexture2D((GLFramebufferTargetEXT)Target, (GLFramebufferAttachmentEXT)Attachment, (GLTextureTargetEXT)TextureTarget, Texture, Level);
             EnsureNoErrors();
         }
 
         public void GenBuffers(int N, out uint V1)
         {
-            GL.GenBuffers((uint)N, out V1);
+            _gl.GenBuffers((uint)N, out V1);
             EnsureNoErrors();
         }
 
@@ -393,7 +394,7 @@ namespace Hedra.Engine.Rendering.Core
             try
             {
                 var id = 0u;
-                GL.GenFramebuffers(1, out id);
+                _gl.GenFramebuffers(1, out id);
                 return (int)id;
             }
             finally
@@ -407,7 +408,7 @@ namespace Hedra.Engine.Rendering.Core
             try
             {
                 var id = 0u;
-                GL.GenQueries(1, out id);
+                _gl.GenQueries(1, out id);
                 return (int)id;
             }
             finally
@@ -421,7 +422,7 @@ namespace Hedra.Engine.Rendering.Core
             try
             {
                 var id = 0u;
-                GL.GenTextures(1, out id);
+                _gl.GenTextures(1, out id);
                 return id;
             }
             finally
@@ -432,19 +433,19 @@ namespace Hedra.Engine.Rendering.Core
 
         public void GenVertexArrays(int N, out uint V1)
         {
-            GL.GenVertexArrays((uint)N, out V1);
+            _gl.GenVertexArrays((uint)N, out V1);
             EnsureNoErrors();
         }
 
         public void GenerateMipmap(GenerateMipmapTarget Target)
         {
-            GL.GenerateMipmap((GLGenerateMipmapTarget)Target);
+            _gl.GenerateMipmap((GLGenerateMipmapTarget)Target);
             EnsureNoErrors();
         }
 
         public unsafe void GetActiveUniformBlock(uint V0, uint V1, ActiveUniformBlockParameter Parameter, out int V3)
         {
-            GL.GetActiveUniformBlock(V0, V1, (GLActiveUniformBlockParameter)Parameter, out V3);
+            _gl.GetActiveUniformBlock(V0, V1, (GLActiveUniformBlockParameter)Parameter, out V3);
             EnsureNoErrors();
         }
 
@@ -452,7 +453,7 @@ namespace Hedra.Engine.Rendering.Core
         {
             try
             {
-                return (ErrorCode)GL.GetError();
+                return (ErrorCode)_gl.GetError();
             }
             finally
             {
@@ -465,7 +466,7 @@ namespace Hedra.Engine.Rendering.Core
             try
             {
                 var output = 0;
-                GL.GetInteger((GLGetPName)PName, &output);
+                _gl.GetInteger((GLGetPName)PName, &output);
                 return output;
             }
             finally
@@ -476,26 +477,26 @@ namespace Hedra.Engine.Rendering.Core
         
         public void GetInteger(GetPName PName, out int Value)
         {
-            GL.GetInteger((GLGetPName)PName, out Value);
+            _gl.GetInteger((GLGetPName)PName, out Value);
             EnsureNoErrors();
         }
 
         public void GetQueryObject(uint Program, GetQueryObjectParam Parameter, out int Value)
         {
-            GL.GetQueryObject(Program, (GLGetQueryObjectParam)Parameter, out Value);
+            _gl.GetQueryObject(Program, (GLGetQueryObjectParam)Parameter, out Value);
             EnsureNoErrors();
         }
 
         public void GetShader(uint Program, ShaderParameter Parameter, out int Value)
         {
-            GL.GetShader(Program, (GLShaderParameter)Parameter, out Value);
+            _gl.GetShader(Program, (GLShaderParameter)Parameter, out Value);
             EnsureNoErrors();
         }
 
         public string GetShaderInfoLog(int Id)
         {
             var log = string.Empty;
-            GL.GetShaderInfoLog((uint) Id, out log);
+            _gl.GetShaderInfoLog((uint) Id, out log);
             EnsureNoErrors();
             return log;
         }
@@ -504,7 +505,7 @@ namespace Hedra.Engine.Rendering.Core
         {
             try
             {
-                return Marshal.PtrToStringAnsi((IntPtr)GL.GetString((GLStringName)Name));
+                return Marshal.PtrToStringAnsi((IntPtr)_gl.GetString((GLStringName)Name));
             }
             finally
             {
@@ -516,7 +517,7 @@ namespace Hedra.Engine.Rendering.Core
         {
             try
             {
-                return (int)GL.GetUniformBlockIndex((uint)V0, Name);
+                return (int)_gl.GetUniformBlockIndex((uint)V0, Name);
             }
             finally
             {
@@ -528,7 +529,7 @@ namespace Hedra.Engine.Rendering.Core
         {
             try
             {
-                return GL.GetUniformLocation(Program, Name);
+                return _gl.GetUniformLocation(Program, Name);
             }
             finally
             {
@@ -538,7 +539,7 @@ namespace Hedra.Engine.Rendering.Core
 
         public void LinkProgram(uint Program)
         {
-            GL.LinkProgram(Program);
+            _gl.LinkProgram(Program);
             EnsureNoErrors();
         }
 
@@ -550,58 +551,58 @@ namespace Hedra.Engine.Rendering.Core
                 arr[i] = Offsets[i].ToPointer();
             
             fixed(uint* ptr1 = Counts)
-                GL.MultiDrawElements((GLPrimitiveType)Primitive, ptr1, (GLDrawElementsType)Type, arr, (uint)Count);
+                _gl.MultiDrawElements((GLPrimitiveType)Primitive, ptr1, (GLDrawElementsType)Type, arr, (uint)Count);
             EnsureNoErrors();
         }
 
         public void PointSize(float Size)
         {
-            GL.PointSize(Size);
+            _gl.PointSize(Size);
             EnsureNoErrors();
         }
         
         public void LineWidth(float Width)
         {
-            GL.LineWidth(Width);
+            _gl.LineWidth(Width);
             EnsureNoErrors();
         }
 
         public void PolygonMode(MaterialFace Face, PolygonMode Mode)
         {
-            GL.PolygonMode((GLMaterialFace)Face, (GLPolygonMode)Mode);
+            _gl.PolygonMode((GLMaterialFace)Face, (GLPolygonMode)Mode);
             EnsureNoErrors();
         }
 
         public void ReadBuffer(ReadBufferMode Mode)
         {
-            GL.ReadBuffer((GLReadBufferMode)Mode);
+            _gl.ReadBuffer((GLReadBufferMode)Mode);
             EnsureNoErrors();
         }
 
         public unsafe void ReadPixels(int V0, int V1, int V2, int V3, PixelFormat Format, PixelType Type, int[] Ptr)
         {
             fixed(void* ptr = Ptr)
-                GL.ReadPixels(V0, V1, (uint)V2, (uint)V3, (GLPixelFormat)Format, (GLPixelType)Type, ptr);
+                _gl.ReadPixels(V0, V1, (uint)V2, (uint)V3, (GLPixelFormat)Format, (GLPixelType)Type, ptr);
             EnsureNoErrors();
         }
 
         public unsafe void ShaderSource(int V0, string Source)
         {
-            GL.ShaderSource((uint)V0, Source);
+            _gl.ShaderSource((uint)V0, Source);
             EnsureNoErrors();
         }
 
         public unsafe void TexImage2D(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3,
             PixelFormat Format, PixelType Type, IntPtr Ptr)
         {
-            GL.TexImage2D((GLTextureTarget)Target, V0, (int)InternalFormat, (uint)V1, (uint)V2, V3, (GLPixelFormat)Format, (GLPixelType)Type, Ptr.ToPointer());
+            _gl.TexImage2D((GLTextureTarget)Target, V0, (int)InternalFormat, (uint)V1, (uint)V2, V3, (GLPixelFormat)Format, (GLPixelType)Type, Ptr.ToPointer());
             EnsureNoErrors();
         }
 
         public void TexImage2DMultisample(TextureTargetMultisample Target, int Samples, PixelInternalFormat InternalFormat,
             int Width, int Height, bool FixedLocations)
         {
-            GL.TexImage2DMultisample((GLTextureTargetMultisample)Target, (uint)Samples, (GLPixelInternalFormatEXT)InternalFormat, (uint)Width, (uint)Height, FixedLocations);
+            _gl.TexImage2DMultisample((GLTextureTargetMultisample)Target, (uint)Samples, (GLPixelInternalFormatEXT)InternalFormat, (uint)Width, (uint)Height, FixedLocations);
             EnsureNoErrors();
         }
 
@@ -609,56 +610,56 @@ namespace Hedra.Engine.Rendering.Core
             PixelFormat Format, PixelType Type, T[] Pixels) where T : unmanaged
         {
             fixed(void* ptr = Pixels)
-                GL.TexImage3D((GLTextureTarget) Target, V0, (int) InternalFormat, (uint) V1, (uint) V2, (uint) V3, V4, (GLPixelFormat) Format, (GLPixelType) Type, ptr);
+                _gl.TexImage3D((GLTextureTarget) Target, V0, (int) InternalFormat, (uint) V1, (uint) V2, (uint) V3, V4, (GLPixelFormat) Format, (GLPixelType) Type, ptr);
             EnsureNoErrors();
         }
 
         public void TexParameter(TextureTarget Target, TextureParameterName Name, int Value)
         {
-            GL.TexParameter((GLTextureTarget)Target, (GLTextureParameterName)Name, Value);
+            _gl.TexParameter((GLTextureTarget)Target, (GLTextureParameterName)Name, Value);
             EnsureNoErrors();
         }
 
         public void Uniform1(int Location, int Uniform)
         {
-            GL.Uniform1(Location, Uniform);
+            _gl.Uniform1(Location, Uniform);
             EnsureNoErrors();
         }
         
         public void Uniform1(int Location, float Uniform)
         {
-            GL.Uniform1(Location, Uniform);
+            _gl.Uniform1(Location, Uniform);
             EnsureNoErrors();
         }
         
         public void Uniform1(int Location, double Uniform)
         {
-            GL.Uniform1(Location, Uniform);
+            _gl.Uniform1(Location, Uniform);
             EnsureNoErrors();
         }       
 
         public unsafe void Uniform2(int Location, Vector2 Uniform)
         {
-            GL.Uniform2(Location, 1, (float*)&Uniform);
+            _gl.Uniform2(Location, 1, (float*)&Uniform);
             EnsureNoErrors();
         }
 
         public unsafe void Uniform3(int Location, Vector3 Uniform)
         {
-            GL.Uniform3(Location, 1, (float*)&Uniform);
+            _gl.Uniform3(Location, 1, (float*)&Uniform);
             EnsureNoErrors();
         }
 
         public unsafe void Uniform4(int Location, Vector4 Uniform)
         {
-            GL.Uniform4(Location, 1, (float*)&Uniform);
+            _gl.Uniform4(Location, 1, (float*)&Uniform);
             EnsureNoErrors();
         }
 
         public unsafe void UniformMatrix2(int Location, bool Transpose, ref Matrix4x4 Uniform)
         {
             var mem = new Vector4(Uniform.M11, Uniform.M12, Uniform.M21, Uniform.M22);
-            GL.UniformMatrix2(Location, 1, Transpose, &mem.X);
+            _gl.UniformMatrix2(Location, 1, Transpose, &mem.X);
             EnsureNoErrors();
         }
 
@@ -674,63 +675,63 @@ namespace Hedra.Engine.Rendering.Core
             mem[6] = Uniform.M31;
             mem[7] = Uniform.M32;
             mem[8] = Uniform.M33;
-            GL.UniformMatrix3(Location, 1, Transpose, mem);
+            _gl.UniformMatrix3(Location, 1, Transpose, mem);
             EnsureNoErrors();
         }
 
         public unsafe void UniformMatrix4x4(int Location, bool Transpose, ref Matrix4x4 Uniform)
         {
             fixed(float* ptr = &Uniform.M11)
-                GL.UniformMatrix4(Location, 1, false, ptr);
+                _gl.UniformMatrix4(Location, 1, false, ptr);
             EnsureNoErrors();
         }
 
         public void UseProgram(uint Program)
         {
-            GL.UseProgram(Program);
+            _gl.UseProgram(Program);
             EnsureNoErrors();
         }
 
         public void VertexAttribDivisor(int V0, int V1)
         {
-            GL.VertexAttribDivisor((uint)V0, (uint)V1);
+            _gl.VertexAttribDivisor((uint)V0, (uint)V1);
             EnsureNoErrors();
         }
 
         public unsafe void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag, int Bytes, IntPtr Ptr)
         {
-            GL.VertexAttribPointer((uint)V0, V1, (GLVertexAttribPointerType)Type, Flag, (uint)Bytes, Ptr.ToPointer());
+            _gl.VertexAttribPointer((uint)V0, V1, (GLVertexAttribPointerType)Type, Flag, (uint)Bytes, Ptr.ToPointer());
             EnsureNoErrors();
         }
         
         public unsafe void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag, int Bytes)
         {
-            GL.VertexAttribPointer((uint)V0, V1, (GLVertexAttribPointerType)Type, Flag, (uint)Bytes, IntPtr.Zero.ToPointer());
+            _gl.VertexAttribPointer((uint)V0, V1, (GLVertexAttribPointerType)Type, Flag, (uint)Bytes, IntPtr.Zero.ToPointer());
             EnsureNoErrors();
         }
 
         public void Viewport(int V0, int V1, int V2, int V3)
         {
-            GL.Viewport(V0, V1, (uint)V2, (uint)V3);
+            _gl.Viewport(V0, V1, (uint)V2, (uint)V3);
             EnsureNoErrors();
         }
 
         public void GetProgram(int ShaderId, GetProgramParameterName ParameterName, out int Value)
         {
             Value = 0;
-            GL.GetProgram((uint)ShaderId, (GLGetProgramParameterName)ParameterName, out Value);
+            _gl.GetProgram((uint)ShaderId, (GLGetProgramParameterName)ParameterName, out Value);
             EnsureNoErrors();
         }
 
         public void GetProgramInfoLog(int ShaderId, out string Log)
         {
-            GL.GetProgramInfoLog((uint)ShaderId, out Log);
+            _gl.GetProgramInfoLog((uint)ShaderId, out Log);
             EnsureNoErrors();
         }
 
         public void UniformBlockBinding(int ShaderId, int Index, int BindingPoint)
         {
-            GL.UniformBlockBinding((uint)ShaderId, (uint)Index, (uint)BindingPoint);
+            _gl.UniformBlockBinding((uint)ShaderId, (uint)Index, (uint)BindingPoint);
             EnsureNoErrors();
         }
 
@@ -739,7 +740,7 @@ namespace Hedra.Engine.Rendering.Core
 #if DEBUG
             if(System.Threading.Thread.CurrentThread.ManagedThreadId != Loader.Hedra.MainThreadId)
                 throw new ArgumentException($"Invalid GL calls outside of the main thread.");
-            var error = GL.GetError();
+            var error = _gl.GetError();
             if (error != GLEnum.NoError /*&& ErrorSeverity.Ignore != Severity*/)
             {
                 var errorMsg = $"Unexpected OpenGL error: {error} {Environment.NewLine} Stack:{Environment.NewLine}{new StackTrace()}";

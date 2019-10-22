@@ -20,7 +20,7 @@ namespace Hedra.Engine.Rendering.Core
     public static class Renderer
     {
         public static event ShaderChangeEvent ShaderChanged;
-        public static IGLProvider Provider { get; set; } = new GLProvider();
+        public static IGLProvider Provider { get; set; }
         
         public static uint ShaderBound => ShaderHandler.Id;
         public static uint FBOBound => FramebufferHandler.Id;
@@ -47,6 +47,11 @@ namespace Hedra.Engine.Rendering.Core
             FramebufferHandler = new FramebufferHandler();
         }
 
+        public static void LoadProvider()
+        {
+            Provider = new GLProvider();
+        }
+        
         public static void Load()
         {
             BlendEquation(BlendEquationMode.FuncAdd);

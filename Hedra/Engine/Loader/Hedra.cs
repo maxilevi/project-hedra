@@ -87,6 +87,7 @@ namespace Hedra.Engine.Loader
             Time.RegisterThread();
             OSManager.Load(Assembly.GetExecutingAssembly().Location);
             
+            Renderer.LoadProvider();
             var glVersion = Renderer.GetString(StringName.Version);
             var shadingOpenGlVersion = GetShadingVersion(glVersion);
 
@@ -119,6 +120,7 @@ namespace Hedra.Engine.Loader
 
             Renderer.Load();
             Log.WriteLine("Supported GLSL version is : "+Renderer.GetString(StringName.ShadingLanguageVersion));
+            OSManager.WriteSpecs();
             
             GameManager.Load();
             Log.WriteLine("Scene loading was Successful.");
