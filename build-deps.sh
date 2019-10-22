@@ -22,6 +22,7 @@ cp "./Silk.NET/src/Input/Silk.NET.Input.Desktop/bin/Release/$FRAMEWORK/Silk.NET.
 cp "./Silk.NET/src/Input/Silk.NET.Input/bin/Release/$FRAMEWORK/Silk.NET.Input.dll" "./references/Silk.NET/Silk.NET.Input.dll"
 cp "./Silk.NET/src/OpenAL/Silk.NET.OpenAL/bin/Release/$FRAMEWORK/Silk.NET.OpenAL.dll" "./references/Silk.NET/Silk.NET.OpenAL.dll"
 cp "./Silk.NET/src/OpenGL/Silk.NET.OpenGL/bin/Release/$FRAMEWORK/Silk.NET.OpenGL.dll" "./references/Silk.NET/Silk.NET.OpenGL.dll"
+cp "./Silk.NET/src/OpenGL/Silk.NET.OpenGL.Legacy/bin/Release/$FRAMEWORK/Silk.NET.OpenGL.Legacy.dll" "./references/Silk.NET/Silk.NET.OpenGL.Legacy.dll"
 cp "./Silk.NET/src/Windowing/Silk.NET.Windowing.Common/bin/Release/$FRAMEWORK/Silk.NET.Windowing.Common.dll" "./references/Silk.NET/Silk.NET.Windowing.Common.dll"
 cp "./Silk.NET/src/Windowing/Silk.NET.Windowing.Desktop/bin/Release/$FRAMEWORK/Silk.NET.Windowing.Desktop.dll" "./references/Silk.NET/Silk.NET.Windowing.Desktop.dll"
 cp "./Silk.NET/src/Windowing/Silk.NET.Windowing/bin/Release/$FRAMEWORK/Silk.NET.Windowing.dll" "./references/Silk.NET/Silk.NET.Windowing.dll"
