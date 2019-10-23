@@ -33,5 +33,3 @@ jobs:
     - name: Run tests
       run: ./packages/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe HedraTests/bin/Release/HedraTests.dll
       shell: bash
-    - name: Run dummy mode
-      run: Hedra.exe --dummy-mode
