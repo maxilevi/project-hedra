@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -109,7 +110,8 @@ namespace Hedra.Engine.Rendering.Core
         private static string Hash<T>(T[] Data, int SizeInBytes, VertexAttribPointerType PointerType, BufferTarget BufferTarget, BufferUsageHint Hint)
         {
             var size = Data.Length != 0 ? Marshal.SizeOf(Data[0]) : 0;
-            var byteArray = new byte[size * Data.Length + 4 * sizeof(int)];
+            var pool = ArrayPool<byte>.Shared;
+            var byteArray = pool.Rent(size * Data.Length + 4 * sizeof(int));
             CopyTo(Data, byteArray);
             Buffer.BlockCopy(
                 new [] { SizeInBytes, (int)PointerType, (int)BufferTarget, (int)Hint },
@@ -118,7 +120,9 @@ namespace Hedra.Engine.Rendering.Core
                 size * Data.Length,
                 sizeof(int) * 4
             );
-            return Hash(byteArray);
+            var hash = Hash(byteArray);
+            pool.Return(byteArray);
+            return hash;
         }
 
         private static string Hash(byte[] Bytes)

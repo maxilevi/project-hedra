@@ -25,9 +25,9 @@ namespace Hedra.Engine.Rendering.Shaders
             }
         }
 
-        public void Load(object[] Array)
+        public void Load(object[] Array, int Length)
         {
-            for (var i = 0; i < Array.Length; i++)
+            for (var i = 0; i < Length; i++)
             {
                 Mappings[i].Value = Array[i];
                 Shader.LoadMapping(Mappings[i]);

@@ -6,6 +6,7 @@
  */
 
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.IO;
@@ -266,7 +267,15 @@ namespace Hedra.Engine.Rendering.Core
                 if (_arrayMappings.ContainsKey(Key))
                 {
                     var asArray = (Array) value;
-                    _arrayMappings[Key].Load(asArray.Cast<object>().ToArray());
+                    var pool = ArrayPool<object>.Shared;
+                    var temp = pool.Rent(asArray.Length);
+                    var i = 0;
+                    foreach (var obj in asArray)
+                    {
+                        temp[i++] = obj;
+                    }
+                    _arrayMappings[Key].Load(temp, asArray.Length);
+                    pool.Return(temp);
                 }
                 else
                 {

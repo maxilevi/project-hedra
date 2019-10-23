@@ -8,6 +8,7 @@
  */
 using System.Numerics;
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using Hedra.Core;
 using Hedra.Engine.Core;
@@ -253,10 +254,12 @@ namespace Hedra.Engine.Rendering.Animation
             (Dictionary<string, JointTransform> Pose, IDictionary<string, JointTransform> TargetPose, float Progression, out bool Interpolated)
         {
             var interpolated = false;
-            var dict = Pose.ToArray();
-            for (var i = 0; i < dict.Length; i++)
+            var pool = ArrayPool<KeyValuePair<string, JointTransform>>.Shared;
+            var buffer = pool.Rent(Pose.Count);
+            CopyToArray(Pose, buffer);
+            for(var i = 0; i < Pose.Count; ++i)
             {
-                var pair = dict[i];
+                var pair = buffer[i];
                 var previousTransform = pair.Value;
                 var nextTransform = TargetPose[pair.Key];
                 var areEqual = previousTransform.Equals(nextTransform);
@@ -266,11 +269,18 @@ namespace Hedra.Engine.Rendering.Animation
                         : JointTransform.Interpolate(previousTransform, nextTransform, Progression);
                 interpolated |= !areEqual;
             }
-
+            pool.Return(buffer);
             Interpolated = interpolated;
             return Pose;
         }
-    
+
+        private void CopyToArray(Dictionary<string, JointTransform> Pose, KeyValuePair<string, JointTransform>[] Buffer)
+        {
+            var i = 0;
+            foreach (var pair in Pose)
+                Buffer[i++] = pair;
+        }
+        
         private Dictionary<string, JointTransform> InterpolateJointPosesFromKeyframes(KeyFrame PreviousFrame, KeyFrame NextFrame, float Progression, ref Dictionary<string, JointTransform> Pose)
         {
             foreach(var pair in PreviousFrame.Pose)
