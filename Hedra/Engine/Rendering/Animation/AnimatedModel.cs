@@ -300,6 +300,22 @@ namespace Hedra.Engine.Rendering.Animation
             }
         }
 
+        public void SetValues(AnimatedModel Model)
+        {
+            TransformationMatrix = Model.TransformationMatrix;
+            Pause = Model.Pause;
+            LocalRotation = Model.LocalRotation;
+            Position = Model.Position;
+            Scale = Model.Scale;
+            Tint = Model.Tint;
+            BaseTint = Model.BaseTint;
+            Alpha = Model.Alpha;
+            ApplyFog = Model.ApplyFog;
+            AnimationSpeed = Model.AnimationSpeed;
+            Outline = Model.Outline;
+            Enabled = Model.Enabled;
+        }
+
         public Matrix4x4[] JointTransforms => _jointMatrices;
 
         private void UpdateJointTransforms(bool Force = false)

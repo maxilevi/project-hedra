@@ -18,6 +18,7 @@ using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.Game;
+using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.PhysicsSystem;
@@ -64,8 +65,11 @@ namespace Hedra.Engine.Rendering.UI
             {
                 System.Diagnostics.Process.Start($"{AssetManager.AppData}/Characters/");
             };
-            
-            _human = new Humanoid();
+
+            _human = new Humanoid
+            {
+                Name = "CreatorHumanoid"
+            };
             _human.Model = new HumanoidModel(_human)
             {
                 LocalRotation = Vector3.UnitY * -90,
@@ -76,6 +80,7 @@ namespace Hedra.Engine.Rendering.UI
             };
             _human.SearchComponent<DamageComponent>().Immune = true;
             _human.Physics.UseTimescale = false;
+            _human.Physics.UsePhysics = false;
             World.RemoveEntity(_human);
 
 
@@ -87,17 +92,11 @@ namespace Hedra.Engine.Rendering.UI
             void SetWeapon(object Sender, MouseButtonEventArgs E)
             {
                 _classType = ClassDesign.FromString(ClassDesign.AvailableClassNames[classChooser.Index]);
-                var rotation = _human.Model.LocalRotation;
-                var position = _human.Position = Scenes.MenuBackground.PlatformPosition;
-
-                _human.Model.Dispose();
-                _human.Model = new HumanoidModel(_human, _classType.ModelTemplate)
-                {
-                    Position = position,
-                    LocalRotation = rotation,
-                    TargetRotation = rotation
-                };
+                var previousModel = _human.Model;
+                _human.Model = new HumanoidModel(_human, _classType.ModelTemplate);
+                _human.Model.SetValues(previousModel);
                 _human.SetWeapon(_classType.StartingItems.First(P => P.Value.IsWeapon).Value.Weapon);
+                previousModel.Dispose();
             }
 
             SetWeapon(null, default);
@@ -171,8 +170,9 @@ namespace Hedra.Engine.Rendering.UI
                 _human.Model.LocalRotation = Vector3.UnitY * -90 + Vector3.UnitY * _newRot;
                 _human.Model.TargetRotation = Vector3.UnitY * -90 + Vector3.UnitY * _newRot;
                 _human.Position = new Vector3(Scenes.MenuBackground.PlatformPosition.X, _human.Position.Y, Scenes.MenuBackground.PlatformPosition.Z);
-                if(_human.Position.Y <= Physics.HeightAtPosition(_human.Position)){
-                    _human.Position = new Vector3(_human.Position.X, Physics.HeightAtPosition(_human.Position) + 4, _human.Position.Z);
+                if(_human.Position.Y <= Physics.HeightAtPosition(_human.Position))
+                {
+                    _human.Position = new Vector3(_human.Position.X, Physics.HeightAtPosition(_human.Position), _human.Position.Z);
                 }
                 _human.IsKnocked = false;
             }

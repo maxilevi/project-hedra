@@ -332,6 +332,11 @@ namespace Hedra.Engine.Player
             }
         }
 
+        public void SetValues(HumanoidModel HumanModel)
+        {
+            Model.SetValues(HumanModel.Model);
+        }
+
         private void HandleTransformationMatrix()
         {
             
