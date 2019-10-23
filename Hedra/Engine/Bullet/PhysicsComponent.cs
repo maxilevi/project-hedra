@@ -57,6 +57,7 @@ namespace Hedra.Engine.Bullet
         private bool _moved;
         private bool _isStuck;
         private bool _usePhysics;
+        private Vector3 _movedDistance;
 
         public PhysicsComponent(IEntity Parent) : base(Parent)
         {
@@ -253,7 +254,8 @@ namespace Hedra.Engine.Bullet
         {
             var deltaTime = Timestep;
             _speedMultiplier = Mathf.Lerp(_speedMultiplier, NormalSpeedModifier * (Parent.IsAttacking ? Parent.AttackingSpeedModifier : 1), deltaTime * 2f);
-            HandleFallDamage(deltaTime);
+            if(_mainInformation.IsInSimulation)
+                HandleFallDamage(deltaTime);
             HandleIsMoving();
             HandleIsStuck();
             Parent.IsGrounded = _sensorContacts > 0;
@@ -276,6 +278,7 @@ namespace Hedra.Engine.Bullet
             if (!(Parent is LocalPlayer))
             {
                 _isStuck = (_moved && _body.LinearVelocity.Compatible().Xz().LengthSquared() < 1f) && !Parent.IsKnocked;
+                _isStuck = (_moved && _body.LinearVelocity.Compatible().Xz().LengthSquared() < 1f) && !Parent.IsKnocked;
                 _moved = false;
             }
         }
@@ -290,7 +293,8 @@ namespace Hedra.Engine.Bullet
         {
             _accumulatedMovement += Position;
             _sensor.Activate();
-            _moved = true;
+            _movedDistance = Position;
+            _moved = _movedDistance.Length() > float.Epsilon;
         }
 
         private void HandleIsMoving()

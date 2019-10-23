@@ -111,6 +111,7 @@ namespace Hedra.Engine.EntitySystem
                         Physics.HeightAtPosition(newPosition + offset),
                         newPosition.Z + offset.Z);
                     World.SpawnMob(template.Type, newNearPosition, Utils.Rng);
+                    //Log.WriteLine($"Spawned '{template.Type}' at '{newNearPosition}', '{((World.GetChunkAt(newPosition)?.Landscape.FullyGenerated ?? false) ? "EXISTS" : "NOT EXISTS")}'", LogType.WorldBuilding);
                 }
             }
             else

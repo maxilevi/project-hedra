@@ -153,14 +153,17 @@ namespace Hedra.Engine.Bullet
 
                     if (!information.IsInSimulation)
                         AddToSimulation(_dynamicBodies[i], information);
-
+#if DEBUG
                     AssertIsNotFailingThroughFloor(_dynamicBodies[i]);
+#endif
                 }
                 else
                 {
                     /* Disable physics on objects that are in places where the ground has not loaded yet. */
                     if (information.IsInSimulation)
+                    {
                         RemoveFromSimulation(_dynamicBodies[i], information);
+                    }
                 }
             }
         }
@@ -173,7 +176,12 @@ namespace Hedra.Engine.Bullet
                 var information = (PhysicsObjectInformation) Body.UserObject;
                 Log.WriteLine($"'{(information.IsEntity ? information.Entity.Name : information.Name)}' fell through the world at '{position}'. Fixing its height...");
                 Body.ClearForces();
-                Body.Translate(Vector3.UnitY * (-position.Y + 1 + Physics.HeightAtPosition(position.Compatible())));
+                if (information.IsEntity)
+                {
+                    information.Entity.Physics.ResetFall();
+                    information.Entity.Physics.ResetVelocity();
+                    information.Entity.Position = new System.Numerics.Vector3(information.Entity.Position.X, Physics.HeightAtPosition(position.Compatible()), information.Entity.Position.Z);
+                }
             }
         }
 
