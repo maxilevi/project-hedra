@@ -4,7 +4,7 @@
   "FirstSpecializationTree": "Assassin",
   "SecondSpecializationTree": "Ninja",
   "Logo": "$DataFile$/Assets/UI/RogueLogo.png",
-  "BaseSpeed": 1.45,
+  "BaseSpeed": 1.55,
   "StartingItems": [
     {
       "Name": "CommonBronzeDoubleBlades",
