@@ -47,7 +47,7 @@ void main()
 	float ShadowVisibility = pass_ditherFogTextureShadows.w == int(1.0) && pass_ditherFogTextureShadows.y == int(1.0)
 	    ? simple_apply_shadows(Coords, bias)
 	    : 1.0;
-    float tex = texture(noiseTexture, base_vertex_position).r * int(pass_ditherFogTextureShadows.z);
+    float tex = texture(noiseTexture, base_vertex_position).r * int(pass_ditherFogTextureShadows.z) * 1.25;
     vec4 inputColor = vec4(linear_to_srbg(Color.xyz * ShadowVisibility * (pass_tint.rgb + pass_baseTint.rgb) * (tex + 1.0)), Color.w);
 
     if(Outline)

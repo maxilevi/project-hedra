@@ -54,7 +54,7 @@ void main()
         if (DitherVisibility - ditherMat[int(gl_FragCoord.x) % 4][int(gl_FragCoord.y) % 4] < 0.0) discard;
 	}
     float ShadowVisibility = use_shadows > 0.0 ? CalculateShadows() : 1.0;
-    float tex = texture(noiseTexture, base_vertex_position).r;
+    float tex = texture(noiseTexture, base_vertex_position).r * 1.25;
 	vec3 final_color = linear_to_srbg(completeColor * (tex + 1.0) * ShadowVisibility);
 	vec4 NewColor = mix(sky_color(), vec4(final_color, raw_color.w), Visibility);
 
