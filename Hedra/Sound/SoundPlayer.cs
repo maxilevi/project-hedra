@@ -21,7 +21,7 @@ namespace Hedra.Sound
     /// </summary>
     public static class SoundPlayer
     {
-        public static ISoundProvider Provider { get; set; } = new SoundProvider();
+        public static ISoundProvider Provider { get; set; }
 
         public static Vector3 ListenerPosition => Provider.ListenerPosition;
 

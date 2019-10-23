@@ -75,6 +75,7 @@ namespace Hedra.Engine.Game
             try
             {
                 Log.WriteLine("Attemping to load sound engine...");
+                SoundPlayer.Provider = new SoundProvider();
                 SoundPlayer.Load();
                 SoundtrackManager.Load();
                 Log.WriteLine("Sound engine loaded succesfully");

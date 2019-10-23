@@ -12,10 +12,12 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Engine.Sound;
 using Hedra.Game;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
+using Hedra.Sound;
 using HedraTests.Rendering;
 using Moq;
 using NUnit.Framework;
@@ -42,6 +44,7 @@ namespace HedraTests
         {
             GameSettings.TestingMode = true;
             Time.RegisterThread();
+            SoundPlayer.Provider = new DummySoundProvider();
             World.Provider = new SimpleWorldProviderMock();
             AssetManager.Provider = new DummyAssetProvider();
             Graphics2D.Provider = new SimpleTexture2DProviderMock();
