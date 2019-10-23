@@ -25,6 +25,9 @@ jobs:
       run: nuget restore HedraTests/HedraTests.csproj -PackagesDirectory packages
     - name: Restore AssetBuilder packages 
       run: nuget restore AssetBuilder/AssetBuilder.csproj -PackagesDirectory packages
+    - name: Build Dependencies
+      shell: bash
+      run: ./build-deps.sh
     - name: Build Solution
       run: dotnet msbuild -p:Configuration=Release
     - name: Run tests
