@@ -18,7 +18,6 @@ namespace HedraTests.Sound
             World.Provider = new SimpleWorldProviderMock();
             AssetManager.Provider = new DummyAssetProvider();
             SoundtrackManager.Load(null);
-            //Assert.Catch(typeof(NullReferenceException), SoundtrackManager.Update);
         }
     }
 }
