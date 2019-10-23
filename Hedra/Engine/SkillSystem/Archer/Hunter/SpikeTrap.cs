@@ -8,6 +8,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Localization;
+using Hedra.Numerics;
 using Hedra.Rendering;
 
 namespace Hedra.Engine.SkillSystem.Archer.Hunter

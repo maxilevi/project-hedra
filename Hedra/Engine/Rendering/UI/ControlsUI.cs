@@ -15,13 +15,16 @@ using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
+using Hedra.Engine.Windowing;
 using Hedra.Game;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
-using OpenTK;
-using OpenTK.Input;
+using System.Numerics;
+using Hedra.Numerics;
+using Silk.NET.Input.Common;
+
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -95,13 +98,13 @@ namespace Hedra.Engine.Rendering.UI
         {
             if(AddClickEvent)
                 Background.Click += (Sender, Args) => OnClick(Background, Args);
-            Background.HoverEnter += (Sender, Args) =>
+            Background.HoverEnter += () =>
             {
                 Text.TextColor = Color.OrangeRed;
                 Text.Scale *= 1.25f;
                 Background.Scale *= 1.25f;
             };
-            Background.HoverExit += (Sender, Args) =>
+            Background.HoverExit += () =>
             {
                 /* Text is recreated when changing the color, so there is no need to edit the scale */
                 Text.TextColor = Color.White;

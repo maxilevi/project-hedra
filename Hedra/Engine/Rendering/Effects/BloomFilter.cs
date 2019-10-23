@@ -7,12 +7,13 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
-using OpenTK.Graphics.OpenGL4;
-using OpenTK;
+using Hedra.Engine.Core;
+using System.Numerics;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Rendering.Core;
+using Hedra.Engine.Windowing;
 using Hedra.Game;
 
 namespace Hedra.Engine.Rendering.Effects

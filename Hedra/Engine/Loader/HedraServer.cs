@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Threading;
+using System.Windows.Forms;
 using Hedra.API;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ClassSystem;
@@ -13,11 +14,13 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Sound;
+using Hedra.Engine.Windowing;
 using Hedra.Game;
 using Hedra.Sound;
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Input;
+using System.Numerics;
+using Silk.NET.Windowing.Common;
+using Image = Silk.NET.GLFW.Image;
+
 
 namespace Hedra.Engine.Loader
 {
@@ -57,6 +60,7 @@ namespace Hedra.Engine.Loader
 
         public void RunOnce() => throw new System.NotImplementedException();
         public void Dispose() => throw new System.NotImplementedException();
+        public bool Fullscreen { get; set; }
         public void Close() => throw new System.NotImplementedException();
         public void Exit() => throw new System.NotImplementedException();
         public bool IsExiting => false;
@@ -66,7 +70,6 @@ namespace Hedra.Engine.Loader
         public VSyncMode VSync { get; set; }
         public WindowState WindowState { get; set; }
         public int Height { get; set; }
-        public Icon Icon { get; set; }
         public string Title { get; set; }
         public int Width { get; set; }
         public WindowBorder WindowBorder { get; set; }
@@ -74,13 +77,23 @@ namespace Hedra.Engine.Loader
         
         public bool FinishedLoadingSplashScreen => true;
         public string GameVersion => "SERVER";
-        public event OnFrameChanged FrameChanged;
-        public event EventHandler<MouseButtonEventArgs> MouseUp;
-        public event EventHandler<MouseButtonEventArgs> MouseDown;
-        public event EventHandler<MouseWheelEventArgs> MouseWheel;
-        public event EventHandler<MouseMoveEventArgs> MouseMove;
-        public event EventHandler<KeyboardKeyEventArgs> KeyDown;
-        public event EventHandler<KeyboardKeyEventArgs> KeyUp;
-        public event EventHandler<KeyPressEventArgs> KeyPress;
+        public void Setup()
+        {
+        }
+
+        public Vector2 MousePosition { get; }
+        public void SetIcon(Image Icon)
+        {
+            throw new NotImplementedException();
+        }
+
+        public event Action<MouseButtonEventArgs> MouseUp;
+        public event Action<MouseButtonEventArgs> MouseDown;
+        public event Action<MouseWheelEventArgs> MouseWheel;
+        public event Action<MouseMoveEventArgs> MouseMove;
+        public event Action<KeyboardKeyEventArgs> KeyDown;
+        public event Action<KeyboardKeyEventArgs> KeyUp;
+        public event Action<string> CharWritten;
+        public event Action<KeyPressEventArgs> KeyPress;
     }
 }

@@ -7,7 +7,7 @@ using Hedra.Engine.Rendering.Particles;
 using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Warrior.Paladin
 {

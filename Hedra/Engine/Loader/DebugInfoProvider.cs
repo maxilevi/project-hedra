@@ -23,9 +23,11 @@ using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using Hedra.WeaponSystem;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
-using OpenTK.Input;
+using System.Numerics;
+using Hedra.Engine.Core;
+
+using Silk.NET.Input.Common;
+
 
 namespace Hedra.Engine.Loader
 {

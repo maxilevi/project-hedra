@@ -5,8 +5,10 @@ using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Game;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Game;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using System.Numerics;
+using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Player.QuestSystem
 {
@@ -30,14 +32,14 @@ namespace Hedra.Engine.Player.QuestSystem
             GameSettings.GlobalShadows = false;
             
             const float aspect = 1.33f;
-            var projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(40 * Mathf.Radian, aspect, 1, 1024f);
+            var projectionMatrix = Matrix4x4.CreatePerspectiveFieldOfView(40 * Mathf.Radian, aspect, 1, 1024f);
             Renderer.LoadProjection(projectionMatrix);
             var offset = Vector3.UnitY * ModelHeight * .5f;
             var eyeOffset = offset + Vector3.UnitZ * 10;
-            var rotMat = Matrix4.CreateRotationY(_rotation * Mathf.Radian);
-            var lookAt = Matrix4.LookAt(
-                Model.Position + Vector3.TransformPosition(eyeOffset, rotMat),
-                Model.Position + Vector3.TransformPosition(offset, rotMat), Vector3.UnitY
+            var rotMat = Matrix4x4.CreateRotationY(_rotation * Mathf.Radian);
+            var lookAt = Matrix4x4.CreateLookAt(
+                Model.Position + Vector3.Transform(eyeOffset, rotMat),
+                Model.Position + Vector3.Transform(offset, rotMat), Vector3.UnitY
             );
             Renderer.LoadModelView(lookAt);
 

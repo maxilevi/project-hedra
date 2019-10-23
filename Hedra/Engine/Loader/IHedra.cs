@@ -1,6 +1,4 @@
-using Hedra.Engine.Events;
-using OpenTK;
-using OpenTK.Platform;
+using System.Numerics;
 
 namespace Hedra.Engine.Loader
 {
@@ -8,6 +6,6 @@ namespace Hedra.Engine.Loader
     {
         bool FinishedLoadingSplashScreen { get; }
         string GameVersion { get; }
-        event OnFrameChanged FrameChanged;
+        void Setup();
     }
 }

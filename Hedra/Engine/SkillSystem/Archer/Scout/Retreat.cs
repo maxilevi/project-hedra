@@ -7,7 +7,8 @@ using Hedra.Engine.Rendering.Particles;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Archer.Scout
 {
@@ -24,7 +25,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
         
         protected override void OnExecution()
         {
-            var reached = _accumulated.LengthSquared > Distance * 5 * Distance * 5;
+            var reached = _accumulated.LengthSquared() > Distance * 5 * Distance * 5;
             _multiplier = Mathf.Lerp(_multiplier, reached ? 0 : DefaultMultiplier, Time.DeltaTime * 3f);
             var translation = _orientation * _multiplier;
             User.Physics.DeltaTranslate(translation);
@@ -70,7 +71,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
         }
 
         protected float Distance => .5f + Level * .5f;
-        protected virtual Vector3 JumpDirection => -User.LookingDirection.Xz.ToVector3().NormalizedFast();
+        protected virtual Vector3 JumpDirection => -User.LookingDirection.Xz().ToVector3().NormalizedFast();
         protected override int MaxLevel => 15;
         public override float MaxCooldown => 20 - Level * .5f;
         public override float ManaCost => 0;

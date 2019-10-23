@@ -5,8 +5,8 @@
  *
  */
 using System;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using System.Numerics;
+using Hedra.Engine.Core;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
 using System.Drawing;
@@ -14,7 +14,9 @@ using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Engine.Windowing;
 using Hedra.Game;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.EnvironmentSystem
 {
@@ -74,7 +76,7 @@ namespace Hedra.Engine.EnvironmentSystem
 
             _starsDome.ColorMultiplier = Vector4.One * (1-SkyManager.LastDayFactor) * 2f;
             _starsDome.Draw();
-            _sunDome.TransformationMatrix = Matrix4.CreateRotationX(Mathf.Radian * (1-SkyManager.StackedDaytimeModifier) * 180f);
+            _sunDome.TransformationMatrix = Matrix4x4.CreateRotationX(Mathf.Radian * (1-SkyManager.StackedDaytimeModifier) * 180f);
             _sunDome.ColorMultiplier = Vector4.One * SkyManager.LastDayFactor * 2f;
             _sunDome.Draw();
 

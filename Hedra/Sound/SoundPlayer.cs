@@ -10,8 +10,9 @@ using System.Reflection;
 using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.Sound;
-using OpenTK;
-using OpenTK.Audio.OpenAL;
+using System.Numerics;
+using Hedra.Numerics;
+using Silk.NET.OpenAL;
 
 namespace Hedra.Sound
 {
@@ -20,7 +21,7 @@ namespace Hedra.Sound
     /// </summary>
     public static class SoundPlayer
     {
-        public static ISoundProvider Provider { get; set; } = new SoundProvider();
+        public static ISoundProvider Provider { get; set; }
 
         public static Vector3 ListenerPosition => Provider.ListenerPosition;
 
@@ -75,7 +76,7 @@ namespace Hedra.Sound
             return Provider.GetAvailableSource();
         }
 
-        public static ALFormat GetSoundFormat(int Channels, int Bits)
+        public static BufferFormat GetSoundFormat(int Channels, int Bits)
         {
             return Provider.GetSoundFormat(Channels, Bits);
         }

@@ -9,7 +9,8 @@ using Hedra.Engine.SkillSystem;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
 using Hedra.Sound;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.AnimationEvents
 {
@@ -26,7 +27,7 @@ namespace Hedra.AnimationEvents
             foreach (var entity in entities)
             {
                 if(entity == Parent || entity.IsStatic) continue;
-                var range = 1 - Mathf.Clamp((position - entity.Position).Xz.LengthFast / 32f, 0, 1);
+                var range = 1 - Mathf.Clamp((position - entity.Position).Xz().LengthFast() / 32f, 0, 1);
                 if (range < 0.005f) continue;
                 entity.AddComponent(new SlowingComponent(entity, Parent, 3f, 100 - 30f * range - 25f));               
                 entity.ShowIcon(CacheItem.FearIcon, 3f);

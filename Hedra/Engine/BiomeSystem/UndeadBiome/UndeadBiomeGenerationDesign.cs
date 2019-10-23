@@ -5,7 +5,7 @@ using Hedra.Core;
 using Hedra.Engine.BiomeSystem.NormalBiome;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.BiomeSystem.UndeadBiome
 {

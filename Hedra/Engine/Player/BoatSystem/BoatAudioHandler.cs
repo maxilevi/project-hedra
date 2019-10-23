@@ -2,7 +2,7 @@ using System;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
 using Hedra.Sound;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.Player.BoatSystem
 {
@@ -23,7 +23,7 @@ namespace Hedra.Engine.Player.BoatSystem
         {
             /*
             _areaSound.Position = _player.Position;
-            _areaSound.Update(_stateHandler.Enabled && _stateHandler.Velocity.LengthFast > 15);
+            _areaSound.Update(_stateHandler.Enabled && _stateHandler.Velocity.LengthFast() > 15);
             */
         }
 

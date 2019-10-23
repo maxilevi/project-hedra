@@ -4,7 +4,6 @@ using System.Drawing;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -19,7 +18,8 @@ using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 using Region = Hedra.BiomeSystem.Region;
 
 namespace Hedra.Engine.StructureSystem.Overworld
@@ -38,11 +38,11 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
             const int tombstoneCount = 25;
             
-            var rotationMatrix = Matrix4.CreateRotationY(rng.NextFloat() * 360 * Mathf.Radian);
+            var rotationMatrix = Matrix4x4.CreateRotationY(rng.NextFloat() * 360 * Mathf.Radian);
             var originalMausoleum = CacheManager.GetModel(CacheItem.Mausoleum);
             var mausoleum = originalMausoleum.ShallowClone();
 
-            mausoleum.Transform(Matrix4.CreateScale(4f));
+            mausoleum.Transform(Matrix4x4.CreateScale(4f));
             mausoleum.Transform(rotationMatrix);
             mausoleum.Translate(position);
             mausoleum.GraduateColor(Vector3.UnitY);
@@ -50,7 +50,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var mausoleumShapes = CacheManager.GetShape(originalMausoleum).DeepClone();
             for (var i = 0; i < mausoleumShapes.Count; i++)
             {
-                mausoleumShapes[i].Transform(Matrix4.CreateScale(4f));
+                mausoleumShapes[i].Transform(Matrix4x4.CreateScale(4f));
                 mausoleumShapes[i].Transform(rotationMatrix);
                 mausoleumShapes[i].Transform(position);
             }
@@ -85,7 +85,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 var shapes = CacheManager.GetShape(originalGrave).DeepClone();
                 for (var l = 0; l < shapes.Count; l++)
                 {
-                    shapes[l].Transform(Matrix4.CreateScale(graveScale));
+                    shapes[l].Transform(Matrix4x4.CreateScale(graveScale));
                     shapes[l].Transform(gravePosition);
                 }
 

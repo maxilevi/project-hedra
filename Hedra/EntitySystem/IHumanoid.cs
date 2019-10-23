@@ -8,7 +8,7 @@ using Hedra.Engine.Player.BoatSystem;
 using Hedra.Engine.SkillSystem;
 using Hedra.Items;
 using Hedra.WeaponSystem;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.EntitySystem
 {

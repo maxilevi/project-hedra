@@ -3,13 +3,13 @@ using Hedra.Engine.Player.QuestSystem.Views;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Localization;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Mission.Blocks
 {
     public class FindStructureMission : MissionBlock
     {
-        public override bool IsCompleted => (Position - Owner.Position).LengthSquared <
+        public override bool IsCompleted => (Position - Owner.Position).LengthSquared() <
                                             Math.Pow(Design.PlateauRadius, 2);
         public override void Setup()
         {

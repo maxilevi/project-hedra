@@ -9,7 +9,8 @@ using Hedra.Engine.Management;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
@@ -97,7 +98,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         private bool IsUnderwater(Vector3 Position, BasePlateau[] Plateaus)
         {
             return World.WorldBuilding.ApplyMultiple(
-                   Position.Xz,
+                   Position.Xz(),
                    World.BiomePool.GetRegion(Position).Generation.GetMaxHeight(Position.X, Position.Z),
                    Plateaus
             ) < BiomePool.SeaLevel-1;

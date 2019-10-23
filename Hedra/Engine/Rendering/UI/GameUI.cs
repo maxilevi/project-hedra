@@ -13,7 +13,7 @@ using System.Drawing;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
-using OpenTK;
+using System.Numerics;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.QuestSystem;

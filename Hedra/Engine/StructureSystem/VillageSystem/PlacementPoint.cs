@@ -1,5 +1,6 @@
 using System;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {
@@ -12,7 +13,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 
         public static bool Collide(PlacementPoint PointA, PlacementPoint PointB)
         {
-            return (PointA.Position - PointB.Position).LengthFast < PointA.Radius + PointB.Radius;
+            return (PointA.Position - PointB.Position).LengthFast() < PointA.Radius + PointB.Radius;
         }
     }
 }

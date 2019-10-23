@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.Core;
 using Microsoft.Scripting.Utils;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Rendering.Geometry
 {
@@ -125,7 +126,7 @@ namespace Hedra.Engine.Rendering.Geometry
         {
             for(var i = 0; i < Colors.Count; i++)
             {
-                if( (Colors[i] - OriginalColor).Length < .01f)
+                if((Colors[i] - OriginalColor).Length() < .01f)
                 {
                     Colors[i] = ReplacementColor;
                 }
@@ -137,9 +138,9 @@ namespace Hedra.Engine.Rendering.Geometry
         {
             if (Colors.Count == 0) return;
 
-            var size = Indices.Count * sizeof(uint) + Vertices.Count * Vector3.SizeInBytes +
-                       Normals.Count * Vector3.SizeInBytes + Extradata.Count * sizeof(float) +
-                       Colors.Count * Vector4.SizeInBytes + Allocator.Kilobyte * 64;
+            var size = Indices.Count * sizeof(uint) + Vertices.Count * HedraSize.Vector3 +
+                       Normals.Count * HedraSize.Vector3 + Extradata.Count * sizeof(float) +
+                       Colors.Count * HedraSize.Vector4 + Allocator.Kilobyte * 64;
             IAllocator allocator;
             if (size <= Allocator.Megabyte * 3)
             {
@@ -240,16 +241,16 @@ namespace Hedra.Engine.Rendering.Geometry
             }
         }
         
-        public static unsafe void Transform(IList<Vector3> Vertices, IList<Vector3> Normals, Matrix4 Matrix)
+        public static unsafe void Transform(IList<Vector3> Vertices, IList<Vector3> Normals, Matrix4x4 Matrix)
         {
             for (var i = 0; i < Vertices.Count; i++)
             {
-                Vertices[i] = Vector3.TransformPosition(Vertices[i], Matrix);
+                Vertices[i] = Vector3.Transform(Vertices[i], Matrix);
             }
-            var normalMat = Matrix.ClearScale().ClearTranslation().Inverted();
+            var normalMat = Matrix.ClearScale().ClearTranslation().Inverted().Transposed();
             for (var i = 0; i < Normals.Count; i++)
             {
-                Normals[i] = Vector3.TransformNormalInverse(Normals[i], normalMat);
+                Normals[i] = Vector3.TransformNormal(Normals[i], normalMat);
             }
         }
     }

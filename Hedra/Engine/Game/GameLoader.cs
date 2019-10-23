@@ -10,7 +10,9 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Sound;
 using Hedra.Sound;
-using OpenTK.Graphics.OpenGL4;
+using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
+using Silk.NET.OpenGL;
 
 namespace Hedra.Engine.Game
 {
@@ -56,16 +58,16 @@ namespace Hedra.Engine.Game
         public static void EnableGLDebug()
         {
             Renderer.Enable(EnableCap.DebugOutput);
-            Renderer.DebugMessageCallback(
-                delegate(DebugSource Source, DebugType Type, int Id, DebugSeverity Severity, int Length, IntPtr Message,
-                    IntPtr Param)
-                {
-                    if(Type != DebugType.DebugTypeError) return;
-                    Log.WriteLine(Source);
-                    Log.WriteLine(Marshal.PtrToStringAnsi(Message));
-                    Log.WriteLine(Severity);
-                    Log.WriteLine(Marshal.PtrToStringAnsi(Param));
-                }, IntPtr.Zero);
+            Renderer.DebugMessageCallback(DebugCallback, IntPtr.Zero);
+        }
+        
+        private static void DebugCallback(GLEnum Source, GLEnum Type, int Id, GLEnum Severity, int Length, IntPtr Message, IntPtr Param)
+        {
+            if(Type != GLEnum.DebugTypeError) return;
+            Log.WriteLine(Source);
+            Log.WriteLine(Marshal.PtrToStringAnsi(Message));
+            Log.WriteLine(Severity);
+            Log.WriteLine(Marshal.PtrToStringAnsi(Param));
         }
 
         public static void LoadSoundEngine()
@@ -73,6 +75,7 @@ namespace Hedra.Engine.Game
             try
             {
                 Log.WriteLine("Attemping to load sound engine...");
+                SoundPlayer.Provider = new SoundProvider();
                 SoundPlayer.Load();
                 SoundtrackManager.Load();
                 Log.WriteLine("Sound engine loaded succesfully");

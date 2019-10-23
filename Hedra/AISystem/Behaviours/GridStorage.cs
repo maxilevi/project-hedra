@@ -4,7 +4,7 @@ using Hedra.Engine;
 using Hedra.Engine.Management;
 using Hedra.Engine.Pathfinding;
 using Hedra.EntitySystem;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.AISystem.Behaviours
 {

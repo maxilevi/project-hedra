@@ -18,10 +18,11 @@ using Hedra.Engine.Loader;
 using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.SkillSystem;
+using Hedra.Engine.Windowing;
 using Hedra.Game;
 using Hedra.WeaponSystem;
-using OpenTK;
-using OpenTK.Input;
+using System.Numerics;
+using MouseButton = Silk.NET.Input.Common.MouseButton;
 using TaskScheduler = Hedra.Core.TaskScheduler;
 
 namespace Hedra.Engine.Player.ToolbarSystem

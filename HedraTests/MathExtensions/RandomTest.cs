@@ -1,6 +1,6 @@
 using System;
 using Hedra;
-using Hedra.Engine.ComplexMath;
+using Hedra.Numerics;
 using NUnit.Framework;
 
 namespace HedraTests.MathExtensions

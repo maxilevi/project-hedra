@@ -41,8 +41,10 @@ using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Items;
 using Hedra.Sound;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using System.Numerics;
+using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Generation
 {
@@ -153,7 +155,7 @@ namespace Hedra.Engine.Generation
             var chunks = Chunks;
             for (var i = 0; i < chunks.Count; ++i)
             {
-                if(_unculledChunks.ContainsKey(chunks[i].Position.Xz))
+                if(_unculledChunks.ContainsKey(chunks[i].Position.Xz()))
                     chunks[i].Mesh?.DrawQuery();
             }
 
@@ -197,7 +199,7 @@ namespace Hedra.Engine.Generation
                     World.RemoveChunk(chunk);
                     continue;
                 }
-                var offset = chunk.Position.Xz;
+                var offset = chunk.Position.Xz();
                 
                 if (WorldRenderer.EnableCulling)
                 {
@@ -347,7 +349,7 @@ namespace Hedra.Engine.Generation
             searchOptions.AddRange(StructureHandler.Structures.OfType<T>());
 
             for (var i = 0; i < searchOptions.Count; i++)
-                if ((searchOptions[i].Position - Position).LengthSquared < Radius * Radius)
+                if ((searchOptions[i].Position - Position).LengthSquared() < Radius * Radius)
                     results.Add(searchOptions[i]);
             return results.ToArray();
         }
@@ -545,7 +547,7 @@ namespace Hedra.Engine.Generation
                 {
                     model.Outline = false;
                     model.Position = Mathf.Lerp(model.Position, Player.Position, Time.DeltaTime * 5f);
-                    if ((model.Position - Player.Position).LengthSquared < 4 * 4)
+                    if ((model.Position - Player.Position).LengthSquared() < 4 * 4)
                     {
                         if (Player.Inventory.AddItem(model.ItemSpecification))
                         {
@@ -663,7 +665,7 @@ namespace Hedra.Engine.Generation
                 for (var i = 0; i < positions.Length; i++)
                 {
                     WaterPosition = positions[i].ToVector3() * Chunk.BlockSize + Chunk.Position;
-                    var dist = (WaterPosition - Position).Xz.LengthSquared;
+                    var dist = (WaterPosition - Position).Xz().LengthSquared();
                     if (dist < nearest) nearest = dist;
                 }
             }

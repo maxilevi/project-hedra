@@ -6,7 +6,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
@@ -15,7 +15,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         public IList<InstanceData> Instances { get; set; }
         public IList<VertexData> LodModels { get; set; }
         public IList<VertexData> Models { get; set; }
-        public IList<Matrix4> TransformationMatrices;
+        public IList<Matrix4x4> TransformationMatrices;
         public List<CollisionShape> Shapes { get; set; }
         public List<BaseStructure> Structures { get; set; }
         public bool BuildAsInstance { get; set; } = true;
@@ -62,7 +62,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return list;
         }
 
-        private InstanceData BuildInstance(VertexData Model, Matrix4 TransformationMatrix)
+        private InstanceData BuildInstance(VertexData Model, Matrix4x4 TransformationMatrix)
         {
             if(!Model.IsClone) 
                 throw new ArgumentOutOfRangeException("All models need to be clones in order to build the instances");
@@ -96,7 +96,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             Models = new List<VertexData>(),
             Shapes = new List<CollisionShape>(),
             Structures = new List<BaseStructure>(),
-            TransformationMatrices = new List<Matrix4>()
+            TransformationMatrices = new List<Matrix4x4>()
         };
     }
 }

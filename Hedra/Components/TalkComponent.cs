@@ -31,8 +31,8 @@ using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
-using OpenTK;
-using OpenTK.Input;
+using System.Numerics;
+
 
 namespace Hedra.Components
 {

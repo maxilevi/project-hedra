@@ -1,7 +1,8 @@
 import TextDisplay
+import clr
 from Core import translate
 from System import Array, Single
-from OpenTK import Vector3
+from System.Numerics import Vector3
 from Hedra.Core import Timer, Time
 from Hedra import World, Utils
 from Hedra.Components import HealthBarComponent, HealthBarType, RideComponent, DamageComponent, CompanionStatsComponent
@@ -9,7 +10,9 @@ from Hedra.AISystem import MinionAIComponent, BasicAIComponent
 from Hedra.Engine.ItemSystem.Templates import ItemTemplate, ItemModelTemplate, AttributeTemplate
 from Hedra.Items import ItemTier, ItemPool
 from Hedra.Rendering import VertexData
+from Hedra.Numerics import VectorExtensions
 
+clr.ImportExtensions(VectorExtensions)
 COMPANION_RESPAWN_TIME = 48 # Seconds
 COMPANION_EQUIPMENT_TYPE = 'Pet'
 CAGE_MODEL_SCALE = 0.15

@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Hedra.Core;
 using Hedra.Engine.Generation;
-using OpenTK;
+using System.Numerics;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Management;
 using Hedra.Engine.EnvironmentSystem;
@@ -25,6 +25,7 @@ using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Sound;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Game;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Sound;
 
@@ -40,8 +41,8 @@ namespace Hedra.Engine.Scenes
         public static Vector3 DefaultPosition = new Vector3(50867 - 3500, 28, 49208 - 30);
         public static Vector3 CampfirePosition = new Vector3(DefaultPosition.X + 64, 4.25f,DefaultPosition.Z + 40);
         public static Vector3 CreatorPosition = new Vector3(DefaultPosition.X + 64, 2.75f,DefaultPosition.Z + 80 );
-        public static Vector3 FirePosition = CampfirePosition.Xz.ToVector3() + Vector3.UnitX * 4;
-        public static Vector3 PlatformPosition = CreatorPosition.Xz.ToVector3() + Vector3.UnitX * 4;
+        public static Vector3 FirePosition = CampfirePosition.Xz().ToVector3() + Vector3.UnitX * 4;
+        public static Vector3 PlatformPosition = CreatorPosition.Xz().ToVector3() + Vector3.UnitX * 4;
         public static Dictionary<Vector3, int> Locations = new Dictionary<Vector3, int>();
         public static float Increment = 0;
         
@@ -50,11 +51,11 @@ namespace Hedra.Engine.Scenes
             RoutineManager.StartRoutine(MakeFire);
             RoutineManager.StartRoutine(MakePlatform);
             
-            var plateau = new RoundedPlateau(CampfirePosition.Xz, 24);
+            var plateau = new RoundedPlateau(CampfirePosition.Xz(), 24);
             var groundwork = new RoundedGroundwork(CampfirePosition, 24, BlockType.StonePath);
             var structure = new CollidableStructure(null, CampfirePosition, plateau, null);
             structure.AddGroundwork(groundwork);
-            structure.AddPlateau(new RoundedPlateau(CreatorPosition.Xz, 16));
+            structure.AddPlateau(new RoundedPlateau(CreatorPosition.Xz(), 16));
             World.WorldBuilding.SetupStructure(structure);
         }
         
@@ -69,7 +70,7 @@ namespace Hedra.Engine.Scenes
                 yield return null;
             }
             
-            PlatformPosition = CreatorPosition.Xz.ToVector3() + Vector3.UnitX * 4 + Vector3.UnitY * (Physics.HeightAtPosition(PlatformPosition +  Vector3.UnitX * 4));
+            PlatformPosition = CreatorPosition.Xz().ToVector3() + Vector3.UnitX * 4 + Vector3.UnitY * (Physics.HeightAtPosition(PlatformPosition +  Vector3.UnitX * 4));
         }
         
         private static IEnumerator MakeFire(){
@@ -84,7 +85,7 @@ namespace Hedra.Engine.Scenes
                 }
                 yield return null;
             }
-            FirePosition = CampfirePosition.Xz.ToVector3() + Vector3.UnitX * 4 + Vector3.UnitY * (Physics.HeightAtPosition(CampfirePosition +  Vector3.UnitX * 4)+1);
+            FirePosition = CampfirePosition.Xz().ToVector3() + Vector3.UnitX * 4 + Vector3.UnitY * (Physics.HeightAtPosition(CampfirePosition +  Vector3.UnitX * 4)+1);
             
             var centerModel = AssetManager.PLYLoader("Assets/Env/Campfire2.ply", Vector3.One * 2.4f);
             centerModel.Translate( FirePosition );
@@ -118,13 +119,13 @@ namespace Hedra.Engine.Scenes
                     yield return null;
                     yield return null;
                     yield return null;
-                    float gain = Math.Max(0, 1 - (FirePosition - SoundPlayer.ListenerPosition).LengthFast / 32f);
+                    float gain = Math.Max(0, 1 - (FirePosition - SoundPlayer.ListenerPosition).LengthFast() / 32f);
                     _sound?.Source.Play(SoundPlayer.GetBuffer(SoundType.Fireplace), FirePosition, 1f, gain, true);
                 }
 
                 if (_sound != null)
                 {
-                    float gain = System.Math.Max(0, 1 - (FirePosition - SoundPlayer.ListenerPosition).LengthFast / 32f);
+                    float gain = System.Math.Max(0, 1 - (FirePosition - SoundPlayer.ListenerPosition).LengthFast() / 32f);
                     _sound.Source.Volume = gain;
 
                 }

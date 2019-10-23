@@ -9,7 +9,8 @@ using Hedra.Core;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Rendering.Particles
 {
@@ -52,7 +53,7 @@ namespace Hedra.Engine.Rendering.Particles
         
         public bool Update(float DeltaTime, Vector3 randomRotation)
         {
-            Color = new Vector4(Color.Xyz, OriginalAlpha * 1);
+            Color = new Vector4(Color.Xyz(), OriginalAlpha * 1);
             Scale = OriginalScale * (Lifetime / MaxLifetime);    
             
             Position += Velocity * DeltaTime;
@@ -80,6 +81,6 @@ namespace Hedra.Engine.Rendering.Particles
             }
         }
         
-        public static int SizeInBytes => 4*4*sizeof(float) + Vector4.SizeInBytes;
+        public static int SizeInBytes => 4*4*sizeof(float) + HedraSize.Vector4;
     }
 }

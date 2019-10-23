@@ -1,9 +1,13 @@
+import clr
 from Core import get_player
-from OpenTK.Input import Key
-from OpenTK import Vector4, Vector2
+from Silk.NET.Input.Common import Key
+from System.Numerics import Vector4, Vector2
 from Hedra.Core import Timer
 from Hedra.Rendering import Graphics2D
 from System import Single
+from Hedra.Numerics import VectorExtensions
+
+clr.ImportExtensions(VectorExtensions)
 
 FOCUS_COLOR = Vector4(0.08, 0.08, 0.08, 1)
 DEFOCUS_COLOR = Vector4(0.152, 0.152, 0.152, 1)
@@ -57,17 +61,13 @@ def update_caret(state):
 def has_space_left(state):
     return state['last_size'] < state['ui_bar'].Scale.X * .5
 
-def on_key_press(event_args, state):
-    if is_enabled(state) and state['in_focus'] and has_space_left(state):
-        add_character(state, event_args.KeyChar)
-
 def is_enabled(state):
     return state['ui_bar'].Enabled
 
 def on_key_down(event_args, state):
     cancel = False
     if is_enabled(state) and state['in_focus']:
-        if event_args.Key == Key.BackSpace or event_args.Key == Key.BackSlash or event_args.Key == Key.NonUSBackSlash:
+        if event_args.Key == Key.Backspace or event_args.Key == Key.BackSlash:
             delete_character(state)
             cancel = True
         elif event_args.Key == Key.Left:
@@ -83,6 +83,10 @@ def on_key_down(event_args, state):
     if cancel:
         event_args.Cancel()
     
+def on_char_written(state, char):
+    if is_enabled(state) and state['in_focus'] and has_space_left(state):
+        add_character(state, char)
+
 
 def delete_character(state):
     if not state['text']: return

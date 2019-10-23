@@ -8,7 +8,7 @@
  */
 using System;
 using System.Collections.Generic;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.Rendering.Animation.ColladaParser
 {
@@ -19,11 +19,11 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
     {
         public readonly int Index;
         public readonly string NameId;
-        public readonly Matrix4 BindLocalTransform;
+        public readonly Matrix4x4 BindLocalTransform;
         
         public readonly List<JointData> Children = new List<JointData>();
         
-        public JointData(int Index, string NameId, Matrix4 BindLocalTransform){
+        public JointData(int Index, string NameId, Matrix4x4 BindLocalTransform){
             this.Index = Index;
             this.NameId = NameId;
             this.BindLocalTransform = BindLocalTransform;

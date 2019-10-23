@@ -13,7 +13,8 @@ using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Player.CraftingSystem
 {
@@ -35,8 +36,8 @@ namespace Hedra.Engine.Player.CraftingSystem
         public CraftingInventoryItemInfo(IPlayer Player)
         {
             _player = Player;
-            _normalTint = new Vector4(Color.Orange.ToVector4().Xyz * 5f, 1);
-            _cooldownTint = new Vector4(Color.Orange.ToVector4().Xyz * 2f, 1);
+            _normalTint = new Vector4(Color.Orange.ToVector4().Xyz() * 5f, 1);
+            _cooldownTint = new Vector4(Color.Orange.ToVector4().Xyz() * 2f, 1);
             _cooldownTimer = new Timer(.5f)
             {
                 AutoReset = false,

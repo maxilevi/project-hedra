@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.Game;
-using OpenTK;
+using System.Numerics;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.QuestSystem;
 using Hedra.Items;

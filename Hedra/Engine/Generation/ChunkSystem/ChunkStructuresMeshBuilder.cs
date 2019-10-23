@@ -4,7 +4,6 @@ using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Core;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
@@ -14,7 +13,8 @@ using Hedra.Engine.Rendering;
 using Hedra.Game;
 using Hedra.Rendering;
 using Microsoft.Scripting.Utils;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
@@ -116,7 +116,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             for (var i = 0; i < InstanceModel.Extradata.Count; i++)
             {
-                InstanceModel.Colors[i] = new Vector4(InstanceModel.Colors[i].Xyz, InstanceModel.Extradata[i]);
+                InstanceModel.Colors[i] = new Vector4(InstanceModel.Colors[i].Xyz(), InstanceModel.Extradata[i]);
             }
 
             /* Manually add these vertex data's for maximum performance */
@@ -130,8 +130,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
             Model.Extradata.AddRange(InstanceModel.Extradata);
         }
         
-        private static void AssertValidModel(VertexData Model)
+        private void AssertValidModel(VertexData Model)
         {
+            if(_parent.Disposed) return;
             if(Model.Colors.Count != Model.Extradata.Count)
                 throw new ArgumentOutOfRangeException($"Extradata '{Model.Extradata.Count}' or color '{Model.Colors.Count}' mismatch");
             
@@ -186,7 +187,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 Model.Extradata.Set(0, Model.Vertices.Count);
             
             /* Pack some randomness to the wind values */
-            Distribution.Seed = Unique.GenerateSeed(Element.Position.Xz);
+            Distribution.Seed = Unique.GenerateSeed(Element.Position.Xz());
             var rng = Distribution.NextFloat();
             for (var k = 0; k < Model.Extradata.Count; k++)
             {

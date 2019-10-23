@@ -2,7 +2,7 @@ using Hedra.Engine;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.WeaponSystem
 {

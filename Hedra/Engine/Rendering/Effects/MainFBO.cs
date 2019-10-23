@@ -5,8 +5,8 @@
  *
  */
 using System;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using System.Numerics;
+using Hedra.Engine.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Rendering.UI;
@@ -16,6 +16,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Frustum;
+using Hedra.Engine.Windowing;
 using Hedra.Game;
 using Hedra.Rendering;
 
@@ -118,7 +119,7 @@ namespace Hedra.Engine.Rendering.Effects
                 Renderer.Uniform1(Ssao.RandomSampler, 2);
                 Renderer.Uniform1(Ssao.Intensity, GameSettings.AmbientOcclusionIntensity);
                 
-                Renderer.UniformMatrix4(Ssao.ProjectionUniform, false, ref Culling.ProjectionMatrix);
+                Renderer.UniformMatrix4x4(Ssao.ProjectionUniform, false, ref Culling.ProjectionMatrix);
 
                 DrawManager.UIRenderer.DrawQuad();
 

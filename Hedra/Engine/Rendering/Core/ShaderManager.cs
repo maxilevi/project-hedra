@@ -14,7 +14,7 @@ using System.Threading;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Management;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.Rendering.Core
 {    

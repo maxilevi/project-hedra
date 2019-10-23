@@ -9,7 +9,7 @@ using Hedra.Engine.Player;
 using Hedra.Items;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Crafting
 {

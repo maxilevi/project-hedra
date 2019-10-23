@@ -21,6 +21,6 @@ namespace Hedra.Engine.Bullet
             OnUpdated?.Invoke();
         }
 
-        public OpenTK.Vector3 Position { get; set; }
+        public System.Numerics.Vector3 Position { get; set; }
     }
 }

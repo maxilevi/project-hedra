@@ -5,7 +5,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.AISystem.Behaviours
 {

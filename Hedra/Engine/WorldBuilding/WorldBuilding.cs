@@ -12,7 +12,7 @@ using System.Linq;
 using Hedra.AISystem.Humanoid;
 using Hedra.Components;
 using Hedra.Core;
-using OpenTK;
+using System.Numerics;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Player;
@@ -27,6 +27,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.EntitySystem;
 using Hedra.Items;
 using Hedra.Localization;
+using Hedra.Numerics;
 
     namespace Hedra.Engine.WorldBuilding
 {

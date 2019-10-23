@@ -19,7 +19,8 @@ using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
 using Hedra.WeaponSystem;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.WeaponSystem
 {
@@ -50,7 +51,7 @@ namespace Hedra.WeaponSystem
         static Knife()
         {
             SheathData = AssetManager.PLYLoader("Assets/Items/KnifeSheath.ply", Vector3.One);
-            SheathData.Transform(Matrix4.CreateRotationY(180f * Mathf.Radian));
+            SheathData.Transform(Matrix4x4.CreateRotationY(180f * Mathf.Radian));
             SheathData.Scale(new Vector3(3.75f, 1.8f, 2f));
         }
 
@@ -89,7 +90,7 @@ namespace Hedra.WeaponSystem
             if (Sheathed)
             {
 
-                var Mat4 = Owner.Model.ChestMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition);
+                var Mat4 = Owner.Model.ChestMatrix.ClearTranslation() * Matrix4x4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition);
             
                 this.MainMesh.Position = Owner.Model.Position;
                 this.MainMesh.BeforeRotation = -Vector3.UnitX * 1.6f - Vector3.UnitY * 2f;
@@ -100,7 +101,7 @@ namespace Hedra.WeaponSystem
             if(base.InAttackStance || Owner.WasAttacking)
             {
 
-                var Mat4 = Owner.Model.LeftWeaponMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);
+                var Mat4 = Owner.Model.LeftWeaponMatrix.ClearTranslation() * Matrix4x4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);
                 
                 this.MainMesh.TransformationMatrix = Mat4;
                 this.MainMesh.Position = Owner.Model.Position;
@@ -112,7 +113,7 @@ namespace Hedra.WeaponSystem
             if(PrimaryAttack)
             {
 
-                var Mat4 = Owner.Model.LeftWeaponMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);
+                var Mat4 = Owner.Model.LeftWeaponMatrix.ClearTranslation() * Matrix4x4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);
                 
                 this.MainMesh.TransformationMatrix = Mat4;
                 this.MainMesh.Position = Owner.Model.Position;
@@ -123,7 +124,7 @@ namespace Hedra.WeaponSystem
             if(SecondaryAttack)
             {
 
-                Matrix4 Mat4 = Owner.Model.LeftWeaponMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);
+                Matrix4x4 Mat4 = Owner.Model.LeftWeaponMatrix.ClearTranslation() * Matrix4x4.CreateTranslation(-Owner.Model.Position + Owner.Model.LeftWeaponPosition);
                 
                 this.MainMesh.TransformationMatrix = Mat4;
                 this.MainMesh.Position = Owner.Model.Position;
@@ -155,7 +156,7 @@ namespace Hedra.WeaponSystem
             }
             base.SetToDefault(_knifeSheath);
 
-            var knifeMat4 = Owner.Model.ChestMatrix.ClearTranslation() * Matrix4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition);
+            var knifeMat4 = Owner.Model.ChestMatrix.ClearTranslation() * Matrix4x4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition);
             
             this._knifeSheath.Position = Owner.Model.Position;
             this._knifeSheath.BeforeRotation = -Vector3.UnitX * 1.75f - Vector3.UnitY * 3.0f;

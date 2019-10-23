@@ -1,7 +1,3 @@
-using System.Drawing;
-using System.IO;
-using System.Reflection;
-using System.Text.RegularExpressions;
 using Hedra;
 using Hedra.Core;
 using Hedra.Engine;
@@ -9,18 +5,19 @@ using Hedra.Engine.Bullet;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
-using Hedra.Engine.Generation;
-using Hedra.Engine.Localization;
+
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Engine.Sound;
 using Hedra.Game;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
+using Hedra.Sound;
 using HedraTests.Rendering;
 using Moq;
 using NUnit.Framework;
@@ -47,6 +44,7 @@ namespace HedraTests
         {
             GameSettings.TestingMode = true;
             Time.RegisterThread();
+            SoundPlayer.Provider = new DummySoundProvider();
             World.Provider = new SimpleWorldProviderMock();
             AssetManager.Provider = new DummyAssetProvider();
             Graphics2D.Provider = new SimpleTexture2DProviderMock();

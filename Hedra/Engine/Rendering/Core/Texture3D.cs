@@ -1,6 +1,7 @@
 using System;
 using Hedra.Engine.IO;
-using OpenTK.Graphics.OpenGL4;
+using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
 
 namespace Hedra.Engine.Rendering.Core
 {
@@ -8,14 +9,13 @@ namespace Hedra.Engine.Rendering.Core
     {
         public uint Id { get; }
 
-        public Texture3D(float[,,] Data)
+        public Texture3D(float[] Data, int Width, int Height, int Depth)
         {
             Id = Renderer.GenTexture();
 
             Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture3D, Id);
-            Renderer.TexImage3D(TextureTarget.Texture3D, 0, PixelInternalFormat.Rgb32f, Data.GetLength(0), Data.GetLength(1), Data.GetLength(2), 0,
-                PixelFormat.Red, PixelType.Float, Data);
+            Renderer.TexImage3D(TextureTarget.Texture3D, 0, PixelInternalFormat.Rgb32f, Width, Height, Depth, 0, PixelFormat.Red, PixelType.Float, Data);
             Renderer.TexParameter(TextureTarget.Texture3D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Nearest);
             Renderer.TexParameter(TextureTarget.Texture3D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Nearest);
             Renderer.TexParameter(TextureTarget.Texture3D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);

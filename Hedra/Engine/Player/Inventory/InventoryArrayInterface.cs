@@ -8,8 +8,8 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using OpenTK;
-using OpenTK.Input;
+using System.Numerics;
+
 
 namespace Hedra.Engine.Player.Inventory
 {

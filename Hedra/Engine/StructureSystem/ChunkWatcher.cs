@@ -5,7 +5,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem
 {

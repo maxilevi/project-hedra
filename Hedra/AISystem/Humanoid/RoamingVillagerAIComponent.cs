@@ -15,7 +15,8 @@ using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Game;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.AISystem.Humanoid
 {
@@ -100,7 +101,7 @@ namespace Hedra.AISystem.Humanoid
         private void LookAtRandom()
         {
             Physics.DirectionToEuler(
-                (new Vector3(Utils.Rng.NextFloat(), Utils.Rng.NextFloat(), Utils.Rng.NextFloat()) * 2 - Vector3.One).Xz.NormalizedFast().ToVector3()
+                (new Vector3(Utils.Rng.NextFloat(), Utils.Rng.NextFloat(), Utils.Rng.NextFloat()) * 2 - Vector3.One).Xz().NormalizedFast().ToVector3()
             );
         }
         
@@ -114,8 +115,8 @@ namespace Hedra.AISystem.Humanoid
 
         private void ManageInteractions()
         {
-            if ((Parent.Position.Xz - _lastPosition).LengthSquared < Chunk.BlockSize*Chunk.BlockSize) return;
-            _lastPosition = Parent.Position.Xz;
+            if ((Parent.Position.Xz() - _lastPosition).LengthSquared() < Chunk.BlockSize*Chunk.BlockSize) return;
+            _lastPosition = Parent.Position.Xz();
             if (ShouldSit && CanSit(out var bench))
                 Sit(bench);
             if (ShouldTalk && CanTalk(out var human))
@@ -143,7 +144,7 @@ namespace Hedra.AISystem.Humanoid
         
         private void Talk(IHumanoid NearestVillager)
         {
-            MoveTo(NearestVillager.Position.Xz, delegate
+            MoveTo(NearestVillager.Position.Xz(), delegate
             {
                 if (Parent.Disposed) return;
                 var time = Utils.Rng.NextFloat() * 8 + 8;
@@ -169,7 +170,7 @@ namespace Hedra.AISystem.Humanoid
         
         private void Sit(InteractableStructure NearestBench)
         {
-            MoveTo(NearestBench.Position.Xz, delegate
+            MoveTo(NearestBench.Position.Xz(), delegate
             {
                 NearestBench.InvokeInteraction(Parent);
                 TaskScheduler.After(Utils.Rng.NextFloat() * 8 + 12, delegate
@@ -188,7 +189,7 @@ namespace Hedra.AISystem.Humanoid
         {
             var nearestVillage = World.InRadius<Village>(Parent.Position, VillageDesign.MaxVillageRadius).FirstOrDefault();
             if (nearestVillage == null) return;
-            MoveTo(nearestVillage.Position.Xz, delegate
+            MoveTo(nearestVillage.Position.Xz(), delegate
             {
                 _interactionTimer.MarkReady();
             }, MarketParameters.MarketSize * .25f);
@@ -196,13 +197,13 @@ namespace Hedra.AISystem.Humanoid
         
         private void FindRandomSpot()
         {
-            _targetVertex = NewPoint.Xz;
+            _targetVertex = NewPoint.Xz();
             SelectNextEdge();
         }
         
         private void SelectNextEdge()
         {
-            var currentVertex = Graph.GetNearestVertex(Parent.Position.Xz);
+            var currentVertex = Graph.GetNearestVertex(Parent.Position.Xz());
             var currentVertexIndex = Graph.GetIndex(currentVertex);
             var allEdges = Graph.GetEdgesWithVertex(currentVertex);
             var lowest = float.MaxValue;
@@ -213,7 +214,7 @@ namespace Hedra.AISystem.Humanoid
                 if (currentEdge == allEdges[i]) continue;
                 var otherVertexIndex = allEdges[i].GetOtherVertex(currentVertexIndex);
                 var otherVertex = Graph.FromIndex(otherVertexIndex);
-                var dist = (otherVertex - _targetVertex).LengthSquared;
+                var dist = (otherVertex - _targetVertex).LengthSquared();
                 if (dist < lowest)
                 {
                     lowest = dist;
@@ -256,7 +257,7 @@ namespace Hedra.AISystem.Humanoid
         }
 
         private Vector2 RandomPointInsideVillage => 
-            new Vector2(Utils.Rng.NextFloat() * 2 - 1, Utils.Rng.NextFloat() * 2 - 1) * .25f * Graph.Size + Parent.Position.Xz;
+            new Vector2(Utils.Rng.NextFloat() * 2 - 1, Utils.Rng.NextFloat() * 2 - 1) * .25f * Graph.Size + Parent.Position.Xz();
 
         private bool ShouldSit => Utils.Rng.Next(0, 2) == 1;
 

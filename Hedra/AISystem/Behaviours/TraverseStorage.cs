@@ -3,7 +3,8 @@ using Hedra.Engine;
 using Hedra.Engine.Core;
 using Hedra.Engine.Pathfinding;
 using Hedra.EntitySystem;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.AISystem.Behaviours
 {
@@ -58,7 +59,7 @@ namespace Hedra.AISystem.Behaviours
         
         private static Grid Create(IEntity Parent)
         {
-            var size = 16 + (int)(Parent.Size.LengthFast / 4);
+            var size = 16 + (int)(Parent.Size.LengthFast() / 4);
             return new Grid(size, size);
         }
         

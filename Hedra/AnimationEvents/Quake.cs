@@ -8,7 +8,8 @@ using Hedra.Engine.SkillSystem;
 using Hedra.Engine.Sound;
 using Hedra.Rendering.Particles;
 using Hedra.Sound;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.AnimationEvents
 {
@@ -42,7 +43,7 @@ namespace Hedra.AnimationEvents
             foreach (var entity in entities)
             {
                 if(!entity.IsGrounded) continue;
-                var damage = Parent.AttackDamage * (1-Mathf.Clamp((position - entity.Position).Xz.LengthFast / radius, 0, 1)) * 3.0F;
+                var damage = Parent.AttackDamage * (1-Mathf.Clamp((position - entity.Position).Xz().LengthFast() / radius, 0, 1)) * 3.0F;
                 if (damage > 0 && Parent != entity)
                 {
                     entity.Damage(damage, Parent, out _);

@@ -11,7 +11,8 @@ using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.StructureSystem.VillageSystem.Placers;
 using Hedra.Engine.WorldBuilding;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {
@@ -37,7 +38,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             {
                 for (var z = 1; z < VillageSize; ++z)
                 {
-                    if( (new Vector2(x,z) - new Vector2(VillageSize, VillageSize) * .5f).LengthSquared > VillageSize * .5f * .5f * VillageSize)
+                    if( (new Vector2(x,z) - new Vector2(VillageSize, VillageSize) * .5f).LengthSquared() > VillageSize * .5f * .5f * VillageSize)
                         continue;
                     var offset = CalculateOffset();
                     var spacingX = 0f;
@@ -57,7 +58,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             }
 
             _marketPoint = (MarketParameters) _specialPoints[0];
-            points = points.OrderBy(P => (P.Position.Xz - _marketPoint.Position.Xz).LengthFast).ToList();
+            points = points.OrderBy(P => (P.Position.Xz() - _marketPoint.Position.Xz()).LengthFast()).ToList();
             for (var i = 0; i < points.Count; i++)
             {
                 var successful = SelectPlacer(points[i], design);
@@ -67,7 +68,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 
         private bool DoesNotIntersectWithSpecialBuildings(IBuildingParameters[] SpecialPoints, Vector2 Position)
         {
-            return SpecialPoints.All(S => (Position - S.Position.Xz).LengthSquared > Math.Pow(S.GetSize(Root.Cache) * 1.5f, 2));
+            return SpecialPoints.All(S => (Position - S.Position.Xz()).LengthSquared() > Math.Pow(S.GetSize(Root.Cache) * 1.5f, 2));
         }
 
         private IBuildingParameters[] AddSpecialPoints(PlacementDesign Design)
@@ -113,7 +114,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                 var offset = CalculateOffset();
                 if ((int)x % 2 == 0) spacingX += VillageDesign.Spacing * .5f;
                 var mod = (1.0f + Math.Max(0, distFromCenter - SparseZone) * 2f) * VillageDesign.Spacing * (Point.Position.NormalizedFast());
-                Point.Position = (new Vector2(VillageDesign.Spacing * x, VillageDesign.Spacing * z + spacingX) - offset + mod.Xz).ToVector3();
+                Point.Position = (new Vector2(VillageDesign.Spacing * x, VillageDesign.Spacing * z + spacingX) - offset + mod.Xz()).ToVector3();
             }
             
             if (distFromCenter < .2f)
@@ -203,7 +204,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 
         private float CalculateDistanceFromCenter(Vector3 Position)
         {
-            return Position.LengthFast / (VillageDesign.Spacing * VillageSize * .5f);
+            return Position.LengthFast() / (VillageDesign.Spacing * VillageSize * .5f);
         }
         
         private Vector2 CalculateOffset()
@@ -233,11 +234,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                     var offset = CalculateOffset();
                     var startPosition = new Vector2(VillageDesign.Spacing * x + spacing *.5f, VillageDesign.Spacing * z + spacing * .5f + addX) - offset;
                     var distFromCenter = 
-                        startPosition.LengthFast / (VillageDesign.Spacing * VillageSize * .5f);
+                        startPosition.LengthFast() / (VillageDesign.Spacing * VillageSize * .5f);
                     
                     if(distFromCenter > NoPathZone) continue;
                     
-                    var start = startPosition + Design.Position.Xz;
+                    var start = startPosition + Design.Position.Xz();
                     var halfStartX = start + new Vector2(spacing, 0) * .5f;
                     var endX = start + new Vector2(spacing, 0);
                     var halfStartZ = start + new Vector2(0, spacing) * .5f;
@@ -283,7 +284,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         protected Vector2 GetRealSize(IBuildingParameters Parameters)
         {
             if (Parameters.Design != null)
-                return Root.Cache.GrabSize(Parameters.Design.Path).Xz;
+                return Root.Cache.GrabSize(Parameters.Design.Path).Xz();
             else
                 return VillageDesign.Spacing * Vector2.One;
         }
@@ -295,7 +296,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             {
                 /* Unless we can guarantee the terrain is flat don't place anything */
                 if(Structure.Mountain.Density(vertices[i]) < 1) continue;            
-                if((vertices[i] - Design.Position.Xz).LengthSquared < Math.Pow(_marketPoint.Size, 2)) continue;
+                if((vertices[i] - Design.Position.Xz()).LengthSquared() < Math.Pow(_marketPoint.Size, 2)) continue;
                 
                 if (Rng.Next(0, 5) == 1)
                 {

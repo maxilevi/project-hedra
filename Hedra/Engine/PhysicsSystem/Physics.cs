@@ -5,7 +5,7 @@
  *
  */
 using System;
-using OpenTK;
+using System.Numerics;
 using Hedra.Engine.Generation;
 using Hedra.Engine.EntitySystem;
 using System.Collections.Generic;
@@ -17,6 +17,7 @@ using Hedra.Engine.IO;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.StructureSystem;
 using Hedra.EntitySystem;
+using Hedra.Numerics;
 using Hedra.Rendering;
 
 namespace Hedra.Engine.PhysicsSystem
@@ -51,14 +52,26 @@ namespace Hedra.Engine.PhysicsSystem
         
         public static Vector3 DirectionToEuler(Vector3 Direction)
         {
+            #if DEBUG
+            if(Direction.IsInvalid())
+                throw new ArgumentException(nameof(Direction));
+            #endif
             if(Direction == Vector3.Zero) return Vector3.Zero;
             if(Direction == new Vector3(0, 1, 0)) return Vector3.UnitX * -90;
             if(Direction == new Vector3(0, -1, 0)) return Vector3.UnitX * 90;
-            var newForward = Direction.Xz.ToVector3().NormalizedFast();
+            var newForward = Direction.Xz().ToVector3().NormalizedFast();
             var defaultRot = Vector3.UnitX * CalculateNewX(Direction) + Vector3.UnitZ * GetRotation(Vector3.UnitZ, new Vector3(0, Direction.Y, 1).NormalizedFast(), Vector3.UnitY).Z;
             var xRot = GetRotation(Vector3.UnitZ, newForward, Vector3.UnitY);
-            var axisAngle = ((Matrix4.CreateRotationZ(defaultRot.Z * Mathf.Radian) * Matrix4.CreateRotationX(defaultRot.X * Mathf.Radian)) * Matrix4.CreateRotationY(xRot.Y * Mathf.Radian)).ExtractRotation().ToAxisAngle();
-            return axisAngle.Xyz * axisAngle.W * Mathf.Degree;
+            var quat = ((Matrix4x4.CreateRotationZ(defaultRot.Z * Mathf.Radian) * Matrix4x4.CreateRotationX(defaultRot.X * Mathf.Radian)) * Matrix4x4.CreateRotationY(xRot.Y * Mathf.Radian)).ExtractRotation();
+            var axisAngle = quat.ToAxisAngle();
+            var result = axisAngle.Xyz() * axisAngle.W * Mathf.Degree;
+            #if DEBUG
+            if (result.IsInvalid())
+            {
+                int a = 0;
+            }
+            #endif
+            return result;
         }
 
         private static Vector3 GetRotation(Vector3 source, Vector3 dest, Vector3 up)

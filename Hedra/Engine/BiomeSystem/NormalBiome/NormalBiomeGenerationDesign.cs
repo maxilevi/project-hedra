@@ -1,6 +1,7 @@
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.BiomeSystem.NormalBiome
 {
@@ -24,7 +25,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             );
             set1 = MultiplySetsDimensional(
                 set1,
-                TransformSet(Noise.GetSimplexSetWithFrequency(Offset.Xz, size.Xz, scale.Xz, 0.001f), F => (F - 0.25f).Clamp01() * 2),
+                TransformSet(Noise.GetSimplexSetWithFrequency(Offset.Xz(), size.Xz(), scale.Xz(), 0.001f), F => (F - 0.25f).Clamp01() * 2),
                 size
             );
             AddSet(DensityMap, set1, F => ((F - 0.015f) * 2.5f).Clamp01() * 32.0f * Chunk.BlockSize);
@@ -36,7 +37,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             );
             set = MultiplySetsDimensional(
                 set,
-                TransformSet(Noise.GetSimplexSetWithFrequency(Offset.Xz, size.Xz, scale.Xz, 0.0008f), F => F.Clamp01() * 3f),
+                TransformSet(Noise.GetSimplexSetWithFrequency(Offset.Xz(), size.Xz(), scale.Xz(), 0.0008f), F => F.Clamp01() * 3f),
                 size
             );
             AddSet(DensityMap, set, F => F.Clamp01() * 256.0f * Chunk.BlockSize);

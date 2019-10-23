@@ -1,12 +1,7 @@
-using System;
-using System.Drawing;
-using Hedra.Engine.Generation;
-using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Rendering.UI;
-using Hedra.Engine.Sound;
-using Hedra.EntitySystem;
+using Hedra.Engine.Windowing;
 using Hedra.Sound;
-using OpenTK.Input;
+using MouseButton = Silk.NET.Input.Common.MouseButton;
 
 namespace Hedra.Engine.Player.Inventory
 {

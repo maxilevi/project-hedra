@@ -10,7 +10,6 @@
 using System;
 using System.Linq;
 using Hedra.Core;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.Rendering;
@@ -18,11 +17,12 @@ using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem.AnimationEvents;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.PhysicsSystem;
-using OpenTK;
+using System.Numerics;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.SkillSystem;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
+using Hedra.Numerics;
 using Hedra.Sound;
 
 namespace Hedra.Engine.EntitySystem
@@ -240,8 +240,7 @@ namespace Hedra.Engine.EntitySystem
                     _position = Rider.Model.ModelPosition - Rider.Model.RidingOffset;
                 }
                 _targetTerrainOrientation = AlignWithTerrain
-                    ? new Matrix3(
-                        Mathf.RotationAlign(
+                    ? Mathf.RotationAlign(
                             Vector3.UnitY,
                             (
                                 Physics.NormalAtPosition(this.Position) + 
@@ -249,19 +248,18 @@ namespace Hedra.Engine.EntitySystem
                                 Physics.NormalAtPosition(this.Position + new Vector3(0, 0, Chunk.BlockSize)) +
                                 Physics.NormalAtPosition(this.Position + new Vector3(Chunk.BlockSize, 0, Chunk.BlockSize))
                             ) * .25f
-                        )
                     ).ExtractRotation() 
                     : Quaternion.Identity;
                 _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation, Time.IndependentDeltaTime * 8f);
-                Model.TransformationMatrix = Matrix4.CreateFromQuaternion(_terrainOrientation);
+                Model.TransformationMatrix = Matrix4x4.CreateFromQuaternion(_terrainOrientation);
                 _quaternionModelRotation = Quaternion.Slerp(_quaternionModelRotation, _quaternionTargetRotation, Time.IndependentDeltaTime * 14f);
                 Model.LocalRotation = _quaternionModelRotation.ToEuler();
                 if (HasRider)
                 {
                     Model.LocalRotation = Rider.Model.LocalRotation;
-                    Model.TransformationMatrix = Matrix4.CreateRotationY(-Model.LocalRotation.Y * Mathf.Radian) 
+                    Model.TransformationMatrix = Matrix4x4.CreateRotationY(-Model.LocalRotation.Y * Mathf.Radian) 
                                                  * Rider.Model.TiltMatrix 
-                                                 * Matrix4.CreateRotationY(Model.LocalRotation.Y * Mathf.Radian);
+                                                 * Matrix4x4.CreateRotationY(Model.LocalRotation.Y * Mathf.Radian);
                 }
                 Model.Position = this.Position;
                 this.LocalRotation = Model.LocalRotation;
@@ -372,6 +370,10 @@ namespace Hedra.Engine.EntitySystem
                 if (HasRider) value = Rider.Model.TargetRotation;
                 _eulerTargetRotation = value;
                 _quaternionTargetRotation = QuaternionMath.FromEuler(_eulerTargetRotation * Mathf.Radian);
+                if (value.IsInvalid())
+                {
+                    int a = 0;
+                }
             }
         }
         public override Vector3 LocalRotation

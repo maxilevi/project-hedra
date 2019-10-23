@@ -5,7 +5,6 @@ using Hedra.BiomeSystem;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Core;
 using Hedra.Engine.Generation;
 using Hedra.Engine.PlantSystem;
@@ -13,7 +12,8 @@ using Hedra.Engine.PlantSystem.Harvestables;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem
 {
@@ -30,9 +30,9 @@ namespace Hedra.Engine.StructureSystem
         {
             var originalModel = Cache != null ? CacheManager.GetModel(Cache.Value) : null;
             var rng = BuildRng(Structure);
-            var rotation = Matrix4.CreateRotationY(Mathf.Radian * BuildRotationAngle(rng));
-            var translation = Matrix4.CreateTranslation(Structure.Position);
-            var transformation = Matrix4.CreateScale(Scale) * rotation * translation;
+            var rotation = Matrix4x4.CreateRotationY(Mathf.Radian * BuildRotationAngle(rng));
+            var translation = Matrix4x4.CreateTranslation(Structure.Position);
+            var transformation = Matrix4x4.CreateScale(Scale) * rotation * translation;
             if (originalModel != null)
             {
                 Structure.AddStaticElement(
@@ -51,7 +51,7 @@ namespace Hedra.Engine.StructureSystem
             return Rng.NextFloat() * 360f;
         }
         
-        protected virtual void DoBuild(CollidableStructure Structure, Matrix4 Rotation, Matrix4 Translation, Random Rng)
+        protected virtual void DoBuild(CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation, Random Rng)
         { 
         }
         
@@ -73,7 +73,7 @@ namespace Hedra.Engine.StructureSystem
                    Math.Abs(Biome.Generation.RiverAtPoint(TargetPosition.X, TargetPosition.Z)) < 0.005f;
         }
 
-        protected void AddDoor(VertexData Model, Vector3 DoorPosition, Matrix4 Transformation, CollidableStructure Structure, bool InvertedRotation, bool InvertedPivot)
+        protected void AddDoor(VertexData Model, Vector3 DoorPosition, Matrix4x4 Transformation, CollidableStructure Structure, bool InvertedRotation, bool InvertedPivot)
         {
             Structure.WorldObject.AddChildren(
                 Builder<IBuildingParameters>.CreateDoor(
@@ -96,7 +96,7 @@ namespace Hedra.Engine.StructureSystem
                 Position,
                 World.GetRegion(Position),
                 Design,
-                Matrix4.CreateScale(Design.Scale(Rng)) * Matrix4.CreateRotationY(Rng.NextFloat() * 360f) * Matrix4.CreateTranslation(Position)
+                Matrix4x4.CreateScale(Design.Scale(Rng)) * Matrix4x4.CreateRotationY(Rng.NextFloat() * 360f) * Matrix4x4.CreateTranslation(Position)
             );
         }
         

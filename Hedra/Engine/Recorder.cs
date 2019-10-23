@@ -13,12 +13,13 @@ using System.IO;
 using System.Threading;
 using Hedra.Core;
 using Hedra.Engine.Game;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using System.Numerics;
+using Hedra.Engine.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Steamworks;
+using Hedra.Engine.Windowing;
 using Hedra.Game;
 
 namespace Hedra.Engine

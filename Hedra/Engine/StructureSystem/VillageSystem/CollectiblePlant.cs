@@ -8,7 +8,7 @@ using Hedra.EntitySystem;
 using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Sound;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {

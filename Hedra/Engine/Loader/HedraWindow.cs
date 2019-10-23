@@ -1,208 +1,212 @@
 using System;
-using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 using System.Threading;
 using Hedra.Engine.Events;
-using OpenTK;
-using OpenTK.Graphics;
+using Hedra.Engine.Windowing;
+using System.Numerics;
+using Silk.NET.GLFW;
+using Silk.NET.Input;
+using Silk.NET.Input.Common;
+using Silk.NET.Windowing;
+using Silk.NET.Windowing.Common;
+using Image = Silk.NET.GLFW.Image;
 
 namespace Hedra.Engine.Loader
 {
-    public abstract class HedraWindow : NativeWindow, IEventProvider, IHedraWindow
+    public abstract class HedraWindow : IEventProvider, IHedraWindow
     {
-        private IGraphicsContext _glContext;
-        private bool _isExiting;
+        private readonly IWindow _window;
+        private bool _cursorVisible;
+        private bool _fullscreen;
         private readonly Stopwatch _watch;
         private SpinWait _spinner;
-        private bool _dryRun;
-        public double TargetFramerate { get; set; }
+        private Vector2 _mousePosition;
 
-        protected HedraWindow(int Width, int Height, GraphicsMode Mode, string Title, GameWindowFlags Options,
-            DisplayDevice Device, int Major, int Minor, GraphicsContextFlags Flags)
-            : base(Width, Height, Title, Options, Mode, Device)
+        protected HedraWindow(int Width, int Height, ContextProfile Profile, ContextFlags Flags, APIVersion Version) : base()
         {
-            try
+            _watch = new Stopwatch();
+            _spinner = new SpinWait();
+            var options = new WindowOptions
             {
-                _watch = new Stopwatch();
-                _spinner = new SpinWait();
-#if DEBUG
-                _glContext = new GraphicsContext(Mode, WindowInfo, 2, 1, GraphicsContextFlags.Debug);
-#else
-                _glContext = new GraphicsContext(Mode, WindowInfo, Major, Minor, Flags);
-#endif
-                _glContext.MakeCurrent(WindowInfo);
-                _glContext.LoadAll();
-            }
-            catch (Exception ex)
+                API = new GraphicsAPI(ContextAPI.OpenGL, Profile, Flags, Version),
+                Size = new Size(Width, Height),
+                ShouldSwapAutomatically = true,
+                IsVisible = true,
+                Title = "Project Hedra",
+                UseSingleThreadedWindow = true
+            };
+            _window = Window.Create(options);
+            _window.Load += Load;
+            _window.Render += RenderFrame;
+            _window.Update += UpdateFrame;
+            _window.Resize += Resize;
+            _window.FocusChanged += FocusChanged;
+            _window.Closing += Unload;
+            _window.Open();
+
+            var input = _window.GetInput();
+            
+            var keyboard = input.Keyboards[0];
+            keyboard.KeyDown += ProcessKeyDown;
+            input.Keyboards[0].KeyUp += ProcessKeyUp;
+            
+            var mouse = input.Mice[0];
+            mouse.MouseMove += (_, Point) => MouseMove?.Invoke(new MouseMoveEventArgs(_mousePosition = new Vector2(Point.X, Point.Y)));
+            mouse.MouseDown += (_, Button) => MouseDown?.Invoke(new MouseButtonEventArgs(Button, InputAction.Press, _mousePosition));
+            mouse.MouseUp += (_, Button) => MouseUp?.Invoke(new MouseButtonEventArgs(Button, InputAction.Release, _mousePosition));
+            mouse.Scroll += (_, Wheel) => MouseWheel?.Invoke(new MouseWheelEventArgs(Wheel.X, Wheel.Y));
+            
+            unsafe
             {
-                base.Dispose();
-                throw;
+                GlfwProvider.GLFW.Value.SetCharCallback(
+                    (WindowHandle*)_window.Handle,
+                    (_, Codepoint) => CharWritten?.Invoke(char.ConvertFromUtf32((int)Codepoint))
+                );
             }
         }
 
-        private IGraphicsContext Context
-        {
-            get
-            {
-                EnsureUndisposed();
-                return _glContext;
-            }
-        }
-
-        public bool IsExiting
-        {
-            get
-            {
-                EnsureUndisposed();
-                return _isExiting;
-            }
-        }
-
-        public VSyncMode VSync
-        {
-            get
-            {
-                EnsureUndisposed();
-                GraphicsContext.Assert();
-                if (Context.SwapInterval < 0)
-                    return VSyncMode.Adaptive;
-                return Context.SwapInterval == 0 ? VSyncMode.Off : VSyncMode.On;
-            }
-            set
-            {
-                EnsureUndisposed();
-                GraphicsContext.Assert();
-                switch (value)
-                {
-                    case VSyncMode.Off:
-                        Context.SwapInterval = 0;
-                        break;
-                    case VSyncMode.On:
-                        Context.SwapInterval = 1;
-                        break;
-                    case VSyncMode.Adaptive:
-                        Context.SwapInterval = -1;
-                        break;
-                }
-            }
-        }
-
-        public override WindowState WindowState
-        {
-            get => base.WindowState;
-            set
-            {
-                base.WindowState = value;
-                Context?.Update(WindowInfo);
-            }
-        }
-
-        public virtual void Exit()
-        {
-            Close();
-        }
-
+        protected abstract void RenderFrame(double Delta);
+        protected abstract void UpdateFrame(double Delta);
+        protected abstract void Unload();
+        protected abstract void FocusChanged(bool IsFocused);
+        protected abstract void Load();
+        protected abstract void Resize(Size Size);
+        
         public void Run()
         {
-            EnsureUndisposed();
-            Visible = true;
-            OnLoad(EventArgs.Empty);
-            OnResize(EventArgs.Empty);
+            _window.IsVisible = true;
+            Load();
+            Resize(new Size(Width, Height));
             _watch.Start();
             var lastTick = _watch.Elapsed.TotalSeconds;
             var elapsed = .0;
             var frames = 0;
-            while (this.Exists && !this.IsExiting)
+            while (!_window.IsClosing)
             {
-                ProcessEvents();
-                if (this.Exists && !this.IsExiting)
+                _window.DoEvents();
+                if (_window.IsClosing) continue;
+                
+                var totalSeconds = _watch.Elapsed.TotalSeconds;
+                var time = Math.Min(1.0, totalSeconds - lastTick);
+                lastTick = totalSeconds;
+                UpdateFrame(time);
+                RenderFrame(time);
+                _window.SwapBuffers();
+                while (_watch.Elapsed.TotalSeconds - lastTick < TargetFramerate)
                 {
-                    var totalSeconds = _watch.Elapsed.TotalSeconds;
-                    var time = Math.Min(1.0, totalSeconds - lastTick);
-                    lastTick = totalSeconds;
-                    this.DispatchUpdateFrame(time);
-                    this.DispatchRenderFrame(time);
-                    while (_watch.Elapsed.TotalSeconds - lastTick < TargetFramerate)
-                    {
-                        _spinner.SpinOnce();
-                    }
+                    _spinner.SpinOnce();
                 }
-                if(_dryRun) break;
             }
+            _window.Reset();
         }
 
-        public void RunOnce()
+        private void ProcessKeyDown(IKeyboard Keyboard, Key Key, int ScanCode, int Mods)
         {
-            _dryRun = true;
-            Run();
+            KeyDown?.Invoke(new KeyboardKeyEventArgs(Key, (KeyModifiers) Mods));
         }
 
-        protected abstract void OnRenderFrame(double Delta);
-
-        protected abstract void OnUpdateFrame(double Delta);
-
-        private void DispatchUpdateFrame(double Delta)
+        private void ProcessKeyUp(IKeyboard Keyboard, Key Key, int ScanCode, int Mods)
         {
-            this.OnUpdateFrame(Delta);
+            KeyUp?.Invoke(new KeyboardKeyEventArgs(Key, (KeyModifiers) Mods));
         }
 
-        private void DispatchRenderFrame(double Delta)
+        public int Width
         {
-            this.OnRenderFrame(Delta);
+            get => _window.Size.Width;
+            set => _window.Size = new Size(value, _window.Size.Height);
         }
-
-        protected void SwapBuffers()
+        public int Height
         {
-            EnsureUndisposed();
-            Context.SwapBuffers();
+            get => _window.Size.Height;
+            set => _window.Size = new Size(_window.Size.Width, value);
         }
         
-        protected override void OnClosing(CancelEventArgs e)
+        public double TargetFramerate { get; set; }
+
+        public bool IsExiting => _window.Handle == IntPtr.Zero || _window.IsClosing;
+
+        public VSyncMode VSync
         {
-            base.OnClosing(e);
-            if (e.Cancel) return;
-            _isExiting = true;
-            OnUnload(EventArgs.Empty);
+            get => _window.VSync;
+            set => _window.VSync = value;
         }
 
-        protected virtual void Dispose(bool Manual)
+        public WindowState WindowState
         {
+            get => _window.WindowState;
+            set => _window.WindowState = value;
         }
 
-        protected abstract void OnLoad(EventArgs E);
+        public bool Exists => !IsExiting;
 
-        protected abstract void OnUnload(EventArgs E);
-
-        protected override void OnResize(EventArgs E)
+        public string Title
         {
-            base.OnResize(E);
-            _glContext.Update(WindowInfo);
+            get => _window.Title;
+            set => _window.Title = value;
         }
 
-
-        public override void Dispose()
+        public void Dispose()
         {
-            try
+            _window.Close();
+        }
+
+        public void Close()
+        {
+            _window.Close();
+        }
+
+        public bool Fullscreen
+        {
+            get => _fullscreen;
+            set
             {
-                Dispose(true);
-            }
-            finally
-            {
-                try
+                _fullscreen = value;
+                unsafe
                 {
-                    if (_glContext != null)
-                    {
-                        _glContext.Dispose();
-                        _glContext = null;
-                    }
-                }
-                finally
-                {
-                    base.Dispose();
+                    var glfw = GlfwProvider.GLFW.Value;
+                    var monitor = glfw.GetPrimaryMonitor();
+                    var mode = glfw.GetVideoMode(monitor);
+                    glfw.SetWindowMonitor
+                    (
+                        (WindowHandle*)_window.Handle,
+                        _fullscreen ? monitor : null, 0, 0, mode->Width, mode->Height,
+                        mode->RefreshRate
+                    );
                 }
             }
-
-            GC.SuppressFinalize(this);
         }
+
+        public bool CursorVisible
+        {
+            get => _cursorVisible;
+            set
+            {
+                unsafe
+                {
+                    _cursorVisible = value;
+                    var glfw = GlfwProvider.GLFW.Value;
+                    var mode = _cursorVisible ? CursorModeValue.CursorNormal : CursorModeValue.CursorHidden;
+                    glfw.SetInputMode((WindowHandle*)_window.Handle, CursorStateAttribute.Cursor, mode);
+                }
+            }
+        }
+
+        public void SetIcon(Image Icon)
+        {
+            unsafe
+            {
+                var glfw = GlfwProvider.GLFW.Value;
+                glfw.SetWindowIcon((WindowHandle*) _window.Handle, 1, &Icon);
+            }
+        }
+
+        public event Action<MouseButtonEventArgs> MouseUp;
+        public event Action<MouseButtonEventArgs> MouseDown;
+        public event Action<MouseWheelEventArgs> MouseWheel;
+        public event Action<MouseMoveEventArgs> MouseMove;
+        public event Action<KeyboardKeyEventArgs> KeyDown;
+        public event Action<KeyboardKeyEventArgs> KeyUp;
+        public event Action<string> CharWritten;
     }
 }

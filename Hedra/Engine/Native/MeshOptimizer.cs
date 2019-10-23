@@ -4,7 +4,7 @@ using Hedra.Engine.Core;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.MeshOptimizer;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.Native
 {
@@ -34,7 +34,7 @@ namespace Hedra.Engine.Native
                 (UIntPtr) indices.Length,
                 verticesPointer.Address,
                 (UIntPtr) vertices.Length,
-                (UIntPtr) (Vector3.SizeInBytes),
+                (UIntPtr) (HedraSize.Vector3),
                 (UIntPtr) targetIndexCount,
                 .05f,
                 BlacklistedIndices,
@@ -59,7 +59,7 @@ namespace Hedra.Engine.Native
                 (UIntPtr) indices.Length,
                 verticesPointer.Address,
                 (UIntPtr) vertices.Length,
-                (UIntPtr) (Vector3.SizeInBytes),
+                (UIntPtr) (HedraSize.Vector3),
                 (UIntPtr) targetIndexCount
             );
             outIndicesPointer.Free();
@@ -78,7 +78,7 @@ namespace Hedra.Engine.Native
                 (UIntPtr) Mesh.Indices.Count,
                 Mesh.Vertices.Pointer,
                 (UIntPtr) Mesh.Vertices.Count,
-                (UIntPtr) (Vector3.SizeInBytes),
+                (UIntPtr) (HedraSize.Vector3),
                 (UIntPtr) targetIndexCount
             );
             Mesh.Indices.Clear();

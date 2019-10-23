@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.Rendering.Animation;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.PhysicsSystem
 {
@@ -30,7 +30,7 @@ namespace Hedra.Engine.PhysicsSystem
                     _horizontalBroadphaseShape = new CollisionShape(new Vector3[_colliderData.DefaultBroadphase.Length]);
                 for (var i = 0; i < _horizontalBroadphaseShape.Vertices.Length; i++)
                 {
-                    _horizontalBroadphaseShape.Vertices[i] = Vector3.TransformPosition(
+                    _horizontalBroadphaseShape.Vertices[i] = Vector3.Transform(
                         _colliderData.DefaultBroadphase[i].Vertex,
                         transforms[(int)_colliderData.DefaultBroadphase[i].Id.X]
                     );
@@ -49,7 +49,7 @@ namespace Hedra.Engine.PhysicsSystem
                     _defaultBroadphaseShape = new CollisionShape(new Vector3[_colliderData.DefaultBroadphase.Length]);
                 for (var i = 0; i < _defaultBroadphaseShape.Vertices.Length; i++)
                 {
-                    _defaultBroadphaseShape.Vertices[i] = Vector3.TransformPosition(
+                    _defaultBroadphaseShape.Vertices[i] = Vector3.Transform(
                         _colliderData.DefaultBroadphase[i].Vertex,
                         transforms[(int)_colliderData.DefaultBroadphase[i].Id.X]
                     );

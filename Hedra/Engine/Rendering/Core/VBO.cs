@@ -6,10 +6,10 @@
  */
 
 using System;
-using System.Drawing;
 using Hedra.Engine.Management;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using System.Numerics;
+using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
 
 namespace Hedra.Engine.Rendering.Core
 {

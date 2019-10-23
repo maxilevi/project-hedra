@@ -8,7 +8,7 @@ using Hedra.Engine.Networking.Packets;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.Networking;
 using Hedra.EntitySystem;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.Networking
 {

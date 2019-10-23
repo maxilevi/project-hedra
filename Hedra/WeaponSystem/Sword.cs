@@ -16,7 +16,8 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.WeaponSystem
 {

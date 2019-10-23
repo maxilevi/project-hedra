@@ -8,8 +8,10 @@ using System;
 using System.Drawing;
 using System.Linq;
 using Hedra.Engine.Localization;
+using Hedra.Engine.Windowing;
 using Hedra.Rendering.UI;
-using OpenTK;
+using System.Numerics;
+
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -78,13 +80,13 @@ namespace Hedra.Engine.Rendering.UI
             Initialize(Position, Scale, Translation.Default(Text), C, F, Options.Select(Translation.Default).ToArray(), Centered);
         }
         
-        public void OnArrowClick(object Sender, EventArgs E)
+        public void OnArrowClick(object Sender, MouseButtonEventArgs E)
         {
             Index--;
             this.Update();
         }
         
-        public void OnRightArrowClick(object Sender, EventArgs E)
+        public void OnRightArrowClick(object Sender, MouseButtonEventArgs E)
         {
             Index++;
             this.Update();

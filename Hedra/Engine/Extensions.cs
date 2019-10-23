@@ -17,10 +17,10 @@ using System.Collections;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using Hedra.Core;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Core;
 using Newtonsoft.Json.Converters;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine
 {
@@ -122,7 +122,7 @@ namespace Hedra.Engine
             throw new ArgumentException($"Cannot create a deep clone of Unclonable object");
         }
         
-        public static Quaternion FromMatrixExt(Matrix4 matrix)
+        public static Quaternion FromMatrixExt(Matrix4x4 matrix)
         {
             float w, x, y, z;
             float diagonal = matrix.M11 + matrix.M22 + matrix.M33;
@@ -176,32 +176,11 @@ namespace Hedra.Engine
             return result.NormalizedFast();
         }
 
-        public static Quaternion NormalizedFast(this Quaternion Quat)
-        {
-            float x = Quat.X, y = Quat.Y, z = Quat.Z, w = Quat.W;
-            float n = 1f / Mathf.FastSqrt(x * x + y * y + z * z + w * w);
-            Quat.W *= n;
-            Quat.Xyz *= n;
-            return Quat;
-        }
-
-        public static Matrix4 Transposed(this Matrix4 Matrix)
-        {
-            Matrix.Transpose();
-            return Matrix;
-        }
-        
-        public static Matrix3 Transposed(this Matrix3 Matrix)
-        {
-            Matrix.Transpose();
-            return Matrix;
-        }
-        
         ///<sumary>
         /// Do NOT touch this function. It's not a real ToMatrix, it's an adhoc version.
-        /// For a real one look Matrix4.CreateFromQuaterion();
+        /// For a real one look Matrix4x4.CreateFromQuaterion();
         ///</sumary>
-        public static Matrix4 ToMatrix(this Quaternion Quat)
+        public static Matrix4x4 ToMatrix(this Quaternion Quat)
         {
             float x = Quat.X, y = Quat.Y, z = Quat.Z, w = Quat.W;
             float xy = x * y;
@@ -214,7 +193,7 @@ namespace Hedra.Engine
             float ySquared = y * y;
             float zSquared = z * z;
 
-            Matrix4 Matrix = Matrix4.Identity;
+            Matrix4x4 Matrix = Matrix4x4.Identity;
             Matrix.M11 = 1 - 2 * (ySquared + zSquared);
             Matrix.M12 = 2 * (xy - zw);
             Matrix.M13 = 2 * (xz + yw);

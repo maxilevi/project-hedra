@@ -4,8 +4,10 @@ using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Sound;
-using OpenTK;
-using OpenTK.Input;
+using System.Numerics;
+
+using Silk.NET.Input.Common;
+
 
 namespace Hedra.Engine.WorldBuilding
 {

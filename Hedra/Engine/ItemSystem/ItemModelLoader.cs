@@ -8,7 +8,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.ItemSystem
 {
@@ -33,7 +33,7 @@ namespace Hedra.Engine.ItemSystem
                 }
             }
             var returnModel = ModelCache[path].Clone();
-            returnModel.Transform(Matrix4.CreateScale(ModelTemplate.Scale));
+            returnModel.Transform(Matrix4x4.CreateScale(ModelTemplate.Scale));
             return returnModel;
         }
 

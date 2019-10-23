@@ -12,7 +12,8 @@ using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering.Geometry;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Rendering
 {
@@ -419,7 +420,7 @@ namespace Hedra.Engine.Rendering
             var p1 = new Vector4(P1, (float) valp1);
             var p2 = new Vector4(P2, (float) valp2);
 
-            if (p2.Length < p1.Length)
+            if (p2.Length() < p1.Length())
             {
                 var temp = p1;
                 p1 = p2;
@@ -428,9 +429,9 @@ namespace Hedra.Engine.Rendering
 
             Vector3 p;
             if (Math.Abs(p1.W - p2.W) > 0.00001)
-                p = p1.Xyz + (p2.Xyz - p1.Xyz) / (p2.W - p1.W) * ((float) IsoLevel - p1.W);
+                p = p1.Xyz() + (p2.Xyz() - p1.Xyz()) / (p2.W - p1.W) * ((float) IsoLevel - p1.W);
             else
-                p = p1.Xyz;
+                p = p1.Xyz();
             return p;
         }
 

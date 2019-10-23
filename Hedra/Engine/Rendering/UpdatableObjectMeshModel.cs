@@ -1,7 +1,7 @@
 using Hedra.Engine.EntitySystem;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.Rendering
 {
@@ -23,7 +23,7 @@ namespace Hedra.Engine.Rendering
             set => Model.Outline = value;
         }
 
-        public Matrix4 TransformationMatrix
+        public Matrix4x4 TransformationMatrix
         {
             get => Model.TransformationMatrix;
             set => Model.TransformationMatrix = value;

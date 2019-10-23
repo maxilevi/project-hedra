@@ -9,13 +9,14 @@
 using System.Collections;
 using Hedra.Core;
 using Hedra.Engine.Rendering;
-using OpenTK;
+using System.Numerics;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Core;
 using Hedra.EntitySystem;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.WorldObjects;
 
@@ -81,7 +82,7 @@ namespace Hedra.Engine.Player
                 _light = ShaderManager.GetAvailableLight();
                 if (_light != null)
                 {
-                    _light.Color = this.Color.Xyz;
+                    _light.Color = this.Color.Xyz();
                     _light.Radius = LightRadius;
                 }
             }
@@ -104,7 +105,7 @@ namespace Hedra.Engine.Player
         {
             if (_light != null)
             {
-                while (_light.Color.LengthFast > 0.05f)
+                while (_light.Color.LengthFast() > 0.05f)
                 {
                     _light.Color -= _light.Color * Time.DeltaTime * 2f;
                     ShaderManager.UpdateLight(_light);

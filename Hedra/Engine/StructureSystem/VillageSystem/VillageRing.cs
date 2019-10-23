@@ -1,4 +1,4 @@
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {
@@ -14,7 +14,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         
         public static bool Collide(VillageRing Ring, PlacementPoint Point)
         {
-            return Point.Position.LengthSquared < Ring.Radius * Ring.Radius &&
+            return Point.Position.LengthSquared() < Ring.Radius * Ring.Radius &&
                    (Ring.InnerRing == null || !Ring.InnerRing.Collides(Point));
         }
 

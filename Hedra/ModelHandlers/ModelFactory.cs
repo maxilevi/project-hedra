@@ -4,6 +4,7 @@ using Hedra.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
+using Hedra.Numerics;
 
 namespace Hedra.ModelHandlers
 {

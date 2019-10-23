@@ -7,11 +7,11 @@
  * To change  template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
-using OpenTK.Graphics.OpenGL4;
+using Hedra.Engine.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using System.Drawing;
-using OpenTK;
+using System.Numerics;
 using System.Collections;
 using System.Linq;
 using Hedra.Components;
@@ -22,12 +22,14 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Animation;
+using Hedra.Engine.Windowing;
 using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using OpenTK.Input;
+
+
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -98,7 +100,7 @@ namespace Hedra.Engine.Rendering.UI
                 _human.SetWeapon(_classType.StartingItems.First(P => P.Value.IsWeapon).Value.Weapon);
             }
 
-            SetWeapon(null, null);
+            SetWeapon(null, default);
             
             classChooser.RightArrow.Click += SetWeapon;
             classChooser.LeftArrow.Click += SetWeapon;

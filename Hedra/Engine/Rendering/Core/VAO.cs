@@ -70,7 +70,7 @@ namespace Hedra.Engine.Rendering.Core
             {
                 Bind(false);
                 Buffer.Bind();
-                Renderer.VertexAttribPointer(Position, Buffer.Stride, Buffer.PointerType, false, 0, 0);
+                Renderer.VertexAttribPointer(Position, Buffer.Stride, Buffer.PointerType, false, 0);
                 Buffer.Unbind();
                 Unbind(false);
             }

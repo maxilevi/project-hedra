@@ -7,10 +7,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using Hedra.Engine.Management;
-using OpenTK;
-using OpenTK.Input;
+using Hedra.Engine.Windowing;
+using System.Numerics;
+using Silk.NET.GLFW;
+using Silk.NET.Input.Common;
 
 namespace Hedra.Engine.Events
 {
@@ -24,11 +24,11 @@ namespace Hedra.Engine.Events
         private static readonly Dictionary<object, EventHandler<KeyEventArgs>> HighKeyUpHandlers;
         private static readonly Dictionary<object, EventHandler<KeyEventArgs>> NormalKeyUpHandlers;
         private static readonly Dictionary<object, EventHandler<KeyEventArgs>> LowKeyUpHandlers;
-        private static readonly Dictionary<object, EventHandler<KeyPressEventArgs>> KeyPressedHandlers;
         private static readonly Dictionary<object, EventHandler<MouseButtonEventArgs>> MouseButtonUpHandlers;
         private static readonly Dictionary<object, EventHandler<MouseButtonEventArgs>> MouseButtonDownHandlers;
         private static readonly Dictionary<object, EventHandler<MouseMoveEventArgs>> MouseMoveHandlers;
         private static readonly Dictionary<object, EventHandler<MouseWheelEventArgs>> MouseWheelHandlers;
+        private static readonly Dictionary<object, Action<string>> CharWrittenHandlers;
 
         private static event EventHandler<KeyEventArgs> HighOnKeyDownEvent;
         private static event EventHandler<KeyEventArgs> NormalOnKeyDownEvent;
@@ -36,11 +36,11 @@ namespace Hedra.Engine.Events
         private static event EventHandler<KeyEventArgs> HighOnKeyUpEvent;
         private static event EventHandler<KeyEventArgs> NormalOnKeyUpEvent;
         private static event EventHandler<KeyEventArgs> LowOnKeyUpEvent;
-        private static event EventHandler<KeyPressEventArgs> OnKeyPressedEvent;
         private static event EventHandler<MouseMoveEventArgs> OnMouseMoveEvent;
         private static event EventHandler<MouseButtonEventArgs> OnMouseButtonUpEvent;
         private static event EventHandler<MouseButtonEventArgs> OnMouseButtonDownEvent;
         private static event EventHandler<MouseWheelEventArgs> OnMouseWheelEvent;
+        private static event Action<string> OnCharWrittenEvent;
 
         public static Vector2 Mouse { get; set; } = Vector2.Zero;
 
@@ -58,7 +58,7 @@ namespace Hedra.Engine.Events
                     Provider.MouseMove -= OnMouseMove;
                     Provider.KeyDown -= OnKeyDown;
                     Provider.KeyUp -= OnKeyUp;
-                    Provider.KeyPress -= OnKeyPress;
+                    Provider.CharWritten -= OnCharWritten;
                 }
                 _provider = value;
                 if (Provider != null)
@@ -69,7 +69,7 @@ namespace Hedra.Engine.Events
                     Provider.MouseMove += OnMouseMove;
                     Provider.KeyDown += OnKeyDown;
                     Provider.KeyUp += OnKeyUp;
-                    Provider.KeyPress += OnKeyPress;
+                    Provider.CharWritten += OnCharWritten;
                 }
             }
         }
@@ -83,12 +83,18 @@ namespace Hedra.Engine.Events
             HighKeyUpHandlers = new Dictionary<object, EventHandler<KeyEventArgs>>();
             NormalKeyUpHandlers = new Dictionary<object, EventHandler<KeyEventArgs>>();
             LowKeyUpHandlers = new Dictionary<object, EventHandler<KeyEventArgs>>();
-            KeyPressedHandlers = new Dictionary<object, EventHandler<KeyPressEventArgs>>();
             MouseMoveHandlers = new Dictionary<object, EventHandler<MouseMoveEventArgs>>();
             MouseWheelHandlers = new Dictionary<object, EventHandler<MouseWheelEventArgs>>();
             MouseButtonUpHandlers = new Dictionary<object, EventHandler<MouseButtonEventArgs>>();
             MouseButtonDownHandlers = new Dictionary<object, EventHandler<MouseButtonEventArgs>>();
+            CharWrittenHandlers = new Dictionary<object, Action<string>>();
             Provider = (IEventProvider) Program.GameWindow;
+        }
+
+        public static void RegisterCharWritten(object Key, Action<string> EventHandler)
+        {
+            CharWrittenHandlers.Add(Key, EventHandler);
+            OnCharWrittenEvent += CharWrittenHandlers[Key];
         }
 
         public static void RegisterMouseMove(object Key, EventHandler<MouseMoveEventArgs> EventHandler)
@@ -206,18 +212,6 @@ namespace Hedra.Engine.Events
             }
         }
 
-        public static void RegisterKeyPress(object Key, EventHandler<KeyPressEventArgs> EventHandler)
-        {
-            KeyPressedHandlers.Add(Key, EventHandler);
-            OnKeyPressedEvent += KeyPressedHandlers[Key];
-        }
-
-        public static void UnregisterKeyPress(object Key)
-        {
-            OnKeyPressedEvent -= KeyPressedHandlers[Key];
-            KeyPressedHandlers.Remove(Key);
-        }
-
         public static void Add(IEventListener E)
         {
             EventListeners.Add(E);
@@ -228,69 +222,69 @@ namespace Hedra.Engine.Events
             EventListeners.Remove(A);
         }
 
-        public static void OnMouseButtonDown(object Sender, MouseButtonEventArgs E)
+        public static void OnCharWritten(string Char)
         {
-            OnMouseButtonDownEvent?.Invoke(Sender, E);
-            for (var i = 0;i<EventListeners.Count; i++){
-                EventListeners[i].OnMouseButtonDown(Sender, E);
-            }
-        }
-
-        public static void OnMouseButtonUp(object Sender, MouseButtonEventArgs E)
-        {
-            OnMouseButtonUpEvent?.Invoke(Sender, E);
-            for (var i = 0;i<EventListeners.Count; i++){
-                EventListeners[i].OnMouseButtonUp(Sender, E);
-            }
-        }
-
-        public static void OnMouseWheel(object Sender, MouseWheelEventArgs E)
-        {
-            OnMouseWheelEvent?.Invoke(Sender, E);
-            for (var i = 0;i<EventListeners.Count; i++){
-                EventListeners[i].OnMouseWheel(Sender, E);
-            }
-        }
-
-        public static void OnMouseMove(object Sender, MouseMoveEventArgs E)
-        {
-            Mouse = new Vector2(E.Mouse.X, E.Mouse.Y);
-            OnMouseMoveEvent?.Invoke(Sender, E);
-            for (var i = 0;i<EventListeners.Count; i++){
-                EventListeners[i].OnMouseMove(Sender, E);
-            }
-        }
-
-        public static void OnKeyDown(object Sender, KeyboardKeyEventArgs E)
-        {
-            var keyEvent = new KeyEventArgs(E);
-            HighOnKeyDownEvent?.Invoke(Sender, keyEvent);
-            NormalOnKeyDownEvent?.Invoke(Sender, keyEvent);
-            LowOnKeyDownEvent?.Invoke(Sender, keyEvent);
+            OnCharWrittenEvent?.Invoke(Char);
             for (var i = 0; i < EventListeners.Count; i++)
             {
-                EventListeners[i].OnKeyDown(Sender, keyEvent);
-            }
-        }
-
-        public static void OnKeyUp(object Sender, KeyboardKeyEventArgs E)
-        {
-            var keyEvent = new KeyEventArgs(E);
-            HighOnKeyUpEvent?.Invoke(Sender, keyEvent);
-            NormalOnKeyUpEvent?.Invoke(Sender, keyEvent);
-            LowOnKeyUpEvent?.Invoke(Sender, keyEvent);
-            for (var i = 0; i < EventListeners.Count; i++)
-            {
-                EventListeners[i].OnKeyUp(Sender, keyEvent);
+                EventListeners[i].OnCharWritten(Char);
             }
         }
         
-        public static void OnKeyPress(object Sender, KeyPressEventArgs E)
+        public static void OnMouseButtonDown(MouseButtonEventArgs E)
         {
-            OnKeyPressedEvent?.Invoke(Sender, E);
-            for(var i = 0;i<EventListeners.Count; i++)
+            OnMouseButtonDownEvent?.Invoke(null, E);
+            for (var i = 0;i<EventListeners.Count; i++){
+                EventListeners[i].OnMouseButtonDown(null, E);
+            }
+        }
+
+        public static void OnMouseButtonUp(MouseButtonEventArgs E)
+        {
+            OnMouseButtonUpEvent?.Invoke(null, E);
+            for (var i = 0;i<EventListeners.Count; i++){
+                EventListeners[i].OnMouseButtonUp(null, E);
+            }
+        }
+
+        public static void OnMouseWheel(MouseWheelEventArgs E)
+        {
+            OnMouseWheelEvent?.Invoke(null, E);
+            for (var i = 0;i<EventListeners.Count; i++){
+                EventListeners[i].OnMouseWheel(null, E);
+            }
+        }
+
+        public static void OnMouseMove(MouseMoveEventArgs E)
+        {
+            Mouse = new Vector2(E.X, E.Y);
+            OnMouseMoveEvent?.Invoke(null, E);
+            for (var i = 0;i<EventListeners.Count; i++){
+                EventListeners[i].OnMouseMove(null, E);
+            }
+        }
+
+        public static void OnKeyDown(KeyboardKeyEventArgs E)
+        {
+            var keyEvent = new KeyEventArgs(E);
+            HighOnKeyDownEvent?.Invoke(null, keyEvent);
+            NormalOnKeyDownEvent?.Invoke(null, keyEvent);
+            LowOnKeyDownEvent?.Invoke(null, keyEvent);
+            for (var i = 0; i < EventListeners.Count; i++)
             {
-                EventListeners[i].OnKeyPress(Sender, E);
+                EventListeners[i].OnKeyDown(null, keyEvent);
+            }
+        }
+
+        public static void OnKeyUp(KeyboardKeyEventArgs E)
+        {
+            var keyEvent = new KeyEventArgs(E);
+            HighOnKeyUpEvent?.Invoke(null, keyEvent);
+            NormalOnKeyUpEvent?.Invoke(null, keyEvent);
+            LowOnKeyUpEvent?.Invoke(null, keyEvent);
+            for (var i = 0; i < EventListeners.Count; i++)
+            {
+                EventListeners[i].OnKeyUp(null, keyEvent);
             }
         }
 
@@ -313,12 +307,6 @@ namespace Hedra.Engine.Events
             for (var i = 0; i < keyUpHandlers.Length; i++)
             {
                 UnregisterKeyUp(keyUpHandlers[i]);
-            }
-
-            var keyPressed = KeyPressedHandlers.Keys.ToArray();
-            foreach (var key in keyPressed)
-            {
-                UnregisterKeyPress(key);
             }
 
             var mouseMoved = MouseMoveHandlers.Keys.ToArray();
@@ -356,13 +344,10 @@ namespace Hedra.Engine.Events
         }
 
         public Key Key => Event.Key;
-        public uint ScanCode => Event.ScanCode;
         public bool Alt => Event.Alt;
         public bool Control => Event.Control;
         public bool Shift => Event.Shift;
         public KeyModifiers Modifiers => Event.Modifiers;
-        public KeyboardState Keyboard => Event.Keyboard;
-        public bool IsRepeat => Event.IsRepeat;
     }
 
     public enum EventPriority

@@ -11,8 +11,8 @@ using Hedra.Engine.Rendering.UI;
 using Hedra.Items;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using OpenTK;
-using OpenTK.Platform.MacOS;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Player.PagedInterface
 {

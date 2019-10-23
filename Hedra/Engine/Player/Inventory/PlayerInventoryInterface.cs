@@ -10,8 +10,10 @@ using Hedra.Input;
 using Hedra.Localization;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
-using OpenTK;
-using OpenTK.Input;
+using System.Numerics;
+using Hedra.Numerics;
+using Silk.NET.Input.Common;
+
 
 namespace Hedra.Engine.Player.Inventory
 {

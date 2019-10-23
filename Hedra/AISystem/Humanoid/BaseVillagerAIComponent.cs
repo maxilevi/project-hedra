@@ -17,7 +17,8 @@ using Hedra.Engine.Player;
 using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.EntitySystem;
 using Hedra.Game;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.AISystem.Humanoid
 {
@@ -48,7 +49,7 @@ namespace Hedra.AISystem.Humanoid
 
             if(Parent.IsNear(GameManager.Player, 16) && !IsMoving)
             {
-                Parent.Orientation = (GameManager.Player.Position - Parent.Position).Xz.NormalizedFast().ToVector3();
+                Parent.Orientation = (GameManager.Player.Position - Parent.Position).Xz().NormalizedFast().ToVector3();
                 Parent.Model.TargetRotation = Physics.DirectionToEuler( Parent.Orientation );
             }
             else if(_move)

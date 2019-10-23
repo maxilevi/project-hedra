@@ -1,14 +1,15 @@
 
 using System;
-using System.Drawing;
 using System.Linq;
-using BulletSharp;
 using Hedra.Engine.Bullet;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using System.Numerics;
 using Hedra.Engine.Rendering.Core;
+using Hedra.Engine.Windowing;
 using Hedra.Rendering;
 using CollisionShape = Hedra.Engine.PhysicsSystem.CollisionShape;
+#if DEBUG
+using Silk.NET.OpenGL.Legacy;
+#endif
 
 namespace Hedra.Engine.Rendering
 {
@@ -26,6 +27,9 @@ namespace Hedra.Engine.Rendering
         public static VBO<ushort> CubeIndicesVBO { get; }
         public static VAO<Vector3> CubeVAO { get; }
         private static BulletDraw _debugDraw;
+#if DEBUG
+        private static readonly GL _gl;
+#endif
         
         static BasicGeometry()
         {
@@ -40,21 +44,24 @@ namespace Hedra.Engine.Rendering
             };
             asVertexData.UniqueVertices();
             var indices = asVertexData.Indices.Select(I => (ushort) I).ToArray();
-            CubeVerticesVBO = new VBO<Vector3>(asVertexData.Vertices.ToArray(), asVertexData.Vertices.Count * Vector3.SizeInBytes, VertexAttribPointerType.Float);
+            CubeVerticesVBO = new VBO<Vector3>(asVertexData.Vertices.ToArray(), asVertexData.Vertices.Count * HedraSize.Vector3, VertexAttribPointerType.Float);
             CubeIndicesVBO = new VBO<ushort>(indices, indices.Length * sizeof(ushort), VertexAttribPointerType.UnsignedShort, BufferTarget.ElementArrayBuffer);
             CubeVAO = new VAO<Vector3>(CubeVerticesVBO);
             
-            _drawVerts = new VBO<Vector3>(new Vector3[5], 5 * Vector3.SizeInBytes, VertexAttribPointerType.Float);
+            _drawVerts = new VBO<Vector3>(new Vector3[5], 5 * HedraSize.Vector3, VertexAttribPointerType.Float);
             _drawIndices = new VBO<uint>(new uint[5], 5 * sizeof(uint), VertexAttribPointerType.UnsignedInt, BufferTarget.ElementArrayBuffer);
             _drawVao = new VAO<Vector3>(_drawVerts);
             _line = new Line3D();
             _debugDraw = new BulletDraw();
+#if DEBUG
+            _gl = GL.GetApi();
+#endif
         }
         
         public static void DrawPlane(Vector3 Normal, float PlaneConst, Vector3 Position, Vector4 Color)
         {
             /*var mat = Transform.Compatible();
-            var color = Color.Xyz.Compatible();
+            var color = Color.Xyz().Compatible();
             var normal = Normal.Compatible();
             _debugDraw.DrawPlane(ref normal, PlaneConst, ref mat, ref color);*/
         }
@@ -87,12 +94,13 @@ namespace Hedra.Engine.Rendering
         public static void DrawPoint(Vector3 Point, Vector4 Color, float Width = 4)
         {
 #if DEBUG
+            
             Shader.Passthrough.Bind();
-            OpenTK.Graphics.OpenGL.GL.PointSize(Width);
-            OpenTK.Graphics.OpenGL.GL.Begin(OpenTK.Graphics.OpenGL.PrimitiveType.Points);
-            OpenTK.Graphics.OpenGL.GL.Vertex3(Point);
-            OpenTK.Graphics.OpenGL.GL.Color4(Color);
-            OpenTK.Graphics.OpenGL.GL.End();
+            _gl.PointSize(Width);
+            _gl.Begin(GLEnum.Points);
+            _gl.Vertex3(Point.X, Point.Y, Point.Z);
+            _gl.Color4(Color.X, Color.Y, Color.Z, Color.W);
+            _gl.End();
             Shader.Passthrough.Unbind();
 #endif
         }
@@ -100,14 +108,15 @@ namespace Hedra.Engine.Rendering
         public static void DrawLine(Vector3 Start, Vector3 End, Vector4 Color, float Width = 1)
         {
 #if DEBUG
+            
             Shader.Passthrough.Bind();
-            OpenTK.Graphics.OpenGL.GL.LineWidth(Width);
-            OpenTK.Graphics.OpenGL.GL.Begin(OpenTK.Graphics.OpenGL.PrimitiveType.Lines);
-            OpenTK.Graphics.OpenGL.GL.Color4(Color);
-            OpenTK.Graphics.OpenGL.GL.Vertex3(Start);
-            OpenTK.Graphics.OpenGL.GL.Color4(Color);
-            OpenTK.Graphics.OpenGL.GL.Vertex3(End);
-            OpenTK.Graphics.OpenGL.GL.End();
+            _gl.LineWidth(Width);
+            _gl.Begin(GLEnum.Lines);
+            _gl.Color4(Color.X, Color.Y, Color.Z, Color.W);
+            _gl.Vertex3(Start.X, Start.Y, Start.Z);
+            _gl.Color4(Color.X, Color.Y, Color.Z, Color.W);
+            _gl.Vertex3(End.X, End.Y, End.Z);
+            _gl.End();
             Shader.Passthrough.Unbind();
 #endif
         }

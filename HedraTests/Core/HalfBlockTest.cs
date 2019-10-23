@@ -5,7 +5,9 @@ using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.Generation;
 using NUnit.Framework;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
+using Silk.NET.Core.Math;
 
 namespace HedraTests.Core
 {

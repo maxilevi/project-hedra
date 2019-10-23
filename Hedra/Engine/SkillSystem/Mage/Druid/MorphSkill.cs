@@ -5,7 +5,7 @@ using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.WeaponSystem;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Mage.Druid
 {

@@ -2,6 +2,7 @@ using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.EntitySystem;
+using Hedra.Numerics;
 
 namespace Hedra.Components.Effects
 {

@@ -5,7 +5,8 @@ using Hedra.Engine.Player.QuestSystem.Views;
 using Hedra.Engine.QuestSystem;
 using Hedra.Items;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Mission.Blocks
 {
@@ -21,8 +22,8 @@ namespace Hedra.Mission.Blocks
             var model = new VertexData();
             for (var i = 0; i < items.Length; i++)
             {
-                var transform = Matrix4.CreateTranslation(Vector3.UnitZ);
-                transform *= Matrix4.CreateRotationY(i * (360 / items.Length) * Mathf.Radian);
+                var transform = Matrix4x4.CreateTranslation(Vector3.UnitZ);
+                transform *= Matrix4x4.CreateRotationY(i * (360 / items.Length) * Mathf.Radian);
                 model += items[i].Model.Clone().Transform(transform);
             }
             return new ModelView(model);

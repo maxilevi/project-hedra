@@ -8,7 +8,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {
@@ -71,7 +71,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                 for (var j = 0; j < designs[i].Length; j++)
                 {
                     var offset = designs[i][j].Offset * designs[i][j].Scale;
-                    var offsetMatrix = Matrix4.CreateTranslation(offset);
+                    var offsetMatrix = Matrix4x4.CreateTranslation(offset);
                     cache._colliderCache.Add(
                         designs[i][j].Path,
                         AssetManager.LoadCollisionShapes(designs[i][j].Path, Vector3.One * designs[i][j].Scale).Select(S => S.Transform(offsetMatrix)).ToList()

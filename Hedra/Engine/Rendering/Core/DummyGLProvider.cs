@@ -1,6 +1,7 @@
 using System;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using System.Numerics;
+using Hedra.Engine.Windowing;
+using Silk.NET.OpenGL;
 
 namespace Hedra.Engine.Rendering.Core
 {
@@ -67,11 +68,6 @@ namespace Hedra.Engine.Rendering.Core
 
         public virtual void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, ref T Data) where T : unmanaged
         {
-        }
-
-        public unsafe void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, IntPtr Data) where T : unmanaged
-        {
-            throw new NotImplementedException();
         }
 
         public virtual void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, T[] Data) where T : unmanaged
@@ -173,7 +169,7 @@ namespace Hedra.Engine.Rendering.Core
         {
         }
 
-        public virtual void DrawBuffers(int N, DrawBuffersEnum[] Enums)
+        public virtual void DrawBuffers(int N, GLEnum[] Enums)
         {
         }
 
@@ -291,7 +287,7 @@ namespace Hedra.Engine.Rendering.Core
         {
         }
 
-        public virtual void MultiDrawElements(PrimitiveType Primitive, int[] Counts, DrawElementsType Type, IntPtr[] Offsets, int Count)
+        public virtual void MultiDrawElements(PrimitiveType Primitive, uint[] Counts, DrawElementsType Type, IntPtr[] Offsets, int Count)
         {
         }
 
@@ -320,18 +316,6 @@ namespace Hedra.Engine.Rendering.Core
         {
         }
 
-        public virtual void StencilFunc(StencilFunction Func, int V0, uint Id)
-        {
-        }
-
-        public virtual void StencilMask(uint Mask)
-        {
-        }
-
-        public virtual void StencilOp(StencilOp Fail, StencilOp ZFail, StencilOp ZPass)
-        {
-        }
-
         public virtual void TexImage2D(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3,
             PixelFormat Format, PixelType Type, IntPtr Ptr)
         {
@@ -343,7 +327,7 @@ namespace Hedra.Engine.Rendering.Core
         }
 
         public virtual void TexImage3D<T>(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3, int V4,
-            PixelFormat Format, PixelType Type, T[,,] Data) where T : struct
+            PixelFormat Format, PixelType Type, T[] Pixels) where T : unmanaged
         {
         }
 
@@ -375,15 +359,15 @@ namespace Hedra.Engine.Rendering.Core
         {
         }
 
-        public virtual void UniformMatrix2(int Location, bool Transpose, ref Matrix2 Uniform)
+        public virtual void UniformMatrix2(int Location, bool Transpose, ref Matrix4x4 Uniform)
         {
         }
 
-        public virtual void UniformMatrix3(int Location, bool Transpose, ref Matrix3 Uniform)
+        public virtual void UniformMatrix3(int Location, bool Transpose, ref Matrix4x4 Uniform)
         {
         }
 
-        public virtual void UniformMatrix4(int Location, bool Transpose, ref Matrix4 Uniform)
+        public virtual void UniformMatrix4x4(int Location, bool Transpose, ref Matrix4x4 Uniform)
         {
         }
 
@@ -399,7 +383,7 @@ namespace Hedra.Engine.Rendering.Core
         {
         }
 
-        public virtual void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag, int Bytes, int V2)
+        public virtual void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag, int Bytes)
         {
         }
 

@@ -6,7 +6,7 @@
  */
 
 using Hedra.Engine.Rendering.Core;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.Rendering
 {

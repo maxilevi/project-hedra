@@ -22,7 +22,8 @@ using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Components
 {
@@ -67,7 +68,7 @@ namespace Hedra.Components
         {
             _targetTint = _tintTimer > 0 ? new Vector4(2.0f, 0.1f, 0.1f, 1) : new Vector4(1, 1, 1, 1);
 
-            if ((Parent.Model.Tint - _targetTint).LengthFast > 0.005f)
+            if ((Parent.Model.Tint - _targetTint).LengthFast() > 0.005f)
             {
                 Parent.Model.Tint = Mathf.Lerp(Parent.Model.Tint, _targetTint, Time.DeltaTime * 12f);
             }
@@ -109,7 +110,7 @@ namespace Hedra.Components
             _hasBeenAttacked = true;
             var isImmune = Immune | (Parent.IsStuck && !Parent.Model.Pause);
 
-            if (!Parent.IsStatic && PlaySound && (GameManager.Player.Position - Parent.Position).LengthSquared < 80*80 && Amount >= 1f)
+            if (!Parent.IsStatic && PlaySound && (GameManager.Player.Position - Parent.Position).LengthSquared() < 80*80 && Amount >= 1f)
             {
                 var asHuman = Damager as Humanoid;
                 var baseDamage = Damager != null ? asHuman?.BaseDamageEquation 
@@ -148,7 +149,7 @@ namespace Hedra.Components
             Inflicted = Amount;
             Parent.Health = Math.Max(Parent.Health - Amount, 0);
             if (Damager != null && Damager != Parent && PushBack 
-                && Parent.Size.LengthFast < Damager.Size.LengthFast)
+                && Parent.Size.LengthFast() < Damager.Size.LengthFast())
             {
                 var direction = (Damager.Position - Parent.Position).Normalized();
                 var factor = 0.5f;

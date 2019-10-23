@@ -10,7 +10,6 @@
 using System;
 using System.Drawing;
 using Hedra.Core;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
@@ -26,8 +25,10 @@ using Hedra.Game;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using System.Numerics;
+using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Player.MapSystem
 {
@@ -134,7 +135,7 @@ namespace Hedra.Engine.Player.MapSystem
 
         private void DrawMap()
         {
-            if ((_lastPosition - _player.Position.Xz.ToVector3()).LengthSquared > 2 || _previousActiveChunks != _player.Loader.ActiveChunks)
+            if ((_lastPosition - _player.Position.Xz().ToVector3()).LengthSquared() > 2 || _previousActiveChunks != _player.Loader.ActiveChunks)
             {
                 Renderer.Enable(EnableCap.DepthTest);
                 var previousFBO = Renderer.FBOBound;
@@ -156,7 +157,7 @@ namespace Hedra.Engine.Player.MapSystem
 
                 Culling.BuildFrustum(_player.View.ModelViewMatrix);
 
-                var projMatrix = Matrix4.CreateOrthographic(1024, 1024, 1f, 2048);
+                var projMatrix = Matrix4x4.CreateOrthographic(1024, 1024, 1f, 2048);
                 var trans = Culling.ModelViewMatrix.ExtractTranslation();
                 Culling.BuildFrustum(projMatrix, Culling.ModelViewMatrix);
 
@@ -190,7 +191,7 @@ namespace Hedra.Engine.Player.MapSystem
                 Renderer.BindFramebuffer(FramebufferTarget.Framebuffer, previousFBO);
                 Renderer.Viewport(0, 0, GameSettings.Width, GameSettings.Height);
                 Renderer.BindShader(previousBound);
-                _lastPosition = _player.Position.Xz.ToVector3();
+                _lastPosition = _player.Position.Xz().ToVector3();
                 _previousActiveChunks = _player.Loader.ActiveChunks;
             }
         }
@@ -213,8 +214,8 @@ namespace Hedra.Engine.Player.MapSystem
             _miniMapNorth.BaseTexture.TextureElement.Angle = -_player.Model.LocalRotation.Y;
 
             UpdateRingObject(_miniMapMarker, MarkedDirection, HasMarker);
-            UpdateRingObject(_miniMapQuestMarker, (MarkedQuestPosition - _player.Position).Xz.NormalizedFast().ToVector3(), HasQuestMarker);
-            if((MarkedQuestPosition - _player.Position).Xz.LengthSquared < Chunk.Width * .25f * Chunk.Width * .25f)
+            UpdateRingObject(_miniMapQuestMarker, (MarkedQuestPosition - _player.Position).Xz().NormalizedFast().ToVector3(), HasQuestMarker);
+            if((MarkedQuestPosition - _player.Position).Xz().LengthSquared() < Chunk.Width * .25f * Chunk.Width * .25f)
                 _miniMapQuestMarker.Disable();
 
             this.DrawMap();
@@ -237,7 +238,7 @@ namespace Hedra.Engine.Player.MapSystem
             Shader["Opacity"] = _miniMap.TextureElement.Opacity;
             Shader["Grayscale"] = _miniMap.TextureElement.Grayscale ? 1 : 0;
             Shader["Tint"] = _miniMap.TextureElement.Tint;
-            Shader["Rotation"] = Matrix2.CreateRotation(-_player.Model.LocalRotation.Y * Mathf.Radian);
+            Shader["Rotation"] = Matrix4x4.CreateRotationZ(-_player.Model.LocalRotation.Y * Mathf.Radian);
 
             DrawManager.UIRenderer.DrawQuad();
 

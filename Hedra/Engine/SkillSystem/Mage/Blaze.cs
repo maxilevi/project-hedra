@@ -10,7 +10,8 @@ using Hedra.Engine.Rendering.Particles;
 using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Mage
 {
@@ -53,7 +54,7 @@ namespace Hedra.Engine.SkillSystem.Mage
             public override void Update()
             {
                 UpdateSpots();
-                if (Parent.IsGrounded && (_lastPosition - Parent.Model.ModelPosition).LengthFast > 2)
+                if (Parent.IsGrounded && (_lastPosition - Parent.Model.ModelPosition).LengthFast() > 2)
                 {
                     MarkSpot();
                     _lastPosition = Parent.Model.ModelPosition;

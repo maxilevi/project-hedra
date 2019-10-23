@@ -17,7 +17,8 @@ using Hedra.Engine.Rendering.Animation;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Archer
 {
@@ -86,7 +87,7 @@ namespace Hedra.Engine.SkillSystem.Archer
             for(var i = 0; i< World.Entities.Count; i++)
             {
                 if (User == World.Entities[i]) continue;
-                if (!((User.Position - World.Entities[i].Position).LengthSquared < 24 * 24)) continue;                  
+                if (!((User.Position - World.Entities[i].Position).LengthSquared() < 24 * 24)) continue;                  
                 var direction = -(User.Position - World.Entities[i].Position).NormalizedFast();
                 World.Entities[i].Physics.DeltaTranslate(direction * 64f);
             }

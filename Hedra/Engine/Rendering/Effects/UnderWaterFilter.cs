@@ -8,8 +8,9 @@
  */
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using System.Numerics;
+using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
 
 namespace Hedra.Engine.Rendering.Effects
 {

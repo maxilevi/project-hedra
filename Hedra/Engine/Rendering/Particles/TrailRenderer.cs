@@ -13,8 +13,10 @@ using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using System.Numerics;
+using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Rendering.Particles
 {
@@ -52,9 +54,9 @@ namespace Hedra.Engine.Rendering.Particles
 
             Executer.ExecuteOnMainThread(delegate
             {
-                _points = new VBO<Vector3>(new Vector3[1], Vector3.SizeInBytes, VertexAttribPointerType.Float,
+                _points = new VBO<Vector3>(new Vector3[1], HedraSize.Vector3, VertexAttribPointerType.Float,
                     BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
-                _colors = new VBO<Vector4>(new Vector4[1], Vector4.SizeInBytes, VertexAttribPointerType.Float,
+                _colors = new VBO<Vector4>(new Vector4[1], HedraSize.Vector4, VertexAttribPointerType.Float,
                     BufferTarget.ArrayBuffer, BufferUsageHint.DynamicDraw);
                 _data = new VAO<Vector3, Vector4>(_points, _colors);
                 _buffersCreated = true;
@@ -110,7 +112,7 @@ namespace Hedra.Engine.Rendering.Particles
             if (smoothPoints.Count >= 1)
             {
                 points.Add(smoothPoints[0]);
-                colors.Add(new Vector4(Color.Xyz, smoothPoints[0].Alpha));
+                colors.Add(new Vector4(Color.Xyz(), smoothPoints[0].Alpha));
             }
 
             for (var i = 1; i < smoothPoints.Count-1; i++)
@@ -127,19 +129,19 @@ namespace Hedra.Engine.Rendering.Particles
                 points.Add( new TrailPoint(d, smoothPoints[i-1].Lifetime, smoothPoints[i - 1].MaxLifetime, 0f));
                 points.Add( new TrailPoint(c, smoothPoints[i].Lifetime, smoothPoints[i].MaxLifetime, .3f));
                 
-                colors.Add(new Vector4(Color.Xyz, Color.W * points[points.Count - 2].Alpha));
-                colors.Add(new Vector4(Color.Xyz, Color.W * points[points.Count - 1].Alpha));
+                colors.Add(new Vector4(Color.Xyz(), Color.W * points[points.Count - 2].Alpha));
+                colors.Add(new Vector4(Color.Xyz(), Color.W * points[points.Count - 1].Alpha));
             }
             if (smoothPoints.Count >= 1)
             {
                 points.Add(smoothPoints[smoothPoints.Count - 1]);
-                colors.Add(new Vector4(Color.Xyz, Color.W * points[points.Count-1].Alpha ));
+                colors.Add(new Vector4(Color.Xyz(), Color.W * points[points.Count-1].Alpha ));
             }
             Executer.ExecuteOnMainThread(() =>
             {
                 if(_disposed) return;
-                _points.Update(points.Select(p => p.Point).ToArray(), points.Count * Vector3.SizeInBytes);
-                _colors.Update(colors.ToArray(), colors.Count * Vector4.SizeInBytes);
+                _points.Update(points.Select(p => p.Point).ToArray(), points.Count * HedraSize.Vector3);
+                _colors.Update(colors.ToArray(), colors.Count * HedraSize.Vector4);
             });
             if (!Emit) return;
             

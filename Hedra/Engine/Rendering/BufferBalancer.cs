@@ -6,8 +6,9 @@ using Hedra.Engine.Core;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Rendering;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using System.Numerics;
+using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
 
 namespace Hedra.Engine.Rendering
 {
@@ -56,7 +57,7 @@ namespace Hedra.Engine.Rendering
             });
         }
 
-        public void DrawShadows(Dictionary<Vector2, Chunk> ShadowDraw, ref IntPtr[] ShadowOffsets, ref int[] ShadowCounts)
+        public void DrawShadows(Dictionary<Vector2, Chunk> ShadowDraw, ref IntPtr[] ShadowOffsets, ref uint[] ShadowCounts)
         {
             for(var i = 0; i < _buffers.Length; ++i)
             {

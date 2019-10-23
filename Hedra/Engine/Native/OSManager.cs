@@ -7,7 +7,8 @@ using System.Windows.Forms;
 using Hedra.Engine.IO;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
-using OpenTK.Graphics.OpenGL4;
+using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
 
 namespace Hedra.Engine.Native
 {
@@ -56,17 +57,19 @@ namespace Hedra.Engine.Native
                     return;
                 }
             }
+        }
 
+        public static void WriteSpecs()
+        {
             var graphicsCard = Renderer.GetString(StringName.Vendor) + Environment.NewLine
-             + Renderer.GetString(StringName.Renderer) + Environment.NewLine 
-             + Renderer.GetString(StringName.Version);
+                                                                     + Renderer.GetString(StringName.Renderer) + Environment.NewLine 
+                                                                     + Renderer.GetString(StringName.Version);
             GraphicsCard = DetectCard(graphicsCard);
             
             Log.WriteLine("OS = " + Environment.OSVersion + Environment.NewLine +
                           "CPU = " + Environment.GetEnvironmentVariable("PROCESSOR_IDENTIFIER") + Environment.NewLine +
                           "Graphics Card = " + OSManager.GraphicsCard + Environment.NewLine
-                          );
-            
+            );
         }
 /*
         public static int GetAvailableGraphicsRam(int Default)

@@ -4,7 +4,7 @@ using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Core;
 using Hedra.Engine.Rendering.Geometry;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.Rendering
 {
@@ -87,7 +87,7 @@ namespace Hedra.Engine.Rendering
             MeshOperations.GraduateColor(_vertices, _colors, Direction, Amount);
         }
         
-        public void Transform(Matrix4 Transformation)
+        public void Transform(Matrix4x4 Transformation)
         {
             MeshOperations.Transform(_vertices, _normals, Transformation);
         }
@@ -97,7 +97,7 @@ namespace Hedra.Engine.Rendering
             MeshOperations.SupportPoint( _vertices, _colors, Direction);
         }
         
-        public InstanceData ToInstanceData(Matrix4 Transformation)
+        public InstanceData ToInstanceData(Matrix4x4 Transformation)
         {
             if (!IsClone)
                 throw new ArgumentOutOfRangeException("VertexData needs to be a clone.");

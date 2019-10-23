@@ -3,7 +3,7 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering.Particles;
 using Hedra.EntitySystem;
 using Hedra.Rendering.Particles;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.ModuleSystem.AnimationEvents
 {

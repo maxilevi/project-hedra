@@ -3,6 +3,7 @@
 #endif
 
 using System;
+using System.Drawing;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime;
@@ -33,9 +34,12 @@ using Hedra.Localization;
 using Hedra.Mission;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL4;
+using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
+using Hedra.WorldObjects;
+using System.Numerics;
+using Hedra.Numerics;
+using Silk.NET.Windowing.Common;
 
 namespace Hedra.Engine.Loader
 {
@@ -43,7 +47,7 @@ namespace Hedra.Engine.Loader
     
     public class Hedra : HedraWindow, IHedra
     {
-        public string GameVersion => "\u03B1 0.6";
+        public string GameVersion => /*"\u03B1 */"1.0";
         public event OnFrameChanged FrameChanged;
         private DebugInfoProvider _debugProvider;
         private SplashScreen _splashScreen;
@@ -52,9 +56,29 @@ namespace Hedra.Engine.Loader
         private bool _forcingResize;
         private int _passedFrames;
         private double _passedMillis;
-        
-        public Hedra(int Width, int Height, GraphicsMode Mode, string Title, DisplayDevice Device, int Minor, int Major) 
-            : base(Width, Height, Mode, Title, GameWindowFlags.Default, Device, Major, Minor, GraphicsContextFlags.Default){}
+
+        public Hedra(int Width, int Height, int Major, int Minor, ContextProfile Profile, ContextFlags Flags) : 
+            base(Width, Height, Profile, Flags, new APIVersion(Major, Minor))
+        {
+        }
+
+        protected override void Load()
+        {
+        }
+
+        public void Setup()
+        {
+            Title = $"Project Hedra {GameVersion}";
+            if (!LoadBoilerplate())
+            {
+                Close();
+            }
+            else
+            {
+                _debugProvider = new DebugInfoProvider();
+                _splashScreen = new SplashScreen();
+            }
+        }
 
         public static bool LoadBoilerplate()
         {
@@ -62,6 +86,19 @@ namespace Hedra.Engine.Loader
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
             Time.RegisterThread();
             OSManager.Load(Assembly.GetExecutingAssembly().Location);
+            
+            Renderer.LoadProvider();
+            var glVersion = Renderer.GetString(StringName.Version);
+            var shadingOpenGlVersion = GetShadingVersion(glVersion);
+
+            if( shadingOpenGlVersion < 3.3f)
+            {
+                
+                OSManager.Show($"Minimum OpenGL version is 3.3, yours is {shadingOpenGlVersion}", "OpenGL Version not supported");
+                return false;
+            }
+            Log.WriteLine(glVersion);
+            
             AssetManager.Load();
             CompatibilityManager.Load();
             GameLoader.LoadSoundEngine();
@@ -83,21 +120,12 @@ namespace Hedra.Engine.Loader
 
             Renderer.Load();
             Log.WriteLine("Supported GLSL version is : "+Renderer.GetString(StringName.ShadingLanguageVersion));
+            OSManager.WriteSpecs();
             
             GameManager.Load();
             Log.WriteLine("Scene loading was Successful.");
- 
-            var glVersion = Renderer.GetString(StringName.Version);
-            var shadingOpenGlVersion = GetShadingVersion(glVersion);
-
-            if( shadingOpenGlVersion < 3.1f)
-            {
-                
-                OSManager.Show($"Minimum OpenGL version is 3.1, yours is {shadingOpenGlVersion}", "OpenGL Version not supported");
-                return false;
-            }
+            
             LoadInterpreter();
-            Log.WriteLine(glVersion);
             return true;
         }
 
@@ -110,21 +138,7 @@ namespace Hedra.Engine.Loader
             MissionPool.Load();
         }
 
-        protected override void OnLoad(EventArgs e)
-        {
-            Title = $"{Title} {GameVersion}";
-            if (!LoadBoilerplate())
-            {
-                Exit();
-            }
-            else
-            {
-                _debugProvider = new DebugInfoProvider();
-                _splashScreen = new SplashScreen();
-            }
-        }
-        
-        protected override void OnUpdateFrame(double Delta)
+        protected override void UpdateFrame(double Delta)
         {
             this._splashScreen.Update();
             var frameTime = Delta;
@@ -168,7 +182,7 @@ namespace Hedra.Engine.Loader
             FrameChanged?.Invoke();
         }
 
-        protected override void OnRenderFrame(double Delta)
+        protected override void RenderFrame(double Delta)
         {    
             Renderer.Clear(ClearBufferMask.DepthBufferBit | ClearBufferMask.ColorBufferBit | ClearBufferMask.StencilBufferBit);        
             if (!_splashScreen.FinishedLoading)
@@ -180,21 +194,18 @@ namespace Hedra.Engine.Loader
                 DrawManager.Draw();
                 _debugProvider.Draw();
             }
-            this.SwapBuffers();
         }
 
-        protected override void OnResize(EventArgs e)
+        protected override void Resize(Size NewSize)
         {
-            base.OnResize(e);
-            GameSettings.SurfaceWidth = Width;
-            GameSettings.SurfaceHeight = Height;
+            GameSettings.SurfaceWidth = NewSize.Width;
+            GameSettings.SurfaceHeight = NewSize.Height;
             DrawManager.UIRenderer.Adjust();
         }
 
-        protected override void OnFocusedChanged(EventArgs e)
+        protected override void FocusChanged(bool IsFocused)
         {
-            base.OnFocusedChanged(e);
-            if(!this.Focused && _splashScreen.FinishedLoading)
+            if(!IsFocused && _splashScreen.FinishedLoading)
             {
                 if(!GameManager.InStartMenu && !GameManager.IsLoading && !GameSettings.Paused &&
                     GameManager.Player != null && !GameManager.Player.InterfaceOpened)
@@ -204,7 +215,7 @@ namespace Hedra.Engine.Loader
             }
         }
         
-        protected override void OnUnload(EventArgs e)
+        protected override void Unload()
         {
             AssetManager.Dispose();
             GameSettings.Save(AssetManager.AppData + "settings.cfg");

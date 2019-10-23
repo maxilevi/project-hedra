@@ -23,7 +23,8 @@ using Hedra.EntitySystem;
 using Hedra.Items;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.WeaponSystem
 {
@@ -188,15 +189,16 @@ namespace Hedra.WeaponSystem
             Mesh.RotationPoint = Vector3.Zero;
             Mesh.LocalPosition = Vector3.Zero;
             Mesh.BeforeRotation = Vector3.Zero;
-            Mesh.TransformationMatrix = Matrix4.Identity;
+            Mesh.TransformationMatrix = Matrix4x4.Identity;
         }
 
         protected void SetToChest(ObjectMesh Mesh)
         {
             SetToDefault(Mesh);
-            Mesh.TransformationMatrix = Owner.Model.ChestMatrix.ClearTranslation() *
-                                        Matrix4.CreateTranslation(
-                                            -Owner.Position + Owner.Model.ChestPosition + Vector3.UnitY * 1f);
+            var translation =
+                Matrix4x4.CreateTranslation(-Owner.Position + Owner.Model.ChestPosition + Vector3.UnitY * 1f);
+            var chest = Owner.Model.ChestMatrix.ClearTranslation();
+            Mesh.TransformationMatrix = (chest * translation);
             Mesh.Position = Owner.Position;
             Mesh.Rotation = SheathedRotation;
             Mesh.BeforeRotation =
@@ -205,10 +207,10 @@ namespace Hedra.WeaponSystem
 
         protected void SetToMainHand(ObjectMesh Mesh)
         {
-            Matrix4 Mat4 = Owner.Model.LeftWeaponMatrix.ClearTranslation() *
-                           Matrix4.CreateTranslation(-Owner.Position + Owner.Model.LeftWeaponPosition);
+            var mat4 = Owner.Model.LeftWeaponMatrix.ClearTranslation() *
+                           Matrix4x4.CreateTranslation(-Owner.Position + Owner.Model.LeftWeaponPosition);
 
-            Mesh.TransformationMatrix = Mat4;
+            Mesh.TransformationMatrix = mat4;
             Mesh.Position = Owner.Position;
             Mesh.LocalRotationPoint = Vector3.Zero;
             Mesh.LocalRotation = Vector3.Zero;
@@ -461,9 +463,9 @@ namespace Hedra.WeaponSystem
                 var time = Time.AccumulatedFrameTime * 40f;
                 var intensity = (float) Math.Pow(ChargingIntensity, 1);
                 var offset = new Vector3((float) Math.Cos(time), 0, (float) Math.Sin(time)) * intensity;
-                Owner.Model.LeftShoulderJoint.TransformationMatrix = Matrix4.CreateTranslation(offset * .05f);
-                Owner.Model.LeftWeaponJoint.TransformationMatrix = Matrix4.CreateTranslation(offset * .075f);
-                Owner.Model.LeftElbowJoint.TransformationMatrix = Matrix4.CreateTranslation(offset * .1f);
+                Owner.Model.LeftShoulderJoint.TransformationMatrix = Matrix4x4.CreateTranslation(offset * .05f);
+                Owner.Model.LeftWeaponJoint.TransformationMatrix = Matrix4x4.CreateTranslation(offset * .075f);
+                Owner.Model.LeftElbowJoint.TransformationMatrix = Matrix4x4.CreateTranslation(offset * .1f);
                 
                 Owner.Model.RightShoulderJoint.TransformationMatrix = Owner.Model.LeftShoulderJoint.TransformationMatrix;
                 Owner.Model.RightElbowJoint.TransformationMatrix = Owner.Model.LeftElbowJoint.TransformationMatrix;
@@ -472,17 +474,17 @@ namespace Hedra.WeaponSystem
             }
             else
             {
-                Owner.Model.LeftShoulderJoint.TransformationMatrix = Matrix4.Identity;
-                Owner.Model.RightShoulderJoint.TransformationMatrix = Matrix4.Identity;
-                Owner.Model.LeftElbowJoint.TransformationMatrix = Matrix4.Identity;
-                Owner.Model.RightElbowJoint.TransformationMatrix = Matrix4.Identity;
-                Owner.Model.LeftWeaponJoint.TransformationMatrix = Matrix4.Identity;
-                Owner.Model.RightWeaponJoint.TransformationMatrix = Matrix4.Identity;
+                Owner.Model.LeftShoulderJoint.TransformationMatrix = Matrix4x4.Identity;
+                Owner.Model.RightShoulderJoint.TransformationMatrix = Matrix4x4.Identity;
+                Owner.Model.LeftElbowJoint.TransformationMatrix = Matrix4x4.Identity;
+                Owner.Model.RightElbowJoint.TransformationMatrix = Matrix4x4.Identity;
+                Owner.Model.LeftWeaponJoint.TransformationMatrix = Matrix4x4.Identity;
+                Owner.Model.RightWeaponJoint.TransformationMatrix = Matrix4x4.Identity;
             }
         }
 
         public virtual Vector3 WeaponTip =>
-            Vector3.TransformPosition((-Vector3.UnitY * 1.5f + Vector3.UnitX * 3f) * 2F, Owner.Model.LeftWeaponMatrix);
+            Vector3.Transform((-Vector3.UnitY * 1.5f + Vector3.UnitX * 3f) * 2F, Owner.Model.LeftWeaponMatrix);
 
         public EffectDescriber Describer
         {

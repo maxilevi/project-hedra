@@ -14,11 +14,12 @@ using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Frustum;
 using Hedra.Engine.StructureSystem;
+using Hedra.Engine.Windowing;
 using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Input;
-using OpenTK;
-using OpenTK.Input;
+using System.Numerics;
+using Hedra.Numerics;
 using Cursor = System.Windows.Forms.Cursor;
 
 namespace Hedra.Engine.Player
@@ -46,10 +47,11 @@ namespace Hedra.Engine.Player
         public float AddedDistance { get; set; }
         public bool LockMouse { get; set; }
         public bool AllowClipping { get; set; }
-        public Matrix4 ModelViewMatrix { get; private set; }
+        public Matrix4x4 ModelViewMatrix { get; private set; }
         public Func<Vector3> PositionDelegate { get; set; }
         private float _xDelta;
         private float _yDelta;
+        private float _wheelDelta;
         public float Pitch { get; set; }
         public float Yaw { get; set; }
         public float StackedYaw { get; private set; }
@@ -164,18 +166,20 @@ namespace Hedra.Engine.Player
 
         public void BuildCameraMatrix()
         {
-            ModelViewMatrix = Matrix4.LookAt(CameraEyePosition, CameraLookAtPosition, Vector3.UnitY);
+            ModelViewMatrix = Matrix4x4.CreateLookAt(CameraEyePosition, CameraLookAtPosition, Vector3.UnitY);
         }
 
         public override void OnMouseWheel(object Sender, MouseWheelEventArgs E)
         {
             if (GameSettings.Paused || !CaptureMovement) return;
 
-            var newDistance = TargetDistance - E.Delta * WheelSpeed;
+            var delta = E.OffsetY;
+            var newDistance = TargetDistance - delta * WheelSpeed;
             if (IsColliding(GetCameraEyePosition(newDistance), out _) || IsColliding(GetCameraEyePosition(newDistance + DistanceBuffer), out _)) return;
 
-            TargetDistance -= E.Delta * WheelSpeed;
+            TargetDistance -= delta * WheelSpeed;
             TargetDistance = Mathf.Clamp(TargetDistance, 1.5f, MaxDistance);
+            _wheelDelta = E.OffsetY;
         }
 
         public float TargetDistance { get; set; } = DefaultDistance;
@@ -216,7 +220,7 @@ namespace Hedra.Engine.Player
                 lookingDir = Vector4.Transform(lookingDir, Culling.ProjectionMatrix.Inverted());
                 lookingDir = new Vector4(lookingDir.X, lookingDir.Y, -1f, 0f);
                 lookingDir = Vector4.Transform(lookingDir, Culling.ModelViewMatrix.Inverted());
-                return lookingDir.Xyz.NormalizedFast();
+                return lookingDir.Xyz().NormalizedFast();
             }
         }
 
@@ -231,7 +235,7 @@ namespace Hedra.Engine.Player
             _callback.RayFromWorld = dst;
             _callback.RayToWorld = src;
             Bullet.BulletPhysics.Raycast(ref dst, ref src, _callback);
-            NewDistance = (dst - _callback.HitPointWorld).Compatible().LengthFast;
+            NewDistance = (dst - _callback.HitPointWorld).Compatible().LengthFast();
             return _callback.HasHit;
         }
     }

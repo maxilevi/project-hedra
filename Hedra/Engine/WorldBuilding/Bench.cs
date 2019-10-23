@@ -4,7 +4,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using Hedra.Localization;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.WorldBuilding
 {

@@ -1,7 +1,7 @@
 using Hedra.Engine.Core;
 using Hedra.Engine.Generation.ChunkSystem;
 using NUnit.Framework;
-using OpenTK;
+using System.Numerics;
 
 namespace HedraTests.Generation
 {

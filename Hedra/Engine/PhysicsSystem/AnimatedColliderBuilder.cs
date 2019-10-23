@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Hedra.Engine.Rendering.Animation;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.PhysicsSystem
 {

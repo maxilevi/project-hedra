@@ -3,7 +3,7 @@ using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.Rendering.Animation;
 using NUnit.Framework;
-using OpenTK;
+using System.Numerics;
 
 namespace HedraTests.Rendering
 {
@@ -18,10 +18,10 @@ namespace HedraTests.Rendering
         public void Setup()
         {
             Time.RegisterThread();
-            _rootJoint = new Joint(0, "Root", Matrix4.Identity);
-            _rootJoint.InverseBindTransform = Matrix4.Identity;
-            _rootJoint.AddChild(new Joint(1, "Chest", Matrix4.CreateTranslation(Vector3.UnitX)));
-            _rootJoint.GetChild("Chest").InverseBindTransform = Matrix4.Identity;
+            _rootJoint = new Joint(0, "Root", Matrix4x4.Identity);
+            _rootJoint.InverseBindTransform = Matrix4x4.Identity;
+            _rootJoint.AddChild(new Joint(1, "Chest", Matrix4x4.CreateTranslation(Vector3.UnitX)));
+            _rootJoint.GetChild("Chest").InverseBindTransform = Matrix4x4.Identity;
             var frames = new KeyFrame[4];
             for (var i = 0; i < frames.Length; i++)
             {
@@ -104,9 +104,9 @@ namespace HedraTests.Rendering
             Time.Set(.5f);
             _animator.Update();
             _animator.Update();
-            Assert.AreEqual(Matrix4.CreateTranslation(Vector3.UnitY * 16),
+            Assert.AreEqual(Matrix4x4.CreateTranslation(Vector3.UnitY * 16),
                 _rootJoint.AnimatedTransform);
-            Assert.AreEqual(Matrix4.CreateTranslation(Vector3.UnitY * 16 + Vector3.UnitX * 16),
+            Assert.AreEqual(Matrix4x4.CreateTranslation(Vector3.UnitY * 16 + Vector3.UnitX * 16),
                 _rootJoint.GetChild("Chest").AnimatedTransform);
         }
     }

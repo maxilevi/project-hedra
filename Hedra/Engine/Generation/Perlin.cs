@@ -6,9 +6,10 @@
 // Based on the original implementation by Ken Perlin
 // http://mrl.nyu.edu/~perlin/noise/
 //
-using OpenTK;
+using System.Numerics;
 using System;
 using Hedra.Core;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Generation{
     

@@ -7,13 +7,16 @@
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using System.Numerics;
+using Hedra.Engine.Core;
 using System.Collections.Generic;
 using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Rendering.Core;
+using Hedra.Engine.Windowing;
 using Hedra.Game;
+using Hedra.Numerics;
+using PixelFormat = Hedra.Engine.Windowing.PixelFormat;
 
 namespace Hedra.Engine.Rendering.Effects
 {
@@ -89,7 +92,7 @@ namespace Hedra.Engine.Rendering.Effects
             var bmpData = bmp.LockBits(new Rectangle(0,0,bmp.Width, bmp.Height), ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
     
             Renderer.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, bmpData.Width, bmpData.Height, 0,
-                OpenTK.Graphics.OpenGL4.PixelFormat.Bgra, PixelType.UnsignedByte, bmpData.Scan0);
+                PixelFormat.Bgra, PixelType.UnsignedByte, bmpData.Scan0);
     
             bmp.UnlockBits(bmpData);
             //Bmp.Dispose();
@@ -100,16 +103,17 @@ namespace Hedra.Engine.Rendering.Effects
             Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) TextureWrapMode.Repeat);
             
             var vecSamples = new Vector3[16];
-            for(var i = 0; i < 16; i++){
-                vecSamples[i] = new Vector3( Utils.Rng.NextFloat() * 2.0f - 1.0f, Utils.Rng.NextFloat() * 2.0f - 1.0f, Utils.Rng.NextFloat() );
-                vecSamples[i].Normalize();
+            for(var i = 0; i < 16; i++)
+            {
+                vecSamples[i] = new Vector3( Utils.Rng.NextFloat() * 2.0f - 1.0f, Utils.Rng.NextFloat() * 2.0f - 1.0f, Utils.Rng.NextFloat() ).Normalized();
                 vecSamples[i] *= Utils.Rng.NextFloat();
                 var scale = i / 16f;
                 scale = Mathf.Lerp(0.1f, 1.0f, scale * scale);
                 vecSamples[i] *= scale;
             }
             var fsamples = new List<float>();
-            for(var i = 0; i < vecSamples.Length; i++){
+            for(var i = 0; i < vecSamples.Length; i++)
+            {
                 fsamples.Add(vecSamples[i].X);
                 fsamples.Add(vecSamples[i].Y);
                 fsamples.Add(vecSamples[i].Z);

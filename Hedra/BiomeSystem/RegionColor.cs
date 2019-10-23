@@ -12,7 +12,8 @@ using Hedra.Engine;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.BiomeSystem
 {

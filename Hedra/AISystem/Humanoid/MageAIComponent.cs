@@ -31,7 +31,7 @@ namespace Hedra.AISystem.Humanoid
         {
             base.Update();
             if(_updateTimer.Tick())
-                _hasNearTargets = ChasingTarget != null && (ChasingTarget.Position - Parent.Position).LengthSquared < MinDistance * MinDistance;
+                _hasNearTargets = ChasingTarget != null && (ChasingTarget.Position - Parent.Position).LengthSquared() < MinDistance * MinDistance;
         }
 
         protected override bool CanUseSecondAttack => _hasNearTargets;

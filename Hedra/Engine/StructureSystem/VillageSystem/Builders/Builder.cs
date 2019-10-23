@@ -21,7 +21,8 @@ using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
@@ -90,12 +91,12 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             };
         }
         
-        private static Vector3 TransformPosition(T Parameters, Vector3 Position, Matrix4 Transformation)
+        private static Vector3 TransformPosition(T Parameters, Vector3 Position, Matrix4x4 Transformation)
         {
-            return Vector3.TransformPosition((Position + Parameters.Design.Offset) * Parameters.Design.Scale, Transformation) + Parameters.Position;
+            return Vector3.Transform((Position + Parameters.Design.Offset) * Parameters.Design.Scale, Transformation) + Parameters.Position;
         }
         
-        private static void AddStructure<U>(T Parameters, U[] Templates, Matrix4 Transformation, BuildingOutput Output, Func<Vector3, U, BaseStructure> Get) where U : IPositionable
+        private static void AddStructure<U>(T Parameters, U[] Templates, Matrix4x4 Transformation, BuildingOutput Output, Func<Vector3, U, BaseStructure> Get) where U : IPositionable
         {
             for (var i = 0; i < Templates.Length; ++i)
             {
@@ -103,22 +104,22 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             }
         }
         
-        protected void AddBeds(T Parameters, BedTemplate[] Beds, Matrix4 Transformation, BuildingOutput Output)
+        protected void AddBeds(T Parameters, BedTemplate[] Beds, Matrix4x4 Transformation, BuildingOutput Output)
         {
             AddStructure(Parameters, Beds, Transformation, Output, (P, T) => new SleepingPad(P));
         }
 
-        protected void AddChimneys(T Parameters, ChimneyTemplate[] Chimneys, Matrix4 Transformation, BuildingOutput Output)
+        protected void AddChimneys(T Parameters, ChimneyTemplate[] Chimneys, Matrix4x4 Transformation, BuildingOutput Output)
         {
             AddStructure(Parameters, Chimneys, Transformation, Output, (P, T) => new Chimney(P));
         }
         
-        protected void AddGenericStructure(T Parameters, StructureTemplate[] Templates, Matrix4 Transformation, BuildingOutput Output)
+        protected void AddGenericStructure(T Parameters, StructureTemplate[] Templates, Matrix4x4 Transformation, BuildingOutput Output)
         {
             AddStructure(Parameters, Templates, Transformation, Output, (P, T) => StructureTemplate.FromType(T.Type, P));
         }
         
-        protected void AddLights(T Parameters, LightTemplate[] Lights, Matrix4 Transformation, BuildingOutput Output)
+        protected void AddLights(T Parameters, LightTemplate[] Lights, Matrix4x4 Transformation, BuildingOutput Output)
         {
             AddStructure(Parameters, Lights, Transformation, Output, (P, T) => new WorldLight(P)
             {
@@ -127,7 +128,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             });
         }
 
-        protected void AddDoors(T Parameters, VillageCache Cache, DoorTemplate[] Doors, Matrix4 Transformation, BuildingOutput Output)
+        protected void AddDoors(T Parameters, VillageCache Cache, DoorTemplate[] Doors, Matrix4x4 Transformation, BuildingOutput Output)
         {
             var doors = new List<Door>();
             for (var i = 0; i < Doors.Length; ++i)
@@ -150,13 +151,13 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         }
         
         public static Door CreateDoor(VertexData Model, Vector3 Position, Vector3 DoorPosition, Vector3 Scale,
-            Matrix4 Transformation, CollidableStructure Structure, bool InvertedRotation = false, bool InvertedPivot = false)
+            Matrix4x4 Transformation, CollidableStructure Structure, bool InvertedRotation = false, bool InvertedPivot = false)
         {
             var vertexData = Model.Scale(Scale);
-            var rotationPoint = Vector3.TransformPosition(Door.GetRotationPointFromMesh(vertexData, InvertedPivot), Transformation);
+            var rotationPoint = Vector3.Transform(Door.GetRotationPointFromMesh(vertexData, InvertedPivot), Transformation);
             vertexData.AverageCenter();
             vertexData.Transform(Transformation);
-            var doorPosition = Vector3.TransformPosition(DoorPosition * Scale, Transformation);
+            var doorPosition = Vector3.Transform(DoorPosition * Scale, Transformation);
             return new Door(
                 vertexData,
                 rotationPoint,
@@ -166,10 +167,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             );
         }
         
-        protected Matrix4 BuildTransformation(T Parameters)
+        protected Matrix4x4 BuildTransformation(T Parameters)
         {
-            var rotationMatrix = LookAtCenter ? Matrix4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian) : Matrix4.Identity;
-            return rotationMatrix * Matrix4.CreateTranslation(Parameters.Position);
+            var rotationMatrix = LookAtCenter ? Matrix4x4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian) : Matrix4x4.Identity;
+            return rotationMatrix * Matrix4x4.CreateTranslation(Parameters.Position);
         }
 
         /// <summary>
@@ -206,12 +207,12 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
         protected float ModelRadius(T Parameters, VillageCache Cache)
         {
-            return Cache.GrabSize(Parameters.Design.Path).Xz.LengthFast;
+            return Cache.GrabSize(Parameters.Design.Path).Xz().LengthFast();
         }
 
         protected GroundworkItem CreateGroundwork(Vector3 Position, float Radius, BlockType Type = BlockType.Path)
         {
-            var plateau = new RoundedPlateau(Position.Xz, Radius * 1.5f);
+            var plateau = new RoundedPlateau(Position.Xz(), Radius * 1.5f);
             return new GroundworkItem
             {
                 Groundwork =  new RoundedGroundwork(Position, Radius, Type),

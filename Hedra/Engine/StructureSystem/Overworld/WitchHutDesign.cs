@@ -18,7 +18,7 @@ using Hedra.EntitySystem;
 using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
@@ -32,7 +32,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         protected override bool NoPlantsZone => true;
         public override string DisplayName => Translations.Get("structure_witch_hut");
 
-        protected override void DoBuild(CollidableStructure Structure, Matrix4 Rotation, Matrix4 Translation, Random Rng)
+        protected override void DoBuild(CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation, Random Rng)
         {
             base.DoBuild(Structure, Rotation, Translation, Rng);
             AddDoor(WitchHutCache.Hut0Door0, WitchHutCache.Hut0Door0Position, Rotation, Structure, WitchHutCache.Hut0Door0InvertedRotation, WitchHutCache.Hut0Door0InvertedPivot);
@@ -69,7 +69,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             });*/
         }
         
-        private static void AddNPCs(CollidableStructure Structure, Matrix4 Transformation, Random Rng)
+        private static void AddNPCs(CollidableStructure Structure, Matrix4x4 Transformation, Random Rng)
         {
             var enemies = new List<IEntity>();
             IHumanoid female = null, male = null;
@@ -77,7 +77,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             {
                 female = World.WorldBuilding.SpawnHumanoid(
                     HumanType.Witch,
-                    Vector3.TransformPosition(WitchHutCache.Hut0Witch0Position, Transformation)
+                    Vector3.Transform(WitchHutCache.Hut0Witch0Position, Transformation)
                 );
                 HumanoidFactory.AddAI(female, false);
             }
@@ -85,7 +85,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             {
                 male = World.WorldBuilding.SpawnHumanoid(
                     HumanType.Witch,
-                    Vector3.TransformPosition(WitchHutCache.Hut0Witch1Position, Transformation)
+                    Vector3.Transform(WitchHutCache.Hut0Witch1Position, Transformation)
                 );
                 HumanoidFactory.AddAI(male, false);
             }
@@ -100,12 +100,12 @@ namespace Hedra.Engine.StructureSystem.Overworld
             ((WitchHut) Structure.WorldObject).Enemies = enemies.ToArray();
         }
         
-        private void PlacePlants(CollidableStructure Structure, Matrix4 Translation, Matrix4 Rotation, Random Rng)
+        private void PlacePlants(CollidableStructure Structure, Matrix4x4 Translation, Matrix4x4 Rotation, Random Rng)
         {
             DecorationsPlacer.PlaceWhenWorldReady(Structure.Position,
                 P =>
                 {
-                    var rotatedOffset = Vector3.TransformPosition(WitchHutCache.PlantOffset, Rotation);
+                    var rotatedOffset = Vector3.Transform(WitchHutCache.PlantOffset, Rotation);
                     var designs = new HarvestableDesign[]
                     {
                         new CabbageDesign(),
@@ -122,7 +122,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                         {
                             AddPlantLine(
                                 allocator,
-                                Vector3.TransformPosition(WitchHutCache.PlantRows[i], Rotation * Translation),
+                                Vector3.Transform(WitchHutCache.PlantRows[i], Rotation * Translation),
                                 rotatedOffset,
                                 designs[i],
                                 WitchHutCache.PlantWidths[i],
