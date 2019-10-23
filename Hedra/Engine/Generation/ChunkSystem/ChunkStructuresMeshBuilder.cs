@@ -130,8 +130,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
             Model.Extradata.AddRange(InstanceModel.Extradata);
         }
         
-        private static void AssertValidModel(VertexData Model)
+        private void AssertValidModel(VertexData Model)
         {
+            if(_parent.Disposed) return;
             if(Model.Colors.Count != Model.Extradata.Count)
                 throw new ArgumentOutOfRangeException($"Extradata '{Model.Extradata.Count}' or color '{Model.Colors.Count}' mismatch");
             

@@ -30,7 +30,7 @@ namespace Hedra.Engine.Sound
             _al.GenSources(1, &id);
             _al.SetSourceProperty(Id, SourceFloat.Gain, 1);
             _al.SetSourceProperty(Id, SourceFloat.Pitch,  1);
-            //_al.SetSourceProperty(Id, SourceVector3.Position, Position);
+            _al.SetSourceProperty(Id, SourceVector3.Position, Position);
             Id = id;
         }
 
@@ -42,11 +42,7 @@ namespace Hedra.Engine.Sound
         private void Play(SoundBuffer Buffer)
         {
             var position = SoundPlayer.ListenerPosition;
-            unsafe
-            {
-                _al.SetListenerProperty(ListenerVector3.Position, position.X, position.Y, position.Z);
-            }
-
+            _al.SetListenerProperty(ListenerVector3.Position, position);
             _al.SetSourceProperty(Id, SourceInteger.Buffer, (int) Buffer.Id);
             _al.SourcePlay(Id);
         }
@@ -55,11 +51,8 @@ namespace Hedra.Engine.Sound
         {
             _al.SetSourceProperty(Id, SourceFloat.Pitch, Pitch);
             _al.SetSourceProperty(Id, SourceFloat.Gain, Gain );
-            unsafe
-            {
-                _al.SetSourceProperty(Id, SourceVector3.Position, (float*)&Location);
-            }
-            // TODO _al.SetSourceProperty(Id, SourceBoolean.Looping, Loop ? 1 : 0);
+            _al.SetSourceProperty(Id, SourceVector3.Position, Location);
+            _al.SetSourceProperty(Id, SourceBoolean.Looping, Loop ? 1 : 0);
 
             this.Stop();
             this.Play(Buffer);

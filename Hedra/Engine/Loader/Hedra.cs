@@ -101,7 +101,7 @@ namespace Hedra.Engine.Loader
             
             AssetManager.Load();
             CompatibilityManager.Load();
-            //GameLoader.LoadSoundEngine();
+            GameLoader.LoadSoundEngine();
             HedraContent.Register();
             ModificationsLoader.Reload();
             NameGenerator.Load();

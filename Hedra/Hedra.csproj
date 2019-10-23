@@ -144,6 +144,9 @@
     <Reference Include="Silk.NET.OpenGL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\references\Silk.NET\Silk.NET.OpenGL.dll</HintPath>
     </Reference>
+    <Reference Include="Silk.NET.OpenGL.Legacy, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\Silk.NET\Silk.NET.OpenGL.Legacy.dll</HintPath>
+    </Reference>
     <Reference Include="Silk.NET.Windowing, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\references\Silk.NET\Silk.NET.Windowing.dll</HintPath>
     </Reference>

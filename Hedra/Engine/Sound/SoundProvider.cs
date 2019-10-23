@@ -27,6 +27,7 @@ namespace Hedra.Engine.Sound
 
         public SoundProvider()
         {
+            _audioContext = new AudioContext();
             _soundFamilies = new Dictionary<string, SoundFamily>();
             _soundItems = new SoundItem[8];
             _soundSources = new SoundSource[32];
@@ -34,7 +35,6 @@ namespace Hedra.Engine.Sound
 
         public void Setup()
         {
-            _audioContext = new AudioContext();
             Log.WriteLine("Generating a pool of sound sources...");
             for (var i = 0; i < _soundSources.Length; i++)
             {
@@ -49,12 +49,11 @@ namespace Hedra.Engine.Sound
 
         public void MarkAsReady()
         {            
-            _loaded = true && _audioContext != null;
+            _loaded = true;
         }
 
         public void LoadSound(string Name, params string[] Names)
         {
-            if (!_loaded) return;
             var family = new SoundFamily();
             for (var i = 0; i < Names.Length; i++)
             {

@@ -15,6 +15,7 @@ using Hedra.Engine.Networking;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Game;
 using System.Numerics;
+using System.Runtime;
 using Silk.NET.GLFW;
 using Silk.NET.Windowing.Common;
 
@@ -31,6 +32,7 @@ namespace Hedra.Engine
         [HandleProcessCorruptedStateExceptions]
         private static void Main(string[] Args)
         {
+            GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
             void ProcessException(object S, UnhandledExceptionEventArgs E)
             {
                 if (E.IsTerminating)
