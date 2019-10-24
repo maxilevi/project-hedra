@@ -14,12 +14,12 @@ namespace Hedra.Engine.BiomeSystem
 
         protected override void DoBuildRiverMap(FastNoiseSIMD Noise, float[][] RiverMap, int Width, float Scale, Vector2 Offset)
         {
-            BaseRiver(Noise, RiverMap, Width, Scale, Offset, 48f);
+            BaseRiver(Noise, RiverMap, Width, Scale, Offset, 38f);
         }
 
         protected override void DoBuildRiverBorderMap(FastNoiseSIMD Noise, float[][] RiverMap, int Width, float Scale, Vector2 Offset)
         {
-            BaseRiver(Noise, RiverMap, Width, Scale, Offset, 42f);
+            BaseRiver(Noise, RiverMap, Width, Scale, Offset, 32f);
         }
         
         private static void BaseRiver(FastNoiseSIMD Noise, float[][] RiverMap, int Width, float Scale, Vector2 Offset, float Border)

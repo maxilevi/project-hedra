@@ -19,21 +19,9 @@ namespace Hedra.Engine.Input
                 if(!_mappings.ContainsKey(key))
                     _mappings.Add(key, false);
             }
-            
-            EventDispatcher.RegisterKeyDown(this, (O, E) =>
-            {
-                var key = (int) E.Key;
-                _mappings[key] = true;
-                if (key == (int)Key.ShiftLeft)
-                {
-                    _mappings[(int)Key.ShiftLeft] = true;
-                }
-            });
-            EventDispatcher.RegisterKeyUp(this, (O, E) =>
-            {
-                var key = (int) E.Key;
-                _mappings[key] = false;
-            });
+
+            EventDispatcher.RegisterKeyDown(this, (O,E) => _mappings[(int)E.Key] = true);
+            EventDispatcher.RegisterKeyUp(this, (O, E) => _mappings[(int)E.Key] = false);
         }
 
         public bool this[Key Code] => _mappings[(int)Code];

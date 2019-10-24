@@ -167,7 +167,7 @@ namespace Hedra.Engine.Player
                 }
                 else
                 {
-                    if(_player.IsClimbing)
+                    if(_player.IsClimbing)    
                         _player.IsClimbing = false;
                 }*/
             }
