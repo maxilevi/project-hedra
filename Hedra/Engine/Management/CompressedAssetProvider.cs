@@ -242,7 +242,7 @@ namespace Hedra.Engine.Management
                     builder.Append(line + Environment.NewLine);
                 }
             }
-            if (builder.Length == 0) throw new ArgumentNullException($"Failed to file shader '{Name}'");
+            if (builder.Length == 0) throw new ArgumentNullException($"Failed to find shader '{Name}'");
             return builder.ToString();
         }
 
