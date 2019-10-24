@@ -41,8 +41,8 @@ namespace Hedra.Engine.Rendering
         public static BufferBalancer WaterBuffer { get; private set; }
         public static bool ShowWaterBackfaces {get; set;}
         public static Texture3D NoiseTexture { get; private set; }
-        public static Texture DuDvMap { get; private set; }
-        public static Texture NormalMap { get; private set; }
+        public static Texture2D DuDvMap { get; private set; }
+        public static Texture2D NormalMap { get; private set; }
         private static IntPtr[] _shadowOffsets;
         private static uint[] _shadowCounts;
 
@@ -56,9 +56,9 @@ namespace Hedra.Engine.Rendering
             Log.WriteLine("Creating 3D noise texture...");
             NoiseTexture = new Texture3D(noiseValues, width, height, depth);
             Log.WriteLine("Loading DuDvMap...");
-            DuDvMap = new Texture("Assets/FX/waterDuDvMap.png", true);
+            DuDvMap = new Texture2D("Assets/FX/waterDuDvMap.png", true);
             Log.WriteLine("Loading water normal map...");
-            NormalMap = new Texture("Assets/FX/waterNormalMap.png", true);
+            NormalMap = new Texture2D("Assets/FX/waterNormalMap.png", true);
         }
 
         public static float[] CreateNoiseArray(out int Width, out int Height, out int Depth)
