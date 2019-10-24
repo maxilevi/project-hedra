@@ -15,7 +15,8 @@ using Hedra.Engine.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.TreeSystem;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Generation
 {
@@ -46,7 +47,7 @@ namespace Hedra.Engine.Generation
             spaceBetween += BiomeRegion.Trees.PrimaryDesign.Spacing;
 
             for(var i = 0; i < _previousTrees.Length; i++){
-                if( (Position - _previousTrees[i] ).LengthSquared < spaceBetween * spaceBetween)
+                if( (Position - _previousTrees[i] ).LengthSquared() < spaceBetween * spaceBetween)
                     return default(PlacementObject);    
             }
             
@@ -61,7 +62,7 @@ namespace Hedra.Engine.Generation
             {
                 Noise = noiseValue,
                 Placed = true,
-                Position = Position.Xz.ToVector3() + Vector3.UnitY * height
+                Position = Position.Xz().ToVector3() + Vector3.UnitY * height
             };
         }
         
@@ -69,7 +70,7 @@ namespace Hedra.Engine.Generation
         {
             var underChunk = World.GetChunkAt(Placement.Position);
             if(underChunk == null) return;
-            var rng = new Random(Unique.GenerateSeed(Placement.Position.Xz));
+            var rng = new Random(Unique.GenerateSeed(Placement.Position.Xz()));
             var extraScale = new Random(World.Seed + 1111).NextFloat() * 5 + 4;
             var scale = 10 + rng.NextFloat() * 3.5f;
 
@@ -80,20 +81,16 @@ namespace Hedra.Engine.Generation
             var originalModel = Design.Model;
             var model = originalModel.Clone();
 
-            var transMatrix = Matrix4.CreateScale(new Vector3(scale, scale, scale) * 1.5f );
-            transMatrix *=  Matrix4.CreateRotationY( rng.NextFloat() * 360f * Mathf.Radian);
-            transMatrix *= Matrix4.CreateTranslation( Placement.Position );
+            var transMatrix = Matrix4x4.CreateScale(new Vector3(scale, scale, scale) * 1.5f );
+            transMatrix *=  Matrix4x4.CreateRotationY( rng.NextFloat() * 360f * Mathf.Radian);
+            transMatrix *= Matrix4x4.CreateTranslation( Placement.Position );
 
             model.AddWindValues(AssetManager.ColorCode1);
             model.AddWindValues(AssetManager.ColorCode2);
 
-            Vector4 woodColor = rng.Next(0, 5) != 1
-                ? BiomeRegion.Colors.WoodColors[new Random(World.Seed + 5232).Next(0, BiomeRegion.Colors.WoodColors.Length)] 
-                : BiomeRegion.Colors.WoodColor;
+            Vector4 woodColor = BiomeRegion.Colors.WoodColors[rng.Next(0, BiomeRegion.Colors.WoodColors.Length)];
 
-            Vector4 leafColor = rng.Next(0, 5) != 1 
-                ? BiomeRegion.Colors.LeavesColors[new Random(World.Seed + 42132).Next(0, BiomeRegion.Colors.LeavesColors.Length)] 
-                : BiomeRegion.Colors.LeavesColor;
+            Vector4 leafColor = BiomeRegion.Colors.LeavesColors[rng.Next(0, BiomeRegion.Colors.LeavesColors.Length)];
 
             model = Design.Paint(model, woodColor, leafColor);
             model.GraduateColor(Vector3.UnitY);

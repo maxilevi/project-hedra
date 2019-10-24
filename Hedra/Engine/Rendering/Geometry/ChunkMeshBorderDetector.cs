@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Hedra.Rendering;
 using IronPython.Modules;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.Rendering.Geometry
 {
@@ -61,7 +61,7 @@ namespace Hedra.Engine.Rendering.Geometry
             };
         }
         
-        public uint[] ProcessEntireBorder(VertexData Mesh, Vector3 Start, Vector3 End)
+        public uint[] ProcessEntireBorder(NativeVertexData Mesh, Vector3 Start, Vector3 End)
         {
             const float epsilon = 0.5f;
             var all = new List<uint>();

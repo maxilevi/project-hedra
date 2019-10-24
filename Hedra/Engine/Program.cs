@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.ExceptionServices;
+using System.Windows.Forms;
 using Hedra.Engine.BiomeSystem.NormalBiome;
 using Hedra.Engine.Steamworks;
 using Hedra.Engine.Game;
@@ -9,11 +10,14 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.IO;
 using Hedra.Engine.Loader;
 using Hedra.Engine.Management;
+using Hedra.Engine.Native;
 using Hedra.Engine.Networking;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Game;
-using OpenTK;
-using OpenTK.Graphics;
+using System.Numerics;
+using System.Runtime;
+using Silk.NET.GLFW;
+using Silk.NET.Windowing.Common;
 
 namespace Hedra.Engine
 {
@@ -28,6 +32,7 @@ namespace Hedra.Engine
         [HandleProcessCorruptedStateExceptions]
         private static void Main(string[] Args)
         {
+            GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
             void ProcessException(object S, UnhandledExceptionEventArgs E)
             {
                 if (E.IsTerminating)
@@ -88,15 +93,15 @@ namespace Hedra.Engine
             Steam.Instance.Dispose();
         }
         
-        private static void RunNormalAndDummyMode(bool DummyMode)
+        private static unsafe void RunNormalAndDummyMode(bool DummyMode)
         {
             if(DummyMode) EnableDummyMode();
             LoadLibraries();
-            
-            var device = DisplayDevice.Default;
-            Log.WriteLine(device.Bounds.ToString());
-            GameSettings.DeviceWidth = device.Width;
-            GameSettings.DeviceHeight = device.Height;
+
+            var bounds = Screen.PrimaryScreen.Bounds;
+            Log.WriteLine(bounds.ToString());
+            GameSettings.DeviceWidth = bounds.Width;
+            GameSettings.DeviceHeight = bounds.Height;
 
             Log.WriteLine("Creating the window on the Primary Device at " + GameSettings.DeviceWidth + "x" +
                             GameSettings.DeviceHeight);
@@ -104,18 +109,32 @@ namespace Hedra.Engine
             GameSettings.Width = GameSettings.DeviceWidth;
             GameSettings.Height = GameSettings.DeviceHeight;
             GameSettings.ScreenRatio = GameSettings.Width / (float) GameSettings.Height;
+            var profile = ContextProfile.Core;
+            var flags = ContextFlags.Default;
+#if DEBUG
+            profile = ContextProfile.Compatability;
+            flags = ContextFlags.Debug;
+#endif
+            GameWindow = new Loader.Hedra(GameSettings.Width, GameSettings.Height, 3, 3, profile, flags);
+            GameWindow.Setup();
+            GameWindow.WindowState = WindowState.Normal;
+            GameWindow.WindowState = WindowState.Maximized;
 
-            GameWindow = new Loader.Hedra(GameSettings.Width, GameSettings.Height, GraphicsMode.Default, "Project Hedra", device, 3, 3)
-            {
-                WindowState = WindowState.Maximized
-            };
-#if !DEBUG
             if (OSManager.RunningPlatform == Platform.Windows)
             {
                 Log.WriteLine("Loading Icon...");
-                GameWindow.Icon = AssetManager.LoadIcon("Assets/Icon.ico");
+                var pixels = AssetManager.LoadIcon("Assets/Icon.ico", out var width, out var height);
+                fixed (byte* ptr = pixels)
+                {
+                    GameWindow.SetIcon(new Silk.NET.GLFW.Image
+                    {
+                        Width = width,
+                        Height = height,
+                        Pixels = ptr
+                    });
+                }
             }
-#endif
+            
             GameSettings.SurfaceWidth = GameWindow.Width;
             GameSettings.SurfaceHeight = GameWindow.Height;
 
@@ -126,12 +145,6 @@ namespace Hedra.Engine
             if (!IsDummy || IsDummy && IsServer)
             {
                 GameWindow.Run();
-            }
-            else
-            {
-                GameWindow.RunOnce();
-                Log.WriteLine("Project Hedra loaded successfully. Exiting...");
-                Environment.Exit(0);
             }
 
             DisposeLibraries();

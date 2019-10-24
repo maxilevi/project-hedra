@@ -7,7 +7,9 @@ using Hedra.EntitySystem;
 using Hedra.Game;
 using HedraTests.Player;
 using NUnit.Framework;
-using OpenTK;
+using System.Numerics;
+using Hedra;
+using Hedra.Numerics;
 
 namespace HedraTests.WorldBuilding
 {
@@ -106,7 +108,7 @@ namespace HedraTests.WorldBuilding
             var orientation = (structPosition - playerPosition).NormalizedFast();
             for (var i = 0; i < 10; i++)
             {
-                var inRange = (structPosition - playerPosition).Xz.LengthSquared <
+                var inRange = (structPosition - playerPosition).Xz().LengthSquared() <
                            InteractableStructureMock.StructureInteractionRadius *
                            InteractableStructureMock.StructureInteractionRadius;
                 Assert.AreEqual(inRange, CreateInteraction(structPosition, playerPosition, orientation));
@@ -121,9 +123,9 @@ namespace HedraTests.WorldBuilding
             var originalOrientation = (structPosition - playerPosition).NormalizedFast();
             for (var i = 0; i < 360; i += 15)
             {
-                var orientation = Vector3.TransformNormal(originalOrientation, Matrix4.CreateRotationY(i * Mathf.Radian));
-                var inRange = Vector2.Dot((structPosition - playerPosition).Xz.NormalizedFast(),
-                                  orientation.Xz.NormalizedFast());
+                var orientation = Vector3.TransformNormal(originalOrientation, Matrix4x4.CreateRotationY(i * Mathf.Radian).Inverted().Transposed());
+                var inRange = Vector2.Dot((structPosition - playerPosition).Xz().NormalizedFast(),
+                                  orientation.Xz().NormalizedFast());
                 Assert.AreEqual(inRange > .9f, CreateInteraction(structPosition, playerPosition, orientation));
             }
         }

@@ -8,10 +8,12 @@ using Hedra.Core;
 using Hedra.Engine.Core;
 using Hedra.Engine.IO;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Rendering;
 using Hedra.Game;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using CollisionShape = BulletSharp.CollisionShape;
-using Vector2 = OpenTK.Vector2;
+using Vector2 = System.Numerics.Vector2;
 
 namespace Hedra.Engine.Bullet
 {
@@ -152,14 +154,17 @@ namespace Hedra.Engine.Bullet
 
                     if (!information.IsInSimulation)
                         AddToSimulation(_dynamicBodies[i], information);
-
+#if DEBUG
                     AssertIsNotFailingThroughFloor(_dynamicBodies[i]);
+#endif
                 }
                 else
                 {
                     /* Disable physics on objects that are in places where the ground has not loaded yet. */
                     if (information.IsInSimulation)
+                    {
                         RemoveFromSimulation(_dynamicBodies[i], information);
+                    }
                 }
             }
         }
@@ -172,7 +177,12 @@ namespace Hedra.Engine.Bullet
                 var information = (PhysicsObjectInformation) Body.UserObject;
                 Log.WriteLine($"'{(information.IsEntity ? information.Entity.Name : information.Name)}' fell through the world at '{position}'. Fixing its height...");
                 Body.ClearForces();
-                Body.Translate(Vector3.UnitY * (-position.Y + 1 + Physics.HeightAtPosition(position.Compatible())));
+                if (information.IsEntity)
+                {
+                    information.Entity.Physics.ResetFall();
+                    information.Entity.Physics.ResetVelocity();
+                    information.Entity.Position = new System.Numerics.Vector3(information.Entity.Position.X, Physics.HeightAtPosition(position.Compatible()), information.Entity.Position.Z);
+                }
             }
         }
 
@@ -238,7 +248,7 @@ namespace Hedra.Engine.Bullet
                 
                 for (var i = 0; i < _bodies.Count; ++i)
                 {
-                    if ((_bodies[i].WorldTransform.Origin.Compatible() - Player.LocalPlayer.Instance.Position).Xz.LengthSquared > 64 * 64) continue;
+                    if ((_bodies[i].WorldTransform.Origin.Compatible() - Player.LocalPlayer.Instance.Position).Xz().LengthSquared() > 64 * 64) continue;
                     var info = (PhysicsObjectInformation) _bodies[i].UserObject;
                     if (info.IsInSimulation)
                         _dynamicsWorld.DebugDrawObject(_bodies[i].WorldTransform, _bodies[i].CollisionShape,
@@ -246,7 +256,7 @@ namespace Hedra.Engine.Bullet
                 }/*
                 for (var i = 0; i < _bodies.Count; ++i)
                 {
-                    //if ((_bodies[i].WorldTransform.Origin.Compatible() - Player.LocalPlayer.Instance.Position).Xz.LengthSquared > 64 * 64) continue;
+                    //if ((_bodies[i].WorldTransform.Origin.Compatible() - Player.LocalPlayer.Instance.Position).Xz().LengthSquared() > 64 * 64) continue;
                     var info = (PhysicsObjectInformation) _bodies[i].UserObject;
                     if (info.IsInSimulation)
                         _dynamicsWorld.DebugDrawObject(_bodies[i].WorldTransform, _bodies[i].CollisionShape, new Vector3(1, 1, 0));
@@ -397,7 +407,7 @@ namespace Hedra.Engine.Bullet
             Body.Dispose();
         }
         
-        public static void AddChunk(Vector2 Offset, VertexData Mesh, PhysicsSystem.CollisionShape[] Shapes)
+        public static void AddChunk(Vector2 Offset, NativeVertexData Mesh, PhysicsSystem.CollisionShape[] Shapes)
         {
             lock (_bulletLock)
             {
@@ -480,7 +490,7 @@ namespace Hedra.Engine.Bullet
 
         }
 
-        private static RigidBody CreateTerrainRigidbody(Vector2 Offset, VertexData Mesh)
+        private static RigidBody CreateTerrainRigidbody(Vector2 Offset, NativeVertexData Mesh)
         {
             var shape = CreateTriangleShape(Mesh.Indices, Mesh.Vertices);
             var body = CreateStaticRigidbody(shape);
@@ -499,7 +509,7 @@ namespace Hedra.Engine.Bullet
             }
         }
 
-        private static BvhTriangleMeshShape CreateTriangleShape(ICollection<uint> Indices, ICollection<OpenTK.Vector3> Vertices)
+        private static BvhTriangleMeshShape CreateTriangleShape(ICollection<uint> Indices, ICollection<System.Numerics.Vector3> Vertices)
         {
             var triangleMesh = new TriangleIndexVertexArray();
             var indexedMesh = CreateIndexedMesh(Indices, Vertices);
@@ -507,7 +517,7 @@ namespace Hedra.Engine.Bullet
             return new BvhTriangleMeshShape(triangleMesh, true);
         }
 
-        private static IndexedMesh CreateIndexedMesh(ICollection<uint> Indices, ICollection<OpenTK.Vector3> Vertices)
+        private static IndexedMesh CreateIndexedMesh(ICollection<uint> Indices, ICollection<System.Numerics.Vector3> Vertices)
         {
             var indexedMesh = new IndexedMesh();
             indexedMesh.Allocate(Indices.Count / 3, Vertices.Count);

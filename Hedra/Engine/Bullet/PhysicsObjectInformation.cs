@@ -2,7 +2,7 @@ using System.Diagnostics;
 using BulletSharp;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.Bullet
 {

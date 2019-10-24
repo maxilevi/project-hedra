@@ -2,6 +2,7 @@
 !include<"Includes/GammaCorrection.shader">
 !include<"Includes/Sky.shader">
 !include<"Includes/Shadows.shader">
+!include<"Includes/NoiseTexture.shader">
 
 in vec4 raw_color;
 in vec4 Color;
@@ -25,7 +26,6 @@ in vec4 pass_tint;
 in vec4 pass_baseTint;
 flat in int pass_ignoreSSAO;
 
-uniform sampler3D noiseTexture;
 uniform bool Outline;
 uniform vec4 OutlineColor;
 uniform float Time;
@@ -47,7 +47,7 @@ void main()
 	float ShadowVisibility = pass_ditherFogTextureShadows.w == int(1.0) && pass_ditherFogTextureShadows.y == int(1.0)
 	    ? simple_apply_shadows(Coords, bias)
 	    : 1.0;
-    float tex = texture(noiseTexture, base_vertex_position).r * int(pass_ditherFogTextureShadows.z);
+    float tex = CalculateNoiseTex(InNorm, base_vertex_position) * int(pass_ditherFogTextureShadows.z);
     vec4 inputColor = vec4(linear_to_srbg(Color.xyz * ShadowVisibility * (pass_tint.rgb + pass_baseTint.rgb) * (tex + 1.0)), Color.w);
 
     if(Outline)

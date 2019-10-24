@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.PhysicsSystem
 {
@@ -18,11 +18,11 @@ namespace Hedra.Engine.PhysicsSystem
             this.Size = Corners[7] - Corners[0];
         }
 
-        public void Transform(Matrix4 Transformation)
+        public void Transform(Matrix4x4 Transformation)
         {
             for (var i = 0; i < Corners.Length; i++)
             {
-                Corners[i] = Vector3.TransformPosition(Corners[i], Transformation);
+                Corners[i] = Vector3.Transform(Corners[i], Transformation);
             }
         }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
-using OpenTK.Graphics.OpenGL4;
+using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
 
 namespace Hedra.Engine.Rendering.Core
 {
@@ -9,7 +10,7 @@ namespace Hedra.Engine.Rendering.Core
         protected static int BufferObjectBinding;
     }
     
-    public sealed class UBO<T> : UBO where T : struct
+    public sealed class UBO<T> : UBO where T : unmanaged
     {
         public override uint Id => _id;
         private readonly int _size;

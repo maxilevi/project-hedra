@@ -12,8 +12,10 @@ using Hedra.Engine.Rendering.UI;
 using Hedra.Game;
 using Hedra.Items;
 using Hedra.Rendering;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using System.Numerics;
+using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Player.Inventory
 {
@@ -112,10 +114,10 @@ namespace Hedra.Engine.Player.Inventory
             ShaderManager.SetLightColorInTheSameThread(Vector3.One);
 
             var aspect = 1.33f;
-            var projectionMatrix = Matrix4.CreatePerspectiveFieldOfView(10 * Mathf.Radian, aspect, 1, 1024f);
+            var projectionMatrix = Matrix4x4.CreatePerspectiveFieldOfView(10 * Mathf.Radian, aspect, 1, 1024f);
             Renderer.LoadProjection(projectionMatrix);
 
-            var lookAt = Matrix4.LookAt(Vector3.UnitZ * ZOffset * (willTilt ? .75f : 1f), Vector3.Zero, Vector3.UnitY);
+            var lookAt = Matrix4x4.CreateLookAt(Vector3.UnitZ * ZOffset * (willTilt ? .75f : 1f), Vector3.Zero, Vector3.UnitY);
             Renderer.LoadModelView(lookAt);
 
             Renderer.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);

@@ -29,17 +29,12 @@ namespace HedraTests.CodePolicy
             "UniformMatrix2x3",
             "UniformMatrix3",
             "UniformMatrix4",
-            "UniformMatrix4x2",
-            "UniformMatrix4x3",
-            "UniformMatrix3x2",
-            "UniformMatrix3x4",
-            "UniformMatrix2x4",
         };
         
         [SetUp]
         public void Setup()
         {
-            _documentation = File.ReadAllText($"{base.SolutionDirectory}/references/OpenTK.xml");
+            _documentation = File.ReadAllText($"{base.SolutionDirectory}/references/gl.xml");
             _glClassName = typeof(GLProvider).Name;
             _debugDrawerClassName = typeof(BasicGeometry).Name;
         }
@@ -83,19 +78,29 @@ namespace HedraTests.CodePolicy
         {
             var calls = new Dictionary<string, string[]>();
             var files = Directory.GetFiles($"{SolutionDirectory}/Hedra/", "*.cs", SearchOption.AllDirectories);
+            var regexes = new []
+            {
+                @"GL\.([a-zA-Z0-9]+)\(",
+                @"_gl\.([a-zA-Z0-9]+)\("
+            };
             for (var i = 0; i < files.Length; i++)
             {
-                var matches = Regex.Matches(File.ReadAllText(files[i]), @"GL\.[a-zA-Z0-9]+\(");
-                if (matches.Count > 0)
+                var matchList = new List<string>();
+                for (var j = 0; j < regexes.Length; ++j)
                 {
-                    var matchList = new List<string>();
-                    for (var k = 0; k < matches.Count; k++)
+                    var source = File.ReadAllText(files[i]);
+                    var matches = Regex.Matches(source, regexes[j]);
+                    if (matches.Count > 0)
                     {
-                        var str = matches[k].Value;
-                        matchList.Add(str.Substring(3, str.Length-4));
+                        for (var k = 0; k < matches.Count; k++)
+                        {
+                            var str = matches[k].Groups[1].Value;
+                            matchList.Add(str);
+                        }
                     }
-                    calls.Add(files[i], matchList.ToArray());
                 }
+                if(matchList.Count > 0)
+                    calls.Add(files[i], matchList.ToArray());
             }
             
             return calls;
@@ -103,6 +108,7 @@ namespace HedraTests.CodePolicy
         
         private float GetRequiredVersion(string FunctionName)
         {
+            if (FunctionName.Equals("GetApi", StringComparison.InvariantCultureIgnoreCase)) return 0f;
             var firstMatch = Regex.Match(_documentation, @"M:OpenTK\.Graphics\.OpenGL\.GL\." + FunctionName + @"[\(\" + "\"" + @"].*\s*.*");
             var match = Regex.Match(firstMatch.Value, @"(requires: v)([0-9]\.[0-9])");
             return float.Parse(match.Groups[2].Value, CultureInfo.InvariantCulture.NumberFormat);

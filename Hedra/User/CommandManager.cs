@@ -33,7 +33,8 @@ using Hedra.Engine.WorldBuilding;
 using Hedra.Game;
 using Hedra.Items;
 using Hedra.Mission;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.User
 {
@@ -157,7 +158,7 @@ namespace Hedra.User
 
                 if (Parts[0] == "distfromvill")
                 {
-                    var dist = (Caster.Position - World.SpawnVillagePoint).Xz.LengthFast;
+                    var dist = (Caster.Position - World.SpawnVillagePoint).Xz().LengthFast();
                     Result = $"Spawn village is '{dist}' meters away";
                     return true;
                 }
@@ -465,7 +466,7 @@ namespace Hedra.User
                 {
                     var fisherman = World.WorldBuilding.SpawnHumanoid(HumanType.Fisherman, Caster.Position + Caster.Orientation * 32);
                     //fisherman.RemoveComponent(fisherman.SearchComponent<BasicAIComponent>());
-                    fisherman.AddComponent(new FishermanAIComponent(fisherman, (Caster.Position + Caster.Orientation * 32).Xz, Vector2.One * 64f));
+                    fisherman.AddComponent(new FishermanAIComponent(fisherman, (Caster.Position + Caster.Orientation * 32).Xz(), Vector2.One * 64f));
                 }
 
                 if (Parts[0] == "frustum")

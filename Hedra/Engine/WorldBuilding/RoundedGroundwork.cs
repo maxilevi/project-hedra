@@ -1,7 +1,8 @@
 using System;
 using System.ComponentModel;
 using Hedra.Engine.Generation;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.WorldBuilding
 {
@@ -19,17 +20,17 @@ namespace Hedra.Engine.WorldBuilding
 
         public override bool Affects(Vector2 Sample)
         {
-            return (Sample - this.Position.Xz).LengthSquared < this.Radius * this.Radius;
+            return (Sample - this.Position.Xz()).LengthSquared() < this.Radius * this.Radius;
         }
         
         public override float Density(Vector2 Sample)
         {
-            return 1 - Math.Min((Sample - this.Position.Xz).LengthSquared / (this.Radius * this.Radius), 1);
+            return 1 - Math.Min((Sample - this.Position.Xz()).LengthSquared() / (this.Radius * this.Radius), 1);
         }
 
         public override BoundingBox ToBoundingBox()
         {
-            return new BoundingBox(Position.Xz, Radius * 2);
+            return new BoundingBox(Position.Xz(), Radius * 2);
         }
     }
 }

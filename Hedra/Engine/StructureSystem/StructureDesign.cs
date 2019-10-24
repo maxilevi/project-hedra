@@ -5,7 +5,6 @@ using System.Linq;
 using Hedra.BiomeSystem;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
@@ -18,7 +17,8 @@ using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem
 {
@@ -32,7 +32,7 @@ namespace Hedra.Engine.StructureSystem
         
         protected CollidableStructure Setup(Vector3 TargetPosition, Random Rng, BaseStructure Structure)
         {
-            var plateau = new RoundedPlateau(TargetPosition.Xz, PlateauRadius);
+            var plateau = new RoundedPlateau(TargetPosition.Xz(), PlateauRadius);
             plateau.MaxHeight = World.WorldBuilding.ApplyMultiple(plateau.Position, plateau.MaxHeight);
             var collidable = new CollidableStructure(this, new Vector3(TargetPosition.X, plateau.MaxHeight, TargetPosition.Z), plateau, Structure);
             Structure.Position = collidable.Position;
@@ -105,8 +105,8 @@ namespace Hedra.Engine.StructureSystem
             var shouldBe = this.SetupRequirements(TargetPosition, ChunkOffset, Biome, Rng);
             if (World.BiomePool.Type == WorldType.Overworld)
             {
-                shouldBe &= (TargetPosition - World.SpawnPoint).Xz.LengthSquared > 512 * 512;
-                shouldBe &= (TargetPosition - World.SpawnVillagePoint).Xz.LengthSquared >
+                shouldBe &= (TargetPosition - World.SpawnPoint).Xz().LengthSquared() > 512 * 512;
+                shouldBe &= (TargetPosition - World.SpawnVillagePoint).Xz().LengthSquared() >
                             VillageDesign.MaxVillageRadius * 1.5f * VillageDesign.MaxVillageRadius * 1.5f;
             }
             return shouldBe && this.ShouldBuild(TargetPosition, Items, Biome.Structures.Designs);
@@ -123,7 +123,7 @@ namespace Hedra.Engine.StructureSystem
             {
                 for (var i = 0; i < Items.Length; i++)
                 {
-                    if (Items[i].Design.GetType() == this.GetType() && (NewPosition.Xz - Items[i].Position.Xz).LengthFast < .05f)
+                    if (Items[i].Design.GetType() == this.GetType() && (NewPosition.Xz() - Items[i].Position.Xz()).LengthFast() < .05f)
                         return true;
                 }
             }

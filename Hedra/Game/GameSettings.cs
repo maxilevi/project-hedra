@@ -18,7 +18,10 @@ using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
 using Hedra.Localization;
 using Hedra.Sound;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
+using Silk.NET.Windowing.Common;
+
 
 namespace Hedra.Game
 {
@@ -62,9 +65,9 @@ namespace Hedra.Game
 
         static GameSettings()
         {
-#if DEBUG
+//#if DEBUG
             DebugMode = true;
-#endif
+//#endif
             WatchScriptChanges = false; // DebugMode;
         }
 
@@ -120,21 +123,8 @@ namespace Hedra.Game
         [WindowSetting]
         public static bool Fullscreen
         {
-            get => _fullscreen;
-            set
-            {
-                _fullscreen = value;
-                if (_fullscreen)
-                {
-                    Program.GameWindow.WindowBorder = WindowBorder.Hidden;
-                    Program.GameWindow.WindowState = WindowState.Fullscreen;
-                }
-                else
-                {
-                   Program.GameWindow.WindowBorder = WindowBorder.Resizable;
-                   Program.GameWindow.WindowState = WindowState.Maximized;
-                }
-            }
+            get => Program.GameWindow.Fullscreen;
+            set => Program.GameWindow.Fullscreen = value;
         }
 
         [Setting]

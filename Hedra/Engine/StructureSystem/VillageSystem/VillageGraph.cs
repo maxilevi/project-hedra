@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {
@@ -68,7 +68,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 
         public Vector2 GetNearestVertex(Vector2 Position)
         {
-            return _vertices.Aggregate((V1, V2) => (V1 - Position).LengthSquared < (V2 - Position).LengthSquared ? V1 : V2);
+            return _vertices.Aggregate((V1, V2) => (V1 - Position).LengthSquared() < (V2 - Position).LengthSquared() ? V1 : V2);
         }
 
         private void CalculateSize()

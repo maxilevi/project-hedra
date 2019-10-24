@@ -22,10 +22,11 @@ using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 using Bullet = BulletSharp;
 using CollisionShape = BulletSharp.CollisionShape;
-using Vector3 = OpenTK.Vector3;
+using Vector3 = System.Numerics.Vector3;
 
 namespace Hedra.Engine.Bullet
 {
@@ -56,6 +57,7 @@ namespace Hedra.Engine.Bullet
         private bool _moved;
         private bool _isStuck;
         private bool _usePhysics;
+        private Vector3 _movedDistance;
 
         public PhysicsComponent(IEntity Parent) : base(Parent)
         {
@@ -139,16 +141,16 @@ namespace Hedra.Engine.Bullet
         public void SetHitbox(Box Dimensions)
         {
             SetShape(_body, GetShapeForBox(Dimensions));
-            var radius = Dimensions.Size.Xz.Length * .5f;
+            var radius = Dimensions.Size.Xz().Length() * .5f;
             SetShape(_sensor, new BoxShape(radius * .5f, .5f, radius * .5f));
         }
 
         private CollisionShape GetShapeForBox(Box Dimensions)
         {
             var bodyShape = default(CompoundShape);
-            if (Dimensions.Size.Xz.LengthFast > Dimensions.Size.Y)
+            if (Dimensions.Size.Xz().LengthFast() > Dimensions.Size.Y)
             {
-                var radius = Dimensions.Size.Xz.Length * .5f * .5f;
+                var radius = Dimensions.Size.Xz().Length() * .5f * .5f;
                 bodyShape = new CompoundShape();
                 var capsule = new SphereShape(radius);
                 bodyShape.AddChildShape(
@@ -158,7 +160,7 @@ namespace Hedra.Engine.Bullet
             }
             else
             {
-                var radius = Dimensions.Size.Xz.Length * .25f;
+                var radius = Dimensions.Size.Xz().Length() * .25f;
                 bodyShape = new CompoundShape();
                 var capsule = new CapsuleShape(radius, Dimensions.Size.Y * .5f);
                 bodyShape.AddChildShape(
@@ -252,7 +254,8 @@ namespace Hedra.Engine.Bullet
         {
             var deltaTime = Timestep;
             _speedMultiplier = Mathf.Lerp(_speedMultiplier, NormalSpeedModifier * (Parent.IsAttacking ? Parent.AttackingSpeedModifier : 1), deltaTime * 2f);
-            HandleFallDamage(deltaTime);
+            if(_mainInformation.IsInSimulation)
+                HandleFallDamage(deltaTime);
             HandleIsMoving();
             HandleIsStuck();
             Parent.IsGrounded = _sensorContacts > 0;
@@ -274,7 +277,8 @@ namespace Hedra.Engine.Bullet
         {
             if (!(Parent is LocalPlayer))
             {
-                _isStuck = (_moved && _body.LinearVelocity.Compatible().Xz.LengthSquared < 1f) && !Parent.IsKnocked;
+                _isStuck = (_moved && _body.LinearVelocity.Compatible().Xz().LengthSquared() < 1f) && !Parent.IsKnocked;
+                _isStuck = (_moved && _body.LinearVelocity.Compatible().Xz().LengthSquared() < 1f) && !Parent.IsKnocked;
                 _moved = false;
             }
         }
@@ -289,12 +293,13 @@ namespace Hedra.Engine.Bullet
         {
             _accumulatedMovement += Position;
             _sensor.Activate();
-            _moved = true;
+            _movedDistance = Position;
+            _moved = _movedDistance.Length() > float.Epsilon;
         }
 
         private void HandleIsMoving()
         {
-            if (_body.LinearVelocity.Compatible().Xz.LengthSquared > 1f)
+            if (_body.LinearVelocity.Compatible().Xz().LengthSquared() > 1f)
             {
                 OnMove?.Invoke();
             }
@@ -368,7 +373,7 @@ namespace Hedra.Engine.Bullet
             var previous = _body.WorldTransform.Origin;
             _body.Translate(Delta.Compatible());
             var moved = previous != _body.WorldTransform.Origin;
-            if(moved && Delta.Xz != Vector2.Zero)
+            if(moved && Delta.Xz() != Vector2.Zero)
                 OnMove?.Invoke();
             return moved;
         }
@@ -390,8 +395,8 @@ namespace Hedra.Engine.Bullet
             
             _body.CollisionShape.GetAabb(Matrix.Identity, out var aabbMin, out var aabbMax);
             var position = Offset + RigidbodyPosition;
-            var aabbMinXz = aabbMin.Compatible().Xz.ToVector3();
-            var aabbMaxXz = aabbMax.Compatible().Xz.ToVector3();
+            var aabbMinXz = aabbMin.Compatible().Xz().ToVector3();
+            var aabbMaxXz = aabbMax.Compatible().Xz().ToVector3();
             return DoRaycast(aabbMinXz + position) 
                    || DoRaycast(new Vector3(aabbMinXz.X, 0, aabbMaxXz.Z) + position) 
                    || DoRaycast(new Vector3(aabbMaxXz.X, 0, aabbMinXz.Z) + position) 

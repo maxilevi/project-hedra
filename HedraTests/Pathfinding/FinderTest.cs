@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using Hedra.Engine.Pathfinding;
 using NUnit.Framework;
-using OpenTK;
+using System.Numerics;
 
 namespace HedraTests.Pathfinding
 {

@@ -7,7 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.Rendering.Animation.ColladaParser
 {
@@ -17,9 +17,9 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
     public class JointTransformData
     {
         public readonly string JointNameId;
-        public readonly Matrix4 JointLocalTransform;
+        public readonly Matrix4x4 JointLocalTransform;
         
-        public JointTransformData(string JointNameId, Matrix4 JointLocalTransform){
+        public JointTransformData(string JointNameId, Matrix4x4 JointLocalTransform){
             this.JointNameId = JointNameId;
             this.JointLocalTransform = JointLocalTransform;
         }

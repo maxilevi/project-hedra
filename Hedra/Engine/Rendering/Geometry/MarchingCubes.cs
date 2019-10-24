@@ -12,7 +12,8 @@ using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Rendering.Geometry;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Rendering
 {
@@ -419,7 +420,7 @@ namespace Hedra.Engine.Rendering
             var p1 = new Vector4(P1, (float) valp1);
             var p2 = new Vector4(P2, (float) valp2);
 
-            if (p2.Length < p1.Length)
+            if (p2.Length() < p1.Length())
             {
                 var temp = p1;
                 p1 = p2;
@@ -428,38 +429,17 @@ namespace Hedra.Engine.Rendering
 
             Vector3 p;
             if (Math.Abs(p1.W - p2.W) > 0.00001)
-                p = p1.Xyz + (p2.Xyz - p1.Xyz) / (p2.W - p1.W) * ((float) IsoLevel - p1.W);
+                p = p1.Xyz() + (p2.Xyz() - p1.Xyz()) / (p2.W - p1.W) * ((float) IsoLevel - p1.W);
             else
-                p = p1.Xyz;
+                p = p1.Xyz();
             return p;
         }
 
-        public static void Build(ref VertexData Data, ref Vector4 TemplateColor, ref Triangle[] TriangleBuffer, ref int TriangleCount, ref bool Orientation, ref bool IsWater)
+        public static unsafe void Build(ref NativeVertexData Data, ref Vector4 TemplateColor, ref Triangle[] TriangleBuffer, ref int TriangleCount, ref bool IsWater, ref bool IsRiverConstant)
         {
-            /*
-            if (TriangleCount == 2)
-            {
-                if (Orientation && 
-                    Math.Abs((TriangleBuffer[0].Vertices[1].Xz - TriangleBuffer[1].Vertices[1].Xz).LengthSquared) < 0.0005f && 
-                    Math.Abs((TriangleBuffer[1].Vertices[0].Xz - TriangleBuffer[0].Vertices[2].Xz).LengthSquared) < 0.0005f)
-                {
-                    var vertex2 = TriangleBuffer[1].Vertices[0];
-                    var vertex3 = TriangleBuffer[0].Vertices[0];
-
-                    TriangleBuffer[0].Vertices[0] = TriangleBuffer[1].Vertices[2];
-                    TriangleBuffer[0].Vertices[1] = vertex3;
-                    TriangleBuffer[0].Vertices[2] = TriangleBuffer[1].Vertices[1];
-
-                    TriangleBuffer[1].Vertices[0] = vertex3;
-                    TriangleBuffer[1].Vertices[1] = TriangleBuffer[1].Vertices[2];
-                    TriangleBuffer[1].Vertices[2] = vertex2;
-
-                }
-            }*/
-            
             for (uint i = 0; i < TriangleCount; i++)
             {
-                if(IsWater && ShouldClip(ref TriangleBuffer[i])) continue;
+                if(IsWater && ShouldClip(ref TriangleBuffer[i], ref IsRiverConstant)) continue;
                 Data.Indices.Add((uint) Data.Vertices.Count + 0);
                 Data.Indices.Add((uint) Data.Vertices.Count + 1);
                 Data.Indices.Add((uint) Data.Vertices.Count + 2);
@@ -480,7 +460,7 @@ namespace Hedra.Engine.Rendering
             }
         }
 
-        private static bool ShouldClip(ref Triangle Triangle)
+        private static bool ShouldClip(ref Triangle Triangle, ref bool IsRiverConstant)
         {
             const float  oceanClipDistance = (BiomePool.SeaLevel-1) * Generation.ChunkSystem.Chunk.BlockSize;
             var isBelowOcean = (Triangle.Vertices[0].Y < oceanClipDistance ||
@@ -488,14 +468,14 @@ namespace Hedra.Engine.Rendering
                                 Triangle.Vertices[2].Y < oceanClipDistance);
             
             const float maxRiverClipDistance = (BiomePool.RiverWaterLevel-2) * Generation.ChunkSystem.Chunk.BlockSize;
-            const float  minRiverClipDistance = (BiomePool.RiverMinHeight) * Generation.ChunkSystem.Chunk.BlockSize;
-            var isBelowRiver = (Triangle.Vertices[0].Y < maxRiverClipDistance ||
-                                Triangle.Vertices[1].Y < maxRiverClipDistance ||
-                                Triangle.Vertices[2].Y < maxRiverClipDistance) &&
-                               (Triangle.Vertices[0].Y > minRiverClipDistance ||
-                                Triangle.Vertices[1].Y > minRiverClipDistance ||
-                                Triangle.Vertices[2].Y > minRiverClipDistance);
-            return isBelowRiver || isBelowOcean;
+            const float  minRiverClipDistance = (BiomePool.RiverFloorLevel-2) * Generation.ChunkSystem.Chunk.BlockSize;
+            var isInRiverClipZone = (Triangle.Vertices[0].Y > minRiverClipDistance &&
+                                     Triangle.Vertices[1].Y > minRiverClipDistance &&
+                                     Triangle.Vertices[2].Y > minRiverClipDistance);
+            var isWithinRiver = (Triangle.Vertices[0].Y < maxRiverClipDistance &&
+                                Triangle.Vertices[1].Y < maxRiverClipDistance &&
+                                Triangle.Vertices[2].Y < maxRiverClipDistance) && isInRiverClipZone;
+            return (isWithinRiver && IsRiverConstant || isBelowOcean);
         }
     }
     

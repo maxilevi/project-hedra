@@ -3,11 +3,12 @@ using Hedra.Core;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
-using OpenTK;
+using System.Numerics;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Game;
 using Hedra.Localization;
-using OpenTK.Input;
+using Hedra.Numerics;
+
 
 namespace Hedra.Engine.Player.BoatSystem
 {
@@ -32,7 +33,7 @@ namespace Hedra.Engine.Player.BoatSystem
                       GameManager.Keyboard[Controls.Rightward];
             if (GameManager.Keyboard[Controls.Forward])
             {
-                var orientation = Vector3.TransformVector(_player.View.Forward, _stateHandler.Transformation);
+                var orientation = Vector3.Transform(_player.View.Forward, _stateHandler.Transformation);
                 _accumulatedDirection = orientation * propulsionFactor;
             }
 
@@ -52,11 +53,11 @@ namespace Hedra.Engine.Player.BoatSystem
                 _accumulatedDirection = dir * propulsionFactor;
             }
 
-            if (_accumulatedDirection.LengthFast > .005f)
+            if (_accumulatedDirection.LengthFast() > .005f)
             {
                 /* Manually translate the boat, avoid using the physics engine*/
                 _player.Movement.ProcessTranslation(_characterRotation, _accumulatedDirection * Speed,
-                    _accumulatedDirection.LengthFast > 5f);
+                    _accumulatedDirection.LengthFast() > 5f);
             }
 
             if (any)

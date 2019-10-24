@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem
 {

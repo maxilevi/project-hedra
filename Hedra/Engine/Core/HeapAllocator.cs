@@ -1,25 +1,26 @@
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using Hedra.Engine.Rendering;
 
 namespace Hedra.Engine.Core
 {
-    public unsafe struct HeapAllocator : IAllocator
+    public unsafe class HeapAllocator : Allocator
     {
-        public void* Malloc<T>(int Count)
+        private void* _buffer;
+        public HeapAllocator(int BufferSize) : base(BufferSize)
         {
-            return (void*) Marshal.AllocHGlobal(SizePerElement<T>() * Count);
+            MemoryPool<byte>.Shared.Rent(BufferSize);
+            _buffer = (void*) Marshal.AllocHGlobal(BufferSize);
         }
 
-        public int SizePerElement<T>()
-        {
-            return Marshal.SizeOf(typeof(T));
-        }
+        protected override void* CreateBuffer() => _buffer;
 
-        public void Free(ref void* Ptr)
+        protected override void FreeBuffer()
         {
-            Marshal.FreeHGlobal((IntPtr)Ptr);
-            Ptr = null;
+            Marshal.FreeHGlobal((IntPtr) _buffer);
+            _buffer = null;
         }
     }
 }

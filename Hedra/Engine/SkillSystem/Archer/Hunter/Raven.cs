@@ -13,7 +13,7 @@ using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Archer.Hunter
 {

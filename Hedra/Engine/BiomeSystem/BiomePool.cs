@@ -12,11 +12,11 @@ using Hedra.BiomeSystem;
 using Hedra.Engine.BiomeSystem.GhostTown;
 using Hedra.Engine.BiomeSystem.NormalBiome;
 using Hedra.Engine.BiomeSystem.UndeadBiome;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.BiomeSystem
 {
@@ -26,12 +26,13 @@ namespace Hedra.Engine.BiomeSystem
     public class BiomePool : IBiomePool
     {
         public const int SeaLevel = 16;
-        public const int PathHeight = RiverWaterLevel;
-        public const int RiverMaxHeight = RiverWaterLevel - 2;
-        public const int RiverMinHeight = RiverFloorLevel - 2;
-        public const int RiverSeaFloorMax = RiverWaterLevel + 2;
-        public const int RiverWaterLevel = 25;
-        public const int RiverFloorLevel = RiverWaterLevel - BaseBiomeGenerationDesign.RiverDepth;
+        public const float PathHeight = RiverWaterLevel;
+        public const float RiverMaxHeight = RiverWaterLevel - 1;
+        public const float RiverMinHeight = SeaLevel - 4;
+        public const float RiverMinClipDistance = RiverFloorLevel - 2;
+        public const float RiverSeaFloorMax = RiverWaterLevel + 2;
+        public const float RiverWaterLevel = 26.5f;
+        public const float RiverFloorLevel = RiverWaterLevel - BaseBiomeGenerationDesign.RiverDepth;
         public const int MaxRegionsPerBiome = 8;
 
         private readonly WorldType _type;
@@ -68,7 +69,7 @@ namespace Hedra.Engine.BiomeSystem
         {
             lock (_regionCache)
             {
-                var voronoiHeight = this.VoronoiFormula(Position.Xz.ToVector3());
+                var voronoiHeight = this.VoronoiFormula(Position.Xz().ToVector3());
 
                 this._regionDistribution.Seed = (int) voronoiHeight;
                 int regionIndex = _regionDistribution.Next(0, MaxRegionsPerBiome);
@@ -76,7 +77,7 @@ namespace Hedra.Engine.BiomeSystem
                 this._biomeDistribution.Seed = (int) voronoiHeight + 421;
                 int biomeIndex = _biomeDistribution.Next(0, _biomeDesigns.Length);
 
-                if ((Position - World.SpawnPoint).Xz.LengthFast < 5000) biomeIndex = 0;
+                if ((Position - World.SpawnPoint).Xz().LengthFast() < 5000) biomeIndex = 0;
 
                 int index = (regionIndex * 100 / 13 + biomeIndex * 100 / 11) * 100;
 

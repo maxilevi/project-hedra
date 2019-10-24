@@ -4,7 +4,7 @@
   "FirstSpecializationTree": "Druid",
   "SecondSpecializationTree": "Necromancer",
   "Logo": "$DataFile$/Assets/UI/MageLogo.png",
-  "BaseSpeed": 1.4,
+  "BaseSpeed": 1.5,
   "StartingItems": [
     {
       "Name": "CommonBronzeStaff",

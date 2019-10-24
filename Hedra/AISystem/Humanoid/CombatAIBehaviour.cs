@@ -1,5 +1,5 @@
 using Hedra.EntitySystem;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.AISystem.Humanoid
 {

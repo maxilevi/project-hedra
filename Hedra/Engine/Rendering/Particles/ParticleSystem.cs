@@ -10,11 +10,13 @@ using System.Collections.Generic;
 using System.Reflection;
 using Hedra.Core;
 using Hedra.Engine.Game;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using System.Numerics;
+using Hedra.Engine.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
+using Hedra.Engine.Windowing;
 using Hedra.Game;
+using Hedra.Numerics;
 using Hedra.Rendering.Particles;
 
 namespace Hedra.Engine.Rendering.Particles
@@ -81,7 +83,7 @@ namespace Hedra.Engine.Rendering.Particles
         
         public void Emit()
         {
-            if((this.Position - LocalPlayer.Instance.Position).LengthSquared > GeneralSettings.DrawDistanceSquared) return;
+            if((this.Position - LocalPlayer.Instance.Position).LengthSquared() > GeneralSettings.DrawDistanceSquared) return;
             
             if(ParticleCount == MaxParticles || !Enabled || (Time.Paused && UseTimeScale)) return;
             
@@ -99,7 +101,7 @@ namespace Hedra.Engine.Rendering.Particles
             Vector4 newColor;
             if(Grayscale)
             {
-                var shade = Color.Xyz.Average() + Utils.Rng.NextFloat() * .2f -.1f;
+                var shade = Color.Xyz().Average() + Utils.Rng.NextFloat() * .2f -.1f;
                 newColor = new Vector4(shade, shade, shade, Color.W);
             }
             else
@@ -158,7 +160,7 @@ namespace Hedra.Engine.Rendering.Particles
         
         public unsafe void Update(float DeltaTime)
         {
-            if(!HasMultipleOutputs && (this.Position - LocalPlayer.Instance.Position).LengthSquared > GeneralSettings.DrawDistanceSquared) return;
+            if(!HasMultipleOutputs && (this.Position - LocalPlayer.Instance.Position).LengthSquared() > GeneralSettings.DrawDistanceSquared) return;
 
             lock (_lock)
             {
@@ -187,10 +189,10 @@ namespace Hedra.Engine.Rendering.Particles
                 var transMatrix = ConstructTransformationMatrix(_particles[i].Position, _particles[i].Rotation,
                     _particles[i].Scale);
                 vec4S[i * 5 + 0] = _particles[i].Color;
-                vec4S[i * 5 + 1] = transMatrix.Column0;
-                vec4S[i * 5 + 2] = transMatrix.Column1;
-                vec4S[i * 5 + 3] = transMatrix.Column2;
-                vec4S[i * 5 + 4] = transMatrix.Column3;
+                vec4S[i * 5 + 1] = transMatrix.Column0();
+                vec4S[i * 5 + 2] = transMatrix.Column1();
+                vec4S[i * 5 + 3] = transMatrix.Column2();
+                vec4S[i * 5 + 4] = transMatrix.Column3();
             }
             Executer.ExecuteOnMainThread(() =>
             {
@@ -200,7 +202,7 @@ namespace Hedra.Engine.Rendering.Particles
         
         public void Draw()
         {
-            if(!HasMultipleOutputs && (this.Position - LocalPlayer.Instance.Position).LengthSquared > GeneralSettings.DrawDistanceSquared) return;
+            if(!HasMultipleOutputs && (this.Position - LocalPlayer.Instance.Position).LengthSquared() > GeneralSettings.DrawDistanceSquared) return;
             if (ParticleCount > 0)
             {
                 Renderer.Enable(EnableCap.Blend);
@@ -231,21 +233,18 @@ namespace Hedra.Engine.Rendering.Particles
         private void UpdateVbo(Vector4[] Vec4S, int Count)
         {
             if(Disposed) return;
-            _particleVbo.Update(Vec4S, Vec4S.Length * Vector4.SizeInBytes);
+            _particleVbo.Update(Vec4S, Vec4S.Length * HedraSize.Vector4);
             _particlesInMemory = Count;
         }
         
-        private static Matrix4 ConstructTransformationMatrix(Vector3 Position, Vector3 Rotation, Vector3 Scale)
+        private static Matrix4x4 ConstructTransformationMatrix(Vector3 Position, Vector3 Rotation, Vector3 Scale)
         {
             var axis = Rotation / Rotation.Y;
-            var rotationMatrix = Matrix4.CreateFromAxisAngle(axis, Rotation.Y * Mathf.Radian);
-            
-            var transMatrix = Matrix4.CreateScale(Scale);
-            transMatrix = Matrix4.Mult(transMatrix, rotationMatrix);
-            transMatrix = Matrix4.Mult(transMatrix,  Matrix4.CreateTranslation(Position));
+            var rotationMatrix = Matrix4x4.CreateFromAxisAngle(axis.NormalizedFast(), Rotation.Y);
+            var transMatrix = Matrix4x4.CreateScale(Scale) * rotationMatrix * Matrix4x4.CreateTranslation(Position);
             return transMatrix;
         }
-        
+ 
         public void Dispose()
         {
             if(Disposed) return;

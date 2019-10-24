@@ -1,13 +1,13 @@
 using System.Collections.Generic;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.Rendering
 {
     public interface IVertexData
     {
-        List<Vector3> Vertices { get; set; }
-        List<Vector4> Colors { get; set; }
-        List<Vector3> Normals { get; set; }
-        List<uint> Indices { get; set; }
+        IList<Vector3> Vertices { get; set; }
+        IList<Vector4> Colors { get; set; }
+        IList<Vector3> Normals { get; set; }
+        IList<uint> Indices { get; set; }
     }
 }

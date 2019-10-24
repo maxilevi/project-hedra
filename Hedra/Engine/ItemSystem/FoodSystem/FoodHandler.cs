@@ -4,6 +4,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.EntitySystem;
 using Hedra.Items;
+using Hedra.Numerics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 

@@ -1,14 +1,15 @@
 [submodule "project-hedra-assets"]
 	path = project-hedra-assets
 	url = https://github.com/maxilevi/project-hedra-assets.git
-
 [submodule "hedra-tools"]
 	path = hedra-tools
 	url = https://github.com/maxilevi/hedra-tools.git
-
 [submodule "hedra-obfuscator"]
 	path = hedra-obfuscator
 	url = https://github.com/maxilevi/hedra-obfuscator.git
 [submodule "hedra-core"]
 	path = hedra-core
 	url = https://github.com/maxilevi/hedra-core.git
+[submodule "Silk.NET"]
+	path = Silk.NET
+	url = https://github.com/maxilevi/Silk.NET.git

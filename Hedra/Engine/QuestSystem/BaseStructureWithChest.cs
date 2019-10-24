@@ -1,7 +1,7 @@
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.WorldBuilding;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.QuestSystem
 {

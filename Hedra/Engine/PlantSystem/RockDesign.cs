@@ -11,7 +11,8 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.PlantSystem
 {
@@ -19,7 +20,7 @@ namespace Hedra.Engine.PlantSystem
     {
         public override CacheItem Type => CacheItem.Rock;
         
-        public override Matrix4 TransMatrix(Vector3 Position, Random Rng)
+        public override Matrix4x4 TransMatrix(Vector3 Position, Random Rng)
         {
             var underChunk = World.GetChunkAt(Position);
             var blockPosition = World.ToBlockSpace(Position);
@@ -28,7 +29,7 @@ namespace Hedra.Engine.PlantSystem
             if (blockPosition.Z + addon.Z / Chunk.BlockSize > Chunk.Width / Chunk.BlockSize) addon.Z = 0;
 
             float height = Physics.HeightAtPosition(Position + addon);
-            if (Block.Noise3D) return Matrix4.Zero;
+            if (Block.Noise3D) return new Matrix4x4();
 
             for (int x = -3; x < 3; x++)
             {
@@ -36,18 +37,18 @@ namespace Hedra.Engine.PlantSystem
                 {
                     float bDens = Physics.HeightAtPosition(new Vector3((blockPosition.X + x) * Chunk.BlockSize + underChunk.OffsetX, 0, (blockPosition.Z + z) * Chunk.BlockSize + underChunk.OffsetZ));
                     float difference = Math.Abs(bDens - height);
-                    if (difference > 5f) return Matrix4.Zero;
+                    if (difference > 5f) return new Matrix4x4();
                 }
             }
 
-            var rotationMat4 = Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat() * Mathf.Radian);
-            var transMatrix = Matrix4.CreateScale(2.75f + Rng.NextFloat() * .75f);
+            var rotationMat4 = Matrix4x4.CreateRotationY(360 * Utils.Rng.NextFloat() * Mathf.Radian);
+            var transMatrix = Matrix4x4.CreateScale(2.75f + Rng.NextFloat() * .75f);
             transMatrix *= rotationMat4;
-            transMatrix *= Matrix4.CreateTranslation(new Vector3(Position.X, height, Position.Z) + addon);
+            transMatrix *= Matrix4x4.CreateTranslation(new Vector3(Position.X, height, Position.Z) + addon);
             return transMatrix;
         }
 
-        public override VertexData Paint(VertexData Data, Region Region, Random Rng)
+        public override NativeVertexData Paint(NativeVertexData Data, Region Region, Random Rng)
         {
             Data.Paint(this.RockColor(Rng));
             Data.GraduateColor(Vector3.UnitY);
@@ -55,7 +56,7 @@ namespace Hedra.Engine.PlantSystem
             return Data; 
         }
 
-        public override void AddShapes(Chunk UnderChunk, Matrix4 TransMatrix)
+        public override void AddShapes(Chunk UnderChunk, Matrix4x4 TransMatrix)
         {
             var newShapes = CacheManager.GetShape(Model).DeepClone();
             newShapes.ForEach(Shape => Shape.Transform(TransMatrix));

@@ -1,7 +1,7 @@
 using System;
 using Hedra.Engine.Game;
 using Hedra.Game;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.Rendering
 {

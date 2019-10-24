@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.Pathfinding
 {

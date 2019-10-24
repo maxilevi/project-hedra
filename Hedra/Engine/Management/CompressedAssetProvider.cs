@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Globalization;
 using System.IO;
@@ -19,7 +20,10 @@ using Hedra.Engine.Rendering.UI;
 using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using OpenTK;
+using System.Numerics;
+using Hedra.Engine.Core;
+using Hedra.Numerics;
+using Silk.NET.GLFW;
 
 namespace Hedra.Engine.Management
 {
@@ -238,7 +242,7 @@ namespace Hedra.Engine.Management
                     builder.Append(line + Environment.NewLine);
                 }
             }
-            if (builder.Length == 0) throw new ArgumentNullException($"Failed to file shader '{Name}'");
+            if (builder.Length == 0) throw new ArgumentNullException($"Failed to find shader '{Name}'");
             return builder.ToString();
         }
 
@@ -248,11 +252,40 @@ namespace Hedra.Engine.Management
             return Name.Replace("/", slashRegex).Replace(".", "\\.");
         }
         
-        public Icon LoadIcon(string Path)
+        public unsafe byte[] LoadIcon(string Path, out int Width, out int Height)
         {
-            using(var ms = new MemoryStream(AssetManager.ReadBinary(Path, AssetsResource)))
+            using (var ms = new MemoryStream(AssetManager.ReadBinary(Path, AssetsResource)))
             {
-                return new Icon(ms);
+                using (var original = new Bitmap(ms))
+                {
+                    using (var bitmap = new Bitmap(original, 48, 48))
+                    {
+
+                        var data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height),
+                            ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+                        Width = data.Width;
+                        Height = data.Height;
+                        var pixels = new byte[data.Width * data.Height * 4];
+                        var ptr = (int*) data.Scan0;
+                        int k = 0;
+                        for (var i = 0; i < pixels.Length; i += 4)
+                        {
+                            var a = (byte)((ptr[k] & 0xFF000000) >> 24);
+                            var r = (byte)((ptr[k] & 0x00FF0000) >> 16);
+                            var g = (byte)((ptr[k] & 0x0000FF00) >> 8);
+                            var b = (byte)((ptr[k] & 0x000000FF));
+                            
+                            pixels[i + 0] = r;
+                            pixels[i + 1] = g;
+                            pixels[i + 2] = b;
+                            pixels[i + 3] = a;
+                            k++;
+                        }
+
+                        bitmap.UnlockBits(data);
+                        return pixels;
+                    }
+                }
             }
         }
 
@@ -498,21 +531,22 @@ namespace Hedra.Engine.Management
         private VertexData HandlePLYTransforms(List<Vector3> Vertices, List<Vector3> Normals,
             List<Vector4> Colors, List<uint> Indices, Vector3 Scale, Vector3 Position, Vector3 Rotation)
         {
-            var scaleMat = Matrix4.CreateScale(Scale);
-            var positionMat = Matrix4.CreateTranslation(Position);
-            var rotationMat = Matrix4.CreateRotationY(Rotation.Y);
-            rotationMat *= Matrix4.CreateRotationX(Rotation.X);
-            rotationMat *= Matrix4.CreateRotationZ(Rotation.Z);
+            var scaleMat = Matrix4x4.CreateScale(Scale);
+            var positionMat = Matrix4x4.CreateTranslation(Position);
+            var rotationMat = Matrix4x4.CreateRotationY(Rotation.Y);
+            rotationMat *= Matrix4x4.CreateRotationX(Rotation.X);
+            rotationMat *= Matrix4x4.CreateRotationZ(Rotation.Z);
             for(var j = 0; j < Vertices.Count; j++)
             {
-                Vertices[j] = Vector3.TransformPosition(Vertices[j], scaleMat);
-                Vertices[j] = Vector3.TransformPosition(Vertices[j], rotationMat);
-                Vertices[j] = Vector3.TransformPosition(Vertices[j], positionMat);
+                Vertices[j] = Vector3.Transform(Vertices[j], scaleMat);
+                Vertices[j] = Vector3.Transform(Vertices[j], rotationMat);
+                Vertices[j] = Vector3.Transform(Vertices[j], positionMat);
             }
-            
+
+            var invertedMat = rotationMat.Inverted().Transposed();
             for(var j = 0; j < Normals.Count; j++)
             {
-                Normals[j] = Vector3.TransformNormal(Normals[j], rotationMat);
+                Normals[j] = Vector3.TransformNormal(Normals[j], invertedMat);
             }
             
             var data = new VertexData
@@ -524,7 +558,10 @@ namespace Hedra.Engine.Management
                 UseCache = true
             };
             data.Trim();
-            data.Optimize();
+            using (var allocator = new HeapAllocator(data.SizeInBytes * 4))
+            {
+                data.Optimize(allocator);
+            }
             return data;
         }
 

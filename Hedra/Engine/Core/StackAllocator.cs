@@ -2,25 +2,20 @@ using System.Runtime.InteropServices;
 
 namespace Hedra.Engine.Core
 {
-    public unsafe struct StackAllocator : IAllocator
+    public unsafe class StackAllocator : Allocator
     {
         private void* _buffer;
-        private int _offset;
-        
-        public StackAllocator(void* Buffer)
+        public StackAllocator(int BufferSize, byte* Buffer) : base(BufferSize)
         {
             _buffer = Buffer;
-            _offset = 0;
-        }
-        
-        public void* Malloc<T>(int Count)
-        {
-            throw new System.NotImplementedException();
         }
 
-        public void Free(ref void* Ptr)
+        protected override void* CreateBuffer() => _buffer;
+
+        protected override void FreeBuffer()
         {
-            throw new System.NotImplementedException();
+            _buffer = null;
+            /* Stack memory does not need to be freed */
         }
     }
 }

@@ -10,18 +10,18 @@
 using System;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Management;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using System.Numerics;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Core;
-using Hedra.Engine.EnvironmentSystem;
-using Hedra.Engine.Game;
+using Hedra.Engine.Core;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.IO;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Rendering.Frustum;
+using Hedra.Engine.Windowing;
 using Hedra.Game;
+using Hedra.Numerics;
 using Hedra.Rendering;
 
 namespace Hedra.Engine.Rendering
@@ -41,10 +41,10 @@ namespace Hedra.Engine.Rendering
         public static BufferBalancer WaterBuffer { get; private set; }
         public static bool ShowWaterBackfaces {get; set;}
         public static Texture3D NoiseTexture { get; private set; }
-        public static Texture DuDvMap { get; private set; }
-        public static Texture NormalMap { get; private set; }
+        public static Texture2D DuDvMap { get; private set; }
+        public static Texture2D NormalMap { get; private set; }
         private static IntPtr[] _shadowOffsets;
-        private static int[] _shadowCounts;
+        private static uint[] _shadowCounts;
 
         public static void Initialize()
         {
@@ -52,43 +52,53 @@ namespace Hedra.Engine.Rendering
             StaticShader = Shader.Build("Shaders/Static.vert", "Shaders/Static.frag");
 
             OpenSimplexNoise.Load(123);
-            var noiseValues = new float[16, 16, 16];
-            for (var x = 0; x < noiseValues.GetLength(0); x++)
+            var noiseValues = CreateNoiseArray(out var width, out var height, out var depth);
+            Log.WriteLine("Creating 3D noise texture...");
+            NoiseTexture = new Texture3D(noiseValues, width, height, depth);
+            Log.WriteLine("Loading DuDvMap...");
+            DuDvMap = new Texture2D("Assets/FX/waterDuDvMap.png", true);
+            Log.WriteLine("Loading water normal map...");
+            NormalMap = new Texture2D("Assets/FX/waterNormalMap.png", true);
+        }
+
+        public static float[] CreateNoiseArray(out int Width, out int Height, out int Depth)
+        {
+            const int width = 16, height = 16, depth = 16;
+            var noiseValues = new float[width * height * depth];
+            for (var x = 0; x < width; x++)
             {
-                for (var y = 0; y < noiseValues.GetLength(1); y++)
+                for (var y = 0; y < height; y++)
                 {
-                    for (var z = 0; z < noiseValues.GetLength(2); z++)
+                    for (var z = 0; z < depth; z++)
                     {
-                        noiseValues[x,y,z] = (float)OpenSimplexNoise.Evaluate(x * 0.6f,y * 0.6f,z * 0.6f) * .5f + .5f;
+                        noiseValues[x * depth * height + y * depth + z] = (float)OpenSimplexNoise.Evaluate(x * 0.6f,y * 0.6f,z * 0.6f) * .5f + .5f;
                     }
                 }
             }
-            Log.WriteLine("Creating 3D noise texture...");
-            NoiseTexture = new Texture3D(noiseValues);
-            Log.WriteLine("Loading DuDvMap...");
-            DuDvMap = new Texture("Assets/FX/waterDuDvMap.png", true);
-            Log.WriteLine("Loading water normal map...");
-            NormalMap = new Texture("Assets/FX/waterNormalMap.png", true);
+
+            Width = width;
+            Height = height;
+            Depth = depth;
+            return noiseValues;
         }
 
         public static void Allocate()
         {
             StaticBuffer = new BufferBalancer(
-                new WorldBuffer(PoolSize.Big),
-                new WorldBuffer(PoolSize.Big),
-                new WorldBuffer(PoolSize.Big)
+                new WorldBuffer(PoolSize.Normal),
+                new WorldBuffer(PoolSize.Normal),
+                new WorldBuffer(PoolSize.Normal)
             );
             InstanceBuffer = new BufferBalancer(
-                new WorldBuffer(PoolSize.VerySmall),
-                new WorldBuffer(PoolSize.VerySmall),
-                new WorldBuffer(PoolSize.VerySmall),
+                new WorldBuffer(PoolSize.Normal),
+                new WorldBuffer(PoolSize.Normal),
                 new WorldBuffer(PoolSize.VerySmall)
             );
             WaterBuffer = new BufferBalancer(
-                new WorldBuffer(PoolSize.Small)
+                new WorldBuffer(PoolSize.Normal)
             );
             _shadowOffsets = new IntPtr[GeneralSettings.MaxChunks];
-            _shadowCounts = new int[GeneralSettings.MaxChunks];
+            _shadowCounts = new uint[GeneralSettings.MaxChunks];
         }
 
         public static void PrepareCameraMatrix()
@@ -157,17 +167,17 @@ namespace Hedra.Engine.Rendering
             WaterBuffer.Remove(ChunkOffset);
         }
         
-        public static bool UpdateStatic(Vector2 Offset, VertexData Data)
+        public static bool UpdateStatic(Vector2 Offset, NativeVertexData Data)
         {
             return StaticBuffer.Update(Offset, Data);
         }
 
-        public static bool UpdateWater(Vector2 Offset, VertexData Data)
+        public static bool UpdateWater(Vector2 Offset, NativeVertexData Data)
         {
             return WaterBuffer.Update(Offset, Data);
         }
 
-        public static bool UpdateInstance(Vector2 Offset, VertexData Data)
+        public static bool UpdateInstance(Vector2 Offset, NativeVertexData Data)
         {
             return InstanceBuffer.Update(Offset, Data);
         }
@@ -292,7 +302,7 @@ namespace Hedra.Engine.Rendering
         public static Vector3 BakedOffset { get; set; }
         public static Vector3 Scale { get; set; } = Vector3.One;
         public static Vector3 Offset { get; set; }
-        public static Matrix4 TransformationMatrix { get; set; } = Matrix4.Identity;
+        public static Matrix4x4 TransformationMatrix { get; set; } = Matrix4x4.Identity;
     }
 
     [Flags]

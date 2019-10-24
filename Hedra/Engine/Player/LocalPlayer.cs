@@ -14,7 +14,7 @@ using Hedra.Components;
 using Hedra.Core;
 using Hedra.Crafting;
 using Hedra.Engine.ClassSystem;
-using OpenTK;
+using System.Numerics;
 using Hedra.Engine.Sound;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.EnvironmentSystem;
@@ -47,9 +47,10 @@ using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Items;
 using Hedra.Localization;
+using Hedra.Numerics;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
-using OpenTK.Input;
+
 using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;
 
 namespace Hedra.Engine.Player
@@ -167,7 +168,7 @@ namespace Hedra.Engine.Player
             var entities = World.Entities.ToArray();
             for (var i = entities.Length - 1; i > -1; i--)
             {
-                if (!(entities[i] is LocalPlayer) && (entities[i].Position.Xz - this.Position.Xz).LengthSquared < 256 * 256 || Companion.Entity == entities[i])
+                if (!(entities[i] is LocalPlayer) && (entities[i].Position.Xz() - this.Position.Xz()).LengthSquared() < 256 * 256 || Companion.Entity == entities[i])
                 {
                     entities[i].Draw();
                 }
@@ -188,7 +189,7 @@ namespace Hedra.Engine.Player
             _wasSleeping = this.IsSleeping;
             var underChunk = World.GetChunkAt(this.Position);
 
-            if( this.Model.Enabled && (_previousPosition - Model.Human.Position).LengthFast > 0.25f && Model.Human.IsGrounded && underChunk != null)
+            if( this.Model.Enabled && (_previousPosition - Model.Human.Position).LengthFast() > 0.25f && Model.Human.IsGrounded && underChunk != null)
             {
                 World.Particles.VariateUniformly = true;
                 World.Particles.Color = World.GetHighestBlockAt( (int) Model.Human.Position.X, (int) Model.Human.Position.Z).GetColor(underChunk.Biome.Colors);

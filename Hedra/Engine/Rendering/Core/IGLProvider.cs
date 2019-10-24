@@ -1,6 +1,12 @@
 using System;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using System.Numerics;
+using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
+
+#region Typedefs
+using GLDebugProc = Silk.NET.OpenGL.DebugProc;
+using GLDrawBuffersEnum = Silk.NET.OpenGL.GLEnum;
+#endregion
 
 namespace Hedra.Engine.Rendering.Core
 {
@@ -20,10 +26,10 @@ namespace Hedra.Engine.Rendering.Core
         void BlitFramebuffer(int SrcX0, int SrcY0, int SrcX1, int SrcY1, int DstX0, int DstY0, int DstX1, int DstY1,
             ClearBufferMask Mask, BlitFramebufferFilter Filter);
         void BufferData(BufferTarget Target, IntPtr Size, IntPtr Ptr, BufferUsageHint Hint);
-        void BufferData<T>(BufferTarget Target, IntPtr Size, T[] Data, BufferUsageHint Hint) where T : struct;
+        void BufferData<T>(BufferTarget Target, IntPtr Size, T[] Data, BufferUsageHint Hint) where T : unmanaged;
         void BufferSubData(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, IntPtr Ptr1);
-        void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, ref T Data) where T : struct;
-        void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, T[] Data) where T : struct;
+        void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, ref T Data) where T : unmanaged;
+        void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, T[] Data) where T : unmanaged;
         FramebufferErrorCode CheckFramebufferStatus(FramebufferTarget Target);
         void Clear(ClearBufferMask Mask);
         void ClearColor(Vector4 DrawingColor);
@@ -32,7 +38,7 @@ namespace Hedra.Engine.Rendering.Core
         int CreateProgram();
         int CreateShader(ShaderType Type);
         void CullFace(CullFaceMode Mode);
-        void DebugMessageCallback(DebugProc Proc, IntPtr Ptr);
+        void DebugMessageCallback(GLDebugProc Proc, IntPtr Ptr);
         void DeleteBuffers(int N, ref uint Id);
         void DeleteFramebuffers(int N, params uint[] Ids);
         void DeleteProgram(uint Program);
@@ -47,7 +53,7 @@ namespace Hedra.Engine.Rendering.Core
         void DisableVertexAttribArray(uint N);
         void DrawArrays(PrimitiveType Type, int Offset, int Count);
         void DrawBuffer(DrawBufferMode Mode);
-        void DrawBuffers(int N, DrawBuffersEnum[] Enums);
+        void DrawBuffers(int N, GLDrawBuffersEnum[] Enums);
         void DrawElements(PrimitiveType Primitive, int Count, DrawElementsType Type, IntPtr Indices);
         void DrawElementsInstanced(PrimitiveType Primitive, int Count, DrawElementsType Type, IntPtr Indices, int Instancecount);
         void Enable(EnableCap Cap);
@@ -72,7 +78,7 @@ namespace Hedra.Engine.Rendering.Core
         int GetUniformBlockIndex(uint V0, string Name);
         int GetUniformLocation(uint Program, string Name);
         void LinkProgram(uint Program);
-        void MultiDrawElements(PrimitiveType Primitive, int[] Counts, DrawElementsType Type, IntPtr[] Offsets, int Count);
+        void MultiDrawElements(PrimitiveType Primitive, uint[] Counts, DrawElementsType Type, IntPtr[] Offsets, int Count);
         void PointSize(float Size);
         void LineWidth(float Width);
         void PolygonMode(MaterialFace Face, PolygonMode Mode);
@@ -84,7 +90,7 @@ namespace Hedra.Engine.Rendering.Core
         void TexImage2DMultisample(TextureTargetMultisample Target, int Samples, PixelInternalFormat InternalFormat,
             int Width, int Height, bool FixedLocations);
         void TexImage3D<T>(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3,
-            int V4, PixelFormat Format, PixelType Type, T[,,] Data) where T : struct;
+            int V4, PixelFormat Format, PixelType Type, T[] Pixels) where T : unmanaged;
         void TexParameter(TextureTarget Target, TextureParameterName Name, int Value);
         void Uniform1(int Location, int Uniform);
         void Uniform1(int Location, float Uniform);
@@ -92,13 +98,13 @@ namespace Hedra.Engine.Rendering.Core
         void Uniform2(int Location, Vector2 Uniform);
         void Uniform3(int Location, Vector3 Uniform);
         void Uniform4(int Location, Vector4 Uniform);
-        void UniformMatrix2(int Location, bool Transpose, ref Matrix2 Uniform);
-        void UniformMatrix3(int Location, bool Transpose, ref Matrix3 Uniform);
-        void UniformMatrix4(int Location, bool Transpose, ref Matrix4 Uniform);
+        void UniformMatrix2(int Location, bool Transpose, ref Matrix4x4 Uniform);
+        void UniformMatrix3(int Location, bool Transpose, ref Matrix4x4 Uniform);
+        void UniformMatrix4x4(int Location, bool Transpose, ref Matrix4x4 Uniform);
         void UseProgram(uint Program);
         void VertexAttribDivisor(int V0, int V1);
         void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag, int Bytes, IntPtr Ptr);
-        void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag, int Bytes, int V2);
+        void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag, int Bytes);
         void Viewport(int V0, int V1, int V2, int V3);
         void GetProgram(int ShaderId, GetProgramParameterName ParameterName, out int Value);
         void GetProgramInfoLog(int ShaderId, out string Log);

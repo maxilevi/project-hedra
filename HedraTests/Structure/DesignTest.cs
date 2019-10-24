@@ -14,7 +14,6 @@ using Hedra.Engine;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.BiomeSystem.NormalBiome;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -31,7 +30,8 @@ using Hedra.Rendering;
 using Hedra.Structures;
 using HedraTests.Player;
 using Moq;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace HedraTests.Structure
 {
@@ -105,15 +105,15 @@ namespace HedraTests.Structure
             Executer.Update();
             for (var i = 0; i < WorldEntities.Length; i++)
             {
-                if( (WorldEntities[i].Position.Xz - structure.Position.Xz).LengthFast > Design.PlateauRadius * multiplier)
-                    Assert.Fail($"{WorldEntities[i].Position.Xz} is far from {structure.Position.Xz} by more than {(WorldEntities[i].Position.Xz - structure.Position.Xz).LengthFast}");
+                if( (WorldEntities[i].Position.Xz() - structure.Position.Xz()).LengthFast() > Design.PlateauRadius * multiplier)
+                    Assert.Fail($"{WorldEntities[i].Position.Xz()} is far from {structure.Position.Xz()} by more than {(WorldEntities[i].Position.Xz() - structure.Position.Xz()).LengthFast()}");
             }
 
             var structures = GetStructureObjects(structure);
             for (var i = 0; i < structures.Length; i++)
             {
-                if( (structures[i].Position.Xz - structure.Position.Xz).LengthFast > Design.PlateauRadius * multiplier)
-                    Assert.Fail($"'{structures[i]}': {structures[i].Position.Xz} is far from {structure.Position.Xz} by more than {(WorldEntities[i].Position.Xz - structure.Position.Xz).LengthFast}");
+                if( (structures[i].Position.Xz() - structure.Position.Xz()).LengthFast() > Design.PlateauRadius * multiplier)
+                    Assert.Fail($"'{structures[i]}': {structures[i].Position.Xz()} is far from {structure.Position.Xz()} by more than {(WorldEntities[i].Position.Xz() - structure.Position.Xz()).LengthFast()}");
             }
         }
         
@@ -204,7 +204,7 @@ namespace HedraTests.Structure
         protected virtual CollidableStructure CreateStructure()
         {
             var location = RandomLocation;
-            return new CollidableStructure(Design, location, new RoundedPlateau(location.Xz, _rng.Next(32, 1024)), CreateBaseStructure(location));
+            return new CollidableStructure(Design, location, new RoundedPlateau(location.Xz(), _rng.Next(32, 1024)), CreateBaseStructure(location));
         }
 
         protected abstract BaseStructure CreateBaseStructure(Vector3 Position);

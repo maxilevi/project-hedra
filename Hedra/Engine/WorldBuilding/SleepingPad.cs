@@ -13,8 +13,8 @@ using Hedra.EntitySystem;
 using Hedra.Engine.Localization;
 using Hedra.Game;
 using Hedra.Localization;
-using OpenTK;
-using OpenTK.Input;
+using System.Numerics;
+
 using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;
 
 namespace Hedra.Engine.WorldBuilding

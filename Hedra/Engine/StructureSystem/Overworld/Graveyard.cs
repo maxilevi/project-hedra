@@ -16,7 +16,7 @@ using Hedra.Engine.QuestSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Localization;
 using Hedra.Mission;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {

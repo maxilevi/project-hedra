@@ -8,7 +8,8 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Rendering.UI;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.EntitySystem
 {
@@ -24,14 +25,14 @@ namespace Hedra.EntitySystem
         
         public static void LookAt(this IEntity Parent, IEntity Target)
         {
-            var dir = (Target.Position - Parent.Position).Xz.NormalizedFast().ToVector3();
+            var dir = (Target.Position - Parent.Position).Xz().NormalizedFast().ToVector3();
             Parent.Rotation = Physics.DirectionToEuler(dir);
             Parent.Orientation = dir;
         }
 
         public static bool IsNear(this IEntity Parent, IEntity Target, float Radius)
         {
-            return (Parent.Position - Target.Position).LengthSquared < Radius * Radius;
+            return (Parent.Position - Target.Position).LengthSquared() < Radius * Radius;
         }
                
         public static bool InAttackRange(this IEntity Parent, IEntity Target, float RadiusModifier = 1f)
@@ -39,7 +40,7 @@ namespace Hedra.EntitySystem
             var collider0 = Parent.Model.HorizontalBroadphaseCollider;
             var collider1 = Target.Model.HorizontalBroadphaseCollider;
             var radii = (collider0.BroadphaseRadius + collider1.BroadphaseRadius) * RadiusModifier;
-            return (Target.Position - Parent.Position).LengthSquared < radii * radii;
+            return (Target.Position - Parent.Position).LengthSquared() < radii * radii;
         }
 
         public static void ShowText(this IEntity Parent, string Text, Color FontColor, float FontSize,
@@ -63,7 +64,7 @@ namespace Hedra.EntitySystem
 
         public static float Distance(this IEntity Parent, IEntity Target)
         {
-            return (Parent.Position - Target.Position).LengthFast;
+            return (Parent.Position - Target.Position).LengthFast();
         }
     }
 }

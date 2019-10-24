@@ -3,7 +3,8 @@ using System.Linq;
 using BulletSharp;
 using Hedra.Core;
 using Hedra.Game;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Rendering.Frustum
 {
@@ -21,8 +22,8 @@ namespace Hedra.Engine.Rendering.Frustum
             new Vector4(1, 1, 1, 1),
         };
         
-        private Matrix4 _projection;
-        private Matrix4 _modelView;
+        private Matrix4x4 _projection;
+        private Matrix4x4 _modelView;
         private readonly Vector3[] _corners;
         private readonly Plane[] _planes;
         private readonly Vector3[] _cubeCachePoints;
@@ -55,7 +56,7 @@ namespace Hedra.Engine.Rendering.Frustum
             return FrustumGJK.Collides(_corners, _cubeCachePoints);
         }
         
-        public void SetMatrices(Matrix4 Projection, Matrix4 ModelView)
+        public void SetMatrices(Matrix4x4 Projection, Matrix4x4 ModelView)
         {
             _projection = Projection;
             _modelView = ModelView;
@@ -68,12 +69,12 @@ namespace Hedra.Engine.Rendering.Frustum
             var view = _modelView.Transposed();
             var viewProjection = _projection * view;
 
-            LeftPlane.Normal = (viewProjection.Column3 + viewProjection.Column0).Xyz;
-            RightPlane.Normal = (viewProjection.Column3 - viewProjection.Column0).Xyz;
-            BottomPlane.Normal = (viewProjection.Column3 + viewProjection.Column1).Xyz;
-            TopPlane.Normal = (viewProjection.Column3 - viewProjection.Column1).Xyz;
-            NearPlane.Normal = (viewProjection.Column2).Xyz;
-            FarPlane.Normal = (viewProjection.Column3 - viewProjection.Column2).Xyz;
+            LeftPlane.Normal = (viewProjection.Column3() + viewProjection.Column0()).Xyz();
+            RightPlane.Normal = (viewProjection.Column3() - viewProjection.Column0()).Xyz();
+            BottomPlane.Normal = (viewProjection.Column3() + viewProjection.Column1()).Xyz();
+            TopPlane.Normal = (viewProjection.Column3() - viewProjection.Column1()).Xyz();
+            NearPlane.Normal = (viewProjection.Column2()).Xyz();
+            FarPlane.Normal = (viewProjection.Column3() - viewProjection.Column2()).Xyz();
 
             LeftPlane.Distance = viewProjection.M44 + viewProjection.M41;
             RightPlane.Distance = viewProjection.M44 - viewProjection.M41;
@@ -84,7 +85,7 @@ namespace Hedra.Engine.Rendering.Frustum
 
             for (var i = 0; i < _planes.Length; ++i)
             {
-                var invMagnitude = 1f / _planes[i].Normal.Length;
+                var invMagnitude = 1f / _planes[i].Normal.Length();
                 _planes[i].Normal *= invMagnitude;
                 _planes[i].Distance *= invMagnitude;
             }
@@ -124,17 +125,17 @@ namespace Hedra.Engine.Rendering.Frustum
             for (var i = 0; i < _corners.Length; ++i)
             {
                 var transformed = Vector4.Transform(UnitCube[i], invProjection);
-                _corners[i] = Vector3.TransformPosition((transformed.Xyz / transformed.W), invModelView);
+                _corners[i] = Vector3.Transform((transformed.Xyz() / transformed.W), invModelView);
             }
         }
 
-        public void Draw(Matrix4 DrawingMatrix)
+        public void Draw(Matrix4x4 DrawingMatrix)
         { 
             if (GameSettings.DebugFrustum)
             {
-                var invProjection = (Matrix4.CreatePerspectiveFieldOfView(50 * Mathf.Radian, 1.33f, 4, 64)).Inverted();
+                var invProjection = (Matrix4x4.CreatePerspectiveFieldOfView(50 * Mathf.Radian, 1.33f, 4, 64)).Inverted();
                 var position = Vector3.Zero;
-                var newCorners = UnitCube.Select(V => Vector4.Transform(V, invProjection)).Select(P => (P.Xyz / P.W) + position).Select(P => Vector3.TransformPosition(P, DrawingMatrix)).ToArray();
+                var newCorners = UnitCube.Select(V => Vector4.Transform(V, invProjection)).Select(P => (P.Xyz() / P.W) + position).Select(P => Vector3.Transform(P, DrawingMatrix)).ToArray();
                 for (var i = 0; i < newCorners.Length; ++i)
                 {
                     BasicGeometry.DrawPoint(newCorners[i], Vector4.One, 10);

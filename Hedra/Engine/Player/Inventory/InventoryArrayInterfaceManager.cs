@@ -1,22 +1,24 @@
 using System;
 using System.Linq;
+using System.Windows.Forms;
 using Hedra.Core;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
-using Hedra.Engine.Localization;
-using Hedra.Engine.Management;
-using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
+using Hedra.Engine.Windowing;
 using Hedra.Game;
 using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenTK;
-using OpenTK.Input;
+using System.Numerics;
+using Hedra.Numerics;
+using MouseButton = Silk.NET.Input.Common.MouseButton;
+using Button = Hedra.Engine.Rendering.UI.Button;
+
 
 namespace Hedra.Engine.Player.Inventory
 {
@@ -48,8 +50,8 @@ namespace Hedra.Engine.Player.Inventory
                     var k = j;
                     buttons[j].Click += (Sender, EventArgs) => this.Interact(buttons[k], EventArgs);
                     buttons[j].Click += (Sender, EventArgs) => this.Use(buttons[k], EventArgs);
-                    buttons[j].HoverEnter += (Sender, EventArgs) => this.HoverEnter(buttons[k], EventArgs);
-                    buttons[j].HoverExit += (Sender, EventArgs) => this.HoverExit(buttons[k], EventArgs);
+                    buttons[j].HoverEnter += () => this.HoverEnter(buttons[k]);
+                    buttons[j].HoverExit += () => this.HoverExit(buttons[k]);
                 }
             }
             _itemInfoInterface = ItemInfoInterface;
@@ -73,7 +75,7 @@ namespace Hedra.Engine.Player.Inventory
         private void MouseMove(object Sender, MouseMoveEventArgs EventArgs)
         {
             var newCoords = Mathf.ToNormalizedDeviceCoordinates(
-                new Vector2(EventArgs.Mouse.X, GameSettings.SurfaceHeight - EventArgs.Mouse.Y),
+                new Vector2(EventArgs.X, GameSettings.SurfaceHeight - EventArgs.Y),
                 new Vector2(GameSettings.SurfaceWidth, GameSettings.SurfaceHeight)
                 );
             if (_selectedButton != null)
@@ -84,7 +86,7 @@ namespace Hedra.Engine.Player.Inventory
 
         protected virtual void Interact(object Sender, MouseButtonEventArgs EventArgs)
         {
-            if(EventArgs == null || EventArgs.Button != MouseButton.Left) return;
+            if(EventArgs.Button != MouseButton.Left) return;
             var button = (Button)Sender;
             var itemIndex = this.IndexByButton(button);
             var array = this.ArrayByButton(button);
@@ -119,7 +121,7 @@ namespace Hedra.Engine.Player.Inventory
 
         protected virtual void Use(object Sender, MouseButtonEventArgs EventArgs)
         {
-            if (EventArgs == null || EventArgs.Button != MouseButton.Right) return;
+            if (EventArgs.Button != MouseButton.Right) return;
             var button = (Button)Sender;
             var itemIndex = this.IndexByButton(button);
             var array = this.ArrayByButton(button);
@@ -294,7 +296,7 @@ namespace Hedra.Engine.Player.Inventory
             _selectedMesh = null;
         }
 
-        protected virtual void HoverEnter(object Sender, MouseEventArgs EventArgs)
+        protected virtual void HoverEnter(object Sender)
         {
             var button = (Button)Sender;
             var itemIndex = this.IndexByButton(button);
@@ -304,7 +306,7 @@ namespace Hedra.Engine.Player.Inventory
             _itemInfoInterface?.Show(item);
         }
 
-        protected virtual void HoverExit(object Sender, MouseEventArgs EventArgs)
+        protected virtual void HoverExit(object Sender)
         {
             _itemInfoInterface?.Hide();
         }

@@ -1,14 +1,16 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Rendering
 {
-    public class CompressedVertexData  : IVertexData, IDisposable
+    public class CompressedVertexData : IDisposable
     {
         /* It's not worth compression vertices and indices since they will be mostly different. */
         private VertexData _original;
@@ -46,18 +48,18 @@ namespace Hedra.Engine.Rendering
             Uncompressed.Compress(Compressed);
         }
 
-        public void Transform(Matrix4 Transformation)
+        public void Transform(Matrix4x4 Transformation)
         {
             for (var i = 0; i < Vertices.Count; i++)
             {
-                Vertices[i] = Vector3.TransformPosition(Vertices[i], Transformation);
+                Vertices[i] = Vector3.Transform(Vertices[i], Transformation);
             }
-            var normalMat = Transformation.ClearScale().ClearTranslation().Inverted();
+            var normalMat = Transformation.ClearScale().ClearTranslation().Inverted().Transposed();
             for (var i = 0; i < _compressedNormals.Count; i++)
             {
                 _compressedNormals[i] = new CompressedValue<Vector3>()
                 {
-                    Type = Vector3.TransformNormalInverse(_compressedNormals[i].Type, normalMat),
+                    Type = Vector3.TransformNormal(_compressedNormals[i].Type, normalMat),
                     Count = _compressedNormals[i].Count
                 };
             }

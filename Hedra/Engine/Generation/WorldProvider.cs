@@ -41,8 +41,10 @@ using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Items;
 using Hedra.Sound;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using System.Numerics;
+using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Generation
 {
@@ -153,7 +155,7 @@ namespace Hedra.Engine.Generation
             var chunks = Chunks;
             for (var i = 0; i < chunks.Count; ++i)
             {
-                if(_unculledChunks.ContainsKey(chunks[i].Position.Xz))
+                if(_unculledChunks.ContainsKey(chunks[i].Position.Xz()))
                     chunks[i].Mesh?.DrawQuery();
             }
 
@@ -197,7 +199,7 @@ namespace Hedra.Engine.Generation
                     World.RemoveChunk(chunk);
                     continue;
                 }
-                var offset = chunk.Position.Xz;
+                var offset = chunk.Position.Xz();
                 
                 if (WorldRenderer.EnableCulling)
                 {
@@ -347,7 +349,7 @@ namespace Hedra.Engine.Generation
             searchOptions.AddRange(StructureHandler.Structures.OfType<T>());
 
             for (var i = 0; i < searchOptions.Count; i++)
-                if ((searchOptions[i].Position - Position).LengthSquared < Radius * Radius)
+                if ((searchOptions[i].Position - Position).LengthSquared() < Radius * Radius)
                     results.Add(searchOptions[i]);
             return results.ToArray();
         }
@@ -545,7 +547,7 @@ namespace Hedra.Engine.Generation
                 {
                     model.Outline = false;
                     model.Position = Mathf.Lerp(model.Position, Player.Position, Time.DeltaTime * 5f);
-                    if ((model.Position - Player.Position).LengthSquared < 4 * 4)
+                    if ((model.Position - Player.Position).LengthSquared() < 4 * 4)
                     {
                         if (Player.Inventory.AddItem(model.ItemSpecification))
                         {
@@ -587,7 +589,7 @@ namespace Hedra.Engine.Generation
             {
                 var region = BiomePool.GetRegion(Point);
                 return region.Generation.GetMaxHeight(Point.X, Point.Z) < Engine.BiomeSystem.BiomePool.SeaLevel
-                    || LandscapeGenerator.River(point.Xz) > 0;
+                    || region.Generation.RiverAtPoint(Point.X, Point.Z) > 0;
             }
             while (IsWater(point))
             {
@@ -650,31 +652,26 @@ namespace Hedra.Engine.Generation
             }
             return (float) Math.Sqrt(nearest);
         }
-        
-        public float NearestWaterBlockOnChunk(Chunk Chunk, Vector3 Position, out Vector3 WaterPosition)
+
+        public unsafe float NearestWaterBlockOnChunk(Chunk Chunk, Vector3 Position, out Vector3 WaterPosition)
         {
-            WaterPosition = Vector3.Zero;
             var nearest = float.MaxValue;
-            if (!Chunk.HasWater) return nearest;
-            /*
-            for (var x = 0; x < Chunk.BoundsX; ++x)
+            WaterPosition = Vector3.Zero;
+            var size = Allocator.Kilobyte * 64;
+            var mem = stackalloc byte[size];
+            using (var allocator = new StackAllocator(size, mem))
             {
-                for (var y = Chunk.MinimumHeight; y < Chunk.MaximumHeight; ++y)
+                var positions = Chunk.GetWaterPositions(allocator);
+                for (var i = 0; i < positions.Length; i++)
                 {
-                    for (var z = 0; z < Chunk.BoundsX; ++z)
-                    {
-                        if (Chunk.GetBlockAt(x,y,z).Type == BlockType.Water)
-                        {
-                            WaterPosition = new Vector3(x * Chunk.BlockSize + Chunk.OffsetX, y * Chunk.BlockSize, z * Chunk.BlockSize + Chunk.OffsetZ); 
-                            var dist = (WaterPosition - Position).Xz.LengthSquared;
-                            if (dist < nearest) nearest = dist;
-                        }
-                    }
-                }  
-            }*/
+                    WaterPosition = positions[i].ToVector3() * Chunk.BlockSize + Chunk.Position;
+                    var dist = (WaterPosition - Position).Xz().LengthSquared();
+                    if (dist < nearest) nearest = dist;
+                }
+            }
+
             return nearest;
         }
-        
         public float NearestWaterBlockOnChunk(Vector3 Position, out Vector3 WaterPosition)
         {
             var nearest = float.MaxValue;

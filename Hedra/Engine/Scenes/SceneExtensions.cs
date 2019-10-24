@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Scenes
 {
@@ -13,7 +14,7 @@ namespace Hedra.Engine.Scenes
             if(!Data.HasColors) throw new ArgumentOutOfRangeException("Scene mesh doesn't have colors");
             for (var i = 0; i < Data.Colors.Count; ++i)
             {
-                if (Data.Colors[i].Xyz != Color)
+                if (Data.Colors[i].Xyz() != Color)
                     return false;
             }
 

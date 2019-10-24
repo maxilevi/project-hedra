@@ -4,7 +4,6 @@ using System.Linq;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Core;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
@@ -13,7 +12,9 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Game;
 using Hedra.Rendering;
-using OpenTK;
+using Microsoft.Scripting.Utils;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
@@ -33,7 +34,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private bool Disposed => _parent.Disposed;
         private ChunkMesh Mesh => _parent.Mesh;
 
-        public ChunkMeshBuildOutput AddStructuresMeshes(ChunkMeshBuildOutput Input, int Lod)
+        public ChunkMeshBuildOutput AddStructuresMeshes(IAllocator Allocator, ChunkMeshBuildOutput Input, int Lod)
         {
             List<VertexData> staticElements;
             try
@@ -47,12 +48,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
             for (var i = 0; i < staticElements.Count; i++)
             {
-                var clone = staticElements[i].Clone();
+                var clone = staticElements[i].NativeClone(Allocator);
                 if(Lod > 1)
                 {
                     clone.UniqueVertices();
-                    MeshOptimizer.SimplifySloppy(clone, LODMap[Lod]);
-                    clone.Flat();
+                    MeshOptimizer.SimplifySloppy(Allocator, clone, LODMap[Lod]);
+                    clone.Flat(Allocator);
                 }
                 if (clone.Extradata.Count != clone.Vertices.Count)
                 {
@@ -60,23 +61,20 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     for (var k = 0; k < extraDataCount; k++) clone.Extradata.Add(0);
                 }
 
-                /* Manually add these vertex data's for maximum performance */
-                for (var k = 0; k < clone.Indices.Count; k++)
-                    clone.Indices[k] += (uint) Input.StaticData.Vertices.Count;
-            
-                Input.StaticData.Vertices.AddRange(clone.Vertices);
-                Input.StaticData.Colors.AddRange(clone.Colors);
-                Input.StaticData.Normals.AddRange(clone.Normals);
-                Input.StaticData.Indices.AddRange(clone.Indices);
-                Input.StaticData.Extradata.AddRange(clone.Extradata);
+                AddManually(
+                    Input.StaticData.Vertices, Input.StaticData.Normals, Input.StaticData.Colors, Input.StaticData.Extradata, Input.StaticData.Indices,
+                    clone.Vertices, clone.Normals, clone.Colors, clone.Extradata, clone.Indices
+                );
                 clone.Dispose();
             }
-            var distribution = new RandomDistribution(); 
+            var nativeStatic = new NativeVertexData(Allocator);
+            var nativeInstance = new NativeVertexData(Allocator);
+            var distribution = new RandomDistribution();
             var instanceElements = Mesh.InstanceElements;
             for (var i = 0; i < instanceElements.Length; i++)
             {
                 if(instanceElements[i].SkipOnLod && Lod != 1) continue;
-                ProcessInstanceData(instanceElements[i], Input.StaticData, i, Lod, distribution, instanceElements[i].CanSimplifyProgramatically ? LODMap[Lod] : -1);
+                ProcessInstanceData(Allocator, instanceElements[i], nativeStatic, i, Lod, distribution, instanceElements[i].CanSimplifyProgramatically ? LODMap[Lod] : -1);
             }
 
             var addGrass = GameSettings.Quality && Lod <= 2 || Lod == 1 && !GameSettings.Quality;
@@ -85,17 +83,26 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 var lodedInstanceElements = Mesh.LodAffectedInstanceElements;
                 for (var i = 0; i < lodedInstanceElements.Length; i++)
                 {
-                    ProcessInstanceData(lodedInstanceElements[i], Input.InstanceData, i, Lod, distribution, 1f / Lod - 0.2f);
+                    ProcessInstanceData(Allocator, lodedInstanceElements[i], nativeInstance, i, Lod, distribution, 1f / Lod - 0.2f);
                 }
             }
-
+            AddManually(
+                Input.StaticData.Vertices, Input.StaticData.Normals, Input.StaticData.Colors, Input.StaticData.Extradata, Input.StaticData.Indices,
+                nativeStatic.Vertices, nativeStatic.Normals, nativeStatic.Colors, nativeStatic.Extradata, nativeStatic.Indices
+            );
+            AddManually(
+                Input.InstanceData.Vertices, Input.InstanceData.Normals, Input.InstanceData.Colors, Input.InstanceData.Extradata, Input.InstanceData.Indices,
+                nativeInstance.Vertices, nativeInstance.Normals, nativeInstance.Colors, nativeInstance.Extradata, nativeInstance.Indices
+            );
+            nativeStatic.Dispose();
+            nativeInstance.Dispose();
             return new ChunkMeshBuildOutput(Input.StaticData, Input.WaterData, Input.InstanceData, Input.Failed);
         }
 
-        private void ProcessInstanceData(InstanceData Instance, VertexData Model, int Index, int Lod, RandomDistribution Distribution, float SimplificationThreshold = -1)
+        private void ProcessInstanceData(IAllocator Allocator, InstanceData Instance, NativeVertexData Model, int Index, int Lod, RandomDistribution Distribution, float SimplificationThreshold = -1)
         {
             var element = Instance.Get(Lod);
-            var model = element.OriginalMesh.Clone();
+            var model = element.OriginalMesh.NativeClone(Allocator);
             model.Transform(element.TransMatrix);
             
             SetColor(model, element, Index);
@@ -103,34 +110,44 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (SimplificationThreshold > 0 && SimplificationThreshold < 1f)
             {
                 model.UniqueVertices();
-                MeshOptimizer.SimplifySloppy(model, SimplificationThreshold);
-                model.Flat();
+                MeshOptimizer.SimplifySloppy(Allocator, model, SimplificationThreshold);
+                model.Flat(Allocator);
             }
             AssertValidModel(model);
             PackAndAddModel(model, Model);
+            model.Dispose();
         }
 
-        private static void PackAndAddModel(VertexData InstanceModel, VertexData Model)
+        private static void PackAndAddModel(NativeVertexData InstanceModel, NativeVertexData Model)
         {
             for (var i = 0; i < InstanceModel.Extradata.Count; i++)
             {
-                InstanceModel.Colors[i] = new Vector4(InstanceModel.Colors[i].Xyz, InstanceModel.Extradata[i]);
+                InstanceModel.Colors[i] = new Vector4(InstanceModel.Colors[i].Xyz(), InstanceModel.Extradata[i]);
             }
 
+            AddManually(
+                Model.Vertices, Model.Normals, Model.Colors, Model.Extradata, Model.Indices,
+                InstanceModel.Vertices, InstanceModel.Normals, InstanceModel.Colors, InstanceModel.Extradata, InstanceModel.Indices
+            );
+        }
+
+        private static void AddManually(IList<Vector3> Vertices, IList<Vector3> Normals, IList<Vector4> Colors, IList<float> Extradata, IList<uint> Indices,
+            IList<Vector3> NewVertices, IList<Vector3> NewNormals, IList<Vector4> NewColors, IList<float> NewExtradata, IList<uint> NewIndices)
+        {
             /* Manually add these vertex data's for maximum performance */
-            for (var k = 0; k < InstanceModel.Indices.Count; k++)
-                InstanceModel.Indices[k] += (uint) Model.Vertices.Count;
+            for (var k = 0; k < NewIndices.Count; k++)
+                NewIndices[k] += (uint) Vertices.Count;
             
-            Model.Vertices.AddRange(InstanceModel.Vertices);
-            Model.Colors.AddRange(InstanceModel.Colors);
-            Model.Normals.AddRange(InstanceModel.Normals);
-            Model.Indices.AddRange(InstanceModel.Indices);
-            Model.Extradata.AddRange(InstanceModel.Extradata);
-            InstanceModel.Dispose();
+            Vertices.AddRange(NewVertices);
+            Colors.AddRange(NewColors);
+            Normals.AddRange(NewNormals);
+            Indices.AddRange(NewIndices);
+            Extradata.AddRange(NewExtradata);
         }
         
-        private static void AssertValidModel(VertexData Model)
+        private void AssertValidModel(NativeVertexData Model)
         {
+            if(_parent.Disposed) return;
             if(Model.Colors.Count != Model.Extradata.Count)
                 throw new ArgumentOutOfRangeException($"Extradata '{Model.Extradata.Count}' or color '{Model.Colors.Count}' mismatch");
             
@@ -138,11 +155,15 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 throw new ArgumentOutOfRangeException($"Vertex '{Model.Extradata.Count}' and color '{Model.Colors.Count}' mismatch");
         }
         
-        private void SetColor(VertexData Model, InstanceData Element, int Index)
+        private void SetColor(NativeVertexData Model, InstanceData Element, int Index)
         {
-            Model.Colors = Element.ColorCache != null && CacheManager.CachedColors.ContainsKey(Element.ColorCache)
-                ? CacheManager.CachedColors[Element.ColorCache].Clone()
+            var replacement = Element.ColorCache != null && CacheManager.CachedColors.ContainsKey(Element.ColorCache)
+                ? CacheManager.CachedColors[Element.ColorCache]
                 : Element.Colors;
+
+            if(replacement == null) return;
+            Model.Colors.Clear();
+            Model.Colors.AddRange(replacement);
 
             if (Element.VariateColor)
             {
@@ -167,17 +188,21 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
         }
 
-        private static void SetExtraData(VertexData Model, InstanceData Element, RandomDistribution Distribution)
+        private static void SetExtraData(NativeVertexData Model, InstanceData Element, RandomDistribution Distribution)
         {
-            Model.Extradata = Element.ExtraDataCache != null &&  CacheManager.CachedExtradata.ContainsKey(Element.ExtraDataCache) 
+            var replacement = Element.ExtraDataCache != null &&  CacheManager.CachedExtradata.ContainsKey(Element.ExtraDataCache) 
                 ? CacheManager.CachedExtradata[Element.ExtraDataCache].Clone()
                 : Element.ExtraData;
 
+            if(replacement == null) return;
+            Model.Extradata.Clear();
+            Model.Extradata.AddRange(replacement);
+            
             if (!Element.HasExtraData)
-                Model.Extradata = Enumerable.Repeat(0f, Model.Vertices.Count).ToList();
+                Model.Extradata.Set(0, Model.Vertices.Count);
             
             /* Pack some randomness to the wind values */
-            Distribution.Seed = Unique.GenerateSeed(Element.Position.Xz);
+            Distribution.Seed = Unique.GenerateSeed(Element.Position.Xz());
             var rng = Distribution.NextFloat();
             for (var k = 0; k < Model.Extradata.Count; k++)
             {

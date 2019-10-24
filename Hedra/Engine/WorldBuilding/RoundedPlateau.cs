@@ -8,7 +8,8 @@
  */
 using System;
 using Hedra.Engine.Generation;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.WorldBuilding
 {
@@ -27,17 +28,17 @@ namespace Hedra.Engine.WorldBuilding
 
         public bool Collides(RoundedPlateau Mount)
         {
-            return (this.Position - Mount.Position).LengthFast < Mount.Radius + this.Radius;
+            return (this.Position - Mount.Position).LengthFast() < Mount.Radius + this.Radius;
         }
         
         public override bool Collides(Vector2 Point)
         {
-            return (this.Position - Point).LengthFast < this.Radius;
+            return (this.Position - Point).LengthFast() < this.Radius;
         }
 
         public override float Density(Vector2 Point)
         {
-            var dist = (Position - Point).LengthFast;
+            var dist = (Position - Point).LengthFast();
             return (float) Math.Min(1.0f, Math.Max(1 - Math.Min(dist / Radius, 1), 0) * Hardness);
         }
 

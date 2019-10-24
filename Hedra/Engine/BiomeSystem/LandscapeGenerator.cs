@@ -14,13 +14,15 @@ using System.Runtime.Remoting.Messaging;
 using BulletSharp;
 using Hedra.BiomeSystem;
 using Hedra.Core;
+using Hedra.Engine.Core;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PlantSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.Overworld;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 using Chunk = Hedra.Engine.Generation.ChunkSystem.Chunk;
 
 namespace Hedra.Engine.BiomeSystem
@@ -31,8 +33,6 @@ namespace Hedra.Engine.BiomeSystem
     /// </summary>
     public class LandscapeGenerator : BiomeGenerator
     {
-        private const float Narrow = 0.42f;
-        private const float Border = 0.02f;
         private const float Scale = 1f;
         const int noise2DScaleWidth = 1;
         const int noise3DScaleWidth = 2;
@@ -54,21 +54,24 @@ namespace Hedra.Engine.BiomeSystem
             var sampledBlocks = new SampledBlockWrapper(sampledArray, Chunk.BoundsX, Chunk.BoundsY, Chunk.BoundsZ);
             var densityMultipliers = stackalloc float[(depth + OutOfChunkBorderSize) * (width + OutOfChunkBorderSize)];
             var sampledDensity = stackalloc float[(depth + OutOfChunkBorderSize) * (width + OutOfChunkBorderSize) * Chunk.BoundsY];
+            var cutoffHeights = new float[depth * width];
             var hasWater = false;
             var hasPath = Parent.Biome.Generation.HasPaths;
             var pathMap = hasPath ? FillPath(depth, Parent.Biome.Generation) : null;
+            var isRiverConstant = true;
 
-            FirstPass(sampledDensity, pathMap, densityMultipliers, depth);
-            SecondPass(sampledBlocks, pathMap, depth, sampledDensity, densityMultipliers, ref hasWater, rng);
+            FirstPass(sampledDensity, pathMap, densityMultipliers, cutoffHeights, depth);
+            SecondPass(sampledBlocks, pathMap, depth, sampledDensity, densityMultipliers, cutoffHeights, ref hasWater, rng, ref isRiverConstant);
 
             CopyBlocks(sampledBlocks, Blocks);
             return new ChunkDetails
             {
-                HasWater = hasWater
+                HasWater = hasWater,
+                IsRiverConstant = isRiverConstant
             };
         }
         
-        private unsafe void FirstPass(float* sampledDensity, float[][] pathMap, float* densityMultipliers, int depth)
+        private unsafe void FirstPass(float* sampledDensity, float[][] pathMap, float* densityMultipliers, float[] cutoffHeights, int depth)
         {
             const int border = (int)OutOfChunkBorderSize / 2;
             var realDepth = depth + OutOfChunkBorderSize;
@@ -77,39 +80,48 @@ namespace Hedra.Engine.BiomeSystem
             var noise3D = FillNoise(depth, Chunk.Height);
             var heights = FillHeight(depth, out _);
 
-            for (var x = -border; x < depth+border; ++x)
+            for (var x = -border; x < depth + border; ++x)
             {
                 for (var z = -border; z < depth + border; ++z)
                 {
                     var position = new Vector2(x * Chunk.BlockSize + OffsetX, z * Chunk.BlockSize + OffsetZ);
                     var pathHeight = x >= 0 && z >= 0 && x < depth && z < depth ? pathMap[x][z] : 0;
-                    var heightAtPoint = CalculateHeight(x, z, heights, null, out _) - pathHeight;
+                    var calculatedHeight = CalculateHeight(x, z, heights, null, out _);
                     var densityMultiplier = 1.0f;
                     var smallFrequency = SmallFrequency(position.X, position.Y);
                     var affectedByPlateau = hasPlateaus && IsAffectedByPlateau(position, plateaus);
                     var foundCutoff = false;
-                    var previousDensity = 0f;
 
                     for (var y = 0; y < Chunk.BoundsY; ++y)
                     {
+                        var pathDensity = CalculatePathDensity(pathHeight, y);
+                        var pathDensityModifier = (float) Math.Pow(Mathf.Clamp(1f - pathDensity / BaseBiomeGenerationDesign.PathDepth, 0f, 1f), 2);
+                        var heightAtPoint = calculatedHeight - pathDensity + (pathDensity > 0 ? smallFrequency : 0);
                         /* The density should also take into account rivers and what not, because of this we add the river data in the second pass*/
-                        var densityAtPoint = CalculateDensity(x,y,z, noise3D) * densityMultiplier;
+                        var densityAtPoint = CalculateDensity(x,y,z, noise3D) * densityMultiplier * pathDensityModifier;
                         var calcDensity = CalculateDensityForBlock(heightAtPoint, densityAtPoint, y);
                         sampledDensity[(x + border) * realDepth * Chunk.BoundsY + (y) * realDepth + (z + border)] = calcDensity;
-                        /* If we haven't found the surface and the next block has negative density then, we found it
+                        /*
+                         * If we haven't found the surface and the next block has negative density then, we found it
                          * If this happens, reset the loop and start again with the correct height
                          */
-                        if (!foundCutoff && calcDensity < 0 && affectedByPlateau)
+                        if (!foundCutoff && calcDensity < 0)
                         {
                             foundCutoff = true;
-                            var newFakeHeight = calcDensity * 0.35F + y - 2;
-                            heightAtPoint = Mathf.Lerp(heightAtPoint + smallFrequency, newFakeHeight, Mathf.Clamp(Math.Abs(heightAtPoint - y) / 8f, 0f, 1f));
-                            HandlePlateaus(position, plateaus, ref heightAtPoint, ref densityMultiplier, ref smallFrequency);
-                            densityMultiplier = 0;
-                            y = 0;
-                        }
+                            if (x >= 0 && z >= 0 && x < depth && z < depth)
+                            {
+                                cutoffHeights[x * depth + z] =((int)Math.Round(y / 3f)) * 3;
+                            }
 
-                        previousDensity = calcDensity;
+                            if (affectedByPlateau)
+                            {
+                                var newFakeHeight = calcDensity * 0.35F + y - 1;
+                                calculatedHeight = Mathf.Lerp(calculatedHeight + smallFrequency, newFakeHeight, Mathf.Clamp(Math.Abs(calculatedHeight - y) / 8f, 0f, 1f));
+                                HandlePlateaus(position, plateaus, ref calculatedHeight, ref densityMultiplier, ref smallFrequency);
+                                densityMultiplier = 0;
+                                y = 0;
+                            }
+                        }
                     }
                     
                     densityMultipliers[(x + border) * realDepth + (z + border)] = densityMultiplier;
@@ -117,14 +129,14 @@ namespace Hedra.Engine.BiomeSystem
             }
         }
 
-        private unsafe void SecondPass(SampledBlockWrapper sampledBlocks, float[][] pathMap, int depth, float* sampledDensity, float* densityMultipliers, ref bool hasWater, Random rng)
+        private unsafe void SecondPass(SampledBlockWrapper sampledBlocks, float[][] pathMap, int depth, float* sampledDensity, float* densityMultipliers, float[] cutoffHeights, ref bool hasWater, Random rng, ref bool isRiverConstant)
         {
             var dirtArray = FillDirt(depth, Parent.Biome.Generation);
             var riverMap = FillRiver(depth, Parent.Biome.Generation, out var riverBorderMap);
             var sampledDensityWidth = OutOfChunkBorderSize + depth;
             var sampledDensityOffset = OutOfChunkBorderSize / 2;
             var groundworks = World.WorldBuilding.GetGroundworksFor(new Vector2(OffsetX, OffsetZ)).ToList();
-            
+
             for (var x = 0; x < depth; x++)
             {
                 for (var z = 0; z < depth; z++)
@@ -139,20 +151,22 @@ namespace Hedra.Engine.BiomeSystem
                     var riverMultiplier = (1f - Math.Min(pathHeight, 1f)) * densityMultiplier;
                     var smallFrequency = SmallFrequency(position.X, position.Y);
                     var bonusDensity = 0f;
-                    var pathDensity = pathHeight * pathMultiplier;
+                    var cutoff = cutoffHeights[x * depth + z];
                     
                     HandleStructures(position, groundworks, out var blockGroundworks, ref bonusDensity, ref riverMultiplier);
 
                     /* Water is built from the bottom up so we should not change this */
                     for (var y = 0; y < Chunk.Height; ++y)
                     {
+                        var pathDensity = CalculatePathDensity(pathHeight * pathMultiplier, y);
                         var riverDensity = (riverHeight > 0 ? CalculateRiverDensity(riverHeight, y, ref smallFrequency, ref riverMultiplier) : 0) * riverMultiplier;
                         var riverBorderDensity = riverBorderHeight * riverMultiplier;
 
                         var storedDensity = sampledDensity[(x+sampledDensityOffset) * sampledDensityWidth * Chunk.Height + y * sampledDensityWidth + (z+sampledDensityOffset)];
                         var densityForBlock = (storedDensity - riverDensity * densityMultiplier + bonusDensity);
                         
-                        this.GenerateBlock(sampledBlocks, ref densityForBlock, ref x, ref y, ref z, ref makeDirt, ref rng, ref riverDensity, ref riverBorderDensity, ref hasWater, ref pathDensity, ref riverMultiplier);
+                        this.GenerateBlock(sampledBlocks, ref densityForBlock, ref x, ref y, ref z, ref makeDirt, ref rng, ref riverDensity, ref riverBorderDensity,
+                            ref hasWater, ref pathDensity, ref cutoff, ref isRiverConstant);
                         this.HandleGroundworks(sampledBlocks, x, y, z, blockGroundworks);
                     }
                     GrassBlockPass(sampledBlocks, sampledDensity, x, z, makeDirt, depth);
@@ -160,13 +174,18 @@ namespace Hedra.Engine.BiomeSystem
             }
         }
 
+        private static float CalculatePathDensity(float path, float y)
+        {
+            return Mathf.Lerp(0, path, Mathf.Clamp((y - BiomePool.SeaLevel) / 2f, 0f, 1f));
+        }
+        
         private static float CalculateRiverDensity(float river, float y, ref float smallFrequency, ref float riverMultiplier)
         {
             var falloff = (river / BaseBiomeGenerationDesign.RiverDepth) * riverMultiplier;
             var density = 16f + smallFrequency * 16f;
             var lerpValue = Mathf.Clamp((y - BiomePool.RiverMaxHeight) / 8f, 0f, 1f);
             density = Mathf.Lerp(density, 0, lerpValue * lerpValue);
-            var bottomLerpValue = Mathf.Clamp((y - BiomePool.RiverMinHeight) / 7f, 0f, 1f);
+            var bottomLerpValue = Mathf.Clamp((y - BiomePool.RiverMinHeight) / 16f, 0f, 1f);
             density = Mathf.Lerp(0, density, bottomLerpValue * bottomLerpValue);
             return (density) * falloff;
         }
@@ -212,7 +231,7 @@ namespace Hedra.Engine.BiomeSystem
             }
         }
 
-        private static unsafe void CopyBlocks(SampledBlockWrapper SampledBlocks, Block[] Blocks)
+        private unsafe void CopyBlocks(SampledBlockWrapper SampledBlocks, Block[] Blocks)
         {
             var width = SampledBlocks.Width;
             for (var x = 0; x < SampledBlocks.Width; ++x)
@@ -223,8 +242,11 @@ namespace Hedra.Engine.BiomeSystem
                     var depth = SampledBlocks.Depth;
                     for (var z = 0; z < SampledBlocks.Depth; ++z)
                     {
-                        Blocks[x * width * height + y * depth + z].Type = SampledBlocks[x,y,z]->Type;
-                        Blocks[x * width * height + y * depth + z].Density = SampledBlocks[x,y,z]->Density;
+                        var ptr = SampledBlocks[x, y, z];
+                        Blocks[x * width * height + y * depth + z].Type = ptr->Type;
+                        Blocks[x * width * height + y * depth + z].Density = ptr->Density;
+                        if (ptr->Type == BlockType.Water)
+                            Parent.AddWaterDensity(x,y,z);
                     }
                 }
             }
@@ -435,15 +457,14 @@ namespace Hedra.Engine.BiomeSystem
         }
         
         private unsafe void GenerateBlock(SampledBlockWrapper Blocks, ref float blockDensity, ref int x, ref int y, ref int z,
-            ref bool makeDirt, ref Random rng, ref float riverHeight, ref float riverBorderHeight, ref bool hasWater, ref float pathDensity, ref float riverMultiplier)
+            ref bool makeDirt, ref Random rng, ref float riverHeight, ref float riverBorderHeight, ref bool hasWater, ref float pathDensity, ref float height, ref bool IsRiverConstant)
         {
-            var currentBlock = Blocks[x,y,z];
             var blockType = BlockType.Air;
 
             HandleNormalBlocks(ref x, ref y, ref z, ref blockDensity, ref blockType, ref makeDirt, ref rng);
             HandlePathBlocks(ref pathDensity, ref blockType);
             hasWater |= HandleOceanBlocks(Blocks, ref x, ref y, ref z, ref blockType);
-            hasWater |= HandleRiverBlocks(Blocks, ref x, ref y, ref z, ref blockType, ref riverHeight, ref riverBorderHeight, ref riverMultiplier);
+            hasWater |= HandleRiverBlocks(Blocks, ref x, ref y, ref z, ref blockType, ref riverHeight, ref riverBorderHeight, ref height, ref IsRiverConstant);
 
             Blocks[x,y,z]->Type = blockType;
             Blocks[x,y,z]->Density = blockDensity;
@@ -451,7 +472,7 @@ namespace Hedra.Engine.BiomeSystem
 
         private static void HandlePathBlocks(ref float pathDensity, ref BlockType blockType)
         {
-            if(pathDensity > 0)
+            if(pathDensity / BaseBiomeGenerationDesign.PathDepth > 0.99f)
                 blockType = BlockType.Path;
         }
         
@@ -474,10 +495,12 @@ namespace Hedra.Engine.BiomeSystem
             }
         }
 
-        private static unsafe bool HandleRiverBlocks(SampledBlockWrapper Blocks, ref int x, ref int y, ref int z, ref BlockType blockType, ref float river, ref float riverBorder, ref float riverMultiplier)
+        private static unsafe bool HandleRiverBlocks(SampledBlockWrapper Blocks, ref int x, ref int y, ref int z, ref BlockType blockType, ref float river, ref float riverBorder, ref float height, ref bool IsRiverConstant)
         {
             var hasWater = false;
-            if (river > 0 && y < BiomePool.RiverWaterLevel)
+            var min = Math.Min(BiomePool.RiverWaterLevel, height);
+            IsRiverConstant &= Math.Abs(min - BiomePool.RiverWaterLevel) < 0.005f;
+            if (river > 0 && y < min)
             {
                 if (blockType == BlockType.Air && y > 0)
                 {
@@ -551,17 +574,8 @@ namespace Hedra.Engine.BiomeSystem
 
             if (Blocks[X,Y,Z]->Type == BlockType.FarmDirt)
             {
-                if ((X + OffsetX) % 2 == 0) Blocks[X,Y,Z]->Density += new Half(.25f);
+                if ((X + OffsetX) % 2 == 0) Blocks[X,Y,Z]->Density += .25f;
             }
-        }
-        
-        public static float River(Vector2 Position, float Border = 0)
-        {
-            return (float) Math.Max(0,
-                       0.5 - Math.Abs(
-                           World.GetNoise(Position.X * 0.0011f,
-                               Position.Y * 0.0011f) - 0.2) - Narrow +
-                       Border) * Scale;
         }
 
         private bool IsBlockChangeable(BlockType Type)
@@ -613,15 +627,15 @@ namespace Hedra.Engine.BiomeSystem
                     if (World.Seed == World.MenuSeed)
                     {
                         //Is menu, force a platform
-                        if ((Scenes.MenuBackground.DefaultPosition.Xz - new Vector2(
+                        if ((Scenes.MenuBackground.DefaultPosition.Xz() - new Vector2(
                                  Parent.OffsetX + x * Chunk.BlockSize,
-                                 Parent.OffsetZ + z * Chunk.BlockSize)).LengthSquared < 32 * 32) continue;
-                        if ((Scenes.MenuBackground.CreatorPosition.Xz - new Vector2(
+                                 Parent.OffsetZ + z * Chunk.BlockSize)).LengthSquared() < 32 * 32) continue;
+                        if ((Scenes.MenuBackground.CreatorPosition.Xz() - new Vector2(
                                  Parent.OffsetX + x * Chunk.BlockSize,
-                                 Parent.OffsetZ + z * Chunk.BlockSize)).LengthSquared < 32 * 32) continue;
-                        if ((Scenes.MenuBackground.CampfirePosition.Xz - new Vector2(
+                                 Parent.OffsetZ + z * Chunk.BlockSize)).LengthSquared() < 32 * 32) continue;
+                        if ((Scenes.MenuBackground.CampfirePosition.Xz() - new Vector2(
                                  Parent.OffsetX + x * Chunk.BlockSize,
-                                 Parent.OffsetZ + z * Chunk.BlockSize)).LengthSquared < 48 * 48) continue;
+                                 Parent.OffsetZ + z * Chunk.BlockSize)).LengthSquared() < 48 * 48) continue;
                     }
 
                     if(noTreesZone || noTreesPlateau || noTreesGroundwork) continue;
@@ -636,7 +650,7 @@ namespace Hedra.Engine.BiomeSystem
                 }
             }
         }
-
+        
         private void LoopPlateaus(int X, int Z, BasePlateau[] RoundedPlateaux, out bool Result)
         {
             Result = false;
@@ -663,16 +677,21 @@ namespace Hedra.Engine.BiomeSystem
             }
         }
 
-        private void DoEnvironmentPlacements(Vector3 Position, bool HideEnvironment, Region Biome)
+        private unsafe void DoEnvironmentPlacements(Vector3 Position, bool HideEnvironment, Region Biome)
         {
-            var designs = Biome.Environment.Designs;
-            for (var i = 0; i < designs.Length; i++)
+            const int size = Allocator.Kilobyte * 256;
+            var mem = stackalloc byte[size];
+            using (var allocator = new StackAllocator(size, mem))
             {
-                if(designs[i].CanBeHidden && HideEnvironment) continue;
-                if (designs[i].ShouldPlace(Position, this.Parent))
+                var designs = Biome.Environment.Designs;
+                for (var i = 0; i < designs.Length; i++)
                 {
-                    var design = designs[i].GetDesign(Position, Parent, Parent.Landscape.RandomGen);
-                    World.EnvironmentGenerator.GeneratePlant(Position, Biome, design);
+                    if (designs[i].CanBeHidden && HideEnvironment) continue;
+                    if (designs[i].ShouldPlace(Position, this.Parent))
+                    {
+                        var design = designs[i].GetDesign(Position, Parent, Parent.Landscape.RandomGen);
+                        World.EnvironmentGenerator.GeneratePlant(allocator, Position, Biome, design);
+                    }
                 }
             }
         }
@@ -691,13 +710,13 @@ namespace Hedra.Engine.BiomeSystem
                 if (structPosition.Design is GiantTreeDesign)
                 {
                     float radius = structPosition.Mountain.Radius;
-                    if ((structPosition.Mountain.Position - possiblePosition.Xz).LengthSquared <
+                    if ((structPosition.Mountain.Position - possiblePosition.Xz()).LengthSquared() <
                         radius * .3f * radius * .3f)
                     {
                         NoGrassZone = true;
                     }
 
-                    if (!NoTreesZone && (structPosition.Mountain.Position - possiblePosition.Xz).LengthSquared <
+                    if (!NoTreesZone && (structPosition.Mountain.Position - possiblePosition.Xz()).LengthSquared() <
                         radius * 0.5f * radius * 0.5f)
                         NoTreesZone = true;
 
@@ -706,7 +725,7 @@ namespace Hedra.Engine.BiomeSystem
                 if (structPosition.Design is TravellingMerchantDesign)
                 {
                     var radius = structPosition.Mountain.Radius;
-                    if ((structPosition.Mountain.Position - possiblePosition.Xz).LengthSquared <
+                    if ((structPosition.Mountain.Position - possiblePosition.Xz()).LengthSquared() <
                         radius * .5f * radius * .5f)
                         InMerchant = true;
                 }

@@ -20,8 +20,9 @@ using Hedra.Engine.Rendering.Particles;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Game;
 using Hedra.Rendering;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using System.Numerics;
+using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
 
 namespace Hedra.Engine.Management
 {
@@ -38,8 +39,7 @@ namespace Hedra.Engine.Management
         private static readonly List<IRenderable> TransparentObjects;
         private static readonly List<ObjectMesh> ObjectMeshes;
         private static bool _initialized;
-        private static CursorIcon _mouseCursorIcon;
-        
+
         public static List<IRenderable> ParticleRenderer { get; }
         public static List<IRenderable> TrailRenderer { get; }
         public static GUIRenderer UIRenderer { get; }
@@ -220,7 +220,6 @@ namespace Hedra.Engine.Management
 
         public static void Dispose()
         {
-            _mouseCursorIcon?.Dispose();
             MainBuffer.Dispose();
             UIRenderer.Dispose();
         }

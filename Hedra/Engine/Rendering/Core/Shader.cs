@@ -6,14 +6,16 @@
  */
 
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Shaders;
 using Hedra.Game;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using System.Numerics;
+using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
 
 namespace Hedra.Engine.Rendering.Core
 {
@@ -30,6 +32,7 @@ namespace Hedra.Engine.Rendering.Core
         private readonly Dictionary<string, bool> _knownMappings;
         private readonly Dictionary<string, UniformMapping> _mappings;
         private readonly Dictionary<string, UniformArray> _arrayMappings;
+        private readonly Dictionary<string, MappingType> _mappingTypes;
         private readonly List<ShaderInput> _inputs;
         private readonly List<ShaderOutput> _outputs;
         private readonly ShaderData _vertexShader;
@@ -82,6 +85,7 @@ namespace Hedra.Engine.Rendering.Core
             _vertexShader = DataV;
             _geometryShader = DataG;
             _fragmentShader = DataF;
+            _mappingTypes = new Dictionary<string, MappingType>();
             _mappings = new Dictionary<string, UniformMapping>();
             _arrayMappings = new Dictionary<string, UniformArray>();
             _knownMappings = new Dictionary<string, bool>();
@@ -127,6 +131,7 @@ namespace Hedra.Engine.Rendering.Core
                 _knownMappings.Clear();
                 _outputs.Clear();
                 _inputs.Clear();
+                _mappingTypes.Clear();
                 this.CompileShaders(_vertexShader, _geometryShader, _fragmentShader);
                 ShaderReloaded?.Invoke();
             }
@@ -205,11 +210,13 @@ namespace Hedra.Engine.Rendering.Core
             if (ShaderFid > 0) Renderer.DeleteShader(ShaderFid);
 
             var parser = new ShaderParser(_vertexShader.Source);
+            parser.AddUniformTypes(_mappingTypes);
             this.AddArrayMappings(parser.ParseUniformArrays(ShaderId));
             this.AddShaderInputs(parser.ParseShaderInputs(), ShaderType.VertexShader);
             this.AddShaderOutputs(parser.ParseShaderOutputs(), ShaderType.VertexShader);
 
             parser.Source = _fragmentShader.Source;
+            parser.AddUniformTypes(_mappingTypes);
             this.AddArrayMappings(parser.ParseUniformArrays(ShaderId));
             this.AddShaderInputs(parser.ParseShaderInputs(), ShaderType.FragmentShader);
             this.AddShaderOutputs(parser.ParseShaderOutputs(), ShaderType.FragmentShader);
@@ -217,6 +224,7 @@ namespace Hedra.Engine.Rendering.Core
             if (_geometryShader != null)
             {
                 parser.Source = _geometryShader.Source;
+                parser.AddUniformTypes(_mappingTypes);
                 this.AddArrayMappings(parser.ParseUniformArrays(ShaderId));
                 this.AddShaderInputs(parser.ParseShaderInputs(), ShaderType.GeometryShader);
                 this.AddShaderOutputs(parser.ParseShaderOutputs(), ShaderType.GeometryShader);
@@ -259,7 +267,15 @@ namespace Hedra.Engine.Rendering.Core
                 if (_arrayMappings.ContainsKey(Key))
                 {
                     var asArray = (Array) value;
-                    _arrayMappings[Key].Load(asArray.Cast<object>().ToArray());
+                    var pool = ArrayPool<object>.Shared;
+                    var temp = pool.Rent(asArray.Length);
+                    var i = 0;
+                    foreach (var obj in asArray)
+                    {
+                        temp[i++] = obj;
+                    }
+                    _arrayMappings[Key].Load(temp, asArray.Length);
+                    pool.Return(temp);
                 }
                 else
                 {
@@ -270,7 +286,7 @@ namespace Hedra.Engine.Rendering.Core
 #if DEBUG
                         if (location == -1) throw new ArgumentException($"Uniform {Key} does not exist in shader");
 #endif
-                        _mappings.Add(Key, new UniformMapping(location, value));
+                        _mappings.Add(Key, new UniformMapping(location, value, _mappingTypes[Key]));
                     }
 #if DEBUG
                     if (Renderer.GetInteger(GetPName.CurrentProgram) != this.ShaderId)
@@ -293,7 +309,10 @@ namespace Hedra.Engine.Rendering.Core
             switch (Mapping.Type)
             {
                 case MappingType.Integer:
-                    Renderer.Uniform1(Mapping.Location, (int)Mapping.Value);
+                    if(Mapping.Value is int)
+                        Renderer.Uniform1(Mapping.Location, (int)Mapping.Value);
+                    else
+                        Renderer.Uniform1(Mapping.Location, (float)Mapping.Value);
                     break;
                 case MappingType.Double:
                     Renderer.Uniform1(Mapping.Location, (double)Mapping.Value);
@@ -311,15 +330,15 @@ namespace Hedra.Engine.Rendering.Core
                     Renderer.Uniform4(Mapping.Location, (Vector4)Mapping.Value);
                     break;
                 case MappingType.Matrix4:
-                    var matrix4 = (Matrix4) Mapping.Value;
-                    Renderer.UniformMatrix4(Mapping.Location, false, ref matrix4);
+                    var matrix4 = (Matrix4x4) Mapping.Value;
+                    Renderer.UniformMatrix4x4(Mapping.Location, false, ref matrix4);
                     break;
                 case MappingType.Matrix3:
-                    var matrix3X3 = (Matrix3)Mapping.Value;
+                    var matrix3X3 = (Matrix4x4)Mapping.Value;
                     Renderer.UniformMatrix3(Mapping.Location, false, ref matrix3X3);
                     break;
                 case MappingType.Matrix2:
-                    var matrix2 = (Matrix2)Mapping.Value;
+                    var matrix2 = (Matrix4x4)Mapping.Value;
                     Renderer.UniformMatrix2(Mapping.Location, false, ref matrix2);
                     break;
                 default:
@@ -338,7 +357,7 @@ namespace Hedra.Engine.Rendering.Core
 
         public void Bind()
         {
-            if (ShaderId < 0) throw new GraphicsException($"{this.GetType().Name} is corrupt. {this.ShaderId}");
+            if (ShaderId < 0) throw new AccessViolationException($"{this.GetType().Name} is corrupt. {this.ShaderId}");
 
             Renderer.BindShader((uint)ShaderId);
             this.LoadBuiltinUniforms();

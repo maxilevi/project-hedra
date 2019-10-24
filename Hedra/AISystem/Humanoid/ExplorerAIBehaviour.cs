@@ -2,7 +2,8 @@ using System;
 using System.Linq;
 using Hedra.Core;
 using Hedra.EntitySystem;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.AISystem.Humanoid
 {
@@ -24,7 +25,7 @@ namespace Hedra.AISystem.Humanoid
         public override Vector3 FindPoint()
         {
             return Leader == Parent
-                ? Vector3.TransformPosition(Vector3.UnitZ * 32, Matrix4.CreateRotationY(_angle * Mathf.Radian)) +
+                ? Vector3.Transform(Vector3.UnitZ * 32, Matrix4x4.CreateRotationY(_angle * Mathf.Radian)) +
                   Parent.Position
                 : _crew[Array.IndexOf(_crew, Parent) - 1].Position;
         }
@@ -39,7 +40,7 @@ namespace Hedra.AISystem.Humanoid
             for (var i = 0; i < _crew.Length; ++i)
             {
                 if(_crew[i].IsDead || _crew[i].Disposed) continue;
-                if ((Entity.Position - _crew[i].Position).LengthSquared > Math.Pow(CombatAIComponent.StareRadius, 2))
+                if ((Entity.Position - _crew[i].Position).LengthSquared() > Math.Pow(CombatAIComponent.StareRadius, 2))
                     _crew[i].SearchComponent<CombatAIComponent>().WalkTo(Entity.Position);
             }
         }

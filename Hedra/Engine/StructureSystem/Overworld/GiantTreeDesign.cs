@@ -3,7 +3,6 @@ using Hedra.BiomeSystem;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EntitySystem.BossSystem;
 using Hedra.Engine.Generation;
@@ -14,7 +13,8 @@ using Hedra.EntitySystem;
 using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
@@ -31,9 +31,9 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var originalModel = CacheManager.GetModel(CacheItem.GiantTree);
             var model = originalModel.ShallowClone();
 
-            var scaleMatrix = Matrix4.CreateScale(Vector3.One * 100f);
-            var transMatrix = Matrix4.CreateRotationY(rng.NextFloat() * 360 * Mathf.Radian);
-            transMatrix *= Matrix4.CreateTranslation(position + Vector3.UnitY * 7f);
+            var scaleMatrix = Matrix4x4.CreateScale(Vector3.One * 100f);
+            var transMatrix = Matrix4x4.CreateRotationY(rng.NextFloat() * 360 * Mathf.Radian);
+            transMatrix *= Matrix4x4.CreateTranslation(position + Vector3.UnitY * 7f);
             model.Transform(scaleMatrix * transMatrix);
 
             model.Color(AssetManager.ColorCode0, region.Colors.WoodColor);
@@ -58,17 +58,17 @@ namespace Hedra.Engine.StructureSystem.Overworld
             DoWhenChunkReady(position, P => PlaceBoss(P, region, Structure, transMatrix, rng), Structure);
         }
 
-        private void PlaceBoss(Vector3 Position, Region Region, CollidableStructure Structure, Matrix4 TransMatrix, Random Rng)
+        private void PlaceBoss(Vector3 Position, Region Region, CollidableStructure Structure, Matrix4x4 TransMatrix, Random Rng)
         {
             var underWater = Region.Generation.GetMaxHeight(Position.X, Position.Z) < BiomePool.SeaLevel;
             var chestOffset = Vector3.UnitZ * 10f + Vector3.UnitX * -80f;
-            var chestPosition = Vector3.TransformPosition(chestOffset, TransMatrix);
+            var chestPosition = Vector3.Transform(chestOffset, TransMatrix);
             IEntity treeBoss = null;
             if (!underWater)
             {
                 treeBoss = BossGenerator.Generate(
                     new [] { MobType.GiantBeetle, MobType.GorillaWarrior, MobType.Troll },
-                    Vector3.TransformPosition(chestOffset - Vector3.UnitZ * 50, TransMatrix),
+                    Vector3.Transform(chestOffset - Vector3.UnitZ * 50, TransMatrix),
                     Rng);
                 ((GiantTree)Structure.WorldObject).Boss = treeBoss;
             }

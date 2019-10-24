@@ -5,7 +5,7 @@ using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Warrior.Berserker
 {

@@ -11,8 +11,11 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Hedra.Engine.Events;
 using Hedra.Engine.Rendering.UI;
-using OpenTK;
-using OpenTK.Input;
+using Hedra.Engine.Windowing;
+using System.Numerics;
+using Silk.NET.Input.Common;
+using Button = Hedra.Engine.Rendering.UI.Button;
+
 
 namespace Hedra.Rendering.UI
 {
@@ -155,7 +158,7 @@ namespace Hedra.Rendering.UI
             if(EventArgs.Key == Key.Enter && _firstHover)
             {
                 if(_buttons[_x][_y].Enabled)
-                    _buttons[_x][_y].OnHoverExit(Sender, EventArgs);
+                    _buttons[_x][_y].OnHoverExit();
                 _buttons[_x][_y].ForceClick();
                 return;
             }
@@ -183,16 +186,16 @@ namespace Hedra.Rendering.UI
 
 
             if (_prevX == _x && _prevY == _y) return;
-            if(_firstHover && _buttons[_prevX][_prevY].Enabled) _buttons[_prevX][_prevY].OnHoverExit(Sender, EventArgs);
+            if(_firstHover && _buttons[_prevX][_prevY].Enabled) _buttons[_prevX][_prevY].OnHoverExit();
             _firstHover = true;
             _prevX = _x;
             _prevY = _y;
-            _buttons[_x][_y].OnHoverEnter(Sender, EventArgs);
+            _buttons[_x][_y].OnHoverEnter();
         }
         
         public override void OnMouseMove(object Sender, MouseMoveEventArgs E)
         {
-            if(_firstHover && _buttons[_prevX][_prevY].Enabled) _buttons[_prevX][_prevY].OnHoverExit(Sender, E);
+            if(_firstHover && _buttons[_prevX][_prevY].Enabled) _buttons[_prevX][_prevY].OnHoverExit();
         }
         
         public virtual Vector2 Position

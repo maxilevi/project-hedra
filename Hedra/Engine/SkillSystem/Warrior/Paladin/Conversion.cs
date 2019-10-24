@@ -10,7 +10,8 @@ using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Warrior.Paladin
 {

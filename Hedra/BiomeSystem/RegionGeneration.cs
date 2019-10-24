@@ -4,7 +4,7 @@ using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.BiomeSystem
 {
@@ -36,6 +36,17 @@ namespace Hedra.BiomeSystem
                 _noise.Seed = World.Seed;
                 _tempHeightMap[0][0] = 0;
                 _design.BuildHeightMap(_noise, _tempHeightMap, null, 1, Chunk.BlockSize, new Vector2(X, Z));
+                return _tempHeightMap[0][0];
+            }
+        }
+        
+        public float RiverAtPoint(float X, float Z)
+        {
+            lock (_tempMapLock)
+            {
+                _noise.Seed = World.Seed;
+                _tempHeightMap[0][0] = 0;
+                _design.BuildRiverMap(_noise, _tempHeightMap, 1, Chunk.BlockSize, new Vector2(X, Z));
                 return _tempHeightMap[0][0];
             }
         }

@@ -19,8 +19,10 @@ using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using System.Numerics;
+using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.EntitySystem.BossSystem
 {
@@ -132,13 +134,13 @@ namespace Hedra.Engine.EntitySystem.BossSystem
 
         private static void DisableIfSmall(UIElement Element)
         {
-            if (Element.Scale.LengthSquared < 0.001 * 0.001)
+            if (Element.Scale.LengthSquared() < 0.001 * 0.001)
                 Element.Disable();
             else
                 Element.Enable();
         }
         
-        private bool CanShow => GameManager.Player.UI.GamePanel.Enabled && (Parent.Position - GameManager.Player.Position).LengthSquared < 14400;
+        private bool CanShow => GameManager.Player.UI.GamePanel.Enabled && (Parent.Position - GameManager.Player.Position).LengthSquared() < 14400;
 
         public override void Dispose()
         {

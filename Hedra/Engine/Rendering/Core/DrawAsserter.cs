@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Hedra.Engine.Rendering.Particles;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using System.Numerics;
+using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
 
 namespace Hedra.Engine.Rendering.Core
 {
@@ -23,8 +24,9 @@ namespace Hedra.Engine.Rendering.Core
             {DrawElementsType.UnsignedShort, typeof(ushort)},
         };
         
-        public static void AssertMultiDrawElement(PrimitiveType Primitive, int[] Counts, DrawElementsType ElementsType, IntPtr[] Offsets, int Length)
+        public static void AssertMultiDrawElement(PrimitiveType Primitive, uint[] Counts, DrawElementsType ElementsType, IntPtr[] Offsets, int Length)
         {
+            return;
             if(Counts.Length != Offsets.Length)
                 throw new ArgumentException($"Found difference in counts ('{Counts.Length}') and offsets ('{Offsets.Length}') arrays");
             
@@ -36,6 +38,7 @@ namespace Hedra.Engine.Rendering.Core
 
         public static void AssertDrawElements(PrimitiveType Primitive, int Count, DrawElementsType ElementsType, IntPtr Offset)
         {
+            return;
             BaseAssert();
             AssertElementBuffer();
             AssertPrimitive(Primitive);
@@ -44,6 +47,7 @@ namespace Hedra.Engine.Rendering.Core
 
         public static void AssertDrawElementsInstanced(PrimitiveType Primitive, int Count, DrawElementsType ElementsType, IntPtr Indices, int InstanceCount)
         {
+            return;
             BaseAssert();
             AssertElementBuffer();
             AssertInstanceCount(Primitive, InstanceCount);
@@ -52,6 +56,7 @@ namespace Hedra.Engine.Rendering.Core
         
         public static void AssertDrawArrays(PrimitiveType Primitive, int Offset, int Count)
         {
+            return;
             if (Offset > Count) 
                 throw new ArgumentException($"Draw offset '{Offset}' cannot be higher than the amount of elements '{Count}'");
             
@@ -64,6 +69,7 @@ namespace Hedra.Engine.Rendering.Core
 
         private static void AssertDrawType(DrawElementsType Type)
         {
+            return;
             var vbo = VBO.GetById(Renderer.VBOBound);
             var expectedType = DrawTypeMap[Type];
             

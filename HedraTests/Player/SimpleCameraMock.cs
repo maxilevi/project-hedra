@@ -1,7 +1,9 @@
 using System;
 using Hedra.Engine.Player;
-using OpenTK;
-using OpenTK.Input;
+using Hedra.Engine.Windowing;
+using System.Numerics;
+
+
 
 namespace HedraTests.Player
 {
@@ -19,7 +21,7 @@ namespace HedraTests.Player
         public float WheelSpeed { get; set; }
         public bool CaptureMovement { get; set; }
         public bool LockMouse { get; set; }
-        public Matrix4 ModelViewMatrix { get; }
+        public Matrix4x4 ModelViewMatrix { get; }
         public Func<Vector3> PositionDelegate { get; set; }
         public int XDelta { get; }
         public int YDelta { get; }
@@ -36,7 +38,7 @@ namespace HedraTests.Player
         public Vector3 CameraEyePosition { get; }
         public Vector3 CrossDirection { get; }
         public Vector3 CrossPosition { get; }
-        public Matrix4 ViewMatrix { get; }
+        public Matrix4x4 ViewMatrix { get; }
         public void Update()
         {
             throw new NotImplementedException();
@@ -73,11 +75,6 @@ namespace HedraTests.Player
         }
 
         public void OnKeyUp(object Sender, KeyboardKeyEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void OnKeyPress(object Sender, KeyPressEventArgs e)
         {
             throw new NotImplementedException();
         }

@@ -1,10 +1,13 @@
 import Companion
+import clr
 from Hedra import World
 from Hedra.Mission import MissionBuilder, QuestTier, QuestReward, DialogObject
 from Hedra.Mission.Blocks import CatchAnimalMission
 from Hedra.Items import ItemPool
 from System import Object, Array
+from Hedra.Numerics import VectorExtensions
 
+clr.ImportExtensions(VectorExtensions)
 IS_QUEST = True
 QUEST_NAME = 'CatchAPet'
 QUEST_TIER = QuestTier.Easy
@@ -50,7 +53,7 @@ def build_reward(animal, rng):
     return reward
 
 def get_nearby_animals(position):
-    return filter(lambda x: x.Type in VALID_PETS and MIN_DISTANCE_SQUARED < (x.Position.Xz - position.Xz).LengthSquared < MAX_DISTANCE_SQUARED, World.Entities)
+    return filter(lambda x: x.Type in VALID_PETS and MIN_DISTANCE_SQUARED < (x.Position.Xz() - position.Xz()).LengthSquared() < MAX_DISTANCE_SQUARED, World.Entities)
 
 def can_give(position):
     return len(get_nearby_animals(position)) > 0

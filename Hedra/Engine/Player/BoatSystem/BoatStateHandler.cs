@@ -4,7 +4,8 @@ using Hedra.Engine.Generation;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Player.BoatSystem
 {
@@ -73,11 +74,10 @@ namespace Hedra.Engine.Player.BoatSystem
         private void HandleDirection()
         {
             var waterNormal = OnWaterSurface || _humanoid.IsUnderwater ? Physics.WaterNormalAtPosition(_humanoid.Model.ModelPosition) : Vector3.UnitY;
-            _targetTerrainOrientation =
-                new Matrix3(Mathf.RotationAlign(Vector3.UnitY, waterNormal)).ExtractRotation();
+            _targetTerrainOrientation = Mathf.RotationAlign(Vector3.UnitY, waterNormal).ExtractRotation();
             _terrainOrientation = Quaternion.Slerp(_terrainOrientation, _targetTerrainOrientation,
                 Time.IndependentDeltaTime * 1f);
-            Transformation = Matrix4.CreateFromQuaternion(_terrainOrientation);
+            Transformation = Matrix4x4.CreateFromQuaternion(_terrainOrientation);
         }
         
         private void HandleTerrain()
@@ -122,7 +122,7 @@ namespace Hedra.Engine.Player.BoatSystem
             }
         }
 
-        public Matrix4 Transformation { get; private set; }
+        public Matrix4x4 Transformation { get; private set; }
 
         public bool OnWaterSurface { get; private set; }
 

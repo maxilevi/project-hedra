@@ -1,7 +1,7 @@
 using System;
 using Hedra.Engine.IO;
-using OpenTK;
-using OpenTK.Input;
+using System.Numerics;
+
 
 namespace Hedra.Engine.Player
 {
@@ -19,7 +19,7 @@ namespace Hedra.Engine.Player
         float WheelSpeed { get; set; }
         bool CaptureMovement { get; set; }
         bool LockMouse { get; set; }
-        Matrix4 ModelViewMatrix { get; }
+        Matrix4x4 ModelViewMatrix { get; }
         Func<Vector3> PositionDelegate { get; set; }
         float Pitch { get; set; }
         float Yaw { get; set; }

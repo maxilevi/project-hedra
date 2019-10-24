@@ -16,8 +16,10 @@ using Hedra.Engine.Rendering.Core;
 using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using System.Numerics;
+using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Rendering.UI
 {

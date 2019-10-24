@@ -4,7 +4,8 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.AISystem.Behaviours
 {
@@ -22,7 +23,7 @@ namespace Hedra.AISystem.Behaviours
 
         protected virtual IEntity GetTarget()
         {
-            return World.InRadius<IPlayer>(Parent.Position, Radius).FirstOrDefault(P => (Parent.Position - P.Position).LengthFast < Radius * P.Attributes.MobAggroModifier);
+            return World.InRadius<IPlayer>(Parent.Position, Radius).FirstOrDefault(P => (Parent.Position - P.Position).LengthFast() < Radius * P.Attributes.MobAggroModifier);
         }
 
         protected virtual void HandleTarget()

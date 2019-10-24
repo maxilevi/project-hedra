@@ -8,7 +8,8 @@
 using System;
 using Hedra.BiomeSystem;
 using Hedra.Core;
-using OpenTK;
+using System.Numerics;
+using Silk.NET.Core.Math;
 
 namespace Hedra.Engine.Generation
 {

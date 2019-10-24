@@ -1,7 +1,8 @@
 using System.Drawing;
 using Hedra.Engine.Rendering;
-using OpenTK.Graphics.OpenGL4;
+using Hedra.Engine.Core;
 using System;
+using Hedra.Engine.Windowing;
 
 namespace HedraTests
 {

@@ -5,7 +5,7 @@ using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Items;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.ClassSystem
 {
@@ -37,11 +37,11 @@ namespace Hedra.Engine.ClassSystem
             throw new ArgumentException();
         }
         
-        public override Matrix4 HelmetPlacement => throw new ArgumentException();
-        public override Matrix4 ChestplatePlacement => throw new ArgumentException();
-        public override Matrix4 PantsMatrixPlacement => throw new ArgumentException();
-        public override Matrix4 LeftBootPlacement => throw new ArgumentException();
-        public override Matrix4 RightBootPlacement => throw new ArgumentException();
+        public override Matrix4x4 HelmetPlacement => throw new ArgumentException();
+        public override Matrix4x4 ChestplatePlacement => throw new ArgumentException();
+        public override Matrix4x4 PantsMatrixPlacement => throw new ArgumentException();
+        public override Matrix4x4 LeftBootPlacement => throw new ArgumentException();
+        public override Matrix4x4 RightBootPlacement => throw new ArgumentException();
         public override Class Type => Class.None;
     }
 }

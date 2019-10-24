@@ -2,18 +2,20 @@ using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using Hedra.Engine.Core;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Rendering;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using System.Numerics;
+using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
 
 namespace Hedra.Engine.Rendering
 {
     public class BufferBalancer
     {
         private readonly WorldBuffer[] _buffers;
-        
+
         public BufferBalancer(params WorldBuffer[] Buffers)
         {
             _buffers = Buffers;
@@ -29,7 +31,7 @@ namespace Hedra.Engine.Rendering
             return result;
         }
 
-        public bool Update(Vector2 Offset, VertexData Data)
+        public bool Update(Vector2 Offset, NativeVertexData Data)
         {
             for (var i = 0; i < _buffers.Length; ++i)
             {
@@ -51,7 +53,7 @@ namespace Hedra.Engine.Rendering
             });
         }
 
-        public void DrawShadows(Dictionary<Vector2, Chunk> ShadowDraw, ref IntPtr[] ShadowOffsets, ref int[] ShadowCounts)
+        public void DrawShadows(Dictionary<Vector2, Chunk> ShadowDraw, ref IntPtr[] ShadowOffsets, ref uint[] ShadowCounts)
         {
             for(var i = 0; i < _buffers.Length; ++i)
             {

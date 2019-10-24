@@ -8,7 +8,7 @@ using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
 using Color = System.Drawing.Color;
 
 namespace Hedra.Engine.StructureSystem.Overworld

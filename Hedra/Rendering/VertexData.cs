@@ -13,11 +13,13 @@ using System.Linq;
 using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.CacheSystem;
+using Hedra.Engine.Core;
 using Hedra.Engine.Management;
 using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Geometry;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 using InstanceData = Hedra.Engine.Rendering.InstanceData;
 
 namespace Hedra.Rendering
@@ -26,18 +28,16 @@ namespace Hedra.Rendering
     /// <summary>
     /// Description of VertexData.
     /// </summary>
-    public sealed class VertexData : LodableObject<VertexData>, IDisposable, IModelData
+    public class VertexData : BaseVertexData<VertexData>, IDisposable, IModelData
     {
         public string Name { get; set; }
-        public List<Vector3> Vertices { get; set; }
-        public List<Vector4> Colors { get; set; }
-        public List<Vector3> Normals { get; set; }
-        public List<uint> Indices { get; set; }
-        public List<float> Extradata { get; set; }
+        private List<Vector3> _vertices;
+        private List<Vector4> _colors;
+        private List<Vector3> _normals;
+        private List<uint> _indices;
+        private List<float> _extradata;
         public VertexData Original { get; set; }
         public bool UseCache { get; set; }
-        public bool HasColors => Colors.Count != 0;
-        public bool HasExtradata => Extradata.Count == Vertices.Count;
         public static VertexData Empty { get; }
         private readonly Dictionary<Vector3, int> _points;
 
@@ -48,128 +48,26 @@ namespace Hedra.Rendering
 
         public VertexData()
         {
-            Vertices = new List<Vector3>();
-            Colors = new List<Vector4>();
-            Normals = new List<Vector3>();
-            Indices = new List<uint>();
-            Extradata = new List<float>();
+            _vertices = new List<Vector3>();
+            _colors = new List<Vector4>();
+            _normals = new List<Vector3>();
+            _indices = new List<uint>();
+            _extradata = new List<float>();
             _points = new Dictionary<Vector3, int>();
-        }
-
-        public static void TrimExcess<T>(List<T> List)
-        {
-            var excess = (List.Count % 3);
-            if (excess == 0) return;
-            for (var i = 0; i < (3-excess); ++i)
-            {
-                List.Add(List[List.Count - 1]);
-            }
-        }
-        
-        public void Trim()
-        {
-            TrimExcess(Vertices);
-            TrimExcess(Colors);
-            TrimExcess(Normals);
-            TrimExcess(Indices);
-            TrimExcess(Extradata);
-        }
-        
-        public Vector3 SupportPoint(Vector3 Direction)
-        {
-            return this.SupportPoint(Direction, -Vector4.One);
-        }
-
-        private Vector3 SupportPoint(Vector3 Direction, Vector4 Color)
-        {
-            var highest = float.MinValue;
-            var support = Vector3.Zero;
-            if(UseCache)
-            {
-                if(IsClone)
-                {
-                    if(Original._points.ContainsKey(Direction + Color.Xyz))
-                    {
-                        return Original.Vertices[Original._points[Direction + Color.Xyz]];
-                    }
-                }
-                else
-                {
-                    if(_points.ContainsKey(Direction + Color.Xyz))
-                        return Vertices[_points[Direction + Color.Xyz]];
-                }
-            }
-            var index = -1;
-            var all = Color == -Vector4.One;
-            lock(Vertices)
-            {
-                for (var i = Vertices.Count-1; i > -1; i--)
-                {
-                    if (HasColors)
-                    {
-                        if (Colors[i] != Color && !all) continue;
-                    }
-
-                    var v = Vertices[i];
-                    var dot = Vector3.Dot(Direction, v);
-
-                    if (!(dot > highest)) continue;
-                    highest = dot;
-                    support = v;
-                    index = i;
-                }
-            }
-
-            if (index == -1 || !UseCache) return support;
-
-            if(IsClone)
-                Original._points.Add(Direction + Color.Xyz, index);
-            else
-                _points.Add(Direction + Color.Xyz, index);
-
-            return support;    
         }
 
         public VertexData AddWindValues(float Scalar = 1)
         {
-            return AddWindValues(-Vector4.One, Scalar);
+            if(!HasExtradata) Extradata = Enumerable.Repeat(0.01f, Vertices.Count).ToList();
+            MeshOperations.AddWindValues(Vertices, Colors, Extradata, Scalar);
+            ApplyRecursively(V => V.AddWindValues(Scalar));
+            return this;
         }
         
         public VertexData AddWindValues(Vector4 ColorFilter, float Scalar = 1)
         {
-            return AddWindValues(
-                ColorFilter,
-                SupportPoint(-Vector3.UnitY, ColorFilter),
-                SupportPoint(Vector3.UnitY, ColorFilter),
-                Scalar
-            );
-        }
-        
-        public VertexData AddWindValues(Vector3 Lowest, Vector3 Highest, float Scalar)
-        {
-            return AddWindValues(
-                -Vector4.One,
-                Lowest,
-                Highest,
-                Scalar
-            );
-        }
-        
-        private VertexData AddWindValues(Vector4 ColorFilter, Vector3 Lowest, Vector3 Highest, float Scalar)
-        {
-            var values = new float[Vertices.Count];
-            var all = ColorFilter == -Vector4.One;
-            if(Extradata.Count == 0) Extradata = Enumerable.Repeat(0.01f, Vertices.Count).ToList();
-            for(var i = 0; i < Extradata.Count; i++)
-            {
-                if(Colors[i] != ColorFilter && !all)
-                {
-                    values[i] = 0;
-                    continue;
-                }             
-                var shade = Vector3.Dot(Vertices[i] - Lowest, Vector3.UnitY) / Vector3.Dot(Highest - Lowest, Vector3.UnitY);
-                Extradata[i] = (shade + (float) Math.Pow(shade, 1.3)) * Scalar;
-            }
+            if(!HasExtradata) Extradata = Enumerable.Repeat(0.01f, Vertices.Count).ToList();
+            MeshOperations.AddWindValues(Vertices, Colors, Extradata, ColorFilter, Scalar);
             ApplyRecursively(V => V.AddWindValues(ColorFilter, Scalar));
             return this;
         }
@@ -187,7 +85,22 @@ namespace Hedra.Rendering
         
         public VertexData Translate(Vector3 Position)
         {
-            Transform(Matrix4.CreateTranslation(Position));
+            Transform(Matrix4x4.CreateTranslation(Position));
+            return this;
+        }
+        
+        public VertexData GraduateColor(Vector3 Direction)
+        {
+            MeshOperations.GraduateColor(Vertices, Colors, Direction);
+            ApplyRecursively(V => V.GraduateColor(Direction));
+            return this;
+        }
+
+        
+        public VertexData Transform(Matrix4x4 Mat)
+        {
+            MeshOperations.Transform(Vertices, Normals, Mat);
+            ApplyRecursively(V => V.Transform(Mat));
             return this;
         }
 
@@ -215,150 +128,11 @@ namespace Hedra.Rendering
             return this;
         }
 
-        public VertexData GraduateColor(Vector3 Direction)
+        public void Optimize(IAllocator Allocator)
         {
-            return GraduateColor(Direction, .3f);
-        }
-
-        private VertexData GraduateColor(Vector3 Direction, float Amount)
-        {
-            var highest = this.SupportPoint(Direction);
-            var lowest =  this.SupportPoint(-Direction);
-
-            var dot = Vector3.Dot(highest - lowest, Direction);
-            for (var i = 0; i < Vertices.Count; i++)
-            {
-                var shade = Vector3.Dot(Vertices[i] - lowest, Direction) / dot;
-                Colors[i] += new Vector4(Amount, Amount, Amount, 0) * shade;
-            }
-            ApplyRecursively(V => V.GraduateColor(Direction, Amount));
-            return this;
+            MeshOperations.Optimize(Allocator, _indices, _vertices, _normals, _colors, _extradata);
         }
         
-        public VertexData Transform(Matrix4 Mat)
-        {
-            for (var i = 0; i < Vertices.Count; i++)
-            {
-                Vertices[i] = Vector3.TransformPosition(Vertices[i], Mat);
-            }
-            var normalMat = Mat.ClearScale().ClearTranslation().Inverted();
-            for (var i = 0; i < Normals.Count; i++)
-            {
-                Normals[i] = Vector3.TransformNormalInverse(Normals[i], normalMat);
-            }
-            ApplyRecursively(V => V.Transform(Mat));
-            return this;
-        }
-
-        public unsafe void Optimize()
-        {
-            if (!HasColors || !CompatibilityManager.SupportsMeshOptimizer) return;
-            /* var originalVertices = Vertices.Count; */
-            var vertices = new MeshOptimizerVertex[Vertices.Count];
-            for (var i = 0; i < vertices.Length; ++i)
-            {
-                vertices[i] = new MeshOptimizerVertex
-                {
-                    Position = Vertices[i],
-                    Normal = Normals[i],
-                    Color = Colors[i]
-                };
-                if(HasExtradata) vertices[i].Extradata = Extradata[i];
-            }
-            var result = MeshOptimizer.Optimize(vertices, Indices.ToArray(), MeshOptimizerVertex.SizeInBytes);
-            Indices = new List<uint>(result.Item2);
-            Normals = new List<Vector3>(result.Item1.Select(V => V.Normal));
-            Colors = new List<Vector4>(result.Item1.Select(V => V.Color));
-            if(HasExtradata) Extradata = new List<float>(result.Item1.Select(V => V.Extradata));
-            Vertices = new List<Vector3>(result.Item1.Select(V => V.Position));
-            /* Log.WriteLine($"Vertex Change % = {(1f - Vertices.Count / (float)originalVertices) * 100}, {Vertices.Count}/{originalVertices}"); */
-        }
-
-        public void UniqueVertices()
-        {
-            if (!HasColors) return;
-            
-            var newIndices = new List<uint>();
-            var vertexMap = new Dictionary<Vector3, int>();
-            var newVertices = new List<Vector3>();
-            var newNormals = new List<Vector3>();
-            var newColors = new List<Vector4>();
-            var newExtradata = new List<float>();
-            for (var i = 0; i < Indices.Count; i++)
-            {
-                var curr = (int) Indices[i];
-                var vertex = Vertices[curr];
-                var index = 0;
-                if (vertexMap.ContainsKey(vertex))
-                {
-                    index = vertexMap[vertex];
-                }
-                else
-                {
-                    index = newVertices.Count;
-                    newVertices.Add(vertex);
-                    vertexMap.Add(vertex, index);
-                    
-                    newColors.Add(Colors[curr]);
-                    newNormals.Add(Normals[curr]);
-                    if(HasExtradata)
-                        newExtradata.Add(Extradata[curr]);
-                }
-                newIndices.Add((uint)index);
-            }
-            Indices = newIndices;
-            Vertices = newVertices;
-            Colors = newColors;
-            Extradata = newExtradata;
-            Normals = newNormals;
-        }
-        
-        public void Flat()
-        {
-            if (!HasColors) return;
-            var newVertices = new List<Vector3>();
-            var newNormals = new List<Vector3>();
-            var newColors = new List<Vector4>();
-            var newExtradata = new List<float>();
-            var newIndices = new List<uint>();
-            for (var i = 0; i < Indices.Count; i+=3)
-            {
-                var i0 = (int)Indices[i];
-                var i1 = (int)Indices[i+1];
-                var i2 = (int)Indices[i+2];
-
-                var triangleColor = (Colors[i0] + Colors[i1] + Colors[i2]) * .33f;
-                newColors.Add(triangleColor);
-                newColors.Add(triangleColor);
-                newColors.Add(triangleColor);
-                
-                newVertices.Add(Vertices[i0]);
-                newVertices.Add(Vertices[i1]);
-                newVertices.Add(Vertices[i2]);
-                
-                var normal = Vector3.Cross(Vertices[i1] - Vertices[i0], Vertices[i2] - Vertices[i0]).Normalized();
-                newNormals.Add(normal);
-                newNormals.Add(normal);
-                newNormals.Add(normal);
-                
-                newIndices.Add((uint)newIndices.Count);
-                newIndices.Add((uint)newIndices.Count);
-                newIndices.Add((uint)newIndices.Count);
-
-                if (HasExtradata)
-                {
-                    newExtradata.Add(Extradata[i0]);
-                    newExtradata.Add(Extradata[i1]);
-                    newExtradata.Add(Extradata[i2]);
-                }
-            }
-            Vertices = newVertices;
-            Colors = newColors;
-            Extradata = newExtradata;
-            Normals = newNormals;
-            Indices = newIndices;
-        }
-
         public VertexData[] Ungroup()
         {
             return MeshAnalyzer.GetConnectedComponents(this);
@@ -366,32 +140,28 @@ namespace Hedra.Rendering
 
         public VertexData RotateX(float EulerAngle)
         {
-            return Transform(Matrix4.CreateRotationX(EulerAngle * Mathf.Radian));
+            return Transform(Matrix4x4.CreateRotationX(EulerAngle * Mathf.Radian));
         }
         
         public VertexData RotateY(float EulerAngle)
         {
-            return Transform(Matrix4.CreateRotationY(EulerAngle * Mathf.Radian));
+            return Transform(Matrix4x4.CreateRotationY(EulerAngle * Mathf.Radian));
         }
         
         public VertexData RotateZ(float EulerAngle)
         {
-            return Transform(Matrix4.CreateRotationZ(EulerAngle * Mathf.Radian));
+            return Transform(Matrix4x4.CreateRotationZ(EulerAngle * Mathf.Radian));
         }
         
         public VertexData Scale(Vector3 Scalar)
         {
-            return Transform(Matrix4.CreateScale(Scalar));
+            return Transform(Matrix4x4.CreateScale(Scalar));
         }
         
-        public VertexData Paint(Vector4 Color)
+        public void Paint(Vector4 Color)
         {
-            for(var i = 0; i < Colors.Count; i++)
-            {
-                Colors[i] = Color;
-            }
+            MeshOperations.PaintMesh(Colors, Color);
             ApplyRecursively(V => V.Paint(Color));
-            return this;
         }
 
         public CompressedVertexData AsCompressed()
@@ -399,7 +169,7 @@ namespace Hedra.Rendering
             return CompressedVertexData.FromVertexData(this);
         }
 
-        public InstanceData ToInstanceData(Matrix4 Transformation)
+        public InstanceData ToInstanceData(Matrix4x4 Transformation)
         {
             if (!IsClone)
                 throw new ArgumentOutOfRangeException("VertexData needs to be a clone.");
@@ -443,6 +213,15 @@ namespace Hedra.Rendering
             }
             return data;
         }
+        
+        public NativeVertexData NativeClone(IAllocator Allocator)
+        {
+            return new NativeVertexData(Allocator, Indices, Vertices, Normals, Colors, Extradata)
+            {
+                Original = Original ?? this,
+                Name = Name
+            };
+        }
 
         public VertexData ShallowClone()
         {
@@ -451,13 +230,7 @@ namespace Hedra.Rendering
 
         public void Color(Vector4 OriginalColor, Vector4 ReplacementColor)
         {
-            for(var i = 0; i < Colors.Count; i++)
-            {
-                if( (Colors[i] - OriginalColor).Length < .01f)
-                {
-                    Colors[i] = ReplacementColor;
-                }
-            }
+            MeshOperations.ColorMesh(Colors, OriginalColor, ReplacementColor);
             ApplyRecursively(V => V.Color(OriginalColor, ReplacementColor));
         }
         
@@ -486,9 +259,9 @@ namespace Hedra.Rendering
             && Extradata.Count == 0;
 
         public int SizeInBytes => Indices.Count * sizeof(uint) 
-                                  + Vertices.Count * Vector3.SizeInBytes 
-                                  + Normals.Count * Vector3.SizeInBytes 
-                                  + Colors.Count * Vector4.SizeInBytes 
+                                  + Vertices.Count * HedraSize.Vector3 
+                                  + Normals.Count * HedraSize.Vector3 
+                                  + Colors.Count * HedraSize.Vector4 
                                   + Extradata.Count * sizeof(float);
         public bool IsClone => Original != null;
         uint[] IModelData.Indices => Indices.ToArray();
@@ -503,18 +276,36 @@ namespace Hedra.Rendering
             Extradata.Clear();
         }
 
-        private struct MeshOptimizerVertex
-        {
-            public static uint SizeInBytes => sizeof(float) * 11;
-            public Vector3 Position;
-            public Vector3 Normal;
-            public Vector4 Color;
-            public float Extradata;
-        }
-
+        /* Do not remove. Used in python scripts */
         public static VertexData Load(string Path, Vector3 Scale)
         {
             return AssetManager.LoadModel(Path, Scale);
+        }
+
+        public override List<Vector3> Vertices
+        {
+            get => _vertices;
+            set => _vertices = value;
+        }
+        public override List<Vector3> Normals
+        {
+            get => _normals;
+            set => _normals = value;
+        }
+        public override List<Vector4> Colors
+        {
+            get => _colors;
+            set => _colors = value;
+        }
+        public override List<uint> Indices
+        {
+            get => _indices;
+            set => _indices = value;
+        }
+        public override List<float> Extradata
+        {
+            get => _extradata;
+            set => _extradata = value;
         }
     }
 }

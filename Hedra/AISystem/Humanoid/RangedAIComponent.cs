@@ -14,7 +14,7 @@ using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using Hedra.WeaponSystem;
 using Hedra.WorldObjects;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.AISystem.Humanoid
 {

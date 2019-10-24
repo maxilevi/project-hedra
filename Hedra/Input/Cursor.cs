@@ -1,6 +1,6 @@
 ﻿using Hedra.Engine;
 using Hedra.Game;
-using OpenTK;
+using System.Numerics;
 using Forms = System.Windows.Forms;
 
 namespace Hedra.Input

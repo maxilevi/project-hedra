@@ -7,7 +7,8 @@ using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
 using NUnit.Framework;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace HedraTests.CacheSystem
 {

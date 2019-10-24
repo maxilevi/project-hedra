@@ -1,7 +1,8 @@
 using System;
 using Hedra.Core;
 using Hedra.Engine.Generation;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.WorldBuilding
 {

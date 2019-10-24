@@ -1,11 +1,12 @@
 using System.Drawing;
 using Hedra.Core;
-using Hedra.Engine.Management;
+using Hedra.Engine.Core;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Windowing;
 using Hedra.EntitySystem;
+using Hedra.Numerics;
 using Hedra.Rendering;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+
 
 namespace Hedra.Engine.EntitySystem
 {

@@ -1,13 +1,17 @@
 using System.Drawing;
+using System.Windows.Forms;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Engine.Windowing;
 using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Sound;
-using OpenTK;
-using OpenTK.Input;
+using System.Numerics;
+
+using Button = Hedra.Engine.Rendering.UI.Button;
+
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {
@@ -68,15 +72,15 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 
         }
 
-        protected override void HoverEnter(object Sender, MouseEventArgs EventArgs)
+        protected override void HoverEnter(object Sender)
         {
-            base.HoverEnter(Sender, EventArgs);
+            base.HoverEnter(Sender);
             _interface.SpecializationInfo.ShowSpecialization(null);
         }
 
-        protected override void HoverExit(object Sender, MouseEventArgs EventArgs)
+        protected override void HoverExit(object Sender)
         {
-            base.HoverExit(Sender, EventArgs);
+            base.HoverExit(Sender);
             var blueprint = _player.AbilityTree.Specialization;
             _interface.SpecializationInfo.ShowSpecialization(blueprint.IsSpecialization ? blueprint : null);
         }

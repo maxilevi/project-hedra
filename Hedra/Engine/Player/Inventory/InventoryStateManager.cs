@@ -4,7 +4,8 @@ using Hedra.Core;
 using Hedra.Engine.Input;
 using Hedra.Engine.Management;
 using Hedra.Input;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Player.Inventory
 {
@@ -71,7 +72,7 @@ namespace Hedra.Engine.Player.Inventory
                             Mathf.Lerp((Vector3)cacheItem.Key.Getter.Invoke(), (Vector3)cacheItem.Value,
                                 (float)Time.DeltaTime * 16f)
                         );
-                        finishedLerp = ((Vector3)cacheItem.Key.Getter.Invoke() - prevValue).Length < 0.01f;
+                        finishedLerp = ((Vector3)cacheItem.Key.Getter.Invoke() - prevValue).Length() < 0.01f;
                     }
                 }
                 if (finishedLerp) break;

@@ -3,7 +3,8 @@ using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.EntitySystem;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.AISystem.Behaviours
 {
@@ -34,9 +35,9 @@ namespace Hedra.AISystem.Behaviours
         {
             if (Target != null)
             {             
-                var oppositeDirection = (Parent.Position - Target()).Xz.ToVector3().NormalizedFast();
+                var oppositeDirection = (Parent.Position - Target()).Xz().ToVector3().NormalizedFast();
                 Traverse.SetTarget(Parent.Position + oppositeDirection * 16f);
-                if ((Parent.Position - Target()).LengthSquared > Radius * Radius)
+                if ((Parent.Position - Target()).LengthSquared() > Radius * Radius)
                 {
                     this.Target = null;
                 }

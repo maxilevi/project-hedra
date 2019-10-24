@@ -12,7 +12,7 @@ using System.Threading;
 using Hedra.Engine.Core;
 using Hedra.Engine.IO;
 using Hedra.Game;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.Generation.ChunkSystem.Builders
 {
@@ -54,7 +54,7 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
                 if (_queue.Count > 0)
                 {
                     _closest.Position = GameManager.Player?.Position ?? Vector3.Zero;
-                    if ( (_lastSortedPosition - _closest.Position).LengthSquared > Chunk.Width * Chunk.Width || _lastCount != _queue.Count)
+                    if ( (_lastSortedPosition - _closest.Position).LengthSquared() > 8*8 || _lastCount != _queue.Count)
                     {
                         _queue.Sort(_closest);
                         _lastSortedPosition = _closest.Position;

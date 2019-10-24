@@ -1,11 +1,11 @@
 using System;
 using Hedra.Core;
 using Hedra.Engine;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.EntitySystem;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.AISystem.Behaviours
 {
@@ -42,7 +42,7 @@ namespace Hedra.AISystem.Behaviours
         {
             if (!_arrived && !Parent.IsKnocked)
             {
-                var orientation = (Target - Parent.Position).Xz.NormalizedFast().ToVector3();
+                var orientation = (Target - Parent.Position).Xz().NormalizedFast().ToVector3();
                 /* If the target reaches the point then (Target - Parent.Position) will be equal to Vector3.Zero and thus the normal will be Vector3.Zero too. */
                 if (orientation != Vector3.Zero)
                 {
@@ -50,7 +50,7 @@ namespace Hedra.AISystem.Behaviours
                     Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
                 }
                 Parent.Physics.Move();
-                if ((Target - Parent.Position).Xz.LengthSquared < ErrorMargin * ErrorMargin)
+                if ((Target - Parent.Position).Xz().LengthSquared() < ErrorMargin * ErrorMargin)
                 {
                     this.Cancel();
                 }

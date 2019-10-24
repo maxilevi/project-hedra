@@ -14,7 +14,7 @@ using System.Threading;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Management;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.Rendering.Core
 {    
@@ -48,7 +48,12 @@ namespace Hedra.Engine.Rendering.Core
 
         public static Shader GetById(uint Id)
         {
-            return _shaders.First(S => S.ShaderId == Id);
+            for (var i = 0; i < _shaders.Count; ++i)
+            {
+                if (_shaders[i].ShaderId == Id)
+                    return _shaders[i];
+            }
+            throw new ArgumentOutOfRangeException();
         }
         
         public static void ReloadShaders()

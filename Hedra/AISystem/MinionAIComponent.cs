@@ -4,7 +4,7 @@ using Hedra.Components;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.EntitySystem;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.AISystem
 { 
@@ -37,7 +37,7 @@ namespace Hedra.AISystem
         public override void Update()
         {
             if(!Enabled) return;
-            if((Parent.Position - Owner.Position).LengthSquared > MaxSeparatedDistance)
+            if((Parent.Position - Owner.Position).LengthSquared() > MaxSeparatedDistance)
             {
                 Parent.Position = Owner.Position + Vector3.Cross(Parent.Orientation, Vector3.UnitY) * 12f;
                 _attack.ResetTarget();

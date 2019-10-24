@@ -50,7 +50,7 @@ namespace Hedra.Engine.QuestSystem
 
         private void AddQuest(IEntity Talker)
         {
-            if(!(Talker is IPlayer player) || (Parent.Position - player.Position).LengthSquared > 32 * 32) return;
+            if(!(Talker is IPlayer player) || (Parent.Position - player.Position).LengthSquared() > 32 * 32) return;
             _canGiveQuest = false;
             player.Questing.Start(Parent, _quest);
             player.Questing.QuestAbandoned += OnQuestAbandoned;

@@ -4,9 +4,11 @@
  * Time: 01:34 a.m.
  *
  */
-using System;
-using OpenTK;
-using OpenTK.Input;
+
+
+using System.Windows.Forms;
+using Hedra.Engine.Windowing;
+
 
 namespace Hedra.Engine.Events
 {
@@ -24,6 +26,7 @@ namespace Hedra.Engine.Events
         
         void OnKeyUp(object sender, KeyEventArgs e);
         
-        void OnKeyPress(object sender, KeyPressEventArgs e);
+        void OnCharWritten(string Char);
+        
     }
 }

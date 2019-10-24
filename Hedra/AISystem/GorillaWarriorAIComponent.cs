@@ -1,6 +1,6 @@
 using Hedra.AISystem.Behaviours;
 using Hedra.Engine.EntitySystem;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.AISystem
 {

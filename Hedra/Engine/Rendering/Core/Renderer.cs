@@ -8,8 +8,11 @@
  */
 
 using System;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using System.Numerics;
+using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
+using Silk.NET.OpenGL;
+using GLDrawBuffersEnum = Silk.NET.OpenGL.GLEnum;
 
 namespace Hedra.Engine.Rendering.Core
 {
@@ -17,16 +20,16 @@ namespace Hedra.Engine.Rendering.Core
     public static class Renderer
     {
         public static event ShaderChangeEvent ShaderChanged;
-        public static IGLProvider Provider { get; set; } = new GLProvider();
+        public static IGLProvider Provider { get; set; }
         
         public static uint ShaderBound => ShaderHandler.Id;
         public static uint FBOBound => FramebufferHandler.Id;
         public static uint VAOBound => VertexAttributeHandler.Id;
         public static uint VBOBound => BufferHandler.Id;
-        public static Matrix4 ModelViewProjectionMatrix { get; private set; }
-        public static Matrix4 ModelViewMatrix { get; private set; }
-        public static Matrix4 ViewMatrix { get; private set; }
-        public static Matrix4 ProjectionMatrix { get; private set; }
+        public static Matrix4x4 ModelViewProjectionMatrix { get; private set; }
+        public static Matrix4x4 ModelViewMatrix { get; private set; }
+        public static Matrix4x4 ViewMatrix { get; private set; }
+        public static Matrix4x4 ProjectionMatrix { get; private set; }
         public static CapHandler CapHandler { get; }
         public static TextureHandler TextureHandler { get; }
         public static ShaderHandler ShaderHandler { get; }
@@ -44,6 +47,11 @@ namespace Hedra.Engine.Rendering.Core
             FramebufferHandler = new FramebufferHandler();
         }
 
+        public static void LoadProvider()
+        {
+            Provider = new GLProvider();
+        }
+        
         public static void Load()
         {
             BlendEquation(BlendEquationMode.FuncAdd);
@@ -51,7 +59,7 @@ namespace Hedra.Engine.Rendering.Core
             Shader.ShaderChanged += () => ShaderChanged?.Invoke();
         }
         
-        public static void MultiDrawElements(PrimitiveType Type, int[] Counts, DrawElementsType ElementsType, IntPtr[] Offsets, int Length)
+        public static void MultiDrawElements(PrimitiveType Type, uint[] Counts, DrawElementsType ElementsType, IntPtr[] Offsets, int Length)
         {
 #if DEBUG
             DrawAsserter.AssertMultiDrawElement(Type, Counts, ElementsType, Offsets, Length);
@@ -148,13 +156,13 @@ namespace Hedra.Engine.Rendering.Core
             TextureHandler.Active(Unit);
         }
 
-        public static void LoadProjection(Matrix4 Projection)
+        public static void LoadProjection(Matrix4x4 Projection)
         {
             ProjectionMatrix = Projection;
             RebuildMVP();
         }
 
-        public static void LoadModelView(Matrix4 ModelView)
+        public static void LoadModelView(Matrix4x4 ModelView)
         {
             ModelViewMatrix = ModelView;
             ViewMatrix = Hedra.Game.GameManager.Player.View.ModelViewMatrix;//ModelView.ClearTranslation();
@@ -171,7 +179,7 @@ namespace Hedra.Engine.Rendering.Core
             Provider.DrawBuffer(Mode);
         }
 
-        public static void DrawBuffers(int N, DrawBuffersEnum[] Enums)
+        public static void DrawBuffers(int N, GLDrawBuffersEnum[] Enums)
         {
             Provider.DrawBuffers(N, Enums);
         }
@@ -206,17 +214,22 @@ namespace Hedra.Engine.Rendering.Core
             Provider.BufferData(Target, Size, Data, Hint);
         }
 
-        public static void BufferData<T>(BufferTarget Target, IntPtr Size, T[] Data, BufferUsageHint Hint) where T : struct
+        public static void BufferData<T>(BufferTarget Target, IntPtr Size, T[] Data, BufferUsageHint Hint) where T : unmanaged
         {
             Provider.BufferData(Target, Size, Data, Hint);
         }
 
-        public static void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, ref T Data) where T : struct
+        public static void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, ref T Data) where T : unmanaged
         {
             Provider.BufferSubData(Target, Ptr0, Offset, ref Data);
         }
 
-        public static void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, T[] Data) where T : struct
+        public static void BufferSubData<T>(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, T[] Data) where T : unmanaged
+        {
+            Provider.BufferSubData(Target, Ptr0, Offset, Data);
+        }
+        
+        public static void BufferSubData(BufferTarget Target, IntPtr Ptr0, IntPtr Offset, IntPtr Data)
         {
             Provider.BufferSubData(Target, Ptr0, Offset, Data);
         }
@@ -444,9 +457,9 @@ namespace Hedra.Engine.Rendering.Core
         }
 
         public static void TexImage3D<T>(TextureTarget Target, int V0, PixelInternalFormat InternalFormat, int V1, int V2, int V3,
-            int V4, PixelFormat Format, PixelType Type, T[,,] Data) where T : struct
+            int V4, PixelFormat Format, PixelType Type, T[] Pixels) where T : unmanaged
         {
-            Provider.TexImage3D(Target, V0, InternalFormat, V1, V2, V3, V4, Format, Type, Data);
+            Provider.TexImage3D(Target, V0, InternalFormat, V1, V2, V3, V4, Format, Type, Pixels);
         }
 
         public static void TexParameter(TextureTarget Target, TextureParameterName Name, int Value)
@@ -484,19 +497,19 @@ namespace Hedra.Engine.Rendering.Core
             Provider.Uniform4(Location, Uniform);
         }
 
-        public static void UniformMatrix2(int Location, bool Transpose, ref Matrix2 Uniform)
+        public static void UniformMatrix2(int Location, bool Transpose, ref Matrix4x4 Uniform)
         {
             Provider.UniformMatrix2(Location, Transpose, ref Uniform);
         }
 
-        public static void UniformMatrix3(int Location, bool Transpose, ref Matrix3 Uniform)
+        public static void UniformMatrix3(int Location, bool Transpose, ref Matrix4x4 Uniform)
         {
             Provider.UniformMatrix3(Location, Transpose, ref Uniform);
         }
 
-        public static void UniformMatrix4(int Location, bool Transpose, ref Matrix4 Uniform)
+        public static void UniformMatrix4x4(int Location, bool Transpose, ref Matrix4x4 Uniform)
         {
-            Provider.UniformMatrix4(Location, Transpose, ref Uniform);
+            Provider.UniformMatrix4x4(Location, Transpose, ref Uniform);
         }
 
         public static void VertexAttribDivisor(int V0, int V1)
@@ -511,9 +524,9 @@ namespace Hedra.Engine.Rendering.Core
         }
 
         public static void VertexAttribPointer(int V0, int V1, VertexAttribPointerType Type, bool Flag,
-            int Bytes, int V2)
+            int Bytes)
         {
-            Provider.VertexAttribPointer(V0, V1, Type, Flag, Bytes, V2);
+            Provider.VertexAttribPointer(V0, V1, Type, Flag, Bytes);
         }
 
         public static void Viewport(int V0, int V1, int V2, int V3)

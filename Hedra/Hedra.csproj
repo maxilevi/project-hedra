@@ -9,7 +9,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Hedra</RootNamespace>
     <AssemblyName>Hedra</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <NoWin32Manifest>False</NoWin32Manifest>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <NoStdLib>True</NoStdLib>
@@ -40,6 +40,7 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <LangVersion>8</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
@@ -71,11 +72,19 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <Reference Include="AdvancedDLSupport, Version=3.1.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\AdvancedDLSupport.3.1.0\lib\netstandard2.0\AdvancedDLSupport.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="BulletSharp, Version=0.11.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\references\BulletSharp.dll</HintPath>
     </Reference>
     <Reference Include="Facepunch.Steamworks">
       <HintPath>..\references\Facepunch.Steamworks.dll</HintPath>
+    </Reference>
+    <Reference Include="Humanizer, Version=2.5.0.0, Culture=neutral, PublicKeyToken=979442b78dfc278e">
+      <HintPath>..\packages\Humanizer.Core.2.5.16\lib\netstandard2.0\Humanizer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73">
       <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
@@ -89,6 +98,7 @@
       <HintPath>..\packages\IronPython.2.7.5\lib\Net40\IronPython.Modules.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Dynamic, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1">
       <HintPath>..\packages\IronPython.2.7.5\lib\Net40\Microsoft.Dynamic.dll</HintPath>
     </Reference>
@@ -100,6 +110,10 @@
       <HintPath>..\packages\IronPython.2.7.5\lib\Net40\Microsoft.Scripting.Metadata.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Mono.DllMap, Version=1.0.1.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Mono.DllMap.1.0.1\lib\netstandard2.0\Mono.DllMap.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
@@ -109,12 +123,67 @@
       <HintPath>..\packages\NVorbis.0.8.6\lib\net35\NVorbis.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="OpenTK, Version=3.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4">
-      <HintPath>..\references\OpenTK.dll</HintPath>
+    <Reference Include="Silk.NET.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\Silk.NET\Silk.NET.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Silk.NET.GLFW, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\Silk.NET\Silk.NET.GLFW.dll</HintPath>
+    </Reference>
+    <Reference Include="Silk.NET.Input, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\Silk.NET\Silk.NET.Input.dll</HintPath>
+    </Reference>
+    <Reference Include="Silk.NET.Input.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\Silk.NET\Silk.NET.Input.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Silk.NET.Input.Desktop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\Silk.NET\Silk.NET.Input.Desktop.dll</HintPath>
+    </Reference>
+    <Reference Include="Silk.NET.OpenAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\Silk.NET\Silk.NET.OpenAL.dll</HintPath>
+    </Reference>
+    <Reference Include="Silk.NET.OpenGL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\Silk.NET\Silk.NET.OpenGL.dll</HintPath>
+    </Reference>
+    <Reference Include="Silk.NET.OpenGL.Legacy, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\Silk.NET\Silk.NET.OpenGL.Legacy.dll</HintPath>
+    </Reference>
+    <Reference Include="Silk.NET.Windowing, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\Silk.NET\Silk.NET.Windowing.dll</HintPath>
+    </Reference>
+    <Reference Include="Silk.NET.Windowing.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\Silk.NET\Silk.NET.Windowing.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Silk.NET.Windowing.Desktop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\references\Silk.NET\Silk.NET.Windowing.Desktop.dll</HintPath>
+    </Reference>
+    <Reference Include="StrictEmit, Version=2.4.2.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\StrictEmit.2.4.2\lib\net45\StrictEmit.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+      <HintPath>..\packages\System.Buffers.4.4.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Memory, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+      <HintPath>..\packages\System.Memory.4.5.2\lib\netstandard2.0\System.Memory.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\System.Numerics.Vectors.4.6.0-preview5.19224.8\lib\net46\System.Numerics.Vectors.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+      <HintPath>..\packages\System.ValueTuple.4.4.0\lib\net47\System.ValueTuple.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -246,8 +315,12 @@
     <Compile Include="Engine\Bullet\PhysicsComponentMotionState.cs" />
     <Compile Include="Engine\CacheSystem\DynamicCache.cs" />
     <Compile Include="Engine\CacheSystem\FishingPostIconCache.cs" />
+    <Compile Include="Engine\Core\AllocationEntry.cs" />
+    <Compile Include="Engine\Core\Allocator.cs" />
     <Compile Include="Engine\Core\HeapAllocator.cs" />
     <Compile Include="Engine\Core\IAllocator.cs" />
+    <Compile Include="Engine\Core\ISequentialList.cs" />
+    <Compile Include="Engine\Core\SequentialList.cs" />
     <Compile Include="Engine\Core\NativeArray.cs" />
     <Compile Include="Engine\Core\NativeList.cs" />
     <Compile Include="Engine\Core\ObjectPool.cs" />
@@ -265,6 +338,7 @@
     <Compile Include="Engine\Generation\ChunkSystem\Builders\StructuresBuilder.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkDetails.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\ChunkQueueType.cs" />
+    <Compile Include="Engine\Generation\ChunkSystem\CoordinateHash3D.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\LoadBalancer.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\NativeMesher.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\SampledBlock.cs" />
@@ -276,6 +350,7 @@
     <Compile Include="Engine\Generation\Simplex.cs" />
     <Compile Include="Engine\Generation\WorldBuilder.cs" />
     <Compile Include="Engine\ItemSystem\Item.cs" />
+    <Compile Include="Engine\Management\PerformanceStatistics.cs" />
     <Compile Include="Engine\Native\HedraCoreNative.cs" />
     <Compile Include="Engine\Native\MeshOptimizer.cs" />
     <Compile Include="Engine\Native\Pointer.cs" />
@@ -294,6 +369,7 @@
     <Compile Include="Engine\QuestSystem\QuestInventory.cs" />
     <Compile Include="Engine\QuestSystem\QuestTemplate.cs" />
     <Compile Include="Engine\QuestSystem\QuestThoughtsComponent.cs" />
+    <Compile Include="Engine\Rendering\BaseVertexData.cs" />
     <Compile Include="Engine\Rendering\Core\LightSettings.cs" />
     <Compile Include="Engine\Rendering\Core\UBO.cs" />
     <Compile Include="Engine\Rendering\Core\VBOCache.cs" />
@@ -305,6 +381,7 @@
     <Compile Include="Engine\Rendering\Geometry\IsoSurfaceCreator.cs" />
     <Compile Include="Engine\Rendering\Geometry\MarchingCubes.cs" />
     <Compile Include="Engine\Rendering\Geometry\MeshAnalyzer.cs" />
+    <Compile Include="Engine\Rendering\Geometry\MeshOperations.cs" />
     <Compile Include="Engine\Rendering\NativeVertexData.cs" />
     <Compile Include="Engine\Rendering\UI\CompanionProfileUIElement.cs" />
     <Compile Include="Engine\Rendering\UI\MenuBackground.cs" />
@@ -319,6 +396,12 @@
     <Compile Include="Engine\StructureSystem\Overworld\SpawnCampfireDesign.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\GenericBuilderWithNPC.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\GenericNPCSettings.cs" />
+    <Compile Include="Engine\Windowing\GLEnums.cs" />
+    <Compile Include="Engine\Windowing\HedraMarshal.cs" />
+    <Compile Include="Engine\Windowing\KeyboardKeyEventArgs.cs" />
+    <Compile Include="Engine\Windowing\MouseButtonEventArgs.cs" />
+    <Compile Include="Engine\Windowing\MouseMoveEventArgs.cs" />
+    <Compile Include="Engine\Windowing\MouseWheelEventArgs.cs" />
     <Compile Include="Items\EquipmentType.cs" />
     <Compile Include="Items\ItemTier.cs" />
     <Compile Include="Items\Trader.cs" />
@@ -342,6 +425,11 @@
     <Compile Include="Mission\QuestReward.cs" />
     <Compile Include="ModelHandlers\BeetleHandler.cs" />
     <Compile Include="Mission\MissionBuilder.cs" />
+    <Compile Include="Numerics\IRandom.cs" />
+    <Compile Include="Numerics\Mathf.cs" />
+    <Compile Include="Numerics\QuaternionMath.cs" />
+    <Compile Include="Numerics\RandomDistribution.cs" />
+    <Compile Include="Numerics\VectorExtensions.cs" />
     <Compile Include="Rendering\Graphics2D.cs" />
     <Compile Include="Structures\GhostTownBossDesign.cs" />
     <Compile Include="Structures\GhostTownPortalDesign.cs" />
@@ -383,7 +471,6 @@
     <Compile Include="Components\ThoughtsComponent.cs" />
     <Compile Include="Components\TradeComponent.cs" />
     <Compile Include="Components\VillagerThoughtsComponent.cs" />
-    <Compile Include="Core\Mathf.cs" />
     <Compile Include="Core\TaskScheduler.cs" />
     <Compile Include="Core\Time.cs" />
     <Compile Include="Core\Timer.cs" />
@@ -495,8 +582,6 @@
     <Compile Include="Engine\Networking\Packets\PositionAndRotationPacket.cs" />
     <Compile Include="Engine\Networking\Packets\WorldPacket.cs" />
     <Compile Include="Engine\Networking\SteamConnection.cs" />
-    <Compile Include="Engine\Obfuscation\ObfuscatorSettings.cs" />
-    <Compile Include="Engine\Obfuscation\ScriptSettings.cs" />
     <Compile Include="Engine\Pathfinding\Finder.cs" />
     <Compile Include="Engine\Pathfinding\Grid.cs" />
     <Compile Include="Engine\Pathfinding\MinHeap.cs" />
@@ -604,7 +689,7 @@
     <Compile Include="Engine\Rendering\ITransparent.cs" />
     <Compile Include="Engine\Rendering\LodableObject.cs" />
     <Compile Include="Engine\Rendering\TextBillboard.cs" />
-    <Compile Include="Engine\Rendering\Texture.cs" />
+    <Compile Include="Engine\Rendering\Texture2D.cs" />
     <Compile Include="Engine\Rendering\TextureBillboard.cs" />
     <Compile Include="Engine\Rendering\UI\Plaque.cs" />
     <Compile Include="Engine\Rendering\UI\TextCache.cs" />
@@ -901,8 +986,6 @@
     <Compile Include="Engine\ClassSystem\RogueDesign.cs" />
     <Compile Include="Engine\ClassSystem\WarriorDesign.cs" />
     <Compile Include="Engine\CompatibilityManager.cs" />
-    <Compile Include="Engine\ComplexMath\IRandom.cs" />
-    <Compile Include="Engine\ComplexMath\RandomDistribution.cs" />
     <Compile Include="Engine\Core\RegistryFactory.cs" />
     <Compile Include="Engine\Core\ICountable.cs" />
     <Compile Include="Engine\Core\IPositionable.cs" />
@@ -992,7 +1075,6 @@
     <Compile Include="Engine\Rendering\CompressedVertexDataExtensions.cs" />
     <Compile Include="Engine\Rendering\Geometry\ChunkMeshBorderDetector.cs" />
     <Compile Include="Engine\Rendering\Geometry\Geometry.cs" />
-    <Compile Include="Engine\Rendering\Geometry\WaterEdgePatcher.cs" />
     <Compile Include="Engine\Rendering\ITexture2DProvider.cs" />
     <Compile Include="Engine\Rendering\IVertexData.cs" />
     <Compile Include="Engine\Rendering\Texture2DProvider.cs" />
@@ -1041,7 +1123,6 @@
     <Compile Include="Engine\Management\DistributedExecuter.cs" />
     <Compile Include="Engine\Management\ITickable.cs" />
     <Compile Include="Engine\Management\TickSystem.cs" />
-    <Compile Include="Engine\ComplexMath\QuaternionMath.cs" />
     <Compile Include="Engine\Management\TrackItem.cs" />
     <Compile Include="Engine\ModuleSystem\AnimationEvents\AnimationEventBuilder.cs" />
     <Compile Include="Engine\ModuleSystem\HumanoidFactory.cs" />
@@ -1327,8 +1408,6 @@
     <Compile Include="Engine\Rendering\UI\CharacterCreatorUI.cs" />
     <Compile Include="Engine\Rendering\UI\ColorPicker.cs" />
     <Compile Include="Engine\Rendering\UI\ControlsUI.cs" />
-    <Compile Include="Engine\Rendering\UI\CursorIcon.cs" />
-    <Compile Include="Engine\Rendering\UI\DisplayOnDrag.cs" />
     <Compile Include="Engine\Rendering\UI\GameUI.cs" />
     <Compile Include="Engine\Rendering\UI\GUIRenderer.cs" />
     <Compile Include="Engine\Rendering\UI\GUITexture.cs" />
@@ -14547,6 +14626,9 @@
     <Content Include="Shaders\Includes\Highlights.shader">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Shaders\Includes\NoiseTexture.shader">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Shaders\Includes\Shadows.shader">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -14580,6 +14662,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Translations\Español.po" />
+    <Content Include="x64\glfw3.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="x64\hedracore.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -14593,6 +14678,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="x64\wrap_oal.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x86\glfw3.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="x86\hedracore.dll">
@@ -14611,12 +14699,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ScriptMapper\ScriptMapper.csproj">
-      <Project>{4798438d-3653-4ca7-b695-d4414186c333}</Project>
-      <Name>ScriptMapper</Name>
-    </ProjectReference>
-  </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent Condition="'$(OS)' == 'Windows_NT' ">
         call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" normal text
@@ -14633,14 +14715,15 @@
     <ErrorReport>prompt</ErrorReport>
     <ConsolePause>False</ConsolePause>
     <OutputPath>bin\Release\</OutputPath>
-    <PreBuildEvent Condition="'$(OS)' == 'Windows_NT' ">
-        call "$(ProjectDir)/../ScriptMapper/bin/$(Configuration)/ScriptMapper.exe" "$(ProjectDir)/Scripts/" "$(ProjectDir)/Engine/Obfuscation/ScriptSettings.cs"
-    </PreBuildEvent>
     <PostBuildEvent Condition="'$(OS)' == 'Windows_NT' ">
-    	call "$(ProjectDir)/../hedra-obfuscator/Confuser.CLI.exe" "$(ProjectDir)/Hedra.crproj"
         call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" normal text
         call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" normal binary
         call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" normal binary
+    </PostBuildEvent>
+    <PostBuildEvent Condition="'$(OS)' != 'Windows_NT' ">
+        mono "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" normal text
+        mono "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" normal binary
+        mono "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" normal binary
     </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
@@ -14655,9 +14738,11 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
+    <Prefer32bit>false</Prefer32bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <Prefer32bit>false</Prefer32bit>
+    <Optimize>false</Optimize>
   </PropertyGroup>
   <ProjectExtensions />
 </Project>

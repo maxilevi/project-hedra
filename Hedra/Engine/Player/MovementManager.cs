@@ -5,7 +5,7 @@
  *
  */
 using System;
-using OpenTK;
+using System.Numerics;
 using Hedra.Engine.Management;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,6 +14,7 @@ using Hedra.Core;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.EntitySystem;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Player
 {
@@ -52,11 +53,6 @@ namespace Hedra.Engine.Player
             Human.Model.LocalRotation = new Vector3(0, Human.Model.LocalRotation.Y, 0);
             if(Up) Human.Position += Vector3.UnitY * 12.5f * (float) Time.DeltaTime;
             else Human.Position -= Vector3.UnitY * 12.5f * (float) Time.DeltaTime;
-
-            Human.Position = new Vector3(
-                Human.Position.X,
-                Math.Max(Physics.HeightAtPosition(Human.Position)+2, Human.Position.Y),
-                Human.Position.Z);
         }
 
         protected void Jump()
@@ -149,12 +145,12 @@ namespace Hedra.Engine.Player
         private void HandleJumping()
         {
             if (!IsJumping) return;
-            if (Human.IsGrounded && Human.Physics.Impulse.LengthSquared < 30 || Human.IsUnderwater)
+            if (Human.IsGrounded && Human.Physics.Impulse.LengthSquared() < 30 || Human.IsUnderwater)
             {
                 CancelJump();
             }
 
-            if (Human.Physics.Impulse.LengthSquared < 10f && !_appliedDownwardImpulse)
+            if (Human.Physics.Impulse.LengthSquared() < 10f && !_appliedDownwardImpulse)
             {
                 Human.Physics.ApplyImpulse(Vector3.UnitY * -4f);
                 _appliedDownwardImpulse = true;

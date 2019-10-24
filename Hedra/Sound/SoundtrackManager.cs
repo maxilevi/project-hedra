@@ -8,14 +8,11 @@
  */
 
 using System.IO;
-using Hedra.Engine.Game;
-using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Scripting;
 using Hedra.Engine.Sound;
-using Microsoft.Scripting.Hosting;
 using NVorbis;
-using OpenTK.Audio.OpenAL;
+using Silk.NET.OpenAL;
 
 namespace Hedra.Sound
 {
@@ -47,10 +44,12 @@ namespace Hedra.Sound
         private static int _currentActionSong;
         private static int _currentAmbientSong;
         private static bool _isPlayingAmbient;
+        private static AL _al;
 
         public static void Load()
         {
             Load(new SoundSource(SoundPlayer.ListenerPosition));
+            _al = AL.GetApi();
         }
 
         public static void Load(SoundSource Source)
@@ -91,8 +90,8 @@ namespace Hedra.Sound
 
             if(_usedBuffer != null && !_source.IsPlaying && _receivedBytes > 0)
             {
-                AL.Source(_source.Id, ALSourcei.Buffer, (int) _usedBuffer.ID);
-                AL.SourcePlay(_source.Id);
+                _al.SetSourceProperty(_source.Id, SourceInteger.Buffer, (int) _usedBuffer.Id);
+                _al.SourcePlay(_source.Id);
                 _buildBuffers = true;
             }
             
@@ -109,13 +108,13 @@ namespace Hedra.Sound
                     return;
                 }
                 var data = CastBuffer(Buffer, _receivedBytes);
-                if(_usedBuffer == null || (_frontBuffer != null && _usedBuffer.ID == _frontBuffer.ID))
+                if(_usedBuffer == null || (_frontBuffer != null && _usedBuffer.Id == _frontBuffer.Id))
                 {
                     _backBuffer?.Dispose();
                     _backBuffer = new SoundBuffer(data, SoundPlayer.GetSoundFormat(_channels, 16), _sampleRate);
                     _usedBuffer = _backBuffer;
                 }
-                else if(_usedBuffer.ID == _backBuffer.ID)
+                else if(_usedBuffer.Id == _backBuffer.Id)
                 {
                     _frontBuffer?.Dispose();
                     _frontBuffer = new SoundBuffer(data, SoundPlayer.GetSoundFormat(_channels, 16), _sampleRate);

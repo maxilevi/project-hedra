@@ -13,6 +13,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.SkillSystem;
 using Hedra.EntitySystem;
 using Hedra.Items;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.ModuleSystem.Templates
 {

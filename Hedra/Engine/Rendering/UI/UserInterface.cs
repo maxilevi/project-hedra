@@ -7,7 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 using System;
-using OpenTK.Input;
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
@@ -17,7 +17,7 @@ using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Engine.Input;
 using Hedra.Engine.Localization;
-using OpenTK;
+using System.Numerics;
 using Hedra.Engine.Management;
 using Hedra.Engine.Networking;
 using Hedra.Engine.Player;
@@ -147,7 +147,7 @@ namespace Hedra.Engine.Rendering.UI
             Button quit = new Button(new Vector2(.9f, bandPosition.Y),
                                      new Vector2(0.15f,0.075f), Translation.Create("exit"), DefaultFontColor, FontCache.GetNormal(fontSize));
             
-            quit.Click += delegate { Program.GameWindow.Exit(); };
+            quit.Click += delegate { Program.GameWindow.Close(); };
             
             if(Program.GameWindow.GameVersion != "Unknown")
             {

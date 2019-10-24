@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
@@ -22,13 +23,14 @@ namespace Hedra.Engine.Generation.ChunkSystem
             this.Height = Height;
             this.Depth = Depth;
         }
-
+        
         public SampledBlock* this[int X, int Y, int Z]
         {
+            [MethodImpl(256)]
             get
             {
 #if DEBUG
-                //BoundsCheck(X, Y, Z);
+                BoundsCheck(X, Y, Z);
 #endif
                 return &_ptr[X * Depth * Height + Y * Depth + Z];
             }

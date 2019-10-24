@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Hedra.Core;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
+using Hedra.Engine.Core;
 
 namespace Hedra.Engine.Rendering.Geometry
 {
@@ -19,9 +20,9 @@ namespace Hedra.Engine.Rendering.Geometry
         /*
          * Reference: https://docs.blender.org/manual/en/latest/modeling/modifiers/deform/smooth.html
          */
-        public static void ApplySmoothing(VertexData Mesh, HashSet<uint> IgnoreList)
+        public static void ApplySmoothing(IList<uint> Indices, IList<Vector3> Vertices, IList<Vector4> Colors, IList<Vector3> Normals, HashSet<uint> IgnoreList)
         {
-            var map = IndexVertices(Mesh);
+            var map = IndexVertices(Indices, Vertices, Colors, Normals);
             var vertexRemap = new Dictionary<Vector3, VertexRemap>();
 
             void AddWeight(Vector3 Vertex, Vertex Neighbour)
@@ -35,9 +36,9 @@ namespace Hedra.Engine.Rendering.Geometry
                 };
             }
             
-            for (var i = 0; i < Mesh.Vertices.Count; ++i)
+            for (var i = 0; i < Vertices.Count; ++i)
             {
-                var vertex = Mesh.Vertices[i];
+                var vertex = Vertices[i];
                 var triangles = map[vertex].ToArray();
                 if (!vertexRemap.ContainsKey(vertex))
                     vertexRemap[vertex] = new VertexRemap();
@@ -52,12 +53,12 @@ namespace Hedra.Engine.Rendering.Geometry
                 }
             }
 
-            for (var i = 0; i < Mesh.Vertices.Count; ++i)
+            for (var i = 0; i < Vertices.Count; ++i)
             {
-                var remap = vertexRemap[Mesh.Vertices[i]];
-                Mesh.Normals[i] = remap.Normal / remap.Count;
+                var remap = vertexRemap[Vertices[i]];
+                Normals[i] = remap.Normal / remap.Count;
                 if(IgnoreList.Contains((uint)i)) continue;
-                Mesh.Vertices[i] = remap.Position / remap.Count;
+                Vertices[i] = remap.Position / remap.Count;
             }
         }
         
@@ -86,16 +87,20 @@ namespace Hedra.Engine.Rendering.Geometry
                 }
             }
 
-            for (var i = 0; i < remaining.Length; ++i)
+            using (var allocator = new HeapAllocator(Allocator.Megabyte * 2))
             {
-                if(visited.Contains(remaining[i])) continue;
-                var component = new HashSet<Triangle>();
-                DepthFirstSearch(remaining[i], component);
+                for (var i = 0; i < remaining.Length; ++i)
+                {
+                    if (visited.Contains(remaining[i])) continue;
+                    var component = new HashSet<Triangle>();
+                    DepthFirstSearch(remaining[i], component);
 
-                var mesh = BuildComponent(component.ToArray());
-                mesh.Optimize();
-                list.Add(mesh);
+                    var mesh = BuildComponent(component.ToArray());
+                    mesh.Optimize(allocator);
+                    list.Add(mesh);
+                }
             }
+
             return list.ToArray();
         }
 
@@ -134,21 +139,26 @@ namespace Hedra.Engine.Rendering.Geometry
 
         private static Dictionary<Vector3, HashSet<Triangle>> IndexVertices(VertexData Mesh)
         {
+            return IndexVertices(Mesh.Indices, Mesh.Vertices, Mesh.Colors, Mesh.Normals);
+        }
+        
+        private static Dictionary<Vector3, HashSet<Triangle>> IndexVertices(IList<uint> Indices, IList<Vector3> Vertices, IList<Vector4> Colors, IList<Vector3> Normals)
+        {
             var map = new Dictionary<Vector3, HashSet<Triangle>>();
             Vertex MakeVertex(int Index)
             {
                 return new Vertex
                 {
-                    Position = Mesh.Vertices[Index],
-                    Color = Mesh.Colors[Index],
-                    Normal = Mesh.Normals[Index]
+                    Position = Vertices[Index],
+                    Color = Colors[Index],
+                    Normal = Normals[Index]
                 };
             }
-            for (var i = 0; i < Mesh.Indices.Count; i+=3)
+            for (var i = 0; i < Indices.Count; i+=3)
             {
-                var p1 = MakeVertex((int)Mesh.Indices[i]);
-                var p2 = MakeVertex((int)Mesh.Indices[i+1]);
-                var p3 = MakeVertex((int)Mesh.Indices[i+2]);
+                var p1 = MakeVertex((int)Indices[i]);
+                var p2 = MakeVertex((int)Indices[i+1]);
+                var p3 = MakeVertex((int)Indices[i+2]);
                 var triangle = new Triangle
                 {
                     P1 = p1,

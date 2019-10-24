@@ -23,8 +23,9 @@ using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenTK;
-using OpenTK.Input;
+using System.Numerics;
+using Hedra.Numerics;
+using Silk.NET.Input.Common;
 using Cursor = Hedra.Input.Cursor;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem

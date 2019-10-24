@@ -3,7 +3,8 @@ using Hedra.Core;
 using Hedra.Engine.Game;
 using Hedra.Game;
 using Hedra.Sound;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Sound
 {
@@ -28,7 +29,7 @@ namespace Hedra.Engine.Sound
         public void Update(bool Condition)
         {
             Condition = Condition && !GameSettings.Paused;
-            if (this._sound == null && (this.Position - SoundPlayer.ListenerPosition).LengthFast < Radius && Condition)
+            if (this._sound == null && (this.Position - SoundPlayer.ListenerPosition).LengthFast() < Radius && Condition)
                 this._sound = SoundPlayer.GetAvailableSource();
 
             if (this._sound != null && (!this._sound.Source.IsPlaying || Type != _bufferType) && Condition)
@@ -39,7 +40,7 @@ namespace Hedra.Engine.Sound
 
             if (this._sound != null)
             {
-                _targetGain = Math.Max(0, 1 - (this.Position - SoundPlayer.ListenerPosition).LengthFast / Radius);
+                _targetGain = Math.Max(0, 1 - (this.Position - SoundPlayer.ListenerPosition).LengthFast() / Radius);
                 _targetGain *= Condition ? 1 : 0;
                 _targetGain *= SoundPlayer.Volume;
                 _targetGain *= Volume;
@@ -50,7 +51,7 @@ namespace Hedra.Engine.Sound
                     this._sound.Source.Volume = _targetGain;
 
             }
-            if (this._sound != null && (this.Position - SoundPlayer.ListenerPosition).LengthFast > Radius)
+            if (this._sound != null && (this.Position - SoundPlayer.ListenerPosition).LengthFast() > Radius)
             {
                 this._sound.Source.Stop();
                 this._sound.Locked = false;

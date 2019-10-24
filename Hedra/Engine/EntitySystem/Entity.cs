@@ -27,7 +27,8 @@ using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.EntitySystem
 {
@@ -105,7 +106,7 @@ namespace Hedra.Engine.EntitySystem
             }
         }
 
-        public bool InUpdateRange => (Physics.RigidbodyPosition - LocalPlayer.Instance.Model.Position).Xz.LengthSquared < GeneralSettings.UpdateDistanceSquared;
+        public bool InUpdateRange => (Physics.RigidbodyPosition - LocalPlayer.Instance.Model.Position).Xz().LengthSquared() < GeneralSettings.UpdateDistanceSquared;
 
         public bool IsActive { get; set; }
         public bool IsBoss { get; set; }
@@ -417,7 +418,7 @@ namespace Hedra.Engine.EntitySystem
         private void SplashEffect(Chunk UnderChunk)
         {
             World.Particles.VariateUniformly = true;
-            World.Particles.Color = new Vector4((UnderChunk?.Biome.Colors.WaterColor ?? Colors.DeepSkyBlue).Xyz, .5f);
+            World.Particles.Color = new Vector4((UnderChunk?.Biome.Colors.WaterColor ?? Colors.DeepSkyBlue).Xyz(), .5f);
             World.Particles.Position = Position;
             World.Particles.Scale = Vector3.One * .5f;
             World.Particles.ScaleErrorMargin = new Vector3(.35f, .35f, .35f);

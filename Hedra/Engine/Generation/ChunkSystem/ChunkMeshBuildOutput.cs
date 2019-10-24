@@ -5,12 +5,12 @@ namespace Hedra.Engine.Generation.ChunkSystem
 {
     public class ChunkMeshBuildOutput
     {
-        public VertexData StaticData { get; set; }
-        public VertexData WaterData { get; set; }
-        public VertexData InstanceData { get; set; }
+        public NativeVertexData StaticData { get; set; }
+        public NativeVertexData WaterData { get; set; }
+        public NativeVertexData InstanceData { get; set; }
         public bool Failed { get; set; }
 
-        public ChunkMeshBuildOutput(VertexData StaticData, VertexData WaterData, VertexData InstanceData, bool Failed)
+        public ChunkMeshBuildOutput(NativeVertexData StaticData, NativeVertexData WaterData, NativeVertexData InstanceData, bool Failed)
         {
             this.StaticData = StaticData;
             this.WaterData = WaterData;
@@ -20,8 +20,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public void Dispose()
         {
-            StaticData.Dispose();
-            WaterData.Dispose();
+            StaticData?.Dispose();
+            WaterData?.Dispose();
+            InstanceData?.Dispose();
         }
     }
 }

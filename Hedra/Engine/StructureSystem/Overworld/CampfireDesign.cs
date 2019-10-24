@@ -3,7 +3,6 @@ using Hedra.BiomeSystem;
 using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
@@ -11,7 +10,8 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
 using Hedra.Sound;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
@@ -31,7 +31,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             ((Campfire) Structure.WorldObject).Bandit =
                     World.WorldBuilding.SpawnBandit(
                         new Vector3(Structure.Position.X, 125, Structure.Position.Z) 
-                        + Vector3.TransformPosition(Vector3.UnitZ * -12f, Matrix4.CreateRotationY(rotation.Y * Mathf.Radian)),
+                        + Vector3.Transform(Vector3.UnitZ * -12f, Matrix4x4.CreateRotationY(rotation.Y * Mathf.Radian)),
                         Level
                     );
 
@@ -39,7 +39,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             if (rng.Next(0, 5) != 1)
             {
                 SpawnMat(
-                    Vector3.TransformPosition(Vector3.UnitX * -12f, Matrix4.CreateRotationY(rotation.Y * Mathf.Radian)),
+                    Vector3.Transform(Vector3.UnitX * -12f, Matrix4x4.CreateRotationY(rotation.Y * Mathf.Radian)),
                     rotation,
                     transformationMatrix,
                     Structure
@@ -47,15 +47,15 @@ namespace Hedra.Engine.StructureSystem.Overworld
             }
         }
         
-        public static void BuildBaseCampfire(Vector3 Position, Vector3 Rotation, CollidableStructure Structure, Random Rng, out Matrix4 TransformationMatrix)
+        public static void BuildBaseCampfire(Vector3 Position, Vector3 Rotation, CollidableStructure Structure, Random Rng, out Matrix4x4 TransformationMatrix)
         {
             var originalCampfire = CacheManager.GetModel(CacheItem.Campfire);
             var model = originalCampfire.ShallowClone();
 
-            TransformationMatrix = Matrix4.CreateScale(3 + Rng.NextFloat() * 1.5f);
-            var rotMat = Matrix4.CreateRotationY(Rotation.Y * Mathf.Radian);
+            TransformationMatrix = Matrix4x4.CreateScale(3 + Rng.NextFloat() * 1.5f);
+            var rotMat = Matrix4x4.CreateRotationY(Rotation.Y * Mathf.Radian);
             TransformationMatrix *= rotMat;
-            TransformationMatrix *= Matrix4.CreateTranslation(Position);
+            TransformationMatrix *= Matrix4x4.CreateTranslation(Position);
             model.Transform(TransformationMatrix);
             model.Color(AssetManager.ColorCode1, Utils.VariateColor(TentColor(Rng), 15, Rng));
 
@@ -69,7 +69,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             Structure.AddCollisionShape(shapes.ToArray());
         }
 
-        public static void SpawnMat(Vector3 Position, Vector3 CampfireRotation, Matrix4 TransformationMatrix,
+        public static void SpawnMat(Vector3 Position, Vector3 CampfireRotation, Matrix4x4 TransformationMatrix,
             CollidableStructure Structure)
         {
             var padOffset = Position + Vector3.UnitZ * -1f;
@@ -82,7 +82,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var shapes = CacheManager.GetShape(originalModel).DeepClone();
             for (var i = 0; i < shapes.Count; i++)
             {
-                shapes[i].Transform(Matrix4.CreateScale(Vector3.One * .75f));
+                shapes[i].Transform(Matrix4x4.CreateScale(Vector3.One * .75f));
                 shapes[i].Transform(TransformationMatrix);
                 shapes[i].Transform(padOffset);
                 Structure.AddCollisionShape(shapes[i]);
@@ -108,7 +108,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             var height = Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z);
 
-            return Rng.Next(0, StructureGrid.CampfireChance) == 1 && height > BiomePool.SeaLevel && Math.Abs(LandscapeGenerator.River(TargetPosition.Xz)) < 0.005f;
+            return Rng.Next(0, StructureGrid.CampfireChance) == 1 && height > BiomePool.SeaLevel && Math.Abs(Biome.Generation.RiverAtPoint(TargetPosition.X, TargetPosition.Z)) < 0.005f;
         }
 
         public static Vector4 TentColor(Random Rng)

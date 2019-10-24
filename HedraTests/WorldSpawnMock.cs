@@ -1,7 +1,7 @@
 using System;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
-using OpenTK;
+using System.Numerics;
 
 namespace HedraTests
 {

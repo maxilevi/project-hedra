@@ -22,7 +22,8 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Geometry;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 using Region = Hedra.BiomeSystem.Region;
 
 namespace Hedra.Engine.Generation.ChunkSystem
@@ -42,6 +43,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public bool BuildedWithStructures { get; private set; }
         public bool Disposed { get; private set; }
         public bool HasWater { get; private set; }
+        public bool IsRiverConstant { get; private set; }
         public bool IsGenerated { get; private set; }
         public BiomeGenerator Landscape { get; private set; }
         public int Lod { get; set; } = 1;
@@ -54,6 +56,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private bool IsGenerating { get; set; }
         public Vector3 Position { get; private set; }
         public ChunkAutomatons Automatons { get; }
+        private List<CoordinateHash3D> _waterPositions;
         private Timer _activityTimer;
 
         //private byte[] _rleBlocks;
@@ -96,6 +99,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 IsGenerating = true;
                 var details = Landscape.GenerateBlocks(_blocks);
                 HasWater = details.HasWater;
+                IsRiverConstant = details.IsRiverConstant;
                 FillHeightCache(_blocks);
                 IsGenerating = false;
             }
@@ -131,7 +135,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public void GenerateStructures()
         {
             if (Disposed) throw new ArgumentException($"Cannot build a disposed chunk.");
-            lock (_blocksLock)
+            lock (_blocksLock)    
             {
                 IsGenerating = true;
                 Landscape.GenerateEnvironment(_regionCache);
@@ -147,28 +151,32 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (_terrainBuilder.Sparsity == null) BuildSparsity();
             var buildingLod = this.Lod;
             this.PrepareForBuilding();
-            var blocks = _blocks;
-            var output = this.CreateTerrainMesh(blocks, buildingLod);
-            SetupCollider(blocks, buildingLod);
-
+            var allocator = new HeapAllocator(Allocator.Megabyte * 16);
+            SetupCollider(allocator, buildingLod);
+            if(!allocator.IsEmpty) throw new ArgumentOutOfRangeException("Detected memory leak");
+            
+            var output = this.CreateTerrainMesh(allocator, buildingLod);
             if (output == null) return;
             this.SetChunkStatus(output);
-            output = this.AddStructuresMeshes(output, buildingLod);
+            output = this.AddStructuresMeshes(allocator, output, buildingLod);
 
             if (output == null) return;
-            this.UploadMesh(output);
+            /* The allocator will be destroyed when the mesh is uploaded */
+            this.UploadMesh(allocator, output);
             this.FinishUpload(output, buildingLod);
         }
 
-        private void SetupCollider(Block[] Blocks, int BuildingLod)
+        private void SetupCollider(IAllocator Allocator, int BuildingLod)
         {
             if (BuildingLod == 1 || BuildingLod == 2)
             {
-                Bullet.BulletPhysics.AddChunk(Position.Xz, CreateCollisionTerrainMesh(Blocks), CollisionShapes);
+                var mesh = CreateCollisionTerrainMesh(Allocator);
+                Bullet.BulletPhysics.AddChunk(Position.Xz(), mesh, CollisionShapes);
+                mesh.Dispose();
             }
             else
             {
-                Bullet.BulletPhysics.RemoveChunk(Position.Xz);
+                Bullet.BulletPhysics.RemoveChunk(Position.Xz());
             }
         }
 
@@ -178,25 +186,25 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _terrainBuilder.Sparsity = ChunkSparsity.From(this);
         }
 
-        private VertexData CreateCollisionTerrainMesh(Block[] Blocks)
+        private NativeVertexData CreateCollisionTerrainMesh(IAllocator Allocator)
         {
             lock (_blocksLock)
             {
-                return _terrainBuilder.CreateTerrainCollisionMesh(_regionCache);
+                return _terrainBuilder.CreateTerrainCollisionMesh(_regionCache, Allocator);
             }
         }
 
-        private ChunkMeshBuildOutput CreateTerrainMesh(Block[] Blocks, int LevelOfDetail)
+        private ChunkMeshBuildOutput CreateTerrainMesh(IAllocator Allocator, int LevelOfDetail)
         {
             lock (_blocksLock)
             {
-                return _terrainBuilder.CreateTerrainMesh(LevelOfDetail, _regionCache);
+                return _terrainBuilder.CreateTerrainMesh(Allocator, LevelOfDetail, _regionCache);
             }
         }
 
-        private ChunkMeshBuildOutput AddStructuresMeshes(ChunkMeshBuildOutput Input, int LevelOfDetail)
+        private ChunkMeshBuildOutput AddStructuresMeshes(IAllocator Allocator, ChunkMeshBuildOutput Input, int LevelOfDetail)
         {
-            return _structuresBuilder.AddStructuresMeshes(Input, LevelOfDetail);
+            return _structuresBuilder.AddStructuresMeshes(Allocator, Input, LevelOfDetail);
         }
 
         private void SetChunkStatus(ChunkMeshBuildOutput Input)
@@ -221,7 +229,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             this.IsBuilding = false;
         }
 
-        private void UploadMesh(ChunkMeshBuildOutput Input)
+        private void UploadMesh(IAllocator InputAllocator, ChunkMeshBuildOutput Input)
         {
             if (Mesh == null ||
                 Input.StaticData.Colors.Count != Input.StaticData.Vertices.Count ||
@@ -245,9 +253,13 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 new Vector3(staticMax.X, Math.Max(staticMax.Y, Input.WaterData.SupportPoint(Vector3.UnitY).Y),
                     staticMax.Z)
             );
-            Input.StaticData.Optimize();
-            Input.InstanceData.Optimize();
-            Input.WaterData.Optimize();
+            using (var allocator = new HeapAllocator(Allocator.Megabyte * 8))
+            {
+                Input.StaticData.Optimize(allocator);
+                Input.InstanceData.Optimize(allocator);
+                Input.WaterData.Optimize(allocator);
+            }
+
             DistributedExecuter.Execute(delegate
             {
                 var staticResult = WorldRenderer.UpdateStatic(new Vector2(OffsetX, OffsetZ), Input.StaticData);
@@ -262,10 +274,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     Mesh.Enabled = true;
                     Mesh.BuildedOnce = true;
                 }
-
-                Input.StaticData?.Dispose();
-                Input.InstanceData?.Dispose();
-                Input.WaterData?.Dispose();
+                Input.StaticData.Dispose();
+                Input.InstanceData.Dispose();
+                Input.WaterData.Dispose();
+                InputAllocator.Dispose();
             });
         }
 
@@ -429,10 +441,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private void ForceDispose()
         {
-            Bullet.BulletPhysics.RemoveChunk(Position.Xz);
+            Bullet.BulletPhysics.RemoveChunk(Position.Xz());
             Mesh?.Dispose();
             Landscape?.Dispose();
-            _blocks = null;
         }
         
         
@@ -508,6 +519,24 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
 
             return blocks;
+        }
+        
+        public void AddWaterDensity(int X, int Y, int Z)
+        {
+            lock (_waterLock)
+            {
+                if (_waterPositions == null) _waterPositions = new List<CoordinateHash3D>();
+                var hash = new CoordinateHash3D(X,Y,Z);
+                _waterPositions.Add(hash);
+            }
+        }
+        
+        public NativeArray<CoordinateHash3D> GetWaterPositions(IAllocator Allocator)
+        {
+            lock (_waterLock)
+            {
+                return _waterPositions.ToNativeArray(Allocator);
+            }
         }
 
         public void Test()

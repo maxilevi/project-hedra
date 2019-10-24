@@ -3,7 +3,8 @@ using System.Runtime.CompilerServices;
 using Hedra.BiomeSystem;
 using Hedra.Core;
 using Hedra.Engine.Rendering;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Generation.ChunkSystem
 {
@@ -11,7 +12,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
     {
         private static int Bounds = (int) (Chunk.Width / Chunk.BlockSize); 
         private readonly Chunk _parent;
-        private readonly float _coefficient;    
+        private readonly float _coefficient;
         private int _offsetX;
         private int _offsetZ;
         private readonly int _boundsX;
@@ -21,9 +22,11 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private readonly float _blockSize;
         private int _sampleWidth;
         private int _sampleHeight;
+        private float _invSampleWidth;
+        private float _invSampleHeight;
         private int noiseValuesMapWidth;
         private int noiseValuesMapHeight;
-        private SampledBlock* _grid;
+        private readonly SampledBlock* _grid;
 
         public ChunkTerrainMeshBuilderHelper(Chunk Parent, int Lod, SampledBlock* Grid)
         {
@@ -52,6 +55,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             _sampleWidth = Lod;
             _sampleHeight = Lod;
+            _invSampleHeight = 1f / _sampleHeight;
+            _invSampleWidth = 1f / _sampleWidth;
             noiseValuesMapWidth = (_boundsX / _sampleWidth) + 1;
             noiseValuesMapHeight = (_boundsY / _sampleHeight);
         }
@@ -90,7 +95,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var isPoint = chunkCoords == new Vector2(_offsetX, _offsetZ);
             var c = new Vector4(rng.NextFloat(), rng.NextFloat(), rng.NextFloat(), 1.0f);
             return isPoint ? new Vector4(0, 0, 0, 1.0f) : c;*/
-            return new Vector4(colorCount == 0 ? Vector3.Zero : color.Xyz / colorCount, 1.0f);
+            return new Vector4(colorCount == 0 ? Vector3.Zero : color.Xyz() / colorCount, 1.0f);
         }
 
         private void AddColorIfNecessary(int X, int Y, int Z, ref RegionColor RegionColor, ref float Noise, ref Vector4 Color, ref int ColorCount)
@@ -225,9 +230,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private float GetSample(int x, int y, int z, out BlockType Type)
         {
-            var x2 = (x / _sampleWidth);
-            var y2 = (y / _sampleHeight);
-            var z2 = (z / _sampleWidth);
+            var x2 = (int)(x * _invSampleWidth);
+            var y2 = (int)(y * _invSampleHeight);
+            var z2 = (int)(z * _invSampleWidth);
 
             var b0 = Get(x2,y2,z2);
             var b1 = Get(x2 + 1, y2, z2);
@@ -243,9 +248,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 b2.Density, b3.Density,
                 b4.Density, b5.Density,
                 b6.Density, b7.Density,
-                (x % _sampleWidth) / (float) _sampleWidth,
-                (y % _sampleHeight) / (float) _sampleHeight,
-                (z % _sampleWidth) / (float) _sampleWidth
+                (x % _sampleWidth) * _invSampleWidth,
+                (y % _sampleHeight) * _invSampleHeight,
+                (z % _sampleWidth) * _invSampleWidth
             );
         }
 

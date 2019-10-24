@@ -7,9 +7,10 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Sound;
 using NVorbis;
-using OpenTK;
-using OpenTK.Audio;
-using OpenTK.Audio.OpenAL;
+using System.Numerics;
+using Hedra.Numerics;
+using Silk.NET.OpenAL;
+
 
 namespace Hedra.Engine.Sound
 {
@@ -26,6 +27,7 @@ namespace Hedra.Engine.Sound
 
         public SoundProvider()
         {
+            _audioContext = new AudioContext();
             _soundFamilies = new Dictionary<string, SoundFamily>();
             _soundItems = new SoundItem[8];
             _soundSources = new SoundSource[32];
@@ -33,7 +35,6 @@ namespace Hedra.Engine.Sound
 
         public void Setup()
         {
-            _audioContext = new AudioContext();
             Log.WriteLine("Generating a pool of sound sources...");
             for (var i = 0; i < _soundSources.Length; i++)
             {
@@ -81,7 +82,7 @@ namespace Hedra.Engine.Sound
             if(!_loaded || Sound == SoundType.None.ToString()) return;
             ListenerPosition = LocalPlayer.Instance.Position;
 
-            Gain = Math.Max(Gain * (1-(ListenerPosition - Location).LengthFast / 128f) * Volume, 0);
+            Gain = Math.Max(Gain * (1-(ListenerPosition - Location).LengthFast() / 128f) * Volume, 0);
             if(Gain <= 0 ) return;
 
             var source = GrabSource();
@@ -259,12 +260,12 @@ namespace Hedra.Engine.Sound
             }
         }
 
-        public ALFormat GetSoundFormat(int Channels, int Bits)
+        public BufferFormat GetSoundFormat(int Channels, int Bits)
         {
             switch (Channels)
             {
-                case 1: return Bits == 8 ? ALFormat.Mono8 : ALFormat.Mono16;
-                case 2: return Bits == 8 ? ALFormat.Stereo8 : ALFormat.Stereo16;
+                case 1: return Bits == 8 ? BufferFormat.Mono8 : BufferFormat.Mono16;
+                case 2: return Bits == 8 ? BufferFormat.Stereo8 : BufferFormat.Stereo16;
                 default: throw new NotSupportedException("The specified sound format is not supported.");
             }
         }

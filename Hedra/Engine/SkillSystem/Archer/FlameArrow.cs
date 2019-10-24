@@ -23,7 +23,8 @@ using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.WeaponSystem;
 using Hedra.WorldObjects;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Archer
 {
@@ -101,7 +102,7 @@ namespace Hedra.Engine.SkillSystem.Archer
                 
                 World.Entities.ToList().ForEach(delegate(IEntity Entity)
                 {
-                    if (!((Entity.Position - position).LengthSquared < EffectRange * EffectRange) || Entity.IsStatic) return;
+                    if (!((Entity.Position - position).LengthSquared() < EffectRange * EffectRange) || Entity.IsStatic) return;
                     
                     if(Entity.SearchComponent<BurningComponent>() == null)
                     {

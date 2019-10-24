@@ -30,7 +30,8 @@ using Hedra.Localization;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Player
 {
@@ -42,7 +43,8 @@ namespace Hedra.Engine.Player
         public const int MaxLevel = 99;
         public const int MaxConsecutiveHits = 45;
         public const float DefaultDodgeCost = 25;
-        public const float SprintingSpeed = 0.75f;
+        public const float SprintingSpeed = 0.25f;
+        public const float SprintingCost = 7.5f;
         
         public event OnAttackEventHandler AfterAttack;
         public event OnAttackEventHandler BeforeAttack;
@@ -189,7 +191,7 @@ namespace Hedra.Engine.Player
             {
                 if(!_wasSprinting)
                     AddBonusSpeedWhile(SprintingSpeed, () => IsSprinting);
-                Stamina -= Time.DeltaTime * 20f;
+                Stamina -= Time.DeltaTime * SprintingCost;
             }
             _wasSprinting = IsSprinting;
         }
@@ -263,7 +265,7 @@ namespace Hedra.Engine.Player
         {
             var meleeWeapon = LeftWeapon as MeleeWeapon;
             var rangeModifier =  meleeWeapon?.MainWeaponSize.Y / 2.5f + 1f ?? 1.0f;
-            var wideModifier = Math.Max( (meleeWeapon?.MainWeaponSize.Xz.LengthFast ?? 1.0f) - .75f, 1.0f);
+            var wideModifier = Math.Max( (meleeWeapon?.MainWeaponSize.Xz().LengthFast() ?? 1.0f) - .75f, 1.0f);
             var nearEntities = World.InRadius<IEntity>(this.Position, 32f * rangeModifier);
             var possibleTargets = nearEntities.Where(E => !E.IsStatic && E != this).ToArray();
             var atLeastOneHit = false;
@@ -271,7 +273,7 @@ namespace Hedra.Engine.Player
             foreach (var target in possibleTargets)
             {
                 if (IgnoreList != null && Array.IndexOf(IgnoreList, target) != -1) continue;
-                var norm = (target.Position - this.Position).Xz.NormalizedFast().ToVector3();
+                var norm = (target.Position - this.Position).Xz().NormalizedFast().ToVector3();
                 var dot = Vector3.Dot(norm, this.Orientation);
                 if(dot > 0.60f / wideModifier && this.InAttackRange(target, rangeModifier))
                 {

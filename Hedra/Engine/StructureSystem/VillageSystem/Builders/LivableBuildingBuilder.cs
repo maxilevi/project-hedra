@@ -7,7 +7,8 @@ using Hedra.Engine.QuestSystem;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.StructureSystem.VillageSystem.Templates;
 using Hedra.Engine.WorldBuilding;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
@@ -40,8 +41,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         private BasePlateau CreatePlateau(T Parameters)
         {
             return GroundworkType.Squared == Parameters.GroundworkType
-                ? (BasePlateau) new SquaredPlateau(Parameters.Position.Xz, Width) { Hardness = 3.0f }
-                : new RoundedPlateau(Parameters.Position.Xz, Width * .5f * 1.5f) { Hardness = 3.0f };
+                ? (BasePlateau) new SquaredPlateau(Parameters.Position.Xz(), Width) { Hardness = 3.0f }
+                : new RoundedPlateau(Parameters.Position.Xz(), Width * .5f * 1.5f) { Hardness = 3.0f };
         }
 
         public override void Polish(T Parameters, VillageRoot Root, Random Rng)
@@ -49,8 +50,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             if (Parameters.Design.HasLamp)
             {
                 var width = VillageDesign.Spacing * .5f;
-                var offset = Vector3.TransformPosition(-width * .5f * Vector3.UnitZ - width * .5f * Vector3.UnitX,
-                    Matrix4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian));
+                var offset = Vector3.Transform(-width * .5f * Vector3.UnitZ - width * .5f * Vector3.UnitX,
+                    Matrix4x4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian));
                 DecorationsPlacer.PlaceLamp(Parameters.Position + offset, Structure, Root, Width, Rng);
             }
         }

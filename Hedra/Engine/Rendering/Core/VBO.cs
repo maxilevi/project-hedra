@@ -6,10 +6,10 @@
  */
 
 using System;
-using System.Drawing;
 using Hedra.Engine.Management;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using System.Numerics;
+using Hedra.Engine.Core;
+using Hedra.Engine.Windowing;
 
 namespace Hedra.Engine.Rendering.Core
 {
@@ -30,7 +30,7 @@ namespace Hedra.Engine.Rendering.Core
         public abstract VertexAttribPointerType PointerType { get; }
     }
     
-    public sealed class VBO<T> : VBO where T : struct
+    public sealed class VBO<T> : VBO where T : unmanaged
     {
         private bool _disposed;
         private uint _id;
@@ -106,15 +106,12 @@ namespace Hedra.Engine.Rendering.Core
             }
             VBOUpdatesInLastFrame++;
         }
-
-        public void Update(T[] Data, int Offset, int Bytes)
+        
+        public void Update(IntPtr Data, int Offset, int Bytes)
         {
             if(Offset + Bytes > SizeInBytes)
                 throw new ArgumentOutOfRangeException($"Provided data '{Offset + Bytes}' exceeds buffer size of '{SizeInBytes}'");
-            
-            if(Data.GetType().GetElementType() != ElementType)
-                throw new ArgumentOutOfRangeException($"Cannot change element type of VBO from '{ElementType}' to '{Data.GetType().GetElementType()}'");
-            
+
             Bind();
             Renderer.BufferSubData(BufferTarget, (IntPtr)Offset, (IntPtr)Bytes, Data);
             Unbind();

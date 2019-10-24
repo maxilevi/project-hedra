@@ -2,7 +2,8 @@ using System;
 using System.Drawing;
 using System.Globalization;
 using Hedra.Core;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Rendering
 {

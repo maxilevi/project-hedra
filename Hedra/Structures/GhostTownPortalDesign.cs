@@ -9,7 +9,7 @@ using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Localization;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Structures
 {
@@ -22,11 +22,11 @@ namespace Hedra.Structures
         protected override Vector3 Scale => Vector3.One * 10;
         protected virtual bool SpawnNPC => true;
 
-        protected override void DoBuild(CollidableStructure Structure, Matrix4 Rotation, Matrix4 Translation, Random Rng)
+        protected override void DoBuild(CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation, Random Rng)
         {
             base.DoBuild(Structure, Rotation, Translation, Rng);
             if(!SpawnNPC) return;
-            DoWhenChunkReady(Vector3.TransformPosition(-Vector3.UnitZ * 5 * Scale - Vector3.UnitX * 2 * Scale, Rotation * Translation), P =>
+            DoWhenChunkReady(Vector3.Transform(-Vector3.UnitZ * 5 * Scale - Vector3.UnitX * 2 * Scale, Rotation * Translation), P =>
             {
                 var human = World.WorldBuilding.SpawnHumanoid(HumanType.Mage, P);
                 human.Physics.UsePhysics = false;

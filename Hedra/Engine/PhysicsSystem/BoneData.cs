@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using OpenTK;
+using System.Numerics;
 
 namespace Hedra.Engine.PhysicsSystem
 {
@@ -31,9 +31,10 @@ namespace Hedra.Engine.PhysicsSystem
             var ids = new Dictionary<int, HashSet<Vector3>>();
             for (var i = 0; i < JointIds.Length; i++)
             {
-                for (var k = 0; k < 1; k++)
+                /* Unroll the loop */
+                //for (var k = 0; k < 1; k++)
                 {
-                    var id = (int)JointIds[i][k];
+                    var id = (int)JointIds[i].X;
                     if (!ids.ContainsKey(id))
                     {
                         ids.Add(id, new HashSet<Vector3>());

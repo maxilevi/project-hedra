@@ -56,7 +56,7 @@ namespace Hedra.Engine.Rendering.Core
         public abstract Type[] Types { get; }
     }
     
-    public class VAO<T1> : VAO where T1 : struct
+    public class VAO<T1> : VAO where T1 : unmanaged
     {
         public VAO(VBO<T1> Buffer)
         {
@@ -70,7 +70,7 @@ namespace Hedra.Engine.Rendering.Core
             {
                 Bind(false);
                 Buffer.Bind();
-                Renderer.VertexAttribPointer(Position, Buffer.Stride, Buffer.PointerType, false, 0, 0);
+                Renderer.VertexAttribPointer(Position, Buffer.Stride, Buffer.PointerType, false, 0);
                 Buffer.Unbind();
                 Unbind(false);
             }
@@ -96,7 +96,7 @@ namespace Hedra.Engine.Rendering.Core
         public override Type[] Types => new[] { typeof(T1) };
     }
     
-    public class VAO<T1, T2> : VAO<T1> where T1 : struct where T2 : struct
+    public class VAO<T1, T2> : VAO<T1> where T1 : unmanaged where T2 : unmanaged
     {
         public VAO(VBO<T1> Buffer1, VBO<T2> Buffer2) : base(Buffer1)
         {
@@ -120,7 +120,7 @@ namespace Hedra.Engine.Rendering.Core
         public override Type[] Types => base.Types.Concat(new[] { typeof(T2) }).ToArray();
     }
     
-    public class VAO<T1, T2, T3> : VAO<T1, T2> where T1 : struct where T2 : struct where T3 : struct
+    public class VAO<T1, T2, T3> : VAO<T1, T2> where T1 : unmanaged where T2 : unmanaged where T3 : unmanaged
     {
         public VAO(VBO<T1> Buffer1, VBO<T2> Buffer2, VBO<T3> Buffer3) : base(Buffer1, Buffer2)
         {
@@ -144,7 +144,7 @@ namespace Hedra.Engine.Rendering.Core
         public override Type[] Types => base.Types.Concat(new[] { typeof(T3) }).ToArray();
     }
     
-    public class VAO<T1, T2, T3, T4> : VAO<T1, T2, T3> where T1 : struct where T2 : struct where T3 : struct  where T4 : struct
+    public class VAO<T1, T2, T3, T4> : VAO<T1, T2, T3> where T1 : unmanaged where T2 : unmanaged where T3 : unmanaged  where T4 : unmanaged
     {
         public VAO(VBO<T1> Buffer1, VBO<T2> Buffer2, VBO<T3> Buffer3, VBO<T4> Buffer4) : base(Buffer1, Buffer2, Buffer3)
         {
@@ -168,7 +168,7 @@ namespace Hedra.Engine.Rendering.Core
         public override Type[] Types => base.Types.Concat(new[] { typeof(T4) }).ToArray();
     }
     
-    public class VAO<T1, T2, T3, T4, T5> : VAO<T1, T2, T3, T4> where T1 : struct where T2 : struct where T3 : struct  where T4 : struct where T5 : struct
+    public class VAO<T1, T2, T3, T4, T5> : VAO<T1, T2, T3, T4> where T1 : unmanaged where T2 : unmanaged where T3 : unmanaged  where T4 : unmanaged where T5 : unmanaged
     {
         public VAO(VBO<T1> Buffer1, VBO<T2> Buffer2, VBO<T3> Buffer3, VBO<T4> Buffer4, VBO<T5> Buffer5)
             : base(Buffer1, Buffer2, Buffer3, Buffer4)

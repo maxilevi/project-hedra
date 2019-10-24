@@ -13,6 +13,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Game;
+using Hedra.Numerics;
 
 namespace Hedra.AISystem.Humanoid
 {
@@ -32,13 +33,13 @@ namespace Hedra.AISystem.Humanoid
         public override void Update(){
             if(ToFollow == null || !DoLogic) return;
 
-            if ((ToFollow.Position - Parent.Position).LengthSquared >
+            if ((ToFollow.Position - Parent.Position).LengthSquared() >
                 GeneralSettings.UpdateDistanceSquared * .5f)
                 Parent.Position = ToFollow.Position;
 
-            if( (ToFollow.Position - Parent.Position).LengthSquared > 8*8 )
+            if( (ToFollow.Position - Parent.Position).LengthSquared() > 8*8 )
             {                
-                Parent.Orientation = (ToFollow.Position - Parent.Position).Xz.NormalizedFast().ToVector3();
+                Parent.Orientation = (ToFollow.Position - Parent.Position).Xz().NormalizedFast().ToVector3();
                 Parent.Model.TargetRotation = Physics.DirectionToEuler( Parent.Orientation );
                 Parent.Physics.Move();
             }

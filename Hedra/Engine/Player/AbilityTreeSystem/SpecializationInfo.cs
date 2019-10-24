@@ -6,12 +6,14 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player.Inventory;
 using Hedra.Engine.Rendering.UI;
+using Hedra.Engine.Windowing;
 using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
-using OpenTK;
-using OpenTK.Input;
+using System.Numerics;
+using Hedra.Numerics;
+
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {
@@ -43,12 +45,12 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             Panel.AddElement(_learnSpecializationText);
 
             _learnSpecializationButton.Click += OnClick;
-            _learnSpecializationButton.HoverEnter += (O,A) =>
+            _learnSpecializationButton.HoverEnter += () =>
             {
                 _learnSpecializationButton.Scale *= 1.05f;
                 _learnSpecializationText.Scale *= 1.05f;
             };
-            _learnSpecializationButton.HoverExit += (O, A) =>
+            _learnSpecializationButton.HoverExit += () =>
             {
                 _learnSpecializationButton.Scale /= 1.05f;
                 _learnSpecializationText.Scale /= 1.05f;
@@ -81,8 +83,8 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             SetPosition();
             ItemTexture.Position += ItemTexture.Scale.Y * Vector2.UnitY * .5f;
             _learnSpecializationButton.Texture.Tint = _player.Level < 5 
-                ? new Vector4(Color.Orange.ToVector4().Xyz * 2f, 1)
-                : new Vector4(Color.Orange.ToVector4().Xyz * 5f, 1);
+                ? new Vector4(Color.Orange.ToVector4().Xyz() * 2f, 1)
+                : new Vector4(Color.Orange.ToVector4().Xyz() * 5f, 1);
             _learnSpecializationText.TextColor = _player.Level < 5
                 ? Color.Gray
                 : Color.White;

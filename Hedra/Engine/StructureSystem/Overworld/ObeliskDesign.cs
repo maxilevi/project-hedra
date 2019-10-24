@@ -2,13 +2,13 @@ using System;
 using Hedra.BiomeSystem;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.ComplexMath;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Localization;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
@@ -39,8 +39,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
             for (var i = 0; i < shapes.Length; ++i)
             {
-                shapes[i].Transform(Matrix4.CreateScale(scale));
-                shapes[i].Transform(Matrix4.CreateTranslation(position));
+                shapes[i].Transform(Matrix4x4.CreateScale(scale));
+                shapes[i].Transform(Matrix4x4.CreateTranslation(position));
             }
             
             obelisk.Type = (ObeliskType) Utils.Rng.Next(0, (int)ObeliskType.MaxItems);
@@ -59,7 +59,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
             var height = Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z);
-            return Rng.Next(0, StructureGrid.ObeliskChance) == 1 && height > BiomePool.SeaLevel && Math.Abs(LandscapeGenerator.River(TargetPosition.Xz)) < 0.005f;
+            return Rng.Next(0, StructureGrid.ObeliskChance) == 1 && height > BiomePool.SeaLevel && Math.Abs(Biome.Generation.RiverAtPoint(TargetPosition.X, TargetPosition.Z)) < 0.005f;
         }
     }
 }

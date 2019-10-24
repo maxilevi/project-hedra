@@ -6,8 +6,8 @@
  */
 using System;
 using System.Diagnostics;
-using OpenTK;
-using OpenTK.Graphics.OpenGL4;
+using System.Numerics;
+using Hedra.Engine.Core;
 using System.Drawing;
 using Hedra.Core;
 using Hedra.Engine.Game;
@@ -15,6 +15,7 @@ using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Game;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -85,7 +86,7 @@ namespace Hedra.Engine.Rendering.UI
         
         public bool UseMask => MaskId != 0;
         
-        public Matrix2 RotationMatrix => Matrix2.CreateRotation(Angle * Mathf.Radian);
+        public Matrix4x4 RotationMatrix => Matrix4x4.CreateRotationZ(Angle * Mathf.Radian);
 
         public Vector2 Position
         {

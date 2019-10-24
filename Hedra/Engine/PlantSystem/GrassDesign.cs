@@ -10,7 +10,8 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.PlantSystem
 {
@@ -18,9 +19,9 @@ namespace Hedra.Engine.PlantSystem
     {
         public override CacheItem Type => CacheItem.Grass;
 
-        protected override void ApplyPaint(VertexData Data, Region Region, Random Rng)
+        protected override void ApplyPaint(NativeVertexData Data, Region Region, Random Rng)
         {
-            var newColor = new Vector4((Region.Colors.GrassColor * 1.0f).Xyz, 1);
+            var newColor = new Vector4((Region.Colors.GrassColor * 1.0f).Xyz(), 1);
             Data.Paint(newColor);
         }
     }

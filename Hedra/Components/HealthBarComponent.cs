@@ -10,7 +10,8 @@ using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Components
 {
@@ -133,7 +134,7 @@ namespace Hedra.Components
 
         public override void Update()
         {
-            _show = (Parent.Model.Position.Xz - GameManager.Player.Position.Xz).LengthSquared <
+            _show = (Parent.Model.Position.Xz() - GameManager.Player.Position.Xz()).LengthSquared() <
                     ShowDistance * ShowDistance
                     && !Hide
                     && !Parent.IsDead
@@ -188,8 +189,8 @@ namespace Hedra.Components
                 Culling.ModelViewMatrix
             );
             var homogeneousSpace = Vector4.Transform(eyeSpace, Culling.ProjectionMatrix);
-            var ndc = homogeneousSpace.Xyz / homogeneousSpace.W;
-            _healthBar.Position = Mathf.Clamp(ndc.Xy, -.98f, .98f);
+            var ndc = homogeneousSpace.Xyz() / homogeneousSpace.W;
+            _healthBar.Position = Mathf.Clamp(ndc.Xy(), -.98f, .98f);
             _healthBar.Scale = _textureSize * _barSize;
             _backgroundTexture.Position = _healthBar.Position;
             _backgroundTexture.Scale = _backgroundTextureSize;

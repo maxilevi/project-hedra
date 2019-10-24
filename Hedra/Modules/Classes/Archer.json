@@ -4,7 +4,7 @@
   "FirstSpecializationTree": "Scout",
   "SecondSpecializationTree": "Hunter",
   "Logo": "$DataFile$/Assets/UI/ArcherLogo.png",
-  "BaseSpeed": 1.375,
+  "BaseSpeed": 1.5,
   "StartingItems": [
     {
       "Name": "CommonWoodenBow",

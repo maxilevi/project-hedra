@@ -10,7 +10,8 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.Items;
 using Hedra.Rendering;
-using OpenTK;
+using System.Numerics;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.PlantSystem.Harvestables
 {
@@ -20,7 +21,7 @@ namespace Hedra.Engine.PlantSystem.Harvestables
 
         public virtual float Scale(Random Rng) => 1.75f + Rng.NextFloat() * .75f;
         
-        public override Matrix4 TransMatrix(Vector3 Position, Random Rng)
+        public override Matrix4x4 TransMatrix(Vector3 Position, Random Rng)
         {
             var underChunk = World.GetChunkAt(Position);
             var blockPosition = World.ToBlockSpace(Position);
@@ -29,7 +30,7 @@ namespace Hedra.Engine.PlantSystem.Harvestables
             if (blockPosition.Z + addon.Z / Chunk.BlockSize > Chunk.Width / Chunk.BlockSize) addon.Z = 0;
 
             float height = Physics.HeightAtPosition(Position + addon);
-            if (Block.Noise3D) return Matrix4.Zero;
+            if (Block.Noise3D) return new Matrix4x4();
 
             for (int x = -3; x < 3; x++)
             {
@@ -37,26 +38,26 @@ namespace Hedra.Engine.PlantSystem.Harvestables
                 {
                     float bDens = Physics.HeightAtPosition(new Vector3((blockPosition.X + x) * Chunk.BlockSize + underChunk.OffsetX, 0, (blockPosition.Z + z) * Chunk.BlockSize + underChunk.OffsetZ));
                     float difference = Math.Abs(bDens - height);
-                    if (difference > 5f) return Matrix4.Zero;
+                    if (difference > 5f) return new Matrix4x4();
                 }
             }
 
-            var rotationMat4 = Matrix4.CreateRotationY(360 * Utils.Rng.NextFloat() * Mathf.Radian);
-            var transMatrix = Matrix4.CreateScale(Scale(Rng));
+            var rotationMat4 = Matrix4x4.CreateRotationY(360 * Utils.Rng.NextFloat() * Mathf.Radian);
+            var transMatrix = Matrix4x4.CreateScale(Scale(Rng));
             transMatrix *= rotationMat4;
-            transMatrix *= Matrix4.CreateTranslation(new Vector3(Position.X, height, Position.Z) + addon);
+            transMatrix *= Matrix4x4.CreateTranslation(new Vector3(Position.X, height, Position.Z) + addon);
             return transMatrix;
         }
 
-        public override VertexData Paint(VertexData Data, Region Region, Random Rng)
+        public override NativeVertexData Paint(NativeVertexData Data, Region Region, Random Rng)
         {
             Data.Color(AssetManager.ColorCode0, Region.Colors.GrassColor);
             return Data;
         }
 
-        public override void CustomPlacement(VertexData Data, Matrix4 TransMatrix, Chunk UnderChunk)
+        public override void CustomPlacement(NativeVertexData Data, Matrix4x4 TransMatrix, Chunk UnderChunk)
         {
-            var position = Vector3.TransformPosition(Vector3.Zero, TransMatrix);
+            var position = Vector3.Transform(Vector3.Zero, TransMatrix);
             World.StructureHandler.AddStructure(
                 new CollidableStructure(
                     new CollectiblePlantDesign(),
