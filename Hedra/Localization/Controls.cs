@@ -22,7 +22,7 @@ namespace Hedra.Localization
             {"rightward_key", Key.D},
             {"climb_key", Key.AltLeft},
             {"jump_key", Key.Space},
-            {"descend_key", Key.ControlLeft},
+            {"descend_key", Key.ShiftLeft},
             {"handlamp_key", Key.F},
             {"respawn_key", Key.R},
             {"skilltree_key", Key.X},
@@ -32,7 +32,7 @@ namespace Hedra.Localization
             {"crafting_key", Key.C},
             {"quest_log_key", Key.T},
             {"open_chat_key", Key.Enter},
-            {"sprint_key", Key.ShiftLeft}
+            {"sprint_key", Key.ControlLeft}
         };
 
         private static Dictionary<string, Key> Mappings = DefaultMappings;
