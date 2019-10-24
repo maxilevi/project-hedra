@@ -4,6 +4,7 @@ using System.Linq;
 using Hedra.Engine.Core;
 using Microsoft.Scripting.Utils;
 using System.Numerics;
+using Hedra.Engine.Management;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.Rendering.Geometry
@@ -252,6 +253,61 @@ namespace Hedra.Engine.Rendering.Geometry
             {
                 Normals[i] = Vector3.TransformNormal(Normals[i], normalMat);
             }
+        }
+
+        public static void Optimize(IAllocator Allocator, IList<uint> Indices, IList<Vector3> Vertices, IList<Vector3> Normals, IList<Vector4> Colors, IList<float> Extradata)
+        {
+            var hasColors = Colors.Count != 0;
+            var hasExtradata = Extradata.Count != 0;
+            if (!hasColors) return;
+            
+            var originalVertices = Vertices.Count;
+            var vertices = new NativeArray<MeshOptimizerVertex>(Allocator, Vertices.Count);
+            var indices = new NativeArray<uint>(Allocator, Indices.Count);
+            for (var i = 0; i < vertices.Length; ++i)
+            {
+                vertices[i] = new MeshOptimizerVertex
+                {
+                    Position = Vertices[i],
+                    Normal = Normals[i],
+                    Color = Colors[i],
+                    Extradata = hasExtradata ? Extradata[i] : default
+                };
+            }
+            for (var i = 0; i < indices.Length; ++i)
+            {
+                indices[i] = Indices[i];
+            }
+
+            Native.MeshOptimizer.Optimize(Allocator, vertices, indices, MeshOptimizerVertex.SizeInBytes);
+            Indices.Clear();
+            Extradata.Clear();
+            Normals.Clear();
+            Colors.Clear();
+            Vertices.Clear();
+            var len = vertices.Length;
+            for (var i = 0; i < len; ++i)
+            {
+                var item = vertices[i];
+                Normals.Add(item.Normal);
+                Colors.Add(item.Color);
+                Vertices.Add(item.Position);
+                if(hasExtradata)
+                    Extradata.Add(item.Extradata);
+            }
+            Indices.AddRange(indices);
+            vertices.Dispose();
+            indices.Dispose();
+            PerformanceStatistics.RegisterMeshOptimization(Vertices.Count, originalVertices);
+        }
+        
+        private struct MeshOptimizerVertex
+        {
+            public static uint SizeInBytes => sizeof(float) * 11;
+            public Vector3 Position;
+            public Vector3 Normal;
+            public Vector4 Color;
+            public float Extradata;
         }
     }
 }

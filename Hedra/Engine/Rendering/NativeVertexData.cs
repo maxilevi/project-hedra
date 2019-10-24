@@ -39,6 +39,12 @@ namespace Hedra.Engine.Rendering
             _extradata = new NativeList<float>(Allocator);
         }
 
+        public void AssertTriangulated()
+        {
+            if(_indices.Count % 3 != 0)
+                throw new ArgumentOutOfRangeException($"ModelData with '{_indices.Count}' indices is not triangulated correctly");
+        }
+        
         public void Flat(IAllocator Allocator)
         {
             MeshOperations.FlatMesh(Allocator, _indices, _vertices, _normals, _colors, _extradata);
@@ -86,15 +92,25 @@ namespace Hedra.Engine.Rendering
         {
             MeshOperations.GraduateColor(_vertices, _colors, Direction, Amount);
         }
+
+        public void Optimize(IAllocator Allocator)
+        {
+            MeshOperations.Optimize(Allocator, _indices, _vertices, _normals, _colors, _extradata);
+        }
+        
+        public void Translate(Vector3 Position)
+        {
+            Transform(Matrix4x4.CreateTranslation(Position));
+        }
         
         public void Transform(Matrix4x4 Transformation)
         {
             MeshOperations.Transform(_vertices, _normals, Transformation);
         }
         
-        public void SupportPoint(Vector3 Direction)
+        public Vector3 SupportPoint(Vector3 Direction)
         {
-            MeshOperations.SupportPoint( _vertices, _colors, Direction);
+            return MeshOperations.SupportPoint( _vertices, _colors, Direction);
         }
         
         public InstanceData ToInstanceData(Matrix4x4 Transformation)
@@ -153,5 +169,11 @@ namespace Hedra.Engine.Rendering
                 Indices = new List<uint>(_indices),
             };
         }
+        
+        public bool IsEmpty => Vertices.Count == 0
+                               && Indices.Count == 0
+                               && Normals.Count == 0
+                               && Colors.Count == 0
+                               && Extradata.Count == 0;
     }
 }

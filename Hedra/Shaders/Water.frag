@@ -28,8 +28,8 @@ uniform float Smoothness;
 
 const float waveStrength = 0.01;
 const float speed = 0.04;
-const float fresnelReflective = 0.4;
-const float edgeSoftness = 24.0;
+const float fresnelReflective = 0.7;
+const float edgeSoftness = 64.0;
 const float specularReflectivity = 0.8;
 const float shineDamper = 10.0;
 

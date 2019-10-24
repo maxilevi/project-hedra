@@ -151,27 +151,28 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (_terrainBuilder.Sparsity == null) BuildSparsity();
             var buildingLod = this.Lod;
             this.PrepareForBuilding();
-            var blocks = _blocks;
-            using (var allocator = new HeapAllocator(Allocator.Megabyte * 16))
-            {
-                var output = this.CreateTerrainMesh(allocator, buildingLod);
-                SetupCollider(allocator, buildingLod);
+            var allocator = new HeapAllocator(Allocator.Megabyte * 16);
+            SetupCollider(allocator, buildingLod);
+            if(!allocator.IsEmpty) throw new ArgumentOutOfRangeException("Detected memory leak");
+            
+            var output = this.CreateTerrainMesh(allocator, buildingLod);
+            if (output == null) return;
+            this.SetChunkStatus(output);
+            output = this.AddStructuresMeshes(allocator, output, buildingLod);
 
-                if (output == null) return;
-                this.SetChunkStatus(output);
-                output = this.AddStructuresMeshes(allocator, output, buildingLod);
-
-                if (output == null) return;
-                this.UploadMesh(output);
-                this.FinishUpload(output, buildingLod);
-            }
+            if (output == null) return;
+            /* The allocator will be destroyed when the mesh is uploaded */
+            this.UploadMesh(allocator, output);
+            this.FinishUpload(output, buildingLod);
         }
 
         private void SetupCollider(IAllocator Allocator, int BuildingLod)
         {
             if (BuildingLod == 1 || BuildingLod == 2)
             {
-                Bullet.BulletPhysics.AddChunk(Position.Xz(), CreateCollisionTerrainMesh(Allocator), CollisionShapes);
+                var mesh = CreateCollisionTerrainMesh(Allocator);
+                Bullet.BulletPhysics.AddChunk(Position.Xz(), mesh, CollisionShapes);
+                mesh.Dispose();
             }
             else
             {
@@ -185,7 +186,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _terrainBuilder.Sparsity = ChunkSparsity.From(this);
         }
 
-        private VertexData CreateCollisionTerrainMesh(IAllocator Allocator)
+        private NativeVertexData CreateCollisionTerrainMesh(IAllocator Allocator)
         {
             lock (_blocksLock)
             {
@@ -228,7 +229,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             this.IsBuilding = false;
         }
 
-        private void UploadMesh(ChunkMeshBuildOutput Input)
+        private void UploadMesh(IAllocator InputAllocator, ChunkMeshBuildOutput Input)
         {
             if (Mesh == null ||
                 Input.StaticData.Colors.Count != Input.StaticData.Vertices.Count ||
@@ -252,9 +253,13 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 new Vector3(staticMax.X, Math.Max(staticMax.Y, Input.WaterData.SupportPoint(Vector3.UnitY).Y),
                     staticMax.Z)
             );
-            Input.StaticData.Optimize();
-            Input.InstanceData.Optimize();
-            Input.WaterData.Optimize();
+            using (var allocator = new HeapAllocator(Allocator.Megabyte * 8))
+            {
+                Input.StaticData.Optimize(allocator);
+                Input.InstanceData.Optimize(allocator);
+                Input.WaterData.Optimize(allocator);
+            }
+
             DistributedExecuter.Execute(delegate
             {
                 var staticResult = WorldRenderer.UpdateStatic(new Vector2(OffsetX, OffsetZ), Input.StaticData);
@@ -269,9 +274,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     Mesh.Enabled = true;
                     Mesh.BuildedOnce = true;
                 }
-                Input.StaticData?.Dispose();
-                Input.InstanceData?.Dispose();
-                Input.WaterData?.Dispose();
+                Input.StaticData.Dispose();
+                Input.InstanceData.Dispose();
+                Input.WaterData.Dispose();
+                InputAllocator.Dispose();
             });
         }
 

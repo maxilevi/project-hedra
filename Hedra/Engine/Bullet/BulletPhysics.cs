@@ -8,6 +8,7 @@ using Hedra.Core;
 using Hedra.Engine.Core;
 using Hedra.Engine.IO;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.Rendering;
 using Hedra.Game;
 using Hedra.Numerics;
 using Hedra.Rendering;
@@ -406,7 +407,7 @@ namespace Hedra.Engine.Bullet
             Body.Dispose();
         }
         
-        public static void AddChunk(Vector2 Offset, VertexData Mesh, PhysicsSystem.CollisionShape[] Shapes)
+        public static void AddChunk(Vector2 Offset, NativeVertexData Mesh, PhysicsSystem.CollisionShape[] Shapes)
         {
             lock (_bulletLock)
             {
@@ -489,7 +490,7 @@ namespace Hedra.Engine.Bullet
 
         }
 
-        private static RigidBody CreateTerrainRigidbody(Vector2 Offset, VertexData Mesh)
+        private static RigidBody CreateTerrainRigidbody(Vector2 Offset, NativeVertexData Mesh)
         {
             var shape = CreateTriangleShape(Mesh.Indices, Mesh.Vertices);
             var body = CreateStaticRigidbody(shape);

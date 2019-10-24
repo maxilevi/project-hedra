@@ -1,10 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace Hedra.Engine.Core
 {
+    [DebuggerStepThrough]
     public class NativeList<T> : IDisposable, ISequentialList<T>, IList<T> where T : unmanaged
     {
         private const int InitialSize = 32;
@@ -61,13 +64,9 @@ namespace Hedra.Engine.Core
             return list;
         }
         
-        private void Resize(int NewSize)
+        private unsafe void Resize(int NewSize)
         {
-            var array = new NativeArray<T>(_allocator, NewSize);
-            for (var i = 0; i < _count; ++i)
-                array[i] = _array[i];
-            _array.Dispose();
-            _array = array;
+            _array.Resize(NewSize);
         }
         
         private void EnsureBounds(int I)
@@ -170,9 +169,13 @@ namespace Hedra.Engine.Core
                 yield return this[i];
             }
         }
+
+        public NativeArray<T> InternalArray => _array;
         
         public IEnumerator<T> GetEnumerator() => Enumerate().GetEnumerator();
+        
         IEnumerator IEnumerable.GetEnumerator() => Enumerate().GetEnumerator();
+        
         public bool IsReadOnly => false;
 
         public void Dispose()

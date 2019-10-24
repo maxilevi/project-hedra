@@ -71,14 +71,6 @@ namespace Hedra.Rendering
             ApplyRecursively(V => V.AddWindValues(ColorFilter, Scalar));
             return this;
         }
-
-        private VertexData AddWindValues(Vector4 ColorFilter, Vector3 Lowest, Vector3 Highest, float Scalar)
-        {
-            if(!HasExtradata) Extradata = Enumerable.Repeat(0.01f, Vertices.Count).ToList();
-            MeshOperations.AddWindValues(Vertices, Colors, Extradata, ColorFilter, Lowest, Highest, Scalar);
-            ApplyRecursively(V => V.AddWindValues(ColorFilter, Lowest, Highest, Scalar));
-            return this;
-        }
         
         public VertexData FillExtraData(float Value)
         {
@@ -103,13 +95,7 @@ namespace Hedra.Rendering
             ApplyRecursively(V => V.GraduateColor(Direction));
             return this;
         }
-        
-        private VertexData GraduateColor(Vector3 Direction, float Amount)
-        {
-            MeshOperations.GraduateColor(Vertices, Colors, Direction, Amount);
-            ApplyRecursively(V => V.GraduateColor(Direction, Amount));
-            return this;
-        }
+
         
         public VertexData Transform(Matrix4x4 Mat)
         {
@@ -142,29 +128,11 @@ namespace Hedra.Rendering
             return this;
         }
 
-        public unsafe void Optimize()
+        public void Optimize(IAllocator Allocator)
         {
-            if (!HasColors || !CompatibilityManager.SupportsMeshOptimizer) return;
-            /* var originalVertices = Vertices.Count; */
-            var vertices = new MeshOptimizerVertex[Vertices.Count];
-            for (var i = 0; i < vertices.Length; ++i)
-            {
-                vertices[i] = new MeshOptimizerVertex
-                {
-                    Position = Vertices[i],
-                    Normal = Normals[i],
-                    Color = Colors[i]
-                };
-                if(HasExtradata) vertices[i].Extradata = Extradata[i];
-            }
-            var result = MeshOptimizer.Optimize(vertices, Indices.ToArray(), MeshOptimizerVertex.SizeInBytes);
-            Indices = new List<uint>(result.Item2);
-            Normals = new List<Vector3>(result.Item1.Select(V => V.Normal));
-            Colors = new List<Vector4>(result.Item1.Select(V => V.Color));
-            if(HasExtradata) Extradata = new List<float>(result.Item1.Select(V => V.Extradata));
-            Vertices = new List<Vector3>(result.Item1.Select(V => V.Position));
-            /* Log.WriteLine($"Vertex Change % = {(1f - Vertices.Count / (float)originalVertices) * 100}, {Vertices.Count}/{originalVertices}"); */
+            MeshOperations.Optimize(Allocator, _indices, _vertices, _normals, _colors, _extradata);
         }
+        
         public VertexData[] Ungroup()
         {
             return MeshAnalyzer.GetConnectedComponents(this);
@@ -308,15 +276,6 @@ namespace Hedra.Rendering
             Extradata.Clear();
         }
 
-        private struct MeshOptimizerVertex
-        {
-            public static uint SizeInBytes => sizeof(float) * 11;
-            public Vector3 Position;
-            public Vector3 Normal;
-            public Vector4 Color;
-            public float Extradata;
-        }
-        
         /* Do not remove. Used in python scripts */
         public static VertexData Load(string Path, Vector3 Scale)
         {

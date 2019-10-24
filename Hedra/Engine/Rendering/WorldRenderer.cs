@@ -167,17 +167,17 @@ namespace Hedra.Engine.Rendering
             WaterBuffer.Remove(ChunkOffset);
         }
         
-        public static bool UpdateStatic(Vector2 Offset, VertexData Data)
+        public static bool UpdateStatic(Vector2 Offset, NativeVertexData Data)
         {
             return StaticBuffer.Update(Offset, Data);
         }
 
-        public static bool UpdateWater(Vector2 Offset, VertexData Data)
+        public static bool UpdateWater(Vector2 Offset, NativeVertexData Data)
         {
             return WaterBuffer.Update(Offset, Data);
         }
 
-        public static bool UpdateInstance(Vector2 Offset, VertexData Data)
+        public static bool UpdateInstance(Vector2 Offset, NativeVertexData Data)
         {
             return InstanceBuffer.Update(Offset, Data);
         }

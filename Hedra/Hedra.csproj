@@ -350,6 +350,7 @@
     <Compile Include="Engine\Generation\Simplex.cs" />
     <Compile Include="Engine\Generation\WorldBuilder.cs" />
     <Compile Include="Engine\ItemSystem\Item.cs" />
+    <Compile Include="Engine\Management\PerformanceStatistics.cs" />
     <Compile Include="Engine\Native\HedraCoreNative.cs" />
     <Compile Include="Engine\Native\MeshOptimizer.cs" />
     <Compile Include="Engine\Native\Pointer.cs" />

@@ -21,6 +21,7 @@ using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using System.Numerics;
+using Hedra.Engine.Core;
 using Hedra.Numerics;
 using Silk.NET.GLFW;
 
@@ -557,7 +558,10 @@ namespace Hedra.Engine.Management
                 UseCache = true
             };
             data.Trim();
-            data.Optimize();
+            using (var allocator = new HeapAllocator(data.SizeInBytes * 4))
+            {
+                data.Optimize(allocator);
+            }
             return data;
         }
 

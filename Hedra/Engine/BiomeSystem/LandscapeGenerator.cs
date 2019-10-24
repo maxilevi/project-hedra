@@ -185,7 +185,7 @@ namespace Hedra.Engine.BiomeSystem
             var density = 16f + smallFrequency * 16f;
             var lerpValue = Mathf.Clamp((y - BiomePool.RiverMaxHeight) / 8f, 0f, 1f);
             density = Mathf.Lerp(density, 0, lerpValue * lerpValue);
-            var bottomLerpValue = Mathf.Clamp((y - BiomePool.RiverMinHeight) / 7f, 0f, 1f);
+            var bottomLerpValue = Mathf.Clamp((y - BiomePool.RiverMinHeight) / 16f, 0f, 1f);
             density = Mathf.Lerp(0, density, bottomLerpValue * bottomLerpValue);
             return (density) * falloff;
         }

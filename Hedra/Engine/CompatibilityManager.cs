@@ -20,35 +20,13 @@ namespace Hedra.Engine
     {
         public static Action<PrimitiveType, uint[], DrawElementsType, IntPtr[], int> MultiDrawElementsMethod { get; private set; }
         public static bool SupportsGeometryShaders { get; private set; } = true;
-        public static bool SupportsMeshOptimizer { get; private set; } = true;
 
         public static void Load()
         {
             DetectGeometryShaderSupport();
             DefineMultiDrawElementsMethod();
-            DetectMeshOptimizerSupport();
         }
 
-        private static void DetectMeshOptimizerSupport()
-        {
-            SupportsMeshOptimizer = true;
-            try
-            {
-                MeshOptimizer.OptimizeCache(new uint[0], 0);
-            }
-            catch (DllNotFoundException e)
-            {
-                Log.WriteLine($"Failed to load MeshOptimizer with the following error: {e}");
-                SupportsMeshOptimizer = false;
-            }
-
-            if (!SupportsMeshOptimizer)
-            {
-                Log.WriteLine("Failed to load required libraries (core.dll). Please contact me with the game log.");
-                Environment.Exit(1);
-            }
-        }
-        
         private static void DetectGeometryShaderSupport()
         {
             SupportsGeometryShaders = true;

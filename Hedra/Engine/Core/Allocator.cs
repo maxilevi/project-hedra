@@ -30,11 +30,34 @@ namespace Hedra.Engine.Core
             var offset = FindSpot(size);
             if(offset + size >= _maxSize)
                 throw new OutOfMemoryException($"Native Allocator has ran out of memory trying to allocate '{size / 1024}' KB\nusedMemory ='{UsedMemory / 1024}' KB, freeMemory ='{FreeMemory / 1024}' KB, totalMemory ='{TotalMemory / 1024}' KB");
-            var k = SizePerElement<T>();
             var ptr = (void*) ((byte*)_buffer + offset);
             _entries.Add(offset, new AllocationEntry(offset, size, ptr));
 
             return ptr;
+        }
+
+        public void* Resize<T>(void* Ptr, int NewCount) where T : unmanaged
+        {
+            var entry = GetEntry(Ptr, out var index);
+            var perElement = SizePerElement<T>();
+            var newSize = perElement * NewCount;
+            void* newPtr;
+            /* If there is contiguous space available, use that */
+            var nextOffset = index < _entries.Count - 1 ? ((AllocationEntry) _entries.GetByIndex(index + 1)).Offset : _maxSize;
+            if (entry.Offset + newSize < nextOffset)
+            {
+                _entries.RemoveAt(index);
+                _entries.Add(entry.Offset, new AllocationEntry(entry.Offset, newSize, Ptr));
+                newPtr = Ptr;
+            }
+            else
+            {
+                newPtr = (T*) Get<T>(NewCount);
+                Buffer.MemoryCopy(Ptr, newPtr, newSize, entry.Length);
+                Free(ref Ptr);
+            }
+
+            return newPtr;
         }
 
         private int FindSpot(int Size)
@@ -78,23 +101,29 @@ namespace Hedra.Engine.Core
 
         public int TotalMemory => _maxSize;
 
+        public bool IsEmpty => _entries.Count == 0;
+
         public void Clear()
         {
             _entries.Clear();
         }
 
-        public void Free(ref void* Ptr)
+        private unsafe AllocationEntry GetEntry(void* Ptr, out int Index)
         {
             for (var i = _entries.Count-1; i > -1; --i)
             {
+                Index = i;
                 var entry = (AllocationEntry)_entries.GetByIndex(i);
-                if (entry.Ptr == Ptr)
-                {
-                    _entries.RemoveAt(i);
-                    Ptr = null;
-                }
+                if (entry.Ptr == Ptr) return entry;
             }
-            if(Ptr != null) throw new ArgumentOutOfRangeException("Ptr was not allocated with this allocator.");
+            throw new ArgumentOutOfRangeException("Ptr was not allocated with this allocator.");
+        }
+
+        public void Free(ref void* Ptr)
+        {
+            GetEntry(Ptr, out var index);
+            _entries.RemoveAt(index);
+            Ptr = null;
         }
 
         public virtual void Dispose()
@@ -104,6 +133,16 @@ namespace Hedra.Engine.Core
             _entries = null;
             _buffer = null;
             FreeBuffer();
+        }
+
+        ~Allocator()
+        {
+            if (_buffer != null)
+            {
+                Dispose();
+                if(!Program.GameWindow.IsExiting)
+                    throw new ArgumentException("Allocator was not disposed");
+            }
         }
     }
 }

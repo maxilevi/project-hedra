@@ -50,10 +50,10 @@ namespace HedraTests.Rendering
         [Test]
         public void TestVolume()
         {
-            using (var allocator = new HeapAllocator(Allocator.Megabyte * 8))
+            using (var allocator = new HeapAllocator(Allocator.Megabyte * 64))
             {
                 var rng = new Random();
-                var count = 100000;
+                var count = 1000000;
                 var vertices = GetAsArray(count, () => new Vector3(rng.NextFloat(), rng.NextFloat(), rng.NextFloat()));
                 var normals = GetAsArray(count, () => new Vector3(rng.NextFloat(), rng.NextFloat(), rng.NextFloat()));
                 var extradata = GetAsArray(count, () => rng.NextFloat());

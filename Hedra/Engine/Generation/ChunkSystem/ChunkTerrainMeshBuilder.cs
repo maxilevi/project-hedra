@@ -40,37 +40,39 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var output = CreateTerrain(Allocator, Lod, Cache, true, true);
             for (var k = 0; k < output.StaticData.Vertices.Count; k++) output.StaticData.Extradata.Add(0);
 
-            Simplify(output.StaticData, Lod);
+            Simplify(Allocator, output.StaticData, Lod);
 
             output.StaticData.Translate(new Vector3(OffsetX, 0, OffsetZ));
             output.WaterData.Translate(new Vector3(OffsetX, 0, OffsetZ));
             return output;
         }
 
-        private static void Simplify(VertexData Data, int Lod)
+        private static void Simplify(IAllocator Allocator, NativeVertexData Data, int Lod)
         {
             Data.UniqueVertices();
             var detector = new ChunkMeshBorderDetector();
             var border = detector.ProcessEntireBorder(Data, Vector3.Zero, new Vector3(Chunk.Width, 0, Chunk.Width));
-            MeshOptimizer.Simplify(Data, border, LODMap[Lod]);
-            Data.Flat();
+            MeshOptimizer.Simplify(Allocator, Data, border, LODMap[Lod]);
+            Data.Flat(Allocator);
         }
 
-        public VertexData CreateTerrainCollisionMesh(RegionCache Cache, IAllocator Allocator)
+        public NativeVertexData CreateTerrainCollisionMesh(RegionCache Cache, IAllocator Allocator)
         {
-            return CreateTerrain(Allocator, 1, Cache, false, false, CollisionMeshLod, CollisionMeshLod).StaticData;
+            var output = CreateTerrain(Allocator, 1, Cache, false, false, CollisionMeshLod, CollisionMeshLod);
+            var staticData = output.StaticData;
+            output.StaticData = null;
+            output.Dispose();
+            return staticData;
         }
 
-        private VertexData PostProcessWater(NativeVertexData waterData)
+        private void PostProcessWater(IAllocator Allocator, NativeVertexData waterData)
         {
-            var waterVertexData = waterData.ToVertexData();
-            waterVertexData.UniqueVertices();
+            waterData.UniqueVertices();
             var detector = new ChunkMeshBorderDetector();
-            var set = new HashSet<uint>(detector.ProcessEntireBorder(waterVertexData, Vector3.Zero, new Vector3(Chunk.Width, 0, Chunk.Width)));
+            var set = new HashSet<uint>(detector.ProcessEntireBorder(waterData, Vector3.Zero, new Vector3(Chunk.Width, 0, Chunk.Width)));
             for(var i = 0; i < 2; ++i)
-                MeshAnalyzer.ApplySmoothing(waterVertexData, set);
-            waterVertexData.Flat();
-            return waterVertexData;
+                MeshAnalyzer.ApplySmoothing(waterData.Indices, waterData.Vertices, waterData.Colors, waterData.Normals, set);
+            waterData.Flat(Allocator);
         }
         
         private unsafe ChunkMeshBuildOutput CreateTerrain(IAllocator Allocator, int Lod, RegionCache Cache, bool ProcessWater, bool ProcessColors, int HorizontalIncrement = 1, int VerticalIncrement = 1)
@@ -82,8 +84,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var helper = new ChunkTerrainMeshBuilderHelper(_parent, Lod, grid);
 
             IterateAndBuild(helper, ref failed, ProcessWater, ProcessColors, Cache, blockData, waterData, HorizontalIncrement, VerticalIncrement);
-
-            return new ChunkMeshBuildOutput(blockData.ToVertexData(), PostProcessWater(waterData), new VertexData(), failed);
+            PostProcessWater(Allocator, waterData);
+            
+            return new ChunkMeshBuildOutput(blockData, waterData, new NativeVertexData(Allocator), failed);
         }
 
         private void IterateAndBuild(ChunkTerrainMeshBuilderHelper Helper, ref bool failed, bool ProcessWater, bool ProcessColors, RegionCache Cache, NativeVertexData blockData, NativeVertexData waterData, int HorizontalIncrement, int VerticalIncrement)
