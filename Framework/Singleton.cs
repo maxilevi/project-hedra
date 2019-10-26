@@ -1,4 +1,4 @@
-namespace Hedra.Engine.Core
+namespace Hedra.Framework
 {
     public class Singleton<T> where T : class, new()
     {

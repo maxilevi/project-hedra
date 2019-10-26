@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Hedra.Engine.Core
+namespace Hedra.Framework
 {
     public interface ISequentialList<T>
     {

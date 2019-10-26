@@ -1,6 +1,4 @@
-using System.Diagnostics;
-
-namespace Hedra.Engine.Core
+namespace Hedra.Framework
 {
     public unsafe struct AllocationEntry
     {

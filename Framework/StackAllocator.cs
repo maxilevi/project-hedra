@@ -1,6 +1,4 @@
-using System.Runtime.InteropServices;
-
-namespace Hedra.Engine.Core
+namespace Hedra.Framework
 {
     public unsafe class StackAllocator : Allocator
     {

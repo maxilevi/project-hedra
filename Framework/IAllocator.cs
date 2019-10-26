@@ -1,6 +1,6 @@
 using System;
 
-namespace Hedra.Engine.Core
+namespace Hedra.Framework
 {
     public unsafe interface IAllocator : IDisposable
     {

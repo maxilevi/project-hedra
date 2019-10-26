@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace Hedra.Engine.Core
+namespace Hedra.Framework
 {
     [DebuggerStepThrough]
     public unsafe struct NativeArray<T> : IDisposable, IEnumerable<T> where T : unmanaged

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 
-namespace Hedra.Engine.Core
+namespace Hedra.Framework
 {
     public class ObjectPool<T>
     {

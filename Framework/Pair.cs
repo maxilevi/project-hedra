@@ -1,6 +1,6 @@
 using System;
 
-namespace Hedra.Engine.Core
+namespace Hedra.Framework
 {
     public class Pair<T, U> : Tuple<T, U>
     {

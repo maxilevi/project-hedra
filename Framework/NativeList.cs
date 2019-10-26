@@ -3,9 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
-namespace Hedra.Engine.Core
+namespace Hedra.Framework
 {
     [DebuggerStepThrough]
     public class NativeList<T> : IDisposable, ISequentialList<T>, IList<T> where T : unmanaged

@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace Hedra.Engine.Core
+namespace Hedra.Framework
 {
     public abstract unsafe class Allocator : IAllocator
     {
@@ -25,6 +25,7 @@ namespace Hedra.Engine.Core
 
         public void* Get<T>(int Count)
         {
+            if(Count == 0) throw new ArgumentNullException("Cannot allocate 0 bytes");
             EnsureBuffer();
             var size = SizePerElement<T>() * Count;
             var offset = FindSpot(size);
@@ -38,6 +39,7 @@ namespace Hedra.Engine.Core
 
         public void* Resize<T>(void* Ptr, int NewCount) where T : unmanaged
         {
+            if(NewCount == 0) throw new ArgumentNullException("Cannot resize to 0 bytes");
             var entry = GetEntry(Ptr, out var index);
             var perElement = SizePerElement<T>();
             var newSize = perElement * NewCount;
@@ -140,8 +142,6 @@ namespace Hedra.Engine.Core
             if (_buffer != null)
             {
                 Dispose();
-                if(!Program.GameWindow.IsExiting)
-                    throw new ArgumentException("Allocator was not disposed");
             }
         }
     }
