@@ -24,6 +24,7 @@ namespace Hedra.Engine.StructureSystem
 {
     public abstract class StructureDesign
     {
+        private static readonly object _lock = new object();
         public abstract int PlateauRadius { get; }
         public abstract VertexData Icon { get; }
         public abstract void Build(CollidableStructure Structure);
@@ -56,8 +57,9 @@ namespace Hedra.Engine.StructureSystem
                     var targetPosition = BuildTargetPosition(offset, Distribution);
                     var items = World.StructureHandler.StructureItems;
                     
-                    if (this.ShouldSetup(offset, targetPosition, items, Biome, Distribution))
+                    if (!World.StructureHandler.StructureExistsAtPosition(targetPosition) && this.ShouldSetup(offset, targetPosition, items, Biome, Distribution))
                     {
+                        World.StructureHandler.RegisterStructure(targetPosition);
                         var item = this.Setup(targetPosition, BuildRng(offset));
                         item.MapPosition = offset;
                         World.StructureHandler.AddStructure(item);

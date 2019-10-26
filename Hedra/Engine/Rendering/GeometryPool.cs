@@ -19,6 +19,7 @@ using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 using Hedra.Numerics;
+using Hedra.Framework;
 
 namespace Hedra.Engine.Rendering
 {

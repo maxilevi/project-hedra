@@ -1,4 +1,5 @@
 using Hedra.Engine.Core;
+using Hedra.Framework;
 using NUnit.Framework;
 
 namespace HedraTests.Core

@@ -20,6 +20,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Game;
+using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Numerics;
 
   namespace Hedra.Engine.StructureSystem
@@ -30,15 +31,18 @@ using Hedra.Numerics;
     public class StructureHandler
     {
         private readonly object _lock = new object();
+        private readonly object _registerLock = new object();
         public Voronoi SeedGenerator { get; }
         private readonly List<StructureWatcher> _itemWatchers;
         private CollidableStructure[] _itemsCache;
         private BaseStructure[] _structureCache;
+        private HashSet<Vector3> _registeredPositions;
         private bool _dirtyStructuresItems;
         private bool _dirtyStructures;
         
         public StructureHandler()
         {
+            _registeredPositions = new HashSet<Vector3>();
             _itemWatchers = new List<StructureWatcher>();
             SeedGenerator = new Voronoi();
             World.OnChunkDisposed += OnChunkDisposed;
@@ -99,6 +103,18 @@ using Hedra.Numerics;
             //else
             DoBuild();
         }
+
+        public void RegisterStructure(Vector3 Position)
+        {
+            lock(_registerLock)
+                _registeredPositions.Add(Position);
+        }
+
+        public bool StructureExistsAtPosition(Vector3 Position)
+        {
+            lock(_registerLock)
+                return _registeredPositions.Contains(Position);
+        }
         
         public void AddStructure(CollidableStructure Structure)
         {
@@ -139,6 +155,7 @@ using Hedra.Numerics;
         {
             lock (_lock)
             {
+                _registeredPositions.Clear();
                 for (var i = _itemWatchers.Count - 1; i > -1; i--)
                 {
                     _itemWatchers[i].Dispose();

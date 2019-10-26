@@ -8,7 +8,7 @@ namespace Hedra.Engine.BiomeSystem
 {
     public abstract class BaseBiomeGenerationDesign : BiomeGenerationDesign
     {
-        public const int RiverDepth = 6;
+        public const int RiverDepth = 4;
         public const float PathDepth = 2.5f;
         public const int PathBorder = 64;
 

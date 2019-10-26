@@ -3,6 +3,7 @@ using System.IO;
 using Facepunch.Steamworks;
 using Hedra.Engine.Core;
 using Hedra.Engine.IO;
+using Hedra.Framework;
 
 namespace Hedra.Engine.Steamworks
 {

@@ -23,6 +23,7 @@ using Hedra.Rendering.UI;
 using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Numerics;
+using Hedra.Framework;
 using Silk.NET.GLFW;
 
 namespace Hedra.Engine.Management
@@ -295,7 +296,7 @@ namespace Hedra.Engine.Management
             var name = Path.GetFileNameWithoutExtension(Filename);
             for(var i = 0; i < Count; i++)
             {
-                var data = AssetManager.PLYLoader($"Assets/Env/Colliders/{name}_Collider{i}.ply", Scale, Vector3.Zero, Vector3.Zero, false);
+                var data = PLYLoader($"Assets/Env/Colliders/{name}_Collider{i}.ply", Scale, Vector3.Zero, Vector3.Zero, false);
                 AssertCorrectShapeFormat(data);
                 var newShape = new CollisionShape(data.Vertices, data.Indices);
                 shapes.Add(newShape);
@@ -319,9 +320,10 @@ namespace Hedra.Engine.Management
         {
             var name = Path.GetFileNameWithoutExtension(Filename);
             var dir = Path.GetDirectoryName(Filename);
-            var bin = ReadBinary($"{dir}/{name}-Colliders.ply", AssetsResource);
+            var path = $"{dir}/{name}-Colliders.ply";
+            var bin = ReadBinary(path, AssetsResource);
             if (bin == null) return false;
-            AddShape(bin, Scale, Shapes);
+            AddShape(path, bin, Scale, Shapes);
             return true;
         }
 
@@ -334,14 +336,14 @@ namespace Hedra.Engine.Management
                 var path = $"Assets/Env/Colliders/{name}_Collider{iterator}.ply";
                 var data = ReadBinary(path, AssetsResource);
                 if(data == null) return;
-                AddShape(data, Scale, Shapes);
+                AddShape(path, data, Scale, Shapes);
                 iterator++;
             }
         }
 
-        private void AddShape(byte[] Binary, Vector3 Scale, List<CollisionShape> Shapes)
+        private void AddShape(string Name, byte[] Binary, Vector3 Scale, List<CollisionShape> Shapes)
         {
-            var vertexInformation = PLYLoader(Binary, Scale, Vector3.Zero, Vector3.Zero, false);
+            var vertexInformation = PLYLoader(Name, Binary, Scale, Vector3.Zero, Vector3.Zero, false);
             AssertCorrectShapeFormat(vertexInformation);
             var newShape = new CollisionShape(vertexInformation.Vertices, vertexInformation.Indices);
             Shapes.Add(newShape);
@@ -397,7 +399,7 @@ namespace Hedra.Engine.Management
                 var path = $"{dir}/{name}_Lod{iterator}.ply";
                 var data = ReadBinary(path, AssetsResource);
                 if (data == null) return model;
-                var vertexInformation = PLYLoader(data, Scale, Vector3.Zero, Vector3.Zero);
+                var vertexInformation = PLYLoader(path, data, Scale, Vector3.Zero, Vector3.Zero);
                 model.AddLOD(vertexInformation, iterator);
             }
             return model;
@@ -412,21 +414,21 @@ namespace Hedra.Engine.Management
         {
             var data = ReadPath(File);
             if (data == null) throw new ArgumentException($"Failed to find file '{File}' in the Assets folder.");
-            return PLYLoader(data, Scale, Position, Rotation, HasColors);
+            return PLYLoader(File, data, Scale, Position, Rotation, HasColors);
         }
 
-        private VertexData PLYLoader(byte[] Data, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true)
+        private VertexData PLYLoader(string Name, byte[] Data, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors = true)
         {
             const string header = "PROCESSEDPLY";
             var size = Encoding.ASCII.GetByteCount(header);
             if (HasHeader(Data, header, size))
             {
-                return PLYUnserialize(Data, size, Scale, Position, Rotation, HasColors);
+                return PLYUnserialize(Name, Data, size, Scale, Position, Rotation, HasColors);
             }
-            return PLYParser(Data, Scale, Position, Rotation, HasColors);
+            return PLYParser(Name, Data, Scale, Position, Rotation, HasColors);
         }
 
-        private VertexData PLYUnserialize(byte[] Data, int HeaderSize, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors)
+        private VertexData PLYUnserialize(string Name, byte[] Data, int HeaderSize, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors)
         {
             using (var ms = new MemoryStream(Data))
             {
@@ -464,11 +466,11 @@ namespace Hedra.Engine.Management
                             );
                     }
                 }
-                return HandlePLYTransforms(vertices, normals, colors, indices, Scale, Position, Rotation);
+                return HandlePLYTransforms(vertices, normals, colors, indices, Scale, Position, Rotation, Name);
             }
         }
 
-        private VertexData PLYParser(byte[] Data, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors)
+        private VertexData PLYParser(string Name, byte[] Data, Vector3 Scale, Vector3 Position, Vector3 Rotation, bool HasColors)
         {
             string fileContents = Encoding.ASCII.GetString(Data);
 
@@ -525,11 +527,11 @@ namespace Hedra.Engine.Management
                 indices.Add(uint.Parse(numbers[accumulatedOffset + 2]));
                 indices.Add(uint.Parse(numbers[accumulatedOffset + 3]));
             }
-            return HandlePLYTransforms(vertices, normals, colors, indices, Scale, Position, Rotation);
+            return HandlePLYTransforms(vertices, normals, colors, indices, Scale, Position, Rotation, Name);
         }
 
         private VertexData HandlePLYTransforms(List<Vector3> Vertices, List<Vector3> Normals,
-            List<Vector4> Colors, List<uint> Indices, Vector3 Scale, Vector3 Position, Vector3 Rotation)
+            List<Vector4> Colors, List<uint> Indices, Vector3 Scale, Vector3 Position, Vector3 Rotation, string Name)
         {
             var scaleMat = Matrix4x4.CreateScale(Scale);
             var positionMat = Matrix4x4.CreateTranslation(Position);
@@ -555,7 +557,8 @@ namespace Hedra.Engine.Management
                 Indices = Indices,
                 Normals = Normals,
                 Colors = Colors,
-                UseCache = true
+                UseCache = true,
+                Name = Name
             };
             data.Trim();
             using (var allocator = new HeapAllocator(data.SizeInBytes * 4))

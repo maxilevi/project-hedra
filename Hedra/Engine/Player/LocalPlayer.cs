@@ -208,7 +208,8 @@ namespace Hedra.Engine.Player
                 _previousPosition = Model.Human.Position;
             }
             
-            Companion.Entity?.Update();
+            if(Companion.Entity != null && !Companion.Entity.Disposed)
+                Companion.Entity?.Update();
             
             Rotation = new Vector3(0, this.Rotation.Y, 0);
             View.AddedDistance = IsMoving || IsSwimming || IsTravelling ? 3.0f : 0.0f;

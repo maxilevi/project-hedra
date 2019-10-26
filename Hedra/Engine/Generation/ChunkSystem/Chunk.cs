@@ -23,7 +23,10 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Geometry;
 using Hedra.Rendering;
 using System.Numerics;
+using Hedra.Engine.IO;
+using Hedra.Framework;
 using Hedra.Numerics;
+using Hedra.Framework;
 using Region = Hedra.BiomeSystem.Region;
 
 namespace Hedra.Engine.Generation.ChunkSystem
@@ -151,7 +154,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (_terrainBuilder.Sparsity == null) BuildSparsity();
             var buildingLod = this.Lod;
             this.PrepareForBuilding();
-            var allocator = new HeapAllocator(Allocator.Megabyte * 16);
+            var allocator = new HeapAllocator(Allocator.Megabyte * 32);
             SetupCollider(allocator, buildingLod);
             if(!allocator.IsEmpty) throw new ArgumentOutOfRangeException("Detected memory leak");
             
@@ -231,10 +234,16 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         private void UploadMesh(IAllocator InputAllocator, ChunkMeshBuildOutput Input)
         {
-            if (Mesh == null ||
-                Input.StaticData.Colors.Count != Input.StaticData.Vertices.Count ||
-                Input.InstanceData.Colors.Count != Input.InstanceData.Vertices.Count)
-                throw new ArgumentException("Chunk index mismatch.");
+            var meshInvalid = Input.StaticData.Colors.Count != Input.StaticData.Vertices.Count ||
+                              Input.InstanceData.Colors.Count != Input.InstanceData.Vertices.Count ||
+                              Input.InstanceData.Extradata.Count != Input.InstanceData.Vertices.Count ||
+                              Input.StaticData.Extradata.Count != Input.StaticData.Vertices.Count;
+            if (meshInvalid)
+            {
+                Log.WriteLine("Chunk index mismatch, skipping...");
+                InputAllocator.Dispose();
+                return;
+            }
 
             var staticMin = new Vector3(
                 Input.StaticData.SupportPoint(-Vector3.UnitX).X - OffsetX,
@@ -253,7 +262,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 new Vector3(staticMax.X, Math.Max(staticMax.Y, Input.WaterData.SupportPoint(Vector3.UnitY).Y),
                     staticMax.Z)
             );
-            using (var allocator = new HeapAllocator(Allocator.Megabyte * 8))
+            using (var allocator = new HeapAllocator(Allocator.Megabyte * 16))
             {
                 Input.StaticData.Optimize(allocator);
                 Input.InstanceData.Optimize(allocator);

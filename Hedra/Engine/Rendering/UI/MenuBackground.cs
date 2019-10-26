@@ -85,8 +85,10 @@ namespace Hedra.Engine.Scenes
                 }
                 yield return null;
             }
-            FirePosition = CampfirePosition.Xz().ToVector3() + Vector3.UnitX * 4 + Vector3.UnitY * (Physics.HeightAtPosition(CampfirePosition +  Vector3.UnitX * 4)+1);
-            
+
+            var firePosition = CampfirePosition.Xz().ToVector3() + Vector3.UnitX * 4;
+            FirePosition = new Vector3(firePosition.X, Physics.HeightAtPosition(firePosition) + 0.25f, firePosition.Z);
+
             var centerModel = AssetManager.PLYLoader("Assets/Env/Campfire2.ply", Vector3.One * 2.4f);
             centerModel.Translate( FirePosition );
             underChunk.AddStaticElement(centerModel);

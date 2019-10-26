@@ -315,16 +315,7 @@
     <Compile Include="Engine\Bullet\PhysicsComponentMotionState.cs" />
     <Compile Include="Engine\CacheSystem\DynamicCache.cs" />
     <Compile Include="Engine\CacheSystem\FishingPostIconCache.cs" />
-    <Compile Include="Engine\Core\AllocationEntry.cs" />
-    <Compile Include="Engine\Core\Allocator.cs" />
-    <Compile Include="Engine\Core\HeapAllocator.cs" />
-    <Compile Include="Engine\Core\IAllocator.cs" />
-    <Compile Include="Engine\Core\ISequentialList.cs" />
     <Compile Include="Engine\Core\SequentialList.cs" />
-    <Compile Include="Engine\Core\NativeArray.cs" />
-    <Compile Include="Engine\Core\NativeList.cs" />
-    <Compile Include="Engine\Core\ObjectPool.cs" />
-    <Compile Include="Engine\Core\StackAllocator.cs" />
     <Compile Include="Engine\DataStructures\AABB.cs" />
     <Compile Include="Engine\DataStructures\Octree.cs" />
     <Compile Include="Engine\DataStructures\OctreeNode.cs" />
@@ -514,8 +505,6 @@
     <Compile Include="Engine\ClassSystem\Templates\StartingItemTemplate.cs" />
     <Compile Include="Engine\Core\ISearchable.cs" />
     <Compile Include="Engine\Core\ModuleLoader.cs" />
-    <Compile Include="Engine\Core\Pair.cs" />
-    <Compile Include="Engine\Core\Singleton.cs" />
     <Compile Include="Engine\Core\TypeFactory.cs" />
     <Compile Include="Engine\EntitySystem\BaseHealthBarComponent.cs" />
     <Compile Include="Engine\EntitySystem\DisposeComponent.cs" />
@@ -14698,6 +14687,12 @@
     <Content Include="x86\wrap_oal.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Framework\Framework.csproj">
+      <Project>{12915777-140a-421a-a0c2-eb9bb112962f}</Project>
+      <Name>Framework</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent Condition="'$(OS)' == 'Windows_NT' ">

@@ -23,6 +23,7 @@ using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.Overworld;
 using System.Numerics;
 using Hedra.Numerics;
+using Hedra.Framework;
 using Chunk = Hedra.Engine.Generation.ChunkSystem.Chunk;
 
 namespace Hedra.Engine.BiomeSystem
@@ -110,7 +111,7 @@ namespace Hedra.Engine.BiomeSystem
                             foundCutoff = true;
                             if (x >= 0 && z >= 0 && x < depth && z < depth)
                             {
-                                cutoffHeights[x * depth + z] =((int)Math.Round(y / 3f)) * 3;
+                                cutoffHeights[x * depth + z] =((int)Math.Round(y / .5f)) * .5f;
                             }
 
                             if (affectedByPlateau)
@@ -185,7 +186,7 @@ namespace Hedra.Engine.BiomeSystem
             var density = 16f + smallFrequency * 16f;
             var lerpValue = Mathf.Clamp((y - BiomePool.RiverMaxHeight) / 8f, 0f, 1f);
             density = Mathf.Lerp(density, 0, lerpValue * lerpValue);
-            var bottomLerpValue = Mathf.Clamp((y - BiomePool.RiverMinHeight) / 16f, 0f, 1f);
+            var bottomLerpValue = Mathf.Clamp((y - BiomePool.RiverMinHeight) / 8f, 0f, 1f);
             density = Mathf.Lerp(0, density, bottomLerpValue * bottomLerpValue);
             return (density) * falloff;
         }
@@ -512,7 +513,7 @@ namespace Hedra.Engine.BiomeSystem
                     }
                 }
             }
-            if (riverBorder > 0 && y < BiomePool.RiverSeaFloorMax && blockType != BlockType.Air && blockType != BlockType.Water)
+            if (riverBorder > 0 && y < BiomePool.RiverSeaFloorMax && y > BiomePool.RiverSeaFloorMin && blockType != BlockType.Air && blockType != BlockType.Water)
             {
                 if (Blocks[x,y + 1,z]->Type == BlockType.Air)
                 {

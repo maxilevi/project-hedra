@@ -126,6 +126,7 @@ namespace Hedra.Engine.Loader
             Log.WriteLine("Scene loading was Successful.");
             
             LoadInterpreter();
+            Program.GameWindow.WindowState = WindowState.Maximized;
             return true;
         }
 

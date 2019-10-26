@@ -131,15 +131,15 @@ namespace Hedra.Engine.Rendering
             Vertex *= Scale;
 
             Vertex += LocalRotationPoint;
-            //Vertex = Vector3.Transform(Vertex, LocalRotationMatrix);
+            Vertex = Vector3.Transform(Vertex, LocalRotationMatrix);
             Vertex -= LocalRotationPoint;
 
             Vertex += BeforeRotation;
             Vertex += RotationPoint;
-            //Vertex = Vector3.Transform(Vertex, _rotationMatrix);
+            Vertex = Vector3.Transform(Vertex, _rotationMatrix);
             Vertex -= RotationPoint;
 
-            //Vertex = Vector3.Transform(Vertex, TransformationMatrix);
+            Vertex = Vector3.Transform(Vertex, TransformationMatrix);
             
             Vertex += Position + LocalPosition;
             return Vertex;

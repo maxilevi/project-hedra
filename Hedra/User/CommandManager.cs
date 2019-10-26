@@ -34,7 +34,9 @@ using Hedra.Game;
 using Hedra.Items;
 using Hedra.Mission;
 using System.Numerics;
+using Hedra.Engine;
 using Hedra.Numerics;
+using Silk.NET.Windowing.Common;
 
 namespace Hedra.User
 {
@@ -374,6 +376,11 @@ namespace Hedra.User
                 if (Parts[0] == "knock")
                 {
                     Caster.KnockForSeconds(float.Parse(Parts[1]));
+                }
+
+                if (Parts[0] == "maximize")
+                {
+                    Program.GameWindow.WindowState = WindowState.Maximized;
                 }
                 if (Parts[0] == "audiotest")
                 {

@@ -6,6 +6,7 @@ using Hedra.API;
 using Hedra.Engine.ClassSystem.Templates;
 using Hedra.Engine.IO;
 using Hedra.Engine.ModuleSystem.Templates;
+using Hedra.Framework;
 using Newtonsoft.Json;
 
 namespace Hedra.Engine.Core

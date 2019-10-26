@@ -72,21 +72,21 @@ namespace Hedra.Numerics
         public static Vector3 ExtractTranslation(this Matrix4x4 Matrix)
         {
             if(!Matrix4x4.Decompose(Matrix, out _, out _, out var translation))
-                throw new ArgumentException("Failed to decompose matrix");
+                return Vector3.Zero;
             return translation;
         }
         
         public static Vector3 ExtractScale(this Matrix4x4 Matrix)
         {
             if(!Matrix4x4.Decompose(Matrix, out var scale, out _, out _))
-                throw new ArgumentException("Failed to decompose matrix");
+                return Vector3.One;
             return scale;
         }
         
         public static Quaternion ExtractRotation(this Matrix4x4 Matrix)
         {
-            if(!Matrix4x4.Decompose(Matrix, out _, out var quaternion, out _))
-                throw new ArgumentException("Failed to decompose matrix");
+            if (!Matrix4x4.Decompose(Matrix, out _, out var quaternion, out _))
+                return Quaternion.Identity;
             return quaternion;
         }
         
