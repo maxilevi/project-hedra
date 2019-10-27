@@ -29,7 +29,7 @@ uniform float Smoothness;
 const float waveStrength = 0.01;
 const float speed = 0.04;
 const float fresnelReflective = 0.7;
-const float edgeSoftness = 32.0;
+const float edgeSoftness = 64.0;
 const float specularReflectivity = 0.8;
 const float shineDamper = 10.0;
 
@@ -83,10 +83,11 @@ void main()
 	float waterDepth = calculateWaterDepth(projectiveCoords);
 	float alpha = (1.0 - fresnel * 0.7) * clamp((waterDepth / edgeSoftness / Smoothness), 0.0, 1.0);
 
-	OutColor = mix(sky_color(), vec4(finalColour, alpha + 1.0), pass_visibility);
+	OutColor = mix(sky_color(), vec4(finalColour, alpha), pass_visibility);
 	vec3 out_position = (_modelViewMatrix * vec4(pass_vertex, 1.0)).xyz;
 	OutPosition = vec4(out_position, gl_FragCoord.z) * useSSR;
 	vec3 out_normal = mat3(transpose(inverse(_modelViewMatrix))) * normal;
 	/* 1.0 means SSR affects this fragment and SSAO doesn't */
 	OutNormal = vec4(out_normal, 1.0) * useSSR;
+	//OutColor = mix(OutColor, vec4(texture(depthMap, projectiveCoords).w, 0, 0, 1), pass_visibility);
 }

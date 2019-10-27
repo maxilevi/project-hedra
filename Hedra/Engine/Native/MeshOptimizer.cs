@@ -30,6 +30,7 @@ namespace Hedra.Engine.Native
 
         public static void SimplifySloppy(IAllocator Allocator, NativeVertexData Mesh, float Threshold)
         {
+            if(Mesh.Indices.Count == 0) return;
             var targetIndexCount = (uint)(Mesh.Indices.Count * Threshold);
             var outIndices = new NativeArray<uint>(Allocator, Mesh.Indices.Count);
             var length = HedraCoreNative.meshopt_simplifySloppy(
