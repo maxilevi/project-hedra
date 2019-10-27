@@ -24,7 +24,7 @@ namespace Hedra.Engine.StructureSystem
 {
     public abstract class StructureDesign
     {
-        private static readonly object _lock = new object();
+        public virtual int SearchRadius => PlateauRadius;
         public abstract int PlateauRadius { get; }
         public abstract VertexData Icon { get; }
         public abstract void Build(CollidableStructure Structure);
@@ -47,9 +47,9 @@ namespace Hedra.Engine.StructureSystem
         
         public void CheckFor(Vector2 ChunkOffset, Region Biome, RandomDistribution Distribution)
         {
-            for (var x = Math.Min(-2, -PlateauRadius / Chunk.Width * 2); x < Math.Max(2, PlateauRadius / Chunk.Width * 2); x++)
+            for (var x = Math.Min(-2, -SearchRadius / Chunk.Width * 2); x < Math.Max(2, SearchRadius / Chunk.Width * 2); x++)
             {
-                for (var z = Math.Min(-2, -PlateauRadius / Chunk.Width * 2); z < Math.Max(2, PlateauRadius / Chunk.Width * 2); z++)
+                for (var z = Math.Min(-2, -SearchRadius / Chunk.Width * 2); z < Math.Max(2, SearchRadius / Chunk.Width * 2); z++)
                 {
                     var offset = new Vector2(ChunkOffset.X + x * Chunk.Width,
                         ChunkOffset.Y + z * Chunk.Width);
@@ -57,7 +57,7 @@ namespace Hedra.Engine.StructureSystem
                     var targetPosition = BuildTargetPosition(offset, Distribution);
                     var items = World.StructureHandler.StructureItems;
                     
-                    if (!World.StructureHandler.StructureExistsAtPosition(targetPosition) && this.ShouldSetup(offset, ref targetPosition, items, Biome, Distribution))
+                    if (this.ShouldSetup(offset, ref targetPosition, items, Biome, Distribution) && !World.StructureHandler.StructureExistsAtPosition(targetPosition))
                     {
                         World.StructureHandler.RegisterStructure(targetPosition);
                         var item = this.Setup(targetPosition, BuildRng(offset));
@@ -72,9 +72,9 @@ namespace Hedra.Engine.StructureSystem
         public virtual bool ShouldRemove(CollidableStructure Structure)
         {
             var chunkOffset = World.ToChunkSpace(Structure.Position);
-            for (var x = Math.Min(-2, -PlateauRadius / Chunk.Width * 2); x < Math.Max(2, PlateauRadius / Chunk.Width * 2); x++)
+            for (var x = Math.Min(-2, -SearchRadius / Chunk.Width * 2); x < Math.Max(2, SearchRadius / Chunk.Width * 2); x++)
             {
-                for (var z = Math.Min(-2, -PlateauRadius / Chunk.Width * 2); z < Math.Max(2, PlateauRadius / Chunk.Width * 2); z++)
+                for (var z = Math.Min(-2, -SearchRadius / Chunk.Width * 2); z < Math.Max(2, SearchRadius / Chunk.Width * 2); z++)
                 {
                     var offset = new Vector2(chunkOffset.X + x * Chunk.Width, chunkOffset.Y + z * Chunk.Width);
                     if (World.GetChunkByOffset(offset) != null)

@@ -23,18 +23,18 @@ namespace Hedra.Engine.Rendering.Geometry
          */
         public static void ApplySmoothing(IList<uint> Indices, IList<Vector3> Vertices, IList<Vector4> Colors, IList<Vector3> Normals, HashSet<uint> IgnoreList, int Steps = 1)
         {
+            var map = IndexUniqueVertices(Indices, Vertices, Colors, Normals);
             for (var w = 0; w < Steps; w++)
             {
-                var map = IndexVertices(Indices, Vertices, Colors, Normals);
                 var vertexRemap = new Dictionary<Vector3, VertexRemap>();
 
-                void AddWeight(Vector3 Vertex, Vertex Neighbour)
+                void AddWeight(Vector3 Vertex, int Neighbour)
                 {
                     var remap = vertexRemap[Vertex];
                     vertexRemap[Vertex] = new VertexRemap
                     {
-                        Position = remap.Position + Neighbour.Position,
-                        Normal = remap.Normal + Neighbour.Normal,
+                        Position = remap.Position + Vertices[Neighbour],
+                        Normal = remap.Normal + Normals[Neighbour],
                         Count = remap.Count + 1,
                     };
                 }
@@ -42,16 +42,16 @@ namespace Hedra.Engine.Rendering.Geometry
                 for (var i = 0; i < Vertices.Count; ++i)
                 {
                     var vertex = Vertices[i];
-                    var triangles = map[vertex].ToArray();
+                    var triangles = map[i].ToArray();
                     if (!vertexRemap.ContainsKey(vertex))
                         vertexRemap[vertex] = new VertexRemap();
 
                     for (var j = 0; j < triangles.Length; ++j)
                     {
-                        var neighbours = triangles[j].GetConnected(vertex);
+                        var neighbours = triangles[j].GetConnected((uint)i);
                         for (var k = 0; k < neighbours.Length; ++k)
                         {
-                            AddWeight(vertex, neighbours[k]);
+                            AddWeight(vertex, (int)neighbours[k]);
                         }
                     }
                 }
@@ -65,7 +65,39 @@ namespace Hedra.Engine.Rendering.Geometry
                 }
             }
         }
-        
+
+        private static IndexedTriangle[][] IndexUniqueVertices(IList<uint> Indices, IList<Vector3> Vertices, IList<Vector4> Colors, IList<Vector3> Normals)
+        {
+            var map = new HashSet<IndexedTriangle>[Vertices.Count];
+            for (var i = 0; i < Indices.Count; i += 3)
+            {
+                var triangle = new IndexedTriangle
+                {
+                    P1 = Indices[i],
+                    P2 = Indices[i + 1],
+                    P3 = Indices[i + 2]
+                };
+                if (map[triangle.P1] == null)
+                    map[triangle.P1] = new HashSet<IndexedTriangle>();
+                if (map[triangle.P2] == null)
+                    map[triangle.P2] = new HashSet<IndexedTriangle>();
+                if (map[triangle.P3] == null)
+                    map[triangle.P3] = new HashSet<IndexedTriangle>();
+
+                map[triangle.P1].Add(triangle);
+                map[triangle.P2].Add(triangle);
+                map[triangle.P3].Add(triangle);
+            }
+
+            var finalMap = new IndexedTriangle[Vertices.Count][];
+            for(var i = 0; i < Vertices.Count; ++i)
+            {
+                finalMap[i] = map[i].ToArray();
+            }
+            return finalMap;
+
+        }
+
         public static VertexData[] GetConnectedComponents(VertexData Mesh)
         {
             var list = new List<VertexData>();
@@ -187,6 +219,24 @@ namespace Hedra.Engine.Rendering.Geometry
                 finalMap.Add(pair.Key, pair.Value.ToArray());
             }
             return finalMap;
+        }
+        
+        private struct IndexedTriangle
+        {
+            public uint P1;
+            public uint P2;
+            public uint P3;
+
+            public uint[] GetConnected(uint P)
+            {
+                if (P1.Equals(P))
+                    return new[] {P2, P3};
+                if (P2.Equals(P))
+                    return new[] {P1, P3};
+                if (P3.Equals(P))
+                    return new[] {P2, P3};
+                return null;
+            }
         }
         
         private struct Triangle
