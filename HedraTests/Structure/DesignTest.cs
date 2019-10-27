@@ -143,7 +143,7 @@ namespace HedraTests.Structure
                     var biome = World.BiomePool.GetRegion(targetPosition);
                     Assert.AreEqual(
                         MapBuilder.Sample(offset.ToVector3(), biome) != null,
-                        design.ShouldSetup(offset, targetPosition, World.StructureHandler.StructureItems,biome, distribution)
+                        design.ShouldSetup(offset, ref targetPosition, World.StructureHandler.StructureItems,biome, distribution)
                     );
                 }
             }

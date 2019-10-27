@@ -57,7 +57,7 @@ namespace Hedra.Engine.StructureSystem
                     var targetPosition = BuildTargetPosition(offset, Distribution);
                     var items = World.StructureHandler.StructureItems;
                     
-                    if (!World.StructureHandler.StructureExistsAtPosition(targetPosition) && this.ShouldSetup(offset, targetPosition, items, Biome, Distribution))
+                    if (!World.StructureHandler.StructureExistsAtPosition(targetPosition) && this.ShouldSetup(offset, ref targetPosition, items, Biome, Distribution))
                     {
                         World.StructureHandler.RegisterStructure(targetPosition);
                         var item = this.Setup(targetPosition, BuildRng(offset));
@@ -102,9 +102,9 @@ namespace Hedra.Engine.StructureSystem
                 ChunkOffset.Y + Rng.Next(0, (int)(Chunk.Width / Chunk.BlockSize)) * Chunk.BlockSize);
         }
 
-        public virtual bool ShouldSetup(Vector2 ChunkOffset, Vector3 TargetPosition, CollidableStructure[] Items, Region Biome, IRandom Rng)
+        public virtual bool ShouldSetup(Vector2 ChunkOffset, ref Vector3 TargetPosition, CollidableStructure[] Items, Region Biome, IRandom Rng)
         {
-            var shouldBe = this.SetupRequirements(TargetPosition, ChunkOffset, Biome, Rng);
+            var shouldBe = this.SetupRequirements(ref TargetPosition, ChunkOffset, Biome, Rng);
             if (World.BiomePool.Type == WorldType.Overworld)
             {
                 shouldBe &= (TargetPosition - World.SpawnPoint).Xz().LengthSquared() > 512 * 512;
@@ -132,7 +132,7 @@ namespace Hedra.Engine.StructureSystem
             return false;
         }
         
-        protected abstract bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng);
+        protected abstract bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng);
 
         protected static void DoWhenChunkReady(Vector3 Position, Action<Vector3> Do, CollidableStructure Structure)
         {

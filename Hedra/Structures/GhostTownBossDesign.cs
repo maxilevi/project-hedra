@@ -46,7 +46,7 @@ namespace Hedra.Structures
             }, Structure);
         }
 
-        public override bool ShouldSetup(Vector2 ChunkOffset, Vector3 TargetPosition, CollidableStructure[] Items, Region Biome, IRandom Rng)
+        public override bool ShouldSetup(Vector2 ChunkOffset, ref Vector3 TargetPosition, CollidableStructure[] Items, Region Biome, IRandom Rng)
         {
             return ChunkOffset == World.ToChunkSpace(World.SpawnPoint) && !Spawned;
         }

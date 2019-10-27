@@ -67,7 +67,7 @@ namespace Hedra.Engine.StructureSystem
             return structure;
         }
 
-        protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
+        protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
             return Rng.Next(0, StructureChance) == 1 &&
                    Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z) > BiomePool.SeaLevel &&

@@ -25,7 +25,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
     public class FishingPostDesign : SimpleStructureDesign<FishingPost>
     {
         public override int PlateauRadius => 256;
-        protected override float EffectivePlateauRadius => 256;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.FishingPostIcon);
         protected override int StructureChance => 4;//StructureGrid.FishingPostChance;
         protected override CacheItem? Cache => null;
@@ -315,9 +314,9 @@ namespace Hedra.Engine.StructureSystem.Overworld
             return base.ShouldBuild(targetPosition, Items, Designs);
         }
 
-        protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
+        protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
-            return Rng.Next(1, 2) == 1 && IsWater(ChunkOffset.ToVector3(), Biome) && SearchForShore(ChunkOffset, Biome, out _);
+            return Rng.Next(1, 2) == 1 && IsWater(ChunkOffset.ToVector3(), Biome) && SearchForShore(ChunkOffset, Biome, out TargetPosition);
         }
 
         private static bool SearchForShore(Vector2 Offset, Region Biome, out Vector3 Position)
