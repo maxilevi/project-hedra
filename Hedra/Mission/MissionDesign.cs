@@ -34,7 +34,9 @@ namespace Hedra.Mission
         {
             return _design.Execute<bool>("can_give", Position);
         }
-        
+
+        public QuestHint Hint =>
+            _design.HasMember("QUEST_HINT") ? _design.Get<QuestHint>("QUEST_HINT") : QuestHint.NoHint;
         public QuestTier Tier => _design.Get<QuestTier>("QUEST_TIER");
         public string Name => _design.Get<string>("QUEST_NAME");
     }

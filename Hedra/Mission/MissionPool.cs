@@ -46,7 +46,7 @@ namespace Hedra.Mission
             return Grab(Name.ToString());
         }
 
-        public static IMissionDesign Random(Vector3 Position, QuestTier Tier = QuestTier.Any)
+        public static IMissionDesign Random(Vector3 Position, QuestTier Tier = QuestTier.Any, QuestHint Hint = QuestHint.NoHint)
         {
             var possibilities = MissionScripts.Where(M => M.CanGive(Position)).ToArray();
             var map = new Dictionary<QuestTier, List<IMissionDesign>>();
@@ -90,5 +90,12 @@ namespace Hedra.Mission
         Easy,
         Medium,
         Hard
+    }
+
+    public enum QuestHint
+    {
+        NoHint,
+        Fishing,
+        Magic
     }
 }
