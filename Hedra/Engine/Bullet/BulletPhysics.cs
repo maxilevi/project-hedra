@@ -502,7 +502,7 @@ namespace Hedra.Engine.Bullet
                 if(Shape.Vertices[k].IsInvalid())
                     throw new ArgumentOutOfRangeException();
             }
-            if (Shape.Indices.Length % 3 != 0 || Shape.Indices.Length == 0)
+            if (Shape.Indices.Length % 3 != 0 || Shape.Indices.Length == 0 || Shape.Vertices.Length == 0)
                 throw new ArgumentOutOfRangeException();
         }
 

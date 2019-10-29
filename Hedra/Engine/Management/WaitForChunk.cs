@@ -25,7 +25,7 @@ namespace Hedra.Engine.Management
             if (!_timer.Tick()) return true;
             var underChunk = World.GetChunkAt(_position);
             var currentSeed = World.Seed;
-            if(underChunk == null || !underChunk.BuildedWithStructures)
+            if(underChunk == null || !underChunk.BuildedCompletely)
             {
                 if (World.Seed != currentSeed || (DisposeCondition?.Invoke() ?? false))
                 {

@@ -66,5 +66,10 @@ namespace Hedra.EntitySystem
         {
             return (Parent.Position - Target.Position).LengthFast();
         }
+
+        public static void RemoveComponent<T>(this IEntity Parent) where T : IComponent<IEntity>
+        {
+            Parent.RemoveComponent(Parent.SearchComponent<T>());
+        }
     }
 }

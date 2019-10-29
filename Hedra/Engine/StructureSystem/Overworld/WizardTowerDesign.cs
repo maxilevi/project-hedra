@@ -25,7 +25,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         protected override CacheItem? Cache => CacheItem.WizardTower;
         protected override bool NoPlantsZone => true;
         protected override Vector3 StructureOffset => Vector3.UnitY * -.5f;
-        protected override Vector3 StructureScale => Vector3.One * 1.25f;
+        protected override Vector3 StructureScale => Vector3.One * 1.0f;
 
         protected override void DoBuild(CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation, Random Rng)
         {
@@ -52,12 +52,52 @@ namespace Hedra.Engine.StructureSystem.Overworld
             AddDoor(model, WizardTowerCache.Door0, Transformation, Structure, true, false);
         }
 
+        private static IHumanoid CreateBaseWizard(Vector3 Position, HealthBarType BehaviourType)
+        {
+            var type = Utils.Rng.Next(0, 2) == 1 ? HumanType.Witch : HumanType.Scholar;
+            var wizard = World.WorldBuilding.SpawnHumanoid(type, Position);
+            wizard.Physics.CollidesWithEntities = false;
+            wizard.Physics.GravityDirection = Vector3.Zero;
+            wizard.SearchComponent<DamageComponent>().Immune = true;
+            var healthBar = wizard.SearchComponent<HealthBarComponent>();
+            wizard.RemoveComponent(healthBar);
+            wizard.AddComponent(new HealthBarComponent(wizard, healthBar.Name, BehaviourType));
+            return wizard;
+        }
+        
         private static IHumanoid CreateWizard(Vector3 Position)
         {
-            var wizard = World.WorldBuilding.SpawnHumanoid(HumanType.Witch, Position);
-            wizard.AddComponent(new QuestGiverComponent(wizard, MissionPool.Random(Position, QuestTier.Medium, QuestHint.Magic)));
-            wizard.Physics.CollidesWithEntities = false;
-            wizard.SearchComponent<DamageComponent>().Immune = true;
+            if (Utils.Rng.Next(0, 2) == 1) return null;
+            var wizard = CreateBaseWizard(Position, HealthBarType.Friendly);
+            if (Utils.Rng.Next(0, 4) == 1)
+            {
+                var questComponent = new QuestGiverComponent(wizard,
+                    MissionPool.Random(Position, QuestTier.Medium, QuestHint.Magic));
+                wizard.AddComponent(questComponent);
+            }
+            else
+            {
+                wizard.AddComponent(new WizardThoughtsComponent(wizard));
+                wizard.AddComponent(new TalkComponent(wizard));
+            }
+            return wizard;
+        }
+        
+        private static IHumanoid CreateDarkWizard(Vector3 Position)
+        {
+            if (Utils.Rng.Next(0, 4) == 1) return null;
+            
+            var wizard = CreateBaseWizard(Position, HealthBarType.Black);
+            if (Utils.Rng.Next(0, 6) == 1)
+            {
+                //var questComponent = new QuestGiverComponent(wizard, MissionPool.Grab());
+                //wizard.AddComponent(questComponent);
+            }
+            else
+            {
+                wizard.AddComponent(new DarkWizardThoughtsComponent(wizard));
+                wizard.AddComponent(new TalkComponent(wizard));
+            }
             return wizard;
         }
 
@@ -71,7 +111,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             IsNightLight = false,
             LightRadius = PointLight.DefaultRadius * 1.5f,
-            Npc1Creator = CreateWizard
+            Npc1Creator = CreateWizard,
+            Npc2Creator = CreateDarkWizard
         };
     }
 }

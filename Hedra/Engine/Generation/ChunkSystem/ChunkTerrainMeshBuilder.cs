@@ -219,5 +219,11 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
             return color;
         }
+
+        public static void ClearMapping(Vector3 Offset)
+        {
+            //lock(WaterLock)
+            //    WaterMappings.Remove()
+        }
     }
 }

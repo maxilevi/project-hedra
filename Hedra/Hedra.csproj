@@ -294,6 +294,7 @@
     <Compile Include="Components\BoatMerchantComponent.cs" />
     <Compile Include="Components\ClothierComponent.cs" />
     <Compile Include="Components\DamageComponent.cs" />
+    <Compile Include="Components\DarkWizardThoughtsComponent.cs" />
     <Compile Include="Components\HealthBarComponent.cs" />
     <Compile Include="Components\InnkeeperComponent.cs" />
     <Compile Include="Components\MasonComponent.cs" />
@@ -301,6 +302,7 @@
     <Compile Include="Components\CompanionStatsComponent.cs" />
     <Compile Include="Components\ScriptedTradeComponent.cs" />
     <Compile Include="Components\TravellingMerchantComponent.cs" />
+    <Compile Include="Components\WizardThoughtsComponent.cs" />
     <Compile Include="Crafting\CraftingInventory.cs" />
     <Compile Include="Crafting\CraftingStation.cs" />
     <Compile Include="Crafting\Templates\IngredientsTemplate.cs" />

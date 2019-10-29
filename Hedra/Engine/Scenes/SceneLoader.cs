@@ -104,13 +104,14 @@ namespace Hedra.Engine.Scenes
             var positions = ScenePositions.Select(V => V.AverageVertices()).ToArray();
             DoWhenWorldReady(positions, P => P, P =>
             {
-                Structure.WorldObject.AddNPCs(Create(P));
+                var npc = Create(P);
+                if(npc != null)
+                    Structure.WorldObject.AddNPCs(npc);
             }, Structure);
         }
         
         private static void DoWhenWorldReady<T>(T[] Values, Func<T, Vector3> GetPosition, Action<T> Do, CollidableStructure Structure)
         {
-            /* Add punching bags */
             for (var i = 0; i < Values.Length; ++i)
             {
                 var k = i;
