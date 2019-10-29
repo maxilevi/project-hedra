@@ -28,7 +28,7 @@ namespace Hedra.Structures
         
         protected override GhostTownPortal Create(Vector3 TargetPosition, float Size)
         {
-            return new SpawnGhostTownPortal(Position, Scale);
+            return new SpawnGhostTownPortal(Position, StructureScale);
         }
 
         public static Vector3 Position => World.SpawnPoint + GhostTownGenerationDesign.IslandRadius * -Vector3.One * .25f;
