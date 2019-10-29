@@ -453,6 +453,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             Bullet.BulletPhysics.RemoveChunk(Position.Xz());
             Mesh?.Dispose();
             Landscape?.Dispose();
+            ChunkTerrainMeshBuilder.ClearMapping(Position);
         }
         
         

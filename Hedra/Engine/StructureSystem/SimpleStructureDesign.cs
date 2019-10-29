@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using Hedra.BiomeSystem;
@@ -20,7 +21,8 @@ namespace Hedra.Engine.StructureSystem
 {
     public abstract class SimpleStructureDesign<T> : StructureDesign where T : BaseStructure
     {
-        protected virtual Vector3 Scale => Vector3.One;
+        protected virtual Vector3 StructureScale => Vector3.One;
+        protected virtual Vector3 StructureOffset => Vector3.Zero;
         protected virtual float EffectivePlateauRadius => PlateauRadius;
         protected abstract int StructureChance { get; }
         protected virtual BlockType PathType => BlockType.StonePath;
@@ -32,12 +34,14 @@ namespace Hedra.Engine.StructureSystem
             var originalModel = Cache != null ? CacheManager.GetModel(Cache.Value) : null;
             var rng = BuildRng(Structure);
             var rotation = Matrix4x4.CreateRotationY(Mathf.Radian * BuildRotationAngle(rng));
-            var translation = Matrix4x4.CreateTranslation(Structure.Position);
-            var transformation = Matrix4x4.CreateScale(Scale) * rotation * translation;
+            var translation = Matrix4x4.CreateTranslation(Structure.Position + StructureOffset);
+            var transformation = Matrix4x4.CreateScale(StructureScale) * rotation * translation;
             if (originalModel != null)
             {
+                var modelClone = originalModel.Clone();
+                ApplyColors(modelClone, World.BiomePool.GetAverageRegionColor(translation.ExtractTranslation()));
                 Structure.AddStaticElement(
-                    originalModel.Clone().Transform(transformation)
+                    modelClone.Transform(transformation)
                 );
                 Structure.AddCollisionShape(
                     CacheManager.GetShape(originalModel).DeepClone().Select(S => S.Transform(transformation)).ToArray()
@@ -45,6 +49,11 @@ namespace Hedra.Engine.StructureSystem
             }
 
             DoBuild(Structure, rotation, translation, rng);
+        }
+
+        protected virtual void ApplyColors(VertexData Model, RegionColor Colors)
+        {
+            
         }
 
         protected virtual float BuildRotationAngle(Random Rng)
@@ -69,6 +78,7 @@ namespace Hedra.Engine.StructureSystem
 
         protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
+            Debug.Assert(StructureChance != 1);
             return Rng.Next(0, StructureChance) == 1 &&
                    Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z) > BiomePool.SeaLevel &&
                    Math.Abs(Biome.Generation.RiverAtPoint(TargetPosition.X, TargetPosition.Z)) < 0.005f;
@@ -80,8 +90,8 @@ namespace Hedra.Engine.StructureSystem
                 Builder<IBuildingParameters>.CreateDoor(
                     Model,
                     Structure.Position,
-                    DoorPosition,
-                    Scale,
+                    DoorPosition + StructureOffset,
+                    StructureScale,
                     Transformation,
                     Structure,
                     InvertedRotation,
@@ -92,6 +102,7 @@ namespace Hedra.Engine.StructureSystem
 
         protected void AddPlant(IAllocator Allocator, Vector3 Position, HarvestableDesign Design, Random Rng)
         {
+            Position += StructureOffset;
             World.EnvironmentGenerator.GeneratePlant(
                 Allocator,
                 Position,
