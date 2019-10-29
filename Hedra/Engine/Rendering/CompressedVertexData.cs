@@ -17,6 +17,10 @@ namespace Hedra.Engine.Rendering
         public List<Vector3> Vertices { get; set; }
         public List<uint> Indices { get; set; }
 
+        public int SizeInBytes => _compressedColors.Count * HedraSize.Vector4 + Vertices.Count * HedraSize.Vector3 +
+                                  _compressedNormals.Count * HedraSize.Vector3 + Indices.Count * sizeof(uint) +
+                                  _compressedExtradata.Count * sizeof(float);
+
         private List<CompressedValue<Vector4>> _compressedColors = new List<CompressedValue<Vector4>>();
         public List<Vector4> Colors
         {
