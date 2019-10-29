@@ -21,7 +21,7 @@ out float DitherVisibility;
 out vec3 base_vertex_position;
 out float use_shadows;
 out float shadow_quality;
-out vec3 completeColor;
+out vec3 worldColor;
 out vec3 unitToLight;
 
 layout(std140) uniform FogSettings {
@@ -115,7 +115,7 @@ void main()
 	InNorm = vec4(InNormal, 1.0);
     raw_color = linear_color;
 	unitToLight = normalize(LightPosition);
-	completeColor = CalculateColor();
+	worldColor = CalculateColor();
 }
 
 vec3 CalculateColor()
@@ -123,8 +123,7 @@ vec3 CalculateColor()
 	//Lighting
 	vec3 unitNormal = normalize(InNorm.xyz);
 	vec3 unitToCamera = normalize((inverse(_modelViewMatrix) * vec4(0.0, 0.0, 0.0, 1.0) ).xyz - InPos.xyz);
-
-	vec3 FLightColor = calculate_lights(LightColor, InPos.xyz);
+	
 	vec4 InputColor = vec4(raw_color.xyz, 1.0);
 	if(Config - NoHighlightFlag > FlagEpsilon)
 	{
@@ -135,7 +134,6 @@ vec3 CalculateColor()
 	vec4 Rim = rim(InputColor.rgb, LightColor, unitToCamera, unitNormal);
 	vec4 Diffuse = diffuse(unitToLight, unitNormal, LightColor);
 	vec4 realColor = Rim + Diffuse * InputColor;
-
-	vec3 point_light_color = diffuse(unitToLight, unitNormal, FLightColor).rgb;
-	return (realColor.xyz + point_light_color * raw_color.xyz);
+	
+	return realColor.xyz;
 }
