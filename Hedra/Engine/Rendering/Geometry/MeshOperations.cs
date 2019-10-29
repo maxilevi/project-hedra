@@ -244,7 +244,7 @@ namespace Hedra.Engine.Rendering.Geometry
             }
         }
         
-        public static unsafe void Transform(IList<Vector3> Vertices, IList<Vector3> Normals, Matrix4x4 Matrix)
+        public static void Transform(IList<Vector3> Vertices, IList<Vector3> Normals, Matrix4x4 Matrix)
         {
             for (var i = 0; i < Vertices.Count; i++)
             {
