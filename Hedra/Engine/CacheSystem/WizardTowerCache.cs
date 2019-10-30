@@ -14,6 +14,6 @@ namespace Hedra.Engine.CacheSystem
             AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Structures/WizardTower/WizardTower0.ply", Vector3.One));
         }
 
-        public static Vector3 Door0 => new Vector3(39.08752f, 36.76129f, -3.41911f);
+        public static Vector3 Door0 => new Vector3(-4.29917f, 36.76129f, -41.54929f);
     }
 }

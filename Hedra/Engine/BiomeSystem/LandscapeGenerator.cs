@@ -95,7 +95,7 @@ namespace Hedra.Engine.BiomeSystem
 
                     for (var y = 0; y < Chunk.BoundsY; ++y)
                     {
-                        var pathDensity = CalculatePathDensity(pathHeight, y);
+                        var pathDensity = CalculatePathDensity(pathHeight, y) * densityMultiplier;
                         var pathDensityModifier = (float) Math.Pow(Mathf.Clamp(1f - pathDensity / BaseBiomeGenerationDesign.PathDepth, 0f, 1f), 2);
                         var heightAtPoint = calculatedHeight - pathDensity + (pathDensity > 0 ? smallFrequency : 0);
                         /* The density should also take into account rivers and what not, because of this we add the river data in the second pass*/
@@ -159,7 +159,7 @@ namespace Hedra.Engine.BiomeSystem
                     /* Water is built from the bottom up so we should not change this */
                     for (var y = 0; y < Chunk.Height; ++y)
                     {
-                        var pathDensity = CalculatePathDensity(pathHeight * pathMultiplier, y);
+                        var pathDensity = CalculatePathDensity(pathHeight, y) * pathMultiplier;
                         var riverDensity = (riverHeight > 0 ? CalculateRiverDensity(riverHeight, y, ref smallFrequency, ref riverMultiplier) : 0) * riverMultiplier;
                         var riverBorderDensity = riverBorderHeight * riverMultiplier;
 

@@ -18,6 +18,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private const int CollisionMeshLod = 2;
         private readonly Chunk _parent;
         private static readonly object WaterLock;
+        private static readonly Dictionary<Vector3, HashSet<Vector3>> ChunkWaterMap;
         private static readonly Dictionary<Vector3, Vector3> WaterMappings;
         private static readonly Dictionary<int, float> LODMap = new Dictionary<int, float>
         {
@@ -222,8 +223,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public static void ClearMapping(Vector3 Offset)
         {
-            //lock(WaterLock)
-            //    WaterMappings.Remove()
+            //lock (WaterLock)
+            //    WaterMappings.Remove(Offset);
         }
     }
 }

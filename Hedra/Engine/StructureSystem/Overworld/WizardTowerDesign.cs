@@ -22,13 +22,15 @@ namespace Hedra.Engine.StructureSystem.Overworld
 {
     public class WizardTowerDesign : SimpleCompletableStructureDesign<WizardTower>
     {
-        public override int PlateauRadius => 384;
+        public override int PlateauRadius => 256 + 128;
         public override VertexData Icon { get; } = CacheManager.GetModel(CacheItem.WizardTowerIcon);
         protected override int StructureChance => StructureGrid.WizardTower;
         protected override CacheItem? Cache => CacheItem.WizardTower;
         protected override bool NoPlantsZone => true;
         protected override Vector3 StructureOffset => Vector3.UnitY * -.5f;
         protected override Vector3 StructureScale => Vector3.One * 1.0f;
+        protected override BlockType PathType => BlockType.Dirt;
+        protected override float GroundworkRadius => 128 + 64;
 
         protected override void DoBuild(CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation, Random Rng)
         {

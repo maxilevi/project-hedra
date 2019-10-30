@@ -24,6 +24,7 @@ namespace Hedra.Engine.StructureSystem
         protected virtual Vector3 StructureScale => Vector3.One;
         protected virtual Vector3 StructureOffset => Vector3.Zero;
         protected virtual float EffectivePlateauRadius => PlateauRadius;
+        protected virtual float GroundworkRadius => EffectivePlateauRadius / 2;
         protected abstract int StructureChance { get; }
         protected virtual BlockType PathType => BlockType.StonePath;
         protected virtual bool NoPlantsZone { get; }
@@ -68,7 +69,7 @@ namespace Hedra.Engine.StructureSystem
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
         {
             var structure = base.Setup(TargetPosition, Rng, Create(TargetPosition, EffectivePlateauRadius));
-            structure.AddGroundwork(new RoundedGroundwork(TargetPosition, EffectivePlateauRadius / 2, PathType)
+            structure.AddGroundwork(new RoundedGroundwork(TargetPosition, GroundworkRadius, PathType)
             {
                 NoPlants = NoPlantsZone
             });
