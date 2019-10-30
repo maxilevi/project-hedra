@@ -21,6 +21,7 @@ using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using System.Numerics;
 using Hedra.Engine.Core;
+using Hedra.Engine.StructureSystem;
 
 namespace HedraTests.Player
 {
@@ -79,6 +80,7 @@ namespace HedraTests.Player
             var biomePoolMock = new Mock<IBiomePool>();
             biomePoolMock.Setup(B => B.GetRegion(It.IsAny<Vector3>())).Returns(defaultRegion);
             worldMock.Setup(W => W.BiomePool).Returns(biomePoolMock.Object);
+            worldMock.Setup(W => W.StructureHandler).Returns(new StructureHandler());
             World.Provider = worldMock.Object;
             _currentHeight = 1;
         }
