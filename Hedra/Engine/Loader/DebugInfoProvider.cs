@@ -112,7 +112,7 @@ namespace Hedra.Engine.Loader
                 text += 
                     $"{lineBreak}DrawCalls={DrawManager.DrawCalls} VBOUpdates={VBO.VBOUpdatesInLastFrame} Chunks={chunkCount} ChunkX={underChunk?.OffsetX ?? 0} ChunkZ={underChunk?.OffsetZ ?? 0}";
                 text +=
-                    $"{lineBreak}Cache={CacheManager.UsedBytes / 1024 / 1024} MB DynamicCache={DynamicCache.UsedBytes / 1024 / 1024} MB";
+                    $"{lineBreak}Cache={CacheManager.UsedBytes / 1024 / 1024} MB DynamicCache={DynamicCache.UsedBytes / 1024 / 1024} MB WaterMappings={ChunkTerrainMeshBuilder.WaterMappingsCount} WaterChunkMappings={ChunkTerrainMeshBuilder.ChunkWaterMapCount}";
                 text +=
                     $"{lineBreak}Textures ={TextureRegistry.Count} Fonts={FontCache.Count} Texts={TextCache.Count} VAO={VAO.Alive} VBO={VBOCache.CachedVBOs}/{VBO.Alive} FBO={FBO.Alive} Lights={ShaderManager.UsedLights}/{ShaderManager.MaxLights}";
                 text += 

@@ -1,8 +1,8 @@
 {
   "Name" : "Crow",
   "MaxHealth": 220.0,
-  "AttackDamage": 4.0,
-  "Speed": 1.4,
+  "AttackDamage": 6.0,
+  "Speed": 1.5,
   "XP": 4.0,
   "Level": 6,
   "AIType": "Hostile",

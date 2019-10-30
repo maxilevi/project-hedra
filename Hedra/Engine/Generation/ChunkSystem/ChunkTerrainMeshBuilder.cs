@@ -40,6 +40,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         static ChunkTerrainMeshBuilder()
         {
             WaterLock = new object();
+            ChunkWaterMap = new Dictionary<Vector3, HashSet<Vector3>>();
             WaterMappings = new Dictionary<Vector3, Vector3>();
         }
         
@@ -124,6 +125,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     }
                     else
                     {
+                        if(!ChunkWaterMap.ContainsKey(Offset))
+                            ChunkWaterMap[Offset] = new HashSet<Vector3>();
+                        ChunkWaterMap[Offset].Add(vertex);
                         WaterMappings.Add(vertex, Water.Vertices[(int) Border[i]] + Offset);
                     }
                 }
@@ -223,8 +227,34 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public static void ClearMapping(Vector3 Offset)
         {
-            //lock (WaterLock)
-            //    WaterMappings.Remove(Offset);
+            lock (WaterLock)
+            {
+                if(!ChunkWaterMap.ContainsKey(Offset)) return;
+                var mappings = ChunkWaterMap[Offset];
+                foreach (var point in mappings)
+                {
+                    WaterMappings.Remove(point);
+                }
+                ChunkWaterMap.Remove(Offset);
+            }
+        }
+
+        public static int WaterMappingsCount
+        {
+            get
+            {
+                lock(WaterLock)
+                    return WaterMappings.Count;
+            }
+        }
+
+        public static int ChunkWaterMapCount
+        {
+            get
+            {
+                lock(WaterLock)
+                    return ChunkWaterMap.Count;
+            }
         }
     }
 }
