@@ -83,7 +83,6 @@ namespace Hedra.Engine.Loader
         public static bool LoadBoilerplate()
         {
             MainThreadId = Thread.CurrentThread.ManagedThreadId;
-            Thread.CurrentThread.Priority = ThreadPriority.Highest;
             Time.RegisterThread();
             OSManager.Load(Assembly.GetExecutingAssembly().Location);
             

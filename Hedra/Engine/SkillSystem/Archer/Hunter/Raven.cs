@@ -47,6 +47,6 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
             Translations.Get("raven_damage_change", (int) (DamageMultiplier * 100))
         };
 
-        protected override MobType CompanionType => MobType.Bee;
+        protected override MobType CompanionType => MobType.Crow;
     }
 }

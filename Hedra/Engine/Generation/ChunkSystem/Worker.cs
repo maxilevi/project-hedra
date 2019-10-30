@@ -20,7 +20,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _workerThread = new Thread(this.Update, MB * 4)
             {
                 IsBackground = true,
-                //Priority = ThreadPriority.Lowest
+                Priority = ThreadPriority.Lowest
             };
             _workerThread.Start();
         }

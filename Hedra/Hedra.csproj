@@ -8790,6 +8790,18 @@
       <Link>Assets\Items\Foods\CookedTrout.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Mobs\Overworld\Crow\CrowAttack0.dae">
+      <Link>Assets\Chr\Mob\Crow\CrowAttack0.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Mobs\Overworld\Crow\CrowIdle.dae">
+      <Link>Assets\Chr\Mob\Crow\CrowIdle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Mobs\Overworld\Crow\CrowWalk.dae">
+      <Link>Assets\Chr\Mob\Crow\CrowWalk.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Mobs\RawFish.ply">
       <Link>Assets\Items\Foods\RawFish.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -14457,6 +14469,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Recipes\WoodenBowlRecipe.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Mobs\Crow.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Mobs\MeleeBeetle.json">

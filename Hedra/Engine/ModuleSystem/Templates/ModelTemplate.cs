@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 
 namespace Hedra.Engine.ModuleSystem.Templates
 {

@@ -276,6 +276,7 @@ namespace Hedra.Engine.EntitySystem
         Cow,
         Bear,
         Lich,
+        Crow,
         TotalCount,
         None,
         Unknown
