@@ -52,7 +52,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         private void AddDoors(CollidableStructure Structure, Matrix4x4 Transformation)
         {
             var model = AssetManager.PLYLoader("Assets/Env/Structures/WizardTower/WizardTower0-Door0.ply", Vector3.One);
-            AddDoor(model, WizardTowerCache.Door0, Transformation, Structure, true, false);
+            AddDoor(model, WizardTowerCache.Door0, Transformation, Structure, false, false);
         }
 
         private static IHumanoid CreateBaseWizard(Vector3 Position, HealthBarType BehaviourType)
