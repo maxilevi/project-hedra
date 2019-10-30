@@ -28,7 +28,7 @@ namespace HedraTests.Player
     public class EntitySpawnerTest : BaseTest
     {
         private PlayerMock _player;
-        private MockEntitySpawner _spawner;
+        private MockMobSpawner _spawner;
         private event EventHandler OnSpawnCallback;
         private Block _spawningBlock;
         private int _currentHeight;
@@ -47,7 +47,7 @@ namespace HedraTests.Player
                 Type = BlockType.Grass
             };
             var entities = new List<IEntity>();
-            _spawner = new MockEntitySpawner(_player)
+            _spawner = new MockMobSpawner(_player)
             {
                 Enabled = true,
                 SpawnChance = 1
@@ -124,7 +124,7 @@ namespace HedraTests.Player
         [Test]
         public void TestSpawnerCantExceedMobCap()
         {
-            EntitySpawner.MobCap = 2;
+            MobSpawner.MobCap = 2;
             this.AssertMobsSpawned(MobType.Sheep, 1, 1);
             this.AssertMobsSpawned(MobType.Sheep, 1, 1);
             this.AssertMobsSpawned(MobType.Sheep, 1, 0);
@@ -135,7 +135,7 @@ namespace HedraTests.Player
         {
             var pause = new ManualResetEvent(false);
             _provider.Exists = true;
-            var spawnerMock = new Mock<EntitySpawner>(_player);
+            var spawnerMock = new Mock<MobSpawner>(_player);
             spawnerMock.Setup(S => S.Update()).Callback(delegate
             {
                 _provider.Exists = false;

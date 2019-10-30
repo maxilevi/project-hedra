@@ -148,7 +148,7 @@
     <Compile Include="Player\CappedSkillMock.cs" />
     <Compile Include="Player\EntitySpawnerTest.cs" />
     <Compile Include="Player\HumanoidTest.cs" />
-    <Compile Include="Player\MockEntitySpawner.cs" />
+    <Compile Include="Player\MockMobSpawner.cs" />
     <Compile Include="Player\SimpleCameraMock.cs" />
     <Compile Include="Player\PlayerMock.cs" />
     <Compile Include="Player\Skills\Archer\AgilityTest.cs" />

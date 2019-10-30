@@ -30,7 +30,7 @@ namespace Hedra.Engine.EntitySystem
     /// <summary>
     /// Description of EntitySpawner.
     /// </summary>
-    public class EntitySpawner
+    public class MobSpawner
     {
         public static int MobCap = int.MaxValue;
         public float SpawnChance { get; set; } = .8f;
@@ -41,7 +41,7 @@ namespace Hedra.Engine.EntitySystem
         private readonly AutoResetEvent _waitHandle;
         public bool Enabled { get; set; }
         
-        public EntitySpawner(IPlayer Player)
+        public MobSpawner(IPlayer Player)
         {
             this._player = Player;
             _rng = new Random();
@@ -232,6 +232,13 @@ namespace Hedra.Engine.EntitySystem
             {
                 Log.WriteLine(e.Message);
                 return true;
+            }
+
+            var items = World.StructureHandler.StructureItems;
+            for (var i = 0; i < items.Length; ++i)
+            {
+                if (items[i].Mountain != null && items[i].Mountain.Collides(Position.Xz()))
+                    return true;
             }
 
             return Vector3.Dot(Physics.NormalAtPosition(Position), Vector3.UnitY) <= .35;

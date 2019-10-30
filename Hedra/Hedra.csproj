@@ -1128,7 +1128,7 @@
     <Compile Include="Engine\EntitySystem\DropComponent.cs" />
     <Compile Include="Engine\EntitySystem\Entity.cs" />
     <Compile Include="Engine\EntitySystem\EntityComponent.cs" />
-    <Compile Include="Engine\EntitySystem\EntitySpawner.cs" />
+    <Compile Include="Engine\EntitySystem\MobSpawner.cs" />
     <Compile Include="Engine\Generation\HighlightedArea.cs" />
     <Compile Include="Engine\Generation\AreaHighlighter.cs" />
     <Compile Include="Engine\PhysicsSystem\AnimatedCollider.cs" />

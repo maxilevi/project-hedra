@@ -68,7 +68,7 @@ namespace Hedra.Engine.Player
         private QuestInterface QuestInterface { get; }
         public CraftingInventory Crafting { get; }
         private CraftingInterface CraftingInterface { get; }
-        public EntitySpawner Spawner { get; }
+        public MobSpawner Spawner { get; }
         public IToolbar Toolbar { get; }
         public IAbilityTree AbilityTree { get; }
         public IStructureAware StructureAware { get; }
@@ -94,7 +94,7 @@ namespace Hedra.Engine.Player
             this.UI = new UserInterface(this);
             this.View = new Camera(this);
             this.Loader = new ChunkLoader(this);
-            this.Spawner = new EntitySpawner(this);
+            this.Spawner = new MobSpawner(this);
             this.Model = new HumanoidModel(this);
             this.StructureAware = new StructureAware(this);
             this.Inventory = new PlayerInventory(this);

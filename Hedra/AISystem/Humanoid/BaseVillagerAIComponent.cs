@@ -56,7 +56,7 @@ namespace Hedra.AISystem.Humanoid
             {
                 if(MovementTimer.Tick())
                 {
-                    IsSitting = Utils.Rng.Next(0, 4) == 1 && !IsMoving;
+                    IsSitting = Utils.Rng.Next(0, 4) == 1 && !IsMoving && ShouldSit;
                     if (!IsSitting)
                     {
                         _targetPoint = NewPoint;
@@ -74,5 +74,7 @@ namespace Hedra.AISystem.Humanoid
 
         protected virtual Vector3 NewPoint =>
             new Vector3(Utils.Rng.NextFloat() * 18 - 9f, 0, Utils.Rng.NextFloat() * 18 - 9f) * Chunk.BlockSize + Parent.Position;
+
+        protected virtual bool ShouldSit { get; } = true;
     }
 }

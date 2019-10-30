@@ -5,6 +5,7 @@ using Hedra.Engine.Localization;
 using Hedra.Localization;
 using Hedra.Rendering;
 using System.Numerics;
+using Hedra.AISystem.Humanoid;
 using Hedra.BiomeSystem;
 using Hedra.Components;
 using Hedra.Engine.Generation;
@@ -14,12 +15,14 @@ using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Scenes;
 using Hedra.EntitySystem;
 using Hedra.Mission;
+using Hedra.Numerics;
+using Hedra.WeaponSystem;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
     public class WizardTowerDesign : SimpleCompletableStructureDesign<WizardTower>
     {
-        public override int PlateauRadius => 256;
+        public override int PlateauRadius => 384;
         public override VertexData Icon { get; } = CacheManager.GetModel(CacheItem.WizardTowerIcon);
         protected override int StructureChance => StructureGrid.WizardTower;
         protected override CacheItem? Cache => CacheItem.WizardTower;
@@ -57,17 +60,19 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var type = Utils.Rng.Next(0, 2) == 1 ? HumanType.Witch : HumanType.Scholar;
             var wizard = World.WorldBuilding.SpawnHumanoid(type, Position);
             wizard.Physics.CollidesWithEntities = false;
-            wizard.Physics.GravityDirection = Vector3.Zero;
+            wizard.Position = Position;
             wizard.SearchComponent<DamageComponent>().Immune = true;
             var healthBar = wizard.SearchComponent<HealthBarComponent>();
             wizard.RemoveComponent(healthBar);
+            wizard.SetWeapon(new Hands());
             wizard.AddComponent(new HealthBarComponent(wizard, healthBar.Name, BehaviourType));
+            wizard.AddComponent(new WizardTowerAIComponent(wizard, Position.Xz(), Vector2.One * 16));
             return wizard;
         }
         
         private static IHumanoid CreateWizard(Vector3 Position)
         {
-            if (Utils.Rng.Next(0, 2) == 1) return null;
+            if (Utils.Rng.Next(0, 3) == 1) return null;
             var wizard = CreateBaseWizard(Position, HealthBarType.Friendly);
             if (Utils.Rng.Next(0, 4) == 1)
             {
@@ -114,5 +119,42 @@ namespace Hedra.Engine.StructureSystem.Overworld
             Npc1Creator = CreateWizard,
             Npc2Creator = CreateDarkWizard
         };
+
+        private class WizardTowerAIComponent : BaseVillagerAIComponent
+        {
+            private readonly Vector2 _position;
+            private readonly Vector2 _size;
+            public WizardTowerAIComponent(IHumanoid Parent, Vector2 Position, Vector2 Size) : base(Parent, true)
+            {
+                _position = Position;
+                _size = Size;
+            }
+
+            protected override void OnMovementStuck()
+            {
+                base.OnMovementStuck();
+                base.CancelMovement();
+            }
+
+            protected override Vector3 NewPoint
+            {
+                get
+                {
+                    /* Try 10 times */
+                    for(var i = 0; i < 10; ++i)
+                    {
+                        var newPoint = new Vector3(
+                                           Utils.Rng.NextFloat() * _size.X - _size.X * .5f,
+                                           0,
+                                           Utils.Rng.NextFloat() * _size.Y - _size.Y * .5f
+                                       ) + _position.ToVector3();
+                        return newPoint;
+                    }
+                    return Parent.Position;
+                }
+            }
+
+            protected override bool ShouldSit => true;
+        }
     }
 }

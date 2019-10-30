@@ -113,7 +113,7 @@ def can_give(position):
 def build_reward(items, rng):
 
     def get_multiplier():
-        return sum([Trader.Price(ItemPool.Grab(x.Name)) * x.Amount for x in items]) / 25.0
+        return sum([Trader.SingleItemPrice(ItemPool.Grab(x.Name)) * x.Amount for x in items]) / 25.0
 
     def get_random_item():
         n = rng.NextDouble()
