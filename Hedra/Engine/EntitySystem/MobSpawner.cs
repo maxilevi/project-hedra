@@ -34,8 +34,6 @@ namespace Hedra.Engine.EntitySystem
     {
         public static int MobCap = int.MaxValue;
         public float SpawnChance { get; set; } = .8f;
-        public int MinSpawn { get; set; }= 1;
-        public int MaxSpawn { get; set; }= 3;
         private readonly IPlayer _player;
         private readonly Random _rng;
         private readonly AutoResetEvent _waitHandle;
@@ -43,7 +41,7 @@ namespace Hedra.Engine.EntitySystem
         
         public MobSpawner(IPlayer Player)
         {
-            this._player = Player;
+            _player = Player;
             _rng = new Random();
             _waitHandle = new AutoResetEvent(false);
             var spawnThread = new Thread(Loop)
