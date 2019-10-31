@@ -5,7 +5,6 @@ namespace Hedra.Numerics
 {
     public static class VectorExtensions
     {
-        /* Check transform normals */
         public static Vector2 Xz(this Vector3 Vector) => new Vector2(Vector.X, Vector.Z);
         
         public static Vector2 Xy(this Vector3 Vector) => new Vector2(Vector.X, Vector.Y);
