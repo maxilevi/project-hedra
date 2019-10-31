@@ -5627,14 +5627,6 @@
       <Link>Assets\Chr\ArcherTripleShoot.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Animations\BearIdle.dae">
-      <Link>Assets\Chr\BearIdle.dae</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Animations\BeeAttack.dae">
-      <Link>Assets\Chr\BeeAttack.dae</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Animations\BeeIdle.dae">
       <Link>Assets\Chr\BeeIdle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -5705,18 +5697,6 @@
     </None>
     <None Include="..\project-hedra-assets\Animations\FlyWalk.dae">
       <Link>Assets\Chr\FlyWalk.dae</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Animations\FoxAttack.dae">
-      <Link>Assets\Chr\FoxAttack.dae</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Animations\FoxIdle.dae">
-      <Link>Assets\Chr\FoxIdle.dae</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Animations\FoxWalk.dae">
-      <Link>Assets\Chr\FoxWalk.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Animations\GnollIdle.dae">
@@ -5883,18 +5863,6 @@
       <Link>Assets\Chr\TrollWalk.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Animations\TurtleAttack.dae">
-      <Link>Assets\Chr\TurtleAttack.dae</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Animations\TurtleIdle.dae">
-      <Link>Assets\Chr\TurtleIdle.dae</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Animations\TurtleWalk.dae">
-      <Link>Assets\Chr\TurtleWalk.dae</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Animations\WarriorBash.dae">
       <Link>Assets\Chr\WarriorBash.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -6001,10 +5969,6 @@
     </None>
     <None Include="..\project-hedra-assets\Animations\WarriorWhirlwind.dae">
       <Link>Assets\Chr\WarriorWhirlwind.dae</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\Animations\WolfIdle.dae">
-      <Link>Assets\Chr\WolfIdle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Models\Berries.ply">
@@ -8338,6 +8302,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Assets\Chr\Mob\Bear" />
+    <Folder Include="Assets\Chr\Mob\Raccoon" />
+    <Folder Include="Assets\Chr\Mob\Turtle" />
     <Folder Include="Assets\Items\Boots\" />
     <Folder Include="Assets\Items\Gems\" />
     <Folder Include="Assets\Items\Pants\" />
@@ -8790,6 +8757,36 @@
       <Link>Assets\Items\Foods\CookedTrout.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Mobs\Overworld\Alpaca\AlpacaAttack0.dae">
+      <Link>Assets\Chr\Mob\Alpaca\AlpacaAttack0.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Mobs\Overworld\Alpaca\AlpacaIdle.dae">
+      <Link>Assets\Chr\Mob\Alpaca\AlpacaIdle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Mobs\Overworld\Alpaca\AlpacaWalk.dae">
+      <Link>Assets\Chr\Mob\Alpaca\AlpacaWalk.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Mobs\Overworld\Bison\BisonAttack0.dae">
+      <Link>Assets\Chr\Mob\Bison\BisonAttack0.dae</Link>
+    </Content>
+    <Content Include="..\project-hedra-assets\Mobs\Overworld\Bison\BisonIdle.dae">
+      <Link>Assets\Chr\Mob\Bison\BisonIdle.dae</Link>
+    </Content>
+    <Content Include="..\project-hedra-assets\Mobs\Overworld\Bison\BisonWalk.dae">
+      <Link>Assets\Chr\Mob\Bison\BisonWalk.dae</Link>
+    </Content>
+    <Content Include="..\project-hedra-assets\Mobs\Overworld\Crab\CrabAttack0.dae">
+      <Link>Assets\Chr\Mob\Crab\CrabAttack0.dae</Link>
+    </Content>
+    <Content Include="..\project-hedra-assets\Mobs\Overworld\Crab\CrabIdle.dae">
+      <Link>Assets\Chr\Mob\Crab\CrabIdle.dae</Link>
+    </Content>
+    <Content Include="..\project-hedra-assets\Mobs\Overworld\Crab\CrabWalk.dae">
+      <Link>Assets\Chr\Mob\Crab\CrabWalk.dae</Link>
+    </Content>
     <Content Include="..\project-hedra-assets\Mobs\Overworld\Crow\CrowAttack0.dae">
       <Link>Assets\Chr\Mob\Crow\CrowAttack0.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -8800,6 +8797,39 @@
     </Content>
     <Content Include="..\project-hedra-assets\Mobs\Overworld\Crow\CrowWalk.dae">
       <Link>Assets\Chr\Mob\Crow\CrowWalk.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Mobs\Overworld\Fox\FoxIdle.dae">
+      <Link>Assets\Chr\Mob\Fox\FoxIdle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Mobs\Overworld\Ostrich\OstrichAttack0.dae">
+      <Link>Assets\Chr\Mob\Ostrich\OstrichAttack0.dae</Link>
+    </Content>
+    <Content Include="..\project-hedra-assets\Mobs\Overworld\Ostrich\OstrichIdle.dae">
+      <Link>Assets\Chr\Mob\Ostrich\OstrichIdle.dae</Link>
+    </Content>
+    <Content Include="..\project-hedra-assets\Mobs\Overworld\Ostrich\OstrichWalk.dae">
+      <Link>Assets\Chr\Mob\Ostrich\OstrichWalk.dae</Link>
+    </Content>
+    <Content Include="..\project-hedra-assets\Mobs\Overworld\Squirrel\SquirrelAttack0.dae">
+      <Link>Assets\Chr\Mob\Squirrel\SquirrelAttack0.dae</Link>
+    </Content>
+    <Content Include="..\project-hedra-assets\Mobs\Overworld\Squirrel\SquirrelIdle.dae">
+      <Link>Assets\Chr\Mob\Squirrel\SquirrelIdle.dae</Link>
+    </Content>
+    <Content Include="..\project-hedra-assets\Mobs\Overworld\Squirrel\SquirrelWalk.dae">
+      <Link>Assets\Chr\Mob\Squirrel\SquirrelWalk.dae</Link>
+    </Content>
+    <Content Include="..\project-hedra-assets\Mobs\Overworld\Wolf\WolfAttack0.dae">
+      <Link>Assets\Chr\Mob\Wolf\WolfAttack0.dae</Link>
+    </Content>
+    <Content Include="..\project-hedra-assets\Mobs\Overworld\Wolf\WolfIdle.dae">
+      <Link>Assets\Chr\Mob\Wolf\WolfIdle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Mobs\Overworld\Wolf\WolfWalk.dae">
+      <Link>Assets\Chr\Mob\Wolf\WolfWalk.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Mobs\RawFish.ply">
@@ -14469,6 +14499,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Recipes\WoodenBowlRecipe.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Mobs\Alpaca.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Mobs\Crow.json">
