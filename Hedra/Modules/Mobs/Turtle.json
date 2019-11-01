@@ -7,28 +7,27 @@
   "Level": 6,
   "AIType": "Neutral",
   "Effects": [],
-  
   "Drops": [],
   
   "Model": {
-    "Path": "$DataFile$/Assets/Chr/TurtleIdle.dae",
-    "Scale": 2.25,
+    "Path": "$DataFile$/Assets/Chr/Mob/Turtle/TurtleIdle.dae",
+    "Scale": 2.0,
     "IdleAnimations": [
       {
-        "Path": "$DataFile$/Assets/Chr/TurtleIdle.dae",
+        "Path": "$DataFile$/Assets/Chr/Mob/Turtle/TurtleIdle.dae",
         "Speed": 1.0
       }
     ],
     "WalkAnimations": [
       {
-        "Path": "$DataFile$/Assets/Chr/TurtleWalk.dae",
-        "Speed": 1.0
+        "Path": "$DataFile$/Assets/Chr/Mob/Turtle/TurtleWalk.dae",
+        "Speed": 1.5
       }
     ],
     "AttackAnimations": [
       {
-        "Path": "$DataFile$/Assets/Chr/TurtleAttack.dae",
-        "Speed": 1.15
+        "Path": "$DataFile$/Assets/Chr/Mob/Turtle/TurtleAttack0.dae",
+        "Speed": 1.0
       }
     ]
   }

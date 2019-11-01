@@ -10,24 +10,24 @@
   "Drops": [],
   
   "Model": {
-    "Path": "$DataFile$/Assets/Chr/BearIdle.dae",
-    "Scale": 3.0,
+    "Path": "$DataFile$/Assets/Chr/Mob/Bear/BearIdle.dae",
+    "Scale": 1.75,
     "IdleAnimations": [
       {
-        "Path": "$DataFile$/Assets/Chr/BoarIdle.dae",
+        "Path": "$DataFile$/Assets/Chr/Mob/Bear/BearIdle.dae",
         "Speed": 1.0
       }
     ],
     "WalkAnimations": [
       {
-        "Path": "$DataFile$/Assets/Chr/BoarWalk.dae",
-        "Speed": 1.25
+        "Path": "$DataFile$/Assets/Chr/Mob/Bear/BearWalk.dae",
+        "Speed": 1.0
       }
     ],
     "AttackAnimations": [
       {
-        "Path": "$DataFile$/Assets/Chr/BoarAttack.dae",
-        "Speed": 1.15
+        "Path": "$DataFile$/Assets/Chr/Mob/Bear/BearAttack0.dae",
+        "Speed": 1.0
       }
     ]
   } 

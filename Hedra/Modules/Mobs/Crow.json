@@ -2,7 +2,7 @@
   "Name" : "Crow",
   "MaxHealth": 220.0,
   "AttackDamage": 6.0,
-  "Speed": 1.5,
+  "Speed": 1.75,
   "XP": 4.0,
   "Level": 6,
   "AIType": "Hostile",
@@ -10,7 +10,7 @@
   "Drops": [],
   "Model": {
     "Path": "$DataFile$/Assets/Chr/Mob/Crow/CrowIdle.dae",
-    "Scale": 2.5,
+    "Scale": 2.75,
     "IdleAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/Mob/Crow/CrowIdle.dae",
