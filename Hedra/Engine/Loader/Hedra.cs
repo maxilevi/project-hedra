@@ -89,6 +89,15 @@ namespace Hedra.Engine.Loader
             Renderer.LoadProvider();
             var glVersion = Renderer.GetString(StringName.Version);
             var shadingOpenGlVersion = GetShadingVersion(glVersion);
+            var maxUniforms = Renderer.GetInteger(GetPName.MaxVertexUniformVectors);
+            if (maxUniforms / 4 < GeneralSettings.MaxJoints)
+            {
+                OSManager.Show($"Max uniforms is '{maxUniforms}' but max joints is '{GeneralSettings.MaxJoints}'", "Warning");
+            }
+            else
+            {
+                Log.WriteLine($"Max uniforms is '{maxUniforms}' but max joints is '{GeneralSettings.MaxJoints}'");
+            }
 
             if( shadingOpenGlVersion < 3.3f)
             {

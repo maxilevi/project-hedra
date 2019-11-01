@@ -79,7 +79,7 @@ namespace Hedra.Engine.Rendering.Animation
                 {
                     string fileContents = Encoding.ASCII.GetString(AssetManager.ReadPath(ModelFile));
                     entityData = ColladaLoader.LoadColladaModel(fileContents);
-                    if(entityData.Joints.JointCount >= GeneralSettings.MaxJoints)
+                    if(entityData.Joints.JointCount > GeneralSettings.MaxJoints)
                         throw new ArgumentOutOfRangeException($"Max joint count is '{GeneralSettings.MaxJoints}' but model '{ModelFile}' has '{entityData.Joints.JointCount}'");
                     Log.WriteLine($"Loaded model '{ModelFile}' with '{entityData.Joints.JointCount}' joints", LogType.System);
                     ModelCache.Add(ModelFile, entityData);
