@@ -1,7 +1,7 @@
 using Hedra.AISystem.Behaviours;
 using Hedra.EntitySystem;
 
-namespace Hedra.AISystem
+namespace Hedra.AISystem.Mob
 {
     public class MeleeBeetleAIComponent : BaseBeetleAIComponent
     {

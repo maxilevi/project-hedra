@@ -3,9 +3,9 @@
   "MaxHealth": 280.0,
   "AttackDamage": 9.0,
   "Speed": 1.4,
-  "XP": 8.0,
+  "XP": 12.0,
   "Level": 8,
-  "AIType": "Hostile",
+  "AIType": "GroupHostile",
   "Effects": [
     {
       "Name": "Bleed",
@@ -14,9 +14,7 @@
       "Duration": 8.0
     }
   ],
-  
-  "Drops": [ ],
-  
+  "Drops": [],
   "Model": {
     "Path": "$DataFile$/Assets/Chr/Mob/Wolf/WolfIdle.dae",
     "Scale": 1.25,
@@ -29,17 +27,17 @@
     "WalkAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/Mob/Wolf/WolfWalk.dae",
-        "Speed": 1.0
+        "Speed": 0.8
       }
     ],
     "AttackAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/Mob/Wolf/WolfAttack0.dae",
-        "Speed": 1.0
+        "Speed": 1.25
       },
       {
         "Path": "$DataFile$/Assets/Chr/Mob/Wolf/WolfAttack1.dae",
-        "Speed": 1.0
+        "Speed": 1.25
       }
     ]
   } 

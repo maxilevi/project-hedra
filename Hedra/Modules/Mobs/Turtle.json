@@ -1,6 +1,6 @@
 ﻿{
   "Name" : "Turtle", 
-  "MaxHealth": 256.0,
+  "MaxHealth": 512.0,
   "AttackDamage": 4.0,
   "Speed": 1.0,
   "XP": 4.0,
@@ -21,13 +21,13 @@
     "WalkAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/Mob/Turtle/TurtleWalk.dae",
-        "Speed": 1.5
+        "Speed": 1.75
       }
     ],
     "AttackAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/Mob/Turtle/TurtleAttack0.dae",
-        "Speed": 1.0
+        "Speed": 1.25
       }
     ]
   }

@@ -5,7 +5,7 @@
   "Speed": 1.3,
   "XP": 5.0,
   "Level": 9,
-  "AIType": "Neutral",
+  "AIType": "Fox",
   "Effects": [],
   "Drops": [],
   
@@ -21,17 +21,17 @@
     "WalkAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/Mob/Wolf/WolfWalk.dae",
-        "Speed": 1.25
+        "Speed": 1.0
       }
     ],
     "AttackAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/Mob/Wolf/WolfAttack0.dae",
-        "Speed": 1.0
+        "Speed": 1.25
       },
       {
         "Path": "$DataFile$/Assets/Chr/Mob/Wolf/WolfAttack1.dae",
-        "Speed": 1.0
+        "Speed": 1.25
       }
     ]
   } 

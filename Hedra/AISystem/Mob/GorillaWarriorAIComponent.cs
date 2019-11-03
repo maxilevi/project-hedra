@@ -1,8 +1,8 @@
+using System.Numerics;
 using Hedra.AISystem.Behaviours;
 using Hedra.Engine.EntitySystem;
-using System.Numerics;
 
-namespace Hedra.AISystem
+namespace Hedra.AISystem.Mob
 {
     public class GorillaWarriorAIComponent : BasicAIComponent, IGuardAIComponent
     {

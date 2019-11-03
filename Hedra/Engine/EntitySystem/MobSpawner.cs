@@ -15,6 +15,7 @@ using Hedra.Engine.Player;
 using System.Numerics;
 using System.Threading;
 using Hedra.Core;
+using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.IO;
@@ -22,6 +23,7 @@ using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.WorldBuilding;
+using Hedra.Framework;
 using Hedra.Game;
 using Hedra.Numerics;
 
@@ -109,8 +111,10 @@ namespace Hedra.Engine.EntitySystem
                         Physics.HeightAtPosition(newPosition + offset),
                         newPosition.Z + offset.Z);
                     World.SpawnMob(template.Type, newNearPosition, Utils.Rng);
-                    //Log.WriteLine($"Spawned '{template.Type}' at '{newNearPosition}', '{((World.GetChunkAt(newPosition)?.Landscape.FullyGenerated ?? false) ? "EXISTS" : "NOT EXISTS")}'", LogType.WorldBuilding);
+                    // Log.WriteLine($"Spawned '{template.Type}' at '{newNearPosition}', '{((World.GetChunkAt(newPosition)?.Landscape.FullyGenerated ?? false) ? "EXISTS" : "NOT EXISTS")}'", LogType.WorldBuilding);
+
                 }
+                Log.WriteLine($"Spawned {count} '{template.Type}' at '{newPosition}'", LogType.WorldBuilding);
             }
             else
             {
@@ -169,47 +173,47 @@ namespace Hedra.Engine.EntitySystem
             return Utils.Rng.Next(0, 20) != 1 || region.Mob.SpawnerSettings.MiniBosses.Length == 0;
         }
 
+        private static bool IsNearWater(Vector3 Position)
+        {
+            return World.NearestWaterBlock(Position, 128, out _) < 128;
+        }
+
         protected virtual SpawnTemplate SelectMobTemplate(Vector3 NewPosition)
         {
             var region = World.BiomePool.GetRegion(NewPosition);
-            var mountain = NewPosition.Y > 60 * Chunk.BlockSize;
-            var shore = NewPosition.Y / Chunk.BlockSize > 0 && NewPosition.Y / Chunk.BlockSize < 2;
+            var height = NewPosition.Y / Chunk.BlockSize;
+            var mountain = height > 96;
+            var shore = height >= BiomePool.SeaLevel-1 && height < 24 || IsNearWater(NewPosition);
             var forest = !shore && World.TreeGenerator.SpaceNoise(NewPosition.X, NewPosition.Z) > 0;
             var plains = !forest && !shore && !mountain;
 
-            var templates = new[]
+            var count = (plains ? 1 : 0) + (forest ? 1 : 0) + (shore ? 1 : 0) + (mountain ? 1 : 0); 
+            var templates = new List<SpawnTemplate>();
+            if(forest)
+                templates.AddRange(region.Mob.SpawnerSettings.Forest);
+            if(mountain)
+                templates.AddRange(region.Mob.SpawnerSettings.Mountain);
+            if(plains)
+                templates.AddRange(region.Mob.SpawnerSettings.Plains);
+            if(shore)
+                templates.AddRange(region.Mob.SpawnerSettings.Shore);
+            
+            if (templates.Count == 0) return null;
+            
+            /* Normalize the ranges */
+            for (var i = 0; i < templates.Count; ++i)
+                templates[i].Chance /= count;
+            
+            /* We shuffle and then sort to distort relative order, we could also use an unstable sort like heapsort */
+            templates.Shuffle(_rng);
+            templates.Sort((T1,T2) => T1.Chance < T2.Chance ? -1 : T1.Chance > T2.Chance ? 1 : 0);
+            
+            var rng = _rng.NextFloat() * 100f;
+            for(var i = 0; i < templates.Count; ++i)
             {
-                region.Mob.SpawnerSettings.Forest,
-                region.Mob.SpawnerSettings.Mountain,
-                region.Mob.SpawnerSettings.Plains,
-                region.Mob.SpawnerSettings.Shore
-            };
-
-            var conditions = new[]
-            {
-                forest,
-                mountain,
-                plains,
-                shore
-            };
-
-            templates.Shuffle(Utils.Rng);
-            conditions.Shuffle(Utils.Rng);
-            for (var i = 0; i < templates.Length; i++)
-            {
-                if (templates[i] == null) continue;
-                if (conditions[i])
-                {
-                    SpawnTemplate type = null;
-                    while (type == null)
-                    {
-                        var template = templates[i][_rng.Next(0, templates[i].Length)];
-
-                        if (_rng.NextFloat() < template.Chance)
-                            type = template;
-                    }
-                    return type;
-                }
+                if (rng < templates[i].Chance)
+                    return templates[i];
+                rng -= templates[i].Chance;
             }
             return null;
         }
@@ -264,6 +268,7 @@ namespace Hedra.Engine.EntitySystem
         Bee,
         Horse,
         Wolf,
+        Goat,
         GorillaWarrior,
         GiantBeetle,
         Gorilla,

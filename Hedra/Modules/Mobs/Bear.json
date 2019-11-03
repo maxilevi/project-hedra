@@ -2,7 +2,7 @@
   "Name" : "Bear", 
   "MaxHealth": 768.0,
   "AttackDamage": 22.0,
-  "Speed": 1.15,
+  "Speed": 1.3,
   "XP": 16.0,
   "Level": 28,
   "AIType": "Neutral",
@@ -11,7 +11,7 @@
   
   "Model": {
     "Path": "$DataFile$/Assets/Chr/Mob/Bear/BearIdle.dae",
-    "Scale": 1.75,
+    "Scale": 2.0,
     "IdleAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/Mob/Bear/BearIdle.dae",
@@ -21,7 +21,7 @@
     "WalkAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/Mob/Bear/BearWalk.dae",
-        "Speed": 1.0
+        "Speed": 1.25
       }
     ],
     "AttackAnimations": [

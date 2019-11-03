@@ -10,7 +10,7 @@ namespace Hedra.Engine.ModuleSystem.Templates
         public int ExplorerRatio { get; set; }
     }
 
-    public class MiniBossTemplate
+    public class MiniBossTemplate : ISpawnTemplate
     {
         public string Type { get; set; }
         public float Chance { get; set; }

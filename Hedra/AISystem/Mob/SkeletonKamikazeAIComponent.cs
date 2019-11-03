@@ -1,12 +1,11 @@
 using Hedra.Components;
 using Hedra.Core;
-using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 
-namespace Hedra.AISystem
+namespace Hedra.AISystem.Mob
 {
     public class SkeletonKamikazeAIComponent : HostileAIComponent
     {

@@ -22,36 +22,38 @@ namespace Hedra.AISystem.Behaviours
             var damageComponent = Parent.SearchComponent<DamageComponent>();
             if (damageComponent != null)
             {
-                damageComponent.OnDamageEvent += delegate (DamageEventArgs Args)
-                {
-                    if (Args.Damager == null) return;
-                    var nearEntities = World.InRadius<IEntity>(Parent.Position, CallRadius).Where(E => E.Type == Parent.Type).ToList();                      
-                    nearEntities.ForEach(delegate(IEntity E)
-                    {
-                        var baseAIComponent = E.SearchComponent<BasicAIComponent>();
-                        var herd = baseAIComponent.SearchBehaviour<HerdBehaviour>();
-                        if (herd != null)
-                        {
-                            /*if (nearEntities.Count < 4)
-                            {
-                                //Check if it is an arrow
-                                if ((Args.Damager.Position - Parent.Position).LengthSquared() > CallRadius * CallRadius)
-                                {
-                                    herd.SetFlee(Parent.Position + (Args.Damager.Position - Parent.Position).NormalizedFast(), CallRadius);
-                                }
-                                else
-                                {
-                                    herd.SetFlee(Args.Damager, CallRadius);
-                                }
-                            }
-                            else
-                            {*/
-                                herd.SetAttack(Args.Damager);
-                            //}
-                        }
-                    });
-                };
+                damageComponent.OnDamageEvent += E => AlertHerd(E.Victim);
             }
+        }
+
+        private void AlertHerd(IEntity Attacker)
+        {
+            if (Attacker == null) return;
+            var nearEntities = World.InRadius<IEntity>(Parent.Position, CallRadius).Where(E => E.Type == Parent.Type).ToList();                      
+            nearEntities.ForEach(delegate(IEntity E)
+            {
+                var baseAIComponent = E.SearchComponent<BasicAIComponent>();
+                var herd = baseAIComponent.SearchBehaviour<HerdBehaviour>();
+                if (herd != null)
+                {
+                    /*if (nearEntities.Count < 4)
+                    {
+                        //Check if it is an arrow
+                        if ((Args.Damager.Position - Parent.Position).LengthSquared() > CallRadius * CallRadius)
+                        {
+                            herd.SetFlee(Parent.Position + (Args.Damager.Position - Parent.Position).NormalizedFast(), CallRadius);
+                        }
+                        else
+                        {
+                            herd.SetFlee(Args.Damager, CallRadius);
+                        }
+                    }
+                    else
+                    {*/
+                    herd.SetAttack(Attacker);
+                    //}
+                }
+            });
         }
 
         public override void Update()

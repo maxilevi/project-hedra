@@ -1,8 +1,11 @@
+using System;
+
 namespace Hedra.Framework
 {
     public unsafe class StackAllocator : Allocator
     {
         private void* _buffer;
+        
         public StackAllocator(int BufferSize, byte* Buffer) : base(BufferSize)
         {
             _buffer = Buffer;

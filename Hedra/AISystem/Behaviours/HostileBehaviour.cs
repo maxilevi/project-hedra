@@ -5,6 +5,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using System.Numerics;
+using Hedra.Engine.Core;
 using Hedra.Numerics;
 
 namespace Hedra.AISystem.Behaviours
@@ -23,7 +24,12 @@ namespace Hedra.AISystem.Behaviours
 
         protected virtual IEntity GetTarget()
         {
-            return World.InRadius<IPlayer>(Parent.Position, Radius).FirstOrDefault(P => (Parent.Position - P.Position).LengthFast() < Radius * P.Attributes.MobAggroModifier);
+            return GetTargets<IPlayer>().FirstOrDefault();
+        }
+
+        protected T[] GetTargets<T>() where T : ISearchable, IEntity
+        {
+            return World.InRadius<T>(Parent.Position, Radius).Where(P => (Parent.Position - P.Position).LengthFast() < Radius * P.Attributes.MobAggroModifier).ToArray();
         }
 
         protected virtual void HandleTarget()

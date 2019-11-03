@@ -15,7 +15,7 @@ from Hedra.Numerics import VectorExtensions
 clr.ImportExtensions(VectorExtensions)
 COMPANION_RESPAWN_TIME = 48 # Seconds
 COMPANION_EQUIPMENT_TYPE = 'Pet'
-CAGE_MODEL_SCALE = 0.15
+CAGE_MODEL_SCALE = 0.75
 CAGE_MODEL_PATH = 'Assets/Items/Misc/CompanionCage.ply'
 GROWTH_ATTRIB_NAME = 'Growth'
 IS_GROWN_ATTRIB_NAME = 'IsGrown'
@@ -30,7 +30,7 @@ MOB_TYPE_ATTRIB_NAME = 'Type'
 PRICE_ATTRIB_NAME = 'Price'
 BASE_GROWTH_SCALE = 0.5
 GROWTH_TIME = 8.0 * 60.0 # 8 Minutes
-GROWTH_SPEED = 1.0 / GROWTH_TIME
+GROWTH_SPEED = 1.0#1.0 / GROWTH_TIME
 BASE_PRICE = 35
 COMPANION_TYPES = [
     ('Pug', ItemTier.Common, True),
@@ -41,7 +41,9 @@ COMPANION_TYPES = [
     ('Sheep', ItemTier.Common, False),
     ('Wolf', ItemTier.Common, True),
     ('Horse', ItemTier.Common, True),
-    ('Deer', ItemTier.Uncommon, True)
+    ('Deer', ItemTier.Uncommon, True),
+    ('Crow', ItemTier.Uncommon, True),
+    ('Alpaca', ItemTier.Uncommon, True)
 ]
 DEFAULT_RIDE_INFO = 0.5
 RIDE_INFO = {
@@ -50,7 +52,9 @@ RIDE_INFO = {
     'Deer': 0.41,
     'Horse': 0.5,
     'Wasp' : 0.5,
-    'Wolf': 0.5
+    'Wolf': 0.5,
+    'Crow': 0.875,
+    'Alpaca' : 0.5
 }
 
 def init(user, state):

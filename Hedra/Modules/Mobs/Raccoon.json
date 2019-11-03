@@ -3,9 +3,9 @@
   "MaxHealth": 216.0,
   "AttackDamage": 7.0,
   "Speed": 1.25,
-  "XP": 6.0,
+  "XP": 8.0,
   "Level": 8,
-  "AIType": "Hostile",
+  "AIType": "GroupHostile",
   "Effects": [
     {
       "Name": "Bleed",
@@ -17,7 +17,7 @@
   "Drops": [],
   "Model": {
     "Path": "$DataFile$/Assets/Chr/Mob/Raccoon/RaccoonIdle.dae",
-    "Scale": 1.1,
+    "Scale": 1.15,
     "IdleAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/Mob/Raccoon/RaccoonIdle.dae",
@@ -33,11 +33,11 @@
     "AttackAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/Mob/Raccoon/RaccoonAttack0.dae",
-        "Speed": 1.4
+        "Speed": 1.5
       },
       {
         "Path": "$DataFile$/Assets/Chr/Mob/Raccoon/RaccoonAttack1.dae",
-        "Speed": 1.6
+        "Speed": 1.75
       }
     ]
   }

@@ -462,8 +462,8 @@ namespace Hedra.Engine.BiomeSystem
         {
             var blockType = BlockType.Air;
 
-            HandleNormalBlocks(ref x, ref y, ref z, ref blockDensity, ref blockType, ref makeDirt, ref rng);
-            HandlePathBlocks(ref pathDensity, ref blockType);
+            HandleNormalBlocks(x, y, z, ref blockDensity, ref blockType, makeDirt, rng);
+            HandlePathBlocks(y, blockDensity, pathDensity, ref blockType);
             hasWater |= HandleOceanBlocks(Blocks, ref x, ref y, ref z, ref blockType);
             hasWater |= HandleRiverBlocks(Blocks, ref x, ref y, ref z, ref blockType, ref riverHeight, ref riverBorderHeight, ref height, ref IsRiverConstant);
 
@@ -471,13 +471,13 @@ namespace Hedra.Engine.BiomeSystem
             Blocks[x,y,z]->Density = blockDensity;
         }
 
-        private static void HandlePathBlocks(ref float pathDensity, ref BlockType blockType)
+        private static void HandlePathBlocks(in int y, in float blockDensity, in float pathDensity, ref BlockType blockType)
         {
-            if(pathDensity / BaseBiomeGenerationDesign.PathDepth > 0.99f)
+            if(pathDensity / BaseBiomeGenerationDesign.PathDepth > 0.99f && blockDensity > 0)
                 blockType = BlockType.Path;
         }
         
-        private static void HandleNormalBlocks(ref int x, ref int y, ref int z, ref float blockDensity, ref BlockType blockType, ref bool makeDirt, ref Random rng)
+        private static void HandleNormalBlocks(in int x, in int y, in int z, ref float blockDensity, ref BlockType blockType, in bool makeDirt, in Random rng)
         {
             if (y < 2)
                 blockDensity = 0.95f + rng.NextFloat() * 0.75f;
