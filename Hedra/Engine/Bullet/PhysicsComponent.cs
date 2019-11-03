@@ -382,22 +382,29 @@ namespace Hedra.Engine.Bullet
             bool DoRaycast(Vector3 From)
             {
                 BulletPhysics.ResetCallback(_rayResult);
-                /* We don't include the terrain in the raycast hit */
-                _rayResult.CollisionFilterMask = (int)(CollisionFilterGroups.StaticFilter | CollisionFilterGroups.CharacterFilter);
+                /*
+                 * We don't include the terrain in the raycast hit
+                 * But we include the sensors so we get more accuracy on where the other characters are
+                 */
+                _rayResult.CollisionFilterMask = (int)(CollisionFilterGroups.StaticFilter | CollisionFilterGroups.CharacterFilter | CollisionFilterGroups.SensorTrigger);
                 var from = From.Compatible() - BulletSharp.Math.Vector3.UnitY * 4;
                 var to = from + BulletSharp.Math.Vector3.UnitY * 4;
                 _rayResult.RayFromWorld = from;
                 _rayResult.RayToWorld = to;
                 BulletPhysics.Raycast(ref from, ref to, _rayResult);
-                return _rayResult.HasHit;
-                //_rayResult.CollisionObjects.Count(C => !ReferenceEquals(C, _sensor) && !ReferenceEquals(C, _body)) > 0;
+                return _rayResult.CollisionObjects.Count(C => !ReferenceEquals(C, _sensor) && !ReferenceEquals(C, _body)) > 0;
             }
             
             _body.CollisionShape.GetAabb(Matrix.Identity, out var aabbMin, out var aabbMax);
             var position = Offset + RigidbodyPosition;
             var aabbMinXz = aabbMin.Compatible().Xz().ToVector3();
             var aabbMaxXz = aabbMax.Compatible().Xz().ToVector3();
-            return DoRaycast(aabbMinXz + position) 
+            return DoRaycast(aabbMinXz * .5f + position)
+                   || DoRaycast(new Vector3(aabbMinXz.X, 0, aabbMaxXz.Z) * .5f + position)
+                   || DoRaycast(new Vector3(aabbMaxXz.X, 0, aabbMinXz.Z) * .5f + position)
+                   || DoRaycast(aabbMaxXz * .5f + position)
+                   || DoRaycast(position)
+                   || DoRaycast(aabbMinXz + position) 
                    || DoRaycast(new Vector3(aabbMinXz.X, 0, aabbMaxXz.Z) + position) 
                    || DoRaycast(new Vector3(aabbMaxXz.X, 0, aabbMinXz.Z) + position) 
                    || DoRaycast(aabbMaxXz + position);

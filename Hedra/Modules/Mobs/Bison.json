@@ -21,7 +21,7 @@
     "WalkAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/Mob/Bison/BisonWalk.dae",
-        "Speed": 1.5
+        "Speed": 1.25
       }
     ],
     "AttackAnimations": [

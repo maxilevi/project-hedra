@@ -8,6 +8,7 @@ using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
 using Hedra.Sound;
 using System.Numerics;
+using Hedra.Engine.Rendering;
 using Hedra.Numerics;
 
 namespace Hedra.AISystem.Behaviours
@@ -49,6 +50,13 @@ namespace Hedra.AISystem.Behaviours
                 }
             }
             //if (Parent.IsStuck) Traverse.Cancel();
+        }
+
+        public void Draw()
+        {
+            if(!Traverse.HasTarget) return;
+            BasicGeometry.DrawLine(Parent.Position, Traverse.Target, Vector4.One, 2);
+            BasicGeometry.DrawPoint(Traverse.Target, Vector4.One);
         }
 
         public override void Dispose()

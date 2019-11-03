@@ -74,7 +74,7 @@ namespace Hedra.AISystem.Behaviours
 
         private void RebuildAndResetPathIfNecessary()
         {
-            TraverseStorage.Instance.RebuildIfNecessary(Parent);
+            TraverseStorage.Instance.RebuildIfNecessary(Parent, Parent.IsStuck); /* Force the rebuild because its stuck */
             RebuildPathIfNecessary();
             if (_currentIndex < _currentPath.Length)
             {

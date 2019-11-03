@@ -56,6 +56,18 @@ namespace Hedra.AISystem.Behaviours
             });
         }
 
+        public void Draw()
+        {
+            if (Flee.Enabled)
+            {
+                Flee.Draw();
+            }
+            else if(Attack.Enabled)
+            {
+                Attack.Draw();
+            }
+        }
+
         public override void Update()
         {
             if (Flee.Enabled)
