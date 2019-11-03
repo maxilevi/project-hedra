@@ -146,9 +146,7 @@ using Hedra.Numerics;
 
         public static CollidableStructure[] GetNearStructures(Vector3 Position)
         {
-            return (from item in World.StructureHandler.StructureItems
-                where (item.Position.Xz() - Position.Xz()).LengthSquared() < item.Radius * item.Radius
-                select item).ToArray();
+            return World.StructureHandler.StructureItems;
         }
 
         public void Discard()

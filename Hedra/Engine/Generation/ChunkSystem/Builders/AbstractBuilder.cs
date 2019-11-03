@@ -69,8 +69,6 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
                     }
                     var result = _pool.Work(this, Type, delegate
                     {
-                        var previous = Thread.CurrentThread.Priority;
-                        Thread.CurrentThread.Priority = ThreadPriority.Lowest;
                         try
                         {
                             if(chunk?.Disposed ?? true) return;
@@ -86,10 +84,6 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
                                 _queue.Remove(chunk);
                                 _hashQueue.Remove(chunk);
                             }
-                        }
-                        finally
-                        {
-                            Thread.CurrentThread.Priority = previous;
                         }
                         lock (_lock)
                             _hashQueue.Remove(chunk);

@@ -137,7 +137,7 @@ namespace Hedra.Engine.Player
         private void SetNearCollisions(CollisionGroup[] New)
         {
             var added = New.Except(NearCollisions).ToArray();
-            var removed = NearCollisions .Except(New).ToArray();
+            var removed = NearCollisions.Except(New).ToArray();
             NearCollisions = New;
             TaskScheduler.Parallel(() =>
             {

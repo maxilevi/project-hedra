@@ -125,7 +125,7 @@ namespace Hedra.Engine.Player.MapSystem
             for (var i = 0; i < _icons.Count; i++)
             { 
                 _icons[i].Mesh.LocalRotation = new Vector3(_icons[i].Mesh.LocalRotation.X, _icons[i].Mesh.LocalRotation.Y + (float) Time.DeltaTime * 0f, _icons[i].Mesh.LocalRotation.Z);
-                _icons[i].Mesh.Position = new Vector3(mapPosition.X, _targetHeight, mapPosition.Z);
+                _icons[i].Mesh.Position = new Vector3(mapPosition.X, _targetHeight - 7, mapPosition.Z);
             }          
             for (var i = 0; i < _baseItems.Count; i++)
             {

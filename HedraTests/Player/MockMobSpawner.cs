@@ -6,11 +6,11 @@ using System.Numerics;
 
 namespace HedraTests.Player
 {
-    public class MockEntitySpawner : EntitySpawner
+    public class MockMobSpawner : MobSpawner
     {
         public SpawnTemplate TargetTemplate { get; set; }
         
-        public MockEntitySpawner(IPlayer Player) : base(Player)
+        public MockMobSpawner(IPlayer Player) : base(Player)
         {
         }
 

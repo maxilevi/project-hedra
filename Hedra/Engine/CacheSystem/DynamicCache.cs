@@ -21,8 +21,9 @@ namespace Hedra.Engine.CacheSystem
             {
                 if (!_modelCache.ContainsKey(Path))
                 {
-                    _modelCache.Add(Path,
-                        CachedVertexData.FromVertexData(AssetManager.LoadPLYWithLODs(Path, Vector3.One)));
+                    var cachedModel = CachedVertexData.FromVertexData(AssetManager.LoadPLYWithLODs(Path, Vector3.One));
+                    _modelCache.Add(Path, cachedModel);
+                    UsedBytes += cachedModel.SizeInBytes;
                 }
 
                 var model = _modelCache[Path].ToVertexData().ShallowClone();
@@ -39,12 +40,16 @@ namespace Hedra.Engine.CacheSystem
                     throw new ArgumentException("Provided path should be the mesh path.");
                 if (!_shapeCache.ContainsKey(Path))
                 {
-                    _shapeCache.Add(Path, AssetManager.LoadCollisionShapes(Path, Vector3.One));
+                    var cachedShapes = AssetManager.LoadCollisionShapes(Path, Vector3.One);
+                    _shapeCache.Add(Path, cachedShapes);
+                    UsedBytes += cachedShapes.Sum(S => S.SizeInBytes);
                 }
 
                 var shapes = _shapeCache[Path].DeepClone();
                 return shapes.Select(S => S.Transform(Matrix4x4.CreateScale(Scale))).ToList();
             }
         }
+        
+        public static int UsedBytes { get; private set; }
     }
 }

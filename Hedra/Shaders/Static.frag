@@ -3,6 +3,7 @@
 !include<"Includes/GammaCorrection.shader">
 !include<"Includes/Sky.shader">
 !include<"Includes/NoiseTexture.shader">
+!include<"Includes/Lighting.shader">
 
 in float Config;
 in vec4 raw_color;
@@ -14,7 +15,7 @@ in float DitherVisibility;
 in vec3 base_vertex_position;
 in float use_shadows;
 in float shadow_quality;
-in vec3 completeColor;
+in vec3 worldColor;
 in vec3 unitToLight;
 
 layout(location = 0)out vec4 OutColor; 
@@ -53,6 +54,11 @@ void main()
 	{
         if (DitherVisibility - ditherMat[int(gl_FragCoord.x) % 4][int(gl_FragCoord.y) % 4] < 0.0) discard;
 	}
+
+    vec3 FLightColor = calculate_lights(LightColor, InPos.xyz);
+    vec3 point_light_color = diffuse(normalize(unitToLight), normalize(InNorm.xyz), FLightColor).rgb;
+    vec3 completeColor = worldColor + point_light_color * raw_color.xyz;
+    
     float ShadowVisibility = use_shadows > 0.0 ? CalculateShadows() : 1.0;
     float tex = CalculateNoiseTex(InNorm.xyz, base_vertex_position);
 	vec3 final_color = linear_to_srbg(completeColor * (tex + 1.0) * ShadowVisibility);
@@ -67,8 +73,9 @@ void main()
 	else
 	{
 		mat3 NormalMat = mat3(transpose(inverse(_modelViewMatrix)));
-		OutColor = NewColor;
-        OutPosition = vec4( (_modelViewMatrix * vec4(InPos.xyz, 1.0)).xyz, gl_FragCoord.z) * (Dither ? DitherVisibility : 1.0);
+        vec3 transformedPosition = (_modelViewMatrix * vec4(InPos.xyz, 1.0)).xyz;
+        OutPosition = vec4(transformedPosition, gl_FragCoord.z) * (Dither ? DitherVisibility : 1.0);
+        OutColor = NewColor;
 		OutNormal = vec4(NormalMat * InNorm.xyz, 0.0) * (Dither ? DitherVisibility : 1.0);
 	}
 }

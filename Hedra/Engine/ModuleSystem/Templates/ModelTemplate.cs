@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 
 namespace Hedra.Engine.ModuleSystem.Templates
 {
@@ -9,6 +10,7 @@ namespace Hedra.Engine.ModuleSystem.Templates
         public string Path { get; set; }
         public float Scale { get; set; }
         public bool IsUndead { get; set; }
+        public bool IsFlying { get; set; }
         public AnimationTemplate[] IdleAnimations { get; set; }
         public AnimationTemplate[] WalkAnimations { get; set; }
         public AttackAnimationTemplate[] AttackAnimations { get; set; }

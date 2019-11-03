@@ -2,7 +2,7 @@
   "Name" : "Bear", 
   "MaxHealth": 768.0,
   "AttackDamage": 22.0,
-  "Speed": 1.15,
+  "Speed": 1.3,
   "XP": 16.0,
   "Level": 28,
   "AIType": "Neutral",
@@ -10,24 +10,24 @@
   "Drops": [],
   
   "Model": {
-    "Path": "$DataFile$/Assets/Chr/BearIdle.dae",
-    "Scale": 3.0,
+    "Path": "$DataFile$/Assets/Chr/Mob/Bear/BearIdle.dae",
+    "Scale": 2.0,
     "IdleAnimations": [
       {
-        "Path": "$DataFile$/Assets/Chr/BoarIdle.dae",
+        "Path": "$DataFile$/Assets/Chr/Mob/Bear/BearIdle.dae",
         "Speed": 1.0
       }
     ],
     "WalkAnimations": [
       {
-        "Path": "$DataFile$/Assets/Chr/BoarWalk.dae",
+        "Path": "$DataFile$/Assets/Chr/Mob/Bear/BearWalk.dae",
         "Speed": 1.25
       }
     ],
     "AttackAnimations": [
       {
-        "Path": "$DataFile$/Assets/Chr/BoarAttack.dae",
-        "Speed": 1.15
+        "Path": "$DataFile$/Assets/Chr/Mob/Bear/BearAttack0.dae",
+        "Speed": 1.0
       }
     ]
   } 

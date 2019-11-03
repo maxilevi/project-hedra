@@ -1,8 +1,8 @@
+using System.Numerics;
 using Hedra.AISystem.Behaviours;
 using Hedra.EntitySystem;
-using System.Numerics;
 
-namespace Hedra.AISystem
+namespace Hedra.AISystem.Mob
 {
     public class TrollAIComponent : BasicAIComponent, IGuardAIComponent
     {

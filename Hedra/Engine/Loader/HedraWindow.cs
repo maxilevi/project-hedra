@@ -77,6 +77,7 @@ namespace Hedra.Engine.Loader
         public void Run()
         {
             _window.IsVisible = true;
+            Thread.CurrentThread.Priority = ThreadPriority.Highest;
             Load();
             Resize(new Size(Width, Height));
             _watch.Start();

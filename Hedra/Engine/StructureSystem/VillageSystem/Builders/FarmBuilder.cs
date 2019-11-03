@@ -25,6 +25,7 @@ using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Rendering;
 using System.Numerics;
+using Hedra.AISystem.Mob;
 using Hedra.Framework;
 using Hedra.Numerics;
 using Hedra.Framework;

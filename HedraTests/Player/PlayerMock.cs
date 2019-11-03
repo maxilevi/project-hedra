@@ -251,7 +251,7 @@ namespace HedraTests.Player
         public ChunkLoader Loader { get; }
         public UserInterface UI { get; set; }
         public IPlayerInventory Inventory { get; set; }
-        public EntitySpawner Spawner { get; }
+        public MobSpawner Spawner { get; }
         public IToolbar Toolbar { get; set; }
         public IVehicle Boat { get; }
         public QuestInterface QuestInterface { get; }

@@ -260,7 +260,7 @@ namespace Hedra.Engine.Events
             Mouse = new Vector2(E.X, E.Y);
             OnMouseMoveEvent?.Invoke(null, E);
             for (var i = 0;i<EventListeners.Count; i++){
-                EventListeners[i].OnMouseMove(null, E);
+                EventListeners[i]?.OnMouseMove(null, E);
             }
         }
 

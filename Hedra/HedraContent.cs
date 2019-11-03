@@ -1,5 +1,6 @@
 using System;
 using Hedra.AISystem;
+using Hedra.AISystem.Mob;
 using Hedra.AnimationEvents;
 using Hedra.AnimationEvents.SkillEvents;
 using Hedra.API;
@@ -72,6 +73,11 @@ namespace Hedra
             AddAIType("Goat", typeof(GoatAIComponent));
             AddAIType("SkeletonKamikaze", typeof(SkeletonKamikazeAIComponent));
             AddAIType("Adaptive", typeof(AdaptiveAIComponent));
+            AddAIType("Squirrel", typeof(SquirrelAIComponent));
+            AddAIType("Crab", typeof(CrabAIComponent));
+            AddAIType("Fox", typeof(FoxAIComponent));
+            AddAIType("Raccoon", typeof(RaccoonAIComponent));
+            AddAIType("GroupHostile", typeof(GroupHostileAIComponent));
 
             AddAnimationEvent("Growl", typeof(Growl));
             AddAnimationEvent("Quake", typeof(Quake));

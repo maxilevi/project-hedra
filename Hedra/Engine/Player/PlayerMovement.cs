@@ -109,8 +109,10 @@ namespace Hedra.Engine.Player
                 keysPresses = 1f / (!wPressed && !sPressed && !aPressed && !dPressed ? 1f : keysPresses);
                 if (keysPresses < 1f) keysPresses *= 1.5f;
 
-                _targetAngles.Z = 7.5f * (_player.View.StackedYaw - _yaw);
-                _targetAngles = Mathf.Clamp(_targetAngles, -17.5f, 17.5f);
+                var isRiding = _player.IsRiding;
+                var limit = isRiding ? 25f : 17.5f;
+                _targetAngles.Z = (limit / 2) * (_player.View.StackedYaw - _yaw);
+                _targetAngles = Mathf.Clamp(_targetAngles, -limit, limit);
                 _angles = Mathf.Lerp(_angles, _targetAngles * (GameManager.Keyboard[Controls.Forward] ? 1.0F : 0.0F), (float)Time.DeltaTime * 8f);
                 _yaw = Mathf.Lerp(_yaw, _player.View.StackedYaw, (float)Time.DeltaTime * 2f);
                 IsMovingForward = GameManager.Keyboard[Controls.Forward];

@@ -1,8 +1,7 @@
 using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Sound;
 using Hedra.Sound;
 
-namespace Hedra.AISystem
+namespace Hedra.AISystem.Mob
 {
     public class GoatAIComponent : NeutralAIComponent
     {

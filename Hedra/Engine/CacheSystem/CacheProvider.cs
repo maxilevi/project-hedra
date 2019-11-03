@@ -48,6 +48,7 @@ namespace Hedra.Engine.CacheSystem
                 foundTypes.Add(cache.Type);
                 Log.WriteLine($"Loading {cache.GetType().Name} into cache as {cache.Type.ToString()}...", LogType.System);
                 _caches.Add(cache.Type.ToString().ToLowerInvariant(), cache);
+                UsedBytes += cache.UsedBytes;
             }
 
             for (var i = 0; i < (int)CacheItem.MaxEnums; i++)
@@ -151,5 +152,7 @@ namespace Hedra.Engine.CacheSystem
             }
             return sum * Extradata.Count;
         }
+        
+        public int UsedBytes { get; private set; }
     }
 }

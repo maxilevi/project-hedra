@@ -471,24 +471,39 @@ namespace Hedra.Engine.Bullet
             var vertCount = 0;
             for (var i = 0; i < Shapes.Length; ++i)
             {
-                if (Shapes[i].Indices.Length % 3 != 0 || Shapes[i].Indices.Length == 0)
-                    throw new ArgumentOutOfRangeException();
+                AssertValidShape(Shapes[i]);
                 triangleMesh.AddIndexedMesh(CreateIndexedMesh(Shapes[i].Indices, Shapes[i].Vertices.Select(V => V - offset.Compatible()).ToArray()));
                 vertCount += Shapes[i].Vertices.Length;
             }
-
-            var useQuantizedAabbCompression = true;//vertCount <= 1024;
-            var shape = new BvhTriangleMeshShape(triangleMesh, useQuantizedAabbCompression);
+            
+            var shape = new BvhTriangleMeshShape(triangleMesh, true);
 #if DEBUG
             if (float.IsInfinity(shape.LocalAabbMax.LengthSquared))
             {
-                Debugger.Break();
+                int a = 0;
             }
 #endif
             var body = CreateStaticRigidbody(shape);
             body.Translate(offset);
             return body;
 
+        }
+
+        private static void AssertValidShape(PhysicsSystem.CollisionShape Shape)
+        {
+            for (var k = 0; k < Shape.Indices.Length; ++k)
+            {
+                var index = Shape.Indices[k];
+                if(Shape.Indices[k] >= Shape.Vertices.Length)
+                    throw new ArgumentOutOfRangeException();
+            }
+            for (var k = 0; k < Shape.Vertices.Length; ++k)
+            {
+                if(Shape.Vertices[k].IsInvalid())
+                    throw new ArgumentOutOfRangeException();
+            }
+            if (Shape.Indices.Length % 3 != 0 || Shape.Indices.Length == 0 || Shape.Vertices.Length == 0)
+                throw new ArgumentOutOfRangeException();
         }
 
         private static RigidBody CreateTerrainRigidbody(Vector2 Offset, NativeVertexData Mesh)

@@ -1,5 +1,5 @@
 from Hedra import World
-from Hedra.Mission import MissionBuilder, QuestTier, QuestReward, DialogObject
+from Hedra.Mission import MissionBuilder, QuestTier, QuestHint, QuestReward, DialogObject
 from Hedra.Mission.Blocks import FishItemMission
 from Hedra.Items import ItemPool, Trader
 from System import Object, Array
@@ -7,6 +7,7 @@ from System import Object, Array
 IS_QUEST = True
 QUEST_NAME = 'FishAnItem'
 QUEST_TIER = QuestTier.Easy
+QUEST_HINT = QuestHint.Fishing
 WATER_SEARCH_RANGE = 64
 
 def setup_timeline(position, giver, owner, rng):

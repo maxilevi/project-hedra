@@ -5,28 +5,32 @@
   "Speed": 1.3,
   "XP": 5.0,
   "Level": 9,
-  "AIType": "Neutral",
+  "AIType": "Fox",
   "Effects": [],
   "Drops": [],
   
   "Model": {
-    "Path": "$DataFile$/Assets/Chr/FoxIdle.dae",
-    "Scale": 1.85,
+    "Path": "$DataFile$/Assets/Chr/Mob/Fox/FoxIdle.dae",
+    "Scale": 1.25,
     "IdleAnimations": [
       {
-        "Path": "$DataFile$/Assets/Chr/FoxIdle.dae",
+        "Path": "$DataFile$/Assets/Chr/Mob/Wolf/WolfIdle.dae",
         "Speed": 1.0
       }
     ],
     "WalkAnimations": [
       {
-        "Path": "$DataFile$/Assets/Chr/FoxWalk.dae",
-        "Speed": 1.65
+        "Path": "$DataFile$/Assets/Chr/Mob/Wolf/WolfWalk.dae",
+        "Speed": 1.0
       }
     ],
     "AttackAnimations": [
       {
-        "Path": "$DataFile$/Assets/Chr/FoxAttack.dae",
+        "Path": "$DataFile$/Assets/Chr/Mob/Wolf/WolfAttack0.dae",
+        "Speed": 1.25
+      },
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/Wolf/WolfAttack1.dae",
         "Speed": 1.25
       }
     ]

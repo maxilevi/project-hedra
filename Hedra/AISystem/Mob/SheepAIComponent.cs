@@ -1,11 +1,8 @@
-using Hedra.Core;
-using Hedra.Engine.EntitySystem;
-using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
 using Hedra.Numerics;
 using Hedra.Sound;
 
-namespace Hedra.AISystem
+namespace Hedra.AISystem.Mob
 {
     public class SheepAIComponent : CattleAIComponent
     {

@@ -17,8 +17,8 @@ namespace Hedra.Engine.StructureSystem
         public StructureWatcher(CollidableStructure Structure)
         {
             this.Structure = Structure;
-            _vertexDataWatcher = new CachedVertexDataChunkWatcher(() => Structure.Models);
-            _instanceDataWatcher = new InstanceDataChunkWatcher(() => Structure.Instances);
+            _vertexDataWatcher = new CachedVertexDataChunkWatcher(() => Structure?.Models);
+            _instanceDataWatcher = new InstanceDataChunkWatcher(() => Structure?.Instances);
             Structure.ModelAdded += this.ModelAdded;
             Structure.InstanceAdded += this.InstanceAdded;
         }

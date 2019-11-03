@@ -68,8 +68,12 @@ namespace Hedra.BiomeSystem
 
                 for (var i = 0; i < Chunk.Height; ++i)
                 {
-                    if(_tempDensityMap[0][i][0] < 0)
-                        return _tempDensityMap[0][i-1][0] + (i-1);
+                    if (_tempDensityMap[0][i][0] < 0)
+                    {
+                        if (i > 0)
+                            return _tempDensityMap[0][i - 1][0] + (i - 1);
+                        return _tempDensityMap[0][i][0];
+                    }
                 }
 
                 return 0;

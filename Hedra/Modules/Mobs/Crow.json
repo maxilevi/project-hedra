@@ -1,0 +1,34 @@
+{
+  "Name" : "Crow",
+  "MaxHealth": 220.0,
+  "AttackDamage": 6.0,
+  "Speed": 1.75,
+  "XP": 4.0,
+  "Level": 6,
+  "IsFlying": true,
+  "AIType": "Hostile",
+  "Effects": [],
+  "Drops": [],
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/Mob/Crow/CrowIdle.dae",
+    "Scale": 2.75,
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/Crow/CrowIdle.dae",
+        "Speed": 1.0
+      }
+    ],
+    "WalkAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/Crow/CrowWalk.dae",
+        "Speed": 1.0
+      }
+    ],
+    "AttackAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/Crow/CrowAttack0.dae",
+        "Speed": 1.0
+      }
+    ]
+  }
+}

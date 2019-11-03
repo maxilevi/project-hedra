@@ -1,0 +1,39 @@
+{
+  "Name" : "Squirrel",
+  "MaxHealth": 160.0,
+  "AttackDamage": 4.0,
+  "Speed": 1.4,
+  "XP": 3.0,
+  "Level": 3,
+  "AIType": "Squirrel",
+  "Effects": [],
+
+  "Drops": [],
+
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/Mob/Squirrel/SquirrelIdle.dae",
+    "Scale": 0.35,
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/Squirrel/SquirrelIdle.dae",
+        "Speed": 1.0
+      }
+    ],
+    "WalkAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/Squirrel/SquirrelWalk.dae",
+        "Speed": 1.0
+      }
+    ],
+    "AttackAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/Squirrel/SquirrelAttack0.dae",
+        "Speed": 1.0
+      },
+      {
+        "Path": "$DataFile$/Assets/Chr/Mob/Squirrel/SquirrelAttack1.dae",
+        "Speed": 1.35
+      }
+    ]
+  }
+}

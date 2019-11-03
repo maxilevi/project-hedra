@@ -18,6 +18,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private const int CollisionMeshLod = 2;
         private readonly Chunk _parent;
         private static readonly object WaterLock;
+        private static readonly Dictionary<Vector3, HashSet<Vector3>> ChunkWaterMap;
         private static readonly Dictionary<Vector3, Vector3> WaterMappings;
         private static readonly Dictionary<int, float> LODMap = new Dictionary<int, float>
         {
@@ -39,6 +40,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         static ChunkTerrainMeshBuilder()
         {
             WaterLock = new object();
+            ChunkWaterMap = new Dictionary<Vector3, HashSet<Vector3>>();
             WaterMappings = new Dictionary<Vector3, Vector3>();
         }
         
@@ -123,6 +125,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     }
                     else
                     {
+                        if(!ChunkWaterMap.ContainsKey(Offset))
+                            ChunkWaterMap[Offset] = new HashSet<Vector3>();
+                        ChunkWaterMap[Offset].Add(vertex);
                         WaterMappings.Add(vertex, Water.Vertices[(int) Border[i]] + Offset);
                     }
                 }
@@ -218,6 +223,38 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
 
             return color;
+        }
+
+        public static void ClearMapping(Vector3 Offset)
+        {
+            lock (WaterLock)
+            {
+                if(!ChunkWaterMap.ContainsKey(Offset)) return;
+                var mappings = ChunkWaterMap[Offset];
+                foreach (var point in mappings)
+                {
+                    WaterMappings.Remove(point);
+                }
+                ChunkWaterMap.Remove(Offset);
+            }
+        }
+
+        public static int WaterMappingsCount
+        {
+            get
+            {
+                lock(WaterLock)
+                    return WaterMappings.Count;
+            }
+        }
+
+        public static int ChunkWaterMapCount
+        {
+            get
+            {
+                lock(WaterLock)
+                    return ChunkWaterMap.Count;
+            }
         }
     }
 }

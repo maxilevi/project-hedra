@@ -53,5 +53,7 @@ namespace Hedra.Engine.CacheSystem
             }
             return null;
         }
+
+        public int UsedBytes => _models.Sum(M => M.SizeInBytes) + _modelParts.Sum(M => M.SizeInBytes) + _shapes.SelectMany(S => S).Sum(S => S.SizeInBytes);
     }
 }

@@ -576,7 +576,7 @@ namespace Hedra.Engine.Generation
             mob.Position = placeablePosition;
             mob.Model.Position = placeablePosition;
             MobFactory.Polish(mob);
-            
+
             this.AddEntity(mob);
             return mob;
         }
@@ -603,16 +603,12 @@ namespace Hedra.Engine.Generation
 
         public Vector3 FindPlaceablePosition(IEntity Mob, Vector3 DesiredPosition)
         {
-            var originalPosition = Mob.Position;
-            var collidesOnSurface = true;
-            Mob.Position = DesiredPosition;
-            while (Mob.Physics.CollidesWithOffset(Vector3.Zero))
+            var offset = DesiredPosition;
+            while (Mob.Physics.CollidesWithOffset(-Mob.Position + offset))
             {
-                DesiredPosition += new Vector3(Utils.Rng.NextFloat() * 32f - 16f, 0, Utils.Rng.NextFloat() * 32f - 16f);
-                Mob.Position = DesiredPosition;
+                offset += new Vector3(Utils.Rng.NextFloat() * 32f - 16f, 0, Utils.Rng.NextFloat() * 32f - 16f);
             }
-            Mob.Position = originalPosition;
-            return DesiredPosition;
+            return offset;
         }
 
         private Vector3 ToBlockSpace(float X, float Z)
@@ -770,7 +766,6 @@ namespace Hedra.Engine.Generation
             -1835204548,
             -1527889388,
             1436884727,
-            -705499025,
             -1122906719,
             1050378001,
             -65738522,

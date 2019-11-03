@@ -29,15 +29,13 @@ namespace Hedra.Engine.PhysicsSystem
         public Vector3 BroadphaseCenter { get; set; }
         public float Height { get; private set; }
         private CollisionShape _cache;
-        private StackTrace _trace;
 
         private CollisionShape(Vector3[] Vertices, uint[] Indices)
         {
-            this.Vertices = Optimize(Vertices ?? new Vector3[0]);
+            this.Vertices = Vertices ?? new Vector3[0];
             this.Indices = Indices ?? new uint[0];
             this.RecalculateBroadphase();
             this.Height = (SupportPoint(Vector3.UnitY) - SupportPoint(-Vector3.UnitY)).Y;
-            _trace = new StackTrace();
         }
 
         public CollisionShape Transform(Matrix4x4 TransMatrix)
@@ -103,20 +101,6 @@ namespace Hedra.Engine.PhysicsSystem
             this.BroadphaseRadius = dist;
         }
 
-        private static Vector3[] Optimize(Vector3[] Original)
-        {
-            /* If it's all empty then it probably is a container. */
-            if (Original.All(V => V.Equals(Vector3.Zero))) return Original;
-
-            var set = new HashSet<Vector3>();
-            for (var i = 0; i < Original.Length; i++)
-            {
-                if (!set.Contains(Original[i]))
-                    set.Add(Original[i]);
-            }
-            return set.ToArray();
-        }
-
         public object Clone()
         {
             return new CollisionShape(Vertices.ToArray(), this.Indices.ToArray());
@@ -133,5 +117,7 @@ namespace Hedra.Engine.PhysicsSystem
         public CollisionShape(VertexData Data) : this(Data.Vertices.ToArray(), Data.Indices.ToArray())
         {       
         }
+
+        public int SizeInBytes => Indices.Length * sizeof(uint) + Vertices.Length * HedraSize.Vector3;
     }
 }

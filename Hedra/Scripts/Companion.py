@@ -15,7 +15,7 @@ from Hedra.Numerics import VectorExtensions
 clr.ImportExtensions(VectorExtensions)
 COMPANION_RESPAWN_TIME = 48 # Seconds
 COMPANION_EQUIPMENT_TYPE = 'Pet'
-CAGE_MODEL_SCALE = 0.15
+CAGE_MODEL_SCALE = 0.75
 CAGE_MODEL_PATH = 'Assets/Items/Misc/CompanionCage.ply'
 GROWTH_ATTRIB_NAME = 'Growth'
 IS_GROWN_ATTRIB_NAME = 'IsGrown'
@@ -27,6 +27,7 @@ NAME_ATTRIB_NAME = 'PetName'
 DEAD_TIMER_ATTRIB_NAME = 'DeadTimer'
 HEALTH_ATTRIB_NAME = 'PetHealth'
 MOB_TYPE_ATTRIB_NAME = 'Type'
+RIDE_HEIGHT_ATTRIB = 'RideHeight'
 PRICE_ATTRIB_NAME = 'Price'
 BASE_GROWTH_SCALE = 0.5
 GROWTH_TIME = 8.0 * 60.0 # 8 Minutes
@@ -39,19 +40,20 @@ COMPANION_TYPES = [
     ('Ooze', ItemTier.Uncommon, False),
     ('Pig', ItemTier.Common, False),
     ('Sheep', ItemTier.Common, False),
-    ('Wolf', ItemTier.Common, True),
+    ('Wolf', ItemTier.Common, False),
     ('Horse', ItemTier.Common, True),
-    ('Deer', ItemTier.Uncommon, True)
+    ('Deer', ItemTier.Uncommon, True),
+    ('Crow', ItemTier.Uncommon, True),
+    ('Alpaca', ItemTier.Rare, True),
+    ('Raccoon', ItemTier.Uncommon, True),
+    ('Crab', ItemTier.Unique, True),
+    ('Turtle', ItemTier.Uncommon, True),
+    ('Squirrel', ItemTier.Rare, True),
+    ('MeleeBeetle', ItemTier.Rare, True),
+    ('RangedBeetle', ItemTier.Rare, True),
+    ('Bison', ItemTier.Unique, True)
+    # ('Gorilla', ItemTier.Legendary, False)
 ]
-DEFAULT_RIDE_INFO = 0.5
-RIDE_INFO = {
-    'Pug': 0.4,
-    'Bee': 0.630,
-    'Deer': 0.41,
-    'Horse': 0.5,
-    'Wasp' : 0.5,
-    'Wolf': 0.5
-}
 
 def init(user, state):
     state['user'] = user
@@ -86,10 +88,13 @@ def update(state):
 def get_dead_timer(pet_item):
     return pet_item.GetAttribute[Timer](DEAD_TIMER_ATTRIB_NAME)
 
+def get_pet_growth(pet_item):
+    return pet_item.GetAttribute[float](GROWTH_ATTRIB_NAME)
+
 def update_growth(pet_item, pet):
 
-    current_growth = pet_item.GetAttribute[float](GROWTH_ATTRIB_NAME)
-    if not pet_item.HasAttribute(IS_GROWN_ATTRIB_NAME) and pet:
+    current_growth = get_pet_growth(pet_item)
+    if current_growth < 1.0 and pet:
         max_scale = unserialize_pet_max_scale(pet_item)
         if abs(current_growth - 1.0) > 0.005:
             new_growth = Time.DeltaTime * GROWTH_SPEED
@@ -105,7 +110,6 @@ def update_growth(pet_item, pet):
 
 def set_max_growth(pet_item):
     pet_item.SetAttribute(GROWTH_ATTRIB_NAME, 1.0)
-    pet_item.SetAttribute(IS_GROWN_ATTRIB_NAME, True, Hidden=True)
    
 def unserialize_pet_max_scale(pet_item):
     scale_array = pet_item.GetAttribute[Array[Single]](MAX_SCALE_ATTRIB_NAME)
@@ -121,6 +125,7 @@ def serialize_pet_max_scale(pet_item, max_scale):
         ]),
         Hidden=True
     )
+    
 
 def handle_model(user, pet, state):
     if user.IsRiding or not pet.Model.Enabled:
@@ -138,6 +143,8 @@ def handle_model(user, pet, state):
             pet.SearchComponent[MinionAIComponent]().Enabled = True
     state['was_riding'] = user.IsRiding
 
+def get_ride_height(pet_item):
+    return pet_item.GetAttribute[float](RIDE_HEIGHT_ATTRIB)
 
 
 def spawn_pet(state, pet_item):
@@ -161,8 +168,8 @@ def spawn_pet(state, pet_item):
         pet.Removable = False
         pet.IsFriendly = True
         if pet_item.GetAttribute[bool](CAN_RIDE_ATTRIB_NAME):
-            pet.AddComponent(RideComponent(pet, RIDE_INFO[type] if type in RIDE_INFO else DEFAULT_RIDE_INFO))
-            pet.Model.IsMountable = pet_item.HasAttribute(IS_GROWN_ATTRIB_NAME)
+            pet.AddComponent(RideComponent(pet, get_ride_height(pet_item)))
+            pet.Model.IsMountable = get_pet_growth(pet_item) >= 1.0
         state['pet'] = pet
     state['pet_item'] = pet_item
   
@@ -177,22 +184,38 @@ def create_companion_templates():
      
 def create_companion_template(type, tier, can_ride):
     mob_template = World.MobFactory.GetFactory(type)
+    mob_name = translate((mob_template.DisplayName or mob_template.Name).lower())
     model_template = ItemModelTemplate()
     model_template.Path = CAGE_MODEL_PATH
     model_template.Scale = CAGE_MODEL_SCALE
     
     template = ItemTemplate()
     template.Name = 'Companion' + type
-    template.DisplayName = translate('generic_companion_item_name', translate(type.lower()))
-    template.Description = translate('generic_companion_item_desc', translate(type.lower()))
+    template.DisplayName = translate('generic_companion_item_name', mob_name)
+    template.Description = translate('generic_companion_item_desc', mob_name)
     template.Tier = tier
     template.EquipmentType = COMPANION_EQUIPMENT_TYPE
-    template.Attributes = create_companion_attributes(type, can_ride, mob_template)
+    template.Attributes = create_companion_attributes(type, can_ride, mob_template, mob_name)
     template.Model = model_template
     return template
 
+def calculate_ride_height(mob_template):
+    scale = mob_template.Model.Scale
+    model = VertexData.Load(mob_template.Model.Path, Vector3.One * scale)
+    # Find the highest vertex that is nearest the center point
+    array = [-v.Y for v in model.Vertices if v.Xz().LengthSquared() < 0.5 * scale * 0.5 * scale]
+    sorted_array = sorted(array)
+    model.Dispose()
+    # Use the average of the K smallest vertices as the point
+    k = 4
+    avg = Single(0.0)
+    for i in range(k):
+        avg += -sorted_array[i]
+    avg = avg / k / mob_template.Model.Scale
+    return avg
 
-def create_companion_attributes(type, can_ride, mob_template):
+
+def create_companion_attributes(type, can_ride, mob_template, mob_name):
     can_ride = can_ride
     pet_attribute = AttributeTemplate()
     pet_attribute.Name = MOB_TYPE_ATTRIB_NAME
@@ -242,10 +265,15 @@ def create_companion_attributes(type, can_ride, mob_template):
     dead_timer_attribute.Name = DEAD_TIMER_ATTRIB_NAME
     
     name_attribute = AttributeTemplate()
-    name_attribute.Value = translate(mob_template.Name.ToLowerInvariant())
+    name_attribute.Value = mob_name
     name_attribute.Hidden = True
     name_attribute.Persist = True
     name_attribute.Name = NAME_ATTRIB_NAME
+
+    ride_height_attribute = AttributeTemplate()
+    ride_height_attribute.Value = calculate_ride_height(mob_template)
+    ride_height_attribute.Hidden = True
+    ride_height_attribute.Name = RIDE_HEIGHT_ATTRIB
     
     return Array[AttributeTemplate]([
         pet_attribute,
@@ -256,7 +284,8 @@ def create_companion_attributes(type, can_ride, mob_template):
         model_attribute,
         health_attribute,
         dead_timer_attribute,
-        name_attribute
+        name_attribute,
+        ride_height_attribute
     ])
 
 def update_ui(pet_item, pet_entity, top_left, top_right, bottom_left, bottom_right, level, name):

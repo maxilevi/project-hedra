@@ -9,8 +9,11 @@ using System.Numerics;
 
 namespace Hedra.AISystem.Behaviours
 {
+    public delegate void TargetChangedEvent(IEntity Target);
+    
     public class AttackBehaviour : Behaviour
     {
+        public event TargetChangedEvent TargetChanged;
         protected FollowBehaviour Follow { get; }
         protected readonly Timer FollowTimer;
         public IEntity Target { get; protected set; }
@@ -28,6 +31,7 @@ namespace Hedra.AISystem.Behaviours
             Target = NewTarget;
             Follow.Target = NewTarget;
             FollowTimer.Reset();
+            TargetChanged?.Invoke(NewTarget);
         }
 
         public override void Update()
