@@ -24,6 +24,7 @@ using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using Hedra.WeaponSystem;
 using System.Numerics;
+using Hedra.Engine.Bullet;
 using Hedra.Engine.Core;
 
 using Silk.NET.Input.Common;
@@ -112,7 +113,7 @@ namespace Hedra.Engine.Loader
                 text += 
                     $"{lineBreak}DrawCalls={DrawManager.DrawCalls} VBOUpdates={VBO.VBOUpdatesInLastFrame} Chunks={chunkCount} ChunkX={underChunk?.OffsetX ?? 0} ChunkZ={underChunk?.OffsetZ ?? 0}";
                 text +=
-                    $"{lineBreak}Cache={CacheManager.UsedBytes / 1024 / 1024} MB DynamicCache={DynamicCache.UsedBytes / 1024 / 1024} MB WaterMappings={ChunkTerrainMeshBuilder.WaterMappingsCount} WaterChunkMappings={ChunkTerrainMeshBuilder.ChunkWaterMapCount}";
+                    $"{lineBreak}Cache={CacheManager.UsedBytes / 1024 / 1024}MB DynCache={DynamicCache.UsedBytes / 1024 / 1024} MB WaterMap={ChunkTerrainMeshBuilder.WaterMappingsCount} WaterChunkMap={ChunkTerrainMeshBuilder.ChunkWaterMapCount} Bullet={BulletPhysics.UsedBytes / 1024 / 1024}MB";
                 text +=
                     $"{lineBreak}Textures ={TextureRegistry.Count} Fonts={FontCache.Count} Texts={TextCache.Count} VAO={VAO.Alive} VBO={VBOCache.CachedVBOs}/{VBO.Alive} FBO={FBO.Alive} Lights={ShaderManager.UsedLights}/{ShaderManager.MaxLights}";
                 text += 

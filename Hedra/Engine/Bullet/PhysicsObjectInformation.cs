@@ -8,6 +8,7 @@ namespace Hedra.Engine.Bullet
 {
     public class PhysicsObjectInformation
     {
+        public int UsedBytes { get; set; }
         public string Name { get; set; }
         public CollisionFilterGroups Group { get; set; }
         public CollisionFilterGroups Mask { get; set; }

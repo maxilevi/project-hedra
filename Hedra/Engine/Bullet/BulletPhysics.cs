@@ -21,8 +21,9 @@ namespace Hedra.Engine.Bullet
     public delegate void OnContactEvent(CollisionObject Body0, CollisionObject Body1);
 
     public delegate void OnRigidbodyEvent(RigidBody Body);
-    public class BulletPhysics
+    public static class BulletPhysics
     {
+        public static int UsedBytes { get; set; }
         public const CollisionFilterGroups TerrainFilter = CollisionFilterGroups.DebrisFilter;
         public static event OnRigidbodyEvent OnRigidbodyReAdded;
         public static event OnContactEvent OnCollision;
@@ -304,6 +305,8 @@ namespace Hedra.Engine.Bullet
                 }
                 lock(_bodyLock)
                     _bodies.Add(Body);
+                
+                UsedBytes += Information.UsedBytes;
             }
         }
 
@@ -356,7 +359,8 @@ namespace Hedra.Engine.Bullet
 
                 if (information.IsSensor)
                     DisposeSensor(Body);
-                
+
+                UsedBytes -= information.UsedBytes;
                 DisposeBody(Body);
             }
         }
@@ -420,7 +424,8 @@ namespace Hedra.Engine.Bullet
                         Group = TerrainFilter,
                         Mask = CollisionFilterGroups.AllFilter,
                         Name = $"Terrain ({Offset.X}, {Offset.Y})",
-                        StaticOffsets = new []{Offset}
+                        StaticOffsets = new []{Offset},
+                        UsedBytes = Mesh.Vertices.Count * HedraSize.Vector3 + Mesh.Indices.Count * sizeof(uint)
                     }),
                 };
                 var shape = CreateShapesRigidbody(Shapes);
@@ -431,10 +436,11 @@ namespace Hedra.Engine.Bullet
                         Group = CollisionFilterGroups.StaticFilter,
                         Mask = CollisionFilterGroups.AllFilter,
                         Name = $"Static Objects on ({Offset.X}, {Offset.Y})",
-                        StaticOffsets = new CollisionGroup(Shapes).Offsets
+                        StaticOffsets = new CollisionGroup(Shapes).Offsets,
+                        UsedBytes = Shapes.Sum(S => S.SizeInBytes)
                     }));
                 }
-
+                
                 RemoveChunk(Offset);
                 lock (_chunkLock)
                     _chunkBodies.Add(Offset, bodies.Select(B => B.One).ToArray());
@@ -587,14 +593,6 @@ namespace Hedra.Engine.Bullet
                 {
                     callback.Dispose();
                 }
-            }
-        }
-        
-        public static void ConvexSweepTest(ConvexShape Shape, ref Matrix From, ref Matrix To, ref ClosestConvexResultCallback Callback)
-        {
-            lock (_bulletLock)
-            {
-                _dynamicsWorld.ConvexSweepTestRef(Shape, ref From, ref To, Callback);
             }
         }
 
