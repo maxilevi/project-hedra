@@ -128,6 +128,10 @@ namespace Hedra.Engine.Management
 
         public static VertexData LoadModel(string File, Vector3 Scale)
         {
+            if (File.Contains("Crow"))
+            {
+                int a = 0;
+            }
             VertexData model;
             if (File.EndsWith(".dae"))
                 model = DAELoader(File).ToVertexData();
@@ -135,7 +139,8 @@ namespace Hedra.Engine.Management
                 model = PLYLoader(File, Vector3.One);
             else
                 throw new ArgumentOutOfRangeException($"Unsupported model '{File}'.");
-            return model; 
+            model.Scale(Scale);
+            return model;
         }
 
         public static bool ModelExists(string Path)

@@ -31,6 +31,7 @@ namespace Hedra.AISystem.Behaviours
             Target = NewTarget;
             Follow.Target = NewTarget;
             FollowTimer.Reset();
+            TargetChanged?.Invoke(NewTarget);
         }
 
         public override void Update()

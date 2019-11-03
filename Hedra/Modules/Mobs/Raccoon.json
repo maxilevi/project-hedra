@@ -2,7 +2,7 @@
   "Name" : "Raccoon",
   "MaxHealth": 216.0,
   "AttackDamage": 7.0,
-  "Speed": 1.25,
+  "Speed": 1.35,
   "XP": 8.0,
   "Level": 8,
   "AIType": "GroupHostile",
@@ -27,7 +27,7 @@
     "WalkAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/Mob/Raccoon/RaccoonWalk.dae",
-        "Speed": 1.0
+        "Speed": 1.25
       }
     ],
     "AttackAnimations": [

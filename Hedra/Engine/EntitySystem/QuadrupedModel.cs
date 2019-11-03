@@ -37,6 +37,8 @@ namespace Hedra.Engine.EntitySystem
         public override bool IsIdling => Array.IndexOf(IdleAnimations, this.Model.AnimationPlaying) != -1;
         public bool AlignWithTerrain { get; set; }
         public bool IsMountable { get; set; }
+        public bool IsFlyingModel { get; }
+        public Vector3 TemplateScale { get; }
         public IHumanoid Rider { get; set; }
         public bool HasRider => Rider != null;
         public AttackAnimationTemplate[] AttackTemplates { get; }
@@ -48,7 +50,7 @@ namespace Hedra.Engine.EntitySystem
         private readonly float[] _walkAnimationSpeed;
         private readonly float _originalMobSpeed;
         private float _lastMobSpeed;
-        
+
         public override CollisionShape HorizontalBroadphaseCollider => Collider.HorizontalBroadphase;
         protected override string ModelPath { get; set; }
         private float _attackCooldown;
@@ -67,6 +69,8 @@ namespace Hedra.Engine.EntitySystem
         {
             var rng = new Random(Parent.Seed);
 
+            TemplateScale = Vector3.One * Template.Scale;
+            IsFlyingModel = Template.IsFlying;
             IsUndead = Template.IsUndead;
             ModelPath = Template.Path;
             Model = AnimationModelLoader.LoadEntity(Template.Path);

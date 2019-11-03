@@ -603,12 +603,12 @@ namespace Hedra.Engine.Generation
 
         public Vector3 FindPlaceablePosition(IEntity Mob, Vector3 DesiredPosition)
         {
-            var offset = Vector3.Zero;
-            while (Mob.Physics.CollidesWithOffset(offset))
+            var offset = DesiredPosition;
+            while (Mob.Physics.CollidesWithOffset(-Mob.Position + offset))
             {
                 offset += new Vector3(Utils.Rng.NextFloat() * 32f - 16f, 0, Utils.Rng.NextFloat() * 32f - 16f);
             }
-            return Mob.Position + offset;
+            return offset;
         }
 
         private Vector3 ToBlockSpace(float X, float Z)

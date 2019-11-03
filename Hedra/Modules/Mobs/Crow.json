@@ -5,6 +5,7 @@
   "Speed": 1.75,
   "XP": 4.0,
   "Level": 6,
+  "IsFlying": true,
   "AIType": "Hostile",
   "Effects": [],
   "Drops": [],

@@ -22,7 +22,7 @@ namespace Hedra.AISystem.Behaviours
             var damageComponent = Parent.SearchComponent<DamageComponent>();
             if (damageComponent != null)
             {
-                damageComponent.OnDamageEvent += E => AlertHerd(E.Victim);
+                damageComponent.OnDamageEvent += E => AlertHerd(E.Damager);
             }
         }
 
