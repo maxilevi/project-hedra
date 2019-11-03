@@ -22,17 +22,17 @@ namespace Hedra.Engine.Player
     public class PlayerInventory : IPlayerInventory
     {
         public const int MainSpaces = 8;
-        public const int InventorySpaces = 20;
-        public const int BootsHolder = 20;
-        public const int PantsHolder = 21;
-        public const int ChestplateHolder = 22;
-        public const int HelmetHolder = 23;
-        public const int PetHolder = 24;
-        public const int VehicleHolder = 25;
-        public const int RingHolder = 26;
-        public const int WeaponHolder = 27;
-        public const int FoodHolder = 19;
-        public const int GoldHolder = 18;
+        public const int InventorySpaces = 30;
+        public const int BootsHolder = 30;
+        public const int PantsHolder = 31;
+        public const int ChestplateHolder = 32;
+        public const int HelmetHolder = 33;
+        public const int PetHolder = 34;
+        public const int VehicleHolder = 35;
+        public const int RingHolder = 36;
+        public const int WeaponHolder = 37;
+        public const int FoodHolder = 29;
+        public const int GoldHolder = 28;
 
         public event OnInventoryUpdated InventoryUpdated;
         private readonly IPlayer _player;
