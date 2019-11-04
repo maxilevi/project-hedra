@@ -31,7 +31,7 @@ namespace Hedra.Engine.WorldBuilding
         public float Apply(Vector2 Point, float Height, out float Final, float SmallFrequency = 0)
         {
             Final = Density(Point);
-            var addonHeight = this.MaxHeight * Math.Max(Final, 0f);
+            var addonHeight = (this.MaxHeight - Height) * Math.Max(Final, 0f);
 
             return Mathf.Lerp(
                 Height,

@@ -28,10 +28,10 @@ namespace Hedra.Engine.StructureSystem.Overworld
     public class FishingPostDesign : SimpleStructureDesign<FishingPost>
     {
         public override int SearchRadius => 384;
-        public override int PlateauRadius => 128;
+        public override int PlateauRadius => 200;
         protected override float EffectivePlateauRadius => 256;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.FishingPostIcon);
-        protected override int StructureChance => 4;//StructureGrid.FishingPostChance;
+        protected override int StructureChance => StructureGrid.FishingPostChance;
         protected override CacheItem? Cache => null;
         protected override BlockType PathType => BlockType.Path;
         private const int CenterRadius = 64;
@@ -61,7 +61,10 @@ namespace Hedra.Engine.StructureSystem.Overworld
             AddFishingStand(structure, Rng, mainDockPosition, mainDockDirection, smallDockPosition);
             BuildGraph(graph, structure, smallDockPosition, mainDockPosition, decorationPoints);
             //AddCampfires(structure, Rng);
-            structure.AddGroundwork(new RoundedGroundwork(structure.Position, CenterRadius * .5f, BlockType.StonePath));
+            structure.AddGroundwork(new RoundedGroundwork(structure.Position, CenterRadius * .5f, BlockType.StonePath)
+            {
+                BonusHeight = -0.0f
+            });
             return structure;
         }
 
@@ -94,7 +97,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 {
                     Width = 12,
                     Type = BlockType.Path,
-                    BonusHeight = 0
+                    BonusHeight = -0.0f
                 });
                 Direction = toDock.Xz();
                 Position = position.Xz();

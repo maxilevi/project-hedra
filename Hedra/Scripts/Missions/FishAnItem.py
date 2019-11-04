@@ -30,7 +30,7 @@ def build_reward(item, rng):
     reward = QuestReward()
     
     def get_multiplier():
-        return min(1.0, Trader.Price(item) / 25.0)
+        return min(1.0, Trader.SingleItemPrice(item) / 25.0)
     
     if n < 0.3:
         reward.Experience = int(rng.Next(3, 9) * get_multiplier())
