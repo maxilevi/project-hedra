@@ -34,7 +34,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         {
             _angle += Time.DeltaTime * 80f;
             var yawPitchRoll = _rotationAxis * _angle * Mathf.Radian;
-            _targetRotation = Quaternion.CreateFromYawPitchRoll(yawPitchRoll.X, yawPitchRoll.Y, yawPitchRoll.Z);
+            _targetRotation = Quaternion.CreateFromYawPitchRoll(yawPitchRoll.Y, yawPitchRoll.X, yawPitchRoll.Z);
             _currentRotation = Quaternion.Slerp(_currentRotation, _targetRotation, Time.DeltaTime * 2f);
             _mesh.LocalRotation = _currentRotation.ToEuler();
             _mesh.Position = Position;

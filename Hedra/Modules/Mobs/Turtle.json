@@ -1,7 +1,7 @@
 ﻿{
   "Name" : "Turtle", 
   "MaxHealth": 512.0,
-  "AttackDamage": 4.0,
+  "AttackDamage": 5.0,
   "Speed": 1.0,
   "XP": 4.0,
   "Level": 6,

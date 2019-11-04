@@ -59,6 +59,7 @@ namespace HedraTests.QuestSystem
             public bool CanGive(Vector3 Position) => true;
 
             public QuestTier Tier { get; private set; }
+            public QuestHint Hint { get; private set; }
             public string Name => "DUMMY";
         }
     }

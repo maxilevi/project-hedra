@@ -61,9 +61,23 @@ namespace Hedra.Mission
                 throw new ArgumentOutOfRangeException($"Failed to find quests that meet the given criteria");
             
             while (!map.ContainsKey(Tier) && Tier != QuestTier.Any) Tier--;
-            return Tier == QuestTier.Any 
-                ? possibilities[Utils.Rng.Next(0, possibilities.Length)] 
-                : map[Tier][Utils.Rng.Next(0, map[Tier].Count)];
+            return Tier == QuestTier.Any
+                ? SelectWeightedRandom(possibilities, Hint, Utils.Rng)
+                : SelectWeightedRandom(map[Tier], Hint, Utils.Rng);
+        }
+
+        private static IMissionDesign SelectWeightedRandom(IList<IMissionDesign> Possibilities, QuestHint Hint, Random Rng)
+        {
+            var entries = new List<IMissionDesign>();
+            for (var i = 0; i < Possibilities.Count; ++i)
+            {
+                entries.Add(Possibilities[i]);
+                /* Add a double entry for those who match the hint */
+                if(Hint == Possibilities[i].Hint)
+                    entries.Add(Possibilities[i]);
+            }
+
+            return entries[Rng.Next(0, entries.Count)];
         }
 
         public static bool Exists(string Name)
