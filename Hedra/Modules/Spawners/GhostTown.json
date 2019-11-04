@@ -2,45 +2,84 @@
   "Plains": [
     {
       "Type": "Ghost",
-      "Chance": 25.0
+      "Chance": 35.0,
+      "MinGroup": 1,
+      "MaxGroup": 3
     },
     {
       "Type": "Skeleton",
-      "Chance": 65.0
+      "Chance": 45.0,
+      "MinGroup": 2,
+      "MaxGroup": 5
     },
     {
       "Type": "SkeletonKamikaze",
-      "Chance": 10.0
+      "Chance": 20.0,
+      "MinGroup": 1,
+      "MaxGroup": 3
     }
   ],
-
+  
+  "Shore": [
+    {
+      "Type": "Ghost",
+      "Chance": 35.0,
+      "MinGroup": 1,
+      "MaxGroup": 3
+    },
+    {
+      "Type": "Skeleton",
+      "Chance": 45.0,
+      "MinGroup": 2,
+      "MaxGroup": 5
+    },
+    {
+      "Type": "SkeletonKamikaze",
+      "Chance": 20.0,
+      "MinGroup": 1,
+      "MaxGroup": 3
+    }
+  ],
+  
   "Mountain": [
     {
       "Type": "Ghost",
-      "Chance": 25.0
+      "Chance": 35.0,
+      "MinGroup": 1,
+      "MaxGroup": 3
     },
     {
       "Type": "Skeleton",
-      "Chance": 65.0
+      "Chance": 45.0,
+      "MinGroup": 2,
+      "MaxGroup": 5
     },
     {
       "Type": "SkeletonKamikaze",
-      "Chance": 10.0
+      "Chance": 20.0,
+      "MinGroup": 1,
+      "MaxGroup": 3
     }
   ],
 
   "Forest": [
     {
       "Type": "Ghost",
-      "Chance": 25.0
+      "Chance": 35.0,
+      "MinGroup": 1,
+      "MaxGroup": 3
     },
     {
       "Type": "Skeleton",
-      "Chance": 65.0
+      "Chance": 45.0,
+      "MinGroup": 2,
+      "MaxGroup": 5
     },
     {
       "Type": "SkeletonKamikaze",
-      "Chance": 10.0
+      "Chance": 20.0,
+      "MinGroup": 1,
+      "MaxGroup": 3
     }
   ]
 }

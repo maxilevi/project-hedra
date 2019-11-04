@@ -86,7 +86,7 @@ namespace Hedra.Engine.BiomeSystem
                 for (var z = -border; z < depth + border; ++z)
                 {
                     var position = new Vector2(x * Chunk.BlockSize + OffsetX, z * Chunk.BlockSize + OffsetZ);
-                    var pathHeight = x >= 0 && z >= 0 && x < depth && z < depth ? pathMap[x][z] : 0;
+                    var pathHeight = x >= 0 && z >= 0 && x < depth && z < depth && pathMap != null ? pathMap[x][z] : 0;
                     var calculatedHeight = CalculateHeight(x, z, heights, null, out _);
                     var densityMultiplier = 1.0f;
                     var smallFrequency = SmallFrequency(position.X, position.Y);

@@ -26,6 +26,7 @@ namespace Hedra.Engine.Player
 
         private Firewave(IEntity Parent, Vector3 Origin) : base(Parent, Origin)
         {
+            Collide = false;
         }
 
         private void Explode()
@@ -78,7 +79,7 @@ namespace Hedra.Engine.Player
             Particles.PositionErrorMargin = new Vector3(2f,2f,2f);
             Particles.Shape = ParticleShape.Sphere;       
             Particles.ParticleLifetime = Math.Max(2.0f * _charge, .25f);
-            
+
             for(var i = 0; i < 750; i++)
             {
                 var dir = new Vector3(Utils.Rng.NextFloat() * 2 - 1, Utils.Rng.NextFloat(), Utils.Rng.NextFloat() * 2 - 1);
@@ -108,6 +109,11 @@ namespace Hedra.Engine.Player
                 _ignore = Ignore
             };
             release.Explode();
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
         }
     }
 }

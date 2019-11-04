@@ -3,7 +3,7 @@
   "MaxHealth": 280.0,
   "AttackDamage": 9.0,
   "Speed": 1.4,
-  "XP": 10.0,
+  "XP": 7.0,
   "Level": 8,
   "AIType": "GroupHostile",
   "Effects": [

@@ -170,7 +170,7 @@ namespace Hedra.Engine.EntitySystem
         private static bool ShouldSpawnMob(Vector3 NewPosition)
         {
             var region = World.BiomePool.GetRegion(NewPosition);
-            return Utils.Rng.Next(0, 20) != 1 || region.Mob.SpawnerSettings.MiniBosses.Length == 0;
+            return Utils.Rng.Next(0, 20) != 1 || region.Mob.SpawnerSettings.MiniBosses == null || region.Mob.SpawnerSettings.MiniBosses.Length == 0;
         }
 
         private static bool IsNearWater(Vector3 Position)
@@ -189,13 +189,13 @@ namespace Hedra.Engine.EntitySystem
 
             var count = (plains ? 1 : 0) + (forest ? 1 : 0) + (shore ? 1 : 0) + (mountain ? 1 : 0); 
             var templates = new List<SpawnTemplate>();
-            if(forest)
+            if(forest && region.Mob.SpawnerSettings.Forest != null)
                 templates.AddRange(region.Mob.SpawnerSettings.Forest);
-            if(mountain)
+            if(mountain && region.Mob.SpawnerSettings.Mountain != null)
                 templates.AddRange(region.Mob.SpawnerSettings.Mountain);
-            if(plains)
+            if(plains && region.Mob.SpawnerSettings.Plains != null)
                 templates.AddRange(region.Mob.SpawnerSettings.Plains);
-            if(shore)
+            if(shore && region.Mob.SpawnerSettings.Shore != null)
                 templates.AddRange(region.Mob.SpawnerSettings.Shore);
             
             if (templates.Count == 0) return null;
@@ -227,7 +227,7 @@ namespace Hedra.Engine.EntitySystem
                     if (World.Entities[i] == _player || World.Entities[i].IsStatic) continue;
 
                     if ((World.Entities[i].Position.Xz() - Position.Xz()).LengthSquared() <
-                        80f * Chunk.BlockSize * 80f * Chunk.BlockSize) return true;
+                        96f * Chunk.BlockSize * 96f * Chunk.BlockSize) return true;
                 }
             }
             catch (ArgumentOutOfRangeException e)
