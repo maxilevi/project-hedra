@@ -247,14 +247,14 @@ namespace Hedra.Engine.Bullet
             if (!GameSettings.DebugPhysics) return;
             lock (_bodyLock)
             {
-                
                 for (var i = 0; i < _bodies.Count; ++i)
                 {
                     if ((_bodies[i].WorldTransform.Origin.Compatible() - Player.LocalPlayer.Instance.Position).Xz().LengthSquared() > 64 * 64) continue;
                     var info = (PhysicsObjectInformation) _bodies[i].UserObject;
                     if (info.IsInSimulation)
-                        _dynamicsWorld.DebugDrawObject(_bodies[i].WorldTransform, _bodies[i].CollisionShape,
-                        new Vector3(1, 1, 0));
+                    {
+                        _dynamicsWorld.DebugDrawObject(_bodies[i].WorldTransform, _bodies[i].CollisionShape, new Vector3(1, 1, 0));
+                    }
                 }/*
                 for (var i = 0; i < _bodies.Count; ++i)
                 {
@@ -416,7 +416,8 @@ namespace Hedra.Engine.Bullet
         {
             lock (_bulletLock)
             {
-                if(Mesh.IsEmpty) return;
+                if(Mesh.IsEmpty)
+                    throw new ArgumentOutOfRangeException("Cannot add an empty mesh");
                 var bodies = new List<Pair<RigidBody, PhysicsObjectInformation>>
                 {
                     new Pair<RigidBody, PhysicsObjectInformation>(CreateTerrainRigidbody(Offset, Mesh), new PhysicsObjectInformation

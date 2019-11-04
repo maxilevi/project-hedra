@@ -79,7 +79,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
 
         public NativeVertexData CreateTerrainCollisionMesh(RegionCache Cache, IAllocator Allocator)
         {
-            var output = CreateTerrain(Allocator, 1, Cache, false, false, CollisionMeshLod, CollisionMeshLod);
+            var output = CreateTerrain(Allocator, 1, Cache, false, false, CollisionMeshLod, 1);
             var staticData = output.StaticData;
             output.StaticData = null;
             output.Dispose();
