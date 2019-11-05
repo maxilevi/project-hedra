@@ -37,7 +37,7 @@ vec4 diffuse(vec3 unitToLight, vec3 unitNormal, vec3 FullLightColor) {
 		+ DiffuseModel(vec3(-1.0, 0.0, 0.0), unitNormal, FullLightColor) * 0.2
 		+ DiffuseModel(vec3(0.0, 0.0, -1.0), unitNormal, FullLightColor) * 0.2
 		+ DiffuseModel(vec3(0.0, 0.0, 1.0), unitNormal, FullLightColor) * 0.2
-		+ DiffuseModel(vec3(0.0, -1.0, 0.0), unitNormal, FullLightColor) * 0.03
+		+ DiffuseModel(vec3(0.0, -1.0, 0.0), unitNormal, FullLightColor) * 0.025
 		+ DiffuseModel(unitToLight, unitNormal, FullLightColor) * 0.75,
 	1.0);
 }

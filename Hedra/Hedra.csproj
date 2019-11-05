@@ -323,6 +323,10 @@
     <Compile Include="Engine\Bullet\PhysicsObjectInformation.cs" />
     <Compile Include="Engine\Bullet\PhysicsComponent.cs" />
     <Compile Include="Engine\Bullet\PhysicsComponentMotionState.cs" />
+    <Compile Include="Engine\CacheSystem\Dungeon0Cache.cs" />
+    <Compile Include="Engine\CacheSystem\Dungeon1Cache.cs" />
+    <Compile Include="Engine\CacheSystem\Dungeon2Cache.cs" />
+    <Compile Include="Engine\CacheSystem\DungeonIconCache.cs" />
     <Compile Include="Engine\CacheSystem\DynamicCache.cs" />
     <Compile Include="Engine\CacheSystem\FishingPostIconCache.cs" />
     <Compile Include="Engine\CacheSystem\WizardTowerCache.cs" />
@@ -391,6 +395,10 @@
     <Compile Include="Engine\Scenes\SceneExtensions.cs" />
     <Compile Include="Engine\Scenes\SceneLoader.cs" />
     <Compile Include="Engine\Scenes\SceneSettings.cs" />
+    <Compile Include="Engine\StructureSystem\CollisionTrigger.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\Dungeon.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\DungeonBuilder.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\DungeonDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\FishingPost.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\FishingPostDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\PunchingBag.cs" />
@@ -9056,6 +9064,46 @@
     </Content>
     <Content Include="..\project-hedra-assets\Sounds\Teleport.ogg">
       <Link>Sounds\Teleport.ogg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon0\Dungeon0-Colliders.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon0-Colliders.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon0\Dungeon0-Door0.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon0-Door0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon0\Dungeon0-Door1.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon0-Door1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon0\Dungeon0-Door2.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon0-Door2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon0\Dungeon0-Door3.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon0-Door3.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon0\Dungeon0-Door4.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon0-Door4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon0\Dungeon0-Door5.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon0-Door5.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon0\Dungeon0-Icon.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon0-Icon.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon0\Dungeon0-Scene.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon0-Scene.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon0\Dungeon0.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Structures\FishingDock0\Caravan0-Colliders.ply">

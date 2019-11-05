@@ -60,6 +60,10 @@ namespace Hedra.Engine.CacheSystem
         Tomato,
         FishingPostIcon,
         WizardTower,
+        Dungeon0,
+        Dungeon1,
+        Dungeon2,
+        Dungeon0Icon,
         MaxEnums
     }
 }

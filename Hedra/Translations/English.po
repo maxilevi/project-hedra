@@ -630,6 +630,7 @@ structure_travelling_merchant = TRAVELLING MERCHANT
 structure_witch_hut = WITCH HUT
 structure_wizard_tower = WIZARD TOWER
 structure_ghost_town_boss = UNDEAD LICH
+structure_dungeon = DUNGEON
 fishing_no_bait = YOU NEED AT LEAST 1 BAIT IN ORDER TO FISH
 fishing_used_bait = -1 BAIT
 generic_companion_item_name = {0} Companion

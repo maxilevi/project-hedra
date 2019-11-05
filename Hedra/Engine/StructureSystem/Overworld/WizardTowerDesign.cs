@@ -20,7 +20,7 @@ using Hedra.WeaponSystem;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
-    public class WizardTowerDesign : SimpleCompletableStructureDesign<WizardTower>
+    public class WizardTowerDesign : SimpleFindableStructureDesign<WizardTower>
     {
         public override int PlateauRadius => 256 + 128;
         public override VertexData Icon { get; } = CacheManager.GetModel(CacheItem.WizardTowerIcon);
@@ -109,10 +109,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
         }
 
         public override string DisplayName => Translations.Get("structure_wizard_tower");
-
-        protected override string GetDescription(WizardTower Structure) => throw new System.NotImplementedException();
-
-        protected override string GetShortDescription(WizardTower Structure) => throw new System.NotImplementedException();
 
         private static SceneSettings WizardTowerSettings { get; } = new SceneSettings
         {

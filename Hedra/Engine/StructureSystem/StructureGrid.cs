@@ -15,6 +15,8 @@ namespace Hedra.Engine.StructureSystem
         public const int WaterGiantTreeChance = 80;
         public const int BanditCampChance = 32;
         public const int VillageChance = 2;
+        public const int Dungeon0Chance = 2;
+        
         /* Small structures */
         public const int FishingPostChance = 2;
         public const int GhostTownPortalChance = 64;
