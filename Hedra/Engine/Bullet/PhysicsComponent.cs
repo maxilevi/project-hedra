@@ -97,7 +97,6 @@ namespace Hedra.Engine.Bullet
                     Group = CollisionFilterGroups.SensorTrigger,
                     Mask = (CollisionFilterGroups.AllFilter & ~CollisionFilterGroups.SensorTrigger),
                     Entity = Parent,
-                    IsSensor = true,
                     Name = $"'{Parent.Name}' sensor"
                 });
                 _sensor.Gravity = BulletSharp.Math.Vector3.Zero;

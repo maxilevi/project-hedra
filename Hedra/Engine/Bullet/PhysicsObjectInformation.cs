@@ -16,7 +16,7 @@ namespace Hedra.Engine.Bullet
         public bool IsEntity => Entity != null;
         public IEntity Entity { get; set; }
         public bool IsInSimulation { get; set; }
-        public bool IsSensor { get; set; }
+        public bool IsSensor => (Group & CollisionFilterGroups.SensorTrigger) == CollisionFilterGroups.SensorTrigger;
         public bool IsDynamic { get; set; }
         public bool IsStatic { get; set; }
         public bool IsPlayer  => Entity is IPlayer;

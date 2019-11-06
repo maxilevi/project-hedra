@@ -105,31 +105,34 @@ namespace Hedra.Engine.Rendering.Geometry
             var map = IndexVertices(Mesh);
             var remaining = map.Keys.ToArray();
             var visited = new HashSet<Vector3>();
-            
-            void DepthFirstSearch(Vector3 Vertex, HashSet<Triangle> Component)
+
+            void BreadthFirstSearch(Vector3 Start, HashSet<Triangle> Component)
             {
-                if (visited.Contains(Vertex)) return;
-                visited.Add(Vertex);
-                var triangles = map[Vertex].ToArray();
-                for (var i = 0; i < triangles.Length; ++i)
+                var queue = new Queue<Vector3>();
+                queue.Enqueue(Start);
+                while (queue.Count > 0)
                 {
-                    if (!Component.Contains(triangles[i]))
+                    var vertex = queue.Dequeue();
+                    if(visited.Contains(vertex)) continue;
+                    visited.Add(vertex);
+                    var triangles = map[vertex];
+                    for (var i = 0; i < triangles.Length; ++i)
+                    {
+                        queue.Enqueue(triangles[i].P1.Position);
+                        queue.Enqueue(triangles[i].P2.Position);
+                        queue.Enqueue(triangles[i].P3.Position);
                         Component.Add(triangles[i]);
-                }
-                var connected = triangles.SelectMany(T => T.GetConnected(Vertex)).ToArray();
-                for (var i = 0; i < connected.Length; ++i)
-                {
-                    DepthFirstSearch(connected[i].Position, Component);
+                    }
                 }
             }
 
-            using (var allocator = new HeapAllocator(Allocator.Megabyte * 2))
+            using (var allocator = new HeapAllocator(Allocator.Megabyte * 16))
             {
                 for (var i = 0; i < remaining.Length; ++i)
                 {
                     if (visited.Contains(remaining[i])) continue;
                     var component = new HashSet<Triangle>();
-                    DepthFirstSearch(remaining[i], component);
+                    BreadthFirstSearch(remaining[i], component);
 
                     var mesh = BuildComponent(component.ToArray(), Mesh);
                     mesh.Optimize(allocator);

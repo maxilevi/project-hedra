@@ -13,6 +13,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.Scenes;
+using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Mission;
 using Hedra.Numerics;
@@ -115,7 +116,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
             IsNightLight = false,
             LightRadius = PointLight.DefaultRadius * 1.5f,
             Npc1Creator = CreateWizard,
-            Npc2Creator = CreateDarkWizard
+            Npc2Creator = CreateDarkWizard,
+            Structure1Creator = (V, _) => new SleepingPad(V)
         };
 
         private class WizardTowerAIComponent : BaseVillagerAIComponent

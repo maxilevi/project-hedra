@@ -85,7 +85,7 @@ namespace Hedra.Engine.StructureSystem
                    Math.Abs(Biome.Generation.RiverAtPoint(TargetPosition.X, TargetPosition.Z)) < 0.005f;
         }
 
-        protected void AddDoor(VertexData Model, Vector3 DoorPosition, Matrix4x4 Transformation, CollidableStructure Structure, bool InvertedRotation, bool InvertedPivot)
+        protected void AddDoor(VertexData Model, Vector3 DoorPosition, Matrix4x4 RotationMatrix, CollidableStructure Structure, bool InvertedRotation, bool InvertedPivot)
         {
             Structure.WorldObject.AddChildren(
                 Builder<IBuildingParameters>.CreateDoor(
@@ -93,7 +93,7 @@ namespace Hedra.Engine.StructureSystem
                     Structure.Position,
                     DoorPosition + StructureOffset,
                     StructureScale,
-                    Transformation,
+                    RotationMatrix,
                     Structure,
                     InvertedRotation,
                     InvertedPivot

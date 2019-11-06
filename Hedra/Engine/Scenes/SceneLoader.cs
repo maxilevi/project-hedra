@@ -24,12 +24,12 @@ namespace Hedra.Engine.Scenes
     public static class SceneLoader
     {
         private static readonly Vector3 LightColorCode = new Vector3(1, 0, 1);
-        private static readonly Vector3 TrainingDummyColorCode = new Vector3(0, 1, 0);
-        private static readonly Vector3 WellColorCode = new Vector3(0, 0, 1);
+        private static readonly Vector3 Structure1ColorCode = new Vector3(0, 1, 1);
+        private static readonly Vector3 Structure2ColorCode = new Vector3(0, 1, 0);
         private static readonly Vector3 NPC2ColorCode = new Vector3(0, 0, 0);
         private static readonly Vector3 NPC1ColorCode = new Vector3(1, 1, 0);
         private static readonly Vector3 FirePlaceColorCode = new Vector3(1, 0, 0);
-        private static readonly Vector3 BedColorCode = new Vector3(0, 1, 1);
+        private static readonly Vector3 WellColorCode = new Vector3(0, 0, 1);
 
         public static void LoadIfExists(CollidableStructure Structure, string Filename, Vector3 Scale, Matrix4x4 Transformation, SceneSettings Settings)
         {
@@ -48,12 +48,12 @@ namespace Hedra.Engine.Scenes
             var map = new Dictionary<Vector3, List<VertexData>>
             {
                 {LightColorCode, new List<VertexData>()},
-                {TrainingDummyColorCode, new List<VertexData>()},
+                {Structure2ColorCode, new List<VertexData>()},
                 {WellColorCode, new List<VertexData>()},
                 {NPC2ColorCode, new List<VertexData>()},
                 {NPC1ColorCode, new List<VertexData>()},
                 {FirePlaceColorCode, new List<VertexData>()},
-                {BedColorCode, new List<VertexData>()}
+                {Structure1ColorCode, new List<VertexData>()}
             };
             for (var i = 0; i < parts.Length; ++i)
             {
@@ -70,25 +70,27 @@ namespace Hedra.Engine.Scenes
 
             /* Add Wells */
             var wells = LoadWells(
-                map[WellColorCode].Select(V => V.Vertices.ToArray()).ToArray()
+                map[WellColorCode].ToArray()
             );
             Structure.WorldObject.AddChildren(wells);
             
             /* Add Fireplaces */
             var fireplaces = LoadFireplaces(
-                map[FirePlaceColorCode].Select(V => V.Vertices.ToArray()).ToArray()
+                map[FirePlaceColorCode].ToArray()
             );
             Structure.WorldObject.AddChildren(fireplaces);
 
-            /* Add Beds */
-            var beds = LoadBeds(
-                map[BedColorCode].Select(V => V.Vertices.ToArray()).ToArray()
+            /* Add Structure1 */
+            var beds = LoadGenericStructure(
+                map[Structure1ColorCode].ToArray(),
+                Settings.Structure1Creator
             );
             Structure.WorldObject.AddChildren(beds);
             
-            /* Add punching bags */
-            var bags = LoadPunchingBags(
-                map[TrainingDummyColorCode].Select(V => V.Vertices.ToArray()).ToArray()
+            /* Add Structure 2 */
+            var bags = LoadGenericStructure(
+                map[Structure2ColorCode].ToArray(),
+                Settings.Structure2Creator
             );
             Structure.WorldObject.AddChildren(bags);
             
@@ -119,47 +121,27 @@ namespace Hedra.Engine.Scenes
             }
         }
 
-        private static BaseStructure[] LoadWells(params Vector3[][] VertexGroups)
+        private static BaseStructure[] LoadWells(params VertexData[] VertexGroups)
         {
-            return LoadGenericStructure(VertexGroups, (V, R) => new Well(V, R));
+            return LoadGenericStructure(VertexGroups, (V, G) => new Well(V, GetRadius(G)));
         }
-        
-        private static BaseStructure[] LoadBeds(params Vector3[][] VertexGroups)
-        {
-            return LoadGenericStructure(VertexGroups, (V, _) => new SleepingPad(V));
-        }
-        
-        private static BaseStructure[] LoadFireplaces(params Vector3[][] VertexGroups)
+
+        private static BaseStructure[] LoadFireplaces(params VertexData[] VertexGroups)
         {
             return LoadGenericStructure(VertexGroups, (V, _) => new Campfire(V));
         }
         
-        private static BaseStructure[] LoadGenericStructure(Vector3[][] VertexGroups, Func<Vector3, float, BaseStructure> Create)
+        private static BaseStructure[] LoadGenericStructure(VertexData[] VertexGroups, Func<Vector3, VertexData, BaseStructure> Create)
         {
             var list = new List<BaseStructure>();
             for (var i = 0; i < VertexGroups.Length; ++i)
             {
                 var averageCenter = VertexGroups[i].AverageVertices();
-                var radius = new CollisionShape(VertexGroups[i]).BroadphaseRadius * 2;
-                list.Add(Create(averageCenter, radius));
+                list.Add(Create(averageCenter, VertexGroups[i]));
             }
             return list.ToArray();
         }
 
-        private static BaseStructure[] LoadPunchingBags(params Vector3[][] VertexGroups)
-        {
-            var list = new List<BaseStructure>();
-            for (var i = 0; i < VertexGroups.Length; ++i)
-            {
-                var box = Physics.BuildDimensionsBox(new VertexData
-                {
-                    Vertices = VertexGroups[i].ToList()
-                }) * 2;
-                list.Add(new PunchingBag(VertexGroups[i].AverageVertices(), box));
-            }
-            return list.ToArray();
-        }
-        
         private static BaseStructure[] LoadLights(Vector3[] Points, SceneSettings Settings)
         {
             var list = new List<BaseStructure>();
@@ -173,6 +155,12 @@ namespace Hedra.Engine.Scenes
                 });
             }
             return list.ToArray();
+        }
+
+        public static float GetRadius(VertexData Mesh)
+        {
+            var radius = new CollisionShape(Mesh).BroadphaseRadius * 2;
+            return radius;
         }
     }
 }

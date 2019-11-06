@@ -1,56 +1,83 @@
 using System.Numerics;
 using BulletSharp;
 using Hedra.Engine.Bullet;
+using Hedra.Engine.Rendering.Geometry;
 using Hedra.Engine.WorldBuilding;
+using Hedra.EntitySystem;
 using Hedra.Rendering;
 
 namespace Hedra.Engine.StructureSystem
 {
+    public delegate void OnCollisionEvent(IEntity Entity);
+    public delegate void OnSeparationEvent(IEntity Entity);
     public class CollisionTrigger : BaseStructure
     {
-        private RigidBody _sensor;
+        public event OnCollisionEvent OnCollision;
+        public event OnSeparationEvent OnSeparation;
         
-        public CollisionTrigger(Vector3 Position, VertexData Model) : base(Position)
+        private readonly RigidBody _sensor;
+        private Vector3 _position;
+        
+        public CollisionTrigger(Vector3 Position, VertexData Mesh) : base(Position)
         {
-            using (var bodyInfo = new RigidBodyConstructionInfo(0, new DefaultMotionState(), BuildShape(Mesh)))
+            Mesh = Mesh.AverageCenter();
+            var shape = BulletPhysics.CreateTriangleShape(Mesh.Indices, Mesh.Vertices);
+            using (var bodyInfo = new RigidBodyConstructionInfo(0, new DefaultMotionState(), shape))
             {
                 _sensor = new RigidBody(bodyInfo);
                 _sensor.Translate(Position.Compatible());
-                Bullet.BulletPhysics.Add(_sensor, new PhysicsObjectInformation
+                _sensor.CollisionFlags |= CollisionFlags.NoContactResponse;
+                BulletPhysics.Add(_sensor, new PhysicsObjectInformation
                 {
                     Group = CollisionFilterGroups.SensorTrigger,
                     Mask = (CollisionFilterGroups.AllFilter & ~CollisionFilterGroups.SensorTrigger),
                     Name = $"Trigger at {Position}",
-                    StaticOffsets = new []{World.ToChunkSpace(Position)}
+                    StaticOffsets = new []
+                    {
+                        World.ToChunkSpace(Position)
+                    }
                 });
                 _sensor.Gravity = BulletSharp.Math.Vector3.Zero;
             }
             
-            BulletPhysics.OnCollision += OnCollision;
-            BulletPhysics.OnSeparation += OnSeparation;
+            BulletPhysics.OnCollision += OnWorldCollision;
+            BulletPhysics.OnSeparation += OnWorldSeparation;
+        }
+        
+        public override Vector3 Position
+        {
+            get => _position;
+            set
+            {
+                _sensor?.Translate((-_position + value).Compatible());
+                _position = value;
+            }
         }
 
-        private void OnCollision(CollisionObject Object0, CollisionObject Object1)
+        private void OnWorldCollision(CollisionObject Object0, CollisionObject Object1)
         {
-            if (!ReferenceEquals(Object0, _sensor) && !ReferenceEquals(Object1, _sensor)) return;
-            var other = ReferenceEquals(Object0, _sensor) ? Object1 : Object0;
-            if (!ReferenceEquals(other, _body))
-            {
-                _sensorContacts++;
-            }
+            if(!ProcessTrigger(Object0, Object1, out var entity)) return;
+            OnSeparation?.Invoke(entity);
         }
         
-        private void OnSeparation(CollisionObject Object0, CollisionObject Object1)
+        private void OnWorldSeparation(CollisionObject Object0, CollisionObject Object1)
         {
-            if (!ReferenceEquals(Object0, _sensor) && !ReferenceEquals(Object1, _sensor)) return;
+            if(!ProcessTrigger(Object0, Object1, out var entity)) return;
+            OnCollision?.Invoke(entity);
+        }
+
+        private bool ProcessTrigger(CollisionObject Object0, CollisionObject Object1, out IEntity Against)
+        {
+            Against = null;
+            if (!ReferenceEquals(Object0, _sensor) && !ReferenceEquals(Object1, _sensor)) return false;
             var other = ReferenceEquals(Object0, _sensor) ? Object1 : Object0;
-            if (!ReferenceEquals(other, _body))
-            {
-                _sensorContacts--;
-            }
+            var information = (PhysicsObjectInformation) other.UserObject;
+            if (!information.IsEntity) return false;
+            Against = information.Entity;
+            return true;
         }
         
-        public void Dispose()
+        public override void Dispose()
         {
             BulletPhysics.RemoveAndDispose(_sensor);
         }

@@ -396,14 +396,17 @@
     <Compile Include="Engine\Scenes\SceneLoader.cs" />
     <Compile Include="Engine\Scenes\SceneSettings.cs" />
     <Compile Include="Engine\StructureSystem\CollisionTrigger.cs" />
+    <Compile Include="Engine\StructureSystem\Lever.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\Dungeon.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\Dungeon0Trigger.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonBuilder.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\DungeonDesign.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\Dungeon0Design.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\FishingPost.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\FishingPostDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\PunchingBag.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\SpawnCampfire.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\SpawnCampfireDesign.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\TimeHandler.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\GenericBuilderWithNPC.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\GenericNPCSettings.cs" />
     <Compile Include="Engine\Windowing\GLEnums.cs" />
@@ -9092,6 +9095,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\Structures\Dungeon0\Dungeon0-Door5.ply">
       <Link>Assets\Env\Structures\Dungeon\Dungeon0-Door5.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon0\Dungeon0-Door6.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon0-Door6.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Structures\Dungeon0\Dungeon0-Icon.ply">

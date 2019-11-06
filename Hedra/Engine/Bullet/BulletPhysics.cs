@@ -532,7 +532,7 @@ namespace Hedra.Engine.Bullet
             }
         }
 
-        private static BvhTriangleMeshShape CreateTriangleShape(ICollection<uint> Indices, ICollection<System.Numerics.Vector3> Vertices)
+        public static BvhTriangleMeshShape CreateTriangleShape(ICollection<uint> Indices, ICollection<System.Numerics.Vector3> Vertices)
         {
             var triangleMesh = new TriangleIndexVertexArray();
             var indexedMesh = CreateIndexedMesh(Indices, Vertices);

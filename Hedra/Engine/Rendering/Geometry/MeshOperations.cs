@@ -16,8 +16,10 @@ namespace Hedra.Engine.Rendering.Geometry
         public static unsafe void FlatMesh(IList<uint> Indices, IList<Vector3> Vertices, IList<Vector3> Normals,
             IList<Vector4> Colors, IList<float> Extradata)
         {
-            var size = (int)(Allocator.Megabyte * 8f);
-            using (var allocator = new HeapAllocator(size))
+            var size = Indices.Count * sizeof(uint) + Vertices.Count * HedraSize.Vector3 +
+                       Normals.Count * HedraSize.Vector3 + Extradata.Count * sizeof(float) +
+                       Colors.Count * HedraSize.Vector4 + Allocator.Kilobyte * 64;
+            using (var allocator = new HeapAllocator(Allocator.Megabyte * 8))
             {
                 FlatMesh(allocator, Indices, Vertices, Normals, Colors, Extradata);
             }

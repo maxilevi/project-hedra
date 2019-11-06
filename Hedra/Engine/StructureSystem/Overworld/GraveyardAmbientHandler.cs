@@ -22,13 +22,13 @@ namespace Hedra.Engine.StructureSystem.Overworld
         private float _oldCementeryTime;
         private float _oldTime;
         private bool _shouldUpdateTime;
+        private TimeHandler _timeHandler;
         
         public GraveyardAmbientHandler(Graveyard Parent)
         {
+            _timeHandler = new TimeHandler(GraveyardDesign.GraveyardSkyTime, SoundType.DarkSound);
             _parent = Parent;
             _particles = new ParticleSystem();
-            GameManager.AfterSave += AfterSave;
-            GameManager.BeforeSave += BeforeSave;
         }
 
         public void Update()
@@ -46,32 +46,14 @@ namespace Hedra.Engine.StructureSystem.Overworld
             
             if(_inCementery && !wasInCementery)
             {
-                _cementeryTime = SkyManager.DayTime;
-                if(_cementeryTime < 12000) SkyManager.DayTime += 24000;
-                SkyManager.Enabled = false;
-                _targetCementeryTime = GraveyardDesign.GraveyardSkyTime;
-                _shouldUpdateTime = true;
-                SoundPlayer.PlayUISound(SoundType.DarkSound);
+                _timeHandler.Apply();
             }
             else if (!_inCementery && wasInCementery)
             {
-                _targetCementeryTime = _cementeryTime;
-                if(this._cementeryTime < 12000) _targetCementeryTime += 24000;
-                _shouldUpdateTime = true;
-                SkyManager.Enabled = false;
+                _timeHandler.Remove();
             }
 
-            if(_shouldUpdateTime)
-            {
-                
-                SkyManager.SetTime( Mathf.Lerp(SkyManager.DayTime, _targetCementeryTime, Time.DeltaTime * 2f) );
-                if( Math.Abs(SkyManager.DayTime - _targetCementeryTime) < 10 )
-                {
-                    _shouldUpdateTime = false;
-                    SkyManager.Enabled = true;
-                    if( SkyManager.DayTime > 24000) SkyManager.DayTime -= 24000;
-                }
-            }
+            _timeHandler.Update();
         }
         
         private void HandleParticles()
@@ -103,41 +85,11 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 }
             }
         }
-            
-        private void BeforeSave(object Invoker, EventArgs Args)
-        {
-            if(_inCementery)
-            {
-                _oldCementeryTime = SkyManager.DayTime;
-                SkyManager.DayTime = _cementeryTime;
-            }
-            _oldTime = float.MaxValue;
-            if (SkyManager.StackLength > 0)
-            {
-                _oldTime = SkyManager.PeekTime();
-                SkyManager.PopTime();
-            }
-        }
-        
-        private void AfterSave(object Invoker, EventArgs Args)
-        {
-            if(_inCementery)
-            {
-                SkyManager.DayTime = _oldCementeryTime;
-            }
-
-            if (_oldTime != float.MaxValue)
-            {
-                SkyManager.DayTime = _oldTime;
-                SkyManager.PushTime();
-            }
-        }
 
         public void Dispose()
         {
             _particles.Dispose();
-            GameManager.AfterSave -= AfterSave;
-            GameManager.BeforeSave -= BeforeSave;
+            _timeHandler.Dispose();
         }
     }
 }

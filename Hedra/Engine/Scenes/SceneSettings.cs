@@ -13,5 +13,7 @@ namespace Hedra.Engine.Scenes
         public bool IsNightLight { get; set; } = true;
         public Func<Vector3, IHumanoid> Npc1Creator { get; set; }
         public Func<Vector3, IHumanoid> Npc2Creator { get; set; }
+        public Func<Vector3, VertexData, BaseStructure> Structure1Creator { get; set; }
+        public Func<Vector3, VertexData, BaseStructure> Structure2Creator { get; set; }
     }
 }

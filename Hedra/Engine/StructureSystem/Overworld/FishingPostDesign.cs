@@ -351,7 +351,12 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             LightRadius = PointLight.DefaultRadius * 2,
             Npc1Creator = CreateFisherman,
-            Npc2Creator = CreateBoatMerchant
+            Npc2Creator = CreateBoatMerchant,
+            Structure2Creator = (P, V) =>
+            {
+                var box = Physics.BuildDimensionsBox(V) * 2;
+                return new PunchingBag(V.AverageVertices(), box);
+            }
         };
     }
 }
