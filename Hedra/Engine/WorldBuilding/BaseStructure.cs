@@ -23,7 +23,7 @@ namespace Hedra.Engine.WorldBuilding
     public abstract class BaseStructure : IDisposable, IStructure, ISearchable
     {
         private readonly List<BaseStructure> _children;
-        private readonly List<IHumanoid> _npcs;
+        private readonly List<IEntity> _npcs;
         public BaseStructure[] Children => _children.ToArray();
         public virtual Vector3 Position { get; set; }
         public bool Disposed { get; protected set; }
@@ -31,7 +31,7 @@ namespace Hedra.Engine.WorldBuilding
         protected BaseStructure(Vector3 Position)
         {
             this.Position = Position;
-            _npcs = new List<IHumanoid>();
+            _npcs = new List<IEntity>();
             _children = new List<BaseStructure>();
         }
         
@@ -45,7 +45,7 @@ namespace Hedra.Engine.WorldBuilding
             }
         }
 
-        public void AddNPCs(params IHumanoid[] NPCs)
+        public void AddNPCs(params IEntity[] NPCs)
         {
             for (var i = 0; i < NPCs.Length; ++i)
             {

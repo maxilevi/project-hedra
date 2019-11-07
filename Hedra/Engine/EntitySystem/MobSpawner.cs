@@ -280,6 +280,7 @@ namespace Hedra.Engine.EntitySystem
         Bear,
         Lich,
         Crow,
+        SkeletonKamikaze,
         TotalCount,
         None,
         Unknown

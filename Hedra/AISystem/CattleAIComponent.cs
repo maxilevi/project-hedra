@@ -51,7 +51,7 @@ namespace Hedra.AISystem
             base.Draw();
             if (GameSettings.DebugAI)
             {
-                DrawDebugCollision();
+                DrawDebugCollision(Parent);
                 if (!Herd.Enabled)
                     Roam.Draw();
                 else

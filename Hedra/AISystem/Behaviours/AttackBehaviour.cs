@@ -51,7 +51,7 @@ namespace Hedra.AISystem.Behaviours
         public void Draw()
         {
             if(Target == null) return;
-            BasicGeometry.DrawLine(Parent.Position, Target.Position, Vector4.One, 2);
+            BasicGeometry.DrawLine(Parent.Position + Vector3.UnitY, Target.Position + Vector3.UnitY, Vector4.One, 2);
             BasicGeometry.DrawPoint(Target.Position, Vector4.One);
         }
 

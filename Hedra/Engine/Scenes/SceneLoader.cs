@@ -101,7 +101,7 @@ namespace Hedra.Engine.Scenes
             PlaceNPCsWhenWorldReady(map[NPC2ColorCode], P => Settings.Npc2Creator(P), Structure);
         }
 
-        private static void PlaceNPCsWhenWorldReady(IEnumerable<VertexData> ScenePositions, Func<Vector3, IHumanoid> Create, CollidableStructure Structure)
+        private static void PlaceNPCsWhenWorldReady(IEnumerable<VertexData> ScenePositions, Func<Vector3, IEntity> Create, CollidableStructure Structure)
         {
             var positions = ScenePositions.Select(V => V.AverageVertices()).ToArray();
             DoWhenWorldReady(positions, P => P, P =>

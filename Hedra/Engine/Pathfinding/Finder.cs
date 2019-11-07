@@ -6,6 +6,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.EntitySystem;
 using System.Numerics;
+using Hedra.Engine.Scenes;
 
 namespace Hedra.Engine.Pathfinding
 {

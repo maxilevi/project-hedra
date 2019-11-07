@@ -23,6 +23,11 @@ namespace Hedra.AISystem
 
         protected void DrawDebugCollision()
         {
+            DrawDebugCollision(Parent);
+        }
+
+        public static void DrawDebugCollision(IEntity Parent)
+        {
             var grid = TraverseStorage.Instance[Parent];
             for (var x = -grid.DimX / 2; x < grid.DimX / 2; x++)
             {

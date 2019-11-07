@@ -1,6 +1,7 @@
 using System.Numerics;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
+using Hedra.Game;
 using Hedra.Rendering;
 
 namespace Hedra.Engine.StructureSystem.Overworld
@@ -14,14 +15,25 @@ namespace Hedra.Engine.StructureSystem.Overworld
             OnCollision += E =>
             {
                 if (E != LocalPlayer.Instance) return;
-                if(!_handler.IsActive)
+                if (!_handler.IsActive)
+                {
                     _handler.Apply();
+                    GameSettings.DepthEffect = true;
+                }
                 else
-                    _handler.Remove();
+                {
+                    Reset();
+                }
             };
             UpdateManager.Add(this);
         }
 
+        public void Reset()
+        {
+            _handler.Remove();
+            GameSettings.DepthEffect = false;
+        }
+        
         public void Update()
         {
             _handler.Update();

@@ -592,7 +592,19 @@ namespace Hedra.Engine.Generation
                 return region.Generation.GetMaxHeight(Point.X, Point.Z) < Engine.BiomeSystem.BiomePool.SeaLevel
                     || region.Generation.RiverAtPoint(Point.X, Point.Z) > 0;
             }
-            while (IsWater(point))
+
+            var structures = StructureHandler.StructureItems;
+            bool IsInsideStructure(Vector3 Point)
+            {
+                for (var i = 0; i < structures.Length; ++i)
+                {
+                    if ((structures[i].Position - Point).LengthSquared() < structures[i].Radius * structures[i].Radius)
+                        return true;
+                }
+
+                return false;
+            }
+            while (IsWater(point) || IsInsideStructure(point))
             {
                 point += 
                     new Vector3( (192f * rng.NextFloat() - 96f) * Chunk.BlockSize, 0, (192f * rng.NextFloat() - 96f) * Chunk.BlockSize);

@@ -231,6 +231,11 @@ namespace Hedra.Engine.Rendering.Effects
                 FinalFbo.Unbind();
             }
 
+            if (GameSettings.DepthEffect)
+            {
+                
+            }
+
             if (GameSettings.FXAA)
                 DrawFXAAQuad(FinalFbo.TextureId[0], GameSettings.Bloom ? AdditiveFbo.TextureId[0] : 0);
             else

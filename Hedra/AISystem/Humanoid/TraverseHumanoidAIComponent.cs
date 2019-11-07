@@ -2,6 +2,8 @@ using System;
 using Hedra.AISystem.Behaviours;
 using Hedra.EntitySystem;
 using System.Numerics;
+using Hedra.Engine.Rendering;
+using Hedra.Game;
 
 namespace Hedra.AISystem.Humanoid
 {
@@ -32,6 +34,16 @@ namespace Hedra.AISystem.Humanoid
                 OnTargetPointReached();
                 IsMoving = false;
             });
+        }
+
+        public override void Draw()
+        {
+            base.Draw();
+            if(!GameSettings.DebugAI) return;
+            BasicAIComponent.DrawDebugCollision(Parent);
+            if(!_traverse.HasTarget) return;
+            BasicGeometry.DrawLine(Parent.Position + Vector3.UnitY, _traverse.Target + Vector3.UnitY, Vector4.One, 2);
+            BasicGeometry.DrawPoint(_traverse.Target, Vector4.One);
         }
 
         protected void CancelMovement()

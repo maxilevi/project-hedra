@@ -227,6 +227,7 @@
     <Compile Include="AISystem\FearAIComponent.cs" />
     <Compile Include="AISystem\FriendlyAIComponent.cs" />
     <Compile Include="AISystem\HostileAIComponent.cs" />
+    <Compile Include="AISystem\Humanoid\DungeonAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\FishermanAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\NPCAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\RangedAIComponent.cs" />
@@ -395,9 +396,11 @@
     <Compile Include="Engine\Scenes\SceneExtensions.cs" />
     <Compile Include="Engine\Scenes\SceneLoader.cs" />
     <Compile Include="Engine\Scenes\SceneSettings.cs" />
+    <Compile Include="Engine\Scenes\WaypointGraph.cs" />
+    <Compile Include="Engine\Scenes\WaypointLoader.cs" />
     <Compile Include="Engine\StructureSystem\CollisionTrigger.cs" />
     <Compile Include="Engine\StructureSystem\Lever.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\Dungeon.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\Dungeon0.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\Dungeon0Trigger.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonBuilder.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\Dungeon0Design.cs" />

@@ -11,13 +11,14 @@ using Hedra.Components.Effects;
 using Hedra.Engine.Game;
 using System.Linq;
 using System.Numerics;
+using Hedra.Engine.Scenes;
 using Hedra.Numerics;
 
 namespace Hedra.AISystem.Behaviours
 {
     public class TraverseBehaviour : Behaviour
     {
-        
+        public WaypointGraph WaypointGraph { get; }
         protected WalkBehaviour Walk { get; }
         private Vector2[] _currentPath;
         private int _currentIndex;

@@ -469,6 +469,11 @@ namespace Hedra.User
                     GameSettings.DebugAI = !GameSettings.DebugAI;
                 }
 
+                if (Parts[0] == "debpath")
+                {
+                    GameSettings.DebugNavMesh = !GameSettings.DebugNavMesh;
+                }
+
                 if (Parts[0] == "fisherman")
                 {
                     var fisherman = World.WorldBuilding.SpawnHumanoid(HumanType.Fisherman, Caster.Position + Caster.Orientation * 32);

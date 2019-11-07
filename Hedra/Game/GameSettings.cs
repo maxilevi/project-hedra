@@ -52,6 +52,8 @@ namespace Hedra.Game
         public static bool BlurFilter { get; set; } = false;
         public static bool DebugAI { get; set; }
         public static bool DebugFrustum { get; set; }
+        public static bool DepthEffect { get; set; }
+        public static bool DebugNavMesh { get; set; }
         public static bool NewWorld { get; set; }
         public static bool DarkEffect = false;
         public static bool DistortEffect = false;
