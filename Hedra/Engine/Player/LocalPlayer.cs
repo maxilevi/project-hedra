@@ -173,6 +173,15 @@ namespace Hedra.Engine.Player
                     entities[i].Draw();
                 }
             }
+
+            if (GameSettings.DebugNavMesh)
+            {
+                var structs = World.StructureHandler.StructureItems;
+                for (var i = 0; i < structs.Length; ++i)
+                {
+                    structs[i].Draw();
+                }
+            }
         }
 
         public override void Update()

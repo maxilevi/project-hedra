@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Core;
@@ -181,7 +182,7 @@ namespace Hedra.Engine.Rendering.Geometry
             return IndexVertices(Mesh.Indices, Mesh.Vertices, Mesh.Colors, Mesh.Normals);
         }
         
-        private static Dictionary<Vector3, Triangle[]> IndexVertices(IList<uint> Indices, IList<Vector3> Vertices, IList<Vector4> Colors, IList<Vector3> Normals)
+        public static Dictionary<Vector3, Triangle[]> IndexVertices(IList<uint> Indices, IList<Vector3> Vertices, IList<Vector4> Colors, IList<Vector3> Normals)
         {
             var map = new Dictionary<Vector3, HashSet<Triangle>>();
             var finalMap = new Dictionary<Vector3, Triangle[]>();
@@ -242,7 +243,7 @@ namespace Hedra.Engine.Rendering.Geometry
             }
         }
         
-        private struct Triangle
+        public struct Triangle
         {
             public Vertex P1;
             public Vertex P2;
@@ -258,9 +259,13 @@ namespace Hedra.Engine.Rendering.Geometry
                     return new[] {P2, P3};
                 return null;
             }
+
+            public Vertex this[int Index] => Index == 0 ? P1 :
+                Index == 1 ? P2 :
+                Index == 2 ? P3 : throw new ArgumentOutOfRangeException();
         }
         
-        private struct Vertex
+        public struct Vertex
         {
             public Vector3 Position;
             public Vector4 Color;

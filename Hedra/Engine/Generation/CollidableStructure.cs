@@ -16,6 +16,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Engine.Rendering.UI;
 using System.Numerics;
+using Hedra.Engine.Scenes;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem;
 using Hedra.Numerics;
@@ -41,6 +42,7 @@ namespace Hedra.Engine.Generation
         public Vector2 MapPosition { get; set; }
         public RoundedPlateau Mountain { get; }
         public BaseStructure WorldObject { get; }
+        public WaypointGraph Waypoints { get; set; }
         public float Radius { get; private set; }
         public StructureDesign Design { get; }
         public AttributeArray Parameters { get; }
@@ -62,6 +64,11 @@ namespace Hedra.Engine.Generation
             this._instances = new HashSet<InstanceData>();
         }
 
+        public void Draw()
+        {
+            Waypoints?.Draw();
+        }
+        
         public void Setup()
         {
             World.WorldBuilding.SetupStructure(this);

@@ -9108,6 +9108,10 @@
       <Link>Assets\Env\Structures\Dungeon\Dungeon0-Icon.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon0\Dungeon0-Pathfinding.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon0-Pathfinding.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Structures\Dungeon0\Dungeon0-Scene.ply">
       <Link>Assets\Env\Structures\Dungeon\Dungeon0-Scene.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

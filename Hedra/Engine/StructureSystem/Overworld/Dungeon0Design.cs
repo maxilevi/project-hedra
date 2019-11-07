@@ -40,7 +40,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             base.DoBuild(Structure, Rotation, Translation, Rng);
             SceneLoader.LoadIfExists(Structure, "Assets/Env/Structures/Dungeon/Dungeon0.ply", Vector3.One, Rotation * Translation, Settings);
-            AddMembersToStructure((Dungeon0)Structure.WorldObject, Structure);
+            AddMembersToStructure((Dungeon0)Structure.WorldObject, Structure, Rotation, Translation);
             
             AddDoor(AssetManager.PLYLoader($"Assets/Env/Structures/Dungeon/Dungeon0-Door0.ply", Vector3.One), Dungeon0Cache.Doors[0], Rotation, Structure, true, false);
             AddDoor(AssetManager.PLYLoader($"Assets/Env/Structures/Dungeon/Dungeon0-Door1.ply", Vector3.One), Dungeon0Cache.Doors[1], Rotation, Structure, false, false);
@@ -51,10 +51,12 @@ namespace Hedra.Engine.StructureSystem.Overworld
             AddDoor(AssetManager.PLYLoader($"Assets/Env/Structures/Dungeon/Dungeon0-Door6.ply", Vector3.One), Dungeon0Cache.Doors[6], Rotation, Structure, false, true);
         }
 
-        private static void AddMembersToStructure(Dungeon0 Dungeon, CollidableStructure Structure)
+        private static void AddMembersToStructure(Dungeon0 Dungeon, CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation)
         {
             Dungeon.Trigger = (Dungeon0Trigger) Structure.WorldObject.Children.First(T => T is CollisionTrigger);
             //Dungeon.Boss = Structure.WorldObject.n
+            
+            Structure.Waypoints = WaypointLoader.Load("Assets/Env/Structures/Dungeon/Dungeon0-Pathfinding.ply", Vector3.One, Rotation * Translation);
         }
 
         protected override string GetDescription(Dungeon0 Structure) => throw new System.NotImplementedException();
