@@ -425,9 +425,9 @@ namespace Hedra.Engine.Bullet
 
         public Vector3 LinearVelocity => _body.LinearVelocity.Compatible();
 
-        public bool Raycast(Vector3 End)
+        public bool StaticRaycast(Vector3 End)
         {
-            return BulletPhysics.Raycast(RigidbodyPosition.Compatible(), End.Compatible());
+            return BulletPhysics.Raycast(RigidbodyPosition.Compatible() + Vector3.UnitY.Compatible() * Parent.Model.Height * .5f, End.Compatible(), CollisionFilterGroups.StaticFilter | BulletPhysics.TerrainFilter);
         }
         
         private float Timestep => Time.IndependentDeltaTime * (UseTimescale ? Time.TimeScale : 1);

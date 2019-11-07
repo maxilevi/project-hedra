@@ -156,9 +156,7 @@ namespace Hedra.Engine.Bullet
 
                     if (!information.IsInSimulation)
                         AddToSimulation(_dynamicBodies[i], information);
-#if DEBUG
                     AssertIsNotFailingThroughFloor(_dynamicBodies[i]);
-#endif
                 }
                 else
                 {
@@ -578,13 +576,16 @@ namespace Hedra.Engine.Bullet
             _currentPairs = temp;
         }
         
-        public static bool Raycast(Vector3 Source, Vector3 End)
+        public static bool Raycast(Vector3 Source, Vector3 End, CollisionFilterGroups Mask)
         {
             lock (_bulletLock)
             {
                 var src = Source;
                 var end = End;
-                var callback = new ClosestRayResultCallback(ref src, ref end);
+                var callback = new ClosestRayResultCallback(ref src, ref end)
+                {
+                    CollisionFilterMask = (int) Mask
+                };
                 try
                 {
                     BulletPhysics.Raycast(ref Source, ref End, callback);
