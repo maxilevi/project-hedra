@@ -198,6 +198,7 @@
     <Compile Include="AISystem\Behaviours\BaseBeetleAttackBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\Behaviour.cs" />
     <Compile Include="AISystem\Behaviours\ChargeBehaviour.cs" />
+    <Compile Include="AISystem\Behaviours\DungeonTraverseBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\EscapeBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\FleeBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\FollowBehaviour.cs" />
@@ -227,7 +228,6 @@
     <Compile Include="AISystem\FearAIComponent.cs" />
     <Compile Include="AISystem\FriendlyAIComponent.cs" />
     <Compile Include="AISystem\HostileAIComponent.cs" />
-    <Compile Include="AISystem\Humanoid\DungeonAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\FishermanAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\NPCAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\RangedAIComponent.cs" />
@@ -253,6 +253,7 @@
     <Compile Include="AISystem\Mob\CowAIComponent.cs" />
     <Compile Include="AISystem\Mob\CowFarmAIComponent.cs" />
     <Compile Include="AISystem\Mob\CrabAIComponent.cs" />
+    <Compile Include="AISystem\Mob\DungeonMobAIComponent.cs" />
     <Compile Include="AISystem\Mob\FoxAIComponent.cs" />
     <Compile Include="AISystem\Mob\GiantBeetleAIComponent.cs" />
     <Compile Include="AISystem\Mob\GoatAIComponent.cs" />

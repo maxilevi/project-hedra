@@ -18,7 +18,6 @@ namespace Hedra.AISystem.Behaviours
 {
     public class TraverseBehaviour : Behaviour
     {
-        public WaypointGraph WaypointGraph { get; }
         protected WalkBehaviour Walk { get; }
         private Vector2[] _currentPath;
         private int _currentIndex;
@@ -40,9 +39,43 @@ namespace Hedra.AISystem.Behaviours
                 Parent.Physics.UpdateColliderList = true;
             }
             _reached = true;
-            TraverseStorage.Instance.CreateIfNecessary(Parent, OnGridUpdated);
+            CreateGraph();
         }
 
+        protected virtual void CreateGraph()
+        {
+            TraverseStorage.Instance.CreateIfNecessary(Parent, OnGridUpdated);
+        }
+        
+        protected virtual void UpdateGraph()
+        {
+            TraverseStorage.Instance.Update(Parent);
+        }
+        
+        protected virtual void RebuildGraph()
+        {
+            /* Force the rebuild because its stuck */
+            TraverseStorage.Instance.RebuildIfNecessary(Parent, Parent.IsStuck);
+        }
+
+        protected virtual void DisposeGraph()
+        {
+            TraverseStorage.Instance.RemoveIfNecessary(Parent, OnGridUpdated);
+        }
+
+        protected virtual void ForceRebuildGraph()
+        {
+            TraverseStorage.Instance.ResetTime(Parent);
+            TraverseStorage.Instance.RebuildIfNecessary(Parent, true);
+        }
+        protected virtual Vector3 CalculateTargetPoint(Vector2 PathPoint)
+        {
+            var centeredOffset =
+                (PathPoint -
+                 new Vector2((int) (CurrentGrid.DimX / 2f), (int) (CurrentGrid.DimY / 2f))).ToVector3();
+            return centeredOffset * Chunk.BlockSize + _origin;
+        }
+        
         public override void Update()
         {
             if (!_reached && _canReach)
@@ -59,7 +92,7 @@ namespace Hedra.AISystem.Behaviours
             Walk.Update();
             if (_canReach)
             {
-                TraverseStorage.Instance.Update(Parent);
+                UpdateGraph();
             }
             else
             {
@@ -75,13 +108,11 @@ namespace Hedra.AISystem.Behaviours
 
         private void RebuildAndResetPathIfNecessary()
         {
-            TraverseStorage.Instance.RebuildIfNecessary(Parent, Parent.IsStuck); /* Force the rebuild because its stuck */
+            RebuildGraph();
             RebuildPathIfNecessary();
             if (_currentIndex < _currentPath.Length)
             {
-                Walk.SetTarget(
-                    (_currentPath[_currentIndex] - new Vector2((int) (CurrentGrid.DimX / 2f),
-                         (int) (CurrentGrid.DimY / 2f))).ToVector3() * Chunk.BlockSize + _origin,
+                Walk.SetTarget(CalculateTargetPoint(_currentPath[_currentIndex]),
                     () =>
                     {
                         _currentIndex++;
@@ -113,11 +144,10 @@ namespace Hedra.AISystem.Behaviours
             }
         }
 
-        private void UpdatePath()
+        protected virtual Vector2[] DoUpdatePath(Vector3 Origin, out bool CanReach)
         {
-            if (_reached || !_canReach) return;
-            _origin = Parent.Position;
-            var target = (Target.Xz() - _origin.Xz()) * new Vector2(1f / Chunk.BlockSize, 1f / Chunk.BlockSize);
+            CanReach = true;
+            var target = (Target.Xz() - Origin.Xz()) * new Vector2(1f / Chunk.BlockSize, 1f / Chunk.BlockSize);
             var center = new Vector2((int)(CurrentGrid.DimX / 2f), (int)(CurrentGrid.DimY / 2f));
             var end = center + new Vector2((int)target.X, (int)target.Y);
             var clampedEnd = new Vector2(Math.Max(Math.Min(end.X, CurrentGrid.DimX - 1), 0), Math.Max(Math.Min(end.Y, CurrentGrid.DimY - 1), 0)); 
@@ -126,45 +156,31 @@ namespace Hedra.AISystem.Behaviours
             if (float.IsInfinity(CurrentGrid.GetCellCost(clampedEnd))) 
                 clampedEnd = Finder.NearestUnblockedCell(CurrentGrid, clampedEnd, unblockedCenter);
             
-            if (unblockedCenter == center)
-                _currentPath = Finder.GetPath(CurrentGrid, center, clampedEnd);
-            else
-                _currentPath = new []{ unblockedCenter };
-            _currentIndex = 0;
+            var currentPath = (Vector2[]) null;
+            currentPath = unblockedCenter == center 
+                ? Finder.GetPath(CurrentGrid, center, clampedEnd) 
+                : new []{ unblockedCenter };
 
-            if(_currentPath.Length == 1 && _currentPath[0] == center)
+            if(currentPath.Length == 1 && currentPath[0] == center)
             {
-                _lastCanNotReachPosition = Target;
-                _canReach = false;
+                CanReach = false;
             }
-
+/*
             _speedBonus = CurrentGrid.BlockedCellCount < CurrentGrid.TotalCellCount * .25f && HasTarget && (Target - Parent.Position).Xz().LengthSquared() > 24*24
                 ? 1.15f
                 : 1f;
-            
-            #region DEBUG
-            if (Parent.Type != "Boar" || true) return;
-            
-            //Debug
-            
-            var bmp1 = new Bitmap(CurrentGrid.DimX, CurrentGrid.DimY);
-            for (var x = 0; x < bmp1.Width; ++x)
-            {
-                for (var y = 0; y < bmp1.Width; ++y)
-                {
-                    bmp1.SetPixel(x, y, float.IsInfinity(CurrentGrid.GetCellCost(new Vector2(x,y))) ? Color.Red : Color.LawnGreen);
-                } 
-            }
-
-            for (var i = 0; i < _currentPath.Length; ++i)
-            {
-                bmp1.SetPixel((int)_currentPath[i].X, (int)_currentPath[i].Y, Color.CornflowerBlue);
-            }
-            bmp1.SetPixel((int)clampedEnd.X, (int)clampedEnd.Y, Color.Black);
-            bmp1.SetPixel((int)unblockedCenter.X, (int)unblockedCenter.Y, Color.White);
-            bmp1.SetPixel((int)center.X, (int)center.Y, Color.Violet);
-            bmp1.Save(GameLoader.AppPath + $"/test{Parent.MobId}.png");
-            #endregion
+                */
+            return currentPath;
+        }
+        
+        protected void UpdatePath()
+        {
+            if (_reached || !_canReach) return;
+            _origin = Parent.Position;
+            _currentIndex = 0;
+            _currentPath = DoUpdatePath(_origin, out var canReach);
+            if (!canReach) _lastCanNotReachPosition = Target;
+            _canReach = canReach;
         }
 
         public void SetTarget(Vector3 Position, Action Callback = null)
@@ -173,8 +189,7 @@ namespace Hedra.AISystem.Behaviours
             Target = Position;
             _callback = Callback;
             _reached = false;
-            TraverseStorage.Instance.ResetTime(Parent);
-            TraverseStorage.Instance.RebuildIfNecessary(Parent, true);
+            ForceRebuildGraph();
             RebuildPathIfNecessary();
         }
 
@@ -213,7 +228,34 @@ namespace Hedra.AISystem.Behaviours
         public override void Dispose()
         {
             Walk.Dispose();
-            TraverseStorage.Instance.RemoveIfNecessary(Parent, OnGridUpdated);
+            DisposeGraph();
         }
+        
     }
 }
+
+#region DEBUG
+/*
+if (Parent.Type != "Boar" || true) return currentPath;
+
+//Debug
+
+var bmp1 = new Bitmap(CurrentGrid.DimX, CurrentGrid.DimY);
+for (var x = 0; x < bmp1.Width; ++x)
+{
+    for (var y = 0; y < bmp1.Width; ++y)
+    {
+        bmp1.SetPixel(x, y, float.IsInfinity(CurrentGrid.GetCellCost(new Vector2(x,y))) ? Color.Red : Color.LawnGreen);
+    } 
+}
+
+for (var i = 0; i < _currentPath.Length; ++i)
+{
+    bmp1.SetPixel((int)_currentPath[i].X, (int)_currentPath[i].Y, Color.CornflowerBlue);
+}
+bmp1.SetPixel((int)clampedEnd.X, (int)clampedEnd.Y, Color.Black);
+bmp1.SetPixel((int)unblockedCenter.X, (int)unblockedCenter.Y, Color.White);
+bmp1.SetPixel((int)center.X, (int)center.Y, Color.Violet);
+bmp1.Save(GameLoader.AppPath + $"/test{Parent.MobId}.png");
+*/
+#endregion

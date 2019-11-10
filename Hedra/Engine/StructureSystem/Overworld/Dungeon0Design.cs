@@ -3,6 +3,7 @@ using System.Linq;
 using System.Numerics;
 using Hedra.AISystem;
 using Hedra.AISystem.Humanoid;
+using Hedra.AISystem.Mob;
 using Hedra.BiomeSystem;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
@@ -74,10 +75,19 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var skeleton = default(IEntity);
             var spawnKamikazeSkeleton = Utils.Rng.Next(1, 2) == 1;
             skeleton = spawnKamikazeSkeleton
-                ? World.SpawnMob(MobType.SkeletonKamikaze, Position, Utils.Rng)
+                ? SpawnKamikazeSkeleton(Position)
                 : NormalPatrolSkeleton(Position);
             skeleton.Position = Position;
             return skeleton;
+        }
+
+        private static IEntity SpawnKamikazeSkeleton(Vector3 Position)
+        {
+            var mob = World.SpawnMob(MobType.SkeletonKamikaze, Position, Utils.Rng);
+            mob.Position = Position;
+            mob.RemoveComponent<BasicAIComponent>();
+            mob.AddComponent(new DungeonMobAIComponent(mob));
+            return mob;
         }
 
         private static IEntity NormalPatrolSkeleton(Vector3 Position)

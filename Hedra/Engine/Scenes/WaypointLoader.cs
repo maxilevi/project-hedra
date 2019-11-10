@@ -17,30 +17,32 @@ namespace Hedra.Engine.Scenes
             if(groups.Length != 1) throw new ArgumentOutOfRangeException("Pathfinding meshes need to be a convex graph");
             var indexed = MeshAnalyzer.IndexVertices(model.Indices, model.Vertices, model.Colors, model.Normals);
             var graph = new WaypointGraph();
-            var visited = new HashSet<MeshAnalyzer.Triangle>();
-            var queue = new Queue<MeshAnalyzer.Triangle>();
-            queue.Enqueue(indexed.Values.First().First());
-            while (queue.Count > 0)
+            var triangles = indexed.Values.SelectMany(T => T).ToArray();
+            for (var i = 0; i < triangles.Length; ++i)
             {
-                var w = queue.Dequeue();
-                if(visited.Contains(w)) continue;
-                visited.Add(w);
-                var from = FromTriangle(w, Transformation);
-                graph.AddVertex(from);
-                for (var i = 0; i < 3; ++i)
+                var tri = triangles[i];
+                var midpoint = FromTriangle(tri, Transformation);
+                for (var j = 0; j < 3; ++j)
                 {
-                    var adjacents = indexed[w[i].Position];
-                    for (var j = 0; j < adjacents.Length; ++j)
+                    var connected = tri.GetConnected(tri[j].Position);
+                    var vertex = FromVertex(tri[j], Transformation);
+                    graph.AddEdge(midpoint, vertex);
+                    for (var k = 0; k < connected.Length; ++k)
                     {
-                        var x = adjacents[j];
-                        if(visited.Contains(x)) continue;
-                        var to = FromTriangle(x, Transformation);
-                        graph.AddEdge(from, to);
-                        queue.Enqueue(x);
+                        graph.AddEdge(vertex, FromVertex(connected[k], Transformation));
                     }
                 }
             }
             return graph;
+        }
+
+        private static Waypoint FromVertex(MeshAnalyzer.Vertex Vertex, Matrix4x4 Transformation)
+        {
+            return new Waypoint
+            {
+                Position = Vector3.Transform(Vertex.Position, Transformation),
+                Size = 4
+            };
         }
 
         private static Waypoint FromTriangle(MeshAnalyzer.Triangle Triangle, Matrix4x4 Transformation)

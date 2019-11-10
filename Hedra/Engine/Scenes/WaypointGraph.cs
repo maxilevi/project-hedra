@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Hedra.Engine.Rendering;
+using Hedra.Framework;
 using Hedra.Game;
 using Hedra.Rendering;
 
@@ -42,26 +44,86 @@ namespace Hedra.Engine.Scenes
         {
             if (!GameSettings.DebugNavMesh) return;
             var vertices = Vertices;
-            var visited = new HashSet<Waypoint>();
             for (var i = 0; i < vertices.Length; ++i)
             {
-                var v = vertices[i];
-                if(visited.Contains(v)) continue;
-                
-                visited.Add(v);
-                BasicGeometry.DrawPoint(v.Position, Colors.Red);
-                var adjacents = Adjacent(v);
-                for (var j = 0; j < adjacents.Length; ++j)
-                {
-                    var w = adjacents[j];
-                    if(visited.Contains(w)) continue;
-                    
-                    visited.Add(w);
-                    BasicGeometry.DrawLine(v.Position, w.Position, Colors.Red, 2f);
-                    BasicGeometry.DrawPoint(w.Position, Colors.Red);
-                }
+                BasicGeometry.DrawPoint(vertices[i].Position, Colors.Red, 4f);
+            }
+            var edges = Edges;
+            for (var i = 0; i < edges.Length; ++i)
+            {
+                BasicGeometry.DrawLine(edges[i].One.Position, edges[i].Two.Position, Colors.Red, 2f);
             }
         }
+
+        private Pair<Waypoint, Waypoint>[] GetEdges()
+        {
+            var edges = new HashSet<Pair<Waypoint, Waypoint>>();
+            var vertices = Vertices;
+            for (var i = 0; i < vertices.Length; ++i)
+            {
+                var adjacent = Adjacent(vertices[i]);
+                for (var j = 0; j < adjacent.Length; ++j)
+                {
+                    var pair = new Pair<Waypoint, Waypoint>(vertices[i], adjacent[j]);
+                    if(!edges.Contains(pair) && !edges.Contains(pair.Inverted()))
+                        edges.Add(pair);
+                }
+            }
+
+            return edges.ToArray();
+        }
+
+        public Waypoint GetNearestVertex(Vector3 Point)
+        {
+            var vertices = Vertices;
+            Waypoint point = default;
+            float dist = float.MaxValue;
+            for (var i = 0; i < vertices.Length; ++i)
+            {
+                var newDist = (vertices[i].Position - Point).LengthSquared();
+                if (newDist < dist)
+                {
+                    point = vertices[i];
+                    dist = newDist;
+                }
+            }
+            return point;
+        }
+
+        private Waypoint[] ReconstructPath(Dictionary<Waypoint, Waypoint> Parents, Waypoint Source, Waypoint Target)
+        {
+            var path = new Stack<Waypoint>();
+            var current = Target;
+            while (current.Position != Source.Position)
+            {
+                path.Push(current);
+                current = Parents[current];
+            }
+            return path.ToArray();
+        }
+        
+        public Waypoint[] GetShortestPath(Waypoint Source, Waypoint Target)
+        {
+            if (Source.Position == Target.Position) return new[] { Source };
+            var parents = new Dictionary<Waypoint, Waypoint>();
+            var queue = new Queue<Waypoint>();
+            parents.Add(Source, default);
+            queue.Enqueue(Source);
+            while (queue.Count > 0)
+            {
+                var v = queue.Dequeue();
+                foreach (var w in Adjacent(v))
+                {
+                    if(parents.ContainsKey(w)) continue;
+                    parents.Add(w, v);
+                    if (w.Position == Target.Position) return ReconstructPath(parents, Source, Target);
+                    queue.Enqueue(w);
+                }
+            }
+            throw new ArgumentException("Waypoint is unreachable");
+        }
+        
+        public Pair<Waypoint, Waypoint>[] Edges => GetEdges();
 
         public Waypoint[] Vertices => _adjacencyList.Keys.ToArray();
     }

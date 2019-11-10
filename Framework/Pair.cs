@@ -10,5 +10,7 @@ namespace Hedra.Framework
         
         public T One => base.Item1;
         public U Two => base.Item2;
+        
+        public Pair<U, T> Inverted() => new Pair<U, T>(Two, One);
     }
 }
