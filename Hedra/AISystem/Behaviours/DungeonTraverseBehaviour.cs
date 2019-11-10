@@ -14,6 +14,7 @@ namespace Hedra.AISystem.Behaviours
         protected WaypointGraph Graph { get; set; }
         public DungeonTraverseBehaviour(IEntity Parent, bool UseCollision = false) : base(Parent, UseCollision)
         {
+            Parent.Physics.CollidesWithEntities = false;
         }
 
         protected override void CreateGraph()

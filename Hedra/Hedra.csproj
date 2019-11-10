@@ -198,6 +198,8 @@
     <Compile Include="AISystem\Behaviours\BaseBeetleAttackBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\Behaviour.cs" />
     <Compile Include="AISystem\Behaviours\ChargeBehaviour.cs" />
+    <Compile Include="AISystem\Behaviours\DungeonHostileBehaviour.cs" />
+    <Compile Include="AISystem\Behaviours\DungeonRoamBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\DungeonTraverseBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\EscapeBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\FleeBehaviour.cs" />
@@ -224,10 +226,14 @@
     <Compile Include="AISystem\Behaviours\TrollAttackBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\WalkBehaviour.cs" />
     <Compile Include="AISystem\CattleAIComponent.cs" />
+    <Compile Include="AISystem\DualAIComponent.cs" />
     <Compile Include="AISystem\FarmAnimalAIComponent.cs" />
     <Compile Include="AISystem\FearAIComponent.cs" />
     <Compile Include="AISystem\FriendlyAIComponent.cs" />
     <Compile Include="AISystem\HostileAIComponent.cs" />
+    <Compile Include="AISystem\Humanoid\DungeonRangedAIComponent.cs" />
+    <Compile Include="AISystem\Humanoid\DungeonMageAIComponent.cs" />
+    <Compile Include="AISystem\Humanoid\DungeonMeleeAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\FishermanAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\NPCAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\RangedAIComponent.cs" />
@@ -253,7 +259,7 @@
     <Compile Include="AISystem\Mob\CowAIComponent.cs" />
     <Compile Include="AISystem\Mob\CowFarmAIComponent.cs" />
     <Compile Include="AISystem\Mob\CrabAIComponent.cs" />
-    <Compile Include="AISystem\Mob\DungeonMobAIComponent.cs" />
+    <Compile Include="AISystem\Mob\DungeonSkeletonKamikazeAIComponent.cs" />
     <Compile Include="AISystem\Mob\FoxAIComponent.cs" />
     <Compile Include="AISystem\Mob\GiantBeetleAIComponent.cs" />
     <Compile Include="AISystem\Mob\GoatAIComponent.cs" />
@@ -401,8 +407,10 @@
     <Compile Include="Engine\Scenes\WaypointLoader.cs" />
     <Compile Include="Engine\StructureSystem\CollisionTrigger.cs" />
     <Compile Include="Engine\StructureSystem\Lever.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\AnimableInteractableStructure.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\Dungeon0.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\Dungeon0Trigger.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\Dungeon0TimeTrigger.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\Dungeon0MobAITrigger.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonBuilder.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\Dungeon0Design.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\FishingPost.cs" />
@@ -411,6 +419,7 @@
     <Compile Include="Engine\StructureSystem\Overworld\SpawnCampfire.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\SpawnCampfireDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\TimeHandler.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\Torch.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\GenericBuilderWithNPC.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\GenericNPCSettings.cs" />
     <Compile Include="Engine\Windowing\GLEnums.cs" />
@@ -9051,6 +9060,18 @@
     </Content>
     <Content Include="..\project-hedra-assets\Objects\FishHook.ply">
       <Link>Assets\Env\Objects\FishHook.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Objects\Lever-Colliders.ply">
+      <Link>Assets\Env\Objects\Lever-Colliders.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Objects\LeverActivate.dae">
+      <Link>Assets\Env\Objects\LeverActivate.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Objects\LeverIdle.dae">
+      <Link>Assets\Env\Objects\LeverIdle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Objects\Portal-Icon.ply">

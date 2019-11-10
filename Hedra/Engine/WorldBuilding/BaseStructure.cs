@@ -24,6 +24,13 @@ namespace Hedra.Engine.WorldBuilding
     {
         private readonly List<BaseStructure> _children;
         private readonly List<IEntity> _npcs;
+
+        protected BaseStructure(List<BaseStructure> Children, List<IEntity> Npcs)
+        {
+            _children = Children;
+            _npcs = Npcs;
+        }
+
         public BaseStructure[] Children => _children.ToArray();
         public virtual Vector3 Position { get; set; }
         public bool Disposed { get; protected set; }
@@ -43,6 +50,18 @@ namespace Hedra.Engine.WorldBuilding
                     throw new ArgumentNullException($"Cannot add a null children");
                 _children.Add(Children[i]);
             }
+        }
+
+        public T Search<T>() where T : BaseStructure
+        {
+            for (var i = 0; i < _children.Count; ++i)
+            {
+                if (_children[i] is T) return (T)_children[i];
+                var recursive = _children[i].Search<T>();
+                if (recursive != null) return recursive;
+            }
+
+            return null;
         }
 
         public void AddNPCs(params IEntity[] NPCs)

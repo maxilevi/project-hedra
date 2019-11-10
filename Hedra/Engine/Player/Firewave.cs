@@ -50,7 +50,7 @@ namespace Hedra.Engine.Player
             SkillUtils.DoNearby(_owner, Distance, Entity =>
             {
                 var direction = (Entity.Position - _owner.Position).Xz().ToVector3().NormalizedFast();
-                Entity.Physics.ApplyImpulse(direction * 96 * _charge * 2f);
+                Entity.Physics.ApplyImpulse(direction * 96 * _charge * 1.5f);
             });
         }
         

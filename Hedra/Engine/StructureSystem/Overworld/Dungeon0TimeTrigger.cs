@@ -6,10 +6,10 @@ using Hedra.Rendering;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
-    public class Dungeon0Trigger : CollisionTrigger, IUpdatable
+    public class Dungeon0TimeTrigger : CollisionTrigger, IUpdatable
     {
         private readonly TimeHandler _handler;
-        public Dungeon0Trigger(Vector3 Position, VertexData Mesh) : base(Position, Mesh)
+        public Dungeon0TimeTrigger(Vector3 Position, VertexData Mesh) : base(Position, Mesh)
         {
             _handler = new TimeHandler(0);
             OnCollision += E =>

@@ -14,6 +14,7 @@ using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
 using System.Numerics;
+using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.Framework;
 using Hedra.Numerics;
 
@@ -85,20 +86,22 @@ namespace Hedra.Engine.StructureSystem
                    Math.Abs(Biome.Generation.RiverAtPoint(TargetPosition.X, TargetPosition.Z)) < 0.005f;
         }
 
-        protected void AddDoor(VertexData Model, Vector3 DoorPosition, Matrix4x4 RotationMatrix, CollidableStructure Structure, bool InvertedRotation, bool InvertedPivot)
+        protected Door AddDoor(VertexData Model, Vector3 DoorPosition, Matrix4x4 RotationMatrix, CollidableStructure Structure, bool InvertedRotation, bool InvertedPivot)
         {
-            Structure.WorldObject.AddChildren(
-                Builder<IBuildingParameters>.CreateDoor(
-                    Model,
-                    Structure.Position,
-                    DoorPosition + StructureOffset,
-                    StructureScale,
-                    RotationMatrix,
-                    Structure,
-                    InvertedRotation,
-                    InvertedPivot
-                )
+            var door = Builder<IBuildingParameters>.CreateDoor(
+                Model,
+                Structure.Position,
+                DoorPosition + StructureOffset,
+                StructureScale,
+                RotationMatrix,
+                Structure,
+                InvertedRotation,
+                InvertedPivot
             );
+            Structure.WorldObject.AddChildren(
+                door
+            );
+            return door;
         }
 
         protected void AddPlant(IAllocator Allocator, Vector3 Position, HarvestableDesign Design, Random Rng)

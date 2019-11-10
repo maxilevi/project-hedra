@@ -23,13 +23,14 @@ namespace Hedra.Engine.Scenes
 {
     public static class SceneLoader
     {
-        private static readonly Vector3 LightColorCode = new Vector3(1, 0, 1);
         private static readonly Vector3 Structure1ColorCode = new Vector3(0, 1, 1);
         private static readonly Vector3 Structure2ColorCode = new Vector3(0, 1, 0);
-        private static readonly Vector3 NPC2ColorCode = new Vector3(0, 0, 0);
+        private static readonly Vector3 Structure4ColorCode = new Vector3(1, 0, 0);
+        private static readonly Vector3 Structure3ColorCode = new Vector3(0, 0, 1);
+        private static readonly Vector3 LightColorCode = new Vector3(1, 0, 1);
         private static readonly Vector3 NPC1ColorCode = new Vector3(1, 1, 0);
-        private static readonly Vector3 FirePlaceColorCode = new Vector3(1, 0, 0);
-        private static readonly Vector3 WellColorCode = new Vector3(0, 0, 1);
+        private static readonly Vector3 NPC2ColorCode = new Vector3(0, 0, 0);
+        private static readonly Vector3 NPC3ColorCode = new Vector3(1, 1, 1);
 
         public static void LoadIfExists(CollidableStructure Structure, string Filename, Vector3 Scale, Matrix4x4 Transformation, SceneSettings Settings)
         {
@@ -49,10 +50,11 @@ namespace Hedra.Engine.Scenes
             {
                 {LightColorCode, new List<VertexData>()},
                 {Structure2ColorCode, new List<VertexData>()},
-                {WellColorCode, new List<VertexData>()},
+                {Structure3ColorCode, new List<VertexData>()},
                 {NPC2ColorCode, new List<VertexData>()},
                 {NPC1ColorCode, new List<VertexData>()},
-                {FirePlaceColorCode, new List<VertexData>()},
+                {NPC3ColorCode, new List<VertexData>()},
+                {Structure4ColorCode, new List<VertexData>()},
                 {Structure1ColorCode, new List<VertexData>()}
             };
             for (var i = 0; i < parts.Length; ++i)
@@ -68,37 +70,42 @@ namespace Hedra.Engine.Scenes
             );
             Structure.WorldObject.AddChildren(lights);
 
-            /* Add Wells */
-            var wells = LoadWells(
-                map[WellColorCode].ToArray()
-            );
-            Structure.WorldObject.AddChildren(wells);
-            
-            /* Add Fireplaces */
-            var fireplaces = LoadFireplaces(
-                map[FirePlaceColorCode].ToArray()
-            );
-            Structure.WorldObject.AddChildren(fireplaces);
-
             /* Add Structure1 */
-            var beds = LoadGenericStructure(
+            var structs = LoadGenericStructure(
                 map[Structure1ColorCode].ToArray(),
                 Settings.Structure1Creator
             );
-            Structure.WorldObject.AddChildren(beds);
+            Structure.WorldObject.AddChildren(structs);
             
             /* Add Structure 2 */
-            var bags = LoadGenericStructure(
+            structs = LoadGenericStructure(
                 map[Structure2ColorCode].ToArray(),
                 Settings.Structure2Creator
             );
-            Structure.WorldObject.AddChildren(bags);
+            Structure.WorldObject.AddChildren(structs);
+            
+            /* Add Structure 3 */
+            structs = LoadGenericStructure(
+                map[Structure3ColorCode].ToArray(),
+                Settings.Structure3Creator
+            );
+            Structure.WorldObject.AddChildren(structs);
+            
+            /* Add Structure 3 */
+            structs = LoadGenericStructure(
+                map[Structure4ColorCode].ToArray(),
+                Settings.Structure4Creator
+            );
+            Structure.WorldObject.AddChildren(structs);
             
             /* Add NPC1 */
             PlaceNPCsWhenWorldReady(map[NPC1ColorCode], P => Settings.Npc1Creator(P), Structure);
             
             /* Add NPC2 */
             PlaceNPCsWhenWorldReady(map[NPC2ColorCode], P => Settings.Npc2Creator(P), Structure);
+            
+            /* Add NPC2 */
+            PlaceNPCsWhenWorldReady(map[NPC3ColorCode], P => Settings.Npc3Creator(P), Structure);
         }
 
         private static void PlaceNPCsWhenWorldReady(IEnumerable<VertexData> ScenePositions, Func<Vector3, IEntity> Create, CollidableStructure Structure)
@@ -121,16 +128,6 @@ namespace Hedra.Engine.Scenes
             }
         }
 
-        private static BaseStructure[] LoadWells(params VertexData[] VertexGroups)
-        {
-            return LoadGenericStructure(VertexGroups, (V, G) => new Well(V, GetRadius(G)));
-        }
-
-        private static BaseStructure[] LoadFireplaces(params VertexData[] VertexGroups)
-        {
-            return LoadGenericStructure(VertexGroups, (V, _) => new Campfire(V));
-        }
-        
         private static BaseStructure[] LoadGenericStructure(VertexData[] VertexGroups, Func<Vector3, VertexData, BaseStructure> Create)
         {
             var list = new List<BaseStructure>();
@@ -162,5 +159,8 @@ namespace Hedra.Engine.Scenes
             var radius = new CollisionShape(Mesh).BroadphaseRadius * 2;
             return radius;
         }
+
+        public static Func<Vector3, VertexData, BaseStructure> WellPlacer => (V, G) => new Well(V, GetRadius(G));
+        public static Func<Vector3, VertexData, BaseStructure> FireplacePlacer => (V, _) => new Campfire(V);
     }
 }

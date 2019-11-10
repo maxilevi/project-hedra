@@ -117,7 +117,9 @@ namespace Hedra.Engine.StructureSystem.Overworld
             LightRadius = PointLight.DefaultRadius * 1.5f,
             Npc1Creator = CreateWizard,
             Npc2Creator = CreateDarkWizard,
-            Structure1Creator = (V, _) => new SleepingPad(V)
+            Structure1Creator = (V, _) => new SleepingPad(V),
+            Structure3Creator = SceneLoader.WellPlacer,
+            Structure4Creator = SceneLoader.FireplacePlacer
         };
 
         private class WizardTowerAIComponent : BaseVillagerAIComponent

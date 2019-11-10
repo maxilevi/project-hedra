@@ -24,6 +24,8 @@ namespace Hedra.Engine.CacheSystem
             new Vector3(47.17975f, 15.92689f, -0.73141f),
             new Vector3(59.23969f, 15.92689f, -0.73141f)
         };
+        
+        public static Vector3 Lever0 => new Vector3(83.40138f, 40f, -74.70468f);
 
         public static Vector3 Offset { get; } = Vector3.UnitY * -.3f;
     }

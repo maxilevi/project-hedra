@@ -176,7 +176,7 @@ namespace Hedra.Engine.Player
 
             if (GameSettings.DebugNavMesh)
             {
-                var structs = World.StructureHandler.StructureItems;
+                var structs = StructureHandler.GetNearStructures(Position);
                 for (var i = 0; i < structs.Length; ++i)
                 {
                     structs[i].Draw();

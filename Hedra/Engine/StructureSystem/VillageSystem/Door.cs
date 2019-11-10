@@ -25,6 +25,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         protected override bool SingleUse => false;
         protected override bool AllowThroughCollider => true;
         public override string Message => Translations.Get(!_opened ? "open_door" : "close_door");
+        protected override bool CanInteract => !IsLocked;
+        public bool IsLocked { get; set; }
         public override int InteractDistance => 12;
         private bool _isMoving;
         private bool _opened;

@@ -12,6 +12,7 @@ namespace Hedra.Engine.StructureSystem
     public delegate void OnSeparationEvent(IEntity Entity);
     public class CollisionTrigger : BaseStructure
     {
+        public const CollisionFilterGroups Group = CollisionFilterGroups.KinematicFilter;
         public event OnCollisionEvent OnCollision;
         public event OnSeparationEvent OnSeparation;
         
@@ -29,8 +30,8 @@ namespace Hedra.Engine.StructureSystem
                 _sensor.CollisionFlags |= CollisionFlags.NoContactResponse;
                 BulletPhysics.Add(_sensor, new PhysicsObjectInformation
                 {
-                    Group = CollisionFilterGroups.SensorTrigger,
-                    Mask = (CollisionFilterGroups.AllFilter & ~CollisionFilterGroups.SensorTrigger),
+                    Group = Group,
+                    Mask = (CollisionFilterGroups.SensorTrigger | CollisionFilterGroups.CharacterFilter),
                     Name = $"Trigger at {Position}",
                     StaticOffsets = new []
                     {

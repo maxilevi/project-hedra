@@ -65,6 +65,7 @@ welcome_to_village = WELCOME TO {0}
 interact_tombstone = PAY RESPECTS
 interact_obelisk = INTERACT
 interact_chest = INTERACT WITH THE CHEST
+interact_lever = INTERACT
 obelisk_xp = YOU EARNED {0} XP
 obelisk_health = YOUR HEALTH FEELS REFRESHED
 obelisk_mana = YOUR MANA FEELS REFRESHED

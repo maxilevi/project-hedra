@@ -356,7 +356,9 @@ namespace Hedra.Engine.StructureSystem.Overworld
             {
                 var box = Physics.BuildDimensionsBox(V) * 2;
                 return new PunchingBag(V.AverageVertices(), box);
-            }
+            },
+            Structure3Creator = SceneLoader.WellPlacer,
+            Structure4Creator = SceneLoader.FireplacePlacer
         };
     }
 }
