@@ -68,12 +68,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 bossDoor1.IsLocked = false;
                 SoundPlayer.PlaySound(SoundType.Door, lever.Position);
             };
-
-            var skeletons = Structure.WorldObject.NPCs;
-            for (var i = 0; i < skeletons.Length; ++i)
-            {
-                skeletons[i].SearchComponent<DamageComponent>().Ignore(E => Array.IndexOf(skeletons, E) != -1);
-            }
         }
 
         private Lever AddLever(CollidableStructure Structure, Vector3 Position, Matrix4x4 Rotation)
@@ -107,14 +101,21 @@ namespace Hedra.Engine.StructureSystem.Overworld
             return new Dungeon0MobAITrigger(Point, Mesh);
         }
 
+        private static void AddImmuneTag(IEntity Skeleton)
+        {
+            Skeleton.AddComponent(new IsDungeonSkeletonComponent(Skeleton));
+            Skeleton.SearchComponent<DamageComponent>().Ignore(E => E.SearchComponent<IsDungeonSkeletonComponent>() != null);
+        }
+        
         private static IEntity PatrolSkeleton(Vector3 Position)
         {
             var skeleton = default(IEntity);
-            var spawnKamikazeSkeleton = Utils.Rng.Next(1, 4) == 1;
+            var spawnKamikazeSkeleton = Utils.Rng.Next(1, 7) == 1;
             skeleton = spawnKamikazeSkeleton
                 ? SpawnKamikazeSkeleton(Position)
                 : NormalPatrolSkeleton(Position);
             skeleton.Position = Position;
+            AddImmuneTag(skeleton);
             return skeleton;
         }
 
@@ -129,12 +130,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
         }
 
         private static IEntity NormalPatrolSkeleton(Vector3 Position)
-        {
-            var skeleton = BaseSkeleton(Position);
-            return skeleton;
-        }
-        
-        private static IEntity StationarySkeleton(Vector3 Position)
         {
             var skeleton = BaseSkeleton(Position);
             return skeleton;
@@ -167,9 +162,20 @@ namespace Hedra.Engine.StructureSystem.Overworld
             IsNightLight = false,
             Structure1Creator = BuildTrigger0,
             Npc1Creator = PatrolSkeleton,
-            Npc2Creator = StationarySkeleton,
+            Npc2Creator = PatrolSkeleton,
             Structure3Creator = BuildTrigger1,
             Structure4Creator = (P, _) => new Torch(P),
         };
+
+        private class IsDungeonSkeletonComponent : EntityComponent
+        {
+            public IsDungeonSkeletonComponent(IEntity Entity) : base(Entity)
+            {
+            }
+
+            public override void Update()
+            {
+            }
+        }
     }
 }
