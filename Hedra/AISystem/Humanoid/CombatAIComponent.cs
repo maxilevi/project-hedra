@@ -34,6 +34,7 @@ namespace Hedra.AISystem.Humanoid
         protected override bool ShouldSleep => !IsChasing;
         public bool IsChasing => _chasingTarget != null;
         public bool IsExploring => !IsChasing && _hasTargetPoint;
+        protected virtual bool CanExplore => true;
 
         protected CombatAIComponent(IHumanoid Entity, bool IsFriendly) : base(Entity)
         {
@@ -82,7 +83,7 @@ namespace Hedra.AISystem.Humanoid
             if (ShouldReset()) return;
             DoUpdate();
             if (IsChasing) OnChasing();
-            else if(!_staring) OnExploring();
+            else if(!_staring && CanExplore) OnExploring();
             if (IsExploring) HandleStaring();
             else _staring = false;
             FindTarget();

@@ -16,7 +16,8 @@ namespace Hedra.Engine.Player.Networking
 {
     public class NetworkPlayer : Humanoid, IPlayer
     {
-        public event OnInteractionEvent Interact;
+        public event OnRespawnEvent OnRespawn;
+        public event OnInteractionEvent OnInteract;
         public ICamera View => throw new System.NotImplementedException();
         public ChunkLoader Loader => throw new System.NotImplementedException();
         public UserInterface UI => throw new System.NotImplementedException();

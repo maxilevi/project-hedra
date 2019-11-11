@@ -57,7 +57,8 @@ namespace Hedra.Engine.Player
 {
     public class LocalPlayer : Humanoid, IPlayer
     {
-        public event OnInteractionEvent Interact;
+        public event OnRespawnEvent OnRespawn;
+        public event OnInteractionEvent OnInteract;
         public ICamera View { get; }
         public ChunkLoader Loader { get; }
         public UserInterface UI { get; set; }
@@ -138,7 +139,7 @@ namespace Hedra.Engine.Player
                     SoundPlayer.PlaySound(SoundType.NotificationSound, Position);
                 }
                 if(Controls.Interact == Args.Key)
-                    Interact?.Invoke();
+                    OnInteract?.Invoke();
             }, EventPriority.Low);
 
             Kill += A =>
@@ -420,6 +421,7 @@ namespace Hedra.Engine.Player
                     VanishSpeed = 2
                 };
             }
+            OnRespawn?.Invoke();
         }
 
         public void Reset()

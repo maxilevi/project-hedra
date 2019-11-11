@@ -230,6 +230,7 @@
     <Compile Include="AISystem\FarmAnimalAIComponent.cs" />
     <Compile Include="AISystem\FearAIComponent.cs" />
     <Compile Include="AISystem\FriendlyAIComponent.cs" />
+    <Compile Include="AISystem\GenericBasicAIComponent.cs" />
     <Compile Include="AISystem\HostileAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\DungeonRangedAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\DungeonMageAIComponent.cs" />

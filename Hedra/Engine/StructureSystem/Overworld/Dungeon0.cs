@@ -1,5 +1,6 @@
 using System.Numerics;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Player;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
@@ -13,6 +14,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         public Dungeon0(Vector3 Position) : base(Position)
         {
+            LocalPlayer.Instance.OnRespawn += Reset;
         }
 
         public void Reset()
@@ -21,5 +23,11 @@ namespace Hedra.Engine.StructureSystem.Overworld
         }
 
         public bool Completed => Boss.IsDead;
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            LocalPlayer.Instance.OnRespawn -= Reset;
+        }
     }
 }

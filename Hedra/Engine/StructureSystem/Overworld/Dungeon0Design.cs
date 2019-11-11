@@ -5,6 +5,7 @@ using Hedra.AISystem;
 using Hedra.AISystem.Humanoid;
 using Hedra.AISystem.Mob;
 using Hedra.BiomeSystem;
+using Hedra.Components;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
@@ -67,6 +68,12 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 bossDoor1.IsLocked = false;
                 SoundPlayer.PlaySound(SoundType.Door, lever.Position);
             };
+
+            var skeletons = Structure.WorldObject.NPCs;
+            for (var i = 0; i < skeletons.Length; ++i)
+            {
+                skeletons[i].SearchComponent<DamageComponent>().Ignore(E => Array.IndexOf(skeletons, E) != -1);
+            }
         }
 
         private Lever AddLever(CollidableStructure Structure, Vector3 Position, Matrix4x4 Rotation)
@@ -103,7 +110,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         private static IEntity PatrolSkeleton(Vector3 Position)
         {
             var skeleton = default(IEntity);
-            var spawnKamikazeSkeleton = Utils.Rng.Next(1, 2) == 1;
+            var spawnKamikazeSkeleton = Utils.Rng.Next(1, 4) == 1;
             skeleton = spawnKamikazeSkeleton
                 ? SpawnKamikazeSkeleton(Position)
                 : NormalPatrolSkeleton(Position);

@@ -32,6 +32,7 @@ namespace Hedra.Engine.WorldBuilding
         }
 
         public BaseStructure[] Children => _children.ToArray();
+        public IEntity[] NPCs => _npcs.ToArray();
         public virtual Vector3 Position { get; set; }
         public bool Disposed { get; protected set; }
 

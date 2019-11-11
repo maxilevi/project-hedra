@@ -15,6 +15,7 @@ using Hedra.EntitySystem;
 using Hedra.WeaponSystem;
 using Hedra.WorldObjects;
 using System.Numerics;
+using Hedra.Engine.PhysicsSystem;
 
 namespace Hedra.AISystem.Humanoid
 {
@@ -44,6 +45,10 @@ namespace Hedra.AISystem.Humanoid
         {        
             _secondAttackCooldown -= Time.DeltaTime;
             _firstAttackCooldown -= Time.DeltaTime;
+            if (ChasingTarget != null && Parent.Physics.StaticRaycast(ChasingTarget.Position + Vector3.UnitY * ChasingTarget.Model.Height * .5f))
+            {
+                ReduceRange();
+            }
         }
 
         protected override void OnAttack()
@@ -67,6 +72,11 @@ namespace Hedra.AISystem.Humanoid
         }
 
         private void OnMiss(Projectile Arrow)
+        {
+            ReduceRange();
+        }
+        
+        private void ReduceRange()
         {
             _attackRadius -= Chunk.BlockSize * 2;
             _attackRadius = System.Math.Max(AttackRadius, Chunk.BlockSize * 2);

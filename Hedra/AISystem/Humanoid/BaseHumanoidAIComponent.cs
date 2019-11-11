@@ -17,7 +17,7 @@ using Hedra.Numerics;
 
 namespace Hedra.AISystem.Humanoid
 {
-    public abstract class BaseHumanoidAIComponent : Component<IHumanoid>, IBehaviourComponent
+    public abstract class BaseHumanoidAIComponent : GenericBasicAIComponent<IHumanoid>, IBehaviourComponent
     {
         protected const float DefaultErrorMargin = 3;
         private SleepingPad _bed;
@@ -144,5 +144,7 @@ namespace Hedra.AISystem.Humanoid
         {
             Parent.IsSitting = true;
         }
+
+        public override AIType Type => throw new NotImplementedException();
     }
 }
