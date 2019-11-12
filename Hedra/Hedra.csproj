@@ -344,6 +344,7 @@
     <Compile Include="Engine\DataStructures\Octree.cs" />
     <Compile Include="Engine\DataStructures\OctreeNode.cs" />
     <Compile Include="Engine\EntitySystem\DummyModel.cs" />
+    <Compile Include="Engine\EnvironmentSystem\SkySettings.cs" />
     <Compile Include="Engine\Generation\ChunkAutomatons.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\Automatons.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\Builders\AbstractBuilder.cs" />
