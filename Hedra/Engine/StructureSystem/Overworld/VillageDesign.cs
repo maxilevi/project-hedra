@@ -27,6 +27,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         public override int PlateauRadius { get; } = MaxVillageRadius;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.VillageIcon);
+        public override bool CanSpawnInside => true;
 
         public override void Build(CollidableStructure Structure)
         {

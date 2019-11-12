@@ -16,6 +16,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
     {
         public override int PlateauRadius { get; } = 256;
         public override VertexData Icon => null;
+        public override bool CanSpawnInside => true;
 
         public override void Build(CollidableStructure Structure)
         {

@@ -29,7 +29,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public override VertexData Icon => CacheManager.GetModel(CacheItem.Dungeon0Icon);
         protected override int StructureChance => StructureGrid.Dungeon0Chance;
         protected override CacheItem? Cache => CacheItem.Dungeon0;
-
+        public override bool CanSpawnInside => false;
         protected override Vector3 StructureOffset => Dungeon0Cache.Offset;
         protected override BlockType PathType => BlockType.StonePath;
         protected override float GroundworkRadius => 180;

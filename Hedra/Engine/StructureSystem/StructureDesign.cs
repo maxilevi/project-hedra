@@ -28,6 +28,7 @@ namespace Hedra.Engine.StructureSystem
         public abstract int PlateauRadius { get; }
         public abstract VertexData Icon { get; }
         public abstract void Build(CollidableStructure Structure);
+        public abstract bool CanSpawnInside { get; }
 
         protected abstract CollidableStructure Setup(Vector3 TargetPosition, Random Rng);
         

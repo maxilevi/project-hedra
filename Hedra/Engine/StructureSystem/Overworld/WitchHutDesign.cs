@@ -33,6 +33,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         protected override BlockType PathType => BlockType.Grass;
         protected override bool NoPlantsZone => true;
         public override string DisplayName => Translations.Get("structure_witch_hut");
+        public override bool CanSpawnInside => false;
 
         protected override void DoBuild(CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation, Random Rng)
         {

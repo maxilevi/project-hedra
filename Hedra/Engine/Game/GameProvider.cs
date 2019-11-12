@@ -215,7 +215,6 @@ namespace Hedra.Engine.Game
             Player.SearchComponent<DamageComponent>().Immune = true;
             var chunkOffset = World.ToChunkSpace(Player.Position);
             StructureHandler.CheckStructures(chunkOffset);
-            
             while (_loadingScreen.IsLoading)
             {
                 yield return null;

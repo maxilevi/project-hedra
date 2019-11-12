@@ -31,6 +31,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             SoundtrackManager.HostageSituation
         };
+        public override bool CanSpawnInside => false;
 
         public override void Build(CollidableStructure Structure)
         {

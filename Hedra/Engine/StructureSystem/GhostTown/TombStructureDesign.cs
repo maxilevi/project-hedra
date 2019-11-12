@@ -13,6 +13,7 @@ namespace Hedra.Engine.StructureSystem.GhostTown
         protected override Vector3 StructureScale => Vector3.One * 5;
         protected override int StructureChance => StructureGrid.TombstoneChance;
         protected override CacheItem? Cache => CacheItem.Grave;
+        public override bool CanSpawnInside => true;
         
         protected override GhostTownTombstone Create(Vector3 Position, float Size)
         {

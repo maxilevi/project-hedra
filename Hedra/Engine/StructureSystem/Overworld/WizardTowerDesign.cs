@@ -32,6 +32,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         protected override Vector3 StructureScale => Vector3.One * 1.0f;
         protected override BlockType PathType => BlockType.Dirt;
         protected override float GroundworkRadius => 128 + 64;
+        public override bool CanSpawnInside => true;
 
         protected override void DoBuild(CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation, Random Rng)
         {

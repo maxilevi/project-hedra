@@ -25,6 +25,8 @@ namespace Hedra.Engine.PlantSystem
         protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
             => throw new NotImplementedException();
         
+        public override bool CanSpawnInside => throw new NotImplementedException();
+        
         public override bool ShouldRemove(CollidableStructure Structure)
         {
             return World.GetChunkByOffset(World.ToChunkSpace(Structure.Position)) == null;

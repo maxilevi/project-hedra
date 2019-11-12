@@ -30,6 +30,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public override int PlateauRadius { get; } = 384;
         public const int GraveyardSkyTime = 24000;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.GraveyardIcon);
+        public override bool CanSpawnInside => false;
 
         public override void Build(CollidableStructure Structure)
         {

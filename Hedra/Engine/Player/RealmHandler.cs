@@ -7,6 +7,7 @@ using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Game;
 using Hedra.Game;
 using System.Numerics;
+using Hedra.Engine.StructureSystem;
 
 namespace Hedra.Engine.Player
 {
@@ -113,7 +114,6 @@ namespace Hedra.Engine.Player
 
             public void Update()
             {
-                Daytime = SkyManager.DayTime;
                 Position = GameManager.Player.Position;
                 MarkedDirection = GameManager.Player.Minimap.MarkedDirection;
                 _handler.Update();
@@ -123,8 +123,8 @@ namespace Hedra.Engine.Player
             {
                 Writer.Write(Seed);
                 Writer.Write((int)Type);
-                Writer.Write(Daytime);
-                Writer.Write(Position);
+                Writer.Write(SkyManager.DayTime);
+                Writer.Write(SanitizePosition(Position));
                 Writer.Write(MarkedDirection);
             }
 
@@ -138,6 +138,20 @@ namespace Hedra.Engine.Player
                     Position = Reader.ReadVector3(),
                     MarkedDirection = Reader.ReadVector3()
                 };
+            }
+
+            private Vector3 SanitizePosition(Vector3 Location)
+            {
+                var structures = StructureHandler.GetNearStructures(Location);
+                for (var i = 0; i < structures.Length; ++i)
+                {
+                    if(structures[i].Design.CanSpawnInside) continue;
+                    Location = World.FindSpawningPoint(Location);
+                    Location = World.FindPlaceablePosition(GameManager.Player, Location);
+                    break;
+                }
+
+                return Location;
             }
 
             public void Dispose()

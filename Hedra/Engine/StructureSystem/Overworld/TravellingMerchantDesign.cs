@@ -17,6 +17,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public static bool Spawned { get; private set; }
         public override int PlateauRadius { get; } = 80;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.MerchantIcon);
+        public override bool CanSpawnInside => true;
 
         public override void Build(CollidableStructure Structure)
         {

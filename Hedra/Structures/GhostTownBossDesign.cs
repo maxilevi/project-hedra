@@ -23,6 +23,7 @@ namespace Hedra.Structures
         protected override int StructureChance => throw new NotImplementedException();
         protected override CacheItem? Cache => null;
         public static bool Spawned { get; set; }
+        public override bool CanSpawnInside => false;
         
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
         {

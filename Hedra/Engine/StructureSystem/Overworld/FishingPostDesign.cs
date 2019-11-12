@@ -35,6 +35,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         protected override CacheItem? Cache => null;
         protected override BlockType PathType => BlockType.Path;
         private const int CenterRadius = 64;
+        public override bool CanSpawnInside => true;
 
         protected override FishingPost Create(Vector3 Position, float Size)
         {

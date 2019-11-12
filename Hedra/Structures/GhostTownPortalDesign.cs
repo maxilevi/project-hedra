@@ -21,6 +21,7 @@ namespace Hedra.Structures
         protected override CacheItem? Cache => CacheItem.Portal;
         protected override Vector3 StructureScale => Vector3.One * 10;
         protected virtual bool SpawnNPC => true;
+        public override bool CanSpawnInside => true;
 
         protected override void DoBuild(CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation, Random Rng)
         {
