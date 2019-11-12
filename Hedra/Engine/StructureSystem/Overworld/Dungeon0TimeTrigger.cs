@@ -15,7 +15,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             OnCollision += E =>
             {
                 if (E != LocalPlayer.Instance) return;
-                if (!_handler.IsActive)
+                 if (!_handler.IsActive)
                 {
                     _handler.Apply();
                     GameSettings.DepthEffect = true;

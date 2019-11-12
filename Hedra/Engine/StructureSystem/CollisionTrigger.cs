@@ -31,7 +31,8 @@ namespace Hedra.Engine.StructureSystem
                 BulletPhysics.Add(_sensor, new PhysicsObjectInformation
                 {
                     Group = Group,
-                    Mask = (CollisionFilterGroups.SensorTrigger | CollisionFilterGroups.CharacterFilter),
+                    /* If we add a sensor filter then we are colliding two times with the entities (one for body and another one for the sensor)*/
+                    Mask = (CollisionFilterGroups.CharacterFilter),
                     Name = $"Trigger at {Position}",
                     StaticOffsets = new []
                     {
@@ -58,13 +59,13 @@ namespace Hedra.Engine.StructureSystem
         private void OnWorldCollision(CollisionObject Object0, CollisionObject Object1)
         {
             if(!ProcessTrigger(Object0, Object1, out var entity)) return;
-            OnSeparation?.Invoke(entity);
+            OnCollision?.Invoke(entity);
         }
         
         private void OnWorldSeparation(CollisionObject Object0, CollisionObject Object1)
         {
             if(!ProcessTrigger(Object0, Object1, out var entity)) return;
-            OnCollision?.Invoke(entity);
+            OnSeparation?.Invoke(entity);
         }
 
         private bool ProcessTrigger(CollisionObject Object0, CollisionObject Object1, out IEntity Against)
