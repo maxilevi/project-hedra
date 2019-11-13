@@ -12,7 +12,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
     public class Dungeon0 : BaseStructure, ICompletableStructure
     {
         public IEntity Boss { get; set; }
-        public Dungeon0TimeTrigger TimeTrigger { get; set; }
+        public DungeonDoorTrigger BuildingTrigger { get; set; }
 
         public Dungeon0(Vector3 Position) : base(Position)
         {
@@ -26,7 +26,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         private void Reset()
         {
-            TimeTrigger.Reset();
+            BuildingTrigger.Leave(GameManager.Player);
         }
 
         public bool Completed => Boss.IsDead;

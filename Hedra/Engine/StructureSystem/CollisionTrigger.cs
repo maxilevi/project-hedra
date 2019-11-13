@@ -1,7 +1,7 @@
+#define DEBUG_MESH
 using System.Numerics;
 using BulletSharp;
 using Hedra.Engine.Bullet;
-using Hedra.Engine.Rendering.Geometry;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
@@ -17,11 +17,18 @@ namespace Hedra.Engine.StructureSystem
         public event OnSeparationEvent OnSeparation;
         
         private readonly RigidBody _sensor;
+#if DEBUG_MESH
+        private ObjectMesh _mesh;
+#endif
         private Vector3 _position;
         
         public CollisionTrigger(Vector3 Position, VertexData Mesh) : base(Position)
         {
             Mesh = Mesh.AverageCenter();
+#if DEBUG_MESH
+            _mesh = ObjectMesh.FromVertexData(Mesh, false, true);
+            _mesh.Enabled = true;
+#endif
             var shape = BulletPhysics.CreateTriangleShape(Mesh.Indices, Mesh.Vertices);
             using (var bodyInfo = new RigidBodyConstructionInfo(0, new DefaultMotionState(), shape))
             {
@@ -52,6 +59,10 @@ namespace Hedra.Engine.StructureSystem
             set
             {
                 _sensor?.Translate((-_position + value).Compatible());
+#if DEBUG_MESH
+                if(_mesh != null)
+                    _mesh.Position = value;
+#endif
                 _position = value;
             }
         }
@@ -70,6 +81,10 @@ namespace Hedra.Engine.StructureSystem
 
         private bool ProcessTrigger(CollisionObject Object0, CollisionObject Object1, out IEntity Against)
         {
+#if DEBUG_MESH
+            if(_mesh != null)
+                _mesh.Position = _position;
+#endif
             Against = null;
             if (!ReferenceEquals(Object0, _sensor) && !ReferenceEquals(Object1, _sensor)) return false;
             var other = ReferenceEquals(Object0, _sensor) ? Object1 : Object0;

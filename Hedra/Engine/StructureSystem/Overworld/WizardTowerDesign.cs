@@ -74,7 +74,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             return wizard;
         }
         
-        private static IHumanoid CreateWizard(Vector3 Position)
+        private static IHumanoid CreateWizard(Vector3 Position, CollidableStructure Structure)
         {
             if (Utils.Rng.Next(0, 3) == 1) return null;
             var wizard = CreateBaseWizard(Position, HealthBarType.Friendly);
@@ -92,7 +92,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             return wizard;
         }
         
-        private static IHumanoid CreateDarkWizard(Vector3 Position)
+        private static IHumanoid CreateDarkWizard(Vector3 Position, CollidableStructure Structure)
         {
             if (Utils.Rng.Next(0, 4) == 1) return null;
             

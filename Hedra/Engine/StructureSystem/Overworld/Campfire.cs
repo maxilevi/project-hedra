@@ -139,7 +139,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             }
         }
 
-        protected virtual Vector3 LightColor { get; } = new Vector3(.8f, .3f, .2f);
+        protected virtual Vector3 LightColor { get; } = new Vector3(1.25f, .2f, .2f);
         protected virtual float LightRadius { get; } = 24;
         
         public override void Dispose()

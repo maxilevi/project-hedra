@@ -36,6 +36,7 @@ namespace Hedra.EntitySystem
         bool WasAttacking { get; set; }
         float AttackSpeed { get; set; }
         float BaseAttackSpeed { get; }
+        bool IsInsideABuilding { get; set; }
         bool CanInteract { get; set; }
         bool IsSleeping { get; set; }
         bool IsJumping { get; }

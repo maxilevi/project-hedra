@@ -99,13 +99,13 @@ namespace Hedra.Engine.Scenes
             Structure.WorldObject.AddChildren(structs);
             
             /* Add NPC1 */
-            PlaceNPCsWhenWorldReady(map[NPC1ColorCode], P => Settings.Npc1Creator(P), Structure);
+            PlaceNPCsWhenWorldReady(map[NPC1ColorCode], P => Settings.Npc1Creator(P, Structure), Structure);
             
             /* Add NPC2 */
-            PlaceNPCsWhenWorldReady(map[NPC2ColorCode], P => Settings.Npc2Creator(P), Structure);
+            PlaceNPCsWhenWorldReady(map[NPC2ColorCode], P => Settings.Npc2Creator(P, Structure), Structure);
             
             /* Add NPC2 */
-            PlaceNPCsWhenWorldReady(map[NPC3ColorCode], P => Settings.Npc3Creator(P), Structure);
+            PlaceNPCsWhenWorldReady(map[NPC3ColorCode], P => Settings.Npc3Creator(P, Structure), Structure);
         }
 
         private static void PlaceNPCsWhenWorldReady(IEnumerable<VertexData> ScenePositions, Func<Vector3, IEntity> Create, CollidableStructure Structure)

@@ -27,6 +27,16 @@ namespace Hedra.AISystem
                 ? _ai2 
                 : _ai1;
         }
+        
+        public void SwitchOne()
+        {
+            _current = _ai1;
+        }
+        
+        public void SwitchTwo()
+        {
+            _current = _ai2;
+        }
 
         public override void Draw()
         {

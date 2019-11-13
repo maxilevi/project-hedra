@@ -16,7 +16,7 @@ using Hedra.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Mage
 {
-    public class Teleport : SingleAnimationSkill<IPlayer>
+    public class Blink : SingleAnimationSkill<IPlayer>
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Teleport.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/MageTeleport.dae");
@@ -92,6 +92,7 @@ namespace Hedra.Engine.SkillSystem.Mage
             }
         }
 
+        protected override bool ShouldDisable => base.ShouldDisable || User.IsInsideABuilding;
         protected override int MaxLevel => 20;
         public override float MaxCooldown => 54 - 20 * (Level / (float) MaxLevel);
         public override float ManaCost => 1;

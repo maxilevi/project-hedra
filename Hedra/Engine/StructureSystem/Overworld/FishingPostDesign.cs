@@ -288,7 +288,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             MainDockPosition = position.Xz();
         }
         
-        private static IHumanoid CreateFisherman(Vector3 Position)
+        private static IHumanoid CreateFisherman(Vector3 Position, CollidableStructure Structure)
         {
             var fisherman = World.WorldBuilding.SpawnHumanoid(HumanType.Fisherman, Position);
             fisherman.AddComponent(new QuestGiverComponent(fisherman, MissionPool.Random(Position, QuestTier.Medium, QuestHint.Fishing)));
@@ -298,7 +298,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             return fisherman;
         }
         
-        private static IHumanoid CreateBoatMerchant(Vector3 Position)
+        private static IHumanoid CreateBoatMerchant(Vector3 Position, CollidableStructure Structure)
         {
             var boatMerchant = World.WorldBuilding.SpawnHumanoid(HumanType.Fisherman, Position);
             boatMerchant.SearchComponent<DamageComponent>().Immune = true;

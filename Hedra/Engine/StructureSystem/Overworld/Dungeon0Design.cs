@@ -81,7 +81,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         private static void AddMembersToStructure(Dungeon0 Dungeon, CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation)
         {
-            Dungeon.TimeTrigger = (Dungeon0TimeTrigger) Structure.WorldObject.Children.First(T => T is CollisionTrigger);
+            Dungeon.BuildingTrigger = (DungeonDoorTrigger) Structure.WorldObject.Children.First(T => T is BuildingDoorTrigger);
             //Dungeon.Boss = Structure.WorldObject.n
             
             Structure.Waypoints = WaypointLoader.Load("Assets/Env/Structures/Dungeon/Dungeon0-Pathfinding.ply", Vector3.One, Rotation * Translation);
@@ -93,49 +93,54 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         private static BaseStructure BuildTrigger0(Vector3 Point, VertexData Mesh)
         {
-            return new Dungeon0TimeTrigger(Point, Mesh);
-        }
-        
-        private static BaseStructure BuildTrigger1(Vector3 Point, VertexData Mesh)
-        {
-            return new Dungeon0MobAITrigger(Point, Mesh);
+            return new DungeonDoorTrigger(Point, Mesh);
         }
 
-        private static void AddImmuneTag(IEntity Skeleton)
-        {
-            Skeleton.AddComponent(new IsDungeonSkeletonComponent(Skeleton));
-            Skeleton.SearchComponent<DamageComponent>().Ignore(E => E.SearchComponent<IsDungeonSkeletonComponent>() != null);
-        }
-        
-        private static IEntity PatrolSkeleton(Vector3 Position)
-        {
-            var skeleton = default(IEntity);
-            var spawnKamikazeSkeleton = Utils.Rng.Next(1, 7) == 1;
-            skeleton = spawnKamikazeSkeleton
-                ? SpawnKamikazeSkeleton(Position)
-                : NormalPatrolSkeleton(Position);
-            skeleton.Position = Position;
-            AddImmuneTag(skeleton);
-            return skeleton;
-        }
-
-        private static IEntity SpawnKamikazeSkeleton(Vector3 Position)
+        private static IEntity SkeletonBoss(Vector3 Position, CollidableStructure Structure)
         {
             var mob = World.SpawnMob(MobType.SkeletonKamikaze, Position, Utils.Rng);
             mob.Position = Position;
             var previousAI = mob.SearchComponent<BasicAIComponent>();
             mob.RemoveComponent(previousAI, false);
-            mob.AddComponent(new DualAIComponent(mob, new DungeonSkeletonKamikazeAIComponent(mob), previousAI));
+            mob.AddComponent(new DungeonDualAIComponent(mob, new DungeonSkeletonKamikazeAIComponent(mob), previousAI, Structure));
             return mob;
         }
 
-        private static IEntity NormalPatrolSkeleton(Vector3 Position)
+        private static void AddImmuneTag(IEntity Skeleton)
         {
-            var skeleton = BaseSkeleton(Position);
+            Skeleton.AddComponent(new IsDungeonMemberComponent(Skeleton));
+            Skeleton.SearchComponent<DamageComponent>().Ignore(E => E.SearchComponent<IsDungeonMemberComponent>() != null);
+        }
+        
+        private static IEntity PatrolSkeleton(Vector3 Position, CollidableStructure Structure)
+        {
+            var skeleton = default(IEntity);
+            var spawnKamikazeSkeleton = Utils.Rng.Next(1, 7) == 1;
+            skeleton = spawnKamikazeSkeleton
+                ? SpawnKamikazeSkeleton(Position, Structure)
+                : NormalPatrolSkeleton(Position, Structure);
+            skeleton.Position = Position;
+            AddImmuneTag(skeleton);
             return skeleton;
         }
 
-        private static IHumanoid BaseSkeleton(Vector3 Position)
+        private static IEntity SpawnKamikazeSkeleton(Vector3 Position, CollidableStructure Structure)
+        {
+            var mob = World.SpawnMob(MobType.SkeletonKamikaze, Position, Utils.Rng);
+            mob.Position = Position;
+            var previousAI = mob.SearchComponent<BasicAIComponent>();
+            mob.RemoveComponent(previousAI, false);
+            mob.AddComponent(new DungeonDualAIComponent(mob, new DungeonSkeletonKamikazeAIComponent(mob), previousAI, Structure));
+            return mob;
+        }
+
+        private static IEntity NormalPatrolSkeleton(Vector3 Position, CollidableStructure Structure)
+        {
+            var skeleton = BaseSkeleton(Position, Structure);
+            return skeleton;
+        }
+
+        private static IHumanoid BaseSkeleton(Vector3 Position, CollidableStructure Structure)
         {
             const int level = 17;
             var skeleton = World.WorldBuilding.SpawnBandit(Position, level, false, true);
@@ -152,7 +157,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 dungeonAI = new DungeonRangedAIComponent(skeleton, false);
             else
                 throw new ArgumentOutOfRangeException();
-            skeleton.AddComponent(new DualAIComponent(skeleton, dungeonAI, previousAI));
+            skeleton.AddComponent(new DungeonDualAIComponent(skeleton, dungeonAI, previousAI, Structure));
             return skeleton;
         }
         
@@ -163,19 +168,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
             Structure1Creator = BuildTrigger0,
             Npc1Creator = PatrolSkeleton,
             Npc2Creator = PatrolSkeleton,
-            Structure3Creator = BuildTrigger1,
+            Npc3Creator = SkeletonBoss,
             Structure4Creator = (P, _) => new Torch(P),
         };
-
-        private class IsDungeonSkeletonComponent : EntityComponent
-        {
-            public IsDungeonSkeletonComponent(IEntity Entity) : base(Entity)
-            {
-            }
-
-            public override void Update()
-            {
-            }
-        }
     }
 }

@@ -7,7 +7,6 @@ namespace Hedra.AISystem.Mob
     {
         public DungeonSkeletonKamikazeAIComponent(Entity Parent) : base(Parent)
         {
-            AlterBehaviour<HostileBehaviour>(new DungeonHostileBehaviour(Parent));
             AlterBehaviour<RoamBehaviour>(new DungeonRoamBehaviour(Parent));
             AlterBehaviour<TraverseBehaviour>(new DungeonTraverseBehaviour(Parent));
         }
