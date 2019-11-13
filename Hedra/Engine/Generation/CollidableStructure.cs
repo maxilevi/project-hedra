@@ -16,6 +16,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Engine.Rendering.UI;
 using System.Numerics;
+using Hedra.Engine.Player;
 using Hedra.Engine.Scenes;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem;

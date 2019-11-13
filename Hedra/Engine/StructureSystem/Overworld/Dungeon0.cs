@@ -4,6 +4,8 @@ using Hedra.Engine.Player;
 using Hedra.Engine.QuestSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
+using Hedra.Game;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
@@ -14,10 +16,15 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         public Dungeon0(Vector3 Position) : base(Position)
         {
-            LocalPlayer.Instance.OnRespawn += Reset;
+            GameManager.Player.StructureAware.StructureLeave += OnLeave;
         }
 
-        public void Reset()
+        private void OnLeave(CollidableStructure Structure)
+        {
+            Reset();
+        }
+
+        private void Reset()
         {
             TimeTrigger.Reset();
         }
@@ -27,7 +34,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public override void Dispose()
         {
             base.Dispose();
-            LocalPlayer.Instance.OnRespawn -= Reset;
+            GameManager.Player.StructureAware.StructureLeave -= OnLeave;
         }
     }
 }
