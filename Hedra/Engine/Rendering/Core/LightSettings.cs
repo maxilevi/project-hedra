@@ -45,5 +45,23 @@ namespace Hedra.Engine.Rendering.Core
                 }
             }
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+            var other = (LightSettings) obj;
+            if (LightCount == other.LightCount && LightColor == other.LightColor && LightPosition == other.LightPosition)
+            {
+                var hasSameBytes = true;
+                for (var i = 0; i < 1024; ++i)
+                {
+                    hasSameBytes &= other.LightsData[i] == LightsData[i];
+                }
+
+                return hasSameBytes;
+            }
+
+            return false;
+        }
     };
 }
