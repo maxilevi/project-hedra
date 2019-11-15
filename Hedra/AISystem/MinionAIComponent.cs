@@ -5,6 +5,7 @@ using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
 using Hedra.EntitySystem;
 using System.Numerics;
+using Hedra.Engine.StructureSystem.Overworld;
 
 namespace Hedra.AISystem
 { 
@@ -32,6 +33,8 @@ namespace Hedra.AISystem
                 Target = this.Owner,
                 ErrorMargin = 4 * Chunk.BlockSize
             };
+            if(Owner.SearchComponent<IsDungeonMemberComponent>() != null || Owner is IHumanoid humanoid && humanoid.IsInsideABuilding)
+                AlterBehaviour<TraverseBehaviour>(new DungeonTraverseBehaviour(Parent));
         }
 
         public override void Update()

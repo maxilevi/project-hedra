@@ -465,6 +465,11 @@ namespace HedraTests.Player
             throw new NotImplementedException();
         }
 
+        public void UpdateCriticalComponents()
+        {
+            throw new NotImplementedException();
+        }
+
         void IUpdatable.Update()
         {
             throw new NotImplementedException();
@@ -483,6 +488,11 @@ namespace HedraTests.Player
 
         public Animation AnimationBlending { get; }
         public void ResetModel()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PlayAnimation(Animation Animation)
         {
             throw new NotImplementedException();
         }

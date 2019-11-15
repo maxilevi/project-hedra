@@ -58,8 +58,6 @@ namespace Hedra.EntitySystem
 
         bool InUpdateRange { get; }
 
-        bool IsBoss { get; set; }
-
         bool IsFriendly { get; set; }
         
         bool IsGrounded { get; set; }
@@ -137,5 +135,8 @@ namespace Hedra.EntitySystem
         void InvokeAfterDamaging(IEntity Invoker, float Damage);
 
         void InvokeDamageModifier(IEntity Invoker, ref float Damage);
+
+        void UpdateCriticalComponents();
+        
     }
 }

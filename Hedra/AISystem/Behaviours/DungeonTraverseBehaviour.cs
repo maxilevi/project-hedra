@@ -19,7 +19,13 @@ namespace Hedra.AISystem.Behaviours
 
         protected override void CreateGraph()
         {
-            Graph = StructureHandler.GetNearStructures(Parent.Position).First(S => S.Waypoints != null).Waypoints;
+        }
+
+        public override void Update()
+        {
+            if(Graph == null)
+                Graph = StructureHandler.GetNearStructures(Parent.Position).First(S => S.Waypoints != null).Waypoints;
+            base.Update();
         }
 
         protected override void UpdateGraph()

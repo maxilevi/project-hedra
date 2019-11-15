@@ -576,7 +576,7 @@ namespace Hedra.Engine.Bullet
             _currentPairs = temp;
         }
         
-        public static bool Raycast(Vector3 Source, Vector3 End, CollisionFilterGroups Mask)
+        public static ClosestRayResultCallback Raycast(Vector3 Source, Vector3 End, CollisionFilterGroups Mask)
         {
             lock (_bulletLock)
             {
@@ -589,7 +589,7 @@ namespace Hedra.Engine.Bullet
                 try
                 {
                     BulletPhysics.Raycast(ref Source, ref End, callback);
-                    return callback.HasHit;
+                    return callback;
                 }
                 finally
                 {

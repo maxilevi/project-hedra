@@ -45,6 +45,7 @@ namespace Hedra.Engine.ItemSystem
         private bool _shouldPickup;
         private bool _canPickup;
         private bool _disposed;
+        private Vector3 _originalPosition;
 
         public WorldItem(Item ItemSpecification, Vector3 Position) : base(null)
         {
@@ -56,6 +57,7 @@ namespace Hedra.Engine.ItemSystem
             this.Model.BaseTint = EffectDescriber.EffectColorFromItem(ItemSpecification);
             this.Scale = new Vector3(1.5f, 1.5f, 1.5f);
             this.Position = Position;
+            this._originalPosition = Position;
             this._height = Math.Abs(modelData.SupportPoint(-Vector3.UnitY).Y - modelData.SupportPoint(Vector3.UnitY).Y);
             this.OnPickup += Player => PickedUp = true;
 
@@ -72,11 +74,10 @@ namespace Hedra.Engine.ItemSystem
             base.Update();
             this.Model.Alpha = this.Alpha;
             if(this.PickedUp) return;
-
-            var heightAtPosition = Physics.HeightAtPosition(Position.X, Position.Z);
-            this.Position = new Vector3(Position.X,
-                Math.Max(heightAtPosition + _height, heightAtPosition + _height + (float) Math.Cos(Time.AccumulatedFrameTime)),
-                Position.Z);
+            
+            this.Position = new Vector3(_originalPosition.X,
+                Math.Max(_originalPosition.Y + _height, _originalPosition.Y + _height + (float) Math.Cos(Time.AccumulatedFrameTime)),
+                _originalPosition.Z);
             this.Model.LocalRotation += Vector3.UnitY * 35f * (float) Time.DeltaTime;
             
             float DotFunc() => Vector2.Dot((this.Position - GameManager.Player.Position).Xz().NormalizedFast(), LocalPlayer.Instance.View.LookingDirection.Xz().NormalizedFast());

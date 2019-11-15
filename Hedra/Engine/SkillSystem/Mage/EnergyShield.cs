@@ -49,7 +49,7 @@ namespace Hedra.Engine.SkillSystem.Mage
                 _shieldObject.Outline = Parent.Model.Outline = true;
                 _shieldObject.OutlineColor = Parent.Model.OutlineColor = Colors.LightBlue * .4f;
                 _shieldObject.ApplySSAO = false;
-                DrawManager.Remove(_shieldObject);
+                DrawManager.RemoveObjectMesh(_shieldObject);
                 DrawManager.AddTransparent(_shieldObject);
             }
 

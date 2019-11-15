@@ -24,7 +24,7 @@ namespace Hedra.Engine.SkillSystem.Warrior.Paladin
         
         protected override void ApplyBonusToEnemy(IEntity Victim, ref float Damage)
         {
-            if (!Victim.IsBoss && !Victim.IsHumanoid && Utils.Rng.NextFloat() < ConvertChance)
+            if (!Victim.IsBoss() && !Victim.IsHumanoid && Utils.Rng.NextFloat() < ConvertChance)
             {
                 _hasMinion = true;
                 Victim.RemoveComponent(Victim.SearchComponent<BasicAIComponent>());

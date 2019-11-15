@@ -48,17 +48,9 @@ namespace Hedra.Engine.EntitySystem.BossSystem
             var dmgComponent = Entity.SearchComponent<DamageComponent>();
             var healthBarComponent = new BossHealthBarComponent(Entity, NameGenerator.Generate(World.Seed + Rng.Next(0, 999999)));
             Entity.RemoveComponent(Entity.SearchComponent<HealthBarComponent>());
-            dmgComponent.OnDamageEvent += delegate(DamageEventArgs Args)
-            {
-                if (!(Args.Victim.Health <= 0)) return;
-
-                GameManager.Player.MessageDispatcher.ShowMessage(Translations.Get("boss_get_xp", (int) dmgComponent.XpToGive), 3f, Colors.Violet.ToColor());
-                healthBarComponent.Enabled = false;
-            };
+            Entity.AddComponent(new BossXPMessageComponent(Entity));
             Entity.Name = healthBarComponent.Name;
-            Entity.IsBoss = true;
             Entity.Physics.CollidesWithStructures = true;
-            Entity.Removable = false;
             Entity.AddComponent(healthBarComponent); 
         }
     }

@@ -9,6 +9,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Rendering.UI;
 using System.Numerics;
+using Hedra.Engine.EntitySystem.BossSystem;
 using Hedra.Numerics;
 
 namespace Hedra.EntitySystem
@@ -75,6 +76,11 @@ namespace Hedra.EntitySystem
         public static void RemoveComponent<T>(this IEntity Parent) where T : IComponent<IEntity>
         {
             Parent.RemoveComponent(Parent.SearchComponent<T>());
+        }
+
+        public static bool IsBoss(this IEntity Parent)
+        {
+            return Parent.SearchComponent<BossHealthBarComponent>() != null;
         }
     }
 }

@@ -13,6 +13,7 @@ using Hedra.AISystem.Humanoid;
 using Hedra.Components;
 using Hedra.Core;
 using System.Numerics;
+using Hedra.API;
 using Hedra.Engine.ClassSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Player;
@@ -95,10 +96,17 @@ using Hedra.Numerics;
             return villager;
         }
 
-        public Humanoid SpawnBandit(Vector3 Position, int Level, bool Friendly = false, bool Undead = false)
+        public Humanoid SpawnBandit(Vector3 Position, int Level, bool Friendly = false, bool Undead = false, Class PossibleClasses = Class.Archer | Class.Mage | Class.Warrior | Class.Rogue)
         {
-            int classN = Utils.Rng.Next(0, ClassDesign.AvailableClasses.Length);
-            var classType = ClassDesign.FromType(ClassDesign.AvailableClasses[classN]);
+            var availableClasses = new List<Class>();
+            for (var i = 0; i < 4; i++)
+            {
+                var @class = (Class)(1 << i);
+                if((@class & PossibleClasses) == @class)
+                    availableClasses.Add(@class);
+            }
+            int classN = Utils.Rng.Next(0, availableClasses.Count);
+            var classType = ClassDesign.FromString(availableClasses[classN]);
 
             var behaviour = new HumanoidConfiguration(Friendly ? HealthBarType.Friendly : HealthBarType.Hostile);
             var isWerewolf = Utils.Rng.Next(0, 4) == 1 && !Undead;

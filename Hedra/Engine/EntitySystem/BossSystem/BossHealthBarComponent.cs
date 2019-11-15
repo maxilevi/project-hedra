@@ -43,7 +43,8 @@ namespace Hedra.Engine.EntitySystem.BossSystem
         private readonly GUIText _nameText;
         private float _targetSize;
         private bool _initialized;
-        public bool Enabled { get; set; }
+        public bool Enabled { get; set; } = true;
+        public int ViewRange { get; set; } = 128;
         public string Name { get; }
         private static Vector2 _bossBarTextureSize;
         private static Vector2 _backgroundTextureSize;
@@ -140,7 +141,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
                 Element.Enable();
         }
         
-        private bool CanShow => GameManager.Player.UI.GamePanel.Enabled && (Parent.Position - GameManager.Player.Position).LengthSquared() < 14400;
+        private bool CanShow => Enabled && GameManager.Player.UI.GamePanel.Enabled && (Parent.Position - GameManager.Player.Position).LengthSquared() < ViewRange * ViewRange;
 
         public override void Dispose()
         {

@@ -30,6 +30,7 @@ namespace Hedra.EntitySystem
         void ApplyImpulse(Vector3 Impulse);
         Vector3 Impulse { get; }
         bool StaticRaycast(Vector3 End);
+        bool StaticRaycast(Vector3 End, out Vector3 Hit);
         bool CollidesWithStructures { get; set; }
         bool CollidesWithEntities { get; set; }
         Vector3 RigidbodyPosition { get; }

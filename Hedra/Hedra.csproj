@@ -226,6 +226,7 @@
     <Compile Include="AISystem\Behaviours\WalkBehaviour.cs" />
     <Compile Include="AISystem\CattleAIComponent.cs" />
     <Compile Include="AISystem\DualAIComponent.cs" />
+    <Compile Include="AISystem\DungeonAdaptiveAIComponent.cs" />
     <Compile Include="AISystem\FarmAnimalAIComponent.cs" />
     <Compile Include="AISystem\FearAIComponent.cs" />
     <Compile Include="AISystem\FriendlyAIComponent.cs" />
@@ -281,6 +282,7 @@
     <Compile Include="AnimationEvents\Growl.cs" />
     <Compile Include="AnimationEvents\Quake.cs" />
     <Compile Include="AnimationEvents\SkillAnimationEvent.cs" />
+    <Compile Include="AnimationEvents\SkillEvents\CastBlaze.cs" />
     <Compile Include="AnimationEvents\SkillEvents\CastLeech.cs" />
     <Compile Include="AnimationEvents\SkillEvents\CastSiphonBlood.cs" />
     <Compile Include="AnimationEvents\SkillEvents\CastTerror.cs" />
@@ -308,6 +310,7 @@
     <Compile Include="BiomeSystem\BiomeStructureDesign.cs" />
     <Compile Include="BiomeSystem\BiomeTreeDesign.cs" />
     <Compile Include="Components\BoatMerchantComponent.cs" />
+    <Compile Include="Components\BossXPMessageComponent.cs" />
     <Compile Include="Components\ClothierComponent.cs" />
     <Compile Include="Components\DamageComponent.cs" />
     <Compile Include="Components\DarkWizardThoughtsComponent.cs" />
@@ -409,8 +412,10 @@
     <Compile Include="Engine\StructureSystem\CollisionTrigger.cs" />
     <Compile Include="Engine\StructureSystem\Lever.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\AnimableInteractableStructure.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\BaseDungeonDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\BuildingDoorTrigger.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\Dungeon0.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\DungeonBossRoomTrigger.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonDoorTrigger.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonDualAIComponent.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonTimeTrigger.cs" />
@@ -746,7 +751,7 @@
     <Compile Include="Engine\SkillSystem\Archer\Scout\Rush.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Scout\SteadyAim.cs" />
     <Compile Include="Engine\SkillSystem\Archer\Scout\Swiftness.cs" />
-    <Compile Include="Engine\SkillSystem\DrainSkill.cs" />
+    <Compile Include="Engine\SkillSystem\PlayerDrainSkill.cs" />
     <Compile Include="Engine\SkillSystem\ISkilledAnimableEntity.cs" />
     <Compile Include="Engine\SkillSystem\ISkilledEntity.cs" />
     <Compile Include="Engine\SkillSystem\DurationSingleAnimationSkillWithStance.cs" />
@@ -825,7 +830,7 @@
     <Compile Include="Engine\SkillSystem\SkillUtils.cs" />
     <Compile Include="Engine\SkillSystem\SpecialAttackPassiveSkill.cs" />
     <Compile Include="Engine\SkillSystem\SpecialAttackSkill.cs" />
-    <Compile Include="Engine\SkillSystem\SwitchSkill.cs" />
+    <Compile Include="Engine\SkillSystem\PlayerSwitchSkill.cs" />
     <Compile Include="Engine\SkillSystem\TreeItem.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Bash.cs" />
     <Compile Include="Engine\SkillSystem\Warrior\Berserker\Berserk.cs" />
@@ -8426,6 +8431,10 @@
       <Link>Assets\Chr\SkeletonKamikazeIdle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Animations\SkeletonKingIdle.dae">
+      <Link>Assets\Chr\SkeletonKingIdle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Animations\WarriorBattleCry.dae">
       <Link>Assets\Chr\WarriorBattleCry.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -14708,6 +14717,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Mobs\SkeletonKamikaze.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Mobs\SkeletonKing.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Mobs\Squirrel.json">

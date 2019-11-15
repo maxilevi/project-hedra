@@ -14,7 +14,7 @@ namespace Hedra.AnimationEvents
         {
             _skill = new T();
             _skill.Initialize(Parent);
-            _skill.Level = Level;
+            _skill.Level = Parent.Level;
         }
 
         public override void Build()

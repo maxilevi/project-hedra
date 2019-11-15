@@ -535,6 +535,8 @@ namespace Hedra.Engine.Player
         public void ResetModel() => Model.Reset();
 
         public void BlendAnimation(Animation Animation) => Model.BlendAnimation(Animation);
+        
+        public void PlayAnimation(Animation Animation) => Model.PlayAnimation(Animation);
 
         public bool CaptureMovement
         {

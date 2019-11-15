@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Linq;
+using Hedra.AISystem.Humanoid;
 using Hedra.Components;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem;
@@ -8,6 +9,7 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
+using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.EntitySystem;
 using Hedra.Items;
 using Hedra.Localization;
@@ -33,7 +35,10 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
         private static IHumanoid SpawnMinion(IEntity Owner, IMinionMastery MasterySkill)
         {
             MasterySkill = MasterySkill ?? new DefaultMastery();
-            var skeleton = World.WorldBuilding.SpawnHumanoid(HumanType.Skeleton, Owner.Position + Owner.Orientation * 16);
+            var targetPosition = Owner.Position + Owner.Orientation * 16;
+            Owner.Physics.StaticRaycast(targetPosition, out var hitPosition);
+            var skeleton = World.WorldBuilding.SpawnHumanoid(HumanType.Skeleton, hitPosition);
+            skeleton.Position = hitPosition;
             skeleton.AddComponent(new MeleeMinionComponent(skeleton, Owner));
             skeleton.SetWeapon(ItemPool.Grab(CommonItems.UncommonSilverSword).Weapon);
             skeleton.BonusHealth = MasterySkill.HealthBonus;

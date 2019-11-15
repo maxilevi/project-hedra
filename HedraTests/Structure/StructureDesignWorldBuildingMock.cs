@@ -11,6 +11,7 @@ using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Items;
 using System.Numerics;
+using Hedra.API;
 
 namespace HedraTests.Structure
 {
@@ -55,6 +56,12 @@ namespace HedraTests.Structure
             return SpawnHumanoid(Type, DesiredPosition, null);
         }
 
+        public Humanoid SpawnBandit(Vector3 Position, int Level, bool Friendly = false, bool Undead = false,
+            Class PossibleClasses = Class.Warrior | Class.Mage | Class.Archer | Class.Rogue)
+        {
+            return SpawnHumanoid(null, Position);
+        }
+
         public Humanoid SpawnHumanoid(string Type, Vector3 DesiredPosition, HumanoidConfiguration Configuration)
         {
             var human = new Humanoid();
@@ -62,11 +69,6 @@ namespace HedraTests.Structure
             human.AddComponent(new HealthBarComponent(human, string.Empty, HealthBarType.Neutral));
             World.AddEntity(human);
             return human;
-        }
-
-        public Humanoid SpawnBandit(Vector3 Position, int Level, bool Friendly = false, bool Undead = false)
-        {
-            return SpawnHumanoid(null, Position);
         }
 
         public Humanoid SpawnVillager(Vector3 Position, bool Move, string Name)

@@ -40,19 +40,23 @@ namespace Hedra.AISystem
             }
         }
 
-        public void AlterBehaviour<T>(T NewBehaviour) where T : Behaviour
+        public void AlterBehaviour<S>(S NewBehaviour) where S : Behaviour
         {
             var type = this.GetType();
             var fields = GetFields(type);
             foreach (FieldInfo field in fields)
             {
-                if (field.FieldType.IsSubclassOf(typeof(T)) || typeof(T) == field.FieldType)
+                if (field.FieldType.IsSubclassOf(typeof(S)) || typeof(S) == field.FieldType)
                 {
                     field.SetValue(this, NewBehaviour);
                 }
                 else if (field.FieldType.IsSubclassOf(typeof(Behaviour)) || typeof(Behaviour) == field.FieldType)
                 {
-                    (field.GetValue(this) as Behaviour).AlterBehaviour<T>(NewBehaviour);
+                    (field.GetValue(this) as Behaviour).AlterBehaviour<S>(NewBehaviour);
+                }
+                else if (field.FieldType.IsSubclassOf(typeof(GenericBasicAIComponent<T>)) || typeof(GenericBasicAIComponent<T>) == field.FieldType)
+                {
+                    (field.GetValue(this) as GenericBasicAIComponent<T>).AlterBehaviour<S>(NewBehaviour);
                 }
             }
         }

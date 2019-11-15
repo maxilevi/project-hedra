@@ -1,4 +1,4 @@
-#define DEBUG_MESH
+//#define DEBUG_MESH
 using System.Numerics;
 using BulletSharp;
 using Hedra.Engine.Bullet;

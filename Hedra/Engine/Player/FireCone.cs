@@ -29,7 +29,8 @@ namespace Hedra.Engine.Player
             base.Update();
             if(Disposed) return;
             if(_shouldStop && Particles.ParticleCount == 0) Dispose();
-            UpdateDamage();
+            if(!Disposed && !_shouldStop)
+                UpdateDamage();
             _do();
             if (!_while()) _shouldStop = true;
         }
@@ -64,9 +65,10 @@ namespace Hedra.Engine.Player
                 if(dot >= .75f && distanceVector.LengthSquared() < ConeDistanceSquared)
                 {
                     var k = i;
+                    var mod = 1f - (distanceVector.LengthSquared() / ConeDistanceSquared);
                     _owner.DoIgnoringHitCombo(() =>
                     {
-                        World.Entities[k].Damage(_damagePerSecond * dot * Time.DeltaTime, _owner, out var exp, false,
+                        World.Entities[k].Damage(_damagePerSecond * dot * Time.DeltaTime * mod, _owner, out var exp, false,
                             false);
                         _owner.XP += exp;
                     });
@@ -90,6 +92,7 @@ namespace Hedra.Engine.Player
                 HandleLifecycle = false,
                 UseLight = true,
                 Speed = 0,
+                Collide = false,
                 _do = Do,
                 _while = While,
                 _owner = Owner,

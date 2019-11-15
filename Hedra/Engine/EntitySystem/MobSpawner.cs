@@ -110,7 +110,8 @@ namespace Hedra.Engine.EntitySystem
                     var newNearPosition = new Vector3(newPosition.X + offset.X,
                         Physics.HeightAtPosition(newPosition + offset),
                         newPosition.Z + offset.Z);
-                    World.SpawnMob(template.Type, newNearPosition, Utils.Rng);
+                    var mob = World.SpawnMob(template.Type, newNearPosition, Utils.Rng);
+                    mob.Removable = true;
                     // Log.WriteLine($"Spawned '{template.Type}' at '{newNearPosition}', '{((World.GetChunkAt(newPosition)?.Landscape.FullyGenerated ?? false) ? "EXISTS" : "NOT EXISTS")}'", LogType.WorldBuilding);
 
                 }
@@ -281,6 +282,7 @@ namespace Hedra.Engine.EntitySystem
         Lich,
         Crow,
         SkeletonKamikaze,
+        SkeletonKing,
         TotalCount,
         None,
         Unknown

@@ -1,10 +1,16 @@
 using System;
 using Hedra.Core;
+using Hedra.Engine.Player;
 using Hedra.Sound;
 
 namespace Hedra.Engine.SkillSystem
 {
-    public abstract class DrainSkill : SwitchSkill
+    public abstract class PlayerDrainSkill : DrainSkill<IPlayer>
+    {
+        
+    }
+
+    public abstract class DrainSkill<T> : SwitchSkill<T> where T : class, IObjectWithAnimation, ISkillUser, IObjectWithMovement, IObjectWithWeapon, IObjectWithLifeCycle
     {
         protected override string AnimationPath => throw new NotImplementedException();
         protected override SoundType SoundType => throw new NotImplementedException();

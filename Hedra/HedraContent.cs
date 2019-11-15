@@ -73,6 +73,7 @@ namespace Hedra
             AddAIType("Goat", typeof(GoatAIComponent));
             AddAIType("SkeletonKamikaze", typeof(SkeletonKamikazeAIComponent));
             AddAIType("Adaptive", typeof(AdaptiveAIComponent));
+            AddAIType("DungeonAdaptive", typeof(DungeonAdaptiveAIComponent));
             AddAIType("Squirrel", typeof(SquirrelAIComponent));
             AddAIType("Crab", typeof(CrabAIComponent));
             AddAIType("Fox", typeof(FoxAIComponent));
@@ -86,6 +87,7 @@ namespace Hedra
             AddAnimationEvent("CastTerror", typeof(CastTerror));
             AddAnimationEvent("CastSiphonBlood", typeof(CastSiphonBlood));
             AddAnimationEvent("CastLeech", typeof(CastLeech));
+            AddAnimationEvent("CastBlaze", typeof(CastBlaze));
             
             AddModelHandler("Ent", typeof(EntHandler));
             AddModelHandler("Ghost", typeof(GhostHandler));

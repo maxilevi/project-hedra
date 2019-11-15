@@ -427,7 +427,14 @@ namespace Hedra.Engine.Bullet
 
         public bool StaticRaycast(Vector3 End)
         {
-            return BulletPhysics.Raycast(RigidbodyPosition.Compatible() + Vector3.UnitY.Compatible() * Parent.Model.Height * .5f, End.Compatible(), CollisionFilterGroups.StaticFilter | BulletPhysics.TerrainFilter);
+            return StaticRaycast(End, out _);
+        }
+        
+        public bool StaticRaycast(Vector3 End, out Vector3 Hit)
+        {
+            var result = BulletPhysics.Raycast(RigidbodyPosition.Compatible() + Vector3.UnitY.Compatible() * Parent.Model.Height * .5f, End.Compatible(), CollisionFilterGroups.StaticFilter | BulletPhysics.TerrainFilter);
+            Hit = result.HitPointWorld.Compatible();
+            return result.HasHit;
         }
         
         private float Timestep => Time.IndependentDeltaTime * (UseTimescale ? Time.TimeScale : 1);

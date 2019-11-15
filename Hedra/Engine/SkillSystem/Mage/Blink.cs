@@ -34,8 +34,9 @@ namespace Hedra.Engine.SkillSystem.Mage
             base.OnDisable();
             User.RemoveComponent(_component);
             _component = null;
-            User.Position += User.View.LookingDirection * Distance;
-            User.Position = World.FindPlaceablePosition(User, User.Position);
+            var targetPosition = User.Position + User.View.LookingDirection * Distance;
+            var hit = User.Physics.StaticRaycast(targetPosition, out var hitPosition);
+            User.Position = hit ? hitPosition - User.View.LookingDirection * 2.5f : targetPosition;
         }
 
         private class TeleportComponent : Component<IHumanoid>
@@ -91,8 +92,7 @@ namespace Hedra.Engine.SkillSystem.Mage
                 });
             }
         }
-
-        protected override bool ShouldDisable => base.ShouldDisable || User.IsInsideABuilding;
+        
         protected override int MaxLevel => 20;
         public override float MaxCooldown => 54 - 20 * (Level / (float) MaxLevel);
         public override float ManaCost => 1;
