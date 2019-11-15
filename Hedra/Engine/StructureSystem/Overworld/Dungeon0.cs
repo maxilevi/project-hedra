@@ -26,8 +26,10 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         private void Reset()
         {
-            BuildingTrigger.Leave(GameManager.Player);
-            Boss.Health = Boss.MaxHealth;
+            if(BuildingTrigger != null)
+                BuildingTrigger.Leave(GameManager.Player);
+            if(Boss != null)
+                Boss.Health = Boss.MaxHealth;
         }
 
         public bool Completed => Boss.IsDead;

@@ -165,10 +165,11 @@ namespace Hedra.Engine.StructureSystem.Overworld
             IsNightLight = false,
             Structure1Creator = BuildTrigger0,
             Structure2Creator = BuildTrigger1,
+            Structure3Creator = AddRewardChest,
+            Structure4Creator = (P, _) => new Torch(P),
             Npc1Creator = PatrolSkeleton,
             Npc2Creator = PatrolSkeleton,
             Npc3Creator = SkeletonBoss,
-            Structure4Creator = (P, _) => new Torch(P),
         };
     }
 }

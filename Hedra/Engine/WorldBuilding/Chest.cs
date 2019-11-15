@@ -44,9 +44,9 @@ namespace Hedra.Engine.WorldBuilding
         protected override string UseAnimationPath => "Assets/Chr/ChestOpen.dae";
         protected override string ColliderPath => "Assets/Env/Chest.ply";
         protected override Vector3 ColliderOffset => -Vector3.UnitX * 1.5f;
-        protected override float AnimationSpeed => 1.5f;
+        protected override float AnimationSpeed => 2.0f;
         protected override bool EnableLegacyTerrainHeightMode => true;
-        protected override Vector3 ModelScale => Vector3.One * 3.5f;
+        protected override Vector3 ModelScale => Vector3.One * 2.5f;
 
         public Chest(Vector3 Position, Item ItemSpecification) : base(Position, Vector3.One)
         {

@@ -39,7 +39,7 @@ namespace Hedra.Engine.WorldBuilding
         protected virtual bool SingleUse => true;
         protected virtual bool DisposeAfterUse => true;
         protected virtual bool CanInteract => true;
-        protected virtual bool AllowThroughCollider => true;
+        protected virtual bool AllowThroughCollider => false;
         public virtual Key Key => Controls.Interact;
         public abstract string Message { get; }
         public abstract int InteractDistance { get; }

@@ -73,7 +73,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             if (underChunk != null && underChunk.BuildedWithStructures && _underChunk != underChunk)
             {
                 _underChunk = underChunk;
-                if(EnableLegacyTerrainHeightMode)
+                if(EnableLegacyTerrainHeightMode && Position.Y <= 1)
                     Position = new Vector3(Position.X, Physics.HeightAtPosition(Position) + .5f, Position.Z);
 
                 var shape = AssetManager.LoadCollisionShapes(ColliderPath, Vector3.One)[0];
