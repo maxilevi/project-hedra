@@ -16,11 +16,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public override void Update()
         {
             base.Update();
-            if(Parent.Distance(_structure.BuildingTrigger.Position) > 16) return;
-            if(_structure.BuildingTrigger.IsInside(GameManager.Player))
-                SwitchOne();
-            else
-                SwitchTwo();
+            SwitchTwo();
         }
     }
 }

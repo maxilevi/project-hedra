@@ -20,6 +20,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Scenes;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem;
+using Hedra.Game;
 using Hedra.Numerics;
 using Hedra.Rendering;
 
@@ -67,6 +68,7 @@ namespace Hedra.Engine.Generation
 
         public void Draw()
         {
+            if (!GameSettings.DebugNavMesh) return;
             Waypoints?.Draw();
         }
         

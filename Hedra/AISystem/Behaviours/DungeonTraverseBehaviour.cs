@@ -47,15 +47,9 @@ namespace Hedra.AISystem.Behaviours
 
         protected override Vector2[] DoUpdatePath(Vector3 Origin, out bool CanReach)
         {
-            CanReach = true;
             var sourceVertex = Graph.GetNearestVertex(Origin);
             var targetVertex = Graph.GetNearestVertex(Target);
-            return Graph.GetShortestPath(sourceVertex, targetVertex).Select(W => W.Position.Xz()).ToArray();
-        }
-
-        protected override Vector3 CalculateTargetPoint(Vector2 PathPoint)
-        {
-            return PathPoint.ToVector3() + Parent.Position.Y * Vector3.UnitY;
+            return Graph.GetShortestPath(sourceVertex, targetVertex, out CanReach).Select(W => W.Position.Xz()).ToArray();
         }
     }
 }

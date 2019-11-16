@@ -9,7 +9,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
 {
     public class DungeonDoorTrigger : BuildingDoorTrigger, IUpdatable
     {
-        public bool IsPlayerInside => _handler.IsActive;
         private readonly TimeHandler _handler;
         public DungeonDoorTrigger(Vector3 Position, VertexData Mesh) : base(Position, Mesh)
         {

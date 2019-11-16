@@ -68,14 +68,7 @@ namespace Hedra.AISystem.Behaviours
             TraverseStorage.Instance.ResetTime(Parent);
             TraverseStorage.Instance.RebuildIfNecessary(Parent, true);
         }
-        protected virtual Vector3 CalculateTargetPoint(Vector2 PathPoint)
-        {
-            var centeredOffset =
-                (PathPoint -
-                 new Vector2((int) (CurrentGrid.DimX / 2f), (int) (CurrentGrid.DimY / 2f))).ToVector3();
-            return centeredOffset * Chunk.BlockSize + _origin;
-        }
-        
+
         public override void Update()
         {
             if (!_reached && _canReach)
@@ -122,7 +115,7 @@ namespace Hedra.AISystem.Behaviours
             }
         }
 
-        private void OnGridUpdated(Grid UpdatedGrid)
+        private void OnGridUpdated(WaypointGrid UpdatedGrid)
         {
             UpdatePath();
         }
@@ -132,45 +125,17 @@ namespace Hedra.AISystem.Behaviours
             if(_currentPath == null)
                 UpdatePath();
         }
-        
-        private void UpdateSpeedBonus()
-        {
-            if (Math.Abs(_lastBonus - _speedBonus) > 0.005f)
-            {
-                if(_lastComponent != null) Parent.RemoveComponent(_lastComponent);
-                _lastComponent = null;
-                if (Math.Abs((_lastBonus = _speedBonus) * Parent.Speed - Parent.Speed) < 0.005f) return;
-                Parent.AddComponent(_lastComponent = new SpeedBonusComponent(Parent, -Parent.Speed + _speedBonus * Parent.Speed));
-            }
-        }
 
         protected virtual Vector2[] DoUpdatePath(Vector3 Origin, out bool CanReach)
         {
-            CanReach = true;
-            var target = (Target.Xz() - Origin.Xz()) * new Vector2(1f / Chunk.BlockSize, 1f / Chunk.BlockSize);
-            var center = new Vector2((int)(CurrentGrid.DimX / 2f), (int)(CurrentGrid.DimY / 2f));
-            var end = center + new Vector2((int)target.X, (int)target.Y);
-            var clampedEnd = new Vector2(Math.Max(Math.Min(end.X, CurrentGrid.DimX - 1), 0), Math.Max(Math.Min(end.Y, CurrentGrid.DimY - 1), 0)); 
-            var unblockedCenter = Finder.NearestUnblockedCell(CurrentGrid, center);
-            
-            if (float.IsInfinity(CurrentGrid.GetCellCost(clampedEnd))) 
-                clampedEnd = Finder.NearestUnblockedCell(CurrentGrid, clampedEnd, unblockedCenter);
-            
-            var currentPath = (Vector2[]) null;
-            currentPath = unblockedCenter == center 
-                ? Finder.GetPath(CurrentGrid, center, clampedEnd) 
-                : new []{ unblockedCenter };
+            var sourceVertex = CurrentGrid.GetNearestVertex(Origin);
+            var targetVertex = CurrentGrid.GetNearestVertex(Target);
+            return CurrentGrid.GetShortestPath(sourceVertex, targetVertex, out CanReach).Select(W => W.Position.Xz()).ToArray();
+        }
 
-            if(currentPath.Length == 1 && currentPath[0] == center)
-            {
-                CanReach = false;
-            }
-/*
-            _speedBonus = CurrentGrid.BlockedCellCount < CurrentGrid.TotalCellCount * .25f && HasTarget && (Target - Parent.Position).Xz().LengthSquared() > 24*24
-                ? 1.15f
-                : 1f;
-                */
-            return currentPath;
+        private Vector3 CalculateTargetPoint(Vector2 PathPoint)
+        {
+            return PathPoint.ToVector3() + Parent.Position.Y * Vector3.UnitY;
         }
         
         protected void UpdatePath()
@@ -204,7 +169,7 @@ namespace Hedra.AISystem.Behaviours
             Walk.Cancel();
         }
 
-        private Grid CurrentGrid => TraverseStorage.Instance[Parent];
+        private WaypointGrid CurrentGrid => TraverseStorage.Instance[Parent];
 
         public Vector2 GridSize => new Vector2(CurrentGrid.DimX, CurrentGrid.DimY);
 
@@ -218,9 +183,7 @@ namespace Hedra.AISystem.Behaviours
             get => Walk.ErrorMargin;
             set => Walk.ErrorMargin = value;
         }
-        
-        public bool HasInvalidPath => _currentPath == null;
-        
+
         public Vector3 Target { get; private set; }
 
         public bool HasTarget => !_reached;

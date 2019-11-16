@@ -409,6 +409,7 @@
     <Compile Include="Engine\Scenes\SceneLoader.cs" />
     <Compile Include="Engine\Scenes\SceneSettings.cs" />
     <Compile Include="Engine\Scenes\WaypointGraph.cs" />
+    <Compile Include="Engine\Scenes\WaypointGrid.cs" />
     <Compile Include="Engine\Scenes\WaypointLoader.cs" />
     <Compile Include="Engine\StructureSystem\CollisionTrigger.cs" />
     <Compile Include="Engine\StructureSystem\Lever.cs" />
@@ -617,12 +618,6 @@
     <Compile Include="Engine\Networking\Packets\WorldPacket.cs" />
     <Compile Include="Engine\Networking\SteamConnection.cs" />
     <Compile Include="Engine\Pathfinding\Finder.cs" />
-    <Compile Include="Engine\Pathfinding\Grid.cs" />
-    <Compile Include="Engine\Pathfinding\MinHeap.cs" />
-    <Compile Include="Engine\Pathfinding\MinHeapNode.cs" />
-    <Compile Include="Engine\Pathfinding\MovementPatterns.cs" />
-    <Compile Include="Engine\Pathfinding\Offset.cs" />
-    <Compile Include="Engine\Pathfinding\PathFinder.cs" />
     <Compile Include="Engine\PlantSystem\BerryBushDesign.cs" />
     <Compile Include="Engine\PlantSystem\CollectiblePlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\CollectiblePlantDesign.cs" />

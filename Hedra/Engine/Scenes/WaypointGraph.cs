@@ -14,13 +14,11 @@ namespace Hedra.Engine.Scenes
     /// </summary>
     public class WaypointGraph
     {
-        private readonly HashSet<Waypoint> _blockedVertices;
         private readonly Dictionary<Waypoint, HashSet<Waypoint>> _adjacencyList;
 
         public WaypointGraph()
         {
             _adjacencyList = new Dictionary<Waypoint, HashSet<Waypoint>>();
-            _blockedVertices = new HashSet<Waypoint>();
         }
 
         public void AddVertex(Waypoint A)
@@ -37,14 +35,19 @@ namespace Hedra.Engine.Scenes
             _adjacencyList[B].Add(A);
         }
 
+        public void RemoveEdge(Waypoint A, Waypoint B)
+        {
+            _adjacencyList[A].Remove(B);
+            _adjacencyList[B].Remove(A);
+        }
+        
         public Waypoint[] Adjacent(Waypoint A)
         {
             return _adjacencyList[A].ToArray();
         }
-
+        
         public void Draw()
         {
-            if (!GameSettings.DebugNavMesh) return;
             var vertices = Vertices;
             for (var i = 0; i < vertices.Length; ++i)
             {
@@ -104,9 +107,10 @@ namespace Hedra.Engine.Scenes
             return path.ToArray();
         }
         
-        public Waypoint[] GetShortestPath(Waypoint Source, Waypoint Target)
+        public Waypoint[] GetShortestPath(Waypoint Source, Waypoint Target, out bool CanReach)
         {
-            if (Source.Position == Target.Position && !_blockedVertices.Contains(Source)) return new[] { Source };
+            CanReach = true;
+            if (Source.Position == Target.Position) return new[] { Source };
             var parents = new Dictionary<Waypoint, Waypoint>();
             var queue = new Queue<Waypoint>();
             parents.Add(Source, default);
@@ -116,23 +120,15 @@ namespace Hedra.Engine.Scenes
                 var v = queue.Dequeue();
                 foreach (var w in Adjacent(v))
                 {
-                    if(parents.ContainsKey(w) || _blockedVertices.Contains(w)) continue;
+                    if(parents.ContainsKey(w)) continue;
                     parents.Add(w, v);
                     if (w.Position == Target.Position) return ReconstructPath(parents, Source, Target);
                     queue.Enqueue(w);
                 }
             }
-            throw new ArgumentException("Waypoint is unreachable");
-        }
 
-        public void BlockVertex(Waypoint Vertex)
-        {
-            _blockedVertices.Add(Vertex);
-        }
-
-        public void UnblockVertex(Waypoint Vertex)
-        {
-            _blockedVertices.Remove(Vertex);
+            CanReach = false;
+            return new Waypoint[0];
         }
         
         public Pair<Waypoint, Waypoint>[] Edges => GetEdges();
