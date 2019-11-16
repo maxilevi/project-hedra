@@ -330,6 +330,7 @@
     <Compile Include="Engine\Bullet\BulletDraw.cs" />
     <Compile Include="Engine\Bullet\BulletInterop.cs" />
     <Compile Include="Engine\Bullet\BulletPhysics.cs" />
+    <Compile Include="Engine\Bullet\BulletWorld.cs" />
     <Compile Include="Engine\Bullet\ContactTestResultCallback.cs" />
     <Compile Include="Engine\Bullet\PhysicsObjectInformation.cs" />
     <Compile Include="Engine\Bullet\PhysicsComponent.cs" />

@@ -48,7 +48,7 @@ namespace Hedra.Engine.Scenes
             var vertices = Vertices;
             for (var i = 0; i < vertices.Length; ++i)
             {
-                BasicGeometry.DrawPoint(vertices[i].Position, Colors.Red, 4f);
+                BasicGeometry.DrawPoint(vertices[i].Position, Colors.Red, 6f);
             }
             var edges = Edges;
             for (var i = 0; i < edges.Length; ++i)
@@ -143,6 +143,5 @@ namespace Hedra.Engine.Scenes
     public struct Waypoint
     {
         public Vector3 Position;
-        public float Size;
     }
 }
