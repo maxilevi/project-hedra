@@ -4,13 +4,13 @@ using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
-using Hedra.Engine.Pathfinding;
 using Hedra.EntitySystem;
 using System.Drawing;
 using Hedra.Components.Effects;
 using Hedra.Engine.Game;
 using System.Linq;
 using System.Numerics;
+using Hedra.Components;
 using Hedra.Engine.Scenes;
 using Hedra.Numerics;
 
@@ -93,10 +93,7 @@ namespace Hedra.AISystem.Behaviours
                 {
                     _canReach = true;
                 }
-                //if(Walk.HasTarget)
-                //    Parent.IsStuck = true;
-            }    
-            /* UpdateSpeedBonus(); */
+            }
         }
 
         private void RebuildAndResetPathIfNecessary()
@@ -144,12 +141,15 @@ namespace Hedra.AISystem.Behaviours
             _origin = Parent.Position;
             _currentIndex = 0;
             _currentPath = DoUpdatePath(_origin, out var canReach);
+            var dmgComponent = Parent.SearchComponent<DamageComponent>();
+            if(dmgComponent != null) dmgComponent.AICanReach = canReach;
             if (!canReach) _lastCanNotReachPosition = Target;
             _canReach = canReach;
         }
 
         public void SetTarget(Vector3 Position, Action Callback = null)
         {
+            if((Position - Target).LengthSquared() < 1) return;
             if ((Parent.Position - Position).LengthSquared() < ErrorMargin * ErrorMargin) return;
             Target = Position;
             _callback = Callback;

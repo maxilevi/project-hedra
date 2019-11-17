@@ -27,6 +27,7 @@ namespace Hedra.AISystem.Humanoid
         private readonly Timer _movementTimer;
         private readonly Timer _rollTimer;
         private readonly Timer _forgetTimer;
+        private bool _canExplore;
         protected abstract float SearchRadius { get; }
         protected abstract float AttackRadius { get; }
         protected abstract float ForgetRadius { get; }
@@ -34,10 +35,11 @@ namespace Hedra.AISystem.Humanoid
         protected override bool ShouldSleep => !IsChasing;
         public bool IsChasing => _chasingTarget != null;
         public bool IsExploring => !IsChasing && _hasTargetPoint;
-        protected virtual bool CanExplore => true;
+        protected virtual bool CanExplore => _canExplore;
 
         protected CombatAIComponent(IHumanoid Entity, bool IsFriendly) : base(Entity)
         {
+            _canExplore = true;
             _isFriendly = IsFriendly;
             _movementTimer = new Timer(1);
             _rollTimer = new Timer(Utils.Rng.NextFloat() * 3 + 4.0f);
@@ -218,6 +220,8 @@ namespace Hedra.AISystem.Humanoid
             _targetPoint = Position;
         }
 
+        public bool SetCanExplore(bool Value) => _canExplore = Value;
+        
         public IEntity ChasingTarget => _chasingTarget;
         
         public CombatAIBehaviour Behaviour

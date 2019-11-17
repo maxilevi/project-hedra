@@ -25,6 +25,7 @@ namespace Hedra.Engine.Scenes
 
         private static void Sample(VertexData Model, WaypointGraph Graph, float Step, Matrix4x4 Transformation)
         {
+            if(Step >= 4.0f) throw new ArgumentOutOfRangeException();
             var world = new BulletWorld(Gravity: 10);
             var shape = BulletPhysics.CreateTriangleShape(Model.Indices, Model.Vertices);
             var mainBody = default(RigidBody);

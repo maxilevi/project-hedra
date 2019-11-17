@@ -8,7 +8,7 @@ namespace Hedra.Engine.Scenes
     {
         private readonly Waypoint[][] _waypoints;
         private readonly HashSet<Waypoint> _blocked;
-        private Vector3 _position;
+        private readonly object _drawLock;
         public int DimX { get; }
         public int DimY { get; }
 
@@ -16,19 +16,31 @@ namespace Hedra.Engine.Scenes
         {
             this.DimX = DimX;
             this.DimY = DimY;
+            _drawLock = new object();
             _waypoints = new Waypoint[DimX][];
             _blocked = new HashSet<Waypoint>();
             for (var x = 0; x < DimX; ++x)
             {
                 _waypoints[x] = new Waypoint[DimY];
-                for (var y = 0; y < DimY; ++y)
+            }
+        }
+
+        public void Rebuild(Vector3 Center, float Scale)
+        {
+            lock (_drawLock)
+            {
+                Clear();
+                for (var x = 0; x < DimX; ++x)
                 {
-                    _waypoints[x][y] = new Waypoint
+                    for (var y = 0; y < DimY; ++y)
                     {
-                        Position = new Vector3(x, 0, y)
-                    };
-                    AddVertex(_waypoints[x][y]);
-                    LinkVertex(new Vector2(x,y));
+                        _waypoints[x][y] = new Waypoint
+                        {
+                            Position = new Vector3(x, 0, y) * Scale + Center
+                        };
+                        AddVertex(_waypoints[x][y]);
+                        LinkVertex(new Vector2(x, y));
+                    }
                 }
             }
         }
@@ -36,6 +48,11 @@ namespace Hedra.Engine.Scenes
         public bool IsWaypointBlocked(Vector2 Waypoint)
         {
             return _blocked.Contains(_waypoints[(int) Waypoint.X][(int) Waypoint.Y]);
+        }
+        
+        public override Waypoint GetNearestVertex(Vector3 Point)
+        {
+            return GetNearestVertex(Point, W => _blocked.Contains(W), out _);
         }
 
         public void UnlinkVertex(Vector2 Waypoint)
@@ -47,10 +64,18 @@ namespace Hedra.Engine.Scenes
                 RemoveEdge(_waypoints[x][y], _waypoints[x-1][y]);
             if(y > 0)
                 RemoveEdge(_waypoints[x][y], _waypoints[x][y-1]);
+            if(x > 0 && y > 0)
+                RemoveEdge(_waypoints[x][y], _waypoints[x-1][y-1]);
             if(x < DimX-1)
                 RemoveEdge(_waypoints[x][y], _waypoints[x+1][y]);
             if(y < DimY-1)
                 RemoveEdge(_waypoints[x][y], _waypoints[x][y+1]);
+            if(x < DimX-1 && y < DimY-1)
+                RemoveEdge(_waypoints[x][y], _waypoints[x+1][y+1]);
+            if (x > 0 && y < DimY-1)
+                RemoveEdge(_waypoints[x][y], _waypoints[x-1][y+1]);
+            if (x < DimX-1 && y > 0)
+                RemoveEdge(_waypoints[x][y], _waypoints[x+1][y-1]);
         }
 
         public void LinkVertex(Vector2 Waypoint)
@@ -69,19 +94,31 @@ namespace Hedra.Engine.Scenes
                 Function(_waypoints[x][y], _waypoints[x-1][y]);
             if(y > 0)
                 Function(_waypoints[x][y], _waypoints[x][y-1]);
+            if(x > 0 && y > 0)
+                Function(_waypoints[x][y], _waypoints[x-1][y-1]);
+            if (x > 0 && y < DimY-1)
+                Function(_waypoints[x][y], _waypoints[x-1][y+1]);
         }
 
-        public Vector3 Position
+        public override void MergeGraph(WaypointGraph Graph, int MergeStep)
         {
-            get => _position;
-            set
+            lock(_drawLock)
+                base.MergeGraph(Graph, MergeStep);
+        }
+
+        public override void Clear()
+        {
+            lock (_drawLock)
             {
-                //for (var i = 0; i <; ++i)
-                {
-                    
-                }
-                _position = value;
+                base.Clear();
+                _blocked.Clear();
             }
+        }
+
+        public override void Draw()
+        {
+            lock(_drawLock)
+                base.Draw();
         }
     }
 }

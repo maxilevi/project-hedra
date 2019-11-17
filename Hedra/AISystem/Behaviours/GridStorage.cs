@@ -2,7 +2,6 @@ using System;
 using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.Management;
-using Hedra.Engine.Pathfinding;
 using Hedra.EntitySystem;
 using System.Numerics;
 using Hedra.Engine.Scenes;

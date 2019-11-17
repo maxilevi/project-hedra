@@ -54,7 +54,7 @@ namespace Hedra.Components
         {
             var player = GameManager.Player;
             if (!_hasRider && (player.Position - Parent.Position).LengthSquared() < 12 * 12 && !player.IsRiding &&
-                !player.IsCasting
+                !player.IsCasting && !player.IsInsideABuilding
                 && Vector3.Dot((Parent.Position - player.Position).NormalizedFast(), player.View.LookingDirection) >
                 .6f)
             {

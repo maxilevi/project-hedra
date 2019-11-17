@@ -2,7 +2,7 @@
   "Name" : "Wolf", 
   "MaxHealth": 280.0,
   "AttackDamage": 9.0,
-  "Speed": 1.4,
+  "Speed": 1.5,
   "XP": 7.0,
   "Level": 8,
   "AIType": "GroupHostile",

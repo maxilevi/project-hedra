@@ -23,13 +23,6 @@ namespace Hedra.Engine.SkillSystem
                     base.OnAttack();
                 })
             );
-            if (Owner.SearchComponent<IsDungeonMemberComponent>() != null ||
-                Owner is IHumanoid humanoid && humanoid.IsInsideABuilding)
-            {
-                var behaviour = new DungeonTraverseBehaviour(Parent);
-                _aiComponent.AlterBehaviour<TraverseBehaviour>(behaviour);
-                AlterBehaviour<TraverseBehaviour>(behaviour);
-            }
         }
             
         public override void Update()

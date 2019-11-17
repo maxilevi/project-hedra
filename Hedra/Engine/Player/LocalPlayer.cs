@@ -169,7 +169,7 @@ namespace Hedra.Engine.Player
             var entities = World.Entities.ToArray();
             for (var i = entities.Length - 1; i > -1; i--)
             {
-                if (!(entities[i] is LocalPlayer) && (entities[i].Position.Xz() - this.Position.Xz()).LengthSquared() < 256 * 256 || Companion.Entity == entities[i])
+                if (!(entities[i] is LocalPlayer) && (entities[i].Position.Xz() - this.Position.Xz()).LengthSquared() < 64 * 64 || Companion.Entity == entities[i])
                 {
                     entities[i].Draw();
                 }

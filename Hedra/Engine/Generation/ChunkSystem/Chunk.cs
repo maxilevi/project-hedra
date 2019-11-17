@@ -17,7 +17,6 @@ using Hedra.Core;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Core;
 using Hedra.Engine.Management;
-using Hedra.Engine.Pathfinding;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Geometry;

@@ -38,7 +38,8 @@ namespace Hedra.EntitySystem
         
         int Level { get; set; }
         
-        bool IsUndead { get; }     
+        bool IsUndead { get; }
+        bool IsInsideABuilding { get; set; }
         
         float MaxOxygen { get; set; }
         

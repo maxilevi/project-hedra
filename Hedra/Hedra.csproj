@@ -199,8 +199,8 @@
     <Compile Include="AISystem\Behaviours\Behaviour.cs" />
     <Compile Include="AISystem\Behaviours\ChargeBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\DungeonRoamBehaviour.cs" />
-    <Compile Include="AISystem\Behaviours\DungeonTraverseBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\EscapeBehaviour.cs" />
+    <Compile Include="AISystem\Behaviours\Finder.cs" />
     <Compile Include="AISystem\Behaviours\FleeBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\FollowBehaviour.cs" />
     <Compile Include="AISystem\Behaviours\FoxHostileBehaviour.cs" />
@@ -232,9 +232,6 @@
     <Compile Include="AISystem\FriendlyAIComponent.cs" />
     <Compile Include="AISystem\GenericBasicAIComponent.cs" />
     <Compile Include="AISystem\HostileAIComponent.cs" />
-    <Compile Include="AISystem\Humanoid\DungeonRangedAIComponent.cs" />
-    <Compile Include="AISystem\Humanoid\DungeonMageAIComponent.cs" />
-    <Compile Include="AISystem\Humanoid\DungeonMeleeAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\FishermanAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\NPCAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\RangedAIComponent.cs" />
@@ -253,6 +250,7 @@
     <Compile Include="AISystem\Humanoid\TraverseHumanoidAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\VillagerAISettings.cs" />
     <Compile Include="AISystem\Humanoid\MeleeAIComponent.cs" />
+    <Compile Include="AISystem\IAlterableAI.cs" />
     <Compile Include="AISystem\IBehaviourComponent.cs" />
     <Compile Include="AISystem\IGuardAIComponent.cs" />
     <Compile Include="AISystem\ITraverseAIComponent.cs" />
@@ -260,7 +258,6 @@
     <Compile Include="AISystem\Mob\CowAIComponent.cs" />
     <Compile Include="AISystem\Mob\CowFarmAIComponent.cs" />
     <Compile Include="AISystem\Mob\CrabAIComponent.cs" />
-    <Compile Include="AISystem\Mob\DungeonSkeletonKamikazeAIComponent.cs" />
     <Compile Include="AISystem\Mob\FoxAIComponent.cs" />
     <Compile Include="AISystem\Mob\GiantBeetleAIComponent.cs" />
     <Compile Include="AISystem\Mob\GoatAIComponent.cs" />
@@ -419,7 +416,6 @@
     <Compile Include="Engine\StructureSystem\Overworld\Dungeon0.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonBossRoomTrigger.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonDoorTrigger.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\DungeonDualAIComponent.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonTimeTrigger.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonBuilder.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\Dungeon0Design.cs" />
@@ -617,7 +613,6 @@
     <Compile Include="Engine\Networking\Packets\PositionAndRotationPacket.cs" />
     <Compile Include="Engine\Networking\Packets\WorldPacket.cs" />
     <Compile Include="Engine\Networking\SteamConnection.cs" />
-    <Compile Include="Engine\Pathfinding\Finder.cs" />
     <Compile Include="Engine\PlantSystem\BerryBushDesign.cs" />
     <Compile Include="Engine\PlantSystem\CollectiblePlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\CollectiblePlantDesign.cs" />

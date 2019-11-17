@@ -74,8 +74,9 @@ namespace Hedra.Engine.WorldBuilding
         {
             var player = GameManager.Player;
 
-            bool IsInLookingAngle() => Vector2.Dot((this.Position - player.Position).Xz().NormalizedFast(),
-                player.View.LookingDirection.Xz().NormalizedFast()) > InteractionAngle && (AllowThroughCollider || !player.Physics.StaticRaycast(Position));                
+            var direction = (this.Position - player.Position).NormalizedFast();
+            bool IsInLookingAngle() => Vector2.Dot((Position - player.Position).Xz().NormalizedFast(),
+                player.View.LookingDirection.Xz().NormalizedFast()) > InteractionAngle && (AllowThroughCollider || !player.Physics.StaticRaycast(Position - direction * 4));                
             
             if (IsInRadius() && IsInLookingAngle() && (!Interacted || !SingleUse) && CanInteract && player.CanInteract)
             {

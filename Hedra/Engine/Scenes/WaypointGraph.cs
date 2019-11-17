@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -14,7 +15,7 @@ namespace Hedra.Engine.Scenes
     /// </summary>
     public class WaypointGraph
     {
-        private readonly Dictionary<Waypoint, HashSet<Waypoint>> _adjacencyList;
+        private Dictionary<Waypoint, HashSet<Waypoint>> _adjacencyList;
 
         public WaypointGraph()
         {
@@ -46,7 +47,7 @@ namespace Hedra.Engine.Scenes
             return _adjacencyList[A].ToArray();
         }
         
-        public void Draw()
+        public virtual void Draw()
         {
             var vertices = Vertices;
             for (var i = 0; i < vertices.Length; ++i)
@@ -78,18 +79,29 @@ namespace Hedra.Engine.Scenes
             return edges.ToArray();
         }
 
-        public Waypoint GetNearestVertex(Vector3 Point)
+        public virtual Waypoint GetNearestVertex(Vector3 Point)
+        {
+            return GetNearestVertex(Point, out _);
+        }
+        
+        public Waypoint GetNearestVertex(Vector3 Point, out float Distance)
+        {
+            return GetNearestVertex(Point, W => false, out Distance);
+        }
+
+        protected Waypoint GetNearestVertex(Vector3 Point, Func<Waypoint, bool> Filter, out float Distance)
         {
             var vertices = Vertices;
             Waypoint point = default;
-            float dist = float.MaxValue;
+            Distance = float.MaxValue;
             for (var i = 0; i < vertices.Length; ++i)
             {
+                if(Filter(vertices[i])) continue;
                 var newDist = (vertices[i].Position - Point).LengthSquared();
-                if (newDist < dist)
+                if (newDist < Distance)
                 {
                     point = vertices[i];
-                    dist = newDist;
+                    Distance = newDist;
                 }
             }
             return point;
@@ -129,6 +141,69 @@ namespace Hedra.Engine.Scenes
 
             CanReach = false;
             return new Waypoint[0];
+        }
+
+        public virtual void Clear()
+        {
+            _adjacencyList.Clear();
+        }
+        
+                
+        public virtual void MergeGraph(WaypointGraph Graph, int MergeStep)
+        {
+            var set = new Dictionary<Vector3, Waypoint>();
+            foreach (var v in Vertices)
+            {
+                set.Add(
+                    new Vector3((int) (v.Position.X / MergeStep), (int) (v.Position.Y / MergeStep),
+                        (int) (v.Position.Z / MergeStep)), v);
+            }
+
+            /* Doing lookups in a smaller set is always faster */
+            var vertices = Graph.Vertices;
+            var canBeConvex = false;
+            for (var i = 0; i < vertices.Length && !canBeConvex; ++i)
+            {
+                var isContained = set.ContainsKey(vertices[i].Position);
+                canBeConvex |= isContained;
+            }
+            if(!canBeConvex) return;
+
+            foreach (var v in vertices)
+            {
+                var n = v;
+                var quantized = new Vector3((int) (v.Position.X / MergeStep), (int) (v.Position.Y / MergeStep), (int) (v.Position.Z / MergeStep));
+                if (set.TryGetValue(quantized, out var m)) n = m;
+                foreach (var w in Graph.Adjacent(v))
+                {
+                    AddEdge(n, w);
+                }
+            }
+        }
+
+        public void AddGraph(WaypointGraph Graph)
+        {
+            foreach (var v in Graph.Vertices)
+            {
+                foreach (var w in Graph.Adjacent(v))
+                {
+                    AddEdge(v, w);
+                }
+            }
+        }
+
+        public void Copy(WaypointGraph Graph)
+        {
+            _adjacencyList = Graph._adjacencyList;
+        }
+
+        public WaypointGraph Clone()
+        {
+            var graph = new WaypointGraph
+            {
+                _adjacencyList = new Dictionary<Waypoint, HashSet<Waypoint>>(_adjacencyList),
+            };
+            return graph;
         }
         
         public Pair<Waypoint, Waypoint>[] Edges => GetEdges();

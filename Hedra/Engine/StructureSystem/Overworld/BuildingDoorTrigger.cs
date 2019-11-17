@@ -32,18 +32,18 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         protected void OnOutsideCollision(IEntity Entity)
         {
-            if (Entity is IHumanoid humanoid && humanoid.IsInsideABuilding)
+            if (Entity.IsInsideABuilding)
             {
-                humanoid.IsInsideABuilding = false;
+                Entity.IsInsideABuilding = false;
                 OnLeave(Entity);
             }
         }
         
         protected void OnInsideCollision(IEntity Entity)
         {
-            if (Entity is IHumanoid humanoid && !humanoid.IsInsideABuilding)
+            if (!Entity.IsInsideABuilding)
             {
-                humanoid.IsInsideABuilding = true;
+                Entity.IsInsideABuilding = true;
                 OnEnter(Entity);
             }
         }

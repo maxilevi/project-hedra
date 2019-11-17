@@ -84,8 +84,7 @@ namespace Hedra.Engine.Player
         public float BonusHealth { get; set; }
         public float DodgeCost { get; set; }    
         public float RandomFactor { get; set; }
-        public bool IsInsideABuilding { get; set; }
-        
+
         public virtual bool CanInteract { get; set; } = true;
         public virtual float FacingDirection => throw new NotImplementedException();
         public new HumanoidModel Model { get => base.Model as HumanoidModel; set => base.Model = value; }

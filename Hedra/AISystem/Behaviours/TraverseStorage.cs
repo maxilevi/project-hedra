@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Hedra.Engine;
 using Hedra.Engine.Core;
-using Hedra.Engine.Pathfinding;
 using Hedra.EntitySystem;
 using System.Numerics;
 using Hedra.Engine.Scenes;

@@ -8,7 +8,6 @@ namespace Hedra.AISystem
         public DungeonAdaptiveAIComponent(Entity Parent) : base(Parent)
         {
             AlterBehaviour<RoamBehaviour>(new DungeonRoamBehaviour(Parent));
-            AlterBehaviour<TraverseBehaviour>(new DungeonTraverseBehaviour(Parent));
         }
     }
 }

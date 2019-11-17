@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Numerics;
 using Hedra.AISystem;
+using Hedra.AISystem.Behaviours;
 using Hedra.AISystem.Humanoid;
 using Hedra.AISystem.Mob;
 using Hedra.API;
@@ -113,6 +114,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             Skeleton.AddComponent(new IsDungeonMemberComponent(Skeleton));
             Skeleton.SearchComponent<DamageComponent>().Ignore(E => E.SearchComponent<IsDungeonMemberComponent>() != null);
+            Skeleton.SearchComponent<IAlterableAI>().AlterBehaviour<RoamBehaviour>(new DungeonRoamBehaviour(Skeleton));
         }
         
         private static IEntity PatrolSkeleton(Vector3 Position, CollidableStructure Structure)
@@ -131,9 +133,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             var mob = World.SpawnMob(MobType.SkeletonKamikaze, Position, Utils.Rng);
             mob.Position = Position;
-            var previousAI = mob.SearchComponent<BasicAIComponent>();
-            mob.RemoveComponent(previousAI, false);
-            mob.AddComponent(new DungeonDualAIComponent(mob, new DungeonSkeletonKamikazeAIComponent(mob), previousAI, Structure));
             return mob;
         }
 
@@ -142,19 +141,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
             const int level = 17;
             var skeleton = World.WorldBuilding.SpawnBandit(Position, level, false, true, Class.Warrior | Class.Rogue | Class.Mage);
             skeleton.Physics.CollidesWithEntities = false;
+            skeleton.SearchComponent<CombatAIComponent>().SetCanExplore(Value: false);
             skeleton.Position = Position;
-            var previousAI = skeleton.SearchComponent<BaseHumanoidAIComponent>();
-            skeleton.RemoveComponent(previousAI, false);
-            var dungeonAI = default(IComponent<IEntity>);
-            if(previousAI is MeleeAIComponent)
-                dungeonAI = new DungeonMeleeAIComponent(skeleton, false);
-            else if(previousAI is MageAIComponent)
-                dungeonAI = new DungeonMageAIComponent(skeleton, false);
-            else if(previousAI is RangedAIComponent)
-                dungeonAI = new DungeonRangedAIComponent(skeleton, false);
-            else
-                throw new ArgumentOutOfRangeException();
-            skeleton.AddComponent(new DungeonDualAIComponent(skeleton, dungeonAI, previousAI, Structure));
             return skeleton;
         }
         

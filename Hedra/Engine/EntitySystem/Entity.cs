@@ -203,6 +203,8 @@ namespace Hedra.Engine.EntitySystem
             get => Physics.RigidbodyPosition;
             set => Physics.Translate(-Position + value);
         }
+        
+        public bool IsInsideABuilding { get; set; }
 
         public Vector3 Rotation
         {
