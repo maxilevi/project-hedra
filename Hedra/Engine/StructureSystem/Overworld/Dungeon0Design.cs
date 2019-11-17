@@ -142,6 +142,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var skeleton = World.WorldBuilding.SpawnBandit(Position, level, false, true, Class.Warrior | Class.Rogue | Class.Mage);
             skeleton.Physics.CollidesWithEntities = false;
             skeleton.SearchComponent<CombatAIComponent>().SetCanExplore(Value: false);
+            skeleton.SearchComponent<CombatAIComponent>().SetGuardSpawnPoint(Value: false);
             skeleton.Position = Position;
             return skeleton;
         }

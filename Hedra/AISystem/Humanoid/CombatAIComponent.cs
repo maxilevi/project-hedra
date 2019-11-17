@@ -27,6 +27,7 @@ namespace Hedra.AISystem.Humanoid
         private readonly Timer _movementTimer;
         private readonly Timer _rollTimer;
         private readonly Timer _forgetTimer;
+        private bool _guardSpawnPoint;
         private bool _canExplore;
         protected abstract float SearchRadius { get; }
         protected abstract float AttackRadius { get; }
@@ -36,10 +37,12 @@ namespace Hedra.AISystem.Humanoid
         public bool IsChasing => _chasingTarget != null;
         public bool IsExploring => !IsChasing && _hasTargetPoint;
         protected virtual bool CanExplore => _canExplore;
+        protected virtual bool GuardSpawnPoint => _guardSpawnPoint;
 
         protected CombatAIComponent(IHumanoid Entity, bool IsFriendly) : base(Entity)
         {
             _canExplore = true;
+            _guardSpawnPoint = true;
             _isFriendly = IsFriendly;
             _movementTimer = new Timer(1);
             _rollTimer = new Timer(Utils.Rng.NextFloat() * 3 + 4.0f);
@@ -121,7 +124,7 @@ namespace Hedra.AISystem.Humanoid
 
         private bool ShouldReset()
         {
-            var targetLost = IsChasing && (_chasingTarget.IsDead || _chasingTarget.IsInvisible || (_targetPoint.Xz() - Parent.Position.Xz()).LengthSquared() > ForgetRadius * ForgetRadius);
+            var targetLost = IsChasing && (_chasingTarget.IsDead || _chasingTarget.IsInvisible || GuardSpawnPoint && (_targetPoint.Xz() - Parent.Position.Xz()).LengthSquared() > ForgetRadius * ForgetRadius);
             var shouldWeReset = IsChasing && _forgetTimer.Tick() || targetLost;
             if (shouldWeReset)
             {
@@ -203,7 +206,7 @@ namespace Hedra.AISystem.Humanoid
         {
             if (IsChasing) return;
             SetTarget(_isFriendly 
-                ? Behaviour.FindMobTarget(32) 
+                ? Behaviour.FindMobTarget(48) 
                 : Behaviour.FindPlayerTarget(SearchRadius)
             );
         }
@@ -220,7 +223,9 @@ namespace Hedra.AISystem.Humanoid
             _targetPoint = Position;
         }
 
-        public bool SetCanExplore(bool Value) => _canExplore = Value;
+        public void SetCanExplore(bool Value) => _canExplore = Value;
+
+        public void SetGuardSpawnPoint(bool Value) => _guardSpawnPoint = Value;
         
         public IEntity ChasingTarget => _chasingTarget;
         

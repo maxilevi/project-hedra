@@ -5,7 +5,7 @@
   "AttackCooldown": 3.0,
   "Speed": 1.40,
   "XP": 28.0,
-  "Level": 11,
+  "Level": 9,
   "AIType": "DungeonAdaptive",
   "Effects": [
     {
@@ -63,7 +63,7 @@
         "OnAnimationMid" : "CastSiphonBlood",
         "Chance": 0.425,
         "Range": 32,
-        "Cooldown": 3.0
+        "Cooldown": 4.0
       }
     ]
   }

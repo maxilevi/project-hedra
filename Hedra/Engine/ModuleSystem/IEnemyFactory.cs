@@ -12,6 +12,7 @@ namespace Hedra.Engine.ModuleSystem
         string DisplayName { get; set; }
         float MaxHealth { get; }
         float AttackDamage { get; }
+        float XP { get; }
 
         void Apply(SkilledAnimableEntity Mob, bool NormalizeValues = true);
 

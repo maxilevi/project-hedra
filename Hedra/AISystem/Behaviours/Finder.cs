@@ -17,7 +17,7 @@ namespace Hedra.AISystem.Behaviours
             for (var i = 0; i < nearbyGraphs.Length; ++i)
             {
                 nearbyGraphs[i].GetNearestVertex(Parent.Position, out var distance);
-                if (distance <= Chunk.BlockSize + 1)
+                if (distance <= Chunk.BlockSize * 2)
                 {
                     if (graph == null) graph = nearbyGraphs[i].Clone();
                     else graph.MergeGraph(nearbyGraphs[i], (int)Chunk.BlockSize);

@@ -22,6 +22,7 @@ using Hedra.Game;
 using Hedra.Localization;
 using Hedra.Rendering;
 using System.Numerics;
+using Hedra.Engine.ModuleSystem;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.EntitySystem.BossSystem
@@ -36,16 +37,18 @@ namespace Hedra.Engine.EntitySystem.BossSystem
             var type = PossibleTypes[Rng.Next(0, PossibleTypes.Length)];
             var boss = World.SpawnMob(type, Vector3.Zero, Rng);
             boss.Position = Position;
-            MakeBoss(boss, Position, Rng);
+            MakeBoss(type, boss, Position, Rng);
             return boss;
         }
 
-        public static void MakeBoss(IEntity Entity, Vector3 Position, Random Rng)
+        public static void MakeBoss(MobType Type, IEntity Entity, Vector3 Position, Random Rng)
         {
+            var template = World.MobFactory.GetFactory(Type.ToString());
             if(Entity.SearchComponent<IGuardAIComponent>() != null)
                 Entity.SearchComponent<IGuardAIComponent>().GuardPosition = Position;
             Entity.SearchComponent<ITraverseAIComponent>().GridSize = new Vector2(32, 32);
             var dmgComponent = Entity.SearchComponent<DamageComponent>();
+            dmgComponent.XpToGive = template.XP;
             var healthBarComponent = new BossHealthBarComponent(Entity, NameGenerator.Generate(World.Seed + Rng.Next(0, 999999)));
             Entity.RemoveComponent(Entity.SearchComponent<HealthBarComponent>());
             Entity.AddComponent(new BossXPMessageComponent(Entity));
