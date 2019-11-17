@@ -24,6 +24,7 @@ namespace Hedra.AISystem
             this.Owner.SearchComponent<DamageComponent>().OnDamageEvent += OnDamage;
             this.Owner.AfterDamaging += OnDamaging;
             this.Owner.Kill += OnOwnerKill;
+            Parent.SearchComponent<DamageComponent>().OnDamageEvent += OnDamage;
             Parent.BeforeDamaging += BeforeDamaging;
             Parent.AfterDamaging += AfterDamaging;
             Parent.Kill += OnKill;
@@ -42,6 +43,8 @@ namespace Hedra.AISystem
             {
                 Parent.Position = Owner.Position + Vector3.Cross(Parent.Orientation, Vector3.UnitY) * 12f;
                 _attack.ResetTarget();
+                _follow.Cancel();
+                _follow.Target = Owner;
             }
             
             if (_attack.Enabled)
@@ -52,8 +55,6 @@ namespace Hedra.AISystem
             {
                 _follow.Update();
             }
-
-            if (Owner.IsDead) Kill();
         }
 
         private void OnDamage(DamageEventArgs Args)
@@ -94,6 +95,7 @@ namespace Hedra.AISystem
         {
             if(_disposed) return;
             _disposed = true;
+            Parent.Health = 0;
             Executer.ExecuteOnMainThread(Dispose);
         }
         

@@ -87,7 +87,7 @@ namespace Hedra.Engine.Player.Inventory
 
         private void SetCompanionState(bool State)
         {
-            if (_player.Companion.Entity == null) return;
+            if (_player.Companion.Item == null) return;
             if (State)
                 _companionInterface.Show(_player.Companion.Item, _player.Companion.Entity);
             else

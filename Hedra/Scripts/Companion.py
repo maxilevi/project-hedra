@@ -62,27 +62,31 @@ def init(user, state):
     state['pet_previous_enabled'] = True
     state['pet_previous_alpha'] = 1
     state['was_riding'] = False
+    state['was_dead'] = False
 
 
 def update(state):
     pet = state['pet']
     user = state['user']
+    pet_item = user.Inventory.Pet
 
     if pet:
+        if not state['was_dead'] and pet.IsDead:
+            get_dead_timer(pet_item).Reset()
+        state['was_dead'] = pet.IsDead
         handle_model(user, pet, state)
 
-    pet_item = user.Inventory.Pet
-    if pet and pet.IsDead and pet_item and get_dead_timer(pet_item).Ready:
-        get_dead_timer(pet_item).Reset()
+    if pet_item and (not pet or pet.IsDead) and get_dead_timer(pet_item).Ready:
+        spawn_pet(state, pet_item)
+        state['pet'].Health = state['pet'].MaxHealth
+        pet_item.SetAttribute(HEALTH_ATTRIB_NAME, state['pet'].MaxHealth)
 
     if pet_item != state['pet_item'] and ((pet_item and get_dead_timer(pet_item).Ready) or (not pet_item)):
         spawn_pet(state, pet_item)
-
-    if pet and pet.IsDead and pet_item and get_dead_timer(pet_item).Tick():
-        pet_item.SetAttribute(HEALTH_ATTRIB_NAME, pet.MaxHealth)
-        spawn_pet(state, pet_item)
-        
+    
     if pet_item:
+        if not pet or pet.IsDead:
+            get_dead_timer(pet_item).Tick()
         update_growth(pet_item, pet)
 
 def get_dead_timer(pet_item):
@@ -289,30 +293,40 @@ def create_companion_attributes(type, can_ride, mob_template, mob_name):
     ])
 
 def update_ui(pet_item, pet_entity, top_left, top_right, bottom_left, bottom_right, level, name):
-    if not pet_item or not pet_entity: return
+    if not pet_item: return
     
     name.Text = pet_item.GetAttribute[str](NAME_ATTRIB_NAME)
-    top_left.Text = '{0} {1}'.format(
-        int(pet_entity.Health),
-        translate('health_points')
-    )
-    top_right.Text = '{0}/{1} {2}'.format(
-        int(pet_entity.SearchComponent[CompanionStatsComponent]().XP),
-        int(pet_entity.SearchComponent[CompanionStatsComponent]().MaxXP),
-        translate('experience_points')
-    )
-    level.Text = '{0} {1}'.format(
-        translate('level').upper(),
-        pet_entity.SearchComponent[CompanionStatsComponent]().Level
-    )
-    bottom_left.Text = '{0} {1}'.format(
-        '{:.2f}'.format(pet_entity.AttackDamage),
-        translate('attack_damage_label')
-    )
-    bottom_right.Text = '{0} {1}'.format(
-        '{:.2f}'.format(pet_entity.Speed * RideComponent.SpeedMultiplier),
-        translate('speed_label')
-    )
+    
+    if pet_entity and not pet_entity.IsDead:
+        top_left.Text = '{0} {1}'.format(
+            int(pet_entity.Health),
+            translate('health_points')
+        )
+        top_right.Text = '{0}/{1} {2}'.format(
+            int(pet_entity.SearchComponent[CompanionStatsComponent]().XP),
+            int(pet_entity.SearchComponent[CompanionStatsComponent]().MaxXP),
+            translate('experience_points')
+        )
+        level.Text = '{0} {1}'.format(
+            translate('level').upper(),
+            pet_entity.SearchComponent[CompanionStatsComponent]().Level
+        )
+        bottom_left.Text = '{0} {1}'.format(
+            '{:.2f}'.format(pet_entity.AttackDamage),
+            translate('attack_damage_label')
+        )
+        bottom_right.Text = '{0} {1}'.format(
+            '{:.2f}'.format(pet_entity.Speed * RideComponent.SpeedMultiplier),
+            translate('speed_label')
+        )
+    else:
+        top_left.Text = str()
+        top_right.Text = str()
+        level.Text = 'RESPAWN IN {0}s'.format(
+            '{:.2f}'.format(get_dead_timer(pet_item).AlertTime - get_dead_timer(pet_item).AlertTime * get_dead_timer(pet_item).Progress)
+        )
+        bottom_left.Text = str()
+        bottom_right.Text = str()
 
 for name, _, _ in COMPANION_TYPES:
     assert World.MobFactory.ContainsFactory(name)
