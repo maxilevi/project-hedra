@@ -87,7 +87,7 @@ namespace Hedra.Components
             {
                 _canUnride = false;
             }
-            if( _hasRider && _rider is LocalPlayer && _shouldUnride || _hasRider && _rider.IsDead )
+            if( _hasRider && _rider is LocalPlayer && _shouldUnride || _hasRider && (_rider.IsDead || _rider.IsInsideABuilding))
                 _rider.IsRiding = false;
 
 

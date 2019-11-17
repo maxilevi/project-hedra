@@ -134,7 +134,7 @@ namespace Hedra.Components
 
         public override void Update()
         {
-            _show = (Parent.Model.Position - GameManager.Player.Position).LengthSquared() <
+            _show = (Parent.Position - GameManager.Player.Position).LengthSquared() <
                     ShowDistance * ShowDistance
                     && !Hide
                     && !Parent.IsDead

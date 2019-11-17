@@ -217,10 +217,13 @@ namespace Hedra.Engine.Player
                 
                 _previousPosition = Model.Human.Position;
             }
-            
-            if(Companion.Entity != null && !Companion.Entity.Disposed)
+
+            if (Companion.Entity != null && !Companion.Entity.Disposed)
+            {
+                Companion.Entity?.UpdateCriticalComponents();
                 Companion.Entity?.Update();
-            
+            }
+
             Rotation = new Vector3(0, this.Rotation.Y, 0);
             View.AddedDistance = IsMoving || IsSwimming || IsTravelling ? 3.0f : 0.0f;
             AmbientEffects.Update();
