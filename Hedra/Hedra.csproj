@@ -334,8 +334,10 @@
     <Compile Include="Engine\Bullet\PhysicsComponentMotionState.cs" />
     <Compile Include="Engine\CacheSystem\Dungeon0Cache.cs" />
     <Compile Include="Engine\CacheSystem\Dungeon1Cache.cs" />
+    <Compile Include="Engine\CacheSystem\Dungeon1IconCache.cs" />
     <Compile Include="Engine\CacheSystem\Dungeon2Cache.cs" />
-    <Compile Include="Engine\CacheSystem\DungeonIconCache.cs" />
+    <Compile Include="Engine\CacheSystem\Dungeon2IconCache.cs" />
+    <Compile Include="Engine\CacheSystem\Dungeon0IconCache.cs" />
     <Compile Include="Engine\CacheSystem\DynamicCache.cs" />
     <Compile Include="Engine\CacheSystem\FishingPostIconCache.cs" />
     <Compile Include="Engine\CacheSystem\WizardTowerCache.cs" />
@@ -413,12 +415,13 @@
     <Compile Include="Engine\StructureSystem\Overworld\AnimableInteractableStructure.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\BaseDungeonDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\BuildingDoorTrigger.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\Dungeon0.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\DungeonWithBoss.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\Dungeon1Design.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonBossRoomTrigger.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonDoorTrigger.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\DungeonTimeTrigger.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonBuilder.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\Dungeon0Design.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\DungeonWithBossDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\FishingPost.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\FishingPostDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\IsDungeonMemberComponent.cs" />
@@ -901,7 +904,7 @@
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\IBuilder.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\GenericBuilder.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Chimney.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\CollectiblePlant.cs" />
+    <Compile Include="Engine\StructureSystem\VillageSystem\CollectibleObject.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\IProbabilityTemplate.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Loom.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Placers\GenericPlacer.cs" />
@@ -8994,6 +8997,10 @@
       <Link>Assets\Items\Misc\Bone.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Misc\BossRoomKey.ply">
+      <Link>Assets\Items\Misc\BossRoomKey.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Misc\Cloth.ply">
       <Link>Assets\Items\Misc\Cloth.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -9144,6 +9151,54 @@
     </Content>
     <Content Include="..\project-hedra-assets\Structures\Dungeon0\Dungeon0.ply">
       <Link>Assets\Env\Structures\Dungeon\Dungeon0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon1\Dungeon1-Colliders.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon1-Colliders.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon1\Dungeon1-Door0.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon1-Door0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon1\Dungeon1-Door1.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon1-Door1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon1\Dungeon1-Door2.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon1-Door2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon1\Dungeon1-Door3.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon1-Door3.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon1\Dungeon1-Door4.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon1-Door4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon1\Dungeon1-Door5.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon1-Door5.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon1\Dungeon1-Door6.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon1-Door6.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon1\Dungeon1-Icon.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon1-Icon.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon1\Dungeon1-Pathfinding.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon1-Pathfinding.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon1\Dungeon1-Scene.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon1-Scene.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon1\Dungeon1.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon1.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Structures\FishingDock0\Caravan0-Colliders.ply">
@@ -14543,6 +14598,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Misc\Bone.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Misc\BossRoomKey.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Misc\Cloth.json">

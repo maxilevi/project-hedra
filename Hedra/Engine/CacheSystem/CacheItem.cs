@@ -64,6 +64,8 @@ namespace Hedra.Engine.CacheSystem
         Dungeon1,
         Dungeon2,
         Dungeon0Icon,
+        Dungeon1Icon,
+        Dungeon2Icon,
         MaxEnums
     }
 }

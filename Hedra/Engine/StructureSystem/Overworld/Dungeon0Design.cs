@@ -26,27 +26,21 @@ using Hedra.Sound;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
-    public class Dungeon0Design : BaseDungeonDesign<Dungeon0>
+    public class Dungeon0Design : DungeonWithBossDesign
     {
         public override int PlateauRadius => 300;
         protected override int StructureChance => StructureGrid.Dungeon0Chance;
         protected override CacheItem? Cache => CacheItem.Dungeon0;
-        public override bool CanSpawnInside => false;
         protected override Vector3 StructureOffset => Dungeon0Cache.Offset;
-        protected override BlockType PathType => BlockType.StonePath;
+        public override VertexData Icon => CacheManager.GetModel(CacheItem.Dungeon0Icon);
         protected override float GroundworkRadius => 180;
-        
-        protected override Dungeon0 Create(Vector3 Position, float Size)
-        {
-            return new Dungeon0(Position);
-        }
+        protected override string BaseFileName => "Dungeon0";
+        protected override SceneSettings Scene => Settings;
+        protected override int Level => 13;
 
         protected override void DoBuild(CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation, Random Rng)
         {
             base.DoBuild(Structure, Rotation, Translation, Rng);
-            SceneLoader.LoadIfExists(Structure, "Assets/Env/Structures/Dungeon/Dungeon0.ply", Vector3.One, Rotation * Translation, Settings);
-            AddMembersToStructure((Dungeon0)Structure.WorldObject, Structure, Rotation, Translation);
-            
             /* Office */
             AddDoor(AssetManager.PLYLoader($"Assets/Env/Structures/Dungeon/Dungeon0-Door0.ply", Vector3.One), Dungeon0Cache.Doors[0], Rotation, Structure, true, false);
             /* Entrance */
@@ -72,26 +66,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
             };
         }
 
-        private static void AddMembersToStructure(Dungeon0 Dungeon, CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation)
-        {
-            Dungeon.BuildingTrigger = (DungeonDoorTrigger) Structure.WorldObject.Children.First(T => T is DungeonDoorTrigger);
-            if (Dungeon.BuildingTrigger == null)
-            {
-                int a = 0;
-            }
-            Structure.Waypoints = WaypointLoader.Load("Assets/Env/Structures/Dungeon/Dungeon0-Pathfinding.ply", Vector3.One, Rotation * Translation);
-        }
-
-        private static BaseStructure BuildTrigger0(Vector3 Point, VertexData Mesh)
-        {
-            return new DungeonDoorTrigger(Point, Mesh);
-        }
-        
-        private static BaseStructure BuildTrigger1(Vector3 Point, VertexData Mesh)
-        {
-            return new DungeonBossRoomTrigger(Point, Mesh);
-        }
-
         private static IEntity SkeletonBoss(Vector3 Position, CollidableStructure Structure)
         {
             var boss = BossGenerator.Generate(new []{MobType.SkeletonKing}, Position, Utils.Rng);
@@ -105,59 +79,22 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var bossBar = boss.SearchComponent<BossHealthBarComponent>();
             bossBar.ViewRange = 80;
             bossBar.Enabled = false;
-            ((Dungeon0) Structure.WorldObject).Boss = boss;
+            ((DungeonWithBoss) Structure.WorldObject).Boss = boss;
             Structure.WorldObject.Search<DungeonBossRoomTrigger>().Boss = boss;
             return boss;
         }
 
-        private static void AddImmuneTag(IEntity Skeleton)
-        {
-            Skeleton.AddComponent(new IsDungeonMemberComponent(Skeleton));
-            Skeleton.SearchComponent<DamageComponent>().Ignore(E => E.SearchComponent<IsDungeonMemberComponent>() != null);
-            Skeleton.SearchComponent<IAlterableAI>().AlterBehaviour<RoamBehaviour>(new DungeonRoamBehaviour(Skeleton));
-        }
-        
-        private static IEntity PatrolSkeleton(Vector3 Position, CollidableStructure Structure)
-        {
-            var skeleton = default(IEntity);
-            var spawnKamikazeSkeleton = Utils.Rng.Next(1, 7) == 1;
-            skeleton = spawnKamikazeSkeleton
-                ? SpawnKamikazeSkeleton(Position, Structure)
-                : NormalSkeleton(Position, Structure);
-            skeleton.Position = Position;
-            AddImmuneTag(skeleton);
-            return skeleton;
-        }
-
-        private static IEntity SpawnKamikazeSkeleton(Vector3 Position, CollidableStructure Structure)
-        {
-            var mob = World.SpawnMob(MobType.SkeletonKamikaze, Position, Utils.Rng);
-            mob.Position = Position;
-            return mob;
-        }
-
-        private static IHumanoid NormalSkeleton(Vector3 Position, CollidableStructure Structure)
-        {
-            const int level = 17;
-            var skeleton = World.WorldBuilding.SpawnBandit(Position, level, false, true, Class.Warrior | Class.Rogue | Class.Mage);
-            skeleton.Physics.CollidesWithEntities = false;
-            skeleton.SearchComponent<CombatAIComponent>().SetCanExplore(Value: false);
-            skeleton.SearchComponent<CombatAIComponent>().SetGuardSpawnPoint(Value: false);
-            skeleton.Position = Position;
-            return skeleton;
-        }
-        
         private static SceneSettings Settings { get; } = new SceneSettings
         {
             LightRadius = Torch.DefaultRadius * 2,
             LightColor = WorldLight.DefaultColor * 2,
             IsNightLight = false,
-            Structure1Creator = BuildTrigger0,
-            Structure2Creator = BuildTrigger1,
+            Structure1Creator = BuildDungeonDoorTrigger,
+            Structure2Creator = BuildBossRoomTrigger,
             Structure3Creator = AddRewardChest,
             Structure4Creator = (P, _) => new Torch(P),
-            Npc1Creator = PatrolSkeleton,
-            Npc2Creator = PatrolSkeleton,
+            Npc1Creator = DungeonSkeleton,
+            Npc2Creator = DungeonSkeleton,
             Npc3Creator = SkeletonBoss,
         };
     }

@@ -4,6 +4,7 @@ using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Rendering;
+using Hedra.Sound;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
@@ -12,7 +13,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         private readonly TimeHandler _handler;
         public DungeonDoorTrigger(Vector3 Position, VertexData Mesh) : base(Position, Mesh)
         {
-            _handler = new TimeHandler(0);
+            _handler = new TimeHandler(0, SoundType.DarkSound);
             UpdateManager.Add(this);
         }
 

@@ -63,7 +63,7 @@ namespace Hedra.Engine.PlantSystem.Harvestables
                     new CollectiblePlantDesign(),
                     position,
                     null,
-                    new CollectiblePlant(
+                    new CollectibleObject(
                         position,
                         Data.ToInstanceData(TransMatrix),
                         ItemCollect

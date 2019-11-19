@@ -49,7 +49,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
             Entity.SearchComponent<ITraverseAIComponent>().GridSize = new Vector2(32, 32);
             var dmgComponent = Entity.SearchComponent<DamageComponent>();
             dmgComponent.XpToGive = template.XP;
-            var healthBarComponent = new BossHealthBarComponent(Entity, NameGenerator.Generate(World.Seed + Rng.Next(0, 999999)));
+            var healthBarComponent = new BossHealthBarComponent(Entity, Entity.Name);
             Entity.RemoveComponent(Entity.SearchComponent<HealthBarComponent>());
             Entity.AddComponent(new BossXPMessageComponent(Entity));
             Entity.Name = healthBarComponent.Name;

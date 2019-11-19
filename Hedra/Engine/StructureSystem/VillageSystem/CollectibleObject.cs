@@ -12,14 +12,13 @@ using System.Numerics;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem
 {
-    public class CollectiblePlant : InteractableStructure
+    public class CollectibleObject : InteractableStructure
     {
         private readonly Item _drop;
         private readonly InstanceData _model;
         private readonly InstanceDataChunkWatcher _watcher;
-        private Village _parent;
-        
-        public CollectiblePlant(Vector3 Position, InstanceData Model, Item Drop) : base(Position)
+
+        public CollectibleObject(Vector3 Position, InstanceData Model, Item Drop) : base(Position)
         {
             _drop = Drop;
             _model = Model;

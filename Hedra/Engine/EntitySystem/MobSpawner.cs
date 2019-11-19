@@ -283,6 +283,7 @@ namespace Hedra.Engine.EntitySystem
         Crow,
         SkeletonKamikaze,
         SkeletonKing,
+        Skeleton,
         TotalCount,
         None,
         Unknown

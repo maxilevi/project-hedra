@@ -38,8 +38,8 @@ namespace Hedra.Engine.Scenes
             var list = new List<Waypoint>();
             var dummy = BulletSharp.Math.Vector3.Zero;
             var callback = new ClosestRayResultCallback(ref dummy, ref dummy);
-            var boundX = Model.SupportPoint(Vector3.UnitX).X - Model.SupportPoint(-Vector3.UnitX).X + 64;
-            var boundZ = Model.SupportPoint(Vector3.UnitZ).Z - Model.SupportPoint(-Vector3.UnitZ).Z + 64;
+            var boundX = (Model.SupportPoint(Vector3.UnitX).X - Model.SupportPoint(-Vector3.UnitX).X) * 2;
+            var boundZ = (Model.SupportPoint(Vector3.UnitZ).Z - Model.SupportPoint(-Vector3.UnitZ).Z) * 2;
             var minY = Model.SupportPoint(-Vector3.UnitY).Y;
             var maxY = Model.SupportPoint(Vector3.UnitY).Y;
             for (var x = 0f; x < boundX; x+=Step)

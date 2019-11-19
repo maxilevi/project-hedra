@@ -20,7 +20,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         public bool IsActive => _isInsideZone;
         
-        public TimeHandler(int TargetSkyTime, SoundType Sound = SoundType.DarkSound)
+        public TimeHandler(int TargetSkyTime, SoundType Sound = SoundType.None)
         {
             _targetSkyTime = TargetSkyTime;
             _soundType = Sound;

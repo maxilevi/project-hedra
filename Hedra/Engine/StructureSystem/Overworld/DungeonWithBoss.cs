@@ -9,12 +9,12 @@ using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
-    public class Dungeon0 : BaseStructure, ICompletableStructure
+    public class DungeonWithBoss : BaseStructure, ICompletableStructure
     {
         public IEntity Boss { get; set; }
         public DungeonDoorTrigger BuildingTrigger { get; set; }
 
-        public Dungeon0(Vector3 Position) : base(Position)
+        public DungeonWithBoss(Vector3 Position) : base(Position)
         {
             GameManager.Player.StructureAware.StructureLeave += OnLeave;
         }

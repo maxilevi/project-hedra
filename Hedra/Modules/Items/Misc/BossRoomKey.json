@@ -1,8 +1,8 @@
 {
-  "Name": "Bone",
-  "DisplayName": "Bone",
+  "Name": "BossRoomKey",
+  "DisplayName": "Key",
   "Tier": "Misc",
-  "Description": "...",
+  "Description": "A dungeon key..",
   "Attributes": [
     {
       "Name": "Amount",
@@ -10,12 +10,12 @@
     },
     {
       "Name": "Price",
-      "Value": 8.0,
+      "Value": 32.0,
       "Hidden": true
     }
   ],
   "Model": {
     "Scale": 1.0,
-    "Path": "$DataFile$/Assets/Items/Misc/Bone.ply"
+    "Path": "$DataFile$/Assets/Items/Misc/BossRoomKey.ply"
   }
 }
