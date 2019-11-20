@@ -25,7 +25,8 @@ namespace Hedra.Engine.CacheSystem
             new Vector3(7.35316f, 12.70829f, 3.41794f)
         };
         
-        public static Vector3 Lever0 => new Vector3(77.18913f, 4.57114f, 216.17668f);
+        public static Vector3 Lever0 => new Vector3(77.18913f, 4.50017f, 69.75796f);
+        public static Vector3 Lever1 => new Vector3(-80.5652f, 4.50017f, 68.96364f);
 
         public static Vector3 Scale { get; } = Vector3.One;
         

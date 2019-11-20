@@ -7,6 +7,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Scenes;
 using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.Engine.WorldBuilding;
+using Hedra.EntitySystem;
 using Hedra.Items;
 using Hedra.Rendering;
 using Hedra.Sound;
@@ -39,19 +40,26 @@ namespace Hedra.Engine.StructureSystem.Overworld
             bossDoor0.IsLocked = true;
             bossDoor1.IsLocked = true;
             
-            var leverDoor = AddDoor(AssetManager.PLYLoader($"Assets/Env/Structures/Dungeon/Dungeon1-Door3.ply", Vector3.One), Dungeon1Cache.Doors[3], Rotation, Structure, true, true);
-            leverDoor.IsLocked = true;
-            var lever = AddLever(Structure, Dungeon0Cache.Lever0, Rotation);
-            lever.OnActivate += _ =>
+            var bossLever = AddLever(Structure, Dungeon1Cache.Lever1, Rotation);
+            bossLever.OnActivate += _ =>
             {
-                leverDoor.IsLocked = false;
-                SoundPlayer.PlaySound(SoundType.Door, lever.Position);
+                bossDoor0.InvokeInteraction(_);
+                bossDoor1.InvokeInteraction(_);
+            };
+            
+            var leverDoor = AddDoor(AssetManager.PLYLoader($"Assets/Env/Structures/Dungeon/Dungeon1-Door3.ply", Vector3.One), Dungeon1Cache.Doors[3], Rotation, Structure, true, false);
+            leverDoor.IsLocked = true;
+
+            var lever0 = AddLever(Structure, Dungeon1Cache.Lever0, Rotation);
+            lever0.OnActivate += _ =>
+            {
+                leverDoor.InvokeInteraction(_);
             };
         }
 
-        private static BaseStructure AddDoorKey(Vector3 Position, VertexData Model)
+        private static IHumanoid DungeonBoss(Vector3 Position, CollidableStructure Structure)
         {
-            return new Anvil(Position);//new CollectibleObject(Position, Model.ToInstanceData(Matrix4x4.Identity), ItemPool.Grab(CommonItems.BossRoomKey));
+            return null;
         }
 
         private static SceneSettings Settings { get; } = new SceneSettings
@@ -61,11 +69,10 @@ namespace Hedra.Engine.StructureSystem.Overworld
             IsNightLight = false,
             Structure1Creator = BuildDungeonDoorTrigger,
             Structure2Creator = BuildBossRoomTrigger,
-            Structure3Creator = AddDoorKey,
+            Structure3Creator = AddRewardChest,
             Structure4Creator = (P, _) => new Torch(P),
             Npc1Creator = DungeonSkeleton,
-            Npc2Creator = DungeonSkeleton,
-            //Npc3Creator = SkeletonBoss,
+            Npc3Creator = DungeonBoss,
         };
     }
 }

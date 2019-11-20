@@ -4,6 +4,7 @@ using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Localization;
+using Hedra.Sound;
 
 namespace Hedra.Engine.StructureSystem
 {
@@ -22,6 +23,7 @@ namespace Hedra.Engine.StructureSystem
         protected override void OnUse(IHumanoid Humanoid)
         {
             OnActivate?.Invoke(Humanoid);
+            SoundPlayer.PlaySound(SoundType.Door, Position);
         }
 
         protected override string ModelPath => "Assets/Env/Objects/LeverIdle.dae";

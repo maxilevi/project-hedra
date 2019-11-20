@@ -60,9 +60,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var lever = AddLever(Structure, Dungeon0Cache.Lever0, Rotation);
             lever.OnActivate += _ =>
             {
-                bossDoor0.IsLocked = false;
-                bossDoor1.IsLocked = false;
-                SoundPlayer.PlaySound(SoundType.Door, lever.Position);
+                bossDoor0.InvokeInteraction(_);
+                bossDoor1.InvokeInteraction(_);
             };
         }
 
