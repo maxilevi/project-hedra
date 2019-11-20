@@ -1,0 +1,30 @@
+{
+  "Name": "VillagerGhost",
+  "DisplayName": "Ghost",
+  "Models": [
+    {
+      "Path": "$DataFile$/Assets/Chr/Mob/NPCGhosts/GhostCommoner0Idle.dae",
+      "WalkAnimation": "$DataFile$/Assets/Chr/Mob/NPCGhosts/GhostWalk.dae",
+      "IsUndead": true,
+      "Scale": 1.0
+    },
+    {
+      "Path": "$DataFile$/Assets/Chr/Mob/NPCGhosts/GhostCommoner1Idle.dae",
+      "WalkAnimation": "$DataFile$/Assets/Chr/Mob/NPCGhosts/GhostWalk.dae",
+      "IsUndead": true,
+      "Scale": 1.0
+    },
+    {
+      "Path": "$DataFile$/Assets/Chr/Mob/NPCGhosts/GhostCommoner2Idle.dae",
+      "WalkAnimation": "$DataFile$/Assets/Chr/Mob/NPCGhosts/GhostWalk.dae",
+      "IsUndead": true,
+      "Scale": 1.0
+    },
+    {
+      "Path": "$DataFile$/Assets/Chr/Mob/NPCGhosts/GhostCommoner3Idle.dae",
+      "WalkAnimation": "$DataFile$/Assets/Chr/Mob/NPCGhosts/GhostWalk.dae",
+      "IsUndead": true,
+      "Scale": 1.0
+    }
+  ]
+}

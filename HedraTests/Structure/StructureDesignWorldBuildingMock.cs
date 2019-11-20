@@ -56,8 +56,7 @@ namespace HedraTests.Structure
             return SpawnHumanoid(Type, DesiredPosition, null);
         }
 
-        public Humanoid SpawnBandit(Vector3 Position, int Level, bool Friendly = false, bool Undead = false,
-            Class PossibleClasses = Class.Warrior | Class.Mage | Class.Archer | Class.Rogue)
+        public Humanoid SpawnBandit(Vector3 Position, int Level, BanditOptions Options)
         {
             return SpawnHumanoid(null, Position);
         }

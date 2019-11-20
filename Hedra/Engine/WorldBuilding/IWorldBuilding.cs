@@ -21,7 +21,7 @@ namespace Hedra.Engine.WorldBuilding
         Humanoid SpawnVillager(Vector3 DesiredPosition, int Seed);
         Humanoid SpawnHumanoid(HumanType Type, Vector3 DesiredPosition);
         Humanoid SpawnHumanoid(string Type, Vector3 DesiredPosition);
-        Humanoid SpawnBandit(Vector3 Position, int Level, bool Friendly = false, bool Undead = false, Class PossibleClasses = Class.Archer | Class.Mage | Class.Warrior | Class.Rogue);
+        Humanoid SpawnBandit(Vector3 Position, int Level, BanditOptions Options);
         Chest SpawnChest(Vector3 Position, Item Item);
         string GenerateName();
         void SetupStructure(CollidableStructure Structure);

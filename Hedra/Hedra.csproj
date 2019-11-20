@@ -416,12 +416,12 @@
     <Compile Include="Engine\StructureSystem\Overworld\BaseDungeonDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\BuildingDoorTrigger.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonWithBoss.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\Dungeon1Design.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\UndeadDungeon1Design.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonBossRoomTrigger.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonDoorTrigger.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonBuilder.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\Dungeon0Design.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\DungeonWithBossDesign.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\UndeadDungeon0Design.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\UndeadDungeonWithBossDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\FishingPost.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\FishingPostDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\IsDungeonMemberComponent.cs" />
@@ -438,6 +438,7 @@
     <Compile Include="Engine\Windowing\MouseButtonEventArgs.cs" />
     <Compile Include="Engine\Windowing\MouseMoveEventArgs.cs" />
     <Compile Include="Engine\Windowing\MouseWheelEventArgs.cs" />
+    <Compile Include="Engine\WorldBuilding\BanditOptions.cs" />
     <Compile Include="Items\EquipmentType.cs" />
     <Compile Include="Items\ItemTier.cs" />
     <Compile Include="Items\Trader.cs" />
@@ -652,7 +653,7 @@
     <Compile Include="Engine\Player\CraftingSystem\CraftingInventoryArrayInterface.cs" />
     <Compile Include="Engine\Player\CraftingSystem\CraftingInventoryArrayInterfaceManager.cs" />
     <Compile Include="Engine\Player\CraftingSystem\CraftingInventoryItemInfo.cs" />
-    <Compile Include="Engine\Player\DummyInventory.cs" />
+    <Compile Include="Engine\Player\HumanoidInventory.cs" />
     <Compile Include="Engine\Player\Humanoid.cs" />
     <Compile Include="Engine\Player\HumanoidModelAnimationState.cs" />
     <Compile Include="Engine\Player\IObjectWithAnimation.cs" />
@@ -8557,6 +8558,46 @@
       <Link>Assets\Chr\Mob\Ghost\LichIdle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Chr\NPCGhost\GhostBeasthunter0Idle.dae">
+      <Link>Assets\Chr\Mob\NPCGhosts\GhostBeasthunter0Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\NPCGhost\GhostCommoner0Idle.dae">
+      <Link>Assets\Chr\Mob\NPCGhosts\GhostCommoner0Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\NPCGhost\GhostCommoner1Idle.dae">
+      <Link>Assets\Chr\Mob\NPCGhosts\GhostCommoner1Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\NPCGhost\GhostCommoner2Idle.dae">
+      <Link>Assets\Chr\Mob\NPCGhosts\GhostCommoner2Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\NPCGhost\GhostCommoner3Idle.dae">
+      <Link>Assets\Chr\Mob\NPCGhosts\GhostCommoner3Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\NPCGhost\GhostScholars0Idle.dae">
+      <Link>Assets\Chr\Mob\NPCGhosts\GhostScholars0Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\NPCGhost\GhostScholars1Idle.dae">
+      <Link>Assets\Chr\Mob\NPCGhosts\GhostScholars1Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\NPCGhost\GhostTraders0Idle.dae">
+      <Link>Assets\Chr\Mob\NPCGhosts\GhostTraders0Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\NPCGhost\GhostTraders1Idle.dae">
+      <Link>Assets\Chr\Mob\NPCGhosts\GhostTraders1Idle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\NPCGhost\GhostWalk.dae">
+      <Link>Assets\Chr\Mob\NPCGhosts\GhostWalk.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Chr\StoneGolem\StoneGolem0Idle.dae">
       <Link>Assets\Chr\Mob\StoneGolem\StoneGolem0Idle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -14777,7 +14818,12 @@
     <Content Include="Modules\Mobs\StoneGolem.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\NPCs\Beasthunter.json" />
+    <Content Include="Modules\NPCs\Beasthunter.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\NPCs\BeasthunterSpirit.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\NPCs\Clothier.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -14803,6 +14849,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\NPCs\Scholar.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\NPCs\VillagerGhost.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\NPCs\Witch.json">

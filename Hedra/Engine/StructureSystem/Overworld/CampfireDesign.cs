@@ -33,7 +33,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
                     World.WorldBuilding.SpawnBandit(
                         new Vector3(Structure.Position.X, 125, Structure.Position.Z) 
                         + Vector3.Transform(Vector3.UnitZ * -12f, Matrix4x4.CreateRotationY(rotation.Y * Mathf.Radian)),
-                        Level
+                        Level,
+                        BanditOptions.Default
                     );
 
             ((Campfire) Structure.WorldObject).Bandit.IsSitting = true;

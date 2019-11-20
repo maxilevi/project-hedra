@@ -153,11 +153,11 @@ namespace Hedra.Engine.Player
         public Humanoid()
         {
             _consecutiveHitsTimer = new Timer(3f);
-            Inventory = new DummyInventory();
             MessageDispatcher = new DummyMessageDispatcher();
             HandLamp = new HandLamp(this);
             Movement = new MovementManager(this);
             Equipment = new EquipmentHandler(this);
+            Inventory = new HumanoidInventory(Equipment);
             Boat = new Boat(this);
             Class = new WarriorDesign();
             RandomFactor = NewRandomFactor();

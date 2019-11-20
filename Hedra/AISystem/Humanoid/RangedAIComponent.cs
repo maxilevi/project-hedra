@@ -55,7 +55,7 @@ namespace Hedra.AISystem.Humanoid
         {    
             if (_secondAttackCooldown <= 0 && CanUseSecondAttack)
             {
-                _secondAttackCooldown = 4.5f;
+                _secondAttackCooldown = SecondAttackCooldownTime;
                 _leftWeapon.Attack2(Parent, new AttackOptions
                 {
                     IgnoreEntities = IgnoreEntities
@@ -95,5 +95,6 @@ namespace Hedra.AISystem.Humanoid
         protected override bool UseCollision => true;
         protected virtual bool CanUseFirstAttack => true;
         protected virtual bool CanUseSecondAttack => true;
+        protected virtual float SecondAttackCooldownTime => 4.5f;
     }
 }

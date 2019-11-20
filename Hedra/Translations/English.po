@@ -102,7 +102,7 @@ villager_thought_3 = Am I the only one who hears the sound of glass breaking?
 villager_thought_4 = I haven't seen you before, are you an explorer?
 villager_thought_5 = I need to craft some stone arrows before I go hunting
 explorer_thought_0 = I am looking for a witch hut, have you seen one?
-explorer_thought_1 = Did you know you can learn to craft new items by collect recipes?
+explorer_thought_1 = Did you know you can learn to craft new items by collecting recipes?
 explorer_thought_2 = Doing quests is fun!
 explorer_thought_3 = Have you been to the realm of the undead?
 explorer_thought_4 = I am looking for a portal in order to explore other realms. Have you seen one?
@@ -222,6 +222,7 @@ hunter = Hunter
 scout = Scout
 ninja = Ninja
 assassin = Assassin
+bandit = Bandit
 # -- End Class Names --
 
 # -- Skill Names --
@@ -600,6 +601,7 @@ turtle = Turtle
 wasp = Wasp
 wolf = Wolf
 lich = Lich
+beasthunterspirit = Spirit
 skeletonking = Skeleton King
 ghost = Ghost
 skeleton = Skeleton

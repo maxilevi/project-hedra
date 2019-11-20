@@ -26,7 +26,7 @@ using Hedra.Sound;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
-    public class Dungeon0Design : DungeonWithBossDesign
+    public class UndeadDungeon0Design : UndeadDungeonWithBossDesign
     {
         public override int PlateauRadius => 300;
         protected override int StructureChance => StructureGrid.Dungeon0Chance;
@@ -35,7 +35,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public override VertexData Icon => CacheManager.GetModel(CacheItem.Dungeon0Icon);
         protected override float GroundworkRadius => 180;
         protected override string BaseFileName => "Dungeon0";
-        protected override SceneSettings Scene => Settings;
         protected override int Level => 13;
 
         protected override void DoBuild(CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation, Random Rng)
@@ -65,36 +64,11 @@ namespace Hedra.Engine.StructureSystem.Overworld
             };
         }
 
-        private static IEntity SkeletonBoss(Vector3 Position, CollidableStructure Structure)
+        protected override IEntity CreateDungeonBoss(Vector3 Position, CollidableStructure Structure)
         {
             var boss = BossGenerator.Generate(new []{MobType.SkeletonKing}, Position, Utils.Rng);
             boss.Position = Position;
-            boss.AddComponent(new IsDungeonMemberComponent(boss));
-            boss.AddComponent(new DropComponent(boss)
-            {
-                ItemDrop = Utils.Rng.Next(0, 3) == 1 ? ItemPool.Grab(ItemTier.Unique) : ItemPool.Grab(ItemTier.Rare),
-                DropChance = Utils.Rng.NextFloat() * 25f + 75f
-            });
-            var bossBar = boss.SearchComponent<BossHealthBarComponent>();
-            bossBar.ViewRange = 80;
-            bossBar.Enabled = false;
-            ((DungeonWithBoss) Structure.WorldObject).Boss = boss;
-            Structure.WorldObject.Search<DungeonBossRoomTrigger>().Boss = boss;
             return boss;
         }
-
-        private static SceneSettings Settings { get; } = new SceneSettings
-        {
-            LightRadius = Torch.DefaultRadius * 2,
-            LightColor = WorldLight.DefaultColor * 2,
-            IsNightLight = false,
-            Structure1Creator = BuildDungeonDoorTrigger,
-            Structure2Creator = BuildBossRoomTrigger,
-            Structure3Creator = AddRewardChest,
-            Structure4Creator = (P, _) => new Torch(P),
-            Npc1Creator = DungeonSkeleton,
-            Npc2Creator = DungeonSkeleton,
-            Npc3Creator = SkeletonBoss,
-        };
     }
 }

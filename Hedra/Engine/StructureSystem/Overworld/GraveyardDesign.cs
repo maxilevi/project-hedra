@@ -123,7 +123,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             {
                 var skeleton = World.WorldBuilding.SpawnBandit(
                         Position + new Vector3(Rng.NextFloat() * 60f - 30f, 0, Rng.NextFloat() * 60f - 30f) * Chunk.BlockSize,
-                        Level, false, true);
+                        Level, BanditOptions.Undead);
                     enemies.Add(skeleton);
             }
             Cementery.Enemies = enemies.ToArray();

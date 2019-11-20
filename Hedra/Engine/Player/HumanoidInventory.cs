@@ -8,8 +8,13 @@ using Hedra.Items;
 
 namespace Hedra.Engine.Player
 {
-    public class DummyInventory : IPlayerInventory
+    public class HumanoidInventory : IPlayerInventory
     {
+        private readonly EquipmentHandler _equipment;
+        public HumanoidInventory(EquipmentHandler Equipment)
+        {
+            _equipment = Equipment;
+        }
         
         public bool AddItem(Item New)
         {
@@ -85,7 +90,7 @@ namespace Hedra.Engine.Player
 
         public bool HasAvailableSpace => false;
 
-        public Item MainWeapon => null;
+        public Item MainWeapon => _equipment.MainWeapon;
         
         public Item Vehicle => null;
         

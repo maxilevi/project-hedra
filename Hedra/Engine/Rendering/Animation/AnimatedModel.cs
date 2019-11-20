@@ -49,6 +49,7 @@ namespace Hedra.Engine.Rendering.Animation
         public Vector3 Scale { get; set; }
         public Box CullingBox { get; set; }
         public bool Outline { get; set; }
+        public bool UpdateWhenOutOfView { get; set; }
         public bool WasCulled { private get; set; }
         public Vector4 OutlineColor { get; set; }
         public Vector3 Max => CullingBox?.Max ?? Vector3.Zero;
@@ -293,7 +294,7 @@ namespace Hedra.Engine.Rendering.Animation
 
         public void Update()
         {
-            if(!Enabled || WasCulled) return;
+            if(!Enabled || (WasCulled && !UpdateWhenOutOfView)) return;
             if (_animator.Update())
             {
                 UpdateJointTransforms(true);

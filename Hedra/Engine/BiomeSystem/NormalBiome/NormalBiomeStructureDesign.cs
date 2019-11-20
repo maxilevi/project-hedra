@@ -28,8 +28,8 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             AddDesign(new WitchHutDesign());
             AddDesign(new FishingPostDesign());
             AddDesign(new WizardTowerDesign());
-            AddDesign(new Dungeon0Design());
-            AddDesign(new Dungeon1Design());
+            AddDesign(new UndeadDungeon0Design());
+            AddDesign(new UndeadDungeon1Design());
         }
 
         public override VillageType VillageType => VillageType.Woodland;

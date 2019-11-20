@@ -26,6 +26,7 @@ using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.EntitySystem;
+using Hedra.Game;
 using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Numerics;
@@ -60,10 +61,15 @@ using Hedra.Numerics;
         {
             return SpawnHumanoid(Type.ToString(), 1, DesiredPosition, Configuration);
         }
-        
+
         private Humanoid SpawnHumanoid(string Type, int Level, Vector3 DesiredPosition, HumanoidConfiguration Configuration)
         {
-            var human = HumanoidFactory.BuildHumanoid(Type, Level, Configuration);
+            return SpawnHumanoid(Type, HumanoidLoader.HumanoidTemplater[Type], Level, DesiredPosition, Configuration);
+        }
+        
+        private Humanoid SpawnHumanoid(string Type, HumanoidTemplate Template, int Level, Vector3 DesiredPosition, HumanoidConfiguration Configuration)
+        {
+            var human = HumanoidFactory.BuildHumanoid(Type, Template, Level, Configuration);
             human.Position = World.FindPlaceablePosition(human, new Vector3(DesiredPosition.X, Physics.HeightAtPosition(DesiredPosition.X, DesiredPosition.Z), DesiredPosition.Z));
             human.Rotation = new Vector3(0, Utils.Rng.NextFloat(), 0) * 360f * Mathf.Radian;
             ApplySeasonHats(human, Type);
@@ -96,34 +102,34 @@ using Hedra.Numerics;
             return villager;
         }
 
-        public Humanoid SpawnBandit(Vector3 Position, int Level, bool Friendly = false, bool Undead = false, Class PossibleClasses = Class.Archer | Class.Mage | Class.Warrior | Class.Rogue)
+        public Humanoid SpawnBandit(Vector3 Position, int Level, BanditOptions Options)
         {
             var availableClasses = new List<Class>();
             for (var i = 0; i < 4; i++)
             {
                 var @class = (Class)(1 << i);
-                if((@class & PossibleClasses) == @class)
+                if((@class & Options.PossibleClasses) == @class)
                     availableClasses.Add(@class);
             }
             int classN = Utils.Rng.Next(0, availableClasses.Count);
             var classType = ClassDesign.FromString(availableClasses[classN]);
 
-            var behaviour = new HumanoidConfiguration(Friendly ? HealthBarType.Friendly : HealthBarType.Hostile);
-            var isWerewolf = Utils.Rng.Next(0, 4) == 1 && !Undead;
-            var className = isWerewolf
-                ? HumanType.Gnoll.ToString()
-                : Undead
-                    ? HumanType.Skeleton.ToString()
-                    : classType.ToString();
-            var human = this.SpawnHumanoid(className, Level, Position, behaviour);
-            if (isWerewolf) human.BonusHealth = human.MaxHealth * .5f;
-            human.Health = human.MaxHealth;
+            var behaviour = new HumanoidConfiguration(Options.Friendly ? HealthBarType.Friendly : HealthBarType.Hostile);
+            var modelTemplate = Options.ModelType != null ? HumanoidLoader.HumanoidTemplater[Options.ModelType.Value.ToString()] : null;
+            var template = HumanoidLoader.HumanoidTemplater[classType.ToString()].Clone();
+            if (modelTemplate != null)
+            {
+                template.Models = modelTemplate.Models;
+                template.Model = modelTemplate.Model;
+            }
+            var templateName = modelTemplate != null ? modelTemplate.DisplayName : Translations.Get("bandit");
+            var human = this.SpawnHumanoid(classType.ToString(), template, Level, Position, behaviour);
 
-            HumanoidFactory.AddAI(human, Friendly);
-            if(Friendly)
-                human.SearchComponent<DamageComponent>().Ignore(E => E is IPlayer);
-            human.Name = (!Friendly) ? Undead ? "Skeleton" : "Bandit" : NameGenerator.PickMaleName(Utils.Rng);
-            human.IsFriendly = Friendly;
+            HumanoidFactory.AddAI(human, Options.Friendly);
+            if(Options.Friendly)
+                human.SearchComponent<DamageComponent>().Ignore(E => E is IPlayer || E == GameManager.Player.Companion.Entity);
+            human.Name = (!Options.Friendly) ? templateName : NameGenerator.PickMaleName(Utils.Rng);
+            human.IsFriendly = Options.Friendly;
             return human;
         }
         

@@ -34,11 +34,9 @@ namespace Hedra.Engine.WorldBuilding
         private static readonly CollisionShape DefaultShape;
 
         public Item ItemSpecification { get; set; }
-        public Func<bool> Condition { get; set; }
         public event OnItemCollect OnPickup;
         public override string Message => Translations.Get("interact_chest");
         public override int InteractDistance => 16;
-        protected override bool CanInteract => IsClosed && (Condition?.Invoke() ?? true);
         protected override string ModelPath => Season.IsChristmas ? "Assets/Chr/ChristmasChestIdle.dae" : "Assets/Chr/ChestIdle.dae";
         protected override string IdleAnimationPath => "Assets/Chr/ChestIdle.dae";
         protected override string UseAnimationPath => "Assets/Chr/ChestOpen.dae";

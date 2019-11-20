@@ -39,24 +39,21 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var lever = new Lever(Vector3.Transform((Position + StructureOffset) * StructureScale, Rotation) + Structure.Position, StructureScale);
             var axisAngle = Rotation.ExtractRotation().ToAxisAngle();
             lever.Rotation = axisAngle.Xyz() * axisAngle.W * Mathf.Degree;
+            lever.Condition = () => IsNearEnemies(lever.Position);
             Structure.WorldObject.AddChildren(lever);
             return lever;
+        }
+        
+        private static bool IsNearEnemies(Vector3 Position)
+        {
+            var mobs = World.Entities;
+            return mobs.Count(M => M.Distance(Position) < 32 && M.SearchComponent<IsDungeonMemberComponent>() != null) == 0;
         }
 
         protected static Chest AddRewardChest(Vector3 Position, VertexData Model)
         {
             var chest = World.SpawnChest(Position, ItemPool.Grab(Utils.Rng.Next(0, 5) == 1 ? ItemTier.Rare : ItemTier.Uncommon));
-            chest.Condition = () =>
-            {
-                var mobs = World.Entities;
-                var canOpen = true;
-                for (var i = 0; i < mobs.Count && canOpen; ++i)
-                {
-                    if (mobs[i] != LocalPlayer.Instance && !mobs[i].Physics.StaticRaycast(Position)) canOpen = false;
-                }
-
-                return canOpen;
-            };
+            chest.Condition = () => IsNearEnemies(chest.Position);
             var triangle = Model.Vertices;
             var direction = Vector3.Zero;
             for (var h = 0; h < 3; ++h)
@@ -89,50 +86,11 @@ namespace Hedra.Engine.StructureSystem.Overworld
             return new DungeonBossRoomTrigger(Point, Mesh);
         }
         
-        private static void AddImmuneTag(IEntity Skeleton)
+        protected static void AddImmuneTag(IEntity Skeleton)
         {
             Skeleton.AddComponent(new IsDungeonMemberComponent(Skeleton));
             Skeleton.SearchComponent<DamageComponent>().Ignore(E => E.SearchComponent<IsDungeonMemberComponent>() != null);
             Skeleton.SearchComponent<IAlterableAI>().AlterBehaviour<RoamBehaviour>(new DungeonRoamBehaviour(Skeleton));
-        }
-        
-        protected static IEntity DungeonSkeleton(Vector3 Position, CollidableStructure Structure)
-        {
-            var skeleton = default(IEntity);
-            var spawnKamikazeSkeleton = Utils.Rng.Next(1, 7) == 1;
-            var spawnGladiatorSkeleton = !spawnKamikazeSkeleton && Utils.Rng.Next(1, 7) == 1;
-            skeleton = spawnKamikazeSkeleton
-                ? SpawnKamikazeSkeleton(Position, Structure)
-                : spawnGladiatorSkeleton
-                    ? SpawnGladiatorSkeleton(Position, Structure)
-                    : NormalSkeleton(Position, Structure);
-            skeleton.Position = Position;
-            AddImmuneTag(skeleton);
-            return skeleton;
-        }
-
-        protected static IEntity SpawnKamikazeSkeleton(Vector3 Position, CollidableStructure Structure)
-        {
-            var mob = World.SpawnMob(MobType.SkeletonKamikaze, Position, Utils.Rng);
-            mob.Position = Position;
-            return mob;
-        }
-        
-        protected static IEntity SpawnGladiatorSkeleton(Vector3 Position, CollidableStructure Structure)
-        {
-            var mob = World.SpawnMob(MobType.Skeleton, Position, Utils.Rng);
-            mob.Position = Position;
-            return mob;
-        }
-
-        protected static IHumanoid NormalSkeleton(Vector3 Position, CollidableStructure Structure)
-        {
-            var skeleton = World.WorldBuilding.SpawnBandit(Position, ((BaseDungeonDesign<T>)Structure.Design).Level, false, true, Class.Warrior | Class.Rogue | Class.Mage);
-            skeleton.Physics.CollidesWithEntities = false;
-            skeleton.SearchComponent<CombatAIComponent>().SetCanExplore(Value: false);
-            skeleton.SearchComponent<CombatAIComponent>().SetGuardSpawnPoint(Value: false);
-            skeleton.Position = Position;
-            return skeleton;
         }
     }
 }

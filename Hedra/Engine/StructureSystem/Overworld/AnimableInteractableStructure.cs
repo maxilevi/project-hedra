@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
@@ -12,6 +13,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
 {
     public abstract class AnimableInteractableStructure : InteractableStructure
     {
+        public Func<bool> Condition { get; set; }
+        protected override bool CanInteract => IsClosed && (Condition?.Invoke() ?? true) && base.CanInteract;
         protected override bool DisposeAfterUse => false;
         private readonly AnimatedModel _model;
         private readonly Animation _idleAnimation;
@@ -31,7 +34,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 OnUse(_lastUser);
                 _lastUser = null;
             };
-            
+            this._model.UpdateWhenOutOfView = true;
             this._model.PlayAnimation(_idleAnimation);
             this._model.Scale = ModelScale * Scale;
             this._model.ApplyFog = true;
@@ -41,18 +44,19 @@ namespace Hedra.Engine.StructureSystem.Overworld
         
         public override void Update(float DeltaTime)
         {
-            if (_model != null) _model.Position = Position;
+            if (_model != null)
+            {
+                _model.Position = Position;
+                _model.Update();
+            }
             base.Update(DeltaTime);
         }
 
         protected override void DoUpdate(float DeltaTime)
         {
             base.DoUpdate(DeltaTime);
-            if (_model != null)
-            {
-                _model.Update();
-                HandleColliders();
-            }
+            if (_model == null) return;
+            HandleColliders();
         }
 
         protected override void OnSelected(IHumanoid Humanoid)

@@ -74,7 +74,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             {
                 MakeTent(tents[i], rng, Structure);
                 enemies[i] = World.WorldBuilding.SpawnBandit(
-                    tents[i].WorldPosition + Vector3.Transform(Vector3.UnitZ * 24, tents[i].RotationMatrix), Level);
+                    tents[i].WorldPosition + Vector3.Transform(Vector3.UnitZ * 24, tents[i].RotationMatrix), Level, BanditOptions.Default);
             }
 
             DecorationsPlacer.PlaceWhenWorldReady(position, P =>

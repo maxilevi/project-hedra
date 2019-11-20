@@ -399,7 +399,7 @@ namespace Hedra.User
                 {
                     if(Parts[1] == "bandit")
                     {
-                        World.WorldBuilding.SpawnBandit(Caster.Position + Caster.Orientation * 32, Caster.Level, false);
+                        World.WorldBuilding.SpawnBandit(Caster.Position + Caster.Orientation * 32, Caster.Level, BanditOptions.Default);
                         return true;
                     }
                     if(Parts[1] == "plantling")
