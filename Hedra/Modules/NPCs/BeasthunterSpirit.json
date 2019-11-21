@@ -1,13 +1,13 @@
 {
   "Name": "BeasthunterSpirit",
-  "DisplayName": "BeasthunterSpirit",
+  "DisplayName": "Beasthunterspirit",
   "XP": 22.0,
   "Models": [
     {
       "Path": "$DataFile$/Assets/Chr/Mob/NPCGhosts/GhostBeasthunter0Idle.dae",
       "WalkAnimation": "$DataFile$/Assets/Chr/Mob/NPCGhosts/GhostWalk.dae",
       "IsUndead": true,
-      "Scale": 1.25
+      "Scale": 1.35
     }
   ]
 }

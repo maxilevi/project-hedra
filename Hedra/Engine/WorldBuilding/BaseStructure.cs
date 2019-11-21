@@ -13,6 +13,7 @@ using Hedra.Engine.Core;
 using System.Numerics;
 using Hedra.Engine.Management;
 using Hedra.EntitySystem;
+using Microsoft.Scripting.Utils;
 
 namespace Hedra.Engine.WorldBuilding
 {
@@ -53,16 +54,20 @@ namespace Hedra.Engine.WorldBuilding
             }
         }
 
-        public T Search<T>() where T : BaseStructure
+        public T SearchFirst<T>() where T : BaseStructure => Search<T>().First();
+        
+        public T[] Search<T>() where T : BaseStructure
         {
+            var list = new List<T>();
             for (var i = 0; i < _children.Count; ++i)
             {
-                if (_children[i] is T) return (T)_children[i];
-                var recursive = _children[i].Search<T>();
-                if (recursive != null) return recursive;
+                if (_children[i] is T)
+                {
+                    list.Add((T)_children[i]);
+                }
+                list.AddRange(_children[i].Search<T>());
             }
-
-            return null;
+            return list.ToArray();
         }
 
         public void AddNPCs(params IEntity[] NPCs)

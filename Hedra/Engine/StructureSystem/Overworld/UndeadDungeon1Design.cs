@@ -77,8 +77,9 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var template = HumanoidLoader.HumanoidTemplater[type];
             BossGenerator.MakeBoss(boss, Position, template.XP);
             boss.BonusHealth = boss.MaxHealth * (1.5f + Utils.Rng.NextFloat());
-            var currentWeapon = boss.Inventory.MainWeapon;
-            boss.SetWeapon(ItemPool.Grab(new ItemPoolSettings(ItemTier.Rare, currentWeapon.EquipmentType)).Weapon);
+            boss.Health = boss.MaxHealth;
+            var currentWeapon = boss.MainWeapon;
+            boss.MainWeapon = ItemPool.Grab(new ItemPoolSettings(ItemTier.Rare, currentWeapon.EquipmentType));
             return boss;
         }
     }

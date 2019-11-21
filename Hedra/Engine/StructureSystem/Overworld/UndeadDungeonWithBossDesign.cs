@@ -39,14 +39,14 @@ namespace Hedra.Engine.StructureSystem.Overworld
             boss.AddComponent(new IsDungeonMemberComponent(boss));
             boss.AddComponent(new DropComponent(boss)
             {
-                ItemDrop = Utils.Rng.Next(0, 3) == 1 ? ItemPool.Grab(ItemTier.Unique) : ItemPool.Grab(ItemTier.Rare),
+                ItemDrop = Utils.Rng.Next(0, 7) == 1 ? ItemPool.Grab(ItemTier.Unique) : Utils.Rng.Next(0, 5) == 1 ? ItemPool.Grab(ItemTier.Rare) : ItemPool.Grab(ItemTier.Uncommon),
                 DropChance = Utils.Rng.NextFloat() * 25f + 75f
             });
             var bossBar = boss.SearchComponent<BossHealthBarComponent>();
             bossBar.ViewRange = 80;
             bossBar.Enabled = false;
             ((DungeonWithBoss) Structure.WorldObject).Boss = boss;
-            Structure.WorldObject.Search<DungeonBossRoomTrigger>().Boss = boss;
+            Structure.WorldObject.SearchFirst<DungeonBossRoomTrigger>().Boss = boss;
             AddImmuneTag(boss);
             return boss;
         }

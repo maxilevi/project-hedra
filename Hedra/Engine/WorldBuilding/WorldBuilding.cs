@@ -122,7 +122,9 @@ using Hedra.Numerics;
                 template.Models = modelTemplate.Models;
                 template.Model = modelTemplate.Model;
             }
-            var templateName = modelTemplate != null ? modelTemplate.DisplayName : Translations.Get("bandit");
+            var templateName = modelTemplate != null 
+                ? Translations.Has(modelTemplate.DisplayName.ToLowerInvariant()) ? Translations.Get(modelTemplate.DisplayName.ToLowerInvariant()) : modelTemplate.DisplayName 
+                : Translations.Get("bandit");
             var human = this.SpawnHumanoid(classType.ToString(), template, Level, Position, behaviour);
 
             HumanoidFactory.AddAI(human, Options.Friendly);

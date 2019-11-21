@@ -35,6 +35,9 @@ using Hedra.Items;
 using Hedra.Mission;
 using System.Numerics;
 using Hedra.Engine;
+using Hedra.Engine.StructureSystem;
+using Hedra.Engine.StructureSystem.VillageSystem;
+using Hedra.EntitySystem;
 using Hedra.Numerics;
 using Silk.NET.Windowing.Common;
 
@@ -395,11 +398,27 @@ namespace Hedra.User
                     LocalPlayer.Instance.Enabled = !LocalPlayer.Instance.Enabled;
                     return true;
                 }
+                if (Parts[0] == "opendoor")
+                {
+                    var structures = StructureHandler.GetNearStructures(Caster.Position);
+                    for (var i = 0; i < structures.Length; ++i)
+                    {
+                        structures[i].WorldObject.Search<Door>().Where(D => Caster.Distance(D.Position) < 16).ToList().ForEach(D => D.IsLocked = false);
+                    }
+                }
                 if (Parts[0] == "spawn")
                 {
                     if(Parts[1] == "bandit")
                     {
                         World.WorldBuilding.SpawnBandit(Caster.Position + Caster.Orientation * 32, Caster.Level, BanditOptions.Default);
+                        return true;
+                    }
+                    if(Parts[1] == "undead")
+                    {
+                        World.WorldBuilding.SpawnBandit(Caster.Position + Caster.Orientation * 32, Caster.Level, new BanditOptions
+                        {
+                            ModelType = Utils.Rng.NextBool() ? HumanType.VillagerGhost : HumanType.BeasthunterSpirit
+                        });
                         return true;
                     }
                     if(Parts[1] == "plantling")

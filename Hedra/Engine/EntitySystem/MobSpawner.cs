@@ -171,7 +171,8 @@ namespace Hedra.Engine.EntitySystem
         private static bool ShouldSpawnMob(Vector3 NewPosition)
         {
             var region = World.BiomePool.GetRegion(NewPosition);
-            return Utils.Rng.Next(0, 20) != 1 || region.Mob.SpawnerSettings.MiniBosses == null || region.Mob.SpawnerSettings.MiniBosses.Length == 0;
+            return (Utils.Rng.Next(0, 20) != 1 || region.Mob.SpawnerSettings.MiniBosses == null || region.Mob.SpawnerSettings.MiniBosses.Length == 0) 
+                   && Vector3.Dot(Physics.NormalAtPosition(NewPosition), Vector3.UnitY) > 0.3f;
         }
 
         private static bool IsNearWater(Vector3 Position)

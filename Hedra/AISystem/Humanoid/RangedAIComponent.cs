@@ -28,21 +28,19 @@ namespace Hedra.AISystem.Humanoid
         private float _secondAttackCooldown;
         private float _firstAttackCooldown;
         private float _attackRadius = DefaultAttackRadius;
-        private readonly RangedWeapon _leftWeapon;
+        private RangedWeapon _leftWeapon;
         protected override float SearchRadius => 128;
         protected override float AttackRadius => _attackRadius;
         protected override float ForgetRadius => 192;
 
         public RangedAIComponent(IHumanoid Parent, bool IsFriendly) : base(Parent, IsFriendly)
         {
-            _leftWeapon = (RangedWeapon) Parent.LeftWeapon;
-            _leftWeapon.Miss += OnMiss;
-            _leftWeapon.Hit += OnHit;
-            _leftWeapon.BowModifiers += BowModifiers;
         }
 
         protected override void DoUpdate()
-        {        
+        {
+            if (_leftWeapon != Parent.LeftWeapon)
+                SetWeapon((RangedWeapon) Parent.LeftWeapon);
             _secondAttackCooldown -= Time.DeltaTime;
             _firstAttackCooldown -= Time.DeltaTime;
             if (ChasingTarget != null && Parent.Physics.StaticRaycast(ChasingTarget.Position + Vector3.UnitY * ChasingTarget.Model.Height * .5f))
@@ -69,6 +67,20 @@ namespace Hedra.AISystem.Humanoid
                     IgnoreEntities = IgnoreEntities
                 });
             }
+        }
+
+        private void SetWeapon(RangedWeapon Weapon)
+        {
+            if (_leftWeapon != null)
+            {
+                _leftWeapon.Miss -= OnMiss;
+                _leftWeapon.Hit -= OnHit;
+                _leftWeapon.BowModifiers -= BowModifiers;
+            }
+            _leftWeapon = Weapon;
+            _leftWeapon.Miss += OnMiss;
+            _leftWeapon.Hit += OnHit;
+            _leftWeapon.BowModifiers += BowModifiers;
         }
 
         private void OnMiss(Projectile Arrow)
