@@ -250,7 +250,7 @@
     <Compile Include="AISystem\Humanoid\TraverseHumanoidAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\VillagerAISettings.cs" />
     <Compile Include="AISystem\Humanoid\MeleeAIComponent.cs" />
-    <Compile Include="AISystem\IAlterableAI.cs" />
+    <Compile Include="AISystem\IBehaviouralAI.cs" />
     <Compile Include="AISystem\IBehaviourComponent.cs" />
     <Compile Include="AISystem\IGuardAIComponent.cs" />
     <Compile Include="AISystem\ITraverseAIComponent.cs" />
@@ -421,6 +421,7 @@
     <Compile Include="Engine\StructureSystem\Overworld\DungeonDoorTrigger.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonBuilder.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\UndeadDungeon0Design.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\UndeadDungeon2Design.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\UndeadDungeonWithBossDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\FishingPost.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\FishingPostDesign.cs" />
@@ -9240,6 +9241,54 @@
     </Content>
     <Content Include="..\project-hedra-assets\Structures\Dungeon1\Dungeon1.ply">
       <Link>Assets\Env\Structures\Dungeon\Dungeon1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon2\Dungeon2-Colliders.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon2-Colliders.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon2\Dungeon2-Door0.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon2-Door0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon2\Dungeon2-Door1.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon2-Door1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon2\Dungeon2-Door2.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon2-Door2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon2\Dungeon2-Door3.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon2-Door3.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon2\Dungeon2-Door4.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon2-Door4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon2\Dungeon2-Door5.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon2-Door5.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon2\Dungeon2-Door6.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon2-Door6.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon2\Dungeon2-Icon.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon2-Icon.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon2\Dungeon2-Pathfinding.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon2-Pathfinding.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon2\Dungeon2-Scene.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon2-Scene.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Dungeon2\Dungeon2.ply">
+      <Link>Assets\Env\Structures\Dungeon\Dungeon2.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Structures\FishingDock0\Caravan0-Colliders.ply">

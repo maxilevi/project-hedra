@@ -10,7 +10,7 @@ using Hedra.Engine.Rendering;
 
 namespace Hedra.AISystem
 {
-    public abstract class GenericBasicAIComponent<T> : Component<T>, IAlterableAI, ITraverseAIComponent where T : IEntity
+    public abstract class GenericBasicAIComponent<T> : Component<T>, IBehaviouralAI, ITraverseAIComponent where T : IEntity
     {
         public bool Enabled { get; set; }
         public abstract AIType Type { get; }

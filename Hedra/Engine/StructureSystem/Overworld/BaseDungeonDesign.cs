@@ -90,7 +90,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             Skeleton.AddComponent(new IsDungeonMemberComponent(Skeleton));
             Skeleton.SearchComponent<DamageComponent>().Ignore(E => E.SearchComponent<IsDungeonMemberComponent>() != null);
-            Skeleton.SearchComponent<IAlterableAI>().AlterBehaviour<RoamBehaviour>(new DungeonRoamBehaviour(Skeleton));
+            Skeleton.SearchComponent<IBehaviouralAI>().AlterBehaviour<RoamBehaviour>(new DungeonRoamBehaviour(Skeleton));
         }
     }
 }

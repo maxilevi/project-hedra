@@ -6,7 +6,7 @@ namespace Hedra.Engine.CacheSystem
     public class Dungeon1Cache : CacheType
     {
         public override CacheItem Type => CacheItem.Dungeon1;
-
+        
         public Dungeon1Cache()
         {
             AddModel(AssetManager.PLYLoader("Assets/Env/Structures/Dungeon/Dungeon1.ply", Vector3.One));
