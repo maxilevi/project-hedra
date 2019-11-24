@@ -30,7 +30,16 @@ namespace Hedra.AISystem.Behaviours
             }
             else
             {
-                Graph.Copy(graph);
+                var targetPoint = Parent.SearchComponent<ITraverseAIComponent>().TargetPoint;
+                graph.GetNearestVertex(targetPoint, out var distance);
+                if (distance > Chunk.BlockSize * 2)
+                {
+                    SampleGridAndMergeGraphs(Parent, Graph, nearbyGraphs);
+                }
+                else
+                {
+                    Graph.Copy(graph);
+                }
             }
         }
 

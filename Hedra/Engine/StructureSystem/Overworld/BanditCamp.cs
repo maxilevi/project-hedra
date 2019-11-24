@@ -77,10 +77,10 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             var randomTypes = new[]
             {
-                HumanType.Warrior, HumanType.Archer, HumanType.Blacksmith, HumanType.Mage, HumanType.TravellingMerchant
+                HumanType.Warrior, HumanType.Archer, HumanType.Blacksmith, HumanType.Mage, HumanType.TravellingMerchant,
+                HumanType.Bard, HumanType.Farmer, HumanType.Scholar, HumanType.GreenVillager, HumanType.Clothier, HumanType.Mason
             };
-            Rescuee = World.WorldBuilding.SpawnHumanoid(randomTypes[Rng.Next(0, randomTypes.Length)],
-                this.Position + Vector3.UnitY * 7f + Vector3.UnitZ * 3.0f);
+            Rescuee = World.WorldBuilding.SpawnHumanoid(randomTypes[Rng.Next(0, randomTypes.Length)], this.Position + Vector3.UnitZ * 3.0f);
             Rescuee.ResetEquipment();
             Rescuee.Physics.UsePhysics = false;
             Rescuee.Physics.CollidesWithEntities = false;
@@ -109,7 +109,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             if (Completed) return;
 
             Rescuee.Model.TransformationMatrix = this.BuildRescueeMatrix();
-            Rescuee.Position = this.Position.Xz().ToVector3() + Vector3.UnitY * Physics.HeightAtPosition(this.Position);
+            Rescuee.Position = this.Position.Xz().ToVector3() + Vector3.UnitY * (Physics.HeightAtPosition(this.Position)-1);
 
             if (!Rescuee.InUpdateRange)
                 Rescuee.Update();
@@ -146,7 +146,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             Rescuee.Physics.UsePhysics = true;
             Rescuee.Physics.CollidesWithEntities = true;
             Rescuee.Physics.CollidesWithStructures = true;
-            Rescuee.Position = new Vector3(this.Position.X + 8f, Physics.HeightAtPosition(this.Position) / Chunk.BlockSize, this.Position.Z);
+            Rescuee.Position = new Vector3(this.Position.X + 8f, Physics.HeightAtPosition(this.Position) / Chunk.BlockSize - 2, this.Position.Z);
             Rescuee.Rotation = Vector3.Zero;
         }
 

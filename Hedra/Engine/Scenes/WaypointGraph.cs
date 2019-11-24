@@ -104,6 +104,8 @@ namespace Hedra.Engine.Scenes
                     Distance = newDist;
                 }
             }
+
+            Distance = (float)Math.Sqrt(Distance);
             return point;
         }
 

@@ -59,6 +59,8 @@ namespace Hedra.AISystem
             set => SearchBehaviour<TraverseBehaviour>().ResizeGrid(value);
         }
 
+        public Vector3 TargetPoint { get; set; }
+
         public T SearchBehaviour<T>() where T : Behaviour
         {
             if (_behaviours == null)

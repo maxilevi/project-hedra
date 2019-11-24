@@ -18,13 +18,14 @@ using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
 using System.Numerics;
+using Hedra.Components;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
     public class BanditCampDesign : CompletableStructureDesign<BanditCamp>
     {
-        private const int Level = 18;
+        private const int Level = 11;
         public override int PlateauRadius { get; } = 328;
         public override VertexData Icon { get; } = CacheManager.GetModel(CacheItem.CampfireIcon);
         public override int[] AmbientSongs { get; } =
@@ -75,6 +76,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 MakeTent(tents[i], rng, Structure);
                 enemies[i] = World.WorldBuilding.SpawnBandit(
                     tents[i].WorldPosition + Vector3.Transform(Vector3.UnitZ * 24, tents[i].RotationMatrix), Level, BanditOptions.Default);
+                enemies[i].SearchComponent<DamageComponent>().Ignore(E => Array.IndexOf(enemies, E) != -1);
             }
 
             DecorationsPlacer.PlaceWhenWorldReady(position, P =>
