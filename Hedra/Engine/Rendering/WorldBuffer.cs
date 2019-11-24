@@ -18,6 +18,7 @@ using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Windowing;
 using Hedra.Game;
 using Hedra.Rendering;
+using Hedra.Framework;
 
 namespace Hedra.Engine.Rendering
 {

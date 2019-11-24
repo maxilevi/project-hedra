@@ -40,7 +40,9 @@ namespace Hedra.Engine.Management
             for(var i = 0; i < GameManager.Player.Toolbar.Skills.Length; i++)
                 GameManager.Player.Toolbar.Skills[i].Unload();
             
-            DataManager.SavePlayer(DataManager.DataFromPlayer(GameManager.Player));
+            DataManager.SavePlayer(
+                DataManager.DataFromPlayer(GameManager.Player)
+            );
             
             for(var i = 0; i < GameManager.Player.Toolbar.Skills.Length; i++)
                 GameManager.Player.Toolbar.Skills[i].Load();

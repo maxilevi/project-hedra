@@ -2,6 +2,7 @@ using System;
 using Hedra.AISystem;
 using Hedra.AISystem.Behaviours;
 using Hedra.AISystem.Humanoid;
+using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.EntitySystem;
 
 namespace Hedra.Engine.SkillSystem

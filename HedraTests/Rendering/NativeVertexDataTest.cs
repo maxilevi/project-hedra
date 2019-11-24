@@ -7,6 +7,7 @@ using Hedra.Rendering;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using System.Numerics;
+using Hedra.Framework;
 using Hedra.Numerics;
 
 namespace HedraTests.Rendering

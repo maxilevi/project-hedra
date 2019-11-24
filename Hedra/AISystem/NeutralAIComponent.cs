@@ -1,5 +1,8 @@
+using System.Numerics;
 using Hedra.AISystem.Behaviours;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.Rendering;
+using Hedra.Game;
 
 namespace Hedra.AISystem
 {
@@ -28,7 +31,20 @@ namespace Hedra.AISystem
                 Roam.Update();
             }
         }
-        
+
+        public override void Draw()
+        {
+            base.Draw();
+            if (GameSettings.DebugAI)
+            {
+                DrawDebugCollision();
+                if (Retaliate.Enabled)
+                    Retaliate.Draw();
+                else
+                    Roam.Draw();
+            }
+        }
+
         public override AIType Type => AIType.Neutral;
     }
 }

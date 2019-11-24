@@ -34,7 +34,12 @@ using Hedra.Game;
 using Hedra.Items;
 using Hedra.Mission;
 using System.Numerics;
+using Hedra.Engine;
+using Hedra.Engine.StructureSystem;
+using Hedra.Engine.StructureSystem.VillageSystem;
+using Hedra.EntitySystem;
 using Hedra.Numerics;
+using Silk.NET.Windowing.Common;
 
 namespace Hedra.User
 {
@@ -375,6 +380,11 @@ namespace Hedra.User
                 {
                     Caster.KnockForSeconds(float.Parse(Parts[1]));
                 }
+
+                if (Parts[0] == "maximize")
+                {
+                    Program.GameWindow.WindowState = WindowState.Maximized;
+                }
                 if (Parts[0] == "audiotest")
                 {
                     for (int i = 0; i < 16; i++)
@@ -388,11 +398,27 @@ namespace Hedra.User
                     LocalPlayer.Instance.Enabled = !LocalPlayer.Instance.Enabled;
                     return true;
                 }
+                if (Parts[0] == "opendoor")
+                {
+                    var structures = StructureHandler.GetNearStructures(Caster.Position);
+                    for (var i = 0; i < structures.Length; ++i)
+                    {
+                        structures[i].WorldObject.Search<Door>().Where(D => Caster.Distance(D.Position) < 16).ToList().ForEach(D => D.IsLocked = false);
+                    }
+                }
                 if (Parts[0] == "spawn")
                 {
                     if(Parts[1] == "bandit")
                     {
-                        World.WorldBuilding.SpawnBandit(Caster.Position + Caster.Orientation * 32, Caster.Level, false);
+                        World.WorldBuilding.SpawnBandit(Caster.Position + Caster.Orientation * 32, Caster.Level, BanditOptions.Default);
+                        return true;
+                    }
+                    if(Parts[1] == "undead")
+                    {
+                        World.WorldBuilding.SpawnBandit(Caster.Position + Caster.Orientation * 32, Caster.Level, new BanditOptions
+                        {
+                            ModelType = Utils.Rng.NextBool() ? HumanType.VillagerGhost : HumanType.BeasthunterSpirit
+                        });
                         return true;
                     }
                     if(Parts[1] == "plantling")
@@ -462,6 +488,11 @@ namespace Hedra.User
                     GameSettings.DebugAI = !GameSettings.DebugAI;
                 }
 
+                if (Parts[0] == "debpath")
+                {
+                    GameSettings.DebugNavMesh = !GameSettings.DebugNavMesh;
+                }
+
                 if (Parts[0] == "fisherman")
                 {
                     var fisherman = World.WorldBuilding.SpawnHumanoid(HumanType.Fisherman, Caster.Position + Caster.Orientation * 32);
@@ -495,6 +526,7 @@ namespace Hedra.User
                         }
                     }
                     World.StructureHandler.Discard();
+                    Engine.StructureSystem.StructureHandler.CheckStructures(World.ToChunkSpace(Caster.Position));
                 }
 
                 if (Parts[0] == "place")

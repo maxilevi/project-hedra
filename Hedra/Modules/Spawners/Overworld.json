@@ -2,7 +2,7 @@
   "MiniBosses": [
     {
       "Type": "Ent",
-      "Chance": 20.0
+      "Chance": 15.0
     },
     {
       "Type": "Gorilla",
@@ -10,45 +10,67 @@
     },
     {
       "Type": "Explorers",
-      "Chance": 65.0,
+      "Chance": 70.0,
       "IsCustom": true
     }
   ],
   "Shore": [
     {
       "Type": "Turtle",
-      "Chance": 100.0
+      "Chance": 50.0,
+      "MinGroup": 2,
+      "MaxGroup": 5
+    },
+    {
+      "Type": "Crab",
+      "Chance": 50.0,
+      "MinGroup": 2,
+      "MaxGroup": 9
     }
   ],
 
   "Plains": [
     {
-      "Type": "Cow",
-      "Chance": 10.0,
+      "Type": "Alpaca",
+      "Chance": 6.0,
+      "MinGroup": 2,
+      "MaxGroup": 5
+    },
+    {
+      "Type": "Bison",
+      "Chance": 8.5,
       "MinGroup": 1,
-      "MaxGroup": 2
+      "MaxGroup": 4
+    },
+    {
+      "Type": "Cow",
+      "Chance": 12.5,
+      "MinGroup": 1,
+      "MaxGroup": 3
     },
     {
       "Type": "Sheep",
-      "Chance": 25.0,
+      "Chance": 17.5,
       "MinGroup" : 3,
       "MaxGroup": 5
     },
     {
       "Type": "Horse",
-      "Chance": 20.0,
+      "Chance": 12.5,
       "MinGroup" : 2,
-      "MaxGroup": 3
+      "MaxGroup": 4
     },
     {
       "Type": "Boar",
-      "Chance": 10.0
+      "Chance": 8.0,
+      "MinGroup": 1,
+      "MaxGroup": 3
     },
     {
       "Type": "Wasp",
       "Chance": 10.0,
-      "MinGroup": 1,
-      "MaxGroup": 2
+      "MinGroup": 2,
+      "MaxGroup": 5
     },
     {
       "Type": "Ooze",
@@ -60,20 +82,38 @@
       "Type": "MeleeBeetle",
       "Chance": 15,
       "MinGroup": 1,
-      "MaxGroup": 2
+      "MaxGroup": 3
     }
   ],
 
   "Mountain": [
     {
+      "Type": "Alpaca",
+      "Chance": 40.0,
+      "MinGroup": 1,
+      "MaxGroup": 5
+    },
+    {
+      "Type": "Bison",
+      "Chance": 10.0,
+      "MinGroup": 1,
+      "MaxGroup": 4
+    },
+    {
+      "Type": "Crow",
+      "Chance": 6.0,
+      "MinGroup": 1,
+      "MaxGroup": 4
+    },
+    {
       "Type": "Goat",
-      "Chance": 75.0,
+      "Chance": 25.0,
       "MinGroup": 1,
       "MaxGroup": 3
     },
     {
       "Type": "Roach",
-      "Chance": 10.0
+      "Chance": 4.0
     },
     {
       "Type": "RangedBeetle",
@@ -85,20 +125,42 @@
 
   "Forest": [
     {
+      "Type": "Squirrel",
+      "Chance": 10.0,
+      "MinGroup": 1,
+      "MaxGroup": 3
+    },
+    {
+      "Type": "Raccoon",
+      "Chance": 12.5,
+      "MinGroup": 1,
+      "MaxGroup": 3
+    },
+    {
       "Type": "Deer",
-      "Chance": 10.0 
+      "Chance": 10.0,
+      "MinGroup": 1,
+      "MaxGroup": 3
     },
     {
       "Type": "Bear",
-      "Chance": 12.5
+      "Chance": 4.0
     },
     {
       "Type": "Wolf",
-      "Chance": 20.0
+      "Chance": 12.5,
+      "MinGroup": 1,
+      "MaxGroup": 3
+    },
+    {
+      "Type": "Fox",
+      "Chance": 10.0,
+      "MinGroup": 1,
+      "MaxGroup": 2
     },
     {
       "Type": "Snake",
-      "Chance": 7.5
+      "Chance": 4.0
     },
     {
       "Type": "RangedBeetle",
@@ -108,15 +170,15 @@
     },
     {
       "Type": "MeleeBeetle",
-      "Chance": 10,
+      "Chance": 12,
       "MinGroup": 1,
       "MaxGroup": 2
     },
     {
       "Type": "Bee",
-      "Chance": 15,
-      "MinGroup": 1,
-      "MaxGroup": 3
+      "Chance": 10.0,
+      "MinGroup": 2,
+      "MaxGroup": 7
     },
     {
       "Type": "Spider",

@@ -19,14 +19,15 @@ namespace Hedra.Structures
         public override VertexData Icon { get; } = CacheManager.GetModel(CacheItem.PortalIcon);
         protected override int StructureChance => StructureGrid.GhostTownPortalChance;
         protected override CacheItem? Cache => CacheItem.Portal;
-        protected override Vector3 Scale => Vector3.One * 10;
+        protected override Vector3 StructureScale => Vector3.One * 10;
         protected virtual bool SpawnNPC => true;
+        public override bool CanSpawnInside => true;
 
         protected override void DoBuild(CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation, Random Rng)
         {
             base.DoBuild(Structure, Rotation, Translation, Rng);
             if(!SpawnNPC) return;
-            DoWhenChunkReady(Vector3.Transform(-Vector3.UnitZ * 5 * Scale - Vector3.UnitX * 2 * Scale, Rotation * Translation), P =>
+            DoWhenChunkReady(Vector3.Transform(-Vector3.UnitZ * 5 * StructureScale - Vector3.UnitX * 2 * StructureScale, Rotation * Translation), P =>
             {
                 var human = World.WorldBuilding.SpawnHumanoid(HumanType.Mage, P);
                 human.Physics.UsePhysics = false;
@@ -42,7 +43,7 @@ namespace Hedra.Structures
 
         protected override GhostTownPortal Create(Vector3 Position, float Size)
         {
-            return new GhostTownPortal(Position, Scale, RealmHandler.GhostTown, SpawnGhostTownPortalDesign.Position);
+            return new GhostTownPortal(Position, StructureScale, RealmHandler.GhostTown, SpawnGhostTownPortalDesign.Position);
         }
         
         public override string DisplayName => Translations.Get("structure_portal");

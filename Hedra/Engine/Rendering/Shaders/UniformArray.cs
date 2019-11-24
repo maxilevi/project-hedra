@@ -25,7 +25,7 @@ namespace Hedra.Engine.Rendering.Shaders
             }
         }
 
-        public void Load(object[] Array, int Length)
+        public void Load<T>(T[] Array, int Length)
         {
             for (var i = 0; i < Length; i++)
             {

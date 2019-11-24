@@ -26,7 +26,7 @@ namespace Hedra.Engine.QuestSystem
             _player.StructureAware.StructureCompleted += _ => CheckForCompleteness();
             _player.StructureAware.StructureLeave += _ => CheckForCompleteness();
             _player.Kill += _ => CheckForCompleteness();
-            _player.Interact += CheckForCompleteness;
+            _player.OnInteract += CheckForCompleteness;
         }
         
         public void Start(IHumanoid Giver, MissionObject Quest)

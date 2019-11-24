@@ -174,7 +174,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
         }
 
-        public void CreateCell(ref GridCell Cell, ref int X, ref int Y, ref int Z, bool isWaterCell, int HorizontalLod, int VerticalLod, out bool Success)
+        public void CreateCell(ref GridCell Cell, in int X, in int Y, in int Z, bool isWaterCell, int HorizontalLod, int VerticalLod, out bool Success)
         {
             Success = true;
             this.BuildCell(ref Cell, X, Y, Z, HorizontalLod, VerticalLod);

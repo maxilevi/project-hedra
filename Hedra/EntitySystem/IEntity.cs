@@ -38,7 +38,8 @@ namespace Hedra.EntitySystem
         
         int Level { get; set; }
         
-        bool IsUndead { get; }     
+        bool IsUndead { get; }
+        bool IsInsideABuilding { get; set; }
         
         float MaxOxygen { get; set; }
         
@@ -57,8 +58,6 @@ namespace Hedra.EntitySystem
         float Health { get; set; }
 
         bool InUpdateRange { get; }
-
-        bool IsBoss { get; set; }
 
         bool IsFriendly { get; set; }
         
@@ -82,7 +81,7 @@ namespace Hedra.EntitySystem
 
         bool Disposed { get; }
         
-        float MaxHealth { get; }
+        float MaxHealth { get; set; }
         
         MobType MobType { get; set; }
         
@@ -137,5 +136,8 @@ namespace Hedra.EntitySystem
         void InvokeAfterDamaging(IEntity Invoker, float Damage);
 
         void InvokeDamageModifier(IEntity Invoker, ref float Damage);
+
+        void UpdateCriticalComponents();
+        
     }
 }

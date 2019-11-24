@@ -35,5 +35,6 @@ namespace Hedra.AISystem.Humanoid
         }
 
         protected override bool CanUseSecondAttack => _hasNearTargets;
+        protected override float SecondAttackCooldownTime => 9f;
     }
 }

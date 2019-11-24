@@ -162,8 +162,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                 vertexData,
                 rotationPoint,
                 Position + doorPosition,
-                InvertedRotation,
-                Structure
+                InvertedRotation
             );
         }
         

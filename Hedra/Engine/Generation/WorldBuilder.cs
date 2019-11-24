@@ -15,7 +15,7 @@ namespace Hedra.Engine.Generation
 
         public WorldBuilder()
         {
-            _maxThreads = Environment.ProcessorCount * 2;
+            _maxThreads = Environment.ProcessorCount;
             _pool = new SharedWorkerPool(_maxThreads);
             _meshBuilder = new MeshBuilder(_pool);
             _blockBuilder = new BlockBuilder(_pool);

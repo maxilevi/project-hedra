@@ -34,6 +34,7 @@ namespace Hedra.Engine.BiomeSystem
         public const float RiverWaterLevel = 26.5f;
         public const float RiverFloorLevel = RiverWaterLevel - BaseBiomeGenerationDesign.RiverDepth;
         public const int MaxRegionsPerBiome = 8;
+        public const float RiverSeaFloorMin = RiverFloorLevel - BaseBiomeGenerationDesign.RiverDepth - 2 - 100;
 
         private readonly WorldType _type;
         private readonly Voronoi _voronoi;

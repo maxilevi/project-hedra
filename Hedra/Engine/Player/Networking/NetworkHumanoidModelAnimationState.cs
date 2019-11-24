@@ -1,3 +1,4 @@
+using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.EntitySystem;
 
 namespace Hedra.Engine.Player.Networking
@@ -17,7 +18,7 @@ namespace Hedra.Engine.Player.Networking
         private bool _isKnocked;
         private bool _isFishing;
         
-        public NetworkHumanoidModelAnimationState(IHumanoid Humanoid, HumanoidModel Model) : base(Humanoid, Model)
+        public NetworkHumanoidModelAnimationState(IHumanoid Humanoid, HumanoidModel Model, HumanoidModelTemplate Template) : base(Humanoid, Model, Template)
         {
         }
 

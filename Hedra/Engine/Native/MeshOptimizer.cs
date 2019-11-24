@@ -1,12 +1,6 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using Hedra.Engine.Core;
 using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.MeshOptimizer;
-using Hedra.Rendering;
-using System.Numerics;
-using Microsoft.Scripting.Utils;
+using Hedra.Framework;
 
 namespace Hedra.Engine.Native
 {
@@ -14,6 +8,7 @@ namespace Hedra.Engine.Native
     {
         public static void Simplify(IAllocator Allocator, NativeVertexData Mesh, uint[] BlacklistedIndices, float Threshold, float ErrorMargin = 0.05f)
         {
+            if(Mesh.Indices.Count == 0) return;
             var targetIndexCount = (uint) (Mesh.Indices.Count * Threshold);
             var outIndices = new NativeArray<uint>(Allocator, Mesh.Indices.Count);
             var length = HedraCoreNative.meshopt_simplify(
@@ -32,33 +27,10 @@ namespace Hedra.Engine.Native
             Mesh.Indices.AddRange(outIndices, (int)length);
             outIndices.Dispose();
         }
-        
-        public static void SimplifySloppy(VertexData Mesh, float Threshold)
-        {
-            var indices = Mesh.Indices.ToArray();
-            var vertices = Mesh.Vertices.ToArray();
-            var targetIndexCount = (uint)(indices.Length * Threshold);
-            var outIndices = new uint[indices.Length];
-            var outIndicesPointer = Pointer.Create(outIndices);
-            var indicesPointer = Pointer.Create(indices);
-            var verticesPointer = Pointer.Create(vertices);
-            var length = HedraCoreNative.meshopt_simplifySloppy(
-                outIndicesPointer.Address,
-                indicesPointer.Address,
-                (UIntPtr) indices.Length,
-                verticesPointer.Address,
-                (UIntPtr) vertices.Length,
-                (UIntPtr) (HedraSize.Vector3),
-                (UIntPtr) targetIndexCount
-            );
-            outIndicesPointer.Free();
-            indicesPointer.Free();
-            verticesPointer.Free();
-            Mesh.Indices = outIndices.Take((int)length).ToList();
-        }
-        
+
         public static void SimplifySloppy(IAllocator Allocator, NativeVertexData Mesh, float Threshold)
         {
+            if(Mesh.Indices.Count == 0) return;
             var targetIndexCount = (uint)(Mesh.Indices.Count * Threshold);
             var outIndices = new NativeArray<uint>(Allocator, Mesh.Indices.Count);
             var length = HedraCoreNative.meshopt_simplifySloppy(

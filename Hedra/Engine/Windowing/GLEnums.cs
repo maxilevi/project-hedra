@@ -131,7 +131,8 @@ namespace Hedra.Engine.Windowing
         MaxGeometryOutputVertices = GLEnum.MaxGeometryOutputVertices,
         MaxGeometryOutputComponents = GLEnum.MaxGeometryOutputComponents,
         MaxGeometryTotalOutputComponents = GLEnum.MaxGeometryTotalOutputComponents,
-        CurrentProgram = GLEnum.CurrentProgram
+        CurrentProgram = GLEnum.CurrentProgram,
+        MaxVertexUniformVectors = GLEnum.MaxVertexUniformVectors
     }
     
     public enum VertexAttribPointerType    

@@ -1,0 +1,21 @@
+{
+  "Name": "BossRoomKey",
+  "DisplayName": "Key",
+  "Tier": "Misc",
+  "Description": "A dungeon key..",
+  "Attributes": [
+    {
+      "Name": "Amount",
+      "Value": 1
+    },
+    {
+      "Name": "Price",
+      "Value": 32.0,
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Assets/Items/Misc/BossRoomKey.ply"
+  }
+}

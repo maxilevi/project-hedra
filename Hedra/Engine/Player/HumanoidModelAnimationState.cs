@@ -1,4 +1,5 @@
 using System;
+using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.EntitySystem;
 using Hedra.Sound;
@@ -29,11 +30,15 @@ namespace Hedra.Engine.Player
         private Animation _helloAnimation;
         private Animation _fishingAnimation;
         
-        public HumanoidModelAnimationState(IHumanoid Humanoid, HumanoidModel Model)
+        public HumanoidModelAnimationState(IHumanoid Humanoid, HumanoidModel Model, HumanoidModelTemplate Template)
         {
+            if (Template.WalkAnimation != null)
+            {
+                int a = 0;
+            }
             _humanoid = Humanoid;
             _model = Model;
-            _walkAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorWalk.dae");
+            _walkAnimation = AnimationLoader.LoadAnimation(Template.WalkAnimation ?? "Assets/Chr/WarriorWalk.dae");
             _idleAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorIdle.dae");
             _rollAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorRoll.dae");
             _eatAnimation = AnimationLoader.LoadAnimation("Assets/Chr/WarriorEat.dae");

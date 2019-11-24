@@ -8,9 +8,6 @@
   "Class": "Warrior",
   "Behaviour" : "Hostile",  
   "Immune": false,
-  "XP": 2.5, 
-  "AttackPower": 1.0, 
-  "AttackSpeed": 1.0,
   "Components":  [],
   "Weapons": [
     {

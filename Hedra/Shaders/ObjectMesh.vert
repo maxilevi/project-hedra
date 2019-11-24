@@ -106,7 +106,7 @@ void main()
 
 	Color = rim(linear_color.rgb, LightColor, unitToCamera, unitNormal) 
 	+ (diffuse(unitToLight, unitNormal, LightColor) + diffuse(unitToLight, unitNormal, FLightColor)) * linear_color;
-	Ambient = 0.25;
+	//Ambient = 0.25;
 
 	InPos = Vertex.xyz;
 	vertex_position = Vertex.xyz;

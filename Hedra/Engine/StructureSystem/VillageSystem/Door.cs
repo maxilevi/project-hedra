@@ -25,6 +25,8 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         protected override bool SingleUse => false;
         protected override bool AllowThroughCollider => true;
         public override string Message => Translations.Get(!_opened ? "open_door" : "close_door");
+        protected override bool CanInteract => !IsLocked && base.CanInteract;
+        public bool IsLocked { get; set; }
         public override int InteractDistance => 12;
         private bool _isMoving;
         private bool _opened;
@@ -37,8 +39,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         private readonly RigidBody _body;
         private Vector3 _position;
 
-        public Door(VertexData Mesh, Vector3 RotationPoint, Vector3 Position, bool InvertedRotation,
-            CollidableStructure Structure) : base(Position)
+        public Door(VertexData Mesh, Vector3 RotationPoint, Vector3 Position, bool InvertedRotation) : base(Position)
         {
             _mesh = ObjectMesh.FromVertexData(Mesh);
             _mesh.ApplyNoiseTexture = true;
@@ -48,7 +49,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             {
                 _body = new RigidBody(bodyInfo);
                 _body.Translate(Position.Compatible());
-                Bullet.BulletPhysics.Add(_body, new PhysicsObjectInformation
+                BulletPhysics.Add(_body, new PhysicsObjectInformation
                 {
                     Group = CollisionFilterGroups.StaticFilter,
                     Mask = CollisionFilterGroups.AllFilter,
@@ -90,10 +91,6 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             get => _position;
             set
             {
-                if(_body != null)
-                {
-                    //int a = 0;
-                }
                 _body?.Translate((-_position + value).Compatible());
                 _position = value;
             }

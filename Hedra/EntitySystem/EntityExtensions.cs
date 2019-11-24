@@ -9,6 +9,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.UI;
 using Hedra.Rendering.UI;
 using System.Numerics;
+using Hedra.Engine.EntitySystem.BossSystem;
 using Hedra.Numerics;
 
 namespace Hedra.EntitySystem
@@ -61,10 +62,25 @@ namespace Hedra.EntitySystem
                 };
             }
         }
+        
+        public static float Distance(this IEntity Parent, Vector3 Position)
+        {
+            return (Parent.Position - Position).LengthFast();
+        }
 
         public static float Distance(this IEntity Parent, IEntity Target)
         {
-            return (Parent.Position - Target.Position).LengthFast();
+            return Parent.Distance(Target.Position);
+        }
+
+        public static void RemoveComponent<T>(this IEntity Parent) where T : IComponent<IEntity>
+        {
+            Parent.RemoveComponent(Parent.SearchComponent<T>());
+        }
+
+        public static bool IsBoss(this IEntity Parent)
+        {
+            return Parent.SearchComponent<BossHealthBarComponent>() != null;
         }
     }
 }

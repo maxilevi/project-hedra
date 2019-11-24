@@ -27,6 +27,7 @@ using Hedra.EntitySystem;
 using Hedra.Items;
 using Hedra.WeaponSystem;
 using System.Numerics;
+using Moq;
 
 namespace HedraTests.Player
 {
@@ -45,6 +46,9 @@ namespace HedraTests.Player
                 Scale = 0
             });
             UI = new UserInterface(this);
+            var physicsMock = new Mock<IPhysicsComponent>();
+            physicsMock.Setup(P => P.StaticRaycast(It.IsAny<Vector3>())).Returns(false);
+            Physics = physicsMock.Object;
         }
 
         public void SplashEffect(Chunk UnderChunk)
@@ -245,13 +249,14 @@ namespace HedraTests.Player
 
         public Weapon LeftWeapon { get; set; }
         public MobType MobType { get; set; }
-        public event OnInteractionEvent Interact;
+        public event OnRespawnEvent OnRespawn;
+        public event OnInteractionEvent OnInteract;
         public IMessageDispatcher MessageDispatcher { get; set; }
         public ICamera View { get; set; } = new SimpleCameraMock();
         public ChunkLoader Loader { get; }
         public UserInterface UI { get; set; }
         public IPlayerInventory Inventory { get; set; }
-        public EntitySpawner Spawner { get; }
+        public MobSpawner Spawner { get; }
         public IToolbar Toolbar { get; set; }
         public IVehicle Boat { get; }
         public QuestInterface QuestInterface { get; }
@@ -281,6 +286,7 @@ namespace HedraTests.Player
         public bool IsUndead { get; }
         public float AttackSpeed { get; set; }
         public float BaseAttackSpeed { get; }
+        public bool IsInsideABuilding { get; set; }
         public bool CanInteract { get; set; }
         public bool IsSleeping { get; set; }
         public bool IsJumping { get; }
@@ -463,6 +469,11 @@ namespace HedraTests.Player
             throw new NotImplementedException();
         }
 
+        public void UpdateCriticalComponents()
+        {
+            throw new NotImplementedException();
+        }
+
         void IUpdatable.Update()
         {
             throw new NotImplementedException();
@@ -481,6 +492,11 @@ namespace HedraTests.Player
 
         public Animation AnimationBlending { get; }
         public void ResetModel()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PlayAnimation(Animation Animation)
         {
             throw new NotImplementedException();
         }

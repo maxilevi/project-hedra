@@ -27,6 +27,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         public override int PlateauRadius { get; } = MaxVillageRadius;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.VillageIcon);
+        public override bool CanSpawnInside => true;
 
         public override void Build(CollidableStructure Structure)
         {
@@ -56,7 +57,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             return new Village(TargetPosition);
         }
 
-        protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
+        protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
             return /*BiomeGenerator.PathFormula(ChunkOffset.X, ChunkOffset.Y) > 0
                    && */Rng.Next(0, StructureGrid.VillageChance) == 1

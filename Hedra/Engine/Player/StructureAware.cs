@@ -53,7 +53,8 @@ namespace Hedra.Engine.Player
         
         public void Update()
         {
-            var collidableStructures = StructureHandler.GetNearStructures(_player.Position);
+            /* Use all the structures */
+            var collidableStructures = World.StructureHandler.StructureItems;
 
             if (_updateTimer.Tick() && NeedsUpdating(collidableStructures))
             {
@@ -137,7 +138,7 @@ namespace Hedra.Engine.Player
         private void SetNearCollisions(CollisionGroup[] New)
         {
             var added = New.Except(NearCollisions).ToArray();
-            var removed = NearCollisions .Except(New).ToArray();
+            var removed = NearCollisions.Except(New).ToArray();
             NearCollisions = New;
             TaskScheduler.Parallel(() =>
             {

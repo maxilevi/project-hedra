@@ -27,7 +27,6 @@ namespace AssetBuilder
             Console.WriteLine($"Parsing File {Filename}");
             #endif
             string fileContents = File.ReadAllText(Filename);
-
             int endHeader = fileContents.IndexOf("element vertex", StringComparison.Ordinal);
             fileContents = fileContents.Substring(endHeader, fileContents.Length - endHeader);
             var numbers = Regex.Matches(fileContents, @"-?[\d]+\.[\d]+|[\d]+\.[\d]+|[\d]+").Cast<Match>().Select(M => M.Value).ToArray();

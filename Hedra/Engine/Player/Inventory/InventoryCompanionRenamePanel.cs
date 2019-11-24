@@ -57,6 +57,7 @@ namespace Hedra.Engine.Player.Inventory
         private void OnApply(object Sender, MouseButtonEventArgs Args)
         {
             Apply?.Invoke();
+            _field.Defocus();
         }
         
         public string Text

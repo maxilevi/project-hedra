@@ -25,5 +25,7 @@ namespace Hedra.Engine.CacheSystem
         Dictionary<object, List<float>> CachedExtradata { get; }
         
         Dictionary<object, List<Vector4>> CachedColors { get; }
+        
+        int UsedBytes { get; }
     }
 }

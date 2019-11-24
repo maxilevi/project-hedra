@@ -7,6 +7,7 @@ using Hedra.Engine.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Networking.Packets;
 using Hedra.Engine.Steamworks;
+using Hedra.Framework;
 
 namespace Hedra.Engine.Networking
 {

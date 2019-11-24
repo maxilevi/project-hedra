@@ -81,8 +81,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
                 if(this._light != null)
                 {
-                    _light.Color = new Vector3(.8f, .3f, .2f);
-                    _light.Radius = 24;
+                    _light.Color = LightColor;
+                    _light.Radius = LightRadius;
                     _light.Position = FirePosition;
                     ShaderManager.UpdateLight(this._light);
                 }
@@ -138,6 +138,9 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 }
             }
         }
+
+        protected virtual Vector3 LightColor { get; } = new Vector3(1.25f, .2f, .2f);
+        protected virtual float LightRadius { get; } = 24;
         
         public override void Dispose()
         {

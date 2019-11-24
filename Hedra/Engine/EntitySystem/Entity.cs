@@ -84,7 +84,7 @@ namespace Hedra.Engine.EntitySystem
         public int MobId { get; set; }
         public int Seed { get; set; }
         public Vector3 Orientation { get; set; } = Vector3.UnitZ;       
-        public bool Removable { get; set; } = true;
+        public bool Removable { get; set; }
         public bool IsStuck => Physics.IsStuck;
         public bool PlaySpawningAnimation { get; set; } = true;
         public bool IsAttacking => Model.IsAttacking;
@@ -203,6 +203,8 @@ namespace Hedra.Engine.EntitySystem
             get => Physics.RigidbodyPosition;
             set => Physics.Translate(-Position + value);
         }
+        
+        public bool IsInsideABuilding { get; set; }
 
         public Vector3 Rotation
         {
@@ -522,13 +524,7 @@ namespace Hedra.Engine.EntitySystem
             this.SpawnAnimation();
             this.UpdateEnvironment();
             this._tickSystem.Tick();
-            var beforeComponents = default(IComponent<IEntity>[]);
-            lock (_componentsLock)
-                beforeComponents = _components.ToArray();
-            for (var i = beforeComponents.Length - 1; i > -1; --i)
-            {
-                beforeComponents[i]?.Update();
-            }
+            UpdateComponents(C => C != null && !(C is HealthBarComponent || C is BossHealthBarComponent));
 
             if (IsKnocked)
             {
@@ -538,6 +534,23 @@ namespace Hedra.Engine.EntitySystem
                     model.Human.IsRiding = false;
                 }
                 if (_knockedTime < 0) IsKnocked = false;
+            }
+        }
+
+        public void UpdateCriticalComponents()
+        {
+            UpdateComponents(C => C is HealthBarComponent || C is BossHealthBarComponent);
+        }
+
+        private void UpdateComponents(Func<IComponent<IEntity>, bool> Filter)
+        {
+            var beforeComponents = default(IComponent<IEntity>[]);
+            lock (_componentsLock)
+                beforeComponents = _components.ToArray();
+            for (var i = beforeComponents.Length - 1; i > -1; --i)
+            {
+                if(Filter(beforeComponents[i]))
+                    beforeComponents[i]?.Update();
             }
         }
 

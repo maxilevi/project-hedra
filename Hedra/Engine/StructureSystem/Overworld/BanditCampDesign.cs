@@ -18,19 +18,21 @@ using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
 using System.Numerics;
+using Hedra.Components;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
     public class BanditCampDesign : CompletableStructureDesign<BanditCamp>
     {
-        private const int Level = 18;
+        private const int Level = 11;
         public override int PlateauRadius { get; } = 328;
         public override VertexData Icon { get; } = CacheManager.GetModel(CacheItem.CampfireIcon);
         public override int[] AmbientSongs { get; } =
         {
             SoundtrackManager.HostageSituation
         };
+        public override bool CanSpawnInside => false;
 
         public override void Build(CollidableStructure Structure)
         {
@@ -73,7 +75,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
             {
                 MakeTent(tents[i], rng, Structure);
                 enemies[i] = World.WorldBuilding.SpawnBandit(
-                    tents[i].WorldPosition + Vector3.Transform(Vector3.UnitZ * 24, tents[i].RotationMatrix), Level);
+                    tents[i].WorldPosition + Vector3.Transform(Vector3.UnitZ * 24, tents[i].RotationMatrix), Level, BanditOptions.Default);
+                enemies[i].SearchComponent<DamageComponent>().Ignore(E => Array.IndexOf(enemies, E) != -1);
             }
 
             DecorationsPlacer.PlaceWhenWorldReady(position, P =>
@@ -211,7 +214,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             return tents.ToArray();
         }
 
-        protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
+        protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
             var height = Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z);
             return Rng.Next(0, StructureGrid.BanditCampChance) == 1 && height > BiomePool.SeaLevel;

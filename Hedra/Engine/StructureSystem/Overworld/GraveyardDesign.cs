@@ -30,6 +30,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public override int PlateauRadius { get; } = 384;
         public const int GraveyardSkyTime = 24000;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.GraveyardIcon);
+        public override bool CanSpawnInside => false;
 
         public override void Build(CollidableStructure Structure)
         {
@@ -122,7 +123,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             {
                 var skeleton = World.WorldBuilding.SpawnBandit(
                         Position + new Vector3(Rng.NextFloat() * 60f - 30f, 0, Rng.NextFloat() * 60f - 30f) * Chunk.BlockSize,
-                        Level, false, true);
+                        Level, BanditOptions.Undead);
                     enemies.Add(skeleton);
             }
             Cementery.Enemies = enemies.ToArray();
@@ -174,7 +175,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             }
         }
 
-        protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
+        protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
             var height = Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z);
             return Rng.Next(0, StructureGrid.GraveyardChance) == 1 && height > BiomePool.SeaLevel;

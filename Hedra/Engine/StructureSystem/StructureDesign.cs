@@ -24,9 +24,11 @@ namespace Hedra.Engine.StructureSystem
 {
     public abstract class StructureDesign
     {
+        public virtual int SearchRadius => PlateauRadius;
         public abstract int PlateauRadius { get; }
         public abstract VertexData Icon { get; }
         public abstract void Build(CollidableStructure Structure);
+        public abstract bool CanSpawnInside { get; }
 
         protected abstract CollidableStructure Setup(Vector3 TargetPosition, Random Rng);
         
@@ -46,9 +48,9 @@ namespace Hedra.Engine.StructureSystem
         
         public void CheckFor(Vector2 ChunkOffset, Region Biome, RandomDistribution Distribution)
         {
-            for (var x = Math.Min(-2, -PlateauRadius / Chunk.Width * 2); x < Math.Max(2, PlateauRadius / Chunk.Width * 2); x++)
+            for (var x = Math.Min(-2, -SearchRadius / Chunk.Width * 2); x < Math.Max(2, SearchRadius / Chunk.Width * 2); x++)
             {
-                for (var z = Math.Min(-2, -PlateauRadius / Chunk.Width * 2); z < Math.Max(2, PlateauRadius / Chunk.Width * 2); z++)
+                for (var z = Math.Min(-2, -SearchRadius / Chunk.Width * 2); z < Math.Max(2, SearchRadius / Chunk.Width * 2); z++)
                 {
                     var offset = new Vector2(ChunkOffset.X + x * Chunk.Width,
                         ChunkOffset.Y + z * Chunk.Width);
@@ -56,8 +58,9 @@ namespace Hedra.Engine.StructureSystem
                     var targetPosition = BuildTargetPosition(offset, Distribution);
                     var items = World.StructureHandler.StructureItems;
                     
-                    if (this.ShouldSetup(offset, targetPosition, items, Biome, Distribution))
+                    if (this.ShouldSetup(offset, ref targetPosition, items, Biome, Distribution) && !World.StructureHandler.StructureExistsAtPosition(targetPosition))
                     {
+                        World.StructureHandler.RegisterStructure(targetPosition);
                         var item = this.Setup(targetPosition, BuildRng(offset));
                         item.MapPosition = offset;
                         World.StructureHandler.AddStructure(item);
@@ -70,9 +73,9 @@ namespace Hedra.Engine.StructureSystem
         public virtual bool ShouldRemove(CollidableStructure Structure)
         {
             var chunkOffset = World.ToChunkSpace(Structure.Position);
-            for (var x = Math.Min(-2, -PlateauRadius / Chunk.Width * 2); x < Math.Max(2, PlateauRadius / Chunk.Width * 2); x++)
+            for (var x = Math.Min(-2, -SearchRadius / Chunk.Width * 2); x < Math.Max(2, SearchRadius / Chunk.Width * 2); x++)
             {
-                for (var z = Math.Min(-2, -PlateauRadius / Chunk.Width * 2); z < Math.Max(2, PlateauRadius / Chunk.Width * 2); z++)
+                for (var z = Math.Min(-2, -SearchRadius / Chunk.Width * 2); z < Math.Max(2, SearchRadius / Chunk.Width * 2); z++)
                 {
                     var offset = new Vector2(chunkOffset.X + x * Chunk.Width, chunkOffset.Y + z * Chunk.Width);
                     if (World.GetChunkByOffset(offset) != null)
@@ -100,9 +103,9 @@ namespace Hedra.Engine.StructureSystem
                 ChunkOffset.Y + Rng.Next(0, (int)(Chunk.Width / Chunk.BlockSize)) * Chunk.BlockSize);
         }
 
-        public virtual bool ShouldSetup(Vector2 ChunkOffset, Vector3 TargetPosition, CollidableStructure[] Items, Region Biome, IRandom Rng)
+        public virtual bool ShouldSetup(Vector2 ChunkOffset, ref Vector3 TargetPosition, CollidableStructure[] Items, Region Biome, IRandom Rng)
         {
-            var shouldBe = this.SetupRequirements(TargetPosition, ChunkOffset, Biome, Rng);
+            var shouldBe = this.SetupRequirements(ref TargetPosition, ChunkOffset, Biome, Rng);
             if (World.BiomePool.Type == WorldType.Overworld)
             {
                 shouldBe &= (TargetPosition - World.SpawnPoint).Xz().LengthSquared() > 512 * 512;
@@ -130,7 +133,7 @@ namespace Hedra.Engine.StructureSystem
             return false;
         }
         
-        protected abstract bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng);
+        protected abstract bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng);
 
         protected static void DoWhenChunkReady(Vector3 Position, Action<Vector3> Do, CollidableStructure Structure)
         {

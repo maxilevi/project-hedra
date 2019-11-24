@@ -10,26 +10,5 @@
       "Path": "$DataFile$/Assets/Chr/Mob/Beasthunter0Idle/Beasthunter0Idle.dae",
       "Scale": 1.0
     }
-  ],
-  "Class": "Warrior",
-  "Behaviour" : "Hostile",
-  "Immune": false,
-  "XP": 2.5,
-  "AttackPower": 1.0,
-  "AttackSpeed": 1.0,
-  "Components":  [],
-  "Weapons": [
-    {
-      "Tier": "Uncommon",
-      "Type": "Sword"
-    },
-    {
-      "Tier": "Uncommon",
-      "Type": "Axe"
-    },
-    {
-      "Tier": "Uncommon",
-      "Type": "Hammer"
-    }
   ]
 }

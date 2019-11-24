@@ -12,6 +12,7 @@ using Hedra.Engine.Rendering;
 using Hedra.Game;
 using Hedra.Numerics;
 using Hedra.Rendering;
+using Hedra.Framework;
 using CollisionShape = BulletSharp.CollisionShape;
 using Vector2 = System.Numerics.Vector2;
 
@@ -20,8 +21,9 @@ namespace Hedra.Engine.Bullet
     public delegate void OnContactEvent(CollisionObject Body0, CollisionObject Body1);
 
     public delegate void OnRigidbodyEvent(RigidBody Body);
-    public class BulletPhysics
+    public static class BulletPhysics
     {
+        public static int UsedBytes { get; set; }
         public const CollisionFilterGroups TerrainFilter = CollisionFilterGroups.DebrisFilter;
         public static event OnRigidbodyEvent OnRigidbodyReAdded;
         public static event OnContactEvent OnCollision;
@@ -154,9 +156,7 @@ namespace Hedra.Engine.Bullet
 
                     if (!information.IsInSimulation)
                         AddToSimulation(_dynamicBodies[i], information);
-#if DEBUG
                     AssertIsNotFailingThroughFloor(_dynamicBodies[i]);
-#endif
                 }
                 else
                 {
@@ -245,14 +245,14 @@ namespace Hedra.Engine.Bullet
             if (!GameSettings.DebugPhysics) return;
             lock (_bodyLock)
             {
-                
                 for (var i = 0; i < _bodies.Count; ++i)
                 {
                     if ((_bodies[i].WorldTransform.Origin.Compatible() - Player.LocalPlayer.Instance.Position).Xz().LengthSquared() > 64 * 64) continue;
                     var info = (PhysicsObjectInformation) _bodies[i].UserObject;
                     if (info.IsInSimulation)
-                        _dynamicsWorld.DebugDrawObject(_bodies[i].WorldTransform, _bodies[i].CollisionShape,
-                        new Vector3(1, 1, 0));
+                    {
+                        _dynamicsWorld.DebugDrawObject(_bodies[i].WorldTransform, _bodies[i].CollisionShape, new Vector3(1, 1, 0));
+                    }
                 }/*
                 for (var i = 0; i < _bodies.Count; ++i)
                 {
@@ -303,6 +303,8 @@ namespace Hedra.Engine.Bullet
                 }
                 lock(_bodyLock)
                     _bodies.Add(Body);
+                
+                UsedBytes += Information.UsedBytes;
             }
         }
 
@@ -355,7 +357,8 @@ namespace Hedra.Engine.Bullet
 
                 if (information.IsSensor)
                     DisposeSensor(Body);
-                
+
+                UsedBytes -= information.UsedBytes;
                 DisposeBody(Body);
             }
         }
@@ -411,7 +414,8 @@ namespace Hedra.Engine.Bullet
         {
             lock (_bulletLock)
             {
-                if(Mesh.IsEmpty) return;
+                if(Mesh.IsEmpty)
+                    throw new ArgumentOutOfRangeException("Cannot add an empty mesh");
                 var bodies = new List<Pair<RigidBody, PhysicsObjectInformation>>
                 {
                     new Pair<RigidBody, PhysicsObjectInformation>(CreateTerrainRigidbody(Offset, Mesh), new PhysicsObjectInformation
@@ -419,7 +423,8 @@ namespace Hedra.Engine.Bullet
                         Group = TerrainFilter,
                         Mask = CollisionFilterGroups.AllFilter,
                         Name = $"Terrain ({Offset.X}, {Offset.Y})",
-                        StaticOffsets = new []{Offset}
+                        StaticOffsets = new []{Offset},
+                        UsedBytes = Mesh.Vertices.Count * HedraSize.Vector3 + Mesh.Indices.Count * sizeof(uint)
                     }),
                 };
                 var shape = CreateShapesRigidbody(Shapes);
@@ -430,10 +435,11 @@ namespace Hedra.Engine.Bullet
                         Group = CollisionFilterGroups.StaticFilter,
                         Mask = CollisionFilterGroups.AllFilter,
                         Name = $"Static Objects on ({Offset.X}, {Offset.Y})",
-                        StaticOffsets = new CollisionGroup(Shapes).Offsets
+                        StaticOffsets = new CollisionGroup(Shapes).Offsets,
+                        UsedBytes = Shapes.Sum(S => S.SizeInBytes)
                     }));
                 }
-
+                
                 RemoveChunk(Offset);
                 lock (_chunkLock)
                     _chunkBodies.Add(Offset, bodies.Select(B => B.One).ToArray());
@@ -470,24 +476,39 @@ namespace Hedra.Engine.Bullet
             var vertCount = 0;
             for (var i = 0; i < Shapes.Length; ++i)
             {
-                if (Shapes[i].Indices.Length % 3 != 0 || Shapes[i].Indices.Length == 0)
-                    throw new ArgumentOutOfRangeException();
+                AssertValidShape(Shapes[i]);
                 triangleMesh.AddIndexedMesh(CreateIndexedMesh(Shapes[i].Indices, Shapes[i].Vertices.Select(V => V - offset.Compatible()).ToArray()));
                 vertCount += Shapes[i].Vertices.Length;
             }
-
-            var useQuantizedAabbCompression = true;//vertCount <= 1024;
-            var shape = new BvhTriangleMeshShape(triangleMesh, useQuantizedAabbCompression);
+            
+            var shape = new BvhTriangleMeshShape(triangleMesh, true);
 #if DEBUG
             if (float.IsInfinity(shape.LocalAabbMax.LengthSquared))
             {
-                Debugger.Break();
+                int a = 0;
             }
 #endif
             var body = CreateStaticRigidbody(shape);
             body.Translate(offset);
             return body;
 
+        }
+
+        private static void AssertValidShape(PhysicsSystem.CollisionShape Shape)
+        {
+            for (var k = 0; k < Shape.Indices.Length; ++k)
+            {
+                var index = Shape.Indices[k];
+                if(Shape.Indices[k] >= Shape.Vertices.Length)
+                    throw new ArgumentOutOfRangeException();
+            }
+            for (var k = 0; k < Shape.Vertices.Length; ++k)
+            {
+                if(Shape.Vertices[k].IsInvalid())
+                    throw new ArgumentOutOfRangeException();
+            }
+            if (Shape.Indices.Length % 3 != 0 || Shape.Indices.Length == 0 || Shape.Vertices.Length == 0)
+                throw new ArgumentOutOfRangeException();
         }
 
         private static RigidBody CreateTerrainRigidbody(Vector2 Offset, NativeVertexData Mesh)
@@ -509,7 +530,7 @@ namespace Hedra.Engine.Bullet
             }
         }
 
-        private static BvhTriangleMeshShape CreateTriangleShape(ICollection<uint> Indices, ICollection<System.Numerics.Vector3> Vertices)
+        public static BvhTriangleMeshShape CreateTriangleShape(ICollection<uint> Indices, ICollection<System.Numerics.Vector3> Vertices)
         {
             var triangleMesh = new TriangleIndexVertexArray();
             var indexedMesh = CreateIndexedMesh(Indices, Vertices);
@@ -555,30 +576,25 @@ namespace Hedra.Engine.Bullet
             _currentPairs = temp;
         }
         
-        public static bool Raycast(Vector3 Source, Vector3 End)
+        public static ClosestRayResultCallback Raycast(Vector3 Source, Vector3 End, CollisionFilterGroups Mask)
         {
             lock (_bulletLock)
             {
                 var src = Source;
                 var end = End;
-                var callback = new ClosestRayResultCallback(ref src, ref end);
+                var callback = new ClosestRayResultCallback(ref src, ref end)
+                {
+                    CollisionFilterMask = (int) Mask
+                };
                 try
                 {
                     BulletPhysics.Raycast(ref Source, ref End, callback);
-                    return callback.HasHit;
+                    return callback;
                 }
                 finally
                 {
                     callback.Dispose();
                 }
-            }
-        }
-        
-        public static void ConvexSweepTest(ConvexShape Shape, ref Matrix From, ref Matrix To, ref ClosestConvexResultCallback Callback)
-        {
-            lock (_bulletLock)
-            {
-                _dynamicsWorld.ConvexSweepTestRef(Shape, ref From, ref To, Callback);
             }
         }
 

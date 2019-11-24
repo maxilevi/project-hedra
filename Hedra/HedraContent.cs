@@ -1,5 +1,6 @@
 using System;
 using Hedra.AISystem;
+using Hedra.AISystem.Mob;
 using Hedra.AnimationEvents;
 using Hedra.AnimationEvents.SkillEvents;
 using Hedra.API;
@@ -72,6 +73,12 @@ namespace Hedra
             AddAIType("Goat", typeof(GoatAIComponent));
             AddAIType("SkeletonKamikaze", typeof(SkeletonKamikazeAIComponent));
             AddAIType("Adaptive", typeof(AdaptiveAIComponent));
+            AddAIType("DungeonAdaptive", typeof(DungeonAdaptiveAIComponent));
+            AddAIType("Squirrel", typeof(SquirrelAIComponent));
+            AddAIType("Crab", typeof(CrabAIComponent));
+            AddAIType("Fox", typeof(FoxAIComponent));
+            AddAIType("Raccoon", typeof(RaccoonAIComponent));
+            AddAIType("GroupHostile", typeof(GroupHostileAIComponent));
 
             AddAnimationEvent("Growl", typeof(Growl));
             AddAnimationEvent("Quake", typeof(Quake));
@@ -80,6 +87,7 @@ namespace Hedra
             AddAnimationEvent("CastTerror", typeof(CastTerror));
             AddAnimationEvent("CastSiphonBlood", typeof(CastSiphonBlood));
             AddAnimationEvent("CastLeech", typeof(CastLeech));
+            AddAnimationEvent("CastBlaze", typeof(CastBlaze));
             
             AddModelHandler("Ent", typeof(EntHandler));
             AddModelHandler("Ghost", typeof(GhostHandler));
@@ -175,7 +183,7 @@ namespace Hedra
             AddSkill("FireRelease", typeof(FireRelease));
             AddSkill("Blaze", typeof(Blaze));
             AddSkill("EnergyShield", typeof(EnergyShield));
-            AddSkill("Teleport", typeof(Teleport));
+            AddSkill("Teleport", typeof(Blink));
             AddSkill("FireMastery", typeof(FireMastery));
             AddSkill("Meditation", typeof(Meditation));
             AddSkill("Inferno", typeof(Inferno));

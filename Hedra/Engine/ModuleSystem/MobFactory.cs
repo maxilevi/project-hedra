@@ -77,6 +77,7 @@ namespace Hedra.Engine.ModuleSystem
             var mobName = Translations.Has(mob.Name.ToLowerInvariant()) ? Translations.Get(mob.Name.ToLowerInvariant()) : mob.Name.AddSpacesToSentence(true);
             if(!Translations.Has(mob.Name.ToLowerInvariant()))
                 Log.WriteLine($"Failed to find translation for mob '{mob.Name}', using name as default.");
+            mob.Name = mobName;
             
             var barComponent = new HealthBarComponent(
                 mob,

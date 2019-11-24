@@ -3,8 +3,9 @@
   "MaxHealth": 128.0,
   "AttackDamage": 2.5,
   "Speed": 1.35,
-  "XP": 2.0,
+  "XP": 3.0,
   "Level": 3,
+  "IsFlying": true,
   "AIType": "Hostile",
   "Effects": [
     {

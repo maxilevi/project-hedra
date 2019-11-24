@@ -105,7 +105,7 @@ namespace Hedra.Engine.Player
             ModelPath = Template.Path;
             
             Model = AnimationModelLoader.LoadEntity(Template.Path);
-            StateHandler = BuildAnimationHandler(Humanoid);
+            StateHandler = BuildAnimationHandler(Humanoid, Template);
 
             Model.Scale = Vector3.One * DefaultScale * Template.Scale;
             LeftWeaponJoint = Model.RootJoint.GetChild("Hand_L");
@@ -485,8 +485,8 @@ namespace Hedra.Engine.Player
             set => StateHandler.DefaultBlending = value;
         }
         
-        protected virtual HumanoidModelAnimationState BuildAnimationHandler(IHumanoid Humanoid) 
-            => new HumanoidModelAnimationState(Humanoid, this);
+        protected virtual HumanoidModelAnimationState BuildAnimationHandler(IHumanoid Humanoid, HumanoidModelTemplate Template) 
+            => new HumanoidModelAnimationState(Humanoid, this, Template);
         
         public override void Dispose()
         {
@@ -509,6 +509,7 @@ namespace Hedra.Engine.Player
     {
         Warrior,
         Archer,
+        Beasthunter,
         Rogue,
         Skeleton,
         Merchant,
@@ -525,8 +526,10 @@ namespace Hedra.Engine.Player
         Mage,
         Innkeeper,
         Clothier,
+        VillagerGhost,
         Mason,
         Fisherman,
+        BeasthunterSpirit,
         GreenVillager
     }
 }

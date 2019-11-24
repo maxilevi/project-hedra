@@ -4,6 +4,8 @@ using Hedra.Engine.Rendering.Geometry;
 using Hedra.Rendering;
 using Microsoft.Scripting.Utils;
 using System.Numerics;
+using Hedra.Framework;
+using Hedra.Framework;
 
 namespace Hedra.Engine.Rendering
 {

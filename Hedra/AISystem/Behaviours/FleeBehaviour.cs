@@ -45,6 +45,11 @@ namespace Hedra.AISystem.Behaviours
             Traverse.Update();
         }
 
+        public void Draw()
+        {
+            
+        }
+
         public bool Enabled => Target != null;
         
         public override void Dispose()

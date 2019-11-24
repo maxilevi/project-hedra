@@ -12,7 +12,7 @@ namespace Hedra.Core
 
         private static int seed2(int _s)
         {
-            var s = 192837463 ^ System.Math.Abs(_s);
+            var s = 192837463 ^ Math.Abs(_s);
             var a = 1664525;
             var c = 1013904223;
             var m = 4294967296;

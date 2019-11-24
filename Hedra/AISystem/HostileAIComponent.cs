@@ -43,17 +43,7 @@ namespace Hedra.AISystem
         {
             if (GameSettings.DebugAI)
             {
-                var grid = TraverseStorage.Instance[Parent];
-                for (var x = -grid.DimX / 2; x < grid.DimX / 2; x++)
-                {
-                    for (var y = -grid.DimY / 2; y < grid.DimY / 2; y++)
-                    {
-                        var offset = new Vector3(x, 0, y) * 4 + Parent.Position;
-                        if(float.IsInfinity(grid.GetCellCost(new Vector2(x + grid.DimX / 2, y + grid.DimY / 2))))
-                            BasicGeometry.DrawLine(offset - Vector3.UnitY * 4, offset + Vector3.UnitY * 2, Vector4.One);
-                    } 
-                }
-
+                DrawDebugCollision();
                 if (Retaliate.Enabled)
                     Retaliate.Draw();
                 else if(Hostile.Enabled)

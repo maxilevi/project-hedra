@@ -11,7 +11,7 @@
   
   "Model": {
     "Path": "$DataFile$/Assets/Chr/HorseIdle.dae",
-    "Scale": 2.15,
+    "Scale": 1.0,
     "IdleAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/HorseIdle.dae",
@@ -21,7 +21,7 @@
     "WalkAnimations": [
       {
         "Path": "$DataFile$/Assets/Chr/HorseWalk.dae",
-        "Speed": 1.25
+        "Speed": 1.5
       }
     ],
     "AttackAnimations": [

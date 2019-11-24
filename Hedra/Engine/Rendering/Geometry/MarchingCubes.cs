@@ -462,7 +462,7 @@ namespace Hedra.Engine.Rendering
 
         private static bool ShouldClip(ref Triangle Triangle, ref bool IsRiverConstant)
         {
-            const float  oceanClipDistance = (BiomePool.SeaLevel-1) * Generation.ChunkSystem.Chunk.BlockSize;
+            const float  oceanClipDistance = (BiomePool.SeaLevel-2) * Generation.ChunkSystem.Chunk.BlockSize;
             var isBelowOcean = (Triangle.Vertices[0].Y < oceanClipDistance ||
                                 Triangle.Vertices[1].Y < oceanClipDistance ||
                                 Triangle.Vertices[2].Y < oceanClipDistance);

@@ -19,7 +19,7 @@ namespace Hedra.Structures
                 var design = Biome.Structures.Designs[i];
                 rng.Seed = StructureDesign.BuildRngSeed(chunkOffset);
                 var targetPosition = StructureDesign.BuildTargetPosition(chunkOffset, rng);
-                if (design.ShouldSetup(chunkOffset, targetPosition, EmptyItems, Biome, rng))
+                if (design.ShouldSetup(chunkOffset, ref targetPosition, EmptyItems, Biome, rng))
                 {
                     return design;
                 }

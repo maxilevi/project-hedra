@@ -97,7 +97,6 @@ namespace Hedra.Engine.Bullet
                     Group = CollisionFilterGroups.SensorTrigger,
                     Mask = (CollisionFilterGroups.AllFilter & ~CollisionFilterGroups.SensorTrigger),
                     Entity = Parent,
-                    IsSensor = true,
                     Name = $"'{Parent.Name}' sensor"
                 });
                 _sensor.Gravity = BulletSharp.Math.Vector3.Zero;
@@ -278,7 +277,6 @@ namespace Hedra.Engine.Bullet
             if (!(Parent is LocalPlayer))
             {
                 _isStuck = (_moved && _body.LinearVelocity.Compatible().Xz().LengthSquared() < 1f) && !Parent.IsKnocked;
-                _isStuck = (_moved && _body.LinearVelocity.Compatible().Xz().LengthSquared() < 1f) && !Parent.IsKnocked;
                 _moved = false;
             }
         }
@@ -382,22 +380,29 @@ namespace Hedra.Engine.Bullet
             bool DoRaycast(Vector3 From)
             {
                 BulletPhysics.ResetCallback(_rayResult);
-                /* We don't include the terrain in the raycast hit */
-                _rayResult.CollisionFilterMask = (int)(CollisionFilterGroups.StaticFilter | CollisionFilterGroups.CharacterFilter);
+                /*
+                 * We don't include the terrain in the raycast hit
+                 * But we include the sensors so we get more accuracy on where the other characters are
+                 */
+                _rayResult.CollisionFilterMask = (int)(CollisionFilterGroups.StaticFilter | CollisionFilterGroups.CharacterFilter | CollisionFilterGroups.SensorTrigger);
                 var from = From.Compatible() - BulletSharp.Math.Vector3.UnitY * 4;
                 var to = from + BulletSharp.Math.Vector3.UnitY * 4;
                 _rayResult.RayFromWorld = from;
                 _rayResult.RayToWorld = to;
                 BulletPhysics.Raycast(ref from, ref to, _rayResult);
-                return _rayResult.HasHit;
-                //_rayResult.CollisionObjects.Count(C => !ReferenceEquals(C, _sensor) && !ReferenceEquals(C, _body)) > 0;
+                return _rayResult.CollisionObjects.Count(C => !ReferenceEquals(C, _sensor) && !ReferenceEquals(C, _body)) > 0;
             }
             
             _body.CollisionShape.GetAabb(Matrix.Identity, out var aabbMin, out var aabbMax);
             var position = Offset + RigidbodyPosition;
             var aabbMinXz = aabbMin.Compatible().Xz().ToVector3();
             var aabbMaxXz = aabbMax.Compatible().Xz().ToVector3();
-            return DoRaycast(aabbMinXz + position) 
+            return DoRaycast(aabbMinXz * .5f + position)
+                   || DoRaycast(new Vector3(aabbMinXz.X, 0, aabbMaxXz.Z) * .5f + position)
+                   || DoRaycast(new Vector3(aabbMaxXz.X, 0, aabbMinXz.Z) * .5f + position)
+                   || DoRaycast(aabbMaxXz * .5f + position)
+                   || DoRaycast(position)
+                   || DoRaycast(aabbMinXz + position) 
                    || DoRaycast(new Vector3(aabbMinXz.X, 0, aabbMaxXz.Z) + position) 
                    || DoRaycast(new Vector3(aabbMaxXz.X, 0, aabbMinXz.Z) + position) 
                    || DoRaycast(aabbMaxXz + position);
@@ -419,9 +424,16 @@ namespace Hedra.Engine.Bullet
 
         public Vector3 LinearVelocity => _body.LinearVelocity.Compatible();
 
-        public bool Raycast(Vector3 End)
+        public bool StaticRaycast(Vector3 End)
         {
-            return BulletPhysics.Raycast(RigidbodyPosition.Compatible(), End.Compatible());
+            return StaticRaycast(End, out _);
+        }
+        
+        public bool StaticRaycast(Vector3 End, out Vector3 Hit)
+        {
+            var result = BulletPhysics.Raycast(RigidbodyPosition.Compatible() + Vector3.UnitY.Compatible() * Parent.Model.Height * .5f, End.Compatible(), CollisionFilterGroups.StaticFilter | BulletPhysics.TerrainFilter);
+            Hit = result.HitPointWorld.Compatible();
+            return result.HasHit;
         }
         
         private float Timestep => Time.IndependentDeltaTime * (UseTimescale ? Time.TimeScale : 1);

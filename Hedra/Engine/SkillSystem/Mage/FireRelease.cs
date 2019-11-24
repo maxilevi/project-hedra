@@ -21,7 +21,7 @@ namespace Hedra.Engine.SkillSystem.Mage
     /// <summary>
     /// Description of FireRelease.
     /// </summary>
-    public class FireRelease : SwitchSkill
+    public class FireRelease : PlayerSwitchSkill
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/FireRelease.png");
         protected override string AnimationPath => "Assets/Chr/Mage-FireRelease.dae";
@@ -45,7 +45,7 @@ namespace Hedra.Engine.SkillSystem.Mage
 
         protected override int MaxLevel => 25;
         private float Damage => 5f + 7 * (Level /(float) MaxLevel);
-        private float ManaPerSecond => 26;
+        private float ManaPerSecond => 44;
         public override string DisplayName => Translations.Get("fire_release_skill");
         public override string Description => Translations.Get("fire_release_desc");
         public override string[] Attributes => new []

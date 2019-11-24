@@ -43,8 +43,10 @@ using Hedra.Items;
 using Hedra.Sound;
 using System.Numerics;
 using Hedra.Engine.Core;
+using Hedra.Engine.SkillSystem;
 using Hedra.Engine.Windowing;
 using Hedra.Numerics;
+using Hedra.Framework;
 
 namespace Hedra.Engine.Generation
 {
@@ -565,7 +567,7 @@ namespace Hedra.Engine.Generation
             return model;
         }
 
-        public SkilledAnimableEntity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed)
+        public ISkilledAnimableEntity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed)
         {
             var mob = MobFactory.Build(Type, MobSeed);
             var placeablePosition = this.FindPlaceablePosition(mob, new Vector3(DesiredPosition.X, Physics.HeightAtPosition(DesiredPosition.X, DesiredPosition.Z), DesiredPosition.Z));
@@ -575,7 +577,7 @@ namespace Hedra.Engine.Generation
             mob.Position = placeablePosition;
             mob.Model.Position = placeablePosition;
             MobFactory.Polish(mob);
-            
+
             this.AddEntity(mob);
             return mob;
         }
@@ -591,7 +593,19 @@ namespace Hedra.Engine.Generation
                 return region.Generation.GetMaxHeight(Point.X, Point.Z) < Engine.BiomeSystem.BiomePool.SeaLevel
                     || region.Generation.RiverAtPoint(Point.X, Point.Z) > 0;
             }
-            while (IsWater(point))
+
+            var structures = StructureHandler.StructureItems;
+            bool IsInsideStructure(Vector3 Point)
+            {
+                for (var i = 0; i < structures.Length; ++i)
+                {
+                    if ((structures[i].Position - Point).LengthSquared() < structures[i].Radius * structures[i].Radius)
+                        return true;
+                }
+
+                return false;
+            }
+            while (IsWater(point) || IsInsideStructure(point))
             {
                 point += 
                     new Vector3( (192f * rng.NextFloat() - 96f) * Chunk.BlockSize, 0, (192f * rng.NextFloat() - 96f) * Chunk.BlockSize);
@@ -602,16 +616,12 @@ namespace Hedra.Engine.Generation
 
         public Vector3 FindPlaceablePosition(IEntity Mob, Vector3 DesiredPosition)
         {
-            var originalPosition = Mob.Position;
-            var collidesOnSurface = true;
-            Mob.Position = DesiredPosition;
-            while (Mob.Physics.CollidesWithOffset(Vector3.Zero))
+            var offset = DesiredPosition;
+            while (Mob.Physics.CollidesWithOffset(-Mob.Position + offset))
             {
-                DesiredPosition += new Vector3(Utils.Rng.NextFloat() * 32f - 16f, 0, Utils.Rng.NextFloat() * 32f - 16f);
-                Mob.Position = DesiredPosition;
+                offset += new Vector3(Utils.Rng.NextFloat() * 32f - 16f, 0, Utils.Rng.NextFloat() * 32f - 16f);
             }
-            Mob.Position = originalPosition;
-            return DesiredPosition;
+            return offset;
         }
 
         private Vector3 ToBlockSpace(float X, float Z)
@@ -769,7 +779,6 @@ namespace Hedra.Engine.Generation
             -1835204548,
             -1527889388,
             1436884727,
-            -705499025,
             -1122906719,
             1050378001,
             -65738522,

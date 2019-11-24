@@ -84,7 +84,7 @@ namespace Hedra.Engine.Player
         public float BonusHealth { get; set; }
         public float DodgeCost { get; set; }    
         public float RandomFactor { get; set; }
-        
+
         public virtual bool CanInteract { get; set; } = true;
         public virtual float FacingDirection => throw new NotImplementedException();
         public new HumanoidModel Model { get => base.Model as HumanoidModel; set => base.Model = value; }
@@ -153,11 +153,11 @@ namespace Hedra.Engine.Player
         public Humanoid()
         {
             _consecutiveHitsTimer = new Timer(3f);
-            Inventory = new DummyInventory();
             MessageDispatcher = new DummyMessageDispatcher();
             HandLamp = new HandLamp(this);
             Movement = new MovementManager(this);
             Equipment = new EquipmentHandler(this);
+            Inventory = new HumanoidInventory(Equipment);
             Boat = new Boat(this);
             Class = new WarriorDesign();
             RandomFactor = NewRandomFactor();
@@ -534,6 +534,8 @@ namespace Hedra.Engine.Player
         public void ResetModel() => Model.Reset();
 
         public void BlendAnimation(Animation Animation) => Model.BlendAnimation(Animation);
+        
+        public void PlayAnimation(Animation Animation) => Model.PlayAnimation(Animation);
 
         public bool CaptureMovement
         {

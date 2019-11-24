@@ -15,7 +15,7 @@ using Hedra.Numerics;
 
 namespace Hedra.Engine.SkillSystem.Mage
 {
-    public class Blaze : DrainSkill
+    public class Blaze : DrainSkill<ISkilledAnimableEntity>
     {
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Blaze.png");
         private BlazeComponent _component;
@@ -33,7 +33,7 @@ namespace Hedra.Engine.SkillSystem.Mage
             User.RemoveComponent(_speedComponent);
         }
 
-        private class BlazeComponent : Component<IHumanoid>
+        private class BlazeComponent : Component<IEntity>
         {
             private readonly Timer _gcTimer;
             private readonly List<Vector3> _spots;
@@ -41,7 +41,7 @@ namespace Hedra.Engine.SkillSystem.Mage
             private readonly float _damage;
             private Vector3 _lastPosition;
             
-            public BlazeComponent(IHumanoid Entity, float Damage) : base(Entity)
+            public BlazeComponent(IEntity Entity, float Damage) : base(Entity)
             {
                 _gcTimer = new Timer(.1f);
                 _spots = new List<Vector3>();
@@ -54,10 +54,10 @@ namespace Hedra.Engine.SkillSystem.Mage
             public override void Update()
             {
                 UpdateSpots();
-                if (Parent.IsGrounded && (_lastPosition - Parent.Model.ModelPosition).LengthFast() > 2)
+                if (Parent.IsGrounded && (_lastPosition - Parent.Position).LengthFast() > 2)
                 {
                     MarkSpot();
-                    _lastPosition = Parent.Model.ModelPosition;
+                    _lastPosition = Parent.Position;
                 }
                 if (_gcTimer.Tick() && _spots.Count > 0) _spots.RemoveAt(0);
             }

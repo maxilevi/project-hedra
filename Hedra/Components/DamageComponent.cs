@@ -43,6 +43,7 @@ namespace Hedra.Components
         public bool Delete { get; set; } = true;
         public bool PlayDeleteAnimation { get; set; } = true;
         public bool PushOnHit { get; set; } = true;
+        public bool AICanReach { get; set; } = true;
         public float MissChance { get; set; } = DefaultMissChance;
         private readonly List<BaseBillboard> _damageLabels;
         private readonly List<Predicate<IEntity>> _ignoreList;
@@ -103,12 +104,11 @@ namespace Hedra.Components
             Amount *= (1.0f / Parent.AttackResistance);
             Amount *= Parent.IsUndead ? Damager?.Attributes.UndeadDamageModifier ?? 1 : 1;
             if (Parent.IsDead || Damager != null && _ignoreList.Any(I => I.Invoke(Damager))) return;
-            
 
             var shouldMiss = Parent is LocalPlayer && Utils.Rng.NextFloat() < MissChance;
             _attackedTimer = 6;
             _hasBeenAttacked = true;
-            var isImmune = Immune | (Parent.IsStuck && !Parent.Model.Pause);
+            var isImmune = Immune || (Parent.IsStuck && !Parent.Model.Pause) || !AICanReach;
 
             if (!Parent.IsStatic && PlaySound && (GameManager.Player.Position - Parent.Position).LengthSquared() < 80*80 && Amount >= 1f)
             {

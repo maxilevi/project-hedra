@@ -5,13 +5,14 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.EntitySystem;
 using System.Numerics;
+using Hedra.Engine.Core;
 using Hedra.Numerics;
 
 namespace Hedra.AISystem.Behaviours
 {
     public class HostileBehaviour : Behaviour
     {
-        protected float Radius { get; } = 64;
+        protected virtual float Radius { get; } = 64;
         protected AttackBehaviour Attack { get; }
         private readonly Timer _timer;
 
@@ -23,7 +24,15 @@ namespace Hedra.AISystem.Behaviours
 
         protected virtual IEntity GetTarget()
         {
-            return World.InRadius<IPlayer>(Parent.Position, Radius).FirstOrDefault(P => (Parent.Position - P.Position).LengthFast() < Radius * P.Attributes.MobAggroModifier);
+            var target = GetTargets<IPlayer>().FirstOrDefault();
+            if (target != null && Parent.Physics.StaticRaycast(target.Position + Vector3.UnitY * target.Model.Height * .5f))
+                return null;
+            return target;
+        }
+
+        protected T[] GetTargets<T>() where T : ISearchable, IEntity
+        {
+            return World.InRadius<T>(Parent.Position, Radius).Where(P => (Parent.Position - P.Position).LengthFast() < Radius * P.Attributes.MobAggroModifier).ToArray();
         }
 
         protected virtual void HandleTarget()

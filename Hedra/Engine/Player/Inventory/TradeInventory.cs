@@ -163,7 +163,7 @@ namespace Hedra.Engine.Player.Inventory
                 _player.View.TargetPitch = Mathf.Lerp(_player.View.TargetPitch, 0f, (float)Time.DeltaTime * 16f);
                 _player.View.TargetDistance =
                     Mathf.Lerp(_player.View.TargetDistance, 10f, (float)Time.DeltaTime * 16f);
-                _player.View.TargetYaw = Mathf.Lerp(_player.View.TargetYaw, (float)Math.Acos(-_player.Orientation.X),
+                _player.View.TargetYaw = Mathf.Lerp(_player.View.TargetYaw, (float) Math.Atan2(-_player.Orientation.Z, -_player.Orientation.X),
                     (float)Time.DeltaTime * 16f);
                 _player.View.CameraHeight = Mathf.Lerp(_player.View.CameraHeight, Vector3.UnitY * 4,
                     (float)Time.DeltaTime * 16f);

@@ -28,6 +28,7 @@ using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Items;
 using System.Numerics;
+using Hedra.Engine.SkillSystem;
 
 namespace Hedra
 {
@@ -222,17 +223,17 @@ namespace Hedra
             return Provider.DropItem(ItemSpec, Position);
         }
 
-        public static Entity SpawnMob(MobType Type, Vector3 DesiredPosition, Random SeedRng)
+        public static IEntity SpawnMob(MobType Type, Vector3 DesiredPosition, Random SeedRng)
         {
             return SpawnMob(Type.ToString(), DesiredPosition, SeedRng);
         }
 
-        public static Entity SpawnMob(string Type, Vector3 DesiredPosition, Random SeedRng)
+        public static IEntity SpawnMob(string Type, Vector3 DesiredPosition, Random SeedRng)
         {
             return SpawnMob(Type, DesiredPosition, SeedRng.Next(ushort.MinValue, ushort.MaxValue));
         }
 
-        public static SkilledAnimableEntity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed)
+        public static ISkilledAnimableEntity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed)
         {
             return Provider.SpawnMob(Type, DesiredPosition, MobSeed);
         }

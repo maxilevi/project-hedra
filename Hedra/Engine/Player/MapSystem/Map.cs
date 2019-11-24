@@ -31,6 +31,7 @@ using Hedra.Rendering.UI;
 using Hedra.Sound;
 using Hedra.Structures;
 using System.Numerics;
+using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Numerics;
 using Silk.NET.Input.Common;
 using MouseButton = Silk.NET.Input.Common.MouseButton;
@@ -65,13 +66,14 @@ namespace Hedra.Engine.Player.MapSystem
         private int _previousSeed;
         private float _height;
         private float _targetHeight;
-        private float _targetTime = float.MaxValue;
         private int lastChunkAmount = -1;
         private float _mapDitherRadius;
         private Chunk _underChunk;
+        private TimeHandler _timeHandler;
 
         public Map(LocalPlayer Player)
         {
+            _timeHandler = new TimeHandler(12000);
             this._player = Player;
             this._panel = new Panel();
             this._icons = new List<MapItem>();
@@ -125,7 +127,7 @@ namespace Hedra.Engine.Player.MapSystem
             for (var i = 0; i < _icons.Count; i++)
             { 
                 _icons[i].Mesh.LocalRotation = new Vector3(_icons[i].Mesh.LocalRotation.X, _icons[i].Mesh.LocalRotation.Y + (float) Time.DeltaTime * 0f, _icons[i].Mesh.LocalRotation.Z);
-                _icons[i].Mesh.Position = new Vector3(mapPosition.X, _targetHeight, mapPosition.Z);
+                _icons[i].Mesh.Position = new Vector3(mapPosition.X, _targetHeight - 7, mapPosition.Z);
             }          
             for (var i = 0; i < _baseItems.Count; i++)
             {
@@ -169,14 +171,7 @@ namespace Hedra.Engine.Player.MapSystem
 
         private void UpdateFogAndTime()
         {
-            if (Math.Abs(float.MaxValue - _targetTime) > 0.005f)
-            {
-                SkyManager.SetTime(Mathf.Lerp(SkyManager.DayTime, _targetTime, (float)Time.DeltaTime * 2f));
-                if (Math.Abs(SkyManager.DayTime - _targetTime) < 10)
-                {
-                    if (SkyManager.DayTime > 24000) SkyManager.DayTime -= 24000;
-                }
-            }
+            _timeHandler.Update();
             if (!Show) return;
             this._player.View.PositionDelegate = () => _player.Model.Position.Xz().ToVector3() + Math.Max(_height, _player.Model.Position.Y) * Vector3.UnitY;
             SkyManager.FogManager.UpdateFogSettings(FogDistance * .95f, FogDistance);
@@ -375,6 +370,7 @@ namespace Hedra.Engine.Player.MapSystem
                     _stateManager.CaptureState();
                     this.UpdateChunks();
                     this.ClearIcons();
+                    _timeHandler.Apply();
                     TaskScheduler.Parallel(this.UpdateIcons);
                     SkyManager.UpdateDayColors = false;
                     WorldRenderer.EnableCulling = false;                  
@@ -389,11 +385,9 @@ namespace Hedra.Engine.Player.MapSystem
                     this._player.View.AllowClipping = true;
                     this._targetHeight = 4096;
                     this._height = _targetHeight;
-                    this._targetTime = 12000;
                     this._player.Toolbar.Listen = false;
                     _cursor.Enabled = true;
                     _panel.Enable();
-                    SkyManager.PushTime();                   
                 }
                 else
                 {
@@ -404,13 +398,11 @@ namespace Hedra.Engine.Player.MapSystem
                     this._targetHeight = 0;
                     this._player.View.AllowClipping = false;
                     _cursor.Enabled = false;
-                    this._targetTime = SkyManager.PeekTime();
+                    _timeHandler.Remove();
                     TaskScheduler.When(() => _height < Camera.DefaultDelegate().Y, delegate
                     {
 
                         this._player.View.PositionDelegate = Camera.DefaultDelegate;
-                        SkyManager.PopTime();
-                        _targetTime = float.MaxValue;
                         if(!_show) _height = 0f;
                     });
                     _player.Loader.UpdateFog(Force: true);

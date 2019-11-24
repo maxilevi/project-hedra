@@ -39,7 +39,7 @@ namespace Hedra.Engine.WorldBuilding
         protected virtual bool SingleUse => true;
         protected virtual bool DisposeAfterUse => true;
         protected virtual bool CanInteract => true;
-        protected virtual bool AllowThroughCollider => true;
+        protected virtual bool AllowThroughCollider => false;
         public virtual Key Key => Controls.Interact;
         public abstract string Message { get; }
         public abstract int InteractDistance { get; }
@@ -74,8 +74,9 @@ namespace Hedra.Engine.WorldBuilding
         {
             var player = GameManager.Player;
 
-            bool IsInLookingAngle() => Vector2.Dot((this.Position - player.Position).Xz().NormalizedFast(),
-                player.View.LookingDirection.Xz().NormalizedFast()) > InteractionAngle && (AllowThroughCollider || !player.Physics.Raycast(Position));                
+            var direction = (this.Position - player.Position).NormalizedFast();
+            bool IsInLookingAngle() => Vector2.Dot((Position - player.Position).Xz().NormalizedFast(),
+                player.View.LookingDirection.Xz().NormalizedFast()) > InteractionAngle && (AllowThroughCollider || !player.Physics.StaticRaycast(Position - direction * 4));                
             
             if (IsInRadius() && IsInLookingAngle() && (!Interacted || !SingleUse) && CanInteract && player.CanInteract)
             {

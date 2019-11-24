@@ -23,22 +23,15 @@ namespace Hedra.Engine.Scenes
 {
     public static class SceneLoader
     {
+        private static readonly Vector3 Structure1ColorCode = new Vector3(0, 1, 1);
+        private static readonly Vector3 Structure2ColorCode = new Vector3(0, 1, 0);
+        private static readonly Vector3 Structure4ColorCode = new Vector3(1, 0, 0);
+        private static readonly Vector3 Structure3ColorCode = new Vector3(0, 0, 1);
         private static readonly Vector3 LightColorCode = new Vector3(1, 0, 1);
-        private static readonly Vector3 TrainingDummyColorCode = new Vector3(0, 1, 0);
-        private static readonly Vector3 WellColorCode = new Vector3(0, 0, 1);
-        private static readonly Vector3 BoatMerchantColorCode = new Vector3(0, 0, 0);
-        private static readonly Vector3 FishermanColorCode = new Vector3(1, 1, 0);
+        private static readonly Vector3 NPC1ColorCode = new Vector3(1, 1, 0);
+        private static readonly Vector3 NPC2ColorCode = new Vector3(0, 0, 0);
+        private static readonly Vector3 NPC3ColorCode = new Vector3(1, 1, 1);
 
-        public static void Load(CollidableStructure Structure, VertexData Scene)
-        {
-            Load(Structure, Scene, new SceneSettings());
-        }
-
-        public static void LoadIfExists(CollidableStructure Structure, string Path, Vector3 Scale, Matrix4x4 Transformation)
-        {
-            LoadIfExists(Structure, Path, Scale, Transformation, new SceneSettings());
-        }
-        
         public static void LoadIfExists(CollidableStructure Structure, string Filename, Vector3 Scale, Matrix4x4 Transformation, SceneSettings Settings)
         {
             var path = $"{Path.GetDirectoryName(Filename)}/{Path.GetFileNameWithoutExtension(Filename)}-Scene.ply";
@@ -56,10 +49,13 @@ namespace Hedra.Engine.Scenes
             var map = new Dictionary<Vector3, List<VertexData>>
             {
                 {LightColorCode, new List<VertexData>()},
-                {TrainingDummyColorCode, new List<VertexData>()},
-                {WellColorCode, new List<VertexData>()},
-                {BoatMerchantColorCode, new List<VertexData>()},
-                {FishermanColorCode, new List<VertexData>()}
+                {Structure2ColorCode, new List<VertexData>()},
+                {Structure3ColorCode, new List<VertexData>()},
+                {NPC2ColorCode, new List<VertexData>()},
+                {NPC1ColorCode, new List<VertexData>()},
+                {NPC3ColorCode, new List<VertexData>()},
+                {Structure4ColorCode, new List<VertexData>()},
+                {Structure1ColorCode, new List<VertexData>()}
             };
             for (var i = 0; i < parts.Length; ++i)
             {
@@ -74,96 +70,75 @@ namespace Hedra.Engine.Scenes
             );
             Structure.WorldObject.AddChildren(lights);
 
-            /* Add Wells */
-            var wells = LoadWells(
-                map[WellColorCode].Select(V => V.Vertices.ToArray()).ToArray()
+            /* Add Structure1 */
+            var structs = LoadGenericStructure(
+                map[Structure1ColorCode].ToArray(),
+                Settings.Structure1Creator
             );
-            Structure.WorldObject.AddChildren(wells);
-
-            /* Add punching bags */
-            var bags = LoadPunchingBags(
-                map[TrainingDummyColorCode].Select(V => V.Vertices.ToArray()).ToArray()
+            Structure.WorldObject.AddChildren(structs);
+            
+            /* Add Structure 2 */
+            structs = LoadGenericStructure(
+                map[Structure2ColorCode].ToArray(),
+                Settings.Structure2Creator
             );
-            Structure.WorldObject.AddChildren(bags);
+            Structure.WorldObject.AddChildren(structs);
             
-            /* Add Boat Merchants */
-            PlaceNPCsWhenWorldReady(map[BoatMerchantColorCode], P => LoadBoatMerchants(P), Structure);
+            /* Add Structure 3 */
+            structs = LoadGenericStructure(
+                map[Structure3ColorCode].ToArray(),
+                Settings.Structure3Creator
+            );
+            Structure.WorldObject.AddChildren(structs);
             
-            /* Add Fisherman */
-            PlaceNPCsWhenWorldReady(map[FishermanColorCode], P => LoadFishermans(P), Structure);
+            /* Add Structure 3 */
+            structs = LoadGenericStructure(
+                map[Structure4ColorCode].ToArray(),
+                Settings.Structure4Creator
+            );
+            Structure.WorldObject.AddChildren(structs);
+            
+            /* Add NPC1 */
+            PlaceNPCsWhenWorldReady(map[NPC1ColorCode], P => Settings.Npc1Creator(P, Structure), Structure);
+            
+            /* Add NPC2 */
+            PlaceNPCsWhenWorldReady(map[NPC2ColorCode], P => Settings.Npc2Creator(P, Structure), Structure);
+            
+            /* Add NPC2 */
+            PlaceNPCsWhenWorldReady(map[NPC3ColorCode], P => Settings.Npc3Creator(P, Structure), Structure);
         }
 
-        private static void PlaceNPCsWhenWorldReady(IEnumerable<VertexData> ScenePositions, Func<Vector3, IHumanoid[]> Load, CollidableStructure Structure)
+        private static void PlaceNPCsWhenWorldReady(IEnumerable<VertexData> ScenePositions, Func<Vector3, IEntity> Create, CollidableStructure Structure)
         {
             var positions = ScenePositions.Select(V => V.AverageVertices()).ToArray();
             DoWhenWorldReady(positions, P => P, P =>
             {
-                Structure.WorldObject.AddNPCs(Load(P));
+                var npc = Create(P);
+                if(npc != null)
+                    Structure.WorldObject.AddNPCs(npc);
             }, Structure);
         }
         
         private static void DoWhenWorldReady<T>(T[] Values, Func<T, Vector3> GetPosition, Action<T> Do, CollidableStructure Structure)
         {
-            /* Add punching bags */
             for (var i = 0; i < Values.Length; ++i)
             {
                 var k = i;
                 DecorationsPlacer.PlaceWhenWorldReady(GetPosition(Values[i]), P => Do(Values[k]), () => Structure.Disposed);
             }
         }
-        
-        private static IHumanoid[] LoadFishermans(params Vector3[] Positions)
-        {
-            IHumanoid Transform(Vector3 Position)
-            {
-                var fisherman = World.WorldBuilding.SpawnHumanoid(HumanType.Fisherman, Position);
-                fisherman.AddComponent(new QuestGiverComponent(fisherman, MissionPool.Random(Position, QuestTier.Medium)));
-                fisherman.Physics.CollidesWithEntities = false;
-                fisherman.IsSitting = true;
-                fisherman.SearchComponent<DamageComponent>().Immune = true;
-                return fisherman;
-            }
-            return Positions.Select(Transform).ToArray();
-        }
 
-        private static IHumanoid[] LoadBoatMerchants(params Vector3[] Positions)
-        {
-            IHumanoid Transform(Vector3 Position)
-            {
-                var boatMerchant = World.WorldBuilding.SpawnHumanoid(HumanType.Fisherman, Position);
-                boatMerchant.SearchComponent<DamageComponent>().Immune = true;
-                boatMerchant.AddComponent(new BoatMerchantComponent(boatMerchant));
-                return boatMerchant;
-            }
-            return Positions.Select(Transform).ToArray();
-        }
-
-        private static BaseStructure[] LoadWells(params Vector3[][] VertexGroups)
+        private static BaseStructure[] LoadGenericStructure(VertexData[] VertexGroups, Func<Vector3, VertexData, BaseStructure> Create)
         {
             var list = new List<BaseStructure>();
             for (var i = 0; i < VertexGroups.Length; ++i)
             {
                 var averageCenter = VertexGroups[i].AverageVertices();
-                var radius = new CollisionShape(VertexGroups[i]).BroadphaseRadius * 2;
-                list.Add(new Well(averageCenter, radius));
+                list.Add(Create(averageCenter, VertexGroups[i]));
             }
             return list.ToArray();
         }
 
-        private static BaseStructure[] LoadPunchingBags(params Vector3[][] VertexGroups)
-        {
-            var list = new List<BaseStructure>();
-            for (var i = 0; i < VertexGroups.Length; ++i)
-            {
-                var box = Physics.BuildDimensionsBox(new VertexData
-                {
-                    Vertices = VertexGroups[i].ToList()
-                }) * 2;
-                list.Add(new PunchingBag(VertexGroups[i].AverageVertices(), box));
-            }
-            return list.ToArray();
-        }
-        
         private static BaseStructure[] LoadLights(Vector3[] Points, SceneSettings Settings)
         {
             var list = new List<BaseStructure>();
@@ -178,5 +153,14 @@ namespace Hedra.Engine.Scenes
             }
             return list.ToArray();
         }
+
+        public static float GetRadius(VertexData Mesh)
+        {
+            var radius = new CollisionShape(Mesh).BroadphaseRadius * 2;
+            return radius;
+        }
+
+        public static Func<Vector3, VertexData, BaseStructure> WellPlacer => (V, G) => new Well(V, GetRadius(G));
+        public static Func<Vector3, VertexData, BaseStructure> FireplacePlacer => (V, _) => new Campfire(V);
     }
 }

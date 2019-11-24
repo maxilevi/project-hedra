@@ -28,14 +28,12 @@ namespace Hedra.Engine.EnvironmentSystem
         public static float LastDayFactor { get; set; }
         public static bool LoadTime { get; set; }
         public static float DaytimeSpeed { get; set; } = 1f;
-        public static float DayTime { get; set; } = 12000;
-        public static bool Enabled { get; set; } = true;
         public static float TargetIntensity { get; set; } = 1;
-        public static bool UpdateDayColors { get; set; } = true;
         public static float StackedDaytime => DayTime + _stackedDaytime;
         public static float StackedDaytimeModifier => Math.Max(0, StackedDaytime / 24000 * 2f);
 
-        private static readonly Stack<float> TimeStack;
+        private static readonly Stack<SkySettings> SkyStack;
+        private static SkySettings _settings;
         private static Region _currentRegion;
         private static Func<Vector4> _targetTopColor;
         private static Func<Vector4> _nextTargetTopColor;
@@ -53,28 +51,36 @@ namespace Hedra.Engine.EnvironmentSystem
 
         static SkyManager()
         {
-            TimeStack = new Stack<float>();
+            _settings = new SkySettings();
+            SkyStack = new Stack<SkySettings>();
+            SkyStack.Push(_settings);
             Sky = new Sky();
             FogManager = new Fog();
             Weather = new WeatherManager();
         }
 
-        public static int StackLength => TimeStack.Count;
-
-        public static float PeekTime()
-        {
-            return TimeStack.Peek();
-        }
+        public static int StackLength => SkyStack.Count;
 
         public static void PushTime()
         {
-            TimeStack.Push(DayTime);
+            PushTime(new SkySettings
+            {
+                DayTime = DayTime,
+                Enabled = Enabled
+            });
+        }
+        
+        public static void PushTime(SkySettings Settings)
+        {
+            SkyStack.Push(Settings);
+            _settings = SkyStack.Peek();
         }
 
-        public static void PopTime()
+        public static SkySettings PopTime()
         {
-            SetTime(TimeStack.Peek());
-            TimeStack.Pop();
+            var settings = SkyStack.Pop();
+            _settings = SkyStack.Peek();
+            return settings;
         }
         
         public static void SetTime(float Time)
@@ -119,7 +125,7 @@ namespace Hedra.Engine.EnvironmentSystem
                     _stackedDaytime = DayTime;
                     DayTime = 0;
                 }
-                DayTime += Time.DeltaTime * 5f * DaytimeSpeed;//20 mins
+                DayTime += Time.DeltaTime * 5f * DaytimeSpeed;
             }
 
             if(simplifiedTime >= 10000 && simplifiedTime < 20000 )
@@ -211,6 +217,24 @@ namespace Hedra.Engine.EnvironmentSystem
         public static void Draw()
         {
             Sky.Draw();
+        }
+
+        public static float DayTime
+        {
+            get => _settings.DayTime;
+            set => _settings.DayTime = value;
+        }
+
+        public static bool Enabled
+        {
+            get => _settings.Enabled;
+            set => _settings.Enabled = value;
+        }
+
+        public static bool UpdateDayColors
+        {
+            get => _settings.UpdateDayColors;
+            set => _settings.UpdateDayColors = value;
         }
     }
 }

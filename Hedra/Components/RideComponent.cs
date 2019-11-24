@@ -38,11 +38,11 @@ namespace Hedra.Components
         private bool _shouldUnride;
         private bool _canRide;
         private bool _canUnride;
-        private readonly float _heightMultiplier;
+        private readonly float _normalizedHeightOffset;
 
-        public RideComponent(IEntity Parent, float HeightMultiplier) : base(Parent)
+        public RideComponent(IEntity Parent, float NormalizedHeightOffset) : base(Parent)
         {
-            _heightMultiplier = HeightMultiplier;
+            _normalizedHeightOffset = NormalizedHeightOffset;
             EventDispatcher.RegisterKeyDown(this, delegate(object Object, KeyEventArgs EventArgs)
             {
                 _shouldRide = EventArgs.Key == Controls.Interact && _canRide;
@@ -54,16 +54,20 @@ namespace Hedra.Components
         {
             var player = GameManager.Player;
             if (!_hasRider && (player.Position - Parent.Position).LengthSquared() < 12 * 12 && !player.IsRiding &&
-                !player.IsCasting
+                !player.IsCasting && !player.IsInsideABuilding
                 && Vector3.Dot((Parent.Position - player.Position).NormalizedFast(), player.View.LookingDirection) >
                 .6f)
             {
-                if (Parent.Model is IMountable model && model.IsMountable && !Parent.IsUnderwater && !Parent.IsKnocked)
+                if (Parent.Model is IMountable model)
                 {
-                    player.MessageDispatcher.ShowMessage(Translations.Get("to_mount", Controls.Interact), .5f, Color.White);
-                    Parent.Model.Tint = new Vector4(2.0f, 2.0f, 2.0f, 1f);
-                    _canRide = true;
-                    if (_shouldRide) this.Ride(player);
+                    if (model.IsMountable && !Parent.IsUnderwater && !Parent.IsKnocked)
+                    {
+                        player.MessageDispatcher.ShowMessage(Translations.Get("to_mount", Controls.Interact), .5f,
+                            Color.White);
+                        Parent.Model.Tint = new Vector4(2.0f, 2.0f, 2.0f, 1f);
+                        _canRide = true;
+                        if (_shouldRide) this.Ride(player);
+                    }
                 }
                 else
                 {                    
@@ -83,7 +87,7 @@ namespace Hedra.Components
             {
                 _canUnride = false;
             }
-            if( _hasRider && _rider is LocalPlayer && _shouldUnride || _hasRider && _rider.IsDead )
+            if( _hasRider && _rider is LocalPlayer && _shouldUnride || _hasRider && (_rider.IsDead || _rider.IsInsideABuilding))
                 _rider.IsRiding = false;
 
 
@@ -102,7 +106,7 @@ namespace Hedra.Components
             _hasRider = true;
             var model = (QuadrupedModel) Parent.Model;
             _rider.IsRiding = true;
-            _rider.Model.RidingOffset = model.Height * Vector3.UnitY * _heightMultiplier;
+            _rider.Model.RidingOffset = Vector3.UnitY * (_normalizedHeightOffset * model.Scale.Y - 1.0f);
             model.AlignWithTerrain = false;
             model.Rider = _rider;
             Parent.Physics.UsePhysics = false;

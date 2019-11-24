@@ -15,7 +15,7 @@ from Hedra.Numerics import VectorExtensions
 clr.ImportExtensions(VectorExtensions)
 COMPANION_RESPAWN_TIME = 48 # Seconds
 COMPANION_EQUIPMENT_TYPE = 'Pet'
-CAGE_MODEL_SCALE = 0.15
+CAGE_MODEL_SCALE = 0.75
 CAGE_MODEL_PATH = 'Assets/Items/Misc/CompanionCage.ply'
 GROWTH_ATTRIB_NAME = 'Growth'
 IS_GROWN_ATTRIB_NAME = 'IsGrown'
@@ -27,6 +27,7 @@ NAME_ATTRIB_NAME = 'PetName'
 DEAD_TIMER_ATTRIB_NAME = 'DeadTimer'
 HEALTH_ATTRIB_NAME = 'PetHealth'
 MOB_TYPE_ATTRIB_NAME = 'Type'
+RIDE_HEIGHT_ATTRIB = 'RideHeight'
 PRICE_ATTRIB_NAME = 'Price'
 BASE_GROWTH_SCALE = 0.5
 GROWTH_TIME = 8.0 * 60.0 # 8 Minutes
@@ -39,19 +40,20 @@ COMPANION_TYPES = [
     ('Ooze', ItemTier.Uncommon, False),
     ('Pig', ItemTier.Common, False),
     ('Sheep', ItemTier.Common, False),
-    ('Wolf', ItemTier.Common, True),
+    ('Wolf', ItemTier.Common, False),
     ('Horse', ItemTier.Common, True),
-    ('Deer', ItemTier.Uncommon, True)
+    ('Deer', ItemTier.Uncommon, True),
+    ('Crow', ItemTier.Uncommon, True),
+    ('Alpaca', ItemTier.Rare, True),
+    ('Raccoon', ItemTier.Uncommon, True),
+    ('Crab', ItemTier.Unique, True),
+    ('Turtle', ItemTier.Uncommon, True),
+    ('Squirrel', ItemTier.Rare, True),
+    ('MeleeBeetle', ItemTier.Rare, True),
+    ('RangedBeetle', ItemTier.Rare, True),
+    ('Bison', ItemTier.Unique, True)
+    # ('Gorilla', ItemTier.Legendary, False)
 ]
-DEFAULT_RIDE_INFO = 0.5
-RIDE_INFO = {
-    'Pug': 0.4,
-    'Bee': 0.630,
-    'Deer': 0.41,
-    'Horse': 0.5,
-    'Wasp' : 0.5,
-    'Wolf': 0.5
-}
 
 def init(user, state):
     state['user'] = user
@@ -60,36 +62,43 @@ def init(user, state):
     state['pet_previous_enabled'] = True
     state['pet_previous_alpha'] = 1
     state['was_riding'] = False
+    state['was_dead'] = False
 
 
 def update(state):
     pet = state['pet']
     user = state['user']
+    pet_item = user.Inventory.Pet
 
     if pet:
+        if not state['was_dead'] and pet.IsDead:
+            get_dead_timer(pet_item).Reset()
+        state['was_dead'] = pet.IsDead
         handle_model(user, pet, state)
 
-    pet_item = user.Inventory.Pet
-    if pet and pet.IsDead and pet_item and get_dead_timer(pet_item).Ready:
-        get_dead_timer(pet_item).Reset()
+    if pet_item and (not pet or pet.IsDead) and get_dead_timer(pet_item).Ready:
+        spawn_pet(state, pet_item)
+        state['pet'].Health = state['pet'].MaxHealth
+        pet_item.SetAttribute(HEALTH_ATTRIB_NAME, state['pet'].MaxHealth)
 
     if pet_item != state['pet_item'] and ((pet_item and get_dead_timer(pet_item).Ready) or (not pet_item)):
         spawn_pet(state, pet_item)
-
-    if pet and pet.IsDead and pet_item and get_dead_timer(pet_item).Tick():
-        pet_item.SetAttribute(HEALTH_ATTRIB_NAME, pet.MaxHealth)
-        spawn_pet(state, pet_item)
-        
+    
     if pet_item:
+        if not pet or pet.IsDead:
+            get_dead_timer(pet_item).Tick()
         update_growth(pet_item, pet)
 
 def get_dead_timer(pet_item):
     return pet_item.GetAttribute[Timer](DEAD_TIMER_ATTRIB_NAME)
 
+def get_pet_growth(pet_item):
+    return pet_item.GetAttribute[float](GROWTH_ATTRIB_NAME)
+
 def update_growth(pet_item, pet):
 
-    current_growth = pet_item.GetAttribute[float](GROWTH_ATTRIB_NAME)
-    if not pet_item.HasAttribute(IS_GROWN_ATTRIB_NAME) and pet:
+    current_growth = get_pet_growth(pet_item)
+    if current_growth < 1.0 and pet:
         max_scale = unserialize_pet_max_scale(pet_item)
         if abs(current_growth - 1.0) > 0.005:
             new_growth = Time.DeltaTime * GROWTH_SPEED
@@ -105,7 +114,6 @@ def update_growth(pet_item, pet):
 
 def set_max_growth(pet_item):
     pet_item.SetAttribute(GROWTH_ATTRIB_NAME, 1.0)
-    pet_item.SetAttribute(IS_GROWN_ATTRIB_NAME, True, Hidden=True)
    
 def unserialize_pet_max_scale(pet_item):
     scale_array = pet_item.GetAttribute[Array[Single]](MAX_SCALE_ATTRIB_NAME)
@@ -121,6 +129,7 @@ def serialize_pet_max_scale(pet_item, max_scale):
         ]),
         Hidden=True
     )
+    
 
 def handle_model(user, pet, state):
     if user.IsRiding or not pet.Model.Enabled:
@@ -138,6 +147,8 @@ def handle_model(user, pet, state):
             pet.SearchComponent[MinionAIComponent]().Enabled = True
     state['was_riding'] = user.IsRiding
 
+def get_ride_height(pet_item):
+    return pet_item.GetAttribute[float](RIDE_HEIGHT_ATTRIB)
 
 
 def spawn_pet(state, pet_item):
@@ -161,8 +172,8 @@ def spawn_pet(state, pet_item):
         pet.Removable = False
         pet.IsFriendly = True
         if pet_item.GetAttribute[bool](CAN_RIDE_ATTRIB_NAME):
-            pet.AddComponent(RideComponent(pet, RIDE_INFO[type] if type in RIDE_INFO else DEFAULT_RIDE_INFO))
-            pet.Model.IsMountable = pet_item.HasAttribute(IS_GROWN_ATTRIB_NAME)
+            pet.AddComponent(RideComponent(pet, get_ride_height(pet_item)))
+            pet.Model.IsMountable = get_pet_growth(pet_item) >= 1.0
         state['pet'] = pet
     state['pet_item'] = pet_item
   
@@ -177,22 +188,38 @@ def create_companion_templates():
      
 def create_companion_template(type, tier, can_ride):
     mob_template = World.MobFactory.GetFactory(type)
+    mob_name = translate((mob_template.DisplayName or mob_template.Name).lower())
     model_template = ItemModelTemplate()
     model_template.Path = CAGE_MODEL_PATH
     model_template.Scale = CAGE_MODEL_SCALE
     
     template = ItemTemplate()
     template.Name = 'Companion' + type
-    template.DisplayName = translate('generic_companion_item_name', translate(type.lower()))
-    template.Description = translate('generic_companion_item_desc', translate(type.lower()))
+    template.DisplayName = translate('generic_companion_item_name', mob_name)
+    template.Description = translate('generic_companion_item_desc', mob_name)
     template.Tier = tier
     template.EquipmentType = COMPANION_EQUIPMENT_TYPE
-    template.Attributes = create_companion_attributes(type, can_ride, mob_template)
+    template.Attributes = create_companion_attributes(type, can_ride, mob_template, mob_name)
     template.Model = model_template
     return template
 
+def calculate_ride_height(mob_template):
+    scale = mob_template.Model.Scale
+    model = VertexData.Load(mob_template.Model.Path, Vector3.One * scale)
+    # Find the highest vertex that is nearest the center point
+    array = [-v.Y for v in model.Vertices if v.Xz().LengthSquared() < 0.5 * scale * 0.5 * scale]
+    sorted_array = sorted(array)
+    model.Dispose()
+    # Use the average of the K smallest vertices as the point
+    k = 4
+    avg = Single(0.0)
+    for i in range(k):
+        avg += -sorted_array[i]
+    avg = avg / k / mob_template.Model.Scale
+    return avg
 
-def create_companion_attributes(type, can_ride, mob_template):
+
+def create_companion_attributes(type, can_ride, mob_template, mob_name):
     can_ride = can_ride
     pet_attribute = AttributeTemplate()
     pet_attribute.Name = MOB_TYPE_ATTRIB_NAME
@@ -242,10 +269,15 @@ def create_companion_attributes(type, can_ride, mob_template):
     dead_timer_attribute.Name = DEAD_TIMER_ATTRIB_NAME
     
     name_attribute = AttributeTemplate()
-    name_attribute.Value = translate(mob_template.Name.ToLowerInvariant())
+    name_attribute.Value = mob_name
     name_attribute.Hidden = True
     name_attribute.Persist = True
     name_attribute.Name = NAME_ATTRIB_NAME
+
+    ride_height_attribute = AttributeTemplate()
+    ride_height_attribute.Value = calculate_ride_height(mob_template)
+    ride_height_attribute.Hidden = True
+    ride_height_attribute.Name = RIDE_HEIGHT_ATTRIB
     
     return Array[AttributeTemplate]([
         pet_attribute,
@@ -256,34 +288,45 @@ def create_companion_attributes(type, can_ride, mob_template):
         model_attribute,
         health_attribute,
         dead_timer_attribute,
-        name_attribute
+        name_attribute,
+        ride_height_attribute
     ])
 
 def update_ui(pet_item, pet_entity, top_left, top_right, bottom_left, bottom_right, level, name):
-    if not pet_item or not pet_entity: return
+    if not pet_item: return
     
     name.Text = pet_item.GetAttribute[str](NAME_ATTRIB_NAME)
-    top_left.Text = '{0} {1}'.format(
-        int(pet_entity.Health),
-        translate('health_points')
-    )
-    top_right.Text = '{0}/{1} {2}'.format(
-        int(pet_entity.SearchComponent[CompanionStatsComponent]().XP),
-        int(pet_entity.SearchComponent[CompanionStatsComponent]().MaxXP),
-        translate('experience_points')
-    )
-    level.Text = '{0} {1}'.format(
-        translate('level').upper(),
-        pet_entity.SearchComponent[CompanionStatsComponent]().Level
-    )
-    bottom_left.Text = '{0} {1}'.format(
-        '{:.2f}'.format(pet_entity.AttackDamage),
-        translate('attack_damage_label')
-    )
-    bottom_right.Text = '{0} {1}'.format(
-        '{:.2f}'.format(pet_entity.Speed * RideComponent.SpeedMultiplier),
-        translate('speed_label')
-    )
+    
+    if pet_entity and not pet_entity.IsDead:
+        top_left.Text = '{0} {1}'.format(
+            int(pet_entity.Health),
+            translate('health_points')
+        )
+        top_right.Text = '{0}/{1} {2}'.format(
+            int(pet_entity.SearchComponent[CompanionStatsComponent]().XP),
+            int(pet_entity.SearchComponent[CompanionStatsComponent]().MaxXP),
+            translate('experience_points')
+        )
+        level.Text = '{0} {1}'.format(
+            translate('level').upper(),
+            pet_entity.SearchComponent[CompanionStatsComponent]().Level
+        )
+        bottom_left.Text = '{0} {1}'.format(
+            '{:.2f}'.format(pet_entity.AttackDamage),
+            translate('attack_damage_label')
+        )
+        bottom_right.Text = '{0} {1}'.format(
+            '{:.2f}'.format(pet_entity.Speed * RideComponent.SpeedMultiplier),
+            translate('speed_label')
+        )
+    else:
+        top_left.Text = str()
+        top_right.Text = str()
+        level.Text = 'RESPAWN IN {0}s'.format(
+            '{:.2f}'.format(get_dead_timer(pet_item).AlertTime - get_dead_timer(pet_item).AlertTime * get_dead_timer(pet_item).Progress)
+        )
+        bottom_left.Text = str()
+        bottom_right.Text = str()
 
 for name, _, _ in COMPANION_TYPES:
     assert World.MobFactory.ContainsFactory(name)

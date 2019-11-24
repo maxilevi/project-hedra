@@ -5,7 +5,9 @@ using Hedra.Engine.Core;
 using Microsoft.Scripting.Utils;
 using System.Numerics;
 using Hedra.Engine.Management;
+using Hedra.Framework;
 using Hedra.Numerics;
+using Hedra.Framework;
 
 namespace Hedra.Engine.Rendering.Geometry
 {
@@ -14,8 +16,10 @@ namespace Hedra.Engine.Rendering.Geometry
         public static unsafe void FlatMesh(IList<uint> Indices, IList<Vector3> Vertices, IList<Vector3> Normals,
             IList<Vector4> Colors, IList<float> Extradata)
         {
-            var size = (int)(Allocator.Megabyte * 8f);
-            using (var allocator = new HeapAllocator(size))
+            var size = Indices.Count * sizeof(uint) + Vertices.Count * HedraSize.Vector3 +
+                       Normals.Count * HedraSize.Vector3 + Extradata.Count * sizeof(float) +
+                       Colors.Count * HedraSize.Vector4 + Allocator.Kilobyte * 64;
+            using (var allocator = new HeapAllocator(Allocator.Megabyte * 8))
             {
                 FlatMesh(allocator, Indices, Vertices, Normals, Colors, Extradata);
             }
@@ -143,7 +147,7 @@ namespace Hedra.Engine.Rendering.Geometry
                        Normals.Count * HedraSize.Vector3 + Extradata.Count * sizeof(float) +
                        Colors.Count * HedraSize.Vector4 + Allocator.Kilobyte * 64;
             IAllocator allocator;
-            if (size <= Allocator.Megabyte * 3)
+            if (size <= Allocator.Megabyte * 2.5f)
             {
                 var mem = stackalloc byte[size];
                 allocator = new StackAllocator(size, mem);
@@ -242,7 +246,7 @@ namespace Hedra.Engine.Rendering.Geometry
             }
         }
         
-        public static unsafe void Transform(IList<Vector3> Vertices, IList<Vector3> Normals, Matrix4x4 Matrix)
+        public static void Transform(IList<Vector3> Vertices, IList<Vector3> Normals, Matrix4x4 Matrix)
         {
             for (var i = 0; i < Vertices.Count; i++)
             {

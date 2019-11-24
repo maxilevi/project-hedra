@@ -21,6 +21,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public const int MaxRadius = 80;
         public override int PlateauRadius { get; } = 80;
         public override VertexData Icon => null;
+        public override bool CanSpawnInside => false;
 
         public override void Build(CollidableStructure Structure)
         {
@@ -32,7 +33,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
                     World.WorldBuilding.SpawnBandit(
                         new Vector3(Structure.Position.X, 125, Structure.Position.Z) 
                         + Vector3.Transform(Vector3.UnitZ * -12f, Matrix4x4.CreateRotationY(rotation.Y * Mathf.Radian)),
-                        Level
+                        Level,
+                        BanditOptions.Default
                     );
 
             ((Campfire) Structure.WorldObject).Bandit.IsSitting = true;
@@ -104,7 +106,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             return structure;
         }
 
-        protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
+        protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
             var height = Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z);
 

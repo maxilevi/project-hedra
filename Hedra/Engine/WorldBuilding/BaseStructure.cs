@@ -13,6 +13,7 @@ using Hedra.Engine.Core;
 using System.Numerics;
 using Hedra.Engine.Management;
 using Hedra.EntitySystem;
+using Microsoft.Scripting.Utils;
 
 namespace Hedra.Engine.WorldBuilding
 {
@@ -23,15 +24,23 @@ namespace Hedra.Engine.WorldBuilding
     public abstract class BaseStructure : IDisposable, IStructure, ISearchable
     {
         private readonly List<BaseStructure> _children;
-        private readonly List<IHumanoid> _npcs;
+        private readonly List<IEntity> _npcs;
+
+        protected BaseStructure(List<BaseStructure> Children, List<IEntity> Npcs)
+        {
+            _children = Children;
+            _npcs = Npcs;
+        }
+
         public BaseStructure[] Children => _children.ToArray();
+        public IEntity[] NPCs => _npcs.ToArray();
         public virtual Vector3 Position { get; set; }
         public bool Disposed { get; protected set; }
 
         protected BaseStructure(Vector3 Position)
         {
             this.Position = Position;
-            _npcs = new List<IHumanoid>();
+            _npcs = new List<IEntity>();
             _children = new List<BaseStructure>();
         }
         
@@ -45,7 +54,23 @@ namespace Hedra.Engine.WorldBuilding
             }
         }
 
-        public void AddNPCs(params IHumanoid[] NPCs)
+        public T SearchFirst<T>() where T : BaseStructure => Search<T>().First();
+        
+        public T[] Search<T>() where T : BaseStructure
+        {
+            var list = new List<T>();
+            for (var i = 0; i < _children.Count; ++i)
+            {
+                if (_children[i] is T)
+                {
+                    list.Add((T)_children[i]);
+                }
+                list.AddRange(_children[i].Search<T>());
+            }
+            return list.ToArray();
+        }
+
+        public void AddNPCs(params IEntity[] NPCs)
         {
             for (var i = 0; i < NPCs.Length; ++i)
             {

@@ -16,6 +16,6 @@
   ],
   "Model": {
     "Scale": 1.0,
-    "Path": "$DataFile$/Items/Misc/Bone.ply"
+    "Path": "$DataFile$/Assets/Items/Misc/Bone.ply"
   }
 }

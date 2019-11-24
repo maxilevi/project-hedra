@@ -16,6 +16,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
     {
         public override int PlateauRadius { get; } = 256;
         public override VertexData Icon => null;
+        public override bool CanSpawnInside => true;
 
         public override void Build(CollidableStructure Structure)
         {
@@ -56,7 +57,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             return structure;
         }
 
-        protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
+        protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
             var height = Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z);
             return Rng.Next(0, StructureGrid.ObeliskChance) == 1 && height > BiomePool.SeaLevel && Math.Abs(Biome.Generation.RiverAtPoint(TargetPosition.X, TargetPosition.Z)) < 0.005f;

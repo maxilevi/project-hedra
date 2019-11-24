@@ -6,6 +6,7 @@ namespace Hedra.Engine.Player
     {
         Animation AnimationBlending { get; }
         void ResetModel();
+        void PlayAnimation(Animation Animation);
         void BlendAnimation(Animation Animation);
     }
 }

@@ -53,5 +53,7 @@ namespace Hedra.Engine.CacheSystem
         {
             Provider.Check(Data);
         }
+
+        public static int UsedBytes => Provider.UsedBytes;
     }
 }

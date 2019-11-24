@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Core;
 using Hedra.Rendering;
 using System.Numerics;
 using Hedra.Engine.Core;
+using Hedra.Framework;
 
 namespace Hedra.Engine.Rendering.Geometry
 {
@@ -20,48 +22,83 @@ namespace Hedra.Engine.Rendering.Geometry
         /*
          * Reference: https://docs.blender.org/manual/en/latest/modeling/modifiers/deform/smooth.html
          */
-        public static void ApplySmoothing(IList<uint> Indices, IList<Vector3> Vertices, IList<Vector4> Colors, IList<Vector3> Normals, HashSet<uint> IgnoreList)
+        public static void ApplySmoothing(IList<uint> Indices, IList<Vector3> Vertices, IList<Vector4> Colors, IList<Vector3> Normals, HashSet<uint> IgnoreList, int Steps = 1)
         {
-            var map = IndexVertices(Indices, Vertices, Colors, Normals);
-            var vertexRemap = new Dictionary<Vector3, VertexRemap>();
-
-            void AddWeight(Vector3 Vertex, Vertex Neighbour)
+            var map = IndexUniqueVertices(Indices, Vertices, Colors, Normals);
+            for (var w = 0; w < Steps; w++)
             {
-                var remap = vertexRemap[Vertex];
-                vertexRemap[Vertex] = new VertexRemap
-                {
-                    Position = remap.Position + Neighbour.Position,
-                    Normal = remap.Normal + Neighbour.Normal,
-                    Count = remap.Count + 1,
-                };
-            }
-            
-            for (var i = 0; i < Vertices.Count; ++i)
-            {
-                var vertex = Vertices[i];
-                var triangles = map[vertex].ToArray();
-                if (!vertexRemap.ContainsKey(vertex))
-                    vertexRemap[vertex] = new VertexRemap();
+                var vertexRemap = new Dictionary<Vector3, VertexRemap>();
 
-                for (var j = 0; j < triangles.Length; ++j)
+                void AddWeight(Vector3 Vertex, int Neighbour)
                 {
-                    var neighbours = triangles[j].GetConnected(vertex);
-                    for (var k = 0; k < neighbours.Length; ++k)
+                    var remap = vertexRemap[Vertex];
+                    vertexRemap[Vertex] = new VertexRemap
                     {
-                        AddWeight(vertex, neighbours[k]);
+                        Position = remap.Position + Vertices[Neighbour],
+                        Normal = remap.Normal + Normals[Neighbour],
+                        Count = remap.Count + 1,
+                    };
+                }
+
+                for (var i = 0; i < Vertices.Count; ++i)
+                {
+                    var vertex = Vertices[i];
+                    var triangles = map[i].ToArray();
+                    if (!vertexRemap.ContainsKey(vertex))
+                        vertexRemap[vertex] = new VertexRemap();
+
+                    for (var j = 0; j < triangles.Length; ++j)
+                    {
+                        var neighbours = triangles[j].GetConnected((uint)i);
+                        for (var k = 0; k < neighbours.Length; ++k)
+                        {
+                            AddWeight(vertex, (int)neighbours[k]);
+                        }
                     }
                 }
-            }
 
-            for (var i = 0; i < Vertices.Count; ++i)
-            {
-                var remap = vertexRemap[Vertices[i]];
-                Normals[i] = remap.Normal / remap.Count;
-                if(IgnoreList.Contains((uint)i)) continue;
-                Vertices[i] = remap.Position / remap.Count;
+                for (var i = 0; i < Vertices.Count; ++i)
+                {
+                    var remap = vertexRemap[Vertices[i]];
+                    Normals[i] = remap.Normal / remap.Count;
+                    if (IgnoreList?.Contains((uint) i) ?? false) continue;
+                    Vertices[i] = remap.Position / remap.Count;
+                }
             }
         }
-        
+
+        private static IndexedTriangle[][] IndexUniqueVertices(IList<uint> Indices, IList<Vector3> Vertices, IList<Vector4> Colors, IList<Vector3> Normals)
+        {
+            var map = new HashSet<IndexedTriangle>[Vertices.Count];
+            for (var i = 0; i < Indices.Count; i += 3)
+            {
+                var triangle = new IndexedTriangle
+                {
+                    P1 = Indices[i],
+                    P2 = Indices[i + 1],
+                    P3 = Indices[i + 2]
+                };
+                if (map[triangle.P1] == null)
+                    map[triangle.P1] = new HashSet<IndexedTriangle>();
+                if (map[triangle.P2] == null)
+                    map[triangle.P2] = new HashSet<IndexedTriangle>();
+                if (map[triangle.P3] == null)
+                    map[triangle.P3] = new HashSet<IndexedTriangle>();
+
+                map[triangle.P1].Add(triangle);
+                map[triangle.P2].Add(triangle);
+                map[triangle.P3].Add(triangle);
+            }
+
+            var finalMap = new IndexedTriangle[Vertices.Count][];
+            for(var i = 0; i < Vertices.Count; ++i)
+            {
+                finalMap[i] = map[i].ToArray();
+            }
+            return finalMap;
+
+        }
+
         public static VertexData[] GetConnectedComponents(VertexData Mesh)
         {
             var list = new List<VertexData>();
@@ -69,33 +106,36 @@ namespace Hedra.Engine.Rendering.Geometry
             var map = IndexVertices(Mesh);
             var remaining = map.Keys.ToArray();
             var visited = new HashSet<Vector3>();
-            
-            void DepthFirstSearch(Vector3 Vertex, HashSet<Triangle> Component)
+
+            void BreadthFirstSearch(Vector3 Start, HashSet<Triangle> Component)
             {
-                if (visited.Contains(Vertex)) return;
-                visited.Add(Vertex);
-                var triangles = map[Vertex].ToArray();
-                for (var i = 0; i < triangles.Length; ++i)
+                var queue = new Queue<Vector3>();
+                queue.Enqueue(Start);
+                while (queue.Count > 0)
                 {
-                    if (!Component.Contains(triangles[i]))
+                    var vertex = queue.Dequeue();
+                    if(visited.Contains(vertex)) continue;
+                    visited.Add(vertex);
+                    var triangles = map[vertex];
+                    for (var i = 0; i < triangles.Length; ++i)
+                    {
+                        queue.Enqueue(triangles[i].P1.Position);
+                        queue.Enqueue(triangles[i].P2.Position);
+                        queue.Enqueue(triangles[i].P3.Position);
                         Component.Add(triangles[i]);
-                }
-                var connected = triangles.SelectMany(T => T.GetConnected(Vertex)).ToArray();
-                for (var i = 0; i < connected.Length; ++i)
-                {
-                    DepthFirstSearch(connected[i].Position, Component);
+                    }
                 }
             }
 
-            using (var allocator = new HeapAllocator(Allocator.Megabyte * 2))
+            using (var allocator = new HeapAllocator(Allocator.Megabyte * 16))
             {
                 for (var i = 0; i < remaining.Length; ++i)
                 {
                     if (visited.Contains(remaining[i])) continue;
                     var component = new HashSet<Triangle>();
-                    DepthFirstSearch(remaining[i], component);
+                    BreadthFirstSearch(remaining[i], component);
 
-                    var mesh = BuildComponent(component.ToArray());
+                    var mesh = BuildComponent(component.ToArray(), Mesh);
                     mesh.Optimize(allocator);
                     list.Add(mesh);
                 }
@@ -104,7 +144,7 @@ namespace Hedra.Engine.Rendering.Geometry
             return list.ToArray();
         }
 
-        private static VertexData BuildComponent(Triangle[] Triangles)
+        private static VertexData BuildComponent(Triangle[] Triangles, VertexData Mesh)
         {
             var vertices = new List<Vector3>();
             var colors = new List<Vector4>();
@@ -137,14 +177,15 @@ namespace Hedra.Engine.Rendering.Geometry
             };
         }
 
-        private static Dictionary<Vector3, HashSet<Triangle>> IndexVertices(VertexData Mesh)
+        private static Dictionary<Vector3, Triangle[]> IndexVertices(VertexData Mesh)
         {
             return IndexVertices(Mesh.Indices, Mesh.Vertices, Mesh.Colors, Mesh.Normals);
         }
         
-        private static Dictionary<Vector3, HashSet<Triangle>> IndexVertices(IList<uint> Indices, IList<Vector3> Vertices, IList<Vector4> Colors, IList<Vector3> Normals)
+        public static Dictionary<Vector3, Triangle[]> IndexVertices(IList<uint> Indices, IList<Vector3> Vertices, IList<Vector4> Colors, IList<Vector3> Normals)
         {
             var map = new Dictionary<Vector3, HashSet<Triangle>>();
+            var finalMap = new Dictionary<Vector3, Triangle[]>();
             Vertex MakeVertex(int Index)
             {
                 return new Vertex
@@ -172,14 +213,37 @@ namespace Hedra.Engine.Rendering.Geometry
                 if(!map.ContainsKey(p3.Position))
                     map.Add(p3.Position, new HashSet<Triangle>());
 
+
                 map[p1.Position].Add(triangle);
                 map[p2.Position].Add(triangle);
                 map[p3.Position].Add(triangle);
             }
-            return map;
+            foreach (var pair in map)
+            {
+                finalMap.Add(pair.Key, pair.Value.ToArray());
+            }
+            return finalMap;
         }
         
-        private struct Triangle
+        private struct IndexedTriangle
+        {
+            public uint P1;
+            public uint P2;
+            public uint P3;
+
+            public uint[] GetConnected(uint P)
+            {
+                if (P1.Equals(P))
+                    return new[] {P2, P3};
+                if (P2.Equals(P))
+                    return new[] {P1, P3};
+                if (P3.Equals(P))
+                    return new[] {P2, P3};
+                return null;
+            }
+        }
+        
+        public struct Triangle
         {
             public Vertex P1;
             public Vertex P2;
@@ -195,9 +259,13 @@ namespace Hedra.Engine.Rendering.Geometry
                     return new[] {P2, P3};
                 return null;
             }
+
+            public Vertex this[int Index] => Index == 0 ? P1 :
+                Index == 1 ? P2 :
+                Index == 2 ? P3 : throw new ArgumentOutOfRangeException();
         }
         
-        private struct Vertex
+        public struct Vertex
         {
             public Vector3 Position;
             public Vector4 Color;

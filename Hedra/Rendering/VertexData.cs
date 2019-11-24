@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Hedra.Core;
 using Hedra.Engine;
@@ -19,7 +20,9 @@ using Hedra.Engine.Native;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Geometry;
 using System.Numerics;
+using Hedra.Framework;
 using Hedra.Numerics;
+using Hedra.Framework;
 using InstanceData = Hedra.Engine.Rendering.InstanceData;
 
 namespace Hedra.Rendering

@@ -1,10 +1,13 @@
 using System;
+using System.Numerics;
 using Hedra.AISystem.Behaviours;
 using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
+using Hedra.Engine.Rendering;
 using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
+using Hedra.Game;
 using Hedra.Sound;
 
 namespace Hedra.AISystem
@@ -40,6 +43,19 @@ namespace Hedra.AISystem
             else
             {
                 Herd.Update();
+            }
+        }
+        
+        public override void Draw()
+        {
+            base.Draw();
+            if (GameSettings.DebugAI)
+            {
+                DrawDebugCollision(Parent);
+                if (!Herd.Enabled)
+                    Roam.Draw();
+                else
+                    Herd.Draw();
             }
         }
 

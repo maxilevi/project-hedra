@@ -54,6 +54,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             
             for (var i = 0; i < Models.Count; i++)
             {
+                if(Models[i].IsEmpty) continue;
                 var mainInstance = BuildInstance(Models[i], TransformationMatrices[i]);
                 if(LodModels != null) mainInstance.AddLOD(BuildInstance(LodModels[i], TransformationMatrices[i]), 2);
                 list.Add(mainInstance);
@@ -66,6 +67,10 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         {
             if(!Model.IsClone) 
                 throw new ArgumentOutOfRangeException("All models need to be clones in order to build the instances");
+            if (Model.Vertices.Count == 0)
+            {
+                int a = 0;
+            }
             var model = new InstanceData
             {
                 OriginalMesh = Model.Original,

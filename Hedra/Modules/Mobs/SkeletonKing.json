@@ -1,0 +1,71 @@
+{
+  "Name" : "SkeletonKing",
+  "MaxHealth": 680.0,
+  "AttackDamage": 18.0,
+  "AttackCooldown": 3.0,
+  "Speed": 1.40,
+  "XP": 28.0,
+  "Level": 9,
+  "AIType": "DungeonAdaptive",
+  "Effects": [
+    {
+      "Name": "Poison",
+      "Chance": 8.0,
+      "Damage": 16.0,
+      "Duration": 4.0
+    }
+  ],
+  "Drops": [],
+  "Model": {
+    "AlignWithTerrain" :  false,
+    "Path": "$DataFile$/Assets/Chr/SkeletonKingIdle.dae",
+    "Scale": 0.85,
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/SkeletonIdle.dae",
+        "Speed": 1.0
+      }
+    ],
+    "WalkAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/WarriorWalk.dae",
+        "Speed": 1.0
+      }
+    ],
+    "AttackAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/NecromancerRaiseSkeleton.dae",
+        "Speed": 2.5,
+        "OnAnimationMid" : "CastRaiseSkeleton",
+        "Chance": 0.15,
+        "Range": 64,
+        "Cooldown": 12.0
+      },
+      {
+        "Path": "$DataFile$/Assets/Chr/MageStaffGroundHit.dae",
+        "Speed": 2.0,
+        "OnAnimationMid" : "CastLeech",
+        "Chance": 0.25,
+        "Range": 24,
+        "Cooldown": 12.0
+      },
+      {
+        "Path": "$DataFile$/Assets/Chr/Mage-FireRelease.dae",
+        "Speed": 2.0,
+        "OnAnimationMid" : "CastBlaze",
+        "Chance": 0.075,
+        "Range": 24,
+        "Cooldown": 8.0
+      },
+      {
+        "Path": "$DataFile$/Assets/Chr/NecromancerSiphonBlood.dae",
+        "Speed": 1.5,
+        "OnAnimationMid" : "CastSiphonBlood",
+        "Chance": 0.425,
+        "Range": 32,
+        "Cooldown": 4.0
+      }
+    ]
+  }
+}
+

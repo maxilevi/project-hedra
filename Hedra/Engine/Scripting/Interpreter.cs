@@ -10,6 +10,7 @@ using Hedra.Engine.Management;
 using Hedra.Game;
 using Hedra.Rendering;
 using IronPython.Hosting;
+using IronPython.Modules;
 using IronPython.Runtime.Types;
 using Microsoft.Scripting.Hosting;
 
@@ -39,11 +40,12 @@ namespace Hedra.Engine.Scripting
             watch.Start();
             Log.WriteLine("Loading Python engine...");
             _engine = Python.CreateEngine();
-            var searchPaths = Directory.GetDirectories(SearchPath, "*", SearchOption.AllDirectories).Concat<string>(new []{SearchPath}).ToArray();
+            var searchPaths = Directory.GetDirectories(SearchPath, "*", SearchOption.AllDirectories).Concat<string>(new []{SearchPath}).ToList();
             _engine.SetSearchPaths(searchPaths);
             _engine.Runtime.LoadAssembly(Assembly.Load(typeof(Interpreter).Assembly.FullName));
             _engine.Runtime.LoadAssembly(Assembly.Load(typeof(System.Numerics.Vector4).Assembly.FullName));
             _engine.Runtime.LoadAssembly(Assembly.Load(typeof(Silk.NET.Input.Common.Key).Assembly.FullName));
+            _engine.Runtime.LoadAssembly(Assembly.Load(typeof(PythonHeapq).Assembly.FullName));
             _runner = new CompiledRunner(_engine);
             Log.WriteLine($"Python engine was successfully loaded in {watch.ElapsedMilliseconds} MS");
 

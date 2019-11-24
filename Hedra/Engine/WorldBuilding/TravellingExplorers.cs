@@ -11,6 +11,7 @@ using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Mission;
 using System.Numerics;
+using Hedra.Engine.Player;
 
 namespace Hedra.Engine.WorldBuilding
 {
@@ -23,7 +24,11 @@ namespace Hedra.Engine.WorldBuilding
             var explorers = new List<IHumanoid>();
             for (var i = 0; i < count; ++i)
             {
-                var explorer = World.WorldBuilding.SpawnBandit(Position + Vector3.UnitZ * i * Chunk.BlockSize * 2, 8, friendly, Rng.Next(0, 5) == 1);
+                var explorer = World.WorldBuilding.SpawnBandit(Position + Vector3.UnitZ * i * Chunk.BlockSize * 2, 8, new BanditOptions
+                {
+                    Friendly = friendly,
+                    ModelType = (Rng.Next(0, 5) == 1 ? (HumanType?)HumanType.Skeleton : null)
+                });
                 if (friendly)
                 {
                     if (Rng.Next(0, 3) == 1)

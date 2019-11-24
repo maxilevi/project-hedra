@@ -25,7 +25,10 @@ using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Rendering;
 using System.Numerics;
+using Hedra.AISystem.Mob;
+using Hedra.Framework;
 using Hedra.Numerics;
+using Hedra.Framework;
 
 namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 {
@@ -197,7 +200,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             DecorationsPlacer.PlaceWhenWorldReady(data.Position, P =>
             {
                 data.TransMatrix *= Matrix4x4.CreateTranslation(Vector3.UnitY * P.Y);
-                Structure.WorldObject.AddChildren(new CollectiblePlant(
+                Structure.WorldObject.AddChildren(new CollectibleObject(
                     data.Position,
                     data,
                     ItemPool.Grab(Type)

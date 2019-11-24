@@ -2,25 +2,25 @@ using System;
 using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.Management;
-using Hedra.Engine.Pathfinding;
 using Hedra.EntitySystem;
 using System.Numerics;
+using Hedra.Engine.Scenes;
 
 namespace Hedra.AISystem.Behaviours
 {
-    public delegate void OnGridUpdated(Grid UpdatedGrid);
+    public delegate void OnGridUpdated(WaypointGrid UpdatedGrid);
     
     public class GridStorage
     {
         public event OnGridUpdated GridUpdated;
-        public Grid Storage { get; set; }
+        public WaypointGrid Storage { get; set; }
         private readonly Timer _rebuildPathTimer;
         private float _currentTimeBetweenTargets;
         private float _lastTimeBetweenTargets;
         private bool _useRebuildTimer;
         public int ReferenceCounter { get; set; } = 1;
 
-        public GridStorage(Grid Storage)
+        public GridStorage(WaypointGrid Storage)
         {
             this.Storage = Storage;
             _rebuildPathTimer = new Timer(.25f)

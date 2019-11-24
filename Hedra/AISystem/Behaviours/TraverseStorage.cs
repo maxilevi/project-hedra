@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using Hedra.Engine;
 using Hedra.Engine.Core;
-using Hedra.Engine.Pathfinding;
 using Hedra.EntitySystem;
 using System.Numerics;
+using Hedra.Engine.Scenes;
 using Hedra.Numerics;
+using Hedra.Framework;
 
 namespace Hedra.AISystem.Behaviours
 {
@@ -54,15 +55,15 @@ namespace Hedra.AISystem.Behaviours
 
         public void ResizeGrid(IEntity Parent, Vector2 Size)
         {
-            _storage[Parent].Storage = new Grid((int)Size.X, (int)Size.Y);
+            _storage[Parent].Storage = new WaypointGrid((int)Size.X, (int)Size.Y);
         }
         
-        private static Grid Create(IEntity Parent)
+        private static WaypointGrid Create(IEntity Parent)
         {
             var size = 16 + (int)(Parent.Size.LengthFast() / 4);
-            return new Grid(size, size);
+            return new WaypointGrid(size, size);
         }
         
-        public Grid this[IEntity Parent] => _storage[Parent].Storage;
+        public WaypointGrid this[IEntity Parent] => _storage[Parent].Storage;
     }
 }

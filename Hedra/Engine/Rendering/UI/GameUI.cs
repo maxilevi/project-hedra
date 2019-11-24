@@ -88,7 +88,7 @@ namespace Hedra.Engine.Rendering.UI
                 DrawOrder.After
             );
             
-            Cross = new BackgroundTexture("Assets/UI/Pointer.png", new Vector2(0, 0), Vector2.One * .1f);
+            Cross = new BackgroundTexture("Assets/UI/Pointer.png", new Vector2(0, -0.05f), Vector2.One * .1f);
             
             _compass = new BackgroundTexture(Graphics2D.LoadFromAssets("Assets/UI/Compass.png"), Vector2.One - new Vector2(0.0366f, 0.065f) * 2f, new Vector2(0.0366f, 0.065f));
 

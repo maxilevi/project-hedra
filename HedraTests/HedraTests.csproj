@@ -138,9 +138,6 @@
     <Compile Include="ModuleSystem\AssetProviderTest.cs" />
     <Compile Include="Network\NetworkMessageTest.cs" />
     <Compile Include="Network\PacketTest.cs" />
-    <Compile Include="Pathfinding\FinderTest.cs" />
-    <Compile Include="Pathfinding\GridCatalog.cs" />
-    <Compile Include="Pathfinding\PathFinderTests.cs" />
     <Compile Include="PhysicsSystem\BoxTest.cs" />
     <Compile Include="PhysicsSystem\CollisionGroupTest.cs" />
     <Compile Include="Player\AbilityTreeTest.cs" />
@@ -148,7 +145,7 @@
     <Compile Include="Player\CappedSkillMock.cs" />
     <Compile Include="Player\EntitySpawnerTest.cs" />
     <Compile Include="Player\HumanoidTest.cs" />
-    <Compile Include="Player\MockEntitySpawner.cs" />
+    <Compile Include="Player\MockMobSpawner.cs" />
     <Compile Include="Player\SimpleCameraMock.cs" />
     <Compile Include="Player\PlayerMock.cs" />
     <Compile Include="Player\Skills\Archer\AgilityTest.cs" />
@@ -224,6 +221,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Framework\Framework.csproj">
+      <Project>{12915777-140a-421a-a0c2-eb9bb112962f}</Project>
+      <Name>Framework</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Hedra\Hedra.csproj">
       <Project>{301a6b68-cf39-4e86-a50a-479b96a5a298}</Project>
       <Name>Hedra</Name>

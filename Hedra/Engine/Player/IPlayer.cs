@@ -18,9 +18,12 @@ namespace Hedra.Engine.Player
 {
     public delegate void OnInteractionEvent();
     
+    public delegate void OnRespawnEvent();
+    
     public interface IPlayer : IHumanoid, ISkillUser
     {
-        event OnInteractionEvent Interact;
+        event OnRespawnEvent OnRespawn;
+        event OnInteractionEvent OnInteract;
         IMessageDispatcher MessageDispatcher { get; }
         ICamera View { get; }
         ChunkLoader Loader { get; }

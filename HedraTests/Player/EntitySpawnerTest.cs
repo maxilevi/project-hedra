@@ -21,6 +21,8 @@ using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using System.Numerics;
 using Hedra.Engine.Core;
+using Hedra.Engine.SkillSystem;
+using Hedra.Engine.StructureSystem;
 
 namespace HedraTests.Player
 {
@@ -28,7 +30,7 @@ namespace HedraTests.Player
     public class EntitySpawnerTest : BaseTest
     {
         private PlayerMock _player;
-        private MockEntitySpawner _spawner;
+        private MockMobSpawner _spawner;
         private event EventHandler OnSpawnCallback;
         private Block _spawningBlock;
         private int _currentHeight;
@@ -47,19 +49,20 @@ namespace HedraTests.Player
                 Type = BlockType.Grass
             };
             var entities = new List<IEntity>();
-            _spawner = new MockEntitySpawner(_player)
+            _spawner = new MockMobSpawner(_player)
             {
                 Enabled = true,
                 SpawnChance = 1
             };
             var worldMock = new Mock<IWorldProvider>();
             worldMock.Setup(W => W.SpawnMob(It.IsAny<string>(), It.IsAny<Vector3>(), It.IsAny<int>()))
-                .Callback(delegate
+                .Returns(delegate
                 {
                     OnSpawnCallback?.Invoke(null, null);
-                    var mockEntity = new Mock<IEntity>();
+                    var mockEntity = new Mock<ISkilledAnimableEntity>();
                     mockEntity.Setup(E => E.IsStatic).Returns(false);
                     entities.Add(mockEntity.Object);
+                    return mockEntity.Object;
                 });
             worldMock.Setup(W => W.Entities).Returns( () => new ReadOnlyCollection<IEntity>(entities));
             worldMock.Setup(W => W.GetHighestY(It.IsAny<int>(), It.IsAny<int>())).Returns( () => _currentHeight);
@@ -79,6 +82,7 @@ namespace HedraTests.Player
             var biomePoolMock = new Mock<IBiomePool>();
             biomePoolMock.Setup(B => B.GetRegion(It.IsAny<Vector3>())).Returns(defaultRegion);
             worldMock.Setup(W => W.BiomePool).Returns(biomePoolMock.Object);
+            worldMock.Setup(W => W.StructureHandler).Returns(new StructureHandler());
             World.Provider = worldMock.Object;
             _currentHeight = 1;
         }
@@ -124,26 +128,10 @@ namespace HedraTests.Player
         [Test]
         public void TestSpawnerCantExceedMobCap()
         {
-            EntitySpawner.MobCap = 2;
+            MobSpawner.MobCap = 2;
             this.AssertMobsSpawned(MobType.Sheep, 1, 1);
             this.AssertMobsSpawned(MobType.Sheep, 1, 1);
             this.AssertMobsSpawned(MobType.Sheep, 1, 0);
-        }
-        
-        [Test]
-        public void TestSpawningThreadIsLaunched()
-        {
-            var pause = new ManualResetEvent(false);
-            _provider.Exists = true;
-            var spawnerMock = new Mock<EntitySpawner>(_player);
-            spawnerMock.Setup(S => S.Update()).Callback(delegate
-            {
-                _provider.Exists = false;
-                pause.Set();
-            });
-            var spawner = spawnerMock.Object;
-            spawner.Dispatch();
-            Assert.True(pause.WaitOne(100), "Failed to dispatch thread when starting the entity spawner.");
         }
         
         [Test]

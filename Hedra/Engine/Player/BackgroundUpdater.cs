@@ -75,22 +75,18 @@ namespace Hedra.Engine.Player
             var entities = World.Entities.ToArray();
             for (var i = entities.Length - 1; i > -1; i--)
             {
-                if (entities[i] != GameManager.Player && 
-                    (
-                        entities[i].InUpdateRange &&
-                        !GameSettings.Paused &&
-                        !GameManager.IsLoading ||
-                        entities[i].IsBoss)
-                    )
+                if (entities[i] == GameManager.Player) continue;
+                if (entities[i].InUpdateRange && !GameSettings.Paused && !GameManager.IsLoading)
                 {
                     if(GameManager.Player.Companion.Entity == entities[i]) continue;
-                    
+
                     entities[i].Update();
                 }
-                else if (entities[i] != GameManager.Player && entities[i].InUpdateRange && GameSettings.Paused)
+                else if (entities[i].InUpdateRange && GameSettings.Paused)
                 {
                     (entities[i].Model as IAudible)?.StopSound();
                 }
+                entities[i].UpdateCriticalComponents();
             }
         }
 

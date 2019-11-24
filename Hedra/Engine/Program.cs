@@ -32,7 +32,7 @@ namespace Hedra.Engine
         [HandleProcessCorruptedStateExceptions]
         private static void Main(string[] Args)
         {
-            GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
+            //GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
             void ProcessException(object S, UnhandledExceptionEventArgs E)
             {
                 if (E.IsTerminating)
@@ -117,8 +117,6 @@ namespace Hedra.Engine
 #endif
             GameWindow = new Loader.Hedra(GameSettings.Width, GameSettings.Height, 3, 3, profile, flags);
             GameWindow.Setup();
-            GameWindow.WindowState = WindowState.Normal;
-            GameWindow.WindowState = WindowState.Maximized;
 
             if (OSManager.RunningPlatform == Platform.Windows)
             {

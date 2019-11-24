@@ -22,8 +22,10 @@ namespace Hedra.Engine.PlantSystem
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng) 
             => throw new NotImplementedException();
 
-        protected override bool SetupRequirements(Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
+        protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
             => throw new NotImplementedException();
+        
+        public override bool CanSpawnInside => throw new NotImplementedException();
         
         public override bool ShouldRemove(CollidableStructure Structure)
         {

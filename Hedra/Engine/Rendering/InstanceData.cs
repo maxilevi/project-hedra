@@ -22,6 +22,9 @@ namespace Hedra.Engine.Rendering
     /// </summary>
     public class InstanceData : LodableObject<InstanceData>, IPositionable, ISearchable
     {
+#if DEBUG
+        private StackTrace _trace = new StackTrace();
+#endif
         private bool _boundsInitialized;
         private Vector3 _bounds;
 

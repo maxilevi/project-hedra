@@ -21,6 +21,7 @@ using Hedra.Engine.Core;
 using Newtonsoft.Json.Converters;
 using System.Numerics;
 using Hedra.Numerics;
+using Hedra.Framework;
 
 namespace Hedra.Engine
 {

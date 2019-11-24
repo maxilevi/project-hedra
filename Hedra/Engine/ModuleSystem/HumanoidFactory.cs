@@ -41,21 +41,24 @@ namespace Hedra.Engine.ModuleSystem
             };
         }
 
-
         public static Humanoid BuildHumanoid(string HumanoidType, int Level, HumanoidConfiguration Configuration)
         {
-            var template = HumanoidLoader.HumanoidTemplater[HumanoidType];
-            var behaviour = Configuration ?? _behaviours[template.Behaviour];
+            return BuildHumanoid(HumanoidType, HumanoidLoader.HumanoidTemplater[HumanoidType], Level, Configuration);
+        }
+        
+        public static Humanoid BuildHumanoid(string HumanoidType, HumanoidTemplate Template, int Level, HumanoidConfiguration Configuration)
+        {
+            var behaviour = Configuration ?? _behaviours[Template.Behaviour];
 
             var difficulty = GetDifficulty(Utils.Rng);
 
             var human = new Humanoid
             {
                 Level = Level,
-                Class = ClassDesign.FromString(template.Class),
+                Class = ClassDesign.FromString(Template.Class),
                 Type = HumanoidType
             };
-            human.Model = new HumanoidModel(human, template.RandomModel);
+            human.Model = new HumanoidModel(human, Template.RandomModel);
             human.Physics.CollidesWithStructures = true;
             human.Physics.CollidesWithEntities = true;
             human.Health = human.MaxHealth;
@@ -66,9 +69,9 @@ namespace Hedra.Engine.ModuleSystem
                 human.AddComponent(CreateComponentFromTemplate(human, components[i]));
             }
 
-            if (template.Weapons != null && template.Weapons.Length > 0)
+            if (Template.Weapons != null && Template.Weapons.Length > 0)
             {
-                var weapon = template.Weapons[Utils.Rng.Next(0, template.Weapons.Length)];
+                var weapon = Template.Weapons[Utils.Rng.Next(0, Template.Weapons.Length)];
                 human.Ring = ItemPool.Grab( new ItemPoolSettings(ItemTier.Common, "Ring"));
                 human.MainWeapon = weapon.Name != null ?  ItemPool.Grab(weapon.Name) : ItemPool.Grab( new ItemPoolSettings(weapon.Tier, weapon.Type));
 
@@ -81,8 +84,8 @@ namespace Hedra.Engine.ModuleSystem
                 human.AddComponent(drop);
             }
     
-            human.AddComponent(new HealthBarComponent(human, template.DisplayName ?? template.Name, behaviour.Type));
-            human.SearchComponent<DamageComponent>().Immune = template.Immune;
+            human.AddComponent(new HealthBarComponent(human, Template.DisplayName ?? Template.Name, behaviour.Type));
+            human.SearchComponent<DamageComponent>().Immune = Template.Immune;
             human.SearchComponent<DamageComponent>().XpToGive = 6f;
             human.Removable = false;
             World.AddEntity(human);

@@ -134,12 +134,13 @@ namespace Hedra.Components
 
         public override void Update()
         {
-            _show = (Parent.Model.Position.Xz() - GameManager.Player.Position.Xz()).LengthSquared() <
+            _show = (Parent.Position - GameManager.Player.Position).LengthSquared() <
                     ShowDistance * ShowDistance
                     && !Hide
                     && !Parent.IsDead
                     && !GameSettings.Paused
-                    && !GameManager.IsLoading;
+                    && !GameManager.IsLoading
+                    && !Parent.Physics.StaticRaycast(GameManager.Player.Position + Vector3.UnitY * GameManager.Player.Model.Height * .5f);
 
             _targetBarSize = _show ? 1 : 0;
 

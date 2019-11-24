@@ -22,6 +22,7 @@ using Hedra.Game;
 using Hedra.Localization;
 using Hedra.Rendering;
 using System.Numerics;
+using Hedra.Engine.ModuleSystem;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.EntitySystem.BossSystem
@@ -31,34 +32,28 @@ namespace Hedra.Engine.EntitySystem.BossSystem
     /// </summary>
     public static class BossGenerator
     {
-        public static Entity Generate(MobType[] PossibleTypes, Vector3 Position, Random Rng)
+        public static IEntity Generate(MobType[] PossibleTypes, Vector3 Position, Random Rng)
         {
             var type = PossibleTypes[Rng.Next(0, PossibleTypes.Length)];
             var boss = World.SpawnMob(type, Vector3.Zero, Rng);
             boss.Position = Position;
-            MakeBoss(boss, Position, Rng);
+            var template = World.MobFactory.GetFactory(type.ToString());
+            MakeBoss(boss, Position, template.XP);
             return boss;
         }
 
-        public static void MakeBoss(IEntity Entity, Vector3 Position, Random Rng)
+        public static void MakeBoss(IEntity Entity, Vector3 Position, float XP)
         {
             if(Entity.SearchComponent<IGuardAIComponent>() != null)
                 Entity.SearchComponent<IGuardAIComponent>().GuardPosition = Position;
             Entity.SearchComponent<ITraverseAIComponent>().GridSize = new Vector2(32, 32);
             var dmgComponent = Entity.SearchComponent<DamageComponent>();
-            var healthBarComponent = new BossHealthBarComponent(Entity, NameGenerator.Generate(World.Seed + Rng.Next(0, 999999)));
+            dmgComponent.XpToGive = XP;
+            var healthBarComponent = new BossHealthBarComponent(Entity, Entity.Name);
             Entity.RemoveComponent(Entity.SearchComponent<HealthBarComponent>());
-            dmgComponent.OnDamageEvent += delegate(DamageEventArgs Args)
-            {
-                if (!(Args.Victim.Health <= 0)) return;
-
-                GameManager.Player.MessageDispatcher.ShowMessage(Translations.Get("boss_get_xp", (int) dmgComponent.XpToGive), 3f, Colors.Violet.ToColor());
-                healthBarComponent.Enabled = false;
-            };
+            Entity.AddComponent(new BossXPMessageComponent(Entity));
             Entity.Name = healthBarComponent.Name;
-            Entity.IsBoss = true;
             Entity.Physics.CollidesWithStructures = true;
-            Entity.Removable = false;
             Entity.AddComponent(healthBarComponent); 
         }
     }

@@ -21,14 +21,14 @@ namespace Hedra.Structures
             return base.Setup(TargetPosition, Rng);
         }
         
-        public override bool ShouldSetup(Vector2 ChunkOffset, Vector3 TargetPosition, CollidableStructure[] Items, Region Biome, IRandom Rng)
+        public override bool ShouldSetup(Vector2 ChunkOffset, ref Vector3 TargetPosition, CollidableStructure[] Items, Region Biome, IRandom Rng)
         {
            return ChunkOffset == World.ToChunkSpace(Position) && !Spawned;
         }
         
         protected override GhostTownPortal Create(Vector3 TargetPosition, float Size)
         {
-            return new SpawnGhostTownPortal(Position, Scale);
+            return new SpawnGhostTownPortal(Position, StructureScale);
         }
 
         public static Vector3 Position => World.SpawnPoint + GhostTownGenerationDesign.IslandRadius * -Vector3.One * .25f;

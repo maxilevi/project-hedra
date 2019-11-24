@@ -89,4 +89,5 @@ void main()
 	vec3 out_normal = mat3(transpose(inverse(_modelViewMatrix))) * normal;
 	/* 1.0 means SSR affects this fragment and SSAO doesn't */
 	OutNormal = vec4(out_normal, 1.0) * useSSR;
+	//OutColor = mix(OutColor, vec4(texture(depthMap, projectiveCoords).w, 0, 0, 1), pass_visibility);
 }

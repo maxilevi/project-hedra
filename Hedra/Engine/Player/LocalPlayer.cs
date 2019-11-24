@@ -57,7 +57,8 @@ namespace Hedra.Engine.Player
 {
     public class LocalPlayer : Humanoid, IPlayer
     {
-        public event OnInteractionEvent Interact;
+        public event OnRespawnEvent OnRespawn;
+        public event OnInteractionEvent OnInteract;
         public ICamera View { get; }
         public ChunkLoader Loader { get; }
         public UserInterface UI { get; set; }
@@ -68,7 +69,7 @@ namespace Hedra.Engine.Player
         private QuestInterface QuestInterface { get; }
         public CraftingInventory Crafting { get; }
         private CraftingInterface CraftingInterface { get; }
-        public EntitySpawner Spawner { get; }
+        public MobSpawner Spawner { get; }
         public IToolbar Toolbar { get; }
         public IAbilityTree AbilityTree { get; }
         public IStructureAware StructureAware { get; }
@@ -94,7 +95,7 @@ namespace Hedra.Engine.Player
             this.UI = new UserInterface(this);
             this.View = new Camera(this);
             this.Loader = new ChunkLoader(this);
-            this.Spawner = new EntitySpawner(this);
+            this.Spawner = new MobSpawner(this);
             this.Model = new HumanoidModel(this);
             this.StructureAware = new StructureAware(this);
             this.Inventory = new PlayerInventory(this);
@@ -138,7 +139,7 @@ namespace Hedra.Engine.Player
                     SoundPlayer.PlaySound(SoundType.NotificationSound, Position);
                 }
                 if(Controls.Interact == Args.Key)
-                    Interact?.Invoke();
+                    OnInteract?.Invoke();
             }, EventPriority.Low);
 
             Kill += A =>
@@ -168,9 +169,18 @@ namespace Hedra.Engine.Player
             var entities = World.Entities.ToArray();
             for (var i = entities.Length - 1; i > -1; i--)
             {
-                if (!(entities[i] is LocalPlayer) && (entities[i].Position.Xz() - this.Position.Xz()).LengthSquared() < 256 * 256 || Companion.Entity == entities[i])
+                if (!(entities[i] is LocalPlayer) && (entities[i].Position.Xz() - this.Position.Xz()).LengthSquared() < 64 * 64 || Companion.Entity == entities[i])
                 {
                     entities[i].Draw();
+                }
+            }
+
+            if (GameSettings.DebugNavMesh)
+            {
+                var structs = StructureHandler.GetNearStructures(Position);
+                for (var i = 0; i < structs.Length; ++i)
+                {
+                    structs[i].Draw();
                 }
             }
         }
@@ -207,9 +217,13 @@ namespace Hedra.Engine.Player
                 
                 _previousPosition = Model.Human.Position;
             }
-            
-            Companion.Entity?.Update();
-            
+
+            if (Companion.Entity != null && !Companion.Entity.Disposed)
+            {
+                Companion.Entity?.UpdateCriticalComponents();
+                Companion.Entity?.Update();
+            }
+
             Rotation = new Vector3(0, this.Rotation.Y, 0);
             View.AddedDistance = IsMoving || IsSwimming || IsTravelling ? 3.0f : 0.0f;
             AmbientEffects.Update();
@@ -229,7 +243,7 @@ namespace Hedra.Engine.Player
             Glider.Update();
             View.Update();
             Realms.Update();
-            Spawner.Dispatch();
+            Spawner.Update();
         }
 
         public override int Gold
@@ -410,6 +424,7 @@ namespace Hedra.Engine.Player
                     VanishSpeed = 2
                 };
             }
+            OnRespawn?.Invoke();
         }
 
         public void Reset()
