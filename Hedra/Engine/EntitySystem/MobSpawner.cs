@@ -45,29 +45,8 @@ namespace Hedra.Engine.EntitySystem
         {
             _player = Player;
             _rng = new Random();
-            _waitHandle = new AutoResetEvent(false);
-            var spawnThread = new Thread(Loop)
-            {
-                IsBackground = true,
-                Priority = ThreadPriority.Lowest
-            };
-            spawnThread.Start();
         }
 
-        private void Loop()
-        {
-            while (GameManager.Exists)
-            {
-                _waitHandle.WaitOne();
-                this.Update();
-            }
-        }
-
-        public void Dispatch()
-        {
-            _waitHandle.Set();
-        }
-        
         public virtual void Update()
         {
             #if !DEBUG
@@ -103,18 +82,24 @@ namespace Hedra.Engine.EntitySystem
 
                 var count = Utils.Rng.Next(template.MinGroup, template.MaxGroup + 1);
 
-                for (var i = 0; i < count; i++)
+                void DoSpawn()
                 {
-                    var offset = new Vector3(Utils.Rng.NextFloat() * 8f - 4f, 0, Utils.Rng.NextFloat() * 8f - 4f) *
-                                 Chunk.BlockSize;
-                    var newNearPosition = new Vector3(newPosition.X + offset.X,
-                        Physics.HeightAtPosition(newPosition + offset),
-                        newPosition.Z + offset.Z);
-                    var mob = World.SpawnMob(template.Type, newNearPosition, Utils.Rng);
-                    mob.Removable = true;
-                    // Log.WriteLine($"Spawned '{template.Type}' at '{newNearPosition}', '{((World.GetChunkAt(newPosition)?.Landscape.FullyGenerated ?? false) ? "EXISTS" : "NOT EXISTS")}'", LogType.WorldBuilding);
+                    for (var i = 0; i < count; i++)
+                    {
+                        var offset = new Vector3(Utils.Rng.NextFloat() * 8f - 4f, 0, Utils.Rng.NextFloat() * 8f - 4f) *
+                                     Chunk.BlockSize;
+                        var newNearPosition = new Vector3(newPosition.X + offset.X,
+                            Physics.HeightAtPosition(newPosition + offset),
+                            newPosition.Z + offset.Z);
+                        var mob = World.SpawnMob(template.Type, newNearPosition, Utils.Rng);
+                        mob.Removable = true;
 
+                        // Log.WriteLine($"Spawned '{template.Type}' at '{newNearPosition}', '{((World.GetChunkAt(newPosition)?.Landscape.FullyGenerated ?? false) ? "EXISTS" : "NOT EXISTS")}'", LogType.WorldBuilding);
+                    }
                 }
+                if (GameSettings.TestingMode) DoSpawn();
+                else TaskScheduler.Parallel(DoSpawn);
+
                 Log.WriteLine($"Spawned {count} '{template.Type}' at '{newPosition}'", LogType.WorldBuilding);
             }
             else
@@ -171,8 +156,7 @@ namespace Hedra.Engine.EntitySystem
         private static bool ShouldSpawnMob(Vector3 NewPosition)
         {
             var region = World.BiomePool.GetRegion(NewPosition);
-            return (Utils.Rng.Next(0, 20) != 1 || region.Mob.SpawnerSettings.MiniBosses == null || region.Mob.SpawnerSettings.MiniBosses.Length == 0) 
-                   && Vector3.Dot(Physics.NormalAtPosition(NewPosition), Vector3.UnitY) > 0.3f;
+            return (Utils.Rng.Next(0, 20) != 1 || region.Mob.SpawnerSettings.MiniBosses == null || region.Mob.SpawnerSettings.MiniBosses.Length == 0);
         }
 
         private static bool IsNearWater(Vector3 Position)
@@ -245,7 +229,9 @@ namespace Hedra.Engine.EntitySystem
                     return true;
             }
 
-            return Vector3.Dot(Physics.NormalAtPosition(Position), Vector3.UnitY) <= .35;
+            var normal = Physics.NormalAtPosition(Position);
+            var river = World.BiomePool.GetRegion(Position).Generation.RiverAtPoint(Position.X, Position.Z);
+            return !(Vector3.Dot(normal, Vector3.UnitY) > .3 && river < 0.005f);
         }
         
         private Vector3 PlacementPosition()
@@ -258,7 +244,7 @@ namespace Hedra.Engine.EntitySystem
 
         public void Dispose()
         {
-            _waitHandle.Dispose();
+            
         }
     }
 

@@ -17,6 +17,7 @@ using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Items;
 using System.Numerics;
+using Hedra.Engine.SkillSystem;
 
 namespace Hedra.Engine.Generation
 {
@@ -117,7 +118,7 @@ namespace Hedra.Engine.Generation
 
         WorldItem DropItem(Item ItemSpec, Vector3 Position);
 
-        SkilledAnimableEntity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed);
+        ISkilledAnimableEntity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed);
 
         Vector3 FindPlaceablePosition(IEntity Mob, Vector3 DesiredPosition);
 

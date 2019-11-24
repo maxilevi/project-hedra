@@ -21,6 +21,7 @@ using NUnit.Framework;
 using NUnit.Framework.Interfaces;
 using System.Numerics;
 using Hedra.Engine.Core;
+using Hedra.Engine.SkillSystem;
 using Hedra.Engine.StructureSystem;
 
 namespace HedraTests.Player
@@ -55,12 +56,13 @@ namespace HedraTests.Player
             };
             var worldMock = new Mock<IWorldProvider>();
             worldMock.Setup(W => W.SpawnMob(It.IsAny<string>(), It.IsAny<Vector3>(), It.IsAny<int>()))
-                .Callback(delegate
+                .Returns(delegate
                 {
                     OnSpawnCallback?.Invoke(null, null);
-                    var mockEntity = new Mock<IEntity>();
+                    var mockEntity = new Mock<ISkilledAnimableEntity>();
                     mockEntity.Setup(E => E.IsStatic).Returns(false);
                     entities.Add(mockEntity.Object);
+                    return mockEntity.Object;
                 });
             worldMock.Setup(W => W.Entities).Returns( () => new ReadOnlyCollection<IEntity>(entities));
             worldMock.Setup(W => W.GetHighestY(It.IsAny<int>(), It.IsAny<int>())).Returns( () => _currentHeight);
@@ -130,22 +132,6 @@ namespace HedraTests.Player
             this.AssertMobsSpawned(MobType.Sheep, 1, 1);
             this.AssertMobsSpawned(MobType.Sheep, 1, 1);
             this.AssertMobsSpawned(MobType.Sheep, 1, 0);
-        }
-        
-        [Test]
-        public void TestSpawningThreadIsLaunched()
-        {
-            var pause = new ManualResetEvent(false);
-            _provider.Exists = true;
-            var spawnerMock = new Mock<MobSpawner>(_player);
-            spawnerMock.Setup(S => S.Update()).Callback(delegate
-            {
-                _provider.Exists = false;
-                pause.Set();
-            });
-            var spawner = spawnerMock.Object;
-            spawner.Dispatch();
-            Assert.True(pause.WaitOne(100), "Failed to dispatch thread when starting the entity spawner.");
         }
         
         [Test]

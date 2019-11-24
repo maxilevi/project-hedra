@@ -71,7 +71,7 @@ namespace HedraTests.CodePolicy
                 for (var i = 0; i < englishKeys.Length; ++i)
                 {
                     var source = File.ReadAllText(modules[k]);
-                    if (Regex.IsMatch(source, $"[\"']{englishKeys[i]}[\"']"))
+                    if (Regex.IsMatch(source, $"[\"']{englishKeys[i]}[\"']", RegexOptions.IgnoreCase))
                         set.Remove(englishKeys[i]);                    
                 }
                 englishKeys = set.ToArray();

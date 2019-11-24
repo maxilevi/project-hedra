@@ -31,6 +31,7 @@ using Hedra.Structures;
 using HedraTests.Player;
 using Moq;
 using System.Numerics;
+using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Numerics;
 
 namespace HedraTests.Structure
@@ -87,11 +88,24 @@ namespace HedraTests.Structure
                 if(!_interceptedEntities.Contains(ent)) _interceptedEntities.Add(ent);
                 return ent;
             });
+            var factory = new MobFactory();
+            factory.AddFactory(new []
+            {
+                new CustomFactory
+                {
+                    Name = "troll",
+                },
+                new CustomFactory
+                {
+                    Name = "giantbeetle"
+                }
+            });
+            worldMock.Setup(W => W.MobFactory).Returns(factory);
             worldMock.Setup(W => W.WorldBuilding).Returns(new StructureDesignWorldBuildingMock());
             worldMock.Setup(W => W.StructureHandler).Returns(new StructureHandler());
             World.Provider = worldMock.Object;
             Design = new T();
-            _rng = new Random();
+            _rng = new Random(1);
             _designs = new NormalBiomeStructureDesign().Designs;
         }
         

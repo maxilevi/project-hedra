@@ -27,6 +27,7 @@ using Hedra.EntitySystem;
 using Hedra.Items;
 using Hedra.WeaponSystem;
 using System.Numerics;
+using Moq;
 
 namespace HedraTests.Player
 {
@@ -45,6 +46,9 @@ namespace HedraTests.Player
                 Scale = 0
             });
             UI = new UserInterface(this);
+            var physicsMock = new Mock<IPhysicsComponent>();
+            physicsMock.Setup(P => P.StaticRaycast(It.IsAny<Vector3>())).Returns(false);
+            Physics = physicsMock.Object;
         }
 
         public void SplashEffect(Chunk UnderChunk)

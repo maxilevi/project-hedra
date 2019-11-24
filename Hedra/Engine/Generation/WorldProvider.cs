@@ -43,6 +43,7 @@ using Hedra.Items;
 using Hedra.Sound;
 using System.Numerics;
 using Hedra.Engine.Core;
+using Hedra.Engine.SkillSystem;
 using Hedra.Engine.Windowing;
 using Hedra.Numerics;
 using Hedra.Framework;
@@ -566,7 +567,7 @@ namespace Hedra.Engine.Generation
             return model;
         }
 
-        public SkilledAnimableEntity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed)
+        public ISkilledAnimableEntity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed)
         {
             var mob = MobFactory.Build(Type, MobSeed);
             var placeablePosition = this.FindPlaceablePosition(mob, new Vector3(DesiredPosition.X, Physics.HeightAtPosition(DesiredPosition.X, DesiredPosition.Z), DesiredPosition.Z));

@@ -32,7 +32,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
     /// </summary>
     public static class BossGenerator
     {
-        public static Entity Generate(MobType[] PossibleTypes, Vector3 Position, Random Rng)
+        public static IEntity Generate(MobType[] PossibleTypes, Vector3 Position, Random Rng)
         {
             var type = PossibleTypes[Rng.Next(0, PossibleTypes.Length)];
             var boss = World.SpawnMob(type, Vector3.Zero, Rng);

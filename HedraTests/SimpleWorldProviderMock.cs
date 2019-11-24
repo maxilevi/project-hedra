@@ -19,6 +19,7 @@ using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Items;
 using System.Numerics;
+using Hedra.Engine.SkillSystem;
 
 namespace HedraTests
 {
@@ -31,7 +32,7 @@ namespace HedraTests
         public virtual ParticleSystem Particles => null;
         public virtual EnvironmentGenerator EnvironmentGenerator => null;
         public virtual IBiomePool BiomePool { get; set; }
-        public virtual MobFactory MobFactory => null;
+        public virtual MobFactory MobFactory => new MobFactory();
         public virtual TreeGenerator TreeGenerator => null;
         public virtual IWorldBuilding WorldBuilding => null;
         public virtual StructureHandler StructureHandler { get; } = new StructureHandler();
@@ -264,7 +265,7 @@ namespace HedraTests
             return default(WorldItem);
         }
 
-        public virtual SkilledAnimableEntity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed)
+        public virtual ISkilledAnimableEntity SpawnMob(string Type, Vector3 DesiredPosition, int MobSeed)
         {
             return default(SkilledAnimableEntity);
         }

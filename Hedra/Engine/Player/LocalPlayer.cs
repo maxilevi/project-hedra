@@ -243,7 +243,7 @@ namespace Hedra.Engine.Player
             Glider.Update();
             View.Update();
             Realms.Update();
-            Spawner.Dispatch();
+            Spawner.Update();
         }
 
         public override int Gold

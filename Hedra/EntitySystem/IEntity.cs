@@ -81,7 +81,7 @@ namespace Hedra.EntitySystem
 
         bool Disposed { get; }
         
-        float MaxHealth { get; }
+        float MaxHealth { get; set; }
         
         MobType MobType { get; set; }
         
