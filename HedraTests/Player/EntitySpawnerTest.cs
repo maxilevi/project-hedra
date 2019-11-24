@@ -35,6 +35,7 @@ namespace HedraTests.Player
         private Block _spawningBlock;
         private int _currentHeight;
         private SimpleGameProviderMock _provider;
+        private float _offset;
 
         [SetUp]
         public override void Setup()
@@ -61,8 +62,12 @@ namespace HedraTests.Player
                     OnSpawnCallback?.Invoke(null, null);
                     var mockEntity = new Mock<ISkilledAnimableEntity>();
                     mockEntity.Setup(E => E.IsStatic).Returns(false);
-                    entities.Add(mockEntity.Object);
-                    return mockEntity.Object;
+                    _offset += 100000;
+                    mockEntity.Setup(E => E.Position).Returns(new Vector3(_offset, 0, _offset));
+                    var obj = mockEntity.Object;
+                    obj.Position = new Vector3(_offset, 0, _offset);
+                    entities.Add(obj);
+                    return obj;
                 });
             worldMock.Setup(W => W.Entities).Returns( () => new ReadOnlyCollection<IEntity>(entities));
             worldMock.Setup(W => W.GetHighestY(It.IsAny<int>(), It.IsAny<int>())).Returns( () => _currentHeight);
@@ -104,7 +109,7 @@ namespace HedraTests.Player
         [Test]
         public void TestCanSpawnMobsInGroups()
         {
-            this.AssertMobsSpawned(MobType.Sheep, 8, 8);
+            this.AssertMobsSpawned(MobType.Sheep, 3, 3);
         }
         
         [Test]

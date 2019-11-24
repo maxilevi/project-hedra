@@ -30,5 +30,13 @@ namespace HedraTests.Structure
         {
             HeightMap[0][0] = _returnValue();
         }
+        
+        protected override void DoBuildRiverBorderMap(FastNoiseSIMD Noise, float[][] RiverMap, int Width, float Scale, Vector2 Offset)
+        {
+        }
+        
+        protected override void DoBuildRiverMap(FastNoiseSIMD Noise, float[][] RiverMap, int Width, float Scale, Vector2 Offset)
+        {
+        }
     }
 }

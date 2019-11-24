@@ -70,9 +70,8 @@ namespace Hedra.Engine.EntitySystem
             if ((_player.Position.Xz() - desiredPosition.Xz()).LengthSquared() <
                 32f * Chunk.BlockSize * 32f * Chunk.BlockSize)
                 return;
-
+            
             if (this.Conflicts(desiredPosition)) return;
-
             if (ShouldSpawnMob(desiredPosition))
             {
                 var newPosition = new Vector3(desiredPosition.X, Physics.HeightAtPosition(desiredPosition),
@@ -97,6 +96,7 @@ namespace Hedra.Engine.EntitySystem
                         // Log.WriteLine($"Spawned '{template.Type}' at '{newNearPosition}', '{((World.GetChunkAt(newPosition)?.Landscape.FullyGenerated ?? false) ? "EXISTS" : "NOT EXISTS")}'", LogType.WorldBuilding);
                     }
                 }
+
                 if (GameSettings.TestingMode) DoSpawn();
                 else TaskScheduler.Parallel(DoSpawn);
 
