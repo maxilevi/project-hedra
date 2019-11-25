@@ -280,7 +280,8 @@ namespace Hedra.Engine.EntitySystem
             Damager?.InvokeBeforeDamaging(this, Amount);
             Damager?.InvokeDamageModifier(this, ref Amount);
             _damageManager.Damage(Amount, Damager, out Exp, out Inflicted, PlaySound, PushBack);
-            Damager?.InvokeAfterDamaging(this, Amount);
+            if(Inflicted > 0)
+                Damager?.InvokeAfterDamaging(this, Amount);
         }
 
         public void InvokeBeforeDamaging(IEntity Invoker, float Damage)

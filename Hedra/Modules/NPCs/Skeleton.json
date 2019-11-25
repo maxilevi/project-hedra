@@ -5,5 +5,10 @@
     "Path": "$DataFile$/Assets/Chr/SkeletonIdle.dae",
     "IsUndead": true,
     "Scale": 1.0
-  }
+  },
+  "Class": "Warrior",
+  "Behaviour" : "Hostile",
+  "Immune": false,
+  "Components":  [],
+  "Weapons": []
 }

@@ -34,7 +34,7 @@
     ],
     "AttackAnimations": [
       {
-        "Path": "$DataFile$/ Assets/Chr/SpiderAttack.dae",
+        "Path": "$DataFile$/Assets/Chr/SpiderAttack.dae",
         "Speed": 1.25
       }
     ]

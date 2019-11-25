@@ -9,23 +9,23 @@
   "Effects": [],
   "Drops": [],
   "Model": {
-    "Path": "$DataFile$/Assets/Chr/Mobs/Alpaca/AlpacaIdle.dae",
+    "Path": "$DataFile$/Assets/Chr/Mob/Alpaca/AlpacaIdle.dae",
     "Scale": 1.5,
     "IdleAnimations": [
       {
-        "Path": "$DataFile$/Assets/Chr/Mobs/Alpaca/AlpacaIdle.dae",
+        "Path": "$DataFile$/Assets/Chr/Mob/Alpaca/AlpacaIdle.dae",
         "Speed": 1.0
       }
     ],
     "WalkAnimations": [
       {
-        "Path": "$DataFile$/Assets/Chr/Mobs/Alpaca/AlpacaWalk.dae",
+        "Path": "$DataFile$/Assets/Chr/Mob/Alpaca/AlpacaWalk.dae",
         "Speed": 1.0
       }
     ],
     "AttackAnimations": [
       {
-        "Path": "$DataFile$/Assets/Chr/Mobs/Alpaca/AlpacaAttack0.dae",
+        "Path": "$DataFile$/Assets/Chr/Mob/Alpaca/AlpacaAttack0.dae",
         "Speed": 1.0
       }
     ]

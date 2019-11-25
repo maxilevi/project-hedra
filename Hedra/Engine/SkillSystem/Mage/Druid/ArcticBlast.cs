@@ -11,7 +11,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
 {
     public class ArcticBlast : PlayerRadiusEffectSkill
     {
-        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skill/ArcticBlast.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/ArcticBlast.png");
 
         protected override void Apply(IEntity Entity)
         {

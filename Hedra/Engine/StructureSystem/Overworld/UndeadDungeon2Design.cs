@@ -18,7 +18,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 {
     public class UndeadDungeon2Design : UndeadDungeonWithBossDesign
     {
-        public override int PlateauRadius => 368;
+        public override int PlateauRadius => 480;
         protected override int StructureChance => StructureGrid.Dungeon2Chance;
         protected override CacheItem? Cache => CacheItem.Dungeon2;
         protected override Vector3 StructureOffset => Dungeon2Cache.Offset;

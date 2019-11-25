@@ -20,7 +20,7 @@ namespace Hedra.Engine.SkillSystem.Mage
 {
     public class Inferno : SingleAnimationSkill<IPlayer>
     {
-        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skill/Inferno.png");
+        public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/Inferno.png");
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/MageInferno.dae");
         protected override float AnimationSpeed => 1.75f;
 

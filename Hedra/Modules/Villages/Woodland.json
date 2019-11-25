@@ -448,7 +448,7 @@
   "Decorations": {
     "Lamps": [
       {
-        "Path": "Assets/Env/Lamp0.ply",
+        "Path": "Assets/Env/Village/Lamp0.ply",
         "Scale": 4.0,
         "LightOffset": {
           "X": 0.0,
@@ -459,7 +459,7 @@
     ],
     "Benches": [
       {
-        "Path": "Assets/Env/Bench0.ply",
+        "Path": "Assets/Env/Village/Bench0.ply",
         "Scale": 3.0,
         "SitOffset": {
           "X": 0.0,
@@ -468,7 +468,7 @@
         }
       },
       {
-        "Path": "Assets/Env/Bench1.ply",
+        "Path": "Assets/Env/Village/Bench1.ply",
         "Scale": 3.0,
         "SitOffset": {
           "X": 0.0,

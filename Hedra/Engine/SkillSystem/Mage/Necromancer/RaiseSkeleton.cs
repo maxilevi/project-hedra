@@ -49,8 +49,10 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
             skeleton.RemoveComponent(skeleton.SearchComponent<HealthBarComponent>());
             skeleton.AddComponent(new HealthBarComponent(skeleton, Translations.Get("skeleton_mastery_minion_name"), HealthBarType.Black, Color.FromArgb(255, 40, 40, 40)));
             skeleton.AddComponent(new SkeletonEffectComponent(skeleton));
-            skeleton.RemoveComponent(skeleton.SearchComponent<DropComponent>());
+            if(skeleton.SearchComponent<DropComponent>() != null)
+                skeleton.RemoveComponent(skeleton.SearchComponent<DropComponent>());
             skeleton.AddComponent(new SelfDestructComponent(skeleton, () => Owner.IsDead));
+            Owner.SearchComponent<DamageComponent>().Ignore(E => E == skeleton);
             return skeleton;
         }
 

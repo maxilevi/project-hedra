@@ -107,23 +107,10 @@ namespace Hedra.Engine.Rendering
                 Renderer.Disable(EnableCap.Blend);
             Renderer.Enable(EnableCap.DepthTest);
             UpdateUniforms();
-            
+
             Data.Bind();
             Indices.Bind();
             Renderer.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
-
-            if (Outline)
-            {
-                Renderer.Enable(EnableCap.Blend);
-                Renderer.Disable(EnableCap.DepthTest);
-                Shader["Outline"] = this.Outline ? 1 : 0;
-                Shader["OutlineColor"] = this.OutlineColor;
-                Shader["Time"] = Time.IndependentDeltaTime;
-                Indices.Bind();
-                Renderer.DrawElements(PrimitiveType.Triangles, Indices.Count, DrawElementsType.UnsignedInt, IntPtr.Zero);
-                Renderer.Enable(EnableCap.DepthTest);
-            }
-            Shader["Outline"] = 0;
         }
         
         public Vector3 TransformPoint(Vector3 Vertex)
@@ -243,6 +230,9 @@ namespace Hedra.Engine.Rendering
                 IgnoreSSAO = ApplySSAO ? 0 : 1,
                 DitherFogTextureShadows = new Vector4(Dither ? 1 : 0, ApplyFog ? 1 : 0, UseNoiseTexture ? 1 : 0, GameSettings.Shadows ? 1 : 0)
             });
+            Shader["Outline"] = this.Outline ? 1 : 0;
+            Shader["OutlineColor"] = this.OutlineColor;
+            Shader["Time"] = Time.IndependentDeltaTime;
         }
 
         private void Bind()

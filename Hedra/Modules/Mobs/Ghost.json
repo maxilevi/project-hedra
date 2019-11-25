@@ -37,7 +37,7 @@
         "Speed": 3.5
       },
       {
-        "Path": "$DataFile$/Assets/Chr/Ghost/GhostAttack1.dae",
+        "Path": "$DataFile$/Assets/Chr/Mob/Ghost/GhostAttack1.dae",
         "Speed": 3.5
       }
     ]

@@ -431,8 +431,10 @@ namespace Hedra.Engine.Bullet
         
         public bool StaticRaycast(Vector3 End, out Vector3 Hit)
         {
+            Hit = End;
             var result = BulletPhysics.Raycast(RigidbodyPosition.Compatible() + Vector3.UnitY.Compatible() * Parent.Model.Height * .5f, End.Compatible(), CollisionFilterGroups.StaticFilter | BulletPhysics.TerrainFilter);
-            Hit = result.HitPointWorld.Compatible();
+            if(result.HasHit)
+                Hit = result.HitPointWorld.Compatible();
             return result.HasHit;
         }
         

@@ -27,7 +27,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
     public class GraveyardDesign : CompletableStructureDesign<Graveyard>
     {
         private const int Level = 9;
-        public override int PlateauRadius { get; } = 384;
+        public override int PlateauRadius { get; } = 420;
         public const int GraveyardSkyTime = 24000;
         public override VertexData Icon => CacheManager.GetModel(CacheItem.GraveyardIcon);
         public override bool CanSpawnInside => false;

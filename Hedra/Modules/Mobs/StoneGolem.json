@@ -11,23 +11,23 @@
   "Drops": [],
   "Model": {
     "AlignWithTerrain" :  false,
-    "Path": "$DataFile$/Assets/Chr/Mob/StoneGolem0Idle.dae",
+    "Path": "$DataFile$/Assets/Chr/Mob/StoneGolem/StoneGolem0Idle.dae",
     "Scale": 3.0,
     "IdleAnimations": [
       {
-        "Path": "$DataFile$/Assets/Chr/Mob/StoneGolem0Idle.dae",
+        "Path": "$DataFile$/Assets/Chr/Mob/StoneGolem/StoneGolem0Idle.dae",
         "Speed": 1.0
       }
     ],
     "WalkAnimations": [
       {
-        "Path": "$DataFile$/Assets/Chr/Mob/StoneGolem0Idle.dae",
+        "Path": "$DataFile$/Assets/Chr/Mob/StoneGolem/StoneGolem0Idle.dae",
         "Speed": 0.75
       }
     ],
     "AttackAnimations": [
       {
-        "Path": "$DataFile$/Assets/Chr/Mob/StoneGolem0Idle.dae",
+        "Path": "$DataFile$/Assets/Chr/Mob/StoneGolem/StoneGolem0Idle.dae",
         "Speed": 0.75
       }
     ]

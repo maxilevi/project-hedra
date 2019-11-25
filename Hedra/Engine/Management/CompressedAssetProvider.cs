@@ -50,10 +50,10 @@ namespace Hedra.Engine.Management
             var boldFonts = new PrivateFontCollection();
             var normalFonts = new PrivateFontCollection();
             
-            var sansBold = AssetManager.ReadBinary("Assets/ClearSans-Bold.ttf", AssetManager.AssetsResource);
+            var sansBold = ReadBinary("Assets/ClearSans-Bold.ttf", AssetsResource);
             boldFonts.AddMemoryFont(Utils.IntPtrFromByteArray(sansBold), sansBold.Length);
 
-            var sansRegular = AssetManager.ReadBinary("Assets/ClearSans-Regular.ttf", AssetManager.AssetsResource);              
+            var sansRegular = ReadBinary("Assets/ClearSans-Regular.ttf", AssetsResource);              
             normalFonts.AddMemoryFont(Utils.IntPtrFromByteArray(sansRegular), sansRegular.Length);
 
             FontCache.SetFonts(normalFonts.Families[0], boldFonts.Families[0]);
@@ -204,19 +204,32 @@ namespace Hedra.Engine.Management
         {
             if (!Stream.CanRead) return null;
             var reader = new BinaryReader(Stream);
+            var k = default(string);
+            var sanitizedName = Name.Replace(@"\", "/").Replace("$DataFile$", string.Empty).Trim();
             var length = reader.BaseStream.Length;
             while (reader.BaseStream.Position < length)
             {
                 var header = reader.ReadString();
                 if (header.Equals("<end_header>"))
-                    return null;
+                    break;
                 
                 var dataPosition = reader.ReadInt64();
                 if (Path.GetFileName(header).Equals(Path.GetFileName(Name)))
                 {
+                    k = header;
+                }
+
+                var sanitizedHeader = header.Replace(@"\", "/");
+                if (Path.GetFileName(sanitizedHeader).Equals(Path.GetFileName(sanitizedName)) && sanitizedHeader.Contains(sanitizedName))
+                {
                     reader.BaseStream.Seek(dataPosition, SeekOrigin.Begin);
                     return reader.ReadBytes(reader.ReadInt32());
                 }
+            }
+
+            if (k != null)
+            {
+                int a = 0;
             }
             return null;
         }
