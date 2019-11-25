@@ -16,6 +16,6 @@
   ],
   "Model": {
     "Scale": 2.0,
-    "Path": "$DataFile$/Items/CommonOrientalWoodenBow.ply"
+    "Path": "$DataFile$/Items/Bows/CommonOrientalWoodenBow.ply"
   }
 }
