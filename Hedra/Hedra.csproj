@@ -340,6 +340,8 @@
     <Compile Include="Engine\CacheSystem\Dungeon0IconCache.cs" />
     <Compile Include="Engine\CacheSystem\DynamicCache.cs" />
     <Compile Include="Engine\CacheSystem\FishingPostIconCache.cs" />
+    <Compile Include="Engine\CacheSystem\ShroomDimensionPortalCache.cs" />
+    <Compile Include="Engine\CacheSystem\ShroomDimensionPortalIconCache.cs" />
     <Compile Include="Engine\CacheSystem\WizardTowerCache.cs" />
     <Compile Include="Engine\Core\SequentialList.cs" />
     <Compile Include="Engine\DataStructures\AABB.cs" />
@@ -416,6 +418,8 @@
     <Compile Include="Engine\StructureSystem\Overworld\BaseDungeonDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\BuildingDoorTrigger.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonWithBoss.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\ShroomDimensionPortal.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\ShroomDimensionPortalDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\UndeadDungeon1Design.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonBossRoomTrigger.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonDoorTrigger.cs" />
@@ -2415,6 +2419,10 @@
       <Link>Sounds\ItemEquip.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\project-hedra-assets\Sounds\River.ogg">
+      <Link>Sounds\River.ogg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\project-hedra-assets\Sounds\RunWood.ogg">
       <Link>Sounds\RunWood.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -2425,6 +2433,10 @@
     </None>
     <None Include="..\project-hedra-assets\Sounds\Soundtrack\Obelisk.ogg">
       <Link>Sounds\Soundtrack\Obelisk.ogg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\project-hedra-assets\Sounds\Soundtrack\Rain.ogg">
+      <Link>Sounds\Rain.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Villages\Blacksmith\Blacksmith0-Lod.ply">
@@ -5611,10 +5623,6 @@
       <Link>Sounds\PreparingAttack.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Sounds\River.ogg">
-      <Link>Sounds\Soundtrack\River.ogg</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Sounds\Soundtrack\HostageSituation.ogg">
       <Link>Sounds\Soundtrack\HostageSituation.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -8300,10 +8308,6 @@
       <Link>Sounds\Soundtrack\MainTheme.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\Sounds\Soundtrack\Rain.ogg">
-      <Link>Sounds\Soundtrack\Rain.ogg</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\Sounds\Roll.ogg">
       <Link>Sounds\Roll.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -10377,6 +10381,18 @@
     </Content>
     <Content Include="..\project-hedra-assets\Structures\Portal0\Portal0_Collider6.ply">
       <Link>Assets\Env\Colliders\Portal0_Collider6.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\TreeCircle0\TreeCircle0-Colliders.ply">
+      <Link>Assets\Env\Structures\TreeCircle\TreeCircle0-Colliders.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\TreeCircle0\TreeCircle0-Icon.ply">
+      <Link>Assets\Env\Structures\TreeCircle\TreeCircle0-Icon.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\TreeCircle0\TreeCircle0.ply">
+      <Link>Assets\Env\Structures\TreeCircle\TreeCircle0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Structures\WitchHut0\WitchHut0-Icon.ply">
