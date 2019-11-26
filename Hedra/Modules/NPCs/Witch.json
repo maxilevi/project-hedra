@@ -3,11 +3,11 @@
   "DisplayName": "Witch",
   "Models": [
     {
-      "Path": "$DataFile$/Assets/Chr/Witch0Idle.dae",
+      "Path": "$DataFile$/Assets/Chr/NPC/Witch0Idle.dae",
       "Scale": 1.0
     },
     {
-      "Path": "$DataFile$/Assets/Chr/Witch1Idle.dae",
+      "Path": "$DataFile$/Assets/Chr/NPC/Witch1Idle.dae",
       "Scale": 1.0
     }
   ],
