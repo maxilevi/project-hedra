@@ -19,7 +19,7 @@ namespace Hedra.Components
     /// <summary>
     ///     Description of HealthComponent.
     /// </summary>
-    public class HealthBarComponent : BaseHealthBarComponent, IRenderable
+    public class HealthBarComponent : BaseHealthBarComponent, IRenderable, INamedHealthBar
     {
         private static uint _neutralTexture;
         private static uint _hostileTexture;

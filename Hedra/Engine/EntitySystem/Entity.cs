@@ -189,7 +189,12 @@ namespace Hedra.Engine.EntitySystem
 
                 return bossHealthBar?.Name ?? "null";
             }
-            set => _name = value;
+            set
+            {
+                _name = value;
+                var healthBar = this.SearchComponent<INamedHealthBar>();
+                if (healthBar != null) healthBar.Name = _name;
+            }
         }
 
         public float Oxygen
@@ -489,6 +494,7 @@ namespace Hedra.Engine.EntitySystem
         {
             if (Disposed) return;
 
+            Disposed = true;
             World.RemoveEntity(this);
             var components = _components.ToArray(); 
             for (var i = components.Length-1; i > -1; --i)
@@ -499,7 +505,7 @@ namespace Hedra.Engine.EntitySystem
             (Model as IAudible)?.StopSound();
 
             Physics.Dispose();
-            Model.Dispose();
+            Model?.Dispose();
             AfterDisposed?.Invoke();
         }
 
@@ -555,6 +561,6 @@ namespace Hedra.Engine.EntitySystem
             }
         }
 
-        public bool Disposed => Model.Disposed;
+        public bool Disposed { get; private set; }
     }
 }
