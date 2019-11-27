@@ -50,7 +50,7 @@ namespace Hedra.Engine.Player.MapSystem
         private bool _show;
         public bool HasMarker { get; private set; }
         public bool HasQuestMarker { get; private set; }
-        public Vector3 MarkedQuestPosition { get; private set; }
+        public Func<Vector3> MarkedQuestPosition { get; private set; }
         public Vector3 MarkedDirection { get; private set; }
         private Vector3 _lastPosition;
         private int _previousActiveChunks;
@@ -110,7 +110,7 @@ namespace Hedra.Engine.Player.MapSystem
             HasMarker = true;
         }
         
-        public void MarkQuest(Vector3 Position)
+        public void MarkQuest(Func<Vector3> Position)
         {
             MarkedQuestPosition = Position;
             HasQuestMarker = true;
@@ -213,9 +213,10 @@ namespace Hedra.Engine.Player.MapSystem
             _miniMapNorth.Enable();
             _miniMapNorth.BaseTexture.TextureElement.Angle = -_player.Model.LocalRotation.Y;
 
+            var markedQuestPosition = HasQuestMarker ? MarkedQuestPosition() : Vector3.Zero;
             UpdateRingObject(_miniMapMarker, MarkedDirection, HasMarker);
-            UpdateRingObject(_miniMapQuestMarker, (MarkedQuestPosition - _player.Position).Xz().NormalizedFast().ToVector3(), HasQuestMarker);
-            if((MarkedQuestPosition - _player.Position).Xz().LengthSquared() < Chunk.Width * .25f * Chunk.Width * .25f)
+            UpdateRingObject(_miniMapQuestMarker, (markedQuestPosition - _player.Position).Xz().NormalizedFast().ToVector3(), HasQuestMarker);
+            if((markedQuestPosition - _player.Position).Xz().LengthSquared() < Chunk.Width * .1f * Chunk.Width * .1f)
                 _miniMapQuestMarker.Disable();
 
             this.DrawMap();
