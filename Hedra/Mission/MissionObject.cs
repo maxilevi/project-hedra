@@ -3,6 +3,7 @@ using Hedra.Engine.Player.QuestSystem.Views;
 using Hedra.EntitySystem;
 using Hedra.Mission.Blocks;
 using System.Numerics;
+using Hedra.Engine.QuestSystem;
 
 namespace Hedra.Mission
 {
@@ -14,14 +15,27 @@ namespace Hedra.Mission
         private IPlayer _owner;
         private IHumanoid _giver;
         private QuestView _view;
+        private readonly MissionSettings _settings;
         
-        public MissionObject(MissionBlock[] Blocks, DialogObject Dialog)
+        public MissionObject(MissionBlock[] Blocks, DialogObject Dialog, MissionSettings Settings)
         {
-            OpeningDialog = Dialog; 
+            OpeningDialog = Dialog;
+            _settings = Settings;
             _blocks = Blocks;
             _index = -1;
         }
 
+        public SerializedQuest Serialize()
+        {
+            return new SerializedQuest
+            {
+                Name = _settings.Name,
+                GiverName = _giver.Name
+            };
+        }
+
+        public bool CanSave => _settings.CanSave;
+        public bool IsStoryline => _settings.IsStoryline;
         public DialogObject OpeningDialog { get; }
         public bool HasLocation => Current.HasLocation;
         public Vector3 Location => Current.Location;

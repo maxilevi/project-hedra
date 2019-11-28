@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using Hedra.Mission;
@@ -31,21 +32,12 @@ namespace Hedra.Engine.QuestSystem
         
         public void Start(IHumanoid Giver, MissionObject Quest)
         {
+            /* Don't give storyline quest if player already has it */
+            if(_activeQuests.Any(Q => Q.IsStoryline)) return;
             Quest.Start(Giver, _player);
             _activeQuests.Insert(0, Quest);
             QuestAccepted?.Invoke(Quest);
             CheckForCompleteness();
-        }
-
-        public void SetQuests(QuestTemplate[] Quests)
-        {
-            /*
-            _activeQuests.Clear();
-            _activeQuests.AddRange(Quests.Select(MissionObject.FromTemplate).ToList());
-            _activeQuests.RemoveAll(Q => Q == null);
-            _activeQuests.ForEach(Q => Q.Start(_player));
-            _activeQuests.ForEach(Q => QuestLoaded?.Invoke(Q));
-            */
         }
 
         public void Trigger()
@@ -67,9 +59,32 @@ namespace Hedra.Engine.QuestSystem
             }
         }
 
-        public QuestTemplate[] GetTemplates()
+        public void SetSerializedQuests(SerializedQuest[] Quests)
         {
-            return new QuestTemplate[0]; //_activeQuests.Select(Q => Q.ToTemplate()).ToArray();
+            Empty();
+            for (var i = 0; i < Quests.Length; ++i)
+            {
+                var design = MissionPool.Grab(Quests[i].Name);
+                var entity = new Humanoid
+                {
+                    Name = Quests[i].GiverName
+                };
+                var quest = design.Build(_player.Position, entity, _player);
+                this.Start(entity, quest);
+                entity.Dispose();
+            }
+            /*
+            _activeQuests.Clear();
+            _activeQuests.AddRange(Quests.Select(MissionObject.FromTemplate).ToList());
+            _activeQuests.RemoveAll(Q => Q == null);
+            _activeQuests.ForEach(Q => Q.Start(_player));
+            _activeQuests.ForEach(Q => QuestLoaded?.Invoke(Q));
+            */
+        }
+        
+        public SerializedQuest[] GetSerializedQuests()
+        {
+            return _activeQuests.Where(Q => Q.CanSave).Select(Q => Q.Serialize()).ToArray();
         }
         
         public void Abandon(MissionObject Object)
@@ -85,5 +100,7 @@ namespace Hedra.Engine.QuestSystem
         }
 
         public MissionObject[] ActiveQuests => _activeQuests.ToArray();
+
+        public bool StartedStoryline => _activeQuests.Any(Q => Q.IsStoryline);
     }
 }

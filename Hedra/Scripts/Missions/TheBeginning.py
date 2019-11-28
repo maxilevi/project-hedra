@@ -6,27 +6,26 @@ from Hedra.Structures import SpawnVillageDesign
 from System import Array, Object
 
 IS_QUEST = True
-QUEST_NAME = 'VisitSpawnVillage'
+QUEST_NAME = 'TheBeginning'
 QUEST_TIER = QuestTier.Easy
-CAN_SAVE = True
+IS_STORYLINE = True
 
 def setup_timeline(position, giver, owner, rng):
     builder = MissionBuilder()
-    
+
     find = FindStructureMission()
     find.Design = SpawnVillageDesign()
     find.Position = World.SpawnVillagePoint
     find.OverrideOpeningDialog(create_dialog(find.Design.DisplayName))
-    
+
     builder.Next(find)
     builder.ReturnToComplete = False
     return builder
 
 def create_dialog(name):
     dialog = DialogObject()
-    dialog.Keyword = 'quest_spawn_dialog'
+    dialog.Keyword = 'quest_the_beginning_dialog'
     dialog.Arguments = Array[Object]([])
-    dialog.AddAfterLine(translate('quest_generic_find_structure', Array[Object]([name])))
     return dialog
 
 def can_give(position):

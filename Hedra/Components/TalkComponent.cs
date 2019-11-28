@@ -220,13 +220,19 @@ namespace Hedra.Components
             Parent.Model.BlendAnimation(_talkingAnimation);
         }
 
+        public string[] GetMany(Translation Line)
+        {
+            return Line.Get().Split(';').ToArray();
+        }
+
         private IEnumerator TalkRoutine(params object[] Args)
         {
             var billboard = (TextBillboard) Args[0];
             PlayTalkingAnimation();
-            for (var i = 0; i < _lines.Count; ++i)
+            var realLines = _lines.SelectMany(GetMany).ToArray();
+            for (var i = 0; i < realLines.Length; ++i)
             {
-                var routine = SingleLineRoutine(billboard, TextProvider.Wrap(_lines[i].Get(), 28));
+                var routine = SingleLineRoutine(billboard, TextProvider.Wrap(realLines[i], 28));
                 while (routine.MoveNext()) yield return null;
                 var waitRoutine = RoutineManager.WaitForSeconds(2f);
                 while (waitRoutine.MoveNext()) yield return null;

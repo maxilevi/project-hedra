@@ -150,10 +150,11 @@ namespace Hedra.Engine.Player.MapSystem
                 /* ReSharper disable once AssignmentInConditionalExpression */
                 if (_questMarker.Enabled &= _player.Minimap.HasQuestMarker)
                 {
+                    var markedQuestPosition = _player.Minimap.MarkedQuestPosition();
                     _questMarker.Position += 
                         Mathf.Min(
-                            Mathf.Max(Vector2.One, (_player.Minimap.MarkedQuestPosition - mapPosition).Xz()).NormalizedFast() * FogDistance,
-                            ToMapCoordinates(_player.Minimap.MarkedQuestPosition.Xz())
+                            Mathf.Max(Vector2.One, (markedQuestPosition - mapPosition).Xz()).NormalizedFast() * FogDistance,
+                            ToMapCoordinates(markedQuestPosition.Xz())
                         ).ToVector3();
                 }
                 

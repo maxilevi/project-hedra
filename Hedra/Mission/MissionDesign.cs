@@ -18,6 +18,7 @@ namespace Hedra.Mission
         public MissionObject Build(Vector3 Position, IHumanoid Giver, IPlayer Owner)
         {
             var builder = _design.Execute<MissionBuilder>("setup_timeline", Position, Giver, Owner, Utils.Rng);
+            if (builder == null) return null;
             if (builder.ReturnToComplete)
             {
                 builder.Next(new EndMission(builder.Reward)
@@ -27,6 +28,12 @@ namespace Hedra.Mission
                     Owner = Owner
                 });
             }
+            builder.SetSettings(new MissionSettings
+            {
+                IsStoryline = IsStoryline,
+                CanSave = CanSave || IsStoryline,
+                Name = Name
+            });
             return builder.Mission;
         }
 
@@ -34,7 +41,9 @@ namespace Hedra.Mission
         {
             return _design.Execute<bool>("can_give", Position);
         }
-
+        
+        public bool CanSave => _design.HasMember("CAN_SAVE") && _design.Get<bool>("CAN_SAVE");
+        public bool IsStoryline => _design.HasMember("IS_STORYLINE") && _design.Get<bool>("IS_STORYLINE");
         public QuestHint Hint =>
             _design.HasMember("QUEST_HINT") ? _design.Get<QuestHint>("QUEST_HINT") : QuestHint.NoHint;
         public QuestTier Tier => _design.Get<QuestTier>("QUEST_TIER");

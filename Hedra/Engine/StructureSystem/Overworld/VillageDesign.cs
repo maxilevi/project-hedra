@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Hedra.BiomeSystem;
 using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.CacheSystem;
@@ -13,6 +14,8 @@ using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Sound;
 using System.Numerics;
+using Hedra.Engine.QuestSystem;
+using Hedra.Mission;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
@@ -34,6 +37,18 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var builder = Structure.Parameters.Get<VillageAssembler>("Builder");
             var design = Structure.Parameters.Get<PlacementDesign>("Design");
             builder.Build(design, Structure);
+            SpawnStorylineGiver(Structure.Position + Vector3.UnitX * 10f);
+        }
+
+        private static void SpawnStorylineGiver(Vector3 Position)
+        {
+            var human = World.WorldBuilding.SpawnHumanoid(HumanType.Bard, Position);
+            var missionDesign = MissionPool.Grab(Quests.TheBeginning);
+            if (!LocalPlayer.Instance.Questing.StartedStoryline)
+            {
+                human.AddComponent(new StorylineQuestGiverComponent(human, missionDesign));
+            }
+            human.Position = Position;
         }
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)

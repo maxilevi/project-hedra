@@ -126,7 +126,7 @@ namespace Hedra.Engine.Management
                 Items = Player.Inventory.ToArray(),
                 Recipes = Player.Crafting.RecipeNames,
                 ToolbarData = Player.Toolbar.Serialize(),
-                Quests = Player.Questing.GetTemplates(),
+                Quests = Player.Questing.GetSerializedQuests(),
                 SkillsData = Player.AbilityTree.Serialize(),
                 RealmData = Player.Realms.Serialize()
             };
@@ -193,13 +193,13 @@ namespace Hedra.Engine.Management
             return information;
         }
 
-        private static QuestTemplate[] LoadQuests(BinaryReader Reader)
+        private static SerializedQuest[] LoadQuests(BinaryReader Reader)
         {
-            var quests = new List<QuestTemplate>();
+            var quests = new List<SerializedQuest>();
             var length = Reader.ReadInt32();
             for(var i = 0; i < length; ++i)
             {
-                var quest = QuestTemplate.FromArray(Reader.ReadBytes(Reader.ReadInt32()));
+                var quest = SerializedQuest.FromArray(Reader.ReadBytes(Reader.ReadInt32()));
                 if(MissionPool.Exists(quest.Name))
                     quests.Add(quest);
                 else

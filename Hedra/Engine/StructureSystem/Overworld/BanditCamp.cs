@@ -30,7 +30,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public Humanoid Rescuee { get; private set; }
         public Entity[] Enemies { get; set; }
         public bool Cleared { get; private set; }
-        public bool Completed => _shouldUntie;
+        public bool Completed => !Rescuee.IsTied;
         public float Radius { get; set; }
         public int EnemiesLeft => Enemies.Count(E => !E.IsDead);
         private readonly Campfire _campfire;
@@ -61,7 +61,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 for (var i = 0; i < Enemies.Length; i++)
                 {
                     if (Enemies[i] != null && !Enemies[i].IsDead && (Enemies[i].Position - Position).Xz().LengthSquared()
-                        < Radius * Radius * .9f * .9f)
+                        < Radius * Radius * .75f * .75f)
                     {
                         allDead = false;
                     }
@@ -70,6 +70,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 this.Cleared = allDead;
             }
             _campfire.Position = Position.Xz().ToVector3() + Vector3.UnitY * Physics.HeightAtPosition(this.Position);
+            _campfire.SetCanCraft(false);
             this.ManageOldMan();
         }
         

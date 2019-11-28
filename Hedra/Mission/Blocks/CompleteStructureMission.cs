@@ -12,7 +12,6 @@ namespace Hedra.Mission.Blocks
         public override bool IsCompleted => StructureObject.Completed;
         public override void Setup()
         {
-            throw new System.NotImplementedException();
         }
 
         public override QuestView BuildView()

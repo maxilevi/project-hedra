@@ -29,6 +29,7 @@ namespace Hedra.Engine.Player.QuestSystem
         private readonly BackgroundTexture _renderTexture;
         private readonly Vector2 _descriptionPosition;
         private readonly Button _abandonButton;
+        private readonly GUIText _storylineLabel;
         private readonly BackgroundTexture _renderBackground;
         private readonly IPlayer _player;
         
@@ -61,6 +62,13 @@ namespace Hedra.Engine.Player.QuestSystem
                     IdPointer = () => CurrentQuest?.View.GetTextureId() ?? GUIRenderer.TransparentTexture
                 }
             };
+            _storylineLabel = new GUIText(
+                Translation.Create("storyline_quest"),
+                Vector2.Zero,
+                Color.Gold,
+                FontCache.GetBold(10)
+            );
+            _storylineLabel.Position = _journalBackground.Position - Vector2.UnitY * (_journalBackground.Scale.Y - _storylineLabel.Scale.Y);
             var abandonSize = Graphics2D.SizeFromAssets("Assets/UI/AbandonButton.png") * .4f;
             _abandonButton = new Button(
                 _journalBackground.Position - Vector2.UnitY * (_journalBackground.Scale.Y - abandonSize.Y),
@@ -84,6 +92,7 @@ namespace Hedra.Engine.Player.QuestSystem
             Panel.AddElement(_renderTexture);
             Panel.AddElement(_descriptionText);
             Panel.AddElement(_journalBackground);
+            Panel.AddElement(_storylineLabel);
 
             var leftJournalTopCorner = -Vector2.UnitX * _journalBackground.Scale.X 
                                        + Vector2.UnitY * (_journalBackground.Scale.Y + TitleText.Scale.Y * .5f);
@@ -110,6 +119,15 @@ namespace Hedra.Engine.Player.QuestSystem
                 _renderTexture.Position += Vector2.UnitY * _descriptionText.Scale.Y * 2;
                 _renderBackground.Position = _renderTexture.Position;
                 _renderBackground.Scale = _renderTexture.Scale * 1.15f;
+                if (Panel.Enabled)
+                {
+                    _storylineLabel.Disable();
+                    if (CurrentQuest.IsStoryline)
+                    {
+                        _abandonButton.Disable();
+                        _storylineLabel.Enable();
+                    }
+                }
             }
             else
             {
@@ -118,6 +136,7 @@ namespace Hedra.Engine.Player.QuestSystem
                 _renderTexture.Disable();
                 _abandonButton.Disable();
                 _renderBackground.Disable();
+                _storylineLabel.Disable();
             }
 
             UpdateMarkedQuest();
@@ -128,7 +147,7 @@ namespace Hedra.Engine.Player.QuestSystem
             if (Quests.Length > 0)
             {
                 if (CurrentQuest.HasLocation)
-                    _player.Minimap.MarkQuest(CurrentQuest.Location);
+                    _player.Minimap.MarkQuest(() => CurrentQuest.Location);
                 else
                     _player.Minimap.UnMarkQuest();
             }

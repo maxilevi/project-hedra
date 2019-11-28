@@ -77,6 +77,7 @@ namespace Hedra.Engine.SkillSystem.Warrior
         
         public override void Update()
         {
+            _trail.Update();
             if (!Casting) return;
             if (ShouldEnd) Disable();
 
@@ -87,7 +88,6 @@ namespace Hedra.Engine.SkillSystem.Warrior
                 DamageNear();
                 _frameCounter = 0;
             }
-            _trail.Update();
             _passedTime += Time.DeltaTime;
             _frameCounter += Time.DeltaTime;
             _rotationY += Time.DeltaTime * 1000f;

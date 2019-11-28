@@ -33,6 +33,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
     /// </summary>
     public class Campfire : CraftingStation
     {
+        private bool _canCraft;
+        protected override bool CanCraft => _canCraft;
         protected override string CraftingMessage => Translations.Get("use_campfire");
         public IHumanoid Bandit { get; set; }
         private static ParticleSystem _fireParticles;
@@ -45,6 +47,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             if(_fireParticles == null)
                 _fireParticles = new ParticleSystem(Vector3.Zero);
             _fireParticles.HasMultipleOutputs = true;
+            _canCraft = true;
         }
 
         public override Crafting.CraftingStation StationType => Crafting.CraftingStation.Campfire;
@@ -119,6 +122,11 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 this._sound.Locked = false;
                 this._sound = null;
             }
+        }
+
+        public void SetCanCraft(bool CanCraft)
+        {
+            _canCraft = CanCraft;
         }
 
         private void HandleBurning()

@@ -204,7 +204,7 @@ namespace Hedra.Engine.Management
         {
             if (!Stream.CanRead) return null;
             var reader = new BinaryReader(Stream);
-            var k = default(string);
+            var similarPath = default(string);
             var sanitizedName = Name.Replace(@"\", "/").Replace("$DataFile$", string.Empty).Trim();
             var length = reader.BaseStream.Length;
             while (reader.BaseStream.Position < length)
@@ -216,7 +216,7 @@ namespace Hedra.Engine.Management
                 var dataPosition = reader.ReadInt64();
                 if (Path.GetFileName(header).Equals(Path.GetFileName(Name)))
                 {
-                    k = header;
+                    similarPath = header;
                 }
 
                 var sanitizedHeader = header.Replace(@"\", "/");
@@ -227,9 +227,9 @@ namespace Hedra.Engine.Management
                 }
             }
 
-            if (k != null)
+            if (similarPath != null)
             {
-                int a = 0;
+                Log.WriteLine($"Failed to find path '{sanitizedName}' but found similar path '{similarPath}'. Was it a typo?");
             }
             return null;
         }

@@ -147,7 +147,10 @@ use_workbench = USE WORKBENCH
 use_loom = USE LOOM
 quests = JOURNAL
 abandon_quest = - ABANDON -
+storyline_quest = STORYLINE QUEST
 empty_journal = Empty.
+quest_failed_to_create_0 = Sorry, I forgot what I was going to tell you.
+quest_failed_to_create_1 = I can't seem to remember what was troubling me. 
 quest_gold = GOLD
 quest_experience = EXPERIENCE
 quest_skill_point = SKILL POINT
@@ -208,6 +211,9 @@ quest_fish_item_short = FISH OUT $(BLUE)(BOLD)(CAPS){{0}}'S $(ORANGE)(BOLD)(CAPS
 quest_fish_item_description = $(BLUE)(BOLD){{0}} lost his precious $(ORANGE)(BOLD)(CAPS){{1}} while swimming. Help him retrieve it by fishing near the marked zone. \n\n$(GRAY)(BOLD){HINT: }You can buy a fishing rod from the merchant at the village.
 quest_fish_item_item_reward_0 = Thank you for helping me but it looks like the $(ORANGE)(BOLD){{0}} got a little bit rusty. You can keep it.
 
+
+quest_rescue_erudite_dialog_0 = Adventurer! Please help me!;While searching for wood my father was kidnapped by a bunch of bandits.;I found out they have a camp near here. Look, I marked it on your map. Please bring him back!
+quest_rescue_erudite_description = $(BLUE)(BOLD){{0}}'s father has been kidnapped. Find his location and rescue him from the aggressors. \n$(GRAY)(BOLD){HINT: }See the map for more details.
 
 # -- Class Names --
 mage = Mage
@@ -653,3 +659,6 @@ attack_damage_label = AD
 rename_btn = RENAME
 apply_rename_btn = APPLY
 punching_bag_name = Training Dummy
+
+# Lore quests dialogs
+quest_the_beginning_dialog_0 = You've finally arrived! I know your memory is hazy, but you were brought here for a specific purpose.;I know you are tired so let's start with something simple. Try talking to some $(BOLD)(RED)(CAPS){VILLAGERS} so you get used to it.

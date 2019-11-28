@@ -50,8 +50,9 @@ namespace Hedra.Mission.Blocks
 
         public override void Cleanup()
         {
-            Humanoid.RemoveComponent(Humanoid.SearchComponent<TalkComponent>());
-            Humanoid.RemoveComponent(Humanoid.SearchComponent<ThoughtsComponent>());
+            Humanoid.RemoveComponent<TalkComponent>();
+            if(Humanoid.SearchComponent<ThoughtsComponent>() != null)
+                Humanoid.RemoveComponent<ThoughtsComponent>();
         }
 
         public override QuestView BuildView()

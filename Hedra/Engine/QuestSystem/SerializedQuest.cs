@@ -2,17 +2,16 @@ using System.Collections.Generic;
 using System.Text;
 using Hedra.Engine.ModuleSystem;
 using System.Numerics;
+using Hedra.Engine.CacheSystem;
 
 namespace Hedra.Engine.QuestSystem
 {
-    public class QuestTemplate : SerializableTemplate<QuestTemplate>
+    public class SerializedQuest : SerializableTemplate<SerializedQuest>
     {
         public string Name { get; set; }
-        public int Seed { get; set; }
-        public int Steps { get; set; }
+        public string GiverName { get; set; }
         public Dictionary<string, object> Content { get; set; }
-        public GiverTemplate Giver { get; set; }
-          
+
         public byte[] ToArray()
         {
             return Encoding.ASCII.GetBytes(
@@ -20,7 +19,7 @@ namespace Hedra.Engine.QuestSystem
             );
         }
         
-        public static QuestTemplate FromArray(byte[] Array)
+        public static SerializedQuest FromArray(byte[] Array)
         {
             var str = Encoding.ASCII.GetString(Array);
             return FromJson(str);

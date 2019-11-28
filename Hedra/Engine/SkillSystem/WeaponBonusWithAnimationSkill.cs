@@ -9,13 +9,19 @@ namespace Hedra.Engine.SkillSystem
     public abstract class WeaponBonusWithAnimationSkill : SingleAnimationSkill<IPlayer>
     {
         private readonly WeaponBonusSkillComposition _skill;
-        
+
+        public override void Initialize(ISkillUser User)
+        {
+            base.Initialize(User);
+            _skill.Initialize(User);
+        }
+
         protected WeaponBonusWithAnimationSkill()
         {
             _skill = new WeaponBonusSkillComposition
             {
                 ApplyBonusToEnemyPublic = ApplyBonusToEnemy,
-                OutlineColorPublic = OutlineColor
+                OutlineColorPublic = OutlineColor,
             };
         }
 

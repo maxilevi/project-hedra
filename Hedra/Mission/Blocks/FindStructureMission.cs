@@ -9,6 +9,7 @@ namespace Hedra.Mission.Blocks
 {
     public class FindStructureMission : MissionBlock
     {
+        private string _missionDescription;
         public override bool IsCompleted => (Position - Owner.Position).LengthSquared() <
                                             Math.Pow(Design.PlateauRadius, 2);
         public override void Setup()
@@ -27,8 +28,13 @@ namespace Hedra.Mission.Blocks
         public override bool HasLocation => true;
         public override Vector3 Location => Position;
         public override string ShortDescription => Translations.Get("quest_find_structure_short", Design.DisplayName);
-        public override string Description => Translations.Get("quest_find_structure_description", Giver.Name, Design.DisplayName);
+        public override string Description => _missionDescription ?? Translations.Get("quest_find_structure_description", Giver.Name, Design.DisplayName);
 
+        public void SetDescription(string New)
+        {
+            _missionDescription = New;
+        }
+        
         public override DialogObject DefaultOpeningDialog => new DialogObject
         {
             Keyword = "quest_find_structure_dialog",

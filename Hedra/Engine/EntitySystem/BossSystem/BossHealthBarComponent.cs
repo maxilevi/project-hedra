@@ -20,6 +20,7 @@ using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using System.Numerics;
+using Hedra.Components;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 using Hedra.Numerics;
@@ -30,7 +31,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
     /// <summary>
     ///     Description of BossHealthBarComponent.
     /// </summary>
-    public class BossHealthBarComponent : BaseHealthBarComponent
+    public class BossHealthBarComponent : BaseHealthBarComponent, INamedHealthBar
     {
         private static uint _bossBarTexture;
 
@@ -41,11 +42,11 @@ namespace Hedra.Engine.EntitySystem.BossSystem
         private readonly Vector2 _barDefaultPosition;
         private readonly Vector2[] _originalScales;
         private readonly GUIText _nameText;
+        private string _name;
         private float _targetSize;
         private bool _initialized;
         public bool Enabled { get; set; } = true;
         public int ViewRange { get; set; } = 128;
-        public string Name { get; }
         private static Vector2 _bossBarTextureSize;
         private static Vector2 _backgroundTextureSize;
         private static uint _backgroundTextureId;
@@ -68,7 +69,6 @@ namespace Hedra.Engine.EntitySystem.BossSystem
         
         public BossHealthBarComponent(IEntity Parent, string Name) : base(Parent)
         {
-            this.Name = Name;
             _panel = new Panel();
              _backgroundTexture = new BackgroundTexture(
                 0,
@@ -84,7 +84,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
                 DrawOrder.Before
             );
             _percentageText = new GUIText(string.Empty, _healthBar.Position, Color.White, FontCache.GetBold(10));
-            _nameText = new GUIText(Name.ToUpperInvariant(), new Vector2(0f, .815f), Color.White, FontCache.GetBold(12));
+            _nameText = new GUIText(string.Empty, new Vector2(0f, .815f), Color.White, FontCache.GetBold(12));
 
             _panel.AddElement(_backgroundTexture);
             _panel.AddElement(_nameText);
@@ -106,6 +106,17 @@ namespace Hedra.Engine.EntitySystem.BossSystem
                     _backgroundTexture.TextureElement.TextureId = _backgroundTextureId;
                 }
             );
+            this.Name = Name;
+        }
+
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                _nameText.Text = _name;
+            }
         }
 
         public override void Update()

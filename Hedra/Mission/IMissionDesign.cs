@@ -11,5 +11,7 @@ namespace Hedra.Mission
         QuestTier Tier { get; }
         QuestHint Hint { get; }
         string Name { get; }
+        bool IsStoryline { get; }
+        bool CanSave { get; }
     }
 }

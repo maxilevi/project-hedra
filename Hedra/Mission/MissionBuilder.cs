@@ -27,7 +27,14 @@ namespace Hedra.Mission
             Reward = New;
         }
 
+        public void SetSettings(MissionSettings New)
+        {
+            Settings = New;
+        }
+
         public QuestReward Reward { get; private set; } = new QuestReward();
+        
+        public MissionSettings Settings { get; private set; } = new MissionSettings();
 
         public MissionObject Mission
         {
@@ -35,7 +42,7 @@ namespace Hedra.Mission
             {
                 if(_designs.Count == 0)
                     throw new ArgumentOutOfRangeException($"A mission needs at least 1 mission block");
-                var mission = new MissionObject(_designs.ToArray(), _designs[0].OpeningDialog);
+                var mission = new MissionObject(_designs.ToArray(), _designs[0].OpeningDialog, Settings);
                 mission.MissionEnd += MissionEnd;
                 return mission;
             }

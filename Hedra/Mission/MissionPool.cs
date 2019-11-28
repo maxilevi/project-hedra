@@ -46,9 +46,9 @@ namespace Hedra.Mission
             return Grab(Name.ToString());
         }
 
-        public static IMissionDesign Random(Vector3 Position, QuestTier Tier = QuestTier.Any, QuestHint Hint = QuestHint.NoHint)
+        public static IMissionDesign Random(Vector3 Position, QuestTier Tier = QuestTier.Any, QuestHint Hint = QuestHint.InvalidHint)
         {
-            var possibilities = MissionScripts.Where(M => M.CanGive(Position)).ToArray();
+            var possibilities = MissionScripts.Where(M => M.CanGive(Position) && !M.IsStoryline).ToArray();
             var map = new Dictionary<QuestTier, List<IMissionDesign>>();
             for (var i = 0; i < possibilities.Length; ++i)
             {
@@ -95,7 +95,8 @@ namespace Hedra.Mission
 
     public enum Quests
     {
-        VisitSpawnVillage
+        VisitSpawnVillage,
+        TheBeginning
     }
 
     public enum QuestTier
@@ -110,6 +111,7 @@ namespace Hedra.Mission
     {
         NoHint,
         Fishing,
-        Magic
+        Magic,
+        InvalidHint
     }
 }

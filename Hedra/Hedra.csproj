@@ -312,6 +312,7 @@
     <Compile Include="Components\DamageComponent.cs" />
     <Compile Include="Components\DarkWizardThoughtsComponent.cs" />
     <Compile Include="Components\HealthBarComponent.cs" />
+    <Compile Include="Components\INamedHealthBar.cs" />
     <Compile Include="Components\InnkeeperComponent.cs" />
     <Compile Include="Components\MasonComponent.cs" />
     <Compile Include="Components\RideComponent.cs" />
@@ -342,6 +343,7 @@
     <Compile Include="Engine\CacheSystem\FishingPostIconCache.cs" />
     <Compile Include="Engine\CacheSystem\ShroomDimensionPortalCache.cs" />
     <Compile Include="Engine\CacheSystem\ShroomDimensionPortalIconCache.cs" />
+    <Compile Include="Engine\CacheSystem\StorylineCache.cs" />
     <Compile Include="Engine\CacheSystem\WizardTowerCache.cs" />
     <Compile Include="Engine\Core\SequentialList.cs" />
     <Compile Include="Engine\DataStructures\AABB.cs" />
@@ -380,6 +382,7 @@
     <Compile Include="Engine\Player\Inventory\InventoryCompanionInfo.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryCompanionRenamePanel.cs" />
     <Compile Include="Engine\QuestSystem\BaseStructureWithChest.cs" />
+    <Compile Include="Engine\QuestSystem\ForgotQuestThoughtsComponent.cs" />
     <Compile Include="Engine\QuestSystem\GiverTemplate.cs" />
     <Compile Include="Engine\QuestSystem\ICompletableStructure.cs" />
     <Compile Include="Engine\QuestSystem\IQuest.cs" />
@@ -387,8 +390,9 @@
     <Compile Include="Engine\QuestSystem\QuestComponent.cs" />
     <Compile Include="Engine\QuestSystem\QuestGiverComponent.cs" />
     <Compile Include="Engine\QuestSystem\QuestInventory.cs" />
-    <Compile Include="Engine\QuestSystem\QuestTemplate.cs" />
+    <Compile Include="Engine\QuestSystem\SerializedQuest.cs" />
     <Compile Include="Engine\QuestSystem\QuestThoughtsComponent.cs" />
+    <Compile Include="Engine\QuestSystem\StorylineQuestGiverComponent.cs" />
     <Compile Include="Engine\Rendering\BaseVertexData.cs" />
     <Compile Include="Engine\Rendering\Core\LightSettings.cs" />
     <Compile Include="Engine\Rendering\Core\UBO.cs" />
@@ -464,6 +468,7 @@
     <Compile Include="Mission\MissionDesign.cs" />
     <Compile Include="Mission\MissionObject.cs" />
     <Compile Include="Mission\MissionPool.cs" />
+    <Compile Include="Mission\MissionSettings.cs" />
     <Compile Include="Mission\QuestReward.cs" />
     <Compile Include="ModelHandlers\BeetleHandler.cs" />
     <Compile Include="Mission\MissionBuilder.cs" />
@@ -8440,7 +8445,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Animations\WarriorFish.dae">
-      <Link>Assets\WarriorFish.dae</Link>
+      <Link>Assets\Chr\WarriorFish.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Animations\WarriorFishing.dae">
@@ -14998,10 +15003,14 @@
     <Content Include="Scripts\Missions\MissionCore.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\Missions\RescueErudite.py" />
     <Content Include="Scripts\Missions\StealWitchFarm.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\Missions\StealWitchPotion.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\Missions\TheBeginning.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\Missions\VisitSpawnVillage.py">

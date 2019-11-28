@@ -172,7 +172,7 @@ namespace Hedra.Engine.Bullet
         private static void AssertIsNotFailingThroughFloor(RigidBody Body)
         {
             var position = Body.WorldTransform.Origin;
-            if (position.Y < -100)
+            if (position.Y < 0)
             {
                 var information = (PhysicsObjectInformation) Body.UserObject;
                 Log.WriteLine($"'{(information.IsEntity ? information.Entity.Name : information.Name)}' fell through the world at '{position}'. Fixing its height...");

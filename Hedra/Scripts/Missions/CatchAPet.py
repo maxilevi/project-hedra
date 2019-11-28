@@ -12,6 +12,7 @@ IS_QUEST = True
 QUEST_NAME = 'CatchAPet'
 QUEST_TIER = QuestTier.Easy
 MAX_DISTANCE_SQUARED = 256 ** 2
+BEST_DISTANCE_SQUARED = 256 ** 2
 MIN_DISTANCE_SQUARED = 48 ** 2
 VALID_PETS = [
     'Pug'
@@ -30,6 +31,8 @@ def setup_timeline(position, giver, owner, rng):
     builder = MissionBuilder()
     
     animals = get_nearby_animals(position)
+    if not animals:
+        return None
     catch = CatchAnimalMission()
     catch.Animal = animals[rng.Next(0, len(animals))]
     builder.Next(catch)

@@ -1,6 +1,7 @@
 using System;
 using Hedra.Components;
 using Hedra.Engine.CacheSystem;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using Hedra.Game;
@@ -20,7 +21,7 @@ namespace Hedra.Engine.QuestSystem
             if(Parent.SearchComponent<TalkComponent>() != null)
                 throw new ArgumentException("There can only be 1 talk component");
             _questArchetype = QuestArchetype;
-            Parent.ShowIcon(CacheItem.AttentionIcon);
+            Parent.ShowIcon(AlertIcon);
             _talk = new TalkComponent(Parent);
             _talk.OnTalkingStarted += CreateQuest;
             _talk.OnTalkingEnded += AddQuest;
@@ -50,7 +51,7 @@ namespace Hedra.Engine.QuestSystem
 
         private void AddQuest(IEntity Talker)
         {
-            if(!(Talker is IPlayer player) || (Parent.Position - player.Position).LengthSquared() > 32 * 32) return;
+            if(!(Talker is IPlayer player) || (Parent.Position - player.Position).LengthSquared() > 32 * 32 || _quest == null) return;
             _canGiveQuest = false;
             player.Questing.Start(Parent, _quest);
             player.Questing.QuestAbandoned += OnQuestAbandoned;
@@ -64,7 +65,14 @@ namespace Hedra.Engine.QuestSystem
             _quest?.Dispose();
             _quest = _questArchetype.Build(Parent.Position, Parent, player);
             RemoveThoughtsIfNecessary();
-            Parent.AddComponent(new QuestThoughtsComponent(Parent, _quest.OpeningDialog));
+            if (_quest != null)
+            {
+                Parent.AddComponent(new QuestThoughtsComponent(Parent, _quest.OpeningDialog));
+            }
+            else
+            {
+                Parent.AddComponent(new ForgotQuestThoughtsComponent(Parent));
+            }
         }
 
         private void RemoveThoughtsIfNecessary()
@@ -84,5 +92,7 @@ namespace Hedra.Engine.QuestSystem
             Parent.ShowIcon(null);
             base.Dispose();
         }
+
+        protected virtual CacheItem AlertIcon => CacheItem.AttentionIcon;
     }
 }
