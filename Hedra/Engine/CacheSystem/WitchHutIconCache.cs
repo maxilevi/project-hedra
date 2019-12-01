@@ -9,7 +9,7 @@ namespace Hedra.Engine.CacheSystem
         
         public WitchHutIconCache()
         {
-            AddModel(AssetManager.PLYLoader("Assets/Env/Structures/WitchHut0-Icon.ply", Vector3.One));
+            AddModel(AssetManager.PLYLoader("Assets/Env/Structures/WitchHut/WitchHut0-Icon.ply", Vector3.One));
         }
     }
 }

@@ -74,4 +74,4 @@ def build_reward(rng):
     return reward
 
 def can_give(position):
-    return len(MissionCore.nearby_structs_designs(position, GhostTownPortalDesign, MAX_DISTANCE)) > 0
+    return False#len(MissionCore.nearby_structs_designs(position, GhostTownPortalDesign, MAX_DISTANCE)) > 0

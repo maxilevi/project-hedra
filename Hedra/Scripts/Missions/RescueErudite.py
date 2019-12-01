@@ -28,7 +28,7 @@ def setup_timeline(position, giver, owner, rng):
     builder.Next(complete)
     
     builder.SetReward(MissionCore.build_generic_reward(rng))
-
+    builder.FailWhen = lambda : bandit_camp.WorldObject.Rescuee.IsDead
     return builder
 
 def create_dialog(name):

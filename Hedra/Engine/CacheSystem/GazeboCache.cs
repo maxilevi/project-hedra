@@ -9,8 +9,8 @@ namespace Hedra.Engine.CacheSystem
 
         public GazeboCache()
         {
-            AddModel(AssetManager.PLYLoader("Assets/Env/Structures/Gazebo0.ply", Scale));
-            AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Structures/Gazebo0.ply", Scale));
+            AddModel(AssetManager.PLYLoader("Assets/Env/Structures/Gazebo/Gazebo0.ply", Scale));
+            AddShapes(AssetManager.LoadCollisionShapes("Assets/Env/Structures/Gazebo/Gazebo0.ply", Scale));
         }
         
         private static Vector3 Scale => Vector3.One * 12f;

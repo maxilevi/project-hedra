@@ -23,6 +23,17 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
         }
 
+        public void EnsureHutIsEmpty()
+        {
+            for(var i = 0; i < Enemies.Length; ++i)
+                Enemies[i].Dispose();
+        }
+        
+        public void EnsureWitchesSpawned()
+        {
+            
+        }
+
         public override void Dispose()
         {
             base.Dispose();

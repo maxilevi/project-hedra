@@ -2,8 +2,12 @@ using Hedra.Engine.ItemSystem;
 
 namespace Hedra.Mission
 {
+    public delegate void OnRewardGiven();
+    
     public class QuestReward
     {
+        public event OnRewardGiven RewardGiven;
+        
         public int Gold { get; set; }
         public int Experience { get; set; }
         public Item Item { get; set; }
@@ -15,6 +19,11 @@ namespace Hedra.Mission
         public bool HasSkillPoint => SkillPoint != 0;
         
         public DialogObject CustomDialog { get; set; }
+
+        public void InvokeRewardGiven()
+        {
+            RewardGiven?.Invoke();
+        }
     }
 }
 /*

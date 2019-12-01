@@ -18,7 +18,7 @@ namespace Hedra.AISystem.Behaviours
 
         public override void Update()
         {
-            if (!Traverse.HasTarget && (Target.Position - Parent.Position).Xz().ToVector3().LengthSquared() < GeneralSettings.UpdateDistanceSquared * .75f)
+            if (Parent.IsStuck || !Traverse.HasTarget && (Target.Position - Parent.Position).Xz().ToVector3().LengthSquared() < GeneralSettings.UpdateDistanceSquared * .75f)
             {
                 var targetDirection = (Target.Position - Parent.Position).Xz().ToVector3().NormalizedFast();
                 Traverse.SetTarget(-targetDirection * 16f + Parent.Position);

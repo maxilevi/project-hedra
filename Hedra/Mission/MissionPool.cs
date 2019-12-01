@@ -87,7 +87,7 @@ namespace Hedra.Mission
         
         private static bool IsMission(Script Mission)
         {
-            return Mission.HasMember(IsQuestName);
+            return Mission.HasMember(IsQuestName) && Mission.Get<bool>(IsQuestName);
         }
 
         public static IMissionDesign[] Designs => MissionScripts.ToArray();

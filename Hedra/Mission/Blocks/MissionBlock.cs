@@ -5,8 +5,15 @@ using System.Numerics;
 
 namespace Hedra.Mission.Blocks
 {
+    public delegate void OnMissionBlockEnd();
+
+    public delegate void OnMissionBlockStart();
+    
     public abstract class MissionBlock
     {
+        public event OnMissionBlockEnd MissionBlockEnd;
+        public event OnMissionBlockStart MissionBlockStart;
+        
         private DialogObject _newDialog;
         public IPlayer Owner { get; set; }
         public IHumanoid Giver { get; set; }
@@ -24,11 +31,17 @@ namespace Hedra.Mission.Blocks
         }
 
         public DialogObject OpeningDialog => _newDialog ?? DefaultOpeningDialog;
+
+        public void Start()
+        {
+            MissionBlockStart?.Invoke();
+        }
         
         public virtual void Cleanup()
         {
-            
+            MissionBlockEnd?.Invoke();
         }
+        
         public virtual void Dispose()
         {
             

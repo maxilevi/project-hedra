@@ -146,10 +146,21 @@ namespace Hedra.Engine.Player.QuestSystem
         {
             if (Quests.Length > 0)
             {
-                if (CurrentQuest.HasLocation)
-                    _player.Minimap.MarkQuest(() => CurrentQuest.Location);
+                var quest = CurrentQuest;
+                if (quest.HasLocation)
+                {
+                    _player.Minimap.MarkQuest(
+                        () =>
+                        {
+                            if(quest.Disposed) return quest.Location;
+                            _player.Minimap.UnMarkQuest();
+                            return Vector3.Zero;
+                        });
+                }
                 else
+                {
                     _player.Minimap.UnMarkQuest();
+                }
             }
             else
             {

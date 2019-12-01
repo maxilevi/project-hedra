@@ -7,10 +7,18 @@ namespace Hedra.Mission
 {
     public delegate void OnMissionEnd();
 
+    public delegate void OnMissionStart();
+
+    public delegate void OnMissionDispose();
+
     public class MissionBuilder
     {
+        public Func<bool> FailWhen { get; set; }
+        public OnMissionDispose MissionDispose;
+        public event OnMissionStart MissionStart;
         public event OnMissionEnd MissionEnd;
         private readonly List<MissionBlock> _designs;
+        private MissionObject _mission;
 
         public MissionBuilder()
         {
@@ -40,11 +48,16 @@ namespace Hedra.Mission
         {
             get
             {
+                if (_mission != null) return _mission;
                 if(_designs.Count == 0)
                     throw new ArgumentOutOfRangeException($"A mission needs at least 1 mission block");
                 var mission = new MissionObject(_designs.ToArray(), _designs[0].OpeningDialog, Settings);
                 mission.MissionEnd += MissionEnd;
-                return mission;
+                mission.MissionDispose += MissionDispose;
+                mission.MissionStart += MissionStart;
+                mission.FailWhen = FailWhen;
+                mission.QuestType = Settings.Name;
+                return _mission = mission;
             }
         }
 

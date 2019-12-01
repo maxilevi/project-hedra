@@ -11,6 +11,7 @@ namespace Hedra.Engine.QuestSystem
     
     public class QuestInventory
     {
+        public event OnQuestChanged QuestFailed;
         public event OnQuestChanged QuestAccepted;
         public event OnQuestChanged QuestCompleted;
         public event OnQuestChanged QuestAbandoned;
@@ -38,6 +39,14 @@ namespace Hedra.Engine.QuestSystem
             _activeQuests.Insert(0, Quest);
             QuestAccepted?.Invoke(Quest);
             CheckForCompleteness();
+        }
+
+        public void Update()
+        {
+            for (var i = 0; i < _activeQuests.Count; ++i)
+            {
+                _activeQuests[i].Update();
+            }
         }
 
         public void Trigger()
@@ -92,6 +101,13 @@ namespace Hedra.Engine.QuestSystem
             Object.Abandon();
             _activeQuests.Remove(Object);
             QuestAbandoned?.Invoke(Object);
+        }
+
+        public void Fail(MissionObject Object)
+        {
+            Object.Abandon();
+            _activeQuests.Remove(Object);
+            QuestFailed?.Invoke(Object);
         }
         
         public void Empty()

@@ -29,7 +29,7 @@ namespace Hedra.Mission.Blocks
             Humanoid.AddComponent(_talk);
         }
 
-        private void OnTalkingStarted(IEntity Talker)
+        protected virtual void OnTalkingStarted(IEntity Talker)
         {
             var thoughts = new QuestThoughtsComponent(Humanoid, _dialog);
             Humanoid.AddComponent(thoughts);
@@ -50,6 +50,7 @@ namespace Hedra.Mission.Blocks
 
         public override void Cleanup()
         {
+            base.Cleanup();
             Humanoid.RemoveComponent<TalkComponent>();
             if(Humanoid.SearchComponent<ThoughtsComponent>() != null)
                 Humanoid.RemoveComponent<ThoughtsComponent>();

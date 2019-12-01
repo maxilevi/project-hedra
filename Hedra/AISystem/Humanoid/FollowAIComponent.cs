@@ -7,11 +7,13 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
+using Hedra.AISystem.Behaviours;
 using Hedra.Core;
 using Hedra.Engine;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Numerics;
 
@@ -21,28 +23,28 @@ namespace Hedra.AISystem.Humanoid
     /// <summary>
     /// Description of OldManAIComponent.
     /// </summary>
-    public class FollowAIComponent : EntityComponent
+    public class FollowAIComponent : BasicAIComponent
     {
-        public Entity ToFollow = null;
-        public bool DoLogic = true;
-        public FollowAIComponent(Entity Parent) : base(Parent){}
-        public FollowAIComponent(Entity Parent, Entity ToFollow) : base(Parent){
-            this.ToFollow = ToFollow;
+        private readonly FollowBehaviour _follow;
+        public FollowAIComponent(IEntity Parent, IEntity ToFollow) : base(Parent)
+        {
+            _follow = new FollowBehaviour(Parent)
+            {
+                Target = ToFollow
+            };
         }
         
-        public override void Update(){
-            if(ToFollow == null || !DoLogic) return;
+        public override void Update()
+        {
+            _follow.Update();
+        }
 
-            if ((ToFollow.Position - Parent.Position).LengthSquared() >
-                GeneralSettings.UpdateDistanceSquared * .5f)
-                Parent.Position = ToFollow.Position;
-
-            if( (ToFollow.Position - Parent.Position).LengthSquared() > 8*8 )
-            {                
-                Parent.Orientation = (ToFollow.Position - Parent.Position).Xz().NormalizedFast().ToVector3();
-                Parent.Model.TargetRotation = Physics.DirectionToEuler( Parent.Orientation );
-                Parent.Physics.Move();
-            }
+        public override AIType Type => AIType.Neutral;
+        
+        public override void Dispose()
+        {
+            base.Dispose();
+            _follow.Dispose();
         }
     }
 }

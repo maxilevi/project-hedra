@@ -44,6 +44,7 @@ namespace Hedra.Components
         public event OnTalkEventHandler OnTalkingStarted;
         public bool Talking { get; private set; }
         public bool CanTalk { get; set; } = true;
+        public bool AutoRemove { get; set; }
 
         private const float CharacterThreshold = .05f;
         private const int TalkRadius = 12;
@@ -183,7 +184,7 @@ namespace Hedra.Components
             return new Translation[0];
         }
 
-        private void TalkToPlayer()
+        public void TalkToPlayer()
         {
             _talker = GameManager.Player;
             OnTalkingStarted?.Invoke(_talker);
@@ -195,13 +196,13 @@ namespace Hedra.Components
                 return Parent.Position + Vector3.UnitY * 14f;
             }
 
-            var lifetime = _lines.Sum(S => TextProvider.StripFormat(S.Get()).Length * CharacterThreshold * 3f);
+            var lifetime = _lines.Sum(S => TextProvider.StripFormat(S.Get()).Length * CharacterThreshold * 4f);
             var backBoard = new TextureBillboard(lifetime, _talkBackground, FollowFunc, _talkBackgroundSize);
 
             _board = new TextBillboard(lifetime, string.Empty, Color.White,
                 FontCache.GetNormal(10), FollowFunc);
             
-            RoutineManager.StartRoutine(TalkRoutine, _board);
+            RoutineManager.StartRoutine(TalkRoutine, _board, backBoard);
 
             _shouldTalk = false;
             Talking = true;
@@ -211,6 +212,8 @@ namespace Hedra.Components
                 {
                     _talker = null;
                     Talking = false;
+                    if(AutoRemove)
+                        Parent.RemoveComponent(this);
                 }
             );
         }
@@ -228,6 +231,7 @@ namespace Hedra.Components
         private IEnumerator TalkRoutine(params object[] Args)
         {
             var billboard = (TextBillboard) Args[0];
+            var backBoard = (TextureBillboard) Args[1];
             PlayTalkingAnimation();
             var realLines = _lines.SelectMany(GetMany).ToArray();
             for (var i = 0; i < realLines.Length; ++i)
@@ -238,6 +242,8 @@ namespace Hedra.Components
                 while (waitRoutine.MoveNext()) yield return null;
             }
             OnTalkingEnded?.Invoke(_talker);
+            backBoard.Dispose();
+            billboard.Dispose();
         }
         
         private static IEnumerator SingleLineRoutine(TextBillboard Billboard, string Text)

@@ -19,6 +19,7 @@ using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Rendering;
 using System.Numerics;
+using Hedra.Engine.Scenes;
 using Hedra.Framework;
 using Hedra.Framework;
 
@@ -38,12 +39,15 @@ namespace Hedra.Engine.StructureSystem.Overworld
         protected override void DoBuild(CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation, Random Rng)
         {
             base.DoBuild(Structure, Rotation, Translation, Rng);
-            AddDoor(WitchHutCache.Hut0Door0, WitchHutCache.Hut0Door0Position, Rotation, Structure, WitchHutCache.Hut0Door0InvertedRotation, WitchHutCache.Hut0Door0InvertedPivot);
-            AddDoor(WitchHutCache.Hut0Door1, WitchHutCache.Hut0Door1Position, Rotation, Structure, WitchHutCache.Hut0Door1InvertedRotation, WitchHutCache.Hut0Door1InvertedPivot);
+            Structure.Waypoints = WaypointLoader.Load($"Assets/Env/Structures/WitchHut/WitchHut0-Pathfinding.ply", WitchHutCache.Scale, Rotation * Translation);
+            var door0 = AddDoor(WitchHutCache.Hut0Door0, WitchHutCache.Hut0Door0Position, Rotation, Structure, WitchHutCache.Hut0Door0InvertedRotation, WitchHutCache.Hut0Door0InvertedPivot);
+            var door1 = AddDoor(WitchHutCache.Hut0Door1, WitchHutCache.Hut0Door1Position, Rotation, Structure, WitchHutCache.Hut0Door1InvertedRotation, WitchHutCache.Hut0Door1InvertedPivot);
             PlacePlants(Structure, Translation, Rotation, Rng);
-            AddNPCs(Structure, Rotation * Translation, Rng);
+            var npc = AddNPCs(Structure, Rotation * Translation, Rng);
             AddDelivery((WitchHut)Structure.WorldObject, Rng);
             AddReward((WitchHut) Structure.WorldObject, Rng);
+            door0.InvokeInteraction(npc);
+            door1.InvokeInteraction(npc);
         }
 
         private static void AddDelivery(WitchHut Structure, Random Rng)
@@ -72,7 +76,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             });*/
         }
         
-        private static void AddNPCs(CollidableStructure Structure, Matrix4x4 Transformation, Random Rng)
+        private static IHumanoid AddNPCs(CollidableStructure Structure, Matrix4x4 Transformation, Random Rng)
         {
             var enemies = new List<IEntity>();
             IHumanoid female = null, male = null;
@@ -101,6 +105,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             if(female != null) enemies.Add(female);
             if(male != null) enemies.Add(male);
             ((WitchHut) Structure.WorldObject).Enemies = enemies.ToArray();
+            return male ?? female;
         }
         
         private void PlacePlants(CollidableStructure Structure, Matrix4x4 Translation, Matrix4x4 Rotation, Random Rng)
@@ -154,12 +159,11 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         protected override string GetDescription(WitchHut Structure)
         {
-            return Translations.Get(""/*
+            return Translations.Get("quest_complete_structure_description_witch_hut_kill", Structure.EnemiesLeft); /*
                 "quest_complete_structure_description_witch_hut",
                 $"{Structure.PickupItem.GetAttribute<int>(CommonAttributes.Amount)} {Structure.PickupItem.DisplayName}",
                 DisplayName,
                 Structure.EnemiesLeft*/
-             );
         }
 
         protected override string GetShortDescription(WitchHut Structure)

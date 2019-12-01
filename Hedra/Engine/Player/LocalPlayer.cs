@@ -244,6 +244,7 @@ namespace Hedra.Engine.Player
             View.Update();
             Realms.Update();
             Spawner.Update();
+            Questing.Update();
         }
 
         public override int Gold

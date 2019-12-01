@@ -50,6 +50,11 @@ namespace Hedra.AISystem
                     Hostile.Draw();
             }
         }
+        
+        public void SetTarget(IEntity Entity)
+        {
+            Hostile.SetTarget(Entity);
+        }
 
         public override AIType Type => AIType.Hostile;
     }

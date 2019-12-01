@@ -75,7 +75,9 @@ namespace Hedra.EntitySystem
 
         public static void RemoveComponent<T>(this IEntity Parent) where T : IComponent<IEntity>
         {
-            Parent.RemoveComponent(Parent.SearchComponent<T>());
+            var component = Parent.SearchComponent<T>();
+            if (component != null)
+                Parent.RemoveComponent(component);
         }
 
         public static bool IsBoss(this IEntity Parent)

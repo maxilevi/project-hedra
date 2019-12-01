@@ -58,6 +58,13 @@ namespace Hedra.Engine.Player.QuestSystem
                     $"{Translations.Get("quest_abandoned")}{Environment.NewLine}{O.ShortDescription}", 1f, false
                 );
             };
+            _player.Questing.QuestFailed += O =>
+            {
+                if(!O.ShowPlaque) return;
+                _player.MessageDispatcher.ShowPlaque(
+                    $"{Translations.Get("quest_failed")}{Environment.NewLine}{O.ShortDescription}", 1f, false
+                );
+            };
         }
 
         private void UpdateView()

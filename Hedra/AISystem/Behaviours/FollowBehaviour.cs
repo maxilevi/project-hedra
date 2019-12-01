@@ -4,12 +4,14 @@ namespace Hedra.AISystem.Behaviours
 {
     public class FollowBehaviour : Behaviour
     {
+        public const int DefaultErrorMargin = 8;
         public IEntity Target { get; set; }
         protected TraverseBehaviour Traverse { get; }
 
         public FollowBehaviour(IEntity Parent) : base(Parent)
         {
             Traverse = new TraverseBehaviour(Parent);
+            ErrorMargin = DefaultErrorMargin;
         }
 
         public override void Update()

@@ -1,3 +1,4 @@
+using System;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.QuestSystem.Views;
 using Hedra.EntitySystem;
@@ -9,14 +10,19 @@ namespace Hedra.Mission
 {
     public class MissionObject
     {
+        public event OnMissionStart MissionStart;
+        public event OnMissionDispose MissionDispose;
         public event OnMissionEnd MissionEnd;
+        public bool Disposed { get; set; }
+        public string QuestType { get; set; }
+        public Func<bool> FailWhen;
         private readonly MissionBlock[] _blocks;
         private int _index;
         private IPlayer _owner;
         private IHumanoid _giver;
         private QuestView _view;
         private readonly MissionSettings _settings;
-        
+
         public MissionObject(MissionBlock[] Blocks, DialogObject Dialog, MissionSettings Settings)
         {
             OpeningDialog = Dialog;
@@ -47,7 +53,7 @@ namespace Hedra.Mission
 
         public void Abandon()
         {
-
+            
         }
 
         public void CleanupAndAdvance()
@@ -64,16 +70,27 @@ namespace Hedra.Mission
             Next();
         }
 
+        public void Update()
+        {
+            if(FailWhen != null && FailWhen())
+                _owner.Questing.Fail(this);
+        }
+
         private void Next()
         {
+            if(_index == -1)
+                MissionStart?.Invoke();
+            var previous = Current;
             _index++;
             if (Current != null)
             {
                 Current.Owner = _owner;
                 Current.Giver = _giver;
                 Current.Setup();
+                previous?.Dispose();
                 _view?.Dispose();
                 _view = Current.BuildView();
+                Current.Start();
             }
             else
             {
@@ -83,15 +100,17 @@ namespace Hedra.Mission
 
         private bool HasNext => _index < _blocks.Length - 1;
 
-        public MissionBlock Current => _index < _blocks.Length ? _blocks[_index] : null;
+        public MissionBlock Current => _index < _blocks.Length && _index >= 0 ? _blocks[_index] : null;
         public IPlayer Owner => _owner;
 
         public void Dispose()
         {
+            Disposed = true;
             for (var i = 0; i < _blocks.Length; ++i)
             {
                 _blocks[i].Dispose();
             }
+            MissionDispose?.Invoke();
         }
     }
 }

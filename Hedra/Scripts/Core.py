@@ -3,6 +3,7 @@ from Hedra.Numerics import Mathf
 from Hedra import Utils
 from Hedra.Game import GameManager, GameSettings
 from Hedra.Localization import Translations
+from Hedra.Engine.Localization import Translation
 
 def do_for_seconds(duration, func, on_finished=None, scale_time=True):
     vars = {'time': 0}
@@ -63,6 +64,9 @@ def is_start_menu():
 
 def translate(msg, *args):
     return Translations.Get(msg, *args)
+
+def load_translation(msg, *args):
+    return Translation.Create(msg, *args)
 
 def get_player():
     return GameManager.Player

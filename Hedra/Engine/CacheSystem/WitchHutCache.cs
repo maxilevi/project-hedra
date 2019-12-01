@@ -14,19 +14,19 @@ namespace Hedra.Engine.CacheSystem
         private static readonly VertexData _hut0Door1;
         static WitchHutCache()
         {
-            _hut0Door0 = AssetManager.PLYLoader("Assets/Env/Structures/WitchHut0_Door0.ply", Scale);
+            _hut0Door0 = AssetManager.PLYLoader("Assets/Env/Structures/WitchHut/WitchHut0_Door0.ply", Scale);
             _hut0Door0.Translate(Offset);
-            _hut0Door1 = AssetManager.PLYLoader("Assets/Env/Structures/WitchHut0_Door1.ply", Scale);
+            _hut0Door1 = AssetManager.PLYLoader("Assets/Env/Structures/WitchHut/WitchHut0_Door1.ply", Scale);
             _hut0Door1.Translate(Offset);
         }
 
         public WitchHutCache()
         {
-            var model = AssetManager.PLYLoader("Assets/Env/Structures/WitchHut0.ply", Scale);
+            var model = AssetManager.PLYLoader("Assets/Env/Structures/WitchHut/WitchHut0.ply", Scale);
             model.Translate(Offset);
             AddModel(model);
 
-            var shapes = AssetManager.LoadCollisionShapes("Assets/Env/Structures/WitchHut0.ply", Scale);
+            var shapes = AssetManager.LoadCollisionShapes("Assets/Env/Structures/WitchHut/WitchHut0.ply", Scale);
             shapes.ForEach(S => S.Transform(Offset * Scale));
             AddShapes(shapes);
         }
@@ -56,8 +56,8 @@ namespace Hedra.Engine.CacheSystem
             5
         };
         
-        private static Vector3 Offset => Vector3.UnitY * .2f;
-        private static Vector3 Scale => Vector3.One * 3.25f;
+        public static Vector3 Offset => Vector3.UnitY * .2f;
+        public static Vector3 Scale => Vector3.One * 3.5f;
         
         private static VertexData LoadCollisionShapesAsVertexData(string Filename, Vector3 Scale)
         {

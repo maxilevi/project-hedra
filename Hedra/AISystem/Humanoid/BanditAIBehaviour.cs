@@ -27,7 +27,7 @@ namespace Hedra.AISystem.Humanoid
             var player = GameManager.Player;
             return !player.IsDead 
                    && (player.Position.Xz() - Parent.Position.Xz()).LengthSquared() < SearchRadius * player.Attributes.MobAggroModifier * SearchRadius * player.Attributes.MobAggroModifier
-                   && !Parent.Physics.StaticRaycast(player.Position + Vector3.UnitY * player.Model.Height * .5f)
+                   && !Parent.Physics.StaticRaycast(player.Position + Vector3.UnitY * player.Model.Height)
                 ? player 
                 : null;
         }

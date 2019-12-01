@@ -43,7 +43,7 @@ namespace Hedra.AISystem.Humanoid
                 SetWeapon((RangedWeapon) Parent.LeftWeapon);
             _secondAttackCooldown -= Time.DeltaTime;
             _firstAttackCooldown -= Time.DeltaTime;
-            if (ChasingTarget != null && Parent.Physics.StaticRaycast(ChasingTarget.Position + Vector3.UnitY * ChasingTarget.Model.Height * .5f))
+            if (ChasingTarget != null && Parent.Physics.StaticRaycast(ChasingTarget.Position + Vector3.UnitY * ChasingTarget.Model.Height))
             {
                 ReduceRange();
             }

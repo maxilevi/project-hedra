@@ -9,7 +9,7 @@ namespace Hedra.Engine.CacheSystem
 
         public GazeboIconCache()
         {
-            AddModel(AssetManager.PLYLoader("Assets/Env/Structures/Gazebo0-Icon.ply", Vector3.One));
+            AddModel(AssetManager.PLYLoader("Assets/Env/Structures/Gazebo/Gazebo0-Icon.ply", Vector3.One));
         }
     }
 }

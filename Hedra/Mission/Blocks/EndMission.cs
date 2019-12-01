@@ -23,6 +23,12 @@ namespace Hedra.Mission.Blocks
             Owner.Questing.Trigger();
         }
 
+        protected override void OnTalkingStarted(IEntity Talker)
+        {
+            base.OnTalkingStarted(Talker);
+            _reward.InvokeRewardGiven();
+        }
+
         private static DialogObject DialogFromReward(QuestReward Reward)
         {
             if (Reward.CustomDialog != null) return Reward.CustomDialog;
@@ -69,7 +75,7 @@ namespace Hedra.Mission.Blocks
             };
         }
 
-        private static string MakeItemString(Item Item)
+        public static string MakeItemString(Item Item)
         {
             var amount = Item.HasAttribute(CommonAttributes.Amount) 
                 ? Item.GetAttribute<int>(CommonAttributes.Amount) 

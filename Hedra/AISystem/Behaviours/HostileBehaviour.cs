@@ -25,7 +25,7 @@ namespace Hedra.AISystem.Behaviours
         protected virtual IEntity GetTarget()
         {
             var target = GetTargets<IPlayer>().FirstOrDefault();
-            if (target != null && Parent.Physics.StaticRaycast(target.Position + Vector3.UnitY * target.Model.Height * .5f))
+            if (target != null && Parent.Physics.StaticRaycast(target.Position + Vector3.UnitY * target.Model.Height))
                 return null;
             return target;
         }
@@ -42,9 +42,14 @@ namespace Hedra.AISystem.Behaviours
                 var target = GetTarget();
                 if (target != null)
                 {
-                    Attack.SetTarget(target);
+                    SetTarget(target);
                 }
             }
+        }
+
+        public void SetTarget(IEntity Entity)
+        {
+            Attack.SetTarget(Entity);
         }
 
         public void Draw()
