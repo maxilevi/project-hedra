@@ -14,7 +14,7 @@ namespace Hedra.Mission
     public class MissionBuilder
     {
         public Func<bool> FailWhen { get; set; }
-        public OnMissionDispose MissionDispose;
+        public event OnMissionDispose MissionDispose;
         public event OnMissionStart MissionStart;
         public event OnMissionEnd MissionEnd;
         private readonly List<MissionBlock> _designs;

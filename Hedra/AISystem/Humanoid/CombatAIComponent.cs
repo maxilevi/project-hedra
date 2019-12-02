@@ -38,6 +38,7 @@ namespace Hedra.AISystem.Humanoid
         public bool IsExploring => !IsChasing && _hasTargetPoint;
         protected virtual bool CanExplore => _canExplore;
         protected virtual bool GuardSpawnPoint => _guardSpawnPoint;
+        public virtual bool DontUpdateAI => false;
 
         protected CombatAIComponent(IHumanoid Entity, bool IsFriendly) : base(Entity)
         {
@@ -84,6 +85,7 @@ namespace Hedra.AISystem.Humanoid
         public override void Update()
         {
             base.Update();
+            if(DontUpdateAI) return;
             if (!CanUpdate) return;
             if (ShouldReset()) return;
             DoUpdate();

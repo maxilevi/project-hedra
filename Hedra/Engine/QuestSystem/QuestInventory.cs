@@ -41,6 +41,11 @@ namespace Hedra.Engine.QuestSystem
             CheckForCompleteness();
         }
 
+        public bool Has(MissionObject Mission)
+        {
+            return _activeQuests.Contains(Mission);
+        }
+
         public void Update()
         {
             for (var i = 0; i < _activeQuests.Count; ++i)

@@ -30,6 +30,11 @@ namespace Hedra.Mission.Blocks
             _newDialog = Dialog;
         }
 
+        public virtual void Update()
+        {
+            
+        }
+        
         public DialogObject OpeningDialog => _newDialog ?? DefaultOpeningDialog;
 
         public void Start()

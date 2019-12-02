@@ -225,8 +225,11 @@ quest_steal_from_witch_kill = Oh no! It looks like it's not empty. Kill the witc
 quest_steal_from_witch_empty = Everything seems to be going as planned
 
 quest_steal_from_witch_hut_reward_failure_0 = I was unable to find anything of value.
-quest_steal_from_witch_hut_reward_escape_0 = Try catching me!
+quest_steal_from_witch_hut_reward_escape_0 = Thanks for the help but I ain't giving you anything. Try catching me!
 quest_steal_from_witch_hut_reward_success_0 = We should do this again some time. Here is your cut $(ORANGE)(BOLD){{0}}.
+
+quest_wait_for_short = WAIT FOR $(BOLD)(CAPS)(ORANGE){{0}}
+quest_wait_for_description = Wait for $(BOLD)(CAPS)(ORANGE){{0}} to finish what he is doing.
 
 # -- Class Names --
 mage = Mage

@@ -71,6 +71,7 @@ namespace Hedra.AISystem.Behaviours
 
         public override void Update()
         {
+            var couldReach = _canReach;
             if (!_reached && _canReach)
             {
                 if (!Walk.HasTarget || Parent.IsStuck)
@@ -94,6 +95,8 @@ namespace Hedra.AISystem.Behaviours
                     _canReach = true;
                 }
             }
+            //if(!couldReach && !_canReach)
+            //    RebuildAndResetPathIfNecessary();
         }
 
         private void RebuildAndResetPathIfNecessary()
@@ -149,7 +152,7 @@ namespace Hedra.AISystem.Behaviours
 
         public void SetTarget(Vector3 Position, Action Callback = null)
         {
-            if((Position - Target).LengthSquared() < 1) return;
+            if((Position - Target).LengthSquared() < 1 && HasTarget) return;
             if ((Parent.Position - Position).LengthSquared() < ErrorMargin * ErrorMargin) return;
             Target = Position;
             _callback = Callback;

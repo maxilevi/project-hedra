@@ -22,6 +22,7 @@ namespace Hedra.Mission
         private IHumanoid _giver;
         private QuestView _view;
         private readonly MissionSettings _settings;
+        private bool _abandoned;
 
         public MissionObject(MissionBlock[] Blocks, DialogObject Dialog, MissionSettings Settings)
         {
@@ -53,14 +54,20 @@ namespace Hedra.Mission
 
         public void Abandon()
         {
-            
+            _abandoned = true;
+            Dispose();
         }
 
         public void CleanupAndAdvance()
         {
             Current.Cleanup();
-            if(HasNext)
+            if(HasNext && !_abandoned)
                 _owner.Questing.Start(_giver, this);
+            else
+            {
+                MissionEnd?.Invoke();
+                Dispose();
+            }
         }
 
         public void Start(IHumanoid Giver, IPlayer Player)
@@ -74,6 +81,7 @@ namespace Hedra.Mission
         {
             if(FailWhen != null && FailWhen())
                 _owner.Questing.Fail(this);
+            Current?.Update();
         }
 
         private void Next()
@@ -91,10 +99,6 @@ namespace Hedra.Mission
                 _view?.Dispose();
                 _view = Current.BuildView();
                 Current.Start();
-            }
-            else
-            {
-                MissionEnd?.Invoke();
             }
         }
 

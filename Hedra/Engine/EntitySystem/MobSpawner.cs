@@ -231,7 +231,7 @@ namespace Hedra.Engine.EntitySystem
 
             var normal = Physics.NormalAtPosition(Position);
             var river = World.BiomePool.GetRegion(Position).Generation.RiverAtPoint(Position.X, Position.Z);
-            return !(Vector3.Dot(normal, Vector3.UnitY) > .3 && river < 0.005f);
+            return Vector3.Dot(normal, Vector3.UnitY) < .4 || river > 0.005f;
         }
         
         private Vector3 PlacementPosition()

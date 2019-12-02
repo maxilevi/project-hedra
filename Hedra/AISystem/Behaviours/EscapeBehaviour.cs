@@ -21,7 +21,7 @@ namespace Hedra.AISystem.Behaviours
             if (Parent.IsStuck || !Traverse.HasTarget && (Target.Position - Parent.Position).Xz().ToVector3().LengthSquared() < GeneralSettings.UpdateDistanceSquared * .75f)
             {
                 var targetDirection = (Target.Position - Parent.Position).Xz().ToVector3().NormalizedFast();
-                Traverse.SetTarget(-targetDirection * 16f + Parent.Position);
+                Traverse.SetTarget(-targetDirection * 8f + Parent.Position);
             }
             Traverse.Update();
         }

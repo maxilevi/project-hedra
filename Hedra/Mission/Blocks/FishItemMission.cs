@@ -24,6 +24,12 @@ namespace Hedra.Mission.Blocks
             ConsumeItems();
         }
 
+        public override void Dispose()
+        {
+            base.Dispose();
+            if(_zone != null) World.FishingZoneHandler.RemoveZone(_zone);
+        }
+
         public Vector3 Zone { get; set; }
         public float Radius { get; set; }
 

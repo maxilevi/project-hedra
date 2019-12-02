@@ -1,14 +1,15 @@
 import MissionCore
+import Core
 import clr
 from Core import translate, load_translation
 import System
-from Hedra.AISystem import BasicAIComponent
+from Hedra.AISystem import BasicAIComponent, ITraverseAIComponent
 from Hedra.Components import TalkComponent, DamageComponent
 from Hedra.Mission import MissionBuilder, QuestTier, DialogObject, QuestReward
-from Hedra.Mission.Blocks import FindStructureMission, CompleteStructureMission, TalkMission
+from Hedra.Mission.Blocks import FindStructureMission, CompleteStructureMission, TalkMission, WaitForMission
 from Hedra.Engine.StructureSystem.Overworld import WitchHutDesign
 from Hedra.EntitySystem import EntityExtensions
-from Hedra.AISystem.Humanoid import EscapeAIComponent, FollowAIComponent, CombatAIComponent
+from Hedra.AISystem.Humanoid import EscapeAIComponent, FollowAIComponent, CombatAIComponent, CommandBasedAIComponent
 from Hedra.Items import ItemPool
 from System import Array, Object
 
@@ -23,7 +24,7 @@ OUTCOME_RUNAWAY = 2
 OUTCOME_SHARE = 3
 OUTCOME_SCAM = 4
 OUTCOME_EMPTY = 5
-
+STEAL_DURATION = 16
 POSSIBLE_REWARDS = [
     ('Bone', 7),
     ('DarkEssence', 2),
@@ -44,39 +45,39 @@ def setup_timeline(position, giver, owner, rng):
         return None
     
     builder.MissionStart += lambda: on_mission_start(giver, owner)
-    builder.MissionEnd += lambda: on_mission_abandoned(giver, owner)
+    builder.FailWhen = lambda: giver.IsDead or not MissionCore.is_within_distance(giver.Position, witch_hut_structure.Position)
+    builder.MissionDispose += lambda: MissionCore.remove_component_if_exists(giver, FollowAIComponent)
 
     witch_hut_structure = MissionCore.find_structure(position, WitchHutDesign)
-    hut = witch_hut_structure.Design
+    hut = witch_hut_structure.WorldObject
     hut_outcome = select_hut_outcome(rng.Next(0, 10))
     steal_outcome = select_steal_outcome(rng.Next(0, 10))
 
     find = FindStructureMission()
-    find.Design = hut
+    find.Design = witch_hut_structure.Design
     find.Position = witch_hut_structure.Position
     find.SetDescription(translate('quest_steal_from_witch_description', giver.Name))
     find.OverrideOpeningDialog(create_dialog(find.Design.DisplayName))
     find.MissionBlockEnd += lambda: on_hut_arrived(giver, witch_hut_structure.WorldObject, hut_outcome, owner, builder)
     builder.Next(find)
     
-    if hut_outcome is OUTCOME_EMPTY:
+    if hut_outcome is OUTCOME_HUT_EMPTY:
         hut.EnsureHutIsEmpty()
     
-    if hut_outcome is OUTCOME_FIGHT:
+    if hut_outcome is OUTCOME_FIGHT or hut_outcome is OUTCOME_RUNAWAY:
         hut.EnsureWitchesSpawned()
+        
+    if hut_outcome is OUTCOME_FIGHT:
         complete = CompleteStructureMission()
         complete.MissionBlockStart += lambda: MissionCore.remove_component_if_exists(giver, BasicAIComponent)
         complete.StructureObject = hut
         complete.StructureDesign = witch_hut_structure.Design
-        complete.MissionBlockEnd += lambda: make_follow(giver, owner)
         builder.Next(complete)
         
     if hut_outcome is OUTCOME_FIGHT or hut_outcome is OUTCOME_HUT_EMPTY:
-        pass
-        #steal = CompleteStructureMission()
-        #steal.StructureObject = witch_hut.WorldObject
-        #steal.StructureDesign = witch_hut.Design
-        #builder.Next(steal)
+        steal = WaitForMission(giver, STEAL_DURATION)
+        steal.MissionBlockStart += lambda: start_steal_animation(giver, hut)
+        builder.Next(steal)
     
     reward = QuestReward()
     reward.CustomDialog = select_dialog_from_steal_outcome(steal_outcome)
@@ -89,8 +90,12 @@ def setup_timeline(position, giver, owner, rng):
         reward.CustomDialog.Arguments = Array[Object]([MissionCore.make_item_string(item)])
     
     builder.SetReward(reward)
-    builder.FailWhen = lambda: giver.IsDead or not MissionCore.is_within_distance(giver.Position, witch_hut_structure.Position)
     return builder
+
+def start_steal_animation(giver, hut):
+    MissionCore.remove_component_if_exists(giver, ITraverseAIComponent)
+    giver.AddComponent(CommandBasedAIComponent(giver))
+    Core.do_for_seconds(STEAL_DURATION-1, lambda x: giver.SearchComponent[CommandBasedAIComponent]().WalkTo(hut.StealPosition))
 
 def add_outcome_effects(outcome, owner, giver):
     if outcome is OUTCOME_SCAM:
@@ -131,23 +136,22 @@ def select_dialog_from_steal_outcome(outcome):
         raise System.ArgumentException('Invalid steal outcome')
     dialog = DialogObject()
     dialog.Keyword = dialog_line
+    dialog.Arguments = Array[Object]([])
     return dialog
 
 def make_run_away(giver, target):
-    MissionCore.remove_component_if_exists(giver, BasicAIComponent)
+    MissionCore.remove_component_if_exists(giver, ITraverseAIComponent)
+    MissionCore.remove_component_if_exists(giver, FollowAIComponent)
     giver.AddComponent(EscapeAIComponent(giver, target))
 
 def make_follow(giver, target):
-    MissionCore.remove_component_if_exists(giver, BasicAIComponent)
+    MissionCore.remove_component_if_exists(giver, ITraverseAIComponent)
     giver.AddComponent(FollowAIComponent(giver, target))
 
 def on_mission_start(giver, target):
     make_follow(giver, target)
     giver.SearchComponent[DamageComponent]().Immune = False
     giver.SearchComponent[DamageComponent]().Ignore(lambda x: x == target)
-
-def on_mission_abandoned(giver, target):
-    MissionCore.remove_component_if_exists(giver, FollowAIComponent)
 
 def select_hut_outcome(n):
     if n < 7: # 70%

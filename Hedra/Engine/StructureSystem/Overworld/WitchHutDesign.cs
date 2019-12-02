@@ -43,11 +43,17 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var door0 = AddDoor(WitchHutCache.Hut0Door0, WitchHutCache.Hut0Door0Position, Rotation, Structure, WitchHutCache.Hut0Door0InvertedRotation, WitchHutCache.Hut0Door0InvertedPivot);
             var door1 = AddDoor(WitchHutCache.Hut0Door1, WitchHutCache.Hut0Door1Position, Rotation, Structure, WitchHutCache.Hut0Door1InvertedRotation, WitchHutCache.Hut0Door1InvertedPivot);
             PlacePlants(Structure, Translation, Rotation, Rng);
-            var npc = AddNPCs(Structure, Rotation * Translation, Rng);
-            AddDelivery((WitchHut)Structure.WorldObject, Rng);
-            AddReward((WitchHut) Structure.WorldObject, Rng);
-            door0.InvokeInteraction(npc);
-            door1.InvokeInteraction(npc);
+
+            var hut = (WitchHut)Structure.WorldObject;
+            hut.StealPosition = Vector3.Transform(WitchHutCache.Hut0StealPosition, Rotation * Translation);
+            hut.Witch0Position = Vector3.Transform(WitchHutCache.Hut0Witch0Position, Rotation * Translation);
+            hut.Witch1Position = Vector3.Transform(WitchHutCache.Hut0Witch1Position, Rotation * Translation);
+            hut.EnsureWitchesSpawned();
+            
+            AddDelivery(hut, Rng);
+            AddReward(hut, Rng);
+            door0.InvokeInteraction(hut.Enemies[0]);
+            door1.InvokeInteraction(hut.Enemies[0]);
         }
 
         private static void AddDelivery(WitchHut Structure, Random Rng)
@@ -75,39 +81,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 SameTier = false
             });*/
         }
-        
-        private static IHumanoid AddNPCs(CollidableStructure Structure, Matrix4x4 Transformation, Random Rng)
-        {
-            var enemies = new List<IEntity>();
-            IHumanoid female = null, male = null;
-            if (Rng.Next(0, 8) != 1)
-            {
-                female = World.WorldBuilding.SpawnHumanoid(
-                    HumanType.Witch,
-                    Vector3.Transform(WitchHutCache.Hut0Witch0Position, Transformation)
-                );
-                HumanoidFactory.AddAI(female, false);
-            }
-            if (female == null || Rng.Next(0, 8) != 1)
-            {
-                male = World.WorldBuilding.SpawnHumanoid(
-                    HumanType.Witch,
-                    Vector3.Transform(WitchHutCache.Hut0Witch1Position, Transformation)
-                );
-                HumanoidFactory.AddAI(male, false);
-            }
 
-            if (female != null && male != null)
-            {
-                female.SearchComponent<DamageComponent>().Ignore(E => E == male);
-                male.SearchComponent<DamageComponent>().Ignore(E => E == female);
-            }
-            if(female != null) enemies.Add(female);
-            if(male != null) enemies.Add(male);
-            ((WitchHut) Structure.WorldObject).Enemies = enemies.ToArray();
-            return male ?? female;
-        }
-        
         private void PlacePlants(CollidableStructure Structure, Matrix4x4 Translation, Matrix4x4 Rotation, Random Rng)
         {
             DecorationsPlacer.PlaceWhenWorldReady(Structure.Position,
