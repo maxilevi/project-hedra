@@ -31,7 +31,7 @@ namespace Hedra.Engine.CacheSystem
             AddShapes(shapes);
         }
 
-        public static Vector3 Hut0StealPosition => new Vector3(4.46797f, 0.2f, 5.31457f);
+        public static Vector3 Hut0StealPosition => new Vector3(4.46797f, 0.2f, 5.31457f) * Scale;
         public static Vector3 Hut0Witch0Position => new Vector3(0, 0, -5.5f) * Scale;
         public static Vector3 Hut0Witch1Position => new Vector3(8, 0, -15f) * Scale;
         

@@ -1,5 +1,4 @@
 import MissionCore
-import Core
 import clr
 from Core import translate, load_translation
 import System
@@ -95,7 +94,7 @@ def setup_timeline(position, giver, owner, rng):
 def start_steal_animation(giver, hut):
     MissionCore.remove_component_if_exists(giver, ITraverseAIComponent)
     giver.AddComponent(CommandBasedAIComponent(giver))
-    Core.do_for_seconds(STEAL_DURATION-1, lambda x: giver.SearchComponent[CommandBasedAIComponent]().WalkTo(hut.StealPosition))
+    giver.SearchComponent[CommandBasedAIComponent]().WalkTo(hut.Witch0Position)
 
 def add_outcome_effects(outcome, owner, giver):
     if outcome is OUTCOME_SCAM:

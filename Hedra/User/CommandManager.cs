@@ -71,6 +71,16 @@ namespace Hedra.User
                         {
                             Caster.Position = World.SpawnVillagePoint;
                         }
+
+                        if (Parts[1] == "witchhut")
+                        {
+                            var structs = StructureHandler.GetNearStructures(Caster.Position);
+                            for(var i = 0; i < structs.Length; ++i)
+                                if (structs[i].WorldObject is WitchHut hut)
+                                {
+                                    Caster.Position = hut.StealPosition;
+                                }
+                        }
                         if (float.TryParse(Parts[1], out var x))
                         {
                             float.TryParse(Parts[2], out var y);
