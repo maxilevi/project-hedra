@@ -186,11 +186,15 @@ quest_complete_structure_short_giant_tree = DEFEAT $(BOLD)(ORANGE){{0}}
 quest_complete_structure_short_graveyard = FREE THE $(BOLD)(ORANGE){{0}} 
 quest_complete_structure_short_bandit_camp = RESCUE $(BOLD)(ORANGE){{0}} 
 quest_complete_structure_short_witch_hut = RAID THE $(BOLD)(ORANGE){{0}}
+quest_complete_structure_short_trade_travelling_merchant = TRADE WITH $(BOLD)(CAPS)(ORANGE){{0}}
+quest_wait_for_short = WAIT FOR $(BOLD)(CAPS)(ORANGE){{0}}
 quest_complete_structure_description_giant_tree = Defeat $(BOLD)(BLUE){{0}} at the $(BOLD)(ORANGE){{1}}.
 quest_complete_structure_description_graveyard = Free the $(BOLD)(ORANGE){{0}} from the corruption of the demons.\nThere are $(BOLD)(VIOLET){{1}} enemies left.
 quest_complete_structure_description_bandit_camp = Kill the kidnappers and rescue $(BOLD)(BLUE){{0}} from the $(BOLD)(ORANGE){{1}}.\n\nThere are $(BOLD)(VIOLET){{2}} bandits left.
 quest_complete_structure_description_witch_hut_kill = Defeat the witches.\n\nThere are $(BOLD)(VIOLET){{0}} witches left.
 quest_complete_structure_description_witch_hut_steal_stuff = Defeat the witches and steal $(BOLD)(BLUE){{0}} from the $(BOLD)(ORANGE){{1}}.\n\nThere are $(BOLD)(VIOLET){{2}} witches left.
+quest_complete_structure_description_trade_travelling_merchant = Trade with $(BOLD)(BLUE){{0}} and buy $(BOLD)(ORANGE){{0}}
+quest_wait_for_description = Wait for $(BOLD)(CAPS)(ORANGE){{0}} to finish what he is doing.
 
 quest_pickup_item_short = PICK UP $(BOLD)(ORANGE){{0}}
 quest_pickup_default_item_description = Pick up $(BOLD)(ORANGE)(CAPS){{0}}.
@@ -213,9 +217,10 @@ quest_fish_item_short = FISH OUT $(BLUE)(BOLD)(CAPS){{0}}'S $(ORANGE)(BOLD)(CAPS
 quest_fish_item_description = $(BLUE)(BOLD){{0}} lost his precious $(ORANGE)(BOLD)(CAPS){{1}} while swimming. Help him retrieve it by fishing near the marked zone. \n\n$(GRAY)(BOLD){HINT: }You can buy a fishing rod from the merchant at the village.
 quest_fish_item_item_reward_0 = Thank you for helping me but it looks like the $(ORANGE)(BOLD){{0}} got a little bit rusty. You can keep it.
 
-
 quest_rescue_erudite_dialog_0 = Adventurer! Please help me!;While searching for wood my father was kidnapped by a bunch of bandits.;I found out they have a camp near here. Look, I marked it on your map. Please bring him back!
 quest_rescue_erudite_description = $(BLUE)(BOLD){{0}}'s father has been kidnapped. Find his location and rescue him from the aggressors. \n$(GRAY)(BOLD){HINT: }See the map for more details.
+
+quest_trade_travelling_merchant_dialog0 = Hey!
 
 quest_steal_from_witch_dialog_0 = Hey, come here.;Don't tell anyone about this, but I found out about a nearby witch hut that was abandoned;I've heard they have several valuable ingredients. We can steal them and sell them in the black market, though, we have to be cautious.;Are you in?
 quest_steal_from_witch_description = Escort $(BLUE)(BOLD){{0}} to the witch hut and make sure nothing goes wrong.
@@ -227,9 +232,6 @@ quest_steal_from_witch_empty = Everything seems to be going as planned
 quest_steal_from_witch_hut_reward_failure_0 = I was unable to find anything of value.
 quest_steal_from_witch_hut_reward_escape_0 = Thanks for the help but I ain't giving you anything. Try catching me!
 quest_steal_from_witch_hut_reward_success_0 = We should do this again some time. Here is your cut $(ORANGE)(BOLD){{0}}.
-
-quest_wait_for_short = WAIT FOR $(BOLD)(CAPS)(ORANGE){{0}}
-quest_wait_for_description = Wait for $(BOLD)(CAPS)(ORANGE){{0}} to finish what he is doing.
 
 # -- Class Names --
 mage = Mage

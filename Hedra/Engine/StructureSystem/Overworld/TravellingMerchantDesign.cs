@@ -12,7 +12,7 @@ using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
-    public class TravellingMerchantDesign : FindableStructureDesign
+    public class TravellingMerchantDesign : CompletableStructureDesign<TravellingMerchant>
     {
         public static bool Spawned { get; private set; }
         public override int PlateauRadius { get; } = 80;
@@ -55,5 +55,11 @@ namespace Hedra.Engine.StructureSystem.Overworld
         }
         
         public override string DisplayName => Translations.Get("structure_travelling_merchant");
+
+        protected override string GetShortDescription(TravellingMerchant Structure) 
+            => Translations.Get("quest_complete_structure_short_trade_travelling_merchant", Structure.Merchant.Name);
+
+        protected override string GetDescription(TravellingMerchant Structure)
+            => Translations.Get("quest_complete_structure_description_trade_travelling_merchant", Structure.Merchant.Name, Structure.ItemsToBuy.ToString());
     }
 }

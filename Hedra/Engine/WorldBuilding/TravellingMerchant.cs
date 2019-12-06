@@ -1,24 +1,26 @@
-using Hedra.Engine.Generation;
-using Hedra.Engine.Management;
+using System;
 using Hedra.Engine.Player;
-using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.EntitySystem;
 using System.Numerics;
+using Hedra.Engine.ItemSystem;
+using Hedra.Engine.QuestSystem;
+using Hedra.Mission;
 
 namespace Hedra.Engine.WorldBuilding
 {
     /// <summary>
     /// Description of Campfire.
     /// </summary>
-    public class TravellingMerchant : Campfire
+    public class TravellingMerchant : Campfire, ICompletableStructure
     {
         public static readonly Vector3 CampfireOffset = Vector3.UnitX * 12f;
-        private readonly IHumanoid _merchant;
+        public IHumanoid Merchant { get; }
+        public ItemCollect ItemsToBuy { get; }
 
         public TravellingMerchant(Vector3 Position) : base(Position)
         {
-            _merchant = World.WorldBuilding.SpawnHumanoid(HumanType.TravellingMerchant, Position);
+            Merchant = World.WorldBuilding.SpawnHumanoid(HumanType.TravellingMerchant, Position);
         }
         
         protected override Vector3 FirePosition => Position - CampfireOffset;
@@ -26,7 +28,9 @@ namespace Hedra.Engine.WorldBuilding
         public override void Dispose()
         {
             base.Dispose();
-            _merchant.Dispose();
+            Merchant.Dispose();
         }
+
+        public bool Completed => throw new NotImplementedException();
     }
 }
