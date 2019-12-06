@@ -81,6 +81,28 @@ namespace Hedra.User
                                     Caster.Position = hut.StealPosition;
                                 }
                         }
+                        if (Parts[1] == "graveyard")
+                        {
+                            var structs = StructureHandler.GetNearStructures(Caster.Position);
+                            for (var i = 0; i < structs.Length; ++i)
+                            {
+                                if (structs[i].WorldObject is Graveyard hut)
+                                {
+                                    Caster.Position = hut.Position;
+                                }
+                            }
+                        }
+                        if (Parts[1] == "merchant")
+                        {
+                            var structs = StructureHandler.GetNearStructures(Caster.Position);
+                            for (var i = 0; i < structs.Length; ++i)
+                            {
+                                if (structs[i].WorldObject is TravellingMerchant hut)
+                                {
+                                    Caster.Position = hut.Position;
+                                }
+                            }
+                        }
                         if (float.TryParse(Parts[1], out var x))
                         {
                             float.TryParse(Parts[2], out var y);
@@ -212,8 +234,16 @@ namespace Hedra.User
                 if (Parts[0] == "quest")
                 {
                     var position = Caster.Position + Caster.Orientation * 16f;
+                    IMissionDesign quest;
+                    if (Parts.Length == 2)
+                    {
+                        quest = MissionPool.Grab(Parts[1]);
+                    }
+                    else
+                    {
+                        quest = MissionPool.Random(position);
+                    }
                     var human = World.WorldBuilding.SpawnVillager(position, Utils.Rng);
-                    var quest = MissionPool.Random(position);
                     human.AddComponent(new QuestGiverComponent(human, quest));
                     Result = "Success";
                     return true;
