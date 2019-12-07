@@ -21,6 +21,7 @@ using Hedra.EntitySystem;
 using Hedra.Input;
 using Hedra.Localization;
 using System.Numerics;
+using Hedra.Engine.ItemSystem;
 using Hedra.Numerics;
 using Silk.NET.Input.Common;
 
@@ -69,7 +70,7 @@ namespace Hedra.Engine.Player.Inventory
             _interfaceManager = new TradeInventoryArrayInterfaceManager(itemInfoInterface, _playerItemsInterface, _merchantItemsInterface);
             _playerBackground = new InventoryBackground(Vector2.UnitX * .5f + Vector2.UnitY * .55f);
             _merchantBackground = new InventoryBackground(Vector2.UnitX * -.5f + Vector2.UnitY * .55f);
-            _interfaceManager.OnTransactionComplete += (Item, Price) => this.UpdateTraders();
+            _interfaceManager.OnTransactionComplete += (Item, Price, Type) => this.UpdateTraders(Item, Type);
             _stateManager.OnStateChange += State =>
             {
                 base.Invoke(State);
@@ -120,7 +121,7 @@ namespace Hedra.Engine.Player.Inventory
             _playerItems.Empty();
         }
 
-        public void UpdateTraders()
+        public void UpdateTraders(Item Item, TransactionType Type)
         {
             for (var i = 0; i < _playerItems.Length; i++)
             {
@@ -135,7 +136,7 @@ namespace Hedra.Engine.Player.Inventory
             {
                 _tradeComponent.Items.Add(i, _merchantItems[i]);
             }
-            _tradeComponent.TransactionComplete();
+            _tradeComponent.TransactionComplete(Item, Type);
             this.UpdateInventory();
         }
 

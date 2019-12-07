@@ -3,6 +3,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.EntitySystem;
 using System.Numerics;
+using Hedra.Components;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.QuestSystem;
 using Hedra.Mission;
@@ -16,11 +17,21 @@ namespace Hedra.Engine.WorldBuilding
     {
         public static readonly Vector3 CampfireOffset = Vector3.UnitX * 12f;
         public IHumanoid Merchant { get; }
-        public ItemCollect ItemsToBuy { get; }
+        public ItemCollect ItemsToBuy { get; set; }
 
         public TravellingMerchant(Vector3 Position) : base(Position)
         {
             Merchant = World.WorldBuilding.SpawnHumanoid(HumanType.TravellingMerchant, Position);
+            Merchant.SearchComponent<TradeComponent>().ItemBought += OnItemBought;
+        }
+        
+        private void OnItemBought(Item I)
+        {
+            if (ItemsToBuy == null) return;
+            if (ItemsToBuy.Name == I.Name && ItemsToBuy.Amount > 0)
+            {
+                ItemsToBuy.Amount -= 1;
+            }
         }
         
         protected override Vector3 FirePosition => Position - CampfireOffset;
@@ -31,6 +42,6 @@ namespace Hedra.Engine.WorldBuilding
             Merchant.Dispose();
         }
 
-        public bool Completed => throw new NotImplementedException();
+        public bool Completed => ItemsToBuy != null && ItemsToBuy.Amount == 0;
     }
 }

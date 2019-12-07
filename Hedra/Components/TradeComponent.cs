@@ -17,10 +17,12 @@ using Hedra.Numerics;
 
 namespace Hedra.Components
 {
+    public delegate void OnItemBought(Item Item);
     public abstract class TradeComponent : Component<IHumanoid>
     {
         protected int MerchantSpaces => TradeInventory.MerchantSpaces;
         private const int TradeRadius = 12;
+        public event OnItemBought ItemBought;
         public Dictionary<int, Item> Items { get; private set; }
         private Dictionary<int, Item> _originalItems;
 
@@ -31,9 +33,11 @@ namespace Hedra.Components
 
         public abstract Dictionary<int, Item> BuildInventory();
 
-        public void TransactionComplete()
+        public void TransactionComplete(Item Item, TransactionType Type)
         {
             Items = new Dictionary<int, Item>(_originalItems);
+            if(Type == TransactionType.Buy)
+                ItemBought?.Invoke(Item);
         }
 
         public override void Update()

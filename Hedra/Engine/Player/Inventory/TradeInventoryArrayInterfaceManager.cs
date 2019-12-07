@@ -29,7 +29,6 @@ namespace Hedra.Engine.Player.Inventory
             _buyer = Buyer;
             _seller = Seller;
             _manager = _buyer == null && Seller == null ?  null : new TradeManager(_buyerInterface, _sellerInterface);
-            if(_manager != null) _manager.OnTransactionComplete += (I, P) => OnTransactionComplete?.Invoke(I, P);
             _itemInfoInterface.SetManager(_manager);
         }
 
@@ -45,7 +44,8 @@ namespace Hedra.Engine.Player.Inventory
             if (item == null || item.IsGold) return;
 
             var price = _manager.ItemPrice(item);
-            if (arrayInterface != _buyerInterface)
+            var isBuying = arrayInterface != _buyerInterface;
+            if (isBuying)
             {
                 _manager.ProcessTrade(_buyer, _seller, _buyerInterface, _sellerInterface, item, price);
             }
@@ -53,6 +53,7 @@ namespace Hedra.Engine.Player.Inventory
             {
                 _manager.ProcessTrade(_seller, _buyer, _sellerInterface, _buyerInterface, item, price);
             }
+            OnTransactionComplete?.Invoke(item, price, isBuying ? TransactionType.Buy : TransactionType.Sell);
             this.UpdateView();
             SoundPlayer.PlayUISound(SoundType.ButtonClick);
         }

@@ -7,6 +7,8 @@ namespace Hedra.Items
 {
     public static class Trader
     {
+        public const float SellMultiplier = 0.5f;
+        public const float BuyMultiplier = 1.25f;
         public static float SingleItemPrice(Item Item)
         {
             if (Item == null) return 0;

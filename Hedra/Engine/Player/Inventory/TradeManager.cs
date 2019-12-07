@@ -13,7 +13,7 @@ using Hedra.Sound;
 
 namespace Hedra.Engine.Player.Inventory
 {
-    public delegate void OnTransactionCompleteEventHandler(Item Item, int Price);
+    public delegate void OnTransactionCompleteEventHandler(Item Item, int Price, TransactionType Type);
 
     public class TradeManager
     {
@@ -24,7 +24,6 @@ namespace Hedra.Engine.Player.Inventory
             _staticTrader = new StaticTradeManager();
         }
         
-        public event OnTransactionCompleteEventHandler OnTransactionComplete;
         private readonly InventoryArrayInterface _buyerInterface;
         private readonly InventoryArrayInterface _sellerInterface;
 
@@ -45,7 +44,7 @@ namespace Hedra.Engine.Player.Inventory
 
         protected virtual float GetPriceMultiplier(Item Item)
         {
-            return _buyerInterface.Array.Contains(Item) ? 0.5f : 1.25f;
+            return _buyerInterface.Array.Contains(Item) ? Trader.SellMultiplier : Trader.BuyMultiplier;
         }
 
         public void ProcessTrade(Humanoid Buyer, Humanoid Seller,
@@ -94,7 +93,6 @@ namespace Hedra.Engine.Player.Inventory
             {
                 Buyer.MessageDispatcher.ShowNotification(Translations.Get("not_enough_money"), Color.Red, 3f);
             }
-            OnTransactionComplete?.Invoke(Item, Price);
         }
 
         public static int Price(Item Item) => _staticTrader.ItemPrice(Item);
@@ -107,5 +105,11 @@ namespace Hedra.Engine.Player.Inventory
 
             protected override float GetPriceMultiplier(Item Item) => 1;
         }
+    }
+
+    public enum TransactionType
+    {
+        Buy,
+        Sell
     }
 }
