@@ -1,6 +1,7 @@
 # This is a simple quest to make the player learn more about the travelling merchant
 
 import MissionCore
+import Items
 from Hedra.Mission.Blocks import FindStructureMission, CompleteStructureMission
 from Hedra.Mission import MissionBuilder, QuestTier, QuestHint, QuestReward, DialogObject, ItemCollect
 from Hedra.Engine.StructureSystem.Overworld import TravellingMerchantDesign
@@ -11,13 +12,9 @@ IS_QUEST = True
 QUEST_NAME = 'BuyFromTravelling'
 QUEST_TIER = QuestTier.Easy
 POSSIBLE_ITEMS = [
-    ('Boat', (1, 1)),
-    asdasd('Boat', (1, 1)),
-    ('Boat', (1, 1)),
-    ('Boat', (1, 1)),
-    ('Boat', (1, 1)),
-    ('Boat', (1, 1)),
-    ('Boat', (1, 1)),
+    (Items.STRENGTH_POTION, (1, 7)),
+    (Items.DEXTERITY_POTION, (1, 7)),
+    (Items.SPEED_POTION, (1, 7))
 ]
 
 def setup_timeline(position, giver, owner, rng):

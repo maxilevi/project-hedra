@@ -152,7 +152,7 @@ namespace Hedra.AISystem.Behaviours
 
         public void SetTarget(Vector3 Position, Action Callback = null)
         {
-            if((Position - Target).LengthSquared() < 1 && HasTarget) return;
+            if((Position - Target).LengthSquared() < 1) return;
             if ((Parent.Position - Position).LengthSquared() < ErrorMargin * ErrorMargin) return;
             Target = Position;
             _callback = Callback;

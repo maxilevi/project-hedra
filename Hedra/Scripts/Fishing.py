@@ -1,5 +1,6 @@
 import Core
 import math
+import Items
 import VisualEffects
 import clr
 from System.Numerics import Vector3, Vector4, Matrix4x4
@@ -29,28 +30,21 @@ FISHING_HOOK_LIFETIME = 4
 REWARD_CHANCE = .66
 ROD_LINE_WIDTH = 2
 PULL_SPEED = 1.0
+COMPANION_EQUIPMENT_TYPE = 'Pet'
 
-BAIT_ITEM_NAME = 'Bait'
-RAW_TROUT_NAME = 'RawTrout'
-RAW_SALMON_NAME = 'RawSalmon'
-RAW_FISH_NAME = 'RawFish'
-HEALTH_POTION_NAME = 'HealthPotion'
-STRENGTH_POTION_NAME = 'StrengthPotion'
-SPEED_POTION_NAME = 'SpeedPotion'
-DEXTERITY_POTION_NAME = 'StaminaPotion'
 
 FISHING_REWARDS = [
-    (STRENGTH_POTION_NAME, 0.025),
-    (SPEED_POTION_NAME, 0.05),
-    (DEXTERITY_POTION_NAME, 0.075),
-    (HEALTH_POTION_NAME, 0.125),
-    (RAW_SALMON_NAME, 0.20),
-    (RAW_TROUT_NAME, 0.30),
-    (RAW_FISH_NAME, 1.0)
+    (Items.STRENGTH_POTION, 0.025),
+    (Items.SPEED_POTION, 0.05),
+    (Items.DEXTERITY_POTION, 0.075),
+    (Items.HEALTH_POTION, 0.125),
+    (Items.RAW_SALMON, 0.20),
+    (Items.RAW_TROUT, 0.30),
+    (Items.RAW_FISH, 1.0)
 ]
 
 def assert_constants():
-    for name, val in FISHING_REWARDS + [(BAIT_ITEM_NAME, 0.0)]:
+    for name, val in FISHING_REWARDS + [(Items.BAIT, 0.0)]:
         assert ItemPool.Exists(name)
 
 def get_fished_item(position):
@@ -69,7 +63,7 @@ def get_fishing_zone_rewards(position):
     return map(lambda x: (x.FishingReward.Name, x.Chance), zones)
 
 def get_bait(human):
-    return human.Inventory.Search(lambda item: item.Name == BAIT_ITEM_NAME)
+    return human.Inventory.Search(lambda item: item.Name == Items.BAIT)
 
 def has_bait(human):
     return get_bait(human) is not None
