@@ -14297,6 +14297,7 @@
     <Content Include="Scripts\Missions\CollectAndCraft.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\Missions\DefeatBossAtGiantTree.py" />
     <Content Include="Scripts\Missions\FindAndKillLich.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

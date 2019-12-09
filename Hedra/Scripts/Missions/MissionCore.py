@@ -1,4 +1,5 @@
 import clr
+import System
 from Hedra import World
 from Hedra.Structures import MapBuilder
 from System.Numerics import Vector2, Vector3
@@ -16,7 +17,7 @@ def nearby_struct_objects(position, type, max_distance=DEFAULT_MAX_STRUCTURE_SEA
         return isinstance(struct_object.Design, type) and (struct_object.Position - position).Xz().LengthSquared() < max_distance * max_distance
     return World.StructureHandler.Find(do_find)
 
-def nearby_structs_designs(position, type, max_distance=DEFAULT_MAX_STRUCTURE_SEARCH_DISTANCE):
+def nearby_structs_positions_designs(position, type, max_distance=DEFAULT_MAX_STRUCTURE_SEARCH_DISTANCE):
     radius = int(max_distance / CHUNK_WIDTH)
     structs = []
     chunk_space = World.ToChunkSpace(position)
@@ -26,11 +27,34 @@ def nearby_structs_designs(position, type, max_distance=DEFAULT_MAX_STRUCTURE_SE
             region = World.BiomePool.GetRegion(final_position)
             sample = MapBuilder.Sample(final_position, region)
             if isinstance(sample, type):
-                structs.append(sample)
+                structs.append((sample, final_position))
     return structs
 
+def nearby_structs_designs(position, type, max_distance=DEFAULT_MAX_STRUCTURE_SEARCH_DISTANCE):
+    return [design for design, _ in nearby_structs_positions_designs(position, type, max_distance)]
+
+def nearby_structs_positions(position, type, max_distance=DEFAULT_MAX_STRUCTURE_SEARCH_DISTANCE):
+    return [final_position for _, final_position in nearby_structs_positions_designs(position, type, max_distance)]
+
 def find_structure(position, type, max_distance=DEFAULT_MAX_STRUCTURE_SEARCH_DISTANCE):
-    return nearby_struct_objects(position, type, max_distance)[0]
+    nearby = nearby_struct_objects(position, type, max_distance)
+    objects = None
+    # If nearby structure have not been created yet we force them
+    if not nearby:
+        positions = nearby_structs_positions(position, type, max_distance)
+        if not positions:
+            raise System.ArgumentOutOfRangeException('Tried to fetch a structure but it has no nearby designs')
+        print(positions)
+        for position in positions:
+            World.StructureHandler.CheckStructures(positions[0].Xz())
+            objects = nearby_struct_objects(position, type, max_distance)
+            print(objects)
+            if objects: break
+        if objects:
+            print('fixed!!')
+        else:
+            print('failed to fix1!')
+    return nearby[0] if nearby else objects[0]
 
 def is_within_distance(entity_position, structure_position, max_distance=DEFAULT_MAX_STRUCTURE_SEARCH_DISTANCE):
     return (entity_position - structure_position).Xz().LengthSquared() < max_distance * max_distance
