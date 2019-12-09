@@ -1,5 +1,6 @@
 
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Hedra.Core;
@@ -27,6 +28,7 @@ namespace Hedra.Engine.Player.Inventory
         private readonly int _length;
         private readonly int _offset;
         private readonly ObjectMesh[] _models;
+        private readonly VertexData[] _modelCache;
         private readonly Vector3[] _modelsSize;
         private static float _itemRotation;
 
@@ -42,6 +44,7 @@ namespace Hedra.Engine.Player.Inventory
             this._offset = Offset;
             this._models = new ObjectMesh[_length];
             this._modelsSize = new Vector3[_length];
+            this._modelCache = new VertexData[_length];
         }
 
         public void UpdateView()
@@ -49,13 +52,17 @@ namespace Hedra.Engine.Player.Inventory
             var itemCount = 0;
             for (var i = 0; i < _length; i++)
             {
+                if (_array[i + _offset] != null && _array[i + _offset].Model == _modelCache[i]) continue;
                 if (_models[i] != null)
                 {
                     _models[i].Dispose();
+                    _models[i] = null;
+                    _modelCache[i] = null;
                 }
                 if (_array[i+ _offset] != null)
                 {
                     _models[i] = BuildModel(_array[i + _offset].Model, out _modelsSize[i]);
+                    _modelCache[i] = _array[i + _offset].Model;
                     itemCount++;
                 }
             }

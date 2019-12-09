@@ -27,12 +27,13 @@ namespace Hedra.Engine.Player
         public event OnStructureCompleted StructureCompleted;
         private bool _wasPlayingCustom;
         private readonly IPlayer _player;
-        private CollidableStructure _insideStructure;
+        private HashSet<CollidableStructure> _insideStructures;
         private CollidableStructure[] _currentNearStructures;
         private readonly Timer _enterTimer;
         private readonly Timer _insideTimer;
         private readonly Timer _updateTimer;
         private readonly Dictionary<CollisionGroup, RigidBody> _bodies;
+        private readonly HashSet<CollidableStructure> _notInsideSet;
 
         public StructureAware(IPlayer Player)
         {
@@ -48,6 +49,8 @@ namespace Hedra.Engine.Player
             _updateTimer = new Timer(.5f);
             _enterTimer.MarkReady();
             _bodies = new Dictionary<CollisionGroup, RigidBody>();
+            _notInsideSet = new HashSet<CollidableStructure>();
+            _insideStructures = new HashSet<CollidableStructure>();
             NearCollisions = new CollisionGroup[0];
         }
         
@@ -95,28 +98,28 @@ namespace Hedra.Engine.Player
         private void HandleEvents()
         {
             if(!_insideTimer.Tick() || _currentNearStructures == null) return;
-            var isInsideAny = false;
+            _notInsideSet.Clear();
             for (var i = 0; i < _currentNearStructures.Length; i++)
             {
                 var structure = _currentNearStructures[i];
+                if(_insideStructures.Contains(structure)) _notInsideSet.Add(structure);
                 if ((structure.Position.Xz() - _player.Position.Xz()).LengthFast() < structure.Radius * .75f)
                 {
-                    isInsideAny = true;
-                    if (_insideStructure == null)
+                    _notInsideSet.Remove(structure);
+                    if (!_insideStructures.Contains(structure))
                     {
-                        _insideStructure = structure;
-                        _insideStructure.Design.OnEnter(_player);
-                        StructureEnter?.Invoke(_insideStructure);
+                        _insideStructures.Add(structure);
+                        structure.Design.OnEnter(_player);
+                        StructureEnter?.Invoke(structure);
                         break;
                     }
                 }
             }
 
-            if (!isInsideAny && _insideStructure != null)
+            foreach (var structure in _notInsideSet)
             {
-                /* _insideStructure.Design.OnLeave(_player); */
-                StructureLeave?.Invoke(_insideStructure);
-                _insideStructure = null;
+                if (!_insideStructures.Contains(structure)) continue;
+                StructureLeave?.Invoke(structure);
             }
         }
         

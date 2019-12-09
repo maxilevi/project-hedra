@@ -113,6 +113,7 @@ namespace Hedra.Engine.Player.Inventory
             _playerItems.SetItems(_player.Inventory.ItemsToArray());
             _merchantItems.SetItems(_tradeComponent.Items.ToArray());
             this.UpdateView();
+            _player.Inventory.UpdateInventory();
         }
 
         public void ClearInventory()
