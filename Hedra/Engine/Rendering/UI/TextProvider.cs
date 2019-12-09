@@ -107,7 +107,8 @@ namespace Hedra.Engine.Rendering.UI
                         var newSplit = string.Empty;
                         for (var k = 0; k < subParts.Length; k++)
                         {
-                            newSplit += $"{splits[i].Replace(texts[i], subParts[k])}{Environment.NewLine}";
+                            var upperString = splits[i].Contains("(BOLD)") ? splits[i].ToUpperInvariant() : splits[i];
+                            newSplit += $"{upperString.Replace(texts[i], subParts[k])}{Environment.NewLine}";
                         }
                         newSplit = newSplit.Substring(0, newSplit.Length - Environment.NewLine.Length);
                         splits[i] = newSplit;
