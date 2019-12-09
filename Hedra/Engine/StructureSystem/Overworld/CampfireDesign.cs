@@ -11,6 +11,9 @@ using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
 using Hedra.Sound;
 using System.Numerics;
+using Hedra.Engine.PhysicsSystem;
+using Hedra.EntitySystem;
+using Hedra.Mission;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem.Overworld
@@ -29,15 +32,12 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var rotation = rng.NextFloat() * 360.0f * Vector3.UnitY;
             BuildBaseCampfire(Structure.Position, rotation, Structure, rng, out var transformationMatrix);
 
-            ((Campfire) Structure.WorldObject).Bandit =
-                    World.WorldBuilding.SpawnBandit(
-                        new Vector3(Structure.Position.X, 125, Structure.Position.Z) 
-                        + Vector3.Transform(Vector3.UnitZ * -12f, Matrix4x4.CreateRotationY(rotation.Y * Mathf.Radian)),
-                        Level,
-                        BanditOptions.Default
-                    );
-
-            ((Campfire) Structure.WorldObject).Bandit.IsSitting = true;
+            var npcPosition = new Vector3(Structure.Position.X, 0, Structure.Position.Z)
+                           + Vector3.Transform(Vector3.UnitZ * -12f, Matrix4x4.CreateRotationY(rotation.Y * Mathf.Radian));
+            DoWhenChunkReady(npcPosition, P =>
+            {
+                ((Campfire) Structure.WorldObject).Bandit = CreateCampfireNPC(rng.Next(0, 3) == 1, P, rng);
+            }, Structure);
             if (rng.Next(0, 5) != 1)
             {
                 SpawnMat(
@@ -47,6 +47,25 @@ namespace Hedra.Engine.StructureSystem.Overworld
                     Structure
                     );
             }
+        }
+
+        private static IHumanoid CreateCampfireNPC(bool Friendly, Vector3 Position, Random Rng)
+        {
+            IHumanoid npc = null;
+            if (!Friendly)
+            {
+                npc = NPCCreator.SpawnBandit(
+                    Position,
+                    Level,
+                    BanditOptions.Default
+                );
+            }
+            else
+            {
+                npc = NPCCreator.SpawnQuestGiver(Position, MissionPool.Random(Position, QuestTier.Medium), Rng);
+            }
+            npc.IsSitting = true;
+            return npc;
         }
         
         public static void BuildBaseCampfire(Vector3 Position, Vector3 Rotation, CollidableStructure Structure, Random Rng, out Matrix4x4 TransformationMatrix)

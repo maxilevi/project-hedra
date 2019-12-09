@@ -29,7 +29,7 @@ namespace Hedra.Structures
             if(!SpawnNPC) return;
             DoWhenChunkReady(Vector3.Transform(-Vector3.UnitZ * 5 * StructureScale - Vector3.UnitX * 2 * StructureScale, Rotation * Translation), P =>
             {
-                var human = World.WorldBuilding.SpawnHumanoid(HumanType.Mage, P);
+                var human = NPCCreator.SpawnHumanoid(HumanType.Mage, P);
                 human.Physics.UsePhysics = false;
                 human.Position = P;
                 human.SearchComponent<DamageComponent>().Immune = true;

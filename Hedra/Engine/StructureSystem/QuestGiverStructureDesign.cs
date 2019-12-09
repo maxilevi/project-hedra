@@ -27,7 +27,7 @@ namespace Hedra.Engine.StructureSystem
                 DoWhenChunkReady(Vector3.Transform(Vector3.Zero, Rotation * Translation), P =>
                 {
                     var position = Vector3.Transform(Offset, Rotation) + P;
-                    var npc = World.WorldBuilding.SpawnVillager(
+                    var npc = NPCCreator.SpawnVillager(
                         position,
                         Rng
                     );

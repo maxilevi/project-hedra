@@ -62,7 +62,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         private static IHumanoid CreateBaseWizard(Vector3 Position, HealthBarType BehaviourType)
         {
             var type = Utils.Rng.Next(0, 2) == 1 ? HumanType.Witch : HumanType.Scholar;
-            var wizard = World.WorldBuilding.SpawnHumanoid(type, Position);
+            var wizard = NPCCreator.SpawnHumanoid(type, Position);
             wizard.Physics.CollidesWithEntities = false;
             wizard.Position = Position;
             wizard.SearchComponent<DamageComponent>().Immune = true;

@@ -17,11 +17,6 @@ namespace Hedra.Engine.WorldBuilding
         IGroundwork[] GetGroundworksFor(Vector2 Position);
         BasePlateau[] Plateaux { get; }
         IGroundwork[] Groundworks { get; }
-        Humanoid SpawnVillager(Vector3 DesiredPosition, Random Rng);
-        Humanoid SpawnVillager(Vector3 DesiredPosition, int Seed);
-        Humanoid SpawnHumanoid(HumanType Type, Vector3 DesiredPosition);
-        Humanoid SpawnHumanoid(string Type, Vector3 DesiredPosition);
-        Humanoid SpawnBandit(Vector3 Position, int Level, BanditOptions Options);
         Chest SpawnChest(Vector3 Position, Item Item);
         string GenerateName();
         void SetupStructure(CollidableStructure Structure);

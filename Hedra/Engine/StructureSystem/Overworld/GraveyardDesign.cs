@@ -121,7 +121,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var skeletonCount = 4;
             for (var i = 0; i < skeletonCount; i++)
             {
-                var skeleton = World.WorldBuilding.SpawnBandit(
+                var skeleton = NPCCreator.SpawnBandit(
                         Position + new Vector3(Rng.NextFloat() * 60f - 30f, 0, Rng.NextFloat() * 60f - 30f) * Chunk.BlockSize,
                         Level, BanditOptions.Undead);
                     enemies.Add(skeleton);

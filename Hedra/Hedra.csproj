@@ -449,6 +449,7 @@
     <Compile Include="Engine\Windowing\MouseMoveEventArgs.cs" />
     <Compile Include="Engine\Windowing\MouseWheelEventArgs.cs" />
     <Compile Include="Engine\WorldBuilding\BanditOptions.cs" />
+    <Compile Include="Engine\WorldBuilding\NPCCreator.cs" />
     <Compile Include="Items\EquipmentType.cs" />
     <Compile Include="Items\ItemTier.cs" />
     <Compile Include="Items\Trader.cs" />

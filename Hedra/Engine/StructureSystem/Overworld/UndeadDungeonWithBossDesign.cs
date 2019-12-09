@@ -82,7 +82,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         protected static IHumanoid NormalSkeleton(Vector3 Position, CollidableStructure Structure)
         {
-            var skeleton = World.WorldBuilding.SpawnBandit(Position, ((UndeadDungeonWithBossDesign)Structure.Design).Level, BanditOptions.Undead);
+            var skeleton = NPCCreator.SpawnBandit(Position, ((UndeadDungeonWithBossDesign)Structure.Design).Level, BanditOptions.Undead);
             skeleton.Physics.CollidesWithEntities = false;
             skeleton.SearchComponent<CombatAIComponent>().SetCanExplore(Value: false);
             skeleton.SearchComponent<CombatAIComponent>().SetGuardSpawnPoint(Value: false);

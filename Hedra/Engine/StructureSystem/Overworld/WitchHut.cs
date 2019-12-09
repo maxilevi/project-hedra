@@ -51,7 +51,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             IHumanoid female = null, male = null;
             if (Rng.Next(0, 8) != 1)
             {
-                female = World.WorldBuilding.SpawnHumanoid(
+                female = NPCCreator.SpawnHumanoid(
                     HumanType.Witch,
                     Witch0Position
                 );
@@ -59,7 +59,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             }
             if (female == null || Rng.Next(0, 8) != 1)
             {
-                male = World.WorldBuilding.SpawnHumanoid(
+                male = NPCCreator.SpawnHumanoid(
                     HumanType.Witch,
                     Witch1Position
                 );

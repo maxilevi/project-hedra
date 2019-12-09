@@ -81,7 +81,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 HumanType.Warrior, HumanType.Archer, HumanType.Blacksmith, HumanType.Mage, HumanType.TravellingMerchant,
                 HumanType.Bard, HumanType.Farmer, HumanType.Scholar, HumanType.GreenVillager, HumanType.Clothier, HumanType.Mason
             };
-            Rescuee = World.WorldBuilding.SpawnHumanoid(randomTypes[Rng.Next(0, randomTypes.Length)], this.Position + Vector3.UnitZ * 3.0f);
+            Rescuee = NPCCreator.SpawnHumanoid(randomTypes[Rng.Next(0, randomTypes.Length)], this.Position + Vector3.UnitZ * 3.0f);
             Rescuee.ResetEquipment();
             Rescuee.Physics.UsePhysics = false;
             Rescuee.Physics.CollidesWithEntities = false;

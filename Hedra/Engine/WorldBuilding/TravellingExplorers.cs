@@ -24,7 +24,7 @@ namespace Hedra.Engine.WorldBuilding
             var explorers = new List<IHumanoid>();
             for (var i = 0; i < count; ++i)
             {
-                var explorer = World.WorldBuilding.SpawnBandit(Position + Vector3.UnitZ * i * Chunk.BlockSize * 2, 8, new BanditOptions
+                var explorer = NPCCreator.SpawnBandit(Position + Vector3.UnitZ * i * Chunk.BlockSize * 2, 8, new BanditOptions
                 {
                     Friendly = friendly,
                     ModelType = (Rng.Next(0, 5) == 1 ? (HumanType?)HumanType.Skeleton : null)

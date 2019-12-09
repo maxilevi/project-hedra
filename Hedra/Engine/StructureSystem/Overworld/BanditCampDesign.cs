@@ -74,7 +74,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             for (var i = 0; i < tents.Length; i++)
             {
                 MakeTent(tents[i], rng, Structure);
-                enemies[i] = World.WorldBuilding.SpawnBandit(
+                enemies[i] = NPCCreator.SpawnBandit(
                     tents[i].WorldPosition + Vector3.Transform(Vector3.UnitZ * 24, tents[i].RotationMatrix), Level, BanditOptions.Default);
                 enemies[i].SearchComponent<DamageComponent>().Ignore(E => Array.IndexOf(enemies, E) != -1);
             }

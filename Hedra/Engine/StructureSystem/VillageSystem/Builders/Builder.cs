@@ -30,7 +30,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
     {
         public static void SpawnVillager(Vector3 Position, Random Rng, VillageGraph Graph, out IHumanoid Humanoid)
         {
-            Humanoid = World.WorldBuilding.SpawnVillager(Position, Rng);
+            Humanoid = NPCCreator.SpawnVillager(Position, Rng);
             Humanoid.SearchComponent<DamageComponent>().Immune = true;
             Humanoid.AddComponent(new TalkComponent(Humanoid));
             Humanoid.AddComponent(new RoamingVillagerAIComponent(Humanoid, Graph));
@@ -183,7 +183,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
 
         protected IHumanoid SpawnHumanoid(HumanType Type, Vector3 Position)
         {
-            var human = World.WorldBuilding.SpawnHumanoid(Type, Position);
+            var human = NPCCreator.SpawnHumanoid(Type, Position);
             human.SetWeapon(null);
             VillageObject.AddHumanoid(human);
             return human;

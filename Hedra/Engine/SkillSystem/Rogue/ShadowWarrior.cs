@@ -14,6 +14,7 @@ using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.WeaponSystem;
 using System.Numerics;
+using Hedra.Engine.WorldBuilding;
 
 namespace Hedra.Engine.SkillSystem.Rogue
 {
@@ -24,7 +25,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
         
         protected override void DoEnable()
         {
-            _warrior = World.WorldBuilding.SpawnHumanoid(HumanType.Rogue, User.Position + User.Orientation * 12);
+            _warrior = NPCCreator.SpawnHumanoid(HumanType.Rogue, User.Position + User.Orientation * 12);
             _warrior.Model.Outline = true;
             _warrior.Model.OutlineColor = new Vector4(.2f, .2f, .2f, 1);
             _warrior.RemoveComponent(_warrior.SearchComponent<HealthBarComponent>());

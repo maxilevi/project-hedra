@@ -42,7 +42,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         private static void SpawnStorylineGiver(Vector3 Position)
         {
-            var human = World.WorldBuilding.SpawnHumanoid(HumanType.Bard, Position);
+            var human = NPCCreator.SpawnHumanoid(HumanType.Bard, Position);
             var missionDesign = MissionPool.Grab(Quests.TheBeginning);
             if (!LocalPlayer.Instance.Questing.StartedStoryline)
             {

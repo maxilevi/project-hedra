@@ -10,6 +10,7 @@ using Hedra.Engine.Player;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.StructureSystem.Overworld;
+using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using Hedra.Items;
 using Hedra.Localization;
@@ -37,7 +38,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
             MasterySkill = MasterySkill ?? new DefaultMastery();
             var targetPosition = Owner.Position + Owner.Orientation * 16;
             Owner.Physics.StaticRaycast(targetPosition, out var hitPosition);
-            var skeleton = World.WorldBuilding.SpawnHumanoid(HumanType.Skeleton, hitPosition);
+            var skeleton = NPCCreator.SpawnHumanoid(HumanType.Skeleton, hitPosition);
             skeleton.Position = hitPosition;
             skeleton.AddComponent(new MeleeMinionComponent(skeleton, Owner));
             skeleton.SetWeapon(ItemPool.Grab(CommonItems.UncommonSilverSword).Weapon);

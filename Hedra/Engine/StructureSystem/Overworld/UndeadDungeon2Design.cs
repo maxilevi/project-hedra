@@ -52,7 +52,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         protected override IEntity CreateDungeonBoss(Vector3 Position, CollidableStructure Structure)
         {
             const HumanType type = HumanType.BeasthunterSpirit;
-            var boss = World.WorldBuilding.SpawnBandit(Position, ((UndeadDungeon2Design) Structure.Design).Level,
+            var boss = NPCCreator.SpawnBandit(Position, ((UndeadDungeon2Design) Structure.Design).Level,
                 new BanditOptions
                 {
                     ModelType = type,

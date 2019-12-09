@@ -21,7 +21,7 @@ namespace Hedra.Engine.WorldBuilding
 
         public TravellingMerchant(Vector3 Position) : base(Position)
         {
-            Merchant = World.WorldBuilding.SpawnHumanoid(HumanType.TravellingMerchant, Position);
+            Merchant = NPCCreator.SpawnHumanoid(HumanType.TravellingMerchant, Position);
             Merchant.SearchComponent<TradeComponent>().ItemBought += OnItemBought;
         }
         

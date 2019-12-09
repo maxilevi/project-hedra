@@ -224,7 +224,7 @@ namespace Hedra.User
                     var vill = World.InRadius<Village>(Caster.Position, VillageDesign.MaxVillageRadius).FirstOrDefault();
                     Result = "Couldn't find any near village";
                     if (vill == null) return false;
-                    var human = World.WorldBuilding.SpawnHumanoid(HumanType.Bard, Caster.Position + Caster.Orientation * 16f);
+                    var human = NPCCreator.SpawnHumanoid(HumanType.Bard, Caster.Position + Caster.Orientation * 16f);
                     human.AddComponent(new TalkComponent(human));
                     human.AddComponent(new RoamingVillagerAIComponent(human, vill.Graph));
                     Result = "Success";
@@ -243,7 +243,7 @@ namespace Hedra.User
                     {
                         quest = MissionPool.Random(position);
                     }
-                    var human = World.WorldBuilding.SpawnVillager(position, Utils.Rng);
+                    var human = NPCCreator.SpawnVillager(position, Utils.Rng);
                     human.AddComponent(new QuestGiverComponent(human, quest));
                     Result = "Success";
                     return true;
@@ -450,12 +450,12 @@ namespace Hedra.User
                 {
                     if(Parts[1] == "bandit")
                     {
-                        World.WorldBuilding.SpawnBandit(Caster.Position + Caster.Orientation * 32, Caster.Level, BanditOptions.Default);
+                        NPCCreator.SpawnBandit(Caster.Position + Caster.Orientation * 32, Caster.Level, BanditOptions.Default);
                         return true;
                     }
                     if(Parts[1] == "undead")
                     {
-                        World.WorldBuilding.SpawnBandit(Caster.Position + Caster.Orientation * 32, Caster.Level, new BanditOptions
+                        NPCCreator.SpawnBandit(Caster.Position + Caster.Orientation * 32, Caster.Level, new BanditOptions
                         {
                             ModelType = Utils.Rng.NextBool() ? HumanType.VillagerGhost : HumanType.BeasthunterSpirit
                         });
@@ -463,11 +463,11 @@ namespace Hedra.User
                     }
                     if(Parts[1] == "plantling")
                     {
-                        World.WorldBuilding.SpawnHumanoid(HumanType.Mandragora, Caster.Position + Caster.Orientation * 32);
+                        NPCCreator.SpawnHumanoid(HumanType.Mandragora, Caster.Position + Caster.Orientation * 32);
                         return true;
                     }
                     if(Parts[1] == "merchant"){
-                        World.WorldBuilding.SpawnHumanoid(HumanType.TravellingMerchant, Caster.Position + Caster.Orientation * 32);
+                        NPCCreator.SpawnHumanoid(HumanType.TravellingMerchant, Caster.Position + Caster.Orientation * 32);
                         return true;
                     }
                     if(Parts[1] == "explorers")
@@ -485,7 +485,7 @@ namespace Hedra.User
                     }
                     else
                     {
-                        World.WorldBuilding.SpawnHumanoid(Parts[1], Caster.Position + Caster.Orientation * 32);
+                        NPCCreator.SpawnHumanoid(Parts[1], Caster.Position + Caster.Orientation * 32);
                     }
                     return true;
                 }
@@ -535,7 +535,7 @@ namespace Hedra.User
 
                 if (Parts[0] == "fisherman")
                 {
-                    var fisherman = World.WorldBuilding.SpawnHumanoid(HumanType.Fisherman, Caster.Position + Caster.Orientation * 32);
+                    var fisherman = NPCCreator.SpawnHumanoid(HumanType.Fisherman, Caster.Position + Caster.Orientation * 32);
                     //fisherman.RemoveComponent(fisherman.SearchComponent<BasicAIComponent>());
                     fisherman.AddComponent(new FishermanAIComponent(fisherman, (Caster.Position + Caster.Orientation * 32).Xz(), Vector2.One * 64f));
                 }

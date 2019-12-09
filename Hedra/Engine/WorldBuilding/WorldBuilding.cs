@@ -25,10 +25,12 @@ using Hedra.Engine.Localization;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.PhysicsSystem;
+using Hedra.Engine.QuestSystem;
 using Hedra.EntitySystem;
 using Hedra.Game;
 using Hedra.Items;
 using Hedra.Localization;
+using Hedra.Mission;
 using Hedra.Numerics;
 
     namespace Hedra.Engine.WorldBuilding
@@ -47,94 +49,6 @@ using Hedra.Numerics;
             _plateaus = new List<BasePlateau>();
         }
 
-        public Humanoid SpawnHumanoid(HumanType Type, Vector3 DesiredPosition)
-        {
-            return SpawnHumanoid(Type.ToString(), 1, DesiredPosition, null);
-        }
-
-        public Humanoid SpawnHumanoid(string Type, Vector3 DesiredPosition)
-        {
-            return SpawnHumanoid(Type, 1, DesiredPosition, null);
-        }
-
-        private Humanoid SpawnHumanoid(HumanType Type, Vector3 DesiredPosition, HumanoidConfiguration Configuration)
-        {
-            return SpawnHumanoid(Type.ToString(), 1, DesiredPosition, Configuration);
-        }
-
-        private Humanoid SpawnHumanoid(string Type, int Level, Vector3 DesiredPosition, HumanoidConfiguration Configuration)
-        {
-            return SpawnHumanoid(Type, HumanoidLoader.HumanoidTemplater[Type], Level, DesiredPosition, Configuration);
-        }
-        
-        private Humanoid SpawnHumanoid(string Type, HumanoidTemplate Template, int Level, Vector3 DesiredPosition, HumanoidConfiguration Configuration)
-        {
-            var human = HumanoidFactory.BuildHumanoid(Type, Template, Level, Configuration);
-            human.Position = World.FindPlaceablePosition(human, new Vector3(DesiredPosition.X, Physics.HeightAtPosition(DesiredPosition.X, DesiredPosition.Z), DesiredPosition.Z));
-            human.Rotation = new Vector3(0, Utils.Rng.NextFloat(), 0) * 360f * Mathf.Radian;
-            ApplySeasonHats(human, Type);
-            return human;
-        }
-
-        public Humanoid SpawnVillager(Vector3 DesiredPosition, Random Rng)
-        {
-            return SpawnVillager(DesiredPosition, Rng.Next(int.MinValue, int.MaxValue));
-        }
-        
-        public Humanoid SpawnVillager(Vector3 DesiredPosition, int Seed)
-        {
-            var rng = new Random(Seed);
-            var types = new []
-            {
-                HumanType.Warrior,
-                HumanType.Rogue,
-                HumanType.Mage,
-                HumanType.Archer,
-                HumanType.Scholar,
-                HumanType.Bard
-            };
-            var villager = SpawnHumanoid(types[rng.Next(0, types.Length)], DesiredPosition, new HumanoidConfiguration(HealthBarType.Friendly));
-            villager.Seed = Seed;
-            villager.SetWeapon(null);
-            villager.Name = NameGenerator.PickMaleName(rng);
-            villager.IsFriendly = true;
-            villager.SearchComponent<DamageComponent>().Immune = true;
-            return villager;
-        }
-
-        public Humanoid SpawnBandit(Vector3 Position, int Level, BanditOptions Options)
-        {
-            var availableClasses = new List<Class>();
-            for (var i = 0; i < 4; i++)
-            {
-                var @class = (Class)(1 << i);
-                if((@class & Options.PossibleClasses) == @class)
-                    availableClasses.Add(@class);
-            }
-            int classN = Utils.Rng.Next(0, availableClasses.Count);
-            var classType = ClassDesign.FromString(availableClasses[classN]);
-
-            var behaviour = new HumanoidConfiguration(Options.Friendly ? HealthBarType.Friendly : HealthBarType.Hostile);
-            var modelTemplate = Options.ModelType != null ? HumanoidLoader.HumanoidTemplater[Options.ModelType.Value.ToString()] : null;
-            var template = HumanoidLoader.HumanoidTemplater[classType.ToString()].Clone();
-            if (modelTemplate != null)
-            {
-                template.Models = modelTemplate.Models;
-                template.Model = modelTemplate.Model;
-            }
-            var templateName = modelTemplate != null 
-                ? Translations.Has(modelTemplate.DisplayName.ToLowerInvariant()) ? Translations.Get(modelTemplate.DisplayName.ToLowerInvariant()) : modelTemplate.DisplayName 
-                : Translations.Get("bandit");
-            var human = this.SpawnHumanoid(classType.ToString(), template, Level, Position, behaviour);
-
-            HumanoidFactory.AddAI(human, Options.Friendly);
-            if(Options.Friendly)
-                human.SearchComponent<DamageComponent>().Ignore(E => E is IPlayer || E == GameManager.Player.Companion.Entity);
-            human.Name = (!Options.Friendly) ? templateName : NameGenerator.PickMaleName(Utils.Rng);
-            human.IsFriendly = Options.Friendly;
-            return human;
-        }
-        
         public Chest SpawnChest(Vector3 Position, Item Item)
         {
             return new Chest(Position, Item);
@@ -148,20 +62,6 @@ using Hedra.Numerics;
                 "mountains_of", "lands_of", "territory_of"
             };
             return Translations.Get(types[rng.Next(0, types.Length)], NameGenerator.Generate(World.Seed));
-        }
-
-        private void ApplySeasonHats(Humanoid Human, string Type)
-        {
-            if (!string.Equals(Type, HumanType.Warrior.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
-                !string.Equals(Type, HumanType.Merchant.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
-                !string.Equals(Type, HumanType.TravellingMerchant.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
-                !string.Equals(Type, HumanType.Archer.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
-                !string.Equals(Type, HumanType.Blacksmith.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
-                !string.Equals(Type, HumanType.Rogue.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
-                !string.Equals(Type, HumanType.Mage.ToString(), StringComparison.InvariantCultureIgnoreCase)) return;
-            
-            if(Season.IsChristmas) 
-                Human.SetHelmet(ItemPool.Grab(ItemType.ChristmasHat).Helmet);
         }
 
         private void RemovePlateau(BasePlateau Mount)

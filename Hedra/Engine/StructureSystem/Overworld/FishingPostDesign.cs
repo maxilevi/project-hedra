@@ -140,7 +140,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         private void SpawnFisherman(CollidableStructure Structure, Vector3 Position)
         {
-            var fisherman = World.WorldBuilding.SpawnHumanoid(HumanType.Fisherman, Position);
+            var fisherman = NPCCreator.SpawnHumanoid(HumanType.Fisherman, Position);
             fisherman.Rotation = new Vector3(0, Utils.Rng.NextFloat() * 360, 0);
             fisherman.AddComponent(new FishermanAIComponent(fisherman, Position.Xz(), Vector2.One * 128f));
             Structure.WorldObject.AddNPCs(fisherman);
@@ -215,7 +215,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             DecorationsPlacer.PlaceWhenWorldReady(Position, P =>
             {
-                var human = World.WorldBuilding.SpawnHumanoid(HumanType.Merchant, Position);
+                var human = NPCCreator.SpawnHumanoid(HumanType.Merchant, Position);
                 Structure.WorldObject.AddNPCs(human);
             }, () => Structure.Disposed);
         }
@@ -290,7 +290,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         
         private static IHumanoid CreateFisherman(Vector3 Position, CollidableStructure Structure)
         {
-            var fisherman = World.WorldBuilding.SpawnHumanoid(HumanType.Fisherman, Position);
+            var fisherman = NPCCreator.SpawnHumanoid(HumanType.Fisherman, Position);
             fisherman.AddComponent(new QuestGiverComponent(fisherman, MissionPool.Random(Position, QuestTier.Medium, QuestHint.Fishing)));
             fisherman.Physics.CollidesWithEntities = false;
             fisherman.IsSitting = true;
@@ -300,7 +300,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         
         private static IHumanoid CreateBoatMerchant(Vector3 Position, CollidableStructure Structure)
         {
-            var boatMerchant = World.WorldBuilding.SpawnHumanoid(HumanType.Fisherman, Position);
+            var boatMerchant = NPCCreator.SpawnHumanoid(HumanType.Fisherman, Position);
             boatMerchant.SearchComponent<DamageComponent>().Immune = true;
             boatMerchant.AddComponent(new BoatMerchantComponent(boatMerchant));
             return boatMerchant;
