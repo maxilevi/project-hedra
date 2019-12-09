@@ -12,7 +12,7 @@ MAX_DISTANCE = 4096
 
 def setup_timeline(position, giver, owner, rng):
     builder = MissionBuilder()
-
+        
     bandit_camp = MissionCore.find_structure(position, BanditCampDesign)
 
     find = FindStructureMission()

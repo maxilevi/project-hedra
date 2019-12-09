@@ -152,7 +152,7 @@ namespace Hedra.Engine.Player.QuestSystem
                     _player.Minimap.MarkQuest(
                         () =>
                         {
-                            if(quest.Disposed) return quest.Location;
+                            if(!quest.Disposed) return quest.Location;
                             _player.Minimap.UnMarkQuest();
                             return Vector3.Zero;
                         });

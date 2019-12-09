@@ -274,7 +274,7 @@ namespace Hedra.Engine.EntitySystem
             {
                 _sound.Position = this.Position;
                 _sound.Pitch = Parent.Speed / PitchSpeed;
-                _sound.Update(this.IsWalking && Parent.IsGrounded);
+                _sound.Update(this.IsWalking && Parent.IsGrounded && !IsFlyingModel);
             }
             _attackCooldown -= Time.IndependentDeltaTime;
         }
