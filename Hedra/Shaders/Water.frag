@@ -12,7 +12,7 @@ in vec3 toCamera;
 in vec3 pass_fromLightVector;
 in vec3 pass_lightColour;
 in vec3 pass_diffuse;
-in vec3 pass_highlights;
+in vec4 pass_highlights;
 
 layout(location = 0)out vec4 OutColor;
 layout(location = 1)out vec4 OutPosition;
@@ -79,7 +79,7 @@ void main()
 	vec3 specularHighlights = pass_lightColour * specular * specularReflectivity;
 	
 	float fresnel = calculateFresnel(normal);
-	vec3 finalColour = pass_color * pass_highlights + specularHighlights;
+	vec3 finalColour = mix(pass_color, pass_highlights.xyz, pass_highlights.a) + specularHighlights;
 	float waterDepth = calculateWaterDepth(projectiveCoords);
 	float alpha = (1.0 - fresnel * 0.7) * clamp((waterDepth / edgeSoftness / Smoothness), 0.0, 1.0);
 

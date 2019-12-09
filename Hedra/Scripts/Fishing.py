@@ -20,7 +20,7 @@ clr.ImportExtensions(EntityExtensions)
 clr.ImportExtensions(InventoryExtensions)
 
 FISHING_DISTANCE = 24
-FISHING_CHANCE = 2600
+FISHING_CHANCE = 1200
 FISHING_STRING_DETAIL = 7
 FISHING_CATCH_TIME = 2.5
 FISHING_ROD_COOLDOWN = 2

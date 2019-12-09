@@ -13,7 +13,7 @@ layout(location = 2)in vec3 InNormal;
 out vec3 pass_vertex;
 out vec3 pass_normal;
 out vec3 pass_color;
-out vec3 pass_highlights;
+out vec4 pass_highlights;
 out float pass_visibility;
 out float pass_height;
 out vec4 pass_botColor;
@@ -63,7 +63,7 @@ void main()
 	pass_lightColour = LightColor;
 	textureCoords = vertex.xz * 0.0025;
 	pass_color = InColor.rgb;
-	pass_highlights = apply_highlights(vec4(1.0), vertex.xyz).xyz;
+	pass_highlights = apply_highlights(vec4(1.0, 1.0, 1.0, 0.0), vertex.xyz);
 	pass_clipSpace = gl_Position;
 	pass_normal = InNormal;
 	pass_vertex = vertex.xyz;
