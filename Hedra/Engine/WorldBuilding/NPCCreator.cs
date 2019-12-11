@@ -79,13 +79,15 @@ namespace Hedra.Engine.WorldBuilding
 
         public static IHumanoid SpawnQuestGiver(Vector3 Position, IMissionDesign Quest, Random Rng)
         {
-            var npc = NPCCreator.SpawnVillager(
+            var npc = SpawnVillager(
                 Position,
                 Rng
             );
             npc.Position = Position;
             npc.Physics.UsePhysics = false;
-            npc.AddComponent(new QuestGiverComponent(npc, MissionPool.Random(Position)));
+            npc.RemoveComponent<TradeComponent>();
+            npc.RemoveComponent<TalkComponent>();
+            npc.AddComponent(new QuestGiverComponent(npc, Quest));
             return npc;
         }
 

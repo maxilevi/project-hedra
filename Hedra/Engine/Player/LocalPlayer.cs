@@ -15,6 +15,7 @@ using Hedra.Core;
 using Hedra.Crafting;
 using Hedra.Engine.ClassSystem;
 using System.Numerics;
+using Hedra.Engine.Bullet;
 using Hedra.Engine.Sound;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.EnvironmentSystem;
@@ -57,6 +58,7 @@ namespace Hedra.Engine.Player
 {
     public class LocalPlayer : Humanoid, IPlayer
     {
+        public event OnMoveEvent OnMove;
         public event OnRespawnEvent OnRespawn;
         public event OnInteractionEvent OnInteract;
         public ICamera View { get; }
@@ -84,6 +86,7 @@ namespace Hedra.Engine.Player
         private IAmbientEffectHandler AmbientEffects { get; }
         private float _acummulativeHealing;
         private Vector3 _previousPosition;
+        private Vector3 _previousMovedPosition;
         private float _health;
         private bool _wasSleeping;
         private bool _enabled;
@@ -217,6 +220,12 @@ namespace Hedra.Engine.Player
                 if( (int) Time.AccumulatedFrameTime % 2 == 0) World.Particles.Emit();
                 
                 _previousPosition = Model.Human.Position;
+            }
+
+            if ((_previousMovedPosition - Position).LengthSquared() > Chunk.BlockSize * Chunk.BlockSize)
+            {
+                OnMove?.Invoke();
+                _previousMovedPosition = Position;
             }
 
             if (Companion.Entity != null && !Companion.Entity.Disposed)

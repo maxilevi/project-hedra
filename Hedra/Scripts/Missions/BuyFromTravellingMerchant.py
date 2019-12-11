@@ -33,6 +33,7 @@ def setup_timeline(position, giver, owner, rng):
     complete = CompleteStructureMission()
     complete.StructureDesign = structure.Design
     complete.StructureObject = structure.WorldObject
+    complete.MissionBlockEnd += lambda: consume_items(items_to_collect, owner)
     builder.Next(complete)
     
     reward = QuestReward()
@@ -42,6 +43,10 @@ def setup_timeline(position, giver, owner, rng):
     builder.SetReward(reward)
     builder.MissionEnd += lambda: items_to_collect.Consume(owner)
     return builder
+
+def consume_items(items, owner):
+    for x in items:
+        x.Consume(owner)
 
 def random_items(rng):
     name, amount = POSSIBLE_ITEMS[rng.Next(0, len(POSSIBLE_ITEMS))]

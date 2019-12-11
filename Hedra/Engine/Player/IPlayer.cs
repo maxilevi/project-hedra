@@ -13,6 +13,7 @@ using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using System.Numerics;
+using Hedra.Engine.Bullet;
 
 namespace Hedra.Engine.Player
 {
@@ -22,6 +23,7 @@ namespace Hedra.Engine.Player
     
     public interface IPlayer : IHumanoid, ISkillUser
     {
+        event OnMoveEvent OnMove;
         event OnRespawnEvent OnRespawn;
         event OnInteractionEvent OnInteract;
         IMessageDispatcher MessageDispatcher { get; }

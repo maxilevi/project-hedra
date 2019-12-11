@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Drawing;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.QuestSystem;
@@ -32,46 +33,19 @@ namespace Hedra.Mission.Blocks
         private static DialogObject DialogFromReward(QuestReward Reward)
         {
             if (Reward.CustomDialog != null) return Reward.CustomDialog;
+            var arguments = new List<object>();
             if (Reward.HasExperience)
-                return new DialogObject
-                {
-                    Keyword = "quest_complete_reward_dialog",
-                    Arguments = new object[]
-                    {
-                        $"{Reward.Experience} {Translations.Get("quest_experience")}"
-                    }
-                };
+                arguments.Add($"{Reward.Experience} {Translations.Get("quest_experience")}");
             if (Reward.HasGold)
-                return new DialogObject
-                {
-                    Keyword = "quest_complete_reward_dialog",
-                    Arguments = new object[]
-                    {
-                        $"{Reward.Gold} {Translations.Get("quest_gold")}"
-                    }
-                };
+                arguments.Add($"{Reward.Gold} {Translations.Get("quest_gold")}");
             if (Reward.HasItem)
-                return new DialogObject
-                {
-                    Keyword = "quest_complete_reward_dialog",
-                    Arguments = new object[]
-                    {
-                        MakeItemString(Reward.Item)
-                    }
-                };
+                arguments.Add(MakeItemString(Reward.Item));
             if (Reward.HasSkillPoint)
-                return new DialogObject
-                {
-                    Keyword = "quest_complete_reward_dialog",
-                    Arguments = new object[]
-                    {
-                        $"{Reward.SkillPoint} {Translations.Get("quest_skill_point")}"
-                    }
-                };
+                arguments.Add($"{Reward.SkillPoint} {Translations.Get("quest_skill_point")}");
             return new DialogObject
             {
-                Keyword = "quest_complete_dialog",
-                Arguments = new object[0]
+                Keyword = $"quest_complete_reward_{arguments.Count}_dialog",
+                Arguments = arguments.ToArray()
             };
         }
 

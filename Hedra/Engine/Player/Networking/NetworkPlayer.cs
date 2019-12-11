@@ -1,5 +1,6 @@
 using System;
 using Hedra.Crafting;
+using Hedra.Engine.Bullet;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player.AbilityTreeSystem;
@@ -16,6 +17,7 @@ namespace Hedra.Engine.Player.Networking
 {
     public class NetworkPlayer : Humanoid, IPlayer
     {
+        public event OnMoveEvent OnMove;
         public event OnRespawnEvent OnRespawn;
         public event OnInteractionEvent OnInteract;
         public ICamera View => throw new System.NotImplementedException();

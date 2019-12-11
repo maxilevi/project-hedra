@@ -247,8 +247,8 @@ namespace Hedra.User
                     {
                         quest = MissionPool.Random(position);
                     }
-                    var human = NPCCreator.SpawnVillager(position, Utils.Rng);
-                    human.AddComponent(new QuestGiverComponent(human, quest));
+
+                    NPCCreator.SpawnQuestGiver(position, quest, Utils.Rng);
                     Result = "Success";
                     return true;
                 }

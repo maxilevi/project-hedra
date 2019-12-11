@@ -4,7 +4,7 @@ from Hedra import World
 from Hedra.Structures import MapBuilder
 from System.Numerics import Vector2, Vector3
 from Hedra.Numerics import VectorExtensions
-from Hedra.Mission import QuestReward
+from Hedra.Mission import QuestReward, ItemCollect
 from Hedra.Mission.Blocks import EndMission
 
 clr.ImportExtensions(VectorExtensions)
@@ -81,3 +81,9 @@ def contains_quest(owner, name):
 
 def make_item_string(item):
     return EndMission.MakeItemString(item)
+
+def to_item_collect(item):
+    collect = ItemCollect()
+    collect.Name = item.Name
+    collect.Amount = item.GetAttribute[str]('Amount') if item.HasAttribute('Amount') else 1
+    return collect

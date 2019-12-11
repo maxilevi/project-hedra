@@ -171,9 +171,19 @@ quest_craft_anywhere_dialog_0 = Using the items you collected I need you to craf
 quest_craft_take_item = This $(ORANGE)(BOLD){{0}} will be useful, take them.
 quest_craft_take_recipe = Take this recipe, it will come in handy.
 quest_learn_recipe_plaque = YOU LEARNED A $(RED)(BOLD){RECIPE}.
-quest_complete_dialog_0 = Thanks for helping me.
+
 quest_complete_reward_dialog_0 = Thank you. Take this $(ORANGE)(BOLD){{0}} as a show of gratitude.
 quest_complete_reward_dialog_1 = Thanks for helping me, here is your reward $(ORANGE)(BOLD){{0}}.
+quest_complete_reward_0_dialog_0 = Thanks for helping me.
+quest_complete_reward_1_dialog_0 = Thanks for helping me, here is your reward $(ORANGE)(BOLD){{0}}.
+quest_complete_reward_1_dialog_1 = Thank you. Take this $(ORANGE)(BOLD){{0}} as a show of gratitude.
+quest_complete_reward_2_dialog_0 = Thanks for helping me, here are your rewards $(ORANGE)(BOLD){{0}} and $(ORANGE)(BOLD){{1}}.
+quest_complete_reward_2_dialog_1 = Thank you. Take this rewards $(ORANGE)(BOLD){{0}} and $(ORANGE)(BOLD){{1}} as a show of gratitude.
+quest_complete_reward_3_dialog_0 = Thanks for helping me, here are your rewards $(ORANGE)(BOLD){{0}}, $(ORANGE)(BOLD){{1}} and $(ORANGE)(BOLD){{2}}.
+quest_complete_reward_3_dialog_1 = Thank you. Take this rewards $(ORANGE)(BOLD){{0}}, $(ORANGE)(BOLD){{1}} and $(ORANGE)(BOLD){{2}} as a show of gratitude.
+quest_complete_reward_4_dialog_0 = Thanks for helping me, here are your rewards $(ORANGE)(BOLD){{0}}, $(ORANGE)(BOLD){{1}}, $(ORANGE)(BOLD){{2}} and $(ORANGE)(BOLD){{3}}.
+quest_complete_reward_4_dialog_1 = Thank you. Take this rewards $(ORANGE)(BOLD){{0}}, $(ORANGE)(BOLD){{1}}, $(ORANGE)(BOLD){{2}} and $(ORANGE)(BOLD){{3}} as a show of gratitude.
+
 quest_find_structure_short = LOOK FOR THE $(BOLD)(ORANGE){{0}}.
 quest_find_structure_description = $(BLUE)(BOLD){{0}} told you there is a nearby $(BOLD)(ORANGE){{1}}.\n$(GRAY)(BOLD){HINT: }Open the map to see more details.
 quest_find_structure_dialog_0 = There is a nearby $(BOLD)(ORANGE)(CAPS){{0}}. You should go find it.
