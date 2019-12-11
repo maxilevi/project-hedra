@@ -81,6 +81,7 @@ namespace Hedra.Engine.Rendering.Core
         public static void Remove(uint Id)
         {
             if (Id == 0) return;
+            if(Textures[Id].Static) return;
             Textures[Id].Uses--;
             if (Textures[Id].Uses == 0)
             {

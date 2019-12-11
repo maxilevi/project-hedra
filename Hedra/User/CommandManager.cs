@@ -230,7 +230,11 @@ namespace Hedra.User
                     Result = "Success";
                     return true;
                 }
-                
+
+                if (Parts[0] == "resetquests")
+                {
+                    Caster.Questing.Empty();
+                }
                 if (Parts[0] == "quest")
                 {
                     var position = Caster.Position + Caster.Orientation * 16f;
@@ -473,6 +477,11 @@ namespace Hedra.User
                     if(Parts[1] == "explorers")
                     {
                         TravellingExplorers.Build(Caster.Position + Caster.Orientation * 32, Utils.Rng);
+                        return true;
+                    }
+                    if(Parts[1] == "abadonedexplorer")
+                    {
+                        TravellingExplorers.BuildAbandonedExplorerWithQuest(Caster.Position + Caster.Orientation * 32, Utils.Rng);
                         return true;
                     }
                     if (World.MobFactory.ContainsFactory(Parts[1]))

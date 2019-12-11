@@ -160,7 +160,10 @@ namespace Hedra.Engine.EntitySystem
                 _iterableModels.ForEach(M => M.Tint = Mathf.Lerp(M.Tint, this.Tint, Time.IndependentDeltaTime * 6f));
                 _iterableModels.ForEach(M => M.Alpha = Mathf.Lerp(M.Alpha, this.Alpha, Time.DeltaTime * 8f));
             }
+        }
 
+        public override void BaseUpdate()
+        {
             if (Parent != null)
             {
                 if (IsMoving && _movingTimer.Tick()) IsMoving = false;

@@ -288,7 +288,6 @@ namespace Hedra.Engine.Player
             base.Update();
             StateHandler.Update();
             _modelSound.Pitch = Human.Speed / PitchSpeed;
-            Model.Position = Mathf.Lerp(Model.Position, Position + RidingOffset, Time.IndependentDeltaTime * 24f);
             var rotation = TargetRotation * Mathf.Radian;
             _rotationQuaternionX = Quaternion.Slerp(_rotationQuaternionX, QuaternionMath.FromEuler(rotation.X, 0, 0), Time.IndependentDeltaTime * 8f);
             _rotationQuaternionY = Quaternion.Slerp(_rotationQuaternionY, QuaternionMath.FromEuler(0, rotation.Y, 0), Time.IndependentDeltaTime * 8f);
@@ -314,7 +313,6 @@ namespace Hedra.Engine.Player
                 _modelSound.Position = Position;
                 _modelSound.Update(IsWalking && !Human.IsJumping && !Human.IsSwimming && Human.IsGrounded || Human.IsSleeping);
             }
-            Model.Update();
             if (_hasLamp)
             {
                 _lampModel.Position = LeftWeaponPosition;
@@ -330,6 +328,13 @@ namespace Hedra.Engine.Player
                 HandleEatingEffects();
                 _foodTimer.Tick();
             }
+        }
+
+        public override void BaseUpdate()
+        {
+            base.BaseUpdate();
+            Model.Position = Mathf.Lerp(Model.Position, Position + RidingOffset, Time.IndependentDeltaTime * 24f);
+            Model.Update();
         }
 
         public void SetValues(HumanoidModel HumanModel)

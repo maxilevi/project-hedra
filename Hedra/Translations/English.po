@@ -198,6 +198,10 @@ quest_wait_for_description = Wait for $(BOLD)(CAPS)(ORANGE){{0}} to finish what 
 
 quest_trade_travelling_merchant_dialog_0 = Hey! I need to get $(ORANGE)(BOLD)(CAPS){{0}} from the $(BLUE)(BOLD)(CAPS){{1}}. Would you mind buying them for me?
 
+quest_find_entity_short = SEARCH FOR $(BOLD)(ORANGE){{0}}
+quest_find_entity_description = Search for $(BOLD)(BLUE){{0}} \n$(GRAY)(BOLD){HINT: }See the map for more details.
+quest_defeat_entity_short = DEFEAT $(BOLD)(ORANGE){{0}}
+quest_defeat_entity_description = Defeat $(BOLD)(BLUE){{0}}. \n$(GRAY)(BOLD){HINT: }See the map for more details.
 
 quest_pickup_item_short = PICK UP $(BOLD)(ORANGE){{0}}
 quest_pickup_default_item_description = Pick up $(BOLD)(ORANGE)(CAPS){{0}}.
@@ -233,6 +237,9 @@ quest_steal_from_witch_empty = Everything seems to be going as planned
 quest_steal_from_witch_hut_reward_failure_0 = I was unable to find anything of value.
 quest_steal_from_witch_hut_reward_escape_0 = Thanks for the help but I ain't giving you anything. Try catching me!
 quest_steal_from_witch_hut_reward_success_0 = We should do this again some time. Here is your cut $(ORANGE)(BOLD){{0}}.
+
+quest_retrieve_stolen_items_dialog_0 = A bunch of outlaws ambushed me and stole all my belongings. Can you recover them for me?
+
 
 # -- Class Names --
 mage = Mage
@@ -680,4 +687,9 @@ apply_rename_btn = APPLY
 punching_bag_name = Training Dummy
 
 # Lore quests dialogs
-quest_the_beginning_dialog_0 = You've finally arrived! I know your memory is hazy, but you were brought here for a specific purpose.;I know you are tired so let's start with something simple. Try talking to some $(BOLD)(RED)(CAPS){VILLAGERS} so you get used to it.
+quest_the_beginning_dialog_0 = You've finally arrived! I know your memory is hazy, but you were brought here for a specific purpose.;I know you are tired so let's start with something simple. Try talking to some $(BOLD)(RED)(CAPS){VILLAGERS}.
+quest_the_beginning_npc_dialog_0 = Asd!
+quest_the_beginning_npc_dialog_1 = asd!
+quest_the_beginning_npc_dialog_2 = aSd!
+quest_the_beginning_npc_dialog_3 = asD!
+quest_the_beginning_npc_dialog_4 = ASD!

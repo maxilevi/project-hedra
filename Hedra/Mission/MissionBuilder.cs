@@ -51,7 +51,7 @@ namespace Hedra.Mission
                 if (_mission != null) return _mission;
                 if(_designs.Count == 0)
                     throw new ArgumentOutOfRangeException($"A mission needs at least 1 mission block");
-                var mission = new MissionObject(_designs.ToArray(), _designs[0].OpeningDialog, Settings);
+                var mission = new MissionObject(_designs.ToArray(), OpeningDialog ?? _designs[0].OpeningDialog, Settings);
                 mission.MissionEnd += MissionEnd;
                 mission.MissionDispose += MissionDispose;
                 mission.MissionStart += MissionStart;
@@ -62,5 +62,6 @@ namespace Hedra.Mission
         }
 
         public bool ReturnToComplete { get; set; } = true;
+        public DialogObject OpeningDialog { get; set; }
     }
 }

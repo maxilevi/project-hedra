@@ -458,9 +458,12 @@
     <Compile Include="Mission\Blocks\CollectMission.cs" />
     <Compile Include="Mission\Blocks\CompleteStructureMission.cs" />
     <Compile Include="Mission\Blocks\CraftMission.cs" />
+    <Compile Include="Mission\Blocks\DefeatEntityMission.cs" />
     <Compile Include="Mission\Blocks\EndMission.cs" />
+    <Compile Include="Mission\Blocks\FindEntityMission.cs" />
     <Compile Include="Mission\Blocks\FindStructureMission.cs" />
     <Compile Include="Mission\Blocks\FishItemMission.cs" />
+    <Compile Include="Mission\Blocks\EntityMission.cs" />
     <Compile Include="Mission\Blocks\ItemMission.cs" />
     <Compile Include="Mission\Blocks\MissionBlock.cs" />
     <Compile Include="Mission\Blocks\TalkMission.cs" />
@@ -14306,6 +14309,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\Missions\RescueErudite.py" />
+    <Content Include="Scripts\Missions\RetrieveStolenItems.py" />
     <Content Include="Scripts\Missions\StealFromWitch.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

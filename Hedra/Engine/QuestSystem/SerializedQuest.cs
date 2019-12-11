@@ -10,7 +10,7 @@ namespace Hedra.Engine.QuestSystem
     {
         public string Name { get; set; }
         public string GiverName { get; set; }
-        public Dictionary<string, object> Content { get; set; }
+        public Vector3 GivenPosition { get; set; }
 
         public byte[] ToArray()
         {

@@ -46,7 +46,7 @@ namespace Hedra.Engine.Player.QuestSystem
             Renderer.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             Renderer.Enable(EnableCap.DepthTest);
             Renderer.Disable(EnableCap.Blend);
-
+            
             Model.DrawModel(lookAt * projectionMatrix, lookAt);
 
             ShaderManager.SetLightColorInTheSameThread(currentDayColor);

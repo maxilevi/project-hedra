@@ -547,6 +547,7 @@ namespace Hedra.Engine.EntitySystem
         public void UpdateCriticalComponents()
         {
             UpdateComponents(C => C is HealthBarComponent || C is BossHealthBarComponent);
+            Model.BaseUpdate();
         }
 
         private void UpdateComponents(Func<IComponent<IEntity>, bool> Filter)

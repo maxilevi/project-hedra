@@ -139,7 +139,8 @@ namespace Hedra.Engine.EntitySystem
         {
             var dict = new Dictionary<string, Action>
             {
-                {"Explorers", () => TravellingExplorers.Build(Position, Utils.Rng)}
+                {"Explorers", () => TravellingExplorers.Build(Position, Utils.Rng)},
+                {"AbandonedExplorerWithQuest", () => TravellingExplorers.BuildAbandonedExplorerWithQuest(Position, Utils.Rng)}
             };
             if (Template.IsCustom)
             {
@@ -156,7 +157,7 @@ namespace Hedra.Engine.EntitySystem
         private static bool ShouldSpawnMob(Vector3 NewPosition)
         {
             var region = World.BiomePool.GetRegion(NewPosition);
-            return (Utils.Rng.Next(0, 20) != 1 || region.Mob.SpawnerSettings.MiniBosses == null || region.Mob.SpawnerSettings.MiniBosses.Length == 0);
+            return (Utils.Rng.Next(0, 15) != 1 || region.Mob.SpawnerSettings.MiniBosses == null || region.Mob.SpawnerSettings.MiniBosses.Length == 0);
         }
 
         private static bool IsNearWater(Vector3 Position)
@@ -213,7 +214,7 @@ namespace Hedra.Engine.EntitySystem
                     if (World.Entities[i] == _player || World.Entities[i].IsStatic) continue;
 
                     if ((World.Entities[i].Position.Xz() - Position.Xz()).LengthSquared() <
-                        96f * Chunk.BlockSize * 96f * Chunk.BlockSize) return true;
+                        80f * Chunk.BlockSize * 80f * Chunk.BlockSize) return true;
                 }
             }
             catch (ArgumentOutOfRangeException e)

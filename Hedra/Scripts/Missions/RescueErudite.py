@@ -8,7 +8,6 @@ from System import Array, Object
 IS_QUEST = True
 QUEST_NAME = 'RescueErudite'
 QUEST_TIER = QuestTier.Medium
-MAX_DISTANCE = 4096
 
 def setup_timeline(position, giver, owner, rng):
     builder = MissionBuilder()

@@ -23,6 +23,7 @@ namespace Hedra.Mission
             _afterLines.Add(Text);
         }
         
+        
         public string Keyword { get; set; }
         public object[] Arguments { get; set; }
         public string[] BeforeDialog => _beforeLines.ToArray();

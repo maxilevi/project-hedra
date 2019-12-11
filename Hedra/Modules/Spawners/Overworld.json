@@ -2,15 +2,20 @@
   "MiniBosses": [
     {
       "Type": "Ent",
-      "Chance": 15.0
+      "Chance": 10.0
     },
     {
       "Type": "Gorilla",
-      "Chance": 15.0
+      "Chance": 10.0
     },
     {
       "Type": "Explorers",
-      "Chance": 70.0,
+      "Chance": 60.0,
+      "IsCustom": true
+    },
+    {
+      "Type": "AbandonedExplorerWithQuest",
+      "Chance": 20.0,
       "IsCustom": true
     }
   ],

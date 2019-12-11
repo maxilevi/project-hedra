@@ -30,6 +30,7 @@ namespace Hedra.Engine.EntitySystem
         public abstract Vector3 TargetRotation { get; set; }     
         public abstract Vector4 OutlineColor { get; set; }
         public abstract void Update();
+        public abstract void BaseUpdate();
         public abstract bool CanAttack(IEntity Victim, float RangeModifier);
         public abstract void Attack(IEntity Victim, float RangeModifier);
         public abstract void Dispose();

@@ -37,7 +37,8 @@ namespace Hedra.Mission
             return new SerializedQuest
             {
                 Name = _settings.Name,
-                GiverName = _giver.Name
+                GiverName = _giver.Name,
+                GivenPosition = _giver.Position
             };
         }
 

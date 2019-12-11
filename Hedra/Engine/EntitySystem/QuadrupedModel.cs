@@ -222,6 +222,13 @@ namespace Hedra.Engine.EntitySystem
                     break;
             }
         }
+
+        public override void BaseUpdate()
+        {
+            base.BaseUpdate();
+            Model.Position = Position;
+            Model.Update();
+        }
   
         public override void Update()
         {
@@ -265,9 +272,7 @@ namespace Hedra.Engine.EntitySystem
                                                  * Rider.Model.TiltMatrix 
                                                  * Matrix4x4.CreateRotationY(Model.LocalRotation.Y * Mathf.Radian);
                 }
-                Model.Position = this.Position;
                 this.LocalRotation = Model.LocalRotation;
-                Model.Update();
             }
 
             if (!base.Disposed)

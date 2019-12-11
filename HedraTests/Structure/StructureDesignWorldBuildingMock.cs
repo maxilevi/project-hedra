@@ -70,11 +70,6 @@ namespace HedraTests.Structure
             return human;
         }
 
-        public Humanoid SpawnVillager(Vector3 Position, bool Move, string Name)
-        {
-            return SpawnHumanoid(null, Position);
-        }
-
         public Chest SpawnChest(Vector3 Position, Item Item)
         {
             return new Chest(Position, Item);

@@ -17,7 +17,7 @@ namespace Hedra.Engine.WorldBuilding
 {
     public class TravellingExplorers
     {
-        public static void Build(Vector3 Position, Random Rng)
+        public static IHumanoid[] Build(Vector3 Position, Random Rng)
         {
             var friendly = Rng.NextBool();
             var count = Rng.Next(1, 4);
@@ -48,6 +48,12 @@ namespace Hedra.Engine.WorldBuilding
 
             explorers.ForEach(E => E.SearchComponent<CombatAIComponent>().Behaviour = 
                 new ExplorerAIBehaviour(E, explorers.ToArray(), Rng));
+            return explorers.ToArray();
+        }
+        
+        public static void BuildAbandonedExplorerWithQuest(Vector3 Position, Random Rng)
+        {
+            
         }
     }
 }

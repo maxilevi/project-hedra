@@ -81,9 +81,10 @@ namespace Hedra.Engine.QuestSystem
                 var design = MissionPool.Grab(Quests[i].Name);
                 var entity = new Humanoid
                 {
-                    Name = Quests[i].GiverName
+                    Name = Quests[i].GiverName,
+                    Position = Quests[i].GivenPosition
                 };
-                var quest = design.Build(_player.Position, entity, _player);
+                var quest = design.Build(entity.Position, entity, _player);
                 this.Start(entity, quest);
                 entity.Dispose();
             }

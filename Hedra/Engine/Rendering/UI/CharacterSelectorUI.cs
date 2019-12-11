@@ -309,6 +309,7 @@ namespace Hedra.Engine.Rendering.UI
                         
                 _humans[k].Model.Enabled = (_humans[k].Model.ModelPosition.Xz() - _humans[k].Position.Xz()).LengthFast() < 8;
                 _humans[k].Update();
+                _humans[k].UpdateCriticalComponents();
                 
                 var target = FireDirection(k, 4.8f);
                 _humans[k].Model.LocalRotation = Physics.DirectionToEuler(target.NormalizedFast().Xz().ToVector3()) + Vector3.UnitY * 180f;

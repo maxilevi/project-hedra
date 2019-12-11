@@ -61,12 +61,12 @@ namespace Hedra.Engine.WorldBuilding
             var rng = new Random(Seed);
             var types = new []
             {
-                HumanType.Warrior,
-                HumanType.Rogue,
-                HumanType.Mage,
-                HumanType.Archer,
+                HumanType.Innkeeper,
+                HumanType.Blacksmith,
+                HumanType.Clothier,
                 HumanType.Scholar,
-                HumanType.Bard
+                HumanType.Bard,
+                HumanType.Farmer
             };
             var villager = SpawnHumanoid(types[rng.Next(0, types.Length)], DesiredPosition, new HumanoidConfiguration(HealthBarType.Friendly));
             villager.Seed = Seed;
@@ -125,14 +125,6 @@ namespace Hedra.Engine.WorldBuilding
         
         private static void ApplySeasonHats(Humanoid Human, string Type)
         {
-            if (!string.Equals(Type, HumanType.Warrior.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
-                !string.Equals(Type, HumanType.Merchant.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
-                !string.Equals(Type, HumanType.TravellingMerchant.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
-                !string.Equals(Type, HumanType.Archer.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
-                !string.Equals(Type, HumanType.Blacksmith.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
-                !string.Equals(Type, HumanType.Rogue.ToString(), StringComparison.InvariantCultureIgnoreCase) &&
-                !string.Equals(Type, HumanType.Mage.ToString(), StringComparison.InvariantCultureIgnoreCase)) return;
-            
             if(Season.IsChristmas) 
                 Human.SetHelmet(ItemPool.Grab(ItemType.ChristmasHat).Helmet);
         }
