@@ -27,6 +27,7 @@ using Hedra.EntitySystem;
 using Hedra.Items;
 using Hedra.WeaponSystem;
 using System.Numerics;
+using Hedra.Engine.Bullet;
 using Moq;
 
 namespace HedraTests.Player
@@ -249,6 +250,7 @@ namespace HedraTests.Player
 
         public Weapon LeftWeapon { get; set; }
         public MobType MobType { get; set; }
+        public event OnMoveEvent OnMove;
         public event OnRespawnEvent OnRespawn;
         public event OnInteractionEvent OnInteract;
         public IMessageDispatcher MessageDispatcher { get; set; }

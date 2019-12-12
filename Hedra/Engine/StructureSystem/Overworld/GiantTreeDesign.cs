@@ -75,7 +75,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             }
 
             var chest = World.SpawnChest(
-                chestPosition,
+                new Vector3(chestPosition.X, Structure.Position.Y, chestPosition.Z), 
                 ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon))
             );
             chest.Condition += () => treeBoss == null || treeBoss.IsDead;
@@ -100,12 +100,12 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         protected override string GetShortDescription(GiantTree Structure)
         {
-            return Translations.Get("quest_complete_structure_short_giant_tree", Structure.Boss.Name.ToUpperInvariant());
+            return Translations.Get("quest_complete_structure_short_giant_tree", Structure.Boss.Name);
         }
 
         protected override string GetDescription(GiantTree Structure)
         {
-            return Translations.Get("quest_complete_structure_description_giant_tree", Structure.Boss.Name.ToUpperInvariant(), DisplayName);
+            return Translations.Get("quest_complete_structure_description_giant_tree", Structure.Boss.Name, DisplayName);
         }
     }
 }

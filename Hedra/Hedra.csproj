@@ -14305,6 +14305,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\Missions\FishAnItem.py" />
+    <Content Include="Scripts\Missions\HelpBadHarvest.py" />
     <Content Include="Scripts\Missions\MissionCore.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

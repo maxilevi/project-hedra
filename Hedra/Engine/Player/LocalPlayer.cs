@@ -230,8 +230,8 @@ namespace Hedra.Engine.Player
 
             if (Companion.Entity != null && !Companion.Entity.Disposed)
             {
-                Companion.Entity?.UpdateCriticalComponents();
                 Companion.Entity?.Update();
+                Companion.Entity?.UpdateCriticalComponents();
             }
 
             Rotation = new Vector3(0, this.Rotation.Y, 0);

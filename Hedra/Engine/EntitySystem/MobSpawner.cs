@@ -146,7 +146,10 @@ namespace Hedra.Engine.EntitySystem
             {
                 if (!dict.ContainsKey(Template.Type))
                     throw new ArgumentOutOfRangeException($"Custom template type '{Template.Type}' does not exist.");
-                dict[Template.Type]();
+                TaskScheduler.Parallel(() =>
+                {
+                    dict[Template.Type]();
+                });
             }
             else
             {

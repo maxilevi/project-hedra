@@ -75,15 +75,10 @@ namespace Hedra.Engine.Player
             var entities = World.Entities.ToArray();
             for (var i = entities.Length - 1; i > -1; i--)
             {
-                if (entities[i].Model.Position == System.Numerics.Vector3.Zero)
-                {
-                    int a = 0;
-                }
                 if (entities[i] == GameManager.Player) continue;
+                if (GameManager.Player.Companion.Entity == entities[i]) continue;
                 if (entities[i].InUpdateRange && !GameSettings.Paused && !GameManager.IsLoading)
                 {
-                    if(GameManager.Player.Companion.Entity == entities[i]) continue;
-
                     entities[i].Update();
                 }
                 else if (entities[i].InUpdateRange && GameSettings.Paused)

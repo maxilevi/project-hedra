@@ -77,6 +77,7 @@ namespace Hedra.Engine.Rendering.Animation
         private Matrix4x4 _positionCache;
         private Matrix4x4 _transformationMatrix = Matrix4x4.Identity;
         private bool _jointsDirty = true;
+        private bool _neverUpdatedJoints = true;
 
         public AnimatedModel(ModelData Model, Joint RootJoint, int JointCount)
         {
@@ -294,11 +295,18 @@ namespace Hedra.Engine.Rendering.Animation
 
         public void Update()
         {
+            /* Update joints on the first update so the model can be drawn even if its not nearby */
+            if (_neverUpdatedJoints)
+            {
+                UpdateJointTransforms(true);
+                _neverUpdatedJoints = false;
+            }
             if(!Enabled || (WasCulled && !UpdateWhenOutOfView)) return;
             if (_animator.Update())
             {
                 UpdateJointTransforms(true);
             }
+            UpdateJointTransforms(true);
         }
 
         public void SetValues(AnimatedModel Model)
@@ -337,8 +345,11 @@ namespace Hedra.Engine.Rendering.Animation
             while (queue.Count != 0)
             {
                 var current = queue.Dequeue();
+                var transform = current.AnimatedTransform == new Matrix4x4()
+                    ? Matrix4x4.Identity
+                    : current.AnimatedTransform;
                 if(current.Index != -1)
-                    JointMatrices[current.Index] = current.AnimatedTransform * scaleAndRotation * current.TransformationMatrix * transformationAndPosition;
+                    JointMatrices[current.Index] = transform * scaleAndRotation * current.TransformationMatrix * transformationAndPosition;
                 for (var i = 0; i < current.Children.Count; i++)
                 {
                     queue.Enqueue(current.Children[i]);

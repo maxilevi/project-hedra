@@ -116,6 +116,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
             {
                 _name = value;
                 _nameText.Text = _name;
+                _originalScales[_panel.Elements.IndexOf(_nameText)] = _nameText.Scale;
             }
         }
 

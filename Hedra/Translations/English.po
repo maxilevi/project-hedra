@@ -213,6 +213,9 @@ quest_find_entity_description = Search for $(BOLD)(BLUE){{0}} \n$(GRAY)(BOLD){HI
 quest_defeat_entity_short = DEFEAT $(BOLD)(ORANGE){{0}}
 quest_defeat_entity_description = Defeat $(BOLD)(BLUE){{0}}. \n$(GRAY)(BOLD){HINT: }See the map for more details.
 
+quest_defeat_boss_dialog_0 = I heard some rumors of a place near here which holds great rewards so I formed a team of brave mercenaries and scouts.;Upon arriving we realized the dangers were grossly understated. I barely made it alive and most of my team died in the battle.;I can mark the location in your map thought I don't suggest you to go alone.
+quest_find_boss_description = Find the place $(BOLD)(BLUE){{0}} told you about.
+
 quest_pickup_item_short = PICK UP $(BOLD)(ORANGE){{0}}
 quest_pickup_default_item_description = Pick up $(BOLD)(ORANGE)(CAPS){{0}}.
 quest_pickup_chest_description = Recover the lost $(BOLD)(BLUE){{0}} from the nearby chest.
