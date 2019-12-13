@@ -23,7 +23,9 @@ namespace Hedra.Engine.Player.QuestSystem
             Framebuffer.Bind();
 
             var meshPrematureCulling = Model.PrematureCulling;
+            var applyFog = Model.ApplyFog;
             Model.PrematureCulling = false;
+            Model.ApplyFog = false;
 
             var currentDayColor = ShaderManager.LightColor;
             ShaderManager.SetLightColorInTheSameThread(Vector3.One);
@@ -46,7 +48,8 @@ namespace Hedra.Engine.Player.QuestSystem
             Renderer.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
             Renderer.Enable(EnableCap.DepthTest);
             Renderer.Disable(EnableCap.Blend);
-            
+
+            Model.UpdateJointTransforms();
             Model.DrawModel(lookAt * projectionMatrix, lookAt);
 
             ShaderManager.SetLightColorInTheSameThread(currentDayColor);
@@ -57,6 +60,7 @@ namespace Hedra.Engine.Player.QuestSystem
             Renderer.Enable(EnableCap.Blend);
             Renderer.Viewport(0, 0, GameSettings.Width, GameSettings.Height);
             Model.PrematureCulling = meshPrematureCulling;
+            Model.ApplyFog = applyFog;
             return Framebuffer.TextureId[0];
         }
 
