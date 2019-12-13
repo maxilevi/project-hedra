@@ -63,9 +63,9 @@ def build_generic_reward(rng):
     n = rng.NextDouble()
     reward = QuestReward()
     if n < 0.4:
-        reward.Experience = int(rng.Next(2, 8))
+        reward.Experience = int(rng.Next(3, 9))
     elif n < 0.9:
-        reward.Gold = int(rng.Next(15, 35))
+        reward.Gold = int(rng.Next(15, 45))
     return reward
 
 def remove_component_if_exists(parent, type):

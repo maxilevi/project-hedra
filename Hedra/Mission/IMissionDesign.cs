@@ -10,6 +10,7 @@ namespace Hedra.Mission
         bool CanGive(Vector3 Position);
         QuestTier Tier { get; }
         QuestHint Hint { get; }
+        QuestPriority Priority { get; }
         string Name { get; }
         bool IsStoryline { get; }
         bool CanSave { get; }

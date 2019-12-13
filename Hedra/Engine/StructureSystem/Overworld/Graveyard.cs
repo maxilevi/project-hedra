@@ -43,6 +43,11 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public void Update()
         {
             _ambientHandler.Update();
+            if (Completed && AreaWrapper != null)
+            {
+                AreaWrapper?.Dispose();
+                AreaWrapper = null;
+            }
         }
         
         public override void Dispose()

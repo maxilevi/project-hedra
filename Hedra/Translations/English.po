@@ -252,7 +252,7 @@ quest_steal_from_witch_hut_reward_escape_0 = Thanks for the help but I ain't giv
 quest_steal_from_witch_hut_reward_success_0 = We should do this again some time. Here is your cut $(ORANGE)(BOLD){{0}}.
 
 quest_retrieve_stolen_items_dialog_0 = A bunch of outlaws ambushed me and stole all my belongings. Can you recover them for me?
-
+quest_clear_graveyard_dialog_0 = Lately things haven't been the same.;It feels like a stream of dark energy has been contaminating the world.;I don't know how to explain it but there is a dark influence surrounding our burial grounds.;We can't pay respects to our loved ones anymore. You should go and experience it by yourself.
 
 # -- Class Names --
 mage = Mage

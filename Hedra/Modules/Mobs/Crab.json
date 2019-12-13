@@ -1,10 +1,10 @@
 {
   "Name" : "Crab",
   "MaxHealth": 196.0,
-  "AttackDamage": 8.0,
+  "AttackDamage": 9.0,
   "Speed": 1.35,
   "XP": 6.0,
-  "Level": 8,
+  "Level": 7,
   "AIType": "Crab",
   "Effects": [],
   "Drops": [],

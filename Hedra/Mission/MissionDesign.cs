@@ -31,7 +31,7 @@ namespace Hedra.Mission
             builder.SetSettings(new MissionSettings
             {
                 IsStoryline = IsStoryline,
-                CanSave = CanSave || IsStoryline,
+                CanSave = CanSave,
                 Name = Name
             });
             return builder.Mission;
@@ -42,6 +42,7 @@ namespace Hedra.Mission
             return _design.Execute<bool>("can_give", Position);
         }
         
+        public QuestPriority Priority => _design.HasMember("QUEST_PRIORITY") ? _design.Get<QuestPriority>("QUEST_PRIORITY") : QuestPriority.Normal; 
         public bool CanSave => _design.HasMember("CAN_SAVE") && _design.Get<bool>("CAN_SAVE");
         public bool IsStoryline => _design.HasMember("IS_STORYLINE") && _design.Get<bool>("IS_STORYLINE");
         public QuestHint Hint =>

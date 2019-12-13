@@ -126,9 +126,9 @@ namespace Hedra.AISystem.Humanoid
 
         private bool ShouldReset()
         {
-            var targetLost = IsChasing && (_chasingTarget.IsDead || _chasingTarget.IsInvisible)
-                             || !IsChasing && GuardSpawnPoint && (_targetPoint.Xz() - Parent.Position.Xz()).LengthSquared() > ForgetRadius * ForgetRadius;
-            var shouldWeReset = IsChasing && _forgetTimer.Tick() || targetLost && false;
+            var targetLost = !IsChasing && GuardSpawnPoint && (_targetPoint.Xz() - Parent.Position.Xz()).LengthSquared() > ForgetRadius * ForgetRadius;
+            var targetDead = IsChasing && (_chasingTarget.IsDead || _chasingTarget.IsInvisible);
+            var shouldWeReset = IsChasing && _forgetTimer.Tick() || targetLost && false || targetDead;
             if (shouldWeReset)
             {
                 Reset();

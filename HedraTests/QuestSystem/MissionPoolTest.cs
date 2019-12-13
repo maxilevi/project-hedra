@@ -60,6 +60,7 @@ namespace HedraTests.QuestSystem
 
             public QuestTier Tier { get; private set; }
             public QuestHint Hint { get; private set; }
+            public QuestPriority Priority { get; }
             public string Name => "DUMMY";
             public bool IsStoryline => false;
             public bool CanSave => false;

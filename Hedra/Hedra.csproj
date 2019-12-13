@@ -14290,6 +14290,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\Items.py" />
+    <Content Include="Scripts\Missions\BadHarvest.py" />
     <Content Include="Scripts\Missions\BuyFromTravellingMerchant.py" />
     <Content Include="Scripts\Missions\CatchAPet.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -14305,7 +14306,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\Missions\FishAnItem.py" />
-    <Content Include="Scripts\Missions\HelpBadHarvest.py" />
     <Content Include="Scripts\Missions\MissionCore.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

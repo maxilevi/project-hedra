@@ -1,5 +1,5 @@
 from Core import translate
-from Hedra.Mission import MissionBuilder, ItemCollect, QuestReward, QuestTier
+from Hedra.Mission import MissionBuilder, ItemCollect, QuestReward, QuestTier, QuestPriority
 from Hedra.Mission.Blocks import CollectMission, TalkMission, CraftMission
 from Hedra.Items import ItemPool, ItemTier, ItemType, EquipmentType, Trader
 from Hedra.Crafting import CraftingStation, CraftingInventory
@@ -8,6 +8,7 @@ from System import Array, ArgumentOutOfRangeException, Math, Object
 IS_QUEST = True
 QUEST_NAME = 'CollectAndCraft'
 QUEST_TIER = QuestTier.Easy
+QUEST_PRIORITY = QuestPriority.Low
 STATION_ATTRIB_NAME = 'CraftingStation'
 MAX_COLLECT_ITEM_TYPES = 1
 

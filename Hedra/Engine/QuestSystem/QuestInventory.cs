@@ -18,6 +18,7 @@ namespace Hedra.Engine.QuestSystem
         public event OnQuestChanged QuestLoaded;
         private readonly IPlayer _player;
         private readonly List<MissionObject> _activeQuests;
+        private int _storylineQuestCompleted;
 
         public QuestInventory(IPlayer Player)
         {
@@ -89,18 +90,15 @@ namespace Hedra.Engine.QuestSystem
                 this.Start(entity, quest);
                 entity.Dispose();
             }
-            /*
-            _activeQuests.Clear();
-            _activeQuests.AddRange(Quests.Select(MissionObject.FromTemplate).ToList());
-            _activeQuests.RemoveAll(Q => Q == null);
-            _activeQuests.ForEach(Q => Q.Start(_player));
-            _activeQuests.ForEach(Q => QuestLoaded?.Invoke(Q));
-            */
+            //_storylineQuestCompleted
         }
         
         public SerializedQuest[] GetSerializedQuests()
         {
-            return _activeQuests.Where(Q => Q.CanSave).Select(Q => Q.Serialize()).ToArray();
+            var list = new List<SerializedQuest>();
+            list.AddRange(_activeQuests.Where(Q => Q.CanSave).Select(Q => Q.Serialize()));
+            //list.Add(SerializedQuest.From);
+            return list.ToArray();
         }
         
         public void Abandon(MissionObject Object)

@@ -71,8 +71,11 @@ namespace Hedra.Mission
             var entries = new List<IMissionDesign>();
             for (var i = 0; i < Possibilities.Count; ++i)
             {
-                entries.Add(Possibilities[i]);
-                /* Add a double entry for those who match the hint */
+                for (var j = 0; j < (int)Possibilities[i].Priority+1; ++j)
+                {
+                    entries.Add(Possibilities[i]);
+                }
+                /* Add an extra entry for those who match the hint */
                 if(Hint == Possibilities[i].Hint)
                     entries.Add(Possibilities[i]);
             }
@@ -113,5 +116,12 @@ namespace Hedra.Mission
         Fishing,
         Magic,
         InvalidHint
+    }
+
+    public enum QuestPriority
+    {
+        Low,
+        Normal,
+        High
     }
 }

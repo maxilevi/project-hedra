@@ -2,7 +2,7 @@ from System import Array, Object, Single
 import MissionCore
 from System.Numerics import Vector3
 from Hedra.Items import ItemPool, ItemTier
-from Hedra.Mission import MissionBuilder, QuestTier, DialogObject, QuestReward, ItemCollect
+from Hedra.Mission import MissionBuilder, QuestTier, DialogObject, QuestReward, ItemCollect, QuestPriority
 from Hedra.Mission.Blocks import FindEntityMission, DefeatEntityMission, CollectMission
 from Hedra.AISystem import IBehaviourComponent
 from Hedra.AISystem.Humanoid import EscapeAIComponent, CombatAIComponent
@@ -12,6 +12,7 @@ from Hedra.Engine.EntitySystem import DropComponent
 IS_QUEST = True
 QUEST_NAME = 'RetrieveStolenItems'
 QUEST_TIER = QuestTier.Medium
+QUEST_PRIORITY = QuestPriority.Low
 MAX_SPAWN_DISTANCE = 768
 
 def setup_timeline(position, giver, owner, rng):
