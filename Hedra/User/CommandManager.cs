@@ -452,6 +452,12 @@ namespace Hedra.User
                 }
                 if (Parts[0] == "spawn")
                 {
+                    if(Parts[1] == "escape")
+                    {
+                        var vill = NPCCreator.SpawnVillager(Caster.Position + Caster.Orientation * 8, Utils.Rng);
+                        vill.AddComponent(new EscapeAIComponent(vill, Caster));
+                        return true;
+                    }
                     if(Parts[1] == "bandit")
                     {
                         NPCCreator.SpawnBandit(Caster.Position + Caster.Orientation * 32, Caster.Level, BanditOptions.Default);
