@@ -36,8 +36,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             var position = Structure.Position + -SpawnOffset;
             var missionDesign = MissionPool.Grab(Quests.VisitSpawnVillage);
-            var villager = NPCCreator.SpawnVillager(position, Rng);
-            villager.AddComponent(new QuestGiverComponent(villager, missionDesign));
+            var villager = NPCCreator.SpawnQuestGiver(position, missionDesign, Rng);
             villager.Position = position;
             villager.Physics.CollidesWithEntities = false;
             villager.Physics.UsePhysics = false;

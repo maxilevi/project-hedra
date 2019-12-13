@@ -51,9 +51,16 @@ namespace Hedra.Engine.WorldBuilding
             return explorers.ToArray();
         }
         
-        public static void BuildAbandonedExplorerWithQuest(Vector3 Position, Random Rng)
+        public static IHumanoid BuildAbandonedExplorerWithQuest(Vector3 Position, Random Rng)
         {
-            
+            var explorer = NPCCreator.SpawnBandit(Position, 8, new BanditOptions
+            {
+                Friendly = true,
+                ModelType = (Rng.Next(0, 5) == 1 ? (HumanType?)HumanType.Skeleton : null)
+            });
+            explorer.AddComponent(new QuestGiverComponent(explorer, MissionPool.Random(Position)));
+            explorer.RemoveComponent<CombatAIComponent>();
+            return explorer;
         }
     }
 }

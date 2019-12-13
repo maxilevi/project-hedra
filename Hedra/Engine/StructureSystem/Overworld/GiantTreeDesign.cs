@@ -92,8 +92,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
             var height = Biome.Generation.GetMaxHeight( TargetPosition.X, TargetPosition.Z);
-            return Rng.Next(0, StructureGrid.GiantTreeChance) == 1 && height > BiomePool.SeaLevel 
-                   || Rng.Next(0, StructureGrid.WaterGiantTreeChance) == 1 && height <= BiomePool.SeaLevel;
+            return Rng.Next(0, StructureGrid.GiantTreeChance) == 1 && height > BiomePool.SeaLevel;
         }
         
         public override string DisplayName => Translations.Get("structure_giant_tree");

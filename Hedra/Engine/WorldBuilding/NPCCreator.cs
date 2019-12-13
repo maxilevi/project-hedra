@@ -74,6 +74,8 @@ namespace Hedra.Engine.WorldBuilding
             villager.Name = NameGenerator.PickMaleName(rng);
             villager.IsFriendly = true;
             villager.SearchComponent<DamageComponent>().Immune = true;
+            villager.RemoveComponent<TradeComponent>();
+            villager.RemoveComponent<TalkComponent>();
             return villager;
         }
 
@@ -85,8 +87,6 @@ namespace Hedra.Engine.WorldBuilding
             );
             npc.Position = Position;
             npc.Physics.UsePhysics = false;
-            npc.RemoveComponent<TradeComponent>();
-            npc.RemoveComponent<TalkComponent>();
             npc.AddComponent(new QuestGiverComponent(npc, Quest));
             return npc;
         }
