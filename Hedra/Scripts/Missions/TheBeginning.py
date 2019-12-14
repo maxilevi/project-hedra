@@ -1,7 +1,8 @@
 import clr
 from Hedra import World
+import MissionCore
 from Hedra.Components import TradeComponent, TalkComponent
-from Hedra.Mission import MissionBuilder, QuestTier, DialogObject
+from Hedra.Mission import MissionBuilder, QuestTier, DialogObject, QuestReward
 from Hedra.Mission.Blocks import TalkMission
 from System import Array, Object, Single
 from System.Numerics import Vector3
@@ -19,10 +20,10 @@ MAX_DISTANCE = 768
 def setup_timeline(position, giver, owner, rng):
     builder = MissionBuilder()
 
-    builder.OpeningDialog = create_dialog()
+    builder.OpeningDialog = MissionCore.create_dialog('quest_the_beginning_dialog')
 
     talk_to = []
-    for i in range(rng.Next(3, 7)):
+    for i in range(rng.Next(3, 6)):
         npc_position = position + Vector3(
             Single(rng.NextDouble() * MAX_DISTANCE * 2 - MAX_DISTANCE),
             Single(0.0),
@@ -36,24 +37,14 @@ def setup_timeline(position, giver, owner, rng):
         talk_to.append(entity)
     
     for npc in talk_to:
-        talk = TalkMission(create_talk_dialog(npc))
+        talk = TalkMission(MissionCore.create_dialog('quest_the_beginning_npc_dialog', [npc.Name]))
         talk.Humanoid = npc
         builder.Next(talk)
-        
-    builder.ReturnToComplete = False
+    
+    reward = QuestReward()
+    reward.CustomDialog = MissionCore.create_dialog('quest_the_beginning_end_dialog')
+    builder.SetReward(reward)
     return builder
-
-def create_talk_dialog(npc):
-    dialog = DialogObject()
-    dialog.Keyword = 'quest_the_beginning_npc_dialog'
-    dialog.Arguments = Array[Object]([npc.Name])
-    return dialog
-
-def create_dialog():
-    dialog = DialogObject()
-    dialog.Keyword = 'quest_the_beginning_dialog'
-    dialog.Arguments = Array[Object]([])
-    return dialog
 
 def can_give(position):
     return False

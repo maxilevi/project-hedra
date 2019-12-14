@@ -4,7 +4,7 @@ from Hedra import World
 from Hedra.Structures import MapBuilder
 from System.Numerics import Vector2, Vector3
 from Hedra.Numerics import VectorExtensions
-from Hedra.Mission import QuestReward, ItemCollect
+from Hedra.Mission import QuestReward, ItemCollect, DialogObject
 from Hedra.Mission.Blocks import EndMission
 
 clr.ImportExtensions(VectorExtensions)
@@ -44,16 +44,11 @@ def find_structure(position, type, max_distance=DEFAULT_MAX_STRUCTURE_SEARCH_DIS
         positions = nearby_structs_positions(position, type, max_distance)
         if not positions:
             raise System.ArgumentOutOfRangeException('Tried to fetch a structure but it has no nearby designs')
-        print(positions)
         for position in positions:
             World.StructureHandler.CheckStructures(positions[0].Xz())
             objects = nearby_struct_objects(position, type, max_distance)
             print(objects)
             if objects: break
-        if objects:
-            print('fixed!!')
-        else:
-            print('failed to fix1!')
     return nearby[0] if nearby else objects[0]
 
 def is_within_distance(entity_position, structure_position, max_distance=DEFAULT_MAX_STRUCTURE_SEARCH_DISTANCE):
@@ -87,3 +82,9 @@ def to_item_collect(item):
     collect.Name = item.Name
     collect.Amount = item.GetAttribute[str]('Amount') if item.HasAttribute('Amount') else 1
     return collect
+
+def create_dialog(keyword, params = []):
+    dialog = DialogObject()
+    dialog.Keyword = keyword
+    dialog.Arguments = System.Array[System.Object](params)
+    return dialog

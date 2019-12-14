@@ -16,13 +16,14 @@ namespace Hedra.Engine.QuestSystem
         public event OnQuestChanged QuestCompleted;
         public event OnQuestChanged QuestAbandoned;
         public event OnQuestChanged QuestLoaded;
+        public StorySettings Story { get; private set; }
         private readonly IPlayer _player;
         private readonly List<MissionObject> _activeQuests;
-        private int _storylineQuestCompleted;
 
         public QuestInventory(IPlayer Player)
         {
             _player = Player;
+            Story = new StorySettings();
             _activeQuests = new List<MissionObject>();
             _player.Inventory.InventoryUpdated += CheckForCompleteness;
             _player.StructureAware.StructureEnter += _ => CheckForCompleteness();
@@ -31,6 +32,7 @@ namespace Hedra.Engine.QuestSystem
             _player.Kill += _ => CheckForCompleteness();
             _player.OnInteract += CheckForCompleteness;
             _player.OnMove += CheckForCompleteness;
+            QuestCompleted += OnQuestCompleted;
         }
         
         public void Start(IHumanoid Giver, MissionObject Quest)
@@ -60,6 +62,12 @@ namespace Hedra.Engine.QuestSystem
         {
             CheckForCompleteness();
         }
+
+        private void OnQuestCompleted(MissionObject Quest)
+        {
+            if (Quest.IsStoryline)
+                Story.CompletedStep++;
+        }
         
         private void CheckForCompleteness()
         {
@@ -78,7 +86,7 @@ namespace Hedra.Engine.QuestSystem
         public void SetSerializedQuests(SerializedQuest[] Quests)
         {
             Empty();
-            for (var i = 0; i < Quests.Length; ++i)
+            for (var i = 0; i < Quests.Length-1; ++i)
             {
                 var design = MissionPool.Grab(Quests[i].Name);
                 var entity = new Humanoid
@@ -90,14 +98,14 @@ namespace Hedra.Engine.QuestSystem
                 this.Start(entity, quest);
                 entity.Dispose();
             }
-            //_storylineQuestCompleted
+            Story = StorySettings.FromQuest(Quests[Quests.Length - 1]);
         }
         
         public SerializedQuest[] GetSerializedQuests()
         {
             var list = new List<SerializedQuest>();
             list.AddRange(_activeQuests.Where(Q => Q.CanSave).Select(Q => Q.Serialize()));
-            //list.Add(SerializedQuest.From);
+            list.Add(SerializedQuest.FromStoryline(Story));
             return list.ToArray();
         }
         
@@ -122,6 +130,6 @@ namespace Hedra.Engine.QuestSystem
 
         public MissionObject[] ActiveQuests => _activeQuests.ToArray();
 
-        public bool StartedStoryline => _activeQuests.Any(Q => Q.IsStoryline);
+        public bool HasStoryQuest => _activeQuests.Any(Q => Q.IsStoryline);
     }
 }

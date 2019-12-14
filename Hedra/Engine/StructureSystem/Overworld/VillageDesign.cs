@@ -15,6 +15,7 @@ using Hedra.Rendering;
 using Hedra.Sound;
 using System.Numerics;
 using Hedra.Engine.QuestSystem;
+using Hedra.Engine.Scripting;
 using Hedra.Mission;
 using Hedra.Numerics;
 
@@ -43,9 +44,12 @@ namespace Hedra.Engine.StructureSystem.Overworld
         private static void SpawnStorylineGiver(Vector3 Position)
         {
             var human = NPCCreator.SpawnHumanoid(HumanType.Bard, Position);
-            var missionDesign = MissionPool.Grab(Quests.TheBeginning);
-            if (!LocalPlayer.Instance.Questing.StartedStoryline)
+            var settings = LocalPlayer.Instance.Questing.Story;
+            if (!LocalPlayer.Instance.Questing.HasStoryQuest && Interpreter.GetFunction("Story.py", "has_finished_story").Invoke<bool>(settings))
             {
+                var missionDesign = MissionPool.Grab(
+                    Interpreter.GetFunction("Story.py", "get_next_quest").Invoke<Quests>(settings)
+                );
                 human.AddComponent(new StorylineQuestGiverComponent(human, missionDesign));
             }
             human.Position = Position;

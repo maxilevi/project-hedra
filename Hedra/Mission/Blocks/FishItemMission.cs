@@ -33,6 +33,9 @@ namespace Hedra.Mission.Blocks
         public Vector3 Zone { get; set; }
         public float Radius { get; set; }
 
+        public override Vector3 Location => Zone;
+        public override bool HasLocation => true;
+
         public Item Item
         {
             get => _item;

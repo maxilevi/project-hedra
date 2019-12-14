@@ -334,6 +334,7 @@
     <Compile Include="Engine\Bullet\PhysicsObjectInformation.cs" />
     <Compile Include="Engine\Bullet\PhysicsComponent.cs" />
     <Compile Include="Engine\Bullet\PhysicsComponentMotionState.cs" />
+    <Compile Include="Engine\CacheSystem\CauldronIconCache.cs" />
     <Compile Include="Engine\CacheSystem\Dungeon0Cache.cs" />
     <Compile Include="Engine\CacheSystem\Dungeon1Cache.cs" />
     <Compile Include="Engine\CacheSystem\Dungeon1IconCache.cs" />
@@ -394,6 +395,7 @@
     <Compile Include="Engine\QuestSystem\SerializedQuest.cs" />
     <Compile Include="Engine\QuestSystem\QuestThoughtsComponent.cs" />
     <Compile Include="Engine\QuestSystem\StorylineQuestGiverComponent.cs" />
+    <Compile Include="Engine\QuestSystem\StorySettings.cs" />
     <Compile Include="Engine\Rendering\BaseVertexData.cs" />
     <Compile Include="Engine\Rendering\Core\LightSettings.cs" />
     <Compile Include="Engine\Rendering\Core\UBO.cs" />
@@ -422,6 +424,8 @@
     <Compile Include="Engine\StructureSystem\Overworld\AnimableInteractableStructure.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\BaseDungeonDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\BuildingDoorTrigger.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\CampfireWithCauldron.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\CampfireWithCauldronDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonWithBoss.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\ShroomDimensionPortal.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\ShroomDimensionPortalDesign.cs" />
@@ -9118,6 +9122,10 @@
       <Link>Assets\Env\BearTrap.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Objects\Cauldron.ply">
+      <Link>Assets\Env\Objects\Cauldron.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Objects\DeathIcon.ply">
       <Link>Assets\Env\DeathIcon.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -14301,6 +14309,7 @@
     <Content Include="Scripts\Missions\CollectAndCraft.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\Missions\CraftAPotion.py" />
     <Content Include="Scripts\Missions\DefeatBossAtGiantTree.py" />
     <Content Include="Scripts\Missions\FindAndKillLich.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -14314,6 +14323,7 @@
     <Content Include="Scripts\Missions\StealFromWitch.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\Missions\Story.py" />
     <Content Include="Scripts\Missions\TheBeginning.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

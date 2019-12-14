@@ -31,6 +31,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             AddDesign(new UndeadDungeon0Design());
             AddDesign(new UndeadDungeon1Design());
             AddDesign(new UndeadDungeon2Design());
+            AddDesign(new CampfireWithCauldronDesign());
             //AddDesign(new ShroomDimensionPortalDesign());
         }
 

@@ -11,6 +11,7 @@ namespace Hedra.Engine.QuestSystem
         public string Name { get; set; }
         public string GiverName { get; set; }
         public Vector3 GivenPosition { get; set; }
+        public Dictionary<string, object> Content { get; set; }
 
         public byte[] ToArray()
         {
@@ -23,6 +24,18 @@ namespace Hedra.Engine.QuestSystem
         {
             var str = Encoding.ASCII.GetString(Array);
             return FromJson(str);
+        }
+
+        public static SerializedQuest FromStoryline(StorySettings Settings)
+        {
+            var quest = new SerializedQuest
+            {
+                Content = new Dictionary<string, object>
+                {
+                    {"CompletedStep", Settings.CompletedStep}
+                }
+            };
+            return quest;
         }
     }
 }
