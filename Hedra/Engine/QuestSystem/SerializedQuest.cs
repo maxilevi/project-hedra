@@ -12,6 +12,7 @@ namespace Hedra.Engine.QuestSystem
         public string GiverName { get; set; }
         public Vector3 GivenPosition { get; set; }
         public Dictionary<string, object> Content { get; set; }
+        public bool IsMetadata { get; set; }
 
         public byte[] ToArray()
         {
@@ -32,8 +33,10 @@ namespace Hedra.Engine.QuestSystem
             {
                 Content = new Dictionary<string, object>
                 {
-                    {"CompletedStep", Settings.CompletedStep}
-                }
+                    {"CompletedSteps", Settings.CompletedSteps}
+                },
+                Name = "Story",
+                IsMetadata = true,
             };
             return quest;
         }

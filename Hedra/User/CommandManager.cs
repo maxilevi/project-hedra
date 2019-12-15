@@ -66,6 +66,11 @@ namespace Hedra.User
                             Caster.Position = World.SpawnPoint;
                             
                         }
+                        if (Parts[1] == "quest")
+                        {
+                            var quest = Caster.Questing.ActiveQuests[0];
+                            Caster.Position = quest.Location;
+                        }
 
                         if (Parts[1] == "spawnvillage")
                         {

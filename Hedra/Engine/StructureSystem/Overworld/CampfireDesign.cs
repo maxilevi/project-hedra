@@ -36,7 +36,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                            + Vector3.Transform(Vector3.UnitZ * -12f, Matrix4x4.CreateRotationY(rotation.Y * Mathf.Radian));
             DoWhenChunkReady(npcPosition, P =>
             {
-                ((Campfire) Structure.WorldObject).Bandit = CreateCampfireNPC(rng.Next(0, 3) == 1, P, rng);
+                ((Campfire) Structure.WorldObject).Bandit = CreateCampfireNPC(Structure, P, rng);
             }, Structure);
             if (rng.Next(0, 5) != 1)
             {
@@ -49,21 +49,13 @@ namespace Hedra.Engine.StructureSystem.Overworld
             }
         }
 
-        private static IHumanoid CreateCampfireNPC(bool Friendly, Vector3 Position, Random Rng)
+        protected virtual IHumanoid CreateCampfireNPC(CollidableStructure Structure, Vector3 Position, Random Rng)
         {
-            IHumanoid npc = null;
-            if (!Friendly)
-            {
-                npc = NPCCreator.SpawnBandit(
-                    Position,
-                    Level,
-                    BanditOptions.Default
-                );
-            }
-            else
-            {
-                npc = NPCCreator.SpawnQuestGiver(Position, MissionPool.Random(Position, QuestTier.Medium), Rng);
-            }
+            var npc = NPCCreator.SpawnBandit(
+                Position,
+                Level,
+                BanditOptions.Default
+            );
             npc.IsSitting = true;
             return npc;
         }

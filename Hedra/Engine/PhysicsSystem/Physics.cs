@@ -81,8 +81,7 @@ namespace Hedra.Engine.PhysicsSystem
             if (Math.Abs(dot - (-1.0f)) < 0.01f)
             {
                 // vector a and b point exactly in the opposite direction, 
-                // so it is a 180 degrees turn around the up-axis
-                return up * 180;
+                // so it is a 180 degrees turn around the up-axiss
             }
             if (Math.Abs(dot - (1.0f)) < 0.01f)
             {

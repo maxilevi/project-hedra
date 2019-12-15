@@ -103,7 +103,7 @@ namespace Hedra.Mission
             }
         }
 
-        private bool HasNext => _index < _blocks.Length - 1;
+        public bool HasNext => _index < _blocks.Length - 1;
 
         public MissionBlock Current => _index < _blocks.Length && _index >= 0 ? _blocks[_index] : null;
         public IPlayer Owner => _owner;

@@ -65,8 +65,8 @@ namespace Hedra.Engine.QuestSystem
 
         private void OnQuestCompleted(MissionObject Quest)
         {
-            if (Quest.IsStoryline)
-                Story.CompletedStep++;
+            if (Quest.IsStoryline && !Quest.HasNext)
+                Story.CompletedSteps++;
         }
         
         private void CheckForCompleteness()
@@ -86,8 +86,9 @@ namespace Hedra.Engine.QuestSystem
         public void SetSerializedQuests(SerializedQuest[] Quests)
         {
             Empty();
-            for (var i = 0; i < Quests.Length-1; ++i)
+            for (var i = 0; i < Quests.Length; ++i)
             {
+                if (Quests[i].IsMetadata) continue;
                 var design = MissionPool.Grab(Quests[i].Name);
                 var entity = new Humanoid
                 {
@@ -98,7 +99,9 @@ namespace Hedra.Engine.QuestSystem
                 this.Start(entity, quest);
                 entity.Dispose();
             }
-            Story = StorySettings.FromQuest(Quests[Quests.Length - 1]);
+
+            var metadata = Quests.FirstOrDefault(Q => Q.IsMetadata);
+            Story = metadata != null ? StorySettings.FromQuest(metadata) : new StorySettings();
         }
         
         public SerializedQuest[] GetSerializedQuests()

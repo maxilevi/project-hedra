@@ -77,6 +77,7 @@ namespace Hedra.Engine.Rendering.Animation
         private Matrix4x4 _positionCache;
         private Matrix4x4 _transformationMatrix = Matrix4x4.Identity;
         private bool _jointsDirty = true;
+        private StackTrace _trace = new StackTrace();
 
         public AnimatedModel(ModelData Model, Joint RootJoint, int JointCount)
         {

@@ -159,6 +159,8 @@ new_quest = $(GOLD)(BOLD)(BIGGER){NEW QUEST!}
 quest_completed = $(GREEN)(BOLD)(BIGGER){QUEST COMPLETED!}
 quest_abandoned = $(RED)(BOLD)(BIGGER){QUEST ABANDONED!}
 quest_failed = $(RED)(BOLD)(BIGGER){QUEST FAILED!}
+quest_collect_short_alternative = COLLECT $(BOLD)(CAPS)(ORANGE){{0}}.
+quest_collect_description_alternative = Collect the following items:\n$(BOLD)(CAPS)(ORANGE){{0}}
 quest_collect_short = BRING $(BLUE)(BOLD){{0}} {1}.
 quest_collect_description = $(BLUE)(BOLD){{0}} is in need of help. $(VIOLET)(BOLD){Bring} him the following items:\n{1}
 quest_collect_dialog_0 = I am in need of $(ORANGE)(BOLD){{0}}. Can you help me?
@@ -243,18 +245,24 @@ quest_rescue_erudite_description = $(BLUE)(BOLD){{0}}'s father has been kidnappe
 
 quest_steal_from_witch_dialog_0 = Hey, come here.;Don't tell anyone about this, but I found out about a nearby witch hut that was abandoned;I've heard they have several valuable ingredients. We can steal them and sell them in the black market, though, we have to be cautious.;Are you in?
 quest_steal_from_witch_description = Escort $(BLUE)(BOLD){{0}} to the witch hut and make sure nothing goes wrong.
-
 quest_steal_from_witch_escape = Oh no! My sources lied! I'm out!
 quest_steal_from_witch_kill = Oh no! It looks like it's not empty. Kill the witches!
 quest_steal_from_witch_empty = Everything seems to be going as planned
-
 quest_steal_from_witch_hut_reward_failure_0 = I was unable to find anything of value.
 quest_steal_from_witch_hut_reward_escape_0 = Thanks for the help but I ain't giving you anything. Try catching me!
 quest_steal_from_witch_hut_reward_success_0 = We should do this again some time. Here is your cut $(ORANGE)(BOLD){{0}}.
 
+quest_craft_a_potion_dialog_0 = I found an old potion recipe from my grandfather.;If you help me with the ingredients I will give you half of it.;Are you in?
+quest_craft_a_potion_failure_0 = Err, I think I made a mistake while cooking the potion. It looks like a mushroom soup!
+quest_craft_a_potion_failure_1 = I might have used the incorrect recipe, this tastes like dirt. 
+quest_craft_a_potion_success_0 = Woah! This recipe worked like a charm. Here is your cut $(BOLD)(CAPS)(ORANGE){{0}}.
+quest_craft_a_potion_collect_0 = Now I need you to bring me $(BOLD)(CAPS)(ORANGE){{0}}.
+quest_craft_a_potion_collect_1 = Search for $(BOLD)(CAPS)(ORANGE){{0}} and bring it to me.
+quest_craft_a_potion_collect_2 = According to this, I need $(BOLD)(CAPS)(ORANGE){{0}}.
+quest_craft_a_potion_collect_3 = The text is a bit fuzzy but I think I need $(BOLD)(CAPS)(ORANGE){{0}}.
+
 quest_retrieve_stolen_items_dialog_0 = A bunch of outlaws ambushed me and stole all my belongings. Can you recover them for me?
 quest_clear_graveyard_dialog_0 = Lately things haven't been the same.;It feels like a stream of dark energy has been contaminating the world.;I don't know how to explain it but there is a dark influence surrounding our burial grounds.;We can't pay respects to our loved ones anymore. You should go and experience it by yourself.
-
 
 # -- Class Names --
 mage = Mage
@@ -708,6 +716,6 @@ quest_the_beginning_npc_dialog_1 = I don't know how to explain it but I feel the
 quest_the_beginning_npc_dialog_2 = I've heard some rumors about an inter-dimensional portal. Sounds surreal, though, we have seen worse things around here...
 quest_the_beginning_npc_dialog_3 = Good thing about being an adventurer like you is being able to specialize into different classes.
 quest_the_beginning_npc_dialog_4 = My brother, a wizard, is convinced he can build a portal to visit other realms.
-quest_the_beginning_npc_dialog_5 = Every now and then I visit my father at a nearby fishing post;We train together and fish food for the whole season.
+quest_the_beginning_npc_dialog_5 = Every now and then I visit my father at a nearby fishing post.;We train together and fish food for the whole season.
 quest_the_beginning_npc_dialog_6 = Mastering a whole skill tree is not something everyone can do.
 quest_the_beginning_end_dialog_0 = I hope you liked your tour around town but there is still a lot to do.;Meet me again sometime later in order to talk about some future quests.

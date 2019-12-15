@@ -1,5 +1,6 @@
 import clr
 import System
+import Items
 from Hedra import World
 from Hedra.Structures import MapBuilder
 from System.Numerics import Vector2, Vector3
@@ -45,9 +46,10 @@ def find_structure(position, type, max_distance=DEFAULT_MAX_STRUCTURE_SEARCH_DIS
         if not positions:
             raise System.ArgumentOutOfRangeException('Tried to fetch a structure but it has no nearby designs')
         for position in positions:
-            World.StructureHandler.CheckStructures(positions[0].Xz())
+            World.StructureHandler.CheckStructures(position.Xz())
             objects = nearby_struct_objects(position, type, max_distance)
             print(objects)
+            print(positions)
             if objects: break
     return nearby[0] if nearby else objects[0]
 
@@ -80,7 +82,7 @@ def make_item_string(item):
 def to_item_collect(item):
     collect = ItemCollect()
     collect.Name = item.Name
-    collect.Amount = item.GetAttribute[str]('Amount') if item.HasAttribute('Amount') else 1
+    collect.Amount = item.GetAttribute[int](Items.AMOUNT_ATTRIBUTE) if item.HasAttribute(Items.AMOUNT_ATTRIBUTE) else 1
     return collect
 
 def create_dialog(keyword, params = []):

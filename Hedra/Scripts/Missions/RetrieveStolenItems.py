@@ -1,5 +1,6 @@
-from System import Array, Object, Single
 import MissionCore
+from Core import translate
+from System import Array, Object, Single
 from System.Numerics import Vector3
 from Hedra.Items import ItemPool, ItemTier
 from Hedra.Mission import MissionBuilder, QuestTier, DialogObject, QuestReward, ItemCollect, QuestPriority
@@ -23,7 +24,7 @@ def setup_timeline(position, giver, owner, rng):
     builder.OpeningDialog = create_opening_dialog(items)
     
     criminals = create_criminals(owner, giver, items, rng)
-    for criminal in criminals:
+    for criminal, item in zip(criminals, items):
         find = FindEntityMission(criminals[0])
         find.MissionBlockEnd += lambda: on_found(owner, criminal, rng)
         builder.Next(find)
@@ -31,12 +32,16 @@ def setup_timeline(position, giver, owner, rng):
         defeat = DefeatEntityMission(criminal)
         builder.Next(defeat)
     
-    collect = CollectMission()
-    collect.Items = Array[ItemCollect]([MissionCore.to_item_collect(x) for x in items])
-    collect.MissionBlockEnd += lambda: collect.ConsumeItems()
-    builder.Next(collect)
-    
-    builder.SetReward(create_reward(items, rng))
+        item_collect = MissionCore.to_item_collect(item)
+        collect = CollectMission()
+        collect.SetDescription(translate('quest_collect_description_alternative', item_collect.ToString()))
+        collect.SetShortDescription(translate('quest_collect_short_alternative', item_collect.ToString()))
+        collect.Items = Array[ItemCollect]([item_collect])
+        collect.MissionBlockEnd += collect.ConsumeItems
+        builder.Next(collect)
+
+    reward = create_reward(items, rng)  
+    builder.SetReward(reward)
     return builder
 
 def create_criminals(owner, giver, items, rng):
@@ -48,7 +53,6 @@ def create_criminals(owner, giver, items, rng):
             Single(rng.NextDouble() * MAX_SPAWN_DISTANCE * 2 - MAX_SPAWN_DISTANCE)
         )
         bandit = NPCCreator.SpawnBandit(position, max(1, owner.Level - rng.Next(0, 5)), BanditOptions.Default)
-        bandit.Name = NameGenerator.PickMaleName(rng)
         bandit.RemoveComponent(bandit.SearchComponent[DropComponent]())
         drop = DropComponent(bandit)
         drop.RandomDrop = False
@@ -84,7 +88,7 @@ def create_items(rng):
 
 def create_reward(items, rng):
     reward = QuestReward()
-    reward.Gold = rng.Next(7, 27)
+    reward.Gold = rng.Next(19, 52)
     reward.Item = items[rng.Next(0, len(items))] if rng.Next(0, 3) == 1 else None
     return reward
 

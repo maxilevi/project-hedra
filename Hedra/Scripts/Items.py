@@ -1,3 +1,4 @@
+# Items
 STONE_ARROW = 'StoneArrow'
 GLASS_FLASK = 'GlassFlask'
 WOODEN_BOWL = 'WoodenBowl'
@@ -16,3 +17,7 @@ RAW_TROUT = 'RawTrout'
 RAW_SALMON = 'RawSalmon'
 RAW_FISH = 'RawFish'
 HEALTH_POTION = 'HealthPotion'
+
+# Attributes
+PRICE_ATTRIBUTE = 'Price'
+AMOUNT_ATTRIBUTE = 'Amount'

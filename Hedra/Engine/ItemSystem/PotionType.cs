@@ -6,6 +6,7 @@ namespace Hedra.Engine.ItemSystem
         StrengthPotion,
         SpeedPotion,
         ManaPotion,
-        StaminaPotion
+        StaminaPotion,
+        MaxPotions
     }
 }

@@ -1,14 +1,16 @@
+using System;
+
 namespace Hedra.Engine.QuestSystem
 {
     public class StorySettings
     {
-        public int CompletedStep { get; set; }
+        public int CompletedSteps { get; set; }
 
         public static StorySettings FromQuest(SerializedQuest Quest)
         {
             return new StorySettings
             {
-                CompletedStep = (int)Quest.Content["CompletedStep"]
+                CompletedSteps = Convert.ToInt32(Quest.Content["CompletedSteps"])
             };
         }
     }

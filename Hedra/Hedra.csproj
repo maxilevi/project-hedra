@@ -424,8 +424,7 @@
     <Compile Include="Engine\StructureSystem\Overworld\AnimableInteractableStructure.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\BaseDungeonDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\BuildingDoorTrigger.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\CampfireWithCauldron.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\CampfireWithCauldronDesign.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\CampfireWithQuestDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonWithBoss.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\ShroomDimensionPortal.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\ShroomDimensionPortalDesign.cs" />
@@ -9122,6 +9121,10 @@
       <Link>Assets\Env\BearTrap.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Objects\Cauldron-Colliders.ply">
+      <Link>Assets\Env\Objects\Cauldron-Colliders.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Objects\Cauldron.ply">
       <Link>Assets\Env\Objects\Cauldron.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -14323,7 +14326,9 @@
     <Content Include="Scripts\Missions\StealFromWitch.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Scripts\Missions\Story.py" />
+    <Content Include="Scripts\Missions\Story.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\Missions\TheBeginning.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

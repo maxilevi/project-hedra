@@ -200,7 +200,7 @@ namespace Hedra.Engine.Management
             for(var i = 0; i < length; ++i)
             {
                 var quest = SerializedQuest.FromArray(Reader.ReadBytes(Reader.ReadInt32()));
-                if(MissionPool.Exists(quest.Name))
+                if(MissionPool.Exists(quest.Name) || quest.IsMetadata)
                     quests.Add(quest);
                 else
                     Log.WriteLine($"Found non-existent quest design '{quest.Name}', removing...");

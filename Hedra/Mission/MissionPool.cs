@@ -99,7 +99,8 @@ namespace Hedra.Mission
     public enum Quests
     {
         VisitSpawnVillage,
-        TheBeginning
+        TheBeginning,
+        CraftAPotion
     }
 
     public enum QuestTier

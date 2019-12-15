@@ -58,7 +58,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             base.Update();
             var distToPlayer = (FirePosition - GameManager.Player.Position).LengthSquared();
-            if (distToPlayer < 256 * 256)
+            if (distToPlayer < 256 * 256 && HasFire)
             {
                 if (this._passedTime++ % 2 == 0)
                 {
@@ -78,7 +78,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 HandleBurning();
             }
 
-            if ( _light == null && distToPlayer < ShaderManager.LightDistance * ShaderManager.LightDistance * 2f){
+            if ( _light == null && distToPlayer < ShaderManager.LightDistance * ShaderManager.LightDistance * 2f && HasFire){
 
                 this._light = ShaderManager.GetAvailableLight();
 
@@ -91,7 +91,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 }
             }
 
-            if (this._sound == null && distToPlayer < 32f*32f*2f)
+            if (this._sound == null && distToPlayer < 32f*32f*2f && HasFire)
             {
                 this._sound = SoundPlayer.GetAvailableSource();
             }
@@ -149,6 +149,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         protected virtual Vector3 LightColor { get; } = new Vector3(1.25f, .2f, .2f);
         protected virtual float LightRadius { get; } = 24;
+        public bool HasFire { get; set; } = true;
         
         public override void Dispose()
         {

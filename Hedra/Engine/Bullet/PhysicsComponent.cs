@@ -289,6 +289,7 @@ namespace Hedra.Engine.Bullet
 
         public void MoveTowards(Vector3 Position)
         {
+            if(_sensor.IsDisposed) return;
             _accumulatedMovement += Position;
             _sensor.Activate();
             _movedDistance = Position;
