@@ -527,7 +527,6 @@ namespace Hedra.Engine.EntitySystem
             this.Physics.Update();
 
             if (IsDead) return;
-
             this.SpawnAnimation();
             this.UpdateEnvironment();
             this._tickSystem.Tick();

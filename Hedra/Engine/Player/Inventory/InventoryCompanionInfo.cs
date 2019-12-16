@@ -12,8 +12,6 @@ using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using System.Numerics;
-
-
 using Silk.NET.Input.Common;
 using Button = Hedra.Engine.Rendering.UI.Button;
 
@@ -160,9 +158,22 @@ namespace Hedra.Engine.Player.Inventory
 
         private void ApplyRename()
         {
-            CurrentItem.SetAttribute("PetName", _renamePanel.Text);
-            _isRenaming = false;
-            UpdateView();
+            var name = _renamePanel.Text;
+            if (CanUseThisName(name))
+            {
+                CurrentItem.SetAttribute("PetName", name);
+                _isRenaming = false;
+                UpdateView();
+            }
+            else
+            {
+                Hedra.Sound.SoundPlayer.PlayUISound(Hedra.Sound.SoundType.ButtonClick);
+            }
+        }
+
+        private bool CanUseThisName(string Name)
+        {
+            return Name != string.Empty;
         }
 
         public override bool Enabled

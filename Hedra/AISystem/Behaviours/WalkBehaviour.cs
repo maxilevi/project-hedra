@@ -46,7 +46,7 @@ namespace Hedra.AISystem.Behaviours
                 /* If the target reaches the point then (Target - Parent.Position) will be equal to Vector3.Zero and thus the normal will be Vector3.Zero too. */
                 if (orientation != Vector3.Zero)
                 {
-                    Parent.Orientation = Mathf.Lerp(Parent.Orientation, orientation, Time.DeltaTime * 8f);
+                    Parent.Orientation = Mathf.Lerp(Parent.Orientation, orientation, Time.DeltaTime * 8f).NormalizedFast();
                     Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
                 }
                 Parent.Physics.Move();

@@ -15,7 +15,7 @@ namespace Hedra.AISystem.Mob
         
         public SkeletonKamikazeAIComponent(Entity Parent) : base(Parent)
         {
-            Parent.SearchComponent<DamageComponent>().PlayDeleteAnimation = false;
+            //Parent.SearchComponent<DamageComponent>().PlayDeleteAnimation = false;
             _model = (QuadrupedModel) Parent.Model;
             Parent.BeforeDamaging += BeforeDamaging;
         }
