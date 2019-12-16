@@ -14300,9 +14300,15 @@
     <Content Include="Scripts\Fishing.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Scripts\Items.py" />
-    <Content Include="Scripts\Missions\BadHarvest.py" />
-    <Content Include="Scripts\Missions\BuyFromTravellingMerchant.py" />
+    <Content Include="Scripts\Items.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\Missions\BadHarvest.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\Missions\BuyFromTravellingMerchant.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\Missions\CatchAPet.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -14312,17 +14318,27 @@
     <Content Include="Scripts\Missions\CollectAndCraft.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Scripts\Missions\CraftAPotion.py" />
-    <Content Include="Scripts\Missions\DefeatBossAtGiantTree.py" />
+    <Content Include="Scripts\Missions\CraftAPotion.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\Missions\DefeatBossAtGiantTree.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\Missions\FindAndKillLich.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Scripts\Missions\FishAnItem.py" />
+    <Content Include="Scripts\Missions\FishAnItem.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\Missions\MissionCore.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Scripts\Missions\RescueErudite.py" />
-    <Content Include="Scripts\Missions\RetrieveStolenItems.py" />
+    <Content Include="Scripts\Missions\RescueErudite.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\Missions\RetrieveStolenItems.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\Missions\StealFromWitch.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

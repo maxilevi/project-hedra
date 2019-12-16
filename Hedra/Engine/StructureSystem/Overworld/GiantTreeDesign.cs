@@ -61,18 +61,13 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         private void PlaceBoss(Vector3 Position, Region Region, CollidableStructure Structure, Matrix4x4 TransMatrix, Random Rng)
         {
-            var underWater = Region.Generation.GetMaxHeight(Position.X, Position.Z) < BiomePool.SeaLevel;
             var chestOffset = Vector3.UnitZ * 10f + Vector3.UnitX * -80f;
             var chestPosition = Vector3.Transform(chestOffset, TransMatrix);
-            IEntity treeBoss = null;
-            if (!underWater)
-            {
-                treeBoss = BossGenerator.Generate(
-                    new [] { MobType.GiantBeetle, MobType.GorillaWarrior, MobType.Troll },
-                    Vector3.Transform(chestOffset - Vector3.UnitZ * 50, TransMatrix),
-                    Rng);
-                ((GiantTree)Structure.WorldObject).Boss = treeBoss;
-            }
+            var treeBoss = BossGenerator.Generate(
+                new [] { MobType.GiantBeetle, MobType.GorillaWarrior, MobType.Troll },
+                Vector3.Transform(chestOffset - Vector3.UnitZ * 50, TransMatrix),
+                Rng);
+            ((GiantTree)Structure.WorldObject).Boss = treeBoss;
 
             var chest = World.SpawnChest(
                 new Vector3(chestPosition.X, Structure.Position.Y, chestPosition.Z), 

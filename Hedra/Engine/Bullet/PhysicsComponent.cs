@@ -239,7 +239,7 @@ namespace Hedra.Engine.Bullet
         }
 
         private Vector3 Gravity => (BulletPhysics.Gravity * _gravityDirection) * (_usePhysics ? 1 : 0);
-        public Vector3 RigidbodyPosition => _body.WorldTransform.Origin.Compatible();//Time.Paused ? _body.WorldTransform.Origin.Compatible() : _motionState.Position;
+        public Vector3 RigidbodyPosition => !_body.IsDisposed ? _body.WorldTransform.Origin.Compatible() : Vector3.Zero;
 
         public override void Draw()
         {

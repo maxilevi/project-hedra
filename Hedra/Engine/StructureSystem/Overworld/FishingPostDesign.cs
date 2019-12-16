@@ -238,7 +238,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 Graph.AddSymmetricEdge(center, MiniDockPosition.Value);
                 Graph.AddSymmetricEdge(DockPosition, MiniDockPosition.Value);
             }
-
             for (var i = 0; i < Decorations.Length; ++i)
             {
                 Graph.AddSymmetricEdge(center, Decorations[i]);
@@ -291,7 +290,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
         private static IHumanoid CreateFisherman(Vector3 Position, CollidableStructure Structure)
         {
             var fisherman = NPCCreator.SpawnHumanoid(HumanType.Fisherman, Position);
-            fisherman.AddComponent(new QuestGiverComponent(fisherman, MissionPool.Random(Position, QuestTier.Medium, QuestHint.Fishing)));
+            var quest = MissionPool.Random(Position, QuestTier.Medium, QuestHint.Fishing);
+            fisherman.AddComponent(new QuestGiverComponent(fisherman, quest));
             fisherman.Physics.CollidesWithEntities = false;
             fisherman.IsSitting = true;
             fisherman.SearchComponent<DamageComponent>().Immune = true;

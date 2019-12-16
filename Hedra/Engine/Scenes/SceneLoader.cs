@@ -17,6 +17,7 @@ using Hedra.Items;
 using Hedra.Mission;
 using Hedra.Rendering;
 using System.Numerics;
+using Hedra.Core;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.Scenes
@@ -124,7 +125,7 @@ namespace Hedra.Engine.Scenes
             for (var i = 0; i < Values.Length; ++i)
             {
                 var k = i;
-                DecorationsPlacer.PlaceWhenWorldReady(GetPosition(Values[i]), P => Do(Values[k]), () => Structure.Disposed);
+                DecorationsPlacer.PlaceWhenWorldReady(GetPosition(Values[i]), _ => TaskScheduler.Parallel(() => Do(Values[k])), () => Structure.Disposed);
             }
         }
 

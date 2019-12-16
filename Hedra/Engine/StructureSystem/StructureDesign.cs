@@ -137,7 +137,7 @@ namespace Hedra.Engine.StructureSystem
 
         protected static void DoWhenChunkReady(Vector3 Position, Action<Vector3> Do, CollidableStructure Structure)
         {
-            DecorationsPlacer.PlaceWhenWorldReady(Position, Do, () => Structure.Disposed);
+            DecorationsPlacer.PlaceWhenWorldReady(Position, P => TaskScheduler.Parallel(() => Do(P)), () => Structure.Disposed);
         }
         
         public virtual bool MeetsRequirements(Vector2 ChunkOffset)

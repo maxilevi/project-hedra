@@ -5,6 +5,7 @@ using Hedra.Engine.Localization;
 using Hedra.Localization;
 using Hedra.Rendering;
 using System.Numerics;
+using BulletSharp;
 using Hedra.AISystem.Humanoid;
 using Hedra.BiomeSystem;
 using Hedra.Components;
@@ -18,6 +19,7 @@ using Hedra.EntitySystem;
 using Hedra.Mission;
 using Hedra.Numerics;
 using Hedra.WeaponSystem;
+using TaskScheduler = Hedra.Core.TaskScheduler;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
@@ -80,8 +82,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var wizard = CreateBaseWizard(Position, HealthBarType.Friendly);
             if (Utils.Rng.Next(0, 4) == 1)
             {
-                var questComponent = new QuestGiverComponent(wizard,
-                    MissionPool.Random(Position, QuestTier.Medium, QuestHint.Magic));
+                var quest = MissionPool.Random(Position, QuestTier.Medium, QuestHint.Magic);
+                var questComponent = new QuestGiverComponent(wizard, quest);
                 wizard.AddComponent(questComponent);
             }
             else

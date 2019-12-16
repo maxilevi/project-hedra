@@ -214,7 +214,8 @@ namespace Hedra.Engine.Loader
 
         protected override void FocusChanged(bool IsFocused)
         {
-            if(!IsFocused && _splashScreen.FinishedLoading)
+            if (_splashScreen == null || !_splashScreen.FinishedLoading) return;
+            if (!IsFocused)
             {
                 if(!GameManager.InStartMenu && !GameManager.IsLoading && !GameSettings.Paused &&
                     GameManager.Player != null && !GameManager.Player.InterfaceOpened)

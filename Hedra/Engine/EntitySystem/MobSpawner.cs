@@ -104,7 +104,12 @@ namespace Hedra.Engine.EntitySystem
             }
             else
             {
-                SelectAndSpawnMiniBoss(desiredPosition, Utils.Rng);
+                void DoSpawnMiniBoss()
+                {
+                    SelectAndSpawnMiniBoss(desiredPosition, Utils.Rng);
+                }
+                if (GameSettings.TestingMode) DoSpawnMiniBoss();
+                else TaskScheduler.Parallel(DoSpawnMiniBoss);
             }
         }
 
@@ -146,10 +151,7 @@ namespace Hedra.Engine.EntitySystem
             {
                 if (!dict.ContainsKey(Template.Type))
                     throw new ArgumentOutOfRangeException($"Custom template type '{Template.Type}' does not exist.");
-                TaskScheduler.Parallel(() =>
-                {
-                    dict[Template.Type]();
-                });
+                dict[Template.Type]();
             }
             else
             {

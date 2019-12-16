@@ -11,13 +11,13 @@ namespace Hedra.Engine.StructureSystem.Overworld
 {
     public class CampfireWithQuestDesign : CampfireDesign
     {
-        public override VertexData Icon => CacheManager.GetModel(CacheItem.CauldronIcon);
+        public override VertexData Icon => null;
         public override bool CanSpawnInside => true;
 
         public override void Build(CollidableStructure Structure)
         {
             var rng = BuildRng(Structure);
-            Structure.Parameters.Set("HasCauldron", true);//rng.Next(0, 3) == 1);
+            Structure.Parameters.Set("HasCauldron", rng.Next(0, 3) == 1);
             base.Build(Structure);
             if (Structure.Parameters.Get<bool>("HasCauldron"))
             {
