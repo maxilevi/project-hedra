@@ -98,10 +98,20 @@ namespace Hedra.Engine
             if(DummyMode) EnableDummyMode();
             LoadLibraries();
 
-            var bounds = Screen.PrimaryScreen.Bounds;
-            Log.WriteLine(bounds.ToString());
-            GameSettings.DeviceWidth = bounds.Width;
-            GameSettings.DeviceHeight = bounds.Height;
+            var screens = Screen.AllScreens;
+            var maxSize = Vector2.Zero;
+            for (var i = 0; i < screens.Length; ++i)
+            {
+                var screenBounds = new Vector2(screens[i].Bounds.Width, screens[i].Bounds.Height);
+                if (screenBounds.LengthSquared() > maxSize.LengthSquared())
+                {
+                    maxSize = screenBounds;
+                }
+                Log.WriteLine($"Found screen size '{screenBounds}'");
+            }
+            var bounds = maxSize;
+            GameSettings.DeviceWidth = (int)bounds.X;
+            GameSettings.DeviceHeight = (int)bounds.Y;
 
             Log.WriteLine("Creating the window on the Primary Device at " + GameSettings.DeviceWidth + "x" +
                             GameSettings.DeviceHeight);
