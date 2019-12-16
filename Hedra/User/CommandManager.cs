@@ -66,6 +66,17 @@ namespace Hedra.User
                             Caster.Position = World.SpawnPoint;
                             
                         }
+                        if (Parts[1] == "shrine")
+                        {
+                            var structs = World.StructureHandler.StructureItems;
+                            for (var i = 0; i < structs.Length; ++i)
+                            {
+                                if (structs[i].WorldObject is Obelisk obelisk)
+                                {
+                                    Caster.Position = obelisk.Position;
+                                }
+                            }
+                        }
                         if (Parts[1] == "quest")
                         {
                             var quest = Caster.Questing.ActiveQuests[0];
@@ -79,16 +90,18 @@ namespace Hedra.User
 
                         if (Parts[1] == "witchhut")
                         {
-                            var structs = StructureHandler.GetNearStructures(Caster.Position);
-                            for(var i = 0; i < structs.Length; ++i)
+                            var structs = World.StructureHandler.StructureItems;
+                            for (var i = 0; i < structs.Length; ++i)
+                            {
                                 if (structs[i].WorldObject is WitchHut hut)
                                 {
                                     Caster.Position = hut.StealPosition;
                                 }
+                            }
                         }
                         if (Parts[1] == "graveyard")
                         {
-                            var structs = StructureHandler.GetNearStructures(Caster.Position);
+                            var structs = World.StructureHandler.StructureItems;
                             for (var i = 0; i < structs.Length; ++i)
                             {
                                 if (structs[i].WorldObject is Graveyard hut)
@@ -99,7 +112,7 @@ namespace Hedra.User
                         }
                         if (Parts[1] == "merchant")
                         {
-                            var structs = StructureHandler.GetNearStructures(Caster.Position);
+                            var structs = World.StructureHandler.StructureItems;
                             for (var i = 0; i < structs.Length; ++i)
                             {
                                 if (structs[i].WorldObject is TravellingMerchant hut)

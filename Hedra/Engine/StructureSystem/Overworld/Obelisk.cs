@@ -33,6 +33,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public override int InteractDistance => 32;
         public ObeliskType Type { get; set; }
         public HighlightedAreaWrapper AreaWrapper { get; set; }
+        protected override bool AllowThroughCollider => true;
 
         public Obelisk(Vector3 Position) : base(Position)
         {
