@@ -100,7 +100,11 @@ namespace Hedra.Mission
     {
         VisitSpawnVillage,
         TheBeginning,
-        CraftAPotion
+        CraftAPotion,
+        BadHarvest,
+        HarvestForMe,
+        FindCowsThatEscaped,
+        DefendFarmFromAttack
     }
 
     public enum QuestTier

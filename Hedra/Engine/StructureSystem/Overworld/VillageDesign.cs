@@ -38,10 +38,10 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var builder = Structure.Parameters.Get<VillageAssembler>("Builder");
             var design = Structure.Parameters.Get<PlacementDesign>("Design");
             builder.Build(design, Structure);
-            SpawnStorylineGiver(Structure.Position + Vector3.UnitX * 10f);
+            SpawnStorylineGiver(Structure, Structure.Position + Vector3.UnitX * 10f);
         }
 
-        private static void SpawnStorylineGiver(Vector3 Position)
+        private static void SpawnStorylineGiver(CollidableStructure Structure, Vector3 Position)
         {
             var human = NPCCreator.SpawnHumanoid(HumanType.Bard, Position);
             var settings = LocalPlayer.Instance.Questing.Story;
@@ -53,6 +53,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 human.AddComponent(new StorylineQuestGiverComponent(human, missionDesign));
             }
             human.Position = Position;
+            Structure.WorldObject.AddNPCs(human);
         }
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)

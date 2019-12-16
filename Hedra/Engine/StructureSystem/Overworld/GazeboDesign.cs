@@ -13,7 +13,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         protected override int StructureChance => StructureGrid.GazeboChance;
         protected override CacheItem? Cache => CacheItem.Gazebo;
         protected override Vector3 DefaultLookingDirection => Vector3.UnitX;
-        protected override Vector3 Offset => GazeboCache.OffsetFromGround;
+        protected override Vector3 NPCOffset => GazeboCache.OffsetFromGround;
         protected override float QuestChance => 1;
         public override bool CanSpawnInside => true;
         protected override Gazebo Create(Vector3 Position, float Size)

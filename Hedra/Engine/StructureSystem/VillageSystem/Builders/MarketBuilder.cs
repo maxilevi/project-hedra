@@ -33,7 +33,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return Input;
         }
 
-        public override BuildingOutput Build(MarketParameters Parameters, DesignTemplate Design, VillageCache Cache, Random Rng, Vector3 Center)
+        public override BuildingOutput Build(MarketParameters Parameters, DesignTemplate Design, VillageCache Cache, Random Rng, Vector3 VillageCenter)
         {
             var marketDist = 3.5f + Rng.NextFloat() * .75f + 0.2f;
             var marketCount = 8 + Rng.Next(0, 4);

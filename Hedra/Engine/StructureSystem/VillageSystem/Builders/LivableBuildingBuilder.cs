@@ -56,9 +56,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             }
         }
 
-        public override BuildingOutput Build(T Parameters, DesignTemplate Design, VillageCache Cache, Random Rng, Vector3 Center)
+        public override BuildingOutput Build(T Parameters, DesignTemplate Design, VillageCache Cache, Random Rng, Vector3 VillageCenter)
         {
-            var output = base.Build(Parameters, Design, Cache, Rng, Center);
+            var output = base.Build(Parameters, Design, Cache, Rng, VillageCenter);
             var transformation = BuildTransformation(Parameters).ClearTranslation();
             AddDoors(Parameters, Cache, Parameters.Design.Doors, transformation, output);
             AddBeds(Parameters, Parameters.Design.Beds, transformation, output);

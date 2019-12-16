@@ -16,7 +16,7 @@ namespace Hedra.Engine.StructureSystem
 {
     public abstract class QuestGiverStructureDesign<T> : SimpleStructureDesign<T> where T : BaseStructure, IQuestStructure
     {
-        protected abstract Vector3 Offset { get; }
+        protected abstract Vector3 NPCOffset { get; }
         protected abstract float QuestChance { get; }
         protected virtual Vector3 DefaultLookingDirection => Vector3.UnitZ;
         
@@ -24,8 +24,8 @@ namespace Hedra.Engine.StructureSystem
         {
             if (Rng.NextFloat() < QuestChance)
             {
-                var position = Vector3.Transform(Vector3.Transform(Offset, Rotation), Rotation * Translation);
-                var quest = MissionPool.Random(position);
+                var position = Vector3.Transform(Vector3.Transform(NPCOffset, Rotation), Rotation * Translation);
+                var quest = SelectQuest(position, Rng);
                 DoWhenChunkReady(position, P =>
                 {
                     var npc = NPCCreator.SpawnQuestGiver(P, quest, Rng);
@@ -35,6 +35,11 @@ namespace Hedra.Engine.StructureSystem
                     ((T) Structure.WorldObject).NPC = npc;
                 }, Structure);
             }
+        }
+
+        protected virtual IMissionDesign SelectQuest(Vector3 Position, Random Rng)
+        {
+            return MissionPool.Random(Position);
         }
     }
 }

@@ -74,6 +74,8 @@ namespace Hedra.Engine.WorldBuilding
         {
             for (var i = 0; i < NPCs.Length; ++i)
             {
+                if(_npcs.Contains(NPCs[i]))
+                    throw new ArgumentException($"This NPC has already been added to the list.");
                 if(NPCs[i] == null)
                     throw new ArgumentNullException("Cannot add a null NPC");
                 _npcs.Add(NPCs[i]);

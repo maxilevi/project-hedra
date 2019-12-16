@@ -43,12 +43,12 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         protected virtual bool LookAtCenter => true;
         protected virtual bool GraduateColor => false;
         protected CollidableStructure Structure { get; }
-        private Village VillageObject { get; }
+        private BaseStructure VillageObject { get; }
         
         protected Builder(CollidableStructure Structure)
         {
             this.Structure = Structure;
-            this.VillageObject = (Village) Structure.WorldObject;
+            this.VillageObject = Structure.WorldObject;
         }
 
         public virtual bool Place(T Parameters, VillageCache Cache)
@@ -75,7 +75,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return Designs[Parameters.Rng.Next(0, Designs.Length)];
         }
         
-        public virtual BuildingOutput Build(T Parameters, DesignTemplate Design, VillageCache Cache, Random Rng, Vector3 Center)
+        public virtual BuildingOutput Build(T Parameters, DesignTemplate Design, VillageCache Cache, Random Rng, Vector3 VillageCenter)
         {
             
             var transformationMatrix = BuildTransformation(Parameters);
@@ -185,21 +185,23 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         {
             var human = NPCCreator.SpawnHumanoid(Type, Position);
             human.SetWeapon(null);
-            VillageObject.AddHumanoid(human);
+            VillageObject.AddNPCs(human);
             return human;
         }
 
         protected IHumanoid SpawnVillager(Vector3 Position, Random Rng)
         {
-            SpawnVillager(Position, Rng, VillageObject.Graph, out var humanoid);
-            VillageObject.AddHumanoid(humanoid);
+            if(!(VillageObject is Village village))
+                throw new ArgumentOutOfRangeException($"In order to spawn a villager, the structure needs to be a village but is a '{VillageObject.ToString()}'");
+            SpawnVillager(Position, Rng, village.Graph, out var humanoid);
+            VillageObject.AddNPCs(humanoid);
             return humanoid;
         }
 
         protected IEntity SpawnMob(MobType Mob, Vector3 Position)
         {
             var mob = World.SpawnMob(Mob, Position, Utils.Rng);
-            VillageObject.AddMob(mob);
+            VillageObject.AddNPCs(mob);
             return mob;
         }
         

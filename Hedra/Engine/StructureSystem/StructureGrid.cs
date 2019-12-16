@@ -19,7 +19,7 @@ namespace Hedra.Engine.StructureSystem
         public const int Dungeon0Chance = 32;
         public const int Dungeon1Chance = 32;
         public const int Dungeon2Chance = 32;
-        
+
         /* Small structures */
         public const int FishingPostChance = 2;
         public const int GhostTownPortalChance = 64;
@@ -29,6 +29,7 @@ namespace Hedra.Engine.StructureSystem
         public const int ObeliskChance = 2;
         public const int CampfireChance = 2;
         public const int TravellingMerchantChance = 8;
+        public const int CottageWithFarmChance = 2;
         
         /* Dead realm structures */
         public const int TombstoneChance = 2;

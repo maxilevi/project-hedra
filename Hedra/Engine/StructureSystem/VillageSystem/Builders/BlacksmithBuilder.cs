@@ -24,9 +24,9 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             return PlaceGroundwork(Parameters.Position, (_width = this.ModelRadius(Parameters, Cache)) * .5f, BlockType.StonePath);
         }
 
-        public override BuildingOutput Build(BlacksmithParameters Parameters, DesignTemplate Design, VillageCache Cache, Random Rng, Vector3 Center)
+        public override BuildingOutput Build(BlacksmithParameters Parameters, DesignTemplate Design, VillageCache Cache, Random Rng, Vector3 VillageCenter)
         {
-            var output = base.Build(Parameters, Design, Cache, Rng, Center);
+            var output = base.Build(Parameters, Design, Cache, Rng, VillageCenter);
             var transformation = BuildTransformation(Parameters).ClearTranslation();
             AddDoors(Parameters, Cache, Parameters.Design.Doors, transformation, output);
             AddChimneys(Parameters, Parameters.Design.Chimneys, transformation, output);

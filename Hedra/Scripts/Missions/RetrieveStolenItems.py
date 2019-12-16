@@ -21,7 +21,7 @@ def setup_timeline(position, giver, owner, rng):
     
     items = create_items(rng)
     
-    builder.OpeningDialog = create_opening_dialog(items)
+    builder.OpeningDialog = MissionCore.create_dialog('quest_retrieve_stolen_items_dialog')
     
     criminals = create_criminals(owner, giver, items, rng)
     for criminal, item in zip(criminals, items):
@@ -69,12 +69,6 @@ def on_found(owner, npc, rng):
         npc.AddComponent(EscapeAIComponent(npc, owner))
     else:
         npc.SearchComponent[CombatAIComponent]().SetTarget(owner)
-
-def create_opening_dialog(items):
-    dialog = DialogObject()
-    dialog.Keyword = 'quest_retrieve_stolen_items_dialog'
-    dialog.Arguments = Array[Object]([])
-    return dialog
     
 def create_items(rng):
     count = rng.Next(1, 4)

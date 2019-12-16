@@ -41,10 +41,11 @@ namespace Hedra.Engine.Rendering
         public Func<BlockType, bool> PlaceCondition { get; set; }
         public VertexData OriginalMesh { get; set; }
 
-        public void Apply(Matrix4x4 Transformation)
+        public InstanceData Apply(Matrix4x4 Transformation)
         {
             TransMatrix *= Transformation;
             ApplyRecursively(I => I.Apply(Transformation));
+            return this;
         }
         
         public Vector3 ApproximateBounds

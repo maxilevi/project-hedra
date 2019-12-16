@@ -42,7 +42,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         {
         }
         
-        public override BuildingOutput Build(FarmParameters Parameters, DesignTemplate Template, VillageCache Cache, Random Rng, Vector3 Center)
+        public override BuildingOutput Build(FarmParameters Parameters, DesignTemplate Template, VillageCache Cache, Random Rng, Vector3 VillageCenter)
         {
             var output = new BuildingOutput
             {
@@ -56,11 +56,11 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             SpawnPlants(Parameters, Rng, output);
             if (Parameters.PropDesign != null && (!Parameters.PropDesign.OnlyOnOutskirts || !Parameters.InsidePaths))
             {
-                var prop = base.Build(Parameters, Parameters.PropDesign, Cache, Rng, Center);
+                var prop = base.Build(Parameters, Parameters.PropDesign, Cache, Rng, VillageCenter);
                 if (Parameters.PropDesign.HasWindmill)
                 {
                     if (Rng.NextFloat() > Parameters.PropDesign.WindmillChance / 100f) return output.Concat(prop);
-                    var windmill = BuildWindmill(Parameters, Parameters.PropDesign, Cache, Rng, Center);
+                    var windmill = BuildWindmill(Parameters, Parameters.PropDesign, Cache, Rng, VillageCenter);
                     prop = prop.Concat(windmill);
                 }
                 return output.Concat(prop);
