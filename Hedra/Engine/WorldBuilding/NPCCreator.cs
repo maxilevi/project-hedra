@@ -65,10 +65,15 @@ namespace Hedra.Engine.WorldBuilding
                 HumanType.Blacksmith,
                 HumanType.Clothier,
                 HumanType.Scholar,
-                HumanType.Bard,
-                HumanType.Farmer
+                HumanType.Bard
             };
-            var villager = SpawnHumanoid(types[rng.Next(0, types.Length)], DesiredPosition, new HumanoidConfiguration(HealthBarType.Friendly));
+            return SpawnVillager(types[rng.Next(0, types.Length)], DesiredPosition, Seed);
+        }
+
+        public static Humanoid SpawnVillager(HumanType Type, Vector3 DesiredPosition, int Seed)
+        {
+            var rng = new Random(Seed);
+            var villager = SpawnHumanoid(Type, DesiredPosition, new HumanoidConfiguration(HealthBarType.Friendly));
             villager.Seed = Seed;
             villager.SetWeapon(null);
             villager.Name = NameGenerator.PickMaleName(rng);
@@ -79,16 +84,32 @@ namespace Hedra.Engine.WorldBuilding
             return villager;
         }
 
+        public static IHumanoid SpawnQuestGiver(HumanType Type, Vector3 Position, IMissionDesign Quest, Random Rng)
+        {
+            var npc = SpawnVillager(
+                Type,
+                Position,
+                Rng.Next(int.MinValue, int.MaxValue)
+            );
+            ApplyQuestGiverStatus(npc, Position, Quest);
+            return npc;
+        }
+
         public static IHumanoid SpawnQuestGiver(Vector3 Position, IMissionDesign Quest, Random Rng)
         {
             var npc = SpawnVillager(
                 Position,
                 Rng
             );
-            npc.Position = Position;
-            npc.Physics.UsePhysics = false;
-            npc.AddComponent(new QuestGiverComponent(npc, Quest));
+            ApplyQuestGiverStatus(npc, Position, Quest);
             return npc;
+        }
+
+        private static void ApplyQuestGiverStatus(IHumanoid Npc, Vector3 Position, IMissionDesign Quest)
+        {
+            Npc.Position = Position;
+            Npc.Physics.UsePhysics = false;
+            Npc.AddComponent(new QuestGiverComponent(Npc, Quest));
         }
 
         public static Humanoid SpawnBandit(Vector3 Position, int Level, BanditOptions Options)

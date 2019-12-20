@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Runtime.ExceptionServices;
 using System.Windows.Forms;
 using Hedra.Engine.BiomeSystem.NormalBiome;
@@ -35,9 +36,15 @@ namespace Hedra.Engine
             //GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
             void ProcessException(object S, UnhandledExceptionEventArgs E)
             {
+                var baseText =  $":{Environment.NewLine}{Environment.NewLine}----STACK TRACE----{Environment.NewLine}{Environment.NewLine}{E.ExceptionObject.ToString()}";
                 if (E.IsTerminating)
                 {
-                    Log.WriteLine($"UNEXPECTED EXCEPTION :{Environment.NewLine}{Environment.NewLine}----STACK TRACE----{Environment.NewLine}{Environment.NewLine}{E.ExceptionObject.ToString()}");
+                    Log.WriteLine($"UNEXPECTED FATAL EXCEPTION {baseText}");
+                    File.Copy($"{GameLoader.AppPath}/log.txt", $"{GameLoader.CrashesFolder}/{DateTime.UtcNow}.txt");
+                }
+                else
+                {
+                    Log.WriteLine("UNEXPECTED EXCEPTION {baseText}");
                 }
             };
             AppDomain.CurrentDomain.UnhandledException += ProcessException;

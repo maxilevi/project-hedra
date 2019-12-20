@@ -489,7 +489,7 @@ namespace Hedra.Engine.Rendering.UI
             {
                 if(E == PanelState.Disabled)
                 {
-                    GameSettings.Save($"{AssetManager.AppData}/settings.cfg");
+                    GameSettings.Save($"{AssetManager.AppPath}/settings.cfg");
                     GameSettings.DarkEffect = false;
                 }
                 if(E == PanelState.Enabled){

@@ -63,7 +63,7 @@ namespace Hedra.Engine.Rendering.UI
                 Translation.Create("character_folder"), Color.White, FontCache.GetNormal(13));
             _openFolder.Click += delegate
             {
-                System.Diagnostics.Process.Start($"{AssetManager.AppData}/Characters/");
+                System.Diagnostics.Process.Start(DataManager.CharactersFolder);
             };
 
             _human = new Humanoid

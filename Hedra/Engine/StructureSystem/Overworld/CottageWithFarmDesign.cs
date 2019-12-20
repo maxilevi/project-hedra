@@ -3,10 +3,12 @@ using System.Linq;
 using System.Numerics;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.Player;
 using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.StructureSystem.VillageSystem.Placers;
 using Hedra.Engine.WorldBuilding;
+using Hedra.EntitySystem;
 using Hedra.Mission;
 using Hedra.Numerics;
 using Hedra.Rendering;
@@ -16,7 +18,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
     public class CottageWithFarmDesign : QuestGiverStructureDesign<CottageWithFarm>
     {
         public override int PlateauRadius => 160;
-        public override VertexData Icon => null;
+        public override VertexData Icon => CacheManager.GetModel(CacheItem.CauldronIcon);
         public override bool CanSpawnInside => true;
         protected override int StructureChance => StructureGrid.CottageWithFarmChance;
         protected override CacheItem? Cache => null;
@@ -73,7 +75,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 GroundworkType = GroundworkType.Rounded,
                 Position = housePosition,
                 Rng = Rng,
-                Rotation = Rotation.ExtractRotation().ToEuler(),
+                Rotation = Vector3.Zero,//Rotation.ExtractRotation().ToEuler(),
                 Type = BlockType.StonePath,
                 WellTemplate = root.Template.Well.Designs[Rng.Next(0, root.Template.Well.Designs.Length)]
             };
@@ -102,15 +104,14 @@ namespace Hedra.Engine.StructureSystem.Overworld
         protected override Vector3 NPCOffset => Vector3.Zero;
         protected override float QuestChance => 1f;
 
+        protected override IHumanoid CreateQuestGiverNPC(Vector3 Position, IMissionDesign Quest, Random Rng)
+        {
+            return NPCCreator.SpawnQuestGiver(HumanType.Farmer, Position, Quest, Rng);
+        }
+
         protected override IMissionDesign SelectQuest(Vector3 Position, Random Rng)
         {
-            var possibleQuests = new[]
-            {
-                Quests.BadHarvest,
-                Quests.FindCowsThatEscaped,
-                Quests.DefendFarmFromAttack
-            };
-            return MissionPool.Random(Position);//MissionPool.Grab(possibleQuests[Rng.Next(0, possibleQuests.Length)]);
+            return MissionPool.Random(Position, QuestTier.Any, QuestHint.Farm);
         }
     }
 }

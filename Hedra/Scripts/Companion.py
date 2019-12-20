@@ -35,6 +35,7 @@ GROWTH_SPEED = 1.0 / GROWTH_TIME
 BASE_PRICE = 35
 COMPANION_TYPES = [
     ('Pug', ItemTier.Uncommon, True),
+    ('Cow', ItemTier.Uncommon, False),
     ('Bee', ItemTier.Rare, True),
     ('Wasp', ItemTier.Rare, True),
     ('Ooze', ItemTier.Rare, False),

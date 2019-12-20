@@ -177,6 +177,7 @@ namespace Hedra.Engine.Game
             }
 
             Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, Information.Class.StartingItems.First(P => P.Key == PlayerInventory.WeaponHolder).Value.EquipmentType);
+            Player.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentType.FarmingRake);
             Player.Inventory.AddRestriction(PlayerInventory.BootsHolder, EquipmentType.Boots);
             Player.Inventory.AddRestriction(PlayerInventory.PantsHolder, EquipmentType.Pants);
             Player.Inventory.AddRestriction(PlayerInventory.ChestplateHolder, EquipmentType.Chestplate);

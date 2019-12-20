@@ -63,6 +63,7 @@ namespace Hedra.Engine.StructureSystem
         public void OnChunkReady(Chunk Object)
         {
             var objects = Get();
+            if(objects == null) return;
             if(!_addedAfterCreation) AddAfterCreationIfNecessary(objects);
             
             for (var i = 0; i < objects.Length; i++)

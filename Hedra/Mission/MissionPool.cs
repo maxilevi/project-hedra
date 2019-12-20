@@ -120,6 +120,7 @@ namespace Hedra.Mission
         NoHint,
         Fishing,
         Magic,
+        Farm,
         InvalidHint
     }
 

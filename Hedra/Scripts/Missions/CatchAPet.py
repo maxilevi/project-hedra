@@ -17,7 +17,8 @@ MAX_DISTANCE_SQUARED = 256 ** 2
 BEST_DISTANCE_SQUARED = 256 ** 2
 MIN_DISTANCE_SQUARED = 48 ** 2
 VALID_PETS = [
-    'Pug'
+    'Pug',
+    'Pig'
 ]
 
 def get_pet_reward(name):
@@ -27,6 +28,7 @@ def get_pet_reward(name):
 
 POSSIBLE_REWARDS = {
     'Pug': get_pet_reward('CompanionPug'),
+    'Pig': get_pet_reward('CompanionPig'),
 }
 
 def setup_timeline(position, giver, owner, rng):

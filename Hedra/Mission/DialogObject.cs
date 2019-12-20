@@ -12,6 +12,16 @@ namespace Hedra.Mission
             _beforeLines = new List<string>();
             _afterLines = new List<string>();
         }
+        
+        public DialogObject(string Keyword) : this()
+        {
+            this.Keyword = Keyword;
+        }
+        
+        public DialogObject(string Keyword, object[] Arguments) : this(Keyword)
+        {
+            this.Arguments = Arguments;
+        }
 
         public void AddBeforeLine(string Text)
         {

@@ -85,7 +85,7 @@ namespace Hedra.Engine.Loader
             MainThreadId = Thread.CurrentThread.ManagedThreadId;
             Time.RegisterThread();
             OSManager.Load(Assembly.GetExecutingAssembly().Location);
-            
+            GameLoader.CreateCrashesFolderIfNecessary();
             Renderer.LoadProvider();
             var glVersion = Renderer.GetString(StringName.Version);
             var shadingOpenGlVersion = GetShadingVersion(glVersion);
@@ -119,7 +119,7 @@ namespace Hedra.Engine.Loader
             BulletPhysics.Load();
             Log.WriteLine("Translations loaded successfully.");
             
-            GameLoader.CreateCharacterFolders(GameLoader.AppData, GameLoader.AppPath);
+            GameLoader.CreateCharacterFolders();
             GameLoader.AllocateMemory();
             Log.WriteLine("Assets loading was successful.");
             
@@ -228,7 +228,7 @@ namespace Hedra.Engine.Loader
         protected override void Unload()
         {
             AssetManager.Dispose();
-            GameSettings.Save(AssetManager.AppData + "settings.cfg");
+            GameSettings.Save($"{AssetManager.AppPath}/settings.cfg");
             if(!GameManager.InStartMenu) AutosaveManager.Save();
             Graphics2D.Dispose();
             DrawManager.Dispose();

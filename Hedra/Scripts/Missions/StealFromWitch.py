@@ -2,7 +2,7 @@ import MissionCore
 import clr
 from Core import translate, load_translation
 import System
-from Hedra.AISystem import BasicAIComponent, ITraverseAIComponent
+from Hedra.AISystem import BasicAIComponent, IBasicAIComponent
 from Hedra.Components import TalkComponent, DamageComponent
 from Hedra.Mission import MissionBuilder, QuestTier, DialogObject, QuestReward
 from Hedra.Mission.Blocks import FindStructureMission, CompleteStructureMission, TalkMission, WaitForMission
@@ -42,15 +42,15 @@ def setup_timeline(position, giver, owner, rng):
     # Don't allow 2 quests of the same type.
     if MissionCore.contains_quest(owner, QUEST_NAME): 
         return None
-    
-    builder.MissionStart += lambda: on_mission_start(giver, owner)
-    builder.FailWhen = lambda: giver.IsDead or not MissionCore.is_within_distance(giver.Position, witch_hut_structure.Position)
-    builder.MissionDispose += lambda: MissionCore.remove_component_if_exists(giver, FollowAIComponent)
 
     witch_hut_structure = MissionCore.find_structure(position, WitchHutDesign)
     hut = witch_hut_structure.WorldObject
     hut_outcome = select_hut_outcome(rng.Next(0, 10))
     steal_outcome = select_steal_outcome(rng.Next(0, 10))
+
+    builder.MissionStart += lambda: on_mission_start(giver, owner)
+    builder.FailWhen = lambda: giver.IsDead or not MissionCore.is_within_distance(giver.Position, witch_hut_structure.Position)
+    builder.MissionDispose += lambda: MissionCore.remove_component_if_exists(giver, FollowAIComponent)
 
     find = FindStructureMission()
     find.Design = witch_hut_structure.Design
@@ -92,7 +92,7 @@ def setup_timeline(position, giver, owner, rng):
     return builder
 
 def start_steal_animation(giver, hut):
-    MissionCore.remove_component_if_exists(giver, ITraverseAIComponent)
+    MissionCore.remove_component_if_exists(giver, IBasicAIComponent)
     giver.AddComponent(CommandBasedAIComponent(giver))
     giver.SearchComponent[CommandBasedAIComponent]().WalkTo(hut.Witch0Position)
 
@@ -139,12 +139,12 @@ def select_dialog_from_steal_outcome(outcome):
     return dialog
 
 def make_run_away(giver, target):
-    MissionCore.remove_component_if_exists(giver, ITraverseAIComponent)
+    MissionCore.remove_component_if_exists(giver, IBasicAIComponent)
     MissionCore.remove_component_if_exists(giver, FollowAIComponent)
     giver.AddComponent(EscapeAIComponent(giver, target))
 
 def make_follow(giver, target):
-    MissionCore.remove_component_if_exists(giver, ITraverseAIComponent)
+    MissionCore.remove_component_if_exists(giver, IBasicAIComponent)
     giver.AddComponent(FollowAIComponent(giver, target))
 
 def on_mission_start(giver, target):

@@ -159,7 +159,10 @@ namespace Hedra.AISystem.Behaviours
             _reached = false;
             ForceRebuildGraph();
             RebuildPathIfNecessary();
-            Parent.SearchComponent<ITraverseAIComponent>().TargetPoint = Target;
+            var traverse = Parent.SearchComponent<ITraverseAIComponent>();
+            /* Sometimes we remove the component and then update */
+            if(traverse != null)
+                traverse.TargetPoint = Target;
         }
 
         public void Cancel()

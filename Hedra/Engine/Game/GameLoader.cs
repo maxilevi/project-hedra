@@ -25,6 +25,8 @@ namespace Hedra.Engine.Game
         
         public static string AppPath =>
             $"{Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)}/".Replace("\\", "/");
+
+        public static string CrashesFolder => $"{AppPath}/Crashes/";
         
         public static void AllocateMemory()
         {
@@ -106,26 +108,34 @@ namespace Hedra.Engine.Game
             _loadedArchitectureFiles = true;
         }
 
-        public static void CreateCharacterFolders(string AppData, string AppPath)
+        public static void CreateCharacterFolders()
         {
-            Directory.CreateDirectory(AppData + "Characters/");
-
-            //Move files to appdata
-            if (Directory.Exists(AppPath + "Characters/"))
+            var appDataCharacters = $"{AppData}Characters/";
+            var appPathCharacters = $"{AppPath}Characters/";
+            Directory.CreateDirectory(appPathCharacters);
+            
+            if (Directory.Exists(appDataCharacters))
             {
-                string[] Files = Directory.GetFiles(AppPath + "Characters/");
-                for (int i = 0; i < Files.Length; i++)
+                var files = Directory.GetFiles(appDataCharacters);
+                for (var i = 0; i < files.Length; i++)
                 {
-                    if (File.Exists(AppData + "Characters/" + Path.GetFileName(Files[i]))) continue;
+                    if (File.Exists(appPathCharacters + Path.GetFileName(files[i]))) continue;
 
-                    File.Move(Files[i], AppData + "Characters/" + Path.GetFileName(Files[i]));
+                    File.Move(files[i], appPathCharacters + Path.GetFileName(files[i]));
                 }
-                string[] DirectoryFiles = Directory.GetFiles(AppPath + "Characters/");
-                for (int i = 0; i < DirectoryFiles.Length; i++)
-                    File.Delete(DirectoryFiles[i]);
+                var directoryFiles = Directory.GetFiles(appDataCharacters);
+                for (var i = 0; i < directoryFiles.Length; i++)
+                {
+                    File.Delete(directoryFiles[i]);
+                }
 
-                Directory.Delete(AppPath + "Characters/");
+                Directory.Delete(appDataCharacters);
             }
+        }
+
+        public static void CreateCrashesFolderIfNecessary()
+        {
+            Directory.CreateDirectory(CrashesFolder);
         }
     }
 }

@@ -21,6 +21,7 @@ namespace Hedra.Items
         Staff,
         Recipe,
         Potion,
+        FarmingRake,
         Ammo
     }
 }

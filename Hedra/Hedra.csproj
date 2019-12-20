@@ -251,6 +251,7 @@
     <Compile Include="AISystem\Humanoid\TraverseHumanoidAIComponent.cs" />
     <Compile Include="AISystem\Humanoid\VillagerAISettings.cs" />
     <Compile Include="AISystem\Humanoid\MeleeAIComponent.cs" />
+    <Compile Include="AISystem\IBasicAIComponent.cs" />
     <Compile Include="AISystem\IBehaviouralAI.cs" />
     <Compile Include="AISystem\IBehaviourComponent.cs" />
     <Compile Include="AISystem\IGuardAIComponent.cs" />
@@ -464,6 +465,7 @@
     <Compile Include="Mission\Blocks\CompleteStructureMission.cs" />
     <Compile Include="Mission\Blocks\CraftMission.cs" />
     <Compile Include="Mission\Blocks\DefeatEntityMission.cs" />
+    <Compile Include="Mission\Blocks\DefendMission.cs" />
     <Compile Include="Mission\Blocks\EndMission.cs" />
     <Compile Include="Mission\Blocks\FindEntityMission.cs" />
     <Compile Include="Mission\Blocks\FindStructureMission.cs" />
@@ -9047,6 +9049,10 @@
       <Link>Assets\Items\Foods\WaterBowl.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Misc\AnimalFood.ply">
+      <Link>Assets\Items\Misc\AnimalFood.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Misc\Bait.ply">
       <Link>Assets\Items\Misc\Bait.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -14050,6 +14056,9 @@
     <Content Include="Modules\Items\Misc\Pebble.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Misc\AnimalFood.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Misc\WoodenStick.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -14329,6 +14338,9 @@
     <Content Include="Scripts\Missions\DefendFarmFromAttack.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Scripts\Missions\FarmCore.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\Missions\FindAndKillLich.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -14339,6 +14351,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\Missions\MissionCore.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Scripts\Missions\PossessedCows.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\Missions\RescueErudite.py">

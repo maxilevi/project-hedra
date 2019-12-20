@@ -13,6 +13,12 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         public IHumanoid NPC { get; set; }
 
+        public void EnsureEmpty()
+        {
+            NPC.Dispose();
+            NPC = null;
+        }
+
         public override void Dispose()
         {
             base.Dispose();

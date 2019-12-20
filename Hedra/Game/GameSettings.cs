@@ -73,7 +73,7 @@ namespace Hedra.Game
             WatchScriptChanges = false; // DebugMode;
         }
 
-        public static string SettingsPath => $"{GameLoader.AppData}settings.cfg";
+        public static string SettingsPath => $"{GameLoader.AppPath}settings.cfg";
         
         public static bool Shadows => ShadowQuality != 0 && GlobalShadows;
         

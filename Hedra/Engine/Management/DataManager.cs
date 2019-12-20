@@ -28,11 +28,12 @@ namespace Hedra.Engine.Management
     /// </summary>
     public static class DataManager
     {
+        public static string CharactersFolder => $"{AssetManager.AppPath}/Characters/";
         private const float SaveVersion = 1.6f;
         
         public static void SavePlayer(PlayerInformation Information)
         {
-            var chrFile = $"{AssetManager.AppData}/Characters/{Information.Name}";
+            var chrFile = $"{CharactersFolder}{Information.Name}";
             
             if(File.Exists(chrFile + ".db"))
             {
@@ -45,7 +46,7 @@ namespace Hedra.Engine.Management
                 var fInfo = new FileInfo(chrFile + ".db.bak");
                 fInfo.Attributes |= FileAttributes.Hidden;
             }
-            using (var fs = File.Create(AssetManager.AppData + "/Characters/" + Information.Name + ".db"))
+            using (var fs = File.Create(CharactersFolder + Information.Name + ".db"))
             {
                 using (var bw = new BinaryWriter(fs))
                 {
@@ -247,8 +248,8 @@ namespace Hedra.Engine.Management
         
         public static void DeleteCharacter(PlayerInformation Information)
         {
-            File.Delete($"{AssetManager.AppData}/Characters/{Information.Name}.db");
-            File.Delete($"{AssetManager.AppData}/Characters/{Information.Name}.db.bak");
+            File.Delete($"{CharactersFolder}{Information.Name}.db");
+            File.Delete($"{CharactersFolder}{Information.Name}.db.bak");
         }
 
         public static PlayerInformation[] PlayerFiles
@@ -256,7 +257,7 @@ namespace Hedra.Engine.Management
             get
             {
                 var filesList = new List<PlayerInformation>();
-                string[] files = Directory.GetFiles(AssetManager.AppData + "Characters/");
+                string[] files = Directory.GetFiles(CharactersFolder);
 
                 for(var i = 0; i < files.Length; i++)
                 {
@@ -280,7 +281,7 @@ namespace Hedra.Engine.Management
                     {
                         if(e is UnauthorizedAccessException)
                         {
-                            Log.WriteLine("Unathoriazed access in file: " + Path.GetFileName(files[i]));
+                            Log.WriteLine("Unauthorized access in file: " + Path.GetFileName(files[i]));
                             continue;
                         }
                         Log.WriteLine(e.ToString());

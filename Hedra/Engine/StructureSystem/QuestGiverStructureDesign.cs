@@ -10,6 +10,7 @@ using Hedra.Engine.QuestSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Mission;
 using System.Numerics;
+using Hedra.EntitySystem;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.StructureSystem
@@ -28,7 +29,7 @@ namespace Hedra.Engine.StructureSystem
                 var quest = SelectQuest(position, Rng);
                 DoWhenChunkReady(position, P =>
                 {
-                    var npc = NPCCreator.SpawnQuestGiver(P, quest, Rng);
+                    var npc = CreateQuestGiverNPC(P, quest, Rng);
                     npc.Rotation = Physics.DirectionToEuler(npc.Orientation = -Vector3.Transform(DefaultLookingDirection, Rotation));
                     npc.Position = P;
                     npc.Physics.UsePhysics = false;
@@ -40,6 +41,11 @@ namespace Hedra.Engine.StructureSystem
         protected virtual IMissionDesign SelectQuest(Vector3 Position, Random Rng)
         {
             return MissionPool.Random(Position);
+        }
+
+        protected virtual IHumanoid CreateQuestGiverNPC(Vector3 Position, IMissionDesign Quest, Random Rng)
+        {
+            return NPCCreator.SpawnQuestGiver(Position, Quest, Rng);
         }
     }
 }

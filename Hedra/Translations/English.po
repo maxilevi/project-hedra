@@ -229,6 +229,10 @@ quest_catch_animal_description = $(BLUE)(BOLD){{0}} is in need of help. His pet 
 quest_catch_animal_dialog_0 = My pet $(ORANGE)(BOLD){{0}} has ran away. Can you help me find him?
 quest_catch_animal_item_0 = Thank you for helping me but it looks like $(ORANGE)(BOLD){{0}} wants to stay with you. Please take care of him. 
 
+quest_defend_entity_short = DEFEND $(BOLD)(BLUE){{0}}.
+quest_defend_entity_description = Defend $(BOLD)(BLUE){{0}} from the attackers!\nThere are $(BOLD)(VIOLET){{1}} attackers left.
+
+
 quest_kill_lich_dialog_0 = Rumors say there is a powerful lich
 quest_complete_portal_description = Enter the $(BLUE)(BOLD){PORTAL} to travel to another realm.
 quest_complete_portal_short = ENTER THE $(BLUE)(BOLD){PORTAL}
@@ -241,7 +245,7 @@ quest_fish_item_description = $(BLUE)(BOLD){{0}} lost his precious $(ORANGE)(BOL
 quest_fish_item_item_reward_0 = Thank you for helping me but it looks like the $(ORANGE)(BOLD){{0}} got a little bit rusty. You can keep it.
 
 quest_rescue_erudite_dialog_0 = Adventurer! Please help me!;While searching for wood my father was kidnapped by a bunch of bandits.;I found out they have a camp near here. Look, I marked it on your map. Please bring him back!
-quest_rescue_erudite_description = $(BLUE)(BOLD){{0}}'s father has been kidnapped. Find his location and rescue him from the aggressors. \n$(GRAY)(BOLD){HINT: }See the map for more details.
+quest_rescue_erudite_description = $(BLUE)(BOLD){{0}}'s father has been kidnapped. Find his location and rescue him from the aggressors.\n$(GRAY)(BOLD){HINT: }See the map for more details.
 
 quest_steal_from_witch_dialog_0 = Hey, come here.;Don't tell anyone about this, but I found out about a nearby witch hut that was abandoned;I've heard they have several valuable ingredients. We can steal them and sell them in the black market, though, we have to be cautious.;Are you in?
 quest_steal_from_witch_description = Escort $(BLUE)(BOLD){{0}} to the witch hut and make sure nothing goes wrong.
@@ -263,6 +267,19 @@ quest_craft_a_potion_collect_3 = The text is a bit fuzzy but I think I need $(BO
 
 quest_retrieve_stolen_items_dialog_0 = A bunch of outlaws ambushed me and stole all my belongings. Can you recover them for me?
 quest_clear_graveyard_dialog_0 = Lately things haven't been the same.;It feels like a stream of dark energy has been contaminating the world.;I don't know how to explain it but there is a dark influence surrounding our burial grounds.;We can't pay respects to our loved ones anymore. You should go and experience it by yourself.
+
+quest_defend_farm_from_attack_dialog_0 = Adventurer! Please help me!;I got word that a bunch of bandits are coming to ravage my farm and steal all my property. Please stop them!
+
+quest_find_cows_that_escaped_dialog_0 = My cows escaped from the farm! Without them I won't be able to survive. Please help me find them!;Equip this $(BOLD)(ORANGE){ANIMAL FOOD} to make cows follow to you.
+
+quest_farmer_hat_reward_dialog_0 = I don't have much to offer you but you can take my $(BOLD)(ORANGE){{0}} as a show of gratitude.
+quest_farming_rake_reward_dialog_0 = Take this $(BOLD)(ORANGE){{0}} as a show of gratitude. Maybe you will build your own farm one day.
+quest_companion_cow_reward_dialog_0 = I don't have much to offer you but you can take my $(BOLD)(ORANGE){{0}} as a show of gratitude.
+
+quest_possessed_cows_dialog_0 = A very strange.
+quest_possessed_cows_description = Escort $(BOLD)(BLUE){{0}} into his farm and find out what is going on.\n$(GRAY)(BOLD){HINT: }See the map for more details.
+quest_defeat_possesse_cows_description = Defeat all $(BOLD)(VIOLET){{0}} possessed cows.
+possessed_cow = Possessed Cow
 
 # -- Class Names --
 mage = Mage

@@ -25,7 +25,6 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             AddDesign(new BanditCampDesign());
             AddDesign(new WellDesign());
             AddDesign(new GazeboDesign());
-            AddDesign(new GhostTownPortalDesign());
             AddDesign(new WitchHutDesign());
             AddDesign(new FishingPostDesign());
             AddDesign(new WizardTowerDesign());
@@ -33,6 +32,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             AddDesign(new UndeadDungeon1Design());
             AddDesign(new UndeadDungeon2Design());
             AddDesign(new CottageWithFarmDesign());
+            //AddDesign(new GhostTownPortalDesign());
             //AddDesign(new ShroomDimensionPortalDesign());
         }
 

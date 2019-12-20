@@ -17,6 +17,9 @@ RAW_TROUT = 'RawTrout'
 RAW_SALMON = 'RawSalmon'
 RAW_FISH = 'RawFish'
 HEALTH_POTION = 'HealthPotion'
+FARMER_HAT = 'FarmerHat'
+FARMING_RAKE = 'FarmingRake'
+COMPANION_COW = 'CompanionCow'
 
 # Attributes
 PRICE_ATTRIBUTE = 'Price'
