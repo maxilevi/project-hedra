@@ -4,7 +4,7 @@ using Hedra.Sound;
 
 namespace Hedra.AISystem.Mob
 {
-    public class PigAIComponent : CattleAIComponent
+    public class PigAIComponent : FeedableCattleAIComponent
     {
         public PigAIComponent(IEntity Parent) : base(Parent)
         {

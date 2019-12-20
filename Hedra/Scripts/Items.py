@@ -20,6 +20,7 @@ HEALTH_POTION = 'HealthPotion'
 FARMER_HAT = 'FarmerHat'
 FARMING_RAKE = 'FarmingRake'
 COMPANION_COW = 'CompanionCow'
+ANIMAL_FOOD = 'AnimalFood'
 
 # Attributes
 PRICE_ATTRIBUTE = 'Price'

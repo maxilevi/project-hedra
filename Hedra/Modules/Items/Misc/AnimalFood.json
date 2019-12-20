@@ -1,7 +1,7 @@
 {
   "Name": "AnimalFood",
   "DisplayName": "Animal food",
-  "EquipmentType": "FarmingRake",
+  "EquipmentType": "HoldableObject",
   "Tier": "Common",
   "Description": "A piece of food used to attract animals",
   "Attributes": [

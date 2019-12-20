@@ -179,6 +179,8 @@ namespace Hedra.Engine.Management
                         File.OpenRead(GetResourceName(DataFile)),
                         DataFile
                     );
+                    selectedHandler.Stream.Position = 0;
+                    selectedHandler.Locked = true;
                     _registeredHandlers.Add(selectedHandler);
                 }
                 Log.WriteLine($"Registered resource handler... (Total = {_registeredHandlers.Count})", LogType.IO);
@@ -207,9 +209,14 @@ namespace Hedra.Engine.Management
             var similarPath = default(string);
             var sanitizedName = Name.Replace(@"\", "/").Replace("$DataFile$", string.Empty).Trim();
             var length = reader.BaseStream.Length;
+            var list = new List<string>();
             while (reader.BaseStream.Position < length)
             {
                 var header = reader.ReadString();
+                if (System.Text.Encoding.UTF8.GetByteCount(header) != header.Length)
+                {
+                    int a = 0;
+                }
                 if (header.Equals("<end_header>"))
                     break;
                 
@@ -225,6 +232,7 @@ namespace Hedra.Engine.Management
                     reader.BaseStream.Seek(dataPosition, SeekOrigin.Begin);
                     return reader.ReadBytes(reader.ReadInt32());
                 }
+                list.Add(header);
             }
 
             if (similarPath != null)

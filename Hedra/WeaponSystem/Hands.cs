@@ -13,6 +13,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.EntitySystem;
 using System.Numerics;
 using Hedra.Numerics;
+using Hedra.Rendering;
 
 namespace Hedra.WeaponSystem
 {
@@ -38,21 +39,25 @@ namespace Hedra.WeaponSystem
             "Assets/Chr/WarriorHeadbutt.dae"
         };
 
-        public Hands() : base(null)
+        public Hands() : this(null)
+        {
+        }
+
+        public Hands(VertexData Mesh) : base(Mesh)
         {
             MainWeaponSize = new Vector3(MainWeaponSize.X, 1f, MainWeaponSize.Z);
         }
-
+        
         protected override void OnPrimaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             if(Type != AttackEventType.Mid) return;
-            Owner.AttackSurroundings(Owner.DamageEquation * 1.5f, Options.IgnoreEntities);
+            Owner.AttackSurroundings(Owner.DamageEquation * 0.75f, Options.IgnoreEntities);
         }
 
         protected override void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             if(Type != AttackEventType.Mid) return;
-            Owner.AttackSurroundings(Owner.DamageEquation * 3.0f * Options.Charge, Options.IgnoreEntities, delegate(IEntity Mob)
+            Owner.AttackSurroundings(Owner.DamageEquation * 1.5f * Options.Charge, Options.IgnoreEntities, delegate(IEntity Mob)
             {
                 if (Utils.Rng.Next(0, 3) == 1 && Options.Charge > .4f)
                     Mob.KnockForSeconds(2.5f + Utils.Rng.NextFloat() * 2f);

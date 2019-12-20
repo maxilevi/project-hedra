@@ -70,7 +70,7 @@ namespace Hedra.WeaponSystem
 
             if (_previousPosition != Owner.Position && Owner.IsGrounded)
             {
-                Chunk underChunk = World.GetChunkAt(Owner.Position);
+                var underChunk = World.GetChunkAt(Owner.Position);
                 World.Particles.VariateUniformly = true;
                 World.Particles.Color = World.GetHighestBlockAt((int)Owner.Position.X, (int)Owner.Position.Z).GetColor(underChunk.Biome.Colors);// * new Vector4(.8f, .8f, 1.0f, 1.0f);
                 World.Particles.Position = Owner.Position - Vector3.UnitY;
@@ -97,11 +97,6 @@ namespace Hedra.WeaponSystem
                 this.Trail = new TrailRenderer(
                     () => this.WeaponTip,
                     Vector4.One);
-            }
-
-            if (Human is LocalPlayer && !Time.Paused && Owner.IsAttacking)
-            {
-                int a = 0;
             }
             this.Trail.Emit &= this.Owner?.IsAttacking ?? false;
             this.Trail.Update();

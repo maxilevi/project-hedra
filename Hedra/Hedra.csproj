@@ -229,6 +229,7 @@
     <Compile Include="AISystem\DungeonAdaptiveAIComponent.cs" />
     <Compile Include="AISystem\FarmAnimalAIComponent.cs" />
     <Compile Include="AISystem\FearAIComponent.cs" />
+    <Compile Include="AISystem\FeedableCattleAIComponent.cs" />
     <Compile Include="AISystem\FriendlyAIComponent.cs" />
     <Compile Include="AISystem\GenericBasicAIComponent.cs" />
     <Compile Include="AISystem\HostileAIComponent.cs" />
@@ -471,6 +472,7 @@
     <Compile Include="Mission\Blocks\FindStructureMission.cs" />
     <Compile Include="Mission\Blocks\FishItemMission.cs" />
     <Compile Include="Mission\Blocks\EntityMission.cs" />
+    <Compile Include="Mission\Blocks\ReuniteEntitiesMission.cs" />
     <Compile Include="Mission\Blocks\ItemMission.cs" />
     <Compile Include="Mission\Blocks\MissionBlock.cs" />
     <Compile Include="Mission\Blocks\TalkMission.cs" />
@@ -1507,6 +1509,7 @@
     <Compile Include="WeaponSystem\Hammer.cs" />
     <Compile Include="WeaponSystem\Hands.cs" />
     <Compile Include="WeaponSystem\HeavyMeleeWeapon.cs" />
+    <Compile Include="WeaponSystem\HoldableObject.cs" />
     <Compile Include="WeaponSystem\Katar.cs" />
     <Compile Include="WeaponSystem\Knife.cs" />
     <Compile Include="WeaponSystem\MeleeWeapon.cs" />

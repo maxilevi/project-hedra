@@ -1,46 +1,50 @@
-import VisualEffects
 import clr
 import MissionCore
 import FarmCore
-from System import Single
+import Items
+from System import Single, Array, Func, Boolean
 from System.Numerics import Vector4, Vector3
 from Hedra import World
 from Hedra.Mission import MissionBuilder, QuestTier, QuestReward, DialogObject
-from Hedra.Mission.Blocks import CatchAnimalMission
+from Hedra.Mission.Blocks import ReuniteEntitiesMission
 from Hedra.Numerics import VectorExtensions
+from Hedra.Components import DamageComponent
+from Hedra.EntitySystem import IEntity
+from Hedra.Items import ItemPool
 
 clr.ImportExtensions(VectorExtensions)
 IS_QUEST = True
 QUEST_NAME = 'FindCowsThatEscaped'
 QUEST_TIER = QuestTier.Easy
-MAX_SPAWN_DISTANCE = 768
+MAX_SPAWN_DISTANCE = 512
 
 
 def setup_timeline(position, giver, owner, rng):
-    captured_vars = {'disposed': False}
-
-    def on_dispose():
-        captured_vars['disposed'] = True
 
     builder = MissionBuilder()
     builder.OpeningDialog = MissionCore.create_dialog('quest_find_cows_that_escaped_dialog')
-    builder.MissionDispose += on_dispose
-    # Add wheat weapon, make wheat attract cows. Complete when all cows within radius
+
     cows = create_cows(giver, rng)
-    for cow in cows:
-        catch = CatchAnimalMission()
-        catch.Animal = cow
-        catch.MissionBlockStart += lambda: VisualEffects.outline_while(cow, Vector4(1.0, 0.0, 0.0, 1.0), lambda: not captured_vars['disposed'])
-        builder.Next(catch)
+    builder.FailWhen = lambda: any([cow.IsDead for cow in cows])
+        
+    reunite = ReuniteEntitiesMission(giver.Position, Array[IEntity](cows))
+    reunite.MissionBlockStart += lambda: owner.Inventory.AddItem(ItemPool.Grab(Items.ANIMAL_FOOD))
+        
+    builder.Next(reunite)
 
     reward = FarmCore.get_reward(rng)
+    reward.RewardGiven += lambda: remove_animal_food(owner)
     builder.SetReward(reward)
     return builder
 
+def remove_animal_food(owner):
+    item = owner.Inventory.Search(lambda x: x.Name == Items.ANIMAL_FOOD)
+    if item:
+        owner.Inventory.RemoveItem(item)
 
 def create_cows(giver, rng):
     cows = []
-    count = rng.Next(2, 6)
+    count = rng.Next(2, 4)
     for i in range(count):
         position = giver.Position + Vector3(
             Single(rng.NextDouble() * MAX_SPAWN_DISTANCE * 2 - MAX_SPAWN_DISTANCE),
@@ -48,6 +52,7 @@ def create_cows(giver, rng):
             Single(rng.NextDouble() * MAX_SPAWN_DISTANCE * 2 - MAX_SPAWN_DISTANCE)
         )
         cow = World.SpawnMob('Cow', position, rng)
+        cow.AddBonusSpeedWhile(0.75, Func[Boolean](lambda: True))
         cows.append(cow)
     return cows
 

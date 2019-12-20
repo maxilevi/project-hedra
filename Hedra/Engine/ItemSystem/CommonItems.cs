@@ -12,7 +12,6 @@ namespace Hedra.Engine.ItemSystem
         CommonBronzeDoubleBlades,
         CommonBronzeStaff,
         UncommonSilverSword,
-        BossRoomKey,
-        FishingRod
+        AnimalFood,
     }
 }

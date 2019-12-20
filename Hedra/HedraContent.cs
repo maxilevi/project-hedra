@@ -52,6 +52,7 @@ namespace Hedra
             AddWeaponType("Knife", typeof(Knife));
             AddWeaponType("FarmingRake", typeof(FarmingRake));
             AddWeaponType("FishingRod", typeof(FishingRod));
+            AddWeaponType("HoldableObject", typeof(HoldableObject));
 
             AddClassRestriction(Class.Warrior, "FarmingRake");
             var classes = new []{Class.Warrior, Class.Mage, Class.Archer, Class.Rogue};

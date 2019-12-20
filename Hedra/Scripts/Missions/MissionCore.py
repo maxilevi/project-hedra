@@ -59,8 +59,8 @@ def is_within_distance(entity_position, structure_position, max_distance=DEFAULT
 def build_generic_reward(rng):
     n = rng.NextDouble()
     reward = QuestReward()
-    if n < 0.4:
-        reward.Experience = int(rng.Next(3, 9))
+    if n < 0.45:
+        reward.Experience = int(rng.Next(3, 12))
     elif n < 0.9:
         reward.Gold = int(rng.Next(15, 45))
     return reward

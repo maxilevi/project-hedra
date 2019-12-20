@@ -8,9 +8,14 @@ namespace Hedra.Engine.Scripting
     {
         private const string Name = "VisualEffects.py";
         
-        public static void Outline(IHumanoid Humanoid, Vector4 Color, float Seconds)
+        public static void Outline(IEntity Humanoid, Vector4 Color, float Seconds)
         {
             Interpreter.GetFunction(Name, "outline").Invoke(Humanoid, Color, Seconds);
+        }
+        
+        public static void SetOutline(IEntity Humanoid, Vector4 Color, bool State)
+        {
+            Interpreter.GetFunction(Name, "set_outline").Invoke(Humanoid, Color, State);
         }
     }
 }

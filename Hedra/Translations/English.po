@@ -270,7 +270,10 @@ quest_clear_graveyard_dialog_0 = Lately things haven't been the same.;It feels l
 
 quest_defend_farm_from_attack_dialog_0 = Adventurer! Please help me!;I got word that a bunch of bandits are coming to ravage my farm and steal all my property. Please stop them!
 
-quest_find_cows_that_escaped_dialog_0 = My cows escaped from the farm! Without them I won't be able to survive. Please help me find them!;Equip this $(BOLD)(ORANGE){ANIMAL FOOD} to make cows follow to you.
+quest_reunite_entities_short = REUNITE ALL $(BOLD)(ORANGE){{0}} $(BOLD)(ORANGE){{1}}
+quest_reunite_entities_find_description = Find all $(BOLD)(ORANGE){{0}} $(BOLD)(ORANGE){{1}} and reunite them at the selected location.\n$(GRAY)(BOLD){HINT: }See the map for more details.
+quest_reunite_entities_goto_description = Move all the $(BOLD)(ORANGE){{0}} into the specified location.\n$(GRAY)(BOLD){HINT: }See the map for more details.
+quest_find_cows_that_escaped_dialog_0 = My cows escaped from the farm! Without them I won't be able to survive. Please help me find them!;Equip this $(BOLD)(ORANGE){ANIMAL FOOD} to make cows follow you.
 
 quest_farmer_hat_reward_dialog_0 = I don't have much to offer you but you can take my $(BOLD)(ORANGE){{0}} as a show of gratitude.
 quest_farming_rake_reward_dialog_0 = Take this $(BOLD)(ORANGE){{0}} as a show of gratitude. Maybe you will build your own farm one day.

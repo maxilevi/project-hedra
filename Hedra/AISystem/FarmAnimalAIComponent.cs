@@ -1,14 +1,18 @@
+using System;
+using System.Linq;
 using System.Windows.Forms;
 using Hedra.AISystem.Behaviours;
 using Hedra.EntitySystem;
 using System.Numerics;
+using Hedra.Engine.ItemSystem;
+using Timer = Hedra.Core.Timer;
 
 namespace Hedra.AISystem
 {
-    public abstract class FarmAnimalAIComponent : CattleAIComponent
+    public abstract class FarmAnimalAIComponent : FeedableCattleAIComponent
     {
         private readonly float _width;
-        
+
         protected FarmAnimalAIComponent(IEntity Parent, Vector3 FarmPosition, float Width) : base(Parent)
         {
             _width = Width;
