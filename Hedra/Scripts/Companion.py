@@ -5,7 +5,7 @@ from System import Array, Single
 from System.Numerics import Vector3
 from Hedra.Core import Timer, Time
 from Hedra import World, Utils
-from Hedra.EntitySystem import DropComponent
+from Hedra.Engine.EntitySystem import DropComponent
 from Hedra.Components import HealthBarComponent, HealthBarType, RideComponent, DamageComponent, CompanionStatsComponent
 from Hedra.AISystem import MinionAIComponent, BasicAIComponent
 from Hedra.Engine.ItemSystem.Templates import ItemTemplate, ItemModelTemplate, AttributeTemplate

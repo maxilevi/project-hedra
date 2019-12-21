@@ -77,7 +77,7 @@ namespace Hedra.Engine.ModuleSystem.Templates
                     throw new ArgumentOutOfRangeException($"Item '{template.Type}' does not exist.");
                 var type = template.Type;
                 var item = ItemPool.Grab(type);
-                item.SetAttribute(CommonAttributes.Amount, Utils.Rng.Next(template.Min, template.Max+1));
+                item.SetAttribute(CommonAttributes.Amount, Utils.Rng.Next(template.Min, template.Max + 1));
                 drop = new DropComponent(Mob)
                 {
                     DropChance = template.Chance,

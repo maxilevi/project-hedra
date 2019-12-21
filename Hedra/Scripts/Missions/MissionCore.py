@@ -48,10 +48,12 @@ def find_structure(position, type, max_distance=DEFAULT_MAX_STRUCTURE_SEARCH_DIS
         for position in positions:
             World.StructureHandler.CheckStructures(position.Xz())
             objects = nearby_struct_objects(position, type, max_distance)
-            print(objects)
-            print(positions)
             if objects: break
     return nearby[0] if nearby else objects[0]
+
+def is_inside_structure(position, structure_type):
+    structures = nearby_struct_objects(position, structure_type)
+    return any([(position - object.Position).Xz().LengthSquared() < object.Design.PlateauRadius ** 2 for object in structures])
 
 def is_within_distance(entity_position, structure_position, max_distance=DEFAULT_MAX_STRUCTURE_SEARCH_DISTANCE):
     return (entity_position - structure_position).Xz().LengthSquared() < max_distance * max_distance

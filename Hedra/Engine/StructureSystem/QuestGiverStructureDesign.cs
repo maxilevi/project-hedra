@@ -25,14 +25,14 @@ namespace Hedra.Engine.StructureSystem
         {
             if (Rng.NextFloat() < QuestChance)
             {
-                var position = Vector3.Transform(Vector3.Transform(NPCOffset, Rotation), Rotation * Translation);
+                var position = Vector3.Transform(NPCOffset, Rotation * Translation);
                 var quest = SelectQuest(position, Rng);
                 DoWhenChunkReady(position, P =>
                 {
-                    var npc = CreateQuestGiverNPC(P, quest, Rng);
+                    var pos = P + Vector3.UnitY * 2;
+                    var npc = CreateQuestGiverNPC(pos, quest, Rng);
                     npc.Rotation = Physics.DirectionToEuler(npc.Orientation = -Vector3.Transform(DefaultLookingDirection, Rotation));
-                    npc.Position = P;
-                    npc.Physics.UsePhysics = false;
+                    npc.Position = pos;
                     ((T) Structure.WorldObject).NPC = npc;
                 }, Structure);
             }

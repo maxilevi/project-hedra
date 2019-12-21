@@ -1,6 +1,7 @@
 import MissionCore
 import FarmCore
 import clr
+import Core
 from System import Array, Object, Single
 from System.Numerics import Vector3
 from Hedra.Mission import MissionBuilder, QuestTier, QuestHint, DialogObject, QuestReward, ItemCollect, QuestPriority
@@ -10,37 +11,47 @@ from Hedra.AISystem import IBasicAIComponent
 from Hedra.Engine.WorldBuilding import NPCCreator, BanditOptions, NameGenerator
 from Hedra.Engine.EntitySystem import DropComponent
 from Hedra.EntitySystem import IEntity
+from Hedra.Components import DamageComponent
 from Hedra.Numerics import VectorExtensions
 
 clr.ImportExtensions(VectorExtensions)
 
-IS_QUEST = True
+IS_QUEST = False
 QUEST_NAME = 'DefendFarmFromAttack'
 QUEST_TIER = QuestTier.Medium
 QUEST_HINT = QuestHint.Farm
-MAX_SPAWN_DISTANCE = 256
-MIN_SPAWN_DISTANCE = 64
+MAX_SPAWN_DISTANCE = 384
+MIN_SPAWN_DISTANCE = 128
 
 def setup_timeline(position, giver, owner, rng):
     builder = MissionBuilder()
     builder.OpeningDialog = MissionCore.create_dialog('quest_defend_farm_from_attack_dialog')
 
-    criminals = create_criminals(owner, giver, rng)
+    criminals, ais = create_criminals(owner, giver, rng)
     
     defend = DefendMission(giver, criminals)
-    defend.MissionBlockStart += lambda: setup_giver(giver)
+    defend.MissionBlockStart += lambda: setup_giver_and_bandits(giver, criminals, ais)
     builder.Next(defend)
 
     reward = FarmCore.get_reward(rng)
     builder.SetReward(reward)
     return builder
 
-def setup_giver(giver):
+def setup_giver_and_bandits(giver, criminals, ais):
     MissionCore.remove_component_if_exists(giver, IBasicAIComponent)
+    for i in range(len(criminals)):
+        ai = ais[i]
+        criminal = criminals[i]
+        def add():
+            print('Adding component ' + str(i))
+            criminal.AddComponent(ai)
+        add()
+        #Core.after_seconds(2 * i, add)
     #giver.AddComponent()
 
 def create_criminals(owner, giver, rng):
     criminals = []
+    ais = []
     count = rng.Next(2, 6)
     for i in range(count):
         position = giver.Position
@@ -51,10 +62,17 @@ def create_criminals(owner, giver, rng):
                 Single(rng.NextDouble() * MAX_SPAWN_DISTANCE * 2 - MAX_SPAWN_DISTANCE)
             )
         bandit = NPCCreator.SpawnBandit(position, max(1, owner.Level - rng.Next(0, 5)), BanditOptions.Default)
-        bandit.SearchComponent[CombatAIComponent]().SetTarget(giver)
+        ai = bandit.SearchComponent[CombatAIComponent]()
+        ai.SetGuardSpawnPoint(False)
+        ai.SetCanExplore(False)
+        ai.SetTarget(giver)
+        ai.CanForgetTargets = False
+        bandit.RemoveComponent(ai, False)
         bandit.RemoveComponent(bandit.SearchComponent[DropComponent]())
+        bandit.SearchComponent[DamageComponent]().Ignore(lambda x: x in criminals)
         criminals.append(bandit)
-    return Array[IEntity](criminals)
+        ais.append(ai)
+    return Array[IEntity](criminals), ais
 
     
 

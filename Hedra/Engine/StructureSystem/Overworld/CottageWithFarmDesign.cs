@@ -62,7 +62,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var farmBuilder = Structure.Parameters.Get<FarmBuilder>("FarmBuilder");
             
             /* The builder expects the position to be set at 0,0 */
-            farmParameters.Position = new Vector3(farmParameters.Position.X, 0, farmParameters.Position.Z);
+            farmParameters.Position = new Vector3(farmParameters.Position.X, 1f, farmParameters.Position.Z);
 
             var farmOutput = farmBuilder.Build(farmParameters, farmParameters.Design, root.Cache, Rng, Vector3.Zero);
             AddOutputToStructure(Structure, farmOutput, farmPosition);
@@ -100,7 +100,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             }
             Structure.WorldObject.AddChildren(structures);
         }
-
+        
         protected override Vector3 NPCOffset => Vector3.Zero;
         protected override float QuestChance => 1f;
 

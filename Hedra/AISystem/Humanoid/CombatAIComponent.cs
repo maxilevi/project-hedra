@@ -39,6 +39,7 @@ namespace Hedra.AISystem.Humanoid
         protected virtual bool CanExplore => _canExplore;
         protected virtual bool GuardSpawnPoint => _guardSpawnPoint;
         public virtual bool DontUpdateAI => false;
+        public bool CanForgetTargets { get; set; } = true;
 
         protected CombatAIComponent(IHumanoid Entity, bool IsFriendly) : base(Entity)
         {
@@ -128,7 +129,7 @@ namespace Hedra.AISystem.Humanoid
         {
             var targetLost = !IsChasing && GuardSpawnPoint && (_targetPoint.Xz() - Parent.Position.Xz()).LengthSquared() > ForgetRadius * ForgetRadius;
             var targetDead = IsChasing && (_chasingTarget.IsDead || _chasingTarget.IsInvisible);
-            var shouldWeReset = IsChasing && _forgetTimer.Tick() || targetLost && false || targetDead;
+            var shouldWeReset = IsChasing && _forgetTimer.Tick() && CanForgetTargets || targetLost && false || targetDead;
             if (shouldWeReset)
             {
                 Reset();

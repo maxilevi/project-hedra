@@ -5,7 +5,7 @@ from System.Numerics import Vector3
 from Hedra.Items import ItemPool, ItemTier
 from Hedra.Mission import MissionBuilder, QuestTier, DialogObject, QuestReward, ItemCollect, QuestPriority
 from Hedra.Mission.Blocks import FindEntityMission, DefeatEntityMission, CollectMission
-from Hedra.AISystem import IBehaviourComponent
+from Hedra.AISystem import IBasicAIComponent
 from Hedra.AISystem.Humanoid import EscapeAIComponent, CombatAIComponent
 from Hedra.Engine.WorldBuilding import NPCCreator, BanditOptions, NameGenerator
 from Hedra.Engine.EntitySystem import DropComponent
@@ -64,7 +64,7 @@ def create_criminals(owner, giver, items, rng):
 
 def on_found(owner, npc, rng):
     if rng.Next(0, 3) == 1:
-        ai = npc.SearchComponent[IBehaviourComponent]()
+        ai = npc.SearchComponent[IBasicAIComponent]()
         if ai: npc.RemoveComponent(ai)
         npc.AddComponent(EscapeAIComponent(npc, owner))
     else:

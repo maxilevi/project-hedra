@@ -71,7 +71,7 @@ namespace Hedra.Engine.SkillSystem.Mage
         protected override int MaxLevel => 15;
         public override float ManaCost => 50f + 30f * (Level / (float) MaxLevel);
         protected override float Duration => 6 + 9 * (Level / (float) MaxLevel);
-        protected override float CooldownDuration => 24;
+        protected override float CooldownDuration => 24 - 8 * (Level / (float) MaxLevel);
         private float ResistanceChange => .2f + .55f * (Level / (float) MaxLevel);
         public override string Description => Translations.Get("energy_shield_desc");
         public override string DisplayName => Translations.Get("energy_shield_skill");

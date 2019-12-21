@@ -3,6 +3,7 @@ import Items
 from System import Array, Object
 from Hedra.Mission import QuestReward, DialogObject
 from Hedra.Items import ItemPool
+from Hedra.Engine.StructureSystem.Overworld import CottageWithFarmDesign
 
 POSSIBLE_ITEM_REWARDS = [
     (ItemPool.Grab(Items.FARMER_HAT), 'quest_farmer_hat_reward_dialog'),
@@ -22,4 +23,4 @@ def get_reward(rng):
         return reward
     
 def can_give(position):
-    return False
+    return MissionCore.is_inside_structure(position, CottageWithFarmDesign)

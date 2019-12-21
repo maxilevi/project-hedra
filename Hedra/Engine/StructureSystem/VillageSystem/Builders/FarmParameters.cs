@@ -15,6 +15,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
         public Random Rng { get; set; }
         public bool HasWindmill { get; set; }
         public bool InsidePaths { get; set; }
+        public float BonusFarmHeight { get; set; } = .35f;
         public DesignTemplate[] PropDesigns { get; set; }
 
         DesignTemplate IBuildingParameters.Design

@@ -72,8 +72,8 @@ namespace Hedra.Engine.Bullet
                 if (Parent is IPlayer)
                 {
                     _body.CollisionFlags |= CollisionFlags.CharacterObject;
-                    _body.ActivationState = ActivationState.DisableDeactivation;
                 }
+                _body.ActivationState = ActivationState.DisableDeactivation;
                 _body.Friction = 1;
                 BulletPhysics.Add(_body, _mainInformation = new PhysicsObjectInformation
                 {
@@ -88,7 +88,7 @@ namespace Hedra.Engine.Bullet
                 _sensor = new RigidBody(bodyInfo);
                 _sensor.CollisionFlags |= CollisionFlags.NoContactResponse;
                 /* FIXME: Ugly */
-                if (Parent is IPlayer)
+                //if (Parent is IPlayer)
                 {
                     _sensor.ActivationState = ActivationState.DisableDeactivation;
                 }

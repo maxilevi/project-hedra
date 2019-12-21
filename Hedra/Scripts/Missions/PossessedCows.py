@@ -13,7 +13,7 @@ from Hedra.Engine.StructureSystem.Overworld import CottageWithFarmDesign
 from Hedra.AISystem.Humanoid import FollowAIComponent
 
 
-IS_QUEST = True
+IS_QUEST = False
 QUEST_NAME = 'PossessedCows'
 QUEST_TIER = QuestTier.Medium
 MAX_SPAWN_DISTANCE = 256
