@@ -7,8 +7,14 @@
   "Level": 30,
   "AIType": "Neutral",
   "Effects": [],
-  "Drops": [],
-
+  "Drops": [
+    {
+      "Type": "RawMeat",
+      "Chance": 100,
+      "Min": 1,
+      "Max": 3,
+    }
+  ],
   "Model": {
     "Path": "$DataFile$/Assets/Chr/Mob/Bison/BisonIdle.dae",
     "Scale": 2.0,
