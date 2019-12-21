@@ -5,6 +5,7 @@ from System import Array, Single
 from System.Numerics import Vector3
 from Hedra.Core import Timer, Time
 from Hedra import World, Utils
+from Hedra.EntitySystem import DropComponent
 from Hedra.Components import HealthBarComponent, HealthBarType, RideComponent, DamageComponent, CompanionStatsComponent
 from Hedra.AISystem import MinionAIComponent, BasicAIComponent
 from Hedra.Engine.ItemSystem.Templates import ItemTemplate, ItemModelTemplate, AttributeTemplate
@@ -53,7 +54,6 @@ COMPANION_TYPES = [
     ('MeleeBeetle', ItemTier.Unique, True),
     ('RangedBeetle', ItemTier.Unique, True),
     ('Bison', ItemTier.Unique, True)
-    # ('Gorilla', ItemTier.Legendary, False)
 ]
 
 def init(user, state):
@@ -170,6 +170,7 @@ def spawn_pet(state, pet_item):
         pet.RemoveComponent(pet.SearchComponent[BasicAIComponent]())
         pet.AddComponent(MinionAIComponent(pet, user))
         pet.AddComponent(CompanionStatsComponent(pet, pet_item))
+        pet.RemoveComponent(pet.SearchComponent[DropComponent]())
         pet.Removable = False
         pet.IsFriendly = True
         if pet_item.GetAttribute[bool](CAN_RIDE_ATTRIB_NAME):
