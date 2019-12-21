@@ -18,7 +18,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
     public class CottageWithFarmDesign : QuestGiverStructureDesign<CottageWithFarm>
     {
         public override int PlateauRadius => 160;
-        public override VertexData Icon => CacheManager.GetModel(CacheItem.CauldronIcon);
+        public override VertexData Icon => null;
         public override bool CanSpawnInside => true;
         protected override int StructureChance => StructureGrid.CottageWithFarmChance;
         protected override CacheItem? Cache => null;

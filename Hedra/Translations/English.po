@@ -136,6 +136,7 @@ requires_anvil = Requires anvil
 requires_workbench = Requires workbench
 requires_water = Requires water
 requires_loom = Requires loom
+requires_cow = Requires cow
 well = well
 anvil = anvil
 campfire = campfire

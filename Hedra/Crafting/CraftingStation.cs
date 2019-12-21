@@ -12,5 +12,6 @@ namespace Hedra.Crafting
         Workbench = 8,
         Loom = 16,
         Water = 32,
+        Cow = 64,
     }
 }

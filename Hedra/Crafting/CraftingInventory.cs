@@ -10,6 +10,8 @@ using Hedra.Items;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Numerics;
+using Hedra.Engine.EntitySystem;
+using Hedra.EntitySystem;
 
 namespace Hedra.Crafting
 {
@@ -49,6 +51,7 @@ namespace Hedra.Crafting
 
         public static CraftingStation GetCurrentStation(Vector3 Position)
         {
+            var entities = World.InRadius<IEntity>(Position, CraftingStationRadius).Where(E => E.MobType == MobType.Cow);
             var structs = World.InRadius<Engine.WorldBuilding.CraftingStation>(Position, CraftingStationRadius);
             var waterStation = structs.Any(S => S.StationType == CraftingStation.Well) || World.NearestWaterBlockOnChunk(Position, out _) < 12 ? CraftingStation.Water : CraftingStation.None;
             var currentStation = CraftingStation.None;
@@ -56,6 +59,12 @@ namespace Hedra.Crafting
             {
                 currentStation |= structs[i].StationType;
             }
+
+            if (entities.Any(E => E.MobType == MobType.Cow))
+            {
+                currentStation |= CraftingStation.Cow;
+            }
+
             return currentStation | waterStation;
         }
 
