@@ -38,7 +38,7 @@ namespace Hedra.Engine.QuestSystem
         public void Start(IHumanoid Giver, MissionObject Quest)
         {
             /* Don't give storyline quest if player already has it */
-            if(_activeQuests.Any(Q => Q.IsStoryline)) return;
+            if(Quest.IsStoryline && _activeQuests.Any(Q => Q.IsStoryline)) return;
             Quest.Start(Giver, _player);
             _activeQuests.Insert(0, Quest);
             QuestAccepted?.Invoke(Quest);
