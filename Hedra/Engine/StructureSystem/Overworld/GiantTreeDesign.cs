@@ -94,12 +94,12 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         protected override string GetShortDescription(GiantTree Structure)
         {
-            return Translations.Get("quest_complete_structure_short_giant_tree", Structure.Boss.Name);
+            return Translations.Get("quest_complete_structure_short_giant_tree", Structure.Boss?.Name ?? Translations.Get("the_boss"));
         }
 
         protected override string GetDescription(GiantTree Structure)
         {
-            return Translations.Get("quest_complete_structure_description_giant_tree", Structure.Boss.Name, DisplayName);
+            return Translations.Get("quest_complete_structure_description_giant_tree", Structure.Boss?.Name ?? Translations.Get("the_boss"), DisplayName);
         }
     }
 }
