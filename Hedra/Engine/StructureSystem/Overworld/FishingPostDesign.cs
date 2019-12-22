@@ -153,7 +153,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 Matrix4x4.CreateTranslation(Structure.Position + Vector3.UnitY * Structure.Groundworks[0].BonusHeight);
             AddModel(Structure, path, FishingPostScale - Vector3.One, fountainTransformation);
 
-            var count = Rng.Next(0, 4);
+            var count = Rng.Next(2, 6);
             for (var i = 0; i < count; ++i)
             {
                 AddVillager(Structure, Structure.Position + new Vector3(CenterRadius * Rng.NextFloat() - CenterRadius * .5f, 0, CenterRadius * Rng.NextFloat() - CenterRadius * .5f), Rng, Graph);
@@ -222,9 +222,16 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         private static void AddVillager(CollidableStructure Structure, Vector3 Position, Random Rng, VillageGraph Graph)
         {
+            var spawnQuest = Rng.Next(0, 3) == 1;
+            var quest = spawnQuest ? MissionPool.Random(Position) : null;
             DecorationsPlacer.PlaceWhenWorldReady(Position, P =>
             {
-                Builder.SpawnVillager(Position, Rng, Graph, out var humanoid);
+                var humanoid = (IHumanoid) null;
+                if (spawnQuest)
+                    humanoid = NPCCreator.SpawnQuestGiver(P, quest, Rng);
+                else
+                    Builder.SpawnVillager(Position, Rng, Graph, out humanoid);
+                
                 Structure.WorldObject.AddNPCs(humanoid);
             }, () => Structure.Disposed);
         }
