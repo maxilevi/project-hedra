@@ -108,7 +108,6 @@ namespace Hedra.Engine.WorldBuilding
         private static void ApplyQuestGiverStatus(IHumanoid Npc, Vector3 Position, IMissionDesign Quest)
         {
             Npc.Position = Position;
-            Npc.Physics.UsePhysics = false;
             Npc.AddComponent(new QuestGiverComponent(Npc, Quest));
         }
 

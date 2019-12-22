@@ -60,7 +60,7 @@ namespace Hedra.User
                 {
                     case "tp":
                     {
-
+                        
                         if (Parts[1] == "spawn")
                         {
                             Caster.Position = World.SpawnPoint;
@@ -75,6 +75,18 @@ namespace Hedra.User
                                 {
                                     Caster.Position = obelisk.Position;
                                 }
+                            }
+                        }
+                        if (Parts[1] == "structures")
+                        {
+                            var structs = World.StructureHandler.StructureItems;
+                            for (var i = 0; i < structs.Length; ++i)
+                            {
+                                var k = i;
+                                TaskScheduler.After(i * 16, () =>
+                                {
+                                    Caster.Position = structs[k].Position;
+                                });
                             }
                         }
                         if (Parts[1] == "quest")

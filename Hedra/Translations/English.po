@@ -729,6 +729,7 @@ attack_damage_label = AD
 rename_btn = RENAME
 apply_rename_btn = APPLY
 punching_bag_name = Training Dummy
+the_boss = THE BOSS
 
 # Lore quests dialogs
 quest_the_beginning_dialog_0 = You've finally arrived! I know your memory is hazy, but you were brought here for a specific purpose.;I know you are tired so let's start with something simple. Try talking to some $(BOLD)(RED)(CAPS){VILLAGERS}.
