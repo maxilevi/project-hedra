@@ -189,9 +189,10 @@ namespace Hedra.Engine.Player
         {
             Human.IsEating = true;
             var health = Food.GetAttribute<float>(CommonAttributes.Saturation);
-            TaskScheduler.While( 
+            var healthPerSecond = health / _foodTimer.AlertTime;
+            TaskScheduler.While(
                 () => Human.IsEating && !Human.IsDead,
-                () => Human.Health += health * Time.IndependentDeltaTime * .3f);
+                () => Human.Health += healthPerSecond * Time.DeltaTime * 2);
             TaskScheduler.When(
                 () => !Human.IsEating,
                 () => OnEatingEnd(Food)
@@ -300,7 +301,7 @@ namespace Hedra.Engine.Player
             LocalRotation = Model.LocalRotation;
             HandleTransformationMatrix();
             HandleState();
-            if ( _isEatingWhileSitting && !Human.IsSitting && Human.IsEating) StopEating();
+            if (_isEatingWhileSitting && !Human.IsSitting && Human.IsEating) StopEating();
             if (_foodTimer.Tick() && Human.IsEating) StopEating();
             Human.HandLamp.Update();
             if (!Disposed)
