@@ -48,12 +48,11 @@ namespace Hedra.Engine.StructureSystem
         
         public void CheckFor(Vector2 ChunkOffset, Region Biome, RandomDistribution Distribution)
         {
-            for (var x = Math.Min(-2, -SearchRadius / Chunk.Width * 2); x < Math.Max(2, SearchRadius / Chunk.Width * 2); x++)
+            for (var x = Math.Min(-2, -SearchRadius / Chunk.Width * 4); x < Math.Max(2, SearchRadius / Chunk.Width * 4); x++)
             {
-                for (var z = Math.Min(-2, -SearchRadius / Chunk.Width * 2); z < Math.Max(2, SearchRadius / Chunk.Width * 2); z++)
+                for (var z = Math.Min(-2, -SearchRadius / Chunk.Width * 4); z < Math.Max(2, SearchRadius / Chunk.Width * 4); z++)
                 {
-                    var offset = new Vector2(ChunkOffset.X + x * Chunk.Width,
-                        ChunkOffset.Y + z * Chunk.Width);
+                    var offset = new Vector2(ChunkOffset.X + x * Chunk.Width, ChunkOffset.Y + z * Chunk.Width);
                     Distribution.Seed = BuildRngSeed(offset);
                     var targetPosition = BuildTargetPosition(offset, Distribution);
                     var items = World.StructureHandler.StructureItems;
@@ -73,9 +72,9 @@ namespace Hedra.Engine.StructureSystem
         public virtual bool ShouldRemove(CollidableStructure Structure)
         {
             var chunkOffset = World.ToChunkSpace(Structure.Position);
-            for (var x = Math.Min(-2, -SearchRadius / Chunk.Width * 2); x < Math.Max(2, SearchRadius / Chunk.Width * 2); x++)
+            for (var x = Math.Min(-2, -SearchRadius / Chunk.Width * 4); x < Math.Max(2, SearchRadius / Chunk.Width * 4); x++)
             {
-                for (var z = Math.Min(-2, -SearchRadius / Chunk.Width * 2); z < Math.Max(2, SearchRadius / Chunk.Width * 2); z++)
+                for (var z = Math.Min(-2, -SearchRadius / Chunk.Width * 4); z < Math.Max(2, SearchRadius / Chunk.Width * 4); z++)
                 {
                     var offset = new Vector2(chunkOffset.X + x * Chunk.Width, chunkOffset.Y + z * Chunk.Width);
                     if (World.GetChunkByOffset(offset) != null)
