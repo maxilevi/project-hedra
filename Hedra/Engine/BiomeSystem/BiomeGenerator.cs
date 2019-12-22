@@ -68,7 +68,7 @@ namespace Hedra.Engine.BiomeSystem
 
         private void CheckForNearbyStructures()
         {
-            StructureHandler.CheckStructures( new Vector2(Parent.OffsetX, Parent.OffsetZ) );
+            StructureHandler.CheckStructures(new Vector2(Parent.OffsetX, Parent.OffsetZ));
         }
 
         public static float PathFormula(float X, float Z)
