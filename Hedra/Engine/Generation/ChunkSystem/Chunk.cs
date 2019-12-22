@@ -153,7 +153,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (_terrainBuilder.Sparsity == null) BuildSparsity();
             var buildingLod = this.Lod;
             this.PrepareForBuilding();
-            var allocator = new HeapAllocator(Allocator.Megabyte * 32);
+            var allocator = new HeapAllocator(Allocator.Megabyte * 48);
             SetupCollider(allocator, buildingLod);
             if(!allocator.IsEmpty) throw new ArgumentOutOfRangeException("Detected memory leak");
             
@@ -261,7 +261,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 new Vector3(staticMax.X, Math.Max(staticMax.Y, Input.WaterData.SupportPoint(Vector3.UnitY).Y),
                     staticMax.Z)
             );
-            using (var allocator = new HeapAllocator(Allocator.Megabyte * 16))
+            using (var allocator = new HeapAllocator(Allocator.Megabyte * 24))
             {
                 Input.StaticData.Optimize(allocator);
                 Input.InstanceData.Optimize(allocator);
