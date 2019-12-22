@@ -58,6 +58,8 @@ namespace Hedra.Engine.Player
 {
     public class LocalPlayer : Humanoid, IPlayer
     {
+        private const int MinimumRespawnDistance = 64;
+        private const int MaximumRespawnDistance = 128;
         public event OnMoveEvent OnMove;
         public event OnRespawnEvent OnRespawn;
         public event OnInteractionEvent OnInteract;
@@ -405,7 +407,16 @@ namespace Hedra.Engine.Player
             GameManager.SpawningEffect = true;
             this.PlaySpawningAnimation = true;
             this.IsRiding = false;
-            var newOffset = new Vector3( (192f * Utils.Rng.NextFloat() - 96f) * Chunk.BlockSize, 0, (192f * Utils.Rng.NextFloat() - 96f) * Chunk.BlockSize);
+            var newOffset = Position;
+            while ((Position - newOffset).LengthSquared() < MinimumRespawnDistance * MinimumRespawnDistance)
+            {
+                newOffset = new Vector3(
+                    (MaximumRespawnDistance * Utils.Rng.NextFloat() * 2 - MaximumRespawnDistance) * Chunk.BlockSize,
+                    0,
+                    (MaximumRespawnDistance * Utils.Rng.NextFloat() * 2 - MaximumRespawnDistance) * Chunk.BlockSize
+                );
+            }
+
             var newPosition = World.FindSpawningPoint(newOffset + this.Position);
             newPosition = World.FindPlaceablePosition(this, new Vector3(newPosition.X, PhysicsSystem.Physics.HeightAtPosition(newPosition.X, newPosition.Z), newPosition.Z));
             this.Model.Position = newPosition;
