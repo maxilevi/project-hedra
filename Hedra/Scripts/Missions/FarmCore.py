@@ -8,7 +8,7 @@ from Hedra.Engine.StructureSystem.Overworld import CottageWithFarmDesign
 POSSIBLE_ITEM_REWARDS = [
     (ItemPool.Grab(Items.FARMER_HAT), 'quest_farmer_hat_reward_dialog'),
     (ItemPool.Grab(Items.FARMING_RAKE), 'quest_farming_rake_reward_dialog'),
-    (ItemPool.Grab(Items.COMPANION_COW), 'quest_companion_cow_reward')
+    (ItemPool.Grab(Items.COMPANION_COW), 'quest_companion_cow_reward_dialog')
 ]
 
 def get_reward(rng):
