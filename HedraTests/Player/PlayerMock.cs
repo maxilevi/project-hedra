@@ -476,6 +476,8 @@ namespace HedraTests.Player
             throw new NotImplementedException();
         }
 
+        public bool UpdateWhenOutOfRange { get; set; }
+
         void IUpdatable.Update()
         {
             throw new NotImplementedException();

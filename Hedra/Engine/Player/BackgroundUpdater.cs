@@ -77,11 +77,12 @@ namespace Hedra.Engine.Player
             {
                 if (entities[i] == GameManager.Player) continue;
                 if (GameManager.Player.Companion.Entity == entities[i]) continue;
-                if (entities[i].InUpdateRange && !GameSettings.Paused && !GameManager.IsLoading)
+                var canUpdate = entities[i].InUpdateRange || entities[i].UpdateWhenOutOfRange;
+                if (canUpdate && !GameSettings.Paused && !GameManager.IsLoading)
                 {
                     entities[i].Update();
                 }
-                else if (entities[i].InUpdateRange && GameSettings.Paused)
+                else if (canUpdate && GameSettings.Paused)
                 {
                     (entities[i].Model as IAudible)?.StopSound();
                 }

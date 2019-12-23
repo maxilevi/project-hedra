@@ -139,5 +139,7 @@ namespace Hedra.EntitySystem
 
         void UpdateCriticalComponents();
         
+        bool UpdateWhenOutOfRange { get; set; }
+        
     }
 }

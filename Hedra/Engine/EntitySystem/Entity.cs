@@ -91,6 +91,7 @@ namespace Hedra.Engine.EntitySystem
         public float Speed { get; set; } = 1.25f;
         public bool IsMoving => Model.IsMoving;
         public bool IsUndead => Model.IsUndead;
+        public bool UpdateWhenOutOfRange { get; set; }
 
         public virtual float Health
         {
