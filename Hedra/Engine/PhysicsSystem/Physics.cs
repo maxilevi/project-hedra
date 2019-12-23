@@ -69,6 +69,7 @@ namespace Hedra.Engine.PhysicsSystem
             if (result.IsInvalid())
             {
                 int a = 0;
+                result = Vector3.Zero;
             }
             #endif
             return result;

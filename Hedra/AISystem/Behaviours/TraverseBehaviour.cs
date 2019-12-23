@@ -22,13 +22,13 @@ namespace Hedra.AISystem.Behaviours
         private Vector2[] _currentPath;
         private int _currentIndex;
         private Vector3 _origin;
-        private bool _reached;
         private Action _callback;
         private float _speedBonus = 1;
         private float _lastBonus = 1;
         private SpeedBonusComponent _lastComponent;
-        private bool _canReach;
         private Vector3 _lastCanNotReachPosition;
+        private bool _hasTarget;
+        private bool _canReach;
 
         public TraverseBehaviour(IEntity Parent, bool UseCollision = false) : base(Parent)
         {
@@ -38,7 +38,6 @@ namespace Hedra.AISystem.Behaviours
                 Parent.Physics.CollidesWithStructures = false;
                 Parent.Physics.UpdateColliderList = true;
             }
-            _reached = true;
             CreateGraph();
         }
 
@@ -71,17 +70,10 @@ namespace Hedra.AISystem.Behaviours
 
         public override void Update()
         {
-            var couldReach = _canReach;
-            if (!_reached && _canReach)
+            if(!_hasTarget) return;
+            if (!Walk.HasTarget || Parent.IsStuck)
             {
-                if (!Walk.HasTarget || Parent.IsStuck)
-                {
-                    RebuildAndResetPathIfNecessary();
-                }
-            }
-            else
-            {
-                Walk.Cancel();
+                RebuildAndResetPathIfNecessary();
             }
             Walk.Update();
             if (_canReach)
@@ -95,8 +87,6 @@ namespace Hedra.AISystem.Behaviours
                     _canReach = true;
                 }
             }
-            //if(!couldReach && !_canReach)
-            //    RebuildAndResetPathIfNecessary();
         }
 
         private void RebuildAndResetPathIfNecessary()
@@ -140,7 +130,6 @@ namespace Hedra.AISystem.Behaviours
         
         protected void UpdatePath()
         {
-            if (_reached || !_canReach) return;
             _origin = Parent.Position;
             _currentIndex = 0;
             _currentPath = DoUpdatePath(_origin, out var canReach);
@@ -152,11 +141,10 @@ namespace Hedra.AISystem.Behaviours
 
         public void SetTarget(Vector3 Position, Action Callback = null)
         {
-            if((Position - Target).LengthSquared() < 1) return;
             if ((Parent.Position - Position).LengthSquared() < ErrorMargin * ErrorMargin) return;
             Target = Position;
             _callback = Callback;
-            _reached = false;
+            _hasTarget = true;
             ForceRebuildGraph();
             RebuildPathIfNecessary();
             var traverse = Parent.SearchComponent<ITraverseAIComponent>();
@@ -167,7 +155,7 @@ namespace Hedra.AISystem.Behaviours
 
         public void Cancel()
         {
-            _reached = true;
+            _hasTarget = false;
             _callback?.Invoke();
         }
 
@@ -193,7 +181,7 @@ namespace Hedra.AISystem.Behaviours
 
         public Vector3 Target { get; private set; }
 
-        public bool HasTarget => !_reached;
+        public bool HasTarget => _hasTarget;
         
         public override void Dispose()
         {

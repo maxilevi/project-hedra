@@ -11,7 +11,7 @@ namespace Hedra.AISystem.Behaviours
 {
     public class WalkBehaviour : Behaviour
     {
-        public const float DefaultErrorMargin = 2;
+        public const float DefaultErrorMargin = 4;
         public Vector3 Target { get; private set; }
         public float ErrorMargin { get; set; } = DefaultErrorMargin;
         private bool _arrived;
@@ -46,8 +46,13 @@ namespace Hedra.AISystem.Behaviours
                 /* If the target reaches the point then (Target - Parent.Position) will be equal to Vector3.Zero and thus the normal will be Vector3.Zero too. */
                 if (orientation != Vector3.Zero)
                 {
+                    var type = Parent.Type;
                     Parent.Orientation = Mathf.Lerp(Parent.Orientation, orientation, Time.DeltaTime * 8f);
                     Parent.Model.TargetRotation = Physics.DirectionToEuler(Parent.Orientation);
+                }
+                else
+                {
+                    int a = 0;
                 }
                 Parent.Physics.Move();
                 if ((Target - Parent.Position).Xz().LengthSquared() < ErrorMargin * ErrorMargin)
