@@ -147,6 +147,31 @@ namespace Hedra.Engine.IO
                 _currentType = Type;
             }
         }
+
+        public static void Flush()
+        {
+            lock (_lock)
+            {
+                foreach (var pair in _logs)
+                {
+                    var stream = pair.Value;
+                    stream.Flush();
+                }
+            }
+        }
+
+        public static void FlushAndClose()
+        {
+            Flush();
+            lock (_lock)
+            {
+                foreach (var pair in _logs)
+                {
+                    var stream = pair.Value;
+                    stream.Close();
+                }
+            }
+        }
     }
 
     public enum LogType
