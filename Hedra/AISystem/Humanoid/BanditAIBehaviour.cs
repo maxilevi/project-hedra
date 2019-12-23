@@ -47,7 +47,6 @@ namespace Hedra.AISystem.Humanoid
                     || Array.IndexOf(Ignore, entities[i]) != -1
                     || entities[i] is IPlayer                       
                     || entities[i].IsImmune 
-                    || entities[i].IsFriendly 
                     || entities[i].IsInvisible) continue;
 
                 return entities[i];
