@@ -8,12 +8,23 @@ namespace Hedra.Engine.WorldBuilding
         public Class PossibleClasses { get; set; } = Class.Archer | Class.Mage | Class.Warrior | Class.Rogue;
         public HumanType? ModelType { get; set; }
         public bool Friendly { get; set; }
+        public bool IsFromQuest { get; set;}
 
         public static BanditOptions Default => new BanditOptions
         {
             Friendly = false,
             ModelType = Utils.Rng.Next(0, 7) == 1 ? HumanType.Gnoll : Utils.Rng.Next(0, 7) == 1 ? (HumanType?) HumanType.Beasthunter : null
         };
+
+        public static BanditOptions Quest
+        {
+            get
+            {
+                var options = Default;
+                options.IsFromQuest = true;
+                return options;
+            }
+        }
 
         public static BanditOptions Undead => new BanditOptions
         {
