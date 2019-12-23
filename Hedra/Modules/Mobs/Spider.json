@@ -15,7 +15,12 @@
     }
   ],
   
-  "Drops": [],
+  "Drops": [
+    {
+      "Type": "String",
+      "Chance": 15
+    }
+  ],
   
   "Model": {
     "Path": "$DataFile$/Assets/Chr/SpiderIdle.dae",
