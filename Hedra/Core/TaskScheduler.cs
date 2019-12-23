@@ -179,11 +179,11 @@ namespace Hedra.Core
         {
             var condition = (Func<bool>)Args[0];
             var action = (Action)Args[1];
-            while (condition())
+            do
             {
                 action();
                 yield return null;
-            }
+            } while (condition());
         }
         #endregion
     }
