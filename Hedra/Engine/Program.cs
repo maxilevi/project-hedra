@@ -40,11 +40,14 @@ namespace Hedra.Engine
                 if (E.IsTerminating)
                 {
                     Log.WriteLine($"UNEXPECTED FATAL EXCEPTION {baseText}");
-                    File.Copy($"{GameLoader.AppPath}/log.txt", $"{GameLoader.CrashesFolder}/{DateTime.UtcNow}.txt");
+                    Log.FlushAndClose();
+                    File.Copy($"{GameLoader.AppPath}/log.txt", $"{GameLoader.CrashesFolder}/CRASH_{DateTime.UtcNow:dd-MM-yyyy_hh-mm-ss}.txt");
                 }
                 else
                 {
-                    Log.WriteLine("UNEXPECTED EXCEPTION {baseText}");
+                    Log.WriteLine($"UNEXPECTED EXCEPTION {baseText}");
+                    Log.Flush();
+                    File.Copy($"{GameLoader.AppPath}/log.txt", $"{GameLoader.CrashesFolder}/CRASH_{DateTime.UtcNow:dd-MM-yyyy_hh-mm-ss}.txt");
                 }
             };
             AppDomain.CurrentDomain.UnhandledException += ProcessException;
