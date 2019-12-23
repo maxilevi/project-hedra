@@ -16,12 +16,12 @@ from Hedra.Numerics import VectorExtensions
 
 clr.ImportExtensions(VectorExtensions)
 
-IS_QUEST = False
+IS_QUEST = True
 QUEST_NAME = 'DefendFarmFromAttack'
 QUEST_TIER = QuestTier.Medium
 QUEST_HINT = QuestHint.Farm
 MAX_SPAWN_DISTANCE = 384
-MIN_SPAWN_DISTANCE = 128
+MIN_SPAWN_DISTANCE = 96
 
 def setup_timeline(position, giver, owner, rng):
     builder = MissionBuilder()
@@ -39,15 +39,14 @@ def setup_timeline(position, giver, owner, rng):
 
 def setup_giver_and_bandits(giver, criminals, ais):
     MissionCore.remove_component_if_exists(giver, IBasicAIComponent)
-    for i in range(len(criminals)):
+    giver.SearchComponent[DamageComponent]().Immune = False
+    giver.BonusHealth = giver.MaxHealth * 4
+    giver.Health = giver.MaxHealth
+    indexes = sorted(list(range(len(criminals))), key=lambda x: (criminals[x].Position - giver.Position).LengthSquared())
+    for i in indexes:
         ai = ais[i]
         criminal = criminals[i]
-        def add():
-            print('Adding component ' + str(i))
-            criminal.AddComponent(ai)
-        add()
-        #Core.after_seconds(2 * i, add)
-    #giver.AddComponent()
+        Core.after_seconds(6 * i + 1, lambda cmp=ai, cri=criminal: cri.AddComponent(cmp))
 
 def create_criminals(owner, giver, rng):
     criminals = []
@@ -61,7 +60,7 @@ def create_criminals(owner, giver, rng):
                 Single(0.0),
                 Single(rng.NextDouble() * MAX_SPAWN_DISTANCE * 2 - MAX_SPAWN_DISTANCE)
             )
-        bandit = NPCCreator.SpawnBandit(position, max(1, owner.Level - rng.Next(0, 5)), BanditOptions.Default)
+        bandit = NPCCreator.SpawnBandit(position, max(1, owner.Level - rng.Next(0, 5)), BanditOptions.Quest)
         ai = bandit.SearchComponent[CombatAIComponent]()
         ai.SetGuardSpawnPoint(False)
         ai.SetCanExplore(False)
