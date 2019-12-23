@@ -52,7 +52,7 @@ def create_criminals(owner, giver, items, rng):
             Single(0.0),
             Single(rng.NextDouble() * MAX_SPAWN_DISTANCE * 2 - MAX_SPAWN_DISTANCE)
         )
-        bandit = NPCCreator.SpawnBandit(position, max(1, owner.Level - rng.Next(0, 5)), BanditOptions.Default)
+        bandit = NPCCreator.SpawnBandit(position, max(1, owner.Level - rng.Next(0, 5)), BanditOptions.Quest)
         bandit.RemoveComponent(bandit.SearchComponent[DropComponent]())
         drop = DropComponent(bandit)
         drop.RandomDrop = False
