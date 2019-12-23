@@ -170,6 +170,7 @@ namespace Hedra.Engine.Loader
                 LocalPlayer.Instance.Loader.Dispatch();
                 frameTime -= delta;
             }
+            
             Time.Set(Delta);
             Time.IncrementFrame(Delta);
             
