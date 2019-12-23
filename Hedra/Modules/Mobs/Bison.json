@@ -12,7 +12,7 @@
       "Type": "RawMeat",
       "Chance": 100,
       "Min": 1,
-      "Max": 3,
+      "Max": 3
     }
   ],
   "Model": {

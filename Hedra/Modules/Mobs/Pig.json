@@ -7,7 +7,14 @@
   "Level": 6,
   "AIType": "Pig",
   "Effects": [],
-  "Drops": [],
+  "Drops": [
+    {
+      "Type": "RawMeat",
+      "Chance": 25,
+      "Min": 1,
+      "Max": 2
+    }
+  ],
   "Model": {
     "Path": "$DataFile$/Assets/Chr/PigIdle.dae",
     "Scale": 2.5,
