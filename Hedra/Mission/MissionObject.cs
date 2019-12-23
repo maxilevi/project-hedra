@@ -80,7 +80,7 @@ namespace Hedra.Mission
 
         public void Update()
         {
-            if(FailWhen != null && FailWhen())
+            if(FailWhen != null && FailWhen() || Current.IsFailed)
                 _owner.Questing.Fail(this);
             Current?.Update();
         }

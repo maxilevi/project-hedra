@@ -19,6 +19,7 @@ namespace Hedra.Mission.Blocks
         }
 
         public override bool IsCompleted => _from.All(E => E.IsDead);
+        public override bool IsFailed => _entity.IsDead;
         public override void Setup()
         {
         }
@@ -31,7 +32,7 @@ namespace Hedra.Mission.Blocks
         public override bool HasLocation => true;
         public override Vector3 Location => _entity.Position;
         public override string ShortDescription => Translations.Get("quest_defend_entity_short", _entity.Name);
-        public override string Description => Translations.Get("quest_defend_entity_description", _entity.Name, _from.Length);
+        public override string Description => Translations.Get("quest_defend_entity_description", _entity.Name, _from.Count(E => !E.IsDead));
         public override DialogObject DefaultOpeningDialog => default;
     }
 }

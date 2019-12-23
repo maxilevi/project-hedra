@@ -18,6 +18,7 @@ namespace Hedra.Mission.Blocks
         public IPlayer Owner { get; set; }
         public IHumanoid Giver { get; set; }
         public abstract bool IsCompleted { get; }
+        public virtual bool IsFailed { get; }
         public abstract void Setup();
         public abstract QuestView BuildView();
         public abstract bool HasLocation { get; }
