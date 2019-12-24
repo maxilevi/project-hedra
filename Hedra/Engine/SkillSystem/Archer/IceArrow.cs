@@ -29,18 +29,18 @@ namespace Hedra.Engine.SkillSystem.Archer
     /// </summary>
     public class IceArrow : SpecialRangedAttackSkill
     {
-        private const float BaseDamage = 40f;
+        private const float BaseDamage = 26f;
         private const float BaseCooldown = 18f;
         private const float CooldownCap = 12f;
         private const float BaseManaCost = 40f;
         public override uint IconId { get; } = Graphics2D.LoadFromAssets("Assets/Skills/IceArrow.png");
         public override string Description => Translations.Get("ice_arrow_desc");
         public override string DisplayName => Translations.Get("ice_arrow");
-        private float Damage => BaseDamage * (base.Level * 0.40f) + BaseDamage;
+        private float Damage => (base.Level * 4.5f) + BaseDamage;
         public override float MaxCooldown => Math.Max(BaseCooldown - 0.80f * base.Level, CooldownCap);
         public override float ManaCost => BaseManaCost;
         protected override int MaxLevel => 99;
-        private float FreezeDuration => 3;
+        private float FreezeDuration => 2.0f;
 
         protected override void OnHit(Projectile Proj, IEntity Victim)
         {
