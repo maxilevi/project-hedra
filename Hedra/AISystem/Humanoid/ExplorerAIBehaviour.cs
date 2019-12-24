@@ -50,8 +50,12 @@ namespace Hedra.AISystem.Humanoid
             for (var i = 0; i < _crew.Length; ++i)
             {
                 if(_crew[i].IsDead || _crew[i].Disposed) continue;
-                if (!_crew[i].SearchComponent<CombatAIComponent>().IsChasing)
-                    _crew[i].SearchComponent<CombatAIComponent>().SetTarget(Entity);
+                var component = _crew[i].SearchComponent<CombatAIComponent>();
+                if (component != null)
+                {
+                    if (!component.IsChasing)
+                        component.SetTarget(Entity);
+                }
             }
         }
 
