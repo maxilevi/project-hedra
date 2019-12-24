@@ -58,7 +58,7 @@ namespace Hedra.Engine.Player
 {
     public class LocalPlayer : Humanoid, IPlayer
     {
-        private const int MinimumRespawnDistance = 64;
+        private const int MinimumRespawnDistance = 32;
         private const int MaximumRespawnDistance = 128;
         public event OnMoveEvent OnMove;
         public event OnRespawnEvent OnRespawn;
