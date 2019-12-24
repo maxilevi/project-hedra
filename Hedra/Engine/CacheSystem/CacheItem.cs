@@ -70,6 +70,7 @@ namespace Hedra.Engine.CacheSystem
         ShroomPortalIcon,
         StorylineIcon,
         CauldronIcon,
+        WindmillIcon,
         MaxEnums
     }
 }
