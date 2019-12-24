@@ -7,7 +7,14 @@
   "Level": 7,
   "AIType": "Crab",
   "Effects": [],
-  "Drops": [],
+  "Drops": [
+    {
+      "Type": "CrabLegs",
+      "Chance": 10,
+      "Min": 1,
+      "Max": 2
+    }
+  ],
 
   "Model": {
     "Path": "$DataFile$/Assets/Chr/Mob/Crab/CrabIdle.dae",
