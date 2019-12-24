@@ -72,7 +72,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
             _component = null;
         }
 
-        private float SpeedChange => (float) Level / MaxLevel / 4f;
+        private float SpeedChange => (float) Level / MaxLevel / 3f + 0.05f;
         public override float IsAffectingModifier => _inCombat ? 1 : 0;
         public override string Description => Translations.Get("hot_pursuit_desc");
         public override string DisplayName => Translations.Get("hot_pursuit_skill");
