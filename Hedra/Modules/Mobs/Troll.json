@@ -1,7 +1,7 @@
 ﻿{
 	"Name" : "Troll", 
 	"MaxHealth": 680.0,
-	"AttackDamage": 13.0,
+	"AttackDamage": 28.0,
 	"AttackCooldown": 1.5,
 	"Speed": 1.35,
 	"XP": 18.0,

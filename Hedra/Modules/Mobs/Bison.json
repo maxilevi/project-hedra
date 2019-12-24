@@ -10,7 +10,7 @@
   "Drops": [
     {
       "Type": "RawMeat",
-      "Chance": 100,
+      "Chance": 40,
       "Min": 1,
       "Max": 3
     }

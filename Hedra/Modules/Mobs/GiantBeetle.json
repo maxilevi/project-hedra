@@ -2,7 +2,7 @@
 	"DisplayName": "Beetle",
 	"Name" : "GiantBeetle",
 	"MaxHealth": 488.0,
-	"AttackDamage": 10.0,
+	"AttackDamage": 22.0,
 	"AttackCooldown": 1.0,
 	"Speed": 1.45,
 	"XP": 12.0,

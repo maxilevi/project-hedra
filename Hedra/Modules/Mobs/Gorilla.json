@@ -1,7 +1,7 @@
 {
   "Name" : "Gorilla",
   "MaxHealth": 488.0,
-  "AttackDamage": 10.0,
+  "AttackDamage": 20.0,
   "AttackCooldown": 2.5,
   "Speed": 1.3,
   "XP": 12.0,
