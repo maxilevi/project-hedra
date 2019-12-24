@@ -1,7 +1,7 @@
 {
   "Name" : "PossessedCow",
   "MaxHealth": 400.0,
-  "AttackDamage": 7.0,
+  "AttackDamage": 8.0,
   "Speed": 1.15,
   "XP": 8.0,
   "Level": 9,
@@ -21,7 +21,7 @@
     },
     {
       "Type": "DarkEssence",
-      "Chance": 10
+      "Chance": 15
     }
   ],
   "Model": {

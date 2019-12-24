@@ -236,7 +236,6 @@ quest_catch_animal_item_0 = Thank you for helping me but it looks like $(ORANGE)
 quest_defend_entity_short = DEFEND $(BOLD)(BLUE){{0}}.
 quest_defend_entity_description = Defend $(BOLD)(BLUE){{0}} from the attackers!\nThere are $(BOLD)(VIOLET){{1}} attackers left.
 
-
 quest_kill_lich_dialog_0 = Rumors say there is a powerful lich
 quest_complete_portal_description = Enter the $(BLUE)(BOLD){PORTAL} to travel to another realm.
 quest_complete_portal_short = ENTER THE $(BLUE)(BOLD){PORTAL}
@@ -283,8 +282,8 @@ quest_farmer_hat_reward_dialog_0 = I don't have much to offer you but you can ta
 quest_farming_rake_reward_dialog_0 = Take this $(BOLD)(ORANGE){{0}} as a show of gratitude. Maybe you will build your own farm one day.
 quest_companion_cow_reward_dialog_0 = I don't have much to offer you but you can take my $(BOLD)(ORANGE){{0}} as a show of gratitude.
 
-quest_possessed_cows_dialog_0 = A very strange.
-quest_possessed_cows_arrive = Thats it! Kill the cows before they get us!
+quest_possessed_cows_dialog_0 = A while ago I was trying to craft some strength potions to sell on the black market.;However while pouring ingredients I accidentally knocked over the cauldron and it mixed with some dark essence that was on the floor;It created a magic liquid that imbued my farm with dark energy.;My farm animals got possessed and started attacking me so I had to flee.;Please escort me there and help me defeat them!
+quest_possessed_cows_arrive = That's it! Kill the cows before they get us!
 quest_possessed_cows_description = Escort $(BOLD)(BLUE){{0}} into his farm and find out what is going on.\n$(GRAY)(BOLD){HINT: }See the map for more details.
 possessed_cow = Possessed Cow
 

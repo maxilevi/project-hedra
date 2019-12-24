@@ -34,10 +34,10 @@ def setup_timeline(position, giver, owner, rng):
     builder.FailWhen = lambda: giver.IsDead or not MissionCore.is_within_distance(giver.Position, farm_structure.Position)
     builder.MissionDispose += lambda: MissionCore.remove_component_if_exists(giver, FollowAIComponent)
 
-    farm.EnsureEmpty()
     cows = spawn_possessed_cows(farm.Position, rng)
 
     find = FindStructureMission()
+    find.MissionBlockStart += lambda: farm.MakePossessed() 
     find.DefaultIcon = CacheItem.WindmillIcon
     find.Design = farm_structure.Design
     find.Position = farm_structure.Position
@@ -47,6 +47,7 @@ def setup_timeline(position, giver, owner, rng):
     builder.Next(find)
     
     defeat = DefeatEntityMission(Array[IEntity](cows))
+    defeat.MissionBlockEnd += lambda: farm.MakeNormal()
     builder.Next(defeat)
 
     builder.SetReward(FarmCore.get_reward(rng))
@@ -69,6 +70,9 @@ def spawn_possessed_cows(farm_position, rng):
 def on_farm_arrived(giver, owner, enemies, rng):
     MissionCore.remove_component_if_exists(giver, TalkComponent)
     MissionCore.remove_component_if_exists(giver, IBasicAIComponent)
+    # Double the giver's health.
+    giver.BonusHealth = giver.MaxHealth
+    giver.Health = giver.MaxHealth
     
     talk = TalkComponent(giver)
     giver.AddComponent(talk)
@@ -76,8 +80,8 @@ def on_farm_arrived(giver, owner, enemies, rng):
     talk.AddDialogLine(load_translation('quest_possessed_cows_arrive'))
     talk.AutoRemove = True
     talk.TalkToPlayer()
-    for enemy in enemies:
-        enemy.SearchComponent[HostileAIComponent]().SetTarget(owner if rng.Next(0, 2) == 1 else giver)
+    #for enemy in enemies:
+    #    enemy.SearchComponent[HostileAIComponent]().SetTarget(owner if rng.Next(0, 2) == 1 else giver)
 
 def make_follow(giver, target):
     MissionCore.remove_component_if_exists(giver, IBasicAIComponent)
@@ -90,4 +94,4 @@ def on_mission_start(giver, target):
 
 
 def can_give(position):
-    return len(MissionCore.nearby_structs_designs(position, CottageWithFarmDesign)) > 0
+    return len(MissionCore.nearby_structs_designs(position, CottageWithFarmDesign)) > 0 and not MissionCore.is_inside_structure(position, CottageWithFarmDesign)

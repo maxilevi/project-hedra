@@ -27,7 +27,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         protected override CottageWithFarm Create(Vector3 Position, float Size)
         {
-            return new CottageWithFarm(Position);
+            return new CottageWithFarm(Position, Size);
         }
 
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
