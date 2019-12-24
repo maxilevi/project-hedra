@@ -4,7 +4,9 @@ using Hedra.Engine.StructureSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Localization;
 using System.Numerics;
+using Hedra.Engine.CacheSystem;
 using Hedra.Numerics;
+using Hedra.Rendering;
 
 namespace Hedra.Mission.Blocks
 {
@@ -20,10 +22,11 @@ namespace Hedra.Mission.Blocks
         public override QuestView BuildView()
         {
             return new ModelView(
-                Design.Icon.Clone().Scale(Vector3.One)
+                (Design.Icon ?? CacheManager.GetModel(DefaultIcon)).Clone().Scale(Vector3.One)
             );
         }
 
+        public CacheItem DefaultIcon { get; set; }
         public IFindableStructureDesign Design { get; set; }
         public Vector3 Position { get; set; }
         public override bool HasLocation => true;

@@ -15,7 +15,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         public void EnsureEmpty()
         {
-            NPC.Dispose();
+            NPC?.Dispose();
             NPC = null;
         }
 

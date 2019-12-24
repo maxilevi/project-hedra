@@ -1,0 +1,49 @@
+{
+  "Name" : "PossessedCow",
+  "MaxHealth": 400.0,
+  "AttackDamage": 7.0,
+  "Speed": 1.15,
+  "XP": 8.0,
+  "Level": 9,
+  "AIType": "Hostile",
+  "Effects": [
+    {
+      "Name": "Knock",
+      "Chance": 15.0,
+      "Damage": 6.0,
+      "Duration": 2.0
+    }
+  ],
+  "Drops": [
+    {
+      "Type": "RawMeat",
+      "Chance": 33
+    },
+    {
+      "Type": "DarkEssence",
+      "Chance": 10
+    }
+  ],
+  "Model": {
+    "Path": "$DataFile$/Assets/Chr/CowIdle.dae",
+    "Scale": 4.0,
+    "IdleAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/BoarIdle.dae",
+        "Speed": 1.0
+      }
+    ],
+    "WalkAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/BoarWalk.dae",
+        "Speed": 1.25
+      }
+    ],
+    "AttackAnimations": [
+      {
+        "Path": "$DataFile$/Assets/Chr/BoarAttack.dae",
+        "Speed": 1.25
+      }
+    ]
+  }
+}

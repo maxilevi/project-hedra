@@ -9,13 +9,14 @@ using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.StructureSystem.VillageSystem.Placers;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
+using Hedra.Localization;
 using Hedra.Mission;
 using Hedra.Numerics;
 using Hedra.Rendering;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
-    public class CottageWithFarmDesign : QuestGiverStructureDesign<CottageWithFarm>
+    public class CottageWithFarmDesign : QuestGiverStructureDesign<CottageWithFarm>, IFindableStructureDesign
     {
         public override int PlateauRadius => 160;
         public override VertexData Icon => null;
@@ -113,5 +114,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             return MissionPool.Random(Position, QuestTier.Any, QuestHint.Farm);
         }
+        
+        public string DisplayName => Translations.Get("structure_cottage");
     }
 }

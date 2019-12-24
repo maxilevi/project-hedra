@@ -7,11 +7,12 @@ namespace Hedra.Mission.Blocks
 {
     public abstract class EntityMission : MissionBlock
     {
-        public IEntity Entity { get; }
+        protected IEntity[] Entities { get; }
+        protected IEntity Entity => Entities[0];
         
-        protected EntityMission(IEntity Entity)
+        protected EntityMission(params IEntity[] Entities)
         {
-            this.Entity = Entity;
+            this.Entities = Entities;
         }
         
         public override void Setup()
@@ -20,9 +21,9 @@ namespace Hedra.Mission.Blocks
 
         public override QuestView BuildView()
         {
-            return new EntityView((AnimatedUpdatableModel)Entity.Model);
+            return new EntityView((AnimatedUpdatableModel)Entities[0].Model);
         }
-        public override Vector3 Location => Entity.Position;
+        public override Vector3 Location => Entities[0].Position;
 
         public override bool HasLocation => true;
     }

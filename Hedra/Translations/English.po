@@ -217,6 +217,9 @@ quest_find_entity_description = Search for $(BOLD)(BLUE){{0}} \n$(GRAY)(BOLD){HI
 quest_defeat_entity_short = DEFEAT $(BOLD)(ORANGE){{0}}
 quest_defeat_entity_description = Defeat $(BOLD)(BLUE){{0}}. \n$(GRAY)(BOLD){HINT: }See the map for more details.
 
+quest_defeat_entities_description = Defeat all $(BOLD)(BLUE){{0} {1}}.
+quest_defeat_entities_short = DEFEAT $(BOLD)(ORANGE){{0}} $(BOLD)(ORANGE){{1}}
+
 quest_defeat_boss_dialog_0 = I heard some rumors of a place near here which holds great rewards so I formed a team of brave mercenaries and scouts.;Upon arriving we realized the dangers were grossly understated. I barely made it alive and most of my team died in the battle.;I can mark the location in your map thought I don't suggest you to go alone.
 quest_find_boss_description = Find the place $(BOLD)(BLUE){{0}} told you about.
 
@@ -281,8 +284,8 @@ quest_farming_rake_reward_dialog_0 = Take this $(BOLD)(ORANGE){{0}} as a show of
 quest_companion_cow_reward_dialog_0 = I don't have much to offer you but you can take my $(BOLD)(ORANGE){{0}} as a show of gratitude.
 
 quest_possessed_cows_dialog_0 = A very strange.
+quest_possessed_cows_arrive = Thats it! Kill the cows before they get us!
 quest_possessed_cows_description = Escort $(BOLD)(BLUE){{0}} into his farm and find out what is going on.\n$(GRAY)(BOLD){HINT: }See the map for more details.
-quest_defeat_possesse_cows_description = Defeat all $(BOLD)(VIOLET){{0}} possessed cows.
 possessed_cow = Possessed Cow
 
 # -- Class Names --
@@ -453,7 +456,7 @@ smite_desc = Bonus damage to undead monsters
 smite_skill = Smite
 smite_damage_multiplier = Deals $(GREEN)(BOLD){{0}%} increased damage to $(RED)(BOLD){undead} enemies
 no_escape_desc = Gain movement speed near enemies with low HP
-no_escape_skill = No Escape
+no_escape_skill = Death Row
 no_escape_speed_change = Increases movement speed by $(GREEN)(BOLD){{0}%}
 no_escape_range_change = Gets affected by mobs less than $(BOLD)(YELLOW){{0}} units away
 conversion_skill = Conversion
@@ -709,6 +712,7 @@ structure_giant_tree = GIANT TREE
 structure_graveyard = GRAVEYARD
 structure_travelling_merchant = TRAVELLING MERCHANT
 structure_witch_hut = WITCH HUT
+structure_cottage = COTTAGE
 structure_wizard_tower = WIZARD TOWER
 structure_ghost_town_boss = UNDEAD LICH
 structure_dungeon = DUNGEON
