@@ -348,6 +348,7 @@
     <Compile Include="Engine\CacheSystem\ShroomDimensionPortalCache.cs" />
     <Compile Include="Engine\CacheSystem\ShroomDimensionPortalIconCache.cs" />
     <Compile Include="Engine\CacheSystem\StorylineCache.cs" />
+    <Compile Include="Engine\CacheSystem\WindmillIconCache.cs" />
     <Compile Include="Engine\CacheSystem\WizardTowerCache.cs" />
     <Compile Include="Engine\Core\SequentialList.cs" />
     <Compile Include="Engine\DataStructures\AABB.cs" />
@@ -9176,6 +9177,10 @@
       <Link>Assets\Env\Objects\Portal.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Objects\Windmill.ply">
+      <Link>Assets\Env\Objects\Windmill.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Sounds\BearTrap.ogg">
       <Link>Sounds\BearTrap.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -14181,6 +14186,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Mobs\Ostrich.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Mobs\PossessedCow.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Mobs\Raccoon.json">
