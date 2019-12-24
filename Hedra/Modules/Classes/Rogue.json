@@ -12,11 +12,11 @@
       "Amount": 1
     }
   ],
-  "AttackResistance": 1.025,
+  "AttackResistance": 1.125,
   "MaxStamina": 125.0,
   "BaseDamage": 8.0,
   "AttackingSpeedModifier": 0.6,
-  "BaseHealthPerLevel": 9.5,
+  "BaseHealthPerLevel": 10.0,
   "BaseManaPerLevel": 8.5,
   "Model": {
     "Path": "$DataFile$/Assets/Chr/RogueIdle.dae",

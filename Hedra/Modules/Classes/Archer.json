@@ -15,7 +15,7 @@
   "StartingRecipes": [
     "StoneArrowRecipe"
   ],
-  "AttackResistance": 0.975,
+  "AttackResistance": 0.95,
   "MaxStamina": 115,
   "BaseDamage": 7.5,
   "AttackingSpeedModifier": 0.125,

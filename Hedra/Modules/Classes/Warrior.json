@@ -12,11 +12,11 @@
       "Amount": 1
     }
   ],
-  "AttackResistance": 1.075,
+  "AttackResistance": 1.15,
   "MaxStamina": 100.0,
   "BaseDamage": 8.0,
   "AttackingSpeedModifier": 0.4,
-  "BaseHealthPerLevel": 10.5,
+  "BaseHealthPerLevel": 12.0,
   "BaseManaPerLevel": 15,
   "Model": {
     "Path": "$DataFile$/Assets/Chr/WarriorIdle.dae",
