@@ -42,11 +42,11 @@ def setup_giver_and_bandits(giver, criminals, ais):
     giver.SearchComponent[DamageComponent]().Immune = False
     giver.BonusHealth = giver.MaxHealth * 4
     giver.Health = giver.MaxHealth
-    indexes = sorted(list(range(len(criminals))), key=lambda x: (criminals[x].Position - giver.Position).LengthSquared())
+    indexes = sorted(list(range(len(criminals))), key=lambda x: -(criminals[x].Position - giver.Position).LengthSquared())
     for i in indexes:
         ai = ais[i]
         criminal = criminals[i]
-        Core.after_seconds(6 * i + 1, lambda cmp=ai, cri=criminal: cri.AddComponent(cmp))
+        Core.after_seconds(5 * i + 1, lambda cmp=ai, cri=criminal: cri.AddComponent(cmp))
 
 def create_criminals(owner, giver, rng):
     criminals = []
