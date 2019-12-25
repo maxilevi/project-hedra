@@ -14,6 +14,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
 {
     public class CollectibleObject : InteractableStructure
     {
+        protected override bool AllowThroughCollider => true;
         private readonly Item _drop;
         private readonly InstanceData _model;
         private readonly InstanceDataChunkWatcher _watcher;

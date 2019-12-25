@@ -36,6 +36,7 @@ namespace Hedra.Engine.ClassSystem
         public string Name => this.ToString();
         public virtual HumanoidModelTemplate ModelTemplate => ClassLoader.Instance[Type].Model;
         public virtual string Logo => ClassLoader.Instance[Type].Logo;
+        public bool IsRanged => ClassLoader.Instance[Type].IsRanged;
         public virtual float BaseSpeed => ClassLoader.Instance[Type].BaseSpeed;    
         public virtual AbilityTreeBlueprint MainTree => AbilityTreeLoader.Instance[ClassLoader.Instance[Type].MainAbilityTree];
         public virtual AbilityTreeBlueprint FirstSpecializationTree => AbilityTreeLoader.Instance[ClassLoader.Instance[Type].FirstSpecializationTree];

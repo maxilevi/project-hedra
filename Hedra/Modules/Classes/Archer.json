@@ -24,5 +24,6 @@
   "Model": {
     "Path": "$DataFile$/Assets/Chr/ArcherIdle.dae",
     "Scale": 1.0
-  }
+  },
+  "IsRanged": true
 }

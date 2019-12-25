@@ -35,7 +35,7 @@ namespace Hedra.Engine.WorldBuilding
     public abstract class InteractableStructure : BaseStructure, ITickable
     {
         public int UpdatesPerSecond => 30;
-        protected virtual float InteractionAngle => .75f;
+        protected virtual float InteractionAngle => .7f;
         protected virtual bool SingleUse => true;
         protected virtual bool DisposeAfterUse => true;
         protected virtual bool CanInteract => true;

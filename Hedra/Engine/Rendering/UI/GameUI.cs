@@ -14,6 +14,7 @@ using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
 using System.Numerics;
+using Hedra.API;
 using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.Player.QuestSystem;
@@ -160,6 +161,9 @@ namespace Hedra.Engine.Rendering.UI
                 _shouldPlay = false;
             }
             _slingShot.Update();
+
+            var isRanged = _player.Class.IsRanged;
+            Cross.Position = isRanged ? new Vector2(0, -0.05f) : new Vector2(0, -0.05f);
         }
 
         private void UpdateLogo()
