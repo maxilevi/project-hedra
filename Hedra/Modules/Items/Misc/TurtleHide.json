@@ -1,0 +1,21 @@
+{
+  "Name": "TurtleHide",
+  "DisplayName": "Turtle hide",
+  "Tier": "Misc",
+  "Description": "...",
+  "Attributes": [
+    {
+      "Name": "Amount",
+      "Value": 1
+    },
+    {
+      "Name": "Price",
+      "Value": 16.0,
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Assets/Items/Misc/TurtleHide.ply"
+  }
+}

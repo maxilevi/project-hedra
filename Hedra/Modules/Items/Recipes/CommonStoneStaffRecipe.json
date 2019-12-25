@@ -1,34 +1,31 @@
 {
-  "Name": "BaitRecipe",
-  "DisplayName": "Bait recipe",
+  "Name": "CommonStoneStaffRecipe",
+  "DisplayName": "Stone staff recipe",
   "EquipmentType": "Recipe",
   "Tier": "Common",
   "Description": "...",
   "Attributes": [
     {
       "Name": "CraftingStation",
-      "Value": "None"
+      "Value": "Anvil"
     },
     {
       "Name": "Ingredients",
       "Value": [
         {
-          "Name": "RawMeat",
-          "Amount": 1
+          "Name": "Timber",
+          "Amount": 2
         },
         {
-          "Name": "Carrot",
-          "Amount": 1
+          "Name": "Pebble",
+          "Amount": 6
         }
       ],
       "Display": "Bullets"
     },
     {
       "Name": "Output",
-      "Value": {
-        "Name": "Bait",
-        "Amount": 6
-      },
+      "Value": "CommonStoneStaff",
       "Hidden": true
     },
     {

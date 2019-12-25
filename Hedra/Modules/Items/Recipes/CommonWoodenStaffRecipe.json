@@ -1,6 +1,6 @@
 {
-  "Name": "BaitRecipe",
-  "DisplayName": "Bait recipe",
+  "Name": "CommonWoodenStaffRecipe",
+  "DisplayName": "Wooden staff recipe",
   "EquipmentType": "Recipe",
   "Tier": "Common",
   "Description": "...",
@@ -13,22 +13,15 @@
       "Name": "Ingredients",
       "Value": [
         {
-          "Name": "RawMeat",
-          "Amount": 1
-        },
-        {
-          "Name": "Carrot",
-          "Amount": 1
+          "Name": "Timber",
+          "Amount": 8
         }
       ],
       "Display": "Bullets"
     },
     {
       "Name": "Output",
-      "Value": {
-        "Name": "Bait",
-        "Amount": 6
-      },
+      "Value": "CommonWoodenStaff",
       "Hidden": true
     },
     {

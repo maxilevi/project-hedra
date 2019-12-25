@@ -7,8 +7,16 @@
   "Level": 6,
   "AIType": "Neutral",
   "Effects": [],
-  "Drops": [],
-  
+  "Drops": [
+    {
+      "Type": "TurtleShell",
+      "Chance": 10
+    },
+    {
+      "Type": "TurtleHide",
+      "Chance": 15
+    }
+  ],
   "Model": {
     "Path": "$DataFile$/Assets/Chr/Mob/Turtle/TurtleIdle.dae",
     "Scale": 2.0,

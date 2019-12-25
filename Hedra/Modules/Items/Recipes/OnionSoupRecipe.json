@@ -1,23 +1,23 @@
 {
-  "Name": "BaitRecipe",
-  "DisplayName": "Bait recipe",
+  "Name": "OnionSoupRecipe",
+  "DisplayName": "Onion soup recipe",
   "EquipmentType": "Recipe",
   "Tier": "Common",
   "Description": "...",
   "Attributes": [
     {
       "Name": "CraftingStation",
-      "Value": "None"
+      "Value": "Campfire"
     },
     {
       "Name": "Ingredients",
       "Value": [
         {
-          "Name": "RawMeat",
-          "Amount": 1
+          "Name": "Onion",
+          "Amount": 2
         },
         {
-          "Name": "Carrot",
+          "Name": "WoodenBowl",
           "Amount": 1
         }
       ],
@@ -25,10 +25,7 @@
     },
     {
       "Name": "Output",
-      "Value": {
-        "Name": "Bait",
-        "Amount": 6
-      },
+      "Value": "CornSoup",
       "Hidden": true
     },
     {

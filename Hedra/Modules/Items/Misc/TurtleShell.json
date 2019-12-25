@@ -1,0 +1,21 @@
+{
+  "Name": "TurtleShell",
+  "DisplayName": "Turtle shell",
+  "Tier": "Misc",
+  "Description": "...",
+  "Attributes": [
+    {
+      "Name": "Amount",
+      "Value": 1
+    },
+    {
+      "Name": "Price",
+      "Value": 24.0,
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Assets/Items/Misc/TurtleShell.ply"
+  }
+}

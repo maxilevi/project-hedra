@@ -1,0 +1,40 @@
+{
+  "Name": "OnionSoup",
+  "DisplayName": "Onion soup",
+  "Tier": "Misc",
+  "Description": "...",
+  "Attributes": [
+    {
+      "Name": "Amount",
+      "Value": 1
+    },
+    {
+      "Name": "Saturation",
+      "Value": 50
+    },
+    {
+      "Name": "Price",
+      "Value": 10,
+      "Hidden": true
+    },
+    {
+      "Name": "IsFood",
+      "Value": true,
+      "Hidden": true
+    },
+    {
+      "Name": "EatTime",
+      "Value": 8.0,
+      "Hidden": true
+    },
+    {
+      "Name": "EatSitting",
+      "Value": true,
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Foods/OnionSoup.ply"
+  }
+}
