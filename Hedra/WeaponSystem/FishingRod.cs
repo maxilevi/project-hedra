@@ -5,9 +5,11 @@ using Hedra.Engine.Scripting;
 using Hedra.EntitySystem;
 using Hedra.Rendering;
 using System.Numerics;
+using Hedra.Engine.ItemSystem;
 
 namespace Hedra.WeaponSystem
 {
+    public delegate void OnFishing(Item FishedObject);
     public class FishingRod : Tool
     {
         private readonly Line3D _line;

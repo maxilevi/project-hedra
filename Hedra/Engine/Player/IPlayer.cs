@@ -13,19 +13,20 @@ using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
 using System.Numerics;
+using Hedra.Components;
 using Hedra.Engine.Bullet;
 
 namespace Hedra.Engine.Player
 {
-    public delegate void OnInteractionEvent();
+    public delegate void OnInteractionEvent(InteractableStructure Structure);
     
     public delegate void OnRespawnEvent();
     
     public interface IPlayer : IHumanoid, ISkillUser
     {
         event OnMoveEvent OnMove;
+        event OnDeadEvent OnDeath;
         event OnRespawnEvent OnRespawn;
-        event OnInteractionEvent OnInteract;
         IMessageDispatcher MessageDispatcher { get; }
         ICamera View { get; }
         ChunkLoader Loader { get; }

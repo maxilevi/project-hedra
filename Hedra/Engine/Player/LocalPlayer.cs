@@ -62,7 +62,8 @@ namespace Hedra.Engine.Player
         private const int MaximumRespawnDistance = 128;
         public event OnMoveEvent OnMove;
         public event OnRespawnEvent OnRespawn;
-        public event OnInteractionEvent OnInteract;
+        public event OnDeadEvent OnDeath;
+
         public ICamera View { get; }
         public ChunkLoader Loader { get; }
         public UserInterface UI { get; set; }
@@ -143,8 +144,6 @@ namespace Hedra.Engine.Player
                     HandLamp.Enabled = !HandLamp.Enabled;
                     SoundPlayer.PlaySound(SoundType.NotificationSound, Position);
                 }
-                if(Controls.Interact == Args.Key)
-                    OnInteract?.Invoke();
             }, EventPriority.Low);
 
             Kill += A =>
@@ -155,6 +154,7 @@ namespace Hedra.Engine.Player
             _damageHandler = SearchComponent<DamageComponent>();
             _damageHandler.PushOnHit = false;
             _damageHandler.Delete = false;
+            _damageHandler.OnDeadEvent += Args => OnDeath?.Invoke(Args); 
         }
 
         public override bool CanInteract

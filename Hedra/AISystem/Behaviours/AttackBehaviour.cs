@@ -37,11 +37,11 @@ namespace Hedra.AISystem.Behaviours
         public override void Update()
         {
             HandleFollowing();
-            if (!Parent.Model.IsAttacking && Target != null && !InAttackRange(Target, 1.15f))
+            if (!Parent.Model.IsAttacking && Target != null && !InAttackRange(Target, 1.25f))
             {
                 Follow.Update();
             }
-            if (Target != null && InAttackRange(Target, 1.15f))
+            if (Target != null && InAttackRange(Target, 1.25f))
             {
                 FollowTimer.Reset();
                 this.Attack(2.0f);

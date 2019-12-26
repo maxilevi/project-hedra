@@ -22,38 +22,36 @@ namespace Hedra.Components.Effects
     /// <summary>
     /// Description of BurningComponent.
     /// </summary>
-    public class BleedingComponent : EntityComponent
+    public class BleedingComponent : DamagingEffectComponent
     {
-        private float _totalTime, _time, _totalDamage;
         private int _pTime;
-        private IEntity _damager = null;
+        private float _time;
         
-        public BleedingComponent(IEntity Parent, IEntity Damager, float TotalTime, float TotalDamage) : base(Parent){
-            this._totalTime = TotalTime;
-            this._totalDamage = TotalDamage;
-            this._damager = Damager;
+        public override DamageType DamageType => DamageType.Bleed;
+
+        public BleedingComponent(IEntity Parent, IEntity Damager, float TotalTime, float TotalDamage) : base(Parent, TotalTime, TotalDamage, Damager)
+        {
             RoutineManager.StartRoutine(UpdateBleed);
         }
         
-        public BleedingComponent(IEntity Parent, float TotalTime, float TotalDamage) : base(Parent){
-            this._totalTime = TotalTime;
-            this._totalDamage = TotalDamage;
-            RoutineManager.StartRoutine(UpdateBleed);
+        public BleedingComponent(IEntity Parent, float TotalTime, float TotalDamage) : this(Parent, null, TotalTime, TotalDamage)
+        {
+        }
+
+        public override void Update()
+        {
         }
         
-        public override void Update(){}
-        
-        public IEnumerator UpdateBleed(){
+        public IEnumerator UpdateBleed()
+        {
             Parent.Model.BaseTint = Colors.LowHealthRed * new Vector4(3,1,1,1) * .7f;
-            while(_totalTime > _pTime && !Parent.IsDead && !Disposed){
+            while(TotalTime > _pTime && !Parent.IsDead && !Disposed){
                 
                 _time += Time.DeltaTime;
                 if(_time >= 1){
                     _pTime++;
                     _time = 0;
-                    Parent.Damage( (float) (_totalDamage / _totalTime), _damager, out float exp, true);
-                    if(_damager is Humanoid humanoid)
-                        humanoid.XP += exp;
+                    Damage();
                 }
                 
                 //Fire particles

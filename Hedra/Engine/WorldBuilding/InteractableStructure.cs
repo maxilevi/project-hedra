@@ -110,6 +110,7 @@ namespace Hedra.Engine.WorldBuilding
             Interacted = true;
             this.Interact(Humanoid);
             OnInteractEvent?.Invoke(Humanoid);
+            Humanoid.RegisterInteraction(this);
             if(DisposeAfterUse && SingleUse) this.Dispose();
         }
 

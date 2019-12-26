@@ -11,8 +11,10 @@ using Hedra.Engine.StructureSystem;
 
 namespace Hedra.Engine.Player
 {
+    public delegate void OnRealmChanged(WorldType Type);
     public class RealmHandler : ISerializableHandler
     {
+        public event OnRealmChanged RealmChanged;
         public const int Overworld = 0;
         public const int GhostTown = 1;
         private int _currentRealm;
@@ -43,7 +45,10 @@ namespace Hedra.Engine.Player
 
         public void GoTo(int Index)
         {
+            var currentRealm = _currentRealm;
             Go(_activeRealms[Index]);
+            if(Index != currentRealm)
+                RealmChanged?.Invoke(_activeRealms[_currentRealm].Type);
         }
         
         private Realm DoCreate(int Seed, WorldType Type)

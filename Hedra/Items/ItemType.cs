@@ -38,6 +38,7 @@ namespace Hedra.Items
         Bait,
         FishingRodRecipe,
         FishingRod,
+        CompanionBee,
         MaxEnums
     }
 }

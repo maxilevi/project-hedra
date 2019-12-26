@@ -30,6 +30,12 @@ namespace Hedra.Engine.Steamworks
             LobbyWrapper.Instance.SetSource((_client?.IsValid ?? false) ? _client.Lobby : null);
         }
 
+        public void Initialize()
+        {
+            if((_client?.IsValid ?? false))
+                AchievementsObserver.Initialize();
+        }
+
         public static void Update()
         {
             Instance._client?.Update();
@@ -51,6 +57,8 @@ namespace Hedra.Engine.Steamworks
         public static NetworkingWrapper Networking => NetworkingWrapper.Instance;
         
         public static LobbyWrapper Lobby => LobbyWrapper.Instance;
+        
+        public Client Client => _client;
         
         public bool IsAvailable => _useSteam && _client.IsValid;
         

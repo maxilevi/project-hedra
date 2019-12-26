@@ -133,6 +133,9 @@ namespace Hedra.Engine.Loader
             GameManager.Load();
             Log.WriteLine("Scene loading was Successful.");
             
+            Steam.Instance.Initialize();
+            Log.WriteLine("Hooking steam into necessary events...");
+            
             LoadInterpreter();
             Program.GameWindow.WindowState = WindowState.Maximized;
             return true;

@@ -23,6 +23,7 @@ using Hedra.Game;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
 using System.Numerics;
+using Hedra.Components.Effects;
 using Hedra.Numerics;
 
 namespace Hedra.Components
@@ -31,13 +32,13 @@ namespace Hedra.Components
     /// Description of DamageComponent.
     /// </summary>
     public delegate void OnDamageEventHandler(DamageEventArgs Args);
-    public delegate void OnDeadEventHandler(DeadEventArgs Args);
+    public delegate void OnDeadEvent(DeadEventArgs Args);
 
     public class DamageComponent : SingularComponent<DamageComponent, IEntity>
     {
         public const float DefaultMissChance = 0.05f;
         public event OnDamageEventHandler OnDamageEvent;
-        public event OnDeadEventHandler OnDeadEvent;
+        public event OnDeadEvent OnDeadEvent;
         public float XpToGive { get; set; } = 8;
         public bool Immune { get; set; }
         public bool Delete { get; set; } = true;
@@ -61,7 +62,10 @@ namespace Hedra.Components
             OnDamageEvent += A =>
             {
                 if (!_wasDead && Parent.IsDead)
-                    OnDeadEvent?.Invoke(new DeadEventArgs(A.Victim, A.Damager, A.Amount, A.Experience));
+                {
+                    var effectComponent = Parent.SearchComponent<DamagingEffectComponent>();
+                    OnDeadEvent?.Invoke(new DeadEventArgs(A.Victim, A.Damager, A.Amount, A.Experience, A.DamageType));
+                }
             };
         }
 
@@ -91,13 +95,18 @@ namespace Hedra.Components
                 if (_damageLabels[i].Disposed) _damageLabels.RemoveAt(i);
             }
         }
-
+        
         public void Damage(float Amount, IEntity Damager, out float Exp, bool PlaySound, bool PushBack)
         {
-            Damage(Amount, Damager, out Exp, out _, PlaySound, PushBack);
+            Damage(Amount, Damager, out Exp, PlaySound, PushBack, DamageType.Unknown);
+        }
+
+        public void Damage(float Amount, IEntity Damager, out float Exp, bool PlaySound, bool PushBack, DamageType DamageType)
+        {
+            Damage(Amount, Damager, out Exp, out _, PlaySound, PushBack, DamageType);
         }
         
-        public void Damage(float Amount, IEntity Damager, out float Exp, out float Inflicted, bool PlaySound, bool PushBack)
+        public void Damage(float Amount, IEntity Damager, out float Exp, out float Inflicted, bool PlaySound, bool PushBack, DamageType DamageType)
         {
             Exp = 0;
             Inflicted = 0;
@@ -168,7 +177,7 @@ namespace Hedra.Components
                 
             }
             if (OnDamageEvent != null && Math.Abs(Amount) > 0.005f)
-                OnDamageEvent.Invoke(new DamageEventArgs(Parent, Damager, Amount, Exp));
+                OnDamageEvent.Invoke(new DamageEventArgs(Parent, Damager, Amount, Exp, DamageType));
         }
         
 
@@ -226,19 +235,21 @@ namespace Hedra.Components
         public IEntity Damager { get; }
         public float Amount { get; }
         public float Experience { get; }
+        public DamageType DamageType { get; }
 
-        public DamageEventArgs(IEntity Victim, IEntity Damager, float Amount, float Experience)
+        public DamageEventArgs(IEntity Victim, IEntity Damager, float Amount, float Experience, DamageType DamageType)
         {
             this.Victim = Victim;
             this.Damager = Damager;
             this.Amount = Amount;
             this.Experience = Experience;
+            this.DamageType = DamageType;
         }
     }
 
     public class DeadEventArgs : DamageEventArgs
     {
-        public DeadEventArgs(IEntity Victim, IEntity Damager, float Amount, float Experience) : base(Victim, Damager, Amount, Experience)
+        public DeadEventArgs(IEntity Victim, IEntity Damager, float Amount, float Experience, DamageType DamageType) : base(Victim, Damager, Amount, Experience, DamageType)
         {
         }
     }

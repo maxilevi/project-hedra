@@ -284,6 +284,7 @@ def retrieve_fish(human, state):
         state['fish'] = get_fished_item(position)
         if state['fish']:
             state['fish_model'] = ObjectMesh.FromVertexData(state['fish'].Model.Clone().Scale(Vector3.One * 2))
+            human.RegisterFishing(state['fish'])
 
 def has_fish_effect(position):
     World.Particles.VariateUniformly = True

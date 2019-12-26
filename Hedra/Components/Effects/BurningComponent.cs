@@ -20,21 +20,18 @@ namespace Hedra.Components.Effects
     /// <summary>
     /// Description of BurningComponent.
     /// </summary>
-    public class BurningComponent : EntityComponent
+    public class BurningComponent : DamagingEffectComponent
     {
-        private readonly float _totalTime;
-        private readonly float _totalDamage;
-        private readonly IEntity _damager;
         private int _particleCounter;
         private float _time;
         private int _pTime;
 
-        public BurningComponent(IEntity Parent, IEntity Damager, float TotalTime, float TotalDamage) : base(Parent)
+        public override DamageType DamageType => DamageType.Fire;
+
+        public BurningComponent(IEntity Parent, IEntity Damager, float TotalTime, float TotalDamage) : base(Parent, TotalTime, TotalDamage, Damager)
         {
             var weakness = Parent.SearchComponent<FireWeaknessComponent>();
-            _totalTime = TotalTime;
-            _totalDamage = (TotalDamage * Damager?.Attributes.FireDamageMultiplier ?? 1) * weakness?.Power ?? 1;
-            _damager = Damager;
+            this.TotalDamage = (TotalDamage * Damager?.Attributes.FireDamageMultiplier ?? 1) * weakness?.Power ?? 1;
             Start();
         }
         
@@ -63,9 +60,7 @@ namespace Hedra.Components.Effects
             {
                 _pTime++;
                 _time = 0;
-                Parent.Damage(_totalDamage / _totalTime, _damager, out float exp);
-                if(_damager is Humanoid damager)
-                    damager.XP += exp;
+                Damage();
             }
 
             if (_particleCounter % 2 == 0)
@@ -83,7 +78,7 @@ namespace Hedra.Components.Effects
             }
             _particleCounter++;
 
-            if(!(_totalTime > _pTime && !Parent.IsDead && !Disposed && !Parent.IsUnderwater))
+            if(!(TotalTime > _pTime && !Parent.IsDead && !Disposed && !Parent.IsUnderwater))
                 Parent.RemoveComponent(this);
         }
 

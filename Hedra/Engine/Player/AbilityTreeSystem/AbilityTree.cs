@@ -31,6 +31,8 @@ using Cursor = Hedra.Input.Cursor;
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {
     public delegate void OnSkillUpdated(AbstractBaseSkill Skill);
+
+    public delegate void OnSpecializationLearned(AbilityTreeBlueprint SpecializationTree);
     
     public class AbilityTree : PlayerInterface, IAbilityTree
     {
@@ -39,6 +41,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         public const int AbilityCount = Columns * Rows;       
         public const int SpecializationLevelRequirement = 5;
         public event OnSkillUpdated SkillUpdated;
+        public event OnSpecializationLearned SpecializationLearned;
         public int SpecializationTreeIndex { get; set; }
         private const char SaveMarker = '!';
         private const char NumberMarker = '|';
@@ -224,6 +227,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 
             SoundPlayer.PlayUISound(SoundType.NotificationSound);
             UpdateView();
+            SpecializationLearned?.Invoke(Blueprint);
         }
 
         public bool IsTreeEnabled(AbilityTreeBlueprint Blueprint)

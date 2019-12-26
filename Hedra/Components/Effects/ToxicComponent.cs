@@ -6,7 +6,7 @@ namespace Hedra.Components.Effects
     {
         public ToxicComponent(IEntity Entity, int Chance, float Damage, float Duration) : base(Entity, Chance, Damage, Duration)
         {
-            Parent.AddComponent(new PoisonComponent(Parent, null, Duration, Damage));
+            Parent.AddComponent(new FoodPoisonComponent(Parent, null, Duration, Damage));
         }
 
         protected override void DoApply(IEntity Victim, float Amount)

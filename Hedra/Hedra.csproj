@@ -314,6 +314,9 @@
     <Compile Include="Components\ClothierComponent.cs" />
     <Compile Include="Components\DamageComponent.cs" />
     <Compile Include="Components\DarkWizardThoughtsComponent.cs" />
+    <Compile Include="Components\DamageType.cs" />
+    <Compile Include="Components\Effects\DamagingEffectComponent.cs" />
+    <Compile Include="Components\Effects\FoodPoisonComponent.cs" />
     <Compile Include="Components\HealthBarComponent.cs" />
     <Compile Include="Components\INamedHealthBar.cs" />
     <Compile Include="Components\InnkeeperComponent.cs" />
@@ -422,6 +425,9 @@
     <Compile Include="Engine\Scenes\WaypointGraph.cs" />
     <Compile Include="Engine\Scenes\WaypointGrid.cs" />
     <Compile Include="Engine\Scenes\WaypointLoader.cs" />
+    <Compile Include="Engine\Steamworks\Achievement.cs" />
+    <Compile Include="Engine\Steamworks\AchievementsObserver.cs" />
+    <Compile Include="Engine\Steamworks\Statistic.cs" />
     <Compile Include="Engine\StructureSystem\CollisionTrigger.cs" />
     <Compile Include="Engine\StructureSystem\Lever.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\AnimableInteractableStructure.cs" />

@@ -16,7 +16,7 @@ namespace Hedra.Engine.Player
     public delegate void OnCompanionChanged(Item NewItem, IEntity NewPet);
     public class CompanionHandler
     {
-        public OnCompanionChanged CompanionChanged;
+        public event OnCompanionChanged CompanionChanged;
         private readonly IPlayer _player;
         private readonly Script _script;
         private readonly Dictionary<string, object> _state;

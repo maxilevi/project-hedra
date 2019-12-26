@@ -29,6 +29,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         bool HasSecondSpecialization { get; }
         bool IsCurrentTreeEnabled { get; }
         event OnPlayerInterfaceStateChangeEventHandler OnPlayerInterfaceStateChange;
+        event OnSpecializationLearned SpecializationLearned;
         int ExtraSkillPoints { get; set; }
     }
 }

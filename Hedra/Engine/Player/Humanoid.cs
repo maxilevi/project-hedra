@@ -31,6 +31,7 @@ using Hedra.Rendering.UI;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
 using System.Numerics;
+using Hedra.Engine.WorldBuilding;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.Player
@@ -48,7 +49,9 @@ namespace Hedra.Engine.Player
         
         public event OnAttackEventHandler AfterAttack;
         public event OnAttackEventHandler BeforeAttack;
-        public event OnHitLandedEventHandler OnHitLanded;
+        public event OnHitLandedEventHandler HitLanded;
+        public event OnInteractionEvent Interact;
+        public event OnFishing Fishing;
         private EquipmentHandler Equipment { get; }
         
         public ClassDesign Class
@@ -184,8 +187,8 @@ namespace Hedra.Engine.Player
             if (!this.IsDead)
             {
                 if(!_damageHandler.HasBeenAttacked)
-                    Health += HealthRegen * Time.IndependentDeltaTime;
-                Mana += ManaRegen * Time.IndependentDeltaTime;
+                    Health += HealthRegen * Time.DeltaTime;
+                Mana += ManaRegen * Time.DeltaTime;
             }
             if (IsSprinting)
             {
@@ -310,7 +313,7 @@ namespace Hedra.Engine.Player
                     this.AddBonusAttackSpeedWhile(ConsecutiveHitsModifier * .5f, () => ConsecutiveHits == consecutiveHitsValue);
                 }
                 Mana = Mathf.Clamp(Mana + 8, 0, MaxMana);
-                OnHitLanded?.Invoke(this, ConsecutiveHits);
+                HitLanded?.Invoke(this, ConsecutiveHits);
             }
         }
 
@@ -571,6 +574,16 @@ namespace Hedra.Engine.Player
             {
                 World.DropItem(Item, Position);
             }
+        }
+
+        public void RegisterInteraction(InteractableStructure Structure)
+        {
+            Interact?.Invoke(Structure);
+        }
+
+        public void RegisterFishing(Item FishedObject)
+        {
+            Fishing?.Invoke(FishedObject);
         }
     }
 }

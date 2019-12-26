@@ -9,6 +9,7 @@ using Hedra.Engine.SkillSystem;
 using Hedra.Items;
 using Hedra.WeaponSystem;
 using System.Numerics;
+using Hedra.Engine.WorldBuilding;
 
 namespace Hedra.EntitySystem
 {
@@ -16,7 +17,9 @@ namespace Hedra.EntitySystem
     {      
         event OnAttackEventHandler BeforeAttack;
         event OnAttackEventHandler AfterAttack;
-        event OnHitLandedEventHandler OnHitLanded;
+        event OnHitLandedEventHandler HitLanded;
+        event OnInteractionEvent Interact;
+        event OnFishing Fishing;
         IVehicle Boat { get; }
         IMessageDispatcher MessageDispatcher { get; set; }
         IPlayerInventory Inventory { get; }
@@ -94,5 +97,7 @@ namespace Hedra.EntitySystem
         void SetMainEquipment(Item[] Equipment);
         void DoIgnoringHitCombo(Action Lambda);
         void AddOrDropItem(Item Item);
+        void RegisterInteraction(InteractableStructure Structure);
+        void RegisterFishing(Item FishedObject);
     }
 }

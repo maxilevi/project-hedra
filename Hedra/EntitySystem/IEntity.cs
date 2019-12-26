@@ -7,6 +7,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Player;
 using Hedra.Engine.WorldBuilding;
 using System.Numerics;
+using Hedra.Components;
 
 namespace Hedra.EntitySystem
 {
@@ -106,6 +107,8 @@ namespace Hedra.EntitySystem
         void Damage(float Amount, IEntity Damager, out float Exp, bool PlaySound = true, bool PushBack = true);
         
         void Damage(float Amount, IEntity Damager, out float Exp, out float Inflicted, bool PlaySound = true, bool PushBack = true);
+        
+        void Damage(float Amount, IEntity Damager, out float Exp, out float Inflicted, bool PlaySound, bool PushBack, DamageType Type);
 
         void AddBonusSpeedWhile(float BonusSpeed, Func<bool> Condition, bool ShowParticles = true);
 

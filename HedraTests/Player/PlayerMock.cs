@@ -27,6 +27,7 @@ using Hedra.EntitySystem;
 using Hedra.Items;
 using Hedra.WeaponSystem;
 using System.Numerics;
+using Hedra.Components;
 using Hedra.Engine.Bullet;
 using Moq;
 
@@ -34,7 +35,10 @@ namespace HedraTests.Player
 {
     public class PlayerMock : IPlayer
     {
-        public event OnHitLandedEventHandler OnHitLanded;
+        public event OnHitLandedEventHandler HitLanded;
+        public event OnInteractionEvent Interact;
+        public event OnFishing Fishing;
+        public event OnDeadEvent OnDeath;
         public SimpleMessageDispatcherMock MessageMock => MessageDispatcher as SimpleMessageDispatcherMock;
         public SimpleCameraMock CameraMock => View as SimpleCameraMock;
         public PlayerMock()
@@ -202,6 +206,16 @@ namespace HedraTests.Player
             throw new NotImplementedException();
         }
 
+        public void RegisterInteraction(InteractableStructure Structure)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void RegisterFishing(Item FishedObject)
+        {
+            throw new NotImplementedException();
+        }
+
         public Item[] GetMainEquipment { get; }
         public Item Ring { get; set; }
         public float BaseSpeed { get; }
@@ -252,7 +266,6 @@ namespace HedraTests.Player
         public MobType MobType { get; set; }
         public event OnMoveEvent OnMove;
         public event OnRespawnEvent OnRespawn;
-        public event OnInteractionEvent OnInteract;
         public IMessageDispatcher MessageDispatcher { get; set; }
         public ICamera View { get; set; } = new SimpleCameraMock();
         public ChunkLoader Loader { get; }
@@ -367,6 +380,12 @@ namespace HedraTests.Player
 
         public void Damage(float Amount, IEntity Damager, out float Exp, out float Inflicted, bool PlaySound = true,
             bool PushBack = true)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Damage(float Amount, IEntity Damager, out float Exp, out float Inflicted, bool PlaySound, bool PushBack,
+            DamageType Type)
         {
             throw new NotImplementedException();
         }

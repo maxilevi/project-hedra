@@ -198,6 +198,13 @@ namespace Hedra.User
                     case "kill":
                     {
                         if (Parts.Length == 1) Caster.Health = 0f;
+                        if (Parts.Length == 2)
+                        {
+                            if (Parts[1] == "mobs")
+                            {
+                                
+                            }
+                        }
                         return true;
                     }
                     case "logItems":

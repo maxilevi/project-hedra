@@ -30,7 +30,7 @@ namespace Hedra.Engine.QuestSystem
             _player.StructureAware.StructureCompleted += _ => CheckForCompleteness();
             _player.StructureAware.StructureLeave += _ => CheckForCompleteness();
             _player.Kill += _ => CheckForCompleteness();
-            _player.OnInteract += CheckForCompleteness;
+            _player.Interact += _ => CheckForCompleteness();
             _player.OnMove += CheckForCompleteness;
             QuestCompleted += OnQuestCompleted;
         }

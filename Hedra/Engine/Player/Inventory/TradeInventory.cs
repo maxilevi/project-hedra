@@ -35,6 +35,7 @@ namespace Hedra.Engine.Player.Inventory
     {
         public const int MerchantSpaces = 20;
         public const int TradeRadius = 12;
+        public event OnTransactionCompleteEventHandler TransactionComplete;
         public bool IsTrading { get; private set; }
         private readonly LocalPlayer _player;
         private readonly InventoryArray _merchantItems;
@@ -70,7 +71,11 @@ namespace Hedra.Engine.Player.Inventory
             _interfaceManager = new TradeInventoryArrayInterfaceManager(itemInfoInterface, _playerItemsInterface, _merchantItemsInterface);
             _playerBackground = new InventoryBackground(Vector2.UnitX * .5f + Vector2.UnitY * .55f);
             _merchantBackground = new InventoryBackground(Vector2.UnitX * -.5f + Vector2.UnitY * .55f);
-            _interfaceManager.OnTransactionComplete += (Item, Price, Type) => this.UpdateTraders(Item, Type);
+            _interfaceManager.OnTransactionComplete += (Item, Price, Type) =>
+            {
+                this.UpdateTraders(Item, Type);
+                TransactionComplete?.Invoke(Item, Price, Type);
+            };
             _stateManager.OnStateChange += State =>
             {
                 base.Invoke(State);

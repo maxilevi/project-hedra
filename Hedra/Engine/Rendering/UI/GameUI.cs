@@ -51,7 +51,7 @@ namespace Hedra.Engine.Rendering.UI
             _consecutiveHits = new GUIText(string.Empty, new Vector2(0f, -0.7f), Color.Transparent, FontCache.GetBold(1f));
             _slingShot = new SlingShotAnimation();
             _slingShot.Play(_consecutiveHits);
-            Player.OnHitLanded += delegate
+            Player.HitLanded += delegate
             {
                 if (_slingShot.Active) return;
                 _shouldPlay = true;

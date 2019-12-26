@@ -21,34 +21,31 @@ namespace Hedra.Components.Effects
     /// <summary>
     /// Description of BurningComponent.
     /// </summary>
-    public class PoisonComponent : EntityComponent
+    public class PoisonComponent : DamagingEffectComponent
     {
-        private float TotalTime, Time, TotalDamage;
-        private int PTime;
-        private IEntity Damager = null;
+        private float _time;
+        private int _pTime;
+        public override DamageType DamageType => DamageType.Poison;
         
-        public PoisonComponent(IEntity Parent, IEntity Damager, float TotalTime, float TotalDamage) : base(Parent)
+        public PoisonComponent(IEntity Parent, IEntity Damager, float TotalTime, float TotalDamage) : base(Parent, TotalTime, TotalDamage, Damager)
         {
-            this.TotalTime = TotalTime;
-            this.TotalDamage = TotalDamage;
-            this.Damager = Damager;
             RoutineManager.StartRoutine(UpdatePoison);
         }
-        
-        public override void Update(){}
+
+        public override void Update()
+        {
+        }
 
         private IEnumerator UpdatePoison()
         {
             Parent.Model.BaseTint = Colors.PoisonGreen *new Vector4(1,3,1,1);
-            while(TotalTime > PTime && !Parent.IsDead && !Disposed){
+            while(TotalTime > _pTime && !Parent.IsDead && !Disposed){
                 
-                Time += Core.Time.DeltaTime;
-                if(Time >= 1){
-                    PTime++;
-                    Time = 0;
-                    Parent.Damage(TotalDamage / TotalTime, Damager, out float Exp);
-                    if(Damager is Humanoid humanoid)
-                        humanoid.XP += Exp;
+                _time += Core.Time.DeltaTime;
+                if(_time >= 1){
+                    _pTime++;
+                    _time = 0;
+                    Damage();
                 }
                 
                 yield return null;

@@ -1,4 +1,5 @@
 using System;
+using Hedra.Components;
 using Hedra.Crafting;
 using Hedra.Engine.Bullet;
 using Hedra.Engine.Generation.ChunkSystem;
@@ -19,7 +20,7 @@ namespace Hedra.Engine.Player.Networking
     {
         public event OnMoveEvent OnMove;
         public event OnRespawnEvent OnRespawn;
-        public event OnInteractionEvent OnInteract;
+        public event OnDeadEvent OnDeath;
         public ICamera View => throw new System.NotImplementedException();
         public ChunkLoader Loader => throw new System.NotImplementedException();
         public UserInterface UI => throw new System.NotImplementedException();
