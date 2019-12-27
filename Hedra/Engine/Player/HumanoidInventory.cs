@@ -26,6 +26,7 @@ namespace Hedra.Engine.Player
         }
 
         public event OnInventoryUpdated InventoryUpdated;
+        public event OnItemSetEventHandler ItemSet;
 
         public void UpdateInventory()
         {
@@ -44,6 +45,7 @@ namespace Hedra.Engine.Player
 
         public void SetItem(int Index, Item New)
         {
+            ItemSet?.Invoke(Index, New);
         }
 
         public void SetItems(KeyValuePair<int, Item>[] Items)

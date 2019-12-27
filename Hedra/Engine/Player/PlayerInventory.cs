@@ -18,7 +18,7 @@ using Hedra.WeaponSystem;
 namespace Hedra.Engine.Player
 {
     public delegate void OnInventoryUpdated();
-    
+
     public class PlayerInventory : IPlayerInventory
     {
         public const int MainSpaces = 8;
@@ -35,6 +35,7 @@ namespace Hedra.Engine.Player
         public const int GoldHolder = 28;
 
         public event OnInventoryUpdated InventoryUpdated;
+        public event OnItemSetEventHandler ItemSet;
         private readonly IPlayer _player;
         private readonly InventoryArray _items;
         private readonly InventoryArray _mainItems;
@@ -70,6 +71,7 @@ namespace Hedra.Engine.Player
                         _player.Ring = New;
                         break;
                 }
+                ItemSet?.Invoke(Index+InventorySpaces, New);
             };
         }
 

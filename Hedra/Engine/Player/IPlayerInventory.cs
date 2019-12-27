@@ -12,6 +12,7 @@ namespace Hedra.Engine.Player
     public interface IPlayerInventory
     {
         event OnInventoryUpdated InventoryUpdated;
+        event OnItemSetEventHandler ItemSet;
         void UpdateInventory();
         void ClearInventory();
         Item Search(Func<Item, bool> Matches);

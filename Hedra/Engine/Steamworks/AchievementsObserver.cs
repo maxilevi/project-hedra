@@ -27,7 +27,7 @@ namespace Hedra.Engine.Steamworks
             LocalPlayer.Instance.Kill += OnPlayerKill;
             LocalPlayer.Instance.Crafting.Craft += OnCraft;
             LocalPlayer.Instance.AbilityTree.SpecializationLearned += OnSpecializationLearned;
-            LocalPlayer.Instance.Inventory.InventoryUpdated += OnInventoryUpdated;
+            LocalPlayer.Instance.Inventory.ItemSet += OnItemSet;
             LocalPlayer.Instance.Questing.QuestCompleted += OnQuestCompleted;
             LocalPlayer.Instance.Companion.CompanionChanged += OnCompanionChanged;
             LocalPlayer.Instance.Trade.TransactionComplete += OnTransactionComplete;
@@ -41,7 +41,7 @@ namespace Hedra.Engine.Steamworks
         private static void OnCraft(IngredientsTemplate[] Ingredients, Item Recipe, Item Output)
         {
             var station = Recipe.GetAttribute<CraftingStation>(CommonAttributes.CraftingStation);
-            if (station == CraftingStation.Campfire)
+            if (station == CraftingStation.Campfire && Output.IsFood)
             {
                 TriggerAchievementIfNecessary(Achievement.ACH_CHEF);
             }
@@ -109,7 +109,7 @@ namespace Hedra.Engine.Steamworks
             if (hasAll) TriggerAchievementIfNecessary(Achievement.ACH_JACK_OF_ALL_TRADES);
         }
         
-        private static void OnInventoryUpdated()
+        private static void OnItemSet(int Index, Item New)
         {
             var hat = LocalPlayer.Instance.Inventory.Helmet;
             if(hat != null) TriggerAchievementIfNecessary(Achievement.ACH_FASHIONABLE);
