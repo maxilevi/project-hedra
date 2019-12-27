@@ -14,10 +14,10 @@ namespace Hedra.Components
         private static readonly string NameAttributeName = Interpreter.GetMember<string>(LibraryName, "NAME_ATTRIB_NAME");
         private static readonly string XPAttributeName = Interpreter.GetMember<string>(LibraryName, "XP_ATTRIB_NAME");
         private static readonly string HealthAttributeName = Interpreter.GetMember<string>(LibraryName, "HEALTH_ATTRIB_NAME");
+        private static readonly string LevelAttributeName = Interpreter.GetMember<string>(LibraryName, "LEVEL_ATTRIB_NAME");
         private readonly Item _storage;
         private readonly Timer _saveTimer;
         private readonly float _baseAttackDamage;
-        private int _level = 1;
 
         public CompanionStatsComponent(IEntity Entity, Item Storage) : base(Entity)
         {
@@ -59,11 +59,11 @@ namespace Hedra.Components
 
         public int Level
         {
-            get => _level;
+            get => _storage.GetAttribute<int>(LevelAttributeName);
             set
             {
-                _level = value;
-                Parent.AttackDamage = _baseAttackDamage * (1 + _level * .4f);
+                _storage.SetAttribute(LevelAttributeName, value);
+                Parent.AttackDamage = _baseAttackDamage * (1 + value * .4f);
             }
         }
 

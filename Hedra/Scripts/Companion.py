@@ -25,6 +25,7 @@ MAX_SCALE_ATTRIB_NAME = 'MaxScale'
 MODEL_ATTRIB_NAME = 'CompanionModel'
 XP_ATTRIB_NAME = 'PetXp'
 NAME_ATTRIB_NAME = 'PetName'
+LEVEL_ATTRIB_NAME = 'PetLevel'
 DEAD_TIMER_ATTRIB_NAME = 'DeadTimer'
 HEALTH_ATTRIB_NAME = 'PetHealth'
 MOB_TYPE_ATTRIB_NAME = 'Type'
@@ -281,6 +282,12 @@ def create_companion_attributes(type, can_ride, mob_template, mob_name):
     ride_height_attribute.Hidden = True
     ride_height_attribute.Name = RIDE_HEIGHT_ATTRIB
     
+    level_attribute = AttributeTemplate()
+    level_attribute.Value = 1
+    level_attribute.Hidden = True
+    level_attribute.Name = LEVEL_ATTRIB_NAME
+    level_attribute.Persist = True
+    
     return Array[AttributeTemplate]([
         pet_attribute,
         ride_attribute,
@@ -291,7 +298,8 @@ def create_companion_attributes(type, can_ride, mob_template, mob_name):
         health_attribute,
         dead_timer_attribute,
         name_attribute,
-        ride_height_attribute
+        ride_height_attribute,
+        level_attribute
     ])
 
 def update_ui(pet_item, pet_entity, top_left, top_right, bottom_left, bottom_right, level, name):
