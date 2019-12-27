@@ -26,6 +26,7 @@ namespace Hedra.Mission.Blocks
             _talk = new TalkComponent(Humanoid);
             _talk.OnTalkingStarted += OnTalkingStarted;
             _talk.OnTalkingEnded += OnTalkingEnded;
+            _talk.AutoRemove = true;
             Humanoid.AddComponent(_talk);
         }
 
