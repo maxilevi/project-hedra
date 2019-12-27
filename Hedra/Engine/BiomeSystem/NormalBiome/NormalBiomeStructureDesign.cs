@@ -32,7 +32,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             AddDesign(new UndeadDungeon1Design());
             AddDesign(new UndeadDungeon2Design());
             AddDesign(new CottageWithFarmDesign());
-            //AddDesign(new GhostTownPortalDesign());
+            AddDesign(new GhostTownPortalDesign());
             //AddDesign(new ShroomDimensionPortalDesign());
         }
 
