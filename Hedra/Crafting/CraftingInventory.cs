@@ -100,6 +100,20 @@ namespace Hedra.Crafting
                 item.SetAttribute(CommonAttributes.Amount, amount);
             return item;
         }
+
+        public static Item GetRecipeThatCrafts(string Name)
+        {
+            var matching = ItemPool.Matching(X =>
+            {
+                var outputAttribute = X.Attributes.FirstOrDefault(Z => Z.Name == "Output");
+                if (outputAttribute == null) return false;
+                var value = outputAttribute.Value;
+                if (value is string name) return name == Name;
+                var asJObject = (JObject) value;
+                return (string) asJObject["Name"] == Name;
+            });
+            return matching.Length == 0 ? null : ItemPool.Grab(matching.First().Name);
+        }
         
         public bool LearnRecipe(string RecipeName)
         {
