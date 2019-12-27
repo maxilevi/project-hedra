@@ -82,7 +82,10 @@ namespace Hedra.Mission.Blocks
             if (_reward.HasItem)
             {
                 Owner.AddOrDropItem(_reward.Item);
-                Owner.ShowText($"+1 {_reward.Item.DisplayName.ToUpperInvariant()}", Color.Bisque, 20);
+                var amount = _reward.Item.HasAttribute(CommonAttributes.Amount)
+                    ? _reward.Item.GetAttribute<int>(CommonAttributes.Amount)
+                    : 1;
+                Owner.ShowText($"+{amount} {_reward.Item.DisplayName.ToUpperInvariant()}", Color.Bisque, 20);
                 SoundPlayer.PlayUISound(SoundType.ItemEquip);
             }
         }
