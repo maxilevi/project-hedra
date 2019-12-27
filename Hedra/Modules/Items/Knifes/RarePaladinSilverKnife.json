@@ -3,15 +3,15 @@
   "DisplayName": "Paladin Silver Knife",
   "EquipmentType": "Knife",
   "Tier": "Rare",
-  "Description": "A small silver blade often carried but bow carrying paladins.",
+  "Description": "A small silver blade often carried by bow carrying paladins.",
   "Attributes": [
     {
       "Name": "Damage",
-      "Value": 9.0
+      "Value": 6.0
     },
     {
       "Name": "AttackSpeed",
-      "Value": 1.15
+      "Value": 1.05
     }
   ],
   "Model": {
