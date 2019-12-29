@@ -45,7 +45,8 @@ namespace Hedra.AISystem.Humanoid
                 if (entities[i] == this.Parent || !((entities[i].Position.Xz() - Parent.Position.Xz()).LengthSquared() < SearchRadius * SearchRadius)) continue;
                 if (entities[i].IsStatic 
                     || Array.IndexOf(Ignore, entities[i]) != -1
-                    || entities[i] is IPlayer                       
+                    || entities[i] is IPlayer
+                    || entities[i] == LocalPlayer.Instance.Companion.Entity
                     || entities[i].IsImmune 
                     || entities[i].IsInvisible) continue;
 
