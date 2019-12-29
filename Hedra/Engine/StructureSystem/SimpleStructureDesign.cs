@@ -104,9 +104,8 @@ namespace Hedra.Engine.StructureSystem
             return door;
         }
 
-        protected void AddPlant(IAllocator Allocator, Vector3 Position, HarvestableDesign Design, Random Rng)
+        protected static void AddPlant(IAllocator Allocator, Vector3 Position, HarvestableDesign Design, Random Rng)
         {
-            Position += StructureOffset;
             World.EnvironmentGenerator.GeneratePlant(
                 Allocator,
                 Position,

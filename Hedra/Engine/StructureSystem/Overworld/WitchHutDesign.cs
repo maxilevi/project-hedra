@@ -42,7 +42,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             Structure.Waypoints = WaypointLoader.Load($"Assets/Env/Structures/WitchHut/WitchHut0-Pathfinding.ply", WitchHutCache.Scale, Rotation * Translation);
             var door0 = AddDoor(WitchHutCache.Hut0Door0, WitchHutCache.Hut0Door0Position, Rotation, Structure, WitchHutCache.Hut0Door0InvertedRotation, WitchHutCache.Hut0Door0InvertedPivot);
             var door1 = AddDoor(WitchHutCache.Hut0Door1, WitchHutCache.Hut0Door1Position, Rotation, Structure, WitchHutCache.Hut0Door1InvertedRotation, WitchHutCache.Hut0Door1InvertedPivot);
-            PlacePlants(Structure, Translation, Rotation, Rng);
+            PlacePlants(Structure, Translation, Rotation, StructureOffset, Rng);
 
             var hut = (WitchHut)Structure.WorldObject;
             hut.StealPosition = Vector3.Transform(WitchHutCache.Hut0StealPosition, Rotation * Translation);
@@ -82,7 +82,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             });*/
         }
 
-        private void PlacePlants(CollidableStructure Structure, Matrix4x4 Translation, Matrix4x4 Rotation, Random Rng)
+        public static void PlacePlants(CollidableStructure Structure, Matrix4x4 Translation, Matrix4x4 Rotation, Vector3 StructureOffset, Random Rng)
         {
             DecorationsPlacer.PlaceWhenWorldReady(Structure.Position,
                 P =>
@@ -104,7 +104,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                         {
                             AddPlantLine(
                                 allocator,
-                                Vector3.Transform(WitchHutCache.PlantRows[i], Rotation * Translation),
+                                Vector3.Transform(WitchHutCache.PlantRows[i], Rotation * Translation) + StructureOffset,
                                 rotatedOffset,
                                 designs[i],
                                 WitchHutCache.PlantWidths[i],
@@ -115,7 +115,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 }, () => Structure.Disposed);
         }
         
-        private void AddPlantLine(IAllocator Allocator, Vector3 Position, Vector3 UnitOffset, HarvestableDesign Design, int Count, Random Rng)
+        private static void AddPlantLine(IAllocator Allocator, Vector3 Position, Vector3 UnitOffset, HarvestableDesign Design, int Count, Random Rng)
         {
             var offset = UnitOffset;
             for (var i = 0; i < Count; ++i)

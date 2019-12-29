@@ -434,8 +434,12 @@
     <Compile Include="Engine\StructureSystem\Overworld\BaseDungeonDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\BuildingDoorTrigger.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\CampfireWithQuestDesign.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\Cottage.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\CottageDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\CottageWithFarm.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\CottageWithFarmDesign.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\CottageWithVegetablePlot.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\CottageWithVegetablePlotDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonWithBoss.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\ShroomDimensionPortal.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\ShroomDimensionPortalDesign.cs" />
@@ -10457,6 +10461,14 @@
     </Content>
     <Content Include="..\project-hedra-assets\Structures\TreeCircle0\TreeCircle0.ply">
       <Link>Assets\Env\Structures\TreeCircle\TreeCircle0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\VegetablePlot0\VegetablePlot0-Colliders.ply">
+      <Link>Assets\Env\Structures\VegetablePlot\VegetablePlot0-Colliders.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\VegetablePlot0\VegetablePlot0.ply">
+      <Link>Assets\Env\Structures\VegetablePlot\VegetablePlot0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Structures\WitchHut0\WitchHut0-Colliders.ply">

@@ -16,20 +16,8 @@ using Hedra.Rendering;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
-    public class CottageWithFarmDesign : QuestGiverStructureDesign<CottageWithFarm>, IFindableStructureDesign
+    public class CottageWithFarmDesign : CottageDesign<CottageWithFarm>
     {
-        public override int PlateauRadius => 160;
-        public override VertexData Icon => null;
-        public override bool CanSpawnInside => true;
-        protected override int StructureChance => StructureGrid.CottageWithFarmChance;
-        protected override CacheItem? Cache => null;
-        protected override BlockType PathType => BlockType.None;
-
-        protected override CottageWithFarm Create(Vector3 Position, float Size)
-        {
-            return new CottageWithFarm(Position, Size);
-        }
-
         protected override CollidableStructure Setup(Vector3 TargetPosition, Random Rng)
         {
             var structure = base.Setup(TargetPosition, Rng);
@@ -56,7 +44,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
         protected override void DoBuild(CollidableStructure Structure, Matrix4x4 Rotation, Matrix4x4 Translation, Random Rng)
         {
             base.DoBuild(Structure, Rotation, Translation, Rng);
-            var houseBuilder = new HouseBuilder(Structure);
             var root = Structure.Parameters.Get<VillageRoot>("Root");
             var farmPosition = Structure.Parameters.Get<Vector3>("FarmPosition");
             var farmParameters = Structure.Parameters.Get<FarmParameters>("FarmParameters");
@@ -68,42 +55,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var farmOutput = farmBuilder.Build(farmParameters, farmParameters.Design, root.Cache, Rng, Vector3.Zero);
             AddOutputToStructure(Structure, farmOutput, farmPosition);
 
-            var housePosition = Structure.Position + Vector3.UnitZ * 80;
-            var houseDesign = root.Template.House.Designs[0];
-            var houseParameters = new HouseParameters
-            {
-                Design = houseDesign,
-                GroundworkType = GroundworkType.Rounded,
-                Position = housePosition,
-                Rng = Rng,
-                Rotation = Vector3.Zero,//Rotation.ExtractRotation().ToEuler(),
-                Type = BlockType.StonePath,
-                WellTemplate = root.Template.Well.Designs[Rng.Next(0, root.Template.Well.Designs.Length)]
-            };
-            
-            /* The builder expects the position to be set at 0,0 */
-            houseParameters.Position = new Vector3(houseParameters.Position.X, 0, houseParameters.Position.Z);
-            
-            var houseOutput = houseBuilder.Build(houseParameters, houseDesign, root.Cache, Rng, housePosition);
-            AddOutputToStructure(Structure, houseOutput, housePosition);
+            AddHouse(Structure, Vector3.UnitZ * 80, root, Rng);
         }
-
-        private static void AddOutputToStructure(CollidableStructure Structure, BuildingOutput Output, Vector3 Position)
-        {
-            var onlyYMatrix = Matrix4x4.CreateTranslation(Vector3.UnitY * Position.Y);
-            Structure.AddCollisionShape(Output.Shapes.Select(S => S.Transform(onlyYMatrix)).ToArray());
-            Structure.AddStaticElement(Output.Models.Select(M => M.Translate(Position)).ToArray());
-            Structure.AddInstance(Output.Instances.Select(I => I.Apply(onlyYMatrix)).ToArray());
-            var structures = Output.Structures.ToArray();
-            for (var i = 0; i < structures.Length; ++i)
-            {
-                structures[i].Position += Position.Y * Vector3.UnitY;
-            }
-            Structure.WorldObject.AddChildren(structures);
-        }
-        
-        protected override Vector3 NPCOffset => Vector3.Zero;
-        protected override float QuestChance => 1f;
 
         protected override IHumanoid CreateQuestGiverNPC(Vector3 Position, IMissionDesign Quest, Random Rng)
         {
@@ -115,6 +68,9 @@ namespace Hedra.Engine.StructureSystem.Overworld
             return MissionPool.Random(Position, QuestTier.Any, QuestHint.Farm);
         }
         
-        public string DisplayName => Translations.Get("structure_cottage");
+        protected override CottageWithFarm Create(Vector3 Position, float Size)
+        {
+            return new CottageWithFarm(Position, Size);
+        }
     }
 }

@@ -8,22 +8,15 @@ using Hedra.Sound;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
-    public class CottageWithFarm : BaseStructure, IQuestStructure
+    public class CottageWithFarm : Cottage
     {
         private HighlightedAreaWrapper _area;
-        private readonly float _radius;
-        public CottageWithFarm(Vector3 Position, float Radius) : base(Position)
-        {
-            _radius = Radius;
-        }
-
-        public IHumanoid NPC { get; set; }
 
         public void MakePossessed()
         {
             NPC?.Dispose();
             NPC = null;
-            _area = World.Highlighter.HighlightAreaPermanently(Position, new Vector4(.2f, .2f, .2f, 1f), _radius);
+            _area = World.Highlighter.HighlightAreaPermanently(Position, new Vector4(.2f, .2f, .2f, 1f), Radius);
         }
 
         public void MakeNormal()
@@ -32,11 +25,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
             _area.Dispose();
             _area = null;
         }
-
-        public override void Dispose()
+        public CottageWithFarm(Vector3 Position, float Radius) : base(Position, Radius)
         {
-            base.Dispose();
-            NPC?.Dispose();
         }
     }
 }
