@@ -1,7 +1,9 @@
 using System.Globalization;
 using System.Numerics;
+using BulletSharp;
 using Hedra.Components;
 using Hedra.Core;
+using Hedra.Engine.Bullet;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
@@ -45,8 +47,10 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
 
         private void Place()
         {
-            var position = (User.Model.RightWeaponPosition + User.Model.LeftWeaponPosition).Xz().ToVector3() * .5f;
-            var trap = new BearTrap(User, position + User.Model.Position.Y * Vector3.UnitY, Duration, Damage, Stun);
+            var position = (User.Model.RightWeaponPosition + User.Model.LeftWeaponPosition) * .5f;
+            var callback =
+                BulletPhysics.Raycast(position.Compatible(), position.Xz().ToVector3().Compatible(), BulletPhysics.TerrainFilter | CollisionFilterGroups.StaticFilter);
+            var trap = new BearTrap(User, callback.HitPointWorld.Compatible(), Duration, Damage, Stun);
             trap.Ignore(X => X == User.Companion.Entity);
         }
         
