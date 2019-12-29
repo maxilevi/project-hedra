@@ -33,7 +33,7 @@ namespace Hedra.WeaponSystem
         protected override void OnPrimaryAttackEvent(AttackEventType Type, AttackOptions Options)
         {
             if(AttackEventType.Mid != Type) return;
-            Owner.AttackSurroundings(Owner.DamageEquation, Options.IgnoreEntities);
+            Owner.AttackSurroundings(Owner.DamageEquation * 1.25f, Options.IgnoreEntities);
         }
         
         public override void Update(IHumanoid Human)
