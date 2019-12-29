@@ -6,18 +6,36 @@ from Hedra.Mission.Blocks import CollectMission, TalkMission
 from Hedra.Mission import MissionBuilder, QuestTier, QuestReward, ItemCollect
 from Hedra.Items import ItemPool, Trader
 from Hedra.Crafting import CraftingInventory
+from Hedra.Engine.ItemSystem import ItemLoader
 
 IS_QUEST = True
 QUEST_NAME = 'CraftAPotion'
 QUEST_TIER = QuestTier.Easy
 
-def parse_ingredient(ingredient):
-    price = Trader.SingleItemPrice(ingredient)
-    return ingredient.Name, 1, 3
+def build_ingredient_list():
+    ingredients = []
+    def parse_ingredient(ingredient):
+        price = Trader.SingleItemPrice(ingredient)
+        return ingredient.Name, 1, 4
 
-POSSIBLE_INGREDIENTS = [
-    parse_ingredient(x) for x in ItemPool.Matching(lambda x: any(j.Name == 'IsFood' and j.Value for j in x.Attributes))
-]
+    food_recipe_ingredients = set()
+    for r in ItemPool.Matching(lambda t: t.EquipmentType == 'Recipe'):
+        output = CraftingInventory.GetOutputFromRecipe(r)
+        if output.IsFood:
+            for k in [x.Name for x in CraftingInventory.GetIngredients(r)]:
+                food_recipe_ingredients.add(k)
+
+    templates = ItemLoader.Templater.Templates
+    for x in templates:
+        is_food = any(j.Name == 'IsFood' and j.Value for j in x.Attributes)
+        is_food_ingredient = x.Name in food_recipe_ingredients
+        
+        if is_food or is_food_ingredient:
+            ingredients.append(x)
+            
+    return [parse_ingredient(ItemPool.Grab(x.Name)) for x in ingredients]
+
+POSSIBLE_INGREDIENTS = build_ingredient_list()
 
 def parse_potion(potion):
     hp_price = Trader.SingleItemPrice(ItemPool.Grab(Items.HEALTH_POTION))
@@ -68,7 +86,7 @@ def give_recipe_if_necessary(owner, item, talk):
 
 def select_ingredients(rng):
     ingredients = []
-    count = rng.Next(2, 6)
+    count = rng.Next(3, 6)
     for _ in range(count):
         ingredients.append(POSSIBLE_INGREDIENTS[rng.Next(0, len(POSSIBLE_INGREDIENTS))])
     return ingredients
