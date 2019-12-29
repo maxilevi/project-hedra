@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Numerics;
 using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine.EntitySystem;
@@ -44,7 +45,8 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
 
         private void Place()
         {
-            var trap = new BearTrap(User, (User.Model.RightWeaponPosition + User.Model.LeftWeaponPosition) * .5f, Duration, Damage, Stun);
+            var position = (User.Model.RightWeaponPosition + User.Model.LeftWeaponPosition).Xz().ToVector3() * .5f;
+            var trap = new BearTrap(User, position + User.Model.Position.Y * Vector3.UnitY, Duration, Damage, Stun);
             trap.Ignore(X => X == User.Companion.Entity);
         }
         

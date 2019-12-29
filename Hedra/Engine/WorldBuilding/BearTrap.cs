@@ -38,12 +38,12 @@ namespace Hedra.Engine.WorldBuilding
         public override void Update()
         {
             base.Update();
-            var heightAtPosition = Physics.HeightAtPosition(Position.X, Position.Z);
+            /*var heightAtPosition = Physics.HeightAtPosition(Position.X, Position.Z);
             Position = new Vector3(
                 Position.X,
                 heightAtPosition,
                 Position.Z
-            );
+            );*/
             HandleCollision();
             if (_timer.Tick())
             {
