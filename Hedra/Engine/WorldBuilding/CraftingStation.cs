@@ -21,7 +21,7 @@ namespace Hedra.Engine.WorldBuilding
         
         public abstract Crafting.CraftingStation StationType { get; }
 
-        protected virtual bool CanCraft => true;
+        public virtual bool CanCraft => true;
 
         protected CraftingStation(Vector3 Position) : base(Position)
         {

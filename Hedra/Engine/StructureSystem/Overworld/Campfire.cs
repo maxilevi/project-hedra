@@ -34,7 +34,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
     public class Campfire : CraftingStation
     {
         private bool _canCraft;
-        protected override bool CanCraft => _canCraft;
+        public override bool CanCraft => _canCraft;
         protected override string CraftingMessage => Translations.Get("use_campfire");
         public IHumanoid Bandit { get; set; }
         private static ParticleSystem _fireParticles;

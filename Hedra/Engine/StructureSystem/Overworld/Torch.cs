@@ -11,6 +11,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         protected override float LightRadius => DefaultRadius;
         protected override Vector3 LightColor => base.LightColor * 2;
-        protected override bool CanCraft => false;
+        public override bool CanCraft => false;
     }
 }
