@@ -21,5 +21,6 @@ namespace Hedra.Engine.ClassSystem.Templates
         public float BaseHealthPerLevel { get; set; }
         public float BaseManaPerLevel { get; set; }
         public bool IsRanged { get; set; }
+        public float BaseHealth { get; set; }
     }
 }

@@ -46,6 +46,7 @@ namespace Hedra.Engine.ClassSystem
         public virtual float AttackResistance => ClassLoader.Instance[Type].AttackResistance;
         public virtual float MaxStamina => ClassLoader.Instance[Type].MaxStamina;
         public virtual float BaseDamage => ClassLoader.Instance[Type].BaseDamage;
+        public virtual float BaseHealth => ClassLoader.Instance[Type].BaseHealth;
         public virtual float AttackingSpeedModifier => ClassLoader.Instance[Type].AttackingSpeedModifier;
         public abstract Matrix4x4 HelmetPlacement { get; }
         public abstract Matrix4x4 ChestplatePlacement { get; }

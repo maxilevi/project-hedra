@@ -18,6 +18,7 @@
   "AttackingSpeedModifier": 0.2,
   "BaseHealthPerLevel": 6.5,
   "BaseManaPerLevel": 18.0,
+  "BaseHealth": 97.0,
   "Model": {
     "Path": "$DataFile$/Assets/Chr/MageIdle.dae",
     "Scale": 1.0

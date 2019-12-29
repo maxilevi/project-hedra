@@ -16,7 +16,8 @@
   "MaxStamina": 100.0,
   "BaseDamage": 8.0,
   "AttackingSpeedModifier": 0.4,
-  "BaseHealthPerLevel": 15.0,
+  "BaseHealthPerLevel": 18.0,
+  "BaseHealth": 148.0,
   "BaseManaPerLevel": 15,
   "Model": {
     "Path": "$DataFile$/Assets/Chr/WarriorIdle.dae",

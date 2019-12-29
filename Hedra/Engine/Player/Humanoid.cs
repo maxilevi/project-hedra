@@ -115,7 +115,7 @@ namespace Hedra.Engine.Player
 
         public static float CalculateMaxHealth(ClassDesign Class, int Level, float RandomFactor)
         {
-            var maxHealth = 97 + RandomFactor * 20f;
+            var maxHealth = Class.BaseHealth + RandomFactor * 20f;
             for (var i = 1; i < Level; i++)
             {
                 maxHealth += Class.MaxHealthFormula(RandomFactor);
