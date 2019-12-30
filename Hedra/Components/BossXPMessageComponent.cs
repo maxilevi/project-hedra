@@ -17,7 +17,7 @@ namespace Hedra.Components
             {
                 if (!(Args.Victim.Health <= 0)) return;
 
-                GameManager.Player.MessageDispatcher.ShowMessage(Translations.Get("boss_get_xp", (int) dmgComponent.XpToGive), 3f, Colors.Violet.ToColor());
+                GameManager.Player.MessageDispatcher.ShowMessage(Translations.Get("boss_get_xp", (int) dmgComponent.XPObtained), 3f, Colors.Violet.ToColor());
                 Entity.SearchComponent<BossHealthBarComponent>().Enabled = false;
             };
         }

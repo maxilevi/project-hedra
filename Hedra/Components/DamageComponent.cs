@@ -171,7 +171,7 @@ namespace Hedra.Components
             {
                 Parent.IsDead = true;
                 Parent.Physics.CollidesWithEntities = false;
-                Exp = XpToGive * Balancer.XPObtainedMultiplier;
+                Exp = XPObtained;
                 if(PlayDeleteAnimation)
                     RoutineManager.StartRoutine(this.DisposeCoroutine);
                 
@@ -227,6 +227,8 @@ namespace Hedra.Components
         /// Returns a bool representing if the Entity has been attacked in the last six seconds.
         /// </summary>
         public bool HasBeenAttacked => _hasBeenAttacked;
+
+        public float XPObtained => XpToGive * Balancer.XPObtainedMultiplier;
     }
 
     public class DamageEventArgs : EventArgs
