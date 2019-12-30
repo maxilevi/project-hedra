@@ -96,7 +96,7 @@ namespace Hedra.Components
                    && !Parent.Model.IsMoving
                    && CanTalk;
             if (!earlyExit) return false;
-            return GameManager.Player.IsLookingAt(Parent, .5f);
+            return true;
         }
 
         public void AddDialogLine(Translation Dialog)
