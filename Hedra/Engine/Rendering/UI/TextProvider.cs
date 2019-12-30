@@ -21,6 +21,7 @@ namespace Hedra.Engine.Rendering.UI
         private static readonly Dictionary<string, Font> FontMap;
         private static readonly Dictionary<string, float> SizeMap;
         private static readonly Dictionary<string, Func<string, string>> TransformationMap;
+        private static readonly object MeasureLock = new object();
 
         static TextProvider()
         {
@@ -231,6 +232,16 @@ namespace Hedra.Engine.Rendering.UI
         private static Bitmap DoBuildText(TextParams Params)
         {
             if(Params.TextFonts.Any(F => F.Size > 128) || Params.Texts.Length == 0) return new Bitmap(1,1);
+            Bitmap textBitmap;
+            lock (MeasureLock)
+            {
+                textBitmap = DoBuildTextSync(Params);
+            }
+            return textBitmap;
+        }
+
+        private static Bitmap DoBuildTextSync(TextParams Params)
+        {
             var fullString = string.Join(string.Empty, Params.Texts);
             var size = CalculateNeededSize(Params);
             var textBitmap = new Bitmap((int)Math.Ceiling(Math.Max(size.Width, 1)), (int)Math.Ceiling(Math.Max(size.Height,1)));
@@ -296,6 +307,7 @@ namespace Hedra.Engine.Rendering.UI
                     }
                 }
             }
+
             return textBitmap;
         }
 
