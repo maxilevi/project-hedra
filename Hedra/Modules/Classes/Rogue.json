@@ -16,8 +16,8 @@
   "MaxStamina": 125.0,
   "BaseDamage": 8.0,
   "AttackingSpeedModifier": 0.6,
-  "BaseHealthPerLevel": 17.0,
-  "BaseHealth": 137.0,
+  "BaseHealthPerLevel": 16.0,
+  "BaseHealth": 127.0,
   "BaseManaPerLevel": 8.5,
   "Model": {
     "Path": "$DataFile$/Assets/Chr/RogueIdle.dae",
