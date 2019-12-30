@@ -287,6 +287,13 @@ quest_possessed_cows_arrive = That's it! Kill the cows before they get us!
 quest_possessed_cows_description = Escort $(BOLD)(BLUE){{0}} into his farm and find out what is going on.\n$(GRAY)(BOLD){HINT: }See the map for more details.
 possessed_cow = Possessed Cow
 
+quest_occupied_house_dialog_0 = A bunch of bandits took over my house while I was on a sales trip to the village.;Please help me defeat them and recover my home!
+quest_occupied_house_arrive = That's it! We will wait here until they go to sleep and then ambush them at night!
+quest_occupied_house_description = Escort $(BOLD)(BLUE){{0}} into his cottage and help him gain it back.\n$(GRAY)(BOLD){HINT: }See the map for more details.
+quest_occupied_house_end_wait_0 = This is the perfect time! Attack them while they are sleeping!
+quest_wait_for_time_desc = Wait here until the $(BOLD)(ORANGE){night} comes.
+quest_wait_for_time_short = WAIT UNTIL $(BOLD)(ORANGE){NIGHT}
+
 # -- Class Names --
 mage = Mage
 warrior = Warrior
