@@ -14,7 +14,7 @@ from Hedra.Rendering import VertexData
 from Hedra.Numerics import VectorExtensions
 
 clr.ImportExtensions(VectorExtensions)
-COMPANION_RESPAWN_TIME = 48 # Seconds
+COMPANION_RESPAWN_TIME = 72 # Seconds
 COMPANION_EQUIPMENT_TYPE = 'Pet'
 CAGE_MODEL_SCALE = 0.75
 CAGE_MODEL_PATH = 'Assets/Items/Misc/CompanionCage.ply'
@@ -32,7 +32,7 @@ MOB_TYPE_ATTRIB_NAME = 'Type'
 RIDE_HEIGHT_ATTRIB = 'RideHeight'
 PRICE_ATTRIB_NAME = 'Price'
 BASE_GROWTH_SCALE = 0.5
-GROWTH_TIME = 8.0 * 60.0 # 8 Minutes
+GROWTH_TIME = 12.0 * 60.0 # 8 Minutes
 GROWTH_SPEED = 1.0 / GROWTH_TIME
 BASE_PRICE = 35
 COMPANION_TYPES = [
