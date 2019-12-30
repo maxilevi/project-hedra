@@ -14,7 +14,7 @@ namespace Hedra.Mission.Blocks
     {
         private string _missionDescription;
         public override bool IsCompleted => (Position - Owner.Position).Xz().LengthSquared() <
-                                            Math.Pow(Design.PlateauRadius, 2);
+                                            Math.Pow(Design.PlateauRadius * DistanceMultiplier, 2);
         public override void Setup()
         {
         }
@@ -29,6 +29,7 @@ namespace Hedra.Mission.Blocks
         public CacheItem DefaultIcon { get; set; }
         public IFindableStructureDesign Design { get; set; }
         public Vector3 Position { get; set; }
+        public float DistanceMultiplier { get; set; } = 1;
         public override bool HasLocation => true;
         public override Vector3 Location => Position;
         public override string ShortDescription => Translations.Get("quest_find_structure_short", Design.DisplayName);
