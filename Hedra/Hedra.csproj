@@ -447,7 +447,6 @@
     <Compile Include="Engine\StructureSystem\Overworld\UndeadDungeon1Design.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonBossRoomTrigger.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonDoorTrigger.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\DungeonBuilder.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\UndeadDungeon0Design.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\UndeadDungeon2Design.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\UndeadDungeonWithBossDesign.cs" />

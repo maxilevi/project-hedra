@@ -28,12 +28,17 @@ namespace Hedra.Engine.WorldBuilding
 
         public bool Collides(RoundedPlateau Mount)
         {
-            return (this.Position - Mount.Position).LengthFast() < Mount.Radius + this.Radius;
+            return Collides(Mount.Position, Mount.Radius);
+        }
+        
+        public bool Collides(Vector2 Point, float PointRadius)
+        {
+            return (this.Position - Point).LengthFast() < PointRadius + Radius;
         }
         
         public override bool Collides(Vector2 Point)
         {
-            return (this.Position - Point).LengthFast() < this.Radius;
+            return Collides(Point, 1);
         }
 
         public override float Density(Vector2 Point)
