@@ -40,7 +40,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             }, Structure);
             if (rng.Next(0, 5) != 1)
             {
-                SpawnMat(
+                SpawnCampfireMat(
                     Vector3.Transform(Vector3.UnitX * -12f, Matrix4x4.CreateRotationY(rotation.Y * Mathf.Radian)),
                     rotation,
                     transformationMatrix,
@@ -82,29 +82,37 @@ namespace Hedra.Engine.StructureSystem.Overworld
             Structure.AddCollisionShape(shapes.ToArray());
         }
 
-        public static void SpawnMat(Vector3 Position, Vector3 CampfireRotation, Matrix4x4 TransformationMatrix,
+        public static void SpawnCampfireMat(Vector3 Position, Vector3 CampfireRotation, Matrix4x4 TransformationMatrix,
             CollidableStructure Structure)
         {
             var padOffset = Position + Vector3.UnitZ * -1f;
+
+            SpawnMat(
+                Position + Structure.Position,
+                CampfireRotation,
+                TransformationMatrix * Matrix4x4.CreateScale(Vector3.One * .75f) * Matrix4x4.CreateTranslation(padOffset),
+                Structure
+            );
+        }
+        
+        public static void SpawnMat(Vector3 Position, Vector3 Rotation, Matrix4x4 TransformationMatrix,
+            CollidableStructure Structure)
+        {
             var originalModel = CacheManager.GetModel(CacheItem.Mat);
             var model = originalModel.Clone();
-            model.Scale(Vector3.One * .75f);
             model.Transform(TransformationMatrix);
-            model.Translate(padOffset);
 
             var shapes = CacheManager.GetShape(originalModel).DeepClone();
             for (var i = 0; i < shapes.Count; i++)
             {
-                shapes[i].Transform(Matrix4x4.CreateScale(Vector3.One * .75f));
                 shapes[i].Transform(TransformationMatrix);
-                shapes[i].Transform(padOffset);
                 Structure.AddCollisionShape(shapes[i]);
             }
 
             Structure.AddStaticElement(model);
-            var pad = new SleepingPad(Position + Structure.Position + Vector3.UnitY)
+            var pad = new SleepingPad(Position + Vector3.UnitY)
             {
-                TargetRotation = CampfireRotation
+                TargetRotation = Rotation
             };
             Structure.WorldObject.AddChildren(pad);
         }
