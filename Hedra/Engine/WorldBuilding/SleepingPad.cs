@@ -26,6 +26,7 @@ namespace Hedra.Engine.WorldBuilding
         public Vector3 TargetRotation { get; set; }
         
         protected override bool DisposeAfterUse => false;
+        protected override bool SingleUse => false;
 
         protected override bool CanInteract => SkyManager.IsSleepTime && !IsOccupied;
 
@@ -35,7 +36,7 @@ namespace Hedra.Engine.WorldBuilding
 
         public override string Message => Translations.Get("to_sleep");
 
-        public override int InteractDistance => 16;
+        public override int InteractDistance => 24;
         protected override bool AllowThroughCollider => true;
 
         public override void Update(float DeltaTime)
