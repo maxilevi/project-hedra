@@ -71,6 +71,7 @@ namespace Hedra.Engine.CacheSystem
         StorylineIcon,
         CauldronIcon,
         WindmillIcon,
+        ClockIcon,
         MaxEnums
     }
 }
