@@ -17,17 +17,16 @@ using Gen = Hedra.Engine.Generation;
 
 namespace Hedra.Engine.EnvironmentSystem
 {
-    /// <summary>
-    /// Description of Sky.
-    /// </summary>
+    public delegate void OnTimeChange();
+    
     public static class SkyManager
     {
+        public static event OnTimeChange TimeChange;
         public static Fog FogManager { get; }
         public static Sky Sky { get; }
         public static WeatherManager Weather { get; }
         public static float LastDayFactor { get; set; }
         public static bool LoadTime { get; set; }
-        public static float DaytimeSpeed { get; set; } = 1f;
         public static float TargetIntensity { get; set; } = 1;
         public static float StackedDaytime => DayTime + _stackedDaytime;
         public static float StackedDaytimeModifier => Math.Max(0, StackedDaytime / 24000 * 2f);
@@ -48,6 +47,7 @@ namespace Hedra.Engine.EnvironmentSystem
         private static float _maxLight;
         private static float _stackedDaytime;
         private static float _intensity;
+        private static float _dayTimeBeforeEventLaunch;
 
         static SkyManager()
         {
@@ -66,6 +66,7 @@ namespace Hedra.Engine.EnvironmentSystem
             PushTime(new SkySettings
             {
                 DayTime = DayTime,
+                DaytimeSpeed = DaytimeSpeed,
                 Enabled = Enabled
             });
         }
@@ -126,6 +127,11 @@ namespace Hedra.Engine.EnvironmentSystem
                     DayTime = 0;
                 }
                 DayTime += Time.DeltaTime * 5f * DaytimeSpeed;
+                if (Math.Abs(_dayTimeBeforeEventLaunch - DayTime) > 25)
+                {
+                    TimeChange?.Invoke();
+                    _dayTimeBeforeEventLaunch = DayTime;
+                }
             }
 
             if(simplifiedTime >= 10000 && simplifiedTime < 20000 )
@@ -235,6 +241,12 @@ namespace Hedra.Engine.EnvironmentSystem
         {
             get => _settings.UpdateDayColors;
             set => _settings.UpdateDayColors = value;
+        }
+
+        public static float DaytimeSpeed
+        {
+            get => _settings.DaytimeSpeed;
+            set => _settings.DaytimeSpeed = value;
         }
     }
 }
