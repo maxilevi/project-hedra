@@ -65,7 +65,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         public override int PlateauRadius => 128;
 
         protected override float GroundworkRadius => 32;
-        public override VertexData Icon => CacheManager.GetModel(CacheItem.CauldronIcon);
+        public override VertexData Icon => null;
 
         private Vector3 Scale => WitchHutCache.Scale * StructureScale;
     }
