@@ -321,7 +321,7 @@ namespace Hedra.Engine.Generation
 
             for (var i = Entities.Count - 1; i > -1; i--)
             {
-                if (Entities[i] is LocalPlayer) continue;
+                if (Entities[i] == LocalPlayer.Instance || Entities[i] == LocalPlayer.Instance.Companion.Entity) continue;
                 Entities[i].Dispose();
             }
 
