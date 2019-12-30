@@ -115,6 +115,20 @@ using Hedra.Numerics;
             lock(_registerLock)
                 return _registeredPositions.Contains(Position);
         }
+
+        public bool StructureCollides(StructureDesign Design, Vector3 Position)
+        {
+            lock (_registerLock)
+            {
+                for (var i = 0; i < _itemWatchers.Count; ++i)
+                {
+                    var mountain = _itemWatchers[i].Structure.Mountain;
+                    if (mountain != null && mountain.Collides(Position.Xz(), Design.PlateauRadius)) return true;
+                }
+            }
+
+            return false;
+        }
         
         public void AddStructure(CollidableStructure Structure)
         {

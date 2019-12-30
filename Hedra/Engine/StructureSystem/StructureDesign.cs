@@ -59,6 +59,7 @@ namespace Hedra.Engine.StructureSystem
                     
                     if (this.ShouldSetup(offset, ref targetPosition, items, Biome, Distribution) && !World.StructureHandler.StructureExistsAtPosition(targetPosition))
                     {
+                        if(World.StructureHandler.StructureCollides(this, targetPosition)) return;
                         World.StructureHandler.RegisterStructure(targetPosition);
                         var item = this.Setup(targetPosition, BuildRng(offset));
                         item.MapPosition = offset;
