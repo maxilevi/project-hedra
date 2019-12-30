@@ -1,18 +1,27 @@
 using System;
+using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Player.QuestSystem.Views;
 using Hedra.Localization;
 
 namespace Hedra.Mission.Blocks
 {
-    public class WaitForTime : MissionBlock
+    public class WaitForTimeMission : MissionBlock
     {
         private readonly int _targetTime;
         private readonly float _speed;
 
-        public override bool IsCompleted => Math.Abs(SkyManager.DayTime - _targetTime) < 0.005f;
+        public override bool IsCompleted
+        {
+            get
+            {
+                var isCompleted = Math.Abs(SkyManager.DayTime - _targetTime) < 100f;
+                if(isCompleted) SkyManager.DaytimeSpeed = 1;
+                return isCompleted;
+            }
+        }
 
-        public WaitForTime(int Target, float Speed = 1.0f)
+        public WaitForTimeMission(int Target, float Speed = 1.0f)
         {
             _speed = Speed;
             _targetTime = Target;
@@ -21,7 +30,6 @@ namespace Hedra.Mission.Blocks
         public override void Setup()
         {
             SkyManager.PushTime();
-            SkyManager.DayTime = _targetTime;
             SkyManager.DaytimeSpeed = _speed;
         }
 
@@ -32,12 +40,12 @@ namespace Hedra.Mission.Blocks
 
         public override QuestView BuildView()
         {
-            return new ModelView();
+            return new ModelView(CacheManager.GetModel(CacheItem.ClockIcon));
         }
 
         public override bool HasLocation => false;
-        public override string ShortDescription => Translations.Get("");
-        public override string Description => Translations.Get("");
+        public override string ShortDescription => Translations.Get("quest_wait_for_time_short");
+        public override string Description => Translations.Get("quest_wait_for_time_desc");
         public override DialogObject DefaultOpeningDialog => default;
     }
 }

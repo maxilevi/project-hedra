@@ -340,6 +340,7 @@
     <Compile Include="Engine\Bullet\PhysicsComponent.cs" />
     <Compile Include="Engine\Bullet\PhysicsComponentMotionState.cs" />
     <Compile Include="Engine\CacheSystem\CauldronIconCache.cs" />
+    <Compile Include="Engine\CacheSystem\ClockIconCache.cs" />
     <Compile Include="Engine\CacheSystem\Dungeon0Cache.cs" />
     <Compile Include="Engine\CacheSystem\Dungeon1Cache.cs" />
     <Compile Include="Engine\CacheSystem\Dungeon1IconCache.cs" />
@@ -488,6 +489,7 @@
     <Compile Include="Mission\Blocks\MissionBlock.cs" />
     <Compile Include="Mission\Blocks\TalkMission.cs" />
     <Compile Include="Mission\Blocks\WaitForMission.cs" />
+    <Compile Include="Mission\Blocks\WaitForTimeMission.cs" />
     <Compile Include="Mission\DialogObject.cs" />
     <Compile Include="Mission\IMissionDesign.cs" />
     <Compile Include="Mission\ItemCollect.cs" />
@@ -9171,6 +9173,10 @@
       <Link>Assets\Env\Objects\Cauldron.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Objects\Clock.ply">
+      <Link>Assets\Env\Objects\Clock.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Objects\DeathIcon.ply">
       <Link>Assets\Env\DeathIcon.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -10465,6 +10471,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\Structures\VegetablePlot0\VegetablePlot0-Colliders.ply">
       <Link>Assets\Env\Structures\VegetablePlot\VegetablePlot0-Colliders.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\VegetablePlot0\VegetablePlot0-Scene.ply">
+      <Link>Assets\Env\Structures\VegetablePlot\VegetablePlot0-Scene.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Structures\VegetablePlot0\VegetablePlot0.ply">
@@ -14426,7 +14436,9 @@
     <Content Include="Scripts\Missions\MissionCore.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Scripts\Missions\OccupiedHouse.py" />
+    <Content Include="Scripts\Missions\OccupiedHouse.py">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Scripts\Missions\PossessedCows.py">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

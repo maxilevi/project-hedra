@@ -9,12 +9,13 @@ using Hedra.Engine.SkillSystem;
 using Hedra.Items;
 using Hedra.WeaponSystem;
 using System.Numerics;
+using Hedra.Engine.Bullet;
 using Hedra.Engine.WorldBuilding;
 
 namespace Hedra.EntitySystem
 {
     public interface IHumanoid : ISkilledAnimableEntity
-    {      
+    {
         event OnAttackEventHandler BeforeAttack;
         event OnAttackEventHandler AfterAttack;
         event OnHitLandedEventHandler HitLanded;
