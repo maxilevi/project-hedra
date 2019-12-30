@@ -21,7 +21,6 @@ using Hedra.Engine.ItemSystem.ArmorSystem;
 using Hedra.Engine.Player.BoatSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Animation;
-using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.SkillSystem;
 using Hedra.EntitySystem;
 using Hedra.Game;
