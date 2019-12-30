@@ -21,7 +21,7 @@ ACTION_SONGS = [
 ]
 
 FOREST = "Sounds/Soundtrack/ForestAmbient.ogg"
-BACKGROUND_SONGS = shuffle([#[FOREST] +
+BACKGROUND_SONGS = shuffle([
     "Sounds/Soundtrack/CardinalCity.ogg",
     "Sounds/Soundtrack/ThroughTheGrasslands.ogg",
     "Sounds/Soundtrack/BreathOfDay.ogg",
