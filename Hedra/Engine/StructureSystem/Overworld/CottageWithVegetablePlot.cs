@@ -20,10 +20,11 @@ namespace Hedra.Engine.StructureSystem.Overworld
             _setup = true;
             for (var i = 0; i < BanditPositions.Length; ++i)
             {
+                var rotation = Vector3.UnitY * Utils.Rng.NextFloat() * 360f;
                 CampfireDesign.SpawnMat(
                     BanditPositions[i],
-                    Vector3.UnitY * Utils.Rng.NextFloat() * 360f,
-                    Matrix4x4.CreateScale(Scale) * Matrix4x4.CreateTranslation(BanditPositions[i] - Vector3.UnitY),
+                    rotation,
+                    Matrix4x4.CreateScale(Scale) *  Matrix4x4.CreateRotationY(rotation.Y) * Matrix4x4.CreateTranslation(BanditPositions[i] - Vector3.UnitY),
                     Structure
                 );
             }
