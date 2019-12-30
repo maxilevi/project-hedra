@@ -21,7 +21,6 @@ namespace Hedra.Engine.WorldBuilding
 {
     public class SleepingPad : InteractableStructure
     {
-        public int UpdatesPerSecond => 8;
         public bool IsOccupied => Sleeper != null;
         public IHumanoid Sleeper { get; private set; }
         public Vector3 TargetRotation { get; set; }
@@ -36,7 +35,8 @@ namespace Hedra.Engine.WorldBuilding
 
         public override string Message => Translations.Get("to_sleep");
 
-        public override int InteractDistance => 12;
+        public override int InteractDistance => 16;
+        protected override bool AllowThroughCollider => true;
 
         public override void Update(float DeltaTime)
         {
@@ -67,6 +67,7 @@ namespace Hedra.Engine.WorldBuilding
                 {
                     dmgComponent.OnDamageEvent -= this.OnDamageWakeUp;
                 }
+                Sleeper.Physics.OnMove -= OnMoveWakeUp;
             }
             if (Human != null)
             {
@@ -82,8 +83,14 @@ namespace Hedra.Engine.WorldBuilding
                     dmgComponent.Immune = false;
                     dmgComponent.OnDamageEvent += this.OnDamageWakeUp;
                 }
+                Human.Physics.OnMove += OnMoveWakeUp;
             }
             Sleeper = Human;
+        }
+        
+        private void OnMoveWakeUp()
+        {
+            this.SetSleeper(null);
         }
 
         private void OnDamageWakeUp(DamageEventArgs Args)
