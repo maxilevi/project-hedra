@@ -34,6 +34,11 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         protected override string GetShortDescription(T Structure) => throw new System.NotImplementedException();
 
+        protected override float BuildRotationAngle(Random Rng)
+        {
+            return Rng.Next(0, 4) * 90;
+        }
+        
         protected Lever AddLever(CollidableStructure Structure, Vector3 Position, Matrix4x4 Rotation)
         {
             var lever = new Lever(Vector3.Transform((Position + StructureOffset) * StructureScale, Rotation) + Structure.Position, StructureScale);
