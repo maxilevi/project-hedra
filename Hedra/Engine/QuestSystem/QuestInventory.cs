@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Hedra.Engine.EntitySystem;
+using Hedra.Engine.EnvironmentSystem;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
 using Hedra.Mission;
@@ -31,7 +32,8 @@ namespace Hedra.Engine.QuestSystem
             _player.StructureAware.StructureLeave += _ => CheckForCompleteness();
             _player.Kill += _ => CheckForCompleteness();
             _player.Interact += _ => CheckForCompleteness();
-            _player.OnMove += CheckForCompleteness;
+            _player.Physics.OnMove += CheckForCompleteness;
+            SkyManager.TimeChange += CheckForCompleteness;
             QuestCompleted += OnQuestCompleted;
         }
         

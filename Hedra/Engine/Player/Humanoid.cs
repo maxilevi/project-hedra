@@ -46,7 +46,6 @@ namespace Hedra.Engine.Player
         public const float DefaultDodgeCost = 25;
         public const float SprintingSpeed = 0.25f;
         public const float SprintingCost = 7.5f;
-        
         public event OnAttackEventHandler AfterAttack;
         public event OnAttackEventHandler BeforeAttack;
         public event OnHitLandedEventHandler HitLanded;

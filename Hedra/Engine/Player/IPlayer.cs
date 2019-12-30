@@ -24,7 +24,6 @@ namespace Hedra.Engine.Player
     
     public interface IPlayer : IHumanoid, ISkillUser
     {
-        event OnMoveEvent OnMove;
         event OnDeadEvent OnDeath;
         event OnRespawnEvent OnRespawn;
         IMessageDispatcher MessageDispatcher { get; }

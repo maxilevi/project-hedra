@@ -60,7 +60,6 @@ namespace Hedra.Engine.Player
     {
         private const int MinimumRespawnDistance = 32;
         private const int MaximumRespawnDistance = 128;
-        public event OnMoveEvent OnMove;
         public event OnRespawnEvent OnRespawn;
         public event OnDeadEvent OnDeath;
 
@@ -89,7 +88,6 @@ namespace Hedra.Engine.Player
         private IAmbientEffectHandler AmbientEffects { get; }
         private float _acummulativeHealing;
         private Vector3 _previousPosition;
-        private Vector3 _previousMovedPosition;
         private float _health;
         private bool _wasSleeping;
         private bool _enabled;
@@ -222,12 +220,6 @@ namespace Hedra.Engine.Player
                 if( (int) Time.AccumulatedFrameTime % 2 == 0) World.Particles.Emit();
                 
                 _previousPosition = Model.Human.Position;
-            }
-
-            if ((_previousMovedPosition - Position).LengthSquared() > Chunk.BlockSize * Chunk.BlockSize)
-            {
-                OnMove?.Invoke();
-                _previousMovedPosition = Position;
             }
 
             if (Companion.Entity != null && !Companion.Entity.Disposed)
