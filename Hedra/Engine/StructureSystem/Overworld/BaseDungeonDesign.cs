@@ -44,21 +44,27 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var lever = new Lever(Vector3.Transform((Position + StructureOffset) * StructureScale, Rotation) + Structure.Position, StructureScale);
             var axisAngle = Rotation.ExtractRotation().ToAxisAngle();
             lever.Rotation = axisAngle.Xyz() * axisAngle.W * Mathf.Degree;
-            lever.Condition = () => IsNearEnemies(lever.Position);
+            lever.Condition = () => IsNotNearEnemies(lever.Position);
             Structure.WorldObject.AddChildren(lever);
             return lever;
         }
         
-        private static bool IsNearEnemies(Vector3 Position)
+        private static bool IsNotNearEnemies(Vector3 Position)
         {
             var mobs = World.Entities;
             return mobs.Count(M => M.Distance(Position) < 32 && M.SearchComponent<IsDungeonMemberComponent>() != null) == 0;
+        }
+        
+        protected static bool IsNotNearLookingEnemies(Vector3 Position)
+        {
+            var mobs = World.Entities;
+            return mobs.Count(M => M.Distance(Position) < 32 && !M.Physics.StaticRaycast(Position) && M.SearchComponent<IsDungeonMemberComponent>() != null) == 0;
         }
 
         protected static Chest AddRewardChest(Vector3 Position, VertexData Model)
         {
             var chest = World.SpawnChest(Position, ItemPool.Grab(Utils.Rng.Next(0, 5) == 1 ? ItemTier.Rare : ItemTier.Uncommon));
-            chest.Condition = () => IsNearEnemies(chest.Position);
+            chest.Condition = () => IsNotNearEnemies(chest.Position);
             var triangle = Model.Vertices;
             var direction = Vector3.Zero;
             for (var h = 0; h < 3; ++h)

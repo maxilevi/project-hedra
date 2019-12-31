@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Numerics;
 using Hedra.AISystem.Humanoid;
+using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EntitySystem.BossSystem;
 using Hedra.Engine.Generation;
@@ -24,8 +25,25 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             base.DoBuild(Structure, Rotation, Translation, Rng);
             SceneLoader.LoadIfExists(Structure, $"Assets/Env/Structures/Dungeon/{BaseFileName}.ply", Vector3.One, Rotation * Translation, Settings);
+            TaskScheduler.When(
+                () => ((DungeonWithBoss) Structure.WorldObject).Boss != null,
+                () => MakeChestOpenWithBossDeath(Structure)
+            );
             ((DungeonWithBoss)Structure.WorldObject).BuildingTrigger = (DungeonDoorTrigger) Structure.WorldObject.Children.FirstOrDefault(T => T is DungeonDoorTrigger);
             Structure.Waypoints = WaypointLoader.Load($"Assets/Env/Structures/Dungeon/{BaseFileName}-Pathfinding.ply", Vector3.One, Rotation * Translation);
+        }
+
+        private void MakeChestOpenWithBossDeath(CollidableStructure Structure)
+        {
+            var children = Structure.WorldObject.Children;
+            var boss = ((DungeonWithBoss) Structure.WorldObject).Boss;
+            for (var i = 0; i < children.Length; ++i)
+            {
+                if (children[i] is Chest chest && (chest.Position - boss.Position).LengthFast() < 48)
+                {
+                    chest.Condition = () => IsNotNearLookingEnemies(chest.Position) && boss.IsDead;
+                }
+            }
         }
 
         protected abstract string BaseFileName { get; }
