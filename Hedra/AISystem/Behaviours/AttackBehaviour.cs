@@ -37,6 +37,14 @@ namespace Hedra.AISystem.Behaviours
         public override void Update()
         {
             HandleFollowing();
+            if (Target != null)
+            {
+                var ride = Target.SearchComponent<Hedra.Components.RideComponent>();
+                if (ride?.Rider != null)
+                {
+                    SetTarget(ride.Rider);
+                }
+            }
             if (!Parent.Model.IsAttacking && Target != null && !InAttackRange(Target, 1.25f))
             {
                 Follow.Update();

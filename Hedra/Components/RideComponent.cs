@@ -30,6 +30,7 @@ namespace Hedra.Components
     public class RideComponent : EntityComponent
     {
         public const float SpeedMultiplier = 1.75f;
+        public IHumanoid Rider => _hasRider ? _rider : null;
         private IHumanoid _rider;
         private BasicAIComponent _ai;
         private HealthBarComponent _healthBar;
