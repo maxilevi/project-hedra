@@ -53,10 +53,10 @@ namespace Hedra.Engine.Rendering
             get
             {
                 if (_boundsInitialized) return _bounds;
-                var diagonal = Vector3.Transform(OriginalMesh.SupportPoint(Vector3.One) - OriginalMesh.SupportPoint(-Vector3.One), TransMatrix);
+                var diagonal = Vector3.Transform(OriginalMesh.SupportPoint(Vector3.One) - OriginalMesh.SupportPoint(-Vector3.One), TransMatrix) - Vector3.Transform(Vector3.Zero, TransMatrix);
                 _bounds.X = diagonal.X;
-                _bounds.X = diagonal.X;
-                _bounds.X = diagonal.X;
+                _bounds.Y = diagonal.Y;
+                _bounds.Z = diagonal.Z;
                 _boundsInitialized = true;
                 return _bounds;
             }
