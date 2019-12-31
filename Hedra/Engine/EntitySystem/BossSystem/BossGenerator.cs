@@ -51,7 +51,6 @@ namespace Hedra.Engine.EntitySystem.BossSystem
             dmgComponent.XpToGive = XP;
             var healthBarComponent = new BossHealthBarComponent(Entity, Entity.Name);
             Entity.RemoveComponent(Entity.SearchComponent<HealthBarComponent>());
-            Entity.AddComponent(new BossXPMessageComponent(Entity));
             Entity.Name = healthBarComponent.Name;
             Entity.Physics.CollidesWithStructures = true;
             Entity.AddComponent(healthBarComponent); 
