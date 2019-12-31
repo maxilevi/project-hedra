@@ -28,6 +28,7 @@ namespace Hedra.Engine.Player
         private bool _wasPlayingCustom;
         private readonly IPlayer _player;
         private HashSet<CollidableStructure> _insideStructures;
+        private HashSet<CollidableStructure> _previousInsideStructures;
         private CollidableStructure[] _currentNearStructures;
         private readonly Timer _enterTimer;
         private readonly Timer _insideTimer;
@@ -50,6 +51,7 @@ namespace Hedra.Engine.Player
             _enterTimer.MarkReady();
             _bodies = new Dictionary<CollisionGroup, RigidBody>();
             _notInsideSet = new HashSet<CollidableStructure>();
+            _previousInsideStructures = new HashSet<CollidableStructure>();
             _insideStructures = new HashSet<CollidableStructure>();
             NearCollisions = new CollisionGroup[0];
         }
@@ -98,29 +100,41 @@ namespace Hedra.Engine.Player
         private void HandleEvents()
         {
             if(!_insideTimer.Tick() || _currentNearStructures == null) return;
-            _notInsideSet.Clear();
+
+            /* Fill the hashset with the current structures we are inside */
+            _insideStructures.Clear();
             for (var i = 0; i < _currentNearStructures.Length; i++)
             {
                 var structure = _currentNearStructures[i];
-                if(_insideStructures.Contains(structure)) _notInsideSet.Add(structure);
-                if ((structure.Position.Xz() - _player.Position.Xz()).LengthFast() < structure.Radius * .75f)
+                if ((structure.Position.Xz() - _player.Position.Xz()).LengthFast() < (structure.Mountain?.Radius ?? structure.Radius))// * .75f)
                 {
-                    _notInsideSet.Remove(structure);
-                    if (!_insideStructures.Contains(structure))
-                    {
-                        _insideStructures.Add(structure);
-                        structure.Design.OnEnter(_player);
-                        StructureEnter?.Invoke(structure);
-                        break;
-                    }
+                    _insideStructures.Add(structure);
                 }
             }
 
-            foreach (var structure in _notInsideSet)
+            /* Check which structure were entered */
+            foreach (var structure in _insideStructures)
             {
-                if (!_insideStructures.Contains(structure)) continue;
-                StructureLeave?.Invoke(structure);
+                if (!_previousInsideStructures.Contains(structure))
+                {
+                    structure.Design.OnEnter(_player);
+                    StructureEnter?.Invoke(structure);
+                }
             }
+
+            /* Check which structures were left */
+            foreach (var structure in _previousInsideStructures)
+            {
+                if (!_insideStructures.Contains(structure))
+                {
+                    StructureLeave?.Invoke(structure);
+                }
+            }
+
+            /* Swap for the next iteration */
+            var tmp = _insideStructures;
+            _insideStructures = _previousInsideStructures;
+            _previousInsideStructures = tmp;
         }
         
         private bool NeedsUpdating(CollidableStructure[] Structures)
