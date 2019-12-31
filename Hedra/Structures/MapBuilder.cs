@@ -1,3 +1,4 @@
+using System.Linq;
 using Hedra.BiomeSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.StructureSystem;
@@ -12,6 +13,8 @@ namespace Hedra.Structures
 
         public static StructureDesign Sample(Vector3 Position, Region Biome)
         {
+            var designAtPosition = World.StructureHandler.StructureItems.FirstOrDefault(C => C.MapPosition == World.ToChunkSpace(Position))?.Design;
+            if (designAtPosition != null) return designAtPosition;
             var chunkOffset = World.ToChunkSpace(Position);
             var rng = new RandomDistribution();
             for (var i = 0; i < Biome.Structures.Designs.Length; i++)
@@ -19,7 +22,7 @@ namespace Hedra.Structures
                 var design = Biome.Structures.Designs[i];
                 rng.Seed = StructureDesign.BuildRngSeed(chunkOffset);
                 var targetPosition = StructureDesign.BuildTargetPosition(chunkOffset, rng);
-                if (design.ShouldSetup(chunkOffset, ref targetPosition, EmptyItems, Biome, rng))
+                if (design.ShouldSetup(chunkOffset, ref targetPosition, EmptyItems, Biome, rng) && !design.InterferesWithAnotherStructure(targetPosition))
                 {
                     return design;
                 }

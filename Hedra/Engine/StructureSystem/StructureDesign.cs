@@ -57,9 +57,9 @@ namespace Hedra.Engine.StructureSystem
                     var targetPosition = BuildTargetPosition(offset, Distribution);
                     var items = World.StructureHandler.StructureItems;
                     
-                    if (this.ShouldSetup(offset, ref targetPosition, items, Biome, Distribution) && !World.StructureHandler.StructureExistsAtPosition(targetPosition))
+                    /* If you change something here update the MapBuilder accordingly */
+                    if (this.ShouldSetup(offset, ref targetPosition, items, Biome, Distribution) && !InterferesWithAnotherStructure(targetPosition))
                     {
-                        if(World.StructureHandler.StructureCollides(this, targetPosition)) return;
                         World.StructureHandler.RegisterStructure(targetPosition);
                         var item = this.Setup(targetPosition, BuildRng(offset));
                         item.MapPosition = offset;
@@ -68,6 +68,12 @@ namespace Hedra.Engine.StructureSystem
                     }
                 }
             }
+        }
+
+        public bool InterferesWithAnotherStructure(Vector3 TargetPosition)
+        {
+            return World.StructureHandler.StructureCollides(this, TargetPosition) ||
+                   World.StructureHandler.StructureExistsAtPosition(TargetPosition);
         }
 
         public virtual bool ShouldRemove(CollidableStructure Structure)
