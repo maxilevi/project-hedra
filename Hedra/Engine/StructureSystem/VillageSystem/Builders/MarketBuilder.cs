@@ -148,10 +148,16 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                         SpawnHumanoid(HumanType.Merchant, originalPosition + Vector3.UnitZ * 40f);
                         break;
                     case 2:
-                        SpawnVillager(originalPosition - Vector3.UnitX * 40f, Rng);
+                        if(Rng.Next(0, 2) == 1)
+                            SpawnVillager(originalPosition - Vector3.UnitX * 40f, Rng);
+                        if(Rng.Next(0, 2) == 1)
+                            SpawnVillager(originalPosition - Vector3.UnitX * 50f, Rng);
                         break;
                     case 3:
-                        SpawnVillager(originalPosition + Vector3.UnitX * 40f, Rng);
+                        if(Rng.Next(0, 2) == 1)
+                            SpawnVillager(originalPosition + Vector3.UnitX * 40f, Rng);
+                        if(Rng.Next(0, 2) == 1)
+                            SpawnVillager(originalPosition - Vector3.UnitX * 50f, Rng);
                         break;
                 }
             }

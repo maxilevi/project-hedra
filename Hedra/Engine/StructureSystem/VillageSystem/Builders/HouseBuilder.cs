@@ -33,7 +33,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             var position = Parameters.Position + Vector3.Transform(Vector3.UnitX * Width,
                                Matrix4x4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian));
             
-            if (Rng.Next(0, 2) == 1)
+            if (true)//Rng.Next(0, 2) == 1)
             {
                 var villager = SpawnVillager(position, Rng);
                 if (Utils.Rng.NextFloat() < .4f)
@@ -52,7 +52,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
                     villager.AddComponent(new QuestGiverComponent(villager, questDesign));
                 }
             }
-            else if (Rng.Next(0, 6) == 1)
+            if (Rng.Next(0, 6) == 1)
             {
                 SpawnMob(MobType.Pug, position);
             }
