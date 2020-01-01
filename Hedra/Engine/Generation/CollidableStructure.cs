@@ -8,21 +8,20 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
-using Hedra.Engine.Rendering.Animation.ColladaParser;
-using Hedra.Engine.Rendering.UI;
 using System.Numerics;
-using Hedra.Engine.Player;
 using Hedra.Engine.Scenes;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem;
 using Hedra.Game;
 using Hedra.Numerics;
 using Hedra.Rendering;
+using InstanceData = Hedra.Engine.Rendering.InstanceData;
 
 namespace Hedra.Engine.Generation
 {
@@ -216,6 +215,7 @@ namespace Hedra.Engine.Generation
                     radius = newRadius;
             }
             this.Radius = radius;
+            if (Radius > 2000) Debugger.Break();
         }
 
         public void Dispose()
