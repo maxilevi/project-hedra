@@ -599,7 +599,8 @@ namespace Hedra.Engine.Generation
             {
                 for (var i = 0; i < structures.Length; ++i)
                 {
-                    if ((structures[i].Position - Point).LengthSquared() < structures[i].Radius * structures[i].Radius)
+                    var radius = structures[i].Mountain?.Radius ?? structures[i].Radius;
+                    if ((structures[i].Position - Point).LengthSquared() < radius * radius)
                         return true;
                 }
 

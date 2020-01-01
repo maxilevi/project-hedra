@@ -1,9 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Hedra.Engine.Core;
-using Hedra.Engine.Management;
-using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Rendering;
 using System.Numerics;
 
@@ -11,6 +7,7 @@ namespace Hedra.Engine.Rendering
 {
     public class CachedVertexData : CompressedVertexData, IDisposable, IPositionable, ISearchable
     {
+        public string Name { get; set; }
         private Vector3 _bounds;
         private Vector3 _position;
         private bool _positionInitialized;
@@ -71,7 +68,7 @@ namespace Hedra.Engine.Rendering
             Indices.Clear();
             Extradata.Clear();
         }
-
+        
         public static CachedVertexData FromVertexData(VertexData Data)
         {
             return new CachedVertexData
@@ -80,7 +77,8 @@ namespace Hedra.Engine.Rendering
                 Colors = Data.Colors,
                 Normals = Data.Normals,
                 Indices = Data.Indices,
-                Extradata = Data.Extradata
+                Extradata = Data.Extradata,
+                Name = Data.Name,
             };
         }
 
