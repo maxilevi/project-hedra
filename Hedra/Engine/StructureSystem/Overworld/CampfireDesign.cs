@@ -90,7 +90,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             SpawnMat(
                 Position + Structure.Position,
                 CampfireRotation,
-                TransformationMatrix * Matrix4x4.CreateScale(Vector3.One * .75f) * Matrix4x4.CreateTranslation(padOffset),
+                Matrix4x4.CreateScale(Vector3.One * .75f) * TransformationMatrix * Matrix4x4.CreateTranslation(padOffset),
                 Structure
             );
         }
