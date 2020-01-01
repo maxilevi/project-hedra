@@ -2,7 +2,7 @@ from Core import *
 from Hedra.Sound import SoundtrackManager
 
 INTERPOLATION_TIME = 2.0
-
+MENU_INTERPOLATION_TIME = 0.75
 VILLAGE_AMBIENT = 0
 MAIN_THEME = 1
 RAIN = 2
@@ -100,28 +100,31 @@ def on_song_end(is_playing_ambient, current_action_track, current_ambient_track)
     
     return resume_ambient(wrap(current_ambient_track + 1, BACKGROUND_SONGS))
 
-def interpolate_volume(target, get_vol, set_vol, time = INTERPOLATION_TIME):
-    vars = {'start': get_vol()}
+def interpolate_volume(target, get_vol, set_vol, time=INTERPOLATION_TIME, should_stop=None):
+    vars = {'start': get_vol(), 'stop': False}
     def change_vol(t):
+        if vars['stop']: return
+        if should_stop and should_stop():
+            vars['stop'] = True
         new_vol = lerp(vars['start'], target, t / time)
         set_vol(new_vol)
     do_for_seconds(time, change_vol, scale_time=False)
         
-def on_pause():
-    interpolate_volume(0.0, get_vol=get_pause_volume, set_vol=set_pause_volume, time=INTERPOLATION_TIME * 0.75)
+def on_pause(should_stop):
+    interpolate_volume(0.0, get_vol=get_pause_volume, set_vol=set_pause_volume, time=MENU_INTERPOLATION_TIME, should_stop=should_stop)
     
-def on_resume():
-    interpolate_volume(1.0, get_vol=get_pause_volume, set_vol=set_pause_volume, time=INTERPOLATION_TIME * 0.75)
+def on_resume(should_stop):
+    interpolate_volume(1.0, get_vol=get_pause_volume, set_vol=set_pause_volume, time=MENU_INTERPOLATION_TIME * 8, should_stop=should_stop)
 
 def soundtrack_setup():
-    vars = {'state': None}
+    vars = {'is_paused': None}
     def update():
         new = is_paused() and (not is_start_menu() or is_loading())
-        if vars['state'] == new:
+        if vars['is_paused'] == new:
             return
         if new:
-            on_pause()
+            on_pause(lambda: not vars['is_paused'])
         else:
-            on_resume()
-        vars['state'] = new
+            on_resume(lambda: vars['is_paused'])
+        vars['is_paused'] = new
     when_game_ready(lambda: do_every(0.25, update, scale_time=False))

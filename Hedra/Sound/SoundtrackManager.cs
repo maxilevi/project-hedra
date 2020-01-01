@@ -7,6 +7,7 @@
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
 
+using System;
 using System.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Scripting;
@@ -19,6 +20,9 @@ namespace Hedra.Sound
     public delegate void OnSongEnd();
     public static class SoundtrackManager
     {
+        private const int MillisecondsPerBuffer = 250;
+        private const int SampleRate = 44100;
+        private const int Channels = 2;
         private const string LibraryName = "Soundtrack.py";
         public static int MainTheme { get; private set; }
         public static int HostageSituation { get; private set; }
@@ -31,7 +35,7 @@ namespace Hedra.Sound
         private static Script _script;
         private static event OnSongEnd SongEnded;
         private static readonly object Lock = new object();
-        private static readonly float[] Buffer = new float[176400 / 2];
+        private static readonly float[] Buffer = new float[Channels * SampleRate / (1000 / MillisecondsPerBuffer)];
         private static SoundSource _source;
         private static SoundBuffer _backBuffer;
         private static SoundBuffer _frontBuffer;
@@ -109,7 +113,7 @@ namespace Hedra.Sound
             {
                 lock (Lock)
                 {
-                    _receivedBytes = _reader.ReadSamples(Buffer, 0, Buffer.Length);
+                    _receivedBytes = _reader.ReadSamples(Buffer, 0, _channels * _sampleRate / (1000 / MillisecondsPerBuffer));
                 }
 
                 if (_receivedBytes <= 0)
@@ -164,6 +168,10 @@ namespace Hedra.Sound
                 _reader = new VorbisReader(stream, true);
                 _sampleRate = _reader.SampleRate;
                 _channels = _reader.Channels;
+                if(_sampleRate != SampleRate)
+                    throw new ArgumentOutOfRangeException($"'{Name}' needs to have a sample rate of '{SampleRate}' but has '{_sampleRate}'");
+                if(_channels != Channels)
+                    throw new ArgumentOutOfRangeException($"'{Name}' needs to have '{SampleRate}' channels but has '{_channels}'");
                 _source.Stop();
             }
         }
