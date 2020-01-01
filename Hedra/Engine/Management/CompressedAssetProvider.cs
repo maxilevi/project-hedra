@@ -111,6 +111,7 @@ namespace Hedra.Engine.Management
 
             var soundBytes = ZipManager.UnZipBytes(File.ReadAllBytes(AppPath + SoundResource));
             var zipBytes = ZipManager.UnZipBytes(File.ReadAllBytes(AppPath + AssetsResource));
+
             File.WriteAllBytes(GetResourceName(AssetsResource), zipBytes);
             File.WriteAllBytes(GetResourceName(SoundResource), soundBytes);
 
@@ -125,8 +126,7 @@ namespace Hedra.Engine.Management
             try
             {
                 if (Directory.Exists(TemporalFolder)) Directory.Delete(TemporalFolder, true);
-                var info = Directory.CreateDirectory(TemporalFolder);
-                info.Attributes = FileAttributes.Directory | FileAttributes.Hidden;
+                Directory.CreateDirectory(TemporalFolder);
             }
             catch (IOException e)
             {
