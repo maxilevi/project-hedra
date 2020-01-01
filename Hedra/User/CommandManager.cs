@@ -39,6 +39,7 @@ using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.EntitySystem;
 using Hedra.Numerics;
+using Hedra.Sound;
 using Silk.NET.Windowing.Common;
 
 namespace Hedra.User
@@ -646,6 +647,17 @@ namespace Hedra.User
                 if (Parts[0] == "printch")
                 {
                     World.GetChunkAt(Caster.Position).Test();
+                }
+                if (Parts[0] == "track")
+                {
+                    if (Parts.Length == 2)
+                    {
+                        
+                    }
+                    else
+                    {
+                        Chat.Log(SoundtrackManager.GetCurrentTrackName());
+                    }
                 }
 
                 if (Parts[0] == "automata")
