@@ -7,7 +7,7 @@ namespace Hedra.Engine.ItemSystem
     public class ItemPoolSettings
     {
         public ItemTier Tier { get; set; }
-        public bool RandomizeTier { get; set; }
+        public bool RandomizeTier { get; set; } = true;
         public bool SameTier { get; set; } = true;
         public string EquipmentType { get; set; }
         public int Seed { get; set; }
