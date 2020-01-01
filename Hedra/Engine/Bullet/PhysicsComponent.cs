@@ -276,7 +276,7 @@ namespace Hedra.Engine.Bullet
         {
             if (!(Parent is LocalPlayer))
             {
-                _isStuck = (_moved && _body.LinearVelocity.Compatible().Xz().LengthSquared() < 1f) && !Parent.IsKnocked;
+                _isStuck = (_moved && _body.LinearVelocity.Compatible().Xz().LengthSquared() < 4f) && !Parent.IsKnocked;
                 _moved = false;
             }
         }
