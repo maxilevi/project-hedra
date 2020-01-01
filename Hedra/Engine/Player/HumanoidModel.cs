@@ -123,6 +123,7 @@ namespace Hedra.Engine.Player
             BaseBroadphaseBox = AssetManager.LoadHitbox(Template.Path) * Model.Scale;
             Dimensions = AssetManager.LoadDimensions(Template.Path) * Model.Scale;
             _modelSound = new AreaSound(SoundType.HumanRun, Vector3.Zero, 48f);
+            _modelSound.Volume = 0.5f;
             _foodTimer = new Timer(1)
             {
                 AutoReset = false

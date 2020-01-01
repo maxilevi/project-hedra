@@ -23,7 +23,7 @@ namespace Hedra.Engine.Sound
         private bool _loaded;
         
         public Vector3 ListenerPosition { get; private set; }
-        public float Volume { get; set; } = 0.4f;
+        public float Volume { get; set; } = 0.05f;
 
         public SoundProvider()
         {

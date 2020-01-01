@@ -39,7 +39,7 @@ namespace Hedra.Engine.Sound
             _al.SourceStop(Id);
         }
 
-        private void Play(SoundBuffer Buffer)
+        public void Play(SoundBuffer Buffer)
         {
             var position = SoundPlayer.ListenerPosition;
             _al.SetListenerProperty(ListenerVector3.Position, position);

@@ -26,10 +26,12 @@ namespace Hedra.Sound
         public static int Rain { get; private set; }
         public static int VillageAmbient { get; private set; }
         public static int OnTheLam { get; private set; }
+        public static int SkeletonSkirmish { get; private set; }
+        public static int FacingTheBeast { get; private set; }
         private static Script _script;
         private static event OnSongEnd SongEnded;
         private static readonly object Lock = new object();
-        private static readonly float[] Buffer = new float[176400 * 2];
+        private static readonly float[] Buffer = new float[176400 / 2];
         private static SoundSource _source;
         private static SoundBuffer _backBuffer;
         private static SoundBuffer _frontBuffer;
@@ -62,7 +64,11 @@ namespace Hedra.Sound
 
         private static void OnSongEnd()
         {
-            _script.Get("on_song_end").Invoke(_isPlayingAmbient, _currentActionSong, _currentAmbientSong);
+            var value = _script.Get("on_song_end").Invoke<int>(_isPlayingAmbient, _currentActionSong, _currentAmbientSong);
+            if (_isPlayingAmbient)
+                _currentAmbientSong = value;
+            else
+                _currentActionSong = value;
         }
         
         public static void PlayAmbient()
@@ -78,6 +84,11 @@ namespace Hedra.Sound
             _isPlayingAmbient = false;
             _currentActionSong = _script.Get("resume_action").Invoke<int>(Index);
         }
+
+        public static string GetCurrentTrackName()
+        {
+            return _script.Get("get_current_track_name").Invoke<string>(_isPlayingAmbient, _currentActionSong, _currentAmbientSong);
+        }
         
         public static void Update()
         {
@@ -90,8 +101,7 @@ namespace Hedra.Sound
 
             if(_usedBuffer != null && !_source.IsPlaying && _receivedBytes > 0)
             {
-                _al.SetSourceProperty(_source.Id, SourceInteger.Buffer, (int) _usedBuffer.Id);
-                _al.SourcePlay(_source.Id);
+                _source.Play(_usedBuffer);
                 _buildBuffers = true;
             }
             
@@ -105,6 +115,7 @@ namespace Hedra.Sound
                 if (_receivedBytes <= 0)
                 {
                     SongEnded?.Invoke();
+                    _buildBuffers = false;
                     return;
                 }
                 var data = CastBuffer(Buffer, _receivedBytes);
@@ -153,6 +164,7 @@ namespace Hedra.Sound
                 _reader = new VorbisReader(stream, true);
                 _sampleRate = _reader.SampleRate;
                 _channels = _reader.Channels;
+                _source.Stop();
             }
         }
         
@@ -174,6 +186,8 @@ namespace Hedra.Sound
             Rain = _script.Get<int>("RAIN");
             VillageAmbient = _script.Get<int>("VILLAGE_AMBIENT");
             OnTheLam = _script.Get<int>("ON_THE_LAM");
+            FacingTheBeast = _script.Get<int>("FACING_THE_BEAST");
+            SkeletonSkirmish = _script.Get<int>("SKELETON_SKIRMISH");
             _script.Get("soundtrack_setup").Invoke();
         }
     }

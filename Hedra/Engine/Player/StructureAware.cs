@@ -79,7 +79,7 @@ namespace Hedra.Engine.Player
             for (var i = 0; i < _currentNearStructures.Length; i++)
             {
                 var structure = _currentNearStructures[i];
-                if ((structure.Position.Xz() - _player.Position.Xz()).LengthFast() < structure.Radius * .75f)
+                if ((structure.Position.Xz() - _player.Position.Xz()).LengthFast() < (structure.Mountain?.Radius ?? structure.Radius))
                 {
                     if (!_wasPlayingCustom && structure.Design.AmbientSongs.Length > 0)
                     {
