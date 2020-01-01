@@ -16,7 +16,7 @@ from Hedra.Numerics import VectorExtensions
 clr.ImportExtensions(VectorExtensions)
 TEXT_BOX_POSITION = Vector2(-0.95, -.65)
 COMMAND_LINE_POSITION = Vector2(-0.825, -0.725)
-COMMAND_LINE_SIZE = Vector2(.225, .02)
+COMMAND_LINE_SIZE = Vector2(.275, .02)
 MAX_HISTORY = 25
 MAX_LINES = 10
 MAX_FADE_TIME = 4.0

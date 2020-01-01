@@ -38,7 +38,8 @@ namespace Hedra.Rendering.UI
             {
                 ShowBar = false,
                 UpdateTextRatio = false,
-                AlignLeft = true
+                AlignLeft = true,
+                TextFont = FontCache.GetBold(10)
             };
             _focusButton = new Button(Position, Scale, GUIRenderer.TransparentTexture);
             _caret = new RenderableText(string.Empty, Vector2.Zero, _textBar.TextColor, _textBar.TextFont);
