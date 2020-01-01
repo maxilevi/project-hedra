@@ -95,6 +95,6 @@ namespace Hedra.Localization
             File.WriteAllText(SavePath, JsonConvert.SerializeObject(Mappings, Formatting.Indented));
         }
 
-        private static string SavePath => $"{GameLoader.AppPath}/controls.cfg";
+        private static string SavePath => $"{GameLoader.AppData}/controls.cfg";
     }
 }
