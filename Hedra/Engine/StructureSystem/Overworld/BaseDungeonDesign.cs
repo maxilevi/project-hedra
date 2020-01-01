@@ -20,6 +20,7 @@ using Hedra.Items;
 using Hedra.Localization;
 using Hedra.Numerics;
 using Hedra.Rendering;
+using Hedra.Sound;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
@@ -103,5 +104,11 @@ namespace Hedra.Engine.StructureSystem.Overworld
             Skeleton.SearchComponent<DamageComponent>().Ignore(E => E.SearchComponent<IsDungeonMemberComponent>() != null);
             Skeleton.SearchComponent<IBehaviouralAI>().AlterBehaviour<RoamBehaviour>(new DungeonRoamBehaviour(Skeleton));
         }
+
+        public override int[] AmbientSongs => new[]
+        {
+            SoundtrackManager.FacingTheBeast,
+            SoundtrackManager.SkeletonSkirmish
+        };
     }
 }
