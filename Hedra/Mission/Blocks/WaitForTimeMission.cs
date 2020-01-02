@@ -10,6 +10,7 @@ namespace Hedra.Mission.Blocks
     {
         private readonly int _targetTime;
         private readonly float _speed;
+        private bool _setup;
 
         public override bool IsCompleted
         {
@@ -29,12 +30,14 @@ namespace Hedra.Mission.Blocks
         
         public override void Setup()
         {
+            _setup = true;
             SkyManager.PushTime();
             SkyManager.DaytimeSpeed = _speed;
         }
 
         public void Pop()
         {
+            if(!_setup) return;
             SkyManager.PopTime();
         }
 
