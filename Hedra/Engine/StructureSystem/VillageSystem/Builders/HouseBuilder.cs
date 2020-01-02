@@ -33,24 +33,21 @@ namespace Hedra.Engine.StructureSystem.VillageSystem.Builders
             var position = Parameters.Position + Vector3.Transform(Vector3.UnitX * Width,
                                Matrix4x4.CreateRotationY(Parameters.Rotation.Y * Mathf.Radian));
             
-            if (true)//Rng.Next(0, 2) == 1)
+            var villager = SpawnVillager(position, Rng);
+            if (Utils.Rng.NextFloat() <= .4f)
             {
-                var villager = SpawnVillager(position, Rng);
-                if (Utils.Rng.NextFloat() < .4f)
+                villager.RemoveComponent(villager.SearchComponent<TalkComponent>());
+                villager.RemoveComponent(villager.SearchComponent<ThoughtsComponent>());
+                var scholars = new[]
                 {
-                    villager.RemoveComponent(villager.SearchComponent<TalkComponent>());
-                    villager.RemoveComponent(villager.SearchComponent<ThoughtsComponent>());
-                    var scholars = new[]
-                    {
-                        HumanType.Scholar.ToString().ToLowerInvariant(),
-                        HumanType.Bard.ToString().ToLowerInvariant()
-                    };
-                    var questDifficulty = Array.IndexOf(scholars, villager.Type.ToLowerInvariant()) != -1
-                        ? QuestTier.Medium
-                        : QuestTier.Easy;
-                    var questDesign = MissionPool.Random(position, questDifficulty);
-                    villager.AddComponent(new QuestGiverComponent(villager, questDesign));
-                }
+                    HumanType.Scholar.ToString().ToLowerInvariant(),
+                    HumanType.Bard.ToString().ToLowerInvariant()
+                };
+                var questDifficulty = Array.IndexOf(scholars, villager.Type.ToLowerInvariant()) != -1
+                    ? QuestTier.Medium
+                    : QuestTier.Easy;
+                var questDesign = MissionPool.Random(position, questDifficulty);
+                villager.AddComponent(new QuestGiverComponent(villager, questDesign));
             }
             if (Rng.Next(0, 6) == 1)
             {
