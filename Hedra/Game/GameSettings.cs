@@ -61,7 +61,6 @@ namespace Hedra.Game
         public static bool GlobalShadows = true;
         public static bool Hardcore = false;
         public static bool UnderWaterEffect = false;
-        private static bool _fullscreen;
         private static int _shadowQuality = 2;
         private static int _frameLimit;
 
@@ -126,7 +125,11 @@ namespace Hedra.Game
         public static bool Fullscreen
         {
             get => Program.GameWindow.Fullscreen;
-            set => Program.GameWindow.Fullscreen = value;
+            set
+            {
+                Program.GameWindow.Fullscreen = value;
+                if(!value) Program.GameWindow.WindowState = WindowState.Maximized;
+            }
         }
 
         [Setting]
@@ -188,30 +191,35 @@ namespace Hedra.Game
 
         public static void LoadNormalSettings(string Path)
         {
-            Load(Path, P => !P.IsDefined(typeof(WindowSettingAttribute), true));
+            Load(Path, P => !P.IsDefined(typeof(WindowSettingAttribute), true), LoadDefaultSettings);
         }
         
         public static void LoadWindowSettings(string Path)
         {
-            Load(Path, P => P.IsDefined(typeof(WindowSettingAttribute), true));
+            Load(Path, P => P.IsDefined(typeof(WindowSettingAttribute), true), LoadDefaultSettings);
         }
 
-        private static void Load(string Path, Predicate<PropertyInfo> Predicate)
+        private static void Load(string Path, Predicate<PropertyInfo> Predicate, Action LoadSettings)
         {
-            if (!File.Exists(Path)) return;
-
-            var lines = File.ReadAllLines(Path);
-            var properties = GatherProperties();
-            for (var i = 0; i < lines.Length; i++)
+            if (File.Exists(Path))
             {
-                var parts = lines[i].Split('=');
-                for (var k = 0; k < properties.Length; k++)
+                var lines = File.ReadAllLines(Path);
+                var properties = GatherProperties();
+                for (var i = 0; i < lines.Length; i++)
                 {
-                    if (!Predicate(properties[k])) continue;
-                    if (properties[k].Name != parts[0]) continue;
-                    var value = ConvertString(parts[1], properties[k].PropertyType);
-                    properties[k].SetValue(null, value, null);
+                    var parts = lines[i].Split('=');
+                    for (var k = 0; k < properties.Length; k++)
+                    {
+                        if (!Predicate(properties[k])) continue;
+                        if (properties[k].Name != parts[0]) continue;
+                        var value = ConvertString(parts[1], properties[k].PropertyType);
+                        properties[k].SetValue(null, value, null);
+                    }
                 }
+            }
+            else
+            {
+                LoadSettings();
             }
         }
 
@@ -225,6 +233,11 @@ namespace Hedra.Game
         private static object ConvertString(string Value, Type Type)
         {
             return Type.IsEnum ? Enum.Parse(Type, Value) : Convert.ChangeType(Value, Type);
+        }
+
+        private static void LoadDefaultSettings()
+        {
+            Fullscreen = true;
         }
     }
 }
