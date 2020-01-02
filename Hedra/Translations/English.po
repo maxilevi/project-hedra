@@ -751,3 +751,5 @@ quest_the_beginning_npc_dialog_4 = My brother, a wizard, is convinced he can bui
 quest_the_beginning_npc_dialog_5 = Every now and then I visit my father at a nearby fishing post.;We train together and fish food for the whole season.
 quest_the_beginning_npc_dialog_6 = Mastering a whole skill tree is not something everyone can do.
 quest_the_beginning_end_dialog_0 = I hope you liked your tour around town but there is still a lot to do.;Meet me again sometime later in order to talk about some future quests.
+
+# Items
