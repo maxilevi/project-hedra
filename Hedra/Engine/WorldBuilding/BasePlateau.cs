@@ -2,6 +2,7 @@ using System;
 using Hedra.Core;
 using Hedra.Engine.Generation;
 using System.Numerics;
+using Hedra.Engine.BiomeSystem;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.WorldBuilding
@@ -13,7 +14,9 @@ namespace Hedra.Engine.WorldBuilding
         protected BasePlateau(Vector2 Position)
         {
             this.Position = Position;
-            this.MaxHeight = World.BiomePool.GetRegion(Position.ToVector3()).Generation.GetAccuarateMaxHeight(Position.X, Position.Y);
+            var region = World.BiomePool.GetRegion(Position.ToVector3());
+            var height = region.Generation.GetAccuarateMaxHeight(Position.X, Position.Y);
+            this.MaxHeight = Math.Max(height, BiomePool.SeaLevel + 1);
         }
 
         public Vector2 Position { get; }
