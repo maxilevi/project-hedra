@@ -500,6 +500,7 @@ namespace Hedra.User
                     if (Parts[1] == "follow")
                     {
                         var vill = NPCCreator.SpawnVillager(Caster.Position + Caster.Orientation * 16, Utils.Rng);
+                        vill.IsSitting = true;
                         vill.AddComponent(new FollowAIComponent(vill, Caster));
                         return true;
                     }{}
