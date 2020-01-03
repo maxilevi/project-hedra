@@ -36,17 +36,18 @@ namespace Hedra.Numerics
                 {
                     if (_seedCache.TryGetValue(value, out var arr))
                     {
-                        _seedArray = arr.ToArray();
+                        for (var i = 0; i < arr.Length; ++i)
+                            _seedArray[i] = arr[i];
                     }
                     else
                     {
-                        CreateSeedArray(value);
+                        FillSeedArray(value);
                         _seedCache.Add(value, _seedArray.ToArray());
                     }
                 }
                 else
                 {
-                    CreateSeedArray(value);
+                    FillSeedArray(value);
                 }
 
                 this._inext = 0;
@@ -55,7 +56,7 @@ namespace Hedra.Numerics
             }
         }
 
-        private void CreateSeedArray(int Value)
+        private void FillSeedArray(int Value)
         {
             int num1 = 161803398 - (Value == int.MinValue ? int.MaxValue : System.Math.Abs(Value));
             this._seedArray[55] = num1;
