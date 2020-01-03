@@ -97,7 +97,6 @@ def on_arrived(giver, owner, is_day):
     talk.TalkToPlayer()
 
 def make_follow(giver, target):
-    giver.IsSitting = False
     MissionCore.remove_component_if_exists(giver, IBasicAIComponent)
     giver.AddComponent(FollowAIComponent(giver, target))
 
