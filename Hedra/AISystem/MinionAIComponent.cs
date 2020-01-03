@@ -42,6 +42,7 @@ namespace Hedra.AISystem
             if((Parent.Position - Owner.Position).LengthSquared() > MaxSeparatedDistance)
             {
                 Parent.Position = Owner.Position + Vector3.Cross(Parent.Orientation, Vector3.UnitY) * 12f;
+                Parent.Physics.ResetFall();
                 _attack.ResetTarget();
                 _follow.Cancel();
                 _follow.Target = Owner;
