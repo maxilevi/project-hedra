@@ -40,7 +40,6 @@ namespace Hedra.Engine.Rendering.UI
         public CharacterCreatorUI CharacterCreator { get; }
         private readonly NetworkUI ConnectPanel;
         private readonly BackgroundTexture _title;
-        private readonly Button _newRun;
         private readonly Button _loadButton;
         public bool InMenu => Menu.Enabled || _optionsMenu.Enabled || ConnectPanel.Enabled;
         private static readonly Color DefaultFontColor = Color.White;
@@ -64,10 +63,10 @@ namespace Hedra.Engine.Rendering.UI
             var blackBand = new BackgroundTexture(Color.FromArgb(0,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.09f / GameSettings.Height * 578), GradientType.LeftRight);
             
             
-            _newRun = new Button(new Vector2(.1f, bandPosition.Y),
+            var newRun = new Button(new Vector2(.1f, bandPosition.Y),
                                 new Vector2(0.15f,0.075f), Translation.Create("new_world"), DefaultFontColor, FontCache.GetNormal(fontSize));
-
-            _newRun.Click += delegate
+            
+            newRun.Click += delegate
             {
                 GameSettings.NewWorld = true;
                 CharacterSelector.ShouldHost = false;
@@ -160,7 +159,7 @@ namespace Hedra.Engine.Rendering.UI
             Menu.AddElement(hostWorld);
             Menu.AddElement(_title);
             Menu.AddElement(quit);
-            Menu.AddElement(_newRun);
+            Menu.AddElement(newRun);
             Menu.AddElement(_loadButton);
             Menu.AddElement(options);
             Menu.AddElement(disconnect);
@@ -174,7 +173,7 @@ namespace Hedra.Engine.Rendering.UI
                 if (Network.Instance.IsAlive)
                 {
 
-                    _newRun.Disable();
+                    newRun.Disable();
                     _loadButton.Disable();
                     hostWorld.Disable();
                     disconnect.Enable();
