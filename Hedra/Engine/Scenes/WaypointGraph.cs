@@ -1,4 +1,5 @@
 using System;
+using System.Buffers;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,10 +17,14 @@ namespace Hedra.Engine.Scenes
     public class WaypointGraph
     {
         private Dictionary<Waypoint, HashSet<Waypoint>> _adjacencyList;
+        private readonly ObjectPool<Dictionary<Waypoint, Waypoint>> _parentsPool;
+        private readonly ObjectPool<Queue<Waypoint>> _queuePool;
 
         public WaypointGraph()
         {
             _adjacencyList = new Dictionary<Waypoint, HashSet<Waypoint>>();
+            _parentsPool = new ObjectPool<Dictionary<Waypoint, Waypoint>>(() => new Dictionary<Waypoint, Waypoint>());
+            _queuePool = new ObjectPool<Queue<Waypoint>>(() => new Queue<Waypoint>());
         }
 
         public void AddVertex(Waypoint A)
@@ -125,8 +130,17 @@ namespace Hedra.Engine.Scenes
         {
             CanReach = true;
             if (Source.Position == Target.Position) return new[] { Source };
-            var parents = new Dictionary<Waypoint, Waypoint>();
-            var queue = new Queue<Waypoint>();
+            var parents = _parentsPool.GetObject();
+            var queue = _queuePool.GetObject();
+
+            void Cleanup()
+            {
+                queue.Clear();
+                parents.Clear();
+                _queuePool.PutObject(queue);
+                _parentsPool.PutObject(parents);
+            }
+            
             parents.Add(Source, default);
             queue.Enqueue(Source);
             while (queue.Count > 0)
@@ -136,12 +150,18 @@ namespace Hedra.Engine.Scenes
                 {
                     if(parents.ContainsKey(w)) continue;
                     parents.Add(w, v);
-                    if (w.Position == Target.Position) return ReconstructPath(parents, Source, Target);
+                    if (w.Position == Target.Position)
+                    {
+                        var path = ReconstructPath(parents, Source, Target);
+                        Cleanup();
+                        return path;
+                    }
                     queue.Enqueue(w);
                 }
             }
 
             CanReach = false;
+            Cleanup();
             return new Waypoint[0];
         }
 
