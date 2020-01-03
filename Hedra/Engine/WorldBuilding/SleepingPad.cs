@@ -1,20 +1,12 @@
-using System;
-using System.Windows.Forms;
 using Hedra.Components;
 using Hedra.Engine.CacheSystem;
-using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
-using Hedra.Engine.Management;
-using Hedra.Engine.Events;
-using Hedra.Engine.Game;
-using Hedra.Engine.Player;
-using Hedra.Engine.Scenes;
 using Hedra.EntitySystem;
-using Hedra.Engine.Localization;
 using Hedra.Game;
 using Hedra.Localization;
 using System.Numerics;
-
+using Hedra.Core;
+using Hedra.Engine.Core;
 using KeyEventArgs = Hedra.Engine.Events.KeyEventArgs;
 
 namespace Hedra.Engine.WorldBuilding
@@ -24,18 +16,17 @@ namespace Hedra.Engine.WorldBuilding
         public bool IsOccupied => Sleeper != null;
         public IHumanoid Sleeper { get; private set; }
         public Vector3 TargetRotation { get; set; }
-        
         protected override bool DisposeAfterUse => false;
         protected override bool SingleUse => false;
-
         protected override bool CanInteract => SkyManager.IsSleepTime && !IsOccupied;
-
+        private readonly Counter _moveCooldown;
+        
         public SleepingPad(Vector3 Position) : base(Position)
         {
+            _moveCooldown = new Counter(4);
         }
 
         public override string Message => Translations.Get("to_sleep");
-
         public override int InteractDistance => 24;
         protected override bool AllowThroughCollider => true;
 
@@ -84,6 +75,7 @@ namespace Hedra.Engine.WorldBuilding
                     dmgComponent.Immune = false;
                     dmgComponent.OnDamageEvent += this.OnDamageWakeUp;
                 }
+                _moveCooldown.Reset();
                 Human.Physics.OnMove += OnMoveWakeUp;
             }
             Sleeper = Human;
@@ -91,7 +83,8 @@ namespace Hedra.Engine.WorldBuilding
         
         private void OnMoveWakeUp()
         {
-            this.SetSleeper(null);
+            if(_moveCooldown.Tick())
+                SetSleeper(null);
         }
 
         private void OnDamageWakeUp(DamageEventArgs Args)

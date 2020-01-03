@@ -353,6 +353,7 @@
     <Compile Include="Engine\CacheSystem\StorylineCache.cs" />
     <Compile Include="Engine\CacheSystem\WindmillIconCache.cs" />
     <Compile Include="Engine\CacheSystem\WizardTowerCache.cs" />
+    <Compile Include="Engine\Core\Counter.cs" />
     <Compile Include="Engine\Core\SequentialList.cs" />
     <Compile Include="Engine\DataStructures\AABB.cs" />
     <Compile Include="Engine\DataStructures\Octree.cs" />
