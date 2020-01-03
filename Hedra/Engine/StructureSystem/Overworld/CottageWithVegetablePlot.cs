@@ -1,4 +1,5 @@
 using System.Numerics;
+using Hedra.Core;
 using Hedra.Engine.Generation;
 using Hedra.Numerics;
 
@@ -32,7 +33,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         public void MakeEmpty()
         {
-            NPC?.Dispose();
+            TaskScheduler.When(() => NPC != null, NPC.Dispose);
         }
     }
 }

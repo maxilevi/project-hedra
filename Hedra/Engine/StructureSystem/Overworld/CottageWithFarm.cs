@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Numerics;
+using Hedra.Core;
 using Hedra.Engine.Generation;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
@@ -14,8 +15,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         public void MakePossessed()
         {
-            NPC?.Dispose();
-            NPC = null;
+            TaskScheduler.When(() => NPC != null, NPC.Dispose);
             _area = World.Highlighter.HighlightAreaPermanently(Position, new Vector4(.2f, .2f, .2f, 1f), Radius);
         }
 
