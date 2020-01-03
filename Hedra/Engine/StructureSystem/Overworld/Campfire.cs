@@ -40,7 +40,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         private static ParticleSystem _fireParticles;
         private long _passedTime;
         private PointLight _light;
-        private SoundItem _sound;
+        private AreaSound _fireSound;
         
         public Campfire(Vector3 Position) : base(Position)
         {
@@ -48,6 +48,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 _fireParticles = new ParticleSystem(Vector3.Zero);
             _fireParticles.HasMultipleOutputs = true;
             _canCraft = true;
+            _fireSound = new AreaSound(SoundType.Fireplace, FirePosition, 32);
         }
 
         public override Crafting.CraftingStation StationType => Crafting.CraftingStation.Campfire;
@@ -91,36 +92,15 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 }
             }
 
-            if (this._sound == null && distToPlayer < 32f*32f*2f && HasFire)
+            _fireSound.Position = FirePosition;
+            _fireSound.Update(HasFire);
+
+            if ( _light != null && (FirePosition - LocalPlayer.Instance.Position).LengthSquared() > ShaderManager.LightDistance * ShaderManager.LightDistance * 2f)
             {
-                this._sound = SoundPlayer.GetAvailableSource();
-            }
-
-            if (this._sound != null)
-            {
-
-                if (!this._sound.Source.IsPlaying)
-                    this._sound.Source.Play(SoundPlayer.GetBuffer(SoundType.Fireplace), FirePosition, 1f, 1f, true);
-
-                var gain = Math.Max(0, 1 - (FirePosition - SoundPlayer.ListenerPosition).LengthFast() / 32f);
-                this._sound.Source.Volume = gain;
-            }
-
-            if ( this._light != null && (FirePosition - LocalPlayer.Instance.Position).LengthSquared() >
-                ShaderManager.LightDistance * ShaderManager.LightDistance * 2f){
-
-                this._light.Position = Vector3.Zero;
-                this._light.Locked = false;
+                _light.Position = Vector3.Zero;
+                _light.Locked = false;
                 ShaderManager.UpdateLight(this._light);
-                this._light = null;
-                
-            }
-
-            if (this._sound != null && distToPlayer > 32f * 32f * 2f)
-            {
-                this._sound.Source.Stop();
-                this._sound.Locked = false;
-                this._sound = null;
+                _light = null;
             }
         }
 
@@ -162,11 +142,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 this._light.Locked = false;
                 this._light = null;
             }
-            if (this._sound != null)
-            {
-                this._sound.Locked = false;
-                this._sound = null;
-            }
+            _fireSound.Dispose();
             Bandit?.Dispose();
         }
     }

@@ -1,6 +1,7 @@
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using System.Numerics;
+using Hedra.Game;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.BiomeSystem.NormalBiome
@@ -42,12 +43,23 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             );
             AddSet(DensityMap, set, F => F.Clamp01() * 256.0f * Chunk.BlockSize);
 
-            /* Small set, generate high frequency noise to avoid making the terrain soft */
+            /* Small set, generate high frequency noise to avoid making the terrain smooth */
             var smallSet = MultiplySets(
                 Noise.GetSimplexSetWithFrequency(offset, size, scale, 0.2f),
                 Noise.GetSimplexSetWithFrequency(offset, size, scale, 0.075f)
             );
             AddSet(DensityMap, smallSet, F => F * -1.0f);
+
+            if (!GameManager.InStartMenu)
+            {
+                /* Sparse lakes */
+                set1 = Noise.GetPerlinSetWithFrequency(offset, size, scale, 0.0005f);
+                set1 = MultiplySets(
+                    set1,
+                    TransformSet(Noise.GetSimplexSetWithFrequency(Offset, size, scale, 0.00075f), F => F)
+                );
+                AddSet(DensityMap, set1, F => F.Clamp01() * -128.0f);
+            }
         }
 
         protected override void DoBuildHeightMap(FastNoiseSIMD Noise, float[][] HeightMap, BlockType[][] TypeMap, int Width, float Scale, Vector2 Offset)

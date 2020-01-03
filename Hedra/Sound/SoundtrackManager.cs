@@ -12,6 +12,7 @@ using System.IO;
 using Hedra.Engine.Management;
 using Hedra.Engine.Scripting;
 using Hedra.Engine.Sound;
+using Hedra.Game;
 using NVorbis;
 using Silk.NET.OpenAL;
 
@@ -96,12 +97,12 @@ namespace Hedra.Sound
         
         public static void Update()
         {
-            if ( !_loaded) return;
+            if (!_loaded) return;
             
             _source.Position = SoundPlayer.ListenerPosition;
             _source.Volume = FinalVolume;
 
-            if (FinalVolume < 0.005f) return;
+            if (FinalVolume < 0.01f) return;
 
             if(_usedBuffer != null && !_source.IsPlaying && _receivedBytes > 0)
             {
