@@ -84,7 +84,6 @@ namespace Hedra.Engine.Player
             Human.Physics.MoveTowards(MoveSpace);
             if(Orientate)
                 ProcessOrientation(MoveSpace, CharacterRotation);
-            Human.IsSitting = false;
         }
         
         public void ProcessTranslation(float CharacterRotation, Vector3 MoveSpace, bool Orientate)

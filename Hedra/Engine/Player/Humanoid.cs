@@ -168,6 +168,12 @@ namespace Hedra.Engine.Player
             Speed = this.BaseSpeed;
             BaseAttackSpeed = .75f;
             AddComponent(_damageHandler = new DamageComponent(this));
+            Physics.OnMove += OnMove;
+        }
+
+        private void OnMove()
+        {
+            IsSitting = false;
         }
 
         public override void Update()
