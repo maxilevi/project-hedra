@@ -50,7 +50,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public BiomeGenerator Landscape { get; private set; }
         public int Lod { get; set; } = 1;
         public ChunkMesh Mesh { get; }
-        public bool NeedsRebuilding { get; private set; }
+        public bool NeedsRebuilding => _needsRebuildCount > 0; 
         public bool NeverBuilded { get; private set; } = true;
         public int OffsetX { get; }
         public int OffsetZ { get; }
@@ -59,7 +59,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public Vector3 Position { get; private set; }
         public ChunkAutomatons Automatons { get; }
         private List<CoordinateHash3D> _waterPositions;
-        private Timer _activityTimer;
+        private int _needsRebuildCount;
+        private int _currentNeedsRebuildCount;
 
         //private byte[] _rleBlocks;
         private Block[] _blocks;
@@ -83,10 +84,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
             _structuresBuilder = new ChunkStructuresMeshBuilder(this);
             _blocksLock = new object();
             _blocks = new Block[BoundsX * BoundsY * BoundsZ];
-            _activityTimer = new Timer(3)
-            {
-                UseTimeScale = false
-            };
             _regionCache = new RegionCache(Position, Position + new Vector3(Chunk.Width, 0, Chunk.Width));
             Biome = World.BiomePool.GetPredominantBiome(this);
             Landscape = World.BiomePool.GetGenerator(this);
@@ -221,13 +218,14 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             this.IsBuilding = true;
             this.BuildedCompletely = false;
+            _currentNeedsRebuildCount = _needsRebuildCount;
         }
 
         private void FinishUpload(ChunkMeshBuildOutput Input, int BuildedLod)
         {
             this.BuildedLod = BuildedLod;
             this.BuildedWithStructures = true;
-            this.NeedsRebuilding = false;
+            _needsRebuildCount -= _currentNeedsRebuildCount;
             this.IsBuilding = false;
         }
 
@@ -330,7 +328,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     Mesh.Elements.Add(Data[i]);
             }
 
-            this.NeedsRebuilding = true;
+            _needsRebuildCount++;
         }
 
         public void RemoveStaticElement(params VertexData[] Data)
@@ -343,7 +341,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     Mesh.Elements.Remove(Data[i]);
             }
 
-            this.NeedsRebuilding = true;
+            _needsRebuildCount++;
         }
 
         public void AddInstance(InstanceData Data, bool AffectedByLod = false)
@@ -351,7 +349,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (Mesh == null) throw new ArgumentException($"Failed to add instance data ");
 
             StaticBuffer.AddInstance(Data, AffectedByLod);
-            this.NeedsRebuilding = true;
+            _needsRebuildCount++;
         }
 
         public void RemoveInstance(InstanceData Data)
@@ -359,7 +357,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (Mesh == null) throw new ArgumentException($"Failed to remove instance data ");
 
             StaticBuffer.RemoveInstance(Data);
-            this.NeedsRebuilding = true;
+            _needsRebuildCount++;
         }
 
         public void AddCollisionShape(params CollisionShape[] Data)
