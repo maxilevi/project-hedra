@@ -30,25 +30,18 @@ namespace Hedra.Engine.Player
         private HashSet<CollidableStructure> _insideStructures;
         private HashSet<CollidableStructure> _previousInsideStructures;
         private CollidableStructure[] _currentNearStructures;
-        private readonly Timer _enterTimer;
         private readonly Timer _insideTimer;
         private readonly Timer _updateTimer;
+        private readonly Timer _soundTimer;
         private readonly Dictionary<CollisionGroup, RigidBody> _bodies;
         private readonly HashSet<CollidableStructure> _notInsideSet;
 
         public StructureAware(IPlayer Player)
         {
             _player = Player;
-            _enterTimer = new Timer(12f)
-            {
-                AutoReset = false
-            };
-            _insideTimer = new Timer(2f)
-            {
-                AutoReset = false
-            };
+            _insideTimer = new Timer(.5f);
+            _soundTimer = new Timer(.5f);
             _updateTimer = new Timer(.5f);
-            _enterTimer.MarkReady();
             _bodies = new Dictionary<CollisionGroup, RigidBody>();
             _notInsideSet = new HashSet<CollidableStructure>();
             _previousInsideStructures = new HashSet<CollidableStructure>();
@@ -58,7 +51,7 @@ namespace Hedra.Engine.Player
         
         public void Update()
         {
-            /* Use all the structures */
+            /* Use all the structures */    
             var collidableStructures = World.StructureHandler.StructureItems;
 
             if (_updateTimer.Tick() && NeedsUpdating(collidableStructures))
@@ -66,20 +59,20 @@ namespace Hedra.Engine.Player
                 _currentNearStructures = collidableStructures.ToArray();
                 SetNearCollisions(collidableStructures.SelectMany(S => S.Colliders).ToArray());
             }
-
-            _enterTimer.Tick();
+            
             HandleSounds();
             HandleEvents();
         }
 
         private void HandleSounds()
         {
-            if(_currentNearStructures == null) return;
+            if(!_soundTimer.Tick() || _currentNearStructures == null) return;
             var none = true;
+            var playerPosition = _player.Position;
             for (var i = 0; i < _currentNearStructures.Length; i++)
             {
                 var structure = _currentNearStructures[i];
-                if ((structure.Position.Xz() - _player.Position.Xz()).LengthFast() < (structure.Mountain?.Radius ?? structure.Radius))
+                if ((structure.Position.Xz() - playerPosition.Xz()).LengthFast() < (structure.Mountain?.Radius ?? structure.Radius))
                 {
                     if (!_wasPlayingCustom && structure.Design.AmbientSongs.Length > 0)
                     {
@@ -101,12 +94,13 @@ namespace Hedra.Engine.Player
         {
             if(!_insideTimer.Tick() || _currentNearStructures == null) return;
 
+            var playerPosition = _player.Position;
             /* Fill the hashset with the current structures we are inside */
             _insideStructures.Clear();
             for (var i = 0; i < _currentNearStructures.Length; i++)
             {
                 var structure = _currentNearStructures[i];
-                if ((structure.Position.Xz() - _player.Position.Xz()).LengthFast() < (structure.Mountain?.Radius ?? structure.Radius))// * .75f)
+                if ((structure.Position.Xz() - playerPosition.Xz()).LengthFast() < (structure.Mountain?.Radius ?? structure.Radius))// * .75f)
                 {
                     _insideStructures.Add(structure);
                 }
