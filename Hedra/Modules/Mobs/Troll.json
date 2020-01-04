@@ -1,10 +1,10 @@
 ﻿{
 	"Name" : "Troll", 
-	"MaxHealth": 680.0,
+	"MaxHealth": 780.0,
 	"AttackDamage": 28.0,
 	"AttackCooldown": 1.5,
 	"Speed": 1.35,
-	"XP": 18.0,
+	"XP": 24.0,
 	"Level": 25,
 	"AIType": "Troll",
 	"Effects": [],

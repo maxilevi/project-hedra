@@ -1,12 +1,12 @@
 ﻿{
 	"DisplayName": "Beetle",
 	"Name" : "GiantBeetle",
-	"MaxHealth": 488.0,
+	"MaxHealth": 688.0,
 	"AttackDamage": 22.0,
 	"AttackCooldown": 1.0,
 	"Speed": 1.45,
-	"XP": 12.0,
-	"Level": 16,
+	"XP": 20.0,
+	"Level": 18,
 	"AIType": "GiantBeetle",
 	"Effects": [
 		{
