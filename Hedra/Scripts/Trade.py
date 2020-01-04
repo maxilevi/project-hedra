@@ -3,6 +3,8 @@ import Items
 
 AMOUNT_ATTRIBUTE = 'Amount'
 COMPANION_EQUIPMENT_TYPE = 'Pet'
+NORMAL_RECIPES = [x.Name for x in ItemPool.Matching(lambda x: x.IsRecipe and x.Tier <= ItemTier.Uncommon)]
+RARE_RECIPES = [x.Name for x in ItemPool.Matching(lambda x: x.IsRecipe and x.Tier == ItemTier.Rare)]
 
 def build_innkeeper_inventory(item_dict, inventory_size, rng):
     items = []
@@ -18,18 +20,12 @@ def build_boat_merchant_inventory(item_dict, inventory_size, rng):
     
 def build_merchant_inventory(item_dict, inventory_size, rng):
 
-    recipes = [
-        ItemPool.Grab(Items.PUMPKIN_PIE_RECIPE),
-        ItemPool.Grab(Items.COOKED_MEAT_RECIPE),
-        ItemPool.Grab(Items.HEALTH_POTION_RECIPE),
-        ItemPool.Grab(Items.CORN_SOUP_RECIPE),
-    ]
     items = [
         (inventory_size - 1, get_infinity_item(Items.BERRY)),
         (inventory_size - 2, get_infinity_item(Items.GLASS_FLASK)),
         (inventory_size - 3, get_infinity_item(Items.WOODEN_BOWL)),
         (inventory_size - 4, get_infinity_item(Items.STONE_ARROW) if rng.Next(0, 2) == 1 else None),
-        (inventory_size - 5, recipes[rng.Next(0, len(recipes))]),
+        (inventory_size - 5, ItemPool.Grab(NORMAL_RECIPES[rng.Next(0, len(NORMAL_RECIPES))])),
     ]
     fishing_items = [
         (4, ItemPool.Grab(Items.FISHING_ROD)),
@@ -48,6 +44,7 @@ def build_travelling_merchant_inventory(item_dict, inventory_size, rng):
         (7, get_infinity_item(Items.DEXTERITY_POTION)),
         (8, get_infinity_item(Items.SPEED_POTION)),
         (9, get_infinity_item(Items.STRENGTH_POTION)),
+        (10, ItemPool.Grab(RARE_RECIPES[rng.Next(0, len(RARE_RECIPES))]) if rng.Next(0, 2) == 1 else None)
     ]
     add_items(special_items, item_dict)
     
@@ -81,3 +78,5 @@ assert ItemPool.Exists(Items.HEALTH_POTION_RECIPE)
 assert ItemPool.Exists(Items.CORN_SOUP_RECIPE)
 assert ItemPool.Exists(Items.FISHING_ROD)
 assert ItemPool.Exists(Items.BAIT)
+assert len(NORMAL_RECIPES) > 0
+assert len(RARE_RECIPES) > 0
