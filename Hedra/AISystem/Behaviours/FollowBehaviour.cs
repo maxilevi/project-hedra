@@ -1,3 +1,4 @@
+using Hedra.Core;
 using Hedra.EntitySystem;
 
 namespace Hedra.AISystem.Behaviours
@@ -7,9 +8,11 @@ namespace Hedra.AISystem.Behaviours
         public const int DefaultErrorMargin = 8;
         public IEntity Target { get; set; }
         protected TraverseBehaviour Traverse { get; }
+        private readonly Timer _followTimer;
 
         public FollowBehaviour(IEntity Parent) : base(Parent)
         {
+            _followTimer = new Timer(.5f);
             Traverse = new TraverseBehaviour(Parent);
             ErrorMargin = DefaultErrorMargin;
         }
@@ -31,7 +34,8 @@ namespace Hedra.AISystem.Behaviours
 
         protected virtual void SetPosition()
         {
-            Traverse.SetTarget(Target.Position);
+            if(_followTimer.Tick())
+                Traverse.SetTarget(Target.Position);
         }
         
         public bool Enabled => Target != null && !Target.IsDead && !Target.IsInvisible && !Target.Disposed;
