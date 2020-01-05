@@ -1,0 +1,21 @@
+{
+  "Name": "Rosemary",
+  "DisplayName": "Rosemary",
+  "Tier": "Misc",
+  "Description": "...",
+  "Attributes": [
+    {
+      "Name": "Amount",
+      "Value": 1
+    },
+    {
+      "Name": "Price",
+      "Value": 16.0,
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Assets/Env/Plants/Rosemary0.ply"
+  }
+}
