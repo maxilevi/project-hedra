@@ -72,6 +72,11 @@ namespace Hedra.Engine.CacheSystem
         CauldronIcon,
         WindmillIcon,
         ClockIcon,
+        TreeStump,
+        WoodLog,
+        LilyPad,
+        Rosemary,
+        Thyme,
         MaxEnums
     }
 }
