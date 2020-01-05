@@ -52,7 +52,6 @@ namespace Hedra.Engine.PlantSystem
         {
             Data.Paint(this.RockColor(Rng));
             Data.GraduateColor(Vector3.UnitY);
-
             return Data; 
         }
 
