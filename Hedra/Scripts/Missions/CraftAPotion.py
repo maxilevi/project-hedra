@@ -19,7 +19,7 @@ def build_ingredient_list():
         return ingredient.Name, 1, 4
 
     food_recipe_ingredients = set()
-    for r in ItemPool.Matching(lambda t: t.EquipmentType == 'Recipe'):
+    for r in ItemPool.Matching(lambda t: t.IsRecipe):
         output = CraftingInventory.GetOutputFromRecipe(r)
         if output.IsFood:
             for k in [x.Name for x in CraftingInventory.GetIngredients(r)]:
