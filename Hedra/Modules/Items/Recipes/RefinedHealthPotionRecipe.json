@@ -1,0 +1,46 @@
+{
+  "Name": "RefinedHealthPotionRecipe",
+  "DisplayName": "Refined health potion recipe",
+  "EquipmentType": "Recipe",
+  "Tier": "Rare",
+  "Description": "...",
+  "Attributes": [
+    {
+      "Name": "CraftingStation",
+      "Value": "None"
+    },
+    {
+      "Name": "Ingredients",
+      "Value": [
+        {
+          "Name": "IntenseHealthPotion",
+          "Amount": 1
+        },
+        {
+          "Name": "Thyme",
+          "Amount": 1
+        }
+      ],
+      "Display": "Bullets"
+    },
+    {
+      "Name": "Output",
+      "Value": "RefinedHealthPotion",
+      "Hidden": true
+    },
+    {
+      "Name": "IsConsumable",
+      "Value": true,
+      "Hidden": true
+    },
+    {
+      "Name": "Handler",
+      "Value": "Recipe",
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 2.0,
+    "Path": "$DataFile$/Items/Misc/Recipe.ply"
+  }
+}

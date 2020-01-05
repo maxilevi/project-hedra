@@ -1,0 +1,36 @@
+{
+  "Name": "RefinedHealthPotion",
+  "DisplayName": "Refined health potion",
+  "EquipmentType": "Potion",
+  "Tier": "Rare",
+  "Description": "...",
+  "Attributes": [
+    {
+      "Name": "Amount",
+      "Value": 1
+    },
+    {
+      "Name": "Saturation",
+      "Value": 320
+    },
+    {
+      "Name": "Price",
+      "Value": 48,
+      "Hidden": true
+    },
+    {
+      "Name": "IsFood",
+      "Value": true,
+      "Hidden": true
+    },
+    {
+      "Name": "EatTime",
+      "Value": 6.0,
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Potions/RefinedHealthPotion.ply"
+  }
+}

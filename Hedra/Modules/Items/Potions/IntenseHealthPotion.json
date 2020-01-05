@@ -1,0 +1,36 @@
+{
+  "Name": "IntenseHealthPotion",
+  "DisplayName": "Intense health potion",
+  "EquipmentType": "Potion",
+  "Tier": "Uncommon",
+  "Description": "...",
+  "Attributes": [
+    {
+      "Name": "Amount",
+      "Value": 1
+    },
+    {
+      "Name": "Saturation",
+      "Value": 210
+    },
+    {
+      "Name": "Price",
+      "Value": 36,
+      "Hidden": true
+    },
+    {
+      "Name": "IsFood",
+      "Value": true,
+      "Hidden": true
+    },
+    {
+      "Name": "EatTime",
+      "Value": 6.0,
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Potions/IntenseHealthPotion.ply"
+  }
+}
