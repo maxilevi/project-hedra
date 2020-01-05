@@ -22,10 +22,21 @@ namespace AssetBuilder
         }
         
         public static byte[] Process(string Filename)
+        {            Console.WriteLine($"Parsing File {Filename}");
+            try
+            {
+                return DoProcess(Filename);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Failed to parse file {Filename}");
+                throw;
+            }
+            return null;
+        }
+
+        private static byte[] DoProcess(string Filename)
         {
-            #if DEBUG
-            Console.WriteLine($"Parsing File {Filename}");
-            #endif
             string fileContents = File.ReadAllText(Filename);
             int endHeader = fileContents.IndexOf("element vertex", StringComparison.Ordinal);
             fileContents = fileContents.Substring(endHeader, fileContents.Length - endHeader);
