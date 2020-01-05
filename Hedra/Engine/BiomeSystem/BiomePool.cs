@@ -197,7 +197,7 @@ namespace Hedra.Engine.BiomeSystem
                             SkyDesign = new NormalBiomeSkyDesign(),
                             MobDesign = new NormalBiomeMobDesign(),
                             GenerationDesign = new NormalBiomeGenerationDesign(),
-                            EnvironmentDesign = new NormalBiomeEnviromentDesign()
+                            EnvironmentDesign = new NormalBiomeEnvironmentDesign()
                         }
                     }
                 },
@@ -212,7 +212,7 @@ namespace Hedra.Engine.BiomeSystem
                             SkyDesign = new GhostTownSkyDesign(),
                             MobDesign = new GhostTownMobDesign(),
                             GenerationDesign = new GhostTownGenerationDesign(),
-                            EnvironmentDesign = new UndeadBiomeEnviromentDesign()
+                            EnvironmentDesign = new UndeadBiomeEnvironmentDesign()
                         }
                     }
                 }

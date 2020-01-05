@@ -4,9 +4,9 @@ using Hedra.Engine.PlantSystem.Harvestables;
 
 namespace Hedra.Engine.BiomeSystem.NormalBiome
 {
-    public class NormalBiomeEnviromentDesign : BiomeEnviromentDesign
+    public class NormalBiomeEnvironmentDesign : BiomeEnviromentDesign
     {
-        public NormalBiomeEnviromentDesign()
+        public NormalBiomeEnvironmentDesign()
         {
             Designs = new PlacementDesign[]
             {
@@ -22,6 +22,9 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
                 /* Harvestables */
                 new CarrotPlacementDesign(), 
                 new OnionPlacementDesign(), 
+                new WoodLogAndTreeStumpPlacementDesign(),
+                new LilyPadPlacementDesign(),
+                new RosemaryAndThymePlacementDesign()
             };
         }
 
