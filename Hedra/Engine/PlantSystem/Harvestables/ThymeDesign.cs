@@ -12,10 +12,5 @@ namespace Hedra.Engine.PlantSystem.Harvestables
         public override CacheItem Type => CacheItem.Thyme;
         
         protected override Item ItemCollect => ItemPool.Grab(ItemType.Thyme);
-        
-        public override NativeVertexData Paint(NativeVertexData Data, Region Region, Random Rng)
-        {
-            return base.Paint(Data, Region, Rng);
-        }
     }
 }

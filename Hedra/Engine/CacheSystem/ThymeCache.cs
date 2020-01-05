@@ -9,7 +9,7 @@ namespace Hedra.Engine.CacheSystem
 
         public ThymeCache()
         {
-            AddModel(AssetManager.LoadPLYWithLODs("Assets/Env/Plants/Thyme0.ply", Vector3.One));
+            AddModel(AssetManager.LoadPLYWithLODs("Assets/Env/Plants/Thyme0.ply", Vector3.One * 1.5f));
         }
     }
 }
