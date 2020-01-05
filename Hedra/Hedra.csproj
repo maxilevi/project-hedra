@@ -8854,12 +8854,12 @@
       <Link>Assets\Env\Plants\Pebble0_Lod8.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\project-hedra-assets\Environment\Misc\TreeStump0.ply">
-      <Link>Assets\Env\Plants\TreeStump0.ply</Link>
+    <Content Include="..\project-hedra-assets\Environment\Misc\TreeStump0-Colliders.ply">
+      <Link>Assets\Env\Plants\TreeStump0-Colliders.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\project-hedra-assets\Environment\Misc\TreeStump0_Colliders.ply">
-      <Link>Assets\Env\Plants\TreeStump0_Colliders.ply</Link>
+    <Content Include="..\project-hedra-assets\Environment\Misc\TreeStump0.ply">
+      <Link>Assets\Env\Plants\TreeStump0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Environment\Misc\TreeStump0_Lod2.ply">
@@ -8906,12 +8906,12 @@
       <Link>Assets\Env\Plants\WoodenStick0_Lod8.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\project-hedra-assets\Environment\Misc\WoodLog0.ply">
-      <Link>Assets\Env\Plants\WoodLog0.ply</Link>
+    <Content Include="..\project-hedra-assets\Environment\Misc\WoodLog0-Colliders.ply">
+      <Link>Assets\Env\Plants\WoodLog0-Colliders.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\project-hedra-assets\Environment\Misc\WoodLog0_Colliders.ply">
-      <Link>Assets\Env\Plants\WoodLog0_Colliders.ply</Link>
+    <Content Include="..\project-hedra-assets\Environment\Misc\WoodLog0.ply">
+      <Link>Assets\Env\Plants\WoodLog0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Environment\Misc\WoodLog0_Lod2.ply">
