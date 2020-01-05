@@ -348,11 +348,16 @@
     <Compile Include="Engine\CacheSystem\Dungeon0IconCache.cs" />
     <Compile Include="Engine\CacheSystem\DynamicCache.cs" />
     <Compile Include="Engine\CacheSystem\FishingPostIconCache.cs" />
+    <Compile Include="Engine\CacheSystem\LilyPadCache.cs" />
+    <Compile Include="Engine\CacheSystem\RosemaryCache.cs" />
     <Compile Include="Engine\CacheSystem\ShroomDimensionPortalCache.cs" />
     <Compile Include="Engine\CacheSystem\ShroomDimensionPortalIconCache.cs" />
+    <Compile Include="Engine\CacheSystem\ThymeCache.cs" />
     <Compile Include="Engine\CacheSystem\StorylineCache.cs" />
+    <Compile Include="Engine\CacheSystem\TreeStumpCache.cs" />
     <Compile Include="Engine\CacheSystem\WindmillIconCache.cs" />
     <Compile Include="Engine\CacheSystem\WizardTowerCache.cs" />
+    <Compile Include="Engine\CacheSystem\WoodLogCache.cs" />
     <Compile Include="Engine\Core\Counter.cs" />
     <Compile Include="Engine\Core\SequentialList.cs" />
     <Compile Include="Engine\DataStructures\AABB.cs" />
@@ -385,6 +390,18 @@
     <Compile Include="Engine\Native\HedraCoreNative.cs" />
     <Compile Include="Engine\Native\MeshOptimizer.cs" />
     <Compile Include="Engine\Native\Pointer.cs" />
+    <Compile Include="Engine\PlantSystem\Harvestables\RosemaryAndThymePlacementDesign.cs" />
+    <Compile Include="Engine\PlantSystem\Harvestables\RosemaryDesign.cs" />
+    <Compile Include="Engine\PlantSystem\Harvestables\ThymeDesign.cs" />
+    <Compile Include="Engine\PlantSystem\Harvestables\StickDesign.cs" />
+    <Compile Include="Engine\PlantSystem\Harvestables\TimberAndSticksPlacementDesign.cs" />
+    <Compile Include="Engine\PlantSystem\Harvestables\TimberDesign.cs" />
+    <Compile Include="Engine\PlantSystem\LilyPadDesign.cs" />
+    <Compile Include="Engine\PlantSystem\LilyPadPlacementDesign.cs" />
+    <Compile Include="Engine\PlantSystem\MultipleStaticPlacementDesign.cs" />
+    <Compile Include="Engine\PlantSystem\TreeStumpDesign.cs" />
+    <Compile Include="Engine\PlantSystem\WoodLogAndTreeStumpPlacementDesign.cs" />
+    <Compile Include="Engine\PlantSystem\WoodLogDesign.cs" />
     <Compile Include="Engine\Player\BackgroundUpdater.cs" />
     <Compile Include="Engine\Player\BoatSystem\BoatHumanoidInputHandler.cs" />
     <Compile Include="Engine\Player\BoatSystem\BoatInputHandler.cs" />
@@ -678,10 +695,7 @@
     <Compile Include="Engine\PlantSystem\PebbleDesign.cs" />
     <Compile Include="Engine\PlantSystem\PebblePlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\PumpkinDesign.cs" />
-    <Compile Include="Engine\PlantSystem\StickDesign.cs" />
     <Compile Include="Engine\PlantSystem\SunflowerDesign.cs" />
-    <Compile Include="Engine\PlantSystem\TimberDesign.cs" />
-    <Compile Include="Engine\PlantSystem\TimberAndSticksPlacementDesign.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\SpecializationInfo.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\SpecializationPanel.cs" />
     <Compile Include="Engine\Player\AbilityTreeSystem\TreeLinesUI.cs" />
@@ -982,7 +996,7 @@
     <Compile Include="HedraContent.cs" />
     <Compile Include="Engine\BiomeSystem\IBiomePool.cs" />
     <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeColors.cs" />
-    <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeEnviromentDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeEnvironmentDesign.cs" />
     <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeGenerationDesign.cs" />
     <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeMobDesign.cs" />
     <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeSkyDesign.cs" />
@@ -997,7 +1011,7 @@
     <Compile Include="BiomeSystem\RegionStructure.cs" />
     <Compile Include="BiomeSystem\RegionTree.cs" />
     <Compile Include="Engine\BiomeSystem\UndeadBiome\UndeadBiomeColorsDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\UndeadBiome\UndeadBiomeEnviromentDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\UndeadBiome\UndeadBiomeEnvironmentDesign.cs" />
     <Compile Include="Engine\BiomeSystem\UndeadBiome\UndeadBiomeGenerationDesign.cs" />
     <Compile Include="Engine\BiomeSystem\UndeadBiome\UndeadBiomeMobDesign.cs" />
     <Compile Include="Engine\BiomeSystem\UndeadBiome\UndeadBiomeStructureDesign.cs" />
@@ -8840,6 +8854,42 @@
       <Link>Assets\Env\Plants\Pebble0_Lod8.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Environment\Misc\TreeStump0.ply">
+      <Link>Assets\Env\Plants\TreeStump0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Misc\TreeStump0_Colliders.ply">
+      <Link>Assets\Env\Plants\TreeStump0_Colliders.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Misc\TreeStump0_Lod2.ply">
+      <Link>Assets\Env\Plants\TreeStump0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Misc\TreeStump0_Lod4.ply">
+      <Link>Assets\Env\Plants\TreeStump0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Misc\TreeStump0_Lod8.ply">
+      <Link>Assets\Env\Plants\TreeStump0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Misc\TreeStump1.ply">
+      <Link>Assets\Env\Plants\TreeStump1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Misc\TreeStump1_Lod2.ply">
+      <Link>Assets\Env\Plants\TreeStump1_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Misc\TreeStump1_Lod4.ply">
+      <Link>Assets\Env\Plants\TreeStump1_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Misc\TreeStump1_Lod8.ply">
+      <Link>Assets\Env\Plants\TreeStump1_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Environment\Misc\WoodenStick0.ply">
       <Link>Assets\Env\Plants\WoodenStick0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -8854,6 +8904,106 @@
     </Content>
     <Content Include="..\project-hedra-assets\Environment\Misc\WoodenStick0_Lod8.ply">
       <Link>Assets\Env\Plants\WoodenStick0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Misc\WoodLog0.ply">
+      <Link>Assets\Env\Plants\WoodLog0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Misc\WoodLog0_Colliders.ply">
+      <Link>Assets\Env\Plants\WoodLog0_Colliders.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Misc\WoodLog0_Lod2.ply">
+      <Link>Assets\Env\Plants\WoodLog0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Misc\WoodLog0_Lod4.ply">
+      <Link>Assets\Env\Plants\WoodLog0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Misc\WoodLog0_Lod8.ply">
+      <Link>Assets\Env\Plants\WoodLog0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Misc\WoodLog1.ply">
+      <Link>Assets\Env\Plants\WoodLog1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Misc\WoodLog1_Lod2.ply">
+      <Link>Assets\Env\Plants\WoodLog1_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Misc\WoodLog1_Lod4.ply">
+      <Link>Assets\Env\Plants\WoodLog1_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Misc\WoodLog1_Lod8.ply">
+      <Link>Assets\Env\Plants\WoodLog1_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Plants\LilyPad0.ply">
+      <Link>Assets\Env\Plants\LilyPad0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Plants\LilyPad0_Lod2.ply">
+      <Link>Assets\Env\Plants\LilyPad0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Plants\LilyPad0_Lod4.ply">
+      <Link>Assets\Env\Plants\LilyPad0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Plants\LilyPad0_Lod8.ply">
+      <Link>Assets\Env\Plants\LilyPad0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Plants\LilyPad1.ply">
+      <Link>Assets\Env\Plants\LilyPad1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Plants\LilyPad1_Lod2.ply">
+      <Link>Assets\Env\Plants\LilyPad1_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Plants\LilyPad1_Lod4.ply">
+      <Link>Assets\Env\Plants\LilyPad1_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Plants\LilyPad1_Lod8.ply">
+      <Link>Assets\Env\Plants\LilyPad1_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Plants\Rosemary0.ply">
+      <Link>Assets\Env\Plants\Rosemary0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Plants\Rosemary0_Lod2.ply">
+      <Link>Assets\Env\Plants\Rosemary0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Plants\Rosemary0_Lod4.ply">
+      <Link>Assets\Env\Plants\Rosemary0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Plants\Rosemary0_Lod8.ply">
+      <Link>Assets\Env\Plants\Rosemary0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Plants\Thyme0.ply">
+      <Link>Assets\Env\Plants\Thyme0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Plants\Thyme0_Lod2.ply">
+      <Link>Assets\Env\Plants\Thyme0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Plants\Thyme0_Lod4.ply">
+      <Link>Assets\Env\Plants\Thyme0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Plants\Thyme0_Lod8.ply">
+      <Link>Assets\Env\Plants\Thyme0_Lod8.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\FX\waterDuDvMap.png">
@@ -9148,8 +9298,16 @@
       <Link>Assets\Items\Potions\HealthPotion.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Potions\IntenseHealthPotion.ply">
+      <Link>Assets\Items\Potions\IntenseHealthPotion.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Potions\ManaPotion.ply">
       <Link>Assets\Items\Potions\ManaPotion.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Potions\RefinedHealthPotion.ply">
+      <Link>Assets\Items\Potions\RefinedHealthPotion.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Potions\SpeedPotion.ply">
@@ -14126,6 +14284,9 @@
     <Content Include="Modules\Items\Misc\GlassFlask.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Misc\Rosemary.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Misc\Rake.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -14133,6 +14294,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Misc\AnimalFood.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Misc\Thyme.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Misc\TurtleHide.json">
@@ -14162,7 +14326,13 @@
     <Content Include="Modules\Items\Potions\HealthPotion.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Potions\IntenseHealthPotion.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Potions\ManaPotion.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Potions\RefinedHealthPotion.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Potions\SpeedPotion.json">
@@ -14208,6 +14378,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Recipes\OnionSoupRecipe.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Recipes\IntenseHealthPotionRecipe.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Recipes\RefinedHealthPotionRecipe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Recipes\StoneArrowRecipe.json">

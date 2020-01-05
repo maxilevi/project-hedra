@@ -39,6 +39,10 @@ namespace Hedra.Items
         FishingRodRecipe,
         FishingRod,
         CompanionBee,
+        RefinedHealthPotionRecipe,
+        IntenseHealthPotionRecipe,
+        Thyme,
+        Rosemary,
         MaxEnums
     }
 }
