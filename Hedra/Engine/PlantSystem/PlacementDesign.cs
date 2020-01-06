@@ -15,6 +15,8 @@ namespace Hedra.Engine.PlantSystem
         /// </summary>
         public virtual bool CanBeHidden => false;
 
+        public virtual bool CanBePlacedOnWater => false;
+
         /// <summary>
         /// Plant design to use for this placement design.
         /// </summary>

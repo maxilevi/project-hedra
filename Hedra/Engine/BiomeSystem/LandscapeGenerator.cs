@@ -22,6 +22,7 @@ using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.Overworld;
 using System.Numerics;
+using Hedra.Engine.PhysicsSystem;
 using Hedra.Numerics;
 using Hedra.Framework;
 using Chunk = Hedra.Engine.Generation.ChunkSystem.Chunk;
@@ -594,14 +595,21 @@ namespace Hedra.Engine.BiomeSystem
                 {
                     this.LoopGroundworks(x, z, groundworks, out var noPlantsGroundwork);
                     if(noPlantsGroundwork) continue;
-                    var y = Parent.GetHighestY(x, z);
-                    if(y < BiomePool.SeaLevel - Chunk.BlockSize) continue;
-                    var samplingPosition = new Vector3(Parent.OffsetX + x * Chunk.BlockSize, y-1, Parent.OffsetZ + z * Chunk.BlockSize);
-                    
-                    
-                    var region = Cache.GetRegion(samplingPosition);
-                    this.LoopStructures(x, z, structs, out var noWeedZone, out _, out _);
-                    this.DoEnvironmentPlacements(samplingPosition, noWeedZone, region);
+                    var groundY = Parent.GetHighestY(x, z);
+                    var waterY = Parent.GetHighestWaterY(x, z);
+
+                    void Sample(int Y, bool IsWaterPlacement)
+                    {
+                        var samplingPosition = new Vector3(Parent.OffsetX + x * Chunk.BlockSize, Y - 1,
+                            Parent.OffsetZ + z * Chunk.BlockSize);
+                        var region = Cache.GetRegion(samplingPosition);
+                        this.LoopStructures(x, z, structs, out var noWeedZone, out _, out _);
+                        this.DoEnvironmentPlacements(samplingPosition, noWeedZone, region, IsWaterPlacement);
+                    }
+
+                    Sample(groundY, false);
+                    if(waterY > 0)
+                        Sample(waterY, true);
                 }
             }
         }
@@ -678,7 +686,7 @@ namespace Hedra.Engine.BiomeSystem
             }
         }
 
-        private unsafe void DoEnvironmentPlacements(Vector3 Position, bool HideEnvironment, Region Biome)
+        private unsafe void DoEnvironmentPlacements(Vector3 Position, bool HideEnvironment, Region Biome, bool IsWaterPlacement)
         {
             const int size = Allocator.Kilobyte * 256;
             var mem = stackalloc byte[size];
@@ -687,7 +695,7 @@ namespace Hedra.Engine.BiomeSystem
                 var designs = Biome.Environment.Designs;
                 for (var i = 0; i < designs.Length; i++)
                 {
-                    if (designs[i].CanBeHidden && HideEnvironment) continue;
+                    if (designs[i].CanBeHidden && HideEnvironment || designs[i].CanBePlacedOnWater != IsWaterPlacement) continue;
                     if (designs[i].ShouldPlace(Position, this.Parent))
                     {
                         var design = designs[i].GetDesign(Position, Parent, Parent.Landscape.RandomGen);

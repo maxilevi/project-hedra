@@ -555,6 +555,21 @@ namespace Hedra.Engine.Generation.ChunkSystem
             Engine.Player.Chat.Log($"RLE took '{sw.ElapsedMilliseconds}' MS and compressed 512KB into '{bytes.Length / 1024}'KB");
         }
 
+        public int GetHighestWaterY(int X, int Z)
+        {
+            var nearestWaterBlockY = 0;
+            for (var y = MaximumHeight; y > MinimumHeight; y--)
+            {
+                var block = GetBlockAt(X, y, Z);
+                if (block.Type == BlockType.Water)
+                {
+                    nearestWaterBlockY = y;
+                    break;
+                }
+            }
+            return nearestWaterBlockY;
+        }
+
         private IEnumerator DisposeCoroutine()
         {
             var time = 0f;

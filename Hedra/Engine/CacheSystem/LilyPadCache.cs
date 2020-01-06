@@ -9,8 +9,9 @@ namespace Hedra.Engine.CacheSystem
 
         public LilyPadCache()
         {
-            AddModel(AssetManager.LoadPLYWithLODs("Assets/Env/Plants/LilyPad0.ply", Vector3.One));
-            AddModel(AssetManager.LoadPLYWithLODs("Assets/Env/Plants/LilyPad1.ply", Vector3.One));
+            var scale = Vector3.One * 5;
+            //AddModel(AssetManager.LoadPLYWithLODs("Assets/Env/Plants/LilyPad0.ply", scale));
+            AddModel(AssetManager.LoadPLYWithLODs("Assets/Env/Plants/LilyPad1.ply", scale));
         }
     }
 }
