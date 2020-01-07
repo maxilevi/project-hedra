@@ -8722,12 +8722,36 @@
       <Link>Assets\Env\Trees\Birch0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Environment\Birch\Birch0_Lod2.ply">
+      <Link>Assets\Env\Trees\Birch0_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Birch\Birch0_Lod4.ply">
+      <Link>Assets\Env\Trees\Birch0_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Birch\Birch0_Lod8.ply">
+      <Link>Assets\Env\Trees\Birch0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Environment\Birch\Birch1-Colliders.ply">
       <Link>Assets\Env\Trees\Birch1-Colliders.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Environment\Birch\Birch1.ply">
       <Link>Assets\Env\Trees\Birch1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Birch\Birch1_Lod2.ply">
+      <Link>Assets\Env\Trees\Birch1_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Birch\Birch1_Lod4.ply">
+      <Link>Assets\Env\Trees\Birch1_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Birch\Birch1_Lod8.ply">
+      <Link>Assets\Env\Trees\Birch1_Lod8.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Environment\Birch\Birch2-Colliders.ply">
@@ -8738,12 +8762,36 @@
       <Link>Assets\Env\Trees\Birch2.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Environment\Birch\Birch2_Lod2.ply">
+      <Link>Assets\Env\Trees\Birch2_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Birch\Birch2_Lod4.ply">
+      <Link>Assets\Env\Trees\Birch2_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Birch\Birch2_Lod8.ply">
+      <Link>Assets\Env\Trees\Birch2_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Environment\Birch\Birch3-Colliders.ply">
       <Link>Assets\Env\Trees\Birch3-Colliders.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Environment\Birch\Birch3.ply">
       <Link>Assets\Env\Trees\Birch3.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Birch\Birch3_Lod2.ply">
+      <Link>Assets\Env\Trees\Birch3_Lod2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Birch\Birch3_Lod4.ply">
+      <Link>Assets\Env\Trees\Birch3_Lod4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Birch\Birch3_Lod8.ply">
+      <Link>Assets\Env\Trees\Birch3_Lod8.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Environment\DeadGrass\DeadGrass0.ply">
