@@ -325,7 +325,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             return Rng.Next(1, 2) == 1 && IsWater(ChunkOffset.ToVector3(), Biome) && SearchForShore(ChunkOffset, Biome, out TargetPosition);
         }
 
-        private static bool SearchForShore(Vector2 Offset, Region Biome, out Vector3 Position)
+        public static bool SearchForShore(Vector2 Offset, Region Biome, out Vector3 Position)
         {
             var directions = new []
             {
@@ -348,7 +348,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             return false;
         }
 
-        private static bool IsWater(Vector3 TargetPosition, Region Biome)
+        public static bool IsWater(Vector3 TargetPosition, Region Biome)
         {
             return (Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z) < BiomePool.SeaLevel - 1f);
         }

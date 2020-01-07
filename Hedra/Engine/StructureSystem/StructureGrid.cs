@@ -30,6 +30,7 @@ namespace Hedra.Engine.StructureSystem
         public const int CampfireChance = 2;
         public const int TravellingMerchantChance = 8;
         public const int CottageWithFarmChance = 8;
+        public const int SolitaryFisherman = 2;
         
         /* Dead realm structures */
         public const int TombstoneChance = 2;

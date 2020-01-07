@@ -463,6 +463,8 @@
     <Compile Include="Engine\StructureSystem\Overworld\DungeonWithBoss.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\ShroomDimensionPortal.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\ShroomDimensionPortalDesign.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\SolitaryFisherman.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\SolitaryFishermanDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\UndeadDungeon1Design.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonBossRoomTrigger.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonDoorTrigger.cs" />
