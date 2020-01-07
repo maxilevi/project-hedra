@@ -338,6 +338,7 @@
     <Compile Include="Engine\Bullet\PhysicsObjectInformation.cs" />
     <Compile Include="Engine\Bullet\PhysicsComponent.cs" />
     <Compile Include="Engine\Bullet\PhysicsComponentMotionState.cs" />
+    <Compile Include="Engine\CacheSystem\BirchTreesCache.cs" />
     <Compile Include="Engine\CacheSystem\CauldronIconCache.cs" />
     <Compile Include="Engine\CacheSystem\ClockIconCache.cs" />
     <Compile Include="Engine\CacheSystem\Dungeon0Cache.cs" />
@@ -355,6 +356,7 @@
     <Compile Include="Engine\CacheSystem\ThymeCache.cs" />
     <Compile Include="Engine\CacheSystem\StorylineCache.cs" />
     <Compile Include="Engine\CacheSystem\TreeStumpCache.cs" />
+    <Compile Include="Engine\CacheSystem\WillowTreesCache.cs" />
     <Compile Include="Engine\CacheSystem\WindmillIconCache.cs" />
     <Compile Include="Engine\CacheSystem\WizardTowerCache.cs" />
     <Compile Include="Engine\CacheSystem\WoodLogCache.cs" />
@@ -477,6 +479,8 @@
     <Compile Include="Engine\StructureSystem\Overworld\Torch.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\GenericBuilderWithNPC.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\GenericNPCSettings.cs" />
+    <Compile Include="Engine\TreeSystem\BirchDesign.cs" />
+    <Compile Include="Engine\TreeSystem\WillowDesign.cs" />
     <Compile Include="Engine\Windowing\GLEnums.cs" />
     <Compile Include="Engine\Windowing\HedraMarshal.cs" />
     <Compile Include="Engine\Windowing\KeyboardKeyEventArgs.cs" />
@@ -8710,6 +8714,38 @@
       <Link>Assets\Chr\NPC\Witch1Idle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Environment\Birch\Birch0-Colliders.ply">
+      <Link>Assets\Env\Trees\Birch0-Colliders.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Birch\Birch0.ply">
+      <Link>Assets\Env\Trees\Birch0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Birch\Birch1-Colliders.ply">
+      <Link>Assets\Env\Trees\Birch1-Colliders.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Birch\Birch1.ply">
+      <Link>Assets\Env\Trees\Birch1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Birch\Birch2-Colliders.ply">
+      <Link>Assets\Env\Trees\Birch2-Colliders.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Birch\Birch2.ply">
+      <Link>Assets\Env\Trees\Birch2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Birch\Birch3-Colliders.ply">
+      <Link>Assets\Env\Trees\Birch3-Colliders.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Birch\Birch3.ply">
+      <Link>Assets\Env\Trees\Birch3.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Environment\DeadGrass\DeadGrass0.ply">
       <Link>Assets\Env\Plants\DeadGrass0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -9004,6 +9040,18 @@
     </Content>
     <Content Include="..\project-hedra-assets\Environment\Plants\Thyme0_Lod8.ply">
       <Link>Assets\Env\Plants\Thyme0_Lod8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Willow\Willow0.ply">
+      <Link>Assets\Env\Trees\Willow0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Willow\Willow1.ply">
+      <Link>Assets\Env\Trees\Willow1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Environment\Willow\Willow2.ply">
+      <Link>Assets\Env\Trees\Willow2.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\FX\waterDuDvMap.png">
