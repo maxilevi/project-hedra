@@ -38,7 +38,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var builder = Structure.Parameters.Get<VillageAssembler>("Builder");
             var design = Structure.Parameters.Get<PlacementDesign>("Design");
             builder.Build(design, Structure);
-            SpawnStorylineGiver(Structure, Structure.Position + Vector3.UnitX * 10f);
+            //SpawnStorylineGiver(Structure, Structure.Position + Vector3.UnitX * 10f);
         }
 
         private static void SpawnStorylineGiver(CollidableStructure Structure, Vector3 Position)
