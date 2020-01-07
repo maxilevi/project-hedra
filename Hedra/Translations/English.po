@@ -113,6 +113,7 @@ wizard_thought_2 = Do you know how to craft strength potions? They are really va
 wizard_thought_3 = Some folks here only speak the language of wizardry
 wizard_thought_4 = Dark times are ahead of us...
 wizard_thought_5 = According to our bibliography there is a way to travel to alternate dimensions. Although we haven't been able to verify it.
+wizard_thought_6 = Centuries ago magicians were so powerful that they could open up paths amidst of oceans and lakes.
 dark_wizard_thought_0 = Nos es trying aedificare a foribus ad aliam rationem
 dark_wizard_thought_1 = Magi domino plurimum atrum pythonissam
 dark_wizard_thought_2 = Vel sunt in ratione finis Ianuae
