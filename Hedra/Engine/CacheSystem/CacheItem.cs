@@ -77,6 +77,8 @@ namespace Hedra.Engine.CacheSystem
         LilyPad,
         Rosemary,
         Thyme,
+        BirchTrees,
+        WillowTrees,
         MaxEnums
     }
 }

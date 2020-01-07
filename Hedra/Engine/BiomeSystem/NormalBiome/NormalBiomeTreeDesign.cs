@@ -14,7 +14,8 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
                 new AppleDesign(),
                 new CypressDesign(),
                 new TallDesign(),
-                new PineDesign(),
+                new BirchDesign(),
+                new PineDesign()
             };
         }
         public override TreeDesign[] AvailableTypes { get; }

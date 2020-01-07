@@ -13,7 +13,7 @@ namespace Hedra.Engine.TreeSystem
 
         public abstract VertexData Model { get; }
 
-        public abstract VertexData Paint(VertexData Model, Vector4 WoodColor, Vector4 LeafColor);
+        public abstract VertexData Paint(VertexData Data, Vector4 WoodColor, Vector4 LeafColor);
 
         public virtual List<CollisionShape> GetShapes(VertexData Data)
         {
