@@ -15,7 +15,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         public void MakePossessed()
         {
-            TaskScheduler.When(() => NPC != null, NPC.Dispose);
+            TaskScheduler.When(() => NPC != null, () => NPC.Dispose());
             _area = World.Highlighter.HighlightAreaPermanently(Position, new Vector4(.2f, .2f, .2f, 1f), Radius);
         }
 

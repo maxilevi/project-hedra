@@ -42,7 +42,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         public void MakeEmpty()
         {
-            TaskScheduler.When(() => NPC != null, NPC.Dispose);
+            TaskScheduler.When(() => NPC != null, () => NPC.Dispose());
         }
     }
 }
