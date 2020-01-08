@@ -151,7 +151,7 @@ namespace Hedra.Engine.Player.Inventory
             var tierColor = ItemUtils.TierToColor(CurrentItem.Tier);
             ItemText.Color = tierColor;
 
-            ItemText.Text = Utils.FitString($"{CurrentItem.Tier} {CurrentItem.DisplayName}", 20);
+            ItemText.Text = Utils.FitString($"{Translations.Get(CurrentItem.Tier.ToString().ToLowerInvariant())} {CurrentItem.DisplayName}", 20);
             ItemAttributes.Color = tierColor;
             ItemDescription.Color = tierColor;
             ItemAttributes.Position = _weaponItemAttributesPosition + this.Position;

@@ -3,7 +3,9 @@ using System.Text;
 using Hedra.Core;
 using Hedra.Engine.ItemSystem.ArmorSystem;
 using Hedra.Engine.ItemSystem.Templates;
+using Hedra.Engine.Localization;
 using Hedra.Items;
+using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.WeaponSystem;
 
@@ -13,11 +15,11 @@ namespace Hedra.Engine.ItemSystem
     {
         private static string GoldItemName = "Gold";
         public string Name { get; set; }
-        public string DisplayName { get; set; }
-        public string Description { get; set; }
         public ItemTier Tier { get; set; }
         public string EquipmentType { get; set; }
         public ItemModelTemplate ModelTemplate { get; private set; }
+        private string _defaultDescription;
+        private string _defaultDisplayName;
         private readonly AttributeArray _attributes;
         private Weapon _weaponCache;
         private ArmorPiece _armorCache;
@@ -226,6 +228,30 @@ namespace Hedra.Engine.ItemSystem
             _armorCacheDirty = false;
 
             return (T) _armorCache;
+        }
+
+        public string DisplayName
+        {
+            get
+            {
+                var displayNameKey = $"item_{Name}_display_name";
+                if (!Translations.IsEnglish && Translations.Has(displayNameKey))
+                    return Translations.Get(displayNameKey);
+                return _defaultDisplayName;
+            }
+            private set => _defaultDisplayName = value;
+        }
+
+        public string Description
+        {
+            get
+            {
+                var descriptionKey = $"item_{Name}_description";
+                if (!Translations.IsEnglish && Translations.Has(descriptionKey))
+                    return Translations.Get(descriptionKey);
+                return _defaultDescription;
+            }
+            private set => _defaultDescription = value;
         }
     }
 }

@@ -106,6 +106,8 @@ namespace Hedra.Localization
         public static string[] Languages => _translations.Keys.ToArray();
         
         private static string _language = GameLanguage.English.ToString();
+        
+        public static bool IsEnglish => Language == GameLanguage.English.ToString();
 
         public static string Language
         {

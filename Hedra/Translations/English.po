@@ -207,7 +207,6 @@ quest_complete_structure_description_giant_tree = Defeat $(BOLD)(BLUE){{0}} at t
 quest_complete_structure_description_graveyard = Free the $(BOLD)(ORANGE){{0}} from the corruption of the demons.\nThere are $(BOLD)(VIOLET){{1}} enemies left.
 quest_complete_structure_description_bandit_camp = Kill the kidnappers and rescue $(BOLD)(BLUE){{0}} from the $(BOLD)(ORANGE){{1}}.\n\nThere are $(BOLD)(VIOLET){{2}} bandits left.
 quest_complete_structure_description_witch_hut_kill = Defeat the witches.\n\nThere are $(BOLD)(VIOLET){{0}} witches left.
-quest_complete_structure_description_witch_hut_steal_stuff = Defeat the witches and steal $(BOLD)(BLUE){{0}} from the $(BOLD)(ORANGE){{1}}.\n\nThere are $(BOLD)(VIOLET){{2}} witches left.
 quest_complete_structure_description_trade_travelling_merchant = Trade with $(BOLD)(CAPS)(BLUE){{0}} and buy $(BOLD)(CAPS)(ORANGE){{1}}
 quest_wait_for_description = Wait for $(BOLD)(CAPS)(ORANGE){{0}} to finish what he is doing.
 
@@ -694,7 +693,6 @@ skeleton = Skeleton
 skeletonkamikaze = Suicide Skeleton
 
 # -- End mobs translations
-boss_get_xp = YOU EARNED {0} XP!
 mountains_of = Mountains of {0}
 lands_of = Lands of {0}
 territory_of = Territory of {0}
@@ -754,3 +752,10 @@ quest_the_beginning_npc_dialog_6 = Mastering a whole skill tree is not something
 quest_the_beginning_end_dialog_0 = I hope you liked your tour around town but there is still a lot to do.;Meet me again sometime later in order to talk about some future quests.
 
 # Items
+common = Common
+uncommon = Uncommon
+divine = Divine
+rare = Rare
+legendary = Legendary
+misc = Misc
+unique = Unique

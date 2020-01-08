@@ -59,3 +59,7 @@ medium = MEDIO
 high = ALTO
 start_menu = Menu
 
+# Items
+item_DivineDemonBlade_display_name = Cuchilla del demonio
+item_DivineDemonBlade_description = La espada exige sacrificio
+

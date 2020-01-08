@@ -6,6 +6,7 @@ using Hedra.API;
 using Hedra.Engine.Core;
 using Hedra.Engine.IO;
 using Hedra.Engine.ItemSystem.Templates;
+using Hedra.Localization;
 using Newtonsoft.Json;
 
 namespace Hedra.Engine.ItemSystem
@@ -26,7 +27,7 @@ namespace Hedra.Engine.ItemSystem
                 Templates.Add(NewTemplates[i].Name.ToLowerInvariant(), NewTemplates[i]);
             }
         }
-        
+
         protected override string FolderPrefix => "Items";
     }
 }
