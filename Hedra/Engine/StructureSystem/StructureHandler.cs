@@ -57,6 +57,7 @@ using Hedra.Numerics;
                     var item = _itemWatchers[i];
                     if (ShouldRemove(item.Structure))
                     {
+                        UnregisterStructure(item.Structure.Position);
                         item.Dispose();
                         _itemWatchers.RemoveAt(i);
                     }
@@ -108,6 +109,12 @@ using Hedra.Numerics;
         {
             lock(_registerLock)
                 _registeredPositions.Add(Position);
+        }
+        
+        public void UnregisterStructure(Vector3 Position)
+        {
+            lock(_registerLock)
+                _registeredPositions.Remove(Position);
         }
 
         public bool StructureExistsAtPosition(Vector3 Position)
