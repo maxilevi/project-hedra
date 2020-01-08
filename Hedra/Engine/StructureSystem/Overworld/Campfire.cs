@@ -92,8 +92,12 @@ namespace Hedra.Engine.StructureSystem.Overworld
                 }
             }
 
-            _fireSound.Position = FirePosition;
-            _fireSound.Update(HasFire);
+            /* The campfire might get updated before everything was initialized */
+            if (_fireSound != null)
+            {
+                _fireSound.Position = FirePosition;
+                _fireSound.Update(HasFire);
+            }
 
             if ( _light != null && (FirePosition - LocalPlayer.Instance.Position).LengthSquared() > ShaderManager.LightDistance * ShaderManager.LightDistance * 2f)
             {
