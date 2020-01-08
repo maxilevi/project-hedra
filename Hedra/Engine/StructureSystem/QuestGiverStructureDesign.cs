@@ -17,7 +17,8 @@ namespace Hedra.Engine.StructureSystem
 {
     public abstract class QuestGiverStructureDesign<T> : SimpleStructureDesign<T> where T : BaseStructure, IQuestStructure
     {
-        protected abstract Vector3 NPCOffset { get; }
+        protected abstract Vector3 NPCHorizontalOffset { get; }
+        protected virtual Vector3 NPCHeightOffset => Vector3.UnitY * 2;
         protected abstract float QuestChance { get; }
         protected virtual Vector3 DefaultLookingDirection => Vector3.UnitZ;
         
@@ -25,11 +26,11 @@ namespace Hedra.Engine.StructureSystem
         {
             if (Rng.NextFloat() < QuestChance)
             {
-                var position = Vector3.Transform(NPCOffset, Rotation * Translation);
+                var position = Vector3.Transform(NPCHorizontalOffset, Rotation * Translation);
                 var quest = SelectQuest(position, Rng);
                 DoWhenChunkReady(position, P =>
                 {
-                    var pos = P + Vector3.UnitY * 2;
+                    var pos = P + NPCHeightOffset;
                     var npc = CreateQuestGiverNPC(pos, quest, Rng);
                     npc.Rotation = Physics.DirectionToEuler(npc.Orientation = -Vector3.Transform(DefaultLookingDirection, Rotation));
                     npc.Position = pos;

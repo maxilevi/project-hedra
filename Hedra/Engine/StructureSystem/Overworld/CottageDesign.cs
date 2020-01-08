@@ -20,7 +20,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         protected override int StructureChance => StructureGrid.CottageWithFarmChance;
         protected override BlockType PathType => BlockType.None;
         protected override CacheItem? Cache => null;
-        protected override Vector3 NPCOffset => Vector3.Zero;
+        protected override Vector3 NPCHorizontalOffset => Vector3.Zero;
         protected override float QuestChance => 1;
         
         protected static void AddHouse(CollidableStructure Structure, Vector3 HouseOffset, VillageRoot Root, Random Rng)

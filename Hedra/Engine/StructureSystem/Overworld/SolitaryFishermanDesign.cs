@@ -45,7 +45,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             return npc;
         }
 
-        protected override Vector3 NPCOffset => Vector3.Zero;
+        protected override Vector3 NPCHorizontalOffset => Vector3.Zero;
         protected override float QuestChance => 1f;
     }
 }

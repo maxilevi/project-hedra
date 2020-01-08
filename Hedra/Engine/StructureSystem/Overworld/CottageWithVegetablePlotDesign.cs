@@ -61,7 +61,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         }
 
         protected override BlockType PathType => BlockType.StonePath;
-        protected override Vector3 NPCOffset => Vector3.UnitZ * -20f - Vector3.UnitX * 15f;
+        protected override Vector3 NPCHorizontalOffset => Vector3.UnitZ * -20f - Vector3.UnitX * 15f;
         public override int PlateauRadius => 128;
 
         protected override float GroundworkRadius => 32;
