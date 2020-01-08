@@ -208,12 +208,10 @@ namespace HedraTests.Player
 
         public void RegisterInteraction(InteractableStructure Structure)
         {
-            throw new NotImplementedException();
         }
 
         public void RegisterFishing(Item FishedObject)
         {
-            throw new NotImplementedException();
         }
 
         public Item[] GetMainEquipment { get; }

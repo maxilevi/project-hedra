@@ -91,6 +91,7 @@ namespace HedraTests.Player.Skills
             var defaultIds = this.GetDefaultIconIds();
             var existingIds = new List<uint>();
             weapons.Remove(typeof(Hands));
+            weapons.Remove(typeof(HoldableObject));
             weapons.Remove(typeof(FarmingRake));
             for (var i = 0; i < weapons.Count; i++)
             {
