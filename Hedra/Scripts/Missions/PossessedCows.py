@@ -83,12 +83,8 @@ def on_farm_arrived(giver, owner, enemies, rng):
     #for enemy in enemies:
     #    enemy.SearchComponent[HostileAIComponent]().SetTarget(owner if rng.Next(0, 2) == 1 else giver)
 
-def make_follow(giver, target):
-    MissionCore.remove_component_if_exists(giver, IBasicAIComponent)
-    giver.AddComponent(FollowAIComponent(giver, target))
-
 def on_mission_start(giver, target):
-    make_follow(giver, target)
+    MissionCore.make_follow(giver, target)
     giver.SearchComponent[DamageComponent]().Immune = False
     giver.SearchComponent[DamageComponent]().Ignore(lambda x: x == target)
 

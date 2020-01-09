@@ -44,7 +44,7 @@ def setup_timeline(position, giver, owner, rng):
     find.MissionBlockEnd += lambda: on_arrived(giver, owner, is_day)
 
     defeat = DefeatEntityMission(Array[IEntity](bandits))
-    defeat.MissionBlockEnd += lambda: make_follow(giver, owner)
+    defeat.MissionBlockEnd += lambda: MissionCore.make_follow(giver, owner)
 
     talk = TalkMission(MissionCore.create_dialog('quest_occupied_house_end_wait'))
     talk.Humanoid = giver
@@ -96,12 +96,8 @@ def on_arrived(giver, owner, is_day):
     talk.AutoRemove = True
     talk.TalkToPlayer()
 
-def make_follow(giver, target):
-    MissionCore.remove_component_if_exists(giver, IBasicAIComponent)
-    giver.AddComponent(FollowAIComponent(giver, target))
-
 def on_mission_start(giver, target):
-    make_follow(giver, target)
+    MissionCore.make_follow(giver, target)
     giver.SearchComponent[DamageComponent]().Immune = False
     giver.SearchComponent[DamageComponent]().Ignore(lambda x: x == target)
 

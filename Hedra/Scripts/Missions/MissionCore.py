@@ -8,6 +8,8 @@ from System.Numerics import Vector2, Vector3
 from Hedra.Numerics import VectorExtensions
 from Hedra.Mission import QuestReward, ItemCollect, DialogObject
 from Hedra.Mission.Blocks import EndMission
+from Hedra.AISystem.Humanoid import FollowAIComponent
+from Hedra.AISystem import IBasicAIComponent
 
 clr.ImportExtensions(VectorExtensions)
 
@@ -104,3 +106,9 @@ def create_dialog(keyword, params = []):
     dialog.Keyword = keyword
     dialog.Arguments = System.Array[System.Object](params)
     return dialog
+
+def make_follow(giver, target):
+    remove_component_if_exists(giver, IBasicAIComponent)
+    follow = FollowAIComponent(giver, target)
+    giver.AddComponent(follow)
+    giver.AddBonusSpeedWhile(0.5, System.Func[System.Boolean](lambda: giver.SearchComponent[FollowAIComponent]() == follow))
