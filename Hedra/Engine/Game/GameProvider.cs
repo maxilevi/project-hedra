@@ -217,7 +217,7 @@ namespace Hedra.Engine.Game
             SoundtrackManager.PlayAmbient();
             Player.SearchComponent<DamageComponent>().Immune = true;
             var chunkOffset = World.ToChunkSpace(Player.Position);
-            StructureHandler.CheckStructures(chunkOffset);
+            World.StructureHandler.CheckStructures(chunkOffset);
             while (_loadingScreen.IsLoading)
             {
                 yield return null;
