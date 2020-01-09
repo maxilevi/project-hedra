@@ -25,12 +25,12 @@ namespace Hedra.Engine.SkillSystem.Warrior
 
         private float HealthFormula(bool Clamp = false)
         {
-            return Clamp ? 12 * Math.Max(Level, 1) : 12 * Level;
+            return (Clamp ? 12 * Math.Max(Level, 1) : 12 * Level) * 1.5f;
         }
         
         protected override void Add()
         {
-            _addonHealth = HealthFormula() * Level;
+            _addonHealth = HealthFormula();
             User.BonusHealth += _addonHealth;
             if(User.Health > User.MaxHealth) User.Health = User.MaxHealth;
         }
