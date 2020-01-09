@@ -57,7 +57,7 @@ def setup_timeline(position, giver, owner, rng):
 
     builder.SetReward(FarmCore.get_reward(rng))
     builder.MissionStart += lambda: on_mission_start(giver, owner)
-    builder.FailWhen = lambda: fail_when(giver, cottage_structure, position)
+    builder.FailWhen = lambda: fail_when(giver, cottage_structure)
     builder.MissionDispose += lambda: on_dispose(giver, is_day, wait)
     return builder
 
