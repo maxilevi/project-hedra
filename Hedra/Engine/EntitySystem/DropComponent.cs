@@ -25,7 +25,7 @@ namespace Hedra.Engine.EntitySystem
     public class DropComponent : EntityComponent
     {
         public bool Dropped { get; private set; }
-        public bool RandomDrop { get; set; } = true;
+        public bool RandomDrop => ItemDrop != null;
         public Item ItemDrop { get; set; }
         private float _dropChance;
         

@@ -66,7 +66,6 @@ namespace Hedra.Engine.ModuleSystem.Templates
             var drop = new DropComponent(Mob)
             {
                 ItemDrop = gold,
-                RandomDrop = false,
                 DropChance = 50
             };
             Mob.AddComponent(drop);
@@ -81,7 +80,6 @@ namespace Hedra.Engine.ModuleSystem.Templates
                 drop = new DropComponent(Mob)
                 {
                     DropChance = template.Chance,
-                    RandomDrop = false,
                     ItemDrop = item
                 };
                 Mob.AddComponent(drop);
@@ -104,42 +102,36 @@ namespace Hedra.Engine.ModuleSystem.Templates
                 Mob.AddComponent(new DropComponent(Mob)
                 {
                     ItemDrop = ItemPool.Grab(ItemTier.Common),
-                    RandomDrop = false,
                     DropChance = .125f,
                 });
             else if(Mob.Level < 16)
                 Mob.AddComponent(new DropComponent(Mob)
                 {
                     ItemDrop = ItemPool.Grab(ItemTier.Uncommon),
-                    RandomDrop = false,
                     DropChance = .1f,
                 });
             else if(Mob.Level < 32)
                 Mob.AddComponent(new DropComponent(Mob)
                 {
                     ItemDrop = ItemPool.Grab(ItemTier.Rare),
-                    RandomDrop = false,
                     DropChance = .075f,
                 });
             else if(Mob.Level < 48)
                 Mob.AddComponent(new DropComponent(Mob)
                 {
                     ItemDrop = ItemPool.Grab(ItemTier.Unique),
-                    RandomDrop = false,
                     DropChance = .05f,
                 });
             else if(Mob.Level < 64)
                 Mob.AddComponent(new DropComponent(Mob)
                 {
                     ItemDrop = ItemPool.Grab(ItemTier.Legendary),
-                    RandomDrop = false,
                     DropChance = .025f,
                 });
             else
                 Mob.AddComponent(new DropComponent(Mob)
                 {
                     ItemDrop = ItemPool.Grab(ItemTier.Divine),
-                    RandomDrop = false,
                     DropChance = .005f,
                 });
         }

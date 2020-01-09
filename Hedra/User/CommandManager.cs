@@ -628,7 +628,7 @@ namespace Hedra.User
                         }
                     }
                     World.StructureHandler.Discard();
-                    Engine.StructureSystem.StructureHandler.CheckStructures(World.ToChunkSpace(Caster.Position));
+                    World.StructureHandler.CheckStructures(World.ToChunkSpace(Caster.Position));
                 }
 
                 if (Parts[0] == "place")
