@@ -16,6 +16,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Hunter
         protected override IEntity SpawnMinion()
         {
             var raven = base.SpawnMinion();
+            raven.Physics.ContactResponse = false;
             raven.AttackDamage *= 1.0f + DamageMultiplier;
             raven.AddComponent(new SelfDestructComponent(raven, Duration));
             return raven;
