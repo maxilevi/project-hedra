@@ -55,7 +55,6 @@ def create_criminals(owner, giver, items, rng):
         bandit = NPCCreator.SpawnBandit(position, max(1, owner.Level - rng.Next(0, 5)), BanditOptions.Quest)
         bandit.RemoveComponent(bandit.SearchComponent[DropComponent]())
         drop = DropComponent(bandit)
-        drop.RandomDrop = False
         drop.ItemDrop = item
         drop.DropChance = 100
         bandit.AddComponent(drop)
