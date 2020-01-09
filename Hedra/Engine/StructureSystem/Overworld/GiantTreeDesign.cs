@@ -71,7 +71,10 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
             var chest = World.SpawnChest(
                 new Vector3(chestPosition.X, Structure.Position.Y, chestPosition.Z), 
-                ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon))
+                ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon)
+                {
+                    RandomizeTier = false
+                })
             );
             chest.Condition += () => treeBoss == null || treeBoss.IsDead;
             chest.Rotation = Vector3.UnitY * 90f;

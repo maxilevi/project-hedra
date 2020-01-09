@@ -129,7 +129,10 @@ namespace Hedra.Engine.StructureSystem.Overworld
             Cementery.Enemies = enemies.ToArray();
 
             var prize = World.SpawnChest(Position + Vector3.UnitX * 40f, 
-                    ItemPool.Grab( new ItemPoolSettings(ItemTier.Uncommon) ));
+                    ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon)
+                    {
+                        RandomizeTier = false
+                    }));
             Cementery.Chest = prize;
             prize.Condition = delegate
             {

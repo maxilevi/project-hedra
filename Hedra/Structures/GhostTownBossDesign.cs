@@ -41,7 +41,10 @@ namespace Hedra.Structures
                 boss.AddComponent(new DropComponent(boss)
                 {
                     DropChance = 100,
-                    ItemDrop = ItemPool.Grab(new ItemPoolSettings(ItemTier.Unique))
+                    ItemDrop = ItemPool.Grab(new ItemPoolSettings(ItemTier.Unique)
+                    {
+                        RandomizeTier = false
+                    })
                 });
                 ((GhostTownBoss)Structure.WorldObject).Boss = boss;
             }, Structure);
