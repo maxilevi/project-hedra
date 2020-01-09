@@ -59,8 +59,9 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
+            if (Rng.Next(0, StructureGrid.ObeliskChance) != 1) return false;
             var height = Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z);
-            return Rng.Next(0, StructureGrid.ObeliskChance) == 1 && height > BiomePool.SeaLevel && Math.Abs(Biome.Generation.RiverAtPoint(TargetPosition.X, TargetPosition.Z)) < 0.005f;
+            return height > BiomePool.SeaLevel && Math.Abs(Biome.Generation.RiverAtPoint(TargetPosition.X, TargetPosition.Z)) < 0.005f;
         }
     }
 }

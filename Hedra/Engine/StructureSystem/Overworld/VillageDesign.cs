@@ -79,8 +79,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         protected override bool SetupRequirements(ref Vector3 TargetPosition, Vector2 ChunkOffset, Region Biome, IRandom Rng)
         {
-            return /*BiomeGenerator.PathFormula(ChunkOffset.X, ChunkOffset.Y) > 0
-                   && */Rng.Next(0, StructureGrid.VillageChance) == 1
+            return Rng.Next(0, StructureGrid.VillageChance) == 1
                    && Biome.Generation.GetMaxHeight(TargetPosition.X, TargetPosition.Z) > BiomePool.SeaLevel
                    && (TargetPosition - World.SpawnPoint).LengthFast() > (World.SpawnVillagePoint - World.SpawnPoint).LengthFast() *  2;
         }

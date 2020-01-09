@@ -49,8 +49,8 @@ namespace Hedra.Engine.BiomeSystem
         {
             _type = Type;
             _regionCache = new Dictionary<int, Region>();
-            _regionDistribution = new RandomDistribution();
-            _biomeDistribution = new RandomDistribution();
+            _regionDistribution = new RandomDistribution(true);
+            _biomeDistribution = new RandomDistribution(true);
             _voronoi = new Voronoi();
             BuildMappings();
         }
