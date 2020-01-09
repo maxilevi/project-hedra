@@ -17,7 +17,7 @@ namespace Hedra.Engine.CacheSystem
         private static readonly object _shapesLock = new object();
         public static VertexData Get(string Path, Vector3 Scale)
         {
-            //lock (_modelLock)
+            lock (_modelLock)
             {
                 if (!_modelCache.ContainsKey(Path))
                 {
@@ -34,7 +34,7 @@ namespace Hedra.Engine.CacheSystem
 
         public static List<CollisionShape> GetShapes(string Path, Vector3 Scale)
         {
-            //lock (_shapesLock)
+            lock (_shapesLock)
             {
                 if (Path.Contains("Colliders.ply"))
                     throw new ArgumentException("Provided path should be the mesh path.");
