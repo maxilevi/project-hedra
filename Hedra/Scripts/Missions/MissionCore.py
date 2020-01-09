@@ -3,6 +3,7 @@ import System
 import Items
 from Hedra import World
 from Hedra.Structures import MapBuilder
+from Hedra.Engine.StructureSystem import StructureDesign
 from System.Numerics import Vector2, Vector3
 from Hedra.Numerics import VectorExtensions
 from Hedra.Mission import QuestReward, ItemCollect, DialogObject
@@ -15,7 +16,7 @@ DEFAULT_MAX_STRUCTURE_SEARCH_DISTANCE = 4096
 
 def nearby_struct_objects(position, type, max_distance=DEFAULT_MAX_STRUCTURE_SEARCH_DISTANCE):
     def do_find(struct_object):
-        return isinstance(struct_object.Design, type) and (struct_object.Position - position).Xz().LengthSquared() < max_distance * max_distance
+        return isinstance(struct_object.Design, type) and (struct_object.Position - position).Xz().LengthSquared() < max_distance ** 2
     return World.StructureHandler.Find(do_find)
 
 def nearby_structs_positions_designs(position, type, max_distance=DEFAULT_MAX_STRUCTURE_SEARCH_DISTANCE):
@@ -25,6 +26,7 @@ def nearby_structs_positions_designs(position, type, max_distance=DEFAULT_MAX_ST
     for x in xrange(-radius, radius):
         for z in xrange(-radius, radius):
             final_position = Vector3(chunk_space.X + x * CHUNK_WIDTH, 0, chunk_space.Y + z * CHUNK_WIDTH)
+            if (final_position - position).Xz().LengthSquared() > max_distance ** 2: continue
             region = World.BiomePool.GetRegion(final_position)
             sample = MapBuilder.Sample(final_position, region)
             if isinstance(sample, type):
@@ -45,18 +47,28 @@ def find_structure(position, type, max_distance=DEFAULT_MAX_STRUCTURE_SEARCH_DIS
         positions = nearby_structs_positions(position, type, max_distance)
         if not positions:
             raise System.ArgumentOutOfRangeException('Tried to fetch a structure but it has no nearby designs')
+        search_for = System.Array[StructureDesign]([type()])
         for position in positions:
-            World.StructureHandler.CheckStructures(position.Xz())
+            World.StructureHandler.CheckStructures(position.Xz())#, search_for)
             objects = nearby_struct_objects(position, type, max_distance)
             if objects: break
     return nearby[0] if nearby else objects[0]
+
+def find_and_bind_structure(builder, position, type, max_distance=DEFAULT_MAX_STRUCTURE_SEARCH_DISTANCE):
+    structure = find_structure(position, type, max_distance)
+    if structure:
+        structure.ActiveQuests += 1
+        def on_disposed():
+            structure.ActiveQuests -= 1
+        builder.MissionDispose += on_disposed
+    return structure
 
 def is_inside_structure(position, structure_type):
     structures = nearby_struct_objects(position, structure_type)
     return any([(position - object.Position).Xz().LengthSquared() < object.Design.PlateauRadius ** 2 for object in structures])
 
 def is_within_distance(entity_position, structure_position, max_distance=DEFAULT_MAX_STRUCTURE_SEARCH_DISTANCE):
-    return (entity_position - structure_position).Xz().LengthSquared() < max_distance * max_distance
+    return (entity_position - structure_position).Xz().LengthSquared() < max_distance ** 2
 
 def build_generic_reward(rng):
     n = rng.NextDouble()

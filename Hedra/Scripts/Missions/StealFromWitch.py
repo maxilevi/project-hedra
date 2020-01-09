@@ -43,7 +43,7 @@ def setup_timeline(position, giver, owner, rng):
     if MissionCore.contains_quest(owner, QUEST_NAME): 
         return None
 
-    witch_hut_structure = MissionCore.find_structure(position, WitchHutDesign)
+    witch_hut_structure = MissionCore.find_and_bind_structure(builder, position, WitchHutDesign)
     hut = witch_hut_structure.WorldObject
     hut_outcome = select_hut_outcome(rng.Next(0, 10))
     steal_outcome = select_steal_outcome(rng.Next(0, 10))

@@ -49,6 +49,7 @@ namespace Hedra.Engine.Generation
         public AttributeArray Parameters { get; }
         public bool Built { get; set; }
         public bool Disposed { get; private set; }
+        public int ActiveQuests { get; set; }
         private bool _structureSetup;
 
         public CollidableStructure(StructureDesign Design, Vector3 Position, RoundedPlateau Mountain, BaseStructure WorldObject)

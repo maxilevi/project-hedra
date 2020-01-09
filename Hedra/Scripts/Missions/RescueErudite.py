@@ -12,7 +12,7 @@ QUEST_TIER = QuestTier.Medium
 def setup_timeline(position, giver, owner, rng):
     builder = MissionBuilder()
         
-    bandit_camp = MissionCore.find_structure(position, BanditCampDesign)
+    bandit_camp = MissionCore.find_and_bind_structure(builder, position, BanditCampDesign)
 
     find = FindStructureMission()
     find.Design = bandit_camp.Design

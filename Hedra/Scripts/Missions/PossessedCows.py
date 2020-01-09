@@ -27,7 +27,7 @@ def setup_timeline(position, giver, owner, rng):
     if MissionCore.contains_quest(owner, QUEST_NAME):
         return None
 
-    farm_structure = MissionCore.find_structure(position, CottageWithFarmDesign)
+    farm_structure = MissionCore.find_and_bind_structure(builder, position, CottageWithFarmDesign)
     farm = farm_structure.WorldObject
 
     builder.MissionStart += lambda: on_mission_start(giver, owner)

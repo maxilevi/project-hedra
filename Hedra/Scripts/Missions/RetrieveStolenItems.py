@@ -23,7 +23,7 @@ def setup_timeline(position, giver, owner, rng):
     
     builder.OpeningDialog = MissionCore.create_dialog('quest_retrieve_stolen_items_dialog')
     
-    criminals = create_criminals(owner, giver, items, rng)
+    criminals = create_criminals(builder, owner, giver, items, rng)
     for criminal, item in zip(criminals, items):
         find = FindEntityMission(criminals[0])
         find.MissionBlockEnd += lambda: on_found(owner, criminal, rng)
@@ -44,7 +44,7 @@ def setup_timeline(position, giver, owner, rng):
     builder.SetReward(reward)
     return builder
 
-def create_criminals(owner, giver, items, rng):
+def create_criminals(builder, owner, giver, items, rng):
     criminals = []
     for item in items:
         position = giver.Position + Vector3(
@@ -52,7 +52,7 @@ def create_criminals(owner, giver, items, rng):
             Single(0.0),
             Single(rng.NextDouble() * MAX_SPAWN_DISTANCE * 2 - MAX_SPAWN_DISTANCE)
         )
-        bandit = NPCCreator.SpawnBandit(position, max(1, owner.Level - rng.Next(0, 5)), BanditOptions.Quest)
+        bandit = NPCCreator.SpawnBandit(position, max(1, owner.Level - rng.Next(0, 5)), BanditOptions.Quest(builder))
         bandit.RemoveComponent(bandit.SearchComponent[DropComponent]())
         drop = DropComponent(bandit)
         drop.ItemDrop = item

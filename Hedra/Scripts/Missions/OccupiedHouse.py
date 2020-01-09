@@ -24,10 +24,10 @@ def setup_timeline(position, giver, owner, rng):
     if MissionCore.contains_quest(owner, QUEST_NAME):
         return None
 
-    cottage_structure = MissionCore.find_structure(position, CottageWithVegetablePlotDesign)
+    cottage_structure = MissionCore.find_and_bind_structure(builder, position, CottageWithVegetablePlotDesign)
     cottage = cottage_structure.WorldObject
 
-    bandits = spawn_bandits(cottage, owner, rng)
+    bandits = spawn_bandits(builder, cottage, owner, rng)
     cottage.Setup(cottage_structure)
 
     is_day = not SkyManager.IsNight
@@ -57,7 +57,7 @@ def setup_timeline(position, giver, owner, rng):
 
     builder.SetReward(FarmCore.get_reward(rng))
     builder.MissionStart += lambda: on_mission_start(giver, owner)
-    builder.FailWhen = lambda: fail_when(giver, cottage_structure)
+    builder.FailWhen = lambda: fail_when(giver, cottage_structure, position)
     builder.MissionDispose += lambda: on_dispose(giver, is_day, wait)
     return builder
 
@@ -69,12 +69,12 @@ def on_dispose(giver, is_day, wait):
 def fail_when(giver, cottage_structure):
     return giver.IsDead or not MissionCore.is_within_distance(giver.Position, cottage_structure.Position)
     
-def spawn_bandits(cottage, owner, rng):
+def spawn_bandits(builder, cottage, owner, rng):
     bandits = []
     count = len(cottage.BanditPositions)
     for i in range(count):
         position = cottage.BanditPositions[i]
-        bandit = NPCCreator.SpawnBandit(position, owner.Level + rng.Next(1, 6), BanditOptions.Quest)
+        bandit = NPCCreator.SpawnBandit(position, owner.Level + rng.Next(1, 6), BanditOptions.Quest(builder))
         bandit.SearchComponent[DamageComponent]().Ignore(lambda x: x in bandits)
         bandits.append(bandit)
     return bandits
