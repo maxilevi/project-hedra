@@ -29,6 +29,7 @@ namespace Hedra.AISystem.Behaviours
         private Vector3 _lastCanNotReachPosition;
         private bool _hasTarget;
         private bool _canReach;
+        private readonly Timer _stuckTimer;
 
         public TraverseBehaviour(IEntity Parent, bool UseCollision = false) : base(Parent)
         {
@@ -38,6 +39,7 @@ namespace Hedra.AISystem.Behaviours
                 Parent.Physics.CollidesWithStructures = false;
                 Parent.Physics.UpdateColliderList = true;
             }
+            _stuckTimer = new Timer(1);
             CreateGraph();
         }
 
@@ -54,7 +56,7 @@ namespace Hedra.AISystem.Behaviours
         protected virtual void RebuildGraph()
         {
             /* Force the rebuild because its stuck */
-            TraverseStorage.Instance.RebuildIfNecessary(Parent, Parent.IsStuck);
+            TraverseStorage.Instance.RebuildIfNecessary(Parent, Parent.IsStuck && _stuckTimer.Tick());
         }
 
         protected virtual void DisposeGraph()
