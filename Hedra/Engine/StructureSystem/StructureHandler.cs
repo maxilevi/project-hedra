@@ -36,7 +36,7 @@ using Hedra.Numerics;
         private readonly List<StructureWatcher> _itemWatchers;
         private CollidableStructure[] _itemsCache;
         private BaseStructure[] _structureCache;
-        private HashSet<Vector3> _registeredPositions;
+        private readonly HashSet<Vector3> _registeredPositions;
         private bool _dirtyStructuresItems;
         private bool _dirtyStructures;
         
@@ -57,7 +57,7 @@ using Hedra.Numerics;
                     var item = _itemWatchers[i];
                     if (ShouldRemove(item.Structure))
                     {
-                        UnregisterStructure(item.Structure.Position);
+                        UnregisterStructure(item.Structure.Position.Xz().ToVector3());
                         item.Dispose();
                         _itemWatchers.RemoveAt(i);
                     }
@@ -69,26 +69,52 @@ using Hedra.Numerics;
         private static bool ShouldRemove(CollidableStructure Structure)
         {
             /* Offset is not used because this causes issues when chunks are deleted at chunk edges */
-            return Structure.Design.ShouldRemove(Structure) && Structure.Built;
+            return Structure.Design.ShouldRemove(Structure) && Structure.Built && Structure.ActiveQuests == 0;
         }
-        
-        public static void CheckStructures(Vector2 ChunkOffset)
-        {
-            if (!World.IsChunkOffset(ChunkOffset))
-                throw new ArgumentException("Provided parameter does not represent a valid offset");
 
+        public void CheckStructures(Vector2 ChunkOffset)
+        {
             var underChunk = World.GetChunkAt(ChunkOffset.ToVector3());
             var region = underChunk != null
                 ? underChunk.Biome
                 : World.BiomePool.GetRegion(ChunkOffset.ToVector3());
-            var designs = region.Structures.Designs;
+            CheckStructures(ChunkOffset, region.Structures.Designs);
+        }
+        
+        /* Used from MissionCore.py */
+        public void CheckStructures(Vector2 ChunkOffset, StructureDesign[] Designs)
+        {
+            if (!World.IsChunkOffset(ChunkOffset))
+                throw new ArgumentException("Provided parameter does not represent a valid offset");
+            
+            var underChunk = World.GetChunkAt(ChunkOffset.ToVector3());
+            var region = underChunk != null
+                ? underChunk.Biome
+                : World.BiomePool.GetRegion(ChunkOffset.ToVector3());
+            var maxSearchRadius = Designs.Max(D => D.SearchRadius);
             /* Beware! This is created locally and we don't maintain a static instance because of multi-threading issues. */
             var distribution = new RandomDistribution(true);
-            for (var i = 0; i < designs.Length; i++)
+            for (var x = Math.Min(-2, -maxSearchRadius / Chunk.Width * 2); x < Math.Max(2, maxSearchRadius / Chunk.Width * 2); x++)
             {
-                if (designs[i].MeetsRequirements(ChunkOffset))
-                    designs[i].CheckFor(ChunkOffset, region, distribution);
+                for (var z = Math.Min(-2, -maxSearchRadius / Chunk.Width * 2); z < Math.Max(2, maxSearchRadius / Chunk.Width * 2); z++)
+                {
+                    var offset = new Vector2(ChunkOffset.X + x * Chunk.Width, ChunkOffset.Y + z * Chunk.Width);
+                    for (var i = 0; i < Designs.Length; i++)
+                    {
+                        if (!IsWithinSearchRadius(Designs[i], offset, ChunkOffset)) continue;
+                        if (!Designs[i].MeetsRequirements(offset)) continue;
+                        
+                        Designs[i].CheckForDesign(offset, region, distribution);
+                    }
+                }
             }
+        }
+
+        private static bool IsWithinSearchRadius(StructureDesign Design, Vector2 Offset, Vector2 Center)
+        {
+            var chunkDistance = (Offset - Center).LengthFast() / Chunk.Width;
+            var structureSearchDistance = Math.Max(2, Design.SearchRadius / Chunk.Width) * 2;
+            return chunkDistance <= structureSearchDistance * 2;
         }
 
         public void Build(CollidableStructure Struct)
@@ -113,8 +139,13 @@ using Hedra.Numerics;
         
         public void UnregisterStructure(Vector3 Position)
         {
-            lock(_registerLock)
+            lock (_registerLock)
+            {
+                /* This commented code fails when a structure setup method generates an exception, causing the structure to exist and dispose but not registeres */
+                if(!_registeredPositions.Contains(Position))
+                    throw new ArgumentOutOfRangeException();
                 _registeredPositions.Remove(Position);
+            }
         }
 
         public bool StructureExistsAtPosition(Vector3 Position)
@@ -142,6 +173,7 @@ using Hedra.Numerics;
             lock (_lock)
             {
                 _itemWatchers.Add(new StructureWatcher(Structure));
+                RegisterStructure(Structure.Position.Xz().ToVector3());
                 Structure.Setup();
                 Dirty();
             }
