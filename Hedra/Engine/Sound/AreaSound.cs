@@ -18,6 +18,7 @@ namespace Hedra.Engine.Sound
         private float _targetGain;
         private SoundItem _sound;
         private SoundType _bufferType;
+        private readonly object _soundLock = new object();
 
         public AreaSound(SoundType Type, Vector3 Position, float Radius)
         {
@@ -29,42 +30,51 @@ namespace Hedra.Engine.Sound
         public void Update(bool Condition)
         {
             Condition = Condition && !GameSettings.Paused;
-            if (this._sound == null && (this.Position - SoundPlayer.ListenerPosition).LengthFast() < Radius && Condition)
-                this._sound = SoundPlayer.GetAvailableSource();
-
-            if (this._sound != null && (!this._sound.Source.IsPlaying || Type != _bufferType) && Condition)
+            lock (_soundLock)
             {
-                this._sound.Source.Play(SoundPlayer.GetBuffer(Type), this.Position, Pitch, 1, true);
-                _bufferType = Type;
-            }
+                if (this._sound == null && (this.Position - SoundPlayer.ListenerPosition).LengthFast() < Radius &&
+                    Condition)
+                    this._sound = SoundPlayer.GetAvailableSource();
 
-            if (this._sound != null)
-            {
-                _targetGain = Math.Max(0, 1 - (this.Position - SoundPlayer.ListenerPosition).LengthFast() / Radius);
-                _targetGain *= Condition ? 1 : 0;
-                _targetGain *= SoundPlayer.Volume;
-                _targetGain *= Volume;
+                if (this._sound != null && (!this._sound.Source.IsPlaying || Type != _bufferType) && Condition)
+                {
+                    this._sound.Source.Play(SoundPlayer.GetBuffer(Type), this.Position, Pitch, 1, true);
+                    _bufferType = Type;
+                }
+
+                if (this._sound != null)
+                {
+                    _targetGain = Math.Max(0, 1 - (this.Position - SoundPlayer.ListenerPosition).LengthFast() / Radius);
+                    _targetGain *= Condition ? 1 : 0;
+                    _targetGain *= SoundPlayer.Volume;
+                    _targetGain *= Volume;
 
 
-                this._sound.Source.Volume = Mathf.Lerp(this._sound.Source.Volume, this._targetGain, (float)Time.IndependentDeltaTime * 8f);
-                if (Math.Abs(this._sound.Source.Volume - this._targetGain) < 0.05f)
-                    this._sound.Source.Volume = _targetGain;
+                    this._sound.Source.Volume = Mathf.Lerp(this._sound.Source.Volume, this._targetGain,
+                        (float) Time.IndependentDeltaTime * 8f);
+                    if (Math.Abs(this._sound.Source.Volume - this._targetGain) < 0.05f)
+                        this._sound.Source.Volume = _targetGain;
 
-            }
-            if (this._sound != null && (this.Position - SoundPlayer.ListenerPosition).LengthFast() > Radius)
-            {
-                this._sound.Source.Stop();
-                this._sound.Locked = false;
-                this._sound = null;
+                }
+
+                if (this._sound != null && (this.Position - SoundPlayer.ListenerPosition).LengthFast() > Radius)
+                {
+                    this._sound.Source.Stop();
+                    this._sound.Locked = false;
+                    this._sound = null;
+                }
             }
         }
 
         public void Stop()
         {
-            this._targetGain = 0;
-            this._sound?.Source.Stop();
-            if (this._sound != null) this._sound.Locked = false;
-            this._sound = null;
+            lock (_soundLock)
+            {
+                _targetGain = 0;
+                _sound?.Source.Stop();
+                if (this._sound != null) this._sound.Locked = false;
+                _sound = null;
+            }
         }
 
         public void Dispose()
