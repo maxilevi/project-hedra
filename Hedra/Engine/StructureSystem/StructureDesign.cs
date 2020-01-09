@@ -19,6 +19,7 @@ using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
 using System.Numerics;
 using Hedra.Numerics;
+using Hedra.Structures;
 
 namespace Hedra.Engine.StructureSystem
 {
@@ -46,27 +47,16 @@ namespace Hedra.Engine.StructureSystem
             return new Random((int) (Structure.Position.X / 11 * (Structure.Position.Z / 13)));
         }
         
-        public void CheckFor(Vector2 ChunkOffset, Region Biome, RandomDistribution Distribution)
+        public void CheckForDesign(Vector2 ChunkPosition, Region Biome, RandomDistribution Distribution)
         {
-            for (var x = Math.Min(-2, -SearchRadius / Chunk.Width * 4); x < Math.Max(2, SearchRadius / Chunk.Width * 4); x++)
+            if(MapBuilder.SampleDesign(this, ChunkPosition, Biome, Distribution, World.StructureHandler.StructureItems, out var targetPosition))
             {
-                for (var z = Math.Min(-2, -SearchRadius / Chunk.Width * 4); z < Math.Max(2, SearchRadius / Chunk.Width * 4); z++)
-                {
-                    var offset = new Vector2(ChunkOffset.X + x * Chunk.Width, ChunkOffset.Y + z * Chunk.Width);
-                    Distribution.Seed = BuildRngSeed(offset);
-                    var targetPosition = BuildTargetPosition(offset, Distribution);
-                    var items = World.StructureHandler.StructureItems;
-                    
-                    /* If you change something here update the MapBuilder accordingly */
-                    if (this.ShouldSetup(offset, ref targetPosition, items, Biome, Distribution) && !InterferesWithAnotherStructure(targetPosition))
-                    {
-                        World.StructureHandler.RegisterStructure(targetPosition);
-                        var item = this.Setup(targetPosition, BuildRng(offset));
-                        item.MapPosition = offset;
-                        World.StructureHandler.AddStructure(item);
-                        World.StructureHandler.Build(item);
-                    }
-                }
+                /* We register here to avoid sync issues */
+                World.StructureHandler.RegisterStructure(targetPosition.Xz().ToVector3());
+                var item = this.Setup(targetPosition, BuildRng(ChunkPosition));
+                item.MapPosition = ChunkPosition;
+                World.StructureHandler.AddStructure(item);
+                World.StructureHandler.Build(item);
             }
         }
 
@@ -79,16 +69,15 @@ namespace Hedra.Engine.StructureSystem
         public virtual bool ShouldRemove(CollidableStructure Structure)
         {
             var chunkOffset = World.ToChunkSpace(Structure.Position);
-            for (var x = Math.Min(-2, -SearchRadius / Chunk.Width * 4); x < Math.Max(2, SearchRadius / Chunk.Width * 4); x++)
+            for (var x = Math.Min(-2, -SearchRadius / Chunk.Width * 2); x < Math.Max(2, SearchRadius / Chunk.Width * 2); x++)
             {
-                for (var z = Math.Min(-2, -SearchRadius / Chunk.Width * 4); z < Math.Max(2, SearchRadius / Chunk.Width * 4); z++)
+                for (var z = Math.Min(-2, -SearchRadius / Chunk.Width * 2); z < Math.Max(2, SearchRadius / Chunk.Width * 2); z++)
                 {
                     var offset = new Vector2(chunkOffset.X + x * Chunk.Width, chunkOffset.Y + z * Chunk.Width);
                     if (World.GetChunkByOffset(offset) != null)
                         return false;
                 }
             }
-
             return true;
         }
 

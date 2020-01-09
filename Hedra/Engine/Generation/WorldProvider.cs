@@ -47,6 +47,7 @@ using Hedra.Engine.SkillSystem;
 using Hedra.Engine.Windowing;
 using Hedra.Numerics;
 using Hedra.Framework;
+using Hedra.Structures;
 
 namespace Hedra.Engine.Generation
 {
@@ -329,6 +330,7 @@ namespace Hedra.Engine.Generation
             WorldRenderer.ForceDiscard();
             FishingZoneHandler.Discard();
             CacheManager.Discard();
+            MapBuilder.Discard();
 
             this.AddEntity(GameManager.Player);
 
