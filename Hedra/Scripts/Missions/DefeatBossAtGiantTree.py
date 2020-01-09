@@ -12,7 +12,7 @@ QUEST_TIER = QuestTier.Medium
 def setup_timeline(position, giver, owner, rng):
     builder = MissionBuilder()
 
-    giant_tree = MissionCore.find_structure(position, GiantTreeDesign)
+    giant_tree = MissionCore.find_and_bind_structure(builder, position, GiantTreeDesign)
 
     find = FindStructureMission()
     find.Design = giant_tree.Design

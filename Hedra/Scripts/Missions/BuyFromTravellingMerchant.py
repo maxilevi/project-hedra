@@ -21,7 +21,7 @@ def setup_timeline(position, giver, owner, rng):
     builder = MissionBuilder()
 
     items_to_collect = random_items(rng)
-    structure = MissionCore.find_structure(position, TravellingMerchantDesign)
+    structure = MissionCore.find_and_bind_structure(builder, position, TravellingMerchantDesign)
     structure.WorldObject.ItemsToBuy = items_to_collect
 
     find = FindStructureMission()

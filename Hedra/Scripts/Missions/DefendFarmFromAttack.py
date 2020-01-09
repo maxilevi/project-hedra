@@ -27,7 +27,7 @@ def setup_timeline(position, giver, owner, rng):
     builder = MissionBuilder()
     builder.OpeningDialog = MissionCore.create_dialog('quest_defend_farm_from_attack_dialog')
 
-    criminals, ais = create_criminals(owner, giver, rng)
+    criminals, ais = create_criminals(builder, owner, giver, rng)
     
     defend = DefendMission(giver, criminals)
     defend.MissionBlockStart += lambda: setup_giver_and_bandits(giver, criminals, ais)
@@ -48,7 +48,7 @@ def setup_giver_and_bandits(giver, criminals, ais):
         criminal = criminals[i]
         Core.after_seconds(5 * i + 1, lambda cmp=ai, cri=criminal: cri.AddComponent(cmp))
 
-def create_criminals(owner, giver, rng):
+def create_criminals(builder, owner, giver, rng):
     criminals = []
     ais = []
     count = rng.Next(2, 6)
@@ -60,7 +60,7 @@ def create_criminals(owner, giver, rng):
                 Single(0.0),
                 Single(rng.NextDouble() * MAX_SPAWN_DISTANCE * 2 - MAX_SPAWN_DISTANCE)
             )
-        bandit = NPCCreator.SpawnBandit(position, max(1, owner.Level - rng.Next(0, 5)), BanditOptions.Quest)
+        bandit = NPCCreator.SpawnBandit(position, max(1, owner.Level - rng.Next(0, 5)), BanditOptions.Quest(builder))
         ai = bandit.SearchComponent[CombatAIComponent]()
         ai.SetGuardSpawnPoint(False)
         ai.SetCanExplore(False)

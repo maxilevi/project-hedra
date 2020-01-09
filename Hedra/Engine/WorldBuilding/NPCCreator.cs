@@ -141,7 +141,7 @@ namespace Hedra.Engine.WorldBuilding
                 human.SearchComponent<DamageComponent>().Ignore(E => E is IPlayer || E == GameManager.Player.Companion.Entity);
             human.Name = (!Options.Friendly) ? templateName : NameGenerator.PickMaleName(Utils.Rng);
             human.IsFriendly = Options.Friendly;
-            human.Removable = !Options.IsFromQuest;
+            Options.ApplyQuestStatus(human);
             human.UpdateWhenOutOfRange = Options.IsFromQuest;
             return human;
         }

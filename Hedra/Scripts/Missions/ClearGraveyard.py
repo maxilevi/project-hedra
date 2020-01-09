@@ -11,7 +11,7 @@ QUEST_TIER = QuestTier.Medium
 def setup_timeline(position, giver, owner, rng):
     builder = MissionBuilder()
 
-    graveyard = MissionCore.find_structure(position, GraveyardDesign)
+    graveyard = MissionCore.find_and_bind_structure(builder, position, GraveyardDesign)
 
     find = FindStructureMission()
     find.Design = graveyard.Design
