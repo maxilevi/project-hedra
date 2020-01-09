@@ -5,7 +5,7 @@ namespace Hedra.AISystem.Behaviours
 {
     public class FollowBehaviour : Behaviour
     {
-        public const int DefaultErrorMargin = 8;
+        public const int DefaultErrorMargin = 6;
         public IEntity Target { get; set; }
         protected TraverseBehaviour Traverse { get; }
         private readonly Timer _followTimer;

@@ -45,11 +45,11 @@ namespace Hedra.AISystem.Behaviours
                     SetTarget(ride.Rider);
                 }
             }
-            if (!Parent.Model.IsAttacking && Target != null && !InAttackRange(Target, 1.25f))
+            if (!Parent.Model.IsAttacking && Target != null && !InAttackRange(Target, 1.35f))
             {
                 Follow.Update();
             }
-            if (Target != null && InAttackRange(Target, 1.25f))
+            if (Target != null && InAttackRange(Target, 1.35f))
             {
                 FollowTimer.Reset();
                 this.Attack(2.0f);
