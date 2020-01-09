@@ -1,6 +1,7 @@
 using System;
 using Hedra.Components;
 using Hedra.Engine.CacheSystem;
+using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player;
 using Hedra.EntitySystem;
@@ -68,6 +69,12 @@ namespace Hedra.Engine.QuestSystem
             if (_quest != null)
             {
                 Parent.AddComponent(new QuestThoughtsComponent(Parent, _quest.OpeningDialog));
+                Parent.Removable = false;
+                _quest.MissionDispose += () =>
+                {
+                    Parent.Removable = true;
+                    Parent.AddComponent(new DisposeComponent(Parent, 1024));
+                };
             }
             else
             {
