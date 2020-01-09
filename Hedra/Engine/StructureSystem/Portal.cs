@@ -110,7 +110,7 @@ namespace Hedra.Engine.StructureSystem
 
         private IEnumerator TeleportEffect()
         {
-            var timer = new Timer(1);
+            var timer = new Timer(5);
             while ((GameManager.Player.Position - Position).LengthFast() < PortalRadius && !timer.Tick())
             {
                 GameManager.SpawningEffect = true;
