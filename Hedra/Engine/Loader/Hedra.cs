@@ -68,7 +68,7 @@ namespace Hedra.Engine.Loader
 
         public void Setup()
         {
-            Title = $"Project Hedra {GameVersion}";
+            Title = $"Project Hedra {GameVersion} Early Access";
             if (!LoadBoilerplate())
             {
                 Close();
