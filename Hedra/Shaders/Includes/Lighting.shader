@@ -1,4 +1,4 @@
-﻿
+
 struct PointLight
 {
     vec3 Position;
@@ -42,7 +42,7 @@ vec4 diffuse(vec3 unitToLight, vec3 unitNormal, vec3 FullLightColor) {
 	1.0);
 }
 
-vec3 calculate_lights(vec3 LightColor, vec3 Vertex, float radius_multiplier = 1.0)
+vec3 calculate_lights(vec3 LightColor, vec3 Vertex, float radius_multiplier)
 {
 	float average_color = (LightColor.r + LightColor.g + LightColor.b) * .33;
 	vec3 light_color = vec3(0.0, 0.0, 0.0);
@@ -53,4 +53,9 @@ vec3 calculate_lights(vec3 LightColor, vec3 Vertex, float radius_multiplier = 1.
 		light_color += Lights[i].Color * att;// * (1.0 - average_color); 
 	}
 	return clamp(light_color, vec3(0.0, 0.0, 0.0), vec3(1.0, 1.0, 1.0));
+}
+
+vec3 calculate_lights(vec3 LightColor, vec3 Vertex)
+{
+    return calculate_lights(LightColor, Vertex, 1.0);
 }

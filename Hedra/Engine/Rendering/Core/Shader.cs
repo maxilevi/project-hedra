@@ -14,6 +14,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Rendering.Shaders;
 using Hedra.Game;
 using System.Numerics;
+using System.Text;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 
@@ -161,8 +162,9 @@ namespace Hedra.Engine.Rendering.Core
 
         private static void Compile(out int ID, string Source, string Name, ShaderType Type)
         {
+            var asciiSource = Encoding.ASCII.GetString(Encoding.ASCII.GetBytes(Source));
             ID = Renderer.CreateShader(Type);
-            Renderer.ShaderSource(ID, Source);
+            Renderer.ShaderSource(ID, asciiSource);
             Renderer.CompileShader(ID);
             string log = Renderer.GetShaderInfoLog(ID);
             Renderer.GetShader(ID, ShaderParameter.CompileStatus, out int result);       

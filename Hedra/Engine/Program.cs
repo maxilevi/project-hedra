@@ -108,16 +108,15 @@ namespace Hedra.Engine
             if(DummyMode) EnableDummyMode();
             LoadLibraries();
 
-            var screens = Screen.AllScreens;
+            var screens = OSManager.GetResolutions();
             var maxSize = Vector2.Zero;
             for (var i = 0; i < screens.Length; ++i)
             {
-                var screenBounds = new Vector2(screens[i].Bounds.Width, screens[i].Bounds.Height);
-                if (screenBounds.LengthSquared() > maxSize.LengthSquared())
+                if (screens[i].LengthSquared() > maxSize.LengthSquared())
                 {
-                    maxSize = screenBounds;
+                    maxSize = screens[i];
                 }
-                Log.WriteLine($"Found screen size '{screenBounds}'");
+                Log.WriteLine($"Found screen size '{screens[i]}'");
             }
             var bounds = maxSize;
             GameSettings.DeviceWidth = (int)bounds.X;

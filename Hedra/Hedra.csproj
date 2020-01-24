@@ -389,9 +389,12 @@
     <Compile Include="Engine\Generation\WorldBuilder.cs" />
     <Compile Include="Engine\ItemSystem\Item.cs" />
     <Compile Include="Engine\Management\PerformanceStatistics.cs" />
+    <Compile Include="Engine\Native\DummyScreenManager.cs" />
     <Compile Include="Engine\Native\HedraCoreNative.cs" />
+    <Compile Include="Engine\Native\IScreenManager.cs" />
     <Compile Include="Engine\Native\MeshOptimizer.cs" />
     <Compile Include="Engine\Native\Pointer.cs" />
+    <Compile Include="Engine\Native\WindowsScreenManager.cs" />
     <Compile Include="Engine\PlantSystem\Harvestables\RosemaryAndThymePlacementDesign.cs" />
     <Compile Include="Engine\PlantSystem\Harvestables\RosemaryDesign.cs" />
     <Compile Include="Engine\PlantSystem\Harvestables\ThymeDesign.cs" />
