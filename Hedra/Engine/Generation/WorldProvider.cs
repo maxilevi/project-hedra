@@ -320,10 +320,11 @@ namespace Hedra.Engine.Generation
                 }
             }
 
-            for (var i = Entities.Count - 1; i > -1; i--)
+            var entities = Entities;
+            for (var i = entities.Count - 1; i > -1; i--)
             {
-                if (Entities[i] == LocalPlayer.Instance || Entities[i] == LocalPlayer.Instance.Companion.Entity) continue;
-                Entities[i].Dispose();
+                if (entities[i] == LocalPlayer.Instance || entities[i] == LocalPlayer.Instance.Companion.Entity) continue;
+                entities[i].Dispose();
             }
 
             StructureHandler.Discard();

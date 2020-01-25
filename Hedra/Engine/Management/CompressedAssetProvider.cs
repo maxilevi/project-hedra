@@ -213,10 +213,6 @@ namespace Hedra.Engine.Management
             while (reader.BaseStream.Position < length)
             {
                 var header = reader.ReadString();
-                if (System.Text.Encoding.UTF8.GetByteCount(header) != header.Length)
-                {
-                    int a = 0;
-                }
                 if (header.Equals("<end_header>"))
                     break;
                 
