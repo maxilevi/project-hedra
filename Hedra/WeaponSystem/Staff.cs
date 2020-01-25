@@ -32,7 +32,7 @@ namespace Hedra.WeaponSystem
 
         protected override Vector3 SheathedPosition => new Vector3(1.5f,-1.0f,-0.75f);
         protected override Vector3 SheathedRotation => new Vector3(-5,90,-125 );
-        protected override SoundType Sound => SoundType.None;
+        protected override SoundType Sound => SoundType.SlashSound;
 
         public Staff(VertexData Contents) : base(Contents)
         {  
