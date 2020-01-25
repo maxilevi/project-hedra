@@ -88,6 +88,8 @@ namespace Hedra.Localization
         public static void Reset()
         {
             Mappings = new Dictionary<string, Key>(DefaultMappings);
+            Save();
+            OnControlsChanged?.Invoke();
         }
         
         private static void Save()
