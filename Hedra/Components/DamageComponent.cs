@@ -149,7 +149,7 @@ namespace Hedra.Components
 
             if (PlaySound)
             {
-                SoundPlayer.PlaySoundWithVariation(!shouldMiss ? SoundType.HitSound : SoundType.SlashSound, Parent.Position, 1f, 80f);
+                SoundPlayer.PlaySoundWithVariation(!shouldMiss ? SoundType.HitSound : SoundType.SlashSound, Parent.Position);
             }
 
             if (shouldMiss || isImmune) return;

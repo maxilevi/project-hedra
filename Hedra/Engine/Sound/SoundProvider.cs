@@ -82,9 +82,14 @@ namespace Hedra.Engine.Sound
             if(!_loaded || Sound == SoundType.None.ToString()) return;
             ListenerPosition = LocalPlayer.Instance.Position;
 
+            if (Gain > 1.5f)
+            {
+                int  a = 0;
+            }
+            
             Gain = Math.Max(Gain * (1-(ListenerPosition - Location).LengthFast() / 128f) * Volume, 0);
             if(Gain <= 0 ) return;
-
+            
             var source = GrabSource();
             if(source == null)
             {

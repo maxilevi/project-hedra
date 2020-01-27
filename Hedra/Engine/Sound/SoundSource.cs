@@ -41,23 +41,22 @@ namespace Hedra.Engine.Sound
 
         public void Play(SoundBuffer Buffer)
         {
-            var position = SoundPlayer.ListenerPosition;
-            _al.SetListenerProperty(ListenerVector3.Position, position);
             _al.SetSourceProperty(Id, SourceInteger.Buffer, (int) Buffer.Id);
+            var position = Vector3.Zero;
+            _al.SetSourceProperty(Id, SourceVector3.Position, position);
             _al.SourcePlay(Id);
         }
         
         public void Play(SoundBuffer Buffer, Vector3 Location, float Pitch, float Gain, bool Loop)
         {
             _al.SetSourceProperty(Id, SourceFloat.Pitch, Pitch);
-            _al.SetSourceProperty(Id, SourceFloat.Gain, Gain );
-            _al.SetSourceProperty(Id, SourceVector3.Position, Location);
+            _al.SetSourceProperty(Id, SourceFloat.Gain, Gain);
             _al.SetSourceProperty(Id, SourceBoolean.Looping, Loop ? 1 : 0);
-
+            
             this.Stop();
             this.Play(Buffer);
         }
-
+        
         public bool IsPlaying
         {
             get

@@ -33,7 +33,7 @@ namespace Hedra.WeaponSystem
             var player = Owner as IPlayer;
             var direction = player?.View.CrossDirection ?? Owner.Orientation;
             Shoot(direction, Options, player?.Companion?.Entity);
-            SoundPlayer.PlaySound(Sound, Owner.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
+            SoundPlayer.PlaySound(Sound, Owner.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f);
         }
         
         protected abstract Projectile Shoot(Vector3 Direction, AttackOptions Options, params IEntity[] ToIgnore);
