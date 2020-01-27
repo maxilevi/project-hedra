@@ -172,7 +172,7 @@ namespace Hedra.Engine.Player
 
         private bool ExecuteMoveOrder(MoveOrder Order)
         {
-            Human.Physics.DeltaTranslate(Order.Position / Order.Seconds);
+            Human.Physics.MoveTowards(Order.Position / Order.Seconds);
             Order.Progress += (float) Time.DeltaTime;
             if(Order.Orientate) this.Orientate();
             return Order.Progress >= Order.Seconds;

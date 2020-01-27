@@ -28,7 +28,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
             var reached = _accumulated.LengthSquared() > Distance * 5 * Distance * 5;
             _multiplier = Mathf.Lerp(_multiplier, reached ? 0 : DefaultMultiplier, Time.DeltaTime * 3f);
             var translation = _orientation * _multiplier;
-            User.Physics.DeltaTranslate(translation);
+            User.Physics.MoveTowards(translation);
             _accumulated += translation * Time.DeltaTime;
             AddParticles();
         }

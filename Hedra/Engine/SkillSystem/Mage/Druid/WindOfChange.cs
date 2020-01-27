@@ -72,7 +72,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
         {
             SkillUtils.DoNearby(User, PushDistance, 0, (E, F) =>
             {
-                E.Physics.DeltaTranslate(-(User.Position - E.Position).Xz().NormalizedFast().ToVector3() * 80f);
+                E.Physics.MoveTowards(-(User.Position - E.Position).Xz().NormalizedFast().ToVector3() * 80f);
             });
         }
 

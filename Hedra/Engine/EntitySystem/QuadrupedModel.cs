@@ -268,7 +268,7 @@ namespace Hedra.Engine.EntitySystem
                 if (HasRider)
                 {
                     Model.LocalRotation = Rider.Model.LocalRotation;
-                    Model.TransformationMatrix = Matrix4x4.CreateRotationY(-Model.LocalRotation.Y * Mathf.Radian) 
+                    Model.TransformationMatrix = Matrix4x4.CreateRotationY(-Model.LocalRotation.Y * Mathf.Radian)
                                                  * Rider.Model.TiltMatrix 
                                                  * Matrix4x4.CreateRotationY(Model.LocalRotation.Y * Mathf.Radian);
                 }

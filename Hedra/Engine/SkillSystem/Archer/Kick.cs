@@ -89,7 +89,7 @@ namespace Hedra.Engine.SkillSystem.Archer
                 if (User == World.Entities[i]) continue;
                 if (!((User.Position - World.Entities[i].Position).LengthSquared() < 24 * 24)) continue;                  
                 var direction = -(User.Position - World.Entities[i].Position).NormalizedFast();
-                World.Entities[i].Physics.DeltaTranslate(direction * 64f);
+                World.Entities[i].Physics.MoveTowards(direction * 64f);
             }
         }
         
