@@ -268,9 +268,12 @@ namespace Hedra.Engine.Player
                 if (!Directory.Exists(AssetManager.AppPath + "/Screenshots/")) Directory.CreateDirectory(AssetManager.AppPath + "/Screenshots/");
                 _player.MessageDispatcher.ShowNotification($"{Translations.Get("saved_screenshot", Recorder.SaveScreenshot($"{AssetManager.AppPath}/Screenshots/"))}", Color.White, 3f, false);
             }
-            
-            if(EventArgs.Key == Key.F6)
+
+            if (EventArgs.Key == Key.F6)
+            {
                 AutosaveManager.Save();
+                _player.MessageDispatcher.ShowNotification($"{Translations.Get("game_saved_success")}", Color.White, 2f);
+            }
 
             if (EventArgs.Key == Key.F1)
             {

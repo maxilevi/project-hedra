@@ -18,6 +18,7 @@ audio = Audio
 display = Display
 input = Input
 controls = Controls
+game_saved_success = Game saved successfully
 name_empty = Name cannot be empty
 name_long = Name cannot be more than {0} characters long
 max_characters = You cannot have more than {0} characters
