@@ -78,7 +78,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
                 if(Utils.Rng.Next(0, KnockChance) == 0)
                     Hit.KnockForSeconds(3);
             };
-            SoundPlayer.PlaySound(SoundType.BowSound, Human.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
+            SoundPlayer.PlaySound(SoundType.BowSound, Human.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f);
             World.AddWorldObject(weaponProj);
         }
         

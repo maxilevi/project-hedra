@@ -14,7 +14,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
             SkillUtils.SpawnParticles(TargetPosition, Vector4.One);
         }
 
-        protected override MobType CompanionType => MobType.Bee;
+        protected override MobType CompanionType => MobType.Crow;
         
         protected override string Keyword => "hawk";
     }

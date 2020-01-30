@@ -34,10 +34,7 @@ using Hedra.Localization;
 using Hedra.Mission;
 using Hedra.Rendering;
 using Hedra.Sound;
-using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
-using Hedra.WorldObjects;
-using System.Numerics;
 using Hedra.Numerics;
 using Silk.NET.Windowing.Common;
 
@@ -47,6 +44,7 @@ namespace Hedra.Engine.Loader
     
     public class Hedra : HedraWindow, IHedra
     {
+        public int BuildNumber => 4;
         public string GameVersion => /*"\u03B1 */"1.0";
         public event OnFrameChanged FrameChanged;
         private DebugInfoProvider _debugProvider;
@@ -68,7 +66,7 @@ namespace Hedra.Engine.Loader
 
         public void Setup()
         {
-            Title = $"Project Hedra {GameVersion} Early Access";
+            Title = $"Project Hedra {GameVersion} Early Access Build {BuildNumber}";
             if (!LoadBoilerplate())
             {
                 Close();

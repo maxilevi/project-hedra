@@ -67,7 +67,8 @@ namespace Hedra.AISystem.Behaviours
         protected virtual void ForceRebuildGraph()
         {
             TraverseStorage.Instance.ResetTime(Parent);
-            TraverseStorage.Instance.RebuildIfNecessary(Parent, true);
+            if(TraverseStorage.Instance.RebuildIfNecessary(Parent, true))
+                _currentPath = null;
         }
 
         public override void Update()

@@ -70,7 +70,7 @@ namespace Hedra.Engine.SkillSystem.Archer.Scout
             World.Particles.Emit();
         }
 
-        protected float Distance => .5f + Level * .5f;
+        protected float Distance => 1f + Level * .5f;
         protected virtual Vector3 JumpDirection => -User.LookingDirection.Xz().ToVector3().NormalizedFast();
         protected override int MaxLevel => 15;
         public override float MaxCooldown => 20 - Level * .5f;

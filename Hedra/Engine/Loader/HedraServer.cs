@@ -77,6 +77,8 @@ namespace Hedra.Engine.Loader
         
         public bool FinishedLoadingSplashScreen => true;
         public string GameVersion => "SERVER";
+        public int BuildNumber { get; }
+
         public void Setup()
         {
         }

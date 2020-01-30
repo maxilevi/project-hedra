@@ -150,7 +150,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (_terrainBuilder.Sparsity == null) BuildSparsity();
             var buildingLod = this.Lod;
             this.PrepareForBuilding();
-            var allocator = new HeapAllocator(Allocator.Megabyte * 48);
+            var allocator = new HeapAllocator(Allocator.Megabyte * 128);
             SetupCollider(allocator, buildingLod);
             if(!allocator.IsEmpty) throw new ArgumentOutOfRangeException("Detected memory leak");
             

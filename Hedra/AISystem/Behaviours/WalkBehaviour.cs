@@ -54,6 +54,7 @@ namespace Hedra.AISystem.Behaviours
                 {
                     int a = 0;
                 }
+                
                 Parent.Physics.Move();
                 if ((Target - Parent.Position).Xz().LengthSquared() < ErrorMargin * ErrorMargin)
                 {

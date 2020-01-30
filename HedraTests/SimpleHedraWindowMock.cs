@@ -43,6 +43,8 @@ namespace HedraTests
         public event Action<string> CharWritten;
         public bool FinishedLoadingSplashScreen => true;
         public string GameVersion { get; }
+        public int BuildNumber { get; }
+
         public void Setup()
         {
         }

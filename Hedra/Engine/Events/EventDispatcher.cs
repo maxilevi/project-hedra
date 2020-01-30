@@ -29,6 +29,7 @@ namespace Hedra.Engine.Events
         private static readonly Dictionary<object, EventHandler<MouseMoveEventArgs>> MouseMoveHandlers;
         private static readonly Dictionary<object, EventHandler<MouseWheelEventArgs>> MouseWheelHandlers;
         private static readonly Dictionary<object, Action<string>> CharWrittenHandlers;
+        private static readonly object Lock = new object();
 
         private static event EventHandler<KeyEventArgs> HighOnKeyDownEvent;
         private static event EventHandler<KeyEventArgs> NormalOnKeyDownEvent;
@@ -93,149 +94,188 @@ namespace Hedra.Engine.Events
 
         public static void RegisterCharWritten(object Key, Action<string> EventHandler)
         {
-            CharWrittenHandlers.Add(Key, EventHandler);
-            OnCharWrittenEvent += CharWrittenHandlers[Key];
+            lock (Lock)
+            {
+                CharWrittenHandlers.Add(Key, EventHandler);
+                OnCharWrittenEvent += CharWrittenHandlers[Key];
+            }
         }
 
         public static void RegisterMouseMove(object Key, EventHandler<MouseMoveEventArgs> EventHandler)
         {
-            MouseMoveHandlers.Add(Key, EventHandler);
-            OnMouseMoveEvent += MouseMoveHandlers[Key];
+            lock (Lock)
+            {
+                MouseMoveHandlers.Add(Key, EventHandler);
+                OnMouseMoveEvent += MouseMoveHandlers[Key];
+            }
         }
 
         public static void UnregisterMouseMove(object Key)
         {
-            OnMouseMoveEvent -= MouseMoveHandlers[Key];
-            MouseMoveHandlers.Remove(Key);
-
+            lock (Lock)
+            {
+                OnMouseMoveEvent -= MouseMoveHandlers[Key];
+                MouseMoveHandlers.Remove(Key);
+            }
         }
 
         public static void RegisterMouseDown(object Key, EventHandler<MouseButtonEventArgs> EventHandler)
         {
-            MouseButtonDownHandlers.Add(Key, EventHandler);
-            OnMouseButtonDownEvent += MouseButtonDownHandlers[Key];
+            lock (Lock)
+            {
+                MouseButtonDownHandlers.Add(Key, EventHandler);
+                OnMouseButtonDownEvent += MouseButtonDownHandlers[Key];
+            }
         }
 
         public static void UnregisterMouseDown(object Key)
         {
-            OnMouseButtonDownEvent -= MouseButtonDownHandlers[Key];
-            MouseButtonDownHandlers.Remove(Key);
-
+            lock (Lock)
+            {
+                OnMouseButtonDownEvent -= MouseButtonDownHandlers[Key];
+                MouseButtonDownHandlers.Remove(Key);
+            }
         }
 
         public static void RegisterMouseUp(object Key, EventHandler<MouseButtonEventArgs> EventHandler)
         {
-            MouseButtonUpHandlers.Add(Key, EventHandler);
-            OnMouseButtonUpEvent += MouseButtonUpHandlers[Key];
+            lock (Lock)
+            {
+                MouseButtonUpHandlers.Add(Key, EventHandler);
+                OnMouseButtonUpEvent += MouseButtonUpHandlers[Key];
+            }
         }
 
         public static void UnregisterMouseUp(object Key)
         {
-            OnMouseButtonUpEvent -= MouseButtonUpHandlers[Key];
-            MouseButtonUpHandlers.Remove(Key);
-
+            lock (Lock)
+            {
+                OnMouseButtonUpEvent -= MouseButtonUpHandlers[Key];
+                MouseButtonUpHandlers.Remove(Key);
+            }
         }
 
         public static void RegisterKeyDown(object Key, EventHandler<KeyEventArgs> EventHandler, EventPriority Priority = EventPriority.Normal)
         {
-            switch (Priority)
+            lock (Lock)
             {
-                case EventPriority.Low:
-                    LowKeyDownHandlers.Add(Key, EventHandler);
-                    LowOnKeyDownEvent += LowKeyDownHandlers[Key];
-                    break;
-                case EventPriority.Normal:
-                    NormalKeyDownHandlers.Add(Key, EventHandler);
-                    NormalOnKeyDownEvent += NormalKeyDownHandlers[Key];
-                    break;
-                case EventPriority.High:
-                    HighKeyDownHandlers.Add(Key, EventHandler);
-                    HighOnKeyDownEvent += HighKeyDownHandlers[Key];
-                    break;
+                switch (Priority)
+                {
+                    case EventPriority.Low:
+                        LowKeyDownHandlers.Add(Key, EventHandler);
+                        LowOnKeyDownEvent += LowKeyDownHandlers[Key];
+                        break;
+                    case EventPriority.Normal:
+                        NormalKeyDownHandlers.Add(Key, EventHandler);
+                        NormalOnKeyDownEvent += NormalKeyDownHandlers[Key];
+                        break;
+                    case EventPriority.High:
+                        HighKeyDownHandlers.Add(Key, EventHandler);
+                        HighOnKeyDownEvent += HighKeyDownHandlers[Key];
+                        break;
+                }
             }
         }
 
         public static void UnregisterKeyDown(object Key)
         {
-            if (LowKeyDownHandlers.ContainsKey(Key))
+            lock (Lock)
             {
-                LowOnKeyDownEvent -= LowKeyDownHandlers[Key];
-                LowKeyDownHandlers.Remove(Key);
-            }
-            else if (NormalKeyDownHandlers.ContainsKey(Key))
-            {
-                NormalOnKeyDownEvent -= NormalKeyDownHandlers[Key];
-                NormalKeyDownHandlers.Remove(Key);
-            }
-            else if (HighKeyDownHandlers.ContainsKey(Key))
-            {
-                HighOnKeyDownEvent -= HighKeyDownHandlers[Key];
-                HighKeyDownHandlers.Remove(Key);
+                if (LowKeyDownHandlers.ContainsKey(Key))
+                {
+                    LowOnKeyDownEvent -= LowKeyDownHandlers[Key];
+                    LowKeyDownHandlers.Remove(Key);
+                }
+                else if (NormalKeyDownHandlers.ContainsKey(Key))
+                {
+                    NormalOnKeyDownEvent -= NormalKeyDownHandlers[Key];
+                    NormalKeyDownHandlers.Remove(Key);
+                }
+                else if (HighKeyDownHandlers.ContainsKey(Key))
+                {
+                    HighOnKeyDownEvent -= HighKeyDownHandlers[Key];
+                    HighKeyDownHandlers.Remove(Key);
+                }
             }
         }
 
         public static void RegisterKeyUp(object Key, EventHandler<KeyEventArgs> EventHandler, EventPriority Priority = EventPriority.Normal)
         {
-            switch (Priority)
+            lock (Lock)
             {
-                case EventPriority.Low:
-                    LowKeyUpHandlers.Add(Key, EventHandler);
-                    LowOnKeyUpEvent += LowKeyUpHandlers[Key];
-                    break;
-                case EventPriority.Normal:
-                    NormalKeyUpHandlers.Add(Key, EventHandler);
-                    NormalOnKeyUpEvent += NormalKeyUpHandlers[Key];
-                    break;
-                case EventPriority.High:
-                    HighKeyUpHandlers.Add(Key, EventHandler);
-                    HighOnKeyUpEvent += HighKeyUpHandlers[Key];
-                    break;
+                switch (Priority)
+                {
+                    case EventPriority.Low:
+                        LowKeyUpHandlers.Add(Key, EventHandler);
+                        LowOnKeyUpEvent += LowKeyUpHandlers[Key];
+                        break;
+                    case EventPriority.Normal:
+                        NormalKeyUpHandlers.Add(Key, EventHandler);
+                        NormalOnKeyUpEvent += NormalKeyUpHandlers[Key];
+                        break;
+                    case EventPriority.High:
+                        HighKeyUpHandlers.Add(Key, EventHandler);
+                        HighOnKeyUpEvent += HighKeyUpHandlers[Key];
+                        break;
+                }
             }
         }
 
         public static void UnregisterKeyUp(object Key)
         {
-            if (LowKeyUpHandlers.ContainsKey(Key))
+            lock (Lock)
             {
-                LowOnKeyUpEvent -= LowKeyUpHandlers[Key];
-                LowKeyUpHandlers.Remove(Key);
-            }
-            else if (NormalKeyUpHandlers.ContainsKey(Key))
-            {
-                NormalOnKeyUpEvent -= NormalKeyUpHandlers[Key];
-                NormalKeyUpHandlers.Remove(Key);
-            }
-            else if (HighKeyUpHandlers.ContainsKey(Key))
-            {
-                HighOnKeyUpEvent -= HighKeyUpHandlers[Key];
-                HighKeyUpHandlers.Remove(Key);
+                if (LowKeyUpHandlers.ContainsKey(Key))
+                {
+                    LowOnKeyUpEvent -= LowKeyUpHandlers[Key];
+                    LowKeyUpHandlers.Remove(Key);
+                }
+                else if (NormalKeyUpHandlers.ContainsKey(Key))
+                {
+                    NormalOnKeyUpEvent -= NormalKeyUpHandlers[Key];
+                    NormalKeyUpHandlers.Remove(Key);
+                }
+                else if (HighKeyUpHandlers.ContainsKey(Key))
+                {
+                    HighOnKeyUpEvent -= HighKeyUpHandlers[Key];
+                    HighKeyUpHandlers.Remove(Key);
+                }
             }
         }
 
         public static void Add(IEventListener E)
         {
-            EventListeners.Add(E);
+            lock(Lock)
+                EventListeners.Add(E);
         }
         
         public static void Remove(IEventListener A)
         {
-            EventListeners.Remove(A);
+            lock(Lock)
+                EventListeners.Remove(A);
         }
 
         public static void OnCharWritten(string Char)
         {
-            OnCharWrittenEvent?.Invoke(Char);
-            for (var i = 0; i < EventListeners.Count; i++)
+            lock (Lock)
             {
-                EventListeners[i].OnCharWritten(Char);
+                OnCharWrittenEvent?.Invoke(Char);
+                for (var i = 0; i < EventListeners.Count; i++)
+                {
+                    EventListeners[i].OnCharWritten(Char);
+                }
             }
         }
         
         public static void OnMouseButtonDown(MouseButtonEventArgs E)
         {
-            OnMouseButtonDownEvent?.Invoke(null, E);
-            for (var i = 0;i<EventListeners.Count; i++){
-                EventListeners[i].OnMouseButtonDown(null, E);
+            lock (Lock)
+            {
+                OnMouseButtonDownEvent?.Invoke(null, E);
+                for (var i = 0; i < EventListeners.Count; i++)
+                {
+                    EventListeners[i].OnMouseButtonDown(null, E);
+                }
             }
         }
 
@@ -249,82 +289,99 @@ namespace Hedra.Engine.Events
 
         public static void OnMouseWheel(MouseWheelEventArgs E)
         {
-            OnMouseWheelEvent?.Invoke(null, E);
-            for (var i = 0;i<EventListeners.Count; i++){
-                EventListeners[i].OnMouseWheel(null, E);
+            lock (Lock)
+            {
+                OnMouseWheelEvent?.Invoke(null, E);
+                for (var i = 0; i < EventListeners.Count; i++)
+                {
+                    EventListeners[i].OnMouseWheel(null, E);
+                }
             }
         }
 
         public static void OnMouseMove(MouseMoveEventArgs E)
         {
-            Mouse = new Vector2(E.X, E.Y);
-            OnMouseMoveEvent?.Invoke(null, E);
-            for (var i = 0;i<EventListeners.Count; i++){
-                EventListeners[i]?.OnMouseMove(null, E);
+            lock (Lock)
+            {
+                Mouse = new Vector2(E.X, E.Y);
+                OnMouseMoveEvent?.Invoke(null, E);
+                for (var i = 0; i < EventListeners.Count; i++)
+                {
+                    EventListeners[i]?.OnMouseMove(null, E);
+                }
             }
         }
 
         public static void OnKeyDown(KeyboardKeyEventArgs E)
         {
-            var keyEvent = new KeyEventArgs(E);
-            HighOnKeyDownEvent?.Invoke(null, keyEvent);
-            NormalOnKeyDownEvent?.Invoke(null, keyEvent);
-            LowOnKeyDownEvent?.Invoke(null, keyEvent);
-            for (var i = 0; i < EventListeners.Count; i++)
+            lock (Lock)
             {
-                EventListeners[i].OnKeyDown(null, keyEvent);
+                var keyEvent = new KeyEventArgs(E);
+                HighOnKeyDownEvent?.Invoke(null, keyEvent);
+                NormalOnKeyDownEvent?.Invoke(null, keyEvent);
+                LowOnKeyDownEvent?.Invoke(null, keyEvent);
+                for (var i = 0; i < EventListeners.Count; i++)
+                {
+                    EventListeners[i].OnKeyDown(null, keyEvent);
+                }
             }
         }
 
         public static void OnKeyUp(KeyboardKeyEventArgs E)
         {
-            var keyEvent = new KeyEventArgs(E);
-            HighOnKeyUpEvent?.Invoke(null, keyEvent);
-            NormalOnKeyUpEvent?.Invoke(null, keyEvent);
-            LowOnKeyUpEvent?.Invoke(null, keyEvent);
-            for (var i = 0; i < EventListeners.Count; i++)
+            lock (Lock)
             {
-                EventListeners[i].OnKeyUp(null, keyEvent);
+                var keyEvent = new KeyEventArgs(E);
+                HighOnKeyUpEvent?.Invoke(null, keyEvent);
+                NormalOnKeyUpEvent?.Invoke(null, keyEvent);
+                LowOnKeyUpEvent?.Invoke(null, keyEvent);
+                for (var i = 0; i < EventListeners.Count; i++)
+                {
+                    EventListeners[i].OnKeyUp(null, keyEvent);
+                }
             }
         }
 
         public static void Clear()
         {
-            EventListeners.Clear();
-            var keyDownHandlers = HighKeyDownHandlers.Keys
-                .Concat(NormalKeyDownHandlers.Keys)
-                .Concat(LowKeyDownHandlers.Keys).ToArray();
-            
-            var keyUpHandlers = HighKeyUpHandlers.Keys
-                .Concat(NormalKeyUpHandlers.Keys)
-                .Concat(LowKeyUpHandlers.Keys).ToArray();
-            
-            for (var i = 0; i < keyDownHandlers.Length; i++)
+            lock (Lock)
             {
-                UnregisterKeyDown(keyDownHandlers[i]);
-            }
+                EventListeners.Clear();
+                var keyDownHandlers = HighKeyDownHandlers.Keys
+                    .Concat(NormalKeyDownHandlers.Keys)
+                    .Concat(LowKeyDownHandlers.Keys).ToArray();
 
-            for (var i = 0; i < keyUpHandlers.Length; i++)
-            {
-                UnregisterKeyUp(keyUpHandlers[i]);
-            }
+                var keyUpHandlers = HighKeyUpHandlers.Keys
+                    .Concat(NormalKeyUpHandlers.Keys)
+                    .Concat(LowKeyUpHandlers.Keys).ToArray();
 
-            var mouseMoved = MouseMoveHandlers.Keys.ToArray();
-            foreach (var key in mouseMoved)
-            {
-                UnregisterMouseMove(key);
-            }
+                for (var i = 0; i < keyDownHandlers.Length; i++)
+                {
+                    UnregisterKeyDown(keyDownHandlers[i]);
+                }
 
-            var mouseButtonDown = MouseButtonDownHandlers.Keys.ToArray();
-            foreach (var key in mouseButtonDown)
-            {
-                UnregisterMouseDown(key);
-            }
+                for (var i = 0; i < keyUpHandlers.Length; i++)
+                {
+                    UnregisterKeyUp(keyUpHandlers[i]);
+                }
 
-            var mouseButtonUp = MouseButtonUpHandlers.Keys.ToArray();
-            foreach (var key in mouseButtonUp)
-            {
-                UnregisterMouseUp(key);
+                var mouseMoved = MouseMoveHandlers.Keys.ToArray();
+                foreach (var key in mouseMoved)
+                {
+                    UnregisterMouseMove(key);
+                }
+
+                var mouseButtonDown = MouseButtonDownHandlers.Keys.ToArray();
+                foreach (var key in mouseButtonDown)
+                {
+                    UnregisterMouseDown(key);
+                }
+
+                var mouseButtonUp = MouseButtonUpHandlers.Keys.ToArray();
+                foreach (var key in mouseButtonUp)
+                {
+                    UnregisterMouseUp(key);
+                }
             }
         }
     }

@@ -142,8 +142,10 @@ using Hedra.Numerics;
             lock (_registerLock)
             {
                 /* This commented code fails when a structure setup method generates an exception, causing the structure to exist and dispose but not registeres */
+#if DEBUG
                 if(!_registeredPositions.Contains(Position))
                     throw new ArgumentOutOfRangeException();
+#endif
                 _registeredPositions.Remove(Position);
             }
         }

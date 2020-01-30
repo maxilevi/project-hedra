@@ -64,7 +64,7 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
                 if(Utils.Rng.NextFloat() < BleedChance && Hit.SearchComponent<BleedingComponent>() == null)
                     Hit.AddComponent(new BleedingComponent(Hit, User, 5f, Damage * .15f));
             };
-            SoundPlayer.PlaySound(SoundType.BowSound, User.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f, 2.5f);
+            SoundPlayer.PlaySound(SoundType.BowSound, User.Position, false,  1f + Utils.Rng.NextFloat() * .2f - .1f);
             World.AddWorldObject(weaponProj);
         }
 

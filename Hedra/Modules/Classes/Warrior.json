@@ -17,7 +17,7 @@
   "BaseDamage": 8.0,
   "AttackingSpeedModifier": 0.4,
   "BaseHealthPerLevel": 17.0,
-  "BaseHealth": 138.0,
+  "BaseHealth": 148.0,
   "BaseManaPerLevel": 15,
   "Model": {
     "Path": "$DataFile$/Assets/Chr/WarriorIdle.dae",

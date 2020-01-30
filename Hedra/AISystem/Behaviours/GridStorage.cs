@@ -29,11 +29,12 @@ namespace Hedra.AISystem.Behaviours
             };
         }
         
-        public void RebuildIfNecessary(IEntity Parent, bool NewTarget)
+        public bool RebuildIfNecessary(IEntity Parent, bool NewTarget)
         {
             var needsRebuild = _useRebuildTimer ? _rebuildPathTimer.Ready : NewTarget;
             if (needsRebuild)
                 UpdateGrid(Parent);
+            return needsRebuild;
         }
 
         public void ResetTime()

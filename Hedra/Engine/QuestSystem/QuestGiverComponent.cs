@@ -32,7 +32,7 @@ namespace Hedra.Engine.QuestSystem
         public override void Update()
         {
             _talk.CanTalk = _canGiveQuest;
-            if (Parent.IsNear(GameManager.Player, 16) && !_talk.Talking)
+            if (Parent.IsNear(GameManager.Player, 16) && !_talk.Talking && !Parent.IsMoving)
             {
                 Parent.LookAt(GameManager.Player);
             }

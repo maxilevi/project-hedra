@@ -42,8 +42,8 @@ namespace Hedra.Engine.Native
         
         public static void Load(string ExecName)
         {
-            if (IntPtr.Size == 4) Log.WriteLine($"Running {Program.GameWindow.GameVersion} as x86");
-            if (IntPtr.Size == 8) Log.WriteLine($"Running {Program.GameWindow.GameVersion} as x64");
+            if (IntPtr.Size == 4) Log.WriteLine($"Running {Program.GameWindow.GameVersion} Build {Program.GameWindow.BuildNumber} as x86");
+            if (IntPtr.Size == 8) Log.WriteLine($"Running {Program.GameWindow.GameVersion} Build {Program.GameWindow.BuildNumber} as x64");
 
             if (RunningPlatform == Platform.Windows)
             {

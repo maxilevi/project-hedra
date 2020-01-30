@@ -6,6 +6,7 @@ namespace Hedra.Engine.Loader
     {
         bool FinishedLoadingSplashScreen { get; }
         string GameVersion { get; }
+        int BuildNumber { get; }
         void Setup();
     }
 }

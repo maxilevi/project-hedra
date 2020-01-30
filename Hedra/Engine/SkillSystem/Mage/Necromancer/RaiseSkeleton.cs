@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Hedra.AISystem.Humanoid;
@@ -24,7 +25,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
         protected override Animation SkillAnimation { get; } = AnimationLoader.LoadAnimation("Assets/Chr/NecromancerRaiseSkeleton.dae");
         protected override float AnimationSpeed => 1.5f;
         protected override bool CanMoveWhileCasting => false;
-        private int _currentMinions;
+        private readonly List<IEntity> _skeletons = new List<IEntity>();
         
         protected override void OnAnimationEnd()
         {
@@ -60,9 +61,13 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
 
         private void Spawn()
         {
+            if (_skeletons.Count == MaxMinions)
+            {
+                _skeletons[0].Damage(_skeletons[0].Health, null, out _, false);
+            }
             var skeleton = SpawnMinion(User, User.SearchSkill<SkeletonMastery>());
-            skeleton.SearchComponent<DamageComponent>().OnDeadEvent += A => _currentMinions--;
-            _currentMinions++;
+            skeleton.SearchComponent<DamageComponent>().OnDeadEvent += A => _skeletons.Remove(skeleton);
+            _skeletons.Add(skeleton);
         }
         
         private class SkeletonEffectComponent : Component<IHumanoid>
@@ -78,9 +83,8 @@ namespace Hedra.Engine.SkillSystem.Mage.Necromancer
         }
 
         private int MaxMinions => 1 + (int) (4 * (Level / (float) MaxLevel));
-        public override float IsAffectingModifier => Math.Min(_currentMinions, 1);
+        public override float IsAffectingModifier => Math.Min(_skeletons.Count, 1);
         protected override int MaxLevel => 20;
-        protected override bool ShouldDisable => _currentMinions >= MaxMinions;
         public override float ManaCost => 140 - 70 * (Level / (float) MaxLevel);
         public override float MaxCooldown => 54 - 30 * (Level / (float) MaxLevel);
         public override string Description => Translations.Get("raise_skeleton_desc");

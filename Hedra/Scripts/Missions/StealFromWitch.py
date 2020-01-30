@@ -122,7 +122,8 @@ def on_hut_arrived(giver, hut, outcome, owner, builder):
     
     # This makes the enemies focus the player
     for enemy in hut.Enemies:
-        enemy.SearchComponent[CombatAIComponent]().SetTarget(owner)
+        cmp = enemy.SearchComponent[CombatAIComponent]()
+        if cmp: cmp.SetTarget(owner)
 
 def select_dialog_from_steal_outcome(outcome):
     if outcome is OUTCOME_SHARE:
