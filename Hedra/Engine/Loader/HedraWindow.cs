@@ -12,6 +12,7 @@ using Silk.NET.Input.Common;
 using Silk.NET.Windowing;
 using Silk.NET.Windowing.Common;
 using Image = Silk.NET.GLFW.Image;
+using Monitor = Silk.NET.Windowing.Monitor;
 
 namespace Hedra.Engine.Loader
 {
@@ -24,30 +25,29 @@ namespace Hedra.Engine.Loader
         private SpinWait _spinner;
         private Vector2 _mousePosition;
 
-        protected HedraWindow(int Width, int Height, ContextProfile Profile, ContextFlags Flags, APIVersion Version) : base()
+        protected HedraWindow(IMonitor Monitor, ContextProfile Profile, ContextFlags Flags, APIVersion Version) : base()
         {
             _watch = new Stopwatch();
             _spinner = new SpinWait();
             var options = new WindowOptions
             {
                 API = new GraphicsAPI(ContextAPI.OpenGL, Profile, Flags, Version),
-                Size = new Size(Width, Height),
+                Size = new Size(Monitor.Bounds.Width, Monitor.Bounds.Height),
                 ShouldSwapAutomatically = true,
                 IsVisible = true,
                 Title = "Project Hedra",
-                UseSingleThreadedWindow = true
+                UseSingleThreadedWindow = true,
             };
-            _window = Window.Create(options);
+            _window = Monitor.CreateWindow(options);
             _window.Load += Load;
             _window.Render += RenderFrame;
             _window.Update += UpdateFrame;
             _window.Resize += Resize;
             _window.FocusChanged += FocusChanged;
             _window.Closing += Unload;
-            _window.Open();
+            _window.Initialize();
 
-            var input = _window.GetInput();
-            
+            var input = _window.CreateInput();
             var keyboard = input.Keyboards[0];
             keyboard.KeyDown += ProcessKeyDown;
             input.Keyboards[0].KeyUp += ProcessKeyUp;

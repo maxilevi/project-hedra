@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Runtime.ExceptionServices;
 using System.Windows.Forms;
 using Hedra.Engine.BiomeSystem.NormalBiome;
@@ -19,6 +20,7 @@ using System.Numerics;
 using System.Runtime;
 using Silk.NET.GLFW;
 using Silk.NET.Windowing.Common;
+using Monitor = Silk.NET.Windowing.Monitor;
 
 namespace Hedra.Engine
 {
@@ -108,19 +110,20 @@ namespace Hedra.Engine
             if(DummyMode) EnableDummyMode();
             LoadLibraries();
 
-            var screens = OSManager.GetResolutions();
-            var maxSize = Vector2.Zero;
-            for (var i = 0; i < screens.Length; ++i)
+            //var monitors = Monitor.GetMonitors();
+            var maxMonitor = Monitor.GetMainMonitor();//(IMonitor)null;
+            var maxSize = new Vector2(maxMonitor.Bounds.Size.Width, maxMonitor.Bounds.Size.Height);
+            /*foreach (var monitor in monitors)
             {
-                if (screens[i].LengthSquared() > maxSize.LengthSquared())
+                var monitorBounds = new Vector2(monitor.Bounds.Size.Width, monitor.Bounds.Size.Height);
+                if (monitorBounds.LengthSquared() > maxSize.LengthSquared())
                 {
-                    maxSize = screens[i];
+                    maxMonitor = monitor;
                 }
-                Log.WriteLine($"Found screen size '{screens[i]}'");
-            }
-            var bounds = maxSize;
-            GameSettings.DeviceWidth = (int)bounds.X;
-            GameSettings.DeviceHeight = (int)bounds.Y;
+                Log.WriteLine($"Found screen size '{monitorBounds}'");
+            }*/
+            GameSettings.DeviceWidth = (int)maxSize.X;
+            GameSettings.DeviceHeight = (int)maxSize.Y;
 
             Log.WriteLine("Creating the window on the Primary Device at " + GameSettings.DeviceWidth + "x" +
                             GameSettings.DeviceHeight);
@@ -134,7 +137,7 @@ namespace Hedra.Engine
             profile = ContextProfile.Compatability;
             flags = ContextFlags.Debug;
 #endif
-            GameWindow = new Loader.Hedra(GameSettings.Width, GameSettings.Height, 3, 3, profile, flags);
+            GameWindow = new Loader.Hedra(maxMonitor, 3, 3, profile, flags);
             GameWindow.Setup();
 
             if (OSManager.RunningPlatform == Platform.Windows)

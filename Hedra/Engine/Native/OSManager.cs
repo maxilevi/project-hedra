@@ -23,7 +23,6 @@ namespace Hedra.Engine.Native
         public static string Specs => GraphicsCard+"|"+RamCount;
         private static readonly IConsoleManager _consoleManager;
         private static readonly IMessageManager _messageManager;
-        private static readonly IScreenManager _screenManager;
 
         static OSManager()
         {
@@ -35,9 +34,6 @@ namespace Hedra.Engine.Native
                 : RunningPlatform == Platform.Linux 
                     ? new LinuxMessageManager()
                     : (IMessageManager) new DummyMessageManager();
-            _screenManager = RunningPlatform == Platform.Windows
-                ? new WindowsScreenManager()
-                : (IScreenManager) new DummyScreenManager();
         }
         
         public static void Load(string ExecName)
@@ -118,12 +114,7 @@ namespace Hedra.Engine.Native
         }
 
         public static bool CanHideConsole => !(_consoleManager is DummyConsoleManager);
-
-        public static Vector2[] GetResolutions()
-        {
-            return _screenManager.GetResolutions();
-        }
-
+        
         public static Platform RunningPlatform
         {
             get
