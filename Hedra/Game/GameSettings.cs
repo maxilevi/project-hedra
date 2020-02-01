@@ -57,12 +57,14 @@ namespace Hedra.Game
         public static bool NewWorld { get; set; }
         public static bool DarkEffect = false;
         public static bool DistortEffect = false;
-        public const float Fov = 85.0f;
         public static bool GlobalShadows = true;
         public static bool Hardcore = false;
         public static bool UnderWaterEffect = false;
         private static int _shadowQuality = 2;
         private static int _frameLimit;
+        public static bool Loaded => LoadedWindowSettings && LoadedNormalSettings;
+        public static bool LoadedWindowSettings { get; private set; }
+        public static bool LoadedNormalSettings { get; private set; }
 
         static GameSettings()
         {
@@ -101,6 +103,8 @@ namespace Hedra.Game
         [Setting] public static bool EnableReflections { get; set; } = true;
         
         [Setting] public static bool FXAA { get; set; } = true;
+        
+        [Setting] public static float FieldOfView { get; set; } = 85f;
         
         [Setting]
         public static int FrameLimit
@@ -192,11 +196,13 @@ namespace Hedra.Game
         public static void LoadNormalSettings(string Path)
         {
             Load(Path, P => !P.IsDefined(typeof(WindowSettingAttribute), true), LoadDefaultSettings);
+            LoadedNormalSettings = true;
         }
         
         public static void LoadWindowSettings(string Path)
         {
             Load(Path, P => P.IsDefined(typeof(WindowSettingAttribute), true), LoadDefaultSettings);
+            LoadedWindowSettings = true;
         }
 
         private static void Load(string Path, Predicate<PropertyInfo> Predicate, Action LoadSettings)

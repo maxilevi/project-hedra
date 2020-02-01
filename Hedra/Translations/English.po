@@ -50,6 +50,7 @@ quality_fast = FAST
 occlusion_culling = Occlusion Culling
 music_volume = Music Volume
 sfx_volume = Sound FX Volume
+field_of_view = Field of View (FOV)
 language = Language
 none = NONE
 fps_limit = FPS Limit

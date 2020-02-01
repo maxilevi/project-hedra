@@ -56,22 +56,23 @@ namespace Hedra.Engine.Rendering.UI
             OnTranslation = Translation.Create("on");
             OffTranslation = Translation.Create("off");
         }
-        
+
         public OptionsUI()
         {
             var fontSize = 14;
             var dist = .2f;
             var vDist = .25f;
-            _normalFont = FontCache.GetNormal(fontSize-1);
-            _boldFont = FontCache.GetBold(fontSize+1);
+            _normalFont = FontCache.GetNormal(fontSize - 1);
+            _boldFont = FontCache.GetBold(fontSize + 1);
             Color fontColor = Color.White;
             _controlsPanel = new ControlsUI();
-            
+
             var bandPosition = new Vector2(0f, .8f);
-            var blackBand = new BackgroundTexture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LeftRight);
-            
+            var blackBand = new BackgroundTexture(Color.FromArgb(255, 69, 69, 69), Color.FromArgb(255, 19, 19, 19),
+                bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LeftRight);
+
             _graphics = new Button(new Vector2(0f, bandPosition.Y),
-                                new Vector2(0.15f,0.075f), Translation.Create("graphics"), Color.White, _normalFont);
+                new Vector2(0.15f, 0.075f), Translation.Create("graphics"), Color.White, _normalFont);
             _graphics.Click += delegate
             {
 
@@ -81,51 +82,55 @@ namespace Hedra.Engine.Rendering.UI
                 this.SetDisplayButtonState(false);
                 this.SetControlsButtonState(false);
             };
-            
+
             _audio = new Button(new Vector2(-0.2f, bandPosition.Y),
-                                new Vector2(0.15f,0.075f), Translation.Create("audio"), Color.White, _normalFont);
-            
-            _audio.Click += delegate { 
+                new Vector2(0.15f, 0.075f), Translation.Create("audio"), Color.White, _normalFont);
+
+            _audio.Click += delegate
+            {
                 SetGraphicsButtonState(false);
                 SetAudioButtonState(true);
                 SetInputButtonState(false);
                 SetDisplayButtonState(false);
                 SetControlsButtonState(false);
             };
-            
+
             _input = new Button(new Vector2(-0.4f, bandPosition.Y),
-                                new Vector2(0.15f,0.075f), Translation.Create("input"), Color.White, _normalFont);
-            
-            _input.Click += delegate { 
+                new Vector2(0.15f, 0.075f), Translation.Create("input"), Color.White, _normalFont);
+
+            _input.Click += delegate
+            {
                 SetGraphicsButtonState(false);
                 SetAudioButtonState(false);
                 SetInputButtonState(true);
                 SetDisplayButtonState(false);
                 SetControlsButtonState(false);
             };
-            
-            _display = new Button(new Vector2(0.2f,bandPosition.Y), new Vector2(0.15f,0.05f),
+
+            _display = new Button(new Vector2(0.2f, bandPosition.Y), new Vector2(0.15f, 0.05f),
                 Translation.Create("display"), Color.White, _normalFont);
-            
-            _display.Click += delegate { 
+
+            _display.Click += delegate
+            {
                 SetGraphicsButtonState(false);
                 SetAudioButtonState(false);
                 SetInputButtonState(false);
                 SetDisplayButtonState(true);
                 SetControlsButtonState(false);
             };
-            
-            _controls = new Button(new Vector2(0.4f,bandPosition.Y), new Vector2(0.15f,0.05f),
+
+            _controls = new Button(new Vector2(0.4f, bandPosition.Y), new Vector2(0.15f, 0.05f),
                 Translation.Create("controls"), Color.White, _normalFont);
-            _controls.Click += delegate { 
+            _controls.Click += delegate
+            {
                 SetGraphicsButtonState(false);
                 SetAudioButtonState(false);
                 SetInputButtonState(false);
                 SetDisplayButtonState(false);
                 SetControlsButtonState(true);
             };
-            
-            
+
+
             GameSettings.ChunkLoaderRadius = Math.Max(GameSettings.ChunkLoaderRadius, GeneralSettings.MinLoadingRadius);
             var viewValuesList = new List<string>();
             for (int i = GeneralSettings.MinLoadingRadius; i < GeneralSettings.MaxLoadingRadius + 1; i++)
@@ -141,167 +146,159 @@ namespace Hedra.Engine.Rendering.UI
                 viewValues.Select(Translation.Default).ToArray(), false)
             {
                 Index = (GeneralSettings.MaxLoadingRadius - GeneralSettings.MinLoadingRadius) / 2,
-                CurrentValue = {Text = viewValues[(GeneralSettings.MaxLoadingRadius - GeneralSettings.MinLoadingRadius) / 2]}
+                CurrentValue =
+                    {Text = viewValues[(GeneralSettings.MaxLoadingRadius - GeneralSettings.MinLoadingRadius) / 2]}
             };
 
-            for(int i = 0; i < viewValues.Length; i++){
-                if(int.Parse(viewValues[i]) == GameSettings.ChunkLoaderRadius)
-{
-                    viewDistance.CurrentValue.Text    = viewValues[i];
+            for (int i = 0; i < viewValues.Length; i++)
+            {
+                if (int.Parse(viewValues[i]) == GameSettings.ChunkLoaderRadius)
+                {
+                    viewDistance.CurrentValue.Text = viewValues[i];
                     viewDistance.Index = i;
                 }
             }
-            
-            viewDistance.LeftArrow.Click += delegate { 
+
+            viewDistance.LeftArrow.Click += delegate
+            {
                 GameSettings.ChunkLoaderRadius = viewDistance.Index + GeneralSettings.MinLoadingRadius;
             };
-            
-            viewDistance.RightArrow.Click += delegate { 
+
+            viewDistance.RightArrow.Click += delegate
+            {
                 GameSettings.ChunkLoaderRadius = viewDistance.Index + GeneralSettings.MinLoadingRadius;
             };
 
             var fpsLimitList = new List<Translation>();
-            fpsLimitList.AddRange(Enumerable.Range(0, 12+1).Select(I => (I*5+30).ToString()).Select(Translation.Default));
+            fpsLimitList.AddRange(Enumerable.Range(0, 12 + 1).Select(I => (I * 5 + 30).ToString())
+                .Select(Translation.Default));
             fpsLimitList.Add(Translation.Create("none"));
-            
+
             var frameLimiterValues = fpsLimitList.ToArray();
 
 
-            var frameLimiter = new OptionChooser(new Vector2(-dist, 0), new Vector2(0.15f, 0.075f), Translation.Create("fps_limit", "{0} :"),
+            var frameLimiter = new OptionChooser(new Vector2(-dist, 0), new Vector2(0.15f, 0.075f),
+                Translation.Create("fps_limit", "{0} :"),
                 fontColor, _normalFont,
                 frameLimiterValues);
 
             if (GameSettings.FrameLimit <= 0.0f)
                 frameLimiter.Index = fpsLimitList.Count - 1;
             else
-                frameLimiter.Index = Enumerable.Range(0, fpsLimitList.Count-1)
+                frameLimiter.Index = Enumerable.Range(0, fpsLimitList.Count - 1)
                     .FirstOrDefault(I => GameSettings.FrameLimit == int.Parse(fpsLimitList[I].Get()));
             frameLimiter.CurrentValue.Text = fpsLimitList[frameLimiter.Index].Get();
 
             void UpdateLimiter(object Sender, MouseButtonEventArgs E)
             {
-                GameSettings.FrameLimit = 
-                    frameLimiter.Index == fpsLimitList.Count-1 ? 0 : int.Parse(frameLimiter.CurrentValue.Text);
+                GameSettings.FrameLimit =
+                    frameLimiter.Index == fpsLimitList.Count - 1 ? 0 : int.Parse(frameLimiter.CurrentValue.Text);
             }
 
             frameLimiter.LeftArrow.Click += UpdateLimiter;
             frameLimiter.RightArrow.Click += UpdateLimiter;
 
             var occlusionCulling = new Button(new Vector2(dist, 0),
-                new Vector2(0.15f, 0.075f), BuildOnOff("occlusion_culling", () => GameSettings.OcclusionCulling), fontColor, _normalFont);
+                new Vector2(0.15f, 0.075f), BuildOnOff("occlusion_culling", () => GameSettings.OcclusionCulling),
+                fontColor, _normalFont);
 
-            occlusionCulling.Click += delegate {
-                GameSettings.OcclusionCulling = !GameSettings.OcclusionCulling;
-            };
-            
+            occlusionCulling.Click += delegate { GameSettings.OcclusionCulling = !GameSettings.OcclusionCulling; };
+
             var fxaa = new Button(new Vector2(dist, -vDist),
-                     new Vector2(0.15f, 0.075f), BuildOnOff("fxaa", () => GameSettings.FXAA), fontColor, _normalFont);
+                new Vector2(0.15f, 0.075f), BuildOnOff("fxaa", () => GameSettings.FXAA), fontColor, _normalFont);
 
-            fxaa.Click += delegate {
-                GameSettings.FXAA = !GameSettings.FXAA;
-            };
-            
-            var bloom = new Button(new Vector2(dist, -vDist*2),
-                     new Vector2(0.15f, 0.075f), BuildOnOff("bloom", () => GameSettings.Bloom), fontColor, _normalFont);
+            fxaa.Click += delegate { GameSettings.FXAA = !GameSettings.FXAA; };
+
+            var bloom = new Button(new Vector2(dist, -vDist * 2),
+                new Vector2(0.15f, 0.075f), BuildOnOff("bloom", () => GameSettings.Bloom), fontColor, _normalFont);
 
 
-            bloom.Click += delegate
-            {
-                GameSettings.Bloom = !GameSettings.Bloom;
-            };
-            
+            bloom.Click += delegate { GameSettings.Bloom = !GameSettings.Bloom; };
+
             var quality = new Button(
-                                new Vector2(-dist, vDist*2),
-                                new Vector2(0.15f,0.075f), 
-                                BuildOnOff("quality", () => GameSettings.Quality, Translation.Create("quality_fancy"), Translation.Create("quality_fast")),
-                                fontColor, _normalFont);
-            
-            quality.Click += delegate
-            {
-                GameSettings.Quality = !GameSettings.Quality;
-            };
+                new Vector2(-dist, vDist * 2),
+                new Vector2(0.15f, 0.075f),
+                BuildOnOff("quality", () => GameSettings.Quality, Translation.Create("quality_fancy"),
+                    Translation.Create("quality_fast")),
+                fontColor, _normalFont);
 
-            
+            quality.Click += delegate { GameSettings.Quality = !GameSettings.Quality; };
+
+
             var vSync = new Button(new Vector2(-dist, vDist),
-                                 new Vector2(0.15f,0.075f), BuildOnOff("vsync", () => GameSettings.VSync), fontColor, _normalFont);
-            
+                new Vector2(0.15f, 0.075f), BuildOnOff("vsync", () => GameSettings.VSync), fontColor, _normalFont);
+
             vSync.Click += delegate { GameSettings.VSync = !GameSettings.VSync; };
-            
+
             var invertMouse = new Button(new Vector2(0, .6f),
-                                 new Vector2(0.15f,0.075f), BuildOnOff("invert_mouse", () => GameSettings.InvertMouse), fontColor, _normalFont);
-            
+                new Vector2(0.15f, 0.075f), BuildOnOff("invert_mouse", () => GameSettings.InvertMouse), fontColor,
+                _normalFont);
+
             invertMouse.Click += delegate { GameSettings.InvertMouse = !GameSettings.InvertMouse; };
-            
-            var shadowsValues =  new []
+
+            var shadowsValues = new[]
             {
-                "none","low","medium","high"
+                "none", "low", "medium", "high"
             }.Select(S => Translation.Create(S)).ToArray();
-            OptionChooser shadows = new OptionChooser(new Vector2(dist, vDist), new Vector2(0.15f, 0.075f), Translation.Create("shadow_quality", "{0}: "),
-                                             fontColor, _normalFont,
-                                            shadowsValues, false);
+            OptionChooser shadows = new OptionChooser(new Vector2(dist, vDist), new Vector2(0.15f, 0.075f),
+                Translation.Create("shadow_quality", "{0}: "),
+                fontColor, _normalFont,
+                shadowsValues, false);
             shadows.Index = 1;
             shadows.CurrentValue.Text = Translations.Get("medium");
-            
-            for(var i = 0; i < shadowsValues.Length; i++)
+
+            for (var i = 0; i < shadowsValues.Length; i++)
             {
-                if( i == GameSettings.ShadowQuality)
+                if (i == GameSettings.ShadowQuality)
                 {
                     shadows.CurrentValue.Text = i == 0 ? Translations.Get("off") : shadowsValues[i].Get();
                     shadows.Index = i;
                     break;
                 }
             }
-            
-            shadows.LeftArrow.Click += delegate {
+
+            shadows.LeftArrow.Click += delegate
+            {
                 GameSettings.ShadowQuality = shadows.Index;
-                if(shadows.Index == 0)
+                if (shadows.Index == 0)
                     shadows.CurrentValue.Text = Translations.Get("off");
             };
-            
-            shadows.RightArrow.Click += delegate {
+
+            shadows.RightArrow.Click += delegate
+            {
                 GameSettings.ShadowQuality = shadows.Index;
-                if(shadows.Index == 0)
+                if (shadows.Index == 0)
                     shadows.CurrentValue.Text = Translations.Get("off");
             };
             var ssao = new Button(new Vector2(-dist, -vDist * 2),
-                                 new Vector2(0.15f,0.075f), BuildOnOff("ambient_occlusion", () => GameSettings.SSAO), fontColor, _normalFont);
-            
-            ssao.Click += delegate
-            {
-                GameSettings.SSAO = !GameSettings.SSAO;
-            };
-            
-            var ssr = new Button(new Vector2(-dist, -vDist * 3), Vector2.Zero, BuildOnOff("water_reflections", () => GameSettings.EnableReflections), fontColor, _normalFont);
-            
-            ssr.Click += delegate
-            {
-                GameSettings.EnableReflections = !GameSettings.EnableReflections;
-            };
-            
-            
+                new Vector2(0.15f, 0.075f), BuildOnOff("ambient_occlusion", () => GameSettings.SSAO), fontColor,
+                _normalFont);
+
+            ssao.Click += delegate { GameSettings.SSAO = !GameSettings.SSAO; };
+
+            var ssr = new Button(new Vector2(-dist, -vDist * 3), Vector2.Zero,
+                BuildOnOff("water_reflections", () => GameSettings.EnableReflections), fontColor, _normalFont);
+
+            ssr.Click += delegate { GameSettings.EnableReflections = !GameSettings.EnableReflections; };
+
+
             var fullscreen = new Button(new Vector2(-dist, -vDist),
-                new Vector2(0.15f,0.075f), BuildOnOff("fullscreen", () => GameSettings.Fullscreen), fontColor, _normalFont);
-            
-            fullscreen.Click += delegate
-            {
-                GameSettings.Fullscreen = !GameSettings.Fullscreen;
-            };
-            
+                new Vector2(0.15f, 0.075f), BuildOnOff("fullscreen", () => GameSettings.Fullscreen), fontColor,
+                _normalFont);
+
+            fullscreen.Click += delegate { GameSettings.Fullscreen = !GameSettings.Fullscreen; };
+
             var showChat = new Button(new Vector2(0, .4f),
-                                 new Vector2(0.15f,0.075f), BuildOnOff("show_chat", () => GameSettings.ShowChat), fontColor, _normalFont);
-            
-            showChat.Click += delegate
-            {
-                GameSettings.ShowChat = !GameSettings.ShowChat;
-            };
-            
+                new Vector2(0.15f, 0.075f), BuildOnOff("show_chat", () => GameSettings.ShowChat), fontColor,
+                _normalFont);
+
+            showChat.Click += delegate { GameSettings.ShowChat = !GameSettings.ShowChat; };
+
             var showMinimap = new Button(new Vector2(0, .6f),
-                                 new Vector2(0.15f,0.075f), BuildOnOff("show_minimap", () => GameSettings.ShowMinimap), fontColor, _normalFont);
-            
-            showMinimap.Click += delegate
-            {
-                GameSettings.ShowMinimap = !GameSettings.ShowMinimap;
-            };
+                new Vector2(0.15f, 0.075f), BuildOnOff("show_minimap", () => GameSettings.ShowMinimap), fontColor,
+                _normalFont);
+
+            showMinimap.Click += delegate { GameSettings.ShowMinimap = !GameSettings.ShowMinimap; };
 
             Button showConsole = null;
             if (OSManager.CanHideConsole)
@@ -310,10 +307,7 @@ namespace Hedra.Engine.Rendering.UI
                     new Vector2(0.15f, 0.075f), BuildOnOff("show_console", () => GameSettings.ShowConsole),
                     fontColor, _normalFont);
 
-                showConsole.Click += delegate
-                {
-                    GameSettings.ShowConsole = !GameSettings.ShowConsole;
-                };
+                showConsole.Click += delegate { GameSettings.ShowConsole = !GameSettings.ShowConsole; };
             }
 
             var langs = Translations.Languages;
@@ -322,6 +316,7 @@ namespace Hedra.Engine.Rendering.UI
             {
                 languageOptions[i] = Translation.Default(langs[i]);
             }
+
             var language = new OptionChooser(new Vector2(0, -.2f), Vector2.Zero,
                 Translation.Create("language", "{0}: "),
                 fontColor, _normalFont, languageOptions, false)
@@ -329,13 +324,29 @@ namespace Hedra.Engine.Rendering.UI
                 Index = Array.IndexOf(languageOptions.Select(T => T.Get()).ToArray(), GameSettings.Language)
             };
             language.CurrentValue.Text = languageOptions[language.Index].Get();
-            language.LeftArrow.Click += delegate
+            language.LeftArrow.Click += delegate { GameSettings.Language = languageOptions[language.Index].Get(); };
+            language.RightArrow.Click += delegate { GameSettings.Language = languageOptions[language.Index].Get(); };
+
+            
+            var fovOptions = Enumerable.Range(40, 80 + 1).Select(I => I.ToString()).Select(Translation.Default).ToArray();
+            var fovChooser = new OptionChooser(new Vector2(0, -.4f), new Vector2(0.15f, 0.075f),
+                Translation.Create("field_of_view", "{0}: "), fontColor, _normalFont, fovOptions);
+            for (var i = 0; i < fovOptions.Length; i++)
             {
-                GameSettings.Language = languageOptions[language.Index].Get();
-            };     
-            language.RightArrow.Click += delegate
-            { 
-                GameSettings.Language = languageOptions[language.Index].Get();
+                if (Math.Abs(GameSettings.FieldOfView - int.Parse(fovOptions[i].Get())) > 0.005f) continue;
+                fovChooser.Index = i;
+                fovChooser.CurrentValue.Text = fovOptions[i].Get();
+                break;
+            }
+
+            fovChooser.LeftArrow.Click += (S, A) =>
+            {
+                GameSettings.FieldOfView = int.Parse(fovOptions[fovChooser.Index].Get());
+            };
+
+            fovChooser.RightArrow.Click += (S, A) =>
+            {
+                GameSettings.FieldOfView = int.Parse(fovOptions[fovChooser.Index].Get());
             };
 
             var smoothLod = new Button(new Vector2(0, .0f),
@@ -450,6 +461,7 @@ namespace Hedra.Engine.Rendering.UI
             _displayButtons.Add(showMinimap);
             _displayButtons.Add(smoothLod);
             _displayButtons.Add(language);
+            _displayButtons.Add(fovChooser);
             if(showConsole != null) _displayButtons.Add(showConsole);
             
             AddElement(_controls);
@@ -489,7 +501,8 @@ namespace Hedra.Engine.Rendering.UI
             {
                 if(E == PanelState.Disabled)
                 {
-                    GameSettings.Save($"{AssetManager.AppData}/settings.cfg");
+                    if(GameSettings.Loaded)
+                        GameSettings.Save($"{AssetManager.AppData}/settings.cfg");
                     GameSettings.DarkEffect = false;
                 }
                 if(E == PanelState.Enabled){
