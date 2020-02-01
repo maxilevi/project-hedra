@@ -16,6 +16,7 @@ using Hedra.Engine.Game;
 using Hedra.Engine.Generation;
 using Hedra.Engine.Generation.ChunkSystem;
 using System.Numerics;
+using Hedra.Engine.BiomeSystem.Savanna;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.BiomeSystem
@@ -198,7 +199,18 @@ namespace Hedra.Engine.BiomeSystem
                             MobDesign = new NormalBiomeMobDesign(),
                             GenerationDesign = new NormalBiomeGenerationDesign(),
                             EnvironmentDesign = new NormalBiomeEnvironmentDesign()
-                        }
+                        }/*,
+                        
+                        new BiomeDesign
+                        {
+                            ColorDesign = new SavannaBiomeColors(),
+                            StructureDesign = new SavannaBiomeStructureDesign(),
+                            TreeDesign = new SavannaBiomeTreeDesign(),
+                            SkyDesign = new SavannaBiomeSkyDesign(),
+                            MobDesign = new SavannaBiomeMobDesign(),
+                            GenerationDesign = new SavannaBiomeGenerationDesign(),
+                            EnvironmentDesign = new SavannaBiomeEnvironmentDesign()
+                        }*/
                     }
                 },
                 {
@@ -206,13 +218,13 @@ namespace Hedra.Engine.BiomeSystem
                     {
                         new BiomeDesign
                         {
-                            ColorDesign = new UndeadBiomeColorsDesign(),
+                            ColorDesign = new GhostTownColorsDesign(),
                             StructureDesign = new GhostTownBiomeStructureDesign(),
                             TreeDesign = new GhostTownTreeDesign(),
                             SkyDesign = new GhostTownSkyDesign(),
                             MobDesign = new GhostTownMobDesign(),
                             GenerationDesign = new GhostTownGenerationDesign(),
-                            EnvironmentDesign = new UndeadBiomeEnvironmentDesign()
+                            EnvironmentDesign = new GhostTownEnvironmentDesign()
                         }
                     }
                 }

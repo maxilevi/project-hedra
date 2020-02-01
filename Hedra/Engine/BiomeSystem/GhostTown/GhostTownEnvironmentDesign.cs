@@ -3,9 +3,9 @@ using Hedra.Engine.PlantSystem;
 
 namespace Hedra.Engine.BiomeSystem.UndeadBiome
 {
-    public class UndeadBiomeEnvironmentDesign : BiomeEnviromentDesign
+    public class GhostTownEnvironmentDesign : BiomeEnviromentDesign
     {
-        public UndeadBiomeEnvironmentDesign()
+        public GhostTownEnvironmentDesign()
         {
             Designs = new PlacementDesign[]
             {

@@ -7,7 +7,7 @@ using System.Numerics;
 
 namespace Hedra.Engine.BiomeSystem.UndeadBiome
 {
-    public class UndeadBiomeColorsDesign : BiomeColorsDesign
+    public class GhostTownColorsDesign : BiomeColorsDesign
     {
         public override Vector4 WaterColor(int Seed)
         {
