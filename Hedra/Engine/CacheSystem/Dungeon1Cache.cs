@@ -30,6 +30,6 @@ namespace Hedra.Engine.CacheSystem
 
         public static Vector3 Scale { get; } = Vector3.One;
         
-        public static Vector3 Offset { get; } = Vector3.UnitY * 8.5f;
+        public static Vector3 Offset { get; } = Vector3.UnitY * 8.5f + Vector3.UnitX * -0.75f + Vector3.UnitZ * 0.75f;
     }
 }
