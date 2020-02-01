@@ -73,79 +73,87 @@ namespace Hedra.Engine.Generation
 
         public float[] GetSimplexSetWithFrequency(Vector3 Offset, Vector3 Size, Vector3 Scale, float frequency)
         {
-            if (_disposed) return null;
+            var size = (int)(Size.X * Size.Y * Size.Z);
+            if (_disposed) return new float[size];
             Frequency = frequency;
             var pointer = HedraCoreNative.fastnoise_getSimplexSet(_native, Offset.X, Offset.Y, Offset.Z, (int)Size.X, (int)Size.Y, (int)Size.Z, Scale.X, Scale.Y, Scale.Z);
-            return PointerToSet(pointer, (uint)(Size.X * Size.Y * Size.Z));
+            return PointerToSet(pointer, (uint)size);
         }
 
         public float[] GetPerlinFractalSetWithFrequency(Vector3 Offset, Vector3 Size, Vector3 Scale, float frequency)
         {
-            if (_disposed) return null;
+            var size = (int)(Size.X * Size.Y * Size.Z);
+            if (_disposed) return new float[size];
             Frequency = frequency;
             var pointer = HedraCoreNative.fastnoise_getPerlinFractalSet(_native, Offset.X, Offset.Y, Offset.Z, (int)Size.X, (int)Size.Y, (int)Size.Z, Scale.X, Scale.Y, Scale.Z);
-            return PointerToSet(pointer, (uint)(Size.X * Size.Y * Size.Z));
+            return PointerToSet(pointer, (uint)(size));
         }
         
         public float[] GetPerlinSetWithFrequency(Vector3 Offset, Vector3 Size, Vector3 Scale, float frequency)
         {
-            if (_disposed) return null;
+            var size = (int)(Size.X * Size.Y * Size.Z);
+            if (_disposed) return new float[size];
             Frequency = frequency;
             var pointer = HedraCoreNative.fastnoise_getPerlinSet(_native, Offset.X, Offset.Y, Offset.Z, (int)Size.X, (int)Size.Y, (int)Size.Z, Scale.X, Scale.Y, Scale.Z);
-            return PointerToSet(pointer, (uint)(Size.X * Size.Y * Size.Z));
+            return PointerToSet(pointer, (uint)(size));
         }
         
         public float[] GetSimplexFractalSetWithFrequency(Vector3 Offset, Vector3 Size, Vector3 Scale, float frequency)
         {
-            if (_disposed) return null;
+            var size = (int)(Size.X * Size.Y * Size.Z);
+            if (_disposed) return new float[size];
             Frequency = frequency;
             var pointer = HedraCoreNative.fastnoise_getSimplexFractalSet(_native, Offset.X, Offset.Y, Offset.Z, (int)Size.X, (int)Size.Y, (int)Size.Z, Scale.X, Scale.Y, Scale.Z);
-            return PointerToSet(pointer, (uint)(Size.X * Size.Y * Size.Z));
+            return PointerToSet(pointer, (uint)(size));
         }
         
         public float[] GetCubicFractalSetWithFrequency(Vector3 Offset, Vector3 Size, Vector3 Scale, float frequency)
         {
-            if (_disposed) return null;
+            var size = (int)(Size.X * Size.Y * Size.Z);
+            if (_disposed) return new float[size];
             Frequency = frequency;
             var pointer = HedraCoreNative.fastnoise_getCubicFractalSet(_native, Offset.X, Offset.Y, Offset.Z, (int)Size.X, (int)Size.Y, (int)Size.Z, Scale.X, Scale.Y, Scale.Z);
-            return PointerToSet(pointer, (uint)(Size.X * Size.Y * Size.Z));
+            return PointerToSet(pointer, (uint)(size));
         }
         
         public float[] GetCubicSetWithFrequency(Vector3 Offset, Vector3 Size, Vector3 Scale, float frequency)
         {
-            if (_disposed) return null;
+            var size = (int)(Size.X * Size.Y * Size.Z);
+            if (_disposed) return new float[size];
             Frequency = frequency;
             var pointer = HedraCoreNative.fastnoise_getCubicSet(_native, Offset.X, Offset.Y, Offset.Z, (int)Size.X, (int)Size.Y, (int)Size.Z, Scale.X, Scale.Y, Scale.Z);
-            return PointerToSet(pointer, (uint)(Size.X * Size.Y * Size.Z));
+            return PointerToSet(pointer, (uint)(size));
         }
         
         public float[] GetValueFractalSetWithFrequency(Vector3 Offset, Vector3 Size, Vector3 Scale, float frequency)
         {
-            if (_disposed) return null;
+            var size = (int)(Size.X * Size.Y * Size.Z);
+            if (_disposed) return new float[size];
             Frequency = frequency;
             var pointer = HedraCoreNative.fastnoise_getValueFractalSet(_native, Offset.X, Offset.Y, Offset.Z, (int)Size.X, (int)Size.Y, (int)Size.Z, Scale.X, Scale.Y, Scale.Z);
-            return PointerToSet(pointer, (uint)(Size.X * Size.Y * Size.Z));
+            return PointerToSet(pointer, (uint)(size));
         }
         
         public float[] GetValueSetWithFrequency(Vector3 Offset, Vector3 Size, Vector3 Scale, float frequency)
         {
-            if (_disposed) return null;
+            var size = (int)(Size.X * Size.Y * Size.Z);
+            if (_disposed) return new float[size];
             Frequency = frequency;
             var pointer = HedraCoreNative.fastnoise_getValueSet(_native, Offset.X, Offset.Y, Offset.Z, (int)Size.X, (int)Size.Y, (int)Size.Z, Scale.X, Scale.Y, Scale.Z);
-            return PointerToSet(pointer, (uint)(Size.X * Size.Y * Size.Z));
+            return PointerToSet(pointer, (uint)(size));
         }
         
         public float[] GetCellularSetWithFrequency(Vector3 Offset, Vector3 Size, Vector3 Scale, float frequency)
         {
-            if (_disposed) return null;
+            var size = (int)(Size.X * Size.Y * Size.Z);
+            if (_disposed) return new float[size];
             Frequency = frequency;
             var pointer = HedraCoreNative.fastnoise_getCellularSet(_native, Offset.X, Offset.Y, Offset.Z, (int)Size.X, (int)Size.Y, (int)Size.Z, Scale.X, Scale.Y, Scale.Z);
-            return PointerToSet(pointer, (uint)(Size.X * Size.Y * Size.Z));
+            return PointerToSet(pointer, (uint)(size));
         }
         
         public float[] GetCellularSetWithFrequency(Vector2 Offset, Vector2 Size, Vector2 Scale, float frequency)
         {
-            if (_disposed) return null;
             return GetCellularSetWithFrequency(new Vector3(Offset.X, 0, Offset.Y), new Vector3(Size.X, 1, Size.Y),
                 new Vector3(Scale.X, 1, Scale.Y), frequency);
         }
