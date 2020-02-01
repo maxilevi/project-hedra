@@ -286,7 +286,7 @@ namespace Hedra.Engine.Windowing
         InfoLogLength = GLEnum.InfoLogLength
     }
     
-    public enum GetQueryObjectParam    
+    public enum GetQueryObjectParam
     {
         QueryResult = GLEnum.QueryResult,
         QueryResultAvailable = GLEnum.QueryResultAvailable

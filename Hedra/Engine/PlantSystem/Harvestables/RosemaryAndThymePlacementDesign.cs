@@ -14,7 +14,7 @@ namespace Hedra.Engine.PlantSystem.Harvestables
         
         protected override bool ShouldPlace(Random Rng)
         {
-            return Rng.Next(0, 40000) == 1;
+            return Rng.Next(0, 27500) == 1;
         }
 
         protected override PlantDesign[] Designs { get; } = new PlantDesign[]
