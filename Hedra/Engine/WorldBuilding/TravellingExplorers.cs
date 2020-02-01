@@ -41,6 +41,12 @@ namespace Hedra.Engine.WorldBuilding
                         explorer.AddComponent(new ExplorerThoughtsComponent(explorer));
                         explorer.AddComponent(new TalkComponent(explorer));
                     }
+
+                    explorer.DamageModifiers += (IEntity Victim, ref float Damage) =>
+                    {
+                        if (Victim.IsFriendly || Victim is LocalPlayer || Victim == LocalPlayer.Instance.Companion.Entity)
+                            Damage = 0;
+                    };
                 }
                 explorer.AddComponent(new DisposeComponent(explorer, Chunk.Width * GeneralSettings.MaxLoadingRadius + Chunk.Width));
                 explorers.Add(explorer);
