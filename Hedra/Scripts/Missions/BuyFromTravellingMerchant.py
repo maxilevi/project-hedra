@@ -20,33 +20,30 @@ POSSIBLE_ITEMS = [
 def setup_timeline(position, giver, owner, rng):
     builder = MissionBuilder()
 
-    items_to_collect = random_items(rng)
+    item_to_collect = random_items(rng)
     structure = MissionCore.find_and_bind_structure(builder, position, TravellingMerchantDesign)
-    structure.WorldObject.ItemsToBuy = items_to_collect
+    structure.WorldObject.ItemsToBuy = item_to_collect
 
     find = FindStructureMission()
     find.Design = structure.Design
     find.Position = structure.Position
-    find.OverrideOpeningDialog(create_dialog(find.Design.DisplayName, items_to_collect))
+    find.OverrideOpeningDialog(create_dialog(find.Design.DisplayName, item_to_collect))
     builder.Next(find) 
 
     complete = CompleteStructureMission()
     complete.StructureDesign = structure.Design
     complete.StructureObject = structure.WorldObject
-    complete.MissionBlockEnd += lambda: consume_items(items_to_collect, owner)
+    complete.MissionBlockEnd += lambda: item_to_collect.Consume(owner)
     builder.Next(complete)
     
     reward = QuestReward()
     reward.Gold = rng.Next(9, 17)
-    reward.Gold += Trader.SingleItemPrice(ItemPool.Grab(items_to_collect.Name)) * Trader.BuyMultiplier * items_to_collect.Amount
+    reward.Gold += Trader.SingleItemPrice(ItemPool.Grab(item_to_collect.Name)) * Trader.BuyMultiplier * item_to_collect.Amount
     
     builder.SetReward(reward)
-    builder.MissionEnd += lambda: items_to_collect.Consume(owner)
+    builder.MissionEnd += lambda: item_to_collect.Consume(owner)
     return builder
 
-def consume_items(items, owner):
-    for x in items:
-        x.Consume(owner)
 
 def random_items(rng):
     name, amount = POSSIBLE_ITEMS[rng.Next(0, len(POSSIBLE_ITEMS))]

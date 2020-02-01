@@ -33,7 +33,7 @@ namespace Hedra.Engine.Scripting
             }
             catch (Exception e)
             {
-                Log.WriteLine($"function '{_name}' from script '{_library}' failed with the following traceback:{Environment.NewLine}{_engine.GetService<ExceptionOperations>().FormatException(e)}");
+                Log.WriteLine($"function '{_name}' from script '{_library}' failed with the following traceback:{Environment.NewLine}{Interpreter.FormatException(e)}");
             }
             return result;
         }

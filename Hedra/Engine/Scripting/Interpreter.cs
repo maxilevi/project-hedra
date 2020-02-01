@@ -57,6 +57,11 @@ namespace Hedra.Engine.Scripting
             return new Function(_runner.GetFunction(Library, Function), Library, Function, _engine);
         }
 
+        public static string FormatException(Exception e)
+        {
+            return _engine.GetService<ExceptionOperations>().FormatException(e);
+        }
+
         public static Script GetScript(string Library)
         {
             return new Script(Library);

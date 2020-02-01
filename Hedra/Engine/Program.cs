@@ -19,6 +19,7 @@ using Hedra.Engine.Rendering.Core;
 using Hedra.Game;
 using System.Numerics;
 using System.Runtime;
+using Hedra.Engine.Scripting;
 using Silk.NET.GLFW;
 using Silk.NET.Windowing.Common;
 using Monitor = Silk.NET.Windowing.Monitor;
@@ -39,7 +40,7 @@ namespace Hedra.Engine
             //GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
             void ProcessException(object S, UnhandledExceptionEventArgs E)
             {
-                var baseText =  $":{Environment.NewLine}{Environment.NewLine}----STACK TRACE----{Environment.NewLine}{Environment.NewLine}{E.ExceptionObject.ToString()}";
+                var baseText =  $":{Environment.NewLine}{Environment.NewLine}----STACK TRACE----{Environment.NewLine}{Environment.NewLine}{E.ExceptionObject.ToString()}{Environment.NewLine}{Environment.NewLine}----SCRIPT TRACE---{Environment.NewLine}{Environment.NewLine}{Interpreter.FormatException((Exception)E.ExceptionObject)}";
                 if (E.IsTerminating)
                 {
                     Log.WriteLine($"UNEXPECTED FATAL EXCEPTION {baseText}");
