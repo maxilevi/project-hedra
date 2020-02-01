@@ -16,8 +16,8 @@ namespace Hedra.AISystem.Humanoid
         
         public ExplorerAIBehaviour(IHumanoid Parent, IHumanoid[] Crew, Random Rng) : base(Parent)
         {
-            _rng = Rng;
             _crew = Crew;
+            _rng = Rng;
             _angle = _rng.NextFloat() * 360;
             Parent.SearchComponent<CombatAIComponent>().IgnoreEntities = _crew;
         }
@@ -41,7 +41,10 @@ namespace Hedra.AISystem.Humanoid
             {
                 if(_crew[i].IsDead || _crew[i].Disposed) continue;
                 if ((Entity.Position - _crew[i].Position).LengthSquared() > Math.Pow(CombatAIComponent.StareRadius, 2))
-                    _crew[i].SearchComponent<CombatAIComponent>().WalkTo(Entity.Position);
+                {
+                    var component = _crew[i].SearchComponent<CombatAIComponent>();
+                    component?.WalkTo(Entity.Position);
+                }
             }
         }
         
