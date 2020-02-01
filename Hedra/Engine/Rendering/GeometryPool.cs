@@ -130,7 +130,7 @@ namespace Hedra.Engine.Rendering
                 if (Offset + SizeInBytes > TotalMemory)
                 {
                     this.DrawAndSave();
-                    throw new OutOfMemoryException("GeometryPool<T> is out of memory");
+                    throw new OutOfMemoryException($"GeometryPool<{nameof(T)}> is out of memory");
                 }
                 Entry.Offset = Offset;
                 Entry.Length = SizeInBytes;

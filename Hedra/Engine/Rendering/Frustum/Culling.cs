@@ -68,7 +68,7 @@ namespace Hedra.Engine.Rendering.Frustum
         {
             var aspect = GameSettings.Width / (float)GameSettings.Height;
             ModelViewMatrix = View;
-            ProjectionMatrix = Matrix4x4.CreatePerspectiveFieldOfView(GameSettings.Fov * Mathf.Radian, aspect, ZNear, ZFar);
+            ProjectionMatrix = Matrix4x4.CreatePerspectiveFieldOfView(GameSettings.FieldOfView * Mathf.Radian, aspect, ZNear, ZFar);
             UpdateFrustum();
         }
 

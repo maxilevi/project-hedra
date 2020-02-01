@@ -44,7 +44,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public int BuildedLod { get; private set; }
         public bool BuildedWithStructures { get; private set; }
         public bool Disposed { get; private set; }
-        public bool HasWater { get; private set; }
         public bool IsRiverConstant { get; private set; }
         public bool IsGenerated { get; private set; }
         public BiomeGenerator Landscape { get; private set; }
@@ -97,7 +96,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
             {
                 IsGenerating = true;
                 var details = Landscape.GenerateBlocks(_blocks);
-                HasWater = details.HasWater;
                 IsRiverConstant = details.IsRiverConstant;
                 FillHeightCache(_blocks);
                 IsGenerating = false;
@@ -525,6 +523,15 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
 
             return blocks;
+        }
+
+        public bool HasWater
+        {
+            get
+            {
+                lock(_waterLock)
+                    return _waterPositions != null;
+            }
         }
         
         public void AddWaterDensity(int X, int Y, int Z)

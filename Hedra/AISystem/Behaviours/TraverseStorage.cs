@@ -55,6 +55,7 @@ namespace Hedra.AISystem.Behaviours
         {
             lock (_lock)
             {
+                if(!_storage.ContainsKey(Parent)) return;
                 _storage[Parent].GridUpdated -= GridUpdated;
                 if (_storage[Parent].ReferenceCounter == 1)
                     _storage.Remove(Parent);

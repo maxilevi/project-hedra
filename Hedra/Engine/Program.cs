@@ -112,7 +112,8 @@ namespace Hedra.Engine
 
             //var monitors = Monitor.GetMonitors();
             var maxMonitor = Monitor.GetMainMonitor();//(IMonitor)null;
-            var maxSize = new Vector2(maxMonitor.Bounds.Size.Width, maxMonitor.Bounds.Size.Height);
+            var size = maxMonitor.VideoMode.Resolution ?? maxMonitor.Bounds.Size;
+            var maxSize = new Vector2(size.Width, size.Height);
             /*foreach (var monitor in monitors)
             {
                 var monitorBounds = new Vector2(monitor.Bounds.Size.Width, monitor.Bounds.Size.Height);
