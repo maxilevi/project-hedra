@@ -55,8 +55,8 @@ namespace Hedra.Engine.Loader
         private int _passedFrames;
         private double _passedMillis;
 
-        public Hedra(IMonitor Monitor, int Major, int Minor, ContextProfile Profile, ContextFlags Flags) : 
-            base(Monitor, Profile, Flags, new APIVersion(Major, Minor))
+        public Hedra(int Width, int Height, IMonitor Monitor, int Major, int Minor, ContextProfile Profile, ContextFlags Flags) : 
+            base(Width, Height, Monitor, Profile, Flags, new APIVersion(Major, Minor))
         {
         }
 

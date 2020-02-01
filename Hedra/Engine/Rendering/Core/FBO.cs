@@ -7,9 +7,11 @@
 
 using System;
 using System.Drawing;
+using System.Numerics;
 using Hedra.Engine.IO;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
+using Hedra.Game;
 using GLDrawBuffersEnum = Silk.NET.OpenGL.GLEnum;
 
 namespace Hedra.Engine.Rendering.Core
@@ -25,6 +27,7 @@ namespace Hedra.Engine.Rendering.Core
         public Size Size { get; private set; }
         public FramebufferAttachment[] Attachments { get; private set; }
         public PixelInternalFormat[] Formats { get; private set; }
+        public Vector2 ViewportSize { get; set; }
         private readonly bool _multisample;
         private uint _id;
         private int _samples;
@@ -64,6 +67,7 @@ namespace Hedra.Engine.Rendering.Core
             this.Size = Size;
             this.Attachments = Attachments;
             this.Formats = Formats;
+            ViewportSize = new Vector2(Size.Width, Size.Height);
             this._multisample = Multisample;
             this._samples = (_multisample) ? Samples : 0;
             
@@ -243,8 +247,7 @@ namespace Hedra.Engine.Rendering.Core
 
                 if (Attachments.Length > 1) Renderer.DrawBuffers(Attachments.Length, buffers);
             }
-            
-            Renderer.Viewport(0, 0, Size.Width, Size.Height);
+            Renderer.Viewport(0, 0, (int)ViewportSize.X, (int)ViewportSize.Y);
 
             // configurably clear the buffer and color bits
             if (Clear)

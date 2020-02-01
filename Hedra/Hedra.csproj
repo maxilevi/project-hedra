@@ -329,7 +329,16 @@
     <Compile Include="Crafting\CraftingStation.cs" />
     <Compile Include="Crafting\Templates\IngredientsTemplate.cs" />
     <Compile Include="Engine\BiomeSystem\BaseBiomeGenerationDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\GhostTown\GhostTownColorsDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\GhostTown\GhostTownEnvironmentDesign.cs" />
     <Compile Include="Engine\BiomeSystem\LegacyBiomeGenerator.cs" />
+    <Compile Include="Engine\BiomeSystem\Savanna\SavannaBiomeColors.cs" />
+    <Compile Include="Engine\BiomeSystem\Savanna\SavannaBiomeEnvironmentDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\Savanna\SavannaBiomeGenerationDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\Savanna\SavannaBiomeMobDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\Savanna\SavannaBiomeSkyDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\Savanna\SavannaBiomeStructureDesign.cs" />
+    <Compile Include="Engine\BiomeSystem\Savanna\SavannaBiomeTreeDesign.cs" />
     <Compile Include="Engine\Bullet\BulletDraw.cs" />
     <Compile Include="Engine\Bullet\BulletInterop.cs" />
     <Compile Include="Engine\Bullet\BulletPhysics.cs" />
@@ -367,6 +376,7 @@
     <Compile Include="Engine\DataStructures\OctreeNode.cs" />
     <Compile Include="Engine\EntitySystem\DummyModel.cs" />
     <Compile Include="Engine\EnvironmentSystem\SkySettings.cs" />
+    <Compile Include="Engine\Game\SetupSettingAttribute.cs" />
     <Compile Include="Engine\Generation\ChunkAutomatons.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\Automatons.cs" />
     <Compile Include="Engine\Generation\ChunkSystem\Builders\AbstractBuilder.cs" />
@@ -1019,13 +1029,6 @@
     <Compile Include="BiomeSystem\RegionSky.cs" />
     <Compile Include="BiomeSystem\RegionStructure.cs" />
     <Compile Include="BiomeSystem\RegionTree.cs" />
-    <Compile Include="Engine\BiomeSystem\UndeadBiome\UndeadBiomeColorsDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\UndeadBiome\UndeadBiomeEnvironmentDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\UndeadBiome\UndeadBiomeGenerationDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\UndeadBiome\UndeadBiomeMobDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\UndeadBiome\UndeadBiomeStructureDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\UndeadBiome\UndeadBiomeTreeDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\UndeadBiome\UndeadBiomeSkyDesign.cs" />
     <Compile Include="Engine\BiomeSystem\Voronoi.cs" />
     <Compile Include="Engine\CacheSystem\AppleTreesCache.cs" />
     <Compile Include="Engine\CacheSystem\AttentionIconCache.cs" />
@@ -14670,6 +14673,7 @@
     <Content Include="Modules\Spawners\GhostTown.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Spawners\Savanna.json" />
     <Content Include="Modules\Villages\Woodland.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

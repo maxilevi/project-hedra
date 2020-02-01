@@ -236,6 +236,7 @@ namespace Hedra.Engine.Rendering.Effects
                 
             }
 
+            Culling.SetViewport(GameSettings.DeviceWidth, GameSettings.DeviceHeight);
             if (GameSettings.FXAA)
                 DrawFXAAQuad(FinalFbo.TextureId[0], GameSettings.Bloom ? AdditiveFbo.TextureId[0] : 0);
             else

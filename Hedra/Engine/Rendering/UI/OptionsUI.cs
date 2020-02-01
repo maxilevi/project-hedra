@@ -19,9 +19,11 @@ using System.Linq;
 using Hedra.Engine.Game;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Native;
+using Hedra.Engine.Player;
 using Hedra.Engine.Windowing;
 using Hedra.Game;
 using Hedra.Localization;
+using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
@@ -69,7 +71,7 @@ namespace Hedra.Engine.Rendering.UI
 
             var bandPosition = new Vector2(0f, .8f);
             var blackBand = new BackgroundTexture(Color.FromArgb(255, 69, 69, 69), Color.FromArgb(255, 19, 19, 19),
-                bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LeftRight);
+                bandPosition, UserInterface.BlackBandSize, GradientType.LeftRight);
 
             _graphics = new Button(new Vector2(0f, bandPosition.Y),
                 new Vector2(0.15f, 0.075f), Translation.Create("graphics"), Color.White, _normalFont);
@@ -348,6 +350,35 @@ namespace Hedra.Engine.Rendering.UI
             {
                 GameSettings.FieldOfView = int.Parse(fovOptions[fovChooser.Index].Get());
             };
+            
+            var resolutionChooser = new OptionChooser(new Vector2(0, -.6f), new Vector2(0.15f, 0.075f),
+                Translation.Create("available_resolutions", "{0}: "), fontColor, _normalFont, GameSettings.AvailableResolutions.Select(V => Translation.Default(V.ToString())).ToArray());
+
+            void SetResolutionName()
+            {
+                resolutionChooser.CurrentValue.Text = GameSettings.AvailableResolutions[GameSettings.ResolutionIndex].ToString().Replace("<","(").Replace(">",")").Replace(".",",");
+            }
+            
+            for (var i = 0; i < GameSettings.AvailableResolutions.Length; i++)
+            {
+                resolutionChooser.Index = GameSettings.ResolutionIndex;
+                SetResolutionName();
+                break;
+            }
+
+            resolutionChooser.LeftArrow.Click += (S, A) =>
+            {
+                GameSettings.ResolutionIndex = Mathf.Modulo(GameSettings.ResolutionIndex - 1, GameSettings.AvailableResolutions.Length);
+                SetResolutionName();
+                LocalPlayer.Instance.MessageDispatcher.ShowNotification(Translations.Get("restart_game_changes_take_effect"), Color.Red, 3f);
+            };
+
+            resolutionChooser.RightArrow.Click += (S, A) =>
+            {
+                GameSettings.ResolutionIndex = Mathf.Modulo(GameSettings.ResolutionIndex + 1, GameSettings.AvailableResolutions.Length);
+                SetResolutionName();
+                LocalPlayer.Instance.MessageDispatcher.ShowNotification(Translations.Get("restart_game_changes_take_effect"), Color.Red, 3f);
+            };
 
             var smoothLod = new Button(new Vector2(0, .0f),
                 new Vector2(0.15f, 0.075f), BuildOnOff("smooth_lod", () => GameSettings.SmoothLod),
@@ -462,6 +493,7 @@ namespace Hedra.Engine.Rendering.UI
             _displayButtons.Add(smoothLod);
             _displayButtons.Add(language);
             _displayButtons.Add(fovChooser);
+            _displayButtons.Add(resolutionChooser);
             if(showConsole != null) _displayButtons.Add(showConsole);
             
             AddElement(_controls);

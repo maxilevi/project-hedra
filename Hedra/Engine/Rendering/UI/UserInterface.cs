@@ -32,6 +32,7 @@ namespace Hedra.Engine.Rendering.UI
 {
     public class UserInterface
     {
+        public static Vector2 BlackBandSize = new Vector2(1f, 0.054f);
         private readonly IPlayer _player;
         public Panel Menu { get; }
         private readonly OptionsUI _optionsMenu;
@@ -59,8 +60,8 @@ namespace Hedra.Engine.Rendering.UI
             const int fontSize = 16;
             _title = new BackgroundTexture(Graphics2D.LoadFromAssets("Assets/UI/MenuLogo.png"),
                                    new Vector2(-.405f, .35f), Graphics2D.SizeFromAssets("Assets/UI/MenuLogo.png").As1920x1080() * .75f);
-
-            var blackBand = new BackgroundTexture(Color.FromArgb(0,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.09f / GameSettings.Height * 578), GradientType.LeftRight);
+            
+            var blackBand = new BackgroundTexture(Color.FromArgb(0,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, BlackBandSize, GradientType.LeftRight);
             
             
             var newRun = new Button(new Vector2(.1f, bandPosition.Y),

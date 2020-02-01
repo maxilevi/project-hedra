@@ -58,7 +58,7 @@ namespace Hedra.Engine.Player.QuestSystem
             Renderer.BindShader(previousBound);
             Renderer.Disable(EnableCap.DepthTest);
             Renderer.Enable(EnableCap.Blend);
-            Renderer.Viewport(0, 0, GameSettings.Width, GameSettings.Height);
+            Renderer.Viewport(0, 0, GameSettings.DeviceWidth, GameSettings.DeviceHeight);
             Model.PrematureCulling = meshPrematureCulling;
             Model.ApplyFog = applyFog;
             return Framebuffer.TextureId[0];

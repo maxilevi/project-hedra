@@ -55,7 +55,7 @@ namespace Hedra.Engine.Rendering.UI
             var defaultColor = Color.White;
             
             var bandPosition = new Vector2(0f, .8f);
-            var blackBand = new BackgroundTexture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, new Vector2(1f, 0.08f / GameSettings.Height * 578), GradientType.LeftRight);
+            var blackBand = new BackgroundTexture(Color.FromArgb(255,69,69,69), Color.FromArgb(255,19,19,19), bandPosition, UserInterface.BlackBandSize, GradientType.LeftRight);
 
             var currentTab = new GUIText(Translation.Create("new_character"), new Vector2(0f, bandPosition.Y), Color.White, FontCache.GetBold(15));
 
@@ -106,7 +106,7 @@ namespace Hedra.Engine.Rendering.UI
             classChooser.CurrentValue.TextColor = defaultColor;
             classChooser.CurrentValue.UpdateText(); 
             
-            var nameField = new TextField(new Vector2(0,-.7f), new Vector2(.15f,.03f));
+            var nameField = new TextField(new Vector2(0,-.7f), new Vector2(.15f,.03f).As1920x1080());
             var createChr = new Button(new Vector2(0f,-.8f), new Vector2(.15f,.05f), Translation.Create("create"), defaultColor, FontCache.GetBold(11));
             createChr.Click += delegate
             {

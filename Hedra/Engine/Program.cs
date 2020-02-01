@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -104,33 +105,43 @@ namespace Hedra.Engine
         {
             Steam.Instance.Dispose();
         }
+
+        private static unsafe void InitializeResolutions()
+        {
+            var glfw = GlfwProvider.GLFW.Value;
+            var videoModes = glfw.GetVideoModes(glfw.GetPrimaryMonitor(), out var count);
+            var resolutions = new List<Vector2>();
+            for (var i = 0; i < count; ++i)
+            {
+                resolutions.Add(new Vector2(videoModes[i].Width, videoModes[i].Height));
+            }
+
+            resolutions = resolutions.Distinct().ToList();
+            if (GameSettings.ResolutionIndex == -1)
+                GameSettings.ResolutionIndex = resolutions.Count - 1;
+            GameSettings.AvailableResolutions = resolutions.ToArray();
+        }
         
         private static unsafe void RunNormalAndDummyMode(bool DummyMode)
         {
             if(DummyMode) EnableDummyMode();
             LoadLibraries();
-
-            //var monitors = Monitor.GetMonitors();
-            var maxMonitor = Monitor.GetMainMonitor();//(IMonitor)null;
-            var size = maxMonitor.VideoMode.Resolution ?? maxMonitor.Bounds.Size;
-            var maxSize = new Vector2(size.Width, size.Height);
-            /*foreach (var monitor in monitors)
-            {
-                var monitorBounds = new Vector2(monitor.Bounds.Size.Width, monitor.Bounds.Size.Height);
-                if (monitorBounds.LengthSquared() > maxSize.LengthSquared())
-                {
-                    maxMonitor = monitor;
-                }
-                Log.WriteLine($"Found screen size '{monitorBounds}'");
-            }*/
+            InitializeResolutions();
+            GameSettings.LoadSetupSettings(GameSettings.SettingsPath);
+            
+            var maxMonitor = Monitor.GetMainMonitor();
+            var monitorSize = (maxMonitor.VideoMode.Resolution ?? maxMonitor.Bounds.Size);
+            var maxSize = new Vector2(monitorSize.Width, monitorSize.Height);
+            var currentSize = GameSettings.AvailableResolutions[GameSettings.ResolutionIndex];
+            
             GameSettings.DeviceWidth = (int)maxSize.X;
             GameSettings.DeviceHeight = (int)maxSize.Y;
 
             Log.WriteLine("Creating the window on the Primary Device at " + GameSettings.DeviceWidth + "x" +
                             GameSettings.DeviceHeight);
 
-            GameSettings.Width = GameSettings.DeviceWidth;
-            GameSettings.Height = GameSettings.DeviceHeight;
+            GameSettings.Width = (int)currentSize.X;
+            GameSettings.Height = (int)currentSize.Y;
             GameSettings.ScreenRatio = GameSettings.Width / (float) GameSettings.Height;
             var profile = ContextProfile.Core;
             var flags = ContextFlags.Default;
@@ -138,7 +149,7 @@ namespace Hedra.Engine
             profile = ContextProfile.Compatability;
             flags = ContextFlags.Debug;
 #endif
-            GameWindow = new Loader.Hedra(maxMonitor, 3, 3, profile, flags);
+            GameWindow = new Loader.Hedra((int)currentSize.X, (int)currentSize.Y, maxMonitor, 3, 3, profile, flags);
             GameWindow.Setup();
 
             if (OSManager.RunningPlatform == Platform.Windows)
@@ -170,7 +181,7 @@ namespace Hedra.Engine
 
             DisposeLibraries();
         }
-        
+
         private static void EnableDummyMode()
         {
             IsDummy = true;

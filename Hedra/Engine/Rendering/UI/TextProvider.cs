@@ -12,6 +12,7 @@ using Hedra.Engine.Management;
 using Hedra.Engine.Native;
 using Hedra.Rendering.UI;
 using System.Numerics;
+using Hedra.Game;
 
 namespace Hedra.Engine.Rendering.UI
 {
@@ -253,6 +254,7 @@ namespace Hedra.Engine.Rendering.UI
                 {
                     // Mono doesnt support this quite well.
                     graphics.ScaleTransform(1.3f, 1.3f);
+                    graphics.ScaleTransform(1f / 1920f * GameSettings.Width, 1f / 1080f * GameSettings.Height);
                 }
                 graphics.Clear(Color.FromArgb(0, 0, 0, 0));
                 var offset = PointF.Empty;
@@ -386,7 +388,7 @@ namespace Hedra.Engine.Rendering.UI
                     max = new SizeF(Math.Max(offset.Width, max.Width), Math.Max(max.Height, bounds.Height));
                 }   
             }
-            return max;
+            return new SizeF(max.Width * 1f / 1920f * GameSettings.Width, max.Height * 1f / 1080f * GameSettings.Height);
         }
         
         private static SizeF CalculateTextSize(string Text, Font TextFont)

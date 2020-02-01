@@ -47,7 +47,7 @@ namespace Hedra.Engine.Player.Inventory
         {
             Panel = new Panel {DisableKeys = true};
             var resFactor = 1366f / GameSettings.Width;
-            BackgroundTexture = new BackgroundTexture(DefaultId, Vector2.Zero, DefaultSize * .525f * resFactor * Scale);
+            BackgroundTexture = new BackgroundTexture(DefaultId, Vector2.Zero, (DefaultSize * .525f * resFactor * Scale).As1920x1080());
             ItemTexture = new BackgroundTexture(0, BackgroundTexture.Position + Mathf.ScaleGui(_targetResolution, BackgroundTexture.Scale * new Vector2(.45f, .0f) + Vector2.UnitX * .025f),
                 BackgroundTexture.Scale * .75f);
 
@@ -62,7 +62,7 @@ namespace Hedra.Engine.Player.Inventory
                 Color.White, FontCache.GetBold(10));
             DrawManager.UIRenderer.Add(ItemAttributes, DrawOrder.After);
             
-            HintTexture = new BackgroundTexture(InventoryBackground.DefaultId, Vector2.UnitY * -.35f, InventoryBackground.DefaultSize * .15f);
+            HintTexture = new BackgroundTexture(InventoryBackground.DefaultId, Vector2.UnitY * -.35f, (InventoryBackground.DefaultSize * .15f));
             HintText = new GUIText(string.Empty, HintTexture.Position, Color.White, FontCache.GetBold(7.As1920x1080()));
 
             Panel.AddElement(HintTexture);
@@ -73,8 +73,8 @@ namespace Hedra.Engine.Player.Inventory
             Panel.AddElement(ItemTexture);
             Panel.AddElement(BackgroundTexture);
 
-            _nonWeaponItemAttributesPosition = Mathf.ScaleGui(_targetResolution, Vector2.UnitY * -.225f);
-            _nonWeaponItemTexturePosition = Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .0f);
+            _nonWeaponItemAttributesPosition = Mathf.ScaleGui(_targetResolution, Vector2.UnitY * -.225f).As1920x1080();
+            _nonWeaponItemTexturePosition = Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .0f).As1920x1080();
             _weaponItemAttributesPosition = ItemAttributes.Position;
             _weaponItemTexturePosition = ItemTexture.Position;
             WeaponItemTextureScale = ItemTexture.Scale;

@@ -25,14 +25,14 @@ namespace Hedra.Engine.Loader
         private SpinWait _spinner;
         private Vector2 _mousePosition;
 
-        protected HedraWindow(IMonitor Monitor, ContextProfile Profile, ContextFlags Flags, APIVersion Version) : base()
+        protected HedraWindow(int Width, int Height, IMonitor Monitor, ContextProfile Profile, ContextFlags Flags, APIVersion Version) : base()
         {
             _watch = new Stopwatch();
             _spinner = new SpinWait();
             var options = new WindowOptions
             {
                 API = new GraphicsAPI(ContextAPI.OpenGL, Profile, Flags, Version),
-                Size = new Size(Monitor.Bounds.Width, Monitor.Bounds.Height),
+                Size = Monitor.VideoMode.Resolution ?? Monitor.Bounds.Size,
                 ShouldSwapAutomatically = true,
                 IsVisible = true,
                 Title = "Project Hedra",

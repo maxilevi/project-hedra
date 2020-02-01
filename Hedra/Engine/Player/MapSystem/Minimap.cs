@@ -221,6 +221,7 @@ namespace Hedra.Engine.Player.MapSystem
 
             this.DrawMap();
 
+            Culling.SetViewport(GameSettings.DeviceWidth, GameSettings.DeviceHeight);
             Shader.Bind();
             Renderer.Enable(EnableCap.Blend);
             Renderer.Disable(EnableCap.DepthTest);

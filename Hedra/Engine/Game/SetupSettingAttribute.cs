@@ -1,7 +1,10 @@
+using System;
+
 namespace Hedra.Engine.Game
 {
-    public class SetupSettingAttribute
+    public class SetupSettingAttribute : SettingAttribute
+
     {
-        
+
     }
 }

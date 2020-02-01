@@ -37,6 +37,7 @@ namespace Hedra.Game
         public static float BloomModifier { get; set; } = 1f;
         public static bool Wireframe { get; set; }
         public static bool LockFrustum { get; set; }
+        public static Vector2[] AvailableResolutions { get; set; }
         public static bool DebugMode { get; set; }
         public static bool DebugView { get; set; }
         public static int DeviceWidth { get; set; }
@@ -62,9 +63,10 @@ namespace Hedra.Game
         public static bool UnderWaterEffect = false;
         private static int _shadowQuality = 2;
         private static int _frameLimit;
-        public static bool Loaded => LoadedWindowSettings && LoadedNormalSettings;
+        public static bool Loaded => LoadedWindowSettings && LoadedNormalSettings && LoadedSetupSettings;
         public static bool LoadedWindowSettings { get; private set; }
         public static bool LoadedNormalSettings { get; private set; }
+        public static bool LoadedSetupSettings { get; private set; }
 
         static GameSettings()
         {
@@ -105,6 +107,8 @@ namespace Hedra.Game
         [Setting] public static bool FXAA { get; set; } = true;
         
         [Setting] public static float FieldOfView { get; set; } = 85f;
+
+        [SetupSetting] public static int ResolutionIndex { get; set; } = -1;
         
         [Setting]
         public static int FrameLimit
@@ -191,11 +195,12 @@ namespace Hedra.Game
         {
             LoadNormalSettings(Path);
             LoadWindowSettings(Path);
+            LoadSetupSettings(Path);
         }
 
         public static void LoadNormalSettings(string Path)
         {
-            Load(Path, P => !P.IsDefined(typeof(WindowSettingAttribute), true), LoadDefaultSettings);
+            Load(Path, P => !P.IsDefined(typeof(WindowSettingAttribute)) && !P.IsDefined(typeof(SetupSettingAttribute), true), LoadDefaultSettings);
             LoadedNormalSettings = true;
         }
         
@@ -203,6 +208,12 @@ namespace Hedra.Game
         {
             Load(Path, P => P.IsDefined(typeof(WindowSettingAttribute), true), LoadDefaultSettings);
             LoadedWindowSettings = true;
+        }
+
+        public static void LoadSetupSettings(string Path)
+        {
+            Load(Path, P => P.IsDefined(typeof(SetupSettingAttribute), true), LoadDefaultSettings);
+            LoadedSetupSettings = true;
         }
 
         private static void Load(string Path, Predicate<PropertyInfo> Predicate, Action LoadSettings)
