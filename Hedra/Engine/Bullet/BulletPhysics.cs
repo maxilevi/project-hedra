@@ -394,7 +394,13 @@ namespace Hedra.Engine.Bullet
             switch (Body.CollisionShape)
             {
                 case BvhTriangleMeshShape bvhTriangleMeshShape:
-                    bvhTriangleMeshShape.MeshInterface.Dispose();
+                    var meshArray = (TriangleIndexVertexArray)bvhTriangleMeshShape.MeshInterface;
+                    var count = meshArray.IndexedMeshArray.Count;
+                    for (var i = 0; i < count; ++i)
+                    {
+                        meshArray.IndexedMeshArray[i].Dispose();
+                    }
+                    meshArray.Dispose();
                     break;
                 case CompoundShape compoundShape:
                 {
