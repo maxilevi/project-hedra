@@ -90,15 +90,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         private static InventoryArray BuildArray()
         {
             var array = new InventoryArray(AbilityCount);
-            for (var i = 0; i < array.Length; i++)
-            {
-                array[i] = new Item
-                {
-                    Model = new VertexData()
-                };
-                array[i].SetAttribute("Level", 0);             
-            }
-
+            ResetArray(array);
             return array;
         }
 
@@ -341,10 +333,27 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             var secondArray = Reader.ReadBytes(Reader.ReadInt32());
             SpecializationTreeIndex = Reader.ReadInt32();
             ExtraSkillPoints = Reader.ReadInt32();
+
+            ResetArray(_firstTree);
+            ResetArray(_secondTree);
+            ResetArray(_mainTree);
             
             ShowBlueprint(_player.Class.FirstSpecializationTree, _firstTree, firstArray);
             ShowBlueprint(_player.Class.SecondSpecializationTree, _secondTree, secondArray);
             ShowBlueprint(_player.Class.MainTree, _mainTree, mainArray);
+        }
+
+        private static void ResetArray(InventoryArray Array)
+        {
+            Array.Empty();
+            for (var i = 0; i < Array.Length; i++)
+            {
+                Array[i] = new Item
+                {
+                    Model = new VertexData()
+                };
+                Array[i].SetAttribute("Level", 0);             
+            }
         }
 
         protected override bool HasExitAnimation => true;

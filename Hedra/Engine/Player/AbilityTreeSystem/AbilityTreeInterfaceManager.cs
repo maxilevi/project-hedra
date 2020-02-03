@@ -125,9 +125,14 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 {
                     for (var i = 0; i < _trees[k].Length; i++)
                     {
-                        used += _trees[k][i].HasAttribute("Level")
+                        var hasUsedPoint = _trees[k][i].HasAttribute("Level")
                             ? _trees[k][i].GetAttribute<int>("Level")
                             : 0;
+                        if (hasUsedPoint > 0)
+                        {
+                            int a = 0;
+                        }
+                        used += hasUsedPoint;
                     }
                 }
 
