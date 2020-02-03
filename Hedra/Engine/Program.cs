@@ -118,8 +118,18 @@ namespace Hedra.Engine
             }
 
             resolutions = resolutions.Distinct().ToList();
+            var mainMonitor = Monitor.GetMainMonitor();
             if (GameSettings.ResolutionIndex == -1)
-                GameSettings.ResolutionIndex = resolutions.Count - 1;
+            {
+                if (mainMonitor.VideoMode.Resolution.HasValue)
+                {
+                    var res = mainMonitor.VideoMode.Resolution.Value;
+                    GameSettings.ResolutionIndex = resolutions.FindIndex(R => res.Width == (int)R.X && res.Height == (int)R.Y);
+                }
+                else
+                    GameSettings.ResolutionIndex = resolutions.Count - 1;
+            }
+
             GameSettings.AvailableResolutions = resolutions.ToArray();
         }
         

@@ -18,7 +18,7 @@ namespace Hedra.Engine.Player.CraftingSystem
        
         private Item[] Recipes => Player.Crafting.Recipes;
 
-        public Item CurrentOutput => Array[SelectedIndex + PerPage * CurrentPage];
+        public Item CurrentOutput => Array[SelectedIndex];
         
         public Item CurrentRecipe => Recipes[SelectedIndex + PerPage * CurrentPage];
         

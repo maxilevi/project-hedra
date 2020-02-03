@@ -72,6 +72,8 @@ namespace Hedra.Engine.Bullet
                 if (Parent is IPlayer)
                 {
                     _body.CollisionFlags |= CollisionFlags.CharacterObject;
+                    _body.CcdMotionThreshold = 1e-16f;
+                    _body.CcdSweptSphereRadius = 100f;
                 }
                 _body.ActivationState = ActivationState.DisableDeactivation;
                 _body.Friction = 1;
@@ -262,7 +264,7 @@ namespace Hedra.Engine.Bullet
             _body.LinearVelocity = ContactResponse 
                 ? new BulletSharp.Math.Vector3(_accumulatedMovement.X, Math.Min(0, _body.LinearVelocity.Y), _accumulatedMovement.Z) + Impulse.Compatible() * (UseTimescale ? Time.TimeScale : 1f)
                 : BulletSharp.Math.Vector3.Zero;
-            _body.Activate();
+            //_body.Activate();
             Impulse *= (float) Math.Pow(0.25f, deltaTime * 5f);
             _accumulatedMovement = Vector3.Zero;
         }

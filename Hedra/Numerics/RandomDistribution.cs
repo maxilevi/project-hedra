@@ -7,6 +7,7 @@ namespace Hedra.Numerics
     public class RandomDistribution : IRandom
     {
         private Dictionary<int, int[]> _seedCache;
+        private object _cacheLock;
         private int[] _seedArray;
         private int _seed;
         private int _inext;
@@ -18,7 +19,11 @@ namespace Hedra.Numerics
 
         public RandomDistribution(bool UseCache) : this(Environment.TickCount)
         {
-            if(UseCache) _seedCache = new Dictionary<int, int[]>();
+            if (UseCache)
+            {
+                _seedCache = new Dictionary<int, int[]>();
+                _cacheLock = new object();
+            }
         }
 
         public RandomDistribution(int Seed)
@@ -34,15 +39,18 @@ namespace Hedra.Numerics
             {
                 if (_seedCache != null)
                 {
-                    if (_seedCache.TryGetValue(value, out var arr))
+                    lock (_cacheLock)
                     {
-                        for (var i = 0; i < arr.Length; ++i)
-                            _seedArray[i] = arr[i];
-                    }
-                    else
-                    {
-                        FillSeedArray(value);
-                        _seedCache.Add(value, _seedArray.ToArray());
+                        if (_seedCache.TryGetValue(value, out var arr))
+                        {
+                            for (var i = 0; i < arr.Length; ++i)
+                                _seedArray[i] = arr[i];
+                        }
+                        else
+                        {
+                            FillSeedArray(value);
+                            _seedCache.Add(value, _seedArray.ToArray());
+                        }
                     }
                 }
                 else

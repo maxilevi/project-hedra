@@ -117,6 +117,10 @@ namespace Hedra.Engine.Player.Inventory
             else
             {
                 AddNormalLayout();
+                if (CurrentItem.IsCompanion)
+                {
+                    MakeColorOfTier();
+                }
             }
         }
 
@@ -148,16 +152,20 @@ namespace Hedra.Engine.Player.Inventory
 
         protected void AddEquipmentLayout()
         {
-            var tierColor = ItemUtils.TierToColor(CurrentItem.Tier);
-            ItemText.Color = tierColor;
-
+            MakeColorOfTier();
             ItemText.Text = Utils.FitString($"{Translations.Get(CurrentItem.Tier.ToString().ToLowerInvariant())} {CurrentItem.DisplayName}", 20);
-            ItemAttributes.Color = tierColor;
-            ItemDescription.Color = tierColor;
             ItemAttributes.Position = _weaponItemAttributesPosition + this.Position;
             ItemTexture.Position = _weaponItemTexturePosition + this.Position;
             ItemTexture.Scale = WeaponItemTextureScale;
             ItemDescription.Text = Utils.FitString(CurrentItem.Description, 32);
+        }
+
+        private void MakeColorOfTier()
+        {
+            var tierColor = ItemUtils.TierToColor(CurrentItem.Tier);
+            ItemText.Color = tierColor;
+            ItemAttributes.Color = tierColor;
+            ItemDescription.Color = tierColor;
         }
 
         protected virtual void UpdateItemMesh()

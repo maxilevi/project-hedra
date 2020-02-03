@@ -212,7 +212,7 @@ namespace Hedra.Game
 
         public static void LoadSetupSettings(string Path)
         {
-            Load(Path, P => P.IsDefined(typeof(SetupSettingAttribute), true), LoadDefaultSettings);
+            Load(Path, P => P.IsDefined(typeof(SetupSettingAttribute), true), () => {});
             LoadedSetupSettings = true;
         }
 

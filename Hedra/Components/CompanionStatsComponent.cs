@@ -27,6 +27,7 @@ namespace Hedra.Components
             /* Force update the xp */
             XP = XP;
             Parent.Health = _storage.GetAttribute<float>(HealthAttributeName);
+            Level = Level;
         }
 
         public override void Update()
@@ -63,7 +64,7 @@ namespace Hedra.Components
             set
             {
                 _storage.SetAttribute(LevelAttributeName, value);
-                Parent.AttackDamage = _baseAttackDamage * (1 + value * .4f);
+                Parent.AttackDamage = _baseAttackDamage * (1 + value * .05f);
             }
         }
 

@@ -69,6 +69,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
         
         public BossHealthBarComponent(IEntity Parent, string Name) : base(Parent)
         {
+            this.Name = Name;
             _panel = new Panel();
              _backgroundTexture = new BackgroundTexture(
                 0,
@@ -84,7 +85,7 @@ namespace Hedra.Engine.EntitySystem.BossSystem
                 DrawOrder.Before
             );
             _percentageText = new GUIText(string.Empty, _healthBar.Position, Color.White, FontCache.GetBold(10));
-            _nameText = new GUIText(string.Empty, new Vector2(0f, .815f), Color.White, FontCache.GetBold(12));
+            _nameText = new GUIText(Name, new Vector2(0f, .815f), Color.White, FontCache.GetBold(12));
 
             _panel.AddElement(_backgroundTexture);
             _panel.AddElement(_nameText);
@@ -96,7 +97,9 @@ namespace Hedra.Engine.EntitySystem.BossSystem
             for (var i = 0; i < elements.Count; ++i)
             {
                 _originalScales[i] = elements[i].Scale;
+                elements[i].Scale = Vector2.Zero;
             }
+            _panel.Disable();
             
             GameManager.Player.UI.GamePanel.AddElement(_panel);
             Executer.ExecuteOnMainThread(
@@ -106,7 +109,6 @@ namespace Hedra.Engine.EntitySystem.BossSystem
                     _backgroundTexture.TextureElement.TextureId = _backgroundTextureId;
                 }
             );
-            this.Name = Name;
         }
 
         public string Name
@@ -115,8 +117,11 @@ namespace Hedra.Engine.EntitySystem.BossSystem
             set
             {
                 _name = value;
-                _nameText.Text = _name;
-                _originalScales[_panel.Elements.IndexOf(_nameText)] = _nameText.Scale;
+                if (_nameText != null)
+                {
+                    _nameText.Text = _name;
+                    _originalScales[_panel.Elements.IndexOf(_nameText)] = _nameText.Scale;
+                }
             }
         }
 

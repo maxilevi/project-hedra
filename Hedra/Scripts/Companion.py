@@ -11,6 +11,7 @@ from Hedra.AISystem import MinionAIComponent, BasicAIComponent
 from Hedra.Engine.ItemSystem.Templates import ItemTemplate, ItemModelTemplate, AttributeTemplate
 from Hedra.Items import ItemTier, ItemPool
 from Hedra.Rendering import VertexData
+from Hedra.Core import Unique
 from Hedra.Numerics import VectorExtensions
 
 clr.ImportExtensions(VectorExtensions)
@@ -22,6 +23,7 @@ GROWTH_ATTRIB_NAME = 'Growth'
 IS_GROWN_ATTRIB_NAME = 'IsGrown'
 CAN_RIDE_ATTRIB_NAME = 'CanRide'
 MAX_SCALE_ATTRIB_NAME = 'MaxScale'
+SEED_ATTRIB_NAME = 'PetSeed'
 MODEL_ATTRIB_NAME = 'CompanionModel'
 XP_ATTRIB_NAME = 'PetXp'
 NAME_ATTRIB_NAME = 'PetName'
@@ -161,8 +163,15 @@ def spawn_pet(state, pet_item):
     
     if pet_item:
         user = state['user']
+        
+        # This is for compatibility for pre-seed items
+        pet_seed = pet_item.GetAttribute[int](SEED_ATTRIB_NAME) if pet_item.HasAttribute(SEED_ATTRIB_NAME) else None
+        if not pet_seed:
+            pet_seed = Unique.RandomSeed()
+            pet_item.SetAttribute(SEED_ATTRIB_NAME, pet_seed, True, 'Flat', True)
+            
         type = pet_item.GetAttribute[str](MOB_TYPE_ATTRIB_NAME)
-        pet = World.SpawnMob(type, user.Position + Vector3.UnitX * 12, Utils.Rng)
+        pet = World.SpawnMob(type, user.Position + Vector3.UnitX * 12, pet_seed)
         pet.Name = pet_item.GetAttribute[str](NAME_ATTRIB_NAME)
         serialize_pet_max_scale(pet_item, pet.Model.Scale)
         pet.SearchComponent[DamageComponent]().Ignore(lambda entity: entity == user)
@@ -287,6 +296,12 @@ def create_companion_attributes(type, can_ride, mob_template, mob_name):
     level_attribute.Hidden = True
     level_attribute.Name = LEVEL_ATTRIB_NAME
     level_attribute.Persist = True
+
+    seed_attribute = AttributeTemplate()
+    seed_attribute.Value = Unique.RandomSeed()
+    seed_attribute.Hidden = True
+    seed_attribute.Name = SEED_ATTRIB_NAME
+    seed_attribute.Persist = True
     
     return Array[AttributeTemplate]([
         pet_attribute,
@@ -299,7 +314,8 @@ def create_companion_attributes(type, can_ride, mob_template, mob_name):
         dead_timer_attribute,
         name_attribute,
         ride_height_attribute,
-        level_attribute
+        level_attribute,
+        seed_attribute
     ])
 
 def update_ui(pet_item, pet_entity, top_left, top_right, bottom_left, bottom_right, level, name):

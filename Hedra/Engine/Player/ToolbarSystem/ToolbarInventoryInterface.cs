@@ -66,7 +66,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
                 {
                     ButtonsText[i].Text = i < Toolbar.InteractableItems
                         ? (i + 1).ToString() : i == Toolbar.InteractableItems
-                        ? "M1" : i == Toolbar.InteractableItems + 1 ? "M2" : string.Empty;
+                        ? "M1" : i == Toolbar.InteractableItems + 1 ? "M2" : Hedra.Localization.Controls.Eat.ToString().ToUpperInvariant();
                 }
             }
         }
@@ -83,7 +83,7 @@ namespace Hedra.Engine.Player.ToolbarSystem
 
         private void OnInventoryUpdated()
         {
-            this.ButtonsText[this.ButtonsText.Length - 1].Text = _player.Inventory.Food?.GetAttribute<int>(CommonAttributes.Amount).ToString() ?? string.Empty;
+            //this.ButtonsText[this.ButtonsText.Length - 1].Text = _player.Inventory.Food?.GetAttribute<int>(CommonAttributes.Amount).ToString() ?? string.Empty;
         }
 
         public override bool Enabled
