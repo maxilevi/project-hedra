@@ -13,7 +13,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         private readonly TimeHandler _handler;
         public DungeonDoorTrigger(Vector3 Position, VertexData Mesh) : base(Position, Mesh)
         {
-            _handler = new TimeHandler(0, SoundType.DarkSound);
+            _handler = new TimeHandler(1000, SoundType.DarkSound);
             UpdateManager.Add(this);
         }
 

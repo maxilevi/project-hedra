@@ -89,9 +89,9 @@ namespace Hedra.Engine.StructureSystem.Overworld
             Player.MessageDispatcher.ShowTitleMessage(Translations.Get("welcome_to_village", NameGenerator.Generate(World.Seed + 23123)), 6f);
         }
 
-        public override int[] AmbientSongs => new []
+        public override int[] AmbientSongs { get; } = new int[0];/*= new []
         {
             SoundtrackManager.VillageAmbient
-        };
+        };*/
     }
 }

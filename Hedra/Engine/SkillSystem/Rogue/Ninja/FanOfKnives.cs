@@ -38,18 +38,19 @@ namespace Hedra.Engine.SkillSystem.Rogue.Ninja
             var direction = User.View.LookingDirection;
             var left = direction.Xz().PerpendicularLeft().ToVector3() + Vector3.UnitY * direction.Y;
             var right = direction.Xz().PerpendicularRight().ToVector3() + Vector3.UnitY * direction.Y;
-            Throw(left * .25f + direction * .75f);
+            var defaultForce = Vector3.UnitY * .05f;
+            Throw(left * .25f + direction * .75f + defaultForce);
             TaskScheduler.After(.15f,
-                () => Throw(direction)
+                () => Throw(direction + defaultForce)
             );
             TaskScheduler.After(.25f,
-                () => Throw(right * .25f + direction * .75f)
+                () => Throw(right * .25f + direction * .75f + defaultForce)
             );
         }
 
         private void Throw(Vector3 Direction)
         {
-            var weaponData = KnifeModel.Clone().Scale(Vector3.One).RotateX(90);
+            var weaponData = KnifeModel.Clone().Scale(Vector3.One * 1.35f).RotateX(90);
             var startingLocation = User.Model.LeftWeaponPosition;
 
             var weaponProj = new Projectile(User, startingLocation, weaponData)

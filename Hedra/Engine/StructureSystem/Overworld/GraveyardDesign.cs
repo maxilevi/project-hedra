@@ -185,7 +185,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             return height > BiomePool.SeaLevel;
         }
         
-        public override int[] AmbientSongs => new []
+        public override int[] AmbientSongs { get; } = new []
         {
             SoundtrackManager.GraveyardChampion
         };

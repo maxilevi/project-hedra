@@ -105,7 +105,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             Skeleton.SearchComponent<IBehaviouralAI>().AlterBehaviour<RoamBehaviour>(new DungeonRoamBehaviour(Skeleton));
         }
 
-        public override int[] AmbientSongs => new[]
+        public override int[] AmbientSongs { get; } = new[]
         {
             SoundtrackManager.FacingTheBeast,
             SoundtrackManager.SkeletonSkirmish

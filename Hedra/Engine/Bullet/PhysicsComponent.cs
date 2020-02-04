@@ -73,7 +73,7 @@ namespace Hedra.Engine.Bullet
                 {
                     _body.CollisionFlags |= CollisionFlags.CharacterObject;
                     _body.CcdMotionThreshold = 1e-16f;
-                    _body.CcdSweptSphereRadius = 100f;
+                    _body.CcdSweptSphereRadius = 4f;
                 }
                 _body.ActivationState = ActivationState.DisableDeactivation;
                 _body.Friction = 1;

@@ -18,6 +18,7 @@ namespace Hedra.Engine.Rendering.UI
 {
     public class TextProvider : ITextProvider
     {
+        public const int DefaultDPI = 96;
         private static readonly Dictionary<string, Color> ColorMap;
         private static readonly Dictionary<string, Font> FontMap;
         private static readonly Dictionary<string, float> SizeMap;
@@ -263,7 +264,7 @@ namespace Hedra.Engine.Rendering.UI
                 {
                     if (Params.Texts[i] == Environment.NewLine)
                     {
-                        offset = new PointF(0, offset.Y + bounds.Height * .75f);
+                        offset = new PointF(0, offset.Y + bounds.Height * .75f * (DefaultDPI / graphics.DpiY));
                         continue;
                     }
                         
@@ -302,7 +303,7 @@ namespace Hedra.Engine.Rendering.UI
                             ).First();
                             bounds = region.GetBounds(graphics);
                             offset = new PointF(
-                                bounds.Width * .75f + offset.X,
+                                bounds.Width * .75f * (DefaultDPI / graphics.DpiX) + offset.X,
                                 offset.Y
                             );
                         }
@@ -353,8 +354,10 @@ namespace Hedra.Engine.Rendering.UI
             var max = SizeF.Empty;
             var sizes = new SizeF[Params.Texts.Length];
             var fullString = string.Join(string.Empty, Params.Texts);
+            var dpi = Vector2.Zero;
             using (var graphics = Graphics.FromHwnd(IntPtr.Zero))
             {
+                dpi = new Vector2(graphics.DpiX, graphics.DpiY);
                 for (var i = 0; i < Params.Texts.Length; ++i)
                 {
                     if (Params.Texts[i] == Environment.NewLine) continue;
@@ -388,7 +391,7 @@ namespace Hedra.Engine.Rendering.UI
                     max = new SizeF(Math.Max(offset.Width, max.Width), Math.Max(max.Height, bounds.Height));
                 }   
             }
-            return new SizeF(max.Width * 1f / 1920f * GameSettings.Width, max.Height * 1f / 1080f * GameSettings.Height);
+            return new SizeF(max.Width * 1f / 1920f * GameSettings.Width * (DefaultDPI / dpi.X), max.Height * 1f / 1080f * GameSettings.Height * (DefaultDPI / dpi.Y));
         }
         
         private static SizeF CalculateTextSize(string Text, Font TextFont)

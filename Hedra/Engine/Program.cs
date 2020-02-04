@@ -19,6 +19,7 @@ using Hedra.Engine.Rendering.Core;
 using Hedra.Game;
 using System.Numerics;
 using System.Runtime;
+using System.Runtime.InteropServices;
 using Hedra.Engine.Scripting;
 using Silk.NET.GLFW;
 using Silk.NET.Windowing.Common;

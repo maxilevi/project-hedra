@@ -26,7 +26,7 @@
     }
   ],
   "Model": {
-    "Scale": 3.0,
+    "Scale": 2.5,
     "Path": "$DataFile$/Items/Rings/CommonBronzeRing.ply"
   }
 }

@@ -63,7 +63,7 @@ namespace Hedra.Components
         {
             Executer.ExecuteOnMainThread(delegate
             {
-                _talkBackgroundSize = Graphics2D.SizeFromAssets("Assets/UI/Dialog.png");
+                _talkBackgroundSize = Graphics2D.SizeFromAssets("Assets/UI/Dialog.png").As1920x1080();
                 _talkBackground = Graphics2D.LoadFromAssets("Assets/UI/Dialog.png");
                 TextureRegistry.MarkStatic(_talkBackground);
             });

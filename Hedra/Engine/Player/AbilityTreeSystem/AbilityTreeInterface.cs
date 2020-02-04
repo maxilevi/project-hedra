@@ -46,9 +46,9 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             );
             _linesUI = new TreeLinesUI();
             _titleText = new GUIText(string.Empty, Vector2.Zero, Color.White, FontCache.GetNormal(16f));
-            _availablePointsText = new GUIText(string.Empty, _backgroundTexture.Position - _backgroundTexture.Scale.Y * Vector2.UnitY,
+            _availablePointsText = new GUIText(Translations.Get("available_points"), _backgroundTexture.Position - _backgroundTexture.Scale.Y * Vector2.UnitY,
                 Color.White, FontCache.GetBold(12f));
-            _availablePointsText.Position += _availablePointsText.Scale.Y * Vector2.UnitY * 2;
+            _availablePointsText.Position += _availablePointsText.Scale.Y * Vector2.UnitY;
             for (var i = 0; i < Buttons.Length; i++)
             {
                 Buttons[i].Scale = Textures[i].Scale;

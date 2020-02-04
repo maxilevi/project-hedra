@@ -332,6 +332,11 @@ namespace Hedra.Engine.Player
             {
                 _player.Health = _player.MaxHealth;
             }
+
+            if (EventArgs.Key == Key.F11)
+            {
+                GameManager.LoadCharacter(DataManager.PlayerFiles[0]);
+            }
 #endif
         }
 
