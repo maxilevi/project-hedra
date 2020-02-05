@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.ItemSystem;
@@ -15,12 +16,26 @@ namespace Hedra.Components
 
         public override Dictionary<int, Item> BuildInventory()
         {
+            var weapons = new EquipmentType[]
+            {
+                EquipmentType.Axe,
+                EquipmentType.Sword,
+                EquipmentType.Hammer,
+                EquipmentType.Ring,
+                EquipmentType.Bow,
+                EquipmentType.Claw,
+                EquipmentType.Katar,
+                EquipmentType.Knife,
+                EquipmentType.Staff,
+                EquipmentType.DoubleBlades
+            };
+            var rng = new Random();
             return new Dictionary<int, Item>
             {
-                {0, ItemPool.Grab(new ItemPoolSettings(ItemTier.Rare, EquipmentType.Axe))},
-                {1, ItemPool.Grab(new ItemPoolSettings(ItemTier.Rare, EquipmentType.Sword))},
-                {2, ItemPool.Grab(new ItemPoolSettings(ItemTier.Rare, EquipmentType.Hammer))},
-                {3, ItemPool.Grab(new ItemPoolSettings(ItemTier.Rare, EquipmentType.Ring))},
+                {0, ItemPool.Grab(new ItemPoolSettings(ItemTier.Rare, weapons[rng.Next(0, weapons.Length)]))},
+                {1, ItemPool.Grab(new ItemPoolSettings(ItemTier.Rare, weapons[rng.Next(0, weapons.Length)]))},
+                {2, ItemPool.Grab(new ItemPoolSettings(ItemTier.Rare, weapons[rng.Next(0, weapons.Length)]))},
+                {3, ItemPool.Grab(new ItemPoolSettings(ItemTier.Rare, weapons[rng.Next(0, weapons.Length)]))},
                 /*{TradeInventory.MerchantSpaces - 1, ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, EquipmentType.Helmet))},
                 {TradeInventory.MerchantSpaces - 2, ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, EquipmentType.Chestplate))},
                 {TradeInventory.MerchantSpaces - 3, ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon, EquipmentType.Pants))},
