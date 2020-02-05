@@ -51,7 +51,7 @@ namespace HedraTests.QuestSystem
                 this.Tier = Tier;
             }
             
-            public MissionObject Build(Vector3 Position, IHumanoid Giver, IPlayer Owner)
+            public MissionObject Build(IHumanoid Giver, IPlayer Owner)
             {
                 return null;
             }
@@ -64,6 +64,8 @@ namespace HedraTests.QuestSystem
             public string Name => "DUMMY";
             public bool IsStoryline => false;
             public bool CanSave => false;
+            public IMissionDesign Clone => new DummyMissionDesign(Tier);
+            public MissionDesignSettings Settings { get; set; }
         }
     }
 }

@@ -417,21 +417,23 @@ namespace Hedra.Engine.Generation
 
             _isChunksCacheDirty = true;
             WorldRenderer.Remove(new Vector2(Chunk.OffsetX, Chunk.OffsetZ));
-       
-            for (var i = Entities.Count - 1; i > -1; i--)
+
+            var entities = Entities;
+            for (var i = entities.Count - 1; i > -1; i--)
             {
-                if (Entities[i] == null)
+                if (entities[i] == null)
                 {
-                    this.RemoveEntity(Entities[i]);
+                    this.RemoveEntity(entities[i]);
                     continue;
                 }
 
-                if (Entities[i].Position.X < Chunk.OffsetX + Chunk.Width &&
-                    Entities[i].Position.X > Chunk.OffsetX &&
-                    Entities[i].Position.Z < Chunk.OffsetZ + Chunk.Width &&
-                    Entities[i].Position.Z > Chunk.OffsetZ)
-                    if (Entities[i].Removable && !(Entities[i] is IPlayer))
-                        Entities[i].Dispose();
+                var entityPosition = entities[i].Position;
+                if (entityPosition.X < Chunk.OffsetX + Chunk.Width &&
+                    entityPosition.X > Chunk.OffsetX &&
+                    entityPosition.Z < Chunk.OffsetZ + Chunk.Width &&
+                    entityPosition.Z > Chunk.OffsetZ)
+                    if (entities[i].Removable && !(entities[i] is IPlayer))
+                        entities[i].Dispose();
             }
 
             var items = WorldObjects;
@@ -443,8 +445,9 @@ namespace Hedra.Engine.Generation
                     continue;
                 }
 
-                if (items[i].Position.X < Chunk.OffsetX + Chunk.Width && items[i].Position.X > Chunk.OffsetX &&
-                    items[i].Position.Z < Chunk.OffsetZ + Chunk.Width && items[i].Position.Z > Chunk.OffsetZ)
+                var itemPosition = items[i].Position;
+                if (itemPosition.X < Chunk.OffsetX + Chunk.Width && itemPosition.X > Chunk.OffsetX &&
+                    itemPosition.Z < Chunk.OffsetZ + Chunk.Width && itemPosition.Z > Chunk.OffsetZ)
                     items[i].Dispose();
             }
             _builder.Remove(Chunk);

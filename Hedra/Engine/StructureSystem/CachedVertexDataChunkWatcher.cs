@@ -25,7 +25,7 @@ namespace Hedra.Engine.StructureSystem
 
         protected override CachedVertexData[] Get()
         {
-            return _lambda();
+            return _lambda?.Invoke();
         }
     }
 }

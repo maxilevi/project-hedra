@@ -36,13 +36,13 @@ using Hedra.Numerics;
         private readonly List<StructureWatcher> _itemWatchers;
         private CollidableStructure[] _itemsCache;
         private BaseStructure[] _structureCache;
-        private readonly HashSet<Vector3> _registeredPositions;
+        private readonly Dictionary<Vector3, CollidableStructure> _registeredPositions;
         private bool _dirtyStructuresItems;
         private bool _dirtyStructures;
         
         public StructureHandler()
         {
-            _registeredPositions = new HashSet<Vector3>();
+            _registeredPositions = new Dictionary<Vector3, CollidableStructure>();
             _itemWatchers = new List<StructureWatcher>();
             SeedGenerator = new Voronoi();
             World.OnChunkDisposed += OnChunkDisposed;
@@ -131,10 +131,22 @@ using Hedra.Numerics;
             DoBuild();
         }
 
-        public void RegisterStructure(Vector3 Position)
+        public void RegisterStructure(Vector3 Position, CollidableStructure Structure)
         {
-            lock(_registerLock)
-                _registeredPositions.Add(Position);
+            lock (_registerLock)
+            {
+                if (_registeredPositions.ContainsKey(Position))
+                {
+                    #if DEBUG
+                    if (_registeredPositions[Position] != Structure)
+                    {
+                        int a = 0;
+                    }
+                    #endif
+                    return;
+                }
+                _registeredPositions.Add(Position, Structure);
+            }
         }
         
         public void UnregisterStructure(Vector3 Position)
@@ -143,7 +155,7 @@ using Hedra.Numerics;
             {
                 /* This commented code fails when a structure setup method generates an exception, causing the structure to exist and dispose but not registeres */
 #if DEBUG
-                if(!_registeredPositions.Contains(Position))
+                if(!_registeredPositions.ContainsKey(Position))
                     throw new ArgumentOutOfRangeException();
 #endif
                 _registeredPositions.Remove(Position);
@@ -152,30 +164,18 @@ using Hedra.Numerics;
 
         public bool StructureExistsAtPosition(Vector3 Position)
         {
-            lock(_registerLock)
-                return _registeredPositions.Contains(Position);
-        }
-
-        public bool StructureCollides(StructureDesign Design, Vector3 Position)
-        {
             lock (_registerLock)
             {
-                for (var i = 0; i < _itemWatchers.Count; ++i)
-                {
-                    var mountain = _itemWatchers[i].Structure.Mountain;
-                    if (mountain != null && mountain.Collides(Position.Xz(), Design.PlateauRadius)) return true;
-                }
+                return _registeredPositions.ContainsKey(Position);
             }
-
-            return false;
         }
-        
+
         public void AddStructure(CollidableStructure Structure)
         {
             lock (_lock)
             {
                 _itemWatchers.Add(new StructureWatcher(Structure));
-                RegisterStructure(Structure.Position.Xz().ToVector3());
+                RegisterStructure(Structure.Position.Xz().ToVector3(), Structure);
                 Structure.Setup();
                 Dirty();
             }

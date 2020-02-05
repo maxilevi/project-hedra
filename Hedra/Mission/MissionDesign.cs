@@ -15,9 +15,9 @@ namespace Hedra.Mission
             _design = Design;
         }
 
-        public MissionObject Build(Vector3 Position, IHumanoid Giver, IPlayer Owner)
+        public MissionObject Build(IHumanoid Giver, IPlayer Owner)
         {
-            var builder = _design.Execute<MissionBuilder>("setup_timeline", Position, Giver, Owner, Utils.Rng);
+            var builder = _design.Execute<MissionBuilder>("setup_timeline", Settings.Position, Giver, Owner, Utils.Rng);
             if (builder == null) return null;
             if (builder.ReturnToComplete)
             {
@@ -49,5 +49,10 @@ namespace Hedra.Mission
             _design.HasMember("QUEST_HINT") ? _design.Get<QuestHint>("QUEST_HINT") : QuestHint.NoHint;
         public QuestTier Tier => _design.Get<QuestTier>("QUEST_TIER");
         public string Name => _design.Get<string>("QUEST_NAME");
+        public MissionDesignSettings Settings { get; set; }
+        public IMissionDesign Clone => new MissionDesign(_design)
+        {
+            Settings = Settings
+        };
     }
 }

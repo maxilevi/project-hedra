@@ -61,9 +61,15 @@ namespace Hedra.Mission
                 throw new ArgumentOutOfRangeException($"Failed to find quests that meet the given criteria");
             
             while (!map.ContainsKey(Tier) && Tier != QuestTier.Any) Tier--;
-            return Tier == QuestTier.Any
+            var returnQuest = Tier == QuestTier.Any
                 ? SelectWeightedRandom(possibilities, Hint, Utils.Rng)
                 : SelectWeightedRandom(map[Tier], Hint, Utils.Rng);
+            var duplicate = returnQuest.Clone;
+            duplicate.Settings = new MissionDesignSettings
+            {
+                Position = Position
+            };
+            return duplicate;
         }
 
         private static IMissionDesign SelectWeightedRandom(IList<IMissionDesign> Possibilities, QuestHint Hint, Random Rng)

@@ -529,6 +529,7 @@
     <Compile Include="Mission\IMissionDesign.cs" />
     <Compile Include="Mission\ItemCollect.cs" />
     <Compile Include="Mission\MissionDesign.cs" />
+    <Compile Include="Mission\MissionDesignSettings.cs" />
     <Compile Include="Mission\MissionObject.cs" />
     <Compile Include="Mission\MissionPool.cs" />
     <Compile Include="Mission\MissionSettings.cs" />

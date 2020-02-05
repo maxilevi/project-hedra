@@ -37,8 +37,7 @@ namespace Hedra.Structures
         {
             Distribution.Seed = StructureDesign.BuildRngSeed(ChunkPosition);
             TargetPosition = StructureDesign.BuildTargetPosition(ChunkPosition, Distribution);
-            return Design.ShouldSetup(ChunkPosition, ref TargetPosition, Items, Biome, Distribution) 
-                   && !Design.InterferesWithAnotherStructure(TargetPosition);
+            return Design.ShouldSetup(ChunkPosition, ref TargetPosition, Items, Biome, Distribution) && !StructureDesign.InterferesWithAnotherStructure(TargetPosition);
         }
 
         public static void Discard()

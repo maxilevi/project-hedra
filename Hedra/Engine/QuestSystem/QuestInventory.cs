@@ -97,7 +97,7 @@ namespace Hedra.Engine.QuestSystem
                     Name = Quests[i].GiverName,
                     Position = Quests[i].GivenPosition
                 };
-                var quest = design.Build(entity.Position, entity, _player);
+                var quest = design.Build(entity, _player);
                 this.Start(entity, quest);
                 entity.Dispose();
             }

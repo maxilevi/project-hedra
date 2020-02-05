@@ -131,7 +131,7 @@ namespace Hedra.Engine.Loader
                 Renderer.ShaderHandler.ResetStats();
                 _debugText.Text = text;
                 _passedTime += Time.IndependentDeltaTime;
-                if (_passedTime > 5.0f)
+                if (_passedTime > 5.0f && false)
                 {
                     _passedTime = 0;
                     _staticPool.TextureElement.TextureId = Graphics2D.LoadTexture(new BitmapObject

@@ -25,6 +25,7 @@ namespace Hedra.Engine.StructureSystem
 {
     public abstract class StructureDesign
     {
+        private static readonly object CheckLock = new object();
         public virtual int SearchRadius => PlateauRadius;
         public abstract int PlateauRadius { get; }
         public abstract VertexData Icon { get; }
@@ -49,21 +50,21 @@ namespace Hedra.Engine.StructureSystem
         
         public void CheckForDesign(Vector2 ChunkPosition, Region Biome, RandomDistribution Distribution)
         {
-            if(MapBuilder.SampleDesign(this, ChunkPosition, Biome, Distribution, World.StructureHandler.StructureItems, out var targetPosition))
+            lock (CheckLock)
             {
-                /* We register here to avoid sync issues */
-                World.StructureHandler.RegisterStructure(targetPosition.Xz().ToVector3());
-                var item = this.Setup(targetPosition, BuildRng(ChunkPosition));
-                item.MapPosition = ChunkPosition;
-                World.StructureHandler.AddStructure(item);
-                World.StructureHandler.Build(item);
+                if (MapBuilder.SampleDesign(this, ChunkPosition, Biome, Distribution, World.StructureHandler.StructureItems, out var targetPosition))
+                {
+                    var item = this.Setup(targetPosition, BuildRng(ChunkPosition));
+                    item.MapPosition = ChunkPosition;
+                    World.StructureHandler.AddStructure(item);
+                    World.StructureHandler.Build(item);
+                }
             }
         }
 
-        public bool InterferesWithAnotherStructure(Vector3 TargetPosition)
+        public static bool InterferesWithAnotherStructure(Vector3 TargetPosition)
         {
-            return World.StructureHandler.StructureCollides(this, TargetPosition) ||
-                   World.StructureHandler.StructureExistsAtPosition(TargetPosition);
+            return World.StructureHandler.StructureExistsAtPosition(TargetPosition);
         }
 
         public virtual bool ShouldRemove(CollidableStructure Structure)

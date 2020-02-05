@@ -25,7 +25,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 {
     public class WizardTowerDesign : SimpleFindableStructureDesign<WizardTower>
     {
-        public override int PlateauRadius => 256 + 128;
+        public override int PlateauRadius => 384;
         public override VertexData Icon { get; } = CacheManager.GetModel(CacheItem.WizardTowerIcon);
         protected override int StructureChance => StructureGrid.WizardTower;
         protected override CacheItem? Cache => CacheItem.WizardTower;

@@ -10,14 +10,24 @@ namespace Hedra.Engine.WorldBuilding
 {
     public abstract class WorldObject : UpdatableModel<ObjectMesh>, IWorldObject
     {
+        private bool _added;
         protected WorldObject(IEntity Parent) : base(Parent)
+        {
+        }
+
+        private void FirstUpdate()
         {
             World.AddWorldObject(this);
             UpdateManager.Add(this);
         }
-
+        
         public override void Update()
         {
+            if (!_added)
+            {
+                FirstUpdate();
+                _added = true;
+            }
         }
 
         public override void Dispose()

@@ -6,7 +6,7 @@ namespace Hedra.Mission
 {
     public interface IMissionDesign
     {
-        MissionObject Build(Vector3 Position, IHumanoid Giver, IPlayer Owner);
+        MissionObject Build(IHumanoid Giver, IPlayer Owner);
         bool CanGive(Vector3 Position);
         QuestTier Tier { get; }
         QuestHint Hint { get; }
@@ -14,5 +14,7 @@ namespace Hedra.Mission
         string Name { get; }
         bool IsStoryline { get; }
         bool CanSave { get; }
+        IMissionDesign Clone { get; }
+        MissionDesignSettings Settings { get; set; }
     }
 }

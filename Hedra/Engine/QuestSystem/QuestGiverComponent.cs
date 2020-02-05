@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 using Hedra.Components;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
@@ -16,7 +17,7 @@ namespace Hedra.Engine.QuestSystem
         private readonly IMissionDesign _questArchetype;
         private MissionObject _quest;
         private bool _canGiveQuest = true;
-        
+
         public QuestGiverComponent(IHumanoid Parent, IMissionDesign QuestArchetype) : base(Parent)
         {
             if(Parent.SearchComponent<TalkComponent>() != null)
@@ -64,7 +65,7 @@ namespace Hedra.Engine.QuestSystem
         {
             if (!(Talker is IPlayer player)) return;
             _quest?.Dispose();
-            _quest = _questArchetype.Build(Parent.Position, Parent, player);
+            _quest = _questArchetype.Build(Parent, player);
             RemoveThoughtsIfNecessary();
             if (_quest != null)
             {
