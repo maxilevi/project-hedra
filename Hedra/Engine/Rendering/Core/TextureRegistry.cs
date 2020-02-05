@@ -90,8 +90,7 @@ namespace Hedra.Engine.Rendering.Core
                 Dispose(Id);
             }
         }
-
-        private static void Dispose(uint Id)
+        public static void Dispose(uint Id)
         {
             if (TextCache.Exists(Id)) throw new ArgumentOutOfRangeException("Textures should not be in any cache when disposing of them.");
             void DisposeProcess()

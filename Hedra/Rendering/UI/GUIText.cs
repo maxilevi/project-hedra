@@ -90,7 +90,6 @@ namespace Hedra.Rendering.UI
                 var t = new StackTrace();
                 void UpdateTexture()
                 {
-                    TextCache.Remove(UIText.TextureId);
                     UIText.TextureId = TextCache.UseOrCreate(text, font, color, obj, t);
                     obj.Bitmap.Dispose();
                 }

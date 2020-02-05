@@ -74,7 +74,10 @@ namespace Hedra.Engine.Rendering.UI
                 if (cache == null)
                     return; // throw new ArgumentOutOfRangeException($"Cache does not exist for id '{Id}'");
                 if ((--cache.Uses) == 0)
+                {
                     Cache.Remove(cache);
+                    Engine.Rendering.Core.TextureRegistry.Dispose(Id);
+                }
             }
         }
 
