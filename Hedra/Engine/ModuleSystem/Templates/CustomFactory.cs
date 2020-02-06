@@ -98,44 +98,38 @@ namespace Hedra.Engine.ModuleSystem.Templates
 
         private void AddItemDropPerLevel(IEntity Mob)
         {
-            if (Mob.Level < 8)
-                Mob.AddComponent(new DropComponent(Mob)
-                {
-                    ItemDrop = ItemPool.Grab(ItemTier.Common),
-                    DropChance = .125f,
-                });
-            else if(Mob.Level < 16)
-                Mob.AddComponent(new DropComponent(Mob)
-                {
-                    ItemDrop = ItemPool.Grab(ItemTier.Uncommon),
-                    DropChance = .1f,
-                });
-            else if(Mob.Level < 32)
-                Mob.AddComponent(new DropComponent(Mob)
-                {
-                    ItemDrop = ItemPool.Grab(ItemTier.Rare),
-                    DropChance = .075f,
-                });
-            else if(Mob.Level < 48)
-                Mob.AddComponent(new DropComponent(Mob)
-                {
-                    ItemDrop = ItemPool.Grab(ItemTier.Unique),
-                    DropChance = .05f,
-                });
-            else if(Mob.Level < 64)
-                Mob.AddComponent(new DropComponent(Mob)
-                {
-                    ItemDrop = ItemPool.Grab(ItemTier.Legendary),
-                    DropChance = .025f,
-                });
-            else
-                Mob.AddComponent(new DropComponent(Mob)
-                {
-                    ItemDrop = ItemPool.Grab(ItemTier.Divine),
-                    DropChance = .005f,
-                });
+            Mob.AddComponent(new DropComponent(Mob)
+            {
+                ItemDrop = ItemPool.Grab(ItemTier.Common),
+                DropChance = 2.5f + (Mob.Level < 8 ? 5f : 0f),
+            });
+            Mob.AddComponent(new DropComponent(Mob)
+            {
+                ItemDrop = ItemPool.Grab(ItemTier.Uncommon),
+                DropChance = 2.0f + (Mob.Level < 16 && Mob.Level > 8 ? 5f : 0f),
+            });
+            Mob.AddComponent(new DropComponent(Mob)
+            {
+                ItemDrop = ItemPool.Grab(ItemTier.Rare),
+                DropChance = 1.5f + (Mob.Level < 32 && Mob.Level > 16 ? 5f : 0f),
+            });
+            Mob.AddComponent(new DropComponent(Mob)
+            {
+                ItemDrop = ItemPool.Grab(ItemTier.Unique),
+                DropChance = 1.0f + (Mob.Level < 48 && Mob.Level > 32 ? 5f : 0f),
+            });
+            Mob.AddComponent(new DropComponent(Mob)
+            {
+                ItemDrop = ItemPool.Grab(ItemTier.Legendary),
+                DropChance = .75f + (Mob.Level < 64 && Mob.Level > 48 ? 5f : 0f),
+            });
+            Mob.AddComponent(new DropComponent(Mob)
+            {
+                ItemDrop = ItemPool.Grab(ItemTier.Divine),
+                DropChance = .5f + (Mob.Level > 64 ? 5f : 0f),
+            });
         }
-        
+
         private float NormalizeXp(float Raw)
         {
             return Mathf.Clamp(Raw, Level * MinXpFactor, Level * MaxXpFactor);

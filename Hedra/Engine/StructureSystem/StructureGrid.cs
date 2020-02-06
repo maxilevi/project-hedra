@@ -61,8 +61,8 @@ namespace Hedra.Engine.StructureSystem
 
         private static SamplerType SelectSampler(StructureDesign Design)
         {
-            if (Design.PlateauRadius >= 1024)
-                return Ranges[0];
+            //if (Design.PlateauRadius >= 1024)
+            //    return Ranges[0];
             return Ranges[1];
         }
 

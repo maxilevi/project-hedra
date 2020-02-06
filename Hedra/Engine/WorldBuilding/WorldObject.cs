@@ -13,12 +13,12 @@ namespace Hedra.Engine.WorldBuilding
         private bool _added;
         protected WorldObject(IEntity Parent) : base(Parent)
         {
+            UpdateManager.Add(this);
         }
 
         private void FirstUpdate()
         {
             World.AddWorldObject(this);
-            UpdateManager.Add(this);
         }
         
         public override void Update()
