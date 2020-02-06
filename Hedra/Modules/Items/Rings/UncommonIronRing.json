@@ -26,7 +26,7 @@
     }
   ],
   "Model": {
-    "Scale": 2.5,
+    "Scale": 4.0,
     "Path": "$DataFile$/Items/Rings/UncommonIronRing.ply"
   }
 }
