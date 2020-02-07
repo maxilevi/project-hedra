@@ -73,6 +73,10 @@ namespace Hedra.Engine.Rendering.UI
                 var cache = Cache.FirstOrDefault(C => C.Id == Id);
                 if (cache == null)
                     return; // throw new ArgumentOutOfRangeException($"Cache does not exist for id '{Id}'");
+                if (cache.Text.Contains("FXAA"))
+                {
+                    int a = 0;
+                }
                 if ((--cache.Uses) == 0)
                 {
                     Cache.Remove(cache);

@@ -13,6 +13,7 @@ using Hedra.Rendering.UI;
 using Hedra.Sound;
 using System.Numerics;
 using Hedra.Numerics;
+using Hedra.Rendering;
 
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
@@ -40,7 +41,9 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             );
             _learnSpecializationButton.Texture.Grayscale = true;
             ItemTexture.Scale *= 1.15f;
+            ItemTexture.Scale = ItemTexture.Scale.As1920x1080();
             BackgroundTexture.Scale *= 1.1f;
+            BackgroundTexture.Scale = BackgroundTexture.Scale.As1920x1080();
             Panel.AddElement(_learnSpecializationButton);
             Panel.AddElement(_learnSpecializationText);
 
@@ -75,7 +78,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         protected override void UpdateView()
         {
             ItemText.Text = _blueprint.DisplayName;
-            ItemDescription.Text = Utils.FitString(_blueprint.Description, 38);
+            ItemDescription.Text = Utils.FitString(_blueprint.Description, (int)(40.As1920x1080()));
             ItemDescription.Color = Color.White;
             ItemTexture.TextureElement.TextureId = _blueprint.Icon;
             HintTexture.Disable();
@@ -114,8 +117,9 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         protected override void SetPosition()
         {
             base.SetPosition();
-            ItemTexture.Position = Position + DefaultSize.Y * Vector2.UnitY *.15f;
-            _learnSpecializationButton.Position = BackgroundTexture.Position - DefaultSize.Y * Vector2.UnitY * .65f;
+            ItemTexture.Position = Position + DefaultSize.Y * Vector2.UnitY * .1f;
+            ItemDescription.Position = ItemTexture.Position - ItemTexture.Scale.Y * Vector2.UnitY * 2 - Vector2.UnitY * .01f; 
+                                       _learnSpecializationButton.Position = BackgroundTexture.Position - DefaultSize.Y * Vector2.UnitY * .65f;
             _learnSpecializationText.Position = _learnSpecializationButton.Position;
         }
 

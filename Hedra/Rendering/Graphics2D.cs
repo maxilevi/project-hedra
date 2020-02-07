@@ -70,7 +70,8 @@ namespace Hedra.Rendering
 
         public static Vector2 As1920x1080(this Vector2 Size)
         {
-            return new Vector2(Size.X / 1920 * GameSettings.Width, Size.Y / 1080 * GameSettings.Height);
+            var targetAspect = 1f / 1080 * GameSettings.Height;
+            return new Vector2(Size.X * targetAspect, Size.Y * targetAspect);
         }
         
         public static float As1920x1080(this int Size)

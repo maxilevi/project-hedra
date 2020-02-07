@@ -448,7 +448,9 @@ namespace Hedra.Engine.Generation
                 var itemPosition = items[i].Position;
                 if (itemPosition.X < Chunk.OffsetX + Chunk.Width && itemPosition.X > Chunk.OffsetX &&
                     itemPosition.Z < Chunk.OffsetZ + Chunk.Width && itemPosition.Z > Chunk.OffsetZ)
+                {
                     items[i].Dispose();
+                }
             }
             _builder.Remove(Chunk);
             Chunk.Dispose();

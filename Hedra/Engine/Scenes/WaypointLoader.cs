@@ -75,8 +75,9 @@ namespace Hedra.Engine.Scenes
                     }
                 }
             }
+            callback.Dispose();
             world.DynamicsWorld.RemoveRigidBody(mainBody);
-            mainBody.Dispose();
+            BulletPhysics.DisposeBody(mainBody);
             world.Dispose();
         }
     }

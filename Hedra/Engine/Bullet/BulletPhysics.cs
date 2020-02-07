@@ -94,6 +94,17 @@ namespace Hedra.Engine.Bullet
                 UpdateActivations();
                 _dynamicsWorld.StepSimulation(DeltaTime);
                 CheckForCollisionEvents();
+
+                lock (_bodyLock)
+                {
+                    for (var i = 0; i < _bodies.Count; ++i)
+                    {
+                        if (_bodies[i].IsDisposed)
+                        {
+                            int a = 0;
+                        }
+                    }
+                }
             }
         }
 
@@ -126,6 +137,11 @@ namespace Hedra.Engine.Bullet
                 {
                     if (information.IsInSimulation)
                         RemoveFromSimulation(_sensors[i], information);
+                }
+
+                if (!information.IsSensor)
+                {
+                    int a = 0;
                 }
             }
         }
@@ -234,6 +250,10 @@ namespace Hedra.Engine.Bullet
 
         private static void AddToSimulation(RigidBody Body, PhysicsObjectInformation Information)
         {
+            if (Body.IsDisposed)
+            {
+                int a = 0;
+            }
             Information.IsInSimulation = true;
             _dynamicsWorld.AddRigidBody(Body, Information.Group, Information.Mask);
             OnRigidbodyReAdded?.Invoke(Body);
@@ -333,13 +353,14 @@ namespace Hedra.Engine.Bullet
 
         private static void AddDynamic(RigidBody Body, PhysicsObjectInformation Information)
         {
+            Information.IsDynamic = true;
             lock (_dynamicBodiesLock)
                 _dynamicBodies.Add(Body);
-            Information.IsDynamic = true;
         }
         
         public static void RemoveAndDispose(RigidBody Body)
         {
+            if(Body.IsDisposed) return;
             lock (_bulletLock)
             {
                 var information = (PhysicsObjectInformation) Body.UserObject;
@@ -358,6 +379,12 @@ namespace Hedra.Engine.Bullet
                 if (information.IsSensor)
                     DisposeSensor(Body);
 
+                #if DEBUG
+                if (_sensors.Contains(Body) || _dynamicBodies.Contains(Body))
+                {
+                    int a = 0;
+                }
+#endif
                 UsedBytes -= information.UsedBytes;
                 DisposeBody(Body);
             }
@@ -389,7 +416,7 @@ namespace Hedra.Engine.Bullet
             }
         }
         
-        private static void DisposeBody(RigidBody Body)
+        public static void DisposeBody(RigidBody Body)
         {
             switch (Body.CollisionShape)
             {

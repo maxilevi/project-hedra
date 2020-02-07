@@ -13,7 +13,7 @@ namespace Hedra.Engine.StructureSystem
         public const int WizardTower = 64;
         public const int GiantTreeChance = 24;
         public const int BanditCampChance = 32;
-        public const int VillageChance = 2;
+        public const int VillageChance = 8;
         public const int WitchHut = 32;
         public const int Dungeon0Chance = 32;
         public const int Dungeon1Chance = 32;
@@ -61,8 +61,8 @@ namespace Hedra.Engine.StructureSystem
 
         private static SamplerType SelectSampler(StructureDesign Design)
         {
-            //if (Design.PlateauRadius >= 1024)
-            //    return Ranges[0];
+            if (Design.PlateauRadius >= 1024)
+                return Ranges[0];
             return Ranges[1];
         }
 
@@ -74,7 +74,7 @@ namespace Hedra.Engine.StructureSystem
 
         private static bool Sample1024(Vector2 Position, out int Seed)
         {
-            return Sampler(Position, I => I == BigSampleChance, 0.0005f, out Seed);
+            return Sampler(Position, I => I == BigSampleChance, 0.002f, out Seed);
         }
         
         private static bool SampleDefault(Vector2 Position, out int Seed)

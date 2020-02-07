@@ -10,6 +10,7 @@ using Hedra.Engine.SkillSystem;
 using Hedra.Localization;
 using System.Numerics;
 using Hedra.Numerics;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
 {
@@ -19,7 +20,9 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         public AbilityTreeInterfaceItemInfo()
         {
             BackgroundTexture.Scale *= 1.15f;
+            BackgroundTexture.Scale = BackgroundTexture.Scale.As1920x1080();
             ItemTexture.Scale *= .4f;
+            ItemTexture.Scale = ItemTexture.Scale.As1920x1080();
             ItemTexture.TextureElement.MaskId = InventoryArrayInterface.DefaultId;
         }
 
@@ -67,9 +70,9 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         
         protected virtual void SetPosition()
         {
-            ItemDescription.Position = Position - Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .025f);
-            ItemTexture.Position = Position + Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .2f);
-            ItemAttributes.Position = ItemDescription.Position - (ItemDescription.Scale.Y + ItemAttributes.Scale.Y) * Vector2.UnitY - Mathf.ScaleGui(_targetResolution, Vector2.UnitY * .05f);
+            ItemDescription.Position = Position - Vector2.UnitY * .02f;
+            ItemTexture.Position = Position + Vector2.UnitY * .1f;
+            ItemAttributes.Position = ItemDescription.Position - (ItemDescription.Scale.Y + ItemAttributes.Scale.Y) * Vector2.UnitY - Vector2.UnitY * .01f;
             SetTitlePosition();
         }
     }

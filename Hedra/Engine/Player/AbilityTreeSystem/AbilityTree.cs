@@ -68,10 +68,10 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             _abilities = _mainTree = BuildArray();
             _interface = new AbilityTreeInterface(_player, _abilities, 0, _abilities.Length, Columns)
             {
-                Position = Mathf.ScaleGui(_targetResolution, Vector2.UnitX * -.65f + Vector2.UnitY * -.1f),
+                Position = Vector2.UnitX * -.65f + Vector2.UnitY * -.1f,
                 SpecializationInfo =
                 {
-                    Position = Mathf.ScaleGui(_targetResolution, Vector2.UnitX * .6f + Vector2.UnitY * .35f)
+                    Position = Vector2.UnitX * .6f + Vector2.UnitY * .1f
                 }
             };
             var itemInfo = new AbilityTreeInterfaceItemInfo

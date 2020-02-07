@@ -32,7 +32,7 @@ namespace Hedra.Engine.Loader
             var options = new WindowOptions
             {
                 API = new GraphicsAPI(ContextAPI.OpenGL, Profile, Flags, Version),
-                Size = Monitor.VideoMode.Resolution ?? Monitor.Bounds.Size,
+                Size = new Size(Width, Height),//Monitor.VideoMode.Resolution ?? Monitor.Bounds.Size,
                 ShouldSwapAutomatically = true,
                 IsVisible = true,
                 Title = "Project Hedra",

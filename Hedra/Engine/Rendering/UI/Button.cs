@@ -238,10 +238,5 @@ namespace Hedra.Engine.Rendering.UI
                 DrawManager.UIRenderer.Remove(this.Texture);
             }
         }
-                    
-        ~Button()
-        {
-            Executer.ExecuteOnMainThread(this.Dispose);
-        }
     }
 }

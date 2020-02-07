@@ -206,6 +206,7 @@ namespace Hedra.WorldObjects
 
         public virtual void Dispose()
         {
+            if (Disposed) return;
             Disposed = true;
             Mesh.Dispose();
             BulletPhysics.RemoveAndDispose(_body);

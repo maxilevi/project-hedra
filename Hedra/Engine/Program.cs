@@ -150,7 +150,7 @@ namespace Hedra.Engine
             GameSettings.DeviceHeight = (int)maxSize.Y;
 
             Log.WriteLine("Creating the window on the Primary Device at " + GameSettings.DeviceWidth + "x" +
-                            GameSettings.DeviceHeight);
+                            GameSettings.DeviceHeight); 
 
             GameSettings.Width = (int)currentSize.X;
             GameSettings.Height = (int)currentSize.Y;
