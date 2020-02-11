@@ -348,6 +348,15 @@ namespace Hedra.Engine.EntitySystem
             if (Dispose)Component.Dispose();
         }
 
+        public void RemoveComponentsOfType<T>() where T : IComponent<IEntity>
+        {
+            var component = (IComponent<IEntity>) null;
+            while ((component = SearchComponent<T>()) != null)
+            {
+                RemoveComponent(component);
+            }
+        }
+
         public T SearchComponent<T>()
         {
             for (var i = 0; i < _components.Count; i++)

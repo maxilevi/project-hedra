@@ -11,13 +11,13 @@ namespace Hedra.Engine.StructureSystem
         /* Big structures */
         public const int GraveyardChance = 32;
         public const int WizardTower = 64;
-        public const int GiantTreeChance = 24;
+        public const int GiantTreeChance = 32;
         public const int BanditCampChance = 32;
         public const int VillageChance = 8;
         public const int WitchHut = 32;
-        public const int Dungeon0Chance = 32;
-        public const int Dungeon1Chance = 32;
-        public const int Dungeon2Chance = 32;
+        public const int Dungeon0Chance = 48;
+        public const int Dungeon1Chance = 48;
+        public const int Dungeon2Chance = 48;
 
         /* Small structures */
         public const int FishingPostChance = 4;

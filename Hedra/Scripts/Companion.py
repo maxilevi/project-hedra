@@ -180,7 +180,7 @@ def spawn_pet(state, pet_item):
         pet.RemoveComponent(pet.SearchComponent[BasicAIComponent]())
         pet.AddComponent(MinionAIComponent(pet, user))
         pet.AddComponent(CompanionStatsComponent(pet, pet_item))
-        pet.RemoveComponent(pet.SearchComponent[DropComponent]())
+        pet.RemoveComponentsOfType[DropComponent]()
         pet.Removable = False
         pet.IsFriendly = True
         if pet_item.GetAttribute[bool](CAN_RIDE_ATTRIB_NAME):

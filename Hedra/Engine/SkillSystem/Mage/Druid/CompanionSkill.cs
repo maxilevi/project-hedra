@@ -55,6 +55,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
             var minion = World.SpawnMob(CompanionType, User.Position + User.Orientation * 12, Utils.Rng);
             minion.RemoveComponent(minion.SearchComponent<BasicAIComponent>());
             minion.RemoveComponent(minion.SearchComponent<HealthBarComponent>());
+            minion.RemoveComponentsOfType<DropComponent>();
             minion.AddComponent(new MinionAIComponent(minion, User));
             minion.AddComponent(new HealthBarComponent(minion, Translations.Get($"{Keyword}_companion_name"), HealthBarType.Friendly));
             minion.SearchComponent<DamageComponent>().Ignore(E => E == User || E == User.Companion.Entity);

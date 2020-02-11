@@ -124,6 +124,8 @@ namespace Hedra.EntitySystem
 
         T SearchComponent<T>();
 
+        void RemoveComponentsOfType<T>() where T : IComponent<IEntity>;
+
         T[] GetComponents<T>();
         
         void KnockForSeconds(float Time);
@@ -143,6 +145,7 @@ namespace Hedra.EntitySystem
         void UpdateCriticalComponents();
         
         bool UpdateWhenOutOfRange { get; set; }
+        
         
     }
 }
