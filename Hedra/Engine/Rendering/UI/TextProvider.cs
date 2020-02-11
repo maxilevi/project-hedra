@@ -256,7 +256,7 @@ namespace Hedra.Engine.Rendering.UI
                     // Mono doesnt support this quite well.
                     graphics.ScaleTransform(1.3f, 1.3f);
                     var factor = 1f / 1080f * GameSettings.Height;
-                    graphics.ScaleTransform(factor, factor);
+                    graphics.ScaleTransform(factor * GameSettings.UIScaling, factor * GameSettings.UIScaling);
                 }
                 graphics.Clear(Color.FromArgb(0, 0, 0, 0));
                 var offset = PointF.Empty;
@@ -393,7 +393,7 @@ namespace Hedra.Engine.Rendering.UI
                 }   
             }
             var factor = 1f / 1080f * GameSettings.Height;
-            return new SizeF(max.Width * factor * (DefaultDPI / dpi.X), max.Height * factor * (DefaultDPI / dpi.Y));
+            return new SizeF(max.Width * factor * (DefaultDPI / dpi.X) * GameSettings.UIScaling, max.Height * factor * (DefaultDPI / dpi.Y) * GameSettings.UIScaling);
         }
         
         private static SizeF CalculateTextSize(string Text, Font TextFont)

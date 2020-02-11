@@ -30,10 +30,10 @@ namespace Hedra.Engine.WorldBuilding
         public void ApplyQuestStatus(IHumanoid Humanoid)
         {
             if(!IsFromQuest) return;
-            Humanoid.Removable = true;
+            Humanoid.Removable = false;
             _questBuilder.MissionDispose += () =>
             {
-                Humanoid.Removable = false;
+                Humanoid.Removable = true;
                 Humanoid.AddComponent(new DisposeComponent(Humanoid, 1024));
                 _questBuilder = null;
             };

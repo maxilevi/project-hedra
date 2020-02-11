@@ -15,6 +15,12 @@ namespace Hedra.AISystem.Mob
             get => Hostile.GuardPosition;
             set => Hostile.GuardPosition = value;
         }
+        
+        public override void Dispose()
+        {
+            base.Dispose();
+            Hostile.Dispose();
+        }
 
         protected override HostileBehaviour GetHostileBehaviour(IEntity Parent)
         {

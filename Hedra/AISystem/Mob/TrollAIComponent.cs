@@ -28,6 +28,13 @@ namespace Hedra.AISystem.Mob
             }
         }
         
+        public override void Dispose()
+        {
+            base.Dispose();
+            Hostile.Dispose();
+            Retaliate.Dispose();
+        }
+        
         public override AIType Type => AIType.Hostile;
         public Vector3 GuardPosition { get; set; }
     }

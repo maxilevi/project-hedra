@@ -350,6 +350,11 @@ namespace Hedra.Engine.Rendering.UI
             {
                 GameSettings.FieldOfView = int.Parse(fovOptions[fovChooser.Index].Get());
             };
+
+            void RestartNotice()
+            {
+                LocalPlayer.Instance.MessageDispatcher.ShowNotification(Translations.Get("restart_game_changes_take_effect"), Color.Red, 3f);
+            };
             
             var resolutionChooser = new OptionChooser(new Vector2(0, -.6f), new Vector2(0.15f, 0.075f),
                 Translation.Create("available_resolutions", "{0}: "), fontColor, _normalFont, GameSettings.AvailableResolutions.Select(V => Translation.Default(V.ToString())).ToArray());
@@ -370,15 +375,49 @@ namespace Hedra.Engine.Rendering.UI
             {
                 GameSettings.ResolutionIndex = Mathf.Modulo(GameSettings.ResolutionIndex - 1, GameSettings.AvailableResolutions.Length);
                 SetResolutionName();
-                LocalPlayer.Instance.MessageDispatcher.ShowNotification(Translations.Get("restart_game_changes_take_effect"), Color.Red, 3f);
+                RestartNotice();
             };
 
             resolutionChooser.RightArrow.Click += (S, A) =>
             {
                 GameSettings.ResolutionIndex = Mathf.Modulo(GameSettings.ResolutionIndex + 1, GameSettings.AvailableResolutions.Length);
                 SetResolutionName();
-                LocalPlayer.Instance.MessageDispatcher.ShowNotification(Translations.Get("restart_game_changes_take_effect"), Color.Red, 3f);
+                RestartNotice();
             };
+            
+            #region ScaleUI
+            var scaleOptions = new []
+            {
+                "0.5","0.6","0.7","0.8","0.9","1.0","1.1","1.2","1.3","1.4","1.5","1.6","1.7","1.8","1.9","2.0"
+            }.Select(Translation.Default).ToArray();
+            var scaleUI = new OptionChooser(
+                new Vector2(0, -.8f), Vector2.Zero,
+                Translation.Create("scale_interface", "{0}: "),
+                fontColor, _normalFont, scaleOptions);
+            
+            scaleUI.LeftArrow.Click += delegate
+            {
+                GameSettings.UIScaling = 
+                    float.Parse(scaleOptions[scaleUI.Index].Get(), NumberStyles.Any, CultureInfo.InvariantCulture);
+                RestartNotice();
+            };
+            
+            scaleUI.RightArrow.Click += delegate 
+            { 
+                GameSettings.UIScaling = 
+                    float.Parse(scaleOptions[scaleUI.Index].Get(), NumberStyles.Any, CultureInfo.InvariantCulture);
+                RestartNotice();
+            };
+            
+            for(var i = 0; i < scaleOptions.Length; i++)
+            {
+                if(Math.Abs(float.Parse(scaleOptions[i].Get(), NumberStyles.Any, CultureInfo.InvariantCulture) - GameSettings.UIScaling) < 0.005f)
+                {
+                    scaleUI.CurrentValue.Text = scaleOptions[i].Get();
+                    scaleUI.Index = i;
+                }
+            }
+            #endregion
 
             var smoothLod = new Button(new Vector2(0, .0f),
                 new Vector2(0.15f, 0.075f), BuildOnOff("smooth_lod", () => GameSettings.SmoothLod),
@@ -463,7 +502,7 @@ namespace Hedra.Engine.Rendering.UI
                     mouseSensitivity.Index = i;
                 }
             }
-            
+
             var autosave = new Button(new Vector2(0f, .2f),
                                  new Vector2(0.15f,0.075f), BuildOnOff("autosave", () => GameSettings.Autosave), fontColor, _normalFont);
             
@@ -493,6 +532,7 @@ namespace Hedra.Engine.Rendering.UI
             _displayButtons.Add(smoothLod);
             _displayButtons.Add(language);
             _displayButtons.Add(fovChooser);
+            _displayButtons.Add(scaleUI);
             _displayButtons.Add(resolutionChooser);
             if(showConsole != null) _displayButtons.Add(showConsole);
             

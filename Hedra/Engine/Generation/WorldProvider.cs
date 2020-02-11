@@ -427,13 +427,14 @@ namespace Hedra.Engine.Generation
                     continue;
                 }
 
-                var entityPosition = entities[i].Position;
-                if (entityPosition.X < Chunk.OffsetX + Chunk.Width &&
-                    entityPosition.X > Chunk.OffsetX &&
-                    entityPosition.Z < Chunk.OffsetZ + Chunk.Width &&
-                    entityPosition.Z > Chunk.OffsetZ)
+                var entityPosition = World.ToChunkSpace(entities[i].Position);
+                if (entityPosition == Chunk.Position.Xz() || World.GetChunkByOffset(entityPosition) == null)
+                {
                     if (entities[i].Removable && !(entities[i] is IPlayer))
+                    {
                         entities[i].Dispose();
+                    }
+                }
             }
 
             var items = WorldObjects;

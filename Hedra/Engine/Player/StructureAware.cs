@@ -10,6 +10,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.StructureSystem;
 using Hedra.Sound;
 using System.Numerics;
+using Hedra.Framework;
 using Hedra.Numerics;
 using CollisionShape = BulletSharp.CollisionShape;
 using TaskScheduler = Hedra.Core.TaskScheduler;
@@ -33,7 +34,7 @@ namespace Hedra.Engine.Player
         private readonly Timer _insideTimer;
         private readonly Timer _updateTimer;
         private readonly Timer _soundTimer;
-        private readonly Dictionary<CollisionGroup, RigidBody> _bodies;
+        private readonly List<Pair<RigidBody, CollisionGroup>> _bodies;
         private readonly HashSet<CollidableStructure> _notInsideSet;
 
         public StructureAware(IPlayer Player)
@@ -42,7 +43,7 @@ namespace Hedra.Engine.Player
             _insideTimer = new Timer(.5f);
             _soundTimer = new Timer(.5f);
             _updateTimer = new Timer(.5f);
-            _bodies = new Dictionary<CollisionGroup, RigidBody>();
+            _bodies = new List<Pair<RigidBody, CollisionGroup>>();
             _notInsideSet = new HashSet<CollidableStructure>();
             _previousInsideStructures = new HashSet<CollidableStructure>();
             _insideStructures = new HashSet<CollidableStructure>();
@@ -153,15 +154,32 @@ namespace Hedra.Engine.Player
             NearCollisions = New;
             TaskScheduler.Parallel(() =>
             {
+                var removedBodies = new List<RigidBody>();
+                var toRemove = new List<int>();
                 for (var i = 0; i < removed.Length; ++i)
                 {
-                    BulletPhysics.RemoveAndDispose(_bodies[removed[i]]);
-                    _bodies.Remove(removed[i]);
+                    toRemove.Clear();
+                    for (var j = 0; j < _bodies.Count; ++j)
+                    {
+                        if (removed[i] == _bodies[j].Two)
+                        {
+                            removedBodies.Add(_bodies[j].One);
+                            toRemove.Add(j);
+                        }
+                    }
+                    for (var j = 0; j < toRemove.Count; ++j)
+                    {
+                        _bodies.RemoveAt(toRemove[j]);
+                    }
+                }
+                for (var i = 0; i < removedBodies.Count; ++i)
+                {
+                    BulletPhysics.RemoveAndDispose(removedBodies[i]);
                 }
 
                 for (var i = 0; i < added.Length; ++i)
                 {
-                    _bodies[added[i]] = BulletPhysics.AddGroup(added[i]);
+                    _bodies.Add(new Pair<RigidBody, CollisionGroup>(BulletPhysics.AddGroup(added[i]), added[i]));
                 }
             });
         }

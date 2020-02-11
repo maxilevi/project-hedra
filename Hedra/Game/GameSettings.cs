@@ -109,6 +109,7 @@ namespace Hedra.Game
         [Setting] public static float FieldOfView { get; set; } = 85f;
 
         [SetupSetting] public static int ResolutionIndex { get; set; } = -1;
+        [SetupSetting] public static float UIScaling { get; set; } = 1;
         
         [Setting]
         public static int FrameLimit

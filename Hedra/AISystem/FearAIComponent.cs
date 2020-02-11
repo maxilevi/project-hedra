@@ -19,6 +19,13 @@ namespace Hedra.AISystem
                 RunAway.Update();
             }
         }
+        
+        public override void Dispose()
+        {
+            base.Dispose();
+            RunAway.Dispose();
+        }
+        
 
         public override AIType Type => AIType.Neutral;
     }

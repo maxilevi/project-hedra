@@ -179,8 +179,8 @@ namespace Hedra.Engine.Player
         public override void Update()
         {
             base.Update();
-            Movement.Update();
             Equipment.Update();
+            Movement.Update();
             UpdateHits();
             UpdateStats();
         }
@@ -564,6 +564,7 @@ namespace Hedra.Engine.Player
             Boat.Dispose();
             Equipment.Dispose();
             this.HandLamp.Dispose();
+            Physics.OnMove -= OnMove;
         }
 
         public bool CanCastSkill => throw new NotImplementedException();

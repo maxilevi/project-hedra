@@ -131,6 +131,18 @@ namespace Hedra.Components
             _panel.OnPanelStateChange += OnPanelStateChanged;
             GameManager.Player.UI.GamePanel.AddElement(_panel);
         }
+        
+        public override void Dispose()
+        {
+            DrawManager.UIRenderer.Remove(this);
+            GameManager.Player.UI.GamePanel.RemoveElement(_panel);
+            _panel.RemoveElement(_text);
+            _panel.RemoveElement(_healthBar);
+            _panel.OnPanelStateChange -= OnPanelStateChanged;
+            _text.Dispose();
+            _healthBar.Dispose();
+            _panel.Dispose();
+        }
 
         public override void Update()
         {
@@ -171,16 +183,7 @@ namespace Hedra.Components
         {
             if(!_show) _text.Disable();
         }
-        
-        public override void Dispose()
-        {
-            DrawManager.UIRenderer.Remove(this);
-            GameManager.Player.UI.GamePanel.RemoveElement(_text);
-            GameManager.Player.UI.GamePanel.RemoveElement(_healthBar);
-            GameManager.Player.UI.GamePanel.OnPanelStateChange -= OnPanelStateChanged;
-            _text.Dispose();
-            _healthBar.Dispose();
-        }
+
         public override void Draw()
         {
             if(Parent.Model == null || _barSize < 0.05f) return;

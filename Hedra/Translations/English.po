@@ -17,6 +17,7 @@ graphics = Graphics
 audio = Audio
 display = Display
 input = Input
+scale_interface = Text Scaling
 controls = Controls
 game_saved_success = Game saved successfully
 name_empty = Name cannot be empty

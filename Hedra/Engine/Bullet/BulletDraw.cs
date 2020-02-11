@@ -1,9 +1,9 @@
 using System.Drawing;
-using BulletSharp;
 using Hedra.Core;
 using Hedra.Engine.IO;
 using Hedra.Engine.Rendering;
 using System.Numerics;
+using BulletSharp;
 using Vector3 = BulletSharp.Math.Vector3;
 
 namespace Hedra.Engine.Bullet

@@ -44,6 +44,13 @@ namespace Hedra.AISystem
                     Roam.Draw();
             }
         }
+        
+        public override void Dispose()
+        {
+            base.Dispose();
+            Roam.Dispose();
+            Retaliate.Dispose();
+        }
 
         public override AIType Type => AIType.Neutral;
     }

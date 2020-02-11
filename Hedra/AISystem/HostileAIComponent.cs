@@ -55,6 +55,14 @@ namespace Hedra.AISystem
         {
             Hostile.SetTarget(Entity);
         }
+        
+        public override void Dispose()
+        {
+            base.Dispose();
+            Roam.Dispose();
+            Hostile.Dispose();
+            Retaliate.Dispose();
+        }
 
         public override AIType Type => AIType.Hostile;
     }

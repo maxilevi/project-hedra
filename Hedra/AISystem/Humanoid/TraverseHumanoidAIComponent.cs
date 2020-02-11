@@ -72,7 +72,13 @@ namespace Hedra.AISystem.Humanoid
             get => _traverse.ErrorMargin;
             set => _traverse.ErrorMargin = value;
         }
-        
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            _traverse.Dispose();
+        }
+
         protected virtual bool UseCollision => false;
     }
 }

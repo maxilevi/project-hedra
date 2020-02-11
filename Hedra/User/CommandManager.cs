@@ -16,7 +16,6 @@ using Hedra.AISystem;
 using Hedra.AISystem.Humanoid;
 using Hedra.Components;
 using Hedra.Components.Effects;
-using Hedra.Core;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;
@@ -34,6 +33,7 @@ using Hedra.Game;
 using Hedra.Items;
 using Hedra.Mission;
 using System.Numerics;
+using BulletSharp;
 using Hedra.Engine;
 using Hedra.Engine.StructureSystem;
 using Hedra.Engine.StructureSystem.VillageSystem;
@@ -41,6 +41,7 @@ using Hedra.EntitySystem;
 using Hedra.Numerics;
 using Hedra.Sound;
 using Silk.NET.Windowing.Common;
+using TaskScheduler = Hedra.Core.TaskScheduler;
 
 namespace Hedra.User
 {
@@ -601,6 +602,11 @@ namespace Hedra.User
                     //fisherman.RemoveComponent(fisherman.SearchComponent<BasicAIComponent>());
                     fisherman.AddComponent(new FishermanAIComponent(fisherman, (Caster.Position + Caster.Orientation * 32).Xz(), Vector2.One * 64f));
                 }
+                if (Parts[0] == "debmem")
+                {
+                    var objs = BulletObjectTracker.Current.GetUserOwnedObjects();
+                    Chat.Log($"Bullet Objects: {objs.Count}");
+                }
 
                 if (Parts[0] == "frustum")
                 {
@@ -629,6 +635,8 @@ namespace Hedra.User
                     }
                     World.StructureHandler.Discard();
                     World.StructureHandler.CheckStructures(World.ToChunkSpace(Caster.Position));
+                    var objs = BulletObjectTracker.Current.GetUserOwnedObjects();
+                    Chat.Log($"Bullet Objects: {objs.Count}");
                 }
 
                 if (Parts[0] == "place")

@@ -84,6 +84,7 @@ namespace Hedra.WeaponSystem
         private bool _outline;
         private Vector4 _outlineColor;
         private bool _effectApplied;
+        private Vector3 _targetPosition;
         private AttackOptions _currentAttackOption;
         
         protected abstract void OnSecondaryAttackEvent(AttackEventType Type, AttackOptions Options);

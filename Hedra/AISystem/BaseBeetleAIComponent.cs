@@ -31,6 +31,13 @@ namespace Hedra.AISystem
         {
             return new HostileBehaviour(Parent);
         }
+        
+        public override void Dispose()
+        {
+            base.Dispose();
+            Hostile.Dispose();
+            Retaliate.Dispose();
+        }
 
         protected abstract AttackBehaviour GetAttackBehaviour(IEntity Parent);
 

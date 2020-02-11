@@ -103,6 +103,8 @@ namespace Hedra.AISystem
         public override void Dispose()
         {
             base.Dispose();
+            _follow.Dispose();
+            _attack.Dispose();
             Owner.SearchComponent<DamageComponent>().OnDamageEvent -= OnDamage;
             Owner.AfterDamaging -= OnDamaging;
             Owner.Kill -= OnOwnerKill;

@@ -446,8 +446,10 @@ namespace Hedra.Engine.Bullet
         public override void Dispose()
         {
             _motionState.Dispose();
+            _rayResult.Dispose();
             BulletPhysics.RemoveAndDispose(_body);
             BulletPhysics.RemoveAndDispose(_sensor);
+            BulletPhysics.OnRigidbodyReAdded -= OnRigidbodyReAdded;
             BulletPhysics.OnCollision -= OnCollision;
             BulletPhysics.OnSeparation -= OnSeparation;
         }

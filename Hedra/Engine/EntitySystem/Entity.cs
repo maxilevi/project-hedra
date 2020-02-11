@@ -83,8 +83,8 @@ namespace Hedra.Engine.EntitySystem
         public float MaxOxygen { get; set; } = 30;
         public int MobId { get; set; }
         public int Seed { get; set; }
-        public Vector3 Orientation { get; set; } = Vector3.UnitZ;       
-        public bool Removable { get; set; }
+        public Vector3 Orientation { get; set; } = Vector3.UnitZ;
+        public bool Removable { get; set; } = true;
         public bool IsStuck => Physics.IsStuck;
         public bool PlaySpawningAnimation { get; set; } = true;
         public bool IsAttacking => Model.IsAttacking;

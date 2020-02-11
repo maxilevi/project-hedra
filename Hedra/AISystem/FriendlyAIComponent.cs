@@ -21,5 +21,11 @@ namespace Hedra.AISystem
         }
         
         public override AIType Type => AIType.Friendly;
+        
+        public override void Dispose()
+        {
+            base.Dispose();
+            Roam.Dispose();
+        }
     }
 }

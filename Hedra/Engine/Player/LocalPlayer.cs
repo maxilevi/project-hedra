@@ -190,8 +190,8 @@ namespace Hedra.Engine.Player
 
         public override void Update()
         {
-            base.Update();
             base.UpdateCriticalComponents();
+            base.Update();
 
             if (this.IsUnderwater && this.IsRiding)
                 this.IsRiding = false;

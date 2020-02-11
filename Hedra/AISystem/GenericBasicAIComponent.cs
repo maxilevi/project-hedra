@@ -40,6 +40,8 @@ namespace Hedra.AISystem
             {
                 if (field.FieldType.IsSubclassOf(typeof(S)) || typeof(S) == field.FieldType)
                 {
+                    var previous = (Behaviour)field.GetValue(this);
+                    previous.Dispose();
                     field.SetValue(this, NewBehaviour);
                 }
                 else if (field.FieldType.IsSubclassOf(typeof(Behaviour)) || typeof(Behaviour) == field.FieldType)
@@ -98,6 +100,11 @@ namespace Hedra.AISystem
             }
 
             return fields;
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
         }
     }
 }
