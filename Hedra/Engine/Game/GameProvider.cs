@@ -119,11 +119,9 @@ namespace Hedra.Engine.Game
             Player.UI.CharacterSelector.StopModels();//So as to fix loose ends
             Player.Class = Information.Class;
             Player.Level = Information.Level;
-            Player.Speed = Player.BaseSpeed;
             Player.Name = Information.Name;
+            Player.Speed = Player.BaseSpeed;
             Player.XP = Information.Xp;
-            Player.Mana = Information.Mana;
-            Player.Health = Information.Health;
             Player.Rotation = Information.Rotation;
             Player.Model.Dispose();
             Player.Model = new HumanoidModel(Player);
@@ -132,6 +130,7 @@ namespace Hedra.Engine.Game
             Player.Toolbar.UnSerialize(Information.ToolbarData);
             Player.Realms.UnSerialize(Information.RealmData);
             Player.View.CameraHeight = Camera.DefaultCameraHeight;
+            Player.Toolbar.UpdateSkills();
             
             if(Player.IsDead)
                 Player.Respawn();
@@ -145,6 +144,10 @@ namespace Hedra.Engine.Game
             GameSettings.DarkEffect = false;
             RoutineManager.StartRoutine(SpawnCoroutine);
             Log.WriteLine($"Making '{Information.Name}' current with seed {World.Seed}.");
+            
+            /* We set health and mana last in order to not affect stuff like bonus health */
+            Player.Mana = Information.Mana;
+            Player.Health = Information.Health;
         }
 
         private void AddDefaultRecipes(PlayerInformation Information)

@@ -11,6 +11,7 @@ using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using System.Numerics;
+using Hedra.Engine.Rendering.Core;
 using Hedra.Numerics;
 
 namespace Hedra.Components
@@ -79,6 +80,7 @@ namespace Hedra.Components
                 _textureSize = Graphics2D.SizeFromAssets("Assets/UI/EntityHealthBar.png").As1920x1080() * .4f;
                 _backgroundTextureSize = Graphics2D.SizeFromAssets("Assets/UI/EntityHealthBarBackground.png").As1920x1080() * .4f;
                 _backgroundTextureId = Graphics2D.LoadFromAssets("Assets/UI/EntityHealthBarBackground.png");
+                //TextureRegistry.MarkStatic(_backgroundTextureId);
             });
         }
         
@@ -139,6 +141,7 @@ namespace Hedra.Components
             _panel.RemoveElement(_text);
             _panel.RemoveElement(_healthBar);
             _panel.OnPanelStateChange -= OnPanelStateChanged;
+            _backgroundTexture.Dispose();
             _text.Dispose();
             _healthBar.Dispose();
             _panel.Dispose();

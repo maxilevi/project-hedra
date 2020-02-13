@@ -49,6 +49,7 @@ namespace Hedra.Engine.SkillSystem
         public abstract bool MeetsRequirements();
         public abstract bool CanBeCastedWhileAttacking { get; }
         public abstract void Use();
+        public abstract void Update();
         public abstract void Reset();
         protected abstract void DoUse();
         public abstract void ResetCooldown();
@@ -196,7 +197,6 @@ namespace Hedra.Engine.SkillSystem
         public override void KeyUp(){}
         public override void Unload(){}
         public override void Load(){}
-        public abstract void Update();
 
         public override Vector2 Scale { get; set; }
         public override string[] Attributes => new string[0];

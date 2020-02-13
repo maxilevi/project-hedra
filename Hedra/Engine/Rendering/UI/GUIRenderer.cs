@@ -19,7 +19,7 @@ namespace Hedra.Engine.Rendering.UI
     {
         public static Shader Shader;
         public static uint TransparentTexture { get; private set; }
-        public static uint[] InmortalTextures { get; private set; }
+        public static uint[] ImmortalTextures { get; private set; }
         private readonly HashSet<TextureCommand> _renderableUISet;
         private readonly List<TextureCommand> _renderableUIList;
         private readonly List<GUITexture> _textures;
@@ -58,7 +58,7 @@ namespace Hedra.Engine.Rendering.UI
                 Bitmap = bmp,
                 Path = "UI:TransparentTexture"
             });
-            InmortalTextures = new[] {TransparentTexture};
+            ImmortalTextures = new[] {TransparentTexture};
         }
 
         public void DrawQuad()

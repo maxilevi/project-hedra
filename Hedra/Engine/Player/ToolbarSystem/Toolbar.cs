@@ -163,6 +163,14 @@ namespace Hedra.Engine.Player.ToolbarSystem
         }
 
         public AbstractBaseSkill[] Skills => _skills;
+
+        public void UpdateSkills()
+        {
+            for (var i = 0; i < _skills.Length; ++i)
+            {
+                _skills[i].Update();
+            }
+        }
         
         public void Dump(BinaryWriter Writer)
         {

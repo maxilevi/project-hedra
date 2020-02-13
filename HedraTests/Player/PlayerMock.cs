@@ -443,6 +443,11 @@ namespace HedraTests.Player
             throw new NotImplementedException();
         }
 
+        public void RemoveComponentsOfType<T>() where T : IComponent<IEntity>
+        {
+            throw new NotImplementedException();
+        }
+
         public T[] GetComponents<T>()
         {
             throw new NotImplementedException();

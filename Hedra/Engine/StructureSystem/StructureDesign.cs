@@ -18,6 +18,8 @@ using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
 using System.Numerics;
+using System.Threading;
+using Hedra.Engine.IO;
 using Hedra.Numerics;
 using Hedra.Structures;
 
@@ -52,7 +54,8 @@ namespace Hedra.Engine.StructureSystem
         {
             lock (CheckLock)
             {
-                if (MapBuilder.SampleDesign(this, ChunkPosition, Biome, Distribution, World.StructureHandler.StructureItems, out var targetPosition))
+                if (MapBuilder.SampleDesign(this, ChunkPosition, Biome, Distribution,
+                    World.StructureHandler.StructureItems, out var targetPosition))
                 {
                     var item = this.Setup(targetPosition, BuildRng(ChunkPosition));
                     item.MapPosition = ChunkPosition;

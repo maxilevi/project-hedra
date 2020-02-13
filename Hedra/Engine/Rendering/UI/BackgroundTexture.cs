@@ -97,6 +97,7 @@ namespace Hedra.Engine.Rendering.UI
         public void Dispose()
         {
             DrawManager.UIRenderer.Remove(this.TextureElement);
+            TextureElement.Dispose();
         }
     }
 }

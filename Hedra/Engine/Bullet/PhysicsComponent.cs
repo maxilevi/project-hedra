@@ -323,7 +323,7 @@ namespace Hedra.Engine.Bullet
                         var fallTime = FallTime;
                         Executer.ExecuteOnMainThread(delegate
                         {
-                            Parent.Damage(fallTime * 7.5f, null, out _, true);
+                            Parent.Damage(fallTime * 12.5f, null, out _, true);
                             Parent.KnockForSeconds(3f);
                         });
                     }

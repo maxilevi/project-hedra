@@ -74,12 +74,17 @@ namespace Hedra.Engine.Rendering.UI
 
         private static uint DisposeId(uint DisposeId, bool UseTextureCache)
         {
-            if (Array.IndexOf(GUIRenderer.InmortalTextures, DisposeId) != -1 || DisposeId == 0) return DisposeId;
+            if (IsImmortal(DisposeId) || DisposeId == 0) return DisposeId;
 
             if(UseTextureCache)
                 TextureRegistry.Remove(DisposeId);
 
             return DisposeId;
+        }
+
+        private static bool IsImmortal(uint Id)
+        {
+            return Array.IndexOf(GUIRenderer.ImmortalTextures, Id) != -1;
         }
         
         public uint Id => IdPointer?.Invoke() ?? TextureId;

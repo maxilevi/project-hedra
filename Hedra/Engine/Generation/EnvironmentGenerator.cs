@@ -43,7 +43,8 @@ namespace Hedra.Engine.Generation
             var transMatrix = CustomTransformationMatrix == new Matrix4x4() ? Design.TransMatrix(Position, rng) : CustomTransformationMatrix;
 
             if (transMatrix == new Matrix4x4()) return;
-
+            if (World.StructureHandler.StructureExistsAtPosition(Vector3.Transform(Vector3.Zero, transMatrix))) return;
+            
             var modelData = Design.Model;
             var modelDataClone = modelData.NativeClone(Allocator);
             /* Only simplify objects that are affected by LOD */
