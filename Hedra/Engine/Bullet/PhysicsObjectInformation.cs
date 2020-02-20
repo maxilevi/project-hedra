@@ -8,6 +8,9 @@ namespace Hedra.Engine.Bullet
 {
     public class PhysicsObjectInformation
     {
+        #if DEBUG
+        private StackTrace _trace = new StackTrace();
+        #endif
         public int UsedBytes { get; set; }
         public string Name { get; set; }
         public CollisionFilterGroups Group { get; set; }

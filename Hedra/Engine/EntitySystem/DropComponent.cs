@@ -27,10 +27,12 @@ namespace Hedra.Engine.EntitySystem
         public bool Dropped { get; private set; }
         public bool RandomDrop => ItemDrop == null;
         public Item ItemDrop { get; set; }
+        private readonly Random _rng;
         private float _dropChance;
         
         public DropComponent(IEntity Parent) : base(Parent)
         {
+            _rng = new Random(Unique.RandomSeed());
             Parent.SearchComponent<DamageComponent>().OnDeadEvent += A =>
             {
                 Drop(A.Damager);
@@ -40,7 +42,7 @@ namespace Hedra.Engine.EntitySystem
         private void Drop(IEntity Killer)
         {
             if (!Parent.IsDead || Dropped) return;
-            var chance = Utils.Rng.NextFloat() * 100f;
+            var chance = _rng.NextFloat() * 100f;
             var item = RandomDrop ? ItemPool.Grab(new ItemPoolSettings(ItemTier.Uncommon)) : ItemDrop;
             chance /= (item != null && item.IsFood && Killer != null ? Killer.Attributes.FoodDropChanceModifier : 1);
             if (chance < DropChance)

@@ -8,6 +8,7 @@ namespace Hedra.Engine.Player
         event OnStructureLeave StructureLeave;
         event OnStructureCompleted StructureCompleted;
         CollisionGroup[] NearCollisions { get; }
+        void Discard();
         void Update();
     }
 }

@@ -504,14 +504,25 @@ namespace Hedra.Engine.Bullet
         private static RigidBody CreateShapesRigidbody(PhysicsSystem.CollisionShape[] Shapes)
         {
             if (Shapes.Length == 0) return null;
-            var offset = (Shapes.Select(S => S.BroadphaseCenter).Aggregate((S1,S2) => S1 + S2) / Shapes.Length).Compatible();
-            var triangleMesh = new TriangleIndexVertexArray();
-            var vertCount = 0;
+            var accumulator = new VertexData();
             for (var i = 0; i < Shapes.Length; ++i)
             {
-                AssertValidShape(Shapes[i]);
-                triangleMesh.AddIndexedMesh(CreateIndexedMesh(Shapes[i].Indices, Shapes[i].Vertices.Select(V => V - offset.Compatible()).ToArray()));
-                vertCount += Shapes[i].Vertices.Length;
+                accumulator += new VertexData()
+                {
+                    Vertices = Shapes[i].Vertices.ToList(),
+                    Indices = Shapes[i].Indices.ToList()
+                };
+            }
+            accumulator.UniqueVertices();
+            var uniqueShape = new PhysicsSystem.CollisionShape(accumulator);
+            var offset = uniqueShape.BroadphaseCenter.Compatible();//(Shapes.Select(S => S.BroadphaseCenter).Aggregate((S1,S2) => S1 + S2) / Shapes.Length).Compatible();
+            var triangleMesh = new TriangleIndexVertexArray();
+            var vertCount = 0;
+            //for (var i = 0; i < Shapes.Length; ++i)
+            {
+                AssertValidShape(uniqueShape);
+                triangleMesh.AddIndexedMesh(CreateIndexedMesh(uniqueShape.Indices, uniqueShape.Vertices.Select(V => V - offset.Compatible()).ToArray()));
+                vertCount += uniqueShape.Vertices.Length;
             }
             
             var shape = new BvhTriangleMeshShape(triangleMesh, true);

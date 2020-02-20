@@ -39,7 +39,7 @@ namespace Hedra.Engine.Generation
         private readonly object _lock = new object();
         public event OnModelAdded ModelAdded;
         public event OnInstanceAdded InstanceAdded;
-        public Vector3 Position { get; }
+        public Vector3 Position { get; private set; }
         public Vector2 MapPosition { get; set; }
         public RoundedPlateau Mountain { get; }
         public BaseStructure WorldObject { get; }
@@ -54,7 +54,7 @@ namespace Hedra.Engine.Generation
 
         public CollidableStructure(StructureDesign Design, Vector3 Position, RoundedPlateau Mountain, BaseStructure WorldObject)
         {
-            this.Position = new Vector3(Position.X, (Mountain?.MaxHeight + 1) * Chunk.BlockSize ?? Position.Y, Position.Z);
+            this.Position = Position;
             this.Mountain = Mountain;
             this.Design = Design;
             this.WorldObject = WorldObject;
@@ -64,6 +64,7 @@ namespace Hedra.Engine.Generation
             this._groundworks = new HashSet<IGroundwork>();
             this._plateaus = new HashSet<BasePlateau>();
             this._instances = new HashSet<InstanceData>();
+            Reposition();
         }
 
         public void Draw()
@@ -76,6 +77,11 @@ namespace Hedra.Engine.Generation
         {
             World.WorldBuilding.SetupStructure(this);
             _structureSetup = true;
+        }
+
+        public void Reposition()
+        {
+            this.Position = new Vector3(Position.X, (Mountain?.MaxHeight + 1) * Chunk.BlockSize ?? Position.Y, Position.Z);
         }
 
         public CollisionGroup[] Colliders

@@ -258,6 +258,25 @@ namespace Hedra.User
                 {
                     GameManager.Player.Physics.UsePhysics = !GameManager.Player.Physics.UsePhysics;
                 }
+
+                if (Parts[0] == "clearworld")
+                {
+                    var entities = World.Entities;
+                    var chunks = World.Chunks;
+                    World.Discard();
+                    for (var i = 0; i < entities.Count; ++i)
+                    {
+                        entities[i].Dispose();
+                    }
+                    
+                    for (var i = 0; i < chunks.Count; ++i)
+                    {
+                        chunks[i].ForceDispose();
+                    }
+                    LocalPlayer.Instance.StructureAware.Discard();
+                    var objs = BulletObjectTracker.Current.GetUserOwnedObjects();
+                    Chat.Log($"Bullet Objects: {objs.Count}");
+                }
                 if (Parts[0] == "villager")
                 {
                     var vill = World.InRadius<Village>(Caster.Position, VillageDesign.MaxVillageRadius).FirstOrDefault();

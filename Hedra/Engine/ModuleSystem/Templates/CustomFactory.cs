@@ -106,27 +106,27 @@ namespace Hedra.Engine.ModuleSystem.Templates
             Mob.AddComponent(new DropComponent(Mob)
             {
                 ItemDrop = ItemPool.Grab(ItemTier.Uncommon),
-                DropChance = 2.0f + (Mob.Level < 16 && Mob.Level > 8 ? 5f : 0f),
+                DropChance = 1.5f + (Mob.Level < 16 && Mob.Level > 8 ? 5f : 0f),
             });
             Mob.AddComponent(new DropComponent(Mob)
             {
                 ItemDrop = ItemPool.Grab(ItemTier.Rare),
-                DropChance = 1.5f + (Mob.Level < 32 && Mob.Level > 16 ? 5f : 0f),
+                DropChance = 1.0f + (Mob.Level < 32 && Mob.Level > 16 ? 5f : 0f),
             });
             Mob.AddComponent(new DropComponent(Mob)
             {
                 ItemDrop = ItemPool.Grab(ItemTier.Unique),
-                DropChance = 1.0f + (Mob.Level < 48 && Mob.Level > 32 ? 5f : 0f),
+                DropChance = 0.5f + (Mob.Level < 48 && Mob.Level > 32 ? 5f : 0f),
             });
             Mob.AddComponent(new DropComponent(Mob)
             {
                 ItemDrop = ItemPool.Grab(ItemTier.Legendary),
-                DropChance = .75f + (Mob.Level < 64 && Mob.Level > 48 ? 5f : 0f),
+                DropChance = .25f + (Mob.Level < 64 && Mob.Level > 48 ? 5f : 0f),
             });
             Mob.AddComponent(new DropComponent(Mob)
             {
                 ItemDrop = ItemPool.Grab(ItemTier.Divine),
-                DropChance = .5f + (Mob.Level > 64 ? 5f : 0f),
+                DropChance = 0.1f + (Mob.Level > 64 ? 5f : 0f),
             });
         }
 

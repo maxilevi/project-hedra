@@ -30,7 +30,10 @@ namespace Hedra.AISystem.Behaviours
         {
             if (!_init) Init();
             lock (_lock)
+            {
+                if (!_storage.ContainsKey(Parent)) return;
                 _storage[Parent].Update();
+            }
         }
 
         public void ResetTime(IEntity Parent)
@@ -82,6 +85,15 @@ namespace Hedra.AISystem.Behaviours
             {
                 lock (_lock)
                     return _storage[Parent].Storage;
+            }
+        }
+
+        public int StorageCount
+        {
+            get
+            {
+                lock (_lock)
+                    return _storage.Count;
             }
         }
     }

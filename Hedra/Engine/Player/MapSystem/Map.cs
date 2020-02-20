@@ -48,6 +48,7 @@ namespace Hedra.Engine.Player.MapSystem
         private const int MapSize = 8;
         private const int ChunkSize = 4;
         private const float FogDistance = 140f;
+        private readonly object _iconsLock;
         private readonly LocalPlayer _player;
         private readonly MapStateManager _stateManager;
         private readonly List<MapItem> _icons;
@@ -74,6 +75,7 @@ namespace Hedra.Engine.Player.MapSystem
         public Map(LocalPlayer Player)
         {
             _timeHandler = new TimeHandler(12000);
+            _iconsLock = new object();
             this._player = Player;
             this._panel = new Panel();
             this._icons = new List<MapItem>();
@@ -124,11 +126,16 @@ namespace Hedra.Engine.Player.MapSystem
             this.UpdateFogAndTime();
 
             var mapPosition = _player.Model.ModelPosition.Xz().ToVector3();
-            for (var i = 0; i < _icons.Count; i++)
-            { 
-                _icons[i].Mesh.LocalRotation = new Vector3(_icons[i].Mesh.LocalRotation.X, _icons[i].Mesh.LocalRotation.Y + (float) Time.DeltaTime * 0f, _icons[i].Mesh.LocalRotation.Z);
-                _icons[i].Mesh.Position = new Vector3(mapPosition.X, _targetHeight - 7, mapPosition.Z);
-            }          
+            lock (_iconsLock)
+            {
+                for (var i = 0; i < _icons.Count; i++)
+                {
+                    _icons[i].Mesh.LocalRotation = new Vector3(_icons[i].Mesh.LocalRotation.X,
+                        _icons[i].Mesh.LocalRotation.Y + (float) Time.DeltaTime * 0f, _icons[i].Mesh.LocalRotation.Z);
+                    _icons[i].Mesh.Position = new Vector3(mapPosition.X, _targetHeight - 7, mapPosition.Z);
+                }
+            }
+
             for (var i = 0; i < _baseItems.Count; i++)
             {
                 if (_baseItems[i].Mesh != null)
@@ -192,11 +199,14 @@ namespace Hedra.Engine.Player.MapSystem
                     _baseItems[i].Mesh.Draw();
                 }
             }
-            
-            for (var i = 0; i < _icons.Count; i++)
+
+            lock (_iconsLock)
             {
-                _icons[i].Mesh.Alpha = _size;
-                _icons[i].Draw();
+                for (var i = 0; i < _icons.Count; i++)
+                {
+                    _icons[i].Mesh.Alpha = _size;
+                    _icons[i].Draw();
+                }
             }
         }
 
@@ -233,7 +243,7 @@ namespace Hedra.Engine.Player.MapSystem
                                     mapItem.Mesh.LocalRotation = new Vector3(0, Utils.Rng.Next(0, 4) * 90f, 0);
                                     mapItem.Mesh.LocalPosition = realPos.ToVector3() + Vector3.UnitY * 12;
                                     mapItem.Mesh.Scale = Vector3.One * 2f;
-                                    lock (_icons) _icons.Add(mapItem);
+                                    lock (_iconsLock) _icons.Add(mapItem);
                                 }
                             }
                         }
@@ -261,11 +271,15 @@ namespace Hedra.Engine.Player.MapSystem
 
         private void ClearIcons()
         {
-            for (var i = 0; i < _icons.Count; i++)
+            lock (_iconsLock)
             {
-                _icons[i].Dispose();
+                for (var i = 0; i < _icons.Count; i++)
+                {
+                    _icons[i].Dispose();
+                }
+
+                _icons.Clear();
             }
-            _icons.Clear();       
         }
 
         private void UpdateMap()

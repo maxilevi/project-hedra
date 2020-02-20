@@ -36,7 +36,7 @@ namespace Hedra.Items
                 EquipmentType.Knife, EquipmentType.Sword, EquipmentType.Hammer
             };
 
-            ArmorEquipmentTypes = new[]
+           ArmorEquipmentTypes = new[]
             {
                 EquipmentType.Boots, EquipmentType.Pants,
                 EquipmentType.Chestplate, EquipmentType.Helmet
@@ -50,7 +50,8 @@ namespace Hedra.Items
 
             BlacklistedItems = new[]
             {
-                ItemType.Gold.ToString()
+                ItemType.Gold.ToString(),
+                ItemType.Glider.ToString()
             };
             
             BlacklistedEquipment = new[]

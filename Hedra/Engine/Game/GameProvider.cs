@@ -130,8 +130,7 @@ namespace Hedra.Engine.Game
             Player.Toolbar.UnSerialize(Information.ToolbarData);
             Player.Realms.UnSerialize(Information.RealmData);
             Player.View.CameraHeight = Camera.DefaultCameraHeight;
-            Player.Toolbar.UpdateSkills();
-            
+
             if(Player.IsDead)
                 Player.Respawn();
             if(Player.IsDead)
@@ -145,6 +144,8 @@ namespace Hedra.Engine.Game
             RoutineManager.StartRoutine(SpawnCoroutine);
             Log.WriteLine($"Making '{Information.Name}' current with seed {World.Seed}.");
             
+            /* Skills need to be updated after everything is set */
+            Player.Toolbar.UpdateSkills();
             /* We set health and mana last in order to not affect stuff like bonus health */
             Player.Mana = Information.Mana;
             Player.Health = Information.Health;

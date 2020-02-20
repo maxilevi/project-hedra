@@ -87,6 +87,7 @@ using Hedra.Numerics;
                 /* This is here so that houses get correctly positioned on mountains */
                 Mount.MaxHeight = ApplyMultiple(Mount.Position, Mount.MaxHeight);
                 _plateaus.Add(Mount);
+                AvoidFloatingStructures(Mount);
             }         
         }
 
@@ -208,6 +209,28 @@ using Hedra.Numerics;
         public void SetupStructure(CollidableStructure Structure)
         {
             LoopStructure(Structure, AddPlateau, AddGroundwork, false);
+            Structure.Reposition();
+        }
+
+        private void AvoidFloatingStructures(params BasePlateau[] Plateaus)
+        {
+            lock (_plateauLock)
+            {
+                for (var i = 0; i < _plateaus.Count; ++i)
+                {
+                    for (var j = 0; j < Plateaus.Length; ++j)
+                    {
+                        if (Plateaus[j] is RoundedPlateau rounded0 && _plateaus[i] is RoundedPlateau rounded1)
+                        {
+                            if (Math.Abs(rounded0.MaxHeight - rounded1.MaxHeight) > 0.005f && rounded0.Collides(rounded1))
+                            {
+                                /* rounded0 is the newest plateau, we always clamp to the existing one to avoid issues */
+                                rounded0.MaxHeight = rounded1.MaxHeight;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public void DisposeStructure(CollidableStructure Structure)

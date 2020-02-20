@@ -242,7 +242,8 @@ namespace Hedra.Engine.Player.ToolbarSystem
                 var inToolbar = new[] {this.SkillAt(0), this.SkillAt(1), this.SkillAt(2), this.SkillAt(3)};
                 for (var i = 0; i < _skills.Length; i++)
                 {
-                    if (!inToolbar.Contains(_skills[i])){
+                    if (!inToolbar.Contains(_skills[i]))
+                    {
                         _skills[i].Active = false;
                         if (filtered.Contains(_skills[i])) _skills[i].Active = value;
                     }

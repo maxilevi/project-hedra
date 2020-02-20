@@ -58,21 +58,30 @@ namespace Hedra.Engine.PlantSystem.Harvestables
         public override void CustomPlacement(NativeVertexData Data, Matrix4x4 TransMatrix, Chunk UnderChunk)
         {
             var position = Vector3.Transform(Vector3.Zero, TransMatrix);
-            World.StructureHandler.AddStructure(
-                new CollidableStructure(
-                    new CollectiblePlantDesign(),
+            if (!World.StructureHandler.StructureExistsAtPosition(position.Xz().ToVector3()))
+            {
+                var collectibleObject = new CollectibleObject(
                     position,
-                    null,
-                    new CollectibleObject(
+                    Data.ToInstanceData(TransMatrix),
+                    ItemCollect
+                );
+                var design = new CollectiblePlantDesign();
+                World.StructureHandler.AddStructure(
+                    new CollidableStructure(
+                        design,
                         position,
-                        Data.ToInstanceData(TransMatrix),
-                        ItemCollect
+                        null,
+                        collectibleObject
                     )
-                )
-                {
-                    Built = true
-                }
-            );
+                    {
+                        Built = true
+                    }
+                );
+            }
+            else
+            {
+                Data.Dispose();
+            }
         }
         
         protected abstract Item ItemCollect { get; }

@@ -442,7 +442,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }*/
         }
 
-        private void ForceDispose()
+        public void ForceDispose()
         {
             Bullet.BulletPhysics.RemoveChunk(Position.Xz());
             Mesh?.Dispose();

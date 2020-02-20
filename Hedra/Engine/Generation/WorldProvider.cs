@@ -627,6 +627,19 @@ namespace Hedra.Engine.Generation
         public Vector3 FindPlaceablePosition(IEntity Mob, Vector3 DesiredPosition)
         {
             var offset = DesiredPosition;
+            var firstCollision = Mob.Physics.CollidesWithOffset(-Mob.Position + offset);
+            if (firstCollision)
+            {
+                var possibleWaypoints = StructureHandler.GetNearStructures(DesiredPosition).Select(S => S.Waypoints)
+                    .Where(S => S != null).ToArray();
+                for (var i = 0; i < possibleWaypoints.Length; ++i)
+                {
+                    var nearest = possibleWaypoints[i].GetNearestVertex(offset, out var distance);
+                    if (distance < Mathf.FastSqrt(32*32 + 32*32))
+                        return nearest.Position;
+                }
+            }
+
             while (Mob.Physics.CollidesWithOffset(-Mob.Position + offset))
             {
                 offset += new Vector3(Utils.Rng.NextFloat() * 32f - 16f, 0, Utils.Rng.NextFloat() * 32f - 16f);

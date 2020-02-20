@@ -154,34 +154,48 @@ namespace Hedra.Engine.Player
             NearCollisions = New;
             TaskScheduler.Parallel(() =>
             {
-                var removedBodies = new List<RigidBody>();
-                var toRemove = new List<int>();
-                for (var i = 0; i < removed.Length; ++i)
-                {
-                    toRemove.Clear();
-                    for (var j = 0; j < _bodies.Count; ++j)
-                    {
-                        if (removed[i] == _bodies[j].Two)
-                        {
-                            removedBodies.Add(_bodies[j].One);
-                            toRemove.Add(j);
-                        }
-                    }
-                    for (var j = 0; j < toRemove.Count; ++j)
-                    {
-                        _bodies.RemoveAt(toRemove[j]);
-                    }
-                }
-                for (var i = 0; i < removedBodies.Count; ++i)
-                {
-                    BulletPhysics.RemoveAndDispose(removedBodies[i]);
-                }
-
-                for (var i = 0; i < added.Length; ++i)
-                {
-                    _bodies.Add(new Pair<RigidBody, CollisionGroup>(BulletPhysics.AddGroup(added[i]), added[i]));
-                }
+                Remove(removed);
+                Add(added);
             });
+        }
+
+        private void Remove(CollisionGroup[] Removed)
+        {
+            var removedBodies = new List<RigidBody>();
+            var toRemove = new List<int>();
+            for (var i = 0; i < Removed.Length; ++i)
+            {
+                toRemove.Clear();
+                for (var j = 0; j < _bodies.Count; ++j)
+                {
+                    if (Removed[i] == _bodies[j].Two)
+                    {
+                        removedBodies.Add(_bodies[j].One);
+                        toRemove.Add(j);
+                    }
+                }
+                for (var j = 0; j < toRemove.Count; ++j)
+                {
+                    _bodies.RemoveAt(toRemove[j]);
+                }
+            }
+            for (var i = 0; i < removedBodies.Count; ++i)
+            {
+                BulletPhysics.RemoveAndDispose(removedBodies[i]);
+            }
+        }
+
+        private void Add(CollisionGroup[] Adds)
+        {
+            for (var i = 0; i < Adds.Length; ++i)
+            {
+                _bodies.Add(new Pair<RigidBody, CollisionGroup>(BulletPhysics.AddGroup(Adds[i]), Adds[i]));
+            }
+        }
+
+        public void Discard()
+        {
+            Remove(NearCollisions);
         }
         
         public CollisionGroup[] NearCollisions { get; private set; }
