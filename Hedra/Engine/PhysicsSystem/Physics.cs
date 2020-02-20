@@ -65,13 +65,11 @@ namespace Hedra.Engine.PhysicsSystem
             var quat = ((Matrix4x4.CreateRotationZ(defaultRot.Z * Mathf.Radian) * Matrix4x4.CreateRotationX(defaultRot.X * Mathf.Radian)) * Matrix4x4.CreateRotationY(xRot.Y * Mathf.Radian)).ExtractRotation();
             var axisAngle = quat.ToAxisAngle();
             var result = axisAngle.Xyz() * axisAngle.W * Mathf.Degree;
-            #if DEBUG
             if (result.IsInvalid())
             {
                 int a = 0;
                 result = Vector3.Zero;
             }
-            #endif
             return result;
         }
 
