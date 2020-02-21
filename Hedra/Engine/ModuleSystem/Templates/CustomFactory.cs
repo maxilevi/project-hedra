@@ -121,7 +121,7 @@ namespace Hedra.Engine.ModuleSystem.Templates
             Mob.AddComponent(new DropComponent(Mob)
             {
                 ItemDrop = ItemPool.Grab(ItemTier.Legendary),
-                DropChance = .25f + (Mob.Level < 64 && Mob.Level > 48 ? 5f : 0f),
+                DropChance = .25f + (Mob.Level < 64 && Mob.Level > 48 ? 2.5f : 0f),
             });
             Mob.AddComponent(new DropComponent(Mob)
             {

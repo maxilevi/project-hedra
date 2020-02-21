@@ -25,6 +25,7 @@ namespace Hedra.Engine.Player
 
     public class ParticleProjectile : Projectile
     {
+        private readonly bool _initialized;
         protected ParticleSystem Particles { get; }
         public bool UseLight { get; set; } = true;
         public float LightRadius { get; set; } = 64;
@@ -34,7 +35,8 @@ namespace Hedra.Engine.Player
         
         public ParticleProjectile(IEntity Parent, Vector3 Origin) : base(Parent, Origin, new VertexData())
         {        
-            Particles = new ParticleSystem();        
+            Particles = new ParticleSystem();
+            _initialized = true;
         }
         
         public override void Update()
@@ -103,6 +105,10 @@ namespace Hedra.Engine.Player
 
         private IEnumerator DisposeCoroutine()
         {
+            while (!_initialized)
+            {
+                yield return null;
+            }
             if (_light != null)
             {
                 while (_light.Color.LengthFast() > 0.05f)

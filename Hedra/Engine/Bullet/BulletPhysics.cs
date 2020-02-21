@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -7,6 +8,7 @@ using BulletSharp.Math;
 using Hedra.Core;
 using Hedra.Engine.Core;
 using Hedra.Engine.IO;
+using Hedra.Engine.Management;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering;
 using Hedra.Game;
@@ -389,7 +391,7 @@ namespace Hedra.Engine.Bullet
                 DisposeBody(Body);
             }
         }
-        
+
         private static void DisposeSensor(RigidBody Body)
         {
             lock (_sensorsLock)
@@ -414,6 +416,20 @@ namespace Hedra.Engine.Bullet
                         _staticBodies.Remove(offsets[i]);
                 }
             }
+        }
+
+        public static void Dispose(BulletDisposableObject Object)
+        {
+            RoutineManager.StartRoutine(DisposeRoutine, Object);
+        }
+
+        private static IEnumerator DisposeRoutine(params object[] Params)
+        {
+            lock (_bulletLock)
+            {
+                ((BulletDisposableObject) Params[0]).Dispose();
+            }
+            yield return null;
         }
         
         public static void DisposeBody(RigidBody Body)
@@ -535,7 +551,6 @@ namespace Hedra.Engine.Bullet
             var body = CreateStaticRigidbody(shape);
             body.Translate(offset);
             return body;
-
         }
 
         private static void AssertValidShape(PhysicsSystem.CollisionShape Shape)

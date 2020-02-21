@@ -20,10 +20,12 @@ using Hedra.Game;
 using System.Numerics;
 using System.Runtime;
 using System.Runtime.InteropServices;
+using BulletSharp;
 using Hedra.Engine.Scripting;
 using Silk.NET.GLFW;
 using Silk.NET.Windowing.Common;
 using Monitor = Silk.NET.Windowing.Monitor;
+using Vector3 = BulletSharp.Math.Vector3;
 
 namespace Hedra.Engine
 {
@@ -140,7 +142,7 @@ namespace Hedra.Engine
             LoadLibraries();
             InitializeResolutions();
             GameSettings.LoadSetupSettings(GameSettings.SettingsPath);
-            
+
             var maxMonitor = Monitor.GetMainMonitor();
             var monitorSize = (maxMonitor.VideoMode.Resolution ?? maxMonitor.Bounds.Size);
             var maxSize = new Vector2(monitorSize.Width, monitorSize.Height);

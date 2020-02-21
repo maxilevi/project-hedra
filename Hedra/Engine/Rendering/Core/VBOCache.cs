@@ -144,7 +144,7 @@ namespace Hedra.Engine.Rendering.Core
             var offset = 0;
             for (var i = 0; i < Structures.Length; ++i)
             {
-                Marshal.StructureToPtr(Structures[i], ptr, true);
+                Marshal.StructureToPtr(Structures[i], ptr, false);
                 Marshal.Copy(ptr, Array, offset, size);
                 offset += size;
             }

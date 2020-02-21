@@ -32,8 +32,8 @@ namespace Hedra.Engine.SkillSystem.Rogue
         protected override int MaxLevel => 20;
         public override float ManaCost => 75;
         public override float MaxCooldown => Math.Max(8, 16 - base.Level * .5f);
-        private float Damage => User.DamageEquation * 2.5f;
-        private float TotalDamage => User.DamageEquation * 2.5f * 4 * (SkillAnimation.Length / SkillAnimation.Speed);
+        private float Damage => User.DamageEquation * DamageMultiplier;
+        private float DamageMultiplier => 2.5f;
 
         protected override void OnAnimationStart()
         {
@@ -71,7 +71,7 @@ namespace Hedra.Engine.SkillSystem.Rogue
         public override string DisplayName => Translations.Get("round_slash_skill");
         public override string[] Attributes => new []
         {
-            Translations.Get("round_slash_damage_change", TotalDamage.ToString("0.0", CultureInfo.InvariantCulture))
+            Translations.Get("round_slash_damage_change", (int)(DamageMultiplier * 4 * (SkillAnimation.Length / SkillAnimation.Speed) * 100f))
         };
     }
 }

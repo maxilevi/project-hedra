@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Hedra.Rendering;
 using System.Numerics;
@@ -27,7 +28,7 @@ namespace Hedra.Engine.Rendering.Core
             {
                 var size = Marshal.SizeOf(Light);
                 var ptr = Marshal.AllocHGlobal(size);
-                Marshal.StructureToPtr(Light, ptr, true);
+                Marshal.StructureToPtr(Light, ptr, false);
                 Marshal.Copy(ptr, Output, Offset, size);
                 Marshal.FreeHGlobal(ptr);
             }

@@ -127,7 +127,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
         {
             base.Dispose();
             _mesh.Dispose();
-            Bullet.BulletPhysics.RemoveAndDispose(_body);
+            BulletPhysics.RemoveAndDispose(_body);
         }
     }
 }

@@ -495,6 +495,19 @@ namespace Hedra.User
                     }
                     return true;
                 }
+                if (Parts[0] == "crashtest")
+                {
+                    for (int i = 0; i < 16; i++)
+                    {
+                        NPCCreator.SpawnBandit(Caster.Position + Caster.Orientation * 32, Caster.Level, new BanditOptions
+                        {
+                            Friendly = false,
+                            ModelType = null,
+                            PossibleClasses = Hedra.API.Class.Mage
+                        });
+                    }
+                    return true;
+                }
                 if (Parts[0] == "hide")
                 {
                     LocalPlayer.Instance.Enabled = !LocalPlayer.Instance.Enabled;
