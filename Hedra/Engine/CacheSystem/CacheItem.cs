@@ -79,6 +79,8 @@ namespace Hedra.Engine.CacheSystem
         Thyme,
         BirchTrees,
         WillowTrees,
+        Garrison,
+        GarrisonIcon,
         MaxEnums
     }
 }
