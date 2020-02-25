@@ -357,6 +357,8 @@
     <Compile Include="Engine\CacheSystem\Dungeon0IconCache.cs" />
     <Compile Include="Engine\CacheSystem\DynamicCache.cs" />
     <Compile Include="Engine\CacheSystem\FishingPostIconCache.cs" />
+    <Compile Include="Engine\CacheSystem\GarrisonCache.cs" />
+    <Compile Include="Engine\CacheSystem\GarrisonIconCache.cs" />
     <Compile Include="Engine\CacheSystem\LilyPadCache.cs" />
     <Compile Include="Engine\CacheSystem\RosemaryCache.cs" />
     <Compile Include="Engine\CacheSystem\ShroomDimensionPortalCache.cs" />
@@ -473,6 +475,8 @@
     <Compile Include="Engine\StructureSystem\Overworld\CottageWithVegetablePlot.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\CottageWithVegetablePlotDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\DungeonWithBoss.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\Garrison.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\GarrisonDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\ShroomDimensionPortal.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\ShroomDimensionPortalDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\SolitaryFisherman.cs" />
@@ -8402,6 +8406,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Assets\Env\Structures\Garrison" />
     <Folder Include="Assets\Items\Boots\" />
     <Folder Include="Assets\Items\Gems\" />
     <Folder Include="Assets\Items\Pants\" />

@@ -441,22 +441,22 @@ namespace Hedra.Engine.Bullet
                     var count = meshArray.IndexedMeshArray.Count;
                     for (var i = 0; i < count; ++i)
                     {
-                        meshArray.IndexedMeshArray[i].Dispose();
+                        Dispose(meshArray.IndexedMeshArray[i]);
                     }
-                    meshArray.Dispose();
+                    Dispose(meshArray);
                     break;
                 case CompoundShape compoundShape:
                 {
                     for (var i = 0; i < compoundShape.NumChildShapes; ++i)
                     {
-                        compoundShape.GetChildShape(i).Dispose();
+                        Dispose(compoundShape.GetChildShape(i));
                     }
                     break;
                 }
             }
-            Body.MotionState.Dispose();
-            Body.CollisionShape.Dispose();
-            Body.Dispose();
+            Dispose(Body.MotionState);
+            Dispose(Body.CollisionShape);
+            Dispose(Body);
         }
         
         public static void AddChunk(Vector2 Offset, NativeVertexData Mesh, PhysicsSystem.CollisionShape[] Shapes)
