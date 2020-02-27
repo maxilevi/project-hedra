@@ -8406,7 +8406,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets\Env\Structures\Garrison" />
     <Folder Include="Assets\Items\Boots\" />
     <Folder Include="Assets\Items\Gems\" />
     <Folder Include="Assets\Items\Pants\" />
@@ -9749,6 +9748,34 @@
     </Content>
     <Content Include="..\project-hedra-assets\Structures\FishingDock0\SmallDock0.ply">
       <Link>Assets\Env\Structures\FishingSettlement\SmallDock0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Garrison0\Garrison0-Colliders.ply">
+      <Link>Assets\Env\Structures\Garrison\Garrison0-Colliders.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Garrison0\Garrison0-Door0.ply">
+      <Link>Assets\Env\Structures\Garrison\Garrison0-Door0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Garrison0\Garrison0-Door1.ply">
+      <Link>Assets\Env\Structures\Garrison\Garrison0-Door1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Garrison0\Garrison0-Door2.ply">
+      <Link>Assets\Env\Structures\Garrison\Garrison0-Door2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Garrison0\Garrison0-Door3.ply">
+      <Link>Assets\Env\Structures\Garrison\Garrison0-Door3.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Garrison0\Garrison0-Icon.ply">
+      <Link>Assets\Env\Structures\Garrison\Garrison0-Icon.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Garrison0\Garrison0-Mesh.ply">
+      <Link>Assets\Env\Structures\Garrison\Garrison0-Mesh.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0-Icon.ply">
