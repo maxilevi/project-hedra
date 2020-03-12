@@ -9778,6 +9778,14 @@
       <Link>Assets\Env\Structures\Garrison\Garrison0-Mesh.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Structures\Garrison0\Garrison0-Pathfinding.ply">
+      <Link>Assets\Env\Structures\Garrison\Garrison0-Pathfinding.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\Garrison0\Garrison0-Scene.ply">
+      <Link>Assets\Env\Structures\Garrison\Garrison0-Scene.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Structures\Gazebo0\Gazebo0-Icon.ply">
       <Link>Assets\Env\Structures\Gazebo\Gazebo0-Icon.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -14312,6 +14320,9 @@
     <Content Include="Modules\Items\Chestplates\CommonLeatherChestplate.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Chestplates\LargeBackpack.json" />
+    <Content Include="Modules\Items\Chestplates\MediumBackpack.json" />
+    <Content Include="Modules\Items\Chestplates\SmallBackpack.json" />
     <Content Include="Modules\Items\Foods\Bread.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

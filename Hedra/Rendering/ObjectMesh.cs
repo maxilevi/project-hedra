@@ -6,6 +6,7 @@
  */
 
 using System;
+using System.Diagnostics;
 using Hedra.Core;
 using Hedra.Engine.Generation.ChunkSystem;
 using Hedra.Engine.Management;
@@ -19,6 +20,7 @@ namespace Hedra.Rendering
 {
     public class ObjectMesh : IRenderable, IDisposable, ICullableModel, IUpdatable
     {
+        private StackTrace _trace = new StackTrace();
         public float AnimationSpeed { get; set; } = 1f;
         public bool PrematureCulling { get; set; } = true;
         public Box CullingBox { get; set; }

@@ -66,7 +66,10 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         protected override IEntity CreateDungeonBoss(Vector3 Position, CollidableStructure Structure)
         {
-            var boss = BossGenerator.Generate(new []{MobType.SkeletonKing}, Position, Utils.Rng);
+            var boss = BossGenerator.Generate(new []
+            {
+                MobType.SkeletonKing
+            }, Position, Utils.Rng);
             boss.Position = Position;
             return boss;
         }

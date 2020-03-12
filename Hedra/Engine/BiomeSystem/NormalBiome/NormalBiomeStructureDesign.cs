@@ -35,6 +35,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
             AddDesign(new CottageWithVegetablePlotDesign());
             AddDesign(new GhostTownPortalDesign());
             AddDesign(new SolitaryFishermanDesign());
+            AddDesign(new GarrisonDesign());
             //AddDesign(new ShroomDimensionPortalDesign());
         }
 
