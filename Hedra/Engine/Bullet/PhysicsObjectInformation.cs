@@ -13,6 +13,8 @@ namespace Hedra.Engine.Bullet
         #endif
         public int UsedBytes { get; set; }
         public string Name { get; set; }
+        /* This is so projectiles don't collide with invisible walls if its not necessary */
+        public bool DisableCollisionIfNoContactResponse { get; set; } = true;
         public CollisionFilterGroups Group { get; set; }
         public CollisionFilterGroups Mask { get; set; }
         public bool IsLand => !IsEntity;

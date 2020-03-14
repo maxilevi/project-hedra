@@ -27,6 +27,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             bag.Health = bag.MaxHealth;
             bag.Physics.UsePhysics = false;
             bag.Physics.ContactResponse = false;
+            bag.Physics.DisableCollisionIfNoContactResponse = false;
             bag.Position = Position - Vector3.UnitY * bag.Model.Dimensions.Size.Y * .5f;
             bag.Removable = false;
             _positi = bag.Position;

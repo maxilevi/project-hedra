@@ -37,6 +37,7 @@ namespace Hedra.EntitySystem
         bool IsStuck { get; }
         bool ContactResponse { get; set; }
         Vector3 LinearVelocity { get; }
+        bool DisableCollisionIfNoContactResponse { get; set; }
 
     }
 }

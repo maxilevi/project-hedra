@@ -148,9 +148,9 @@ namespace Hedra.WorldObjects
         {
             if (_landed || !Collide || !ReferenceEquals(Object0, _body) && !ReferenceEquals(Object1, _body)) return;
             var other = ReferenceEquals(Object0, _body) ? Object1 : Object0;
-            /* Ignore collision on deactivated colliders */
-            if((other.CollisionFlags & CollisionFlags.NoContactResponse) == CollisionFlags.NoContactResponse) return;
             var objectInformation = (PhysicsObjectInformation)other.UserObject;
+            /* Ignore collision on deactivated colliders */
+            if(((other.CollisionFlags & CollisionFlags.NoContactResponse) == CollisionFlags.NoContactResponse) && objectInformation.DisableCollisionIfNoContactResponse) return;
             if (!objectInformation.IsEntity)
             {
                 var type = objectInformation.IsLand

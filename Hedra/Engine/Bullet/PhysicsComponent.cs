@@ -440,6 +440,17 @@ namespace Hedra.Engine.Bullet
                 Hit = result.HitPointWorld.Compatible();
             return result.HasHit;
         }
+
+        public bool DisableCollisionIfNoContactResponse
+        {
+            get => _mainInformation.DisableCollisionIfNoContactResponse;
+
+            set
+            {
+                _mainInformation.DisableCollisionIfNoContactResponse = value;
+                _sensorInformation.DisableCollisionIfNoContactResponse = value;
+            }
+        }
         
         private float Timestep => Time.IndependentDeltaTime * (UseTimescale ? Time.TimeScale : 1);
 
