@@ -18,7 +18,7 @@ namespace Hedra.Engine.StructureSystem
         public const int Dungeon0Chance = 48;
         public const int Dungeon1Chance = 48;
         public const int Dungeon2Chance = 48;
-        public const int GarrisonChance = 16;//48
+        public const int GarrisonChance = 48;
 
         /* Small structures */
         public const int FishingPostChance = 4;
@@ -37,10 +37,8 @@ namespace Hedra.Engine.StructureSystem
 
         private const int SampleTypes = 5;
         private const int BigSampleChance = 1;
-        
-        
-        
-        
+
+
         private static readonly SamplerType[] Ranges;
 
         static StructureGrid()

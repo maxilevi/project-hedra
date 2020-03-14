@@ -39,7 +39,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             AddDoor(AssetManager.PLYLoader($"Assets/Env/Structures/Garrison/Garrison0-Door2.ply", Vector3.One),
                 GarrisonCache.Doors[2], Rotation, Structure, true, true);
             AddDoor(AssetManager.PLYLoader($"Assets/Env/Structures/Garrison/Garrison0-Door3.ply", Vector3.One),
-                GarrisonCache.Doors[3], Rotation, Structure, true, true);
+                GarrisonCache.Doors[3], Rotation, Structure, false, false);
             Structure.Waypoints = WaypointLoader.Load($"Assets/Env/Structures/Garrison/Garrison0-Pathfinding.ply",
                 Vector3.One, Rotation * Translation);
             SceneLoader.LoadIfExists(Structure, $"Assets/Env/Structures/Garrison/Garrison0.ply", GarrisonCache.Scale, Rotation * Translation, GarrisonSettings);
