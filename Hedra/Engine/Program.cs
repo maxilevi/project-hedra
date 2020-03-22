@@ -103,7 +103,7 @@ namespace Hedra.Engine
 #endif
             GameLoader.LoadArchitectureSpecificFilesIfNecessary(GameLoader.AppPath);
             Steam.Instance.Load();
-        }
+        }    
 
         private static void DisposeLibraries()
         {

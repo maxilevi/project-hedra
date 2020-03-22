@@ -112,6 +112,13 @@ namespace Hedra.Engine.StructureSystem.Overworld
             return wizard;
         }
 
+        private static IHumanoid CreateMerchantWizard(Vector3 Position, CollidableStructure Structure)
+        {
+            var wizard = CreateBaseWizard(Position, HealthBarType.Friendly);
+            wizard.AddComponent(new ResetSkillPointsDialogComponent(wizard));
+            return wizard;
+        }
+
         public override string DisplayName => Translations.Get("structure_wizard_tower");
 
         private static SceneSettings WizardTowerSettings { get; } = new SceneSettings
@@ -120,6 +127,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             LightRadius = PointLight.DefaultRadius * 1.5f,
             Npc1Creator = CreateWizard,
             Npc2Creator = CreateDarkWizard,
+            Npc3Creator = CreateMerchantWizard,
             Structure1Creator = (V, _) => new SleepingPad(V),
             Structure3Creator = SceneLoader.WellPlacer,
             Structure4Creator = SceneLoader.FireplacePlacer

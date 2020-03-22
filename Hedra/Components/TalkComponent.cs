@@ -47,7 +47,7 @@ namespace Hedra.Components
         public bool AutoRemove { get; set; }
 
         private const float CharacterThreshold = .05f;
-        private const int TalkRadius = 12;
+        public const int TalkRadius = 12;
         private static uint _talkBackground;
         private static Vector2 _talkBackgroundSize;
         private readonly List<Translation> _lines;
@@ -102,6 +102,11 @@ namespace Hedra.Components
         public void AddDialogLine(Translation Dialog)
         {
             _lines.Add(Dialog);
+        }
+
+        public void ClearDialogLines()
+        {
+            _lines.Clear();
         }
         
         public override void Update()

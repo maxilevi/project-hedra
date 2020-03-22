@@ -16,6 +16,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         void Reset();
         void ShowBlueprint(AbilityTreeBlueprint Blueprint, InventoryArray Array, byte[] AbilityTreeArray);
         int AvailablePoints { get; }
+        int UsedPoints { get; }
         Item[] TreeItems { get; }
         InventoryArray MainTree { get; }
         InventoryArray FirstTree { get; }

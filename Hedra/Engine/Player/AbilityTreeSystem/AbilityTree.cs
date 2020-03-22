@@ -152,12 +152,24 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 
         public void Reset()
         {
+            SetBlueprint(_player.Class.FirstSpecializationTree, _firstTree);
+            for (var i = 0; i < AbilityCount; i++)
+            {
+                this.SetPoints(i, 0);
+            }
+            SetBlueprint(_player.Class.SecondSpecializationTree, _secondTree);
+            for (var i = 0; i < AbilityCount; i++)
+            {
+                this.SetPoints(i, 0);
+            }
+            SetBlueprint(_player.Class.MainTree, _mainTree);
             for (var i = 0; i < AbilityCount; i++)
             {
                 this.SetPoints(i, 0);
             }
             SpecializationTreeIndex = 0;
         }
+        
         
         private static byte[] BuildSaveData(InventoryArray Abilities)
         {
@@ -272,6 +284,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         }
 
         public int AvailablePoints => _manager.AvailablePoints;
+        public int UsedPoints => _manager.UsedPoints;
         public Item[] TreeItems => MainTree.Items.Concat(FirstTree.Items).Concat(SecondTree.Items).ToArray();
         public InventoryArray MainTree => _mainTree;
         public InventoryArray FirstTree => _firstTree;

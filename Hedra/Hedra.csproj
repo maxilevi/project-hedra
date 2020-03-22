@@ -319,6 +319,7 @@
     <Compile Include="Components\INamedHealthBar.cs" />
     <Compile Include="Components\InnkeeperComponent.cs" />
     <Compile Include="Components\MasonComponent.cs" />
+    <Compile Include="Components\ResetSkillPointsDialogComponent.cs" />
     <Compile Include="Components\RideComponent.cs" />
     <Compile Include="Components\CompanionStatsComponent.cs" />
     <Compile Include="Components\ScriptedTradeComponent.cs" />
