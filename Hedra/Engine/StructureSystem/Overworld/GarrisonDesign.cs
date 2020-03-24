@@ -8,10 +8,12 @@ using Hedra.Components;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Management;
 using Hedra.Engine.Scenes;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
+using Hedra.Items;
 using Hedra.Numerics;
 using Hedra.Rendering;
 
@@ -64,15 +66,21 @@ namespace Hedra.Engine.StructureSystem.Overworld
         
         private static void AddImmuneTag(IEntity Bandit)
         {
-            Bandit.AddComponent(new IsDungeonMemberComponent(Bandit));
-            Bandit.SearchComponent<DamageComponent>().Ignore(E => E.SearchComponent<IsDungeonMemberComponent>() != null);
+            Bandit.AddComponent(new IsStructureMemberComponent(Bandit));
+            Bandit.SearchComponent<DamageComponent>().Ignore(E => E.SearchComponent<IsStructureMemberComponent>() != null);
             Bandit.SearchComponent<IBehaviouralAI>().AlterBehaviour<RoamBehaviour>(new DungeonRoamBehaviour(Bandit));
+        }
+
+        private static Item CreateItemForRewardChest()
+        {
+            return ItemPool.Grab(Utils.Rng.Next(0, 7) == 1 ? ItemTier.Rare : ItemTier.Uncommon);
         }
 
         private SceneSettings GarrisonSettings { get; } = new SceneSettings
         {
             Structure4Creator = (P, _) => new Torch(P),
             Structure2Creator = SceneLoader.WellPlacer,
+            Structure3Creator = (P, M) => StructureContentHelper.AddRewardChest(P, M, CreateItemForRewardChest()),
             Structure1Creator = (P, _) => new SleepingPad(P),
             Npc1Creator = CreateBandit,
             Npc2Creator = CreateBandit

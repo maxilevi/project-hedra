@@ -3,9 +3,9 @@ using Hedra.EntitySystem;
 
 namespace Hedra.Engine.StructureSystem.Overworld
 {
-    public class IsDungeonMemberComponent : EntityComponent
+    public class IsStructureMemberComponent : EntityComponent
     {
-        public IsDungeonMemberComponent(IEntity Entity) : base(Entity)
+        public IsStructureMemberComponent(IEntity Entity) : base(Entity)
         {
         }
 

@@ -490,12 +490,13 @@
     <Compile Include="Engine\StructureSystem\Overworld\UndeadDungeonWithBossDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\FishingPost.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\FishingPostDesign.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\IsDungeonMemberComponent.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\IsStructureMemberComponent.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\PunchingBag.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\SpawnCampfire.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\SpawnCampfireDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\TimeHandler.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\Torch.cs" />
+    <Compile Include="Engine\StructureSystem\StructureContentHelper.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\Builders\GenericBuilderWithNPC.cs" />
     <Compile Include="Engine\StructureSystem\VillageSystem\GenericNPCSettings.cs" />
     <Compile Include="Engine\TreeSystem\BirchDesign.cs" />

@@ -45,47 +45,9 @@ namespace Hedra.Engine.StructureSystem.Overworld
             var lever = new Lever(Vector3.Transform((Position + StructureOffset) * StructureScale, Rotation) + Structure.Position, StructureScale);
             var axisAngle = Rotation.ExtractRotation().ToAxisAngle();
             lever.Rotation = axisAngle.Xyz() * axisAngle.W * Mathf.Degree;
-            lever.Condition = () => IsNotNearEnemies(lever.Position);
+            lever.Condition = () => StructureContentHelper.IsNotNearEnemies(lever.Position);
             Structure.WorldObject.AddChildren(lever);
             return lever;
-        }
-        
-        private static bool IsNotNearEnemies(Vector3 Position)
-        {
-            var mobs = World.Entities;
-            return mobs.Count(M => M.Distance(Position) < 32 && M.SearchComponent<IsDungeonMemberComponent>() != null) == 0;
-        }
-        
-        protected static bool IsNotNearLookingEnemies(Vector3 Position)
-        {
-            var mobs = World.Entities;
-            return mobs.Count(M => M.Distance(Position) < 32 && !M.Physics.StaticRaycast(Position) && M.SearchComponent<IsDungeonMemberComponent>() != null) == 0;
-        }
-
-        protected static Chest AddRewardChest(Vector3 Position, VertexData Model)
-        {
-            var chest = World.SpawnChest(Position, ItemPool.Grab(Utils.Rng.Next(0, 5) == 1 ? ItemTier.Rare : ItemTier.Uncommon));
-            chest.Condition = () => IsNotNearEnemies(chest.Position);
-            var triangle = Model.Vertices;
-            var direction = Vector3.Zero;
-            for (var h = 0; h < 3; ++h)
-            {
-                var i = h;
-                var j = (h + 1) % 3;
-                var k = (h + 2) % 3;
-                var ij = (triangle[i] - triangle[j]).LengthFast();
-                var ik = (triangle[i] - triangle[k]).LengthFast();
-                var jk = (triangle[k] - triangle[j]).LengthFast();
-                if (ij < ik && ij < jk)
-                {
-                    var avg = (triangle[i] + triangle[j]) / 2;
-                    direction = (avg - triangle[k]).NormalizedFast();
-                    break;
-                }
-            }
-
-            chest.Rotation = Physics.DirectionToEuler(direction) + 90 * Vector3.UnitY;
-            return chest;
         }
 
         protected static BaseStructure BuildDungeonDoorTrigger(Vector3 Point, VertexData Mesh)
@@ -100,8 +62,8 @@ namespace Hedra.Engine.StructureSystem.Overworld
         
         protected static void AddImmuneTag(IEntity Skeleton)
         {
-            Skeleton.AddComponent(new IsDungeonMemberComponent(Skeleton));
-            Skeleton.SearchComponent<DamageComponent>().Ignore(E => E.SearchComponent<IsDungeonMemberComponent>() != null);
+            Skeleton.AddComponent(new IsStructureMemberComponent(Skeleton));
+            Skeleton.SearchComponent<DamageComponent>().Ignore(E => E.SearchComponent<IsStructureMemberComponent>() != null);
             Skeleton.SearchComponent<IBehaviouralAI>().AlterBehaviour<RoamBehaviour>(new DungeonRoamBehaviour(Skeleton));
         }
 

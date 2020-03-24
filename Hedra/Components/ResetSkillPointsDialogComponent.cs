@@ -70,7 +70,7 @@ namespace Hedra.Components
             if (neededGold != 0 && talkee.Gold >= neededGold)
             {
                 _asked = true;
-                talkee.MessageDispatcher.ShowMessage(Translations.Get("accept_skill_change", Controls.Skilltree), 3, Color.Gold);
+                talkee.MessageDispatcher.ShowMessage(Translations.Get("accept_skill_change", Controls.Interact), 3, Color.Gold);
             }
         }
 
@@ -80,6 +80,7 @@ namespace Hedra.Components
             Humanoid.AbilityTree.Reset();
             SoundPlayer.PlayUISound(SoundType.TransactionSound);
             _accepted = true;
+            _asked = false;
             
             _talkComponent.ClearDialogLines();
             _talkComponent.AutoRemove = true;
@@ -95,7 +96,7 @@ namespace Hedra.Components
 
         private int CalculatePrice(IPlayer Player)
         {
-            return (int) (Player.AbilityTree.UsedPoints * 47.5f);
+            return (int) (Player.AbilityTree.UsedPoints * 47.5f) + (Player.AbilityTree.HasSpecialization ? 200 : 0);
         }
         
         public override void Update()

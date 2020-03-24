@@ -6,6 +6,7 @@ using Hedra.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EntitySystem.BossSystem;
 using Hedra.Engine.Generation;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Scenes;
 using Hedra.Engine.WorldBuilding;
 using Hedra.EntitySystem;
@@ -41,7 +42,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             {
                 if (children[i] is Chest chest && (chest.Position - boss.Position).LengthFast() < 48)
                 {
-                    chest.Condition = () => IsNotNearLookingEnemies(chest.Position) && boss.IsDead;
+                    chest.Condition = () => StructureContentHelper.IsNotNearLookingEnemies(chest.Position) && boss.IsDead;
                 }
             }
         }
@@ -54,7 +55,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
         {
             var design = (UndeadDungeonWithBossDesign) Structure.Design;
             var boss = design.CreateDungeonBoss(Position, Structure);
-            boss.AddComponent(new IsDungeonMemberComponent(boss));
+            boss.AddComponent(new IsStructureMemberComponent(boss));
             boss.AddComponent(new DropComponent(boss)
             {
                 ItemDrop = Utils.Rng.Next(0, 7) == 1 ? ItemPool.Grab(ItemTier.Unique) : Utils.Rng.Next(0, 5) == 1 ? ItemPool.Grab(ItemTier.Rare) : ItemPool.Grab(ItemTier.Uncommon),
@@ -108,6 +109,11 @@ namespace Hedra.Engine.StructureSystem.Overworld
             return skeleton;
         }
 
+        private static Item CreateItemForChest()
+        {
+            return ItemPool.Grab(Utils.Rng.Next(0, 5) == 1 ? ItemTier.Rare : ItemTier.Uncommon);
+        }
+
         private static SceneSettings Settings { get; } = new SceneSettings
         {
             LightRadius = Torch.DefaultRadius * 2,
@@ -115,7 +121,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             IsNightLight = false,
             Structure1Creator = BuildDungeonDoorTrigger,
             Structure2Creator = BuildBossRoomTrigger,
-            Structure3Creator = AddRewardChest,
+            Structure3Creator = (P, M) => StructureContentHelper.AddRewardChest(P, M, CreateItemForChest()),
             Structure4Creator = (P, _) => new Torch(P),
             Npc1Creator = DungeonSkeleton,
             Npc2Creator = DungeonSkeleton,
