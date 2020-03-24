@@ -53,7 +53,7 @@ namespace Hedra.Components
                 }
                 else
                 {
-                    _talkComponent.AddDialogLine(Translations);
+                    _talkComponent.AddDialogLine(Translation.Create("no_skill_points_reset_dialog"));
                 }
             }
             else
@@ -67,22 +67,23 @@ namespace Hedra.Components
             _talkComponent.ClearDialogLines();
             if (!(Talkee is LocalPlayer talkee)) return;
             var neededGold = CalculatePrice(talkee);
-            if (talkee.Gold >= neededGold)
+            if (neededGold != 0 && talkee.Gold >= neededGold)
             {
                 _asked = true;
-                talkee.MessageDispatcher.ShowMessage(Translations.Get("accept_skill_change", Controls.Skilltree), 3, Color.Silver);
+                talkee.MessageDispatcher.ShowMessage(Translations.Get("accept_skill_change", Controls.Skilltree), 3, Color.Gold);
             }
         }
 
         private void OnAccept(IPlayer Humanoid)
         {
-            Humanoid.AbilityTree.Reset();
             Humanoid.Gold -= CalculatePrice(Humanoid);
+            Humanoid.AbilityTree.Reset();
             SoundPlayer.PlayUISound(SoundType.TransactionSound);
+            _accepted = true;
+            
             _talkComponent.ClearDialogLines();
             _talkComponent.AutoRemove = true;
             _talkComponent.TalkToPlayer();
-            _accepted = true;
         }
 
         private bool CanAccept()

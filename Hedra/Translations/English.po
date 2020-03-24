@@ -748,6 +748,7 @@ reset_skill_points_dialog = I can help you redesign your skill tree for a modest
 cannot_reset_skill_points_dialog = For an exchange of $(BOLD)(GOLD){{0} gold} I can help you redesign your skill tree.\nCome back when you have the money.
 accept_skill_change = Press [{0}] to Accept
 skill_points_reset_dialog = Your skill points have been reset.
+no_skill_points_reset_dialog = I usually help players redesign their skill points but you have none!\nCome back when you are interested.
 
 # Lore quests dialogs
 quest_the_beginning_dialog_0 = You've finally arrived! I know your memory is hazy, but you were brought here for a specific purpose.;I know you are tired so let's start with something simple. Try talking to some $(BOLD)(RED)(CAPS){VILLAGERS}.
