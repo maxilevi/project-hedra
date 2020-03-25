@@ -9,7 +9,7 @@ namespace Hedra.Engine.CacheSystem
 
         public GarrisonIconCache()
         {
-            AddModel(AssetManager.PLYLoader("Assets/Env/Structures/Garrison/Garrison0-Icon.ply", Vector3.One));
+            AddModel(AssetManager.PLYLoader("Assets/Env/Structures/Garrison/Garrison0-Icon.ply", Vector3.One * .5f));
         }
     }
 }

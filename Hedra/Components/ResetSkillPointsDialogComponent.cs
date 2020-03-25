@@ -24,7 +24,7 @@ namespace Hedra.Components
             Parent.AddComponent(_talkComponent);
             EventDispatcher.RegisterKeyDown(this, (_, EventArgs) =>
             {
-                if (EventArgs.Key == Controls.Skilltree && CanAccept())
+                if (EventArgs.Key == Controls.Interact && CanAccept())
                 {
                     OnAccept(LocalPlayer.Instance);
                     EventArgs.Cancel();

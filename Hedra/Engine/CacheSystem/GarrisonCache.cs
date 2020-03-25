@@ -21,6 +21,6 @@ namespace Hedra.Engine.CacheSystem
             new Vector3(26.6138f, 38.44756f, -15.21347f)
         };
         
-        public static Vector3 Scale => Vector3.One * 1.15f;
+        public static Vector3 Scale => Vector3.One * 1.1f;
     }
 }
