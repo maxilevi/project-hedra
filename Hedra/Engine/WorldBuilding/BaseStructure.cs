@@ -23,6 +23,8 @@ namespace Hedra.Engine.WorldBuilding
     /// </summary>
     public abstract class BaseStructure : IDisposable, IStructure, ISearchable
     {
+        private readonly object _childrenLock = new object();
+        private readonly object _npcLock = new object();
         private readonly List<BaseStructure> _children;
         private readonly List<IEntity> _npcs;
 
@@ -31,9 +33,7 @@ namespace Hedra.Engine.WorldBuilding
             _children = Children;
             _npcs = Npcs;
         }
-
-        public BaseStructure[] Children => _children.ToArray();
-        public IEntity[] NPCs => _npcs.ToArray();
+        
         public virtual Vector3 Position { get; set; }
         public bool Disposed { get; protected set; }
 
@@ -46,11 +46,14 @@ namespace Hedra.Engine.WorldBuilding
         
         public void AddChildren(params BaseStructure[] Children)
         {
-            for (var i = 0; i < Children.Length; ++i)
+            lock (_childrenLock)
             {
-                if(Children[i] == null)
-                    throw new ArgumentNullException($"Cannot add a null children");
-                _children.Add(Children[i]);
+                for (var i = 0; i < Children.Length; ++i)
+                {
+                    if (Children[i] == null)
+                        throw new ArgumentNullException($"Cannot add a null children");
+                    _children.Add(Children[i]);
+                }
             }
         }
 
@@ -58,43 +61,76 @@ namespace Hedra.Engine.WorldBuilding
         
         public T[] Search<T>() where T : BaseStructure
         {
-            var list = new List<T>();
-            for (var i = 0; i < _children.Count; ++i)
+            lock (_childrenLock)
             {
-                if (_children[i] is T)
+                var list = new List<T>();
+                for (var i = 0; i < _children.Count; ++i)
                 {
-                    list.Add((T)_children[i]);
+                    if (_children[i] is T)
+                    {
+                        list.Add((T) _children[i]);
+                    }
+
+                    list.AddRange(_children[i].Search<T>());
                 }
-                list.AddRange(_children[i].Search<T>());
+
+                return list.ToArray();
             }
-            return list.ToArray();
         }
 
         public void AddNPCs(params IEntity[] NPCs)
         {
-            for (var i = 0; i < NPCs.Length; ++i)
+            lock (_npcLock)
             {
-                if(_npcs.Contains(NPCs[i]))
-                    throw new ArgumentException($"This NPC has already been added to the list.");
-                if(NPCs[i] == null)
-                    throw new ArgumentNullException("Cannot add a null NPC");
-                _npcs.Add(NPCs[i]);
+                for (var i = 0; i < NPCs.Length; ++i)
+                {
+                    if (_npcs.Contains(NPCs[i]))
+                        throw new ArgumentException($"This NPC has already been added to the list.");
+                    if (NPCs[i] == null)
+                        throw new ArgumentNullException("Cannot add a null NPC");
+                    _npcs.Add(NPCs[i]);
+                }
+            }
+        }
+        
+        public BaseStructure[] Children
+        {
+            get
+            {
+                lock(_childrenLock)
+                    return _children.ToArray();
+            }
+        }
+
+        public IEntity[] NPCs
+        {
+            get
+            {
+                lock(_npcLock)
+                    return _npcs.ToArray();
             }
         }
         
         public virtual void Dispose()
         {
             Disposed = true;
-            for (var i = 0; i < _children.Count; i++)
+            lock (_childrenLock)
             {
-                _children[i].Dispose();
+                for (var i = 0; i < _children.Count; i++)
+                {
+                    _children[i]?.Dispose();
+                }
+                _children.Clear();
             }
-            _children.Clear();
-            for (var i = 0; i < _npcs.Count; i++)
+            
+            lock (_npcLock)
             {
-                _npcs[i].Dispose();
+                for (var i = 0; i < _npcs.Count; i++)
+                {
+                    _npcs[i]?.Dispose();
+                }
+                _npcs.Clear();
             }
-            _npcs.Clear();
         }
     }
 }
