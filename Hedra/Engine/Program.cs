@@ -25,6 +25,7 @@ using Hedra.Engine.Scripting;
 using Silk.NET.GLFW;
 using Silk.NET.Windowing.Common;
 using Monitor = Silk.NET.Windowing.Monitor;
+using TaskScheduler = Hedra.Core.TaskScheduler;
 using Vector3 = BulletSharp.Math.Vector3;
 
 namespace Hedra.Engine
@@ -187,6 +188,13 @@ namespace Hedra.Engine
             GameSettings.ScreenRatio = GameSettings.Width / (float) GameSettings.Height;    
 
             GameSettings.LoadWindowSettings(GameSettings.SettingsPath);
+            var previousFullscreen = GameSettings.Fullscreen;
+            TaskScheduler.After(1, () =>
+            {
+                GameSettings.Fullscreen = true;
+                GameSettings.Fullscreen = false;
+                GameSettings.Fullscreen = previousFullscreen; 
+            });
             Log.WriteLine("Window settings loading was Successful");
             if (!IsDummy || IsDummy && IsServer)
             {
