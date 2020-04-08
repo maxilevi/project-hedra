@@ -152,7 +152,7 @@ namespace Hedra.Engine.Player
             var added = New.Except(NearCollisions).ToArray();
             var removed = NearCollisions.Except(New).ToArray();
             NearCollisions = New;
-            TaskScheduler.Parallel(() =>
+            Executer.ExecuteOnMainThread(() =>
             {
                 Remove(removed);
                 Add(added);
