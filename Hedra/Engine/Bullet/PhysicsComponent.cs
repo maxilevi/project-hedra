@@ -64,7 +64,8 @@ namespace Hedra.Engine.Bullet
             _usePhysics = true;
             _gravityDirection = -Vector3.UnitY;
             _gravity = Gravity;
-            using (var bodyInfo = new RigidBodyConstructionInfo(1, _motionState = new PhysicsComponentMotionState(), new BoxShape(Vector3.One.Compatible())))
+            _motionState = new PhysicsComponentMotionState();
+            using (var bodyInfo = new RigidBodyConstructionInfo(1, _motionState, new BoxShape(Vector3.One.Compatible())))
             {
                 _body = new RigidBody(bodyInfo);
                 /* FIXME: Ugly */
@@ -180,7 +181,7 @@ namespace Hedra.Engine.Bullet
             }
             finally
             {
-                BulletPhysics.Dispose(previous, () => true);
+                BulletPhysics.Dispose(previous);
             }
         }
 
@@ -223,11 +224,8 @@ namespace Hedra.Engine.Bullet
                     _sensorInformation.Mask &= ~CollisionFilterGroups.CharacterFilter;
                 }
 
-                Executer.ExecuteOnMainThread(() =>
-                {
-                    BulletPhysics.ApplyMaskChanges(_body);
-                    BulletPhysics.ApplyMaskChanges(_sensor);
-                });
+                BulletPhysics.ApplyMaskChanges(_body);
+                BulletPhysics.ApplyMaskChanges(_sensor);
             }
     }
 
@@ -458,8 +456,8 @@ namespace Hedra.Engine.Bullet
 
         public override void Dispose()
         {
-            /* Motion state is disposed by the body */
-            BulletPhysics.Dispose(_rayResult, () => true);
+            BulletPhysics.Dispose(_motionState);
+            BulletPhysics.Dispose(_rayResult);
             BulletPhysics.RemoveAndDispose(_body);
             BulletPhysics.RemoveAndDispose(_sensor);
             BulletPhysics.OnRigidbodyReAdded -= OnRigidbodyReAdded;

@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using BulletSharp;
 using BulletSharp.Math;
 using Hedra.Core;
@@ -17,7 +16,6 @@ using Hedra.Numerics;
 using Hedra.Rendering;
 using Hedra.Framework;
 using CollisionShape = BulletSharp.CollisionShape;
-using Timer = Hedra.Core.Timer;
 using Vector2 = System.Numerics.Vector2;
 
 namespace Hedra.Engine.Bullet
@@ -52,12 +50,9 @@ namespace Hedra.Engine.Bullet
         private static HashSet<Pair<CollisionObject, CollisionObject>> _pairsLastUpdate;
         public const float Gravity = 10 * Generation.ChunkSystem.Chunk.BlockSize;
         public static int ObjectsInSimulation { get; private set; }
-        public static int ObjectsInDisposeQueue { get; private set; }
-        private static Timer _debugTimer;
 
         public static void Load()
         {
-            _debugTimer = new Timer(8);
             _sensorsLock = new object();
             _chunkLock = new object();
             _bulletLock = new object();
@@ -97,12 +92,21 @@ namespace Hedra.Engine.Bullet
         {
             lock (_bulletLock)
             {
-                if(_debugTimer.Tick())
-                    Log.WriteLine($"ObjectsInSimulation = {ObjectsInSimulation}; ObjectsInDisposeQueue = {ObjectsInDisposeQueue}; Objects = {_bodies.Count}");
                 CalculateActiveOffsets();
                 UpdateActivations();
                 _dynamicsWorld.StepSimulation(DeltaTime);
                 CheckForCollisionEvents();
+
+                lock (_bodyLock)
+                {
+                    for (var i = 0; i < _bodies.Count; ++i)
+                    {
+                        if (_bodies[i].IsDisposed)
+                        {
+                            int a = 0;
+                        }
+                    }
+                }
             }
         }
 
@@ -135,6 +139,11 @@ namespace Hedra.Engine.Bullet
                 {
                     if (information.IsInSimulation)
                         RemoveFromSimulation(_sensors[i], information);
+                }
+
+                if (!information.IsSensor)
+                {
+                    int a = 0;
                 }
             }
         }
@@ -217,14 +226,12 @@ namespace Hedra.Engine.Bullet
             for (var i = 0; i < Bodies.Count; ++i)
             {
                 var information = (PhysicsObjectInformation) Bodies[i].UserObject;
-                if (Bodies[i].IsDisposed) continue;
                 lock (_bulletLock)
                 {
                     if (Add)
                     {
                         if (!information.IsInSimulation)
                             AddToSimulation(Bodies[i], information);
-
                         _dynamicsWorld.UpdateSingleAabb(Bodies[i]);
                     }
                     else
@@ -245,23 +252,14 @@ namespace Hedra.Engine.Bullet
 
         private static void AddToSimulation(RigidBody Body, PhysicsObjectInformation Information)
         {
-            if (AssertBodyNotDisposed(Body, Information))
-                return;
+            if (Body.IsDisposed)
+            {
+                int a = 0;
+            }
             Information.IsInSimulation = true;
             _dynamicsWorld.AddRigidBody(Body, Information.Group, Information.Mask);
             OnRigidbodyReAdded?.Invoke(Body);
             ObjectsInSimulation++;
-        }
-
-        private static bool AssertBodyNotDisposed(RigidBody Body, PhysicsObjectInformation Information)
-        {
-            if (Body.IsDisposed)
-            {
-                Log.WriteLine($"Trying to add disposed body '{Information.Name}' from {new StackTrace()}");
-                return true;
-            }
-
-            return false;
         }
 
         public static void Draw()
@@ -364,6 +362,7 @@ namespace Hedra.Engine.Bullet
         
         public static void RemoveAndDispose(RigidBody Body)
         {
+            if(Body.IsDisposed) return;
             lock (_bulletLock)
             {
                 var information = (PhysicsObjectInformation) Body.UserObject;
@@ -419,25 +418,17 @@ namespace Hedra.Engine.Bullet
             }
         }
 
-        public static void Dispose(BulletDisposableObject Object, Func<bool> When)
+        public static void Dispose(BulletDisposableObject Object)
         {
-            RoutineManager.StartRoutine(DisposeRoutine, Object, When);
+            RoutineManager.StartRoutine(DisposeRoutine, Object);
         }
 
         private static IEnumerator DisposeRoutine(params object[] Params)
         {
-            ObjectsInDisposeQueue++;
-            var obj = ((BulletDisposableObject) Params[0]);
-            var lambda = (Func <bool>) Params[1];
-            while (!lambda()) yield return null;
-            
             lock (_bulletLock)
             {
-                if(!obj.IsDisposed)
-                    ((BulletDisposableObject) Params[0]).Dispose();
+                ((BulletDisposableObject) Params[0]).Dispose();
             }
-
-            ObjectsInDisposeQueue--;
             yield return null;
         }
         
@@ -450,73 +441,22 @@ namespace Hedra.Engine.Bullet
                     var count = meshArray.IndexedMeshArray.Count;
                     for (var i = 0; i < count; ++i)
                     {
-                        Dispose(meshArray.IndexedMeshArray[i], () => Body.IsDisposed);
+                        Dispose(meshArray.IndexedMeshArray[i]);
                     }
-                    Dispose(meshArray, () => Body.IsDisposed);
+                    Dispose(meshArray);
                     break;
                 case CompoundShape compoundShape:
                 {
                     for (var i = 0; i < compoundShape.NumChildShapes; ++i)
                     {
-                        Dispose(compoundShape.GetChildShape(i), () => Body.IsDisposed);
+                        Dispose(compoundShape.GetChildShape(i));
                     }
                     break;
                 }
             }
-            Dispose(Body.MotionState, () => Body.IsDisposed);
-            Dispose(Body.CollisionShape, () => Body.IsDisposed);
-            Dispose(Body, () => !IsBodyBeingReferenced(Body));
-        }
-
-        private static bool IsBodyBeingReferenced(RigidBody Body)
-        {
-            bool bodiesContains, chunkContains, staticContains, sensorsContains, dynamicContains, dynamicWorldContains = false, collisionCacheContains = false;
-            lock (_bodyLock)
-                bodiesContains = _bodies.Contains(Body);
-
-            lock (_chunkLock)
-            {
-                var information = (PhysicsObjectInformation)Body.UserObject;
-                chunkContains = false;
-                staticContains = false;
-                if (information?.StaticOffsets != null)
-                {
-                    for (var i = 0; i < information.StaticOffsets.Length; ++i)
-                    {
-                        var offset = information.StaticOffsets[i];
-                        if (_chunkBodies.ContainsKey(offset) && !chunkContains)
-                        {
-                            chunkContains = _chunkBodies[offset].Contains(Body);
-                        }
-
-                        if (_staticBodies.ContainsKey(offset) && !staticContains)
-                        {
-                            staticContains = _staticBodies[offset].Contains(Body);
-                        }
-                    }
-                }
-            }
-
-            lock (_sensorsLock)
-                sensorsContains = _sensors.Contains(Body);
-
-            lock (_dynamicBodiesLock)
-                dynamicContains = _dynamicBodies.Contains(Body);
-
-            if (!bodiesContains && !chunkContains && !sensorsContains && !dynamicContains)
-            {
-                lock (_bulletLock)
-                    dynamicWorldContains = _dynamicsWorld.CollisionObjectArray.Contains(Body);
-            }
-
-            if (!dynamicWorldContains)
-            {
-                collisionCacheContains = _pairsLastUpdate.Any(P => Equals(P.One, Body) || Equals(P.Two, Body));
-                if(!collisionCacheContains)
-                    collisionCacheContains = _currentPairs.Any(P => Equals(P.One, Body) || Equals(P.Two, Body));
-            }
-
-            return bodiesContains || chunkContains || sensorsContains || dynamicContains || dynamicWorldContains || collisionCacheContains;
+            Dispose(Body.MotionState);
+            Dispose(Body.CollisionShape);
+            Dispose(Body);
         }
         
         public static void AddChunk(Vector2 Offset, NativeVertexData Mesh, PhysicsSystem.CollisionShape[] Shapes)
@@ -716,7 +656,26 @@ namespace Hedra.Engine.Bullet
                 }
             }
         }
-        
+
+        public static bool Collides(Vector3 Offset, RigidBody Body)
+        {
+            lock (_bulletLock)
+            {
+                var callback = new ContactTestResultCallback();
+                try
+                {
+                    Body.Translate(Offset);
+                    _dynamicsWorld.ContactTest(Body, callback);
+                    return callback.HasHit;
+                }
+                finally
+                {
+                    Body.Translate(-Offset);
+                    callback.Dispose();
+                }
+            }
+        }
+
         private static void BaseResetCallback(RayResultCallback Callback)
         {
             Callback.ClosestHitFraction = 1;

@@ -122,7 +122,7 @@ namespace Hedra.Engine.Loader
                 text += 
                     $"{lineBreak}QUEUES = {World.Builder.MeshQueueCount} / {World.Builder.BlockQueueCount} / {World.Builder.StructureQueueCount} THREADS = {World.Builder.MeshThreads} / {World.Builder.BlockThreads} / {World.Builder.StructureThreads} Time={(int)(SkyManager.DayTime/1000)}:{((int) ( ( SkyManager.DayTime/1000f - (int)(SkyManager.DayTime/1000) ) * 60)):00} H={World.Entities.Count(M => M.IsHumanoid)} Items={World.WorldObjects.Length} M&H={World.Entities.Count}";
                 text += 
-                    $"{lineBreak}Watchers={World.StructureHandler.Watchers.Length} Structs={World.StructureHandler.Structures.Length}->{World.StructureHandler.Structures.Sum(S => S.Children.Length)} Plateaus={World.WorldBuilding.Plateaux.Length} Groundworks={World.WorldBuilding.Groundworks.Length} BType={block.Type} BDisposeQ={BulletPhysics.ObjectsInDisposeQueue}";
+                    $"{lineBreak}Watchers={World.StructureHandler.Watchers.Length} Structs={World.StructureHandler.Structures.Length}->{World.StructureHandler.Structures.Sum(S => S.Children.Length)} Plateaus={World.WorldBuilding.Plateaux.Length} Groundworks={World.WorldBuilding.Groundworks.Length} BType={block.Type}";
                 text +=
                     $"{lineBreak}AIStorage={TraverseStorage.Instance.StorageCount} Updates={UpdateManager.UpdateCount} Seed={World.Seed} FPS={Time.Framerate} MS={Time.Frametime} BDensity={block.Density} Pitch={player.View.Pitch:0.00}";
                 text +=
