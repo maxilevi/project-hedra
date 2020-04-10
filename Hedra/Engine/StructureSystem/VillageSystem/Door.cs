@@ -73,6 +73,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
                 Id = 0,
                 Vertices = Mesh.Vertices.ToArray()
             });
+            if (collider.Size.LengthSquared() <= 0.25f) throw new ArgumentOutOfRangeException();
             return new BoxShape(collider.Size.Compatible() * .5f);
         }
 

@@ -166,10 +166,14 @@ namespace Hedra.Engine.Rendering.Core
             ID = Renderer.CreateShader(Type);
             Renderer.ShaderSource(ID, asciiSource);
             Renderer.CompileShader(ID);
-            string log = Renderer.GetShaderInfoLog(ID);
-            Renderer.GetShader(ID, ShaderParameter.CompileStatus, out int result);       
-            if (log == string.Empty) log = Renderer.GetError().ToString();
-            if (result != 1) Log.WriteResult(result == 1, "Shader " + Name + " has compiled" + " | " + log + " | " + result);
+            Renderer.GetShader(ID, ShaderParameter.InfoLogLength, out var logLength);
+            var log = string.Empty;
+            if(logLength > 0) Renderer.GetShaderInfoLog(ID);
+            Renderer.GetShader(ID, ShaderParameter.CompileStatus, out int result);
+            if (result != 1)
+            {
+                Log.WriteResult(result == 1, "Shader " + Name + " has compiled" + " | " + log + " | " + result);
+            }
         }
 
         private void CompileShaders(ShaderData DataV, ShaderData DataG, ShaderData DataF)
@@ -239,7 +243,9 @@ namespace Hedra.Engine.Rendering.Core
         {
             Renderer.LinkProgram(ShaderId);
             Renderer.GetProgram(ShaderId, GetProgramParameterName.LinkStatus, out var isLinked);
-            Renderer.GetProgramInfoLog(ShaderId, out var log);
+            Renderer.GetProgram(ShaderId, GetProgramParameterName.InfoLogLength, out var length);
+            var log = string.Empty;
+            if (length > 0) Renderer.GetProgramInfoLog(ShaderId, out log);
             if (isLinked == 0)
             {
                 Log.WriteResult(false, $"Shader '{Name}' linking failed |  {log}  | ");

@@ -21,6 +21,7 @@ namespace Hedra.Engine.Generation
             get => _seed;
             set
             {
+                if(_disposed) return;
                 if(_seed != value)
                     HedraCoreNative.fastnoise_setSeed(_native, _seed = value);
             }
@@ -28,47 +29,38 @@ namespace Hedra.Engine.Generation
 
         public float PerturbAmp
         {
-            set => HedraCoreNative.fastnoise_setPerturbAmp(_native, value);
-        }
-        
-        public float PerturbFrequency
-        {
-            set => HedraCoreNative.fastnoise_setPerturbFrequency(_native, value);
-        }
-        
-        public PerturbType PerturbType
-        {
-            set => HedraCoreNative.fastnoise_setPerturbType(_native, value);
+            set
+            {
+                if(_disposed) return;
+                HedraCoreNative.fastnoise_setPerturbAmp(_native, value);
+            }
         }
 
-        public float FractalLacunarity
+        public float PerturbFrequency
         {
-            set => HedraCoreNative.fastnoise_setFractalLacunarity(_native, value);
+            set
+            {
+                if(_disposed) return;
+                HedraCoreNative.fastnoise_setPerturbFrequency(_native, value);
+            }
         }
-        
-        public float FractalGain
+
+        public PerturbType PerturbType
         {
-            set => HedraCoreNative.fastnoise_setFractalGain(_native, value);
+            set
+            {
+                if(_disposed) return;
+                HedraCoreNative.fastnoise_setPerturbType(_native, value);
+            }
         }
-        
-        public int FractalOctaves
-        {
-            set => HedraCoreNative.fastnoise_setFractalOctaves(_native, value);
-        }
-        
-        public FractalType FractalType
-        {
-            set => HedraCoreNative.fastnoise_setFractalType(_native, value);
-        }
-        
+
         public float Frequency
         {
-            set => HedraCoreNative.fastnoise_setFrequency(_native, value);
-        }
-        
-        public CellularReturnType CellularReturnType
-        {
-            set => HedraCoreNative.fastnoise_setCellularReturnType(_native, value);
+            set
+            {
+                if(_disposed) return;
+                HedraCoreNative.fastnoise_setFrequency(_native, value);
+            }
         }
 
         public float[] GetSimplexSetWithFrequency(Vector3 Offset, Vector3 Size, Vector3 Scale, float frequency)

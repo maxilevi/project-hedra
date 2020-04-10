@@ -5,7 +5,6 @@ using Hedra.Engine.Localization;
 using Hedra.Localization;
 using Hedra.Rendering;
 using System.Numerics;
-using BulletSharp;
 using Hedra.AISystem.Humanoid;
 using Hedra.BiomeSystem;
 using Hedra.Components;

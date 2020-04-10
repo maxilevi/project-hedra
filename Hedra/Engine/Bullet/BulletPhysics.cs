@@ -420,7 +420,8 @@ namespace Hedra.Engine.Bullet
 
         public static void Dispose(BulletDisposableObject Object)
         {
-            RoutineManager.StartRoutine(DisposeRoutine, Object);
+            Object.Dispose();
+            //RoutineManager.StartRoutine(DisposeRoutine, Object);
         }
 
         private static IEnumerator DisposeRoutine(params object[] Params)
@@ -434,9 +435,17 @@ namespace Hedra.Engine.Bullet
         
         public static void DisposeBody(RigidBody Body)
         {
+            Log.WriteLine($"Disposing from {new StackTrace()}");
+            //Log.WriteLine(Body.UserObject);
+            Log.WriteLine($"Disposing shape of type {Body.CollisionShape.ShapeType} {Body.CollisionShape.GetType()}");
+            Log.WriteLine($"IsInfinite: {Body.CollisionShape.IsInfinite} IsConcave: {Body.CollisionShape.IsConcave} LocalScaling: {Body.CollisionShape.LocalScaling} IsDisposed: {Body.CollisionShape.IsDisposed}");
+            Log.WriteLine($"IsCompound: {Body.CollisionShape.IsCompound} IsNonMoving: {Body.CollisionShape.IsNonMoving}");
+            Log.Flush();
             switch (Body.CollisionShape)
             {
                 case BvhTriangleMeshShape bvhTriangleMeshShape:
+                    Log.WriteLine($"LocalAabbMax: {bvhTriangleMeshShape.LocalAabbMax} LocalAabbMin: {bvhTriangleMeshShape.LocalAabbMin}");
+                    Log.Flush();
                     var meshArray = (TriangleIndexVertexArray)bvhTriangleMeshShape.MeshInterface;
                     var count = meshArray.IndexedMeshArray.Count;
                     for (var i = 0; i < count; ++i)
@@ -453,9 +462,14 @@ namespace Hedra.Engine.Bullet
                     }
                     break;
                 }
+                case BoxShape boxShape:
+                    Dispose(boxShape);
+                    break;
+                
+                default:
+                    throw new ArgumentOutOfRangeException($"Unknown collision shape of type '{Body.CollisionShape.ShapeType}' and object type '{Body.CollisionShape.GetType()}' found");
             }
             Dispose(Body.MotionState);
-            Dispose(Body.CollisionShape);
             Dispose(Body);
         }
         
@@ -635,7 +649,7 @@ namespace Hedra.Engine.Bullet
             _currentPairs = temp;
         }
         
-        public static ClosestRayResultCallback Raycast(Vector3 Source, Vector3 End, CollisionFilterGroups Mask)
+        public static RayResult Raycast(Vector3 Source, Vector3 End, CollisionFilterGroups Mask)
         {
             lock (_bulletLock)
             {
@@ -648,7 +662,7 @@ namespace Hedra.Engine.Bullet
                 try
                 {
                     BulletPhysics.Raycast(ref Source, ref End, callback);
-                    return callback;
+                    return new RayResult(callback.HasHit, callback.HitPointWorld);
                 }
                 finally
                 {
@@ -716,6 +730,18 @@ namespace Hedra.Engine.Bullet
                 lock (_bodies)
                     return _bodies.Count;
             }
+        }
+    }
+    
+    public struct RayResult
+    {
+        public bool HasHit { get; }
+        public Vector3 HitPointWorld { get; }
+
+        public RayResult(bool HasHit, Vector3 HitPointWorld)
+        {
+            this.HasHit = HasHit;
+            this.HitPointWorld = HitPointWorld;
         }
     }
 }

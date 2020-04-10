@@ -64,8 +64,7 @@ namespace Hedra.Engine.Bullet
             _usePhysics = true;
             _gravityDirection = -Vector3.UnitY;
             _gravity = Gravity;
-            _motionState = new PhysicsComponentMotionState();
-            using (var bodyInfo = new RigidBodyConstructionInfo(1, _motionState, new BoxShape(Vector3.One.Compatible())))
+            using (var bodyInfo = new RigidBodyConstructionInfo(1, _motionState = new PhysicsComponentMotionState(), new BoxShape(Vector3.One.Compatible())))
             {
                 _body = new RigidBody(bodyInfo);
                 /* FIXME: Ugly */
@@ -143,6 +142,7 @@ namespace Hedra.Engine.Bullet
         {
             SetShape(_body, GetShapeForBox(Dimensions));
             var radius = Dimensions.Size.Xz().Length() * .5f;
+            if (radius < 0.25f) throw new ArgumentOutOfRangeException();
             SetShape(_sensor, new BoxShape(radius * .5f, .5f, radius * .5f));
         }
 
@@ -153,6 +153,7 @@ namespace Hedra.Engine.Bullet
             {
                 var radius = Dimensions.Size.Xz().Length() * .5f * .5f;
                 bodyShape = new CompoundShape();
+                if (radius < 0.25f) throw new ArgumentOutOfRangeException();
                 var capsule = new SphereShape(radius);
                 bodyShape.AddChildShape(
                     Matrix.Translation(BulletSharp.Math.Vector3.UnitY * -radius),
@@ -163,6 +164,7 @@ namespace Hedra.Engine.Bullet
             {
                 var radius = Dimensions.Size.Xz().Length() * .25f;
                 bodyShape = new CompoundShape();
+                if (radius < 0.25f) throw new ArgumentOutOfRangeException();
                 var capsule = new CapsuleShape(radius, Dimensions.Size.Y * .5f);
                 bodyShape.AddChildShape(
                     Matrix.Translation(BulletSharp.Math.Vector3.UnitY * (-capsule.HalfHeight - radius)),
@@ -456,7 +458,6 @@ namespace Hedra.Engine.Bullet
 
         public override void Dispose()
         {
-            BulletPhysics.Dispose(_motionState);
             BulletPhysics.Dispose(_rayResult);
             BulletPhysics.RemoveAndDispose(_body);
             BulletPhysics.RemoveAndDispose(_sensor);
