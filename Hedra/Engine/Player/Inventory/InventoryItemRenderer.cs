@@ -24,7 +24,7 @@ namespace Hedra.Engine.Player.Inventory
     {
         public const float ZOffsetFactor = 1.25f * 5f;
         public static readonly FBO Framebuffer;
-        private readonly InventoryArray _array;
+        private InventoryArray _array;
         private readonly int _length;
         private readonly int _offset;
         private readonly ObjectMesh[] _models;
@@ -45,6 +45,11 @@ namespace Hedra.Engine.Player.Inventory
             this._models = new ObjectMesh[_length];
             this._modelsSize = new Vector3[_length];
             this._modelCache = new VertexData[_length];
+        }
+
+        public void SetArray(InventoryArray New)
+        {
+            _array = New;
         }
 
         public void UpdateView()

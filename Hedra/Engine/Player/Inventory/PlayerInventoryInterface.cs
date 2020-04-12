@@ -11,7 +11,9 @@ using Hedra.Localization;
 using Hedra.Sound;
 using Hedra.WeaponSystem;
 using System.Numerics;
+using Hedra.Items;
 using Hedra.Numerics;
+using Newtonsoft.Json;
 using Silk.NET.Input.Common;
 
 
@@ -23,11 +25,13 @@ namespace Hedra.Engine.Player.Inventory
         private readonly InventoryArrayInterface _itemsArrayInterface;
         private readonly InventoryArrayInterface _leftMainItemsArrayInterface;
         private readonly InventoryArrayInterface _rightMainItemsArrayInterface;
+        private readonly InventoryArrayInterface _extraSpaceItemsArrayInterface;
         private readonly InventoryArrayInterfaceManager _interfaceManager;
         private readonly InventoryBackground _inventoryBackground;
         private readonly InventoryStateManager _stateManager;
         private readonly InventoryCompanionInfo _companionInterface;
         private bool _show;
+        private Item _bagItem;
 
         public PlayerInventoryInterface(IPlayer Player)
         {
@@ -48,6 +52,10 @@ namespace Hedra.Engine.Player.Inventory
             {
                 Position = Vector2.UnitY * .05f + Vector2.UnitX * +.25f + Vector2.UnitY * .05f
             };
+            _extraSpaceItemsArrayInterface = new InventoryArrayInterface(new InventoryArray(HoldingBagHandler.Size), 0, HoldingBagHandler.Size, 6, Vector2.One)
+            {
+                Position = Vector2.UnitY * -.45f + Vector2.UnitX * .6f
+            };
             _companionInterface = new InventoryCompanionInfo
             {
                 Position = Vector2.UnitX * -.65f + Vector2.UnitY * .1f
@@ -57,10 +65,11 @@ namespace Hedra.Engine.Player.Inventory
                 Position = Vector2.UnitX * .6f + Vector2.UnitY * .1f
             };
             _interfaceManager = new InventoryArrayInterfaceManager(itemInfoInterface, _itemsArrayInterface,
-                _leftMainItemsArrayInterface, _rightMainItemsArrayInterface);
+                _leftMainItemsArrayInterface, _rightMainItemsArrayInterface, _extraSpaceItemsArrayInterface);
             _stateManager.OnStateChange += Invoke;
             _player.Inventory.InventoryUpdated += UpdateInventory;
             _player.Companion.CompanionChanged += _companionInterface.UpdateStats;
+            _interfaceManager.OnItemMove += OnItemMove;
         }
 
         private void UpdateInventory()
@@ -123,6 +132,27 @@ namespace Hedra.Engine.Player.Inventory
             }
         }
 
+        public void ShowInventoryForItem(Item Bag)
+        {
+            if (Bag != _bagItem)
+            {
+                _bagItem = Bag;
+                _extraSpaceItemsArrayInterface.SetArray(Bag.GetAttribute<InventoryArray>("Inventory"));
+                _extraSpaceItemsArrayInterface.Enabled = true;
+            }
+            else
+            {
+                _bagItem = null;
+                _extraSpaceItemsArrayInterface.Enabled = false;
+            }
+        }
+
+        private void OnItemMove(InventoryArray PreviousArray, InventoryArray NewArray, int Index, Item Item)
+        {
+            if(_extraSpaceItemsArrayInterface.Array == NewArray || _extraSpaceItemsArrayInterface.Array == PreviousArray)
+                HoldingBagHandler.SaveInventory(_bagItem, _extraSpaceItemsArrayInterface.Array);
+        }
+
         public override Key OpeningKey => Controls.InventoryOpen;
         public override bool Show
         {
@@ -136,6 +166,7 @@ namespace Hedra.Engine.Player.Inventory
                 _rightMainItemsArrayInterface.Enabled = _show;
                 _inventoryBackground.Enabled = _show;
                 _interfaceManager.Enabled = _show;
+                _extraSpaceItemsArrayInterface.Enabled = false;
                 this.UpdateInventory();
                 this.SetInventoryState(_show);
                 SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);

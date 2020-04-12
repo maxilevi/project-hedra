@@ -510,6 +510,7 @@
     <Compile Include="Engine\WorldBuilding\BanditOptions.cs" />
     <Compile Include="Engine\WorldBuilding\NPCCreator.cs" />
     <Compile Include="Items\EquipmentType.cs" />
+    <Compile Include="Items\HoldingBagHandler.cs" />
     <Compile Include="Items\ItemTier.cs" />
     <Compile Include="Items\Trader.cs" />
     <Compile Include="Localization\Controls.cs" />
@@ -9372,6 +9373,10 @@
       <Link>Assets\Items\Misc\FishingRod.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Misc\HoldingBag.ply">
+      <Link>Assets\Items\Misc\HoldingBag.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Misc\Pebble.ply">
       <Link>Assets\Items\Misc\Pebble.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -14431,6 +14436,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Misc\GlassFlask.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Misc\HoldingBag.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Misc\Rosemary.json">

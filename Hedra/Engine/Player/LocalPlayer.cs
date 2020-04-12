@@ -251,6 +251,11 @@ namespace Hedra.Engine.Player
             Questing.Update();
         }
 
+        public void ShowInventoryFor(Item Bag)
+        {
+            InventoryInterface.ShowInventoryForItem(Bag);
+        }
+
         public override int Gold
         {
             get => Inventory.Search(I => I.IsGold)?.GetAttribute<int>(CommonAttributes.Amount) ?? 0;
@@ -260,14 +265,15 @@ namespace Hedra.Engine.Player
         private void SetGold(int Amount, bool Silent)
         {
             if (Amount < 0) return;
+            var currentGold = Inventory.Search(I => I.IsGold);
             if (!Silent)
             {
-                var sign = Amount > 0 ? "+" : "-";
-                this.ShowText(Model.HeadPosition, $"{sign} {Math.Abs(Amount - Gold)} {Translations.Get("quest_gold")}", Color.Gold,
+                var isLessThanCurrent = Amount < currentGold.GetAttribute<int>(CommonAttributes.Amount);
+                var sign = isLessThanCurrent ? "-" : "+";
+                this.ShowText(Model.HeadPosition, $"{sign} {Math.Abs(Amount - Gold)} {Translations.Get("quest_gold")}", isLessThanCurrent ? Color.Red : Color.Gold,
                     18);
             }
-
-            var currentGold = Inventory.Search(I => I.IsGold);
+            
             if (currentGold == null)
             {
                 var gold = ItemPool.Grab(ItemType.Gold);

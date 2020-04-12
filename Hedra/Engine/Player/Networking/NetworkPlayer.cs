@@ -3,6 +3,7 @@ using Hedra.Components;
 using Hedra.Crafting;
 using Hedra.Engine.Bullet;
 using Hedra.Engine.Generation.ChunkSystem;
+using Hedra.Engine.ItemSystem;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Engine.Player.Inventory;
@@ -47,6 +48,11 @@ namespace Hedra.Engine.Player.Networking
         public T SearchSkill<T>() where T : AbstractBaseSkill
         {
             throw new NotImplementedException();
+        }
+
+        public void ShowInventoryFor(Item Bag)
+        {
+            
         }
 
         public bool Enabled

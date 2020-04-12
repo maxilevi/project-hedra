@@ -1,0 +1,28 @@
+{
+  "Name": "HoldingBag",
+  "DisplayName": "Holding Bag",
+  "Tier": "Rare",
+  "Description": "...",
+  "Attributes": [
+    {
+      "Name": "Objects",
+      "Value": {},
+      "Hidden": true,
+      "Persist": true
+    },
+    {
+      "Name": "IsConsumable",
+      "Value": true,
+      "Hidden": true
+    },
+    {
+      "Name": "Handler",
+      "Value": "HoldingBag",
+      "Hidden": true
+    }
+  ],
+  "Model": {
+    "Scale": 2.0,
+    "Path": "$DataFile$/Items/Misc/HoldingBag.ply"
+  }
+}

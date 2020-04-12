@@ -67,7 +67,9 @@ def on_found(owner, npc, rng):
         if ai: npc.RemoveComponent(ai)
         npc.AddComponent(EscapeAIComponent(npc, owner))
     else:
-        npc.SearchComponent[CombatAIComponent]().SetTarget(owner)
+        comp = npc.SearchComponent[CombatAIComponent]()
+        if comp:
+            comp.SetTarget(owner)
     
 def create_items(rng):
     count = rng.Next(1, 4)

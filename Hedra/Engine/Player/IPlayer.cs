@@ -15,6 +15,7 @@ using Hedra.EntitySystem;
 using System.Numerics;
 using Hedra.Components;
 using Hedra.Engine.Bullet;
+using Hedra.Engine.ItemSystem;
 
 namespace Hedra.Engine.Player
 {
@@ -43,6 +44,7 @@ namespace Hedra.Engine.Player
         CraftingInventory Crafting { get; }
         QuestInventory Questing { get; }
         IStructureAware StructureAware { get; }
+        void ShowInventoryFor(Item Bag);
         bool InterfaceOpened { get; }
         bool Enabled { get; set; }
         void Respawn();

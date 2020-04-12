@@ -41,7 +41,7 @@ namespace Hedra.Engine.Core
                 var templates = Load<U>(modules.Concat(mods).ToArray());
                 foreach (var template in templates)
                 {
-                    Templates.Add(ParseKey(template.Name), template);
+                    Templates[ParseKey(template.Name)] = template;
                 }
             }
         }

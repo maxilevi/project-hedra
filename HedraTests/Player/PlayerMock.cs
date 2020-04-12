@@ -331,6 +331,11 @@ namespace HedraTests.Player
         public CraftingInventory Crafting { get; }
         public QuestInventory Questing { get; }
         public IStructureAware StructureAware { get; }
+        public void ShowInventoryFor(Item Bag)
+        {
+            
+        }
+
         public bool InterfaceOpened { get; }
         public bool Enabled { get; set; }
         public void Respawn()

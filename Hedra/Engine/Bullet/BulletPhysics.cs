@@ -96,17 +96,6 @@ namespace Hedra.Engine.Bullet
                 UpdateActivations();
                 _dynamicsWorld.StepSimulation(DeltaTime);
                 CheckForCollisionEvents();
-
-                lock (_bodyLock)
-                {
-                    for (var i = 0; i < _bodies.Count; ++i)
-                    {
-                        if (_bodies[i].IsDisposed)
-                        {
-                            int a = 0;
-                        }
-                    }
-                }
             }
         }
 
@@ -139,11 +128,6 @@ namespace Hedra.Engine.Bullet
                 {
                     if (information.IsInSimulation)
                         RemoveFromSimulation(_sensors[i], information);
-                }
-
-                if (!information.IsSensor)
-                {
-                    int a = 0;
                 }
             }
         }
@@ -252,10 +236,6 @@ namespace Hedra.Engine.Bullet
 
         private static void AddToSimulation(RigidBody Body, PhysicsObjectInformation Information)
         {
-            if (Body.IsDisposed)
-            {
-                int a = 0;
-            }
             Information.IsInSimulation = true;
             _dynamicsWorld.AddRigidBody(Body, Information.Group, Information.Mask);
             OnRigidbodyReAdded?.Invoke(Body);
@@ -418,59 +398,37 @@ namespace Hedra.Engine.Bullet
             }
         }
 
-        public static void Dispose(BulletDisposableObject Object)
-        {
-            Object.Dispose();
-            //RoutineManager.StartRoutine(DisposeRoutine, Object);
-        }
-
-        private static IEnumerator DisposeRoutine(params object[] Params)
-        {
-            lock (_bulletLock)
-            {
-                ((BulletDisposableObject) Params[0]).Dispose();
-            }
-            yield return null;
-        }
         
         public static void DisposeBody(RigidBody Body)
         {
-            Log.WriteLine($"Disposing from {new StackTrace()}");
-            //Log.WriteLine(Body.UserObject);
-            Log.WriteLine($"Disposing shape of type {Body.CollisionShape.ShapeType} {Body.CollisionShape.GetType()}");
-            Log.WriteLine($"IsInfinite: {Body.CollisionShape.IsInfinite} IsConcave: {Body.CollisionShape.IsConcave} LocalScaling: {Body.CollisionShape.LocalScaling} IsDisposed: {Body.CollisionShape.IsDisposed}");
-            Log.WriteLine($"IsCompound: {Body.CollisionShape.IsCompound} IsNonMoving: {Body.CollisionShape.IsNonMoving}");
-            Log.Flush();
             switch (Body.CollisionShape)
             {
                 case BvhTriangleMeshShape bvhTriangleMeshShape:
-                    Log.WriteLine($"LocalAabbMax: {bvhTriangleMeshShape.LocalAabbMax} LocalAabbMin: {bvhTriangleMeshShape.LocalAabbMin}");
-                    Log.Flush();
                     var meshArray = (TriangleIndexVertexArray)bvhTriangleMeshShape.MeshInterface;
                     var count = meshArray.IndexedMeshArray.Count;
                     for (var i = 0; i < count; ++i)
                     {
-                        Dispose(meshArray.IndexedMeshArray[i]);
+                        meshArray.IndexedMeshArray[i].Dispose();
                     }
-                    Dispose(meshArray);
+                    meshArray.Dispose();
                     break;
                 case CompoundShape compoundShape:
                 {
                     for (var i = 0; i < compoundShape.NumChildShapes; ++i)
                     {
-                        Dispose(compoundShape.GetChildShape(i));
+                        compoundShape.GetChildShape(i).Dispose();
                     }
                     break;
                 }
                 case BoxShape boxShape:
-                    Dispose(boxShape);
+                    boxShape.Dispose();
                     break;
                 
                 default:
                     throw new ArgumentOutOfRangeException($"Unknown collision shape of type '{Body.CollisionShape.ShapeType}' and object type '{Body.CollisionShape.GetType()}' found");
             }
-            Dispose(Body.MotionState);
-            Dispose(Body);
+            Body.MotionState.Dispose();
+            Body.Dispose();
         }
         
         public static void AddChunk(Vector2 Offset, NativeVertexData Mesh, PhysicsSystem.CollisionShape[] Shapes)

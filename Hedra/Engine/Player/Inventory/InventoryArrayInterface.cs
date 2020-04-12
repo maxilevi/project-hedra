@@ -95,6 +95,7 @@ namespace Hedra.Engine.Player.Inventory
             if(Array.Length != New.Length)
                 throw new ArgumentOutOfRangeException($"New InventoryArray ({New.Length}) needs to be of the same size as the original.");
             _array = New;
+            _renderer.SetArray(New);
         }
 
         public int Offset => _offset;

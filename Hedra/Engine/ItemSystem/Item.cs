@@ -147,6 +147,10 @@ namespace Hedra.Engine.ItemSystem
         public static Item FromArray(byte[] Array)
         {
             var savedTemplate = ItemTemplate.FromJson(Encoding.ASCII.GetString(Array));
+            if (savedTemplate != null && savedTemplate.Name == "HoldingBag")
+            {
+                int a = 0;
+            }
             if (savedTemplate == null || !ItemPool.Exists(savedTemplate.Name)) return null;
             var savedItem = FromTemplate(savedTemplate);
             var item = ItemPool.Grab(savedItem.Name);

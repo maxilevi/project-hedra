@@ -183,7 +183,7 @@ namespace Hedra.Engine.Bullet
             }
             finally
             {
-                BulletPhysics.Dispose(previous);
+                previous.Dispose();
             }
         }
 
@@ -458,7 +458,7 @@ namespace Hedra.Engine.Bullet
 
         public override void Dispose()
         {
-            BulletPhysics.Dispose(_rayResult);
+            _rayResult.Dispose();
             BulletPhysics.RemoveAndDispose(_body);
             BulletPhysics.RemoveAndDispose(_sensor);
             BulletPhysics.OnRigidbodyReAdded -= OnRigidbodyReAdded;
