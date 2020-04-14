@@ -62,8 +62,8 @@ namespace Hedra.Engine.Player.Inventory
                 Color.White, FontCache.GetBold(10));
             DrawManager.UIRenderer.Add(ItemAttributes, DrawOrder.After);
             
-            HintTexture = new BackgroundTexture(InventoryBackground.DefaultId, Vector2.UnitY * -.35f, (InventoryBackground.DefaultSize * .15f));
-            HintText = new GUIText(string.Empty, HintTexture.Position, Color.White, FontCache.GetBold(7.As1920x1080()));
+            HintTexture = new BackgroundTexture(InventoryBackground.DefaultId, Vector2.UnitY * -.305f, (InventoryBackground.DefaultSize * .175f));
+            HintText = new GUIText(string.Empty, HintTexture.Position, Color.White, FontCache.GetBold(10.As1920x1080()));
 
             Panel.AddElement(HintTexture);
             Panel.AddElement(HintText);
@@ -99,6 +99,8 @@ namespace Hedra.Engine.Player.Inventory
         {
             if (CurrentItem.IsConsumable)
             {
+                HintText.Enable();
+                HintTexture.Enable();
                 HintText.Text = Translations.Get("right_click_use");
             }
             else

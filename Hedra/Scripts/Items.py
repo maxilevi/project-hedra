@@ -22,6 +22,7 @@ FARMING_RAKE = 'FarmingRake'
 COMPANION_COW = 'CompanionCow'
 ANIMAL_FOOD = 'AnimalFood'
 MILK_BOTTLE = 'MilkBottle'
+HOLDING_BAG = 'HoldingBag'
 
 # Attributes
 PRICE_ATTRIBUTE = 'Price'

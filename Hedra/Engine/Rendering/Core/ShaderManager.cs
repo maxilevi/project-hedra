@@ -124,6 +124,7 @@ namespace Hedra.Engine.Rendering.Core
             get => _lightColor;
             set
             {
+                if(_lightColor == value) return;
                 _lightColor = value;
                 UpdateLights();
             }
@@ -131,6 +132,7 @@ namespace Hedra.Engine.Rendering.Core
 
         public static void SetLightColorInTheSameThread(Vector3 Color)
         {
+            if(_lightColor == Color) return;
             _lightColor = Color;
             UpdateLights();
         }

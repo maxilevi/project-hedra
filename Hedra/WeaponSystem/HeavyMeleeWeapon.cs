@@ -11,7 +11,7 @@ namespace Hedra.WeaponSystem
     public abstract class HeavyMeleeWeapon : MeleeWeapon
     {
         protected override string AttackStanceName => "Assets/Chr/WarriorSmash-Stance.dae";
-        protected override float PrimarySpeed => 1.15f;
+        protected override float PrimarySpeed => 1.25f;
         protected override string[] PrimaryAnimationsNames => new []
         {
             "Assets/Chr/WarriorSlash-Right.dae",

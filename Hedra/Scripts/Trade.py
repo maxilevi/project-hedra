@@ -41,6 +41,7 @@ def build_travelling_merchant_inventory(item_dict, inventory_size, rng):
     special_items = [
         (1, ItemPool.Grab(ItemTier.Uncommon, COMPANION_EQUIPMENT_TYPE)),
         (3, ItemPool.Grab(Items.BOAT)),
+        (4, ItemPool.Grab(Items.HOLDING_BAG)),
         (7, get_infinity_item(Items.DEXTERITY_POTION)),
         (8, get_infinity_item(Items.SPEED_POTION)),
         (9, get_infinity_item(Items.STRENGTH_POTION)),

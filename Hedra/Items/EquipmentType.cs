@@ -21,6 +21,8 @@ namespace Hedra.Items
         Staff,
         Recipe,
         Potion,
+        Misc,
+        FishingRod,
         HoldableObject,
         Ammo
     }

@@ -22,7 +22,8 @@
     },
     {
       "Name": "Price",
-      "Value": 400
+      "Value": 400,
+      "Hidden": true
     }
   ],
   "Model": {

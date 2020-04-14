@@ -43,6 +43,7 @@ namespace Hedra.Items
         IntenseHealthPotionRecipe,
         Thyme,
         Rosemary,
+        HoldingBag,
         MaxEnums
     }
 }

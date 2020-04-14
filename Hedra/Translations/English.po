@@ -769,3 +769,4 @@ rare = Rare
 legendary = Legendary
 misc = Misc
 unique = Unique
+equipment_used_by = EQUIPMENT FOR {0}

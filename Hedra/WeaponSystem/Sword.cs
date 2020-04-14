@@ -34,7 +34,7 @@ namespace Hedra.WeaponSystem
         private readonly TrailRenderer _renderer;
         
         protected override string AttackStanceName => "Assets/Chr/WarriorSmash-Stance.dae";
-        protected override float PrimarySpeed => 1.25f;
+        protected override float PrimarySpeed => 1.4f;
         protected override string[] PrimaryAnimationsNames => new []
         {
             "Assets/Chr/WarriorSlash-Left.dae",
