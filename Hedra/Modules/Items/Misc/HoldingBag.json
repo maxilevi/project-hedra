@@ -19,6 +19,10 @@
       "Name": "Handler",
       "Value": "HoldingBag",
       "Hidden": true
+    },
+    {
+      "Name": "Price",
+      "Value": 400
     }
   ],
   "Model": {
