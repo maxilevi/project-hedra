@@ -257,7 +257,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
                 new Vector3(staticMax.X, Math.Max(staticMax.Y, Input.WaterData.SupportPoint(Vector3.UnitY).Y),
                     staticMax.Z)
             );
-            using (var allocator = new HeapAllocator(Allocator.Megabyte * 24))
+            using (var allocator = new HeapAllocator(Allocator.Megabyte * 64))
             {
                 Input.StaticData.Optimize(allocator);
                 Input.InstanceData.Optimize(allocator);

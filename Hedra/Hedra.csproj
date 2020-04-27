@@ -360,6 +360,8 @@
     <Compile Include="Engine\CacheSystem\FishingPostIconCache.cs" />
     <Compile Include="Engine\CacheSystem\GarrisonCache.cs" />
     <Compile Include="Engine\CacheSystem\GarrisonIconCache.cs" />
+    <Compile Include="Engine\CacheSystem\GnollFortressCache.cs" />
+    <Compile Include="Engine\CacheSystem\GnollFortressIconCache.cs" />
     <Compile Include="Engine\CacheSystem\LilyPadCache.cs" />
     <Compile Include="Engine\CacheSystem\RosemaryCache.cs" />
     <Compile Include="Engine\CacheSystem\ShroomDimensionPortalCache.cs" />
@@ -464,6 +466,7 @@
     <Compile Include="Engine\Steamworks\AchievementsObserver.cs" />
     <Compile Include="Engine\Steamworks\Statistic.cs" />
     <Compile Include="Engine\StructureSystem\CollisionTrigger.cs" />
+    <Compile Include="Engine\StructureSystem\DoorSettings.cs" />
     <Compile Include="Engine\StructureSystem\Lever.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\AnimableInteractableStructure.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\BaseDungeonDesign.cs" />
@@ -478,6 +481,8 @@
     <Compile Include="Engine\StructureSystem\Overworld\DungeonWithBoss.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\Garrison.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\GarrisonDesign.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\GnollFortress.cs" />
+    <Compile Include="Engine\StructureSystem\Overworld\GnollFortressDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\ShroomDimensionPortal.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\ShroomDimensionPortalDesign.cs" />
     <Compile Include="Engine\StructureSystem\Overworld\SolitaryFisherman.cs" />
@@ -9125,6 +9130,46 @@
       <Link>Assets\FX\waterNormalMap.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Landforms\landform1.png">
+      <Link>Assets\Env\Landforms\landform1.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Landforms\landform10.jpg">
+      <Link>Assets\Env\Landforms\landform10.jpg</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Landforms\landform2.png">
+      <Link>Assets\Env\Landforms\landform2.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Landforms\landform3.png">
+      <Link>Assets\Env\Landforms\landform3.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Landforms\landform4.png">
+      <Link>Assets\Env\Landforms\landform4.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Landforms\landform5.png">
+      <Link>Assets\Env\Landforms\landform5.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Landforms\landform6.png">
+      <Link>Assets\Env\Landforms\landform6.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Landforms\landform7.png">
+      <Link>Assets\Env\Landforms\landform7.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Landforms\landform8.png">
+      <Link>Assets\Env\Landforms\landform8.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Landforms\landform9.png">
+      <Link>Assets\Env\Landforms\landform9.png</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Mobs\CookedFish.ply">
       <Link>Assets\Items\Foods\CookedFish.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -10735,6 +10780,70 @@
     </Content>
     <Content Include="..\project-hedra-assets\Structures\GiantTree0\GiantTree0_Collider99.ply">
       <Link>Assets\Env\Colliders\GiantTree0_Collider99.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GnollFortress0\GnollFortress0-Colliders.ply">
+      <Link>Assets\Env\Structures\GnollFortress\GnollFortress0-Colliders.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GnollFortress0\GnollFortress0-Door0.ply">
+      <Link>Assets\Env\Structures\GnollFortress\GnollFortress0-Door0.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GnollFortress0\GnollFortress0-Door1.ply">
+      <Link>Assets\Env\Structures\GnollFortress\GnollFortress0-Door1.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GnollFortress0\GnollFortress0-Door10.ply">
+      <Link>Assets\Env\Structures\GnollFortress\GnollFortress0-Door10.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GnollFortress0\GnollFortress0-Door2.ply">
+      <Link>Assets\Env\Structures\GnollFortress\GnollFortress0-Door2.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GnollFortress0\GnollFortress0-Door3.ply">
+      <Link>Assets\Env\Structures\GnollFortress\GnollFortress0-Door3.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GnollFortress0\GnollFortress0-Door4.ply">
+      <Link>Assets\Env\Structures\GnollFortress\GnollFortress0-Door4.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GnollFortress0\GnollFortress0-Door5.ply">
+      <Link>Assets\Env\Structures\GnollFortress\GnollFortress0-Door5.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GnollFortress0\GnollFortress0-Door6.ply">
+      <Link>Assets\Env\Structures\GnollFortress\GnollFortress0-Door6.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GnollFortress0\GnollFortress0-Door7.ply">
+      <Link>Assets\Env\Structures\GnollFortress\GnollFortress0-Door7.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GnollFortress0\GnollFortress0-Door8.ply">
+      <Link>Assets\Env\Structures\GnollFortress\GnollFortress0-Door8.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GnollFortress0\GnollFortress0-Door9.ply">
+      <Link>Assets\Env\Structures\GnollFortress\GnollFortress0-Door9.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GnollFortress0\GnollFortress0-Icon.ply">
+      <Link>Assets\Env\Structures\GnollFortress\GnollFortress0-Icon.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GnollFortress0\GnollFortress0-Pathfinding.ply">
+      <Link>Assets\Env\Structures\GnollFortress\GnollFortress0-Pathfinding.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GnollFortress0\GnollFortress0-Scene.ply">
+      <Link>Assets\Env\Structures\GnollFortress\GnollFortress0-Scene.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Structures\GnollFortress0\GnollFortress0.ply">
+      <Link>Assets\Env\Structures\GnollFortress\GnollFortress0.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Structures\Obelisk0\Obelisk0-Colliders.ply">

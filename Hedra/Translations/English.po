@@ -722,6 +722,7 @@ structure_giant_tree = GIANT TREE
 structure_graveyard = GRAVEYARD
 structure_travelling_merchant = TRAVELLING MERCHANT
 structure_witch_hut = WITCH HUT
+structure_gnoll_fortress = GNOLL FORTRESS
 structure_cottage = COTTAGE
 structure_wizard_tower = WIZARD TOWER
 structure_ghost_town_boss = UNDEAD LICH

@@ -81,6 +81,8 @@ namespace Hedra.Engine.CacheSystem
         WillowTrees,
         Garrison,
         GarrisonIcon,
+        GnollFortress,
+        GnollFortressIcon,
         MaxEnums
     }
 }
