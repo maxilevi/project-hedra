@@ -18,8 +18,8 @@ namespace Hedra.Engine.StructureSystem
         public const int Dungeon0Chance = 48;
         public const int Dungeon1Chance = 48;
         public const int Dungeon2Chance = 48;
-        public const int GarrisonChance = 64;
-        public const int GnollFortressChance = 8;//64
+        public const int GarrisonChance = 32;
+        public const int GnollFortressChance = 32;
 
         /* Small structures */
         public const int FishingPostChance = 4;

@@ -8458,6 +8458,18 @@
       <Link>Assets\Chr\GiantBeetleIdle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Animations\GnollArcherIdle.dae">
+      <Link>Assets\Chr\Mob\Gnoll\GnollArcherIdle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Animations\GnollMageIdle.dae">
+      <Link>Assets\Chr\Mob\Gnoll\GnollMageIdle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Animations\GnollRogueIdle.dae">
+      <Link>Assets\Chr\Mob\Gnoll\GnollRogueIdle.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Animations\GnollWarriorIdle.dae">
       <Link>Assets\Chr\Mob\Gnoll\GnollWarriorIdle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -117,7 +117,7 @@ namespace Hedra.Components
             var shouldMiss = Parent is LocalPlayer && Utils.Rng.NextFloat() < MissChance;
             _attackedTimer = 6;
             _hasBeenAttacked = true;
-            var isImmune = Immune || (Parent.IsStuck && !Parent.Model.Pause) || !AICanReach;
+            var isImmune = Immune;// || (Parent.IsStuck && !Parent.Model.Pause) || !AICanReach;
 
             if (!Parent.IsStatic && PlaySound && (GameManager.Player.Position - Parent.Position).LengthSquared() < 80*80 && Amount >= 1f)
             {

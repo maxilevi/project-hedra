@@ -41,7 +41,7 @@ namespace Hedra.WeaponSystem
             "Assets/Chr/WarriorSlash-Right.dae",
             "Assets/Chr/WarriorSlash-Front.dae"
         };
-        protected override float SecondarySpeed => 1.65f;
+        protected override float SecondarySpeed => 2f;
 
         protected override string[] SecondaryAnimationsNames => new []
         {
@@ -104,7 +104,7 @@ namespace Hedra.WeaponSystem
         public override void Attack2(IHumanoid Human, AttackOptions Options)
         {
             Options.IdleMovespeed *= Options.Charge * 2.5f + .25f;
-            Options.RunMovespeed = Options.Charge * 1.5f;
+            Options.RunMovespeed = Options.Charge * 2.0f + 0.25f;
             base.Attack2(Human, Options);
             _renderer.Emit = true;
         }

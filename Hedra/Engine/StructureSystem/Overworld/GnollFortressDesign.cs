@@ -1,6 +1,7 @@
 using System;
 using System.Numerics;
 using Hedra.AISystem.Humanoid;
+using Hedra.API;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.Generation;
 using Hedra.Engine.ItemSystem;
@@ -17,7 +18,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
 {
     public class GnollFortressDesign : SimpleCompletableStructureDesign<GnollFortress>
     {
-        public const int Level = 27;
+        public const int Level = 17;
         public override int PlateauRadius => 480;
         public override string DisplayName => Translations.Get("structure_gnoll_fortress");
         public override VertexData Icon => CacheManager.GetModel(CacheItem.GnollFortressIcon);
@@ -55,8 +56,10 @@ namespace Hedra.Engine.StructureSystem.Overworld
 
         protected static IHumanoid CreateMeleeGnoll(Vector3 Position, CollidableStructure Structure)
         {
+            var isWarrior = Utils.Rng.NextBool(); 
             var options = BanditOptions.Default;
-            options.ModelType = HumanType.GnollWarrior;
+            options.PossibleClasses = (isWarrior ? Class.Warrior : Class.Rogue);
+            options.ModelType = (isWarrior ? HumanType.GnollWarrior : HumanType.GnollRogue);
             var bandit = NPCCreator.SpawnBandit(Position, Level, options);
             bandit.Physics.CollidesWithEntities = false;
             bandit.SearchComponent<CombatAIComponent>().SetCanExplore(Value: false);
@@ -68,7 +71,11 @@ namespace Hedra.Engine.StructureSystem.Overworld
         
         protected static IHumanoid CreateRangedGnoll(Vector3 Position, CollidableStructure Structure)
         {
-            var bandit = NPCCreator.SpawnBandit(Position, Level, BanditOptions.Default);
+            var isArcher = Utils.Rng.NextBool(); 
+            var options = BanditOptions.Default;
+            options.PossibleClasses = (isArcher ? Class.Archer : Class.Mage);
+            options.ModelType = (isArcher ? HumanType.GnollArcher : HumanType.GnollMage);
+            var bandit = NPCCreator.SpawnBandit(Position, Level, options);
             bandit.Physics.CollidesWithEntities = false;
             bandit.SearchComponent<CombatAIComponent>().SetCanExplore(Value: false);
             bandit.SearchComponent<CombatAIComponent>().SetGuardSpawnPoint(Value: false);

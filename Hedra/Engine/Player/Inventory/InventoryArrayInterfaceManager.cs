@@ -137,7 +137,7 @@ namespace Hedra.Engine.Player.Inventory
                 }
                 if (!success) array[itemIndex] = item;
             }
-            else if (item != null && item.IsFood)
+            else if (item != null && item.IsFood && array.Length > PlayerInventory.FoodHolder)
             {
                 array[itemIndex] = item;
                 SwitchItems(itemIndex, PlayerInventory.FoodHolder, array, array);

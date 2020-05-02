@@ -27,7 +27,7 @@ namespace Hedra.Items
             foreach (var prop in objects.Properties())
             {
                 var index = int.Parse(prop.Name);
-                inventoryArray.SetItem(index, Item.FromTemplate(ItemTemplate.FromJson(prop.Value.ToString())));
+                inventoryArray.SetItem(index, Item.FromArray(Encoding.UTF8.GetBytes(prop.Value.ToString())));
             }
             Bag.SetAttribute("Inventory", inventoryArray, true);
         }
@@ -45,7 +45,7 @@ namespace Hedra.Items
                 {
                     if(Array[i] == null) continue;
                     writer.WritePropertyName(i.ToString());
-                    writer.WriteValue(ItemTemplate.ToJson(ItemTemplate.FromItem(Array[i])));
+                    writer.WriteValue(Encoding.UTF8.GetString(Array[i].ToArray()));
                 }
                 writer.WriteEndObject();
             }

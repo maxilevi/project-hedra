@@ -366,7 +366,7 @@ namespace Hedra.Engine.Player
         public void RegisterEquipment(IModel Equipment)
         {
             Equipment.Enabled = Enabled;
-            Equipment.Scale = Model.Scale;
+            Equipment.Scale *= Model.Scale;
             Equipment.Alpha = Model.Alpha;
             RegisterModel(Equipment);
         }
@@ -537,6 +537,9 @@ namespace Hedra.Engine.Player
         Mason,
         Fisherman,
         GnollWarrior,
+        GnollMage,
+        GnollRogue,
+        GnollArcher,
         BeasthunterSpirit,
         GreenVillager
     }
