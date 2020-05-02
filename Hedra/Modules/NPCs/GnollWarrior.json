@@ -1,0 +1,14 @@
+{
+  "Name": "GnollWarrior",
+  "DisplayName": "Gnoll Warrior",
+  "Models": [
+    {
+      "Path": "$DataFile$/Assets/Chr/Mob/Gnoll/GnollWarriorIdle.dae",
+      "Scale": 1.0
+    },
+    {
+      "Path": "$DataFile$/Assets/Chr/Mob/Gnoll/GnollWarriorIdle.dae",
+      "Scale": 1.0
+    }
+  ]
+}

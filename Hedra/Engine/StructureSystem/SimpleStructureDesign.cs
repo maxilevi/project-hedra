@@ -14,7 +14,12 @@ using Hedra.Engine.StructureSystem.VillageSystem.Builders;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Rendering;
 using System.Numerics;
+using Hedra.AISystem;
+using Hedra.AISystem.Behaviours;
+using Hedra.Components;
+using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Engine.StructureSystem.VillageSystem;
+using Hedra.EntitySystem;
 using Hedra.Framework;
 using Hedra.Numerics;
 
@@ -104,6 +109,13 @@ namespace Hedra.Engine.StructureSystem
             return door;
         }
 
+        protected static void AddImmuneTag(IEntity Bandit)
+        {
+            Bandit.AddComponent(new IsStructureMemberComponent(Bandit));
+            Bandit.SearchComponent<DamageComponent>().Ignore(E => E.SearchComponent<IsStructureMemberComponent>() != null);
+            Bandit.SearchComponent<IBehaviouralAI>().AlterBehaviour<RoamBehaviour>(new DungeonRoamBehaviour(Bandit));
+        }
+        
         protected static void AddPlant(IAllocator Allocator, Vector3 Position, HarvestableDesign Design, Random Rng)
         {
             World.EnvironmentGenerator.GeneratePlant(

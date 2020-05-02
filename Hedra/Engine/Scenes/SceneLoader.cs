@@ -62,6 +62,7 @@ namespace Hedra.Engine.Scenes
             {
                 if(!parts[i].HasColors) throw new ArgumentOutOfRangeException("Scene mesh doesn't have colors");
                 var averageColor = parts[i].Colors.Select(V => V.Xyz()).Aggregate((V1, V2) => V1 + V2) / parts[i].Colors.Count;
+                averageColor = new Vector3((float)Math.Round(averageColor.X, MidpointRounding.ToEven), (float)Math.Round(averageColor.Y, MidpointRounding.ToEven), (float)Math.Round(averageColor.Z, MidpointRounding.ToEven));
                 map[averageColor].Add(parts[i]);
             }
             /* Add Lights */
@@ -163,5 +164,7 @@ namespace Hedra.Engine.Scenes
 
         public static Func<Vector3, VertexData, BaseStructure> WellPlacer => (V, G) => new Well(V, GetRadius(G));
         public static Func<Vector3, VertexData, BaseStructure> FireplacePlacer => (V, _) => new Campfire(V);
+        
+        public static Func<Vector3, VertexData, BaseStructure> SleepingPadPlacer => (V, _) => new SleepingPad(V);
     }
 }

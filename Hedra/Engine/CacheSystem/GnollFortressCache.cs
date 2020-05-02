@@ -30,5 +30,8 @@ namespace Hedra.Engine.CacheSystem
             new DoorSettings(new Vector3(4.54559f, 0.72194f, 13.13675f), Scale, true, true),
             new DoorSettings(new Vector3(5.24249f, 0.67368f, -10.24741f), Scale, false, true)
         };
+
+        public static string PathfindingFile => $"Assets/Env/Structures/GnollFortress/GnollFortress0-Pathfinding.ply";
+        public static string SceneFile => $"Assets/Env/Structures/GnollFortress/GnollFortress0.ply";
     }
 }

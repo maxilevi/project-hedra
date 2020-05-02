@@ -63,13 +63,6 @@ namespace Hedra.Engine.StructureSystem.Overworld
             AddImmuneTag(bandit);
             return bandit;
         }
-        
-        private static void AddImmuneTag(IEntity Bandit)
-        {
-            Bandit.AddComponent(new IsStructureMemberComponent(Bandit));
-            Bandit.SearchComponent<DamageComponent>().Ignore(E => E.SearchComponent<IsStructureMemberComponent>() != null);
-            Bandit.SearchComponent<IBehaviouralAI>().AlterBehaviour<RoamBehaviour>(new DungeonRoamBehaviour(Bandit));
-        }
 
         private static Item CreateItemForRewardChest()
         {
@@ -81,7 +74,7 @@ namespace Hedra.Engine.StructureSystem.Overworld
             Structure4Creator = (P, _) => new Torch(P),
             Structure2Creator = SceneLoader.WellPlacer,
             Structure3Creator = (P, M) => StructureContentHelper.AddRewardChest(P, M, CreateItemForRewardChest()),
-            Structure1Creator = (P, _) => new SleepingPad(P),
+            Structure1Creator = SceneLoader.SleepingPadPlacer,
             Npc1Creator = CreateBandit,
             Npc2Creator = CreateBandit
         };

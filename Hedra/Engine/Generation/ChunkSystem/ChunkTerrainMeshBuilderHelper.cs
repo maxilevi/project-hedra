@@ -95,7 +95,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
             var isPoint = chunkCoords == new Vector2(_offsetX, _offsetZ);
             var c = new Vector4(rng.NextFloat(), rng.NextFloat(), rng.NextFloat(), 1.0f);
             return isPoint ? new Vector4(0, 0, 0, 1.0f) : c;*/
-            return new Vector4(colorCount == 0 ? Vector3.Zero : color.Xyz() / colorCount, 1.0f);
+            var defaultShade = CalculateStoneShade(BlockType.Stone);
+            return new Vector4(colorCount == 0 ? new Vector3(defaultShade, defaultShade, defaultShade) : color.Xyz() / colorCount, 1.0f);
         }
 
         private void AddColorIfNecessary(int X, int Y, int Z, ref RegionColor RegionColor, ref float Noise, ref Vector4 Color, ref int ColorCount)
@@ -127,7 +128,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             }
             else if (Type == BlockType.Stone || Type == BlockType.StonePath)
             {
-                var shade = (Utils.Rng.NextFloat() * 2 - 1f) * .2f * (Type == BlockType.StonePath ? 3f : 1f);
+                var shade = CalculateStoneShade(Type);
                 blockColor += new Vector4(shade, shade, shade, 0); 
             }
             else if (Type == BlockType.FarmDirt)
@@ -136,6 +137,11 @@ namespace Hedra.Engine.Generation.ChunkSystem
                     blockColor -= new Vector4(.1f, .1f, .1f, 0);
             }
             return blockColor;
+        }
+
+        private static float CalculateStoneShade(BlockType Type)
+        {
+            return (Utils.Rng.NextFloat() * 2 - 1f) * .2f * (Type == BlockType.StonePath ? 3f : 1f);
         }
 
         private void BuildDensityGrid(int Lod)

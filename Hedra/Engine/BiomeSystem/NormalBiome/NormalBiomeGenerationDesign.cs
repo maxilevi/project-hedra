@@ -10,7 +10,7 @@ namespace Hedra.Engine.BiomeSystem.NormalBiome
     {
         public override bool HasRivers => true;
         public override bool HasPaths => true;
-        public override bool HasDiSrt => true;
+        public override bool HasDirt => true;
         
         protected override void DoBuildDensityMap(FastNoiseSIMD Noise, float[][][] DensityMap, BlockType[][][] TypeMap, int Width, int Height, float HorizontalScale, float VerticalScale, Vector3 Offset)
         {

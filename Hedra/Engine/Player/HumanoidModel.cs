@@ -536,6 +536,7 @@ namespace Hedra.Engine.Player
         VillagerGhost,
         Mason,
         Fisherman,
+        GnollWarrior,
         BeasthunterSpirit,
         GreenVillager
     }
