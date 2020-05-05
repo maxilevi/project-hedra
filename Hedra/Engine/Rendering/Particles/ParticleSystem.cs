@@ -256,8 +256,7 @@ namespace Hedra.Engine.Rendering.Particles
                 DrawManager.ParticleRenderer.Remove(this);
                 BackgroundUpdater.Remove(this);
             };
-            if(_vao == null) Executer.ExecuteOnMainThread(DoDispose);
-            else DoDispose();
+            Executer.ExecuteOnMainThread(DoDispose);
         }
     }
 }
