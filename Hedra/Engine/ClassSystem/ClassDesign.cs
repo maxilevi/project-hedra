@@ -34,6 +34,7 @@ namespace Hedra.Engine.ClassSystem
         }
 
         public string Name => this.ToString();
+        public virtual HumanoidModelTemplate HeadModelTemplate => ClassLoader.Instance[Type].HeadModel;
         public virtual HumanoidModelTemplate ModelTemplate => ClassLoader.Instance[Type].Model;
         public virtual string Logo => ClassLoader.Instance[Type].Logo;
         public bool IsRanged => ClassLoader.Instance[Type].IsRanged;
@@ -48,11 +49,6 @@ namespace Hedra.Engine.ClassSystem
         public virtual float BaseDamage => ClassLoader.Instance[Type].BaseDamage;
         public virtual float BaseHealth => ClassLoader.Instance[Type].BaseHealth;
         public virtual float AttackingSpeedModifier => ClassLoader.Instance[Type].AttackingSpeedModifier;
-        public abstract Matrix4x4 HelmetPlacement { get; }
-        public abstract Matrix4x4 ChestplatePlacement { get; }
-        public abstract Matrix4x4 PantsMatrixPlacement { get; }
-        public abstract Matrix4x4 LeftBootPlacement { get; }
-        public abstract Matrix4x4 RightBootPlacement { get; }
         public abstract Class Type { get; }
 
         private static KeyValuePair<int, Item> ParseStartingItems(StartingItemTemplate Template)

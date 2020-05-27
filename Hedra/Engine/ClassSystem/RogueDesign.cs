@@ -8,12 +8,7 @@ using System.Numerics;
 namespace Hedra.Engine.ClassSystem
 {
     public class RogueDesign : ClassDesign
-    {       
-        public override Matrix4x4 HelmetPlacement { get; } = Matrix4x4.Identity;
-        public override Matrix4x4 ChestplatePlacement { get; } = Matrix4x4.Identity;
-        public override Matrix4x4 PantsMatrixPlacement { get; } = Matrix4x4.Identity;
-        public override Matrix4x4 LeftBootPlacement { get; } = Matrix4x4.Identity;
-        public override Matrix4x4 RightBootPlacement { get; } = Matrix4x4.Identity;
+    {
         public override Class Type => Class.Rogue;
     }
 }

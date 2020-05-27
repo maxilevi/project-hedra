@@ -37,11 +37,6 @@ namespace Hedra.Engine.ClassSystem
             throw new ArgumentException();
         }
         
-        public override Matrix4x4 HelmetPlacement => throw new ArgumentException();
-        public override Matrix4x4 ChestplatePlacement => throw new ArgumentException();
-        public override Matrix4x4 PantsMatrixPlacement => throw new ArgumentException();
-        public override Matrix4x4 LeftBootPlacement => throw new ArgumentException();
-        public override Matrix4x4 RightBootPlacement => throw new ArgumentException();
         public override Class Type => Class.None;
     }
 }
