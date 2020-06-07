@@ -1,3 +1,22 @@
 {
-  
+  "Name": "RareChitinChestplate",
+  "DisplayName": "Chitin Chestplate",
+  "EquipmentType": "Chestplate",
+  "Tier": "Rare",
+  "Description": "Chitin chestplate.",
+  "Attributes": [
+    {
+      "Name": "Defense",
+      "Value": 7.5
+    },
+    {
+      "Name": "MovementSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Chestplates/ChitinChestplate.dae"
+  }
 }
+        

@@ -8,7 +8,7 @@ namespace HedraTests
         public AnimatedModelData LoadColladaModel(string ColladaFile)
         {
             return new AnimatedModelData(
-                new ModelData(new Vector3[0], new Vector3[0], new Vector3[0], new uint[0], new Vector3[0], new Vector3[0]),
+                new ModelData(new Vector3[0], new Vector3[0], new Vector3[0], new uint[0], new Vector3[0], new Vector3[0], new string[0]),
                 new JointsData(0, new JointData(1, "Root", Matrix4x4.Identity))
                 );
         }
@@ -16,7 +16,7 @@ namespace HedraTests
         public ModelData LoadModel(string ColladaFile)
         {
             return new ModelData(new Vector3[0], new Vector3[0], new Vector3[0], new uint[0], new Vector3[0],
-                new Vector3[0]);
+                new Vector3[0], new string[0]);
         }
 
         public AnimationData LoadColladaAnimation(string ColladaFile)

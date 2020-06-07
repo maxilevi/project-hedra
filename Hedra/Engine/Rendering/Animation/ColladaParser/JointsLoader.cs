@@ -28,16 +28,34 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
         private int JointCount = 0;
         private static readonly Matrix4x4 Correction = Matrix4x4.CreateFromAxisAngle(Vector3.UnitX, -90f * Mathf.Radian);
     
-        public JointsLoader(XmlNode VisualSceneNode, List<string> BoneOrder)
+        public JointsLoader(XmlNode VisualSceneNode)
         {
             this.ArmatureData = VisualSceneNode["visual_scene"].ChildWithAttribute("node", "id", ArmatureName);
-            this.BoneOrder = BoneOrder;
+            this.BoneOrder = CollectBoneOrder();
+        }
+
+        private List<string> CollectBoneOrder()
+        {
+            var order = new List<string>();
+            var headNode = ArmatureData["node"];
+            LoadJointName(headNode, order);
+            return order;
+        }
+        
+        private void LoadJointName(XmlNode JointNode, List<string> Order)
+        {
+            Order.Add(JointNode.GetAttribute("sid").Value);
+            var childs = JointNode.Children("node");
+            for(var i = 0; i < childs.Count; i++)
+            {
+                LoadJointName(childs[i], Order);
+            }
         }
         
         public JointsData ExtractBoneData()
         {
-            XmlNode headNode = ArmatureData["node"];
-            JointData headJoint = LoadJointData(headNode, true);
+            var headNode = ArmatureData["node"];
+            var headJoint = LoadJointData(headNode, true);
             if(BoneOrder.Count > JointCount) 
                 throw new ArgumentOutOfRangeException($"Some vertex groups have no attached joint ({BoneOrder.Count}). Probably check that the exported model has no duplicated vertex groups.");
             return new JointsData(JointCount, headJoint);
@@ -59,9 +77,9 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
         
         private JointData LoadJointData(XmlNode JointNode, bool IsRoot)
         {
-            JointData joint = ExtractMainJointData(JointNode, IsRoot);
-            List<XmlNode> Childs = JointNode.Children("node");
-            for(int i = 0; i < Childs.Count; i++){
+            var joint = ExtractMainJointData(JointNode, IsRoot);
+            var Childs = JointNode.Children("node");
+            for(var i = 0; i < Childs.Count; i++){
                 joint.AddChild(LoadJointData(Childs[i], false));
             }
             return joint;

@@ -39,13 +39,13 @@ namespace Hedra.Engine.Rendering.Animation
         public static AnimatedModel LoadEntity(AnimatedModelData EntityData)
         {         
             JointsData SkeletonData = EntityData.Joints;
-            Joint HeadJoint = AnimationModelLoader.CreateJoints(SkeletonData.HeadJoint);
+            Joint HeadJoint = CreateJoints(SkeletonData.HeadJoint);
             return new AnimatedModel(EntityData.Mesh, HeadJoint, SkeletonData.JointCount);
         }
 
         public static AnimatedModel LoadEntity(string ModelFile)
         {
-            var animatedModel = AnimationModelLoader.LoadEntity(AnimationModelLoader.GetEntityData(ModelFile));
+            var animatedModel = LoadEntity(GetEntityData(ModelFile));
             animatedModel.CullingBox = AssetManager.LoadHitbox(ModelFile);
             return animatedModel;
         }
@@ -59,9 +59,9 @@ namespace Hedra.Engine.Rendering.Animation
          * @return The created joint, with all its descendants added.
          */
         private static Joint CreateJoints(JointData Data) {
-            Joint Joint = new Joint(Data.Index, Data.NameId, Data.BindLocalTransform);
+            var Joint = new Joint(Data.Index, Data.NameId, Data.BindLocalTransform);
             for (int i = 0; i < Data.Children.Count; i++){
-                Joint.AddChild( AnimationModelLoader.CreateJoints(Data.Children[i]) );
+                Joint.AddChild(CreateJoints(Data.Children[i]));
             }
             return Joint;
         }

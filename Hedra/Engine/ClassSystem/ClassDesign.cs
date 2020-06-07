@@ -35,6 +35,9 @@ namespace Hedra.Engine.ClassSystem
 
         public string Name => this.ToString();
         public virtual HumanoidModelTemplate HeadModelTemplate => ClassLoader.Instance[Type].HeadModel;
+        public virtual HumanoidModelTemplate ChestModelTemplate => ClassLoader.Instance[Type].ChestModel;
+        public virtual HumanoidModelTemplate LegsModelTemplate => ClassLoader.Instance[Type].LegsModel;
+        public virtual HumanoidModelTemplate FeetModelTemplate => ClassLoader.Instance[Type].FeetModel;
         public virtual HumanoidModelTemplate ModelTemplate => ClassLoader.Instance[Type].Model;
         public virtual string Logo => ClassLoader.Instance[Type].Logo;
         public bool IsRanged => ClassLoader.Instance[Type].IsRanged;

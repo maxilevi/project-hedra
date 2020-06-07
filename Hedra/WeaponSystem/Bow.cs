@@ -47,7 +47,7 @@ namespace Hedra.WeaponSystem
             "Assets/Chr/ArcherTripleShoot.dae"
         };
         
-        protected override Vector3 SheathedPosition => new Vector3(1.5f,-0.0f,0.0f);
+        protected override Vector3 SheathedPosition => new Vector3(1.75f,-0.0f,0.0f);
         protected override Vector3 SheathedRotation => new Vector3(-5,90,-125 );
         
         private static readonly VertexData QuiverVertexData;
@@ -95,7 +95,7 @@ namespace Hedra.WeaponSystem
         {
             MainMesh.TransformationMatrix = 
                 Owner.Model.ChestMatrix.ClearTranslation() 
-                * Matrix4x4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition - Vector3.UnitY * .25f);
+                * Matrix4x4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition + Vector3.UnitY * .35f);
             MainMesh.Position = Owner.Model.Position;
             MainMesh.Rotation = this.SheathedRotation;
             MainMesh.BeforeRotation = this.SheathedPosition * this.Scale;
@@ -142,7 +142,7 @@ namespace Hedra.WeaponSystem
             SetToDefault(_quiver);
             _quiver.TransformationMatrix = Owner.Model.ChestMatrix.ClearTranslation() * Matrix4x4.CreateTranslation(-Owner.Model.Position + Owner.Model.ChestPosition);
             _quiver.Position = Owner.Model.Position;
-            _quiver.BeforeRotation = (-Vector3.UnitY * 1.5f - Vector3.UnitZ * 1.8f) * this.Scale;
+            _quiver.BeforeRotation = (-Vector3.UnitY * 1.1f - Vector3.UnitZ * 2f) * this.Scale;
         }
         
         private void SetArrowPosition()

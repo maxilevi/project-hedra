@@ -21,6 +21,7 @@ using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Animation;
+using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.EntitySystem;
 using Hedra.Items;
 using Hedra.Numerics;
@@ -104,7 +105,9 @@ namespace Hedra.Engine.Player
             IsUndead = Template.IsUndead;
             ModelPath = Template.Path;
             
-            Model = AnimationModelLoader.LoadEntity(Template.Path);
+
+            Model = AnimationModelLoader.LoadEntity(ModelPath);
+            Model.IgnoreBaseModel = true;
             StateHandler = BuildAnimationHandler(Humanoid, Template);
 
             Model.Scale = Vector3.One * DefaultScale * Template.Scale;
@@ -494,6 +497,11 @@ namespace Hedra.Engine.Player
         
         protected virtual HumanoidModelAnimationState BuildAnimationHandler(IHumanoid Humanoid, HumanoidModelTemplate Template) 
             => new HumanoidModelAnimationState(Humanoid, this, Template);
+
+        public bool HasModel(ModelData NewModel)
+        {
+            return Model.HasModel(NewModel);
+        }
         
         public override void Dispose()
         {

@@ -16,6 +16,8 @@ namespace Hedra.Engine.ItemSystem.ArmorSystem
             {
                 {"Chestplate", typeof(ChestPiece)},
                 {"Helmet", typeof(HelmetPiece)},
+                {"Pants", typeof(PantsPiece)},
+                {"Boots", typeof(BootsPiece)},
             };
         }
 

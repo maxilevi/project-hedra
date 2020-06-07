@@ -50,10 +50,10 @@ namespace Hedra.WeaponSystem
         protected override void OnSheathed()
         {
             base.OnSheathed();
-            MainMesh.BeforeRotation = new Vector3(.4f, 0.75f, -1.2f);
+            MainMesh.BeforeRotation = new Vector3(.6f, 0.75f, -1.2f);
             MainMesh.LocalRotation = new Vector3(0, 90, 135);
                 
-            SecondBlade.BeforeRotation = new Vector3(-1.0f, 0.75f, -1.2f);
+            SecondBlade.BeforeRotation = new Vector3(-0.8f, 0.75f, -1.2f);
             SecondBlade.LocalRotation = new Vector3(0, 270, 225);
         }
 

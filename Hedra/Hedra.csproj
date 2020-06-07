@@ -8566,6 +8566,22 @@
       <Link>Assets\Chr\Mob\Beasthunter\Beasthunter1Idle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Chr\BodyParts\WarriorChest.dae">
+      <Link>Assets\Chr\BodyParts\WarriorChest.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\BodyParts\WarriorFeet.dae">
+      <Link>Assets\Chr\BodyParts\WarriorFeet.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\BodyParts\WarriorHead.dae">
+      <Link>Assets\Chr\BodyParts\WarriorHead.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\BodyParts\WarriorLegs.dae">
+      <Link>Assets\Chr\BodyParts\WarriorLegs.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Chr\Erudites\Bard0Idle.dae">
       <Link>Assets\Chr\Mob\Erudites\Bard0Idle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -9354,6 +9370,14 @@
       <Link>Assets\Items\Ammo\SteelArrow.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Boots\ChitinBoots.dae">
+      <Link>Assets\Items\Boots\ChitinBoots.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\ChitinChestplate.dae">
+      <Link>Assets\Items\Chestplates\ChitinChestplate.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Foods\Bread.ply">
       <Link>Assets\Items\Foods\Bread.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -9464,6 +9488,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Misc\Wool.ply">
       <Link>Assets\Items\Misc\Wool.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Pants\ChitinPants.dae">
+      <Link>Assets\Items\Pants\ChitinPants.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Potions\AgilityPotion.ply">
@@ -14449,12 +14477,15 @@
     <Content Include="Modules\Items\Ammo\StoneArrow.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Boots\RareChitinBoots.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Chestplates\CommonLeatherChestplate.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\Items\Chestplates\LargeBackpack.json" />
-    <Content Include="Modules\Items\Chestplates\MediumBackpack.json" />
-    <Content Include="Modules\Items\Chestplates\SmallBackpack.json" />
+    <Content Include="Modules\Items\Chestplates\RareChitinChestplate.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Foods\Bread.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -14603,6 +14634,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Misc\Wool.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Pants\RareChitinPants.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Potions\HealthPotion.json">

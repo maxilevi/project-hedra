@@ -22,14 +22,19 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
         private readonly XmlNode SkinningData;
         private readonly int MaxWeights;
     
-        public SkinLoader(XmlNode ControllersNode, int MaxWeights)
+        public SkinLoader(XmlNode Node, int MaxWeights)
         {
-            SkinningData = ControllersNode?["controller"]?["skin"];
+            SkinningData = Node["library_controllers"]?["controller"]?["skin"];
             if (SkinningData == null)
                 throw new ArgumentOutOfRangeException("Provided model has no skinning data.");
             this.MaxWeights = MaxWeights;
         }
-    
+
+        public static bool HasSkinningData(XmlNode Node)
+        {
+            return Node["library_controllers"]?["controller"]?["skin"] != null;
+        }
+        
         public SkinningData ExtractSkinData() {
             List<string> jointsList = LoadJointsList();
             float[] Weights = LoadWeights();
@@ -39,7 +44,8 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
             return new SkinningData(jointsList, VertexWeights);
         }
     
-        private List<string> LoadJointsList() {
+        private List<string> LoadJointsList()
+        {
             XmlNode inputNode = SkinningData["vertex_weights"];
             string jointDataId = inputNode.ChildWithAttribute("input", "semantic", "JOINT").GetAttribute("source").Value.Substring(1);
             XmlNode jointsNode = SkinningData.ChildWithAttribute("source", "id", jointDataId)["Name_array"];

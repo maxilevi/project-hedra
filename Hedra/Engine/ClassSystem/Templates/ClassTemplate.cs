@@ -7,6 +7,10 @@ namespace Hedra.Engine.ClassSystem.Templates
     {
         public string Name { get; set; }
         public HumanoidModelTemplate Model { get; set; }
+        public HumanoidModelTemplate HeadModel { get; set; }
+        public HumanoidModelTemplate ChestModel { get; set; }
+        public HumanoidModelTemplate LegsModel { get; set; }
+        public HumanoidModelTemplate FeetModel { get; set; }
         public string Logo { get; set; }
         public float BaseSpeed { get; set; }
         public string MainAbilityTree { get; set; }

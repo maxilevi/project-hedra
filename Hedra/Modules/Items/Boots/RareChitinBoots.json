@@ -1,0 +1,22 @@
+{
+  "Name": "RareChitinBoots",
+  "DisplayName": "Chitin Boots",
+  "EquipmentType": "Boots",
+  "Tier": "Rare",
+  "Description": "Chitin boots.",
+  "Attributes": [
+    {
+      "Name": "Defense",
+      "Value": 7.5
+    },
+    {
+      "Name": "MovementSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Boots/ChitinBoots.dae"
+  }
+}
+        

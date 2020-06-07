@@ -19,23 +19,25 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
         public AnimatedModelData LoadColladaModel(string ColladaFile)
         {
             var node = ParsePath(ColladaFile, true);
-            var skinningData = LoadSkinning(node);
-    
-            var jointsLoader = new JointsLoader(node["library_visual_scenes"], skinningData.JointOrder);
+            var jointsLoader = new JointsLoader(node["library_visual_scenes"]);
             var jointsData = jointsLoader.ExtractBoneData();
-
-            return new AnimatedModelData(LoadGeometry(node, skinningData), jointsData);
+            if (SkinLoader.HasSkinningData(node))
+            {
+                var skinningData = LoadSkinning(node);
+                return new AnimatedModelData(LoadGeometry(node, skinningData), jointsData);
+            }
+            return new AnimatedModelData(ModelData.Empty, jointsData);
         }
 
         private static SkinningData LoadSkinning(XmlNode Node)
         {
-            var skinLoader = new SkinLoader(Node["library_controllers"], GeneralSettings.MaxWeights);
+            var skinLoader = new SkinLoader(Node, GeneralSettings.MaxWeights);
             return skinLoader.ExtractSkinData();
         }
         
         private static ModelData LoadGeometry(XmlNode Node, SkinningData SkinningData)
         {
-            var geometryLoader = new GeometryLoader(Node["library_geometries"], SkinningData.VerticesSkinData);
+            var geometryLoader = new GeometryLoader(Node["library_geometries"], SkinningData);
             return geometryLoader.ExtractModelData();
         }
 

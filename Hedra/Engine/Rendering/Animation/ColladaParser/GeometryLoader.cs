@@ -24,7 +24,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
     {
         private readonly XmlNode MeshData;
     
-        private readonly List<VertexSkinData> VertexWeights;
+        private readonly SkinningData Skinning;
         
         private int[] JointIdsArray;
         private float[] WeightsArray;
@@ -36,8 +36,8 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
         
         private Matrix4x4 Correction = Matrix4x4.CreateRotationX(-90f * Mathf.Radian);
         
-        public GeometryLoader(XmlNode GeometryNode, List<VertexSkinData> VertexWeights) {
-            this.VertexWeights = VertexWeights;
+        public GeometryLoader(XmlNode GeometryNode, SkinningData Skinning) {
+            this.Skinning = Skinning;
             this.MeshData = GeometryNode["geometry"]["mesh"];
         }
         
@@ -80,7 +80,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
             VertexData.TrimExcess(weights);
             VertexData.TrimExcess(normalsList);
             VertexData.TrimExcess(colorsList);
-            return new ModelData(positions.ToArray(), colorsList.ToArray(), normalsList.ToArray(), Indices.ToArray(), jointIds.ToArray(), weights.ToArray());
+            return new ModelData(positions.ToArray(), colorsList.ToArray(), normalsList.ToArray(), Indices.ToArray(), jointIds.ToArray(), weights.ToArray(), Skinning.JointOrder.ToArray());
         }
         
         private void ReadRawData(XmlNode PolyNode)
@@ -90,7 +90,8 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
             this.ReadColors(PolyNode);
         }
     
-        private void ReadPositions() {
+        private void ReadPositions()
+        {
             var positionsId = MeshData["vertices"]["input"].GetAttribute("source").Substring(1);
             XmlNode positionsData = MeshData.ChildWithAttribute("source", "id", positionsId)["float_array"];
             var count = int.Parse( positionsData.GetAttribute("count").Value );
@@ -101,7 +102,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
                 var z = float.Parse( posData[i * 3 + 2], NumberStyles.Any, CultureInfo.InvariantCulture);
                 var position = new Vector4(x, y, z, 1);
                 position = Vector4.Transform(position, Correction);
-                Vertices.Add(new Vertex(Vertices.Count, position.Xyz(), VertexWeights[Vertices.Count] ));
+                Vertices.Add(new Vertex(Vertices.Count, position.Xyz(), Skinning.VerticesSkinData[Vertices.Count]));
             }
         }
     

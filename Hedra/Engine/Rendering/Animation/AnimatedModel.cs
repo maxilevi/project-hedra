@@ -49,6 +49,7 @@ namespace Hedra.Engine.Rendering.Animation
         public Vector3 Scale { get; set; }
         public Box CullingBox { get; set; }
         public bool Outline { get; set; }
+        public bool IgnoreBaseModel { get; set; }
         public bool UpdateWhenOutOfView { get; set; }
         public bool WasCulled { private get; set; }
         public Vector4 OutlineColor { get; set; }
@@ -115,6 +116,11 @@ namespace Hedra.Engine.Rendering.Animation
             DrawManager.Add(this);
         }
 
+        public bool HasModel(ModelData Model)
+        {
+            return _addedModels.Contains(Model);
+        }
+        
         public void AddModel(ModelData Model)
         {
             _addedModels.Add(Model);
@@ -136,7 +142,7 @@ namespace Hedra.Engine.Rendering.Animation
         
         private void RebuildBuffers()
         {
-            var model = ModelData.Combine(_baseModelData, _addedModels.ToArray());
+            var model = ModelData.Combine(IgnoreBaseModel ? ModelData.Empty : _baseModelData, _addedModels.ToArray());
             Executer.ExecuteOnMainThread(delegate
             {
                 if (_disposed) return;

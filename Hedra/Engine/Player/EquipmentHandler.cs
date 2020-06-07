@@ -1,7 +1,10 @@
 using System;
+using Hedra.API;
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.ItemSystem.ArmorSystem;
+using Hedra.Engine.Management;
 using Hedra.Engine.Rendering;
+using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.EntitySystem;
 using Hedra.Items;
 using Hedra.WeaponSystem;
@@ -17,12 +20,18 @@ namespace Hedra.Engine.Player
         public BootsPiece Boots { get; private set; }
 
         private readonly IHumanoid _owner;
+        private ModelData _defaultHead;
+        private ModelData _defaultChest;
+        private ModelData _defaultPants;
+        private ModelData _defaultBoots;
+        private Class _lastClass;
         private Item _mainWeapon;
         private Item _ring;
 
         public EquipmentHandler(IHumanoid Owner)
         {
             _owner = Owner;
+            UpdateDefaultModels();
         }
 
         public void Update()
@@ -32,10 +41,52 @@ namespace Hedra.Engine.Player
             Helmet?.Update(_owner);
             Pants?.Update(_owner);
             Boots?.Update(_owner);
+            AddDefaultModels();
+            UpdateDefaultModels();
+        }
+
+        private void AddDefaultModels()
+        {
+            var model = _owner.Model;
+            AddDefaultModel(Helmet, model, _defaultHead);
+            AddDefaultModel(Chest, model, _defaultChest);
+            AddDefaultModel(Pants, model, _defaultPants);
+            AddDefaultModel(Boots, model, _defaultBoots);
+        }
+
+        private void AddDefaultModel(ArmorPiece Piece, HumanoidModel Model, ModelData Default)
+        {
+            if (Piece == null && !Model.HasModel(Default))
+            {
+                Model.AddModel(Default);
+            }
+            else if(Piece != null && Model.HasModel(Default))
+            {
+                Model.RemoveModel(Default);
+            }
+        }
+
+        private void UpdateDefaultModels()
+        {
+            if (_defaultHead != null && _owner.Class.Type == _lastClass) return;
+            if (_defaultHead != null)
+            {
+                var model = _owner.Model;
+                model.RemoveModel(_defaultHead);
+                model.RemoveModel(_defaultChest);
+                model.RemoveModel(_defaultPants);
+                model.RemoveModel(_defaultBoots);
+            }
+            _defaultHead = AssetManager.DAELoader(_owner.Class.HeadModelTemplate.Path);
+            _defaultChest = AssetManager.DAELoader(_owner.Class.ChestModelTemplate.Path);
+            _defaultPants = AssetManager.DAELoader(_owner.Class.LegsModelTemplate.Path);
+            _defaultBoots = AssetManager.DAELoader(_owner.Class.FeetModelTemplate.Path);
+            _lastClass = _owner.Class.Type;
         }
 
         public void Reset()
         {
+            UpdateDefaultModels();
             SetHelmet(null);
             SetChest(null);
             SetPants(null);
@@ -68,6 +119,8 @@ namespace Hedra.Engine.Player
             Set(New, LeftWeapon, W => LeftWeapon = W);
             (_owner as LocalPlayer)?.Toolbar.SetAttackType(LeftWeapon);
         }
+        
+        
 
         private void Set<T>(T New, T Old, Action<T> Setter) where T : class, IModel
         {

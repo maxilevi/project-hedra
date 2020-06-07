@@ -30,7 +30,8 @@ namespace Hedra.Engine.ItemSystem.ArmorSystem
                 if(Owner != null) 
                     UnregisterOwner(Owner);
                 Owner = Humanoid;
-                RegisterOwner(Humanoid);
+                if(Humanoid != null)
+                    RegisterOwner(Humanoid);
             }
         }
 
@@ -43,7 +44,7 @@ namespace Hedra.Engine.ItemSystem.ArmorSystem
         {
             Humanoid.Model.RemoveModel(_model);
         }
-
+        
         public Vector4 Tint { get; set; }
         public Vector4 BaseTint { get; set; }
         public Vector3 Scale { get; set; }
@@ -56,6 +57,7 @@ namespace Hedra.Engine.ItemSystem.ArmorSystem
         public float AnimationSpeed { get; set; }
         public Vector4 OutlineColor { get; set; }
         public bool Outline { get; set; }
+        public ModelData Model => _model;
 
         public void Dispose()
         {

@@ -1,0 +1,22 @@
+{
+  "Name": "RareChitinPants",
+  "DisplayName": "Chitin Pants",
+  "EquipmentType": "Pants",
+  "Tier": "Rare",
+  "Description": "Chitin pants.",
+  "Attributes": [
+    {
+      "Name": "Defense",
+      "Value": 7.5
+    },
+    {
+      "Name": "MovementSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Pants/ChitinPants.dae"
+  }
+}
+        
