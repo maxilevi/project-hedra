@@ -238,19 +238,49 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
             for (var j = 0; j < final.Vertices.Length; ++j)
             {
                 var output = ClearStitchData(final.JointNames, final.JointIds[j], final.VertexWeights[j]);
-                final.JointIds[j] = output.One;
-                final.VertexWeights[j] = output.Two;
+                //final.JointIds[j] = output.One;
+                //final.VertexWeights[j] = output.Two;
 
                 for (var i = pairsToMatch.Count-1; i > -1; --i)
                 {
                     if (final.Vertices[j] != pairsToMatch[i].One) continue;
                     
-                    output = ClearStitchData(final.JointNames, pairsToMatch[i].Two.JointIds, pairsToMatch[i].Two.Weights);
+                    //output = ClearStitchData(final.JointNames, pairsToMatch[i].Two.JointIds, pairsToMatch[i].Two.Weights);
                     
-                    final.Vertices[j] = pairsToMatch[i].Two.Position;
-                    final.JointIds[j] = output.One;
-                    final.VertexWeights[j] = output.Two;
+                    //final.Vertices[j] = pairsToMatch[i].Two.Position;
+                    //final.JointIds[j] = output.One;
+                    //final.VertexWeights[j] = output.Two;
                     pairsToMatch.RemoveAt(i);
+                }
+            }
+            var freqs = final.JointIds.SelectMany(x => new float[]{x.X, x.Y, x.Z}).GroupBy(x => x).ToDictionary(x => x.Key, x => x.Count());
+            for (var i = 0; i < final.JointNames.Length; i++)
+            {
+                if (!final.JointNames[i].Contains("ST")) continue;
+                if (freqs.ContainsKey(i))
+                {
+                    int a = 0;
+                }
+            }
+
+            for (var i = 0; i < final.JointIds.Length; i++)
+            {
+                if (final.JointIds[i] == Vector3.Zero)
+                {
+                    int a = 0;
+                }
+            }
+            
+            for (var i = 0; i < final.VertexWeights.Length; i++)
+            {
+                if (final.VertexWeights[i] == Vector3.Zero)
+                {
+                    int a = 0;
+                }
+                
+                if (Math.Abs((final.VertexWeights[i].X + final.VertexWeights[i].Y + final.VertexWeights[i].Z)) < 0.005f)
+                {
+                    int a = 0;
                 }
             }
 
@@ -281,6 +311,12 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
             {
                 ids.Z = 0;
                 weights = DistributeWeight(weights, 2);
+            }
+
+            if (ids == Vector3.Zero)
+            {
+                ids = Vector3.UnitX;
+                weights = Vector3.UnitX;
             }
             return new Pair<Vector3, Vector3>(ids, weights);
         }
