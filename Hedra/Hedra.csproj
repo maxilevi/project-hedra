@@ -8566,6 +8566,54 @@
       <Link>Assets\Chr\Mob\Beasthunter\Beasthunter1Idle.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Chr\BodyParts\ArcherChest.dae">
+      <Link>Assets\Chr\BodyParts\ArcherChest.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\BodyParts\ArcherFeet.dae">
+      <Link>Assets\Chr\BodyParts\ArcherFeet.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\BodyParts\ArcherHead.dae">
+      <Link>Assets\Chr\BodyParts\ArcherHead.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\BodyParts\ArcherLegs.dae">
+      <Link>Assets\Chr\BodyParts\ArcherLegs.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\BodyParts\MageChest.dae">
+      <Link>Assets\Chr\BodyParts\MageChest.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\BodyParts\MageFeet.dae">
+      <Link>Assets\Chr\BodyParts\MageFeet.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\BodyParts\MageHead.dae">
+      <Link>Assets\Chr\BodyParts\MageHead.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\BodyParts\MageLegs.dae">
+      <Link>Assets\Chr\BodyParts\MageLegs.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\BodyParts\RogueChest.dae">
+      <Link>Assets\Chr\BodyParts\RogueChest.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\BodyParts\RogueFeet.dae">
+      <Link>Assets\Chr\BodyParts\RogueFeet.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\BodyParts\RogueHead.dae">
+      <Link>Assets\Chr\BodyParts\RogueHead.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\BodyParts\RogueLegs.dae">
+      <Link>Assets\Chr\BodyParts\RogueLegs.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Chr\BodyParts\WarriorChest.dae">
       <Link>Assets\Chr\BodyParts\WarriorChest.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -9420,6 +9468,18 @@
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Foods\WaterBowl.ply">
       <Link>Assets\Items\Foods\WaterBowl.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Helmet\CommonArcherHat.dae">
+      <Link>Assets\Items\Helmets\CommonArcherHat.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Helmet\CommonWizardHat.dae">
+      <Link>Assets\Items\Helmets\CommonWizardHat.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Helmet\RareChitinHelmet.dae">
+      <Link>Assets\Items\Helmets\RareChitinHelmet.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Misc\AnimalFood.ply">
@@ -14559,6 +14619,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Foods\WaterBowl.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Helmets\CommonArcherHat.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Helmets\CommonWizardHat.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Helmets\RareChitinHelmet.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Helmets\ChristmasHat.json">

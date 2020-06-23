@@ -93,9 +93,15 @@ namespace Hedra.Engine.Rendering.UI
             {
                 _classType = ClassDesign.FromString(ClassDesign.AvailableClassNames[classChooser.Index]);
                 var previousModel = _human.Model;
+                _human.Class = _classType;
                 _human.Model = new HumanoidModel(_human, _classType.ModelTemplate);
                 _human.Model.SetValues(previousModel);
+                _human.SetHelmet(_classType.StartingItems.FirstOrDefault(P => P.Value.IsHelmet).Value?.Helmet);
                 _human.SetWeapon(_classType.StartingItems.First(P => P.Value.IsWeapon).Value.Weapon);
+                /* One time for updating the default body parts */
+                _human.UpdateEquipment();
+                /* The second time is for setting them */
+                _human.UpdateEquipment();
                 previousModel.Dispose();
             }
 

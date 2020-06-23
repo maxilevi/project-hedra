@@ -10,6 +10,11 @@
       "Name": "CommonBronzeStaff",
       "Index": 37,
       "Amount": 1
+    },
+    {
+      "Name": "CommonWizardHat",
+      "Index": 33,
+      "Amount": 1
     }
   ],
   "AttackResistance": 0.925,
@@ -25,19 +30,19 @@
   },
   "IsRanged": true,
   "HeadModel": {
-    "Path": "$DataFile$/Assets/Chr/BodyParts/WarriorHead.dae",
+    "Path": "$DataFile$/Assets/Chr/BodyParts/MageHead.dae",
     "Scale": 1.0
   },
   "ChestModel": {
-    "Path": "$DataFile$/Assets/Chr/BodyParts/WarriorChest.dae",
+    "Path": "$DataFile$/Assets/Chr/BodyParts/MageChest.dae",
     "Scale": 1.0
   },
   "LegsModel": {
-    "Path": "$DataFile$/Assets/Chr/BodyParts/WarriorLegs.dae",
+    "Path": "$DataFile$/Assets/Chr/BodyParts/MageLegs.dae",
     "Scale": 1.0
   },
   "FeetModel": {
-    "Path": "$DataFile$/Assets/Chr/BodyParts/WarriorFeet.dae",
+    "Path": "$DataFile$/Assets/Chr/BodyParts/MageFeet.dae",
     "Scale": 1.0
   }
 }

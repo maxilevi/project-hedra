@@ -24,9 +24,9 @@ namespace Hedra.Engine.Rendering
             return EntityRenderer.Draw(Model, Height);
         }
 
-        public void AddModel(ModelData Data)
+        public void AddModel(ModelData Data, bool IsDefault = false)
         {
-            Model.AddModel(Data);
+            Model.AddModel(Data, IsDefault);
         }
 
         public void RemoveModel(ModelData Data)

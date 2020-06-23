@@ -10,6 +10,11 @@
       "Name": "CommonWoodenBow",
       "Index": 37,
       "Amount": 1
+    },
+    {
+      "Name": "CommonArcherHat",
+      "Index": 33,
+      "Amount": 1
     }
   ],
   "StartingRecipes": [
@@ -28,19 +33,19 @@
   },
   "IsRanged": true,
   "HeadModel": {
-    "Path": "$DataFile$/Assets/Chr/BodyParts/WarriorHead.dae",
+    "Path": "$DataFile$/Assets/Chr/BodyParts/ArcherHead.dae",
     "Scale": 1.0
   },
   "ChestModel": {
-    "Path": "$DataFile$/Assets/Chr/BodyParts/WarriorChest.dae",
+    "Path": "$DataFile$/Assets/Chr/BodyParts/ArcherChest.dae",
     "Scale": 1.0
   },
   "LegsModel": {
-    "Path": "$DataFile$/Assets/Chr/BodyParts/WarriorLegs.dae",
+    "Path": "$DataFile$/Assets/Chr/BodyParts/ArcherLegs.dae",
     "Scale": 1.0
   },
   "FeetModel": {
-    "Path": "$DataFile$/Assets/Chr/BodyParts/WarriorFeet.dae",
+    "Path": "$DataFile$/Assets/Chr/BodyParts/ArcherFeet.dae",
     "Scale": 1.0
   }
 }

@@ -48,21 +48,31 @@ namespace Hedra.Engine.Player
         private void AddDefaultModels()
         {
             var model = _owner.Model;
-            AddDefaultModel(Helmet, model, _defaultHead);
+            AddDefaultModel(Helmet, model, _defaultHead, true);
             AddDefaultModel(Chest, model, _defaultChest);
             AddDefaultModel(Pants, model, _defaultPants);
             AddDefaultModel(Boots, model, _defaultBoots);
         }
 
-        private void AddDefaultModel(ArmorPiece Piece, HumanoidModel Model, ModelData Default)
+        private void AddDefaultModel(ArmorPiece Piece, HumanoidModel Model, ModelData Default, bool AlwaysOn = false)
         {
-            if (Piece == null && !Model.HasModel(Default))
+            if (AlwaysOn)
             {
-                Model.AddModel(Default);
+                if (!Model.HasModel(Default))
+                {
+                    Model.AddModel(Default, true);
+                }
             }
-            else if(Piece != null && Model.HasModel(Default))
+            else
             {
-                Model.RemoveModel(Default);
+                if (Piece == null && !Model.HasModel(Default))
+                {
+                    Model.AddModel(Default, true);
+                }
+                else if (Piece != null && Model.HasModel(Default))
+                {
+                    Model.RemoveModel(Default);
+                }
             }
         }
 

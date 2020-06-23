@@ -185,6 +185,11 @@ namespace Hedra.Engine.Player
             UpdateStats();
         }
 
+        public void UpdateEquipment()
+        {
+            Equipment.Update();
+        }
+
         private void UpdateStats()
         {
             Stamina += Time.DeltaTime * StaminaRegen;

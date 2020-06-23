@@ -181,6 +181,7 @@ namespace Hedra.Engine.ItemSystem
         public bool IsAmmo => string.Equals(EquipmentType, Items.EquipmentType.Ammo.ToString(), StringComparison.InvariantCultureIgnoreCase);
         public bool IsWeapon => WeaponFactory.Contains(this);
         public bool IsArmor => ArmorFactory.Contains(this);
+        public bool IsHelmet => IsArmor && EquipmentType == Items.EquipmentType.Helmet.ToString();
         public bool IsCompanion => EquipmentType == Items.EquipmentType.Pet.ToString();
         public bool IsRing => EquipmentType == Items.EquipmentType.Ring.ToString();
         public bool IsEquipment => IsWeapon || IsRing || IsArmor;

@@ -121,9 +121,12 @@ namespace Hedra.Engine.Rendering.Animation
             return _addedModels.Contains(Model);
         }
         
-        public void AddModel(ModelData Model)
+        public void AddModel(ModelData Model, bool IsDefault = false)
         {
-            _addedModels.Add(Model);
+            if (IsDefault)
+                _addedModels.Insert(0, Model);
+            else
+                _addedModels.Add(Model);
             RebuildBuffers();
         }
         
@@ -147,7 +150,7 @@ namespace Hedra.Engine.Rendering.Animation
             {
                 if (_disposed) return;
                 _vertices.Update(model.Vertices, model.Vertices.Length * HedraSize.Vector3);
-                _colors.Update(model.Colors, model.Colors.Length * HedraSize.Vector4);
+                _colors.Update(model.Colors, model.Colors.Length * HedraSize.Vector3);
                 _normals.Update(model.Normals, model.Normals.Length * HedraSize.Vector3);
                 _indices.Update(model.Indices, model.Indices.Length * sizeof(uint));
                 _jointIds.Update(model.JointIds, model.JointIds.Length * HedraSize.Vector3);

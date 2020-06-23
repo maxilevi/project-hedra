@@ -1,0 +1,22 @@
+{
+  "Name": "RareChitinHelmet",
+  "DisplayName": "Chitin Helmet",
+  "EquipmentType": "Helmet",
+  "Tier": "Rare",
+  "Description": "Chitin helmet.",
+  "Attributes": [
+    {
+      "Name": "Defense",
+      "Value": 7.5
+    },
+    {
+      "Name": "MovementSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Helmets/RareChitinHelmet.dae"
+  }
+}
+        

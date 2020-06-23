@@ -24,19 +24,19 @@
     "Scale": 1.0
   },
   "HeadModel": {
-    "Path": "$DataFile$/Assets/Chr/BodyParts/WarriorHead.dae",
+    "Path": "$DataFile$/Assets/Chr/BodyParts/RogueHead.dae",
     "Scale": 1.0
   },
   "ChestModel": {
-    "Path": "$DataFile$/Assets/Chr/BodyParts/WarriorChest.dae",
+    "Path": "$DataFile$/Assets/Chr/BodyParts/RogueChest.dae",
     "Scale": 1.0
   },
   "LegsModel": {
-    "Path": "$DataFile$/Assets/Chr/BodyParts/WarriorLegs.dae",
+    "Path": "$DataFile$/Assets/Chr/BodyParts/RogueLegs.dae",
     "Scale": 1.0
   },
   "FeetModel": {
-    "Path": "$DataFile$/Assets/Chr/BodyParts/WarriorFeet.dae",
+    "Path": "$DataFile$/Assets/Chr/BodyParts/RogueFeet.dae",
     "Scale": 1.0
   }
 }
