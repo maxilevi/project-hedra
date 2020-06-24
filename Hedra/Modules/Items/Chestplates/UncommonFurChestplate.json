@@ -1,0 +1,22 @@
+{
+  "Name": "UncommonFurChestplate",
+  "DisplayName": "Fur Chestplate",
+  "EquipmentType": "Chestplate",
+  "Tier": "Uncommon",
+  "Description": "Fur chestplate.",
+  "Attributes": [
+    {
+      "Name": "Defense",
+      "Value": 5
+    },
+    {
+      "Name": "MovementSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Chestplates/FurChestplate.dae"
+  }
+}
+        

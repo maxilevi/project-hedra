@@ -1,0 +1,22 @@
+{
+  "Name": "UncommonFurPants",
+  "DisplayName": "Fur Pants",
+  "EquipmentType": "Pants",
+  "Tier": "Uncommon",
+  "Description": "Fur pants.",
+  "Attributes": [
+    {
+      "Name": "Defense",
+      "Value": 5
+    },
+    {
+      "Name": "MovementSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Pants/FurPants.dae"
+  }
+}
+        

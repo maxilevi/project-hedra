@@ -1,0 +1,22 @@
+{
+  "Name": "UncommonFurBoots",
+  "DisplayName": "Fur Boots",
+  "EquipmentType": "Boots",
+  "Tier": "Uncommon",
+  "Description": "Fur boots.",
+  "Attributes": [
+    {
+      "Name": "Defense",
+      "Value": 5
+    },
+    {
+      "Name": "MovementSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Boots/FurBoots.dae"
+  }
+}
+        
