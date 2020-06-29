@@ -30,6 +30,7 @@ quest_log_label = JOURNAL
 map_label = MAP
 view_distance = View Distance
 mouse_sensitivity = Mouse Sensitivity
+smooth_camera = Smooth Camera
 loading = LOADING
 on = ON
 off = OFF

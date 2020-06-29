@@ -90,6 +90,8 @@ namespace Hedra.Game
 
         [Setting] public static bool Autosave { get; set; } = true;
 
+        [Setting] public static bool SmoothCamera { get; set; } = true;
+
         [Setting] public static int ChunkLoaderRadius { get; set; } = 24;
 
         [Setting] public static bool InvertMouse { get; set; } = false;

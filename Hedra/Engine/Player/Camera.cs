@@ -144,8 +144,8 @@ namespace Hedra.Engine.Player
             }
             _interpolatedZoomOut = Mathf.Lerp(_interpolatedZoomOut, _targetZoomOut, Time.DeltaTime * 2f);
             _interpolatedPosition = PositionDelegate() - _interpolatedZoomOut;
-            Pitch = Mathf.Lerp(Pitch, TargetPitch, Time.IndependentDeltaTime * 16f);
-            Yaw = Mathf.Lerp(Yaw, TargetYaw, Time.IndependentDeltaTime * 16f);
+            Pitch = GameSettings.SmoothCamera ? Mathf.Lerp(Pitch, TargetPitch, Time.IndependentDeltaTime * 16f) : TargetPitch;
+            Yaw = GameSettings.SmoothCamera ? Mathf.Lerp(Yaw, TargetYaw, Time.IndependentDeltaTime * 16f) : TargetYaw;
             Distance = Mathf.Lerp(Distance, TargetDistance + AddedDistance * Time.TimeScale, Time.IndependentDeltaTime * 3f);
         }
 

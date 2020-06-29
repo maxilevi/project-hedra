@@ -172,7 +172,7 @@ namespace Hedra.Engine.Rendering.UI
             };
 
             var fpsLimitList = new List<Translation>();
-            fpsLimitList.AddRange(Enumerable.Range(0, 12 + 1).Select(I => (I * 5 + 30).ToString())
+            fpsLimitList.AddRange(Enumerable.Range(0, 12 + 1 + 22).Select(I => (I * 5 + 30).ToString())
                 .Select(Translation.Default));
             fpsLimitList.Add(Translation.Create("none"));
 
@@ -502,7 +502,7 @@ namespace Hedra.Engine.Rendering.UI
                     mouseSensitivity.Index = i;
                 }
             }
-
+            
             var autosave = new Button(new Vector2(0f, .2f),
                                  new Vector2(0.15f,0.075f), BuildOnOff("autosave", () => GameSettings.Autosave), fontColor, _normalFont);
             
@@ -511,6 +511,12 @@ namespace Hedra.Engine.Rendering.UI
                 GameSettings.Autosave = !GameSettings.Autosave;
             };
 
+            var smoothCamera = new Button(new Vector2(0, 0), Vector2.Zero, BuildOnOff("smooth_camera", () => GameSettings.SmoothCamera), fontColor,
+                _normalFont);
+
+            smoothCamera.Click += delegate { GameSettings.SmoothCamera = !GameSettings.SmoothCamera; };
+
+            
             _graphicsButtons.Add(quality);
             _graphicsButtons.Add(vSync);
             _graphicsButtons.Add(shadows);
@@ -525,6 +531,7 @@ namespace Hedra.Engine.Rendering.UI
             _inputButtons.Add(invertMouse);
             _inputButtons.Add(mouseSensitivity);
             _inputButtons.Add(autosave);
+            _inputButtons.Add(smoothCamera);
             _audioButtons.Add(musicVolume);
             _audioButtons.Add(sfxVolume);
             _displayButtons.Add(showChat);
