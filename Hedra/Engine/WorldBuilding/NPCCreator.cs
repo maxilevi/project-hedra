@@ -150,7 +150,7 @@ namespace Hedra.Engine.WorldBuilding
         private static void ApplySeasonHats(Humanoid Human, string Type)
         {
             if(Season.IsChristmas) 
-                Human.SetHelmet(ItemPool.Grab(ItemType.ChristmasHat).Helmet);
+                Human.SetHelmet(ItemPool.Grab(ItemType.ChristmasHat));
         }
     }
 }

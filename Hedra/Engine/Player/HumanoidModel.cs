@@ -106,7 +106,7 @@ namespace Hedra.Engine.Player
             ModelPath = Template.Path;
             
 
-            Model = AnimationModelLoader.LoadEntity(ModelPath);
+            Model = AnimationModelLoader.LoadEntity(ModelPath, true);
             Model.IgnoreBaseModel = true;
             StateHandler = BuildAnimationHandler(Humanoid, Template);
 

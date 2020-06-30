@@ -56,16 +56,16 @@ namespace Hedra.Engine.Player
                         _player.SetWeapon(New == null ? Weapon.Empty : New.Weapon);
                         break;
                     case HelmetHolder:
-                        _player.SetHelmet(New?.Helmet);
+                        _player.SetHelmet(New);
                         break;
                     case ChestplateHolder:
-                        _player.SetChestplate(New?.Chestplate);
+                        _player.SetChestplate(New);
                         break;
                     case PantsHolder:
-                        _player.SetPants(New?.Pants);
+                        _player.SetPants(New);
                         break;
                     case BootsHolder:
-                        _player.SetBoots(New?.Boots);
+                        _player.SetBoots(New);
                         break;
                     case RingHolder:
                         _player.Ring = New;

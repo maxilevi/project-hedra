@@ -378,6 +378,7 @@
     <Compile Include="Engine\DataStructures\AABB.cs" />
     <Compile Include="Engine\DataStructures\Octree.cs" />
     <Compile Include="Engine\DataStructures\OctreeNode.cs" />
+    <Compile Include="Engine\EntitySystem\ArmorBonusComponent.cs" />
     <Compile Include="Engine\EntitySystem\DummyModel.cs" />
     <Compile Include="Engine\EnvironmentSystem\SkySettings.cs" />
     <Compile Include="Engine\Game\SetupSettingAttribute.cs" />
@@ -14553,9 +14554,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Boots\UncommonFurBoots.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Modules\Items\Chestplates\CommonLeatherChestplate.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Chestplates\RareChitinChestplate.json">

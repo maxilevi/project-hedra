@@ -110,6 +110,9 @@ namespace Hedra.Components
         {
             Exp = 0;
             Inflicted = 0;
+
+            var armor = (Parent is IHumanoid human) ? human.Armor : 0;
+            Amount *= (1.0f - armor / 100f);
             Amount *= (1.0f / Parent.AttackResistance);
             Amount *= Parent.IsUndead ? Damager?.Attributes.UndeadDamageModifier ?? 1 : 1;
             if (Parent.IsDead || Damager != null && _ignoreList.Any(I => I.Invoke(Damager))) return;

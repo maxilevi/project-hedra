@@ -459,6 +459,7 @@ namespace Hedra.Engine.Player
             Realms.Reset();
             Minimap.Reset();
             Chat.Clear();
+            Armor = 0f;
             Model.Alpha = 0f;
             View.TargetPitch = 0f;
             View.TargetYaw = 0f;

@@ -110,6 +110,26 @@ namespace HedraTests.Player
             throw new NotImplementedException();
         }
 
+        public void SetHelmet(Item Item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetChestplate(Item Item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetPants(Item Item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetBoots(Item Item)
+        {
+            throw new NotImplementedException();
+        }
+
         public void SetHelmet(HelmetPiece Item)
         {
             throw new NotImplementedException();
@@ -254,6 +274,7 @@ namespace HedraTests.Player
         public bool Disposed { get; }
         public float MaxHealth { get; set; }
         public float ManaRegen { get; }
+        public float Armor { get; set; }
         public float HealthRegen { get; }
         public float WeaponModifier(Item Weapon)
         {

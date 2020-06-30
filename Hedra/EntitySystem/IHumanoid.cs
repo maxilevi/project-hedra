@@ -82,15 +82,16 @@ namespace Hedra.EntitySystem
         float BaseSpeed { get; }
         float MaxHealth { get; }
         float ManaRegen { get; }
+        float Armor { get; set; }
         float HealthRegen { get; }
         float WeaponModifier(Item Weapon);
         Weapon LeftWeapon { get; }
         void Roll(RollType Type);
         void SetWeapon(Weapon Item);
-        void SetHelmet(HelmetPiece Item);
-        void SetChestplate(ChestPiece Item);
-        void SetPants(PantsPiece Item);
-        void SetBoots(BootsPiece Item);
+        void SetHelmet(Item Item);
+        void SetChestplate(Item Item);
+        void SetPants(Item Item);
+        void SetBoots(Item Item);
         void InvokeBeforeAttackEvent(AttackOptions Options);
         void InvokeAfterAttackEvent(AttackOptions Options);
         Item MainWeapon { get; }

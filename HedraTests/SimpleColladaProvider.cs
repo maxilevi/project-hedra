@@ -5,7 +5,7 @@ namespace HedraTests
 {
     public class SimpleColladaProvider : IColladaProvider
     {
-        public AnimatedModelData LoadColladaModel(string ColladaFile)
+        public AnimatedModelData LoadColladaModel(string ColladaFile, bool LoadAllJoints = false)
         {
             return new AnimatedModelData(
                 new ModelData(new Vector3[0], new Vector3[0], new Vector3[0], new uint[0], new Vector3[0], new Vector3[0], new string[0]),

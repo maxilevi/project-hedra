@@ -28,10 +28,10 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
         private int JointCount = 0;
         private static readonly Matrix4x4 Correction = Matrix4x4.CreateFromAxisAngle(Vector3.UnitX, -90f * Mathf.Radian);
     
-        public JointsLoader(XmlNode VisualSceneNode)
+        public JointsLoader(XmlNode VisualSceneNode, List<string> BoneOrder)
         {
             this.ArmatureData = VisualSceneNode["visual_scene"].ChildWithAttribute("node", "id", ArmatureName);
-            this.BoneOrder = CollectBoneOrder();
+            this.BoneOrder = BoneOrder ?? CollectBoneOrder();
         }
 
         private List<string> CollectBoneOrder()

@@ -232,16 +232,16 @@ namespace Hedra.Engine.Rendering.UI
                     Human.SetWeapon(Human.MainWeapon.Weapon);
                     break;
                 case PlayerInventory.HelmetHolder:
-                    Human.SetHelmet(Object.Helmet);
+                    Human.SetHelmet(Object);
                     break;
                 case PlayerInventory.ChestplateHolder:
-                    Human.SetChestplate(Object.Chestplate);
+                    Human.SetChestplate(Object);
                     break;
                 case PlayerInventory.PantsHolder:
-                    Human.SetPants(Object.Pants);
+                    Human.SetPants(Object);
                     break;
                 case PlayerInventory.BootsHolder:
-                    Human.SetBoots(Object.Boots);
+                    Human.SetBoots(Object);
                     break;
             }
         }

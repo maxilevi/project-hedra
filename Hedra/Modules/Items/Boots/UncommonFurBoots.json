@@ -3,15 +3,15 @@
   "DisplayName": "Fur Boots",
   "EquipmentType": "Boots",
   "Tier": "Uncommon",
-  "Description": "Fur boots.",
+  "Description": "Light boots.",
   "Attributes": [
     {
       "Name": "Defense",
-      "Value": 5
+      "Value": 2.5
     },
     {
       "Name": "MovementSpeed",
-      "Value": 1.0
+      "Value": 1.075
     }
   ],
   "Model": {

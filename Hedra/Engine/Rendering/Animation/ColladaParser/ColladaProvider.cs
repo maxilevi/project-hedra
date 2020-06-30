@@ -15,18 +15,15 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
             if(AssertHasArmature) AssertCorrectName(document);
             return document.ChildNodes[1];
         }
-        
-        public AnimatedModelData LoadColladaModel(string ColladaFile)
+
+        public AnimatedModelData LoadColladaModel(string ColladaFile, bool LoadAllJoints = false)
         {
             var node = ParsePath(ColladaFile, true);
-            var jointsLoader = new JointsLoader(node["library_visual_scenes"]);
+            var skinningData = LoadSkinning(node);
+            var jointsLoader = new JointsLoader(node["library_visual_scenes"], !LoadAllJoints ? skinningData.JointOrder : null);
             var jointsData = jointsLoader.ExtractBoneData();
-            if (SkinLoader.HasSkinningData(node))
-            {
-                var skinningData = LoadSkinning(node);
-                return new AnimatedModelData(LoadGeometry(node, skinningData), jointsData);
-            }
-            return new AnimatedModelData(ModelData.Empty, jointsData);
+            
+            return new AnimatedModelData(LoadGeometry(node, skinningData), jointsData);
         }
 
         private static SkinningData LoadSkinning(XmlNode Node)

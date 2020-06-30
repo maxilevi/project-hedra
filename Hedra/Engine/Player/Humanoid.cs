@@ -37,7 +37,7 @@ namespace Hedra.Engine.Player
 {
 
     public delegate void OnHitLandedEventHandler(IHumanoid Humanoid, int ConsecutiveHits);
-    
+
     public class Humanoid : Entity, IHumanoid
     {
         public const int MaxLevel = 99;
@@ -51,7 +51,7 @@ namespace Hedra.Engine.Player
         public event OnInteractionEvent Interact;
         public event OnFishing Fishing;
         private EquipmentHandler Equipment { get; }
-        
+
         public ClassDesign Class
         {
             get => _class;
@@ -83,12 +83,18 @@ namespace Hedra.Engine.Player
         public float ManaRegenFactor { get; set; }
         public float AttackPower { get; set; }
         public float BonusHealth { get; set; }
-        public float DodgeCost { get; set; }    
+        public float DodgeCost { get; set; }
         public float RandomFactor { get; set; }
 
         public virtual bool CanInteract { get; set; } = true;
         public virtual float FacingDirection => throw new NotImplementedException();
-        public new HumanoidModel Model { get => base.Model as HumanoidModel; set => base.Model = value; }
+
+        public new HumanoidModel Model
+        {
+            get => base.Model as HumanoidModel;
+            set => base.Model = value;
+        }
+
         public virtual Vector3 LookingDirection => Orientation;
         public MovementManager Movement { get; protected set; }
         public HandLamp HandLamp { get; }
@@ -106,8 +112,10 @@ namespace Hedra.Engine.Player
         #region Propierties ( MaxMana, MaxHealth, MaxXp)
 
         public override float AttackingSpeedModifier => Class.AttackingSpeedModifier;
-        
+
         public float BaseSpeed => Class.BaseSpeed;
+        
+        public float Armor { get; set; }
 
         public override float MaxHealth => CalculateMaxHealth(Class, Level, RandomFactor) + BonusHealth;
 
@@ -118,20 +126,22 @@ namespace Hedra.Engine.Player
             {
                 maxHealth += Class.MaxHealthFormula(RandomFactor);
             }
+
             return maxHealth;
         }
 
         public float MaxXP => MaxLevel == Level ? 0 : ClassDesign.XPFormula(this.Level);
-                    
+
         public float MaxMana
         {
             get
             {
                 var maxMana = 90 + RandomFactor * 60f;
-                for(var i = 1; i < this.Level; i++)
+                for (var i = 1; i < this.Level; i++)
                 {
-                    maxMana += Class.MaxManaFormula(RandomFactor);                    
+                    maxMana += Class.MaxManaFormula(RandomFactor);
                 }
+
                 return maxMana;
             }
         }
@@ -148,7 +158,7 @@ namespace Hedra.Engine.Player
         public float HealthRegen => this.IsSleeping ? 6.0f * this.MaxHealth * .005f : 0;
 
         public float StaminaRegen { get; set; } = 4;
-        
+
         #endregion
 
         public Humanoid()
@@ -167,8 +177,9 @@ namespace Hedra.Engine.Player
             AttackPower = 1f;
             Speed = this.BaseSpeed;
             BaseAttackSpeed = .75f;
-            AddComponent(_damageHandler = new DamageComponent(this));
             Physics.OnMove += OnMove;
+            _damageHandler = new DamageComponent(this);
+            AddComponent(_damageHandler);
         }
 
         private void OnMove()
@@ -195,16 +206,18 @@ namespace Hedra.Engine.Player
             Stamina += Time.DeltaTime * StaminaRegen;
             if (!this.IsDead)
             {
-                if(!_damageHandler.HasBeenAttacked)
+                if (!_damageHandler.HasBeenAttacked)
                     Health += HealthRegen * Time.DeltaTime;
                 Mana += ManaRegen * Time.DeltaTime;
             }
+
             if (IsSprinting)
             {
-                if(!_wasSprinting)
+                if (!_wasSprinting)
                     AddBonusSpeedWhile(SprintingSpeed, () => IsSprinting);
                 Stamina -= Time.DeltaTime * SprintingCost;
             }
+
             _wasSprinting = IsSprinting;
         }
 
@@ -220,22 +233,26 @@ namespace Hedra.Engine.Player
                 ConsecutiveHits = 0;
             }
         }
-        
+
         #region Dodge
+
         public void Roll(RollType Type)
         {
             var player = this as LocalPlayer;
-            if( IsUnderwater || IsTravelling || IsRolling || IsCasting || IsRiding || IsJumping) return;
-            
-            if(player != null)
+            if (IsUnderwater || IsTravelling || IsRolling || IsCasting || IsRiding || IsJumping) return;
+
+            if (player != null)
             {
                 if (Stamina < DodgeCost)
                 {
-                    GameManager.Player.MessageDispatcher.ShowNotification(Translations.Get("too_tired"), Color.DarkRed, 3f, true);
+                    GameManager.Player.MessageDispatcher.ShowNotification(Translations.Get("too_tired"), Color.DarkRed,
+                        3f, true);
                     return;
                 }
+
                 Stamina -= DodgeCost;
             }
+
             IsAttacking = false;
             IsRolling = true;
             SearchComponent<DamageComponent>().Immune = true;
@@ -249,10 +266,7 @@ namespace Hedra.Engine.Player
             Movement.Move(Movement.LastOrientation * 2.5f * Attributes.TumbleDistanceModifier, .5f, false);
 
             SoundPlayer.PlaySoundWithVariation(SoundType.Dodge, this.Position);
-            TaskScheduler.When( () => !IsRolling, () =>
-            {
-                SearchComponent<DamageComponent>().Immune = false;
-            } );
+            TaskScheduler.When(() => !IsRolling, () => { SearchComponent<DamageComponent>().Immune = false; });
         }
 
         #endregion
@@ -261,12 +275,12 @@ namespace Hedra.Engine.Player
         {
             this.AttackSurroundings(Damage, Ignore, null);
         }
-        
+
         public void AttackSurroundings(float Damage, Action<IEntity> Callback)
         {
             this.AttackSurroundings(Damage, null, null);
         }
-        
+
         public void AttackSurroundings(float Damage)
         {
             this.AttackSurroundings(Damage, null, null);
@@ -276,8 +290,8 @@ namespace Hedra.Engine.Player
         public void AttackSurroundings(float Damage, IEntity[] IgnoreList, Action<IEntity> Callback)
         {
             var meleeWeapon = LeftWeapon as MeleeWeapon;
-            var rangeModifier =  meleeWeapon?.MainWeaponSize.Y / 2.5f + 1f ?? 1.0f;
-            var wideModifier = Math.Max( (meleeWeapon?.MainWeaponSize.Xz().LengthFast() ?? 1.0f) - .75f, 1.0f);
+            var rangeModifier = meleeWeapon?.MainWeaponSize.Y / 2.5f + 1f ?? 1.0f;
+            var wideModifier = Math.Max((meleeWeapon?.MainWeaponSize.Xz().LengthFast() ?? 1.0f) - .75f, 1.0f);
             var nearEntities = World.InRadius<IEntity>(this.Position, 32f * rangeModifier);
             var possibleTargets = nearEntities.Where(E => !E.IsStatic && E != this).ToArray();
             var atLeastOneHit = false;
@@ -287,7 +301,7 @@ namespace Hedra.Engine.Player
                 if (IgnoreList != null && Array.IndexOf(IgnoreList, target) != -1) continue;
                 var norm = (target.Position - this.Position).Xz().NormalizedFast().ToVector3();
                 var dot = Vector3.Dot(norm, this.Orientation);
-                if(dot > 0.60f / wideModifier && this.InAttackRange(target, rangeModifier))
+                if (dot > 0.60f / wideModifier && this.InAttackRange(target, rangeModifier))
                 {
                     var damageToDeal = Damage * dot;
                     target.Damage(damageToDeal, this, out var exp, out var inflicted);
@@ -297,16 +311,18 @@ namespace Hedra.Engine.Player
                         atLeastOneHit = true;
                 }
             }
-            if(!atLeastOneHit)
+
+            if (!atLeastOneHit)
             {
                 MainWeapon?.Weapon.PlaySound();
             }
+
             this.ProcessHit(atLeastOneHit);
         }
 
         public void ProcessHit(bool HittedSomething)
         {
-            if(_ignoreHitCombo) return;
+            if (_ignoreHitCombo) return;
             if (!HittedSomething)
             {
                 ConsecutiveHits = 0;
@@ -319,8 +335,10 @@ namespace Hedra.Engine.Player
                 var consecutiveHitsValue = ConsecutiveHits;
                 if (previousValue != MaxConsecutiveHits)
                 {
-                    this.AddBonusAttackSpeedWhile(ConsecutiveHitsModifier * .5f, () => ConsecutiveHits == consecutiveHitsValue);
+                    this.AddBonusAttackSpeedWhile(ConsecutiveHitsModifier * .5f,
+                        () => ConsecutiveHits == consecutiveHitsValue);
                 }
+
                 Mana = Mathf.Clamp(Mana + 8, 0, MaxMana);
                 HitLanded?.Invoke(this, ConsecutiveHits);
             }
@@ -348,38 +366,60 @@ namespace Hedra.Engine.Player
         {
             Equipment.SetWeapon(Item);
         }
-        
-        public void SetHelmet(HelmetPiece Item)
+
+        public void SetHelmet(Item Item)
         {
-            Equipment.SetHelmet(Item);
+            ApplyArmorBonuses(Item, () => Inventory.Helmet == Item);
+            Equipment.SetHelmet(Item?.Helmet);
         }
-        
-        public void SetChestplate(ChestPiece Item)
+
+        public void SetChestplate(Item Item)
         {
-            Equipment.SetChest(Item);
+            ApplyArmorBonuses(Item, () => Inventory.Chest == Item);
+            Equipment.SetChest(Item?.Chestplate);
         }
-        
-        public void SetPants(PantsPiece Item)
+
+        public void SetPants(Item Item)
         {
-            Equipment.SetPants(Item);
+            ApplyArmorBonuses(Item, () => Inventory.Pants == Item);
+            Equipment.SetPants(Item?.Pants);
         }
-        
-        public void SetBoots(BootsPiece Item)
+
+        public void SetBoots(Item Item)
         {
-            Equipment.SetBoots(Item);
+            ApplyArmorBonuses(Item, () => Inventory.Boots == Item);
+            Equipment.SetBoots(Item?.Boots);
+        }
+
+        private void ApplyArmorBonuses(Item Item, Func<bool> While)
+        {
+            if (Item == null) return;
+            var bonusArmor = Item.HasAttribute(CommonAttributes.Defense)
+                ? Item.GetAttribute<float>(CommonAttributes.Defense)
+                : 0;
+            var bonusSpeed = Item.HasAttribute(CommonAttributes.MovementSpeed)
+                ? Item.GetAttribute<float>(CommonAttributes.MovementSpeed)
+                : 0;
+            AddBonusSpeedWhile(BaseSpeed * (bonusSpeed - 1f), While);
+            AddBonusArmorWhile(bonusArmor, While);
         }
 
         public void AddBonusAttackSpeedWhile(float BonusAttackSpeed, Func<bool> Condition)
         {
             ComponentManager.AddComponentWhile(new AttackSpeedBonusComponent(this, BonusAttackSpeed), Condition);
         }
-        
+
         public void AddBonusHealthWhile(float BonusHealth, Func<bool> Condition)
         {
             ComponentManager.AddComponentWhile(new HealthBonusComponent(this, BonusHealth), Condition);
         }
 
-        public void Greet()
+        public void AddBonusArmorWhile(float BonusArmor, Func<bool> Condition)
+        {
+            ComponentManager.AddComponentWhile(new ArmorBonusComponent(this, BonusArmor), Condition);
+        }
+
+    public void Greet()
         {
             CanInteract = false;
             Movement.CaptureMovement = false;
@@ -461,6 +501,32 @@ namespace Hedra.Engine.Player
             }
             set => this.BaseAttackSpeed = value;
         }
+
+        private Item[] GetEquipmentItems()
+        {
+            return new[] {Inventory.Boots, Inventory.Pants, Inventory.Chest, Inventory.Helmet}.Where(E => E != null).ToArray();
+        }
+
+        public float ArmorDefenseBonus
+        {
+            get
+            {
+                return GetEquipmentItems().Select(E =>
+                    E.HasAttribute(CommonAttributes.Defense) ? E.GetAttribute<float>(CommonAttributes.Defense) : 0)
+                .Sum();
+            }    
+        }
+
+        public float ArmorMovementSpeedBonus
+        {
+            get
+            {
+                return GetEquipmentItems().Select(E =>
+                        E.HasAttribute(CommonAttributes.MovementSpeed) ? E.GetAttribute<float>(CommonAttributes.MovementSpeed) : 0)
+                    .Sum();
+            }
+        }
+        
         
         public float XP
         {

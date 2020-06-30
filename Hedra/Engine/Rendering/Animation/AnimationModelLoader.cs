@@ -43,9 +43,9 @@ namespace Hedra.Engine.Rendering.Animation
             return new AnimatedModel(EntityData.Mesh, HeadJoint, SkeletonData.JointCount);
         }
 
-        public static AnimatedModel LoadEntity(string ModelFile)
+        public static AnimatedModel LoadEntity(string ModelFile, bool LoadAllJoints = false)
         {
-            var animatedModel = LoadEntity(GetEntityData(ModelFile));
+            var animatedModel = LoadEntity(GetEntityData(ModelFile, LoadAllJoints));
             animatedModel.CullingBox = AssetManager.LoadHitbox(ModelFile);
             return animatedModel;
         }
@@ -66,7 +66,7 @@ namespace Hedra.Engine.Rendering.Animation
             return Joint;
         }
 
-        private static AnimatedModelData GetEntityData(string ModelFile)
+        private static AnimatedModelData GetEntityData(string ModelFile, bool LoadAllJoints = false)
         {
             AnimatedModelData entityData;
             lock (ModelCache)
@@ -78,7 +78,7 @@ namespace Hedra.Engine.Rendering.Animation
                 else
                 {
                     string fileContents = Encoding.ASCII.GetString(AssetManager.ReadPath(ModelFile));
-                    entityData = ColladaLoader.LoadColladaModel(fileContents);
+                    entityData = ColladaLoader.LoadColladaModel(fileContents, LoadAllJoints);
                     if(entityData.Joints.JointCount > GeneralSettings.MaxJoints)
                         throw new ArgumentOutOfRangeException($"Max joint count is '{GeneralSettings.MaxJoints}' but model '{ModelFile}' has '{entityData.Joints.JointCount}'");
                     Log.WriteLine($"Loaded model '{ModelFile}' with '{entityData.Joints.JointCount}' joints", LogType.System);

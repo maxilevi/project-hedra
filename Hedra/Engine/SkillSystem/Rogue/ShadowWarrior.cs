@@ -39,10 +39,10 @@ namespace Hedra.Engine.SkillSystem.Rogue
             _warrior.Health = _warrior.MaxHealth;
             _warrior.Ring = User.Ring;
             _warrior.SetWeapon(WeaponFactory.Get(User.MainWeapon));
-            _warrior.SetBoots(User.Inventory.Boots?.Boots);
-            _warrior.SetPants(User.Inventory.Pants?.Pants);
-            _warrior.SetChestplate(User.Inventory.Chest?.Chestplate);
-            _warrior.SetHelmet(User.Inventory.Helmet?.Helmet);
+            _warrior.SetBoots(User.Inventory.Boots);
+            _warrior.SetPants(User.Inventory.Pants);
+            _warrior.SetChestplate(User.Inventory.Chest);
+            _warrior.SetHelmet(User.Inventory.Helmet);
             _warrior.SearchComponent<DamageComponent>().Ignore(E => E == User || E == User.Companion.Entity);
             _warrior.Physics.CanBePushed = false;
             _warrior.Physics.CollidesWithEntities = false;

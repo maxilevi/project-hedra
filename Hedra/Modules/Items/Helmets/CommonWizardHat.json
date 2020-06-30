@@ -5,10 +5,6 @@
   "Tier": "Common",
   "Description": "Wizard hat.",
   "Attributes": [
-    {
-      "Name": "Defense",
-      "Value": 1.0
-    }
   ],
   "Model": {
     "Scale": 1.0,
