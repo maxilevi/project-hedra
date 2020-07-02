@@ -1,0 +1,22 @@
+{
+  "Name": "CommonClothBoots",
+  "DisplayName": "Cloth Boots",
+  "EquipmentType": "Boots",
+  "Tier": "Common",
+  "Description": "Light boots.",
+  "Attributes": [
+    {
+      "Name": "Defense",
+      "Value": 1.0
+    },
+    {
+      "Name": "MovementSpeed",
+      "Value": 1.05 
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Boots/CommonClothBoots.dae"
+  }
+}
+        

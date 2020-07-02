@@ -54,10 +54,7 @@ namespace Hedra.Items
                 ItemType.Glider.ToString()
             };
             
-            BlacklistedEquipment = new[]
-            {
-                EquipmentType.Chestplate.ToString()
-            };
+            BlacklistedEquipment = new string[0];
         }
 
         public static Item Grab(ItemPoolSettings Settings)

@@ -1,0 +1,22 @@
+{
+  "Name": "RareNecromancerRobe",
+  "DisplayName": "Necromancer robe",
+  "EquipmentType": "Chestplate",
+  "Tier": "Rare",
+  "Description": "Necromancer robe.",
+  "Attributes": [
+    {
+      "Name": "Defense",
+      "Value": 5
+    },
+    {
+      "Name": "Sorcery",
+      "Value": 10.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Chestplates/RareNecromancerChestplate.dae"
+  }
+}
+        

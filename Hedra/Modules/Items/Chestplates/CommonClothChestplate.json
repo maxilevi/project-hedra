@@ -1,0 +1,22 @@
+{
+  "Name": "CommonClothChestplate",
+  "DisplayName": "Cloth Chestplate",
+  "EquipmentType": "Chestplate",
+  "Tier": "Common",
+  "Description": "Light chestplate.",
+  "Attributes": [
+    {
+      "Name": "Defense",
+      "Value": 2.5
+    },
+    {
+      "Name": "MovementSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Chestplates/CommonClothChestplate.dae"
+  }
+}
+        

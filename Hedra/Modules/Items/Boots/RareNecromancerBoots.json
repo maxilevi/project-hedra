@@ -1,0 +1,22 @@
+{
+  "Name": "RareNecromancerBoots",
+  "DisplayName": "Necromancer boots",
+  "EquipmentType": "Boots",
+  "Tier": "Rare",
+  "Description": "Necromancer boots.",
+  "Attributes": [
+    {
+      "Name": "MovementSpeed",
+      "Value": 1.05
+    },
+    {
+      "Name": "Sorcery",
+      "Value": 2.5
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Boots/RareNecromancerBoots.dae"
+  }
+}
+        

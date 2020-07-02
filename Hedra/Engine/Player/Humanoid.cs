@@ -399,7 +399,7 @@ namespace Hedra.Engine.Player
                 : 0;
             var bonusSpeed = Item.HasAttribute(CommonAttributes.MovementSpeed)
                 ? Item.GetAttribute<float>(CommonAttributes.MovementSpeed)
-                : 0;
+                : 1;
             AddBonusSpeedWhile(BaseSpeed * (bonusSpeed - 1f), While);
             AddBonusArmorWhile(bonusArmor, While);
         }

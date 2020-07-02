@@ -1,0 +1,22 @@
+{
+  "Name": "RareNecromancerMask",
+  "DisplayName": "Necromancer Mask",
+  "EquipmentType": "Helmet",
+  "Tier": "Rare",
+  "Description": "Necromancer mask.",
+  "Attributes": [
+    {
+      "Name": "Defense",
+      "Value": -2.5
+    },
+    {
+      "Name": "Sorcery",
+      "Value": 7.5
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Helmets/RareNecromancerMask.dae"
+  }
+}
+        
