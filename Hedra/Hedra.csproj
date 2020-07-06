@@ -9437,9 +9437,11 @@
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Boots\RareWizardBoots.dae">
       <Link>Assets\Items\Boots\RareWizardBoots.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Boots\UncommonFarmerBoots.dae">
       <Link>Assets\Items\Boots\UncommonFarmerBoots.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\ChitinChestplate.dae">
       <Link>Assets\Items\Chestplates\ChitinChestplate.dae</Link>
@@ -9463,9 +9465,11 @@
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\RareWizardChestplate.dae">
       <Link>Assets\Items\Chestplates\RareWizardChestplate.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\UncommonFarmerChestplate.dae">
       <Link>Assets\Items\Chestplates\UncommonFarmerChestplate.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Foods\Bread.ply">
       <Link>Assets\Items\Foods\Bread.ply</Link>
@@ -9621,9 +9625,11 @@
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Pants\RareWizardPants.dae">
       <Link>Assets\Items\Pants\RareWizardPants.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Pants\UncommonFarmerPants.dae">
       <Link>Assets\Items\Pants\UncommonFarmerPants.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Potions\AgilityPotion.ply">
       <Link>Assets\Items\Potions\AgilityPotion.ply</Link>
