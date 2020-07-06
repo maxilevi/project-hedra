@@ -1,0 +1,22 @@
+{
+  "Name": "RareWizardPants",
+  "DisplayName": "Wizard Pants",
+  "EquipmentType": "Pants",
+  "Tier": "Rare",
+  "Description": "Wizard pants.",
+  "Attributes": [
+    {
+      "Name": "Defense",
+      "Value": 5
+    },
+    {
+      "Name": "Sorcery",
+      "Value": 2.5
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Pants/RareWizardPants.dae"
+  }
+}
+        

@@ -1,0 +1,22 @@
+{
+  "Name": "UncommonFarmerBoots",
+  "DisplayName": "Farmer Boots",
+  "EquipmentType": "Boots",
+  "Tier": "Uncommon",
+  "Description": "Farmer boots.",
+  "Attributes": [
+    {
+      "Name": "Defense",
+      "Value": 2.5
+    },
+    {
+      "Name": "MovementSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Boots/UncommonFarmerBoots.dae"
+  }
+}
+        

@@ -1,0 +1,22 @@
+{
+  "Name": "UncommonFarmerRobe",
+  "DisplayName": "Farmer Robe",
+  "EquipmentType": "Chestplate",
+  "Tier": "Uncommon",
+  "Description": "Farmer robe.",
+  "Attributes": [
+    {
+      "Name": "Defense",
+      "Value": 2.5
+    },
+    {
+      "Name": "MovementSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Chestplates/UncommonFarmerChestplate.dae"
+  }
+}
+        

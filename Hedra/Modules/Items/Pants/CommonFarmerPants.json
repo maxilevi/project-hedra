@@ -1,0 +1,22 @@
+{
+  "Name": "CommonFarmerPants",
+  "DisplayName": "Farmer Pants",
+  "EquipmentType": "Pants",
+  "Tier": "Common",
+  "Description": "Farmer pants.",
+  "Attributes": [
+    {
+      "Name": "Defense",
+      "Value": 2.5
+    },
+    {
+      "Name": "MovementSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Pants/CommonFarmerPants.dae"
+  }
+}
+        

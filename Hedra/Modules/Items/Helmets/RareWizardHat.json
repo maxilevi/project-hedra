@@ -1,0 +1,22 @@
+{
+  "Name": "RareWizardHat",
+  "DisplayName": "Wizard Hat",
+  "EquipmentType": "Helmet",
+  "Tier": "Rare",
+  "Description": "Wizard hat.",
+  "Attributes": [
+    {
+      "Name": "Defense",
+      "Value": -2.5
+    },
+    {
+      "Name": "Sorcery",
+      "Value": 7.5
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Helmets/RareWizardHat.dae"
+  }
+}
+        

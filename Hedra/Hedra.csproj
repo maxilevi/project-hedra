@@ -9423,6 +9423,10 @@
       <Link>Assets\Items\Boots\CommonClothBoots.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Boots\CommonFarmerBoots.dae">
+      <Link>Assets\Items\Boots\CommonFarmerBoots.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Boots\FurBoots.dae">
       <Link>Assets\Items\Boots\FurBoots.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -9430,6 +9434,12 @@
     <Content Include="..\project-hedra-assets\Models\Blend\Boots\RareNecromancerBoots.dae">
       <Link>Assets\Items\Boots\RareNecromancerBoots.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Boots\RareWizardBoots.dae">
+      <Link>Assets\Items\Boots\RareWizardBoots.dae</Link>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Boots\UncommonFarmerBoots.dae">
+      <Link>Assets\Items\Boots\UncommonFarmerBoots.dae</Link>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\ChitinChestplate.dae">
       <Link>Assets\Items\Chestplates\ChitinChestplate.dae</Link>
@@ -9439,6 +9449,10 @@
       <Link>Assets\Items\Chestplates\CommonClothChestplate.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\CommonFarmerChestplate.dae">
+      <Link>Assets\Items\Chestplates\CommonFarmerChestplate.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\FurChestplate.dae">
       <Link>Assets\Items\Chestplates\FurChestplate.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -9446,6 +9460,12 @@
     <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\RareNecromancerChestplate.dae">
       <Link>Assets\Items\Chestplates\RareNecromancerChestplate.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\RareWizardChestplate.dae">
+      <Link>Assets\Items\Chestplates\RareWizardChestplate.dae</Link>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\UncommonFarmerChestplate.dae">
+      <Link>Assets\Items\Chestplates\UncommonFarmerChestplate.dae</Link>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Foods\Bread.ply">
       <Link>Assets\Items\Foods\Bread.ply</Link>
@@ -9505,6 +9525,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Helmet\RareNecromancerMask.dae">
       <Link>Assets\Items\Helmets\RareNecromancerMask.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Helmet\RareWizardHat.dae">
+      <Link>Assets\Items\Helmets\RareWizardHat.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Misc\AnimalFood.ply">
@@ -9583,6 +9607,10 @@
       <Link>Assets\Items\Pants\CommonClothPants.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Pants\CommonFarmerPants.dae">
+      <Link>Assets\Items\Pants\CommonFarmerPants.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Pants\FurPants.dae">
       <Link>Assets\Items\Pants\FurPants.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -9590,6 +9618,12 @@
     <Content Include="..\project-hedra-assets\Models\Blend\Pants\RareNecromancerPants.dae">
       <Link>Assets\Items\Pants\RareNecromancerPants.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Pants\RareWizardPants.dae">
+      <Link>Assets\Items\Pants\RareWizardPants.dae</Link>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Pants\UncommonFarmerPants.dae">
+      <Link>Assets\Items\Pants\UncommonFarmerPants.dae</Link>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Potions\AgilityPotion.ply">
       <Link>Assets\Items\Potions\AgilityPotion.ply</Link>
@@ -14577,10 +14611,19 @@
     <Content Include="Modules\Items\Boots\CommonClothBoots.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Boots\CommonFarmerBoots.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Boots\RareChitinBoots.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Boots\RareNecromancerBoots.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Boots\RareWizardBoots.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Boots\UncommonFarmerBoots.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Boots\UncommonFurBoots.json">
@@ -14589,10 +14632,19 @@
     <Content Include="Modules\Items\Chestplates\CommonClothChestplate.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Chestplates\CommonFarmerRobe.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Chestplates\RareChitinChestplate.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Chestplates\RareNecromancerChestplate.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Chestplates\RareWizardChestplate.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Chestplates\UncommonFarmerRobe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Chestplates\UncommonFurChestplate.json">
@@ -14691,6 +14743,9 @@
     <Content Include="Modules\Items\Helmets\RareNecromancerMask.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Helmets\RareWizardHat.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Misc\Bait.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -14763,10 +14818,19 @@
     <Content Include="Modules\Items\Pants\CommonClothPants.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Pants\CommonFarmerPants.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Pants\RareChitinPants.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Pants\RareNecromancerPants.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Pants\RareWizardPants.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Pants\UncommonFarmerPants.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Pants\UncommonFurPants.json">
