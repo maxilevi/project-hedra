@@ -9431,6 +9431,18 @@
       <Link>Assets\Items\Boots\FurBoots.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Boots\RareArcherBoots.dae">
+      <Link>Assets\Items\Boots\RareArcherBoots.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Boots\RareBeasthunterBoots.dae">
+      <Link>Assets\Items\Boots\RareBeasthunterBoots.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Boots\RareBlacksmithBoots.dae">
+      <Link>Assets\Items\Boots\RareBlacksmithBoots.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Boots\RareNecromancerBoots.dae">
       <Link>Assets\Items\Boots\RareNecromancerBoots.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -9441,6 +9453,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Boots\UncommonFarmerBoots.dae">
       <Link>Assets\Items\Boots\UncommonFarmerBoots.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Boots\UniqueOrientalBoots.dae">
+      <Link>Assets\Items\Boots\UniqueOrientalBoots.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\ChitinChestplate.dae">
@@ -9459,6 +9475,18 @@
       <Link>Assets\Items\Chestplates\FurChestplate.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\RareBeasthunterChestplate.dae">
+      <Link>Assets\Items\Chestplates\RareBeasthunterChestplate.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\RareBlacksmithChestplate.dae">
+      <Link>Assets\Items\Chestplates\RareBlacksmithChestplate.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\RareGreenRobe.dae">
+      <Link>Assets\Items\Chestplates\RareGreenRobe.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\RareNecromancerChestplate.dae">
       <Link>Assets\Items\Chestplates\RareNecromancerChestplate.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -9469,6 +9497,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\UncommonFarmerChestplate.dae">
       <Link>Assets\Items\Chestplates\UncommonFarmerChestplate.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\UniqueOrientalRobe.dae">
+      <Link>Assets\Items\Chestplates\UniqueOrientalRobe.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Foods\Bread.ply">
@@ -9521,6 +9553,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Helmet\CommonWizardHat.dae">
       <Link>Assets\Items\Helmets\CommonWizardHat.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Helmet\RareArcherHat.dae">
+      <Link>Assets\Items\Helmets\RareArcherHat.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Helmet\RareChitinHelmet.dae">
@@ -9619,6 +9655,18 @@
       <Link>Assets\Items\Pants\FurPants.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Pants\RareArcherPants.dae">
+      <Link>Assets\Items\Pants\RareArcherPants.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Pants\RareBeasthunterPants.dae">
+      <Link>Assets\Items\Pants\RareBeasthunterPants.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Pants\RareBlacksmithPants.dae">
+      <Link>Assets\Items\Pants\RareBlacksmithPants.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Pants\RareNecromancerPants.dae">
       <Link>Assets\Items\Pants\RareNecromancerPants.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -9629,6 +9677,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Pants\UncommonFarmerPants.dae">
       <Link>Assets\Items\Pants\UncommonFarmerPants.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Pants\UniqueOrientalPants.dae">
+      <Link>Assets\Items\Pants\UniqueOrientalPants.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Potions\AgilityPotion.ply">
