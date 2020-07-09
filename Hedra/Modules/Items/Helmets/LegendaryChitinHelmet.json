@@ -1,8 +1,8 @@
 {
-  "Name": "RareChitinHelmet",
+  "Name": "LegendaryChitinHelmet",
   "DisplayName": "Chitin Helmet",
   "EquipmentType": "Helmet",
-  "Tier": "Rare",
+  "Tier": "Legendary",
   "Description": "Chitin helmet.",
   "Attributes": [
     {

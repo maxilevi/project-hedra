@@ -1,8 +1,8 @@
 {
-  "Name": "RareChitinChestplate",
+  "Name": "LegendaryChitinChestplate",
   "DisplayName": "Chitin Chestplate",
   "EquipmentType": "Chestplate",
-  "Tier": "Rare",
+  "Tier": "Legendary",
   "Description": "Chitin chestplate.",
   "Attributes": [
     {

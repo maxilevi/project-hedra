@@ -1,8 +1,8 @@
 {
-  "Name": "RareChitinBoots",
+  "Name": "LegendaryChitinBoots",
   "DisplayName": "Chitin Boots",
   "EquipmentType": "Boots",
-  "Tier": "Rare",
+  "Tier": "Legendary",
   "Description": "Chitin boots.",
   "Attributes": [
     {
