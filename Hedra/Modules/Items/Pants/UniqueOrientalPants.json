@@ -1,0 +1,22 @@
+{
+  "Name": "UniqueOrientalPants",
+  "DisplayName": "Oriental pants",
+  "EquipmentType": "Pants",
+  "Tier": "Unique",
+  "Description": "Oriental pants.",
+  "Attributes": [
+    {
+      "Name": "MovementSpeed",
+      "Value": 1.05
+    },
+    {
+      "Name": "Sorcery",
+      "Value": 2.5
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Pants/UniqueOrientalPants.dae"
+  }
+}
+        

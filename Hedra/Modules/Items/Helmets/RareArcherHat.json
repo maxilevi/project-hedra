@@ -1,0 +1,22 @@
+{
+  "Name": "RareArcherHat",
+  "DisplayName": "Archer Hat",
+  "EquipmentType": "Helmet",
+  "Tier": "Rare",
+  "Description": "Archer hat.",
+  "Attributes": [
+    {
+      "Name": "MovementSpeed",
+      "Value": 1.05
+    },
+    {
+      "Name": "Sorcery",
+      "Value": 2.5
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Helmets/RareArcherHat.dae"
+  }
+}
+        

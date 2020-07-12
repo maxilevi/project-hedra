@@ -1,0 +1,22 @@
+{
+  "Name": "UniqueBeasthunterPants",
+  "DisplayName": "Beasthunter Pants",
+  "EquipmentType": "Pants",
+  "Tier": "Unique",
+  "Description": "Beasthunter pants.",
+  "Attributes": [
+    {
+      "Name": "MovementSpeed",
+      "Value": 1.05
+    },
+    {
+      "Name": "Sorcery",
+      "Value": 2.5
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Pants/RareBeasthunterPants.dae"
+  }
+}
+        

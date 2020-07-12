@@ -1,0 +1,22 @@
+{
+  "Name": "UniqueBeasthunterBoots",
+  "DisplayName": "Beasthunter Boots",
+  "EquipmentType": "Boots",
+  "Tier": "Unique",
+  "Description": "Beasthunter boots.",
+  "Attributes": [
+    {
+      "Name": "MovementSpeed",
+      "Value": 1.05
+    },
+    {
+      "Name": "Sorcery",
+      "Value": 2.5
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Boots/RareBeasthunterBoots.dae"
+  }
+}
+        

@@ -1,0 +1,22 @@
+{
+  "Name": "RareBlacksmithBoots",
+  "DisplayName": "Blacksmith Boots",
+  "EquipmentType": "Boots",
+  "Tier": "Rare",
+  "Description": "Blacksmith boots.",
+  "Attributes": [
+    {
+      "Name": "MovementSpeed",
+      "Value": 1.05
+    },
+    {
+      "Name": "Sorcery",
+      "Value": 2.5
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Boots/RareBlacksmithBoots.dae"
+  }
+}
+        
