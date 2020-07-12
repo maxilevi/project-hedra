@@ -3,7 +3,7 @@ import Items
 
 AMOUNT_ATTRIBUTE = 'Amount'
 COMPANION_EQUIPMENT_TYPE = 'Pet'
-NORMAL_RECIPES = [x.Name for x in ItemPool.Matching(lambda x: x.IsRecipe and x.Tier <= ItemTier.Uncommon)]
+NORMAL_RECIPES = [x.Name for x in ItemPool.Matching(lambda x: x.IsRecipe and (x.Tier == ItemTier.Uncommon or x.Tier == ItemTier.Common))]
 RARE_RECIPES = [x.Name for x in ItemPool.Matching(lambda x: x.IsRecipe and x.Tier == ItemTier.Rare)]
 
 def build_innkeeper_inventory(item_dict, inventory_size, rng):
@@ -26,6 +26,7 @@ def build_merchant_inventory(item_dict, inventory_size, rng):
         (inventory_size - 3, get_infinity_item(Items.WOODEN_BOWL)),
         (inventory_size - 4, get_infinity_item(Items.STONE_ARROW) if rng.Next(0, 2) == 1 else None),
         (inventory_size - 5, ItemPool.Grab(NORMAL_RECIPES[rng.Next(0, len(NORMAL_RECIPES))])),
+        (inventory_size - 6, ItemPool.Grab(NORMAL_RECIPES[rng.Next(0, len(NORMAL_RECIPES))]))
     ]
     fishing_items = [
         (4, ItemPool.Grab(Items.FISHING_ROD)),
