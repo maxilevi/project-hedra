@@ -36,6 +36,8 @@ namespace Hedra.Engine.Player.Inventory
         private Item _selectedItem;
         private bool _enabled;
         private bool _willReset;
+        private int _selectedButtonIndex;
+        private InventoryArray _selectedButtonArray;
 
         public InventoryArrayInterfaceManager(InventoryInterfaceItemInfo ItemInfoInterface, params InventoryArrayInterface[] Interfaces)
         {
@@ -68,6 +70,7 @@ namespace Hedra.Engine.Player.Inventory
                 {
                     if(_willReset)
                         this.DropItem(_selectedItem);
+                    OnItemMove?.Invoke(_selectedButtonArray, null, _selectedButtonIndex, _selectedItem);
                 });
             }
         }
@@ -95,7 +98,7 @@ namespace Hedra.Engine.Player.Inventory
             _willReset = false;
             if (item != null && _selectedButton == null)
             {
-                this.SetSelectedItem(button, item);
+                this.SetSelectedItem(array, itemIndex, button, item);
                 array[itemIndex] = null;
                 this.SetCancelButton(button);
                 this.UpdateView();
@@ -155,9 +158,11 @@ namespace Hedra.Engine.Player.Inventory
             SoundPlayer.PlayUISound(SoundType.ItemEquip);
         }
 
-        private void SetSelectedItem(Button SelectedButton, Item SelectedItem)
+        private void SetSelectedItem(InventoryArray Array, int Index, Button SelectedButton, Item SelectedItem)
         {
             _selectedButton = SelectedButton;
+            _selectedButtonArray = Array;
+            _selectedButtonIndex = Index;
             _selectedItem = SelectedItem;
             var renderer = this.RendererByButton(_selectedButton);
             _selectedMesh = InventoryItemRenderer.BuildModel(_selectedItem.Model, out _selectedMeshSize);

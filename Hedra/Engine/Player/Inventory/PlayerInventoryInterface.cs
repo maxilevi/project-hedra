@@ -151,13 +151,20 @@ namespace Hedra.Engine.Player.Inventory
         {
             if (_extraSpaceItemsArrayInterface.Array == NewArray || _extraSpaceItemsArrayInterface.Array == PreviousArray)
             {
-                var newItem = NewArray[Index];
-                /* We should not be able to store holding bags in holding bags */
-                if (newItem == _bagItem)
+                if (NewArray != null)
                 {
-                    PreviousArray.AddItem(newItem);
-                    NewArray.SetItem(Index, null);
-                    UpdateInventory();
+                    var newItem = NewArray[Index];
+                    /* We should not be able to store holding bags in holding bags */
+                    if (newItem == _bagItem)
+                    {
+                        PreviousArray.AddItem(newItem);
+                        NewArray.SetItem(Index, null);
+                        UpdateInventory();
+                    }
+                    else
+                    {
+                        HoldingBagHandler.SaveInventory(_bagItem, _extraSpaceItemsArrayInterface.Array);
+                    }
                 }
                 else
                 {
