@@ -9,19 +9,20 @@ namespace Hedra.Engine.SkillSystem
     public abstract class WeaponBonusSkill : CappedSkill<IPlayer>
     {
         private Weapon _activeWeapon;
+        private bool _isAttacking;
         protected bool IsActive { get; set; }
         
         protected override void DoUse()
         {
-            User.DamageModifiers += ApplyBonusToEnemy;
-            User.AfterDamaging += AfterDamaging;
+            User.DamageModifiers += ApplyBonusToEnemyWrapper;
+            User.BeforeAttack += BeforeAttack;
             User.AfterAttack += AfterAttack;
             IsActive = true;
         }
         private void AfterDamaging(IEntity Victim, float Damage)
         {
-            User.DamageModifiers -= ApplyBonusToEnemy;
-            User.AfterDamaging -= AfterDamaging;
+            User.DamageModifiers -= ApplyBonusToEnemyWrapper;
+            User.BeforeAttack -= BeforeAttack;
             User.AfterAttack -= AfterAttack;
             IsActive = false;
             _activeWeapon.Outline = false;
@@ -31,8 +32,20 @@ namespace Hedra.Engine.SkillSystem
 
         private void AfterAttack(AttackOptions Options)
         {
+            _isAttacking = false;
             if(IsActive)
                 AfterDamaging(default(IEntity), default(float));
+        }
+
+        private void BeforeAttack(AttackOptions Options)
+        {
+            _isAttacking = true;
+        }
+
+        private void ApplyBonusToEnemyWrapper(IEntity Victim, ref float Damage)
+        {
+            if(_isAttacking)
+                ApplyBonusToEnemy(Victim, ref Damage);
         }
 
         protected abstract void ApplyBonusToEnemy(IEntity Victim, ref float Damage);
