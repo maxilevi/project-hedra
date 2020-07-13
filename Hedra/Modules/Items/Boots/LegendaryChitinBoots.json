@@ -3,15 +3,15 @@
   "DisplayName": "Chitin Boots",
   "EquipmentType": "Boots",
   "Tier": "Legendary",
-  "Description": "Chitin boots.",
+  "Description": "Really heavy.",
   "Attributes": [
     {
       "Name": "Defense",
-      "Value": 2.5
+      "Value": 5.0
     },
     {
       "Name": "MovementSpeed",
-      "Value": 1.0
+      "Value": 0.975
     }
   ],
   "Model": {

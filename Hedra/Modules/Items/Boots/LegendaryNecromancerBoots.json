@@ -1,8 +1,8 @@
 {
-  "Name": "RareNecromancerBoots",
+  "Name": "LegendaryNecromancerBoots",
   "DisplayName": "Necromancer boots",
   "EquipmentType": "Boots",
-  "Tier": "Rare",
+  "Tier": "Legendary",
   "Description": "Necromancer boots.",
   "Attributes": [
     {

@@ -7,10 +7,10 @@
   "Attributes": [
     {
       "Name": "MovementSpeed",
-      "Value": 1.05
+      "Value": 1.0
     },
     {
-      "Name": "Sorcery",
+      "Name": "Defense",
       "Value": 2.5
     }
   ],

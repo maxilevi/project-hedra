@@ -7,11 +7,11 @@
   "Attributes": [
     {
       "Name": "MovementSpeed",
-      "Value": 1.05
+      "Value": 1.0
     },
     {
-      "Name": "Sorcery",
-      "Value": 2.5
+      "Name": "Defense",
+      "Value": 3.0
     }
   ],
   "Model": {

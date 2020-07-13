@@ -6,11 +6,7 @@
   "Description": "Blacksmith pants.",
   "Attributes": [
     {
-      "Name": "MovementSpeed",
-      "Value": 1.05
-    },
-    {
-      "Name": "Sorcery",
+      "Name": "Defense",
       "Value": 2.5
     }
   ],

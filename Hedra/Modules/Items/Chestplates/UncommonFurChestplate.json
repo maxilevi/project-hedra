@@ -3,15 +3,15 @@
   "DisplayName": "Fur Chestplate",
   "EquipmentType": "Chestplate",
   "Tier": "Uncommon",
-  "Description": "Fur chestplate.",
+  "Description": "Light as a feather.",
   "Attributes": [
     {
       "Name": "Defense",
-      "Value": 7.5
+      "Value": 5.0
     },
     {
       "Name": "MovementSpeed",
-      "Value": 1.0
+      "Value": 1.05
     }
   ],
   "Model": {

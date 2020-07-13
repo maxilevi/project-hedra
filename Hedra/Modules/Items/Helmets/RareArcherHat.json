@@ -6,12 +6,12 @@
   "Description": "Archer hat.",
   "Attributes": [
     {
-      "Name": "MovementSpeed",
-      "Value": 1.05
+      "Name": "Accuracy",
+      "Value": 5
     },
     {
-      "Name": "Sorcery",
-      "Value": 2.5
+      "Name": "Defense",
+      "Value": 5
     }
   ],
   "Model": {

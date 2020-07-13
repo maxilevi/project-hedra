@@ -7,11 +7,7 @@
   "Attributes": [
     {
       "Name": "Defense",
-      "Value": 1.0
-    },
-    {
-      "Name": "MovementSpeed",
-      "Value": 1.025
+      "Value": 1.5
     }
   ],
   "Model": {

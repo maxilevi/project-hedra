@@ -1,13 +1,13 @@
 {
-  "Name": "RareNecromancerPants",
+  "Name": "LegendaryNecromancerPants",
   "DisplayName": "Necromancer pants",
   "EquipmentType": "Pants",
-  "Tier": "Rare",
+  "Tier": "Legendary",
   "Description": "Necromancer pants.",
   "Attributes": [
     {
       "Name": "Defense",
-      "Value": 5
+      "Value": -1.0
     },
     {
       "Name": "Sorcery",

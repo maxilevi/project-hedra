@@ -1,17 +1,17 @@
 {
-  "Name": "RareNecromancerMask",
+  "Name": "LegendaryNecromancerMask",
   "DisplayName": "Necromancer Mask",
   "EquipmentType": "Helmet",
-  "Tier": "Rare",
+  "Tier": "Legendary",
   "Description": "Necromancer mask.",
   "Attributes": [
     {
       "Name": "Defense",
-      "Value": -2.5
+      "Value": -5
     },
     {
       "Name": "Sorcery",
-      "Value": 7.5
+      "Value": 15
     }
   ],
   "Model": {

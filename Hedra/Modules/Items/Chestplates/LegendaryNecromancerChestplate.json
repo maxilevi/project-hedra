@@ -1,13 +1,13 @@
 {
-  "Name": "RareNecromancerRobe",
+  "Name": "LegendaryNecromancerRobe",
   "DisplayName": "Necromancer robe",
   "EquipmentType": "Chestplate",
-  "Tier": "Rare",
+  "Tier": "Legendary",
   "Description": "Necromancer robe.",
   "Attributes": [
     {
       "Name": "Defense",
-      "Value": 5
+      "Value": 2.5
     },
     {
       "Name": "Sorcery",

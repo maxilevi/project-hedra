@@ -6,12 +6,8 @@
   "Description": "Archer robe.",
   "Attributes": [
     {
-      "Name": "MovementSpeed",
-      "Value": 1.05
-    },
-    {
-      "Name": "Sorcery",
-      "Value": 2.5
+      "Name": "Accuracy",
+      "Value": 10
     }
   ],
   "Model": {

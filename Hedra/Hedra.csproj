@@ -14681,7 +14681,7 @@
     <Content Include="Modules\Items\Boots\LegendaryChitinBoots.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\Items\Boots\RareNecromancerBoots.json">
+    <Content Include="Modules\Items\Boots\LegendaryNecromancerBoots.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Boots\RareWizardBoots.json">
@@ -14714,7 +14714,7 @@
     <Content Include="Modules\Items\Chestplates\RareArcherRobe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\Items\Chestplates\RareNecromancerChestplate.json">
+    <Content Include="Modules\Items\Chestplates\LegendaryNecromancerChestplate.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Chestplates\RareWizardChestplate.json">
@@ -14825,7 +14825,7 @@
     <Content Include="Modules\Items\Helmets\RareArcherHat.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\Items\Helmets\RareNecromancerMask.json">
+    <Content Include="Modules\Items\Helmets\LegendaryNecromancerMask.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Helmets\RareWizardHat.json">
@@ -14915,7 +14915,7 @@
     <Content Include="Modules\Items\Pants\LegendaryChitinPants.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\Items\Pants\RareNecromancerPants.json">
+    <Content Include="Modules\Items\Pants\LegendaryNecromancerPants.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Modules\Items\Pants\RareWizardPants.json">
