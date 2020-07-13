@@ -19,6 +19,7 @@ namespace Hedra.Engine.SkillSystem
             User.AfterAttack += AfterAttack;
             IsActive = true;
         }
+        
         private void AfterDamaging(IEntity Victim, float Damage)
         {
             User.DamageModifiers -= ApplyBonusToEnemyWrapper;
