@@ -114,6 +114,7 @@ namespace Hedra.Engine.SkillSystem.Warrior
         private void ManageParticles()
         {
             var underChunk = World.GetChunkAt(User.Position);
+            if(underChunk == null) return;
             World.Particles.VariateUniformly = true;
             World.Particles.Color = World.GetHighestBlockAt((int)this.User.Position.X, (int)this.User.Position.Z).GetColor(underChunk.Biome.Colors);
             World.Particles.Position = this.User.Position - Vector3.UnitY;
