@@ -36,6 +36,9 @@ namespace Hedra.Components
 
     public class DamageComponent : SingularComponent<DamageComponent, IEntity>
     {
+        private static readonly Vector4 DamageTint = new Vector4(2.0f, 0.1f, 0.1f, 1);
+        private static readonly Vector4 DamageTint2 = Vector4.One;
+        
         public const float DefaultMissChance = 0.05f;
         public event OnDamageEventHandler OnDamageEvent;
         public event OnDeadEvent OnDeadEvent;
@@ -53,6 +56,7 @@ namespace Hedra.Components
         private float _attackedTimer;
         private bool _hasBeenAttacked;
         private bool _wasDead;
+        private float _tintStrength;
 
         public DamageComponent(IEntity Parent) : base(Parent)
         {
@@ -71,15 +75,19 @@ namespace Hedra.Components
 
         public override void Update()
         {
-            _targetTint = _tintTimer > 0 ? new Vector4(2.0f, 0.1f, 0.1f, 1) : new Vector4(1, 1, 1, 1);
 
             if ((Parent.Model.Tint - _targetTint).LengthFast() > 0.005f)
             {
-                Parent.Model.Tint = Mathf.Lerp(Parent.Model.Tint, _targetTint, Time.DeltaTime * 12f);
+                Parent.Model.Tint = Mathf.Lerp(Parent.Model.Tint, _targetTint, Time.DeltaTime * 8f);
             }
 
             _tintTimer -= Time.IndependentDeltaTime;
             _tintTimer = Math.Max(_tintTimer, 0);
+
+            if (Math.Abs(_tintTimer) < 0.005f)
+            {
+                _targetTint = Vector4.One;
+            }
 
             if (HasBeenAttacked)
             {
@@ -94,6 +102,14 @@ namespace Hedra.Components
             {
                 if (_damageLabels[i].Disposed) _damageLabels.RemoveAt(i);
             }
+        }
+
+        private void TriggerTint(float Strength)
+        {
+            _tintTimer = 0.25f;
+            _tintStrength = Math.Max(Math.Min(1f, Strength * 15f), 0f);
+            _targetTint = Mathf.Lerp(DamageTint * 8f, Vector4.One, 1f - _tintStrength);
+            Parent.Model.Tint = _targetTint;
         }
         
         public void Damage(float Amount, IEntity Damager, out float Exp, bool PlaySound, bool PushBack)
@@ -156,8 +172,8 @@ namespace Hedra.Components
             }
 
             if (shouldMiss || isImmune) return;
-            
-            _tintTimer = 0.25f;
+
+            TriggerTint(Amount / Parent.Health);
             Inflicted = Amount;
             Parent.Health = Math.Max(Parent.Health - Amount, 0);
             if (Damager != null && Damager != Parent && PushBack 
