@@ -299,8 +299,8 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
                     var output = ClearStitchData(pairsToMatch[i].Two.JointIds, pairsToMatch[i].Two.Weights, jointNameToId);
                     
                     final.Vertices[j] = pairsToMatch[i].Two.Position;
-                    final.JointIds[j] = output.One;
-                    final.VertexWeights[j] = output.Two;
+                    //final.JointIds[j] = output.One;
+                   // final.VertexWeights[j] = output.Two;
                     pairsToMatch.RemoveAt(i);
                 }
             }
