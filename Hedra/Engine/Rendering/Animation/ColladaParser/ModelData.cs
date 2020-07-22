@@ -28,6 +28,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
         public Vector3[] Normals { get; }
         public uint[] Indices { get; }
         public string[] JointNames { get; }
+        public string Name { get; set; }
     
         public ModelData(Vector3[] Vertices, Vector3[] Colors, Vector3[] Normals, uint[] Indices, Vector3[] JointIds, Vector3[] VertexWeights, string[] JointNames)
         {
@@ -87,6 +88,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
                         localMap.Add(name, new List<StitchVertex>());
                     localMap[name].Add(
                         new StitchVertex(
+                            Models[i].Name,
                             Models[i].Vertices[j],
                             Models[i].VertexWeights[j],
                             JointIdsToNames(Models[i].JointIds[j], Models[i].JointNames)
@@ -104,26 +106,28 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
 
             return map;
         }
-
+        
         private static List<Pair<Vector3, StitchVertex>> CalculatePairsToMatch(ModelData[] Models)
         {
             var matchableVertices = GetMatchableVertexGroups(Models);
             var pairsToMatch = new List<Pair<Vector3, StitchVertex>>();
             foreach (var pair in matchableVertices)
             {
-                for (var i = 0; i < pair.Value.Count; ++i)
+                var parts = pair.Value.OrderByDescending(X => X.Length).ToList();
+                for (var i = 0; i < parts.Count; ++i)
                 {
-                    for (var h = 0; h < pair.Value[i].Length; ++h)
+                    for (var h = 0; h < parts[i].Length; ++h)
                     {
+                        var v1 = parts[i][h].Position;
                         var minDist = float.MaxValue;
                         var nearestModel = -1;
                         var nearestIndex = -1;
-                        for (var j = i + 1; j < pair.Value.Count; ++j)
+                        var others = parts.Where(P => P != parts[i]).ToList(); 
+                        for (var j = 0; j < others.Count; ++j)
                         {
-                            for (var k = 0; k < pair.Value[j].Length; ++k)
+                            for (var k = 0; k < others[j].Length; ++k)
                             {
-                                var v1 = pair.Value[i][h].Position;
-                                var v2 = pair.Value[j][k].Position;
+                                var v2 = others[j][k].Position;
                                 var dist = (v1 - v2).LengthSquared();
                                 if (dist < minDist)
                                 {
@@ -136,8 +140,8 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
                         if(nearestIndex == -1) continue;
                         pairsToMatch.Add(
                             new Pair<Vector3, StitchVertex>(
-                                pair.Value[i][h].Position,
-                                pair.Value[nearestModel][nearestIndex]
+                                parts[i][h].Position,
+                                others[nearestModel][nearestIndex]
                             )
                         );
                     }
@@ -299,9 +303,8 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
                     var output = ClearStitchData(pairsToMatch[i].Two.JointIds, pairsToMatch[i].Two.Weights, jointNameToId);
                     
                     final.Vertices[j] = pairsToMatch[i].Two.Position;
-                    //final.JointIds[j] = output.One;
-                   // final.VertexWeights[j] = output.Two;
-                    pairsToMatch.RemoveAt(i);
+                    final.JointIds[j] = output.One;
+                    final.VertexWeights[j] = output.Two;
                 }
             }
             
@@ -379,9 +382,11 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
             public Vector3 Position;
             public Vector3 Weights;
             public string[] JointIds;
+            public string Name;
 
-            public StitchVertex(Vector3 Position, Vector3 Weights, string[] JointIds)
+            public StitchVertex(string Name, Vector3 Position, Vector3 Weights, string[] JointIds)
             {
+                this.Name = Name;
                 this.Position = Position;
                 this.Weights = Weights;
                 this.JointIds = JointIds;

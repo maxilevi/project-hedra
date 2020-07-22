@@ -596,7 +596,9 @@ namespace Hedra.Engine.Management
             var data = ReadPath(File);
             if (data == null) throw new ArgumentException($"Failed to find file '{File}' in the Assets folder.");
             var fileContents = Encoding.ASCII.GetString(data);
-            return ColladaLoader.LoadModel(fileContents);
+            var model = ColladaLoader.LoadModel(fileContents);
+            model.Name = File;
+            return model;
         }
         
         public void Dispose()
