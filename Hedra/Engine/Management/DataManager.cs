@@ -118,7 +118,7 @@ namespace Hedra.Engine.Management
             {
                 Level = Player.Level,
                 Health = Player.Health,
-                Mana = Player.MaxXP,
+                Mana = Player.Mana,
                 Xp = Player.XP,
                 Name = Player.Name,
                 Rotation = Player.Rotation,

@@ -576,7 +576,7 @@ namespace Hedra.Engine.Player
         public float Mana
         {
             get => _mana;
-            set => _mana = Mathf.Clamp(value,0,MaxMana);
+            set => _mana = Mathf.Clamp(value, 0, MaxMana);
         }
         
         public bool IsFishing { get; set; }
