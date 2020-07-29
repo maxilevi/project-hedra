@@ -9435,6 +9435,18 @@
       <Link>Assets\Items\Boots\LegendaryArcherNobleBoots.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Boots\LegendaryRogueNobleBoots.dae">
+      <Link>Assets\Items\Boots\LegendaryRogueNobleBoots.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Boots\LegendaryStarmagiBoots.dae">
+      <Link>Assets\Items\Boots\LegendaryStarmagiBoots.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Boots\LegendaryWarriorNobleBoots.dae">
+      <Link>Assets\Items\Boots\LegendaryWarriorNobleBoots.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Boots\RareArcherBoots.dae">
       <Link>Assets\Items\Boots\RareArcherBoots.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -9481,6 +9493,18 @@
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\LegendaryArcherNobleChestplate.dae">
       <Link>Assets\Items\Chestplates\LegendaryArcherNobleChestplate.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\LegendaryRogueNobleChestplate.dae">
+      <Link>Assets\Items\Chestplates\LegendaryRogueNobleChestplate.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\LegendaryStarmagiChestplate.dae">
+      <Link>Assets\Items\Chestplates\LegendaryStarmagiChestplate.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\LegendaryWarriorNobleChestplate.dae">
+      <Link>Assets\Items\Chestplates\LegendaryWarriorNobleChestplate.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\RareBeasthunterChestplate.dae">
@@ -9565,6 +9589,10 @@
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Helmet\LegendaryArcherNobleHat.dae">
       <Link>Assets\Items\Helmets\LegendaryArcherNobleHat.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Helmet\LegendaryWarriorNobleHat.dae">
+      <Link>Assets\Items\Helmets\LegendaryWarriorNobleHat.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Helmet\RareArcherHat.dae">
@@ -9669,6 +9697,18 @@
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Pants\LegendaryArcherNoblePants.dae">
       <Link>Assets\Items\Pants\LegendaryArcherNoblePants.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Pants\LegendaryRogueNoblePants.dae">
+      <Link>Assets\Items\Pants\LegendaryRogueNoblePants.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Pants\LegendaryStarmagiPants.dae">
+      <Link>Assets\Items\Pants\LegendaryStarmagiPants.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Pants\LegendaryWarriorNoblePants.dae">
+      <Link>Assets\Items\Pants\LegendaryWarriorNoblePants.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Pants\RareArcherPants.dae">
