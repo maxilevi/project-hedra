@@ -14728,6 +14728,10 @@
     <Content Include="Modules\Items\Boots\CommonFarmerBoots.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Boots\LegendaryNobleArcherBoots.json" />
+    <Content Include="Modules\Items\Boots\LegendaryNobleRogueBoots.json" />
+    <Content Include="Modules\Items\Boots\LegendaryNobleWarriorBoots.json" />
+    <Content Include="Modules\Items\Boots\LegendaryStarmagiBoots.json" />
     <Content Include="Modules\Items\Boots\RareArcherBoots.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -14761,6 +14765,10 @@
     <Content Include="Modules\Items\Chestplates\CommonFarmerRobe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Chestplates\LegendaryNobleArcherChestplate.json" />
+    <Content Include="Modules\Items\Chestplates\LegendaryNobleRogueChestplate.json" />
+    <Content Include="Modules\Items\Chestplates\LegendaryNobleWarriorChestplate.json" />
+    <Content Include="Modules\Items\Chestplates\LegendaryStarmagiChestplate.json" />
     <Content Include="Modules\Items\Chestplates\RareBlacksmithChestplate.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -14878,6 +14886,8 @@
     <Content Include="Modules\Items\Helmets\FarmerHat.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Helmets\LegendaryNobleArcherHelmet.json" />
+    <Content Include="Modules\Items\Helmets\LegendaryNobleWarriorCrown.json" />
     <Content Include="Modules\Items\Helmets\RareArcherHat.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -14962,6 +14972,10 @@
     <Content Include="Modules\Items\Pants\CommonFarmerPants.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Modules\Items\Pants\LegendaryNobleArcherPants.json" />
+    <Content Include="Modules\Items\Pants\LegendaryNobleRoguePants.json" />
+    <Content Include="Modules\Items\Pants\LegendaryNobleWarrioPants.json" />
+    <Content Include="Modules\Items\Pants\LegendaryStarmagiPants.json" />
     <Content Include="Modules\Items\Pants\RareArcherPants.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
