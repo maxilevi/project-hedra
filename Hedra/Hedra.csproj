@@ -14728,10 +14728,18 @@
     <Content Include="Modules\Items\Boots\CommonFarmerBoots.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\Items\Boots\LegendaryNobleArcherBoots.json" />
-    <Content Include="Modules\Items\Boots\LegendaryNobleRogueBoots.json" />
-    <Content Include="Modules\Items\Boots\LegendaryNobleWarriorBoots.json" />
-    <Content Include="Modules\Items\Boots\LegendaryStarmagiBoots.json" />
+    <Content Include="Modules\Items\Boots\LegendaryNobleArcherBoots.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Boots\LegendaryNobleRogueBoots.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Boots\LegendaryNobleWarriorBoots.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Boots\LegendaryStarmagiBoots.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Boots\RareArcherBoots.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

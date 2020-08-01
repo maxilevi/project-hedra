@@ -1,3 +1,22 @@
 {
-  
+  "Name": "LegendaryStarmagiBoots",
+  "DisplayName": "Starmagi boots",
+  "EquipmentType": "Boots",
+  "Tier": "Legendary",
+  "Description": "Starmagi boots.",
+  "Attributes": [
+    {
+      "Name": "MovementSpeed",
+      "Value": 1.05
+    },
+    {
+      "Name": "Sorcery",
+      "Value": 3.5
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Boots/LegendaryStarmagiBoots.dae"
+  }
 }
+        
