@@ -1,22 +1,22 @@
 {
-  "Name": "LegendaryNobleRoguePants",
-  "DisplayName": "Noble Rogue Pants",
+  "Name": "LegendaryNobleWarriorPants",
+  "DisplayName": "Noble Warrior Pants",
   "EquipmentType": "Pants",
   "Tier": "Legendary",
   "Description": "Noble pants.",
   "Attributes": [
     {
       "Name": "Defense",
-      "Value": 3.0
+      "Value": 4.0
     },
     {
       "Name": "MovementSpeed",
-      "Value": 1.025
+      "Value": 0.975
     }
   ],
   "Model": {
     "Scale": 1.0,
-    "Path": "$DataFile$/Items/Pants/LegendaryNobleRoguePants.dae"
+    "Path": "$DataFile$/Items/Pants/LegendaryNobleWarriorPants.dae"
   }
 }
         

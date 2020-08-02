@@ -1,3 +1,26 @@
 {
-  
+  "Name": "LegendaryStarmagiPants",
+  "DisplayName": "Starmagi Pants",
+  "EquipmentType": "Pants",
+  "Tier": "Legendary",
+  "Description": "Starmagi pants.",
+  "Attributes": [
+    {
+      "Name": "Defense",
+      "Value": -1.0
+    },
+    {
+      "Name": "MovementSpeed",
+      "Value": 1.025
+    },
+    {
+      "Name": "Sorcery",
+      "Value": 5.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Pants/LegendaryStarmagiPants.dae"
+  }
 }
+        

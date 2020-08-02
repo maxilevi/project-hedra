@@ -1,3 +1,26 @@
 {
-  
+  "Name": "LegendaryNobleArcherPants",
+  "DisplayName": "Noble Archer Pants",
+  "EquipmentType": "Pants",
+  "Tier": "Legendary",
+  "Description": "Noble pants.",
+  "Attributes": [
+    {
+      "Name": "Defense",
+      "Value": 2.5
+    },
+    {
+      "Name": "MovementSpeed",
+      "Value": 1.025
+    },
+    {
+      "Name": "Accuracy",
+      "Value": 2.5
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Pants/LegendaryNobleArcherPants.dae"
+  }
 }
+        
