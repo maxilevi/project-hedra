@@ -14902,8 +14902,12 @@
     <Content Include="Modules\Items\Helmets\FarmerHat.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\Items\Helmets\LegendaryNobleArcherHelmet.json" />
-    <Content Include="Modules\Items\Helmets\LegendaryNobleWarriorCrown.json" />
+    <Content Include="Modules\Items\Helmets\LegendaryNobleArcherHelmet.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Helmets\LegendaryNobleWarriorCrown.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Helmets\RareArcherHat.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -14988,12 +14992,18 @@
     <Content Include="Modules\Items\Pants\CommonFarmerPants.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\Items\Pants\LegendaryNobleArcherPants.json" />
-    <Content Include="Modules\Items\Pants\LegendaryNobleRoguePants.json" />
+    <Content Include="Modules\Items\Pants\LegendaryNobleArcherPants.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Pants\LegendaryNobleRoguePants.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Pants\LegendaryNobleWarriorPants.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\Items\Pants\LegendaryStarmagiPants.json" />
+    <Content Include="Modules\Items\Pants\LegendaryStarmagiPants.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Pants\RareArcherPants.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

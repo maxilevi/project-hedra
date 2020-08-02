@@ -1,3 +1,22 @@
 {
-  
+  "Name": "LegendaryArcherHelmet",
+  "DisplayName": "Archer helmet",
+  "EquipmentType": "Helmet",
+  "Tier": "Legendary",
+  "Description": "Archer helmet.",
+  "Attributes": [
+    {
+      "Name": "Defense",
+      "Value": 5
+    },
+    {
+      "Name": "Accuracy",
+      "Value": 7.5
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Helmets/LegendaryArcherHat.dae"
+  }
 }
+        
