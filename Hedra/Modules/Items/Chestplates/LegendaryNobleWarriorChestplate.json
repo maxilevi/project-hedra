@@ -1,3 +1,18 @@
 {
-  
+  "Name": "LegendaryNobleWarriorChestplate",
+  "DisplayName": "Noble Warrior Chestplate",
+  "EquipmentType": "Chestplate",
+  "Tier": "Legendary",
+  "Description": "Noble warrior chestplate.",
+  "Attributes": [
+    {
+      "Name": "Defense",
+      "Value": 15.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Chestplates/LegendaryNobleWarriorChestplate.dae"
+  }
 }
+        

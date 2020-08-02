@@ -1,3 +1,18 @@
 {
-  
+  "Name": "LegendaryNobleRogueChestplate",
+  "DisplayName": "Noble Rogue Chestplate",
+  "EquipmentType": "Chestplate",
+  "Tier": "Legendary",
+  "Description": "Noble rogue chestplate.",
+  "Attributes": [
+    {
+      "Name": "Defense",
+      "Value": 7.5
+    },
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Chestplates/LegendaryNobleRogueChestplate.dae"
+  }
 }
+        

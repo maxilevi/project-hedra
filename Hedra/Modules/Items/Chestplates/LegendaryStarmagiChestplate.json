@@ -1,3 +1,22 @@
 {
-  
+  "Name": "LegendaryStarmagiChestplate",
+  "DisplayName": "Starmagi Chestplate",
+  "EquipmentType": "Chestplate",
+  "Tier": "Legendary",
+  "Description": "Starmagi chestplate.",
+  "Attributes": [
+    {
+      "Name": "Defense",
+      "Value": 2.5
+    },
+    {
+      "Name": "Sorcery",
+      "Value": 15.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Chestplates/LegendaryStarmagiChestplate.dae"
+  }
 }
+        

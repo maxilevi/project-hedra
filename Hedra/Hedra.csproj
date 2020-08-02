@@ -14773,10 +14773,18 @@
     <Content Include="Modules\Items\Chestplates\CommonFarmerRobe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\Items\Chestplates\LegendaryNobleArcherChestplate.json" />
-    <Content Include="Modules\Items\Chestplates\LegendaryNobleRogueChestplate.json" />
-    <Content Include="Modules\Items\Chestplates\LegendaryNobleWarriorChestplate.json" />
-    <Content Include="Modules\Items\Chestplates\LegendaryStarmagiChestplate.json" />
+    <Content Include="Modules\Items\Chestplates\LegendaryNobleArcherChestplate.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Chestplates\LegendaryNobleRogueChestplate.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Chestplates\LegendaryNobleWarriorChestplate.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\Items\Chestplates\LegendaryStarmagiChestplate.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Chestplates\RareBlacksmithChestplate.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -14982,7 +14990,9 @@
     </Content>
     <Content Include="Modules\Items\Pants\LegendaryNobleArcherPants.json" />
     <Content Include="Modules\Items\Pants\LegendaryNobleRoguePants.json" />
-    <Content Include="Modules\Items\Pants\LegendaryNobleWarrioPants.json" />
+    <Content Include="Modules\Items\Pants\LegendaryNobleWarriorPants.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Modules\Items\Pants\LegendaryStarmagiPants.json" />
     <Content Include="Modules\Items\Pants\RareArcherPants.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
