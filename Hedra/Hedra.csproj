@@ -9431,20 +9431,20 @@
       <Link>Assets\Items\Boots\FurBoots.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\project-hedra-assets\Models\Blend\Boots\LegendaryArcherNobleBoots.dae">
-      <Link>Assets\Items\Boots\LegendaryArcherNobleBoots.dae</Link>
+    <Content Include="..\project-hedra-assets\Models\Blend\Boots\LegendaryNobleArcherBoots.dae">
+      <Link>Assets\Items\Boots\LegendaryNobleArcherBoots.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\project-hedra-assets\Models\Blend\Boots\LegendaryRogueNobleBoots.dae">
-      <Link>Assets\Items\Boots\LegendaryRogueNobleBoots.dae</Link>
+    <Content Include="..\project-hedra-assets\Models\Blend\Boots\LegendaryNobleRogueBoots.dae">
+      <Link>Assets\Items\Boots\LegendaryNobleRogueBoots.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Boots\LegendaryNobleWarriorBoots.dae">
+      <Link>Assets\Items\Boots\LegendaryNobleWarriorBoots.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Boots\LegendaryStarmagiBoots.dae">
       <Link>Assets\Items\Boots\LegendaryStarmagiBoots.dae</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\project-hedra-assets\Models\Blend\Boots\LegendaryWarriorNobleBoots.dae">
-      <Link>Assets\Items\Boots\LegendaryWarriorNobleBoots.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Boots\RareArcherBoots.dae">
@@ -9491,20 +9491,20 @@
       <Link>Assets\Items\Chestplates\FurChestplate.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\LegendaryArcherNobleChestplate.dae">
-      <Link>Assets\Items\Chestplates\LegendaryArcherNobleChestplate.dae</Link>
+    <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\LegendaryNobleArcherChestplate.dae">
+      <Link>Assets\Items\Chestplates\LegendaryNobleArcherChestplate.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\LegendaryRogueNobleChestplate.dae">
-      <Link>Assets\Items\Chestplates\LegendaryRogueNobleChestplate.dae</Link>
+    <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\LegendaryNobleRogueChestplate.dae">
+      <Link>Assets\Items\Chestplates\LegendaryNobleRogueChestplate.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\LegendaryNobleWarriorChestplate.dae">
+      <Link>Assets\Items\Chestplates\LegendaryNobleWarriorChestplate.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\LegendaryStarmagiChestplate.dae">
       <Link>Assets\Items\Chestplates\LegendaryStarmagiChestplate.dae</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\LegendaryWarriorNobleChestplate.dae">
-      <Link>Assets\Items\Chestplates\LegendaryWarriorNobleChestplate.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\RareBeasthunterChestplate.dae">
@@ -9587,12 +9587,12 @@
       <Link>Assets\Items\Helmets\CommonWizardHat.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\project-hedra-assets\Models\Blend\Helmet\LegendaryArcherNobleHat.dae">
-      <Link>Assets\Items\Helmets\LegendaryArcherNobleHat.dae</Link>
+    <Content Include="..\project-hedra-assets\Models\Blend\Helmet\LegendaryNobleArcherHat.dae">
+      <Link>Assets\Items\Helmets\LegendaryNobleArcherHat.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\project-hedra-assets\Models\Blend\Helmet\LegendaryWarriorNobleHat.dae">
-      <Link>Assets\Items\Helmets\LegendaryWarriorNobleHat.dae</Link>
+    <Content Include="..\project-hedra-assets\Models\Blend\Helmet\LegendaryNobleWarriorHat.dae">
+      <Link>Assets\Items\Helmets\LegendaryNobleWarriorHat.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Helmet\RareArcherHat.dae">
@@ -9695,20 +9695,20 @@
       <Link>Assets\Items\Pants\FurPants.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\project-hedra-assets\Models\Blend\Pants\LegendaryArcherNoblePants.dae">
-      <Link>Assets\Items\Pants\LegendaryArcherNoblePants.dae</Link>
+    <Content Include="..\project-hedra-assets\Models\Blend\Pants\LegendaryNobleArcherPants.dae">
+      <Link>Assets\Items\Pants\LegendaryNobleArcherPants.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\project-hedra-assets\Models\Blend\Pants\LegendaryRogueNoblePants.dae">
-      <Link>Assets\Items\Pants\LegendaryRogueNoblePants.dae</Link>
+    <Content Include="..\project-hedra-assets\Models\Blend\Pants\LegendaryNobleRoguePants.dae">
+      <Link>Assets\Items\Pants\LegendaryNobleRoguePants.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Pants\LegendaryNobleWarriorPants.dae">
+      <Link>Assets\Items\Pants\LegendaryNobleWarriorPants.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Pants\LegendaryStarmagiPants.dae">
       <Link>Assets\Items\Pants\LegendaryStarmagiPants.dae</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\project-hedra-assets\Models\Blend\Pants\LegendaryWarriorNoblePants.dae">
-      <Link>Assets\Items\Pants\LegendaryWarriorNoblePants.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Pants\RareArcherPants.dae">
