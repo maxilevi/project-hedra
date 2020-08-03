@@ -1,9 +1,9 @@
 {
-  "Name": "LegendaryArcherHelmet",
-  "DisplayName": "Archer helmet",
+  "Name": "LegendaryNobleArcherHelmet",
+  "DisplayName": "Noble Archer helmet",
   "EquipmentType": "Helmet",
   "Tier": "Legendary",
-  "Description": "Archer helmet.",
+  "Description": "Noble Archer helmet.",
   "Attributes": [
     {
       "Name": "Defense",
@@ -16,7 +16,7 @@
   ],
   "Model": {
     "Scale": 1.0,
-    "Path": "$DataFile$/Items/Helmets/LegendaryArcherHat.dae"
+    "Path": "$DataFile$/Items/Helmets/LegendaryNobleArcherHat.dae"
   }
 }
         
