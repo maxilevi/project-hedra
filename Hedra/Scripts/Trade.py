@@ -5,6 +5,7 @@ AMOUNT_ATTRIBUTE = 'Amount'
 COMPANION_EQUIPMENT_TYPE = 'Pet'
 NORMAL_RECIPES = [x.Name for x in ItemPool.Matching(lambda x: x.IsRecipe and (x.Tier == ItemTier.Uncommon or x.Tier == ItemTier.Common))]
 RARE_RECIPES = [x.Name for x in ItemPool.Matching(lambda x: x.IsRecipe and x.Tier == ItemTier.Rare)]
+ARMOR_POOL = [x.Name for x in ItemPool.Matching(lambda x: x.IsArmor and (x.Tier == ItemTier.Uncommon or x.Tier == ItemTier.Common))]
 
 def build_innkeeper_inventory(item_dict, inventory_size, rng):
     items = []
@@ -49,14 +50,20 @@ def build_travelling_merchant_inventory(item_dict, inventory_size, rng):
         (10, ItemPool.Grab(RARE_RECIPES[rng.Next(0, len(RARE_RECIPES))]) if rng.Next(0, 2) == 1 else None)
     ]
     add_items(special_items, item_dict)
-    
-    
+
+
 def build_clothier_inventory(item_dict, inventory_size, rng):
-    items = []
+    items = [
+        (1, ItemPool.Grab(ARMOR_POOL[rng.Next(0, len(ARMOR_POOL))])),
+        (2, ItemPool.Grab(ARMOR_POOL[rng.Next(0, len(ARMOR_POOL))])),
+    ]
     add_items(items, item_dict)
 
 def build_mason_inventory(item_dict, inventory_size, rng):
-    items = []
+    items = [
+        (1, ItemPool.Grab(ARMOR_POOL[rng.Next(0, len(ARMOR_POOL))])),
+        (2, ItemPool.Grab(ARMOR_POOL[rng.Next(0, len(ARMOR_POOL))])),
+    ]
     add_items(items, item_dict)
 
 def add_items(items, dict):
