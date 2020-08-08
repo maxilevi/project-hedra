@@ -21,7 +21,8 @@
   "BaseManaPerLevel": 15,
   "Model": {
     "Path": "$DataFile$/Assets/Chr/WarriorIdle.dae",
-    "Scale": 1.0
+    "Scale": 1.0,
+    "IgnoreBaseModel": true
   },
   "HeadModel": {
     "Path": "$DataFile$/Assets/Chr/BodyParts/WarriorHead.dae",

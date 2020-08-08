@@ -14,6 +14,7 @@ namespace Hedra.Engine.Rendering
     public abstract class AnimatedUpdatableModel : UpdatableModel<AnimatedModel>
     {
         protected abstract string ModelPath { get; set; }
+        protected bool UsesBodyParts { get; set; }
         
         protected AnimatedUpdatableModel(IEntity Parent) : base(Parent)
         {
@@ -24,6 +25,18 @@ namespace Hedra.Engine.Rendering
             return EntityRenderer.Draw(Model, Height);
         }
 
+        public void AddBodyPartModel(ModelData Data, bool IsDefault = false)
+        {
+            if(UsesBodyParts)
+                Model.AddModel(Data, IsDefault);
+        }
+
+        public void RemoveBodyPartModel(ModelData Data)
+        {
+            if(UsesBodyParts)
+                Model.RemoveModel(Data);
+        }
+        
         public void AddModel(ModelData Data, bool IsDefault = false)
         {
             Model.AddModel(Data, IsDefault);

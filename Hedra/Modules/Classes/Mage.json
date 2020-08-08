@@ -26,7 +26,8 @@
   "BaseHealth": 97.0,
   "Model": {
     "Path": "$DataFile$/Assets/Chr/MageIdle.dae",
-    "Scale": 1.0
+    "Scale": 1.0,
+    "IgnoreBaseModel": true
   },
   "IsRanged": true,
   "HeadModel": {

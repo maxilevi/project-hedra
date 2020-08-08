@@ -28,6 +28,8 @@ namespace Hedra.Items
                     {
                         price += GetNormalizedAttributeValue(Item, CommonAttributes.Defense);
                         price += GetNormalizedAttributeValue(Item, CommonAttributes.MovementSpeed);
+                        price += GetNormalizedAttributeValue(Item, CommonAttributes.Sorcery);
+                        price += GetNormalizedAttributeValue(Item, CommonAttributes.Accuracy);
                     }
 
                     if (Item.IsRing)

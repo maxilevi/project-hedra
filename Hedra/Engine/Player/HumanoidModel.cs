@@ -107,7 +107,9 @@ namespace Hedra.Engine.Player
             
 
             Model = AnimationModelLoader.LoadEntity(ModelPath, true);
-            Model.IgnoreBaseModel = true;
+            Model.IgnoreBaseModel = Template.IgnoreBaseModel;
+            /* If we are ignoring the base model then we are using body parts */
+            base.UsesBodyParts = Model.IgnoreBaseModel;
             StateHandler = BuildAnimationHandler(Humanoid, Template);
 
             Model.Scale = Vector3.One * DefaultScale * Template.Scale;

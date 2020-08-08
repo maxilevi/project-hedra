@@ -60,18 +60,18 @@ namespace Hedra.Engine.Player
             {
                 if (!Model.HasModel(Default))
                 {
-                    Model.AddModel(Default, true);
+                    Model.AddBodyPartModel(Default, true);
                 }
             }
             else
             {
                 if (Piece == null && !Model.HasModel(Default))
                 {
-                    Model.AddModel(Default, true);
+                    Model.AddBodyPartModel(Default, true);
                 }
                 else if (Piece != null && Model.HasModel(Default))
                 {
-                    Model.RemoveModel(Default);
+                    Model.RemoveBodyPartModel(Default);
                 }
             }
         }
