@@ -66,7 +66,8 @@ namespace Hedra.Items
         
         private static float GetNormalizedAttributeValue(Item Item, CommonAttributes Attribute)
         {
-            var attr = Item.GetAttributes().First(T => T.Name == Attribute.ToString());
+            var attr = Item.GetAttributes().FirstOrDefault(T => T.Name == Attribute.ToString());
+            if (attr == null) return 0;
             return attr.Display == AttributeDisplay.Percentage.ToString() 
                 ? ConvertObj<float>(attr.Value) * 100f 
                 : ConvertObj<float>(attr.Value);
