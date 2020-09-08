@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using Hedra.Core;
@@ -35,7 +36,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             _specializationBackground = new RenderableTexture(
                 new BackgroundTexture(
                     InventoryBackground.DefaultId,
-                    BackgroundTexture.Position - (BackgroundTexture.Scale.Y + specializationBackgroundScale.Y * 2f) *
+                    BackgroundTexture.Position - (BackgroundTexture.Scale.Y + specializationBackgroundScale.Y * 3f) *
                     Vector2.UnitY,
                     specializationBackgroundScale
                 ), DrawOrder.Before
@@ -188,6 +189,12 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         {
             EventDispatcher.UnregisterKeyUp(this);
             EventDispatcher.UnregisterKeyDown(this);
+        }
+
+        public override Vector2 Scale
+        {
+            get => _specializationBackground.Scale;
+            set => throw new NotImplementedException();
         }
     }
 }

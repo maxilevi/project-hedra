@@ -14,6 +14,7 @@ using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using System.Numerics;
+using Hedra.Engine.Windowing;
 using Hedra.Numerics;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem
@@ -34,6 +35,8 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         private readonly TreeLinesUI _linesUI;
         private readonly SpecializationPanel _specializationPanel;
         private AbilityTreeBlueprint _blueprint;
+        private readonly Button _confirmButton;
+        private readonly GUIText _confirmButtonText;
 
         public AbilityTreeInterface(IPlayer Player, InventoryArray Array, int Offset, int Length, int SlotsPerLine)
             : base(Array, Offset, Length, SlotsPerLine, new Vector2(1.5f, 1.5f))
@@ -68,7 +71,34 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 _panel.AddElement(_skillPointsBackgroundTextures[i]);
             }
             _specializationPanel = new SpecializationPanel(_player, Buttons, Textures, _backgroundTexture);
+            var confirmButtonScale = InventoryBackground.DefaultSize * .2f;
+            _confirmButton = new Button(
+                _backgroundTexture.Position - (_backgroundTexture.Scale.Y + confirmButtonScale.Y * 2f) * Vector2.UnitY,
+                confirmButtonScale,
+                InventoryBackground.DefaultId
+            );
+            _confirmButtonText = new GUIText(
+                Translation.Create("confirm_skill_points"),
+                _confirmButton.Position,
+                Color.White,
+                FontCache.GetBold(13)
+            );
+            //_confirmButton.Texture.Grayscale = true;
 
+            _confirmButton.Click += ConfirmChanges;
+            _confirmButton.HoverEnter += () =>
+            {
+                _confirmButton.Scale *= 1.05f;
+                _confirmButtonText.Scale *= 1.05f;
+            };
+            _confirmButton.HoverExit += () =>
+            {
+                _confirmButton.Scale /= 1.05f;
+                _confirmButtonText.Scale /= 1.05f;
+            };
+
+            _panel.AddElement(_confirmButton);
+            _panel.AddElement(_confirmButtonText);
             _panel.AddElement(_specializationPanel);
             _panel.AddElement(_linesUI);
             _panel.AddElement(_titleText);
@@ -76,6 +106,11 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             _panel.AddElement(_backgroundTexture);
         }
 
+        private void ConfirmChanges(object Sender, MouseButtonEventArgs Args)
+        {
+            _player.AbilityTree.ConfirmPoints();
+        }
+        
         public override void UpdateView()
         {
             if(!Enabled) return;

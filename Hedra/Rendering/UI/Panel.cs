@@ -212,7 +212,7 @@ namespace Hedra.Rendering.UI
             }
         }
         
-        public Vector2 Scale
+        public virtual Vector2 Scale
         {
             get => throw new NotImplementedException();
             set => throw new NotImplementedException();

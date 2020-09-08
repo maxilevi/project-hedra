@@ -704,6 +704,7 @@ lands_of = Lands of {0}
 territory_of = Territory of {0}
 skill_tree_title = $(BOLD)(CAPS)(GOLD){{0}}\nSKILL TREE
 learn_specialization = LEARN SPECIALIZATION
+confirm_skill_points = CONFIRM
 # -- Class Descriptions --
 berserker_class_description = A crazed warrior who fights for honor and bloodlust                           
 paladin_class_description = A skilled warrior trained in the great arts of defense

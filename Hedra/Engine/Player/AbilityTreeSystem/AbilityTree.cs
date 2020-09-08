@@ -57,6 +57,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         private readonly AbilityInventoryBackground _background;
         private AbilityTreeBlueprint _blueprint;
         private InventoryArray _abilities;
+        private InventoryArray _tempAbilities;
         private bool _show;
 
         public AbilityTree(IPlayer Player)
@@ -66,6 +67,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             _firstTree = BuildArray();
             _secondTree = BuildArray();
             _abilities = _mainTree = BuildArray();
+            _tempAbilities = BuildArray();
             _interface = new AbilityTreeInterface(_player, _abilities, 0, _abilities.Length, Columns)
             {
                 Position = Vector2.UnitX * -.65f + Vector2.UnitY * -.1f,
@@ -136,15 +138,26 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             if(item != null) this.SetPoints(_abilities.IndexOf(item), Count);
         }
 
-        public void SetPoints(int Index, int Count)
+        public void SetPoints(int Index, int Count, bool Save = true)
         {
-            _abilities[Index].SetAttribute("Level", Count);
-            for (var k = 0; k < _player.Toolbar.Skills.Length; k++)
+            _tempAbilities[Index].SetAttribute("Level", Count);
+            if (Save)
+                ConfirmPoints();
+        }
+
+        public void ConfirmPoints()
+        {
+            for (var i = 0; i < _tempAbilities.Length; i++)
             {
-                if (_player.Toolbar.Skills[k].GetType() == _abilities[Index].GetAttribute<Type>("AbilityType"))
+                var count = _tempAbilities[i].GetAttribute<int>("Level");
+                _abilities[i].SetAttribute("Level", count);
+                for (var k = 0; k < _player.Toolbar.Skills.Length; k++)
                 {
-                    _player.Toolbar.Skills[k].Level = Count;
-                    SkillUpdated?.Invoke(_player.Toolbar.Skills[k]);
+                    if (_player.Toolbar.Skills[k].GetType() == _abilities[i].GetAttribute<Type>("AbilityType"))
+                    {
+                        _player.Toolbar.Skills[k].Level = count;
+                        SkillUpdated?.Invoke(_player.Toolbar.Skills[k]);
+                    }
                 }
             }
             this.UpdateView();

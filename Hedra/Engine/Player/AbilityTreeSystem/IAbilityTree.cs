@@ -12,7 +12,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         event OnSkillUpdated SkillUpdated;
         void Update();
         void SetPoints(Type AbilityType, int Count);
-        void SetPoints(int Index, int Count);
+        void SetPoints(int Index, int Count, bool Save = true);
         void Reset();
         void ShowBlueprint(AbilityTreeBlueprint Blueprint, InventoryArray Array, byte[] AbilityTreeArray);
         int AvailablePoints { get; }
@@ -32,5 +32,6 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         event OnPlayerInterfaceStateChangeEventHandler OnPlayerInterfaceStateChange;
         event OnSpecializationLearned SpecializationLearned;
         int ExtraSkillPoints { get; set; }
+        void ConfirmPoints();
     }
 }
