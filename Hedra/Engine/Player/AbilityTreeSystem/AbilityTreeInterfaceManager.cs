@@ -43,7 +43,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
 
             if (this.AvailablePoints > 0 && !locked && previousUnlocked)
             {
-                _player.AbilityTree.SetPoints(index, item.GetAttribute<int>("Level") + 1, false);
+                _player.AbilityTree.SetPoints(index, item.GetAttribute<int>("Level") + 1);
             }
             else
             {

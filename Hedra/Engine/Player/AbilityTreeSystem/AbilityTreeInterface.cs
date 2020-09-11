@@ -114,6 +114,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         public override void UpdateView()
         {
             if(!Enabled) return;
+            var unconfirmedSkills = 0;
             _availablePointsText.Text = $"{Translations.Get("available_points")}: {_player.AbilityTree.AvailablePoints}";
             for (var i = 0; i < this.Buttons.Length; i++)
             {
@@ -132,7 +133,12 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                         ? this.Array[i + Offset].GetAttribute<int>("Level")
                         : 0;
 
+                    var isConfirmed = _player.AbilityTree.IsConfirmed(i + Offset);
+                    
                     this.ButtonsText[i].Text = level > 0 ? level.ToString() : string.Empty;
+                    this.ButtonsText[i].Color = isConfirmed ? Color.White : Color.DarkGoldenrod;
+                    if (!isConfirmed)
+                        unconfirmedSkills++;
                     if(level > 0 && _panel.Enabled)
                         _skillPointsBackgroundTextures[i].Enable();
                     
@@ -140,6 +146,16 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 }
             }
 
+            if (unconfirmedSkills > 0)
+            {
+                _confirmButton.Enable();
+                _confirmButtonText.Enable();
+            }
+            else
+            {
+                _confirmButton.Disable();
+                _confirmButtonText.Disable();
+            }
             _titleText.Text = Translations.Get("skill_tree_title", _blueprint.DisplayName);
             _titleText.Position = _backgroundTexture.Position + _backgroundTexture.Scale.Y * Vector2.UnitY - _titleText.Scale.Y * Vector2.UnitY;
             _titleText.Grayscale = !IsTreeEnabled;

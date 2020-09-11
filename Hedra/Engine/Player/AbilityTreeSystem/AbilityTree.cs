@@ -57,7 +57,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
         private readonly AbilityInventoryBackground _background;
         private AbilityTreeBlueprint _blueprint;
         private InventoryArray _abilities;
-        private InventoryArray _tempAbilities;
+        private Dictionary<int, int> _skillChanges;
         private bool _show;
 
         public AbilityTree(IPlayer Player)
@@ -67,7 +67,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             _firstTree = BuildArray();
             _secondTree = BuildArray();
             _abilities = _mainTree = BuildArray();
-            _tempAbilities = BuildArray();
+            _skillChanges = new Dictionary<int, int>();
             _interface = new AbilityTreeInterface(_player, _abilities, 0, _abilities.Length, Columns)
             {
                 Position = Vector2.UnitX * -.65f + Vector2.UnitY * -.1f,
@@ -138,29 +138,41 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             if(item != null) this.SetPoints(_abilities.IndexOf(item), Count);
         }
 
-        public void SetPoints(int Index, int Count, bool Save = true)
+        public void SetPoints(int Index, int Count)
         {
-            _tempAbilities[Index].SetAttribute("Level", Count);
-            if (Save)
-                ConfirmPoints();
+            if(!_skillChanges.ContainsKey(Index))
+                _skillChanges.Add(Index, _abilities[Index].GetAttribute<int>("Level"));
+                
+            _abilities[Index].SetAttribute("Level", Count);
+            for (var k = 0; k < _player.Toolbar.Skills.Length; k++)
+            {
+                if (_player.Toolbar.Skills[k].GetType() == _abilities[Index].GetAttribute<Type>("AbilityType"))
+                {
+                    _player.Toolbar.Skills[k].Level = Count;
+                    SkillUpdated?.Invoke(_player.Toolbar.Skills[k]);
+                }
+            }
+            this.UpdateView();
         }
 
         public void ConfirmPoints()
         {
-            for (var i = 0; i < _tempAbilities.Length; i++)
-            {
-                var count = _tempAbilities[i].GetAttribute<int>("Level");
-                _abilities[i].SetAttribute("Level", count);
-                for (var k = 0; k < _player.Toolbar.Skills.Length; k++)
-                {
-                    if (_player.Toolbar.Skills[k].GetType() == _abilities[i].GetAttribute<Type>("AbilityType"))
-                    {
-                        _player.Toolbar.Skills[k].Level = count;
-                        SkillUpdated?.Invoke(_player.Toolbar.Skills[k]);
-                    }
-                }
-            }
+            _skillChanges.Clear();
             this.UpdateView();
+        }
+
+        public bool IsConfirmed(int Index)
+        {
+            return !_skillChanges.ContainsKey(Index);
+        }
+
+        private void ResetChanges()
+        {
+            foreach (var change in _skillChanges)
+            {
+                SetPoints(change.Key, change.Value);
+            }
+            ConfirmPoints();
         }
 
         public void Reset()
@@ -182,7 +194,6 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             }
             SpecializationTreeIndex = 0;
         }
-        
         
         private static byte[] BuildSaveData(InventoryArray Abilities)
         {
@@ -230,7 +241,7 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
                 }
             }
 
-            this.UpdateView();
+            this.ConfirmPoints();
         }
 
         public AbilityTreeBlueprint Specialization => _blueprint;
@@ -311,13 +322,19 @@ namespace Hedra.Engine.Player.AbilityTreeSystem
             {
                 if (_show == value || _stateManager.GetState() != _show) return;
                 _show = value;
+                if(!_show)
+                    ResetChanges();
                 _player.Toolbar.BagEnabled = _show;
                 _player.Toolbar.PassiveEffectsEnabled = !_show;
                 _interface.Enabled = _show;              
                 _background.Enabled = _show;
                 _manager.Enabled = _show;
-                if(_show)
+                if (_show)
+                {
                     ShowBlueprint(_player.Class.MainTree, _mainTree, null);
+                    _skillChanges.Clear();
+                }
+
                 SetInventoryState(_show);
                 SoundPlayer.PlayUISound(SoundType.ButtonHover, 1.0f, 0.6f);
             }
