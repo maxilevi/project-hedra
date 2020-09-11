@@ -37,7 +37,7 @@ namespace HedraTests.Player.Skills
             {
                 Skill.Level = L;
             });
-            abilityTreeMock.Setup(A => A.SetPoints(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<bool>())).Callback(delegate(int I, int L)
+            abilityTreeMock.Setup(A => A.SetPoints(It.IsAny<int>(), It.IsAny<int>())).Callback(delegate(int I, int L)
             {
                 Skill.Level = L;
             });
