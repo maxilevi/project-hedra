@@ -33,6 +33,7 @@ namespace Hedra.Engine.Player
         public byte[] SkillsData { get; set; }
         public byte[] ToolbarData { get; set; }
         public ClassDesign Class { get; set; }
+        public CustomizationData Customization { get; set; }
         public float RandomFactor { get; set; }
         private Dictionary<int, Item> _items;
         private List<string> _learnedRecipes;

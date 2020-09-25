@@ -25,6 +25,7 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Animation;
 using Hedra.Engine.Windowing;
 using Hedra.EntitySystem;
+using Hedra.Framework;
 using Hedra.Game;
 using Hedra.Localization;
 using Hedra.Rendering;
@@ -44,9 +45,11 @@ namespace Hedra.Engine.Rendering.UI
         private readonly Button _openFolder;
         private float _newRot;
         private ClassDesign _classType;
+        private CustomizationData _customization;
         
         public CharacterCreatorUI(IPlayer Player) 
         {
+            _customization = new CustomizationData();
             _clickTimer = new Timer(.25f)
             {
                 UseTimeScale = false
@@ -83,34 +86,11 @@ namespace Hedra.Engine.Rendering.UI
             _human.Physics.UsePhysics = false;
             World.RemoveEntity(_human);
 
-
-            var classes = ClassDesign.AvailableClassNames.Select(S => Translation.Create(S.ToLowerInvariant())).ToArray();
-            var classChooser = new OptionChooser(new Vector2(0,.5f), Vector2.Zero, Translation.Create("class"), defaultColor,
-                                                          defaultFont, classes, true);
-            classChooser.Index = Array.IndexOf(ClassDesign.AvailableClassNames, _human.Class.Name);
-
-            void SetWeapon(object Sender, MouseButtonEventArgs E)
-            {
-                _classType = ClassDesign.FromString(ClassDesign.AvailableClassNames[classChooser.Index]);
-                var previousModel = _human.Model;
-                _human.Class = _classType;
-                _human.Model = new HumanoidModel(_human, _classType.ModelTemplate);
-                _human.Model.SetValues(previousModel);
-                _human.SetHelmet(_classType.StartingItems.FirstOrDefault(P => P.Value.IsHelmet).Value);
-                _human.SetWeapon(_classType.StartingItems.First(P => P.Value.IsWeapon).Value.Weapon);
-                /* One time for updating the default body parts */
-                _human.UpdateEquipment();
-                /* The second time is for setting them */
-                _human.UpdateEquipment();
-                previousModel.Dispose();
-            }
-
-            SetWeapon(null, default);
+            var rng = new Random();
+            var classChooser = CreateClassChooser(defaultFont, defaultColor, rng);
+            var genderChooser = CreateGenderChooser(defaultFont, defaultColor, rng);
             
-            classChooser.RightArrow.Click += SetWeapon;
-            classChooser.LeftArrow.Click += SetWeapon;
-            classChooser.CurrentValue.TextColor = defaultColor;
-            classChooser.CurrentValue.UpdateText(); 
+            UpdateModel(null, default);
             
             var nameField = new TextField(new Vector2(0,-.7f), new Vector2(.15f,.03f).As1920x1080());
             var createChr = new Button(new Vector2(0f,-.8f), new Vector2(.15f,.05f), Translation.Create("create"), defaultColor, FontCache.GetBold(11));
@@ -129,18 +109,78 @@ namespace Hedra.Engine.Rendering.UI
                 nameField.Text = string.Empty;    
             };
             
+            // Normal Skin #FFBFA1
             
-            base.AddElement(classChooser);
-            base.AddElement(nameField);
-            base.AddElement(createChr);
-            base.AddElement(blackBand);
-            base.AddElement(_openFolder);
-            this.AddElement(currentTab);
+            AddElement(genderChooser);
+            AddElement(classChooser);
+            AddElement(nameField);
+            AddElement(createChr);
+            AddElement(blackBand);
+            AddElement(_openFolder);
+            AddElement(currentTab);
             base.Disable();
 
             OnPanelStateChange += PanelStateChange;
             OnEscapePressed += EscapePressed;
             UpdateManager.Add(this);
+        }
+
+
+        private OptionChooser CreateClassChooser(Font DefaultFont, Color DefaultColor, Random Rng)
+        {
+            var classes = ClassDesign.AvailableClassNames.Select(S => Translation.Create(S.ToLowerInvariant())).ToArray();
+            classes.Shuffle(Rng);
+            var classChooser = new OptionChooser(new Vector2(0,.5f), Vector2.Zero, Translation.Create("class"), DefaultColor,
+                DefaultFont, classes, true);
+            classChooser.Index = Array.IndexOf(ClassDesign.AvailableClassNames, _human.Class.Name);
+
+            void UpdateClass(object Sender, MouseButtonEventArgs _)
+            {
+                _classType = ClassDesign.FromString(ClassDesign.AvailableClassNames[classChooser.Index]);
+            }
+            
+            classChooser.RightArrow.Click += UpdateClass;
+            classChooser.LeftArrow.Click += UpdateClass;
+            classChooser.CurrentValue.TextColor = DefaultColor;
+            classChooser.CurrentValue.UpdateText();
+            return classChooser;
+        }
+        private OptionChooser CreateGenderChooser(Font DefaultFont, Color DefaultColor, Random Rng)
+        {
+            var genders = new[]
+            {
+                new Pair<Translation, HumanGender>(Translation.Create("male"), HumanGender.Male),
+                new Pair<Translation, HumanGender>(Translation.Create("female"), HumanGender.Female)
+            };
+            var genderChooser = new OptionChooser(new Vector2(0,.5f), Vector2.Zero, Translation.Create("gender"), DefaultColor, DefaultFont, genders.Select(P => P.One).ToArray(), true);
+            genderChooser.Index = Rng.Next(0, 2);
+            
+            void UpdateGender(object Sender, MouseButtonEventArgs _)
+            {
+                _customization.Gender = genders[genderChooser.Index].Two;
+            }
+
+            genderChooser.RightArrow.Click += UpdateGender;
+            genderChooser.LeftArrow.Click += UpdateGender;
+            genderChooser.CurrentValue.TextColor = DefaultColor;
+            genderChooser.CurrentValue.UpdateText();
+            return genderChooser;
+        }
+        
+        private void UpdateModel(object Sender, MouseButtonEventArgs E)
+        {
+            var previousModel = _human.Model;
+            _human.Class = _classType;
+            _human.Customization = _customization;
+            _human.Model = new HumanoidModel(_human, _classType.ModelTemplate);
+            _human.Model.SetValues(previousModel);
+            _human.SetHelmet(_classType.StartingItems.FirstOrDefault(P => P.Value.IsHelmet).Value);
+            _human.SetWeapon(_classType.StartingItems.First(P => P.Value.IsWeapon).Value.Weapon);
+            /* One time for updating the default body parts */
+            _human.UpdateEquipment();
+            /* The second time is for setting them */
+            _human.UpdateEquipment();
+            previousModel.Dispose();
         }
 
         private void PanelStateChange(object Sender, PanelState State)

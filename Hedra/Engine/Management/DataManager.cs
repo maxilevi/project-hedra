@@ -29,7 +29,7 @@ namespace Hedra.Engine.Management
     public static class DataManager
     {
         public static string CharactersFolder => $"{AssetManager.AppPath}/Characters/";
-        private const float SaveVersion = 1.6f;
+        private const float SaveVersion = 1.61f;
         
         public static void SavePlayer(PlayerInformation Information)
         {
@@ -52,6 +52,7 @@ namespace Hedra.Engine.Management
                 {
                     bw.Write(SaveVersion);
                     bw.Write(Information.Name);
+                    Information.Customization.Write(bw);
 
                     bw.Write(Information.Rotation.X);
                     bw.Write(Information.Rotation.Y);
@@ -129,7 +130,8 @@ namespace Hedra.Engine.Management
                 ToolbarData = Player.Toolbar.Serialize(),
                 Quests = Player.Questing.GetSerializedQuests(),
                 SkillsData = Player.AbilityTree.Serialize(),
-                RealmData = Player.Realms.Serialize()
+                RealmData = Player.Realms.Serialize(),
+                Customization = Player.Customization
             };
 
             return data;
@@ -172,6 +174,10 @@ namespace Hedra.Engine.Management
                 float version = br.ReadSingle();
                 if (version < 1.6f) return null;
                 information.Name = br.ReadString();
+                if (version >= 1.61f)
+                {
+                    information.Customization = CustomizationData.Read(br);
+                }
                 information.Rotation = new Vector3(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
                 information.Health = br.ReadSingle();
                 information.Xp = br.ReadSingle();

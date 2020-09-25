@@ -108,6 +108,7 @@ namespace Hedra.Engine.Player
 
             Model = AnimationModelLoader.LoadEntity(ModelPath, true);
             Model.IgnoreBaseModel = Template.IgnoreBaseModel;
+            base.Paint(new []{Human.Customization.HairColor, Human.Customization.SkinColor});
             /* If we are ignoring the base model then we are using body parts */
             base.UsesBodyParts = Model.IgnoreBaseModel;
             StateHandler = BuildAnimationHandler(Humanoid, Template);

@@ -24,6 +24,7 @@ namespace Hedra.EntitySystem
         IVehicle Boat { get; }
         IMessageDispatcher MessageDispatcher { get; set; }
         IPlayerInventory Inventory { get; }
+        CustomizationData Customization { get; set; }
         int ConsecutiveHits { get; }
         bool IsAttacking { get; set; }
         bool IsSprinting { get; }

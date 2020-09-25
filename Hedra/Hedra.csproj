@@ -425,6 +425,8 @@
     <Compile Include="Engine\Player\BackgroundUpdater.cs" />
     <Compile Include="Engine\Player\BoatSystem\BoatHumanoidInputHandler.cs" />
     <Compile Include="Engine\Player\BoatSystem\BoatInputHandler.cs" />
+    <Compile Include="Engine\Player\CustomizationData.cs" />
+    <Compile Include="Engine\Player\HumanGender.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryCompanionInfo.cs" />
     <Compile Include="Engine\Player\Inventory\InventoryCompanionRenamePanel.cs" />
     <Compile Include="Engine\QuestSystem\BaseStructureWithChest.cs" />

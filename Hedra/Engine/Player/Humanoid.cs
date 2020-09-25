@@ -64,6 +64,7 @@ namespace Hedra.Engine.Player
 
         public IVehicle Boat { get; }
         public IPlayerInventory Inventory { get; protected set; }
+        public CustomizationData Customization { get; set; }
         public IMessageDispatcher MessageDispatcher { get; set; }
         public int ConsecutiveHits { get; private set; }
         public bool IsAttacking { get; set; }
@@ -165,6 +166,7 @@ namespace Hedra.Engine.Player
         {
             _consecutiveHitsTimer = new Timer(3f);
             Class = new WarriorDesign();
+            Customization = new CustomizationData();
             MessageDispatcher = new DummyMessageDispatcher();
             HandLamp = new HandLamp(this);
             Movement = new MovementManager(this);
