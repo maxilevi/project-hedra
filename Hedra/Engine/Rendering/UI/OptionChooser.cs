@@ -68,6 +68,7 @@ namespace Hedra.Engine.Rendering.UI
             prevLeftArrow.Dispose();
             prevRightArrow.Dispose();
             prevCurrentValue.Dispose();
+            Update();
         }
         
         public OptionChooser(Vector2 Position, Vector2 Scale, Translation Text, Color C, Font F, Translation[] Options, bool Centered = false) : base()

@@ -46,7 +46,7 @@ namespace Hedra.Engine.Rendering.UI
         private float _newRot;
         private ClassDesign _classType;
         private CustomizationData _customization;
-        
+
         public CharacterCreatorUI(IPlayer Player) 
         {
             _customization = new CustomizationData();
@@ -71,7 +71,7 @@ namespace Hedra.Engine.Rendering.UI
 
             _human = new Humanoid
             {
-                Name = "CreatorHumanoid"
+                Name = "CreatorHumanoid",
             };
             _human.Model = new HumanoidModel(_human)
             {
@@ -89,6 +89,7 @@ namespace Hedra.Engine.Rendering.UI
             var rng = new Random();
             var classChooser = CreateClassChooser(defaultFont, defaultColor, rng);
             var genderChooser = CreateGenderChooser(defaultFont, defaultColor, rng);
+            var hairPicker = CreateHairPicker(this);
             
             UpdateModel(null, default);
             
@@ -110,7 +111,7 @@ namespace Hedra.Engine.Rendering.UI
             };
             
             // Normal Skin #FFBFA1
-            
+            AddElement(hairPicker);
             AddElement(genderChooser);
             AddElement(classChooser);
             AddElement(nameField);
@@ -125,19 +126,31 @@ namespace Hedra.Engine.Rendering.UI
             UpdateManager.Add(this);
         }
 
+        private ColorPicker CreateHairPicker(Panel InPanel)
+        {
+            var picker = new ColorPicker(_hairColors, "Hair", Vector2.Zero, Vector2.One, InPanel);
+            return picker;
+        }
+
 
         private OptionChooser CreateClassChooser(Font DefaultFont, Color DefaultColor, Random Rng)
         {
-            var classes = ClassDesign.AvailableClassNames.Select(S => Translation.Create(S.ToLowerInvariant())).ToArray();
+            var classes =
+                ClassDesign.AvailableClassNames.Select(S =>
+                    new Pair<string, ClassDesign>(S, ClassDesign.FromString(S))).ToArray();
             classes.Shuffle(Rng);
+            var classesNames = classes.Select(S => Translation.Create(S.One.ToLowerInvariant())).ToArray();
             var classChooser = new OptionChooser(new Vector2(0,.5f), Vector2.Zero, Translation.Create("class"), DefaultColor,
-                DefaultFont, classes, true);
-            classChooser.Index = Array.IndexOf(ClassDesign.AvailableClassNames, _human.Class.Name);
+                DefaultFont, classesNames, true);
 
             void UpdateClass(object Sender, MouseButtonEventArgs _)
             {
-                _classType = ClassDesign.FromString(ClassDesign.AvailableClassNames[classChooser.Index]);
+                _classType = classes[classChooser.Index].Two;
+                _customization = CustomizationData.FromClass(_classType);
+                UpdateModel(null, default);
             }
+
+            UpdateClass(null, default);
             
             classChooser.RightArrow.Click += UpdateClass;
             classChooser.LeftArrow.Click += UpdateClass;
@@ -152,12 +165,13 @@ namespace Hedra.Engine.Rendering.UI
                 new Pair<Translation, HumanGender>(Translation.Create("male"), HumanGender.Male),
                 new Pair<Translation, HumanGender>(Translation.Create("female"), HumanGender.Female)
             };
-            var genderChooser = new OptionChooser(new Vector2(0,.5f), Vector2.Zero, Translation.Create("gender"), DefaultColor, DefaultFont, genders.Select(P => P.One).ToArray(), true);
+            var genderChooser = new OptionChooser(new Vector2(0,.3f), Vector2.Zero, Translation.Create("gender"), DefaultColor, DefaultFont, genders.Select(P => P.One).ToArray(), true);
             genderChooser.Index = Rng.Next(0, 2);
             
             void UpdateGender(object Sender, MouseButtonEventArgs _)
             {
                 _customization.Gender = genders[genderChooser.Index].Two;
+                UpdateModel(null, default);
             }
 
             genderChooser.RightArrow.Click += UpdateGender;
@@ -230,5 +244,20 @@ namespace Hedra.Engine.Rendering.UI
             base.Dispose();
             UpdateManager.Remove(this);
         }
+
+        private static Vector4[] _skinColors = new[]
+        {
+            Colors.FromHtml("#FFBFA1")
+        };
+
+        private static Vector4[] _hairColors = new[]
+        {
+            Colors.FromHtml("#FFBFA1"),
+            Colors.FromHtml("#FFBFA1"),
+            Colors.FromHtml("#FFBFA1"),
+            Colors.FromHtml("#FFBFA1"),
+            Colors.FromHtml("#FFBFA1"),
+            Colors.FromHtml("#FFBFA1"),
+        };
     }
 }

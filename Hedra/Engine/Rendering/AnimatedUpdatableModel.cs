@@ -25,16 +25,21 @@ namespace Hedra.Engine.Rendering
             return EntityRenderer.Draw(Model, Height);
         }
 
-        public void AddBodyPartModel(ModelData Data, bool IsDefault = false)
+        public void AddBodyPartModel(ModelData Data, bool IsDefault = false, bool Rebuild = true)
         {
             if(UsesBodyParts)
-                Model.AddModel(Data, IsDefault);
+                Model.AddModel(Data, IsDefault, Rebuild);
         }
 
-        public void RemoveBodyPartModel(ModelData Data)
+        public void Rebuild()
+        {
+            Model.RebuildBuffers();
+        }
+
+        public void RemoveBodyPartModel(ModelData Data, bool Rebuild = true)
         {
             if(UsesBodyParts)
-                Model.RemoveModel(Data);
+                Model.RemoveModel(Data, Rebuild);
         }
         
         public void AddModel(ModelData Data, bool IsDefault = false)

@@ -38,6 +38,7 @@ namespace Hedra.Rendering
         
         public static Vector4 FromHtml(string Hex)
         {
+            if (Hex == null) return default;
             var argb = int.Parse(Hex.Replace("#", string.Empty), NumberStyles.HexNumber);
 
             return FromArgb((byte)((argb & -16777216) >> 0x18),

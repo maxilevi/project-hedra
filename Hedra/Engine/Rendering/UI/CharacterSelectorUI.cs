@@ -153,6 +153,7 @@ namespace Hedra.Engine.Rendering.UI
             for(var i = 0; i < _information.Length; i++)
             {
                 var offset = FireDirection(i, 6.4f);
+                _humans[i].Customization = _information[i].Customization;
                 _humans[i].Class = _information[i].Class;
                 _humans[i].Model = new HumanoidModel(_humans[i]);
                 _humans[i].Position = Scenes.MenuBackground.FirePosition + offset;

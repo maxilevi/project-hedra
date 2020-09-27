@@ -118,6 +118,7 @@ namespace Hedra.Engine.Game
             Player.Loader.Reset();
             Player.UI.CharacterSelector.StopModels();//So as to fix loose ends
             Player.Class = Information.Class;
+            Player.Customization = Information.Customization;
             Player.Level = Information.Level;
             Player.Name = Information.Name;
             Player.Speed = Player.BaseSpeed;

@@ -48,5 +48,7 @@
   "FeetModel": {
     "Path": "$DataFile$/Assets/Chr/BodyParts/ArcherFeet.dae",
     "Scale": 1.0
-  }
+  },
+  "DefaultSkinColor": "#FFBFA1",
+  "DefaultFirstHairColor": "#4E3616"
 }

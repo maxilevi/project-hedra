@@ -121,19 +121,21 @@ namespace Hedra.Engine.Rendering.Animation
             return _addedModels.Contains(Model);
         }
         
-        public void AddModel(ModelData Model, bool IsDefault = false)
+        public void AddModel(ModelData Model, bool IsDefault = false, bool Rebuild = true)
         {
             if (IsDefault)
                 _addedModels.Insert(0, Model);
             else
                 _addedModels.Add(Model);
-            RebuildBuffers();
+            if(Rebuild)
+                RebuildBuffers();
         }
         
-        public void RemoveModel(ModelData Model)
+        public void RemoveModel(ModelData Model, bool Rebuild = true)
         {
             _addedModels.Remove(Model);
-            RebuildBuffers();
+            if(Rebuild)
+                RebuildBuffers();
         }
 
         public void ClearModel()
@@ -143,7 +145,7 @@ namespace Hedra.Engine.Rendering.Animation
             RebuildBuffers();
         }
         
-        private void RebuildBuffers()
+        public void RebuildBuffers()
         {
             var model = ModelData.Combine(IgnoreBaseModel ? ModelData.Empty : _baseModelData, _addedModels.ToArray());
             Executer.ExecuteOnMainThread(delegate

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using Hedra.API;
@@ -13,6 +14,7 @@ using Hedra.Engine.Player.AbilityTreeSystem;
 using Hedra.Items;
 using Newtonsoft.Json.Linq;
 using System.Numerics;
+using Hedra.Rendering;
 
 namespace Hedra.Engine.ClassSystem
 {
@@ -39,6 +41,9 @@ namespace Hedra.Engine.ClassSystem
         public virtual HumanoidModelTemplate LegsModelTemplate => ClassLoader.Instance[Type].LegsModel;
         public virtual HumanoidModelTemplate FeetModelTemplate => ClassLoader.Instance[Type].FeetModel;
         public virtual HumanoidModelTemplate ModelTemplate => ClassLoader.Instance[Type].Model;
+        public virtual Vector4 DefaultSkinColor => Colors.FromHtml(ClassLoader.Instance[Type].DefaultSkinColor);
+        public virtual Vector4 DefaultFirstHairColor => Colors.FromHtml(ClassLoader.Instance[Type].DefaultFirstHairColor);
+        public virtual Vector4 DefaultSecondHairColor => Colors.FromHtml(ClassLoader.Instance[Type].DefaultSecondHairColor);
         public virtual string Logo => ClassLoader.Instance[Type].Logo;
         public bool IsRanged => ClassLoader.Instance[Type].IsRanged;
         public virtual float BaseSpeed => ClassLoader.Instance[Type].BaseSpeed;    

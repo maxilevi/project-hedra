@@ -455,6 +455,7 @@
     <Compile Include="Engine\Rendering\Geometry\MarchingCubes.cs" />
     <Compile Include="Engine\Rendering\Geometry\MeshAnalyzer.cs" />
     <Compile Include="Engine\Rendering\Geometry\MeshOperations.cs" />
+    <Compile Include="Engine\Rendering\ModelLoader.cs" />
     <Compile Include="Engine\Rendering\NativeVertexData.cs" />
     <Compile Include="Engine\Rendering\UI\CompanionProfileUIElement.cs" />
     <Compile Include="Engine\Rendering\UI\MenuBackground.cs" />

@@ -45,5 +45,8 @@
   "FeetModel": {
     "Path": "$DataFile$/Assets/Chr/BodyParts/MageFeet.dae",
     "Scale": 1.0
-  }
+  },
+  "DefaultSkinColor": "#FFBFA1",
+  "DefaultFirstHairColor": "#8E7B6A",
+  "DefaultSecondHairColor": "#B2ABA7"
 }

@@ -169,6 +169,7 @@ namespace Hedra.Engine.Management
         private static PlayerInformation LoadPlayer(Stream Str)
         {
             var information = new PlayerInformation();
+            var useDefaultCustomization = false;
             using (var br = new BinaryReader(Str))
             {
                 float version = br.ReadSingle();
@@ -177,6 +178,10 @@ namespace Hedra.Engine.Management
                 if (version >= 1.61f)
                 {
                     information.Customization = CustomizationData.Read(br);
+                }
+                else
+                {
+                    useDefaultCustomization = true;
                 }
                 information.Rotation = new Vector3(br.ReadSingle(), br.ReadSingle(), br.ReadSingle());
                 information.Health = br.ReadSingle();
@@ -197,6 +202,8 @@ namespace Hedra.Engine.Management
             }
             Str.Close();
             Str.Dispose();
+            if(useDefaultCustomization)
+                information.Customization = CustomizationData.FromClass(information.Class);
             return information;
         }
 

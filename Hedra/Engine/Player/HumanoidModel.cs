@@ -108,7 +108,6 @@ namespace Hedra.Engine.Player
 
             Model = AnimationModelLoader.LoadEntity(ModelPath, true);
             Model.IgnoreBaseModel = Template.IgnoreBaseModel;
-            base.Paint(new []{Human.Customization.HairColor, Human.Customization.SkinColor});
             /* If we are ignoring the base model then we are using body parts */
             base.UsesBodyParts = Model.IgnoreBaseModel;
             StateHandler = BuildAnimationHandler(Humanoid, Template);
@@ -505,7 +504,36 @@ namespace Hedra.Engine.Player
         {
             return Model.HasModel(NewModel);
         }
+
+        private static ModelData LoadAndPaint(IHumanoid Owner, string Path)
+        {
+            var model = ModelLoader.Load(Path);
+            model.Paint(AssetManager.ColorCode0.Xyz(), Owner.Customization.SkinColor.Xyz());
+            model.Paint(AssetManager.ColorCode1.Xyz(), Owner.Customization.FirstHairColor.Xyz());
+            model.Paint(AssetManager.ColorCode2.Xyz(), Owner.Customization.SecondHairColor.Xyz());
+            return model;
+        }
         
+        public static ModelData LoadHead(IHumanoid Owner)
+        {
+            return LoadAndPaint(Owner, Owner.Class.HeadModelTemplate.Path);
+        }
+        
+        public static ModelData LoadChest(IHumanoid Owner)
+        {
+            return LoadAndPaint(Owner, Owner.Class.ChestModelTemplate.Path);
+        }
+        
+        public static ModelData LoadLegs(IHumanoid Owner)
+        {
+            return LoadAndPaint(Owner, Owner.Class.LegsModelTemplate.Path);
+        }
+        
+        public static ModelData LoadFeet(IHumanoid Owner)
+        {
+            return LoadAndPaint(Owner, Owner.Class.FeetModelTemplate.Path);
+        }
+
         public override void Dispose()
         {
             _food.Dispose();

@@ -25,6 +25,7 @@ namespace Hedra.Engine.Player
         private ModelData _defaultPants;
         private ModelData _defaultBoots;
         private Class _lastClass;
+        private CustomizationData _lastCustomization;
         private Item _mainWeapon;
         private Item _ring;
 
@@ -48,37 +49,45 @@ namespace Hedra.Engine.Player
         private void AddDefaultModels()
         {
             var model = _owner.Model;
-            AddDefaultModel(Helmet, model, _defaultHead, true);
-            AddDefaultModel(Chest, model, _defaultChest);
-            AddDefaultModel(Pants, model, _defaultPants);
-            AddDefaultModel(Boots, model, _defaultBoots);
+            var changed = false;
+            changed |= AddDefaultModel(Helmet, model, _defaultHead, true);
+            changed |= AddDefaultModel(Chest, model, _defaultChest);
+            changed |= AddDefaultModel(Pants, model, _defaultPants);
+            changed |= AddDefaultModel(Boots, model, _defaultBoots);
+            if (changed)
+                model.Rebuild();
         }
 
-        private void AddDefaultModel(ArmorPiece Piece, HumanoidModel Model, ModelData Default, bool AlwaysOn = false)
+        private bool AddDefaultModel(ArmorPiece Piece, HumanoidModel Model, ModelData Default, bool AlwaysOn = false)
         {
             if (AlwaysOn)
             {
                 if (!Model.HasModel(Default))
                 {
-                    Model.AddBodyPartModel(Default, true);
+                    Model.AddBodyPartModel(Default, true, false);
+                    return true;
                 }
             }
             else
             {
                 if (Piece == null && !Model.HasModel(Default))
                 {
-                    Model.AddBodyPartModel(Default, true);
+                    Model.AddBodyPartModel(Default, true, false);
+                    return true;
                 }
                 else if (Piece != null && Model.HasModel(Default))
                 {
-                    Model.RemoveBodyPartModel(Default);
+                    Model.RemoveBodyPartModel(Default, false);
+                    return true;
                 }
             }
+
+            return false;
         }
 
         private void UpdateDefaultModels()
         {
-            if (_defaultHead != null && _owner.Class.Type == _lastClass) return;
+            if (_defaultHead != null && _owner.Class.Type == _lastClass && _owner.Customization == _lastCustomization) return;
             if (_defaultHead != null)
             {
                 var model = _owner.Model;
@@ -87,11 +96,13 @@ namespace Hedra.Engine.Player
                 model.RemoveModel(_defaultPants);
                 model.RemoveModel(_defaultBoots);
             }
-            _defaultHead = AssetManager.DAELoader(_owner.Class.HeadModelTemplate.Path);
-            _defaultChest = AssetManager.DAELoader(_owner.Class.ChestModelTemplate.Path);
-            _defaultPants = AssetManager.DAELoader(_owner.Class.LegsModelTemplate.Path);
-            _defaultBoots = AssetManager.DAELoader(_owner.Class.FeetModelTemplate.Path);
+
+            _defaultHead = HumanoidModel.LoadHead(_owner);
+            _defaultChest = HumanoidModel.LoadChest(_owner);
+            _defaultPants = HumanoidModel.LoadLegs(_owner);
+            _defaultBoots = HumanoidModel.LoadFeet(_owner);
             _lastClass = _owner.Class.Type;
+            _lastCustomization = _owner.Customization;
         }
 
         public void Reset()

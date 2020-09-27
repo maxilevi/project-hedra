@@ -15,6 +15,7 @@ using Hedra.Core;
 using System.Numerics;
 using Hedra.Engine.Rendering;
 using Hedra.Numerics;
+using Hedra.Rendering;
 using Hedra.Rendering.UI;
 
 namespace Hedra.Engine.Rendering.UI
@@ -26,26 +27,23 @@ namespace Hedra.Engine.Rendering.UI
     
     public class ColorPicker : UIElement
     {
-        //private static readonly Bitmap RoundedRectangle = new Bitmap(new MemoryStream(AssetManager.ReadBinary("Assets/Background.png",AssetManager.DataFile3)));
         public event ColorPickedEventHandler ColorPickedEvent; 
         public List<UIElement> Elements = new List<UIElement>();
         private static Vector2 _targetResolution = new Vector2(1024, 600);
         
         public ColorPicker(Vector4[] Colors, string Name, Vector2 Position, Vector2 Scale, Panel InPanel, int ColorsPerRow = 3){
-            int rowCount = 0;
-            Vector2 xOffset = Vector2.Zero;
-            Vector2 yOffset = Vector2.Zero;
-            Vector2 totalOffset = Vector2.Zero;
+            var rowCount = 0;
+            var xOffset = Vector2.Zero;
+            var yOffset = Vector2.Zero;
+            var totalOffset = Vector2.Zero;
             
-            for(int i = 0; i < Colors.Length; i++){
-                Button background = new Button(Position + Mathf.ScaleGui(_targetResolution,xOffset+yOffset) * Scale, Mathf.ScaleGui(new Vector2(600,600),new Vector2(.15f,.15f)) * 0.5f *Scale, string.Empty, GUIRenderer.TransparentTexture);
-                int k = i;
+            for(var i = 0; i < Colors.Length; i++){
+                var background = new Button(Position + Mathf.ScaleGui(_targetResolution,xOffset+yOffset) * Scale, Mathf.ScaleGui(new Vector2(600,600),new Vector2(.15f,.15f)) * 0.5f *Scale, string.Empty, GUIRenderer.TransparentTexture);
+                var k = i;
                 background.Click += delegate { if(ColorPickedEvent != null) ColorPickedEvent.Invoke(Colors[k]); };
-                //Texture backgroundTex = new Texture(Graphics2D.LoadTexture(Graphics2D.Clone(RoundedRectangle)),
-                //                                    Position + Mathf.ScaleGUI(_targetResolution, xOffset+yOffset) * Scale, Mathf.ScaleGUI(new Vector2(600,600),new Vector2(.15f,.15f)) * 0.5f * Scale);
+                var backgroundTex = new BackgroundTexture("Assets/Background.png", Position + Mathf.ScaleGui(_targetResolution, xOffset+yOffset) * Scale, Mathf.ScaleGui(new Vector2(600,600),new Vector2(.15f,.15f)) * 0.5f * Scale);
                 
-                //Texture colorTex = new Texture(Graphics2D.LoadTexture(Graphics2D.ReColorMask(Mathf.ToColor(Colors[i]),Graphics2D.Clone(RoundedRectangle))),
-                //                              Position +  Mathf.ScaleGUI(_targetResolution, xOffset+yOffset) * Scale, Mathf.ScaleGUI(new Vector2(600,600),new Vector2(.15f,.15f)) * 0.4f * Scale);
+                var colorTex = new BackgroundTexture("Assets/Background.png", Position +  Mathf.ScaleGui(_targetResolution, xOffset+yOffset) * Scale, Mathf.ScaleGui(new Vector2(600,600),new Vector2(.15f,.15f)) * 0.4f * Scale);
                 xOffset += new Vector2(0.1f,0);
                 if(rowCount == 3){
                     xOffset = Vector2.Zero;
@@ -53,11 +51,11 @@ namespace Hedra.Engine.Rendering.UI
                     rowCount = -1;
                 }
                 InPanel.AddElement(background);
-                //InPanel.AddElement(colorTex);
-                //InPanel.AddElement(backgroundTex);
+                InPanel.AddElement(colorTex);
+                InPanel.AddElement(backgroundTex);
                 Elements.Add(background);
-                //Elements.Add(colorTex);
-                //Elements.Add(backgroundTex);
+                Elements.Add(colorTex);
+                Elements.Add(backgroundTex);
                 rowCount++;
             }
             //Simple hack

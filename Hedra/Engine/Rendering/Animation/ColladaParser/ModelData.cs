@@ -10,6 +10,7 @@ using System.Numerics;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Hedra.Engine.BiomeSystem.NormalBiome;
 using Hedra.Framework;
 using Hedra.Numerics;
 using Hedra.Rendering;
@@ -29,7 +30,7 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
         public uint[] Indices { get; }
         public string[] JointNames { get; }
         public string Name { get; set; }
-    
+
         public ModelData(Vector3[] Vertices, Vector3[] Colors, Vector3[] Normals, uint[] Indices, Vector3[] JointIds, Vector3[] VertexWeights, string[] JointNames)
         {
             this.Vertices = Vertices;
@@ -39,6 +40,15 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
             this.JointIds = JointIds;
             this.VertexWeights = VertexWeights;
             this.JointNames = JointNames;
+        }
+
+        public void Paint(Vector3 Color, Vector3 Replacement)
+        {
+            for (var i = 0; i < Colors.Length; ++i)
+            {
+                if(Colors[i] == Color)
+                    Colors[i] = Replacement;
+            }
         }
 
         public VertexData ToVertexData()
@@ -373,6 +383,11 @@ namespace Hedra.Engine.Rendering.Animation.ColladaParser
                 int a = 0;
             }
             return new Pair<Vector3, Vector3>(ids, weights);
+        }
+
+        public ModelData Clone()
+        {
+            return new ModelData(Vertices.ToArray(), Colors.ToArray(), Normals.ToArray(), Indices.ToArray(), JointIds.ToArray(), VertexWeights.ToArray(), JointNames.ToArray());
         }
 
         public static ModelData Empty { get; } = new ModelData(new Vector3[0], new Vector3[0], new Vector3[0], new uint[0], new Vector3[0], new Vector3[0], new string[0]);

@@ -39,5 +39,8 @@
   "FeetModel": {
     "Path": "$DataFile$/Assets/Chr/BodyParts/WarriorFeet.dae",
     "Scale": 1.0
-  }
+  },
+  "DefaultSkinColor": "#FFBFA1",
+  "DefaultFirstHairColor": "#8E7B6A",
+  "DefaultSecondHairColor": "#FFFFFF"
 }
