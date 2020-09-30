@@ -20,18 +20,19 @@ namespace Hedra.Engine.Player
         public BootsPiece Boots { get; private set; }
 
         private readonly IHumanoid _owner;
+        private readonly CustomizationData _lastCustomization;
         private ModelData _defaultHead;
         private ModelData _defaultChest;
         private ModelData _defaultPants;
         private ModelData _defaultBoots;
         private Class _lastClass;
-        private CustomizationData _lastCustomization;
         private Item _mainWeapon;
         private Item _ring;
 
         public EquipmentHandler(IHumanoid Owner)
         {
             _owner = Owner;
+            _lastCustomization = new CustomizationData();
             UpdateDefaultModels();
         }
 
@@ -87,7 +88,7 @@ namespace Hedra.Engine.Player
 
         private void UpdateDefaultModels()
         {
-            if (_defaultHead != null && _owner.Class.Type == _lastClass && _owner.Customization == _lastCustomization) return;
+            if (_defaultHead != null && _owner.Class.Type == _lastClass && !IsCustomizationDifferent()) return;
             if (_defaultHead != null)
             {
                 var model = _owner.Model;
@@ -102,7 +103,23 @@ namespace Hedra.Engine.Player
             _defaultPants = HumanoidModel.LoadLegs(_owner);
             _defaultBoots = HumanoidModel.LoadFeet(_owner);
             _lastClass = _owner.Class.Type;
-            _lastCustomization = _owner.Customization;
+            UpdateCustomization();
+        }
+
+        private bool IsCustomizationDifferent()
+        {
+            return _owner.Customization.FirstHairColor != _lastCustomization.FirstHairColor
+                || _owner.Customization.SecondHairColor != _lastCustomization.SecondHairColor
+                || _owner.Customization.SkinColor != _lastCustomization.SkinColor
+                || _owner.Customization.Gender != _lastCustomization.Gender;
+        }
+
+        private void UpdateCustomization()
+        {
+            _lastCustomization.FirstHairColor = _owner.Customization.FirstHairColor;
+            _lastCustomization.SecondHairColor = _owner.Customization.SecondHairColor;
+            _lastCustomization.SkinColor = _owner.Customization.SkinColor;
+            _lastCustomization.Gender = _owner.Customization.Gender;
         }
 
         public void Reset()

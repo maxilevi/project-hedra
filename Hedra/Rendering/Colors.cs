@@ -41,7 +41,7 @@ namespace Hedra.Rendering
             if (Hex == null) return default;
             var argb = int.Parse(Hex.Replace("#", string.Empty), NumberStyles.HexNumber);
 
-            return FromArgb((byte)((argb & -16777216) >> 0x18),
+            return FromArgb(255,//(byte)((argb & -16777216) >> 0x18),
             (byte)((argb & 0xff0000) >> 0x10),
             (byte)((argb & 0xff00) >> 8),
             (byte)(argb & 0xff));

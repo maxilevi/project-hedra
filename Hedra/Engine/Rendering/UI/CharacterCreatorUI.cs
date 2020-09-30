@@ -89,7 +89,7 @@ namespace Hedra.Engine.Rendering.UI
             var rng = new Random();
             var classChooser = CreateClassChooser(defaultFont, defaultColor, rng);
             var genderChooser = CreateGenderChooser(defaultFont, defaultColor, rng);
-            var hairPicker = CreateHairPicker(this);
+            CreateColorPickers(this);
             
             UpdateModel(null, default);
             
@@ -110,8 +110,6 @@ namespace Hedra.Engine.Rendering.UI
                 nameField.Text = string.Empty;    
             };
             
-            // Normal Skin #FFBFA1
-            AddElement(hairPicker);
             AddElement(genderChooser);
             AddElement(classChooser);
             AddElement(nameField);
@@ -126,10 +124,31 @@ namespace Hedra.Engine.Rendering.UI
             UpdateManager.Add(this);
         }
 
-        private ColorPicker CreateHairPicker(Panel InPanel)
+        private void CreateColorPickers(Panel InPanel)
         {
-            var picker = new ColorPicker(_hairColors, "Hair", Vector2.Zero, Vector2.One, InPanel);
-            return picker;
+            var picker1 = new ColorPicker(_hairColors, Translation.Create("first_hair_picker"), new Vector2(.25f, .35f), Vector2.One * 0.5f, InPanel);
+            picker1.ColorPickedEvent += V =>
+            {
+                _customization.FirstHairColor = V;
+                UpdateModel(null, default);
+            };
+            InPanel.AddElement(picker1);
+            
+            var picker2 = new ColorPicker(_hairColors, Translation.Create("second_hair_picker"), new Vector2(.25f, -.05f), Vector2.One * 0.5f, InPanel);
+            picker2.ColorPickedEvent += V =>
+            {
+                _customization.SecondHairColor = V;
+                UpdateModel(null, default);
+            };
+            InPanel.AddElement(picker2);
+            
+            var skinPicker = new ColorPicker(_skinColors, Translation.Create("skin_picker"), new Vector2(-.25f, .35f), Vector2.One * 0.5f, InPanel);
+            skinPicker.ColorPickedEvent += V =>
+            {
+                _customization.SkinColor = V;
+                UpdateModel(null, default);
+            };
+            InPanel.AddElement(skinPicker);
         }
 
 
@@ -252,12 +271,17 @@ namespace Hedra.Engine.Rendering.UI
 
         private static Vector4[] _hairColors = new[]
         {
-            Colors.FromHtml("#FFBFA1"),
-            Colors.FromHtml("#FFBFA1"),
-            Colors.FromHtml("#FFBFA1"),
-            Colors.FromHtml("#FFBFA1"),
-            Colors.FromHtml("#FFBFA1"),
-            Colors.FromHtml("#FFBFA1"),
+            Colors.FromHtml("#4E3616"),
+            Colors.FromHtml("#8E7B6A"),
+            Colors.FromHtml("#B2ABA7"),
+            Colors.FromHtml("#59442F"),
+            Colors.FromHtml("#8E7B6A"),
+            Colors.FromHtml("#4E3616"),
+            Colors.FromHtml("#FFFFFF"),
+            //Colors.FromHtml("#FFBFA1"),
+            //Colors.FromHtml("#FFBFA1"),
+            //Colors.FromHtml("#FFBFA1"),
+            //Colors.FromHtml("#FFBFA1"),
         };
     }
 }

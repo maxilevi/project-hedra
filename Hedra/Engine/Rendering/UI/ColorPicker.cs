@@ -13,6 +13,7 @@ using System.Drawing;
 using System.IO;
 using Hedra.Core;
 using System.Numerics;
+using Hedra.Engine.Localization;
 using Hedra.Engine.Rendering;
 using Hedra.Numerics;
 using Hedra.Rendering;
@@ -27,83 +28,87 @@ namespace Hedra.Engine.Rendering.UI
     
     public class ColorPicker : UIElement
     {
-        public event ColorPickedEventHandler ColorPickedEvent; 
-        public List<UIElement> Elements = new List<UIElement>();
-        private static Vector2 _targetResolution = new Vector2(1024, 600);
-        
-        public ColorPicker(Vector4[] Colors, string Name, Vector2 Position, Vector2 Scale, Panel InPanel, int ColorsPerRow = 3){
+        public event ColorPickedEventHandler ColorPickedEvent;
+        private readonly List<UIElement> _elements;
+        private Vector2 _mScale;
+        private Vector2 _mPosition;
+
+        public ColorPicker(Vector4[] Colors, Translation NameTranslation, Vector2 Position, Vector2 Scale, Panel InPanel, int ColorsPerRow = 3)
+        {
+            _elements = new List<UIElement>();
             var rowCount = 0;
-            var xOffset = Vector2.Zero;
-            var yOffset = Vector2.Zero;
-            var totalOffset = Vector2.Zero;
-            
-            for(var i = 0; i < Colors.Length; i++){
-                var background = new Button(Position + Mathf.ScaleGui(_targetResolution,xOffset+yOffset) * Scale, Mathf.ScaleGui(new Vector2(600,600),new Vector2(.15f,.15f)) * 0.5f *Scale, string.Empty, GUIRenderer.TransparentTexture);
+            var offset = Vector2.Zero;
+            var realScale = Scale * 0.115f;
+            var offsetStepX = Vector2.Zero;
+            var offsetStepY = Vector2.Zero; 
+
+            for(var i = 0; i < Colors.Length; i++)
+            {
                 var k = i;
-                background.Click += delegate { if(ColorPickedEvent != null) ColorPickedEvent.Invoke(Colors[k]); };
-                var backgroundTex = new BackgroundTexture("Assets/Background.png", Position + Mathf.ScaleGui(_targetResolution, xOffset+yOffset) * Scale, Mathf.ScaleGui(new Vector2(600,600),new Vector2(.15f,.15f)) * 0.5f * Scale);
+                var backgroundTex = new BackgroundTexture("Assets/Background.png", Position + offset, realScale);
+                var colorTex = new BackgroundTexture(Colors[i], Position + offset, backgroundTex.Scale * 0.85f);
+                var btn = new Button(Position + offset, backgroundTex.Scale, GUIRenderer.TransparentTexture);
+                btn.Click += (_, __) => ColorPickedEvent?.Invoke(Colors[k]);
                 
-                var colorTex = new BackgroundTexture("Assets/Background.png", Position +  Mathf.ScaleGui(_targetResolution, xOffset+yOffset) * Scale, Mathf.ScaleGui(new Vector2(600,600),new Vector2(.15f,.15f)) * 0.4f * Scale);
-                xOffset += new Vector2(0.1f,0);
-                if(rowCount == 3){
-                    xOffset = Vector2.Zero;
-                    yOffset += new Vector2(0, 0.175f);
-                    rowCount = -1;
-                }
-                InPanel.AddElement(background);
                 InPanel.AddElement(colorTex);
                 InPanel.AddElement(backgroundTex);
-                Elements.Add(background);
-                Elements.Add(colorTex);
-                Elements.Add(backgroundTex);
+                InPanel.AddElement(btn);
+                _elements.Add(colorTex);
+                _elements.Add(btn);
+                _elements.Add(backgroundTex);
+                
                 rowCount++;
+                offsetStepX = new Vector2(backgroundTex.Scale.X, 0);
+                offsetStepY = new Vector2(0, backgroundTex.Scale.Y);
+                
+                offset += offsetStepX * 3;
+                if (rowCount == ColorsPerRow)
+                {
+                    offset = new Vector2(0, offset.Y - offsetStepY.Y * 3);
+                    rowCount = 0;
+                }
             }
-            //Simple hack
-            GUIText title = new GUIText(Name,Position + Mathf.ScaleGui(new Vector2(600,600),new Vector2(.15f,.15f / 8 * Colors.Length)) * .5f * 8 * .5f * Scale - new Vector2(0.1f,0) * (0.25f),
-                                        Color.FromArgb(255,39,39,39), FontCache.GetNormal(14 * Scale.X));
             
-            Elements.Add(title);
+            var title = new GUIText(NameTranslation, Position + offsetStepX * ColorsPerRow  + offsetStepX * (ColorsPerRow-1) + offsetStepY * 2f, Color.White, FontCache.GetBold(22 * (Scale.X + Scale.Y) / 2f));
+            title.Position -= title.Scale.X * Vector2.UnitX;
+            _elements.Add(title);
             InPanel.AddElement(title);
         }
-        
-        public void PickRandom(){
-            Random:
-                int rng = Utils.Rng.Next(0, Elements.Count);
-                if(!(Elements[rng] is Button))
-                    goto Random;
-                else
-                    (Elements[rng] as Button).ForceClick();
-        }
-        
-        public void Enable(){
-            for(int i = 0; i < Elements.Count; i++){
-                Elements[i].Enable();
+
+        public void Enable()
+        {
+            for(int i = 0; i < _elements.Count; i++)
+            {
+                _elements[i].Enable();
             }
         }
         
-        public void Disable(){
-            for(int i = 0; i < Elements.Count; i++){
-                Elements[i].Disable();
+        public void Disable()
+        {
+            for(int i = 0; i < _elements.Count; i++)
+            {
+                _elements[i].Disable();
             }
         }
         
-        private Vector2 _mScale;
         public Vector2 Scale{
-            get{ return _mScale; }
+            get => _mScale;
             set{
                 _mScale = value;
-                for(int i = 0; i < Elements.Count; i++){
-                    Elements[i].Scale = value;
+                for(var i = 0; i < _elements.Count; i++)
+                {
+                    _elements[i].Scale = value;
                 }
             }
         }
         
-        private Vector2 _mPosition;
-        public Vector2 Position{
-            get{ return _mPosition; }
+        public Vector2 Position
+        {
+            get => _mPosition;
             set{
-                for(int i = 0; i < Elements.Count; i++){
-                    Elements[i].Position = Elements[i].Position + value - _mPosition;
+                for(var i = 0; i < _elements.Count; i++)
+                {
+                    _elements[i].Position = _elements[i].Position + value - _mPosition;
                 }
                 _mPosition = value;
             }
@@ -111,7 +116,7 @@ namespace Hedra.Engine.Rendering.UI
 
         public void Dispose()
         {
-            Elements.ForEach(D => D.Dispose());
+            _elements.ForEach(D => D.Dispose());
         }    
     }
 }

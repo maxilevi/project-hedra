@@ -778,3 +778,7 @@ equipment_used_by = EQUIPMENT FOR {0}
 gender = Gender
 male = Male
 female = Female
+
+first_hair_picker = First Hair Color
+second_hair_picker = Second Hair Color
+skin_picker = Skin Color
