@@ -44,7 +44,7 @@ namespace Hedra.Engine.Loader
             
             Log.WriteLine("Starting hedra dedicated server...");
             Hedra.LoadBoilerplate();
-            var information = LocalPlayer.BuildNewPlayer("HOST", ClassDesign.FromString(Class.Mage));
+            var information = LocalPlayer.BuildNewPlayer("HOST", ClassDesign.FromString(Class.Mage), new CustomizationData());
             GameManager.MakeCurrent(information);
             Network.Instance.Host();
         }

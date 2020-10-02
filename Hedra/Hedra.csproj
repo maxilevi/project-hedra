@@ -8582,6 +8582,22 @@
       <Link>Assets\Chr\BodyParts\ArcherLegs.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Chr\BodyParts\FemaleWarriorChest.dae">
+      <Link>Assets\Chr\BodyParts\FemaleWarriorChest.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\BodyParts\FemaleWarriorFeet.dae">
+      <Link>Assets\Chr\BodyParts\FemaleWarriorFeet.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\BodyParts\FemaleWarriorHead.dae">
+      <Link>Assets\Chr\BodyParts\FemaleWarriorHead.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Chr\BodyParts\FemaleWarriorLegs.dae">
+      <Link>Assets\Chr\BodyParts\FemaleWarriorLegs.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Chr\BodyParts\MageChest.dae">
       <Link>Assets\Chr\BodyParts\MageChest.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

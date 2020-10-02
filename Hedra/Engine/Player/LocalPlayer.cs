@@ -493,7 +493,7 @@ namespace Hedra.Engine.Player
             return (T) Toolbar.Skills.First(S => S is T);
         }
         
-        public static bool CreatePlayer(string Name, ClassDesign ClassType)
+        public static bool CreatePlayer(string Name, ClassDesign ClassType, CustomizationData Customization)
         {
             if (Name == string.Empty)
             {
@@ -512,18 +512,19 @@ namespace Hedra.Engine.Player
                 return false;
             }
 
-            var information = BuildNewPlayer(Name, ClassType);
+            var information = BuildNewPlayer(Name, ClassType, Customization);
             DataManager.SavePlayer(information);
             return true;
         }
 
-        public static PlayerInformation BuildNewPlayer(string Name, ClassDesign ClassType)
+        public static PlayerInformation BuildNewPlayer(string Name, ClassDesign ClassType, CustomizationData Customization)
         {
             var data = new PlayerInformation
             {
                 Name = Name,
                 RandomFactor = NewRandomFactor(),
-                Class = ClassType
+                Class = ClassType,
+                Customization = Customization
             };
 
             var gold = ItemPool.Grab(ItemType.Gold);

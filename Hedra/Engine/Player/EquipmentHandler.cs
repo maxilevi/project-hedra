@@ -61,6 +61,7 @@ namespace Hedra.Engine.Player
 
         private bool AddDefaultModel(ArmorPiece Piece, HumanoidModel Model, ModelData Default, bool AlwaysOn = false)
         {
+            if (!Model.UsesBodyParts) return false;
             if (AlwaysOn)
             {
                 if (!Model.HasModel(Default))

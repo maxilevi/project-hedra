@@ -203,7 +203,7 @@ namespace Hedra.Engine.Management
             Str.Close();
             Str.Dispose();
             if(useDefaultCustomization)
-                information.Customization = CustomizationData.FromClass(information.Class);
+                information.Customization = CustomizationData.FromClass(information.Class, HumanGender.Male);
             return information;
         }
 

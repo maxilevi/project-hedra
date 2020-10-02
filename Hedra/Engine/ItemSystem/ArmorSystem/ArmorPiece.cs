@@ -11,11 +11,12 @@ namespace Hedra.Engine.ItemSystem.ArmorSystem
     {
         public bool Disposed { get; set; }
         protected IHumanoid Owner { get; private set; }
-        private readonly ModelData _model;
+        private readonly ModelData _originalModel;
+        private ModelData _currentModel;
 
         protected ArmorPiece(ModelData Model)
         {
-            _model = Model;
+            _originalModel = Model;
         }
         
         public void Update(IHumanoid Humanoid)
@@ -37,12 +38,19 @@ namespace Hedra.Engine.ItemSystem.ArmorSystem
 
         private void RegisterOwner(IHumanoid Humanoid)
         {
-            Humanoid.Model.AddModel(_model);
+            UpdateCurrentModel(Humanoid);
+            Humanoid.Model.AddModel(_currentModel);
         }
         
         private void UnregisterOwner(IHumanoid Humanoid)
         {
-            Humanoid.Model.RemoveModel(_model);
+            Humanoid.Model.RemoveModel(_currentModel);
+        }
+
+        private void UpdateCurrentModel(IHumanoid Humanoid)
+        {
+            _currentModel = _originalModel.Clone();
+            HumanoidModel.PaintModelWithCustomization(Humanoid, _currentModel);
         }
         
         public Vector4 Tint { get; set; }
@@ -57,7 +65,6 @@ namespace Hedra.Engine.ItemSystem.ArmorSystem
         public float AnimationSpeed { get; set; }
         public Vector4 OutlineColor { get; set; }
         public bool Outline { get; set; }
-        public ModelData Model => _model;
 
         public void Dispose()
         {

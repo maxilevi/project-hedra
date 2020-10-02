@@ -508,30 +508,35 @@ namespace Hedra.Engine.Player
         private static ModelData LoadAndPaint(IHumanoid Owner, string Path)
         {
             var model = ModelLoader.Load(Path);
-            model.Paint(AssetManager.ColorCode0.Xyz(), Owner.Customization.SkinColor.Xyz());
-            model.Paint(AssetManager.ColorCode1.Xyz(), Owner.Customization.FirstHairColor.Xyz());
-            model.Paint(AssetManager.ColorCode2.Xyz(), Owner.Customization.SecondHairColor.Xyz());
+            PaintModelWithCustomization(Owner, model);
             return model;
+        }
+
+        public static void PaintModelWithCustomization(IHumanoid Owner, ModelData Model)
+        {
+            Model.Paint(AssetManager.ColorCode0.Xyz(), Owner.Customization.SkinColor.Xyz());
+            Model.Paint(AssetManager.ColorCode1.Xyz(), Owner.Customization.FirstHairColor.Xyz());
+            Model.Paint(AssetManager.ColorCode2.Xyz(), Owner.Customization.SecondHairColor.Xyz());
         }
         
         public static ModelData LoadHead(IHumanoid Owner)
         {
-            return LoadAndPaint(Owner, Owner.Class.HeadModelTemplate.Path);
+            return LoadAndPaint(Owner, Owner.Customization.Gender == HumanGender.Male ? Owner.Class.HeadModelTemplate.Path : Owner.Class.FemaleHeadModelTemplate.Path);
         }
         
         public static ModelData LoadChest(IHumanoid Owner)
         {
-            return LoadAndPaint(Owner, Owner.Class.ChestModelTemplate.Path);
+            return LoadAndPaint(Owner, Owner.Customization.Gender == HumanGender.Male ? Owner.Class.ChestModelTemplate.Path : Owner.Class.FemaleChestModelTemplate.Path);
         }
         
         public static ModelData LoadLegs(IHumanoid Owner)
         {
-            return LoadAndPaint(Owner, Owner.Class.LegsModelTemplate.Path);
+            return LoadAndPaint(Owner, Owner.Customization.Gender == HumanGender.Male ? Owner.Class.LegsModelTemplate.Path : Owner.Class.FemaleLegsModelTemplate.Path);
         }
         
         public static ModelData LoadFeet(IHumanoid Owner)
         {
-            return LoadAndPaint(Owner, Owner.Class.FeetModelTemplate.Path);
+            return LoadAndPaint(Owner, Owner.Customization.Gender == HumanGender.Male ? Owner.Class.FeetModelTemplate.Path : Owner.Class.FemaleFeetModelTemplate.Path);
         }
 
         public override void Dispose()

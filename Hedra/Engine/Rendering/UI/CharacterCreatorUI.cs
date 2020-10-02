@@ -104,7 +104,7 @@ namespace Hedra.Engine.Rendering.UI
                     return;
                 }
 
-                if(!LocalPlayer.CreatePlayer(nameField.Text, _classType)) return;          
+                if(!LocalPlayer.CreatePlayer(nameField.Text, _classType, _customization)) return;          
                 base.Disable();
                 GameManager.Player.UI.CharacterSelector.Enable();
                 nameField.Text = string.Empty;    
@@ -126,23 +126,35 @@ namespace Hedra.Engine.Rendering.UI
 
         private void CreateColorPickers(Panel InPanel)
         {
-            var picker1 = new ColorPicker(_hairColors, Translation.Create("first_hair_picker"), new Vector2(.25f, .35f), Vector2.One * 0.5f, InPanel);
+            const int columnCount = 8;
+            const int rowCount = 8;
+            var allColors = new Vector4[columnCount * rowCount];
+            const float step = 360f / columnCount;
+            for (var j = 0; j < rowCount; ++j)
+            {
+                for (var i = 0; i < columnCount; ++i)
+                {
+                    allColors[j * columnCount + i] = Colors.HsLtoRgba(i * step, 1.0f, 1.0f - (j+1) / (float) (rowCount+2), 1f);
+                }
+            }
+            
+            var picker1 = new ColorPicker(allColors, Translation.Create("first_hair_picker"), new Vector2(.3f, .4f), Vector2.One * 0.25f, InPanel, columnCount, 13);
             picker1.ColorPickedEvent += V =>
             {
                 _customization.FirstHairColor = V;
                 UpdateModel(null, default);
             };
             InPanel.AddElement(picker1);
-            
-            var picker2 = new ColorPicker(_hairColors, Translation.Create("second_hair_picker"), new Vector2(.25f, -.05f), Vector2.One * 0.5f, InPanel);
+
+            var picker2 = new ColorPicker(allColors, Translation.Create("second_hair_picker"), new Vector2(.3f, -.2f), Vector2.One * 0.25f, InPanel, columnCount, 13);
             picker2.ColorPickedEvent += V =>
             {
                 _customization.SecondHairColor = V;
                 UpdateModel(null, default);
             };
             InPanel.AddElement(picker2);
-            
-            var skinPicker = new ColorPicker(_skinColors, Translation.Create("skin_picker"), new Vector2(-.25f, .35f), Vector2.One * 0.5f, InPanel);
+
+            var skinPicker = new ColorPicker(_skinColors, Translation.Create("skin_picker"), new Vector2(-.75f, .35f), Vector2.One * 0.4f, InPanel, 4);
             skinPicker.ColorPickedEvent += V =>
             {
                 _customization.SkinColor = V;
@@ -165,7 +177,7 @@ namespace Hedra.Engine.Rendering.UI
             void UpdateClass(object Sender, MouseButtonEventArgs _)
             {
                 _classType = classes[classChooser.Index].Two;
-                _customization = CustomizationData.FromClass(_classType);
+                _customization = CustomizationData.FromClass(_classType, _customization.Gender);
                 UpdateModel(null, default);
             }
 
@@ -189,7 +201,7 @@ namespace Hedra.Engine.Rendering.UI
             
             void UpdateGender(object Sender, MouseButtonEventArgs _)
             {
-                _customization.Gender = genders[genderChooser.Index].Two;
+                _customization = CustomizationData.FromClass(_classType, genders[genderChooser.Index].Two);
                 UpdateModel(null, default);
             }
 
@@ -266,7 +278,14 @@ namespace Hedra.Engine.Rendering.UI
 
         private static Vector4[] _skinColors = new[]
         {
-            Colors.FromHtml("#FFBFA1")
+            Colors.FromHtml("#FFBFA1"),
+            Colors.FromHtml("#743D2B"),
+            Colors.FromHtml("#EDD8C7"),
+            Colors.FromHtml("#4A332D"),
+            Colors.FromHtml("#D19477"),
+            Colors.FromHtml("#DFAA8B"),
+            Colors.FromHtml("#E5B5A1"),
+            Colors.FromHtml("#FEE3D4"),
         };
 
         private static Vector4[] _hairColors = new[]
@@ -275,8 +294,6 @@ namespace Hedra.Engine.Rendering.UI
             Colors.FromHtml("#8E7B6A"),
             Colors.FromHtml("#B2ABA7"),
             Colors.FromHtml("#59442F"),
-            Colors.FromHtml("#8E7B6A"),
-            Colors.FromHtml("#4E3616"),
             Colors.FromHtml("#FFFFFF"),
             //Colors.FromHtml("#FFBFA1"),
             //Colors.FromHtml("#FFBFA1"),

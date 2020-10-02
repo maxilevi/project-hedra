@@ -11,9 +11,16 @@ namespace Hedra.Engine.ClassSystem.Templates
         public HumanoidModelTemplate ChestModel { get; set; }
         public HumanoidModelTemplate LegsModel { get; set; }
         public HumanoidModelTemplate FeetModel { get; set; }
+        public HumanoidModelTemplate FemaleHeadModel { get; set; }
+        public HumanoidModelTemplate FemaleChestModel { get; set; }
+        public HumanoidModelTemplate FemaleLegsModel { get; set; }
+        public HumanoidModelTemplate FemaleFeetModel { get; set; }
         public string DefaultSkinColor { get; set; }
         public string DefaultFirstHairColor { get; set; }
         public string DefaultSecondHairColor { get; set; }
+        public string FemaleDefaultSkinColor { get; set; }
+        public string FemaleDefaultFirstHairColor { get; set; }
+        public string FemaleDefaultSecondHairColor { get; set; }
         public string Logo { get; set; }
         public float BaseSpeed { get; set; }
         public string MainAbilityTree { get; set; }

@@ -12,14 +12,14 @@ namespace Hedra.Engine.Player
         public Vector4 SecondHairColor { get; set; }
         public Vector4 SkinColor { get; set; }
 
-        public static CustomizationData FromClass(ClassDesign Design)
+        public static CustomizationData FromClass(ClassDesign Design, HumanGender Gender)
         {
             return new CustomizationData
             {
-                Gender = (HumanGender) HumanGender.Male,
-                FirstHairColor = Design.DefaultFirstHairColor,
-                SecondHairColor = Design.DefaultSecondHairColor,
-                SkinColor = Design.DefaultSkinColor,
+                Gender = Gender,
+                FirstHairColor = Gender == HumanGender.Male ? Design.DefaultFirstHairColor : Design.FemaleDefaultFirstHairColor,
+                SecondHairColor = Gender == HumanGender.Male ? Design.DefaultSecondHairColor : Design.FemaleDefaultSecondHairColor,
+                SkinColor = Gender == HumanGender.Male ? Design.DefaultSkinColor : Design.FemaleDefaultSkinColor,
             };
         }
         

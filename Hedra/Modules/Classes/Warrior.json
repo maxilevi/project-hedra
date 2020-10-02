@@ -40,7 +40,26 @@
     "Path": "$DataFile$/Assets/Chr/BodyParts/WarriorFeet.dae",
     "Scale": 1.0
   },
+  "FemaleHeadModel": {
+    "Path": "$DataFile$/Assets/Chr/BodyParts/FemaleWarriorHead.dae",
+    "Scale": 1.0
+  },
+  "FemaleChestModel": {
+    "Path": "$DataFile$/Assets/Chr/BodyParts/FemaleWarriorChest.dae",
+    "Scale": 1.0
+  },
+  "FemaleLegsModel": {
+    "Path": "$DataFile$/Assets/Chr/BodyParts/FemaleWarriorLegs.dae",
+    "Scale": 1.0
+  },
+  "FemaleFeetModel": {
+    "Path": "$DataFile$/Assets/Chr/BodyParts/FemaleWarriorFeet.dae",
+    "Scale": 1.0
+  },
   "DefaultSkinColor": "#FFBFA1",
   "DefaultFirstHairColor": "#8E7B6A",
-  "DefaultSecondHairColor": "#FFFFFF"
+  "DefaultSecondHairColor": "#FFFFFF",
+  "FemaleDefaultSkinColor": "#D19D6B",
+  "FemaleDefaultFirstHairColor": "#614621",
+  "FemaleDefaultSecondHairColor": "#FFFFFF"
 }

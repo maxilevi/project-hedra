@@ -33,7 +33,7 @@ namespace Hedra.Engine.Rendering.UI
         private Vector2 _mScale;
         private Vector2 _mPosition;
 
-        public ColorPicker(Vector4[] Colors, Translation NameTranslation, Vector2 Position, Vector2 Scale, Panel InPanel, int ColorsPerRow = 3)
+        public ColorPicker(Vector4[] Colors, Translation NameTranslation, Vector2 Position, Vector2 Scale, Panel InPanel, int ColorsPerRow = 3, float TextSize = 14)
         {
             _elements = new List<UIElement>();
             var rowCount = 0;
@@ -69,8 +69,12 @@ namespace Hedra.Engine.Rendering.UI
                 }
             }
             
-            var title = new GUIText(NameTranslation, Position + offsetStepX * ColorsPerRow  + offsetStepX * (ColorsPerRow-1) + offsetStepY * 2f, Color.White, FontCache.GetBold(22 * (Scale.X + Scale.Y) / 2f));
-            title.Position -= title.Scale.X * Vector2.UnitX;
+            var title = new GUIText(
+                NameTranslation,
+                Position + offsetStepX * (ColorsPerRow-1)  + offsetStepX * (ColorsPerRow-1) + offsetStepY * 3f, Color.White,
+                FontCache.GetBold(TextSize)
+            );
+            title.Position -= title.Scale.X * Vector2.UnitX * 0.5f;
             _elements.Add(title);
             InPanel.AddElement(title);
         }

@@ -57,6 +57,56 @@ namespace Hedra.Rendering
             var inverse = 1 / 256f;
             return new Vector4(R * inverse, G * inverse, B * inverse, A * inverse);
         }
+        
+        /// <summary>
+        /// Converts HSL to RGB, with a specified output Alpha.
+        /// Arguments are limited to the defined range:
+        /// does not raise exceptions.
+        /// </summary>
+        /// <param name="h">Hue, must be in [0, 360].</param>
+        /// <param name="s">Saturation, must be in [0, 1].</param>
+        /// <param name="l">Luminance, must be in [0, 1].</param>
+        /// <param name="a">Output Alpha, must be in [0, 255].</param>
+        public static Vector4 HsLtoRgba(double h, double s, double l, double a)
+        {
+            h = Math.Max(0D, Math.Min(360D, h));
+            s = Math.Max(0D, Math.Min(1D, s));
+            l = Math.Max(0D, Math.Min(1D, l));
+            a = Math.Max(0D, Math.Min(1D, a));
+            
+            if (Math.Abs(s) < 0.000000000000001) {
+                return FromArgb((float)a, (float)l, (float)l, (float)l);
+            }
+
+            double q = l < .5D
+                    ? l * (1D + s)
+                    : (l + s) - (l * s);
+            double p = (2D * l) - q;
+
+            double hk = h / 360D;
+            double[] T = new double[3];
+            T[0] = hk + (1D / 3D); // Tr
+            T[1] = hk; // Tb
+            T[2] = hk - (1D / 3D); // Tg
+
+            for (int i = 0; i < 3; i++) {
+                if (T[i] < 0D)
+                    T[i] += 1D;
+                if (T[i] > 1D)
+                    T[i] -= 1D;
+
+                if ((T[i] * 6D) < 1D)
+                    T[i] = p + ((q - p) * 6D * T[i]);
+                else if ((T[i] * 2D) < 1)
+                    T[i] = q;
+                else if ((T[i] * 3D) < 2)
+                    T[i] = p + ((q - p) * ((2D / 3D) - T[i]) * 6D);
+                else
+                    T[i] = p;
+            }
+
+            return FromArgb((float)a, (float)T[0], (float)T[1], (float)T[2]);
+        }
 
         #region Custom Colors Lists
         public static Vector4 BerryColor(Random Rng)

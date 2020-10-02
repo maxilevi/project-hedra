@@ -14,7 +14,7 @@ namespace Hedra.Engine.Rendering
     public abstract class AnimatedUpdatableModel : UpdatableModel<AnimatedModel>
     {
         protected abstract string ModelPath { get; set; }
-        protected bool UsesBodyParts { get; set; }
+        public bool UsesBodyParts { get; set; }
         
         protected AnimatedUpdatableModel(IEntity Parent) : base(Parent)
         {

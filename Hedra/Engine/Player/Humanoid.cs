@@ -166,7 +166,7 @@ namespace Hedra.Engine.Player
         {
             _consecutiveHitsTimer = new Timer(3f);
             Class = new WarriorDesign();
-            Customization = CustomizationData.FromClass(_class);
+            Customization = CustomizationData.FromClass(_class, HumanGender.Male);
             MessageDispatcher = new DummyMessageDispatcher();
             HandLamp = new HandLamp(this);
             Movement = new MovementManager(this);
