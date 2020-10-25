@@ -49,6 +49,25 @@
     "Path": "$DataFile$/Assets/Chr/BodyParts/ArcherFeet.dae",
     "Scale": 1.0
   },
+  "FemaleHeadModel": {
+    "Path": "$DataFile$/Assets/Chr/BodyParts/FemaleArcherHead.dae",
+    "Scale": 1.0
+  },
+  "FemaleChestModel": {
+    "Path": "$DataFile$/Assets/Chr/BodyParts/FemaleArcherChest.dae",
+    "Scale": 1.0
+  },
+  "FemaleLegsModel": {
+    "Path": "$DataFile$/Assets/Chr/BodyParts/FemaleArcherLegs.dae",
+    "Scale": 1.0
+  },
+  "FemaleFeetModel": {
+    "Path": "$DataFile$/Assets/Chr/BodyParts/FemaleArcherFeet.dae",
+    "Scale": 1.0
+  },
   "DefaultSkinColor": "#FFBFA1",
-  "DefaultFirstHairColor": "#4E3616"
+  "DefaultFirstHairColor": "#4E3616",
+  "FemaleDefaultSkinColor": "#DCB48C",
+  "FemaleDefaultFirstHairColor": "#844222",
+  "FemaleDefaultSecondHairColor": "#FFFFFF"
 }
