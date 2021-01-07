@@ -34,6 +34,7 @@ namespace Hedra.Engine.Player
         IPlayerInventory Inventory { get; }
         IToolbar Toolbar { get; }
         IAbilityTree AbilityTree { get; }
+        EquipmentHandler Equipment { get; }
         RealmHandler Realms { get; }
         CompanionHandler Companion { get; }
         Chat Chat { get; }

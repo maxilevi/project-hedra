@@ -16,6 +16,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
         private AnimatedModel _oldModel;
         private AnimatedModel _newModel;
         private string[] _oldRestrictions;
+        private bool _oldUpdateDefaultModels;
 
         protected sealed override void DoEnable()
         {
@@ -36,15 +37,17 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
             _newModel = AnimationModelLoader.LoadEntity(template.Path);
             _newModel.Scale = Vector3.One * template.Scale;
             ApplyVisuals(_newModel, template.Path);
+            _oldUpdateDefaultModels = User.Equipment.ShouldUpdateDefaultModels;
             _oldModel = SwitchModel(_newModel);
             _oldModel.Enabled = false;
+            User.Equipment.ShouldUpdateDefaultModels = false;
             if (RestrictWeapons)
             {
+                _oldRestrictions = User.Inventory.GetRestrictions(PlayerInventory.WeaponHolder);
                 var oldWeapon = User.Inventory.MainWeapon;
-                User.Inventory.AddRestriction(PlayerInventory.WeaponHolder, EquipmentRestriction);
+                User.Inventory.SetRestrictions(PlayerInventory.WeaponHolder, new []{EquipmentRestriction});
                 User.Inventory.SetItem(PlayerInventory.WeaponHolder, null);
                 if (oldWeapon != null) User.Inventory.AddItem(oldWeapon);
-                _oldRestrictions = User.Inventory.GetRestrictions(PlayerInventory.WeaponHolder);
                 User.SetWeapon(CustomWeapon);
             }
 
@@ -63,6 +66,7 @@ namespace Hedra.Engine.SkillSystem.Mage.Druid
             SwitchModel(_oldModel);
             _newModel.Dispose();
             _newModel = null;
+            User.Equipment.ShouldUpdateDefaultModels = _oldUpdateDefaultModels;
             if (RestrictWeapons)
             {
                 User.Inventory.SetRestrictions(PlayerInventory.WeaponHolder, _oldRestrictions);

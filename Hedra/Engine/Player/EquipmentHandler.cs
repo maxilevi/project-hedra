@@ -18,6 +18,7 @@ namespace Hedra.Engine.Player
         public HelmetPiece Helmet { get; private set; }
         public PantsPiece Pants { get; private set; }
         public BootsPiece Boots { get; private set; }
+        public bool ShouldUpdateDefaultModels { get; set; } = true;
 
         private readonly IHumanoid _owner;
         private readonly CustomizationData _lastCustomization;
@@ -43,8 +44,11 @@ namespace Hedra.Engine.Player
             Helmet?.Update(_owner);
             Pants?.Update(_owner);
             Boots?.Update(_owner);
-            AddDefaultModels();
-            UpdateDefaultModels();
+            if (ShouldUpdateDefaultModels)
+            {
+                AddDefaultModels();
+                UpdateDefaultModels();
+            }
         }
 
         private void AddDefaultModels()

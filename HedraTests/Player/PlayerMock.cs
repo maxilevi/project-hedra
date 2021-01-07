@@ -296,6 +296,7 @@ namespace HedraTests.Player
         public IVehicle Boat { get; }
         public QuestInterface QuestInterface { get; }
         public IAbilityTree AbilityTree { get; set; }
+        public EquipmentHandler Equipment { get; }
         public RealmHandler Realms { get; }
         public CompanionHandler Companion { get; }
         public Chat Chat { get; }

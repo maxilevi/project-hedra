@@ -50,7 +50,7 @@ namespace Hedra.Engine.Player
         public event OnHitLandedEventHandler HitLanded;
         public event OnInteractionEvent Interact;
         public event OnFishing Fishing;
-        private EquipmentHandler Equipment { get; }
+        public EquipmentHandler Equipment { get; }
 
         public ClassDesign Class
         {
