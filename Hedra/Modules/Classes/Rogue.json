@@ -40,6 +40,22 @@
     "Path": "$DataFile$/Assets/Chr/BodyParts/RogueFeet.dae",
     "Scale": 1.0
   },
+  "FemaleHeadModel": {
+    "Path": "$DataFile$/Assets/Chr/BodyParts/FemaleRogueHead.dae",
+    "Scale": 1.0
+  },
+  "FemaleChestModel": {
+    "Path": "$DataFile$/Assets/Chr/BodyParts/FemaleRogueChest.dae",
+    "Scale": 1.0
+  },
+  "FemaleLegsModel": {
+    "Path": "$DataFile$/Assets/Chr/BodyParts/FemaleRogueLegs.dae",
+    "Scale": 1.0
+  },
+  "FemaleFeetModel": {
+    "Path": "$DataFile$/Assets/Chr/BodyParts/FemaleRogueFeet.dae",
+    "Scale": 1.0
+  },
   "DefaultSkinColor": "#FFBFA1",
   "DefaultFirstHairColor": "#59442F"
 }
