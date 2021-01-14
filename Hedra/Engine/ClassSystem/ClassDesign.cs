@@ -47,10 +47,12 @@ namespace Hedra.Engine.ClassSystem
         public virtual HumanoidModelTemplate ModelTemplate => ClassLoader.Instance[Type].Model;
         public virtual Vector4 DefaultSkinColor => Colors.FromHtml(ClassLoader.Instance[Type].DefaultSkinColor);
         public virtual Vector4 DefaultFirstHairColor => Colors.FromHtml(ClassLoader.Instance[Type].DefaultFirstHairColor);
-        public virtual Vector4 DefaultSecondHairColor => Colors.FromHtml(ClassLoader.Instance[Type].DefaultSecondHairColor);
+        public bool HasSecondHairColor => ClassLoader.Instance[Type].DefaultSecondHairColor != null;
+        public virtual Vector4 DefaultSecondHairColor => HasSecondHairColor ? Colors.FromHtml(ClassLoader.Instance[Type].DefaultSecondHairColor) : Vector4.One;
         public virtual Vector4 FemaleDefaultSkinColor => Colors.FromHtml(ClassLoader.Instance[Type].FemaleDefaultSkinColor);
         public virtual Vector4 FemaleDefaultFirstHairColor => Colors.FromHtml(ClassLoader.Instance[Type].FemaleDefaultFirstHairColor);
-        public virtual Vector4 FemaleDefaultSecondHairColor => Colors.FromHtml(ClassLoader.Instance[Type].FemaleDefaultSecondHairColor);
+        public bool HasSecondFemaleHairColor => ClassLoader.Instance[Type].FemaleDefaultSecondHairColor != null;
+        public virtual Vector4 FemaleDefaultSecondHairColor => HasSecondFemaleHairColor ? Colors.FromHtml(ClassLoader.Instance[Type].FemaleDefaultSecondHairColor) : Vector4.One;
         public virtual string Logo => ClassLoader.Instance[Type].Logo;
         public bool IsRanged => ClassLoader.Instance[Type].IsRanged;
         public virtual float BaseSpeed => ClassLoader.Instance[Type].BaseSpeed;    

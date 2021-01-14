@@ -46,6 +46,7 @@ namespace Hedra.Engine.Rendering.UI
         private float _newRot;
         private ClassDesign _classType;
         private CustomizationData _customization;
+        private ColorPicker _secondHairColorPicker;
 
         public CharacterCreatorUI(IPlayer Player) 
         {
@@ -146,13 +147,13 @@ namespace Hedra.Engine.Rendering.UI
             };
             InPanel.AddElement(picker1);
 
-            var picker2 = new ColorPicker(allColors, Translation.Create("second_hair_picker"), new Vector2(.3f, -.2f), Vector2.One * 0.25f, InPanel, columnCount, 13);
-            picker2.ColorPickedEvent += V =>
+            _secondHairColorPicker = new ColorPicker(allColors, Translation.Create("second_hair_picker"), new Vector2(.3f, -.2f), Vector2.One * 0.25f, InPanel, columnCount, 13);
+            _secondHairColorPicker.ColorPickedEvent += V =>
             {
                 _customization.SecondHairColor = V;
                 UpdateModel(null, default);
             };
-            InPanel.AddElement(picker2);
+            InPanel.AddElement(_secondHairColorPicker);
 
             var skinPicker = new ColorPicker(_skinColors, Translation.Create("skin_picker"), new Vector2(-.75f, .35f), Vector2.One * 0.4f, InPanel, 4);
             skinPicker.ColorPickedEvent += V =>
@@ -226,6 +227,10 @@ namespace Hedra.Engine.Rendering.UI
             /* The second time is for setting them */
             _human.UpdateEquipment();
             previousModel.Dispose();
+            if(_customization.Gender == HumanGender.Female && _classType.HasSecondFemaleHairColor || _customization.Gender == HumanGender.Male && _classType.HasSecondHairColor)
+                _secondHairColorPicker?.Enable();
+            else
+                _secondHairColorPicker?.Disable();
         }
 
         private void PanelStateChange(object Sender, PanelState State)
