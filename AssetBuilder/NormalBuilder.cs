@@ -74,7 +74,23 @@ namespace AssetBuilder
                     bw.Write("<end_header>");
                     bw.Write(contents);
                 }
-                File.WriteAllBytes(Output, ZipBytes(ms.ToArray()));
+
+                var data = ZipBytes(ms.ToArray());
+                Console.WriteLine($"Opening file {Output}");
+                using (var fs = new FileStream(Output, FileMode.Create, FileAccess.Write))
+                {
+                    //const int slices = 64;
+                    var size = data.Length / 64;
+                    var offset = 0;
+                    while (offset < data.Length)
+                    {
+                        var actualSize = Math.Min(data.Length - offset, size);
+                        Console.WriteLine($"Wrote {actualSize} at {offset}");
+                        fs.Write(data, offset, actualSize);
+                        offset += actualSize;
+                    }
+                }
+                Console.WriteLine($"Wrote {data.Length} bytes!");
             }
         }
 
