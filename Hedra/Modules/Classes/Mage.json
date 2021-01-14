@@ -46,7 +46,25 @@
     "Path": "$DataFile$/Assets/Chr/BodyParts/MageFeet.dae",
     "Scale": 1.0
   },
+  "FemaleHeadModel": {
+    "Path": "$DataFile$/Assets/Chr/BodyParts/FemaleMageHead.dae",
+    "Scale": 1.0
+  },
+  "FemaleChestModel": {
+    "Path": "$DataFile$/Assets/Chr/BodyParts/FemaleMageChest.dae",
+    "Scale": 1.0
+  },
+  "FemaleLegsModel": {
+    "Path": "$DataFile$/Assets/Chr/BodyParts/FemaleMageLegs.dae",
+    "Scale": 1.0
+  },
+  "FemaleFeetModel": {
+    "Path": "$DataFile$/Assets/Chr/BodyParts/FemaleMageFeet.dae",
+    "Scale": 1.0
+  },
   "DefaultSkinColor": "#FFBFA1",
   "DefaultFirstHairColor": "#8E7B6A",
-  "DefaultSecondHairColor": "#B2ABA7"
+  "DefaultSecondHairColor": "#B2ABA7",
+  "FemaleDefaultSkinColor": "#DEB894",
+  "FemaleDefaultFirstHairColor": "#51372D"
 }

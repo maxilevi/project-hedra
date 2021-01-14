@@ -57,5 +57,7 @@
     "Scale": 1.0
   },
   "DefaultSkinColor": "#FFBFA1",
-  "DefaultFirstHairColor": "#59442F"
+  "DefaultFirstHairColor": "#59442F",
+  "FemaleDefaultSkinColor": "#DEB894",
+  "FemaleDefaultFirstHairColor": "#614621"
 }
