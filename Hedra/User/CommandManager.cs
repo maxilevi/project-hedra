@@ -383,6 +383,10 @@ namespace Hedra.User
                     {
                         Caster.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int) ItemTier.Divine), EquipmentType.Sword)));
                     }
+                    if (Parts[1] == "helmet")
+                    {
+                        Caster.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int) ItemTier.Divine), EquipmentType.Helmet)));
+                    }
                     if (Parts[1] == "axe")
                     {
                         Caster.Inventory.AddItem(ItemPool.Grab(new ItemPoolSettings((ItemTier)Utils.Rng.Next(0, (int)ItemTier.Divine), EquipmentType.Axe)));
