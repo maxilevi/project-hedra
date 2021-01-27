@@ -44,7 +44,7 @@ namespace Hedra.Engine.Loader
     
     public class Hedra : HedraWindow, IHedra
     {
-        public int BuildNumber => 16;
+        public int BuildNumber => 17;
         public string GameVersion => /*"\u03B1 */"1.0";
         public event OnFrameChanged FrameChanged;
         private DebugInfoProvider _debugProvider;

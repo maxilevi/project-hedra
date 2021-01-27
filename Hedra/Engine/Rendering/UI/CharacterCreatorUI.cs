@@ -227,10 +227,6 @@ namespace Hedra.Engine.Rendering.UI
             /* The second time is for setting them */
             _human.UpdateEquipment();
             previousModel.Dispose();
-            if(_customization.Gender == HumanGender.Female && _classType.HasSecondFemaleHairColor || _customization.Gender == HumanGender.Male && _classType.HasSecondHairColor)
-                _secondHairColorPicker?.Enable();
-            else
-                _secondHairColorPicker?.Disable();
         }
 
         private void PanelStateChange(object Sender, PanelState State)
@@ -272,6 +268,11 @@ namespace Hedra.Engine.Rendering.UI
                     _human.Position = new Vector3(_human.Position.X, Physics.HeightAtPosition(_human.Position), _human.Position.Z);
                 }
                 _human.IsKnocked = false;
+                
+                if(_customization.Gender == HumanGender.Female && _classType.HasSecondFemaleHairColor || _customization.Gender == HumanGender.Male && _classType.HasSecondHairColor)
+                    _secondHairColorPicker?.Enable();
+                else
+                    _secondHairColorPicker?.Disable();
             }
         }
 
