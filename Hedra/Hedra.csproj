@@ -9542,6 +9542,10 @@
       <Link>Assets\Items\Boots\UniqueOrientalBoots.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Bows\UniqueChitinBow.ply">
+      <Link>Assets\Items\Bows\UniqueChitinBow.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\ChitinChestplate.dae">
       <Link>Assets\Items\Chestplates\ChitinChestplate.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -9600,6 +9604,14 @@
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Chestplate\UniqueOrientalRobe.dae">
       <Link>Assets\Items\Chestplates\UniqueOrientalRobe.dae</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Claws\RareChitinClaw.ply">
+      <Link>Assets\Items\Claws\RareChitinClaw.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Claws\RareChitinKnuckles.ply">
+      <Link>Assets\Items\Claws\RareChitinKnuckles.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Foods\Bread.ply">
@@ -9832,6 +9844,14 @@
     </Content>
     <Content Include="..\project-hedra-assets\Models\Blend\Potions\StrengthPotion.ply">
       <Link>Assets\Items\Potions\StrengthPotion.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Staves\RareChitinStaff.ply">
+      <Link>Assets\Items\Staves\RareChitinStaff.ply</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\project-hedra-assets\Models\Blend\Swords\RareChitinSword.ply">
+      <Link>Assets\Items\Swords\RareChitinSword.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="..\project-hedra-assets\Objects\BearTrap.ply">
