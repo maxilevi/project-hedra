@@ -1,0 +1,21 @@
+{
+  "Name": "RareChitinStaff",
+  "DisplayName": "Chitin Staff",
+  "EquipmentType": "Staff",
+  "Tier": "Rare",
+  "Description": "Chitin staff.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 6.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.10
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Staves/RareChitinStaff.ply"
+  }
+}

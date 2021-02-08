@@ -1,0 +1,21 @@
+{
+  "Name": "RareChitinClaw",
+  "DisplayName": "Chitin Claw",
+  "EquipmentType": "Claw",
+  "Tier": "Rare",
+  "Description": "Chitin claw.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 5.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 1.0
+    }
+  ],
+  "Model": {
+    "Scale": 1.0,
+    "Path": "$DataFile$/Items/Claws/RareChitinClaw.ply"
+  }
+}

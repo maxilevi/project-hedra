@@ -1,13 +1,13 @@
 {
-  "Name": "RareChitinBow",
-  "DisplayName": "Chitin Bow",
+  "Name": "UniqueChitinBow",
+  "DisplayName": "Unique Chitin Bow",
   "EquipmentType": "Bow",
-  "Tier": "Rare",
+  "Tier": "Unique",
   "Description": "Chitin bow.",
   "Attributes": [
     {
       "Name": "Damage",
-      "Value": 4.0
+      "Value": 5.0
     },
     {
       "Name": "AttackSpeed",
@@ -16,6 +16,6 @@
   ],
   "Model": {
     "Scale": 1.0,
-    "Path": "$DataFile$/Items/Bows/RareChitinBow.ply"
+    "Path": "$DataFile$/Items/Bows/UniqueChitinBow.ply"
   }
 }

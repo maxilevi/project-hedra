@@ -1,0 +1,21 @@
+{
+  "Name": "RareChitinSword",
+  "DisplayName": "Chitin Sword",
+  "EquipmentType": "Sword",
+  "Tier": "Rare",
+  "Description": "Chitin sword.",
+  "Attributes": [
+    {
+      "Name": "Damage",
+      "Value": 7.0
+    },
+    {
+      "Name": "AttackSpeed",
+      "Value": 0.95
+    }
+  ],
+  "Model": {
+    "Scale": 3.5,
+    "Path": "$DataFile$/Items/Swords/RareChitinSword.ply"
+  }
+}
