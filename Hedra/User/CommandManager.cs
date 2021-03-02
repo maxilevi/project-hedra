@@ -593,7 +593,11 @@ namespace Hedra.User
                     World.SpawnChest(Caster.Position + Caster.Orientation * 32, ItemPool.Grab(Parts[1]) );
                     return true;
                 }
-
+                if(Parts[0] == "fire")
+                {
+                    Caster.AddComponent(new BurningComponent(Caster, null, 3, 10));
+                    return true;
+                }
                 if (Parts[0] == "watch")
                 {
                     GameSettings.WatchScriptChanges = !GameSettings.WatchScriptChanges;

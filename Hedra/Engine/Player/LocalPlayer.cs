@@ -421,6 +421,7 @@ namespace Hedra.Engine.Player
             this.Position = newPosition;
             this.IsKnocked = false;
             IsRolling = false;
+            ComponentManager.Clear();
 
             var xpDiff = (int)(XP * .15f);
             var goldDiff = (int)(Gold * .1f);
