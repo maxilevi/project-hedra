@@ -41,6 +41,24 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
             _watch = new Stopwatch();
         }
 
+        private Chunk GetFirstClosest()
+        {
+            _closest.Position = GameManager.Player?.Position ?? Vector3.Zero;
+            Chunk bestChunk = null;
+            var currDist = 10e9;
+            for (var i = 0; i < _queue.Count; ++i)
+            {
+                if (_queue[i] == null) continue;
+                var dist = (_queue[i].Position - _closest.Position).LengthSquared();
+                if (dist < currDist)
+                {
+                    bestChunk = _queue[i];
+                    currDist = dist;
+                }
+            }
+            return bestChunk;
+        }
+
         public void Update()
         {
             lock (_lock)
@@ -53,14 +71,7 @@ namespace Hedra.Engine.Generation.ChunkSystem.Builders
                 }
                 if (_queue.Count > 0)
                 {
-                    _closest.Position = GameManager.Player?.Position ?? Vector3.Zero;
-                    if ( (_lastSortedPosition - _closest.Position).LengthSquared() > 8*8 || _lastCount != _queue.Count)
-                    {
-                        _queue.Sort(_closest);
-                        _lastSortedPosition = _closest.Position;
-                        _lastCount = _queue.Count;
-                    }
-                    var chunk = _queue[0];
+                    var chunk = GetFirstClosest();
                     if (chunk?.Disposed ?? false)
                     {
                         _queue.Remove(chunk);
