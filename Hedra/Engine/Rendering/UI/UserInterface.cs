@@ -35,6 +35,7 @@ namespace Hedra.Engine.Rendering.UI
         public static Vector2 BlackBandSize = new Vector2(1f, 0.054f);
         private readonly IPlayer _player;
         public Panel Menu { get; }
+        private readonly HelpUI _helpPanel;
         private readonly OptionsUI _optionsMenu;
         public GameUI GamePanel { get; }
         public CharacterSelectorUI CharacterSelector { get; }
@@ -55,6 +56,7 @@ namespace Hedra.Engine.Rendering.UI
             CharacterSelector = new CharacterSelectorUI();
             ConnectPanel = new NetworkUI();
             CharacterCreator = new CharacterCreatorUI(Player);
+            _helpPanel = new HelpUI();
 
             var bandPosition = new Vector2(0, -.8f);
             const int fontSize = 16;
@@ -165,6 +167,7 @@ namespace Hedra.Engine.Rendering.UI
             Menu.AddElement(options);
             Menu.AddElement(disconnect);
             Menu.AddElement(inviteFriends);
+            Menu.AddElement(_helpPanel);
             
             Menu.OnPanelStateChange += delegate(object Sender, PanelState E)
             {
@@ -213,6 +216,10 @@ namespace Hedra.Engine.Rendering.UI
             }
             if(GameManager.IsLoading || GameManager.InMenu || GameSettings.ContinousMove) return;
 
+            if (ShowHelp)
+                _helpPanel.Enable();
+            else
+                _helpPanel.Disable();
             Menu.Enable();
             _optionsMenu.Disable();
             CharacterSelector.ReloadSaveFile();
@@ -221,6 +228,7 @@ namespace Hedra.Engine.Rendering.UI
             GamePanel.Disable();
             CharacterCreator.Disable();
             ConnectPanel.Disable();
+            _helpPanel.Disable();
             if(!Network.Instance.IsAlive)
             {
                 GameSettings.Paused = true;
@@ -250,6 +258,22 @@ namespace Hedra.Engine.Rendering.UI
             ConnectPanel.Disable();
             Cursor.Show = false;
             Cursor.Center();
+        }
+
+        private bool _showHelp;
+        public bool ShowHelp
+        {
+            get => _showHelp;
+            set
+            {
+                if (value && Hide)
+                    return;
+                _showHelp = value;
+                if (_showHelp)
+                    _helpPanel.Enable();
+                else
+                    _helpPanel.Disable();
+            }
         }
         
         private List<bool> _wasEnabled = new List<bool>();

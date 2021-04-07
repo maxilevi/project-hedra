@@ -32,30 +32,32 @@ namespace Hedra.Localization
             {"crafting_key", Key.C},
             {"quest_log_key", Key.T},
             {"open_chat_key", Key.Enter},
-            {"sprint_key", Key.ControlLeft}
+            {"sprint_key", Key.ControlLeft},
+            {"help_key", Key.F4},
         };
 
         private static Dictionary<string, Key> Mappings = DefaultMappings;
         
-        public static Key InventoryOpen => Mappings["inventory_open_key"];
-        public static Key Interact => Mappings["interact_key"];
-        public static Key Forward => Mappings["forward_key"];
-        public static Key Leftward => Mappings["leftward_key"];
-        public static Key Backward => Mappings["backward_key"];
-        public static Key Rightward => Mappings["rightward_key"];
-        public static Key Climb => Mappings["climb_key"];
-        public static Key Jump => Mappings["jump_key"];
-        public static Key Descend => Mappings["descend_key"];
-        public static Key Handlamp => Mappings["handlamp_key"];
-        public static Key Respawn = Mappings["respawn_key"];
-        public static Key Skilltree => Mappings["skilltree_key"];
-        public static Key Map => Mappings["map_key"];
-        public static Key Eat => Mappings["eat_key"];
-        public static Key SpecialItem => Mappings["special_item_key"];
-        public static Key Crafting => Mappings["crafting_key"];
-        public static Key QuestLog => Mappings["quest_log_key"];
-        public static Key OpenChat => Mappings["open_chat_key"];
-        public static Key Sprint => Mappings["sprint_key"];
+        public static Key InventoryOpen => (Key) Mappings["inventory_open_key"];
+        public static Key Interact => (Key) Mappings["interact_key"];
+        public static Key Forward => (Key) Mappings["forward_key"];
+        public static Key Leftward => (Key) Mappings["leftward_key"];
+        public static Key Backward => (Key) Mappings["backward_key"];
+        public static Key Rightward => (Key) Mappings["rightward_key"];
+        public static Key Climb => (Key) Mappings["climb_key"];
+        public static Key Jump => (Key) Mappings["jump_key"];
+        public static Key Descend => (Key) Mappings["descend_key"];
+        public static Key Handlamp => (Key) Mappings["handlamp_key"];
+        public static Key Respawn = (Key) Mappings["respawn_key"];
+        public static Key Skilltree => (Key) Mappings["skilltree_key"];
+        public static Key Map => (Key) Mappings["map_key"];
+        public static Key Eat => (Key) Mappings["eat_key"];
+        public static Key SpecialItem => (Key) Mappings["special_item_key"];
+        public static Key Crafting => (Key) Mappings["crafting_key"];
+        public static Key QuestLog => (Key) Mappings["quest_log_key"];
+        public static Key OpenChat => (Key) Mappings["open_chat_key"];
+        public static Key Sprint => (Key) Mappings["sprint_key"];
+        public static Key Help => (Key) Mappings["help_key"];
 
         public static void UpdateMapping(string Key, Key New)
         {
@@ -98,5 +100,10 @@ namespace Hedra.Localization
         }
 
         private static string SavePath => $"{GameLoader.AppData}/controls.cfg";
+    }
+    
+    public enum MouseKey
+    {
+        Middle
     }
 }

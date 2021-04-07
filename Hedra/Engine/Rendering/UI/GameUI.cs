@@ -93,6 +93,10 @@ namespace Hedra.Engine.Rendering.UI
             
             _compass = new BackgroundTexture(Graphics2D.LoadFromAssets("Assets/UI/Compass.png"), Vector2.One - new Vector2(0.0366f, 0.065f) * 2f, new Vector2(0.0366f, 0.065f));
 
+            var helpTranslation = Translation.Create("help_label");
+            helpTranslation.Concat(() => $" - {Controls.Help}");
+            var helpMsg = new GUIText(helpTranslation, new Vector2(0, .9f), Color.FromArgb(200, 255, 255, 255), FontCache.GetBold(14));
+            
             var skillTreeTranslation = Translation.Create("skill_tree_label");
             skillTreeTranslation.Concat(() => $" - {Controls.Skilltree}");
             var skillTreeMsg = new GUIText(skillTreeTranslation, new Vector2(-.85f, -.9f), Color.FromArgb(200, 255, 255, 255), FontCache.GetBold(14));
@@ -103,10 +107,12 @@ namespace Hedra.Engine.Rendering.UI
             
             Controls.OnControlsChanged += () =>
             {
+                helpTranslation.UpdateTranslation();
                 questLogTranslation.UpdateTranslation();
                 skillTreeTranslation.UpdateTranslation();
             };
             
+            AddElement(helpMsg);
             AddElement(_playerProfile);
             AddElement(questLogMsg);
             AddElement(skillTreeMsg);

@@ -458,6 +458,7 @@
     <Compile Include="Engine\Rendering\ModelLoader.cs" />
     <Compile Include="Engine\Rendering\NativeVertexData.cs" />
     <Compile Include="Engine\Rendering\UI\CompanionProfileUIElement.cs" />
+    <Compile Include="Engine\Rendering\UI\HelpUI.cs" />
     <Compile Include="Engine\Rendering\UI\MenuBackground.cs" />
     <Compile Include="Engine\Rendering\UI\ProfileUIElement.cs" />
     <Compile Include="Engine\Scenes\SceneExtensions.cs" />
@@ -7863,9 +7864,6 @@
     <None Include="Assets\UI\Compass.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\UI\Help.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Assets\UI\MapCursor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -14732,6 +14730,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\UI\Dialog.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\UI\HelpTexture.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Assets\UI\InventoryBackground.png">

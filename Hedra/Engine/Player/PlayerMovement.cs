@@ -236,12 +236,16 @@ namespace Hedra.Engine.Player
                     }
                 }
             });
+            this.RegisterKey(Controls.Help, delegate
+            {
+                _player.UI.ShowHelp = !_player.UI.ShowHelp;             
+            });
             
             this.RegisterKey(Key.F3, delegate
             {
                 GameSettings.DebugView = !GameSettings.DebugView && GameSettings.DebugMode;             
             });
-            this.RegisterKey(Key.F4, delegate
+            this.RegisterKey(Key.F12, delegate
             {
                 GameSettings.DebugPhysics = !GameSettings.DebugPhysics && GameSettings.DebugMode;             
             });

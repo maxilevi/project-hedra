@@ -25,6 +25,7 @@ name_long = Name cannot be more than {0} characters long
 max_characters = You cannot have more than {0} characters
 hit_label = HIT
 hits_label = HITS
+help_label = HELP
 skill_tree_label = SKILL TREE
 quest_log_label = JOURNAL
 map_label = MAP
@@ -658,6 +659,8 @@ eat_key = Eat
 special_item_key = Special Item
 crafting_key = Craft
 quest_log_key = Quest Log
+dodge_key = Dodge
+help_key = Help
 reset_to_default = RESET TO DEFAULT
 key_already_used = KEY '{0}' IS ALREADY BOUND TO AN ACTION
 # Mob Translations
