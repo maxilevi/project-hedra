@@ -238,7 +238,7 @@ namespace Hedra.Engine.Player
             });
             this.RegisterKey(Controls.Help, delegate
             {
-                _player.UI.ShowHelp = !_player.UI.ShowHelp;             
+                _player.UI.ShowHelp = !_player.UI.ShowHelp && !_player.UI.InMenu;             
             });
             
             this.RegisterKey(Key.F3, delegate
