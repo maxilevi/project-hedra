@@ -167,8 +167,7 @@ namespace Hedra.Engine.Rendering.UI
             Menu.AddElement(options);
             Menu.AddElement(disconnect);
             Menu.AddElement(inviteFriends);
-            Menu.AddElement(_helpPanel);
-            
+
             Menu.OnPanelStateChange += delegate(object Sender, PanelState E)
             {
                 if (E != PanelState.Enabled) return;

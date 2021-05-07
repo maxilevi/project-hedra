@@ -40,6 +40,7 @@ using Hedra.Engine.StructureSystem.VillageSystem;
 using Hedra.EntitySystem;
 using Hedra.Numerics;
 using Hedra.Sound;
+using Microsoft.Scripting.Utils;
 using Silk.NET.Windowing.Common;
 using TaskScheduler = Hedra.Core.TaskScheduler;
 
@@ -333,6 +334,14 @@ namespace Hedra.User
                     if (Parts[1] == "coin")
                     {
                         World.DropItem(ItemPool.Grab(ItemType.Gold), Caster.Position + Caster.Orientation * 16f);
+                        return true;
+                    }
+                    
+                    if (Parts[1] == "all")
+                    {
+                        var a = ItemPool.Matching(I => I.IsArmor);
+                        for (int i = 0; i < a.Length; ++i)
+                            World.DropItem(a[i], Caster.Position + Caster.Orientation * Utils.Rng.Next(16, 64));
                         return true;
                     }
                 }

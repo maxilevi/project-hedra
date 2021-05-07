@@ -14882,9 +14882,7 @@
     <Content Include="Modules\Items\Chestplates\LegendaryChitinChestplate.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Modules\Items\Chestplates\RareArcherRobe.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Modules\Items\Chestplates\RareArcherRobe.json" />
     <Content Include="Modules\Items\Chestplates\LegendaryNecromancerChestplate.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
