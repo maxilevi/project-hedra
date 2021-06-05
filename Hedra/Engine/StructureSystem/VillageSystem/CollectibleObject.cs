@@ -29,7 +29,7 @@ namespace Hedra.Engine.StructureSystem.VillageSystem
             });
         }
 
-        public override string Message => Translations.Get("to_collect");
+        public override string Message => Translations.Get("to_collect", _drop.DisplayName);
 
         public override int InteractDistance => 12;
         
