@@ -2,7 +2,7 @@ import Core
 import TextDisplay
 import clr
 from System.Numerics import Vector2
-from Silk.NET.Input.Common import Key
+from Silk.NET.Input import Key
 from Hedra.Core import Time
 from Hedra.User import WordFilter, CommandManager
 from Hedra.Game import GameSettings

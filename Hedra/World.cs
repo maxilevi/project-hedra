@@ -29,6 +29,7 @@ using Hedra.EntitySystem;
 using Hedra.Items;
 using System.Numerics;
 using Hedra.Engine.SkillSystem;
+using Hedra.Framework;
 
 namespace Hedra
 {
@@ -73,6 +74,11 @@ namespace Hedra
             SearcheableChunksReference = Provider.SearcheableChunks;
         }
 
+        public static void Serialize(string Folder)
+        {
+            //Provider.Serialize(string)
+        }
+        
         public static float GetNoise(float X, float Y)
         {
             return Provider.GetNoise(X, Y);

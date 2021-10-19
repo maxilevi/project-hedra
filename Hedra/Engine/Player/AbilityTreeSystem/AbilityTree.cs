@@ -25,7 +25,7 @@ using Hedra.Rendering;
 using Hedra.Sound;
 using System.Numerics;
 using Hedra.Numerics;
-using Silk.NET.Input.Common;
+using Silk.NET.Input;
 using Cursor = Hedra.Input.Cursor;
 
 namespace Hedra.Engine.Player.AbilityTreeSystem

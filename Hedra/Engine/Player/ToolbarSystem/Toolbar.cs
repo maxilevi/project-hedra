@@ -22,7 +22,7 @@ using Hedra.Engine.Windowing;
 using Hedra.Game;
 using Hedra.WeaponSystem;
 using System.Numerics;
-using MouseButton = Silk.NET.Input.Common.MouseButton;
+using MouseButton = Silk.NET.Input.MouseButton;
 using TaskScheduler = Hedra.Core.TaskScheduler;
 
 namespace Hedra.Engine.Player.ToolbarSystem

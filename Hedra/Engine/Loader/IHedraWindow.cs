@@ -1,4 +1,4 @@
-using Silk.NET.Windowing.Common;
+using Silk.NET.Windowing;
 using Image = Silk.NET.GLFW.Image;
 
 
@@ -8,7 +8,7 @@ namespace Hedra.Engine.Loader
     {
         double TargetFramerate { get; set; }
         bool IsExiting { get; }
-        VSyncMode VSync { get; set; }
+        bool VSync { get; set; }
         WindowState WindowState { get; set; }
         bool Exists { get; }
         string Title { get; set; }

@@ -9,7 +9,7 @@ using System;
 using Hedra.BiomeSystem;
 using Hedra.Core;
 using System.Numerics;
-using Silk.NET.Core.Math;
+using Hedra.Numerics;
 
 namespace Hedra.Engine.Generation
 {
@@ -86,7 +86,7 @@ namespace Hedra.Engine.Generation
         }
 
         
-        public Half Density => new Half((((_bits >> 11) & 1) * 2 - 1) * ((_bits & 0x7FF) * 0.01f));
+        public Half Density => (Half) ((((_bits >> 11) & 1) * 2 - 1) * ((_bits & 0x7FF) * 0.01f));
         public BlockType Type => (BlockType) (_bits >> 12);
     }
 }

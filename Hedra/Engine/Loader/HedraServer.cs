@@ -18,7 +18,7 @@ using Hedra.Engine.Windowing;
 using Hedra.Game;
 using Hedra.Sound;
 using System.Numerics;
-using Silk.NET.Windowing.Common;
+using Silk.NET.Windowing;
 using Image = Silk.NET.GLFW.Image;
 
 
@@ -67,7 +67,7 @@ namespace Hedra.Engine.Loader
         public bool Exists => true;
         
         public double TargetFramerate { get; set; }
-        public VSyncMode VSync { get; set; }
+        public bool VSync { get; set; }
         public WindowState WindowState { get; set; }
         public int Height { get; set; }
         public string Title { get; set; }
@@ -82,6 +82,8 @@ namespace Hedra.Engine.Loader
         public void Setup()
         {
         }
+
+        public IWindow Window => null;
 
         public Vector2 MousePosition { get; }
         public void SetIcon(Image Icon)

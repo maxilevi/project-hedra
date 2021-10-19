@@ -23,7 +23,7 @@ using System.Runtime.InteropServices;
 using BulletSharp;
 using Hedra.Engine.Scripting;
 using Silk.NET.GLFW;
-using Silk.NET.Windowing.Common;
+using Silk.NET.Windowing;
 using Monitor = Silk.NET.Windowing.Monitor;
 using TaskScheduler = Hedra.Core.TaskScheduler;
 using Vector3 = BulletSharp.Math.Vector3;
@@ -122,13 +122,13 @@ namespace Hedra.Engine
             }
 
             resolutions = resolutions.Distinct().ToList();
-            var mainMonitor = Monitor.GetMainMonitor();
+            var mainMonitor = Monitor.GetMainMonitor(null);
             if (GameSettings.ResolutionIndex == -1)
             {
                 if (mainMonitor.VideoMode.Resolution.HasValue)
                 {
                     var res = mainMonitor.VideoMode.Resolution.Value;
-                    GameSettings.ResolutionIndex = resolutions.FindIndex(R => res.Width == (int)R.X && res.Height == (int)R.Y);
+                    GameSettings.ResolutionIndex = resolutions.FindIndex(R => res.X == (int)R.X && res.Y == (int)R.Y);
                 }
                 else
                     GameSettings.ResolutionIndex = resolutions.Count - 1;
@@ -144,9 +144,9 @@ namespace Hedra.Engine
             InitializeResolutions();
             GameSettings.LoadSetupSettings(GameSettings.SettingsPath);
 
-            var maxMonitor = Monitor.GetMainMonitor();
+            var maxMonitor = Monitor.GetMainMonitor(null);
             var monitorSize = (maxMonitor.VideoMode.Resolution ?? maxMonitor.Bounds.Size);
-            var maxSize = new Vector2(monitorSize.Width, monitorSize.Height);
+            var maxSize = new Vector2(monitorSize.X, monitorSize.Y);
             var currentSize = GameSettings.AvailableResolutions[GameSettings.ResolutionIndex];
             
             GameSettings.DeviceWidth = (int)maxSize.X;

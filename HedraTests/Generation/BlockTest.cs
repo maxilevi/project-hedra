@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Hedra;
 using Hedra.Core;
@@ -5,7 +6,6 @@ using Hedra.Engine.Generation;
 using NUnit.Framework;
 using System.Numerics;
 using Hedra.Numerics;
-using Silk.NET.Core.Math;
 
 namespace HedraTests.Generation
 {
@@ -37,7 +37,7 @@ namespace HedraTests.Generation
             for (var i = 0; i < 5; i++)
             {
                 var type = (BlockType) Utils.Rng.Next(0, (int) BlockType.MaxNums);
-                var density = new Half(Utils.Rng.NextFloat() * 20f - 10f);
+                var density = (Half) (Utils.Rng.NextFloat() * 20f - 10f);
                 yield return new TestTuple(
                     new Block(type, density),
                     type,

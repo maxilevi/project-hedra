@@ -20,7 +20,7 @@ using Hedra.Localization;
 using Hedra.Sound;
 using System.Numerics;
 using Hedra.Numerics;
-using Silk.NET.Windowing.Common;
+using Silk.NET.Windowing;
 
 
 namespace Hedra.Game
@@ -179,8 +179,8 @@ namespace Hedra.Game
         [WindowSetting]
         public static bool VSync
         {
-            get => (int) Program.GameWindow.VSync == 2;
-            set => Program.GameWindow.VSync = (VSyncMode) (value ? 2 : 0);
+            get => Program.GameWindow.VSync;
+            set => Program.GameWindow.VSync = value;
         }
 
         public static void Save(string Path)

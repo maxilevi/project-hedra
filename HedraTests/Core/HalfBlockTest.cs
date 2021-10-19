@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Hedra;
@@ -7,7 +8,6 @@ using Hedra.Engine.Generation;
 using NUnit.Framework;
 using System.Numerics;
 using Hedra.Numerics;
-using Silk.NET.Core.Math;
 
 namespace HedraTests.Core
 {
@@ -26,7 +26,7 @@ namespace HedraTests.Core
         [TestCaseSource(nameof(RandomBlocks))]
         public void TestDensity(TestTuple Tuple)
         {
-            Assert.AreEqual(Tuple.ExpectedDensity, Tuple.Block.Density, 0.02);
+            Assert.AreEqual((double)Tuple.ExpectedDensity, Tuple.Block.Density, 0.02);
         }
         
         [TestCaseSource(nameof(RandomBlocks))]
@@ -40,7 +40,7 @@ namespace HedraTests.Core
             for (var i = 0; i < 5; i++)
             {
                 var type = (BlockType) Utils.Rng.Next(0, (int) BlockType.MaxNums);
-                var density = new Half(Utils.Rng.NextFloat() * 20f - 10f);
+                var density = (Half) (Utils.Rng.NextFloat() * 20f - 10f);
                 yield return new TestTuple(
                     new HalfBlock(type, density),
                     type,

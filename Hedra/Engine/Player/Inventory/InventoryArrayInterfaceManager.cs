@@ -16,7 +16,7 @@ using Hedra.Rendering;
 using Hedra.Sound;
 using System.Numerics;
 using Hedra.Numerics;
-using MouseButton = Silk.NET.Input.Common.MouseButton;
+using MouseButton = Silk.NET.Input.MouseButton;
 using Button = Hedra.Engine.Rendering.UI.Button;
 
 

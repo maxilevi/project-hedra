@@ -1,6 +1,6 @@
 import clr
 from Core import get_player
-from Silk.NET.Input.Common import Key
+from Silk.NET.Input import Key
 from System.Numerics import Vector4, Vector2
 from Hedra.Core import Timer
 from Hedra.Rendering import Graphics2D

@@ -6,7 +6,7 @@ using Hedra.Localization;
 using Hedra.Sound;
 using System.Numerics;
 
-using Silk.NET.Input.Common;
+using Silk.NET.Input;
 
 
 namespace Hedra.Engine.WorldBuilding

@@ -23,7 +23,7 @@ using Hedra.Rendering.UI;
 using Hedra.Sound;
 using System.Numerics;
 using Hedra.Numerics;
-using Silk.NET.Input.Common;
+using Silk.NET.Input;
 
 
 namespace Hedra.Engine.Rendering.UI

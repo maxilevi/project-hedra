@@ -155,10 +155,10 @@ namespace Hedra.Engine.SkillSystem
             Renderer.Enable(EnableCap.DepthTest);
             Renderer.Enable(EnableCap.CullFace);
             
-            Renderer.ActiveTexture(TextureUnit.Texture0);
-            Renderer.BindTexture(TextureTarget.Texture2D, 0);
-            Renderer.ActiveTexture(TextureUnit.Texture1);
-            Renderer.BindTexture(TextureTarget.Texture2D, 0);
+            //Renderer.ActiveTexture(TextureUnit.Texture0);
+            //Renderer.BindTexture(TextureTarget.Texture2D, 0);
+            //Renderer.ActiveTexture(TextureUnit.Texture1);
+            //Renderer.BindTexture(TextureTarget.Texture2D, 0);
             
             _cooldownSecondsText.Draw();
         }

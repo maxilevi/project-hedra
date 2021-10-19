@@ -23,7 +23,7 @@ using Hedra.Localization;
 using System.Numerics;
 using Hedra.Engine.ItemSystem;
 using Hedra.Numerics;
-using Silk.NET.Input.Common;
+using Silk.NET.Input;
 
 
 namespace Hedra.Engine.Player.Inventory

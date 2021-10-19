@@ -44,7 +44,7 @@ namespace Hedra.Engine.Scripting
             _engine.SetSearchPaths(searchPaths);
             _engine.Runtime.LoadAssembly(Assembly.Load(typeof(Interpreter).Assembly.FullName));
             _engine.Runtime.LoadAssembly(Assembly.Load(typeof(System.Numerics.Vector4).Assembly.FullName));
-            _engine.Runtime.LoadAssembly(Assembly.Load(typeof(Silk.NET.Input.Common.Key).Assembly.FullName));
+            _engine.Runtime.LoadAssembly(Assembly.Load(typeof(Silk.NET.Input.Key).Assembly.FullName));
             _engine.Runtime.LoadAssembly(Assembly.Load(typeof(PythonHeapq).Assembly.FullName));
             _runner = new CompiledRunner(_engine);
             Log.WriteLine($"Python engine was successfully loaded in {watch.ElapsedMilliseconds} MS");

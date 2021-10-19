@@ -14,6 +14,7 @@ using System.Drawing;
 using System.Numerics;
 using System.Collections;
 using System.Linq;
+using System.Threading.Tasks;
 using Hedra.Components;
 using Hedra.Core;
 using Hedra.Engine.ClassSystem;
@@ -30,7 +31,7 @@ using Hedra.Game;
 using Hedra.Localization;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
-
+using TaskScheduler = Hedra.Core.TaskScheduler;
 
 
 namespace Hedra.Engine.Rendering.UI
@@ -216,9 +217,10 @@ namespace Hedra.Engine.Rendering.UI
         private void UpdateModel(object Sender, MouseButtonEventArgs E)
         {
             var previousModel = _human.Model;
+            var model = new HumanoidModel(_human, _classType.ModelTemplate);
             _human.Class = _classType;
             _human.Customization = _customization;
-            _human.Model = new HumanoidModel(_human, _classType.ModelTemplate);
+            _human.Model = model;
             _human.Model.SetValues(previousModel);
             _human.SetHelmet(_classType.StartingItems.FirstOrDefault(P => P.Value.IsHelmet).Value);
             _human.SetWeapon(_classType.StartingItems.First(P => P.Value.IsWeapon).Value.Weapon);

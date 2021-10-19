@@ -10,7 +10,7 @@ using System.Linq;
 using Hedra.Engine.Windowing;
 using System.Numerics;
 using Silk.NET.GLFW;
-using Silk.NET.Input.Common;
+using Silk.NET.Input;
 
 namespace Hedra.Engine.Events
 {

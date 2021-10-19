@@ -15,7 +15,7 @@ namespace Hedra.Engine.WorldBuilding
         {
             this.Position = Position;
             var region = World.BiomePool.GetRegion(Position.ToVector3());
-            var height = region.Generation.GetAccuarateMaxHeight(Position.X, Position.Y);
+            var height = region.Generation.GetAccurateMaxHeight(Position.X, Position.Y);
             this.MaxHeight = Math.Max(height, BiomePool.SeaLevel + 1);
         }
 

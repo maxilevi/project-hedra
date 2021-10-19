@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Hedra.Engine.Events;
 using Hedra.Engine.Game;
 using Hedra.Game;
-using Silk.NET.Input.Common;
+using Silk.NET.Input;
 
 
 namespace Hedra.Engine.Rendering.UI

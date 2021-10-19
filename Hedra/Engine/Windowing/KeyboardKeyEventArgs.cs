@@ -1,6 +1,6 @@
 using System.Windows.Forms;
 using Silk.NET.GLFW;
-using Silk.NET.Input.Common;
+using Silk.NET.Input;
 
 namespace Hedra.Engine.Windowing
 {

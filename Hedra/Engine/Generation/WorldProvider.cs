@@ -250,6 +250,33 @@ namespace Hedra.Engine.Generation
 
             if (GameSettings.Wireframe) Renderer.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
         }
+
+        public void SaveChunk()
+        {
+            SaveRegion();
+        }
+
+        private void SaveRegion()
+        {
+            
+        }
+
+        public void Save(string Folder)
+        {
+            const int region = 12;
+            var regionSize = Math.Pow(2, 12);
+            var regions = new Dictionary<Vector2, List<Chunk>>();
+            var chunks = Chunks;
+            foreach (var chunk in chunks)
+            {
+                var src = new Vector2((chunk.OffsetX >> region) << region, (chunk.OffsetZ >> region) << region);
+                if (!regions.ContainsKey(src))
+                {
+                    regions[src] = new List<Chunk>();
+                }
+                regions[src].Add(chunk);
+            }
+        }
         
         public float GetNoise(float X, float Y)
         {

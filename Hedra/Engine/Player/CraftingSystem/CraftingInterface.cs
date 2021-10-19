@@ -7,7 +7,7 @@ using Hedra.Localization;
 using Hedra.Sound;
 using System.Numerics;
 using Hedra.Numerics;
-using Silk.NET.Input.Common;
+using Silk.NET.Input;
 
 
 namespace Hedra.Engine.Player.CraftingSystem

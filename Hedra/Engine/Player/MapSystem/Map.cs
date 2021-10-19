@@ -33,8 +33,8 @@ using Hedra.Structures;
 using System.Numerics;
 using Hedra.Engine.StructureSystem.Overworld;
 using Hedra.Numerics;
-using Silk.NET.Input.Common;
-using MouseButton = Silk.NET.Input.Common.MouseButton;
+using Silk.NET.Input;
+using MouseButton = Silk.NET.Input.MouseButton;
 
 
 namespace Hedra.Engine.Player.MapSystem

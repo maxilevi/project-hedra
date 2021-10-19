@@ -1,6 +1,6 @@
 using System.Numerics;
 using Silk.NET.GLFW;
-using MouseButton = Silk.NET.Input.Common.MouseButton;
+using MouseButton = Silk.NET.Input.MouseButton;
 
 namespace Hedra.Engine.Windowing
 {

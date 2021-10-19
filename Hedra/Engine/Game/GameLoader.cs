@@ -12,7 +12,7 @@ using Hedra.Engine.Sound;
 using Hedra.Sound;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
-using Silk.NET.OpenGL;
+using SilkGL = Silk.NET.OpenGL;
 
 namespace Hedra.Engine.Game
 {
@@ -63,9 +63,9 @@ namespace Hedra.Engine.Game
             Renderer.DebugMessageCallback(DebugCallback, IntPtr.Zero);
         }
         
-        private static void DebugCallback(GLEnum Source, GLEnum Type, int Id, GLEnum Severity, int Length, IntPtr Message, IntPtr Param)
+        private static void DebugCallback(SilkGL.GLEnum Source, SilkGL.GLEnum Type, int Id, SilkGL.GLEnum Severity, int Length, IntPtr Message, IntPtr Param)
         {
-            if(Type != GLEnum.DebugTypeError) return;
+            if(Type != SilkGL.GLEnum.DebugTypeError) return;
             Log.WriteLine(Source);
             Log.WriteLine(Marshal.PtrToStringAnsi(Message));
             Log.WriteLine(Severity);

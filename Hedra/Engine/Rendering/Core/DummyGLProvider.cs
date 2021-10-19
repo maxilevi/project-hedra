@@ -1,7 +1,8 @@
 using System;
 using System.Numerics;
 using Hedra.Engine.Windowing;
-using Silk.NET.OpenGL;
+using GLDebugProc = Silk.NET.OpenGL.DebugProc;
+using GLDrawBuffersEnum = Silk.NET.OpenGL.GLEnum;
 
 namespace Hedra.Engine.Rendering.Core
 {
@@ -109,7 +110,7 @@ namespace Hedra.Engine.Rendering.Core
         {
         }
 
-        public virtual void DebugMessageCallback(DebugProc Proc, IntPtr Ptr)
+        public virtual void DebugMessageCallback(GLDebugProc Proc, IntPtr Ptr)
         {
         }
 
@@ -169,7 +170,7 @@ namespace Hedra.Engine.Rendering.Core
         {
         }
 
-        public virtual void DrawBuffers(int N, GLEnum[] Enums)
+        public virtual void DrawBuffers(int N, GLDrawBuffersEnum[] Enums)
         {
         }
 

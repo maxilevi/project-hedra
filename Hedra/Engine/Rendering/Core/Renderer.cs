@@ -11,8 +11,9 @@ using System;
 using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
-using Silk.NET.OpenGL;
+using GLDebugProc = Silk.NET.OpenGL.DebugProc;
 using GLDrawBuffersEnum = Silk.NET.OpenGL.GLEnum;
+
 
 namespace Hedra.Engine.Rendering.Core
 {
@@ -274,7 +275,7 @@ namespace Hedra.Engine.Rendering.Core
             Provider.CullFace(Mode);
         }
 
-        public static void DebugMessageCallback(DebugProc Proc, IntPtr Ptr)
+        public static void DebugMessageCallback(GLDebugProc Proc, IntPtr Ptr)
         {
             Provider.DebugMessageCallback(Proc, Ptr);
         }

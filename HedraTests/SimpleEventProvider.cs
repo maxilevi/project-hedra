@@ -4,8 +4,8 @@ using Hedra.Engine.Events;
 using Hedra.Engine.Windowing;
 using System.Numerics;
 using Silk.NET.GLFW;
-using Silk.NET.Input.Common;
-using MouseButton = Silk.NET.Input.Common.MouseButton;
+using Silk.NET.Input;
+using MouseButton = Silk.NET.Input.MouseButton;
 
 namespace HedraTests
 {

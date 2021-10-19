@@ -57,11 +57,10 @@ namespace Hedra.Engine.Generation.ChunkSystem
         private bool IsGenerating { get; set; }
         public Vector3 Position { get; private set; }
         public ChunkAutomatons Automatons { get; }
-        private List<CoordinateHash3D> _waterPositions;
         private int _needsRebuildCount;
         private int _currentNeedsRebuildCount;
-
-        //private byte[] _rleBlocks;
+        
+        private List<CoordinateHash3D> _waterPositions;
         private Block[] _blocks;
         private byte[] _heightCache;
         private readonly object _waterLock = new object();
@@ -419,15 +418,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
         {
             get
             {
-                /*
-                if (_rleBlocks == null && _blocks == null) return _defaultBlock;
-                if (_blocks == null)
-                {
-                    _blocks = DecompressRLE(_rleBlocks);
-                    _rleBlocks = null;
-                }
-                _activityTimer.Reset();
-*/
                 return _blocks[Index];
             }
         }
@@ -451,9 +441,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
         }
         
         
-        public int MemoryUsed => IsCompressed ? 0/*_rleBlocks.Length * sizeof(byte)*/ : (_blocks?.Length ?? BoundsX*BoundsZ*BoundsY) * sizeof(ushort);
+        public int MemoryUsed => IsCompressed ? 0 : (_blocks?.Length ?? BoundsX*BoundsZ*BoundsY) * sizeof(ushort);
 
-        public bool IsCompressed => _blocks == null /*&& _rleBlocks != null*/;
+        public bool IsCompressed => _blocks == null;
 
         private static byte[] CompressRLE(Block[] Blocks)
         {

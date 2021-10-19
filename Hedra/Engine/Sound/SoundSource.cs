@@ -51,7 +51,7 @@ namespace Hedra.Engine.Sound
         {
             _al.SetSourceProperty(Id, SourceFloat.Pitch, Pitch);
             _al.SetSourceProperty(Id, SourceFloat.Gain, Gain);
-            _al.SetSourceProperty(Id, SourceBoolean.Looping, Loop ? 1 : 0);
+            _al.SetSourceProperty(Id, SourceBoolean.Looping, Loop);
             
             this.Stop();
             this.Play(Buffer);

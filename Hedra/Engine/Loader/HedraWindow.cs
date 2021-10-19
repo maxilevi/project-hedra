@@ -8,9 +8,10 @@ using System.Numerics;
 using Hedra.Engine.Core;
 using Silk.NET.GLFW;
 using Silk.NET.Input;
-using Silk.NET.Input.Common;
+using Silk.NET.Input;
+using Silk.NET.Maths;
 using Silk.NET.Windowing;
-using Silk.NET.Windowing.Common;
+using Silk.NET.Windowing;
 using Image = Silk.NET.GLFW.Image;
 using Monitor = Silk.NET.Windowing.Monitor;
 
@@ -18,7 +19,8 @@ namespace Hedra.Engine.Loader
 {
     public abstract class HedraWindow : IEventProvider, IHedraWindow
     {
-        private readonly IWindow _window;
+        public IWindow Window { get; }
+        
         private bool _cursorVisible;
         private bool _fullscreen;
         private readonly Stopwatch _watch;
@@ -32,22 +34,22 @@ namespace Hedra.Engine.Loader
             var options = new WindowOptions
             {
                 API = new GraphicsAPI(ContextAPI.OpenGL, Profile, Flags, Version),
-                Size = new Size(Width, Height),//Monitor.VideoMode.Resolution ?? Monitor.Bounds.Size,
+                Size = new Vector2D<int>(Width, Height),
                 ShouldSwapAutomatically = true,
                 IsVisible = true,
                 Title = "Project Hedra",
-                UseSingleThreadedWindow = true,
+                VSync = false,
             };
-            _window = Monitor.CreateWindow(options);
-            _window.Load += Load;
-            _window.Render += RenderFrame;
-            _window.Update += UpdateFrame;
-            _window.Resize += Resize;
-            _window.FocusChanged += FocusChanged;
-            _window.Closing += Unload;
-            _window.Initialize();
+            Window = Monitor.CreateWindow(options);
+            Window.Load += Load;
+            Window.Render += RenderFrame;
+            Window.Update += UpdateFrame;
+            Window.Resize += Resize;
+            Window.FocusChanged += FocusChanged;
+            Window.Closing += Unload;
+            Window.Initialize();
 
-            var input = _window.CreateInput();
+            var input = Window.CreateInput();
             var keyboard = input.Keyboards[0];
             keyboard.KeyDown += ProcessKeyDown;
             input.Keyboards[0].KeyUp += ProcessKeyUp;
@@ -61,7 +63,7 @@ namespace Hedra.Engine.Loader
             unsafe
             {
                 GlfwProvider.GLFW.Value.SetCharCallback(
-                    (WindowHandle*)_window.Handle,
+                    (WindowHandle*)Window.Handle,
                     (_, Codepoint) => CharWritten?.Invoke(char.ConvertFromUtf32((int)Codepoint))
                 );
             }
@@ -72,90 +74,69 @@ namespace Hedra.Engine.Loader
         protected abstract void Unload();
         protected abstract void FocusChanged(bool IsFocused);
         protected abstract void Load();
-        protected abstract void Resize(Size Size);
+        protected abstract void Resize(Vector2D<int> Size);
         
         public void Run()
         {
-            _window.IsVisible = true;
+            Window.IsVisible = true;
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
             Load();
-            Resize(new Size(Width, Height));
-            _watch.Start();
-            var lastTick = _watch.Elapsed.TotalSeconds;
-            var elapsed = .0;
-            var frames = 0;
-            while (!_window.IsClosing)
-            {
-                _window.DoEvents();
-                if (_window.IsClosing) continue;
-                
-                var totalSeconds = _watch.Elapsed.TotalSeconds;
-                var time = Math.Min(1.0, totalSeconds - lastTick);
-                lastTick = totalSeconds;
-                UpdateFrame(time);
-                RenderFrame(time);
-                _window.SwapBuffers();
-                while (_watch.Elapsed.TotalSeconds - lastTick < TargetFramerate)
-                {
-                    _spinner.SpinOnce();
-                }
-            }
-            _window.Reset();
+            Window.Run();
         }
 
-        private void ProcessKeyDown(IKeyboard Keyboard, Key Key, int ScanCode, int Mods)
+        private void ProcessKeyDown(IKeyboard Keyboard, Key Key, int Mods)
         {
             KeyDown?.Invoke(new KeyboardKeyEventArgs(Key, (KeyModifiers) Mods));
         }
 
-        private void ProcessKeyUp(IKeyboard Keyboard, Key Key, int ScanCode, int Mods)
+        private void ProcessKeyUp(IKeyboard Keyboard, Key Key, int Mods)
         {
             KeyUp?.Invoke(new KeyboardKeyEventArgs(Key, (KeyModifiers) Mods));
         }
 
         public int Width
         {
-            get => _window.Size.Width;
-            set => _window.Size = new Size(value, _window.Size.Height);
+            get => Window.Size.X;
+            set => Window.Size = new Vector2D<int>(value, Window.Size.Y);
         }
         public int Height
         {
-            get => _window.Size.Height;
-            set => _window.Size = new Size(_window.Size.Width, value);
+            get => Window.Size.Y;
+            set => Window.Size = new Vector2D<int>(Window.Size.X, value);
         }
         
         public double TargetFramerate { get; set; }
 
-        public bool IsExiting => _window.Handle == IntPtr.Zero || _window.IsClosing;
+        public bool IsExiting => Window.Handle == IntPtr.Zero || Window.IsClosing;
 
-        public VSyncMode VSync
+        public bool VSync
         {
-            get => _window.VSync;
-            set => _window.VSync = value;
+            get => Window.VSync;
+            set => Window.VSync = value;
         }
 
         public WindowState WindowState
         {
-            get => _window.WindowState;
-            set => _window.WindowState = value;
+            get => Window.WindowState;
+            set => Window.WindowState = value;
         }
 
         public bool Exists => !IsExiting;
 
         public string Title
         {
-            get => _window.Title;
-            set => _window.Title = value;
+            get => Window.Title;
+            set => Window.Title = value;
         }
 
         public void Dispose()
         {
-            _window.Close();
+            Window.Close();
         }
 
         public void Close()
         {
-            _window.Close();
+            Window.Close();
         }
 
         public bool Fullscreen
@@ -171,7 +152,7 @@ namespace Hedra.Engine.Loader
                     var mode = glfw.GetVideoMode(monitor);
                     glfw.SetWindowMonitor
                     (
-                        (WindowHandle*)_window.Handle,
+                        (WindowHandle*)Window.Handle,
                         _fullscreen ? monitor : null, 0, 0, mode->Width, mode->Height,
                         mode->RefreshRate
                     );
@@ -189,7 +170,7 @@ namespace Hedra.Engine.Loader
                     _cursorVisible = value;
                     var glfw = GlfwProvider.GLFW.Value;
                     var mode = _cursorVisible ? CursorModeValue.CursorNormal : CursorModeValue.CursorHidden;
-                    glfw.SetInputMode((WindowHandle*)_window.Handle, CursorStateAttribute.Cursor, mode);
+                    glfw.SetInputMode((WindowHandle*)Window.Handle, CursorStateAttribute.Cursor, mode);
                 }
             }
         }
@@ -199,7 +180,7 @@ namespace Hedra.Engine.Loader
             unsafe
             {
                 var glfw = GlfwProvider.GLFW.Value;
-                glfw.SetWindowIcon((WindowHandle*) _window.Handle, 1, &Icon);
+                glfw.SetWindowIcon((WindowHandle*) Window.Handle, 1, &Icon);
             }
         }
 

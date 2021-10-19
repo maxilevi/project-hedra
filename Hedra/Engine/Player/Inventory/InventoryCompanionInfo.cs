@@ -12,7 +12,7 @@ using Hedra.Game;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using System.Numerics;
-using Silk.NET.Input.Common;
+using Silk.NET.Input;
 using Button = Hedra.Engine.Rendering.UI.Button;
 
 

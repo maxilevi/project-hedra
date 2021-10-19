@@ -6,8 +6,9 @@ using System.Numerics;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 using Hedra.Game;
-using Silk.NET.OpenGL;
+//using Silk.NET.OpenGL;
 #region Typedefs
+
 using GLBufferTarget = Silk.NET.OpenGL.GLEnum;
 using GLTextureUnit = Silk.NET.OpenGL.GLEnum;
 using GLQueryTarget = Silk.NET.OpenGL.GLEnum;
@@ -50,6 +51,7 @@ using GLGetQueryObjectParam = Silk.NET.OpenGL.GLEnum;
 using GLFramebufferTargetEXT = Silk.NET.OpenGL.GLEnum;
 using GLTextureTargetEXT = Silk.NET.OpenGL.GLEnum;
 using GLFramebufferAttachmentEXT = Silk.NET.OpenGL.GLEnum;
+
 #endregion
 
 
@@ -57,10 +59,10 @@ namespace Hedra.Engine.Rendering.Core
 {
     public class GLProvider : IGLProvider
     {
-        private readonly GL _gl;
+        private readonly Silk.NET.OpenGL.GL _gl;
         public GLProvider()
         {
-            _gl = GL.GetApi();
+            _gl = Silk.NET.OpenGL.GL.GetApi(Program.GameWindow.Window);
         }
         
         public ErrorSeverity Severity { get; set; }
@@ -246,7 +248,7 @@ namespace Hedra.Engine.Rendering.Core
 
         public void DeleteFramebuffers(int N, params uint[] Ids)
         {
-            _gl.DeleteFramebuffers((uint)N, Ids);
+            _gl.DeleteFramebuffers(new ReadOnlySpan<uint>(Ids, 0, N));
             EnsureNoErrors();
         }
 
@@ -276,13 +278,13 @@ namespace Hedra.Engine.Rendering.Core
 
         public void DeleteTextures(int N, params uint[] Ids)
         {
-            _gl.DeleteTextures((uint)N, Ids);
+            _gl.DeleteTextures(new ReadOnlySpan<uint>(Ids, 0, N));
             EnsureNoErrors();
         }
 
         public void DeleteVertexArrays(int N, params uint[] Ids)
         {
-            _gl.DeleteVertexArrays((uint)N, Ids);
+            _gl.DeleteVertexArrays(new ReadOnlySpan<uint>(Ids, 0, N));
             EnsureNoErrors();
         }
 
@@ -741,7 +743,7 @@ namespace Hedra.Engine.Rendering.Core
             if(System.Threading.Thread.CurrentThread.ManagedThreadId != Loader.Hedra.MainThreadId)
                 throw new ArgumentException($"Invalid GL calls outside of the main thread.");
             var error = _gl.GetError();
-            if (error != GLEnum.NoError /*&& ErrorSeverity.Ignore != Severity*/)
+            if (error != Silk.NET.OpenGL.GLEnum.NoError /*&& ErrorSeverity.Ignore != Severity*/)
             {
                 var errorMsg = $"Unexpected OpenGL error: {error} {Environment.NewLine} Stack:{Environment.NewLine}{new StackTrace()}";
                 Log.WriteResult(false, errorMsg);

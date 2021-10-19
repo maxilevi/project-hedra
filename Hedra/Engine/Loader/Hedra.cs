@@ -36,7 +36,8 @@ using Hedra.Rendering;
 using Hedra.Sound;
 using Hedra.Engine.Windowing;
 using Hedra.Numerics;
-using Silk.NET.Windowing.Common;
+using Silk.NET.Maths;
+using Silk.NET.Windowing;
 
 namespace Hedra.Engine.Loader
 {
@@ -207,10 +208,10 @@ namespace Hedra.Engine.Loader
             }
         }
 
-        protected override void Resize(Size NewSize)
+        protected override void Resize(Vector2D<int> NewSize)
         {
-            GameSettings.SurfaceWidth = NewSize.Width;
-            GameSettings.SurfaceHeight = NewSize.Height;
+            GameSettings.SurfaceWidth = NewSize.X;
+            GameSettings.SurfaceHeight = NewSize.Y;
             DrawManager.UIRenderer.Adjust();
         }
 

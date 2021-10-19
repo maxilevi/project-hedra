@@ -4,7 +4,7 @@ using Hedra.Engine.Loader;
 using Hedra.Engine.Windowing;
 using System.Numerics;
 using Silk.NET.GLFW;
-using Silk.NET.Windowing.Common;
+using Silk.NET.Windowing;
 
 
 namespace HedraTests
@@ -13,7 +13,7 @@ namespace HedraTests
     {
         public double TargetFramerate { get; set; }
         public bool IsExiting => true;
-        public VSyncMode VSync { get; set; }
+        public bool VSync { get; set; }
         public WindowState WindowState { get; set; }
         public bool Exists { get; }
         public int Height { get; set; }
@@ -48,6 +48,8 @@ namespace HedraTests
         public void Setup()
         {
         }
+
+        public IWindow Window { get; }
 
         public Vector2 MousePosition { get; }
         public void SetIcon(Image Icon)

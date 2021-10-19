@@ -51,7 +51,7 @@ namespace Hedra.BiomeSystem
             }
         }
         
-        public float GetAccuarateMaxHeight(float X, float Z)
+        public float GetAccurateMaxHeight(float X, float Z)
         {
             lock (_tempMapLock)
             {

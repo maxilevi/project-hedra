@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Ultz.Native.GLFW.3.3.2.1\build\net461\Ultz.Native.GLFW.props" Condition="Exists('..\packages\Ultz.Native.GLFW.3.3.2.1\build\net461\Ultz.Native.GLFW.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -98,9 +99,17 @@
       <HintPath>..\packages\IronPython.2.7.5\lib\Net40\IronPython.Modules.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Bcl.HashCode, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+      <HintPath>..\packages\Microsoft.Bcl.HashCode.1.1.0\lib\net461\Microsoft.Bcl.HashCode.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Dynamic, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1">
       <HintPath>..\packages\IronPython.2.7.5\lib\Net40\Microsoft.Dynamic.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.DependencyModel, Version=3.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60">
+      <HintPath>..\packages\Microsoft.Extensions.DependencyModel.3.1.1\lib\net451\Microsoft.Extensions.DependencyModel.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Scripting, Version=1.1.0.20, Culture=neutral, PublicKeyToken=7f709c5b713576e1">
       <HintPath>..\packages\IronPython.2.7.5\lib\Net40\Microsoft.Scripting.dll</HintPath>
@@ -123,52 +132,59 @@
       <HintPath>..\packages\NVorbis.0.8.6\lib\net35\NVorbis.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Silk.NET.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\references\Silk.NET\Silk.NET.Core.dll</HintPath>
+    <Reference Include="Silk.NET.Core, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Silk.NET.Core.2.9.0\lib\netstandard2.0\Silk.NET.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Silk.NET.GLFW, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\references\Silk.NET\Silk.NET.GLFW.dll</HintPath>
+    <Reference Include="Silk.NET.GLFW, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Silk.NET.GLFW.2.9.0\lib\netstandard2.0\Silk.NET.GLFW.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Silk.NET.Input, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\references\Silk.NET\Silk.NET.Input.dll</HintPath>
+    <Reference Include="Silk.NET.Input.Common, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Silk.NET.Input.Common.2.9.0\lib\netstandard2.0\Silk.NET.Input.Common.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Silk.NET.Input.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\references\Silk.NET\Silk.NET.Input.Common.dll</HintPath>
+    <Reference Include="Silk.NET.Input.Glfw, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Silk.NET.Input.Glfw.2.9.0\lib\netstandard2.0\Silk.NET.Input.Glfw.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Silk.NET.Input.Desktop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\references\Silk.NET\Silk.NET.Input.Desktop.dll</HintPath>
+    <Reference Include="Silk.NET.Maths, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Silk.NET.Maths.2.9.0\lib\netstandard2.0\Silk.NET.Maths.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Silk.NET.OpenAL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\references\Silk.NET\Silk.NET.OpenAL.dll</HintPath>
+    <Reference Include="Silk.NET.OpenAL, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Silk.NET.OpenAL.2.9.0\lib\netstandard2.0\Silk.NET.OpenAL.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Silk.NET.OpenGL, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\references\Silk.NET\Silk.NET.OpenGL.dll</HintPath>
+    <Reference Include="Silk.NET.OpenGL, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Silk.NET.OpenGL.2.9.0\lib\netstandard2.0\Silk.NET.OpenGL.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Silk.NET.OpenGL.Legacy, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\references\Silk.NET\Silk.NET.OpenGL.Legacy.dll</HintPath>
+    <Reference Include="Silk.NET.OpenGL.Legacy, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Silk.NET.OpenGL.Legacy.2.9.0\lib\netstandard2.0\Silk.NET.OpenGL.Legacy.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Silk.NET.Windowing, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\references\Silk.NET\Silk.NET.Windowing.dll</HintPath>
+    <Reference Include="Silk.NET.Windowing.Common, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Silk.NET.Windowing.Common.2.9.0\lib\netstandard2.0\Silk.NET.Windowing.Common.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Silk.NET.Windowing.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\references\Silk.NET\Silk.NET.Windowing.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Silk.NET.Windowing.Desktop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\references\Silk.NET\Silk.NET.Windowing.Desktop.dll</HintPath>
+    <Reference Include="Silk.NET.Windowing.Glfw, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Silk.NET.Windowing.Glfw.2.9.0\lib\netstandard2.0\Silk.NET.Windowing.Glfw.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="StrictEmit, Version=2.4.2.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\StrictEmit.2.4.2\lib\net45\StrictEmit.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Buffers, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-      <HintPath>..\packages\System.Buffers.4.4.0\lib\netstandard2.0\System.Buffers.dll</HintPath>
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Memory, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
-      <HintPath>..\packages\System.Memory.4.5.2\lib\netstandard2.0\System.Memory.dll</HintPath>
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
+      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Numerics" />
@@ -176,8 +192,12 @@
       <HintPath>..\packages\System.Numerics.Vectors.4.6.0-preview5.19224.8\lib\net46\System.Numerics.Vectors.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.5.0.0\lib\net45\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <HintPath>..\packages\System.Runtime.InteropServices.RuntimeInformation.4.0.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
@@ -186,6 +206,10 @@
     </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="Ultz.Bcl.Half, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Ultz.Bcl.Half.Fallback.1.0.0\lib\netstandard2.0\Ultz.Bcl.Half.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AISystem\AdaptiveAIComponent.cs" />
@@ -461,6 +485,7 @@
     <Compile Include="Engine\Rendering\UI\HelpUI.cs" />
     <Compile Include="Engine\Rendering\UI\MenuBackground.cs" />
     <Compile Include="Engine\Rendering\UI\ProfileUIElement.cs" />
+    <Compile Include="Engine\Rendering\UI\TextureAtlas.cs" />
     <Compile Include="Engine\Scenes\SceneExtensions.cs" />
     <Compile Include="Engine\Scenes\SceneLoader.cs" />
     <Compile Include="Engine\Scenes\SceneSettings.cs" />
@@ -7754,10 +7779,6 @@
       <Link>Assets\Skills\Claw.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\UI\Skills\Conflagaration.png">
-      <Link>Assets\Skills\Conflagaration.png</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\UI\Skills\DoubleSwords.png">
       <Link>Assets\Skills\DoubleSwords.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -7766,28 +7787,12 @@
       <Link>Assets\Skills\Fade.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="..\project-hedra-assets\UI\Skills\Fireball.png">
-      <Link>Assets\Skills\Fireball.png</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="..\project-hedra-assets\UI\Skills\FireRelease.png">
       <Link>Assets\Skills\FireRelease.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\UI\Skills\FlameArrow.png">
       <Link>Assets\Skills\FlameArrow.png</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\UI\Skills\FlameDisk.png">
-      <Link>Assets\Skills\FlameDisk.png</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\UI\Skills\FlameJump.png">
-      <Link>Assets\Skills\FlameJump.png</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\UI\Skills\FlameStyle.png">
-      <Link>Assets\Skills\FlameStyle.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\UI\Skills\Hammer.png">
@@ -7844,10 +7849,6 @@
     </None>
     <None Include="..\project-hedra-assets\UI\Skills\Throw.png">
       <Link>Assets\Skills\Throw.png</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="..\project-hedra-assets\UI\Skills\TripleFireball.png">
-      <Link>Assets\Skills\TripleFireball.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\UI\Skills\TripleShuriken.png">
@@ -15577,6 +15578,7 @@
   </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent Condition="'$(OS)' == 'Windows_NT' ">
+        call "$(ProjectDir)/../utilities/make_atlas.sh"
         call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" normal text
         call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" normal binary
         call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" normal binary
@@ -15621,4 +15623,10 @@
     <Optimize>false</Optimize>
   </PropertyGroup>
   <ProjectExtensions />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Ultz.Native.GLFW.3.3.2.1\build\net461\Ultz.Native.GLFW.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Ultz.Native.GLFW.3.3.2.1\build\net461\Ultz.Native.GLFW.props'))" />
+  </Target>
 </Project>

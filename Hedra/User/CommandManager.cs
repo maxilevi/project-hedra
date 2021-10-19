@@ -41,7 +41,7 @@ using Hedra.EntitySystem;
 using Hedra.Numerics;
 using Hedra.Sound;
 using Microsoft.Scripting.Utils;
-using Silk.NET.Windowing.Common;
+using Silk.NET.Windowing;
 using TaskScheduler = Hedra.Core.TaskScheduler;
 
 namespace Hedra.User

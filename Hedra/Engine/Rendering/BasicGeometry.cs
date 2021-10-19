@@ -8,7 +8,7 @@ using Hedra.Engine.Windowing;
 using Hedra.Rendering;
 using CollisionShape = Hedra.Engine.PhysicsSystem.CollisionShape;
 #if DEBUG
-using Silk.NET.OpenGL.Legacy;
+using Legacy = Silk.NET.OpenGL.Legacy;
 #endif
 
 namespace Hedra.Engine.Rendering
@@ -28,7 +28,7 @@ namespace Hedra.Engine.Rendering
         public static VAO<Vector3> CubeVAO { get; }
         private static BulletDraw _debugDraw;
 #if DEBUG
-        private static readonly GL _gl;
+        private static readonly Legacy.GL _gl;
 #endif
         
         static BasicGeometry()
@@ -54,7 +54,7 @@ namespace Hedra.Engine.Rendering
             _line = new Line3D();
             _debugDraw = new BulletDraw();
 #if DEBUG
-            _gl = GL.GetApi();
+            _gl = Legacy.GL.GetApi(Program.GameWindow.Window);
 #endif
         }
         
@@ -97,7 +97,7 @@ namespace Hedra.Engine.Rendering
             
             Shader.Passthrough.Bind();
             _gl.PointSize(Width);
-            _gl.Begin(GLEnum.Points);
+            _gl.Begin(Legacy.GLEnum.Points);
             _gl.Vertex3(Point.X, Point.Y, Point.Z);
             _gl.Color4(Color.X, Color.Y, Color.Z, Color.W);
             _gl.End();
@@ -111,7 +111,7 @@ namespace Hedra.Engine.Rendering
             
             Shader.Passthrough.Bind();
             _gl.LineWidth(Width);
-            _gl.Begin(GLEnum.Lines);
+            _gl.Begin(Legacy.GLEnum.Lines);
             _gl.Color4(Color.X, Color.Y, Color.Z, Color.W);
             _gl.Vertex3(Start.X, Start.Y, Start.Z);
             _gl.Color4(Color.X, Color.Y, Color.Z, Color.W);

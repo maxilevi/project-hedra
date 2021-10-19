@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Hedra.Engine.Events;
-using Silk.NET.Input.Common;
+using Silk.NET.Input;
 
 namespace Hedra.Engine.Input
 {

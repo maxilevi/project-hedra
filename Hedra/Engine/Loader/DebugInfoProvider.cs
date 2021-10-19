@@ -28,7 +28,7 @@ using Hedra.AISystem.Behaviours;
 using Hedra.Engine.Bullet;
 using Hedra.Engine.Core;
 
-using Silk.NET.Input.Common;
+using Silk.NET.Input;
 
 
 namespace Hedra.Engine.Loader

@@ -1,7 +1,7 @@
 using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Windowing;
 using Hedra.Sound;
-using MouseButton = Silk.NET.Input.Common.MouseButton;
+using MouseButton = Silk.NET.Input.MouseButton;
 
 namespace Hedra.Engine.Player.Inventory
 {

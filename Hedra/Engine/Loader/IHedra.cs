@@ -1,4 +1,5 @@
 using System.Numerics;
+using Silk.NET.Windowing;
 
 namespace Hedra.Engine.Loader
 {
@@ -8,5 +9,6 @@ namespace Hedra.Engine.Loader
         string GameVersion { get; }
         int BuildNumber { get; }
         void Setup();
+        IWindow Window { get; }
     }
 }

@@ -14,7 +14,7 @@ using System.Numerics;
 using Hedra.Items;
 using Hedra.Numerics;
 using Newtonsoft.Json;
-using Silk.NET.Input.Common;
+using Silk.NET.Input;
 
 
 namespace Hedra.Engine.Player.Inventory
