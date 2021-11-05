@@ -20,6 +20,7 @@ layout(std140) uniform FogSettings {
 	float U_Height;
 };
 
+out vec3 base_vertex_position;
 out vec4 pass_color;
 out vec3 pass_normal;
 out float pass_visibility;
@@ -43,6 +44,7 @@ uniform float Alpha;
 void main(void)
 {
 	vec3 linear_color = srgb_to_linear(in_color);
+	base_vertex_position = in_position;
 	pass_height = U_Height;
 	pass_botColor = U_BotColor;
 	pass_topColor = U_TopColor;

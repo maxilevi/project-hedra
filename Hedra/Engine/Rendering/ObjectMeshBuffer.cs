@@ -38,7 +38,7 @@ namespace Hedra.Engine.Rendering
         private static UBO<ObjectMeshBufferData> UBO { get; }
         public bool ApplyFog { get; set; } = true;
         public float Alpha { get; set; } = 1;
-        public bool UseNoiseTexture { get; set; }
+        public bool UseNoiseTexture { get; set; } = true;
         public bool Dither { get; set; }
         public bool Outline { get; set; }
         public bool Pause { get; set; }

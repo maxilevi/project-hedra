@@ -60,7 +60,7 @@ void main()
     vec3 completeColor = worldColor + point_light_color * raw_color.xyz;
     
     float ShadowVisibility = use_shadows > 0.0 ? CalculateShadows() : 1.0;
-    float tex = CalculateNoiseTex(InNorm.xyz, base_vertex_position);
+    float tex = CalculateNoiseTex(InNorm.xyz, base_vertex_position) * 1.55;
 	vec3 final_color = linear_to_srbg(completeColor * (tex + 1.0) * ShadowVisibility);
 	vec4 NewColor = mix(sky_color(), vec4(final_color, raw_color.w), Visibility);
 
@@ -72,11 +72,12 @@ void main()
 	}
 	else
 	{
+        float ditherVisibility = (Dither ? DitherVisibility : 1.0);
 		mat3 NormalMat = mat3(transpose(inverse(_modelViewMatrix)));
         vec3 transformedPosition = (_modelViewMatrix * vec4(InPos.xyz, 1.0)).xyz;
-        OutPosition = vec4(transformedPosition, gl_FragCoord.z) * (Dither ? DitherVisibility : 1.0);
+        OutPosition = vec4(transformedPosition, gl_FragCoord.z) * ditherVisibility;
         OutColor = NewColor;
-		OutNormal = vec4(NormalMat * InNorm.xyz, 0.0) * (Dither ? DitherVisibility : 1.0);
+		OutNormal = vec4(NormalMat * InNorm.xyz, 0.0) * ditherVisibility;
 	}
 }
 

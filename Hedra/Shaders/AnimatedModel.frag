@@ -2,7 +2,9 @@
 !include<"Includes/GammaCorrection.shader">
 !include<"Includes/Sky.shader">
 !include<"Includes/Shadows.shader">
+!include<"Includes/NoiseTexture.shader">
 
+in vec3 base_vertex_position;
 in vec4 pass_color;
 in vec3 pass_normal;
 in float pass_visibility;
@@ -15,6 +17,7 @@ layout(location = 2)out vec4 out_normal;
 
 uniform bool UseFog;
 uniform bool UseShadows;
+uniform bool UseNoise;
 uniform vec4 Tint;
 uniform vec4 BaseTint;
 uniform float Alpha;
@@ -29,8 +32,9 @@ void main(void)
 	{
 		discard;
 	}
+    float tex = CalculateNoiseTex(pass_normal, base_vertex_position) * 0.5;
 	float ShadowVisibility = UseShadows ? simple_apply_shadows(pass_coords, bias) : 1.0;	
-	vec4 new_color = pass_color * (BaseTint + Tint) * ShadowVisibility;
+	vec4 new_color = pass_color * (tex + 1.0) * (BaseTint + Tint) * ShadowVisibility;
 	new_color = vec4(linear_to_srbg(new_color.xyz), new_color.w);
 
     if(Outline)

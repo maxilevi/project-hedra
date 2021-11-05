@@ -79,7 +79,14 @@ namespace Hedra.Engine.Rendering.Animation
         private Matrix4x4 _transformationMatrix = Matrix4x4.Identity;
         private bool _jointsDirty = true;
         private StackTrace _trace = new StackTrace();
+        private static readonly Texture3D NoiseTexture;
 
+        static AnimatedModel()
+        {
+            var noiseValues = WorldRenderer.CreateNoiseArray(out var width, out var height, out var depth);
+            NoiseTexture = new Texture3D(noiseValues, width, height, depth);
+        }
+        
         public AnimatedModel(ModelData Model, Joint RootJoint, int JointCount)
         {
             Model.AssertTriangulated();
@@ -216,6 +223,9 @@ namespace Hedra.Engine.Rendering.Animation
             Renderer.Enable(EnableCap.DepthTest);
             Renderer.Disable(EnableCap.Blend);
             if (Alpha < 0.95f) Renderer.Enable(EnableCap.Blend);
+            
+            Renderer.ActiveTexture(TextureUnit.Texture1);
+            Renderer.BindTexture(TextureTarget.Texture3D, NoiseTexture.Id);
 
             lock (_syncRoot)
             {
@@ -229,7 +239,8 @@ namespace Hedra.Engine.Rendering.Animation
         private void DoDrawModel(Matrix4x4 ProjectionViewMat, Matrix4x4 ViewMatrix)
         {
             _shader.Bind();
-
+            _shader["noiseTexture"] = 1;
+            
             if (_shader == DeathShader && CompatibilityManager.SupportsGeometryShaders)
             {
                 Renderer.Enable(EnableCap.Blend);
