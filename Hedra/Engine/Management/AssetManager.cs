@@ -128,10 +128,6 @@ namespace Hedra.Engine.Management
 
         public static VertexData LoadModel(string File, Vector3 Scale)
         {
-            if (File.Contains("Crow"))
-            {
-                int a = 0;
-            }
             VertexData model;
             if (File.EndsWith(".dae"))
                 model = DAELoader(File).ToVertexData();
