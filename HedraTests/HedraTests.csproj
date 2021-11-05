@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Ultz.Native.GLFW.3.3.2.1\build\net461\Ultz.Native.GLFW.props" Condition="Exists('..\packages\Ultz.Native.GLFW.3.3.2.1\build\net461\Ultz.Native.GLFW.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -66,32 +67,21 @@
       <HintPath>..\packages\Silk.NET.Core.2.9.0\lib\netstandard2.0\Silk.NET.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Silk.NET.GLFW, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\references\Silk.NET\Silk.NET.GLFW.dll</HintPath>
-    </Reference>
-    <Reference Include="Silk.NET.Input, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\references\Silk.NET\Silk.NET.Input.dll</HintPath>
+    <Reference Include="Silk.NET.GLFW, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\packages\Silk.NET.GLFW.2.9.0\lib\netstandard2.0\Silk.NET.GLFW.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Silk.NET.Input.Common, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\Silk.NET.Input.Common.2.9.0\lib\netstandard2.0\Silk.NET.Input.Common.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Silk.NET.Input.Desktop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\references\Silk.NET\Silk.NET.Input.Desktop.dll</HintPath>
-    </Reference>
     <Reference Include="Silk.NET.Maths, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\Silk.NET.Maths.2.9.0\lib\netstandard2.0\Silk.NET.Maths.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Silk.NET.Windowing, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\references\Silk.NET\Silk.NET.Windowing.dll</HintPath>
-    </Reference>
     <Reference Include="Silk.NET.Windowing.Common, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\Silk.NET.Windowing.Common.2.9.0\lib\netstandard2.0\Silk.NET.Windowing.Common.dll</HintPath>
       <Private>True</Private>
-    </Reference>
-    <Reference Include="Silk.NET.Windowing.Desktop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\references\Silk.NET\Silk.NET.Windowing.Desktop.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
@@ -281,6 +271,7 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\NUnit3TestAdapter.3.12.0\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit3TestAdapter.3.12.0\build\net35\NUnit3TestAdapter.props'))" />
+    <Error Condition="!Exists('..\packages\Ultz.Native.GLFW.3.3.2.1\build\net461\Ultz.Native.GLFW.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Ultz.Native.GLFW.3.3.2.1\build\net461\Ultz.Native.GLFW.props'))" />
   </Target>
   <PropertyGroup>
     <PostBuildEvent Condition="'$(OS)' == 'Windows_NT' ">
