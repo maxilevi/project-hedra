@@ -22,5 +22,5 @@ void main() {
     AO += texture(SSAOInput, UVCoords + vec2(0.0, -texel*2.0)).r;
 
 	AO = AO / 5.0;
-	OutColor = vec4(texture(ColorInput, TexCoords).xyz, 1.0) - vec4(AO,AO,AO,0.0);
+	OutColor = vec4(texture(ColorInput, TexCoords).xyz, 1.0) - vec4(AO, AO, AO, 0.0);
 }

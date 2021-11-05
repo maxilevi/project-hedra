@@ -12,6 +12,7 @@ using Hedra.Engine.Core;
 using System.Collections.Generic;
 using Hedra.Core;
 using Hedra.Engine.Game;
+using Hedra.Engine.IO;
 using Hedra.Engine.Rendering.Core;
 using Hedra.Engine.Windowing;
 using Hedra.Game;
@@ -25,6 +26,7 @@ namespace Hedra.Engine.Rendering.Effects
     /// </summary>
     public class DeferedRenderer
     {
+        public const int SampleCount = 64;
         public FBO FirstPass;
         public FBO SecondPass;
         public FBO ThirdPass; 
@@ -60,8 +62,8 @@ namespace Hedra.Engine.Rendering.Effects
             formats[2] = PixelInternalFormat.Rgba16f;
 
             FirstPass = new FBO(new Size(GameSettings.Width, GameSettings.Height), attachments, formats, false, false, 0, true);
-            ThirdPass = new FBO(GameSettings.Width / 2, GameSettings.Height / 2);
-            SecondPass = new FBO(GameSettings.Width / 2, GameSettings.Height / 2);
+            ThirdPass = new FBO(GameSettings.Width / 1, GameSettings.Height / 1);
+            SecondPass = new FBO(GameSettings.Width / 1, GameSettings.Height / 1);
             WaterPass = new FBO(GameSettings.Width / 4, GameSettings.Height / 4);
 
             #region SETUP UNIFORMS & TEXTURES
@@ -80,8 +82,8 @@ namespace Hedra.Engine.Rendering.Effects
             {
                 for(var y = 0; y < 4; y++)
                 {
-                    var value = new Vector3( gen.NextFloat(), gen.NextFloat(), 0.0f);
-                    var col = Color.FromArgb(255, (byte)(value.X * 255),(byte) (value.Y * 255), (byte) (value.Z * 255) );
+                    var value = new Vector3(gen.NextFloat(), gen.NextFloat(), 0.0f) * 2 - new Vector3(1, 1, 0);
+                    var col = Color.FromArgb(255, (byte)(value.X * 255),(byte) (value.Y * 255), (byte) (value.Z * 255));
                     bmp.SetPixel(x,y, col);
                 }
             }
@@ -102,12 +104,12 @@ namespace Hedra.Engine.Rendering.Effects
             Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) TextureWrapMode.Repeat);
             Renderer.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int) TextureWrapMode.Repeat);
             
-            var vecSamples = new Vector3[16];
-            for(var i = 0; i < 16; i++)
+            var vecSamples = new Vector3[SampleCount];
+            for(var i = 0; i < SampleCount; i++)
             {
                 vecSamples[i] = new Vector3( Utils.Rng.NextFloat() * 2.0f - 1.0f, Utils.Rng.NextFloat() * 2.0f - 1.0f, Utils.Rng.NextFloat() ).Normalized();
                 vecSamples[i] *= Utils.Rng.NextFloat();
-                var scale = i / 16f;
+                var scale = i / (float) SampleCount;
                 scale = Mathf.Lerp(0.1f, 1.0f, scale * scale);
                 vecSamples[i] *= scale;
             }

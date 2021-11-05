@@ -118,7 +118,7 @@ namespace Hedra.Engine.Rendering.Effects
                 Renderer.Uniform1(Ssao.NormalSampler, 1);
                 Renderer.Uniform1(Ssao.RandomSampler, 2);
                 Renderer.Uniform1(Ssao.Intensity, GameSettings.AmbientOcclusionIntensity);
-                
+
                 Renderer.UniformMatrix4x4(Ssao.ProjectionUniform, false, ref Culling.ProjectionMatrix);
 
                 DrawManager.UIRenderer.DrawQuad();
@@ -241,7 +241,7 @@ namespace Hedra.Engine.Rendering.Effects
                 DrawFXAAQuad(FinalFbo.TextureId[0], GameSettings.Bloom ? AdditiveFbo.TextureId[0] : 0);
             else
                 DrawQuad(FinalFbo.TextureId[0], GameSettings.Bloom ? AdditiveFbo.TextureId[0] : 0);
-            //DrawQuad(Ssao.FirstPass.TextureId[0], 0);
+            //DrawQuad(Ssao.FirstPass.TextureId[2], 0);
 
             Renderer.ActiveTexture(TextureUnit.Texture0);
             Renderer.BindTexture(TextureTarget.Texture2D, 0);
