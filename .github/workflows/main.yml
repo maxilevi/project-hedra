@@ -17,17 +17,26 @@ jobs:
         submodules: true
     - name: Setup Dotnet for use with actions
       uses: actions/setup-dotnet@v1.0.0
+      
+    - name: Setup Nuget
+      uses: Nuget/setup-nuget@v1.0.5
+      
     - name: Restore Hedra packages
-      run: dotnet restore Hedra/Hedra.csproj --packages packages
+      run: nuget restore Hedra/Hedra.csproj -PackageDirectory packages
+      
     - name: Restore HedraTests packages
-      run: dotnet restore HedraTests/HedraTests.csproj --packages packages
+      run: nuget restore HedraTests/HedraTests.csproj -PackageDirectory packages
+      
     - name: Restore AssetBuilder packages 
-      run: dotnet restore AssetBuilder/AssetBuilder.csproj --packages packages
+      run: nuget restore AssetBuilder/AssetBuilder.csproj -PackageDirectory packages
+      
     - name: Build Dependencies
       shell: bash
       run: ./build-deps.sh
+      
     - name: Build Solution
       run: dotnet msbuild -p:Configuration=Release
+      
     - name: Run tests
       run: ./packages/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe HedraTests/bin/Release/HedraTests.dll
       shell: bash
