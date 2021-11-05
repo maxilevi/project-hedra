@@ -13,6 +13,7 @@ namespace Hedra.Framework
         private readonly IAllocator _allocator;
         private NativeArray<T> _array;
         private int _count;
+        private bool _disposed;
         
         public NativeList(IAllocator Allocator) : this(Allocator, null)
         {
@@ -179,6 +180,8 @@ namespace Hedra.Framework
 
         public void Dispose()
         {
+            if (_disposed) return;
+            _disposed = true;
             _array.Dispose();
         }
     }
