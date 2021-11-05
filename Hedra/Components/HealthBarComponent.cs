@@ -190,9 +190,10 @@ namespace Hedra.Components
         public override void Draw()
         {
             if(Parent.Model == null || _barSize < 0.05f) return;
-            
+
+            var height = (Height ?? Math.Max(Parent.Model.Height * 1.5f, 6));
             var eyeSpace = Vector4.Transform(
-                new Vector4(Parent.Position + (Height ?? Parent.Model.Height * (1.5f)) * Vector3.UnitY, 1),
+                new Vector4(Parent.Position + height * Vector3.UnitY, 1),
                 Culling.ModelViewMatrix
             );
             var homogeneousSpace = Vector4.Transform(eyeSpace, Culling.ProjectionMatrix);
