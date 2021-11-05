@@ -21,7 +21,9 @@ using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.WorldBuilding;
 using Hedra.Engine.Game;
 using Hedra.Engine.StructureSystem.Overworld;
+using Hedra.Framework;
 using Hedra.Numerics;
+using Hedra.Structures;
 
   namespace Hedra.Engine.StructureSystem
 {
@@ -64,6 +66,30 @@ using Hedra.Numerics;
                 }
                 Dirty();
             }
+        }
+        
+        /* Used from MissionCore.py */
+        public static List<Pair<StructureDesign, Vector3>> NearbyStructuresPositionDesigns(Vector3 Position, Type Type, float MaxDistance)
+        {
+            var radius = (int) (MaxDistance / Chunk.Width);
+            var structs = new List<Pair<StructureDesign, Vector3>>();
+            var chunkSpace = World.ToChunkSpace(Position);
+            for (var x = -radius; x < radius; x++)
+            {
+                for (var z = -radius; z < radius; z++)
+                {
+                    var finalPosition = new Vector3(chunkSpace.X + x * Chunk.Width, 0, chunkSpace.Y + z * Chunk.Width);
+                    if ((finalPosition - Position).Xz().LengthSquared() > MaxDistance * MaxDistance)
+                        continue;
+                    
+                    var region = World.BiomePool.GetRegion(finalPosition);
+                    var sample = MapBuilder.Sample(finalPosition, region);
+                    if (sample != null && sample.GetType() == Type)
+                        structs.Add(new Pair<StructureDesign, Vector3>(sample, finalPosition));
+                }
+            }
+
+            return structs;
         }
 
         private static bool ShouldRemove(CollidableStructure Structure)

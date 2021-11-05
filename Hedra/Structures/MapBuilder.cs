@@ -1,3 +1,5 @@
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using Hedra.BiomeSystem;
 using Hedra.Engine.Generation;
@@ -9,27 +11,35 @@ namespace Hedra.Structures
 {
     public class MapBuilder
     {
+        private static ConcurrentDictionary<Vector3, StructureDesign> _cache;
         private static readonly CollidableStructure[] EmptyItems = new CollidableStructure[0];
         private static RandomDistribution _distribution;
 
         static MapBuilder()
         {
+            _cache = new ConcurrentDictionary<Vector3, StructureDesign>();
             _distribution = new RandomDistribution(true);
         }
 
         public static StructureDesign Sample(Vector3 Position, Region Biome)
         {
+            if (_cache.TryGetValue(Position, out var cachedDesign))
+                return cachedDesign;
+            
             var designAtPosition = World.StructureHandler.StructureItems.FirstOrDefault(C => C.MapPosition == World.ToChunkSpace(Position))?.Design;
             if (designAtPosition != null) return designAtPosition;
+            
             var chunkOffset = World.ToChunkSpace(Position);
             for (var i = 0; i < Biome.Structures.Designs.Length; i++)
             {
                 var design = Biome.Structures.Designs[i];
                 if (SampleDesign(design, chunkOffset, Biome, _distribution, EmptyItems, out _))
                 {
+                    _cache.TryAdd(Position, design);
                     return design;
                 }
             }
+            _cache.TryAdd(Position, null);
             return null;
         }
 
@@ -42,6 +52,7 @@ namespace Hedra.Structures
 
         public static void Discard()
         {
+            _cache = new ConcurrentDictionary<Vector3, StructureDesign>();
             _distribution = new RandomDistribution(true);
         }
     }

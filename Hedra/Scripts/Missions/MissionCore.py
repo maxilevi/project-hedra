@@ -22,24 +22,13 @@ def nearby_struct_objects(position, type, max_distance=DEFAULT_MAX_STRUCTURE_SEA
     return World.StructureHandler.Find(do_find)
 
 def nearby_structs_positions_designs(position, type, max_distance=DEFAULT_MAX_STRUCTURE_SEARCH_DISTANCE):
-    radius = int(max_distance / CHUNK_WIDTH)
-    structs = []
-    chunk_space = World.ToChunkSpace(position)
-    for x in xrange(-radius, radius):
-        for z in xrange(-radius, radius):
-            final_position = Vector3(chunk_space.X + x * CHUNK_WIDTH, 0, chunk_space.Y + z * CHUNK_WIDTH)
-            if (final_position - position).Xz().LengthSquared() > max_distance ** 2: continue
-            region = World.BiomePool.GetRegion(final_position)
-            sample = MapBuilder.Sample(final_position, region)
-            if isinstance(sample, type):
-                structs.append((sample, final_position))
-    return structs
+    return World.StructureHandler.NearbyStructuresPositionDesigns(position, type, max_distance)
 
 def nearby_structs_designs(position, type, max_distance=DEFAULT_MAX_STRUCTURE_SEARCH_DISTANCE):
-    return [design for design, _ in nearby_structs_positions_designs(position, type, max_distance)]
+    return [pair.One for pair in nearby_structs_positions_designs(position, type, max_distance)]
 
 def nearby_structs_positions(position, type, max_distance=DEFAULT_MAX_STRUCTURE_SEARCH_DISTANCE):
-    return [final_position for _, final_position in nearby_structs_positions_designs(position, type, max_distance)]
+    return [pair.Two for pair in nearby_structs_positions_designs(position, type, max_distance)]
 
 def find_structure(position, type, max_distance=DEFAULT_MAX_STRUCTURE_SEARCH_DISTANCE):
     nearby = nearby_struct_objects(position, type, max_distance)
