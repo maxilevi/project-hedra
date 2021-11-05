@@ -18,11 +18,11 @@ jobs:
     - name: Setup Dotnet for use with actions
       uses: actions/setup-dotnet@v1.0.0
     - name: Restore Hedra packages
-      run: dotnet restore Hedra/Hedra.csproj -PackagesDirectory packages
+      run: dotnet restore Hedra/Hedra.csproj -packages packages
     - name: Restore HedraTests packages
-      run: dotnet restore HedraTests/HedraTests.csproj -PackagesDirectory packages
+      run: dotnet restore HedraTests/HedraTests.csproj -packages packages
     - name: Restore AssetBuilder packages 
-      run: dotnet restore AssetBuilder/AssetBuilder.csproj -PackagesDirectory packages
+      run: dotnet restore AssetBuilder/AssetBuilder.csproj -packages packages
     - name: Build Dependencies
       shell: bash
       run: ./build-deps.sh
