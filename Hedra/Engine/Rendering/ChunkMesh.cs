@@ -7,6 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Hedra.Engine.Game;
 using System.Numerics;
 using Hedra.Engine.Core;
@@ -27,8 +28,11 @@ namespace Hedra.Engine.Rendering
         private ObjectMeshBuffer _buffer;
         private readonly List<InstanceData> _instanceElements;
         private readonly List<InstanceData> _lodedInstanceElements;
-        public readonly List<CollisionShape> CollisionBoxes = new List<CollisionShape>();
+        private readonly List<CollisionShape> CollisionBoxes = new List<CollisionShape>();
         public readonly List<VertexData> Elements = new List<VertexData>();
+        private readonly object _collisionLock = new object();
+        private readonly object _offsetsLock = new object();
+        private readonly HashSet<Vector2> _offsets = new HashSet<Vector2>();
 
         public bool IsBuilded;
         public bool IsGenerated;
@@ -89,6 +93,41 @@ namespace Hedra.Engine.Rendering
         {
             _instanceElements.Remove(Data);
             _lodedInstanceElements.Remove(Data);
+        }
+
+        public void Add(CollisionShape Shape)
+        {
+            lock (_offsets)
+            {
+                lock (_collisionLock)
+                {
+                    for (var i = 0; i < Shape.Vertices.Length; ++i)
+                    {
+                        _offsets.Add(World.ToChunkSpace(Shape.Vertices[i]));
+                    }
+                    CollisionBoxes.Add(Shape);
+                }
+            }
+        }
+
+        public Vector2[] Offsets 
+        {
+            get
+            {
+                lock (_offsetsLock)
+                {
+                    return _offsets.ToArray();
+                }
+            }
+        }
+
+        public CollisionShape[] CollisionShapes
+        {
+            get
+            {
+                lock (_collisionLock)
+                    return CollisionBoxes.ToArray();
+            }
         }
 
         public InstanceData[] InstanceElements => _instanceElements.ToArray();

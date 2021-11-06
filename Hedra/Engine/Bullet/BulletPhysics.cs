@@ -431,7 +431,7 @@ namespace Hedra.Engine.Bullet
             Body.Dispose();
         }
         
-        public static void AddChunk(Vector2 Offset, NativeVertexData Mesh, PhysicsSystem.CollisionShape[] Shapes)
+        public static void AddChunk(Vector2 Offset, NativeVertexData Mesh, PhysicsSystem.CollisionShape[] Shapes, Vector2[] Offsets)
         {
             lock (_bulletLock)
             {
@@ -456,7 +456,7 @@ namespace Hedra.Engine.Bullet
                         Group = CollisionFilterGroups.StaticFilter,
                         Mask = CollisionFilterGroups.AllFilter,
                         Name = $"Static Objects on ({Offset.X}, {Offset.Y})",
-                        StaticOffsets = new CollisionGroup(Shapes).Offsets,
+                        StaticOffsets = Offsets,
                         UsedBytes = Shapes.Sum(S => S.SizeInBytes)
                     }));
                 }

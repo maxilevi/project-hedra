@@ -167,7 +167,7 @@ namespace Hedra.Engine.Generation.ChunkSystem
             if (BuildingLod == 1 || BuildingLod == 2)
             {
                 var mesh = CreateCollisionTerrainMesh(Allocator);
-                Bullet.BulletPhysics.AddChunk(Position.Xz(), mesh, CollisionShapes);
+                Bullet.BulletPhysics.AddChunk(Position.Xz(), mesh, Mesh.CollisionShapes, Mesh.Offsets);
                 mesh.Dispose();
             }
             else
@@ -360,12 +360,9 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public void AddCollisionShape(params CollisionShape[] Data)
         {
             if (Mesh == null) throw new ArgumentException($"Failed to add collision shape");
-
-            lock (Mesh.CollisionBoxes)
-            {
-                for (var i = 0; i < Data.Length; i++)
-                    Mesh.CollisionBoxes.Add(Data[i]);
-            }
+            
+            for (var i = 0; i < Data.Length; i++)
+                Mesh.Add(Data[i]);
         }
 
         public bool NeighboursExist
@@ -397,19 +394,6 @@ namespace Hedra.Engine.Generation.ChunkSystem
         public ChunkMesh StaticBuffer => Mesh;
 
         public ReadOnlyCollection<VertexData> StaticElements => Mesh.Elements.AsReadOnly();
-
-        public CollisionShape[] CollisionShapes
-        {
-            get
-            {
-                if (Disposed) return new List<CollisionShape>().ToArray();
-
-                lock (Mesh.CollisionBoxes)
-                {
-                    return Mesh.CollisionBoxes.ToArray();
-                }
-            }
-        }
 
         public int MaximumHeight => _terrainBuilder.Sparsity?.MaximumHeight ?? BoundsY - 1;
         public int MinimumHeight => _terrainBuilder.Sparsity?.MinimumHeight ?? 0;
