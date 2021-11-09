@@ -60,13 +60,13 @@ namespace Hedra.AISystem
 
         private void OnDamage(DamageEventArgs Args)
         {
-            if(Args.Damager != Owner && Args.Damager != Parent && Args.Damager != null)
+            if(Args.Damager != Owner && Args.Damager != Parent && Args.Damager != null && _attack.Target == null)
                 _attack.SetTarget(Args.Damager);
         }
 
         private void OnDamaging(IEntity Target, float Damage)
         {
-            if (Target != Owner && Target != Parent && Target != null)
+            if (Target != Owner && Target != Parent && Target != null && _attack.Target == null)
                 _attack.SetTarget(Target);
         }
 

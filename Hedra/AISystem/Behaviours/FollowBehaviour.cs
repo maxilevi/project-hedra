@@ -29,7 +29,9 @@ namespace Hedra.AISystem.Behaviours
         public void Cancel()
         {
             Target = null;
+            _followTimer.MarkReady();
             Traverse.CancelWalk();
+            Traverse.Cancel();
         }
 
         protected virtual void SetPosition()
