@@ -121,6 +121,6 @@ void main()
     }
     occlusion = (occlusion / sample_count);
     occlusion = max(0.0, occlusion -0.0);
-    float occ = occlusion * Intensity * 0.75;
+    float occ = occlusion * Intensity * .75;
     Color = vec4(occ,occ,occ, 1.0);
 }
