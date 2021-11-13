@@ -29,6 +29,7 @@ using Hedra.WeaponSystem;
 using System.Numerics;
 using Hedra.Components;
 using Hedra.Engine.Bullet;
+using Hedra.Game;
 using Moq;
 
 namespace HedraTests.Player
@@ -50,6 +51,8 @@ namespace HedraTests.Player
                 Path = string.Empty,
                 Scale = 0
             });
+            GameSettings.AvailableResolutions = new[] {Vector2.One};
+            GameSettings.ResolutionIndex = 0;
             UI = new UserInterface(this);
             var physicsMock = new Mock<IPhysicsComponent>();
             physicsMock.Setup(P => P.StaticRaycast(It.IsAny<Vector3>())).Returns(false);
