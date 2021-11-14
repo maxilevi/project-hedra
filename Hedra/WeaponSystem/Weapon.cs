@@ -183,6 +183,7 @@ namespace Hedra.WeaponSystem
 
         protected void SetToDefault(ObjectMesh Mesh)
         {
+            Mesh.UseLegacyRotation = true;
             Mesh.Position = Vector3.Zero;
             Mesh.LocalRotationPoint = Vector3.Zero;
             Mesh.LocalRotation = Vector3.Zero;
