@@ -77,7 +77,7 @@ namespace Hedra.Engine.Management
             get
             {
                 lock (Lock)
-                    return Routines.Count;
+                    return RoutinesToAdd.Count + Routines.Count;
             }
         }
     }

@@ -103,5 +103,11 @@ namespace Hedra.Components
         {
             
         }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            EventDispatcher.UnregisterKeyDown(this);
+        }
     }
 }

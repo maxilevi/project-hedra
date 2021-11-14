@@ -52,36 +52,6 @@ namespace Hedra.Engine.PhysicsSystem
             return new Vector3(rho, theta, 0) * Mathf.Degree;
         }
 
-        private static Vector3 GetRotation(Vector3 source, Vector3 dest, Vector3 up)
-        {
-            float dot = Vector3.Dot(source, dest);
-
-            if (Math.Abs(dot - (-1.0f)) < 0.01f)
-            {
-                // vector a and b point exactly in the opposite direction, 
-                // so it is a 180 degrees turn around the up-axiss
-            }
-            if (Math.Abs(dot - (1.0f)) < 0.01f)
-            {
-                // vector a and b point exactly in the same direction
-                // so we return the identity quaternion
-                return Vector3.Zero;
-            }
-
-            float rotAngle = (float)Math.Acos(dot);
-            Vector3 rotAxis = Vector3.Cross(source, dest);
-            rotAxis = Vector3.Normalize(rotAxis);
-            return rotAxis * rotAngle * Mathf.Degree;
-        }
-        
-        private static float CalculateNewX(Vector3 Direction)
-        {
-            var output = 0f;
-            if (Direction.Y > 0) output = Mathf.Lerp(0, -90, Direction.Y);
-            else output = Mathf.Lerp(0, 90, -Direction.Y);
-            return output;
-        }
-        
         public static float HeightAtPosition(float X, float Z)
         {
              return HeightAtPosition(new Vector3(X,0,Z));

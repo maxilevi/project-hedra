@@ -519,17 +519,6 @@ namespace Hedra.Engine.Player
             }    
         }
 
-        public float ArmorMovementSpeedBonus
-        {
-            get
-            {
-                return GetEquipmentItems().Select(E =>
-                        E.HasAttribute(CommonAttributes.MovementSpeed) ? E.GetAttribute<float>(CommonAttributes.MovementSpeed) : 0)
-                    .Sum();
-            }
-        }
-        
-        
         public float XP
         {
             get => _xp;

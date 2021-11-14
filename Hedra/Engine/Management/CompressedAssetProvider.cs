@@ -25,6 +25,8 @@ using Hedra.Engine.Core;
 using Hedra.Numerics;
 using Hedra.Framework;
 using Silk.NET.GLFW;
+using Silk.NET.OpenGL.Legacy;
+using PixelFormat = System.Drawing.Imaging.PixelFormat;
 
 namespace Hedra.Engine.Management
 {
@@ -136,6 +138,7 @@ namespace Hedra.Engine.Management
         
         public byte[] ReadPath(string Path, bool Text = true)
         {
+
             bool external = !Path.Contains("$DataFile$");
             if (!external || Path.StartsWith("Assets/") || Path.StartsWith("Assets\\"))
             {

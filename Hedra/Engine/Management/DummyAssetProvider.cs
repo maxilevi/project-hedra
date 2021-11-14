@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using Hedra.Engine.PhysicsSystem;
 using Hedra.Engine.Rendering.Animation.ColladaParser;
 using Hedra.Rendering;
 using System.Numerics;
+using System.Text;
 using Image = Silk.NET.GLFW.Image;
 
 namespace Hedra.Engine.Management
@@ -17,6 +19,16 @@ namespace Hedra.Engine.Management
         public string AppData => new CompressedAssetProvider().AppData;
         public string TemporalFolder { get; }
         public string ShaderCode { get; }
+        private static string _exePath;
+        private static readonly byte[] SampleAnimation;
+
+        static DummyAssetProvider()
+        {
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            var path = Path.GetDirectoryName(assembly.Location);
+            _exePath = path;
+            SampleAnimation = Encoding.ASCII.GetBytes(File.ReadAllText(_exePath + "/test_model.xml"));
+        }
         
         public void Load()
         {
@@ -32,6 +44,8 @@ namespace Hedra.Engine.Management
 
         public byte[] ReadPath(string Path, bool Text = true)
         {
+            if (Path.Contains(".dae"))
+                return SampleAnimation;
             return SampleImage;
         }
 
@@ -94,7 +108,7 @@ namespace Hedra.Engine.Management
 
         public ModelData DAELoader(string File)
         {
-            return default(ModelData);
+            return new ModelData(new Vector3[0], new Vector3[0], new Vector3[0], new uint[0], new Vector3[0], new Vector3[0], new []{"Chest"});
         }
 
         public void Dispose()
