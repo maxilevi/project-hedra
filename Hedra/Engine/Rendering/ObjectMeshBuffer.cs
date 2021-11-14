@@ -52,6 +52,7 @@ namespace Hedra.Engine.Rendering
         public Vector3 LocalRotationPoint { get; set; }
         public Vector3 LocalPosition { get; set; }
         public Vector3 BeforeRotation { get; set; }
+        public bool UseLegacyRotation { get; set; }
         
 
         private static readonly Texture3D NoiseTexture;
@@ -137,9 +138,12 @@ namespace Hedra.Engine.Rendering
             get
             { 
                 if(_rotMatrixCached) return _localRotationMatrix;
-                _localRotationMatrix = Matrix4x4.CreateRotationY(_localRotation.Y * Mathf.Radian)
-                    * Matrix4x4.CreateRotationX(_localRotation.X * Mathf.Radian)
-                    * Matrix4x4.CreateRotationZ(_localRotation.Z * Mathf.Radian);
+                if (UseLegacyRotation)
+                    _localRotationMatrix = Matrix4x4.CreateRotationY(_localRotation.Y * Mathf.Radian) *
+                                           Matrix4x4.CreateRotationX(_localRotation.X * Mathf.Radian) *
+                                           Matrix4x4.CreateRotationZ(_localRotation.Z * Mathf.Radian);
+                else
+                    _localRotationMatrix = Matrix4x4.CreateFromQuaternion(QuaternionMath.FromEuler(_localRotation * Mathf.Radian));
                 _rotMatrixCached = true;
                 return _localRotationMatrix;
                 
@@ -165,9 +169,12 @@ namespace Hedra.Engine.Rendering
             set
             {
                 _rotation = value;
-                _rotationMatrix = Matrix4x4.CreateRotationX(value.X * Mathf.Radian)
-                    * Matrix4x4.CreateRotationY(value.Y * Mathf.Radian)
-                    * Matrix4x4.CreateRotationZ(value.Z * Mathf.Radian);
+                if (UseLegacyRotation)
+                    _rotationMatrix = Matrix4x4.CreateRotationX(_rotation.X * Mathf.Radian) *
+                                      Matrix4x4.CreateRotationY(_rotation.Y * Mathf.Radian) *
+                                      Matrix4x4.CreateRotationZ(_rotation.Z * Mathf.Radian);
+                else
+                    _rotationMatrix = Matrix4x4.CreateFromQuaternion(QuaternionMath.FromEuler(_rotation * Mathf.Radian));
             }
         }
         

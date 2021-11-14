@@ -197,7 +197,13 @@ namespace Hedra.Rendering
             get => _buffer.ApplyFog;
             set => _buffer.ApplyFog = value;
         }
-        
+
+        public bool UseLegacyRotation
+        {
+            get => _buffer.UseLegacyRotation;
+            set => _buffer.UseLegacyRotation = value;
+        }
+
         public float Alpha
         {
             get => _buffer.Alpha;

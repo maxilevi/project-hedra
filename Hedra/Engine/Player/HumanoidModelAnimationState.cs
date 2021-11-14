@@ -32,10 +32,6 @@ namespace Hedra.Engine.Player
         
         public HumanoidModelAnimationState(IHumanoid Humanoid, HumanoidModel Model, HumanoidModelTemplate Template)
         {
-            if (Template.WalkAnimation != null)
-            {
-                int a = 0;
-            }
             _humanoid = Humanoid;
             _model = Model;
             _walkAnimation = AnimationLoader.LoadAnimation(Template.WalkAnimation ?? "Assets/Chr/WarriorWalk.dae");
@@ -157,7 +153,7 @@ namespace Hedra.Engine.Player
 
         public void Update()
         {
-            _walkAnimation.Speed = _humanoid.Speed;
+            _walkAnimation.Speed = _humanoid.Speed * 1.25f;
         }
 
         public bool IsWalking => _walkAnimation == _model.AnimationPlaying;

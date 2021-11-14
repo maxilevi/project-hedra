@@ -40,28 +40,16 @@ namespace Hedra.Engine.PhysicsSystem
                 new Vector3(Model.SupportPoint(Vector3.UnitX).X, Model.SupportPoint(Vector3.UnitY).Y, Model.SupportPoint(Vector3.UnitZ).Z)
             );
         }
-        
+
         public static Vector3 DirectionToEuler(Vector3 Direction)
         {
-            #if DEBUG
-            if(Direction.IsInvalid())
+#if DEBUG
+            if (Direction.IsInvalid())
                 throw new ArgumentException(nameof(Direction));
-            #endif
-            if(Direction == Vector3.Zero) return Vector3.Zero;
-            if(Direction == new Vector3(0, 1, 0)) return Vector3.UnitX * -90;
-            if(Direction == new Vector3(0, -1, 0)) return Vector3.UnitX * 90;
-            var newForward = Direction.Xz().ToVector3().NormalizedFast();
-            var defaultRot = Vector3.UnitX * CalculateNewX(Direction) + Vector3.UnitZ * GetRotation(Vector3.UnitZ, new Vector3(0, Direction.Y, 1).NormalizedFast(), Vector3.UnitY).Z;
-            var xRot = GetRotation(Vector3.UnitZ, newForward, Vector3.UnitY);
-            var quat = ((Matrix4x4.CreateRotationZ(defaultRot.Z * Mathf.Radian) * Matrix4x4.CreateRotationX(defaultRot.X * Mathf.Radian)) * Matrix4x4.CreateRotationY(xRot.Y * Mathf.Radian)).ExtractRotation();
-            var axisAngle = quat.ToAxisAngle();
-            var result = axisAngle.Xyz() * axisAngle.W * Mathf.Degree;
-            if (result.IsInvalid())
-            {
-                int a = 0;
-                result = Vector3.Zero;
-            }
-            return result;
+#endif
+            var theta = (float) -(Math.Atan2(Direction.Z, Direction.X) - Math.PI / 2);
+            var rho = (float) (Math.Acos(Direction.Y) - Math.PI / 2);
+            return new Vector3(rho, theta, 0) * Mathf.Degree;
         }
 
         private static Vector3 GetRotation(Vector3 source, Vector3 dest, Vector3 up)

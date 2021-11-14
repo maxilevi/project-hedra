@@ -60,9 +60,7 @@ namespace Hedra.Engine.Player
         private bool _hasLamp;
         private Vector3 _previousPosition;
         private Vector3 _rotation;
-        private Quaternion _rotationQuaternionX;
-        private Quaternion _rotationQuaternionY;
-        private Quaternion _rotationQuaternionZ;
+        private Quaternion _rotationQuaternion;
         private float _lastAnimationTime = -1;
         private float _alpha = 1f;
         private Vector3 _defaultHeadPosition = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
@@ -296,14 +294,8 @@ namespace Hedra.Engine.Player
             StateHandler.Update();
             _modelSound.Pitch = Human.Speed / PitchSpeed;
             var rotation = TargetRotation * Mathf.Radian;
-            _rotationQuaternionX = Quaternion.Slerp(_rotationQuaternionX, QuaternionMath.FromEuler(rotation.X, 0, 0), Time.IndependentDeltaTime * 8f);
-            _rotationQuaternionY = Quaternion.Slerp(_rotationQuaternionY, QuaternionMath.FromEuler(0, rotation.Y, 0), Time.IndependentDeltaTime * 8f);
-            _rotationQuaternionZ = Quaternion.Slerp(_rotationQuaternionZ, QuaternionMath.FromEuler(0, 0, rotation.Z), Time.IndependentDeltaTime * 8f);
-            Model.LocalRotation = new Vector3(
-                QuaternionMath.ToEuler(_rotationQuaternionX).X,
-                QuaternionMath.ToEuler(_rotationQuaternionY).Y,
-                QuaternionMath.ToEuler(_rotationQuaternionZ).Z
-                );
+            _rotationQuaternion = Quaternion.Slerp(_rotationQuaternion, QuaternionMath.FromEuler(rotation), Time.IndependentDeltaTime * 8f);
+            Model.LocalRotation = _rotationQuaternion.ToEuler();
             LocalRotation = Model.LocalRotation;
             HandleTransformationMatrix();
             HandleState();
