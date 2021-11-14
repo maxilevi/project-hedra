@@ -13,6 +13,7 @@ using NUnit.Framework;
 
 namespace HedraTests.Game
 {
+    /*
     [TestFixture]
     [Ignore("MobBalance is not useful for detecting balance issues, it only causes errors")]
     public class MobBalanceTest : BaseTest
@@ -69,8 +70,8 @@ namespace HedraTests.Game
             Assert.LessOrEqual(min, val, msg);
             Assert.Pass(msg);
         }
-
-        /* Called via reflection by NUnit */
+*/
+        /* Called via reflection by NUnit 
         private static IEnumerable<IEntity> Mobs()
         {
             BaseTest.MockEngine();
@@ -91,5 +92,5 @@ namespace HedraTests.Game
                 yield return mob;
             }
         }     
-    }
+    }*/
 }

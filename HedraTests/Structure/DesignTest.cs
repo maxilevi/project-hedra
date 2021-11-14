@@ -31,7 +31,10 @@ using Hedra.Structures;
 using HedraTests.Player;
 using Moq;
 using System.Numerics;
+using Hedra.Engine.ClassSystem;
 using Hedra.Engine.ModuleSystem.Templates;
+using Hedra.Engine.Player;
+using Hedra.Engine.Rendering.UI;
 using Hedra.Numerics;
 
 namespace HedraTests.Structure
@@ -42,14 +45,15 @@ namespace HedraTests.Structure
         private List<IEntity> _interceptedEntities;
         private StructureDesign[] _designs;
         private BiomeStructureDesign _biomeStructureDesign;
-        
+
         [SetUp]
         public override void Setup()
         {
+            HumanoidLoader.LoadModules(AssetManager.AppPath);
             base.Setup();
-            DesiredHeight = BiomePool.SeaLevel+1;
+            DesiredHeight = BiomePool.SeaLevel + 1;
             NameGenerator.Load();
-            GameManager.Player = new PlayerMock();
+            GameManager.Player = new PlayerMock(addUI: true);
             var cacheProvider = new Mock<ICacheProvider>();
             var defaultShape = new List<CollisionShape>();
             defaultShape.Add(new CollisionShape(VertexData.Empty));
@@ -71,11 +75,12 @@ namespace HedraTests.Structure
             biomePoolMock.Setup(B => B.GetRegion(It.IsAny<Vector3>())).Returns(defaultRegion);
             var worldMock = new Mock<IWorldProvider>();
             var normalProvider = new WorldProvider();
-            worldMock.Setup(W => W.ToChunkSpace(It.IsAny<Vector3>())).Returns<Vector3>(V => normalProvider.ToChunkSpace(V));
+            worldMock.Setup(W => W.ToChunkSpace(It.IsAny<Vector3>()))
+                .Returns<Vector3>(V => normalProvider.ToChunkSpace(V));
             worldMock.Setup(W => W.BiomePool).Returns(biomePoolMock.Object);
             worldMock.Setup(W => W.AddEntity(It.IsAny<IEntity>())).Callback(delegate(IEntity Entity)
             {
-                if(!_interceptedEntities.Contains(Entity)) _interceptedEntities.Add(Entity);
+                if (!_interceptedEntities.Contains(Entity)) _interceptedEntities.Add(Entity);
             });
             var guardAiComponentMock = new Mock<IGuardAIComponent>();
             guardAiComponentMock.As<ITraverseAIComponent>();
@@ -85,11 +90,11 @@ namespace HedraTests.Structure
                 ent.AddComponent(new HealthBarComponent(ent, "test", HealthBarType.Hostile));
                 ent.AddComponent(new DamageComponent(ent));
                 ent.AddComponent(guardAiComponentMock.Object);
-                if(!_interceptedEntities.Contains(ent)) _interceptedEntities.Add(ent);
+                if (!_interceptedEntities.Contains(ent)) _interceptedEntities.Add(ent);
                 return ent;
             });
             var factory = new MobFactory();
-            factory.AddFactory(new []
+            factory.AddFactory(new[]
             {
                 new CustomFactory
                 {
@@ -100,10 +105,17 @@ namespace HedraTests.Structure
                     Name = "giantbeetle"
                 }
             });
+            var worldbuilding = new StructureDesignWorldBuildingMock();
             worldMock.Setup(W => W.MobFactory).Returns(factory);
-            worldMock.Setup(W => W.WorldBuilding).Returns(new StructureDesignWorldBuildingMock());
+            worldMock.Setup(W => W.WorldBuilding).Returns(worldbuilding);
             worldMock.Setup(W => W.StructureHandler).Returns(new StructureHandler());
             World.Provider = worldMock.Object;
+            var npcMock = new Mock<INPCCreatorProvider>();
+            npcMock.Setup(T => T.SpawnHumanoid(It.IsAny<string>(), It.IsAny<Vector3>()))
+                .Returns(worldbuilding.SpawnHumanoid(string.Empty, Vector3.Zero));
+            npcMock.Setup(T => T.SpawnHumanoid(It.IsAny<HumanType>(), It.IsAny<Vector3>()))
+                .Returns(worldbuilding.SpawnHumanoid(string.Empty, Vector3.Zero));
+            NPCCreator.Provider = npcMock.Object;
             Design = new T();
             _rng = new Random(1);
             _designs = new NormalBiomeStructureDesign().Designs;

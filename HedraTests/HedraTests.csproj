@@ -59,8 +59,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Silk.NET.Core, Version=2.9.0.0, Culture=neutral, PublicKeyToken=null">
@@ -217,7 +217,6 @@
     <Compile Include="Rendering\MeshAnalyzerTest.cs" />
     <Compile Include="Scripting\InterpreterTests.cs" />
     <Compile Include="SimpleAnimationProvider.cs" />
-    <Compile Include="SimpleColladaProvider.cs" />
     <Compile Include="SimpleEventProvider.cs" />
     <Compile Include="SimpleGameProviderMock.cs" />
     <Compile Include="SimpleHedraWindowMock.cs" />
@@ -264,6 +263,11 @@
       <Project>{301a6b68-cf39-4e86-a50a-479b96a5a298}</Project>
       <Name>Hedra</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="test_model.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

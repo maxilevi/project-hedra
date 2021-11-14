@@ -50,7 +50,6 @@ namespace HedraTests
             Graphics2D.Provider = new SimpleTexture2DProviderMock();
             Renderer.Provider = new DummyGLProvider();
             AnimationLoader.Provider = new SimpleAnimationProvider();
-            ColladaLoader.Provider = new SimpleColladaProvider();
             GameManager.Provider = new SimpleGameProviderMock();
             GUIText.Provider = new SimpleTextProviderMock();
             ClassLoader.LoadModules(GameLoader.AppPath);

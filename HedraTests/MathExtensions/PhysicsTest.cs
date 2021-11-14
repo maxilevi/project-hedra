@@ -1,22 +1,33 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using Hedra.Engine.PhysicsSystem;
 using NUnit.Framework;
 using System.Numerics;
+using Hedra.Numerics;
 
 namespace HedraTests.MathExtensions
 {
     [TestFixture]
     public class PhysicsTest
     {
-        [Test]
-        public void DirectionToEulerTest()
+        [TestCaseSource(nameof(All))]
+        public void DirectionToEulerTest(KeyValuePair<Vector3, Vector3> pair)
+        {
+            var expectedEuler = pair.Value;
+            var euler = Physics.DirectionToEuler(pair.Key);
+
+            Assert.True((euler - expectedEuler).Length() < 0.05f, $"Rotation of direction {pair.Key} was {euler} but should be {expectedEuler}");
+        }
+
+        private static IEnumerable All()
         {
             var samples = new Dictionary<Vector3, Vector3>
             {
-                {new Vector3(0, 1, 0), new Vector3(-90, 0, 0)},
-                {new Vector3(0, -1, 0), new Vector3(90, 0, 0)},
                 {new Vector3(0, 0, 1), new Vector3(0, 0, 0)},
                 {new Vector3(0, 0, -1), new Vector3(0, 180, 0)},
+                {new Vector3(0, 1, 0), new Vector3(-90, 0, 0)},
+                {new Vector3(0, -1, 0), new Vector3(90, 0, 0)},
                 {new Vector3(1, 0, 0), new Vector3(0, 90, 0)},
                 {new Vector3(-1, 0, 0), new Vector3(0, -90, 0)},
                 {new Vector3(1, 1, 1), new Vector3(-84.92001f, 35.18748f, 35.18751f)},
@@ -26,12 +37,10 @@ namespace HedraTests.MathExtensions
                 {new Vector3(-1, 1, 0), new Vector3(138.564f, 138.5641f, 138.5642f)},
                 {new Vector3(0, -1, -1), new Vector3(0, -127.2792f, 127.2793f)},
             };
-            foreach (var sample in samples)
+            foreach (var pair in samples)
             {
-                var expectedEuler = sample.Value;
-                var euler = Physics.DirectionToEuler(sample.Key);
-                Assert.True((euler - expectedEuler).Length() < 0.05f, $"Expected euler: {expectedEuler} should be equal to {euler}");
-            }
+                yield return pair;
+            } 
         }
     }
 }

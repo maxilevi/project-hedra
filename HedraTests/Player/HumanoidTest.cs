@@ -1,4 +1,5 @@
 using Hedra.Engine.ClassSystem;
+using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.Player;
@@ -19,8 +20,8 @@ namespace HedraTests.Player
             _human = new Humanoid();
             _human.Model = new HumanoidModel(_human, new HumanoidModelTemplate
             {
-                Path = string.Empty,
-                Scale = 0
+                Path = "Assets/Chr/WarriorIdle.dae",
+                Scale = 1
             });
         }
 

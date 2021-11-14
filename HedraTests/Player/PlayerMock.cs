@@ -42,18 +42,20 @@ namespace HedraTests.Player
         public event OnDeadEvent OnDeath;
         public SimpleMessageDispatcherMock MessageMock => MessageDispatcher as SimpleMessageDispatcherMock;
         public SimpleCameraMock CameraMock => View as SimpleCameraMock;
-        public PlayerMock()
+
+        public PlayerMock(bool addUI = false)
         {
             MessageDispatcher = new SimpleMessageDispatcherMock();
             Movement = new SimpleMovementMock(this);
             Model = new HumanoidModel(this, new HumanoidModelTemplate
             {
-                Path = string.Empty,
-                Scale = 0
+                Path = "Assets/Chr/WarriorIdle.dae",
+                Scale = 1
             });
             GameSettings.AvailableResolutions = new[] {Vector2.One};
             GameSettings.ResolutionIndex = 0;
-            UI = new UserInterface(this);
+            if (addUI)
+                UI = new UserInterface(this);
             var physicsMock = new Mock<IPhysicsComponent>();
             physicsMock.Setup(P => P.StaticRaycast(It.IsAny<Vector3>())).Returns(false);
             Physics = physicsMock.Object;

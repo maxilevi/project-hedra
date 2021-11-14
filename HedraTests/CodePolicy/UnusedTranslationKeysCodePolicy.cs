@@ -29,7 +29,8 @@ namespace HedraTests.CodePolicy
             "quest_pickup_item_short",
             "quest_pickup_default_item_description",
             "quest_pickup_chest_description",
-            "quest_pickup_get_item_description"
+            "quest_pickup_get_item_description",
+            "possessed_cow"
         };
 
         private void LoadKeys(out string[] Keys, out string[] SourceFiles)

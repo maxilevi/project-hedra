@@ -19,6 +19,7 @@ namespace HedraTests.Structure
             return new GiantTree(Position);
         }
 
+        [Ignore("No longer accepted behaviour")]
         [Test]
         public void TestGiantTreeSpawnsWithoutBossAndWithChestUnderWater()
         {

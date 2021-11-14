@@ -9,8 +9,10 @@ using Hedra.Engine.Management;
 using Hedra.Engine.ModuleSystem;
 using Hedra.Engine.ModuleSystem.Templates;
 using Hedra.Engine.Player;
+using Hedra.Engine.Sound;
 using Hedra.EntitySystem;
 using Hedra.Items;
+using Hedra.Sound;
 using NUnit.Framework;
 
 namespace HedraTests.Game
@@ -223,6 +225,7 @@ namespace HedraTests.Game
         private static void LoadItems()
         {
             AssetManager.Provider = new DummyAssetProvider();
+            SoundPlayer.Provider = new DummySoundProvider();
             if (!_loaded)
             {
                 _loaded = true;
