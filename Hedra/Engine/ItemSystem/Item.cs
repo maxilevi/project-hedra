@@ -170,6 +170,11 @@ namespace Hedra.Engine.ItemSystem
             return NewItem;
         }
 
+        public Item Clone()
+        {
+            return FromTemplate(ItemTemplate.FromItem(this));
+        }
+
 
         public byte[] ToArray()
         {
