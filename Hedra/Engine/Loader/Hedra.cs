@@ -5,6 +5,7 @@
 using System;
 using System.Drawing;
 using System.Globalization;
+using System.Numerics;
 using System.Reflection;
 using System.Runtime;
 using System.Text.RegularExpressions;
@@ -67,7 +68,7 @@ namespace Hedra.Engine.Loader
 
         public void Setup()
         {
-            Title = $"Project Hedra {GameVersion} Early Access Build {BuildNumber}";
+            Title = $"Project Hedra {GameVersion}";
             if (!LoadBoilerplate())
             {
                 Close();
