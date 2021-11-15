@@ -62,8 +62,8 @@ namespace Hedra.Engine.Rendering.Effects
             formats[2] = PixelInternalFormat.Rgba16f;
 
             FirstPass = new FBO(new Size(GameSettings.Width, GameSettings.Height), attachments, formats, false, false, 0, true);
-            ThirdPass = new FBO(GameSettings.Width / 1, GameSettings.Height / 1);
-            SecondPass = new FBO(GameSettings.Width / 1, GameSettings.Height / 1);
+            ThirdPass = new FBO(GameSettings.Width / 2, GameSettings.Height / 2);
+            SecondPass = new FBO(GameSettings.Width / 2, GameSettings.Height / 2);
             WaterPass = new FBO(GameSettings.Width / 4, GameSettings.Height / 4);
 
             #region SETUP UNIFORMS & TEXTURES

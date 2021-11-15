@@ -39,6 +39,7 @@ namespace Hedra.Rendering
         private List<Vector3> _normals;
         private List<uint> _indices;
         private List<float> _extradata;
+        private List<VertexData> _groups;
         public VertexData Original { get; set; }
         public bool UseCache { get; set; }
         public static VertexData Empty { get; }

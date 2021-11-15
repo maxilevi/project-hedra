@@ -99,6 +99,50 @@ namespace Hedra.Engine.Rendering.Geometry
 
         }
 
+       /* public static VertexData[] GetConnectedComponents2(VertexData Mesh)
+        {
+            var list = new List<VertexData>();
+            var vertices = Mesh.Vertices;
+            if (vertices.Count == 0) return list.ToArray();
+
+            var graph = new Dictionary<Vector3, List<Vector3>>();
+            var indices = Mesh.Indices;
+            Vector3 GetVertex(int I)
+            {
+                return new Vertex(
+                    vertices[(int) indices[I]],
+                    vertices[(int) indices[I]],
+                    vertices[(int) indices[I]]
+                );
+            }
+            
+            for (var i = 0; i < indices.Count; i += 3)
+            {
+                var v0 = GetVertex(i);
+                var v1 = GetVertex(i+1);
+                var v2 = GetVertex(i+2);
+
+                if(!graph.ContainsKey(v0))
+                    graph.Add(v0, new List<Vector3>());
+                
+                if(!graph.ContainsKey(v1))
+                    graph.Add(v1, new List<Vector3>());
+                
+                if(!graph.ContainsKey(v2))
+                    graph.Add(v2, new List<Vector3>());
+                
+                graph[v0].Add(v1);
+                graph[v0].Add(v2);
+                
+                graph[v1].Add(v0);
+                graph[v1].Add(v2);
+                
+                graph[v2].Add(v0);
+                graph[v2].Add(v1);
+            }
+
+        }*/
+
         public static VertexData[] GetConnectedComponents(VertexData Mesh)
         {
             var list = new List<VertexData>();
@@ -188,13 +232,9 @@ namespace Hedra.Engine.Rendering.Geometry
             var finalMap = new Dictionary<Vector3, Triangle[]>();
             Vertex MakeVertex(int Index)
             {
-                return new Vertex
-                {
-                    Position = Vertices[Index],
-                    Color = Colors[Index],
-                    Normal = Normals[Index]
-                };
+                return new Vertex(Vertices[Index], Colors[Index], Normals[Index]);
             }
+            
             for (var i = 0; i < Indices.Count; i+=3)
             {
                 var p1 = MakeVertex((int)Indices[i]);
@@ -267,13 +307,25 @@ namespace Hedra.Engine.Rendering.Geometry
         
         public struct Vertex
         {
-            public Vector3 Position;
-            public Vector4 Color;
-            public Vector3 Normal;
+            public readonly Vector3 Position;
+            public readonly Vector4 Color;
+            public readonly  Vector3 Normal;
 
+            public Vertex(Vector3 p, Vector4 c, Vector3 n)
+            {
+                Position = p;
+                Color = c;
+                Normal = n;
+            }
+
+            private static int Combine(int h1, int h2)
+            {
+                return (h1 << 5) + h1 ^ h2;
+            }
+            
             public override int GetHashCode()
             {
-                return (Position.GetHashCode() * 17 + Color.GetHashCode()) ^ Normal.GetHashCode();
+                return Combine(Combine(Position.GetHashCode(), Color.GetHashCode()), Normal.GetHashCode());
             }
         }
     }

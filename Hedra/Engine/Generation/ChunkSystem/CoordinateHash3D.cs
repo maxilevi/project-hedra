@@ -8,8 +8,8 @@ namespace Hedra.Engine.Generation.ChunkSystem
     [StructLayout(LayoutKind.Sequential)]
     public struct CoordinateHash3D : IEquatable<CoordinateHash3D>
     {
-        public const int MaxCoordinateSizeXZ = 32;
-        public const int MaxCoordinateSizeY = 64;
+        public const int MaxCoordinateSizeXZ = (int) (Chunk.Width / Chunk.BlockSize);
+        public const int MaxCoordinateSizeY = (int) (Chunk.Height / Chunk.BlockSize);
         private readonly ushort _bits;
 
         public CoordinateHash3D(Vector3 Coordinates): this((byte)Coordinates.X, (byte)Coordinates.Y, (byte)Coordinates.Z)
