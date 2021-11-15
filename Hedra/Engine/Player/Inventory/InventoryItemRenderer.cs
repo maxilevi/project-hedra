@@ -22,7 +22,7 @@ namespace Hedra.Engine.Player.Inventory
 {
     public class InventoryItemRenderer
     {
-        public const float ZOffsetFactor = 1.25f * 5f;
+        public const float ZOffsetFactor = 5f;
         public static readonly FBO Framebuffer;
         private InventoryArray _array;
         private readonly int _length;
@@ -95,8 +95,8 @@ namespace Hedra.Engine.Player.Inventory
 
         public static uint Draw(ObjectMesh Mesh, bool IsWeapon, bool TiltIfWeapon, Vector3 Size)
         {
-            var zoffset = Size.Y > (Size.X + Size.Z) * .25f ? Size.Y * ZOffsetFactor : (Size.X + Size.Z);
-            return Draw(Mesh, IsWeapon, TiltIfWeapon, Size.Y * ZOffsetFactor + (Size.X + Size.Z) * .5f);
+            var zoffset = ZOffsetFactor * Size.Length();
+            return Draw(Mesh, IsWeapon, TiltIfWeapon, zoffset);
         }
 
         public static uint Draw(ObjectMesh Mesh, Item Item, bool TiltIfWeapon, Vector3 Size)

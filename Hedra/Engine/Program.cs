@@ -22,6 +22,7 @@ using System.Runtime;
 using System.Runtime.InteropServices;
 using BulletSharp;
 using Hedra.Engine.Scripting;
+using Silk.NET.Core;
 using Silk.NET.GLFW;
 using Silk.NET.Windowing;
 using Monitor = Silk.NET.Windowing.Monitor;
@@ -171,15 +172,8 @@ namespace Hedra.Engine
             {
                 Log.WriteLine("Loading Icon...");
                 var pixels = AssetManager.LoadIcon("Assets/Icon.ico", out var width, out var height);
-                fixed (byte* ptr = pixels)
-                {
-                    GameWindow.SetIcon(new Silk.NET.GLFW.Image
-                    {
-                        Width = width,
-                        Height = height,
-                        Pixels = ptr
-                    });
-                }
+                var raw = new RawImage(width, height, new Memory<byte>(pixels));
+                GameWindow.Window.SetWindowIcon(ref raw);
             }
             
             GameSettings.SurfaceWidth = GameWindow.Width;
