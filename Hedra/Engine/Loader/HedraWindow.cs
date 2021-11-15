@@ -6,6 +6,7 @@ using Hedra.Engine.Events;
 using Hedra.Engine.Windowing;
 using System.Numerics;
 using Hedra.Engine.Core;
+using Silk.NET.Core;
 using Silk.NET.GLFW;
 using Silk.NET.Input;
 using Silk.NET.Input;
@@ -174,16 +175,7 @@ namespace Hedra.Engine.Loader
                 }
             }
         }
-
-        public void SetIcon(Image Icon)
-        {
-            unsafe
-            {
-                var glfw = GlfwProvider.GLFW.Value;
-                glfw.SetWindowIcon((WindowHandle*) Window.Handle, 1, &Icon);
-            }
-        }
-
+        
         public event Action<MouseButtonEventArgs> MouseUp;
         public event Action<MouseButtonEventArgs> MouseDown;
         public event Action<MouseWheelEventArgs> MouseWheel;

@@ -18,6 +18,5 @@ namespace Hedra.Engine.Loader
         void Close();
         int Width { get; set; }
         int Height { get; set; }
-        void SetIcon(Image Icon);
     }
 }
