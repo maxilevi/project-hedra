@@ -2,7 +2,7 @@
 cd "$(dirname "$0")" && cd ".."
 
 echo -e "Building hedra-core"
-./hedra-core/build.sh
+./hedra-core/build-windows.sh
 
 echo -e "Copying files..."
 cp ./hedra-core/cmake-build-x32/Release/hedracore.dll ./Hedra/x86/hedracore.dll
