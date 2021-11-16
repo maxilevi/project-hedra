@@ -90,7 +90,7 @@ namespace AssetBuilder
                         offset += actualSize;
                     }
                 }
-                Console.WriteLine($"Wrote {data.Length} bytes!");
+                //Console.WriteLine($"Wrote {data.Length} bytes!");
             }
         }
 
