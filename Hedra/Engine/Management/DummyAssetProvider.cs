@@ -98,7 +98,7 @@ namespace Hedra.Engine.Management
         {
             return new VertexData()
             {
-                Vertices = new List<Vector3>(new[] {new Vector3(), new Vector3(), new Vector3()}),
+                Vertices = new List<Vector3>(new[] {-Vector3.One, Vector3.UnitY * 3, Vector3.One * 2}),
                 Colors = new List<Vector4>(new[] {new Vector4(), new Vector4(), new Vector4()}),
                 Normals = new List<Vector3>(new[] {new Vector3(), new Vector3(), new Vector3()}),
                 Indices = new List<uint>(new[] {(uint) 0, (uint)1, (uint)2}),

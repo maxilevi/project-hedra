@@ -31,7 +31,6 @@ namespace Hedra.Engine.Rendering.Core
         public static bool Exists<T>(T[] Data, int SizeInBytes, VertexAttribPointerType PointerType, BufferTarget BufferTarget, BufferUsageHint Hint, out uint Id)
         {
             Id = 0;
-            if (GameSettings.TestingMode) return true;
             var hash = Hash(Data, SizeInBytes, PointerType, BufferTarget, Hint);
             if (_hashedReferences.ContainsKey(hash))
             {
@@ -149,6 +148,14 @@ namespace Hedra.Engine.Rendering.Core
                 offset += size;
             }
             Marshal.FreeHGlobal(ptr);
+        }
+
+        public static void Clear()
+        {
+            if (!GameSettings.TestingMode) throw new NotImplementedException();
+            _uncachedVBOs.Clear();
+            _hashedReferences.Clear();
+            _referenceCounter.Clear();
         }
 
         public static int CachedVBOs => _referenceCounter.Count;

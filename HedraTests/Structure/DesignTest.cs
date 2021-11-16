@@ -112,9 +112,14 @@ namespace HedraTests.Structure
             World.Provider = worldMock.Object;
             var npcMock = new Mock<INPCCreatorProvider>();
             npcMock.Setup(T => T.SpawnHumanoid(It.IsAny<string>(), It.IsAny<Vector3>()))
-                .Returns(worldbuilding.SpawnHumanoid(string.Empty, Vector3.Zero));
+                .Returns((string s, Vector3 p) => worldbuilding.SpawnHumanoid(s, p));
+            
             npcMock.Setup(T => T.SpawnHumanoid(It.IsAny<HumanType>(), It.IsAny<Vector3>()))
-                .Returns(worldbuilding.SpawnHumanoid(string.Empty, Vector3.Zero));
+                .Returns((HumanType s, Vector3 p) => worldbuilding.SpawnHumanoid(s.ToString().ToLowerInvariant(), p));
+            
+            npcMock.Setup(T => T.SpawnBandit(It.IsAny<Vector3>(), It.IsAny<int>(), It.IsAny<BanditOptions>()))
+                .Returns((Vector3 p, int i, BanditOptions _) => worldbuilding.SpawnHumanoid(string.Empty, p));
+            
             NPCCreator.Provider = npcMock.Object;
             Design = new T();
             _rng = new Random(1);

@@ -33,6 +33,13 @@ namespace Hedra.Engine.Management
             lock (Lock)
                 StandBy.Clear();
         }
+        
+        public static void Clear()
+        {
+            Flush();
+            lock (Lock)
+                Functions.Clear();
+        }
 
         public static void Update()
         {
@@ -52,7 +59,11 @@ namespace Hedra.Engine.Management
         private struct InvokerCall
         {
             /* Used for debugging */
+#if DEBUG
             public StackTrace Trace;
+#else
+                Trace = null;
+#endif
             public Action Call;
 
             public InvokerCall(Action Call)

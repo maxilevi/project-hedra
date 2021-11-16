@@ -225,7 +225,6 @@
     <Compile Include="SimpleWorldProviderMock.cs" />
     <Compile Include="SimpleMessageDispatcherMock.cs" />
     <Compile Include="Handling\ExecuterTest.cs" />
-    <Compile Include="MathExtensions\QuaternionExtensionTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sound\SoundtrackTest.cs" />
     <Compile Include="Structure\BanditCampDesignTest.cs" />

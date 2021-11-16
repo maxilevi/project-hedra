@@ -15,6 +15,7 @@ using Hedra.Engine.Rendering.UI;
 using Hedra.Engine.Sound;
 using Hedra.Game;
 using Hedra.Localization;
+using Hedra.Mission;
 using Hedra.Rendering;
 using Hedra.Rendering.UI;
 using Hedra.Sound;
@@ -49,6 +50,8 @@ namespace HedraTests
             AssetManager.Provider = new DummyAssetProvider();
             Graphics2D.Provider = new SimpleTexture2DProviderMock();
             Renderer.Provider = new DummyGLProvider();
+            VBOCache.Clear();
+            Executer.Clear();
             AnimationLoader.Provider = new SimpleAnimationProvider();
             GameManager.Provider = new SimpleGameProviderMock();
             GUIText.Provider = new SimpleTextProviderMock();
@@ -61,6 +64,7 @@ namespace HedraTests
             GameSettings.Height = 1080;
             BulletPhysics.Load();
             BackgroundUpdater.Load();
+            MissionPool.Load();
         }
 
         [TearDown]

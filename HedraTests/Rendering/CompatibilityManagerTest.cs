@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
+using Hedra.Game;
 
 namespace HedraTests.Rendering
 {
@@ -51,7 +52,9 @@ namespace HedraTests.Rendering
             var timesCalled = 0;
             glMock.Setup(M => M.DrawElements(It.IsAny<PrimitiveType>(), It.IsAny<int>(), It.IsAny<DrawElementsType>(),
                 It.IsAny<IntPtr>())).Callback(() => ++timesCalled);
-            
+
+            GameSettings.TestingMode = true;
+            VBOCache.Clear();
             Renderer.Provider = glMock.Object;
             CompatibilityManager.Load();
 
@@ -62,20 +65,16 @@ namespace HedraTests.Rendering
         [Test]
         public void TestMultiDrawIsEnabledIfNoErrors()
         {
-            var glMock = new Mock<IGLProvider>();
-            
-            var timesCalled = 0;
-            glMock.Setup(M => M.MultiDrawElements(It.IsAny<PrimitiveType>(), It.IsAny<uint[]>(),
-                    It.IsAny<DrawElementsType>(), It.IsAny<IntPtr[]>(), It.IsAny<int>())).Callback( () => ++timesCalled);
+            var glMock = new DummyGLProvider();
 
-            glMock.Setup(M => M.GetInteger(It.IsAny<GetPName>())).Returns(Shader.Passthrough.ShaderId);
-            
-            Renderer.Provider = glMock.Object;
+            GameSettings.TestingMode = true;
+            VBOCache.Clear();
+            Renderer.Provider = glMock;
             CompatibilityManager.Load();
-            Assert.AreEqual(1, timesCalled);
+            Assert.AreEqual(1, glMock.MultiDrawTimesCalled);
             
             CompatibilityManager.MultiDrawElementsMethod(PrimitiveType.Triangles, new uint[5], DrawElementsType.UnsignedInt, new IntPtr[5] , 5);            
-            Assert.AreEqual(2, timesCalled);
+            Assert.AreEqual(2, glMock.MultiDrawTimesCalled);
         }
     }
 }

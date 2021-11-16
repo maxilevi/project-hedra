@@ -26,16 +26,16 @@ namespace HedraTests.MathExtensions
             {
                 {new Vector3(0, 0, 1), new Vector3(0, 0, 0)},
                 {new Vector3(0, 0, -1), new Vector3(0, 180, 0)},
-                {new Vector3(0, 1, 0), new Vector3(-90, 0, 0)},
-                {new Vector3(0, -1, 0), new Vector3(90, 0, 0)},
+                {new Vector3(0, 1, 0), new Vector3(-90, 90, 0)},
+                {new Vector3(0, -1, 0), new Vector3(90, 90, 0)},
                 {new Vector3(1, 0, 0), new Vector3(0, 90, 0)},
                 {new Vector3(-1, 0, 0), new Vector3(0, -90, 0)},
-                {new Vector3(1, 1, 1), new Vector3(-84.92001f, 35.18748f, 35.18751f)},
-                {new Vector3(-1, -1, -1), new Vector3(41.78011f, -100.8305f, 100.8306f)},
-                {new Vector3(-1, -1, 1), new Vector3(84.92001f, -35.18748f, 35.18751f)},
+                {new Vector3(1, 1, 1), new Vector3(-90, 45, 0)},
+                {new Vector3(-1, -1, -1), new Vector3(90, 225, 0)},
+                {new Vector3(-1, -1, 1), new Vector3(90, -45, 0)},
                 {new Vector3(-1, 0, -1), new Vector3(0, 225, 0)},
-                {new Vector3(-1, 1, 0), new Vector3(138.564f, 138.5641f, 138.5642f)},
-                {new Vector3(0, -1, -1), new Vector3(0, -127.2792f, 127.2793f)},
+                {new Vector3(-1, 1, 0), new Vector3(-90, -90, 0)},
+                {new Vector3(0, -1, -1), new Vector3(90, 180, 0)},
             };
             foreach (var pair in samples)
             {

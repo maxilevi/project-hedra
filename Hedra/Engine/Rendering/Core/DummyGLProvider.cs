@@ -1,4 +1,5 @@
 using System;
+using System.Drawing.Text;
 using System.Numerics;
 using Hedra.Engine.Windowing;
 using GLDebugProc = Silk.NET.OpenGL.DebugProc;
@@ -9,7 +10,9 @@ namespace Hedra.Engine.Rendering.Core
     public class DummyGLProvider : IGLProvider
     {
         public ErrorSeverity Severity { get; set; }
-        
+
+        public int MultiDrawTimesCalled { get; private set; }
+
         public virtual void ActiveTexture(TextureUnit Unit)
         {
         }
@@ -204,19 +207,23 @@ namespace Hedra.Engine.Rendering.Core
         {
         }
 
+        private uint _bufferIds = 1;
+
         public virtual void GenBuffers(int N, out uint V1)
         {
-            V1 = 1;
-        }
+            V1 = _bufferIds++;
+    }
 
+        private int _framebufferIds = 1;
         public virtual int GenFramebuffer()
         {
-            return 1;
+            return _framebufferIds++;
         }
 
+        private int _queryIds = 1;
         public virtual int GenQuery()
         {
-            return 1;
+            return _queryIds++;
         }
 
         public virtual uint GenTexture()
@@ -290,6 +297,7 @@ namespace Hedra.Engine.Rendering.Core
 
         public virtual void MultiDrawElements(PrimitiveType Primitive, uint[] Counts, DrawElementsType Type, IntPtr[] Offsets, int Count)
         {
+            MultiDrawTimesCalled++;
         }
 
         public virtual void PointSize(float Size)

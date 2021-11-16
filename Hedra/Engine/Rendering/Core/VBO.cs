@@ -8,6 +8,7 @@
 using System;
 using Hedra.Engine.Management;
 using System.Numerics;
+using BulletSharp;
 using Hedra.Engine.Core;
 using Hedra.Engine.Windowing;
 
@@ -32,6 +33,7 @@ namespace Hedra.Engine.Rendering.Core
     
     public sealed class VBO<T> : VBO where T : unmanaged
     {
+        private static int hits;
         private bool _disposed;
         private uint _id;
         /// <summary>

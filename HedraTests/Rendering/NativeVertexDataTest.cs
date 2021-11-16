@@ -103,7 +103,9 @@ namespace HedraTests.Rendering
                     Assert.AreEqual(extradata[i], nativeVertexData.Extradata[i]);
                 }
                 
+#if RELEASE
                 Assert.Less(nativeTime, normalTime);
+#endif
             }
         }
 
