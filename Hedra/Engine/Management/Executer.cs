@@ -61,8 +61,6 @@ namespace Hedra.Engine.Management
             /* Used for debugging */
 #if DEBUG
             public StackTrace Trace;
-#else
-                Trace = null;
 #endif
             public Action Call;
 
@@ -71,8 +69,6 @@ namespace Hedra.Engine.Management
                 this.Call = Call;
 #if DEBUG
                 Trace = new StackTrace();
-#else
-                Trace = null;
 #endif
             }
         }
