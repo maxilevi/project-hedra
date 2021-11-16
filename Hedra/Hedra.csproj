@@ -29,6 +29,9 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <LangVersion>8</LangVersion>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Authors>Maximiliano Levi</Authors>
+    <Company>LeastSquares</Company>
+    <Product>Project Hedra</Product>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <StartAction>Project</StartAction>
@@ -13992,7 +13995,16 @@
     <Content Include="x64\glfw3.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="x64\hedracore.dll">
+    <Content Include="x64\libhedracore.so" Condition=" '$(OS)' != 'Windows_NT' " >
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x86\libhedracore.so" Condition=" '$(OS)' != 'Windows_NT' ">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x64\hedracore.dll" Condition=" '$(OS)' == 'Windows_NT' ">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="x86\hedracore.dll" Condition=" '$(OS)' == 'Windows_NT' ">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="x64\libbulletc.dll">
@@ -14008,9 +14020,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="x86\glfw3.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="x86\hedracore.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="x86\libbulletc.dll">
