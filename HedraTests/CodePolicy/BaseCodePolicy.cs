@@ -12,7 +12,7 @@ namespace HedraTests.CodePolicy
         
         protected BaseCodePolicy()
         {
-            SolutionDirectory = Directory.GetParent(TestContext.CurrentContext.TestDirectory).Parent.Parent.FullName;
+            SolutionDirectory = Directory.GetParent(TestContext.CurrentContext.TestDirectory).Parent.Parent.Parent.FullName;
         }
         
         protected int LineFromIndex(string Contents, int Index)

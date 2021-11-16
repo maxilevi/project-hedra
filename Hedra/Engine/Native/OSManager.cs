@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text.RegularExpressions;
-using System.Windows.Forms;
+
 using Hedra.Engine.IO;
 using Hedra.Engine.Rendering;
 using Hedra.Engine.Rendering.Core;
@@ -43,6 +43,7 @@ namespace Hedra.Engine.Native
 
             if (RunningPlatform == Platform.Windows)
             {
+                /*
                 if (IntPtr.Size == 4 && NvidiaGPUFix32.SOP_SetProfile("Hedra", Path.GetFileName(ExecName)) == NvidiaGPUFix32.RESULT_CHANGE)
                 {
                     MessageBox.Show(
@@ -57,6 +58,7 @@ namespace Hedra.Engine.Native
                     Program.GameWindow.Close();
                     return;
                 }
+                */
             }
         }
 

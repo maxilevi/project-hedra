@@ -1,13 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Security.Cryptography;
-using System.Windows.Forms.VisualStyles;
 using Hedra.AISystem.Humanoid;
 using Hedra.Components;
-using Hedra.Core;
-using Hedra.Engine.BiomeSystem;
 using Hedra.Engine.Core;
 using Hedra.Engine.EntitySystem;
 using Hedra.Engine.EnvironmentSystem;

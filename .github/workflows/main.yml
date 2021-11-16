@@ -8,7 +8,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest]
+        os: [windows-latest, ubuntu-latest]
     
     steps:
     - uses: actions/checkout@v2
@@ -17,31 +17,15 @@ jobs:
         submodules: true
     - name: Setup Dotnet for use with actions
       uses: actions/setup-dotnet@v1.0.0
-      
-    #- name: Setup Nuget
-    #  uses: Nuget/setup-nuget@v1.0.5
-      
-    - name: Restore Hedra packages
-      run: dotnet restore Hedra/Hedra.csproj
-      
-    - name: Restore HedraTests packages
-      run: dotnet restore HedraTests/HedraTests.csproj
-      
-    - name: Restore AssetBuilder packages 
-      run: dotnet restore AssetBuilder/AssetBuilder.csproj
-      
+
     - name: Build Dependencies
       shell: bash
       run: ./build-deps.sh
       
     - name: Build Solution
-      run: dotnet msbuild -p:Configuration=Release
-      
-    - name: Run tests
-      run: ./packages/NUnit.ConsoleRunner.3.8.0/tools/nunit3-console.exe HedraTests/bin/Release/HedraTests.dll
-      shell: bash
+      run: dotnet test -c Release "Project Hedra.sln"
 
     - uses: actions/upload-artifact@v1
       with:
         name: Hedra-${{ matrix.os }}
-        path: Hedra/bin/Release/
+        path: Hedra/bin/netcoreapp3.1/Release/

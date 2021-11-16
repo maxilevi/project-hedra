@@ -1,7 +1,7 @@
 using System;
 using System.Drawing;
 using System.Threading;
-using System.Windows.Forms;
+
 using Hedra.API;
 using Hedra.Engine.CacheSystem;
 using Hedra.Engine.ClassSystem;
@@ -98,6 +98,6 @@ namespace Hedra.Engine.Loader
         public event Action<KeyboardKeyEventArgs> KeyDown;
         public event Action<KeyboardKeyEventArgs> KeyUp;
         public event Action<string> CharWritten;
-        public event Action<KeyPressEventArgs> KeyPress;
+        public event Action<KeyboardKeyEventArgs> KeyPress;
     }
 }

@@ -20,7 +20,6 @@ using Hedra.Game;
 using Hedra.Input;
 using System.Numerics;
 using Hedra.Numerics;
-using Cursor = System.Windows.Forms.Cursor;
 
 namespace Hedra.Engine.Player
 {

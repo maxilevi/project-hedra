@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows.Forms;
+
 using Hedra.Components;
 using Hedra.Core;
 using Hedra.Crafting;

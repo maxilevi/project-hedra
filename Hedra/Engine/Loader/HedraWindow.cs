@@ -1,20 +1,14 @@
 using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.Threading;
 using Hedra.Engine.Events;
 using Hedra.Engine.Windowing;
 using System.Numerics;
-using Hedra.Engine.Core;
-using Silk.NET.Core;
 using Silk.NET.GLFW;
-using Silk.NET.Input;
 using Silk.NET.Input;
 using Silk.NET.Maths;
 using Silk.NET.Windowing;
-using Silk.NET.Windowing;
-using Image = Silk.NET.GLFW.Image;
-using Monitor = Silk.NET.Windowing.Monitor;
+using HedraCursor = Hedra.Input.Cursor;
 
 namespace Hedra.Engine.Loader
 {
@@ -60,6 +54,7 @@ namespace Hedra.Engine.Loader
             mouse.MouseDown += (_, Button) => MouseDown?.Invoke(new MouseButtonEventArgs(Button, InputAction.Press, _mousePosition));
             mouse.MouseUp += (_, Button) => MouseUp?.Invoke(new MouseButtonEventArgs(Button, InputAction.Release, _mousePosition));
             mouse.Scroll += (_, Wheel) => MouseWheel?.Invoke(new MouseWheelEventArgs(Wheel.X, Wheel.Y));
+            HedraCursor.Mouse = mouse;
             
             unsafe
             {

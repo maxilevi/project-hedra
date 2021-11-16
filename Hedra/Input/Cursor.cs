@@ -1,14 +1,15 @@
 ﻿using Hedra.Engine;
 using Hedra.Game;
 using System.Numerics;
-using Forms = System.Windows.Forms;
+using Silk.NET.Input;
 
 namespace Hedra.Input
 {
     public static class Cursor
     {
+        public static IMouse Mouse { get; set; }
+
         private static bool _show = true;
-        private static Vector2 _position;
 
         public static void Center()
         {
@@ -32,8 +33,8 @@ namespace Hedra.Input
 
         public static Vector2 Position
         {
-            get => new Vector2(Forms.Cursor.Position.X, Forms.Cursor.Position.Y);
-            set => Forms.Cursor.Position = new System.Drawing.Point((int)value.X, (int)value.Y);
+            get => Mouse.Position;
+            private set => Mouse.Position = new Vector2((int)value.X, (int)value.Y);
         }
     }
 }

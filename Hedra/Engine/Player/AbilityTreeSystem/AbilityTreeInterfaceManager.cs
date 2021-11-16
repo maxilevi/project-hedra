@@ -1,5 +1,5 @@
 using System.Drawing;
-using System.Windows.Forms;
+
 using Hedra.Engine.ItemSystem;
 using Hedra.Engine.Localization;
 using Hedra.Engine.Player.Inventory;

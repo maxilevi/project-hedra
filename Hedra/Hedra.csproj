@@ -1,31 +1,18 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>10.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{301A6B68-CF39-4E86-A50A-479B96A5A298}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Hedra</RootNamespace>
-    <AssemblyName>Hedra</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <NoWin32Manifest>False</NoWin32Manifest>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <NoStdLib>True</NoStdLib>
-    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <SignAssembly>False</SignAssembly>
     <DelaySign>False</DelaySign>
     <RunCodeAnalysis>False</RunCodeAnalysis>
-    <TargetFrameworkProfile />
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <DebugType>Full</DebugType>
     <WarningLevel>4</WarningLevel>
     <ApplicationIcon>Assets\Icon.ico</ApplicationIcon>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -41,13 +28,13 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <LangVersion>8</LangVersion>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
     <StartAction>Project</StartAction>
     <DefineConstants>DEBUG;</DefineConstants>
-    <Optimize>False</Optimize>
     <OutputPath>bin\Debug</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
@@ -58,19 +45,14 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-    <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
-    <Optimize>True</Optimize>
     <OutputPath>bin\Release</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
     <BaseAddress>4194304</BaseAddress>
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <RegisterForComInterop>False</RegisterForComInterop>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <FileAlignment>4096</FileAlignment>
   </PropertyGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Reference Include="BulletSharp, Version=0.12.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\references\BulletSharp.dll</HintPath>
@@ -78,1410 +60,11 @@
     <Reference Include="Facepunch.Steamworks">
       <HintPath>..\references\Facepunch.Steamworks.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="mscorlib" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AISystem\AdaptiveAIComponent.cs" />
-    <Compile Include="AISystem\AIFactory.cs" />
-    <Compile Include="AISystem\AIType.cs" />
-    <Compile Include="AISystem\BaseBeetleAIComponent.cs" />
-    <Compile Include="AISystem\BasicAIComponent.cs" />
-    <Compile Include="AISystem\Behaviours\AdaptiveAttackBehaviour.cs" />
-    <Compile Include="AISystem\Behaviours\AttackBehaviour.cs" />
-    <Compile Include="AISystem\Behaviours\BaseBeetleAttackBehaviour.cs" />
-    <Compile Include="AISystem\Behaviours\Behaviour.cs" />
-    <Compile Include="AISystem\Behaviours\ChargeBehaviour.cs" />
-    <Compile Include="AISystem\Behaviours\DungeonRoamBehaviour.cs" />
-    <Compile Include="AISystem\Behaviours\EscapeBehaviour.cs" />
-    <Compile Include="AISystem\Behaviours\Finder.cs" />
-    <Compile Include="AISystem\Behaviours\FleeBehaviour.cs" />
-    <Compile Include="AISystem\Behaviours\FollowBehaviour.cs" />
-    <Compile Include="AISystem\Behaviours\FoxHostileBehaviour.cs" />
-    <Compile Include="AISystem\Behaviours\GridStorage.cs" />
-    <Compile Include="AISystem\Behaviours\GroupHostileBehaviour.cs" />
-    <Compile Include="AISystem\Behaviours\HunterHostileBehaviour.cs" />
-    <Compile Include="AISystem\Behaviours\MeleeBeetleAttackBehaviour.cs" />
-    <Compile Include="AISystem\Behaviours\RangedBeetleAttackBehaviour.cs" />
-    <Compile Include="AISystem\Behaviours\RunAwayBehaviour.cs" />
-    <Compile Include="AISystem\Behaviours\TraverseBehaviour.cs" />
-    <Compile Include="AISystem\Behaviours\GiantBeetleAttackBehaviour.cs" />
-    <Compile Include="AISystem\Behaviours\GorillaWarriorAttackBehaviour.cs" />
-    <Compile Include="AISystem\Behaviours\GuardHostileBehaviour.cs" />
-    <Compile Include="AISystem\Behaviours\HerdBehaviour.cs" />
-    <Compile Include="AISystem\Behaviours\HostileBehaviour.cs" />
-    <Compile Include="AISystem\Behaviours\IdleBehaviour.cs" />
-    <Compile Include="AISystem\Behaviours\RetaliateBehaviour.cs" />
-    <Compile Include="AISystem\Behaviours\RoamAroundBehaviour.cs" />
-    <Compile Include="AISystem\Behaviours\RoamBehaviour.cs" />
-    <Compile Include="AISystem\Behaviours\StareBehaviour.cs" />
-    <Compile Include="AISystem\Behaviours\TraverseStorage.cs" />
-    <Compile Include="AISystem\Behaviours\TrollAttackBehaviour.cs" />
-    <Compile Include="AISystem\Behaviours\WalkBehaviour.cs" />
-    <Compile Include="AISystem\CattleAIComponent.cs" />
-    <Compile Include="AISystem\DungeonAdaptiveAIComponent.cs" />
-    <Compile Include="AISystem\FarmAnimalAIComponent.cs" />
-    <Compile Include="AISystem\FearAIComponent.cs" />
-    <Compile Include="AISystem\FeedableCattleAIComponent.cs" />
-    <Compile Include="AISystem\FriendlyAIComponent.cs" />
-    <Compile Include="AISystem\GenericBasicAIComponent.cs" />
-    <Compile Include="AISystem\HostileAIComponent.cs" />
-    <Compile Include="AISystem\Humanoid\CommandBasedAIComponent.cs" />
-    <Compile Include="AISystem\Humanoid\FishermanAIComponent.cs" />
-    <Compile Include="AISystem\Humanoid\NPCAIComponent.cs" />
-    <Compile Include="AISystem\Humanoid\RangedAIComponent.cs" />
-    <Compile Include="AISystem\Humanoid\BaseHumanoidAIComponent.cs" />
-    <Compile Include="AISystem\Humanoid\BanditAIBehaviour.cs" />
-    <Compile Include="AISystem\Humanoid\CombatAIComponent.cs" />
-    <Compile Include="AISystem\Humanoid\EscapeAIComponent.cs" />
-    <Compile Include="AISystem\Humanoid\ExplorerAIBehaviour.cs" />
-    <Compile Include="AISystem\Humanoid\FarmerAIComponent.cs" />
-    <Compile Include="AISystem\Humanoid\FollowAIComponent.cs" />
-    <Compile Include="AISystem\Humanoid\CombatAIBehaviour.cs" />
-    <Compile Include="AISystem\Humanoid\MageAIComponent.cs" />
-    <Compile Include="AISystem\Humanoid\BaseVillagerAIComponent.cs" />
-    <Compile Include="AISystem\Humanoid\RawMovementHumanoidAIComponent.cs" />
-    <Compile Include="AISystem\Humanoid\RoamingVillagerAIComponent.cs" />
-    <Compile Include="AISystem\Humanoid\TraverseHumanoidAIComponent.cs" />
-    <Compile Include="AISystem\Humanoid\VillagerAISettings.cs" />
-    <Compile Include="AISystem\Humanoid\MeleeAIComponent.cs" />
-    <Compile Include="AISystem\IBasicAIComponent.cs" />
-    <Compile Include="AISystem\IBehaviouralAI.cs" />
-    <Compile Include="AISystem\IBehaviourComponent.cs" />
-    <Compile Include="AISystem\IGuardAIComponent.cs" />
-    <Compile Include="AISystem\ITraverseAIComponent.cs" />
-    <Compile Include="AISystem\MinionAIComponent.cs" />
-    <Compile Include="AISystem\Mob\CowAIComponent.cs" />
-    <Compile Include="AISystem\Mob\CowFarmAIComponent.cs" />
-    <Compile Include="AISystem\Mob\CrabAIComponent.cs" />
-    <Compile Include="AISystem\Mob\FoxAIComponent.cs" />
-    <Compile Include="AISystem\Mob\GiantBeetleAIComponent.cs" />
-    <Compile Include="AISystem\Mob\GoatAIComponent.cs" />
-    <Compile Include="AISystem\Mob\GorillaWarriorAIComponent.cs" />
-    <Compile Include="AISystem\Mob\MeleeBeetleAIComponent.cs" />
-    <Compile Include="AISystem\Mob\PigAIComponent.cs" />
-    <Compile Include="AISystem\Mob\PigFarmAIComponent.cs" />
-    <Compile Include="AISystem\Mob\PugAIComponent.cs" />
-    <Compile Include="AISystem\Mob\RaccoonAIComponent.cs" />
-    <Compile Include="AISystem\Mob\RangedBeetleAIComponent.cs" />
-    <Compile Include="AISystem\Mob\SheepAIComponent.cs" />
-    <Compile Include="AISystem\Mob\SheepFarmAIComponent.cs" />
-    <Compile Include="AISystem\Mob\SkeletonKamikazeAIComponent.cs" />
-    <Compile Include="AISystem\Mob\SquirrelAIComponent.cs" />
-    <Compile Include="AISystem\Mob\TrollAIComponent.cs" />
-    <Compile Include="AISystem\Mob\GroupHostileAIComponent.cs" />
-    <Compile Include="AISystem\NeutralAIComponent.cs" />
-    <Compile Include="AnimationEvents\AnimationEvent.cs" />
-    <Compile Include="AnimationEvents\Growl.cs" />
-    <Compile Include="AnimationEvents\Quake.cs" />
-    <Compile Include="AnimationEvents\SkillAnimationEvent.cs" />
-    <Compile Include="AnimationEvents\SkillEvents\CastBlaze.cs" />
-    <Compile Include="AnimationEvents\SkillEvents\CastLeech.cs" />
-    <Compile Include="AnimationEvents\SkillEvents\CastSiphonBlood.cs" />
-    <Compile Include="AnimationEvents\SkillEvents\CastTerror.cs" />
-    <Compile Include="AnimationEvents\SkillEvents\CastRaiseSkeleton.cs" />
-    <Compile Include="AnimationEvents\Slash.cs" />
-    <Compile Include="API\AIRegistry.cs" />
-    <Compile Include="API\AnimationEventRegistry.cs" />
-    <Compile Include="API\Class.cs" />
-    <Compile Include="API\EffectRegistry.cs" />
-    <Compile Include="API\ItemHandlerRegistry.cs" />
-    <Compile Include="API\Mod.cs" />
-    <Compile Include="API\ModelHandlerRegistry.cs" />
-    <Compile Include="API\ModificationsLoader.cs" />
-    <Compile Include="API\Registry.cs" />
-    <Compile Include="API\SkillRegistry.cs" />
-    <Compile Include="API\TypeRegistry.cs" />
-    <Compile Include="API\ClassRestrictionRegistry.cs" />
-    <Compile Include="API\WeaponRegistry.cs" />
-    <Compile Include="BiomeSystem\BiomeColorsDesign.cs" />
-    <Compile Include="BiomeSystem\BiomeDesign.cs" />
-    <Compile Include="BiomeSystem\BiomeEnviromentDesign.cs" />
-    <Compile Include="BiomeSystem\BiomeGenerationDesign.cs" />
-    <Compile Include="BiomeSystem\BiomeMobDesign.cs" />
-    <Compile Include="BiomeSystem\BiomeSkyDesign.cs" />
-    <Compile Include="BiomeSystem\BiomeStructureDesign.cs" />
-    <Compile Include="BiomeSystem\BiomeTreeDesign.cs" />
-    <Compile Include="Components\BoatMerchantComponent.cs" />
-    <Compile Include="Components\ClothierComponent.cs" />
-    <Compile Include="Components\DamageComponent.cs" />
-    <Compile Include="Components\DarkWizardThoughtsComponent.cs" />
-    <Compile Include="Components\DamageType.cs" />
-    <Compile Include="Components\Effects\DamagingEffectComponent.cs" />
-    <Compile Include="Components\Effects\FoodPoisonComponent.cs" />
-    <Compile Include="Components\HealthBarComponent.cs" />
-    <Compile Include="Components\INamedHealthBar.cs" />
-    <Compile Include="Components\InnkeeperComponent.cs" />
-    <Compile Include="Components\MasonComponent.cs" />
-    <Compile Include="Components\ResetSkillPointsDialogComponent.cs" />
-    <Compile Include="Components\RideComponent.cs" />
-    <Compile Include="Components\CompanionStatsComponent.cs" />
-    <Compile Include="Components\ScriptedTradeComponent.cs" />
-    <Compile Include="Components\TravellingMerchantComponent.cs" />
-    <Compile Include="Components\WizardThoughtsComponent.cs" />
-    <Compile Include="Crafting\CraftingInventory.cs" />
-    <Compile Include="Crafting\CraftingStation.cs" />
-    <Compile Include="Crafting\Templates\IngredientsTemplate.cs" />
-    <Compile Include="Engine\BiomeSystem\BaseBiomeGenerationDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\GhostTown\GhostTownColorsDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\GhostTown\GhostTownEnvironmentDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\LegacyBiomeGenerator.cs" />
-    <Compile Include="Engine\BiomeSystem\Savanna\SavannaBiomeColors.cs" />
-    <Compile Include="Engine\BiomeSystem\Savanna\SavannaBiomeEnvironmentDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\Savanna\SavannaBiomeGenerationDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\Savanna\SavannaBiomeMobDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\Savanna\SavannaBiomeSkyDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\Savanna\SavannaBiomeStructureDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\Savanna\SavannaBiomeTreeDesign.cs" />
-    <Compile Include="Engine\Bullet\BulletDraw.cs" />
-    <Compile Include="Engine\Bullet\BulletInterop.cs" />
-    <Compile Include="Engine\Bullet\BulletPhysics.cs" />
-    <Compile Include="Engine\Bullet\BulletWorld.cs" />
-    <Compile Include="Engine\Bullet\ContactTestResultCallback.cs" />
-    <Compile Include="Engine\Bullet\PhysicsObjectInformation.cs" />
-    <Compile Include="Engine\Bullet\PhysicsComponent.cs" />
-    <Compile Include="Engine\Bullet\PhysicsComponentMotionState.cs" />
-    <Compile Include="Engine\CacheSystem\BirchTreesCache.cs" />
-    <Compile Include="Engine\CacheSystem\CauldronIconCache.cs" />
-    <Compile Include="Engine\CacheSystem\ClockIconCache.cs" />
-    <Compile Include="Engine\CacheSystem\Dungeon0Cache.cs" />
-    <Compile Include="Engine\CacheSystem\Dungeon1Cache.cs" />
-    <Compile Include="Engine\CacheSystem\Dungeon1IconCache.cs" />
-    <Compile Include="Engine\CacheSystem\Dungeon2Cache.cs" />
-    <Compile Include="Engine\CacheSystem\Dungeon2IconCache.cs" />
-    <Compile Include="Engine\CacheSystem\Dungeon0IconCache.cs" />
-    <Compile Include="Engine\CacheSystem\DynamicCache.cs" />
-    <Compile Include="Engine\CacheSystem\FishingPostIconCache.cs" />
-    <Compile Include="Engine\CacheSystem\GarrisonCache.cs" />
-    <Compile Include="Engine\CacheSystem\GarrisonIconCache.cs" />
-    <Compile Include="Engine\CacheSystem\GnollFortressCache.cs" />
-    <Compile Include="Engine\CacheSystem\GnollFortressIconCache.cs" />
-    <Compile Include="Engine\CacheSystem\LilyPadCache.cs" />
-    <Compile Include="Engine\CacheSystem\RosemaryCache.cs" />
-    <Compile Include="Engine\CacheSystem\ShroomDimensionPortalCache.cs" />
-    <Compile Include="Engine\CacheSystem\ShroomDimensionPortalIconCache.cs" />
-    <Compile Include="Engine\CacheSystem\ThymeCache.cs" />
-    <Compile Include="Engine\CacheSystem\StorylineCache.cs" />
-    <Compile Include="Engine\CacheSystem\TreeStumpCache.cs" />
-    <Compile Include="Engine\CacheSystem\WillowTreesCache.cs" />
-    <Compile Include="Engine\CacheSystem\WindmillIconCache.cs" />
-    <Compile Include="Engine\CacheSystem\WizardTowerCache.cs" />
-    <Compile Include="Engine\CacheSystem\WoodLogCache.cs" />
-    <Compile Include="Engine\Core\Counter.cs" />
-    <Compile Include="Engine\Core\SequentialList.cs" />
-    <Compile Include="Engine\DataStructures\AABB.cs" />
-    <Compile Include="Engine\DataStructures\Octree.cs" />
-    <Compile Include="Engine\DataStructures\OctreeNode.cs" />
-    <Compile Include="Engine\EntitySystem\ArmorBonusComponent.cs" />
-    <Compile Include="Engine\EntitySystem\DummyModel.cs" />
-    <Compile Include="Engine\EnvironmentSystem\SkySettings.cs" />
-    <Compile Include="Engine\Game\SetupSettingAttribute.cs" />
-    <Compile Include="Engine\Generation\ChunkAutomatons.cs" />
-    <Compile Include="Engine\Generation\ChunkSystem\Automatons.cs" />
-    <Compile Include="Engine\Generation\ChunkSystem\Builders\AbstractBuilder.cs" />
-    <Compile Include="Engine\Generation\ChunkSystem\Builders\BlockBuilder.cs" />
-    <Compile Include="Engine\Generation\ChunkSystem\Builders\MeshBuilder.cs" />
-    <Compile Include="Engine\Generation\ChunkSystem\Builders\QueueType.cs" />
-    <Compile Include="Engine\Generation\ChunkSystem\Builders\StructuresBuilder.cs" />
-    <Compile Include="Engine\Generation\ChunkSystem\ChunkDetails.cs" />
-    <Compile Include="Engine\Generation\ChunkSystem\ChunkQueueType.cs" />
-    <Compile Include="Engine\Generation\ChunkSystem\CoordinateHash3D.cs" />
-    <Compile Include="Engine\Generation\ChunkSystem\LoadBalancer.cs" />
-    <Compile Include="Engine\Generation\ChunkSystem\NativeMesher.cs" />
-    <Compile Include="Engine\Generation\ChunkSystem\SampledBlock.cs" />
-    <Compile Include="Engine\Generation\ChunkSystem\SharedWorkerPool.cs" />
-    <Compile Include="Engine\Generation\ChunkSystem\Worker.cs" />
-    <Compile Include="Engine\Generation\ChunkSystem\WorkerPool.cs" />
-    <Compile Include="Engine\Generation\FastNoiseSIMD.cs" />
-    <Compile Include="Engine\Generation\FishingZoneHandler.cs" />
-    <Compile Include="Engine\Generation\Simplex.cs" />
-    <Compile Include="Engine\Generation\WorldBuilder.cs" />
-    <Compile Include="Engine\ItemSystem\Item.cs" />
-    <Compile Include="Engine\Management\PerformanceStatistics.cs" />
-    <Compile Include="Engine\Native\DummyScreenManager.cs" />
-    <Compile Include="Engine\Native\HedraCoreNative.cs" />
-    <Compile Include="Engine\Native\IScreenManager.cs" />
-    <Compile Include="Engine\Native\MeshOptimizer.cs" />
-    <Compile Include="Engine\Native\Pointer.cs" />
-    <Compile Include="Engine\Native\WindowsScreenManager.cs" />
-    <Compile Include="Engine\PlantSystem\Harvestables\RosemaryAndThymePlacementDesign.cs" />
-    <Compile Include="Engine\PlantSystem\Harvestables\RosemaryDesign.cs" />
-    <Compile Include="Engine\PlantSystem\Harvestables\ThymeDesign.cs" />
-    <Compile Include="Engine\PlantSystem\Harvestables\StickDesign.cs" />
-    <Compile Include="Engine\PlantSystem\Harvestables\TimberAndSticksPlacementDesign.cs" />
-    <Compile Include="Engine\PlantSystem\Harvestables\TimberDesign.cs" />
-    <Compile Include="Engine\PlantSystem\LilyPadDesign.cs" />
-    <Compile Include="Engine\PlantSystem\LilyPadPlacementDesign.cs" />
-    <Compile Include="Engine\PlantSystem\MultipleStaticPlacementDesign.cs" />
-    <Compile Include="Engine\PlantSystem\TreeStumpDesign.cs" />
-    <Compile Include="Engine\PlantSystem\WoodLogAndTreeStumpPlacementDesign.cs" />
-    <Compile Include="Engine\PlantSystem\WoodLogDesign.cs" />
-    <Compile Include="Engine\Player\BackgroundUpdater.cs" />
-    <Compile Include="Engine\Player\BoatSystem\BoatHumanoidInputHandler.cs" />
-    <Compile Include="Engine\Player\BoatSystem\BoatInputHandler.cs" />
-    <Compile Include="Engine\Player\CustomizationData.cs" />
-    <Compile Include="Engine\Player\HumanGender.cs" />
-    <Compile Include="Engine\Player\Inventory\InventoryCompanionInfo.cs" />
-    <Compile Include="Engine\Player\Inventory\InventoryCompanionRenamePanel.cs" />
-    <Compile Include="Engine\QuestSystem\BaseStructureWithChest.cs" />
-    <Compile Include="Engine\QuestSystem\ForgotQuestThoughtsComponent.cs" />
-    <Compile Include="Engine\QuestSystem\GiverTemplate.cs" />
-    <Compile Include="Engine\QuestSystem\ICompletableStructure.cs" />
-    <Compile Include="Engine\QuestSystem\IQuest.cs" />
-    <Compile Include="Engine\QuestSystem\ItemDescription.cs" />
-    <Compile Include="Engine\QuestSystem\QuestComponent.cs" />
-    <Compile Include="Engine\QuestSystem\QuestGiverComponent.cs" />
-    <Compile Include="Engine\QuestSystem\QuestInventory.cs" />
-    <Compile Include="Engine\QuestSystem\SerializedQuest.cs" />
-    <Compile Include="Engine\QuestSystem\QuestThoughtsComponent.cs" />
-    <Compile Include="Engine\QuestSystem\StorylineQuestGiverComponent.cs" />
-    <Compile Include="Engine\QuestSystem\StorySettings.cs" />
-    <Compile Include="Engine\Rendering\BaseVertexData.cs" />
-    <Compile Include="Engine\Rendering\Core\LightSettings.cs" />
-    <Compile Include="Engine\Rendering\Core\UBO.cs" />
-    <Compile Include="Engine\Rendering\Core\VBOCache.cs" />
-    <Compile Include="Engine\Rendering\Effects\SSRFilter.cs" />
-    <Compile Include="Engine\Rendering\Effects\WaterRenderer.cs" />
-    <Compile Include="Engine\Rendering\Frustum\FrustumGJK.cs" />
-    <Compile Include="Engine\Rendering\Frustum\Plane.cs" />
-    <Compile Include="Engine\Rendering\Frustum\Simplex.cs" />
-    <Compile Include="Engine\Rendering\Geometry\IsoSurfaceCreator.cs" />
-    <Compile Include="Engine\Rendering\Geometry\MarchingCubes.cs" />
-    <Compile Include="Engine\Rendering\Geometry\MeshAnalyzer.cs" />
-    <Compile Include="Engine\Rendering\Geometry\MeshOperations.cs" />
-    <Compile Include="Engine\Rendering\ModelLoader.cs" />
-    <Compile Include="Engine\Rendering\NativeVertexData.cs" />
-    <Compile Include="Engine\Rendering\UI\CompanionProfileUIElement.cs" />
-    <Compile Include="Engine\Rendering\UI\HelpUI.cs" />
-    <Compile Include="Engine\Rendering\UI\MenuBackground.cs" />
-    <Compile Include="Engine\Rendering\UI\ProfileUIElement.cs" />
-    <Compile Include="Engine\Rendering\UI\TextureAtlas.cs" />
-    <Compile Include="Engine\Scenes\SceneExtensions.cs" />
-    <Compile Include="Engine\Scenes\SceneLoader.cs" />
-    <Compile Include="Engine\Scenes\SceneSettings.cs" />
-    <Compile Include="Engine\Scenes\WaypointGraph.cs" />
-    <Compile Include="Engine\Scenes\WaypointGrid.cs" />
-    <Compile Include="Engine\Scenes\WaypointLoader.cs" />
-    <Compile Include="Engine\Steamworks\Achievement.cs" />
-    <Compile Include="Engine\Steamworks\AchievementsObserver.cs" />
-    <Compile Include="Engine\Steamworks\Statistic.cs" />
-    <Compile Include="Engine\StructureSystem\CollisionTrigger.cs" />
-    <Compile Include="Engine\StructureSystem\DoorSettings.cs" />
-    <Compile Include="Engine\StructureSystem\Lever.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\AnimableInteractableStructure.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\BaseDungeonDesign.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\BuildingDoorTrigger.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\CampfireWithQuestDesign.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\Cottage.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\CottageDesign.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\CottageWithFarm.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\CottageWithFarmDesign.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\CottageWithVegetablePlot.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\CottageWithVegetablePlotDesign.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\DungeonWithBoss.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\Garrison.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\GarrisonDesign.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\GnollFortress.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\GnollFortressDesign.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\ShroomDimensionPortal.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\ShroomDimensionPortalDesign.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\SolitaryFisherman.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\SolitaryFishermanDesign.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\UndeadDungeon1Design.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\DungeonBossRoomTrigger.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\DungeonDoorTrigger.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\UndeadDungeon0Design.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\UndeadDungeon2Design.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\UndeadDungeonWithBossDesign.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\FishingPost.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\FishingPostDesign.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\IsStructureMemberComponent.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\PunchingBag.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\SpawnCampfire.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\SpawnCampfireDesign.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\TimeHandler.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\Torch.cs" />
-    <Compile Include="Engine\StructureSystem\StructureContentHelper.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Builders\GenericBuilderWithNPC.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\GenericNPCSettings.cs" />
-    <Compile Include="Engine\TreeSystem\BirchDesign.cs" />
-    <Compile Include="Engine\TreeSystem\WillowDesign.cs" />
-    <Compile Include="Engine\Windowing\GLEnums.cs" />
-    <Compile Include="Engine\Windowing\HedraMarshal.cs" />
-    <Compile Include="Engine\Windowing\KeyboardKeyEventArgs.cs" />
-    <Compile Include="Engine\Windowing\MouseButtonEventArgs.cs" />
-    <Compile Include="Engine\Windowing\MouseMoveEventArgs.cs" />
-    <Compile Include="Engine\Windowing\MouseWheelEventArgs.cs" />
-    <Compile Include="Engine\WorldBuilding\BanditOptions.cs" />
-    <Compile Include="Engine\WorldBuilding\INPCCreatorProvider.cs" />
-    <Compile Include="Engine\WorldBuilding\NPCCreator.cs" />
-    <Compile Include="Engine\WorldBuilding\NPCCreatorProvider.cs" />
-    <Compile Include="Items\EquipmentType.cs" />
-    <Compile Include="Items\HoldingBagHandler.cs" />
-    <Compile Include="Items\ItemTier.cs" />
-    <Compile Include="Items\Trader.cs" />
-    <Compile Include="Localization\Controls.cs" />
-    <Compile Include="Mission\Blocks\CatchAnimalMission.cs" />
-    <Compile Include="Mission\Blocks\CollectMission.cs" />
-    <Compile Include="Mission\Blocks\CompleteStructureMission.cs" />
-    <Compile Include="Mission\Blocks\CraftMission.cs" />
-    <Compile Include="Mission\Blocks\DefeatEntityMission.cs" />
-    <Compile Include="Mission\Blocks\DefendMission.cs" />
-    <Compile Include="Mission\Blocks\EndMission.cs" />
-    <Compile Include="Mission\Blocks\FindEntityMission.cs" />
-    <Compile Include="Mission\Blocks\FindStructureMission.cs" />
-    <Compile Include="Mission\Blocks\FishItemMission.cs" />
-    <Compile Include="Mission\Blocks\EntityMission.cs" />
-    <Compile Include="Mission\Blocks\ReuniteEntitiesMission.cs" />
-    <Compile Include="Mission\Blocks\ItemMission.cs" />
-    <Compile Include="Mission\Blocks\MissionBlock.cs" />
-    <Compile Include="Mission\Blocks\TalkMission.cs" />
-    <Compile Include="Mission\Blocks\WaitForMission.cs" />
-    <Compile Include="Mission\Blocks\WaitForTimeMission.cs" />
-    <Compile Include="Mission\DialogObject.cs" />
-    <Compile Include="Mission\IMissionDesign.cs" />
-    <Compile Include="Mission\ItemCollect.cs" />
-    <Compile Include="Mission\MissionDesign.cs" />
-    <Compile Include="Mission\MissionDesignSettings.cs" />
-    <Compile Include="Mission\MissionObject.cs" />
-    <Compile Include="Mission\MissionPool.cs" />
-    <Compile Include="Mission\MissionSettings.cs" />
-    <Compile Include="Mission\QuestReward.cs" />
-    <Compile Include="ModelHandlers\BeetleHandler.cs" />
-    <Compile Include="Mission\MissionBuilder.cs" />
-    <Compile Include="Numerics\IRandom.cs" />
-    <Compile Include="Numerics\Mathf.cs" />
-    <Compile Include="Numerics\QuaternionMath.cs" />
-    <Compile Include="Numerics\RandomDistribution.cs" />
-    <Compile Include="Numerics\VectorExtensions.cs" />
-    <Compile Include="Rendering\Graphics2D.cs" />
-    <Compile Include="Structures\GhostTownBossDesign.cs" />
-    <Compile Include="Structures\GhostTownPortalDesign.cs" />
-    <Compile Include="Structures\MapBuilder.cs" />
-    <Compile Include="Structures\SpawnGhostTownPortalDesign.cs" />
-    <Compile Include="Structures\SpawnVillage.cs" />
-    <Compile Include="Structures\SpawnVillageDesign.cs" />
-    <Compile Include="User\CommandManager.cs" />
-    <Compile Include="User\WordFilter.cs" />
-    <Compile Include="Components\BlacksmithComponent.cs" />
-    <Compile Include="Components\Effects\AttackPowerBonusComponent.cs" />
-    <Compile Include="Components\Effects\AttackResistanceBonusComponent.cs" />
-    <Compile Include="Components\Effects\AttackSpeedBonusComponent.cs" />
-    <Compile Include="Components\Effects\BleedComponent.cs" />
-    <Compile Include="Components\Effects\BleedingComponent.cs" />
-    <Compile Include="Components\Effects\BurningComponent.cs" />
-    <Compile Include="Components\Effects\FearComponent.cs" />
-    <Compile Include="Components\Effects\FireComponent.cs" />
-    <Compile Include="Components\Effects\FireWeaknessComponent.cs" />
-    <Compile Include="Components\Effects\FreezeComponent.cs" />
-    <Compile Include="Components\Effects\FreezingComponent.cs" />
-    <Compile Include="Components\Effects\KnockComponent.cs" />
-    <Compile Include="Components\Effects\PoisonComponent.cs" />
-    <Compile Include="Components\Effects\PoisonousComponent.cs" />
-    <Compile Include="Components\Effects\SlowComponent.cs" />
-    <Compile Include="Components\Effects\SlowingComponent.cs" />
-    <Compile Include="Components\Effects\SpeedBonusComponent.cs" />
-    <Compile Include="Components\Effects\SpeedComponent.cs" />
-    <Compile Include="Components\Effects\StaminaRegenComponent.cs" />
-    <Compile Include="Components\Effects\ToxicComponent.cs" />
-    <Compile Include="Components\ExplorerThoughtsComponent.cs" />
-    <Compile Include="Components\FarmerThoughtsComponent.cs" />
-    <Compile Include="Components\HeadIconComponent.cs" />
-    <Compile Include="Components\MercenaryComponent.cs" />
-    <Compile Include="Components\MerchantComponent.cs" />
-    <Compile Include="Components\SingularComponent.cs" />
-    <Compile Include="Components\SpawnVillagerThoughtsComponent.cs" />
-    <Compile Include="Components\TalkComponent.cs" />
-    <Compile Include="Components\ThoughtsComponent.cs" />
-    <Compile Include="Components\TradeComponent.cs" />
-    <Compile Include="Components\VillagerThoughtsComponent.cs" />
-    <Compile Include="Core\TaskScheduler.cs" />
-    <Compile Include="Core\Time.cs" />
-    <Compile Include="Core\Timer.cs" />
-    <Compile Include="Core\Unique.cs" />
-    <Compile Include="Engine\BiomeSystem\GhostTownHandler.cs" />
-    <Compile Include="Engine\BiomeSystem\GhostTown\GhostTownGenerationDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\GhostTown\GhostTownSkyDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\GhostTown\GhostTownMobDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\GhostTown\GhostTownBiomeStructureDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\GhostTown\GhostTownTreeDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\OverworldHandler.cs" />
-    <Compile Include="Engine\BiomeSystem\WorldHandler.cs" />
-    <Compile Include="Engine\BiomeSystem\WorldType.cs" />
-    <Compile Include="Engine\CacheSystem\CabbageCache.cs" />
-    <Compile Include="Engine\CacheSystem\CarrotPlantCache.cs" />
-    <Compile Include="Engine\CacheSystem\CornCache.cs" />
-    <Compile Include="Engine\CacheSystem\DeadGrassCache.cs" />
-    <Compile Include="Engine\CacheSystem\DeathIconCache.cs" />
-    <Compile Include="Engine\CacheSystem\GazeboCache.cs" />
-    <Compile Include="Engine\CacheSystem\GazeboIconCache.cs" />
-    <Compile Include="Engine\CacheSystem\MushroomCache.cs" />
-    <Compile Include="Engine\CacheSystem\OnionPlantCache.cs" />
-    <Compile Include="Engine\CacheSystem\PeaPlantCache.cs" />
-    <Compile Include="Engine\CacheSystem\PebbleCache.cs" />
-    <Compile Include="Engine\CacheSystem\PortalCache.cs" />
-    <Compile Include="Engine\CacheSystem\PortalIconCache.cs" />
-    <Compile Include="Engine\CacheSystem\PumpkinCache.cs" />
-    <Compile Include="Engine\CacheSystem\StickCache.cs" />
-    <Compile Include="Engine\CacheSystem\SunflowerCache.cs" />
-    <Compile Include="Engine\CacheSystem\TimberCache.cs" />
-    <Compile Include="Engine\CacheSystem\TomatoPlantCache.cs" />
-    <Compile Include="Engine\CacheSystem\WellCache.cs" />
-    <Compile Include="Engine\CacheSystem\WitchHutCache.cs" />
-    <Compile Include="Engine\CacheSystem\WitchHutIconCache.cs" />
-    <Compile Include="Engine\CacheSystem\WizardTowerIcon.cs" />
-    <Compile Include="Engine\ClassSystem\AbilityTreeLoader.cs" />
-    <Compile Include="Engine\ClassSystem\ClassLoader.cs" />
-    <Compile Include="Engine\ClassSystem\RestrictionsFactory.cs" />
-    <Compile Include="Engine\ClassSystem\Templates\AbilityTreeTemplate.cs" />
-    <Compile Include="Engine\ClassSystem\Templates\ClassTemplate.cs" />
-    <Compile Include="Engine\ClassSystem\Templates\StartingItemTemplate.cs" />
-    <Compile Include="Engine\Core\ISearchable.cs" />
-    <Compile Include="Engine\Core\ModuleLoader.cs" />
-    <Compile Include="Engine\Core\TypeFactory.cs" />
-    <Compile Include="Engine\EntitySystem\BaseHealthBarComponent.cs" />
-    <Compile Include="Engine\EntitySystem\DisposeComponent.cs" />
-    <Compile Include="Engine\EntitySystem\EntityAttributes.cs" />
-    <Compile Include="Engine\EntitySystem\IEntityWithAttributes.cs" />
-    <Compile Include="Engine\EntitySystem\SkilledAnimableEntity.cs" />
-    <Compile Include="Engine\EntitySystem\SkilledEntity.cs" />
-    <Compile Include="Engine\Game\Balancer.cs" />
-    <Compile Include="Engine\Game\Season.cs" />
-    <Compile Include="Engine\Generation\FastComparer.cs" />
-    <Compile Include="Engine\Input\ArrowSelector.cs" />
-    <Compile Include="Engine\Input\ArrowSelectorState.cs" />
-    <Compile Include="Engine\ItemSystem\FoodSystem\FoodHandler.cs" />
-    <Compile Include="Engine\ItemSystem\ItemHandlerFactory.cs" />
-    <Compile Include="Engine\ItemSystem\PotionAttributes.cs" />
-    <Compile Include="Engine\ItemSystem\PotionType.cs" />
-    <Compile Include="Engine\ItemSystem\Templates\AttributeTemplate.cs" />
-    <Compile Include="Engine\ItemSystem\Templates\ItemModelTemplate.cs" />
-    <Compile Include="Engine\ItemSystem\Templates\ItemTemplate.cs" />
-    <Compile Include="Engine\Loader\HedraServer.cs" />
-    <Compile Include="Engine\Localization\IniParser.cs" />
-    <Compile Include="Engine\Management\DummyAssetProvider.cs" />
-    <Compile Include="Engine\Management\WaitForChunk.cs" />
-    <Compile Include="Engine\ModuleSystem\ModelHandlers\ModelHandlerFactory.cs" />
-    <Compile Include="Engine\ModuleSystem\SerializableTemplate.cs" />
-    <Compile Include="Engine\ModuleSystem\Templates\AnimationTemplate.cs" />
-    <Compile Include="Engine\ModuleSystem\Templates\AttackAnimationTemplate.cs" />
-    <Compile Include="Engine\ModuleSystem\Templates\CustomFactory.cs" />
-    <Compile Include="Engine\ModuleSystem\Templates\DropTemplate.cs" />
-    <Compile Include="Engine\ModuleSystem\Templates\EffectTemplate.cs" />
-    <Compile Include="Engine\ModuleSystem\Templates\HumanoidConfiguration.cs" />
-    <Compile Include="Engine\ModuleSystem\Templates\HumanoidComponentsItemTemplate.cs" />
-    <Compile Include="Engine\ModuleSystem\Templates\HumanoidModelTemplate.cs" />
-    <Compile Include="Engine\ModuleSystem\Templates\HumanoidTemplate.cs" />
-    <Compile Include="Engine\ModuleSystem\Templates\HumanoidWeaponTemplate.cs" />
-    <Compile Include="Engine\ModuleSystem\Templates\INamedTemplate.cs" />
-    <Compile Include="Engine\ModuleSystem\Templates\ModelTemplate.cs" />
-    <Compile Include="Engine\ModuleSystem\Templates\SpawnerSettings.cs" />
-    <Compile Include="Engine\ModuleSystem\Templates\SpawnTemplate.cs" />
-    <Compile Include="Engine\Native\GraphicsCardType.cs" />
-    <Compile Include="Engine\Networking\BaseConnection.cs" />
-    <Compile Include="Engine\Networking\CommonMessages.cs" />
-    <Compile Include="Engine\Networking\DummyConnection.cs" />
-    <Compile Include="Engine\Networking\GameHandler.cs" />
-    <Compile Include="Engine\Networking\Network.cs" />
-    <Compile Include="Engine\Networking\ConnectionFactory.cs" />
-    <Compile Include="Engine\Networking\GameClient.cs" />
-    <Compile Include="Engine\Networking\Handler.cs" />
-    <Compile Include="Engine\Networking\GameHost.cs" />
-    <Compile Include="Engine\Networking\IConnection.cs" />
-    <Compile Include="Engine\Networking\LocalConnection.cs" />
-    <Compile Include="Engine\Networking\NetworkWorld.cs" />
-    <Compile Include="Engine\Networking\Packets\AcceptJoinPacket.cs" />
-    <Compile Include="Engine\Networking\Packets\AnimationStatePacket.cs" />
-    <Compile Include="Engine\Networking\Packets\INetworkPacket.cs" />
-    <Compile Include="Engine\Networking\Packets\IPacket.cs" />
-    <Compile Include="Engine\Networking\Packets\NetworkMessage.cs" />
-    <Compile Include="Engine\Networking\Packets\NetworkPacket.cs" />
-    <Compile Include="Engine\Networking\Packets\PacketReader.cs" />
-    <Compile Include="Engine\Networking\Packets\PacketWriter.cs" />
-    <Compile Include="Engine\Networking\Packets\PeersPacket.cs" />
-    <Compile Include="Engine\Networking\Packets\PlayerAttributesPacket.cs" />
-    <Compile Include="Engine\Networking\Packets\PlayerInformationPacket.cs" />
-    <Compile Include="Engine\Networking\Packets\PositionAndRotationPacket.cs" />
-    <Compile Include="Engine\Networking\Packets\WorldPacket.cs" />
-    <Compile Include="Engine\Networking\SteamConnection.cs" />
-    <Compile Include="Engine\PlantSystem\BerryBushDesign.cs" />
-    <Compile Include="Engine\PlantSystem\CollectiblePlacementDesign.cs" />
-    <Compile Include="Engine\PlantSystem\CollectiblePlantDesign.cs" />
-    <Compile Include="Engine\PlantSystem\CornDesign.cs" />
-    <Compile Include="Engine\PlantSystem\DeadGrassDesign.cs" />
-    <Compile Include="Engine\PlantSystem\DeadGrassPlacementDesign.cs" />
-    <Compile Include="Engine\PlantSystem\FarmPlantDesign.cs" />
-    <Compile Include="Engine\PlantSystem\Harvestables\HarvestableDesign.cs" />
-    <Compile Include="Engine\PlantSystem\Harvestables\CabbageDesign.cs" />
-    <Compile Include="Engine\PlantSystem\Harvestables\CabbagePlacementDesign.cs" />
-    <Compile Include="Engine\PlantSystem\Harvestables\CarrotDesign.cs" />
-    <Compile Include="Engine\PlantSystem\Harvestables\CarrotPlacementDesign.cs" />
-    <Compile Include="Engine\PlantSystem\Harvestables\OnionDesign.cs" />
-    <Compile Include="Engine\PlantSystem\Harvestables\OnionPlacementDesign.cs" />
-    <Compile Include="Engine\PlantSystem\Harvestables\PeasDesign.cs" />
-    <Compile Include="Engine\PlantSystem\Harvestables\PeasPlacementDesign.cs" />
-    <Compile Include="Engine\PlantSystem\Harvestables\TomatoDesign.cs" />
-    <Compile Include="Engine\PlantSystem\Harvestables\TomatoPlacementDesign.cs" />
-    <Compile Include="Engine\PlantSystem\MultipleCollectiblePlacementDesign.cs" />
-    <Compile Include="Engine\PlantSystem\MushroomDesign.cs" />
-    <Compile Include="Engine\PlantSystem\MushroomPlacementDesign.cs" />
-    <Compile Include="Engine\PlantSystem\PebbleDesign.cs" />
-    <Compile Include="Engine\PlantSystem\PebblePlacementDesign.cs" />
-    <Compile Include="Engine\PlantSystem\PumpkinDesign.cs" />
-    <Compile Include="Engine\PlantSystem\SunflowerDesign.cs" />
-    <Compile Include="Engine\Player\AbilityTreeSystem\SpecializationInfo.cs" />
-    <Compile Include="Engine\Player\AbilityTreeSystem\SpecializationPanel.cs" />
-    <Compile Include="Engine\Player\AbilityTreeSystem\TreeLinesUI.cs" />
-    <Compile Include="Engine\Player\CraftingSystem\CraftingBackground.cs" />
-    <Compile Include="Engine\Player\CraftingSystem\CraftingInterface.cs" />
-    <Compile Include="Engine\Player\CraftingSystem\CraftingInventoryArrayInterface.cs" />
-    <Compile Include="Engine\Player\CraftingSystem\CraftingInventoryArrayInterfaceManager.cs" />
-    <Compile Include="Engine\Player\CraftingSystem\CraftingInventoryItemInfo.cs" />
-    <Compile Include="Engine\Player\HumanoidInventory.cs" />
-    <Compile Include="Engine\Player\Humanoid.cs" />
-    <Compile Include="Engine\Player\HumanoidModelAnimationState.cs" />
-    <Compile Include="Engine\Player\IObjectWithAnimation.cs" />
-    <Compile Include="Engine\Player\IObjectWithMana.cs" />
-    <Compile Include="Engine\Player\IObjectWithMovement.cs" />
-    <Compile Include="Engine\Player\IObjectWithWeapon.cs" />
-    <Compile Include="Engine\Player\Inventory\AttributeFormatter.cs" />
-    <Compile Include="Engine\Player\Inventory\BaseBackground.cs" />
-    <Compile Include="Engine\Player\Inventory\PlayerInventoryInterface.cs" />
-    <Compile Include="Engine\Player\IObjectWithLifeCycle.cs" />
-    <Compile Include="Engine\Player\ISkillUser.cs" />
-    <Compile Include="Engine\Player\Networking\NetworkHumanoidModel.cs" />
-    <Compile Include="Engine\Player\Networking\NetworkHumanoidModelAnimationState.cs" />
-    <Compile Include="Engine\Player\Networking\NetworkPlayer.cs" />
-    <Compile Include="Engine\Player\PagedInterface\PagedInventoryArrayInterface.cs" />
-    <Compile Include="Engine\Player\PagedInterface\PagedInventoryArrayInterfaceManager.cs" />
-    <Compile Include="Engine\Player\PagedInterface\PagedInventoryItemInfo.cs" />
-    <Compile Include="Engine\Player\ISerializableHandler.cs" />
-    <Compile Include="Engine\Player\QuestSystem\EntityRenderer.cs" />
-    <Compile Include="Engine\Player\QuestSystem\QuestingJournal.cs" />
-    <Compile Include="Engine\Player\QuestSystem\QuestInterface.cs" />
-    <Compile Include="Engine\Player\QuestSystem\Views\ModelView.cs" />
-    <Compile Include="Engine\Player\QuestSystem\Views\EntityView.cs" />
-    <Compile Include="Engine\Player\QuestSystem\Views\QuestView.cs" />
-    <Compile Include="Engine\Player\RealmHandler.cs" />
-    <Compile Include="Engine\Player\ToolbarSystem\PassiveEffectsInterface.cs" />
-    <Compile Include="Engine\Rendering\BufferBalancer.cs" />
-    <Compile Include="Engine\Rendering\Core\DrawAsserter.cs" />
-    <Compile Include="Engine\Rendering\Core\DummyGLProvider.cs" />
-    <Compile Include="Engine\Rendering\Core\ErrorSeverity.cs" />
-    <Compile Include="Engine\Rendering\Core\FBO.cs" />
-    <Compile Include="Engine\Rendering\Core\FramebufferHandler.cs" />
-    <Compile Include="Engine\Rendering\Core\GLObject.cs" />
-    <Compile Include="Engine\Rendering\Core\GLProvider.cs" />
-    <Compile Include="Engine\Rendering\Core\IdentifiableObject.cs" />
-    <Compile Include="Engine\Rendering\Core\IGLProvider.cs" />
-    <Compile Include="Engine\Rendering\Core\Renderer.cs" />
-    <Compile Include="Engine\Rendering\Core\RenderException.cs" />
-    <Compile Include="Engine\Rendering\Core\Shader.cs" />
-    <Compile Include="Engine\Rendering\Core\ShaderHandler.cs" />
-    <Compile Include="Engine\Rendering\Core\ShaderManager.cs" />
-    <Compile Include="Engine\Rendering\Core\Texture3D.cs" />
-    <Compile Include="Engine\Rendering\Core\TextureHandler.cs" />
-    <Compile Include="Engine\Rendering\Core\TextureParameter.cs" />
-    <Compile Include="Engine\Rendering\Core\TextureRegistry.cs" />
-    <Compile Include="Engine\Rendering\Core\VAO.cs" />
-    <Compile Include="Engine\Rendering\Core\VBO.cs" />
-    <Compile Include="Engine\Rendering\Core\VertexAttributeHandler.cs" />
-    <Compile Include="Engine\Rendering\Core\BufferHandler.cs" />
-    <Compile Include="Engine\Rendering\Frustum\BoundingFrustum.cs" />
-    <Compile Include="Engine\Rendering\Frustum\Culling.cs" />
-    <Compile Include="Engine\Rendering\Frustum\Occludable.cs" />
-    <Compile Include="Engine\Rendering\Frustum\OcclusionState.cs" />
-    <Compile Include="Engine\Rendering\IModelData.cs" />
-    <Compile Include="Engine\Rendering\Line3D.cs" />
-    <Compile Include="Engine\Rendering\Particles\ParticleVAO.cs" />
-    <Compile Include="Engine\Rendering\Shaders\ShaderInput.cs" />
-    <Compile Include="Engine\Rendering\Shaders\ShaderIO.cs" />
-    <Compile Include="Engine\Rendering\Shaders\ShaderOutput.cs" />
-    <Compile Include="Engine\Rendering\TextFormatting.cs" />
-    <Compile Include="Engine\Rendering\ITransparent.cs" />
-    <Compile Include="Engine\Rendering\LodableObject.cs" />
-    <Compile Include="Engine\Rendering\TextBillboard.cs" />
-    <Compile Include="Engine\Rendering\Texture2D.cs" />
-    <Compile Include="Engine\Rendering\TextureBillboard.cs" />
-    <Compile Include="Engine\Rendering\UI\Plaque.cs" />
-    <Compile Include="Engine\Rendering\UI\TextCache.cs" />
-    <Compile Include="Engine\Rendering\UI\TextOptions.cs" />
-    <Compile Include="Engine\Rendering\UI\DrawableTexture.cs" />
-    <Compile Include="Engine\Scripting\ErrorReporter.cs" />
-    <Compile Include="Engine\Scripting\Function.cs" />
-    <Compile Include="Engine\Scripting\Interpreter.cs" />
-    <Compile Include="Engine\Scripting\ObfuscationAdapter.cs" />
-    <Compile Include="Engine\Scripting\CompiledRunner.cs" />
-    <Compile Include="Engine\Scripting\Runner.cs" />
-    <Compile Include="Engine\Scripting\Script.cs" />
-    <Compile Include="Engine\Scripting\VisualEffects.cs" />
-    <Compile Include="Engine\SkillSystem\PlayerActivateDurationSkill.cs" />
-    <Compile Include="Engine\SkillSystem\ActivateDurationSkillWithSingleAnimation.cs" />
-    <Compile Include="Engine\SkillSystem\Archer\Jab.cs" />
-    <Compile Include="Engine\SkillSystem\Archer\Hunter\Concealment.cs" />
-    <Compile Include="Engine\SkillSystem\Archer\Hunter\Focus.cs" />
-    <Compile Include="Engine\SkillSystem\Archer\Hunter\Raven.cs" />
-    <Compile Include="Engine\SkillSystem\Archer\Hunter\Scavenge.cs" />
-    <Compile Include="Engine\SkillSystem\Archer\Hunter\SpikeTrap.cs" />
-    <Compile Include="Engine\SkillSystem\Archer\Hunter\SteelArrows.cs" />
-    <Compile Include="Engine\SkillSystem\Archer\Scout\HotPursuit.cs" />
-    <Compile Include="Engine\SkillSystem\Archer\Scout\Nimbleness.cs" />
-    <Compile Include="Engine\SkillSystem\Archer\Scout\Retreat.cs" />
-    <Compile Include="Engine\SkillSystem\Archer\Scout\Rush.cs" />
-    <Compile Include="Engine\SkillSystem\Archer\Scout\SteadyAim.cs" />
-    <Compile Include="Engine\SkillSystem\Archer\Scout\Swiftness.cs" />
-    <Compile Include="Engine\SkillSystem\PlayerDrainSkill.cs" />
-    <Compile Include="Engine\SkillSystem\ISkilledAnimableEntity.cs" />
-    <Compile Include="Engine\SkillSystem\ISkilledEntity.cs" />
-    <Compile Include="Engine\SkillSystem\DurationSingleAnimationSkillWithStance.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Blaze.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Druid\ArcticBlast.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Druid\BearCompanion.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Druid\CompanionMastery.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Druid\CompanionSkill.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Druid\GroundFissure.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Druid\HawkCompanion.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Druid\MorphSkill.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Druid\OakSpirit.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Druid\Werewolf.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Druid\WindOfChange.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Druid\WolfCompanion.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\EnergyShield.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\FireMastery.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Inferno.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Necromancer\BloodExchange.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Necromancer\BloodProjectile.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Necromancer\BloodSkill.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Necromancer\DarkReaping.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Necromancer\IMinionMastery.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Necromancer\Leech.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Necromancer\RaiseSkeleton.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Necromancer\SiphonBlood.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Necromancer\SkeletonMastery.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Necromancer\Terror.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\PlayerRadiusEffectSkill.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Blink.cs" />
-    <Compile Include="Engine\SkillSystem\SingleAnimationSkillWithStance.cs" />
-    <Compile Include="Engine\SkillSystem\SpecialRangedAttackSkill.cs" />
-    <Compile Include="Engine\SkillSystem\MeleeMinionComponent.cs" />
-    <Compile Include="Engine\SkillSystem\Warrior\Paladin\Conversion.cs" />
-    <Compile Include="Engine\SkillSystem\Warrior\Thorns.cs" />
-    <Compile Include="Engine\SkillSystem\WeaponBonusSkill.cs" />
-    <Compile Include="Engine\SkillSystem\ChargeablePassiveSkill.cs" />
-    <Compile Include="Engine\SkillSystem\ConditionedPassiveSkill.cs" />
-    <Compile Include="Engine\SkillSystem\Rogue\Assassin\Cutthroat.cs" />
-    <Compile Include="Engine\SkillSystem\Rogue\Assassin\Fade.cs" />
-    <Compile Include="Engine\SkillSystem\Rogue\Assassin\MarkedForDeath.cs" />
-    <Compile Include="Engine\SkillSystem\Rogue\Assassin\NightStalker.cs" />
-    <Compile Include="Engine\SkillSystem\Rogue\Assassin\CleanCut.cs" />
-    <Compile Include="Engine\SkillSystem\Rogue\Assassin\QuietSteps.cs" />
-    <Compile Include="Engine\SkillSystem\Rogue\Assassin\Stealth.cs" />
-    <Compile Include="Engine\SkillSystem\Rogue\Assassin\Treason.cs" />
-    <Compile Include="Engine\SkillSystem\Rogue\Ninja\FanOfKnives.cs" />
-    <Compile Include="Engine\SkillSystem\Rogue\Ninja\FinishingBlow.cs" />
-    <Compile Include="Engine\SkillSystem\Rogue\Ninja\MartialArtsMaster.cs" />
-    <Compile Include="Engine\SkillSystem\Rogue\Ninja\SnakeSpirit.cs" />
-    <Compile Include="Engine\SkillSystem\Rogue\Ninja\MartialArtsTraining.cs" />
-    <Compile Include="Engine\SkillSystem\Rogue\Ninja\TigerStrike.cs" />
-    <Compile Include="Engine\SkillSystem\Rogue\Ninja\TripleShuriken.cs" />
-    <Compile Include="Engine\SkillSystem\Rogue\ShadowWarrior.cs" />
-    <Compile Include="Engine\SkillSystem\PlayerSingleAnimationSkill.cs" />
-    <Compile Include="Engine\SkillSystem\Archer\Agility.cs" />
-    <Compile Include="Engine\SkillSystem\Archer\FlameArrow.cs" />
-    <Compile Include="Engine\SkillSystem\Archer\IceArrow.cs" />
-    <Compile Include="Engine\SkillSystem\Archer\Kick.cs" />
-    <Compile Include="Engine\SkillSystem\Archer\LearnKnife.cs" />
-    <Compile Include="Engine\SkillSystem\Archer\PoisonArrow.cs" />
-    <Compile Include="Engine\SkillSystem\Archer\Puncture.cs" />
-    <Compile Include="Engine\SkillSystem\AbstractBaseSkill.cs" />
-    <Compile Include="Engine\SkillSystem\CappedSkill.cs" />
-    <Compile Include="Engine\SkillSystem\LearningSkill.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\FireRelease.cs" />
-    <Compile Include="Engine\SkillSystem\Mage\Meditation.cs" />
-    <Compile Include="Engine\SkillSystem\PassiveSkill.cs" />
-    <Compile Include="Engine\SkillSystem\Rogue\BurstOfSpeed.cs" />
-    <Compile Include="Engine\SkillSystem\Rogue\LearnClaw.cs" />
-    <Compile Include="Engine\SkillSystem\Rogue\LearnKatar.cs" />
-    <Compile Include="Engine\SkillSystem\Rogue\RoundSlash.cs" />
-    <Compile Include="Engine\SkillSystem\Rogue\Shuriken.cs" />
-    <Compile Include="Engine\SkillSystem\Rogue\Venom.cs" />
-    <Compile Include="Engine\SkillSystem\SkillFactory.cs" />
-    <Compile Include="Engine\SkillSystem\SkillUtils.cs" />
-    <Compile Include="Engine\SkillSystem\SpecialAttackPassiveSkill.cs" />
-    <Compile Include="Engine\SkillSystem\SpecialAttackSkill.cs" />
-    <Compile Include="Engine\SkillSystem\PlayerSwitchSkill.cs" />
-    <Compile Include="Engine\SkillSystem\TreeItem.cs" />
-    <Compile Include="Engine\SkillSystem\Warrior\Bash.cs" />
-    <Compile Include="Engine\SkillSystem\Warrior\Berserker\Berserk.cs" />
-    <Compile Include="Engine\SkillSystem\Warrior\Berserker\Frenzy.cs" />
-    <Compile Include="Engine\SkillSystem\Warrior\Berserker\GroundStomp.cs" />
-    <Compile Include="Engine\SkillSystem\Warrior\Berserker\IronSkin.cs" />
-    <Compile Include="Engine\SkillSystem\Warrior\Berserker\LearnAxe.cs" />
-    <Compile Include="Engine\SkillSystem\Warrior\Berserker\Sacrifice.cs" />
-    <Compile Include="Engine\SkillSystem\Warrior\Berserker\BattleCry.cs" />
-    <Compile Include="Engine\SkillSystem\Warrior\Intercept.cs" />
-    <Compile Include="Engine\SkillSystem\Warrior\Leap.cs" />
-    <Compile Include="Engine\SkillSystem\Warrior\NoEscape.cs" />
-    <Compile Include="Engine\SkillSystem\Warrior\Paladin\Faith.cs" />
-    <Compile Include="Engine\SkillSystem\Warrior\Paladin\FireEnchant.cs" />
-    <Compile Include="Engine\SkillSystem\Warrior\Paladin\HolyAttack.cs" />
-    <Compile Include="Engine\SkillSystem\Warrior\Paladin\LearnHammer.cs" />
-    <Compile Include="Engine\SkillSystem\Warrior\Paladin\Prayer.cs" />
-    <Compile Include="Engine\SkillSystem\Warrior\Paladin\Smite.cs" />
-    <Compile Include="Engine\SkillSystem\Warrior\Resistance.cs" />
-    <Compile Include="Engine\SkillSystem\Warrior\Whirlwind.cs" />
-    <Compile Include="Engine\SkillSystem\WeaponBonusWithAnimationSkill.cs" />
-    <Compile Include="Engine\Sound\DummySoundProvider.cs" />
-    <Compile Include="Engine\Steamworks\FriendsWrapper.cs" />
-    <Compile Include="Engine\Steamworks\LobbyWrapper.cs" />
-    <Compile Include="Engine\Steamworks\NetworkingWrapper.cs" />
-    <Compile Include="Engine\Steamworks\Steam.cs" />
-    <Compile Include="Engine\Steamworks\SteamObjectWrapper.cs" />
-    <Compile Include="Engine\StructureSystem\CachedVertexDataChunkWatcher.cs" />
-    <Compile Include="Engine\StructureSystem\ChunkWatcher.cs" />
-    <Compile Include="Engine\StructureSystem\FindableStructureDesign.cs" />
-    <Compile Include="Engine\StructureSystem\GhostTown\GhostTownBoss.cs" />
-    <Compile Include="Engine\StructureSystem\GhostTown\SpawnGhostTownPortal.cs" />
-    <Compile Include="Engine\StructureSystem\GhostTown\GhostTownPortal.cs" />
-    <Compile Include="Engine\StructureSystem\GhostTown\TombStructureDesign.cs" />
-    <Compile Include="Engine\StructureSystem\ICompletableStructureDesign.cs" />
-    <Compile Include="Engine\StructureSystem\IFindableStructureDesign.cs" />
-    <Compile Include="Engine\StructureSystem\InstanceDataChunkWatcher.cs" />
-    <Compile Include="Engine\StructureSystem\IQuestStructure.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\BanditCamp.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\BanditCampDesign.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\Campfire.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\CampfireDesign.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\Gazebo.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\GazeboDesign.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\GiantTree.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\GiantTreeDesign.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\Graveyard.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\GraveyardAmbientHandler.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\GraveyardDesign.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\Obelisk.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\ObeliskDesign.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\TravellingMerchantDesign.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\Village.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\VillageDesign.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\Well.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\WellDesign.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\WitchHut.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\WitchHutDesign.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\WizardTower.cs" />
-    <Compile Include="Engine\StructureSystem\Overworld\WizardTowerDesign.cs" />
-    <Compile Include="Engine\StructureSystem\Portal.cs" />
-    <Compile Include="Engine\StructureSystem\PortalStructureDesign.cs" />
-    <Compile Include="Engine\StructureSystem\CompletableStructureDesign.cs" />
-    <Compile Include="Engine\StructureSystem\QuestGiverStructureDesign.cs" />
-    <Compile Include="Engine\StructureSystem\SimpleCompletableStructureDesign.cs" />
-    <Compile Include="Engine\StructureSystem\SimpleFindableStructureDesign.cs" />
-    <Compile Include="Engine\StructureSystem\SimpleStructureDesign.cs" />
-    <Compile Include="Engine\StructureSystem\StructureDesign.cs" />
-    <Compile Include="Engine\StructureSystem\StructureGrid.cs" />
-    <Compile Include="Engine\StructureSystem\StructureHandler.cs" />
-    <Compile Include="Engine\StructureSystem\StructureWatcher.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Anvil.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Builders\ILivableBuildingParameters.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Builders\LivableBuildingBuilder.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Builders\DecorationsPlacer.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Builders\GenericParameters.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Builders\IBuilder.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Builders\GenericBuilder.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Chimney.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\CollectibleObject.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\IProbabilityTemplate.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Loom.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Placers\GenericPlacer.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Placers\IPlacer.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\QuestBoard.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\ChimneyTemplate.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\GenericDesignTemplate.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\GenericTemplate.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\LightTemplate.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\StructureTemplate.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Workbench.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\BedTemplate.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\BuildingDesignTemplate.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\DecorationsTemplate.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\FarmDesignTemplate.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\WindmillDesignTemplate.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\VillageGraph.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\WindmillBlades.cs" />
-    <Compile Include="Engine\WorldBuilding\BaseGroundwork.cs" />
-    <Compile Include="Engine\WorldBuilding\BasePlateau.cs" />
-    <Compile Include="Engine\WorldBuilding\Bench.cs" />
-    <Compile Include="Engine\WorldBuilding\BoundingBox.cs" />
-    <Compile Include="Engine\WorldBuilding\CraftingStation.cs" />
-    <Compile Include="Engine\WorldBuilding\GroundworkType.cs" />
-    <Compile Include="Engine\WorldBuilding\IBoundingBox.cs" />
-    <Compile Include="Engine\WorldBuilding\IWorldObject.cs" />
-    <Compile Include="Engine\WorldBuilding\WorldObject.cs" />
-    <Compile Include="Engine\WorldBuilding\BearTrap.cs" />
-    <Compile Include="Engine\WorldBuilding\SquaredGroundwork.cs" />
-    <Compile Include="Engine\WorldBuilding\SquaredPlateau.cs" />
-    <Compile Include="Engine\WorldBuilding\TravellingExplorers.cs" />
-    <Compile Include="EntitySystem\EntityExtensions.cs" />
-    <Compile Include="EntitySystem\SelfDestructComponent.cs" />
-    <Compile Include="Game\GameManager.cs" />
-    <Compile Include="Game\GameSettings.cs" />
-    <Compile Include="Game\GeneralSettings.cs" />
-    <Compile Include="HedraContent.cs" />
-    <Compile Include="Engine\BiomeSystem\IBiomePool.cs" />
-    <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeColors.cs" />
-    <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeEnvironmentDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeGenerationDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeMobDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeSkyDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeStructureDesign.cs" />
-    <Compile Include="Engine\BiomeSystem\NormalBiome\NormalBiomeTreeDesign.cs" />
-    <Compile Include="BiomeSystem\Region.cs" />
-    <Compile Include="Engine\BiomeSystem\RegionCache.cs" />
-    <Compile Include="BiomeSystem\RegionEnviroment.cs" />
-    <Compile Include="BiomeSystem\RegionGeneration.cs" />
-    <Compile Include="BiomeSystem\RegionMob.cs" />
-    <Compile Include="BiomeSystem\RegionSky.cs" />
-    <Compile Include="BiomeSystem\RegionStructure.cs" />
-    <Compile Include="BiomeSystem\RegionTree.cs" />
-    <Compile Include="Engine\BiomeSystem\Voronoi.cs" />
-    <Compile Include="Engine\CacheSystem\AppleTreesCache.cs" />
-    <Compile Include="Engine\CacheSystem\AttentionIconCache.cs" />
-    <Compile Include="Engine\CacheSystem\BerryBushCache.cs" />
-    <Compile Include="Engine\CacheSystem\BossIconCache.cs" />
-    <Compile Include="Engine\CacheSystem\BushesCache.cs" />
-    <Compile Include="Engine\CacheSystem\CacheItem.cs" />
-    <Compile Include="Engine\CacheSystem\CacheManager.cs" />
-    <Compile Include="Engine\CacheSystem\CacheType.cs" />
-    <Compile Include="Engine\CacheSystem\CampfireCache.cs" />
-    <Compile Include="Engine\CacheSystem\CampfireIconCache.cs" />
-    <Compile Include="Engine\CacheSystem\CampfireLogsCache.cs" />
-    <Compile Include="Engine\CacheSystem\CampfireRoasterCache.cs" />
-    <Compile Include="Engine\CacheSystem\CloudCache.cs" />
-    <Compile Include="Engine\CacheSystem\CypressTreesCache.cs" />
-    <Compile Include="Engine\CacheSystem\DeadTreesCache.cs" />
-    <Compile Include="Engine\CacheSystem\FearIconCache.cs" />
-    <Compile Include="Engine\CacheSystem\FernCache.cs" />
-    <Compile Include="Engine\CacheSystem\FlowerCache.cs" />
-    <Compile Include="Engine\CacheSystem\GiantTreeCache.cs" />
-    <Compile Include="Engine\CacheSystem\GrassCache.cs" />
-    <Compile Include="Engine\CacheSystem\CacheIgnore.cs" />
-    <Compile Include="Engine\CacheSystem\GraveCache.cs" />
-    <Compile Include="Engine\CacheSystem\GraveyardIconCache.cs" />
-    <Compile Include="Engine\CacheSystem\ICacheProvider.cs" />
-    <Compile Include="Engine\CacheSystem\MatCache.cs" />
-    <Compile Include="Engine\CacheSystem\MausoleumCache.cs" />
-    <Compile Include="Engine\CacheSystem\MerchantCartCache.cs" />
-    <Compile Include="Engine\CacheSystem\MerchantIconCache.cs" />
-    <Compile Include="Engine\CacheSystem\OakTreesCache.cs" />
-    <Compile Include="Engine\CacheSystem\ObeliskCache.cs" />
-    <Compile Include="Engine\CacheSystem\PineTreesCache.cs" />
-    <Compile Include="Engine\CacheSystem\ReedCache.cs" />
-    <Compile Include="Engine\CacheSystem\RockCache.cs" />
-    <Compile Include="Engine\CacheSystem\KnockedIconCache.cs" />
-    <Compile Include="Engine\CacheSystem\SleepingIconCache.cs" />
-    <Compile Include="Engine\CacheSystem\TallTreesCache.cs" />
-    <Compile Include="Engine\CacheSystem\CampfireTentCache.cs" />
-    <Compile Include="Engine\CacheSystem\VillageIconCache.cs" />
-    <Compile Include="Engine\CacheSystem\WheatCache.cs" />
-    <Compile Include="Engine\ClassSystem\ArcherDesign.cs" />
-    <Compile Include="Engine\ClassSystem\ClassDesign.cs" />
-    <Compile Include="Engine\ClassSystem\HiddenClassAttribute.cs" />
-    <Compile Include="Engine\ClassSystem\MageDesign.cs" />
-    <Compile Include="Engine\ClassSystem\NoneDesign.cs" />
-    <Compile Include="Engine\ClassSystem\RogueDesign.cs" />
-    <Compile Include="Engine\ClassSystem\WarriorDesign.cs" />
-    <Compile Include="Engine\CompatibilityManager.cs" />
-    <Compile Include="Engine\Core\RegistryFactory.cs" />
-    <Compile Include="Engine\Core\ICountable.cs" />
-    <Compile Include="Engine\Core\IPositionable.cs" />
-    <Compile Include="Engine\EntitySystem\Component.cs" />
-    <Compile Include="Engine\EntitySystem\EffectFactory.cs" />
-    <Compile Include="Engine\Game\GameLoader.cs" />
-    <Compile Include="Engine\Game\LoadingScreen.cs" />
-    <Compile Include="Engine\Game\SettingAttribute.cs" />
-    <Compile Include="Engine\Game\WindowSettingAttribute.cs" />
-    <Compile Include="Engine\Generation\ChunkSystem\ChunkSparsity.cs" />
-    <Compile Include="Engine\Input\KeyboardManager.cs" />
-    <Compile Include="Engine\ItemSystem\ArmorSystem\BootsPiece.cs" />
-    <Compile Include="Engine\ItemSystem\ArmorSystem\HelmetPiece.cs" />
-    <Compile Include="Engine\ItemSystem\ArmorSystem\PantsPiece.cs" />
-    <Compile Include="Engine\Loader\DebugInfoProvider.cs" />
-    <Compile Include="Engine\EntitySystem\BaseUpdatableModel.cs" />
-    <Compile Include="Engine\EntitySystem\InteractableComponent.cs" />
-    <Compile Include="Engine\EntitySystem\UpdatableModel.cs" />
-    <Compile Include="Engine\EntitySystem\HealthBonusComponent.cs" />
-    <Compile Include="Engine\EnvironmentSystem\SkyOverlay.cs" />
-    <Compile Include="Engine\EnvironmentSystem\WeatherManager.cs" />
-    <Compile Include="Engine\Events\IEventProvider.cs" />
-    <Compile Include="Engine\Game\GameProvider.cs" />
-    <Compile Include="Engine\Game\IGameProvider.cs" />
-    <Compile Include="Engine\Generation\ChunkSystem\ChunkStructuresMeshBuilder.cs" />
-    <Compile Include="Engine\Generation\ChunkSystem\ChunkTerrainMeshBuilder.cs" />
-    <Compile Include="Engine\Generation\ChunkSystem\ChunkTerrainMeshBuilderHelper.cs" />
-    <Compile Include="Engine\Generation\ChunkSystem\ChunkMeshBuildOutput.cs" />
-    <Compile Include="Engine\Generation\ChunkSystem\ChunkWatcher.cs" />
-    <Compile Include="Engine\Generation\IWorldProvider.cs" />
-    <Compile Include="Engine\Generation\RenderingComparer.cs" />
-    <Compile Include="Engine\Generation\WorldProvider.cs" />
-    <Compile Include="Engine\Loader\Hedra.cs" />
-    <Compile Include="Engine\Loader\HedraWindow.cs" />
-    <Compile Include="Engine\Loader\IHedra.cs" />
-    <Compile Include="Engine\Loader\IHedraWindow.cs" />
-    <Compile Include="Engine\Loader\SplashScreen.cs" />
-    <Compile Include="Engine\Localization\GameLanguage.cs" />
-    <Compile Include="Engine\Localization\Translation.cs" />
-    <Compile Include="Engine\Management\CompressedAssetProvider.cs" />
-    <Compile Include="Engine\Management\IAssetProvider.cs" />
-    <Compile Include="Engine\Management\ResourceHandler.cs" />
-    <Compile Include="Engine\ModuleSystem\AnimationEvents\ChargeEffect.cs" />
-    <Compile Include="Engine\Native\DummyConsoleManager.cs" />
-    <Compile Include="Engine\Native\DummyMessageManager.cs" />
-    <Compile Include="Engine\Native\IConsoleManager.cs" />
-    <Compile Include="Engine\Native\IMessageManager.cs" />
-    <Compile Include="Engine\Native\LinuxMessageManager.cs" />
-    <Compile Include="Engine\Native\OSManager.cs" />
-    <Compile Include="Engine\Native\Platform.cs" />
-    <Compile Include="Engine\Native\WindowsConsoleManager.cs" />
-    <Compile Include="Engine\Native\WindowsMessageManager.cs" />
-    <Compile Include="Engine\PhysicsSystem\CollisionGroup.cs" />
-    <Compile Include="Engine\PlantSystem\ReedDesign.cs" />
-    <Compile Include="Engine\PlantSystem\ReedPlacementDesign.cs" />
-    <Compile Include="Engine\PlantSystem\WeedDesign.cs" />
-    <Compile Include="Engine\Player\AbilityTreeSystem\IAbilityTree.cs" />
-    <Compile Include="Engine\Player\AmbientEffectHandler.cs" />
-    <Compile Include="Engine\Player\BoatSystem\Boat.cs" />
-    <Compile Include="Engine\Player\BoatSystem\BoatAudioHandler.cs" />
-    <Compile Include="Engine\Player\BoatSystem\BoatPlayerInputHandler.cs" />
-    <Compile Include="Engine\Player\BoatSystem\BoatModelHandler.cs" />
-    <Compile Include="Engine\Player\BoatSystem\BoatStateHandler.cs" />
-    <Compile Include="Engine\Player\BoatSystem\IBoat.cs" />
-    <Compile Include="Engine\Player\EquipmentHandler.cs" />
-    <Compile Include="Engine\Player\Fireball.cs" />
-    <Compile Include="Engine\Player\FireCone.cs" />
-    <Compile Include="Engine\Player\Firewave.cs" />
-    <Compile Include="Engine\Player\IAmbientEffectHandler.cs" />
-    <Compile Include="Engine\Player\IPlayerInventory.cs" />
-    <Compile Include="Engine\Player\IVehicle.cs" />
-    <Compile Include="Engine\Player\RollType.cs" />
-    <Compile Include="Engine\Player\StructureAware.cs" />
-    <Compile Include="Engine\Player\ICamera.cs" />
-    <Compile Include="Engine\Player\IStructureAware.cs" />
-    <Compile Include="Engine\Player\ToolbarSystem\IToolbar.cs" />
-    <Compile Include="Engine\Rendering\AnimatedUpdatableModel.cs" />
-    <Compile Include="Engine\Rendering\Animation\AnimationLoader.cs" />
-    <Compile Include="Engine\Rendering\Animation\ColladaParser\ColladaProvider.cs" />
-    <Compile Include="Engine\Rendering\Animation\ColladaParser\IColladaProvider.cs" />
-    <Compile Include="Engine\Rendering\Animation\IAnimationProvider.cs" />
-    <Compile Include="Engine\Rendering\Animation\ProgressEvent.cs" />
-    <Compile Include="Engine\Rendering\BitmapObject.cs" />
-    <Compile Include="Engine\Rendering\CachedVertexData.cs" />
-    <Compile Include="Engine\Rendering\CompressedValue.cs" />
-    <Compile Include="Engine\Rendering\CompressedVertexData.cs" />
-    <Compile Include="Engine\Rendering\CompressedVertexDataExtensions.cs" />
-    <Compile Include="Engine\Rendering\Geometry\ChunkMeshBorderDetector.cs" />
-    <Compile Include="Engine\Rendering\Geometry\Geometry.cs" />
-    <Compile Include="Engine\Rendering\ITexture2DProvider.cs" />
-    <Compile Include="Engine\Rendering\IVertexData.cs" />
-    <Compile Include="Engine\Rendering\Texture2DProvider.cs" />
-    <Compile Include="Engine\Rendering\UI\IAdjustable.cs" />
-    <Compile Include="Engine\Rendering\UI\ISimpleTexture.cs" />
-    <Compile Include="Engine\Rendering\UI\ITextProvider.cs" />
-    <Compile Include="Engine\Rendering\UI\SlingShotAnimation.cs" />
-    <Compile Include="Engine\Rendering\UI\TextProvider.cs" />
-    <Compile Include="Engine\Rendering\UI\TextureAnimation.cs" />
-    <Compile Include="Engine\Rendering\UI\ShiverAnimation.cs" />
-    <Compile Include="Engine\Rendering\UpdatableObjectMeshModel.cs" />
-    <Compile Include="Engine\Sound\ISoundProvider.cs" />
-    <Compile Include="Engine\Sound\SoundFamily.cs" />
-    <Compile Include="Engine\Sound\SoundProvider.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Builders\CompressedBuildingOutput.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Builders\HouseParameters.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Builders\MarketParameters.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Door.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\GridPlacementDesigner.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\IPlacementDesigner.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Layout\PathEdge.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Layout\PathGraph.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Layout\PathVertex.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\PlacementDesigner.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Placers\HousePlacer.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\DoorTemplate.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\HouseDesignTemplate.cs" />
-    <Compile Include="Engine\WorldBuilding\IWorldBuilding.cs" />
-    <Compile Include="Engine\WorldBuilding\LineGroundwork.cs" />
-    <Compile Include="Engine\WorldBuilding\RoundedGroundwork.cs" />
-    <Compile Include="Engine\IO\ConfigurationFile.cs" />
-    <Compile Include="Engine\ItemSystem\ArmorSystem\ArmorPiece.cs" />
-    <Compile Include="Engine\ItemSystem\ArmorSystem\ArmorFactory.cs" />
-    <Compile Include="Engine\ItemSystem\ArmorSystem\ChestPiece.cs" />
-    <Compile Include="Engine\ItemSystem\ArmorSystem\DoubleArmorPiece.cs" />
-    <Compile Include="Engine\ItemSystem\AttributeArray.cs" />
-    <Compile Include="Engine\ItemSystem\AttributeDisplay.cs" />
-    <Compile Include="Engine\ItemSystem\CommonAttributes.cs" />
-    <Compile Include="Engine\ItemSystem\CommonItems.cs" />
-    <Compile Include="Engine\ItemSystem\EffectDescriber.cs" />
-    <Compile Include="Engine\ItemSystem\ItemLoader.cs" />
-    <Compile Include="Engine\ItemSystem\ItemModelLoader.cs" />
-    <Compile Include="Engine\ItemSystem\ItemPoolSettings.cs" />
-    <Compile Include="Engine\ItemSystem\ItemTemplater.cs" />
-    <Compile Include="Engine\ItemSystem\ItemUtils.cs" />
-    <Compile Include="Engine\Management\DistributedExecuter.cs" />
-    <Compile Include="Engine\Management\ITickable.cs" />
-    <Compile Include="Engine\Management\TickSystem.cs" />
-    <Compile Include="Engine\Management\TrackItem.cs" />
-    <Compile Include="Engine\ModuleSystem\AnimationEvents\AnimationEventBuilder.cs" />
-    <Compile Include="Engine\ModuleSystem\HumanoidFactory.cs" />
-    <Compile Include="Engine\ModuleSystem\HumanoidLoader.cs" />
-    <Compile Include="Engine\ModuleSystem\HumanoidTemplater.cs" />
-    <Compile Include="Engine\ModuleSystem\IEnemyFactory.cs" />
-    <Compile Include="Engine\ModuleSystem\MobLoader.cs" />
-    <Compile Include="Engine\ModuleSystem\SpawnerLoader.cs" />
-    <Compile Include="Engine\EntitySystem\IMountable.cs" />
-    <Compile Include="Engine\ModuleSystem\MobFactory.cs" />
-    <Compile Include="Engine\EntitySystem\DropComponent.cs" />
-    <Compile Include="Engine\EntitySystem\Entity.cs" />
-    <Compile Include="Engine\EntitySystem\EntityComponent.cs" />
-    <Compile Include="Engine\EntitySystem\MobSpawner.cs" />
-    <Compile Include="Engine\Generation\HighlightedArea.cs" />
-    <Compile Include="Engine\Generation\AreaHighlighter.cs" />
-    <Compile Include="Engine\PhysicsSystem\AnimatedCollider.cs" />
-    <Compile Include="Engine\PhysicsSystem\AnimatedColliderBuilder.cs" />
-    <Compile Include="Engine\PhysicsSystem\AnimatedColliderData.cs" />
-    <Compile Include="Engine\PhysicsSystem\BoneBox.cs" />
-    <Compile Include="Engine\PhysicsSystem\BoneData.cs" />
-    <Compile Include="Engine\PlantSystem\BerryBushPlacementDesign.cs" />
-    <Compile Include="Engine\PlantSystem\BushDesign.cs" />
-    <Compile Include="Engine\PlantSystem\CloudDesign.cs" />
-    <Compile Include="Engine\PlantSystem\CloudPlacementDesign.cs" />
-    <Compile Include="Engine\PlantSystem\ShrubsPlacementDesign.cs" />
-    <Compile Include="Engine\PlantSystem\FernDesign.cs" />
-    <Compile Include="Engine\PlantSystem\GrassDesign.cs" />
-    <Compile Include="Engine\PlantSystem\WeedsPlacementDesign.cs" />
-    <Compile Include="Engine\PlantSystem\PlantDesign.cs" />
-    <Compile Include="Engine\PlantSystem\PlacementDesign.cs" />
-    <Compile Include="Engine\PlantSystem\RockDesign.cs" />
-    <Compile Include="Engine\PlantSystem\RockPlacementDesign.cs" />
-    <Compile Include="Engine\PlantSystem\WheatDesign.cs" />
-    <Compile Include="Engine\ItemSystem\WorldItem.cs" />
-    <Compile Include="Engine\EntitySystem\QuadrupedModel.cs" />
-    <Compile Include="Engine\EntitySystem\StaticModel.cs" />
-    <Compile Include="Engine\EntitySystem\TameComponent.cs" />
-    <Compile Include="Engine\EnvironmentSystem\Fog.cs" />
-    <Compile Include="Engine\EnvironmentSystem\Light.cs" />
-    <Compile Include="Engine\EnvironmentSystem\SkyManager.cs" />
-    <Compile Include="Engine\EnvironmentSystem\Sky.cs" />
-    <Compile Include="Engine\Events\EventDispatcher.cs" />
-    <Compile Include="Engine\Events\EventListener.cs" />
-    <Compile Include="Engine\Events\IEventListener.cs" />
-    <Compile Include="Engine\Extensions.cs" />
-    <Compile Include="Engine\Generation\ChunkSystem\ChunkComparer.cs" />
-    <Compile Include="Engine\Generation\HeightmapData.cs" />
-    <Compile Include="Engine\Generation\EnvironmentGenerator.cs" />
-    <Compile Include="Engine\Generation\Perlin.cs" />
-    <Compile Include="Engine\Generation\CollidableStructure.cs" />
-    <Compile Include="Engine\IO\Log.cs" />
-    <Compile Include="Engine\Management\AnalyticsManager.cs" />
-    <Compile Include="Engine\Management\AutosaveManager.cs" />
-    <Compile Include="Engine\Management\Pool.cs" />
-    <Compile Include="Engine\CacheSystem\CacheProvider.cs" />
-    <Compile Include="Engine\Management\DataManager.cs" />
-    <Compile Include="Engine\Player\Customization\CustomizationOptions.cs" />
-    <Compile Include="Engine\Player\Customization\ModelCustomization.cs" />
-    <Compile Include="Engine\Player\HangGlider.cs" />
-    <Compile Include="Engine\Player\MapSystem\MapBaseItem.cs" />
-    <Compile Include="Engine\Player\MapSystem\MapMeshBuilder.cs" />
-    <Compile Include="Engine\Player\PlayerMovement.cs" />
-    <Compile Include="Engine\WorldBuilding\IGroundwork.cs" />
-    <Compile Include="Engine\WorldBuilding\Tombstone.cs" />
-    <Compile Include="Engine\Rendering\CapHandler.cs" />
-    <Compile Include="Engine\Rendering\GeometryData.cs" />
-    <Compile Include="Engine\BiomeSystem\BiomePool.cs" />
-    <Compile Include="Engine\Generation\BlockUtils.cs" />
-    <Compile Include="Engine\BiomeSystem\BiomeGenerator.cs" />
-    <Compile Include="Engine\BiomeSystem\LandscapeGenerator.cs" />
-    <Compile Include="Engine\Generation\Noise.cs" />
-    <Compile Include="BiomeSystem\RegionColor.cs" />
-    <Compile Include="Engine\Generation\TreeGenerator.cs" />
-    <Compile Include="Engine\Management\AssetManager.cs" />
-    <Compile Include="Engine\Management\RoutineManager.cs" />
-    <Compile Include="Engine\Management\DrawManager.cs" />
-    <Compile Include="Engine\Management\ICullable.cs" />
-    <Compile Include="Engine\Management\IRenderable.cs" />
-    <Compile Include="Engine\Management\IUpdatable.cs" />
-    <Compile Include="Engine\Management\Executer.cs" />
-    <Compile Include="Engine\Management\UpdateManager.cs" />
-    <Compile Include="Engine\Management\ZipManager.cs" />
-    <Compile Include="Engine\PhysicsSystem\Physics.cs" />
-    <Compile Include="Engine\PhysicsSystem\Box.cs" />
-    <Compile Include="Engine\PhysicsSystem\CollisionShape.cs" />
-    <Compile Include="Engine\Player\MapSystem\MapItem.cs" />
-    <Compile Include="Engine\Player\MapSystem\MapStateManager.cs" />
-    <Compile Include="Engine\Player\ToolbarSystem\AbilityBagInventoryInterface.cs" />
-    <Compile Include="Engine\Player\ToolbarSystem\ToolbarInputHandler.cs" />
-    <Compile Include="Engine\Player\ToolbarSystem\ToolbarInterfaceManager.cs" />
-    <Compile Include="Engine\Player\ToolbarSystem\ToolbarInventoryInterface.cs" />
-    <Compile Include="Engine\Player\AbilityTreeSystem\AbilityInventoryBackground.cs" />
-    <Compile Include="Engine\Player\AbilityTreeSystem\AbilityTreeInterface.cs" />
-    <Compile Include="Engine\Player\AbilityTreeSystem\AbilityTreeInterfaceManager.cs" />
-    <Compile Include="Engine\Player\AbilityTreeSystem\AbilityTreeInterfaceItemInfo.cs" />
-    <Compile Include="Engine\Player\Camera.cs" />
-    <Compile Include="Engine\Player\Chat.cs" />
-    <Compile Include="Engine\Player\DummyMessageDispatcher.cs" />
-    <Compile Include="Engine\Player\GliderModel.cs" />
-    <Compile Include="Engine\EntitySystem\EntityComponentManager.cs" />
-    <Compile Include="Engine\Player\Inventory\InventoryArrayInterface.cs" />
-    <Compile Include="Engine\Player\Inventory\InventoryArrayInterfaceManager.cs" />
-    <Compile Include="Engine\Player\Inventory\InventoryBackground.cs" />
-    <Compile Include="Engine\Player\Inventory\InventoryInterfaceItemInfo.cs" />
-    <Compile Include="Engine\Player\Inventory\InventoryItemRenderer.cs" />
-    <Compile Include="Engine\Player\Inventory\InventoryStateManager.cs" />
-    <Compile Include="Engine\Player\Inventory\RestrictionsInterface.cs" />
-    <Compile Include="Engine\Player\Inventory\TradeInventoryInterfaceItemInfo.cs" />
-    <Compile Include="Engine\Player\Inventory\TradeInventoryArrayInterfaceManager.cs" />
-    <Compile Include="Engine\Player\Inventory\TradeManager.cs" />
-    <Compile Include="Engine\Player\IPlayer.cs" />
-    <Compile Include="Engine\Player\IMessageDispatcher.cs" />
-    <Compile Include="Engine\Player\PlayerInventory.cs" />
-    <Compile Include="Engine\Player\HandLamp.cs" />
-    <Compile Include="Engine\Player\Inventory\InventoryArray.cs" />
-    <Compile Include="Engine\Player\LocalPlayer.cs" />
-    <Compile Include="Engine\Player\MapSystem\Map.cs" />
-    <Compile Include="Engine\Player\MapSystem\Minimap.cs" />
-    <Compile Include="Engine\Player\CompanionHandler.cs" />
-    <Compile Include="Engine\Player\PlayerInformation.cs" />
-    <Compile Include="Engine\Player\MovementManager.cs" />
-    <Compile Include="Engine\Player\HumanoidModel.cs" />
-    <Compile Include="Engine\Player\ParticleProjectile.cs" />
-    <Compile Include="Engine\Player\ToolbarSystem\Toolbar.cs" />
-    <Compile Include="Engine\Player\AbilityTreeSystem\AbilityTree.cs" />
-    <Compile Include="Engine\Player\AbilityTreeSystem\AbilityTreeBlueprint.cs" />
-    <Compile Include="Engine\Management\StateManager.cs" />
-    <Compile Include="Engine\Player\Inventory\TradeInventory.cs" />
-    <Compile Include="Engine\Player\VisualMessageDispatcher.cs" />
-    <Compile Include="Engine\Player\WeaponAttack.cs" />
-    <Compile Include="Engine\EntitySystem\BossSystem\BossHealthBarComponent.cs" />
-    <Compile Include="Engine\EntitySystem\BossSystem\BossGenerator.cs" />
-    <Compile Include="Engine\WorldBuilding\IStructure.cs" />
-    <Compile Include="Engine\WorldBuilding\SleepingPad.cs" />
-    <Compile Include="Engine\WorldBuilding\Chest.cs" />
-    <Compile Include="Engine\WorldBuilding\InteractableStructure.cs" />
-    <Compile Include="Engine\WorldBuilding\WorldLight.cs" />
-    <Compile Include="Engine\WorldBuilding\NameGenerator.cs" />
-    <Compile Include="Engine\WorldBuilding\RoundedPlateau.cs" />
-    <Compile Include="Engine\WorldBuilding\WorldBuilding.cs" />
-    <Compile Include="Engine\WorldBuilding\BaseStructure.cs" />
-    <Compile Include="Engine\Reflection.cs" />
-    <Compile Include="Engine\Rendering\Cubemap.cs" />
-    <Compile Include="Engine\Rendering\PoolSize.cs" />
-    <Compile Include="Engine\Rendering\Shaders\MappingType.cs" />
-    <Compile Include="Engine\Rendering\Shaders\ShaderBuilder.cs" />
-    <Compile Include="Engine\Rendering\Shaders\ShaderData.cs" />
-    <Compile Include="Engine\Rendering\Shaders\ShaderParser.cs" />
-    <Compile Include="Engine\Rendering\Shaders\UniformArray.cs" />
-    <Compile Include="Engine\Rendering\Shaders\UniformMapping.cs" />
-    <Compile Include="Engine\Rendering\StateHandler.cs" />
-    <Compile Include="Engine\Rendering\UI\PlayerInterface.cs" />
-    <Compile Include="Engine\Rendering\UI\TextConfiguration.cs" />
-    <Compile Include="Engine\Rendering\UI\TextureCommand.cs" />
-    <Compile Include="Engine\WorldBuilding\TravellingMerchant.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Builders\BlacksmithBuilder.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Builders\BlacksmithParameters.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Builders\Builder.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Builders\BuildingOutput.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Builders\BuildingParameters.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Builders\FarmBuilder.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Builders\FarmParameters.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Builders\HouseBuilder.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Builders\IBuildingParameters.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Builders\MarketBuilder.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Builders\StableBuilder.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Builders\VillageAssembler.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Builders\MarketWellBuilder.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\MarketCache.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Placement.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\PlacementDesign.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\PlacementPoint.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Placers\BlacksmithPlacer.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Placers\FarmPlacer.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Placers\MarketPlacer.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Placers\Placer.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\BlacksmithDesignTemplate.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\BlacksmithTemplate.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\BuildingTemplate.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\DesignTemplate.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\FarmTemplate.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\HouseTemplate.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\StableTemplate.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\VillageTemplate.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\WellTemplate.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\Templates\WindmillTemplate.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\VillageCache.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\VillageConfiguration.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\VillagePlacement.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\VillageRing.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\VillageRoot.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\VillageDesigner.cs" />
-    <Compile Include="Engine\Recorder.cs" />
-    <Compile Include="Engine\Rendering\Animation\AnimatedModel.cs" />
-    <Compile Include="Engine\Rendering\Animation\AnimatedModelShader.cs" />
-    <Compile Include="Engine\Rendering\Animation\Animation.cs" />
-    <Compile Include="Engine\Rendering\Animation\AnimationProvider.cs" />
-    <Compile Include="Engine\Rendering\Animation\AnimationModelLoader.cs" />
-    <Compile Include="Engine\Rendering\Animation\Animator.cs" />
-    <Compile Include="Engine\Rendering\Animation\ColladaParser\AnimatedModelData.cs" />
-    <Compile Include="Engine\Rendering\Animation\ColladaParser\AnimationData.cs" />
-    <Compile Include="Engine\Rendering\Animation\ColladaParser\AnimationLoader.cs" />
-    <Compile Include="Engine\Rendering\Animation\ColladaParser\ColladaLoader.cs" />
-    <Compile Include="Engine\Rendering\Animation\ColladaParser\GeometryLoader.cs" />
-    <Compile Include="Engine\Rendering\Animation\ColladaParser\JointData.cs" />
-    <Compile Include="Engine\Rendering\Animation\ColladaParser\JointsData.cs" />
-    <Compile Include="Engine\Rendering\Animation\ColladaParser\JointsLoader.cs" />
-    <Compile Include="Engine\Rendering\Animation\ColladaParser\JointTransformData.cs" />
-    <Compile Include="Engine\Rendering\Animation\ColladaParser\KeyFrameData.cs" />
-    <Compile Include="Engine\Rendering\Animation\ColladaParser\ModelData.cs" />
-    <Compile Include="Engine\Rendering\Animation\ColladaParser\SkinLoader.cs" />
-    <Compile Include="Engine\Rendering\Animation\ColladaParser\SkinningData.cs" />
-    <Compile Include="Engine\Rendering\Animation\ColladaParser\Vertex.cs" />
-    <Compile Include="Engine\Rendering\Animation\ColladaParser\VertexSkinData.cs" />
-    <Compile Include="Engine\Rendering\Animation\Joint.cs" />
-    <Compile Include="Engine\Rendering\Animation\JointTransform.cs" />
-    <Compile Include="Engine\Rendering\Animation\KeyFrame.cs" />
-    <Compile Include="Engine\Rendering\BaseBillboard.cs" />
-    <Compile Include="Engine\Rendering\ChunkGeometry.cs" />
-    <Compile Include="Engine\Rendering\IMeshBuffer.cs" />
-    <Compile Include="Engine\Rendering\ChunkRenderCommand.cs" />
-    <Compile Include="Engine\Rendering\Effects\FXShader.cs" />
-    <Compile Include="Engine\Rendering\IDisposeAnimation.cs" />
-    <Compile Include="Engine\Rendering\Effects\BloomFilter.cs" />
-    <Compile Include="Engine\Rendering\Effects\BlurFilter.cs" />
-    <Compile Include="Engine\Rendering\Effects\MainFBO.cs" />
-    <Compile Include="Engine\Rendering\Effects\DistortionFilter.cs" />
-    <Compile Include="Engine\Rendering\Effects\DeferredRendering.cs" />
-    <Compile Include="Engine\Rendering\Effects\IEffect.cs" />
-    <Compile Include="Engine\Rendering\Effects\Filter.cs" />
-    <Compile Include="Engine\Rendering\Effects\UnderWaterFilter.cs" />
-    <Compile Include="Engine\Rendering\ObjectMeshBuffer.cs" />
-    <Compile Include="Engine\Rendering\DataContainer.cs" />
-    <Compile Include="Engine\Rendering\MemoryEntry.cs" />
-    <Compile Include="Engine\Rendering\GeometryPool.cs" />
-    <Compile Include="Engine\Rendering\InstanceData.cs" />
-    <Compile Include="Engine\Rendering\IModel.cs" />
-    <Compile Include="Engine\Rendering\MeshData.cs" />
-    <Compile Include="Engine\Rendering\NvidiaGPUFix32.cs" />
-    <Compile Include="EntitySystem\IComponent.cs" />
-    <Compile Include="EntitySystem\ApplyEffectComponent.cs" />
-    <Compile Include="EntitySystem\IEntity.cs" />
-    <Compile Include="EntitySystem\IHumanoid.cs" />
-    <Compile Include="EntitySystem\IPhysicsComponent.cs" />
-    <Compile Include="Input\Cursor.cs" />
-    <Compile Include="Items\InventoryExtensions.cs" />
-    <Compile Include="Items\ItemHandler.cs" />
-    <Compile Include="Items\ItemPool.cs" />
-    <Compile Include="Items\ItemType.cs" />
-    <Compile Include="Items\PotionHandler.cs" />
-    <Compile Include="Items\RecipeHandler.cs" />
-    <Compile Include="Localization\Translations.cs" />
-    <Compile Include="ModelHandlers\EntHandler.cs" />
-    <Compile Include="ModelHandlers\GhostFactory.cs" />
-    <Compile Include="ModelHandlers\GhostHandler.cs" />
-    <Compile Include="ModelHandlers\ModelFactory.cs" />
-    <Compile Include="ModelHandlers\ModelHandler.cs" />
-    <Compile Include="Rendering\Colors.cs" />
-    <Compile Include="Rendering\ObjectMesh.cs" />
-    <Compile Include="Rendering\Particles\ParticleShape.cs" />
-    <Compile Include="Rendering\PointLight.cs" />
-    <Compile Include="Rendering\UI\FontCache.cs" />
-    <Compile Include="Rendering\UI\GUIText.cs" />
-    <Compile Include="Rendering\UI\Panel.cs" />
-    <Compile Include="Rendering\UI\TextField.cs" />
-    <Compile Include="Rendering\VertexData.cs" />
-    <Compile Include="Sound\SoundPlayer.cs" />
-    <Compile Include="Sound\SoundtrackManager.cs">
+    <Compile Update="Sound\SoundtrackManager.cs">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="Utils.cs" />
-    <Compile Include="Engine\Rendering\NvidiaGPUFix64.cs" />
-    <Compile Include="Engine\Rendering\Particles\TrailRenderer.cs" />
-    <Compile Include="Engine\Rendering\Particles\Particle3D.cs" />
-    <Compile Include="Engine\Rendering\Particles\ParticleSystem.cs" />
-    <Compile Include="Engine\Rendering\Particles\ParticleCreator.cs" />
-    <Compile Include="Engine\Rendering\ShadowRenderer.cs" />
-    <Compile Include="Engine\Rendering\SymetricMatrix.cs" />
-    <Compile Include="Engine\Rendering\UI\Bar.cs" />
-    <Compile Include="Engine\Rendering\UI\Button.cs" />
-    <Compile Include="Engine\Rendering\UI\CharacterSelectorUI.cs" />
-    <Compile Include="Engine\Rendering\UI\CharacterCreatorUI.cs" />
-    <Compile Include="Engine\Rendering\UI\ColorPicker.cs" />
-    <Compile Include="Engine\Rendering\UI\ControlsUI.cs" />
-    <Compile Include="Engine\Rendering\UI\GameUI.cs" />
-    <Compile Include="Engine\Rendering\UI\GUIRenderer.cs" />
-    <Compile Include="Engine\Rendering\UI\GUITexture.cs" />
-    <Compile Include="Engine\Rendering\UI\NetworkUI.cs" />
-    <Compile Include="Engine\Rendering\UI\OptionChooser.cs" />
-    <Compile Include="Engine\Rendering\UI\OptionsUI.cs" />
-    <Compile Include="Engine\Rendering\UI\ProgressBar.cs" />
-    <Compile Include="Engine\Rendering\UI\RenderableButton.cs" />
-    <Compile Include="Engine\Rendering\UI\RenderableText.cs" />
-    <Compile Include="Engine\Rendering\UI\RenderableTexture.cs" />
-    <Compile Include="Engine\Rendering\UI\BackgroundTexture.cs" />
-    <Compile Include="Engine\Rendering\UI\TexturedBar.cs" />
-    <Compile Include="Engine\Rendering\UI\UIElement.cs" />
-    <Compile Include="Engine\Rendering\UI\UserInterface.cs" />
-    <Compile Include="Engine\Rendering\WorldBuffer.cs" />
-    <Compile Include="Engine\Rendering\WorldRenderer.cs" />
-    <Compile Include="Engine\Sound\AreaSound.cs" />
-    <Compile Include="Engine\Sound\IAudible.cs" />
-    <Compile Include="Engine\Sound\SoundBuffer.cs" />
-    <Compile Include="Engine\Sound\SoundEffect.cs" />
-    <Compile Include="Engine\Sound\SoundItem.cs" />
-    <Compile Include="Engine\Program.cs" />
-    <Compile Include="Engine\Sound\SoundSource.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\VillageLoader.cs" />
-    <Compile Include="Engine\StructureSystem\VillageSystem\VillageType.cs" />
-    <Compile Include="Engine\Generation\Block.cs" />
-    <Compile Include="Engine\Generation\ChunkSystem\Chunk.cs" />
-    <Compile Include="Engine\Generation\ChunkSystem\ChunkLoader.cs" />
-    <Compile Include="Engine\Rendering\BasicGeometry.cs" />
-    <Compile Include="Engine\Rendering\CubeData.cs" />
-    <Compile Include="Engine\Rendering\ChunkMesh.cs" />
-    <Compile Include="Engine\TreeSystem\AppleDesign.cs" />
-    <Compile Include="Engine\TreeSystem\CypressDesign.cs" />
-    <Compile Include="Engine\TreeSystem\DeadTreeDesign.cs" />
-    <Compile Include="Engine\TreeSystem\OakDesign.cs" />
-    <Compile Include="Engine\TreeSystem\PineDesign.cs" />
-    <Compile Include="Engine\TreeSystem\TallDesign.cs" />
-    <Compile Include="Engine\TreeSystem\TreeDesign.cs" />
-    <Compile Include="WeaponSystem\AttackOptions.cs" />
-    <Compile Include="WeaponSystem\Axe.cs" />
-    <Compile Include="WeaponSystem\Bow.cs" />
-    <Compile Include="WeaponSystem\Claw.cs" />
-    <Compile Include="WeaponSystem\DoubleBlades.cs" />
-    <Compile Include="WeaponSystem\FarmingRake.cs" />
-    <Compile Include="WeaponSystem\FishingRod.cs" />
-    <Compile Include="WeaponSystem\Hammer.cs" />
-    <Compile Include="WeaponSystem\Hands.cs" />
-    <Compile Include="WeaponSystem\HeavyMeleeWeapon.cs" />
-    <Compile Include="WeaponSystem\HoldableObject.cs" />
-    <Compile Include="WeaponSystem\Katar.cs" />
-    <Compile Include="WeaponSystem\Knife.cs" />
-    <Compile Include="WeaponSystem\MeleeWeapon.cs" />
-    <Compile Include="WeaponSystem\RangedWeapon.cs" />
-    <Compile Include="WeaponSystem\RogueWeapon.cs" />
-    <Compile Include="WeaponSystem\Staff.cs" />
-    <Compile Include="WeaponSystem\Sword.cs" />
-    <Compile Include="WeaponSystem\Tool.cs" />
-    <Compile Include="WeaponSystem\Weapon.cs" />
-    <Compile Include="WeaponSystem\WeaponFactory.cs" />
-    <Compile Include="WeaponSystem\WeaponIcons.cs" />
-    <Compile Include="World.cs" />
-    <Compile Include="WorldObjects\LandType.cs" />
-    <Compile Include="WorldObjects\Projectile.cs" />
     <None Include="..\project-hedra-assets\Animations\BeetleAttack0.dae">
       <Link>Assets\Chr\BeetleAttack0.dae</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -5446,148 +4029,148 @@
       <Link>Assets\Skills\TripleShot.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\UI\Pointer.png">
+    <None Update="Assets\UI\Pointer.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Bows\CommonRecurveBow.json">
+    <None Update="Modules\Items\Bows\CommonRecurveBow.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Bows\DivineShieldedBow.json">
+    <None Update="Modules\Items\Bows\DivineShieldedBow.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Bows\LegendaryEagleTipBow.json">
+    <None Update="Modules\Items\Bows\LegendaryEagleTipBow.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Bows\LegendaryPlatedGoreBow.json">
+    <None Update="Modules\Items\Bows\LegendaryPlatedGoreBow.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Bows\RareBronzeKnuckleShieldBow.json">
+    <None Update="Modules\Items\Bows\RareBronzeKnuckleShieldBow.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Bows\RareBronzeShieldedBow.json">
+    <None Update="Modules\Items\Bows\RareBronzeShieldedBow.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Bows\UncommonSpikedGuardBow.json">
+    <None Update="Modules\Items\Bows\UncommonSpikedGuardBow.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Claws\CommonIronClaw.json">
+    <None Update="Modules\Items\Claws\CommonIronClaw.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Claws\DivineCarmesiClaw.json">
+    <None Update="Modules\Items\Claws\DivineCarmesiClaw.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Claws\LegendaryAdamantineClaw.json">
+    <None Update="Modules\Items\Claws\LegendaryAdamantineClaw.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Claws\RareCelestialClaw.json">
+    <None Update="Modules\Items\Claws\RareCelestialClaw.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Claws\UncommonBronzeClawFist.json">
+    <None Update="Modules\Items\Claws\UncommonBronzeClawFist.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Foods\Berry.json">
+    <None Update="Modules\Items\Foods\Berry.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Katars\DivineCrystalFist.json">
+    <None Update="Modules\Items\Katars\DivineCrystalFist.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Katars\LegendaryDemonicKatar.json">
+    <None Update="Modules\Items\Katars\LegendaryDemonicKatar.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Katars\LegendaryGoldenMaceFist.json">
+    <None Update="Modules\Items\Katars\LegendaryGoldenMaceFist.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Katars\RareCrimsonKatar.json">
+    <None Update="Modules\Items\Katars\RareCrimsonKatar.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Katars\RareEllipseKatar.json">
+    <None Update="Modules\Items\Katars\RareEllipseKatar.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Katars\UncommonIronKatar.json">
+    <None Update="Modules\Items\Katars\UncommonIronKatar.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Katars\UncommonLeatherKatar.json">
+    <None Update="Modules\Items\Katars\UncommonLeatherKatar.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Staves\CommonBronzeStaff.json">
+    <None Update="Modules\Items\Staves\CommonBronzeStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Staves\CommonRuneStaff.json">
+    <None Update="Modules\Items\Staves\CommonRuneStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Staves\CommonStoneStaff.json">
+    <None Update="Modules\Items\Staves\CommonStoneStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Staves\CommonWoodenStaff.json">
+    <None Update="Modules\Items\Staves\CommonWoodenStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Staves\DivineTulipflameStaff.json">
+    <None Update="Modules\Items\Staves\DivineTulipflameStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Staves\LegendaryBloodstoneStaff.json">
+    <None Update="Modules\Items\Staves\LegendaryBloodstoneStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Staves\LegendaryCelestialCleansingStaff.json">
+    <None Update="Modules\Items\Staves\LegendaryCelestialCleansingStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Staves\LegendarySnakeStaff.json">
+    <None Update="Modules\Items\Staves\LegendarySnakeStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Staves\RareAutumnStaff.json">
+    <None Update="Modules\Items\Staves\RareAutumnStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Staves\RareChitinclawStaff.json">
+    <None Update="Modules\Items\Staves\RareChitinclawStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Staves\RareEgipticStaff.json">
+    <None Update="Modules\Items\Staves\RareEgipticStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Staves\RareIncenseStaff.json">
+    <None Update="Modules\Items\Staves\RareIncenseStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Staves\RareWildSocketedStaff.json">
+    <None Update="Modules\Items\Staves\RareWildSocketedStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Staves\UncommonBattleStaff.json">
+    <None Update="Modules\Items\Staves\UncommonBattleStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Staves\UncommonEmeraldStaff.json">
+    <None Update="Modules\Items\Staves\UncommonEmeraldStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Staves\UncommonHardwoodStaff.json">
+    <None Update="Modules\Items\Staves\UncommonHardwoodStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Staves\UncommonLongStaff.json">
+    <None Update="Modules\Items\Staves\UncommonLongStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Staves\UniqueBloodSpillingStaff.json">
+    <None Update="Modules\Items\Staves\UniqueBloodSpillingStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Staves\UniqueSanctuaryStaff.json">
+    <None Update="Modules\Items\Staves\UniqueSanctuaryStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Staves\UniqueScryingStaff.json">
+    <None Update="Modules\Items\Staves\UniqueScryingStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Staves\UniqueVoidStaff.json">
+    <None Update="Modules\Items\Staves\UniqueVoidStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Staves\UniqueWorldEaterStaff.json">
+    <None Update="Modules\Items\Staves\UniqueWorldEaterStaff.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Mobs\GiantBeetle.json">
+    <None Update="Modules\Mobs\GiantBeetle.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Spawners\Overworld.json">
+    <None Update="Modules\Spawners\Overworld.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Includes\Conditionals.shader">
+    <None Update="Shaders\Includes\Conditionals.shader">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Includes\GammaCorrection.shader">
+    <None Update="Shaders\Includes\GammaCorrection.shader">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Includes\Lighting.shader">
+    <None Update="Shaders\Includes\Lighting.shader">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Sounds\BoatMove.ogg">
@@ -5622,7 +4205,7 @@
       <Link>Sounds\WaterSplash.ogg</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Translations\English.po">
+    <None Update="Translations\English.po">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -7600,33 +6183,31 @@
       <Link>Assets\Env\Wheat.ply</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="app.config" />
-    <None Include="app.manifest" />
-    <None Include="Assets\Background.png">
+    <None Update="Assets\Background.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\ClearSans-Bold.ttf">
+    <None Update="Assets\ClearSans-Bold.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\ClearSans-Regular.ttf">
+    <None Update="Assets\ClearSans-Regular.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Bar.png">
+    <None Update="Assets\Bar.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\DoubleKnife.png">
+    <None Update="Assets\DoubleKnife.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Env\SimpleIcosphere.ply">
+    <None Update="Assets\Env\SimpleIcosphere.ply">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Env\Tetrahedra.ply">
+    <None Update="Assets\Env\Tetrahedra.ply">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Icon.ico">
+    <None Update="Assets\Icon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Knife.png">
+    <None Update="Assets\Knife.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\UI\Skills\Agility.png">
@@ -7737,430 +6318,430 @@
       <Link>Assets\Skills\Venom.png</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\Sans.ttf">
+    <None Update="Assets\Sans.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\UI\Compass.png">
+    <None Update="Assets\UI\Compass.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\UI\MapCursor.png">
+    <None Update="Assets\UI\MapCursor.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\UI\Menu.png">
+    <None Update="Assets\UI\Menu.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Assets\UI\Skillsbar.png">
+    <None Update="Assets\UI\Skillsbar.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Axes\DivineEqualizerAxe.json">
+    <None Update="Modules\Items\Axes\DivineEqualizerAxe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Axes\LegendaryReedemerAxe.json">
+    <None Update="Modules\Items\Axes\LegendaryReedemerAxe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Axes\LegendaryRoyalAxe.json">
+    <None Update="Modules\Items\Axes\LegendaryRoyalAxe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Axes\RareHunterAxe.json">
+    <None Update="Modules\Items\Axes\RareHunterAxe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Axes\UncommonHalvingBladeAxe.json">
+    <None Update="Modules\Items\Axes\UncommonHalvingBladeAxe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Axes\UncommonHandGuillotineAxe.json">
+    <None Update="Modules\Items\Axes\UncommonHandGuillotineAxe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Axes\UncommonSilverAxe.json">
+    <None Update="Modules\Items\Axes\UncommonSilverAxe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Axes\UniqueMaceAxe.json">
+    <None Update="Modules\Items\Axes\UniqueMaceAxe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Axes\UniquePendulumBladeAxe.json">
+    <None Update="Modules\Items\Axes\UniquePendulumBladeAxe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Axes\UniqueWoodsmanAxe.json">
+    <None Update="Modules\Items\Axes\UniqueWoodsmanAxe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Blades\CommonIronDoubleBlades.json">
+    <None Update="Modules\Items\Blades\CommonIronDoubleBlades.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Blades\RareBarbarianIronDoubleBlades.json">
+    <None Update="Modules\Items\Blades\RareBarbarianIronDoubleBlades.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Blades\RarePaladinSilverDoubleBlades.json">
+    <None Update="Modules\Items\Blades\RarePaladinSilverDoubleBlades.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Blades\UncommonBarbarianBronzeDoubleBlades.json">
+    <None Update="Modules\Items\Blades\UncommonBarbarianBronzeDoubleBlades.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Blades\UncommonSilverDoubleBlades.json">
+    <None Update="Modules\Items\Blades\UncommonSilverDoubleBlades.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Bows\UncommonSilverBow.json">
+    <None Update="Modules\Items\Bows\UncommonSilverBow.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Hammers\DivineDrainerHammer.json">
+    <None Update="Modules\Items\Hammers\DivineDrainerHammer.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Hammers\LegendaryGolemFistHammer.json">
+    <None Update="Modules\Items\Hammers\LegendaryGolemFistHammer.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Hammers\RareStoneBreakerHammer.json">
+    <None Update="Modules\Items\Hammers\RareStoneBreakerHammer.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Hammers\RareSunderingHalberdHammer.json">
+    <None Update="Modules\Items\Hammers\RareSunderingHalberdHammer.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Hammers\RareSunderingHammer.json">
+    <None Update="Modules\Items\Hammers\RareSunderingHammer.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Hammers\UncommonSmithyHammer.json">
+    <None Update="Modules\Items\Hammers\UncommonSmithyHammer.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Hammers\UniquePaladinHammer.json">
+    <None Update="Modules\Items\Hammers\UniquePaladinHammer.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Hammers\UniqueRingingHammer.json">
+    <None Update="Modules\Items\Hammers\UniqueRingingHammer.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Hammers\UniqueShellbreakerHammer.json">
+    <None Update="Modules\Items\Hammers\UniqueShellbreakerHammer.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Knifes\CommonIronKnife.json">
+    <None Update="Modules\Items\Knifes\CommonIronKnife.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Knifes\RareBarbarianIronKnife.json">
+    <None Update="Modules\Items\Knifes\RareBarbarianIronKnife.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Knifes\RarePaladinSilverKnife.json">
+    <None Update="Modules\Items\Knifes\RarePaladinSilverKnife.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Knifes\UncommonBarbarianBronzeKnife.json">
+    <None Update="Modules\Items\Knifes\UncommonBarbarianBronzeKnife.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Knifes\UncommonSilverKnife.json">
+    <None Update="Modules\Items\Knifes\UncommonSilverKnife.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Axes\CommonBronzeAxe.json">
+    <None Update="Modules\Items\Axes\CommonBronzeAxe.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Claws\CommonBronzeClaw.json">
+    <None Update="Modules\Items\Claws\CommonBronzeClaw.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Blades\CommonBronzeDoubleBlades.json">
+    <None Update="Modules\Items\Blades\CommonBronzeDoubleBlades.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Hammers\CommonBronzeHammer.json">
+    <None Update="Modules\Items\Hammers\CommonBronzeHammer.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Katars\CommonBronzeKatar.json">
+    <None Update="Modules\Items\Katars\CommonBronzeKatar.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Knifes\CommonBronzeKnife.json">
+    <None Update="Modules\Items\Knifes\CommonBronzeKnife.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Rings\CommonWoodenRing.json">
+    <None Update="Modules\Items\Rings\CommonWoodenRing.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Rings\RareGoldRing.json">
+    <None Update="Modules\Items\Rings\RareGoldRing.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Rings\UncommonIronRing.json">
+    <None Update="Modules\Items\Rings\UncommonIronRing.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Rings\UncommonSilverRing.json">
+    <None Update="Modules\Items\Rings\UncommonSilverRing.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Swords\CommonBronzeSword.json">
+    <None Update="Modules\Items\Swords\CommonBronzeSword.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Swords\CommonIronLongsword.json">
+    <None Update="Modules\Items\Swords\CommonIronLongsword.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Hammers\CommonIronMace.json">
+    <None Update="Modules\Items\Hammers\CommonIronMace.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Bows\CommonOrientalWoodenBow.json">
+    <None Update="Modules\Items\Bows\CommonOrientalWoodenBow.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Bows\CommonWoodenBow.json">
+    <None Update="Modules\Items\Bows\CommonWoodenBow.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Misc\Glider.json">
+    <None Update="Modules\Items\Misc\Glider.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Misc\Gold.json">
+    <None Update="Modules\Items\Misc\Gold.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Rings\CommonBronzeRing.json">
+    <None Update="Modules\Items\Rings\CommonBronzeRing.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Hammers\UncommonIronWarhammer.json">
+    <None Update="Modules\Items\Hammers\UncommonIronWarhammer.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Swords\DivineDemonBlade.json">
+    <None Update="Modules\Items\Swords\DivineDemonBlade.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Swords\LegendaryBloodEdge.json">
+    <None Update="Modules\Items\Swords\LegendaryBloodEdge.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Swords\LegendarySteelChopper.json">
+    <None Update="Modules\Items\Swords\LegendarySteelChopper.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Swords\RareBarbarianIronSword.json">
+    <None Update="Modules\Items\Swords\RareBarbarianIronSword.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Swords\RarePaladinSilverSword.json">
+    <None Update="Modules\Items\Swords\RarePaladinSilverSword.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Swords\RareSilverRapier.json">
+    <None Update="Modules\Items\Swords\RareSilverRapier.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Swords\RareSteelCleaver.json">
+    <None Update="Modules\Items\Swords\RareSteelCleaver.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Swords\UncommonBarbarianBronzeSword.json">
+    <None Update="Modules\Items\Swords\UncommonBarbarianBronzeSword.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Swords\UncommonSilverFalchion.json">
+    <None Update="Modules\Items\Swords\UncommonSilverFalchion.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Swords\UncommonSilverSword.json">
+    <None Update="Modules\Items\Swords\UncommonSilverSword.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Swords\UniqueAncientEdge.json">
+    <None Update="Modules\Items\Swords\UniqueAncientEdge.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Items\Swords\UniqueCrystalSword.json">
+    <None Update="Modules\Items\Swords\UniqueCrystalSword.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Mobs\Bear.json">
+    <None Update="Modules\Mobs\Bear.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Mobs\Bee.json">
+    <None Update="Modules\Mobs\Bee.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Mobs\Boar.json">
+    <None Update="Modules\Mobs\Boar.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Mobs\Deer.json">
+    <None Update="Modules\Mobs\Deer.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Mobs\Fox.json">
+    <None Update="Modules\Mobs\Fox.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Mobs\Goat.json">
+    <None Update="Modules\Mobs\Goat.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Mobs\Horse.json">
+    <None Update="Modules\Mobs\Horse.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Mobs\Ooze.json">
+    <None Update="Modules\Mobs\Ooze.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Mobs\Rat.json">
+    <None Update="Modules\Mobs\Rat.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Mobs\Roach.json">
+    <None Update="Modules\Mobs\Roach.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Mobs\Sheep.json">
+    <None Update="Modules\Mobs\Sheep.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Mobs\Snake.json">
+    <None Update="Modules\Mobs\Snake.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Mobs\Troll.json">
+    <None Update="Modules\Mobs\Troll.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\NPCs\Archer.json">
+    <None Update="Modules\NPCs\Archer.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\NPCs\Blacksmith.json">
+    <None Update="Modules\NPCs\Blacksmith.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\NPCs\Gnoll.json">
+    <None Update="Modules\NPCs\Gnoll.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\NPCs\Mage.json">
+    <None Update="Modules\NPCs\Mage.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\NPCs\Merchant.json">
+    <None Update="Modules\NPCs\Merchant.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\NPCs\Rogue.json">
+    <None Update="Modules\NPCs\Rogue.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\NPCs\TravellingMerchant.json">
+    <None Update="Modules\NPCs\TravellingMerchant.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\NPCs\Warrior.json">
+    <None Update="Modules\NPCs\Warrior.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Mobs\Spider.json">
+    <None Update="Modules\Mobs\Spider.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Mobs\Turtle.json">
+    <None Update="Modules\Mobs\Turtle.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Mobs\Wasp.json">
+    <None Update="Modules\Mobs\Wasp.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Modules\Mobs\Wolf.json">
+    <None Update="Modules\Mobs\Wolf.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\AnimatedModel.frag">
+    <None Update="Shaders\AnimatedModel.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\AnimatedModel.vert">
+    <None Update="Shaders\AnimatedModel.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\AnimatedModelDeath.geom">
+    <None Update="Shaders\AnimatedModelDeath.geom">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Bloom.frag">
+    <None Update="Shaders\Bloom.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Bloom.vert">
+    <None Update="Shaders\Bloom.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Blur.frag">
+    <None Update="Shaders\Blur.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Cursor.frag">
+    <None Update="Shaders\Cursor.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Cursor.vert">
+    <None Update="Shaders\Cursor.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Distortion.frag">
+    <None Update="Shaders\Distortion.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\DropShadows.frag">
+    <None Update="Shaders\DropShadows.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\DropShadows.vert">
+    <None Update="Shaders\DropShadows.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Includes\Random.shader">
+    <None Update="Shaders\Includes\Random.shader">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Includes\Sky.shader">
+    <None Update="Shaders\Includes\Sky.shader">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\ObjectMesh.frag">
+    <None Update="Shaders\ObjectMesh.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\ObjectMesh.vert">
+    <None Update="Shaders\ObjectMesh.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\FXAA.frag">
+    <None Update="Shaders\FXAA.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\MinimapGUI.frag">
+    <None Update="Shaders\MinimapGUI.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\SkyOverlay.frag">
+    <None Update="Shaders\SkyOverlay.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\SkyOverlay.vert">
+    <None Update="Shaders\SkyOverlay.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\SSAO-Pass1.frag">
+    <None Update="Shaders\SSAO-Pass1.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\SSAO-Pass3.frag">
+    <None Update="Shaders\SSAO-Pass3.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\SSAO.vert">
+    <None Update="Shaders\SSAO.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\HBlur.vert">
+    <None Update="Shaders\HBlur.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\GUI.frag">
+    <None Update="Shaders\GUI.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\GUI.vert">
+    <None Update="Shaders\GUI.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Instance.frag">
+    <None Update="Shaders\Instance.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Instance.vert">
+    <None Update="Shaders\Instance.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Lines.frag">
+    <None Update="Shaders\Lines.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Lines.vert">
+    <None Update="Shaders\Lines.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Particle.frag">
+    <None Update="Shaders\Particle.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Particle.vert">
+    <None Update="Shaders\Particle.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Bar.frag">
+    <None Update="Shaders\Bar.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Bar.vert">
+    <None Update="Shaders\Bar.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Shadows.frag">
+    <None Update="Shaders\Shadows.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Shadows.vert">
+    <None Update="Shaders\Shadows.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Skills.frag">
+    <None Update="Shaders\Skills.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Skills.vert">
+    <None Update="Shaders\Skills.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\SkyGradient.frag">
+    <None Update="Shaders\SkyGradient.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\SkyGradient.vert">
+    <None Update="Shaders\SkyGradient.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\SSAO-Pass2.frag">
+    <None Update="Shaders\SSAO-Pass2.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Static.frag">
+    <None Update="Shaders\Static.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Static.vert">
+    <None Update="Shaders\Static.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Sun.frag">
+    <None Update="Shaders\Sun.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Sun.vert">
+    <None Update="Shaders\Sun.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\TrailRenderer.frag">
+    <None Update="Shaders\TrailRenderer.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\TrailRenderer.vert">
+    <None Update="Shaders\TrailRenderer.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\UnderWater.frag">
+    <None Update="Shaders\UnderWater.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\UnderWater.vert">
+    <None Update="Shaders\UnderWater.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\VBlur.vert">
+    <None Update="Shaders\VBlur.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Water.frag">
+    <None Update="Shaders\Water.frag">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Shaders\Water.vert">
+    <None Update="Shaders\Water.vert">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="..\project-hedra-assets\Sounds\Bow.ogg">
@@ -14664,7 +13245,7 @@
     <Content Include="Assets\UI\SelectedInventorySlot.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Modules\Mobs\GorillaWarrior.json">
+    <None Update="Modules\Mobs\GorillaWarrior.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <Content Include="Mods\README.txt">
@@ -15448,17 +14029,11 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Framework\Framework.csproj">
-      <Project>{12915777-140a-421a-a0c2-eb9bb112962f}</Project>
-      <Name>Framework</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\Framework\Framework.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AdvancedDLSupport">
-      <Version>3.1.0</Version>
-    </PackageReference>
     <PackageReference Include="IronPython">
-      <Version>2.7.5</Version>
+      <Version>2.7.11</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>12.0.2</Version>
@@ -15481,6 +14056,15 @@
     <PackageReference Include="Silk.NET.OpenGL.Legacy">
       <Version>2.9.0</Version>
     </PackageReference>
+    <PackageReference Include="SixLabors.Fonts">
+      <Version>1.0.0-beta15</Version>
+    </PackageReference>
+    <PackageReference Include="SixLabors.ImageSharp">
+      <Version>1.0.4</Version>
+    </PackageReference>
+    <PackageReference Include="System.Drawing.Common">
+      <Version>6.0.0</Version>
+    </PackageReference>
     <PackageReference Include="System.Numerics.Vectors">
       <Version>4.6.0-preview5.19224.8</Version>
     </PackageReference>
@@ -15488,51 +14072,11 @@
       <Version>5.0.0</Version>
     </PackageReference>
   </ItemGroup>
-  <PropertyGroup>
-    <PostBuildEvent Condition="'$(OS)' == 'Windows_NT' ">
-        call "$(ProjectDir)/../utilities/make_atlas.sh"
-        call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" normal text
-        call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" normal binary
-        call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" normal binary
-    </PostBuildEvent>
-    <PostBuildEvent Condition="'$(OS)' != 'Windows_NT' ">
-        mono "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" normal text
-        mono "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" normal binary
-        mono "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" normal binary
-    </PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <ErrorReport>prompt</ErrorReport>
-    <ConsolePause>False</ConsolePause>
-    <OutputPath>bin\Release\</OutputPath>
-    <PostBuildEvent Condition="'$(OS)' == 'Windows_NT' ">
-        call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" normal text
-        call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" normal binary
-        call "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" normal binary
-    </PostBuildEvent>
-    <PostBuildEvent Condition="'$(OS)' != 'Windows_NT' ">
-        mono "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Shaders/" "$(TargetDir)/data1.db" normal text
-        mono "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Sounds/" "$(TargetDir)/data2.db" normal binary
-        mono "$(ProjectDir)/../utilities/AssetBuilder.exe" "$(TargetDir)/Assets/" "$(TargetDir)/data3.db" normal binary
-    </PostBuildEvent>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
-    <DebugSymbols>True</DebugSymbols>
-    <ErrorReport>prompt</ErrorReport>
-    <ConsolePause>False</ConsolePause>
-    <OutputPath>bin\Debug\</OutputPath>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <WarningLevel>1</WarningLevel>
-    <DocumentationFile>
-    </DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>bin\Release\</OutputPath>
-    <Prefer32bit>false</Prefer32bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <Prefer32bit>false</Prefer32bit>
-    <Optimize>false</Optimize>
-  </PropertyGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="&quot;$(MSBuildProjectDirectory)/../utilities/make_atlas.sh&quot;" />
+    <Exec Command="&quot;$(MSBuildProjectDirectory)/../utilities/AssetBuilder.exe&quot; &quot;$(TargetDir)/Shaders/&quot; &quot;$(TargetDir)/data1.db&quot; normal text" />
+    <Exec Command="&quot;$(MSBuildProjectDirectory)/../utilities/AssetBuilder.exe&quot; &quot;$(TargetDir)/Sounds/&quot; &quot;$(TargetDir)/data2.db&quot; normal binary" />
+    <Exec Command="&quot;$(MSBuildProjectDirectory)/../utilities/AssetBuilder.exe&quot; &quot;$(TargetDir)/Assets/&quot; &quot;$(TargetDir)/data3.db&quot; normal binary" />
+  </Target>
   <ProjectExtensions />
 </Project>
